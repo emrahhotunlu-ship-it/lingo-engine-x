@@ -646,12 +646,12 @@ const TM_ALL = () => [
   ['n', L('Wochenfrage: sicher im Kundengespräch', 'Week question: confident with clients'), L('letzte Woche 3', 'last week 3'), L('4 von 5', '4 of 5')]
 ];
 function h30(v) {
-  const blocks = NORMAL();
+  const blocks = dayBlocks('review');
   if (v === 'all') {
     return tmSub('h30-report', 'h14', tmTitle(L('Alle Messwerte', 'All measurements'), L('Diese Woche, jeweils mit Ziel. Grün heißt im Ziel, grau heißt noch ohne Ziel oder zu wenig Belege. Kein Wert ist eine Note.', 'This week, each with its target. Green means on target, gray means no target yet or not enough evidence. No value is a grade.')) +
       '<div class="card" style="padding:2px 16px">' + tmLights(TM_ALL()) + '</div>');
   }
-  const top = exTop(blocks, 5, v === 'focus' ? 0.99 : 0.96);
+  const top = exTop(blocks, 4, v === 'focus' ? 0.99 : 0.96);
   if (v === 'focus') {
     const f = S.ui.focus != null ? S.ui.focus : 0;
     const opts = [[L('Wortpartner', 'Collocations'), L('empfohlen: diese Woche 5 von 9', 'recommended: 5 of 9 this week')], [L('Sprechen unter Zeitdruck', 'Speaking under time pressure'), L('mehr Hot Seat und Flüssigkeit', 'more hot seat and fluency')], [L('Hören schneller', 'Faster listening'), L('Hörtexte öfter bei 1,1×', 'listening more often at 1.1×')], [L('Keine Vorgabe', 'No preference'), L('die App entscheidet nach deinen Werten', 'the app decides from your numbers')]];
@@ -659,7 +659,7 @@ function h30(v) {
       '<div class="stagec" style="gap:18px;justify-content:flex-start;padding-top:22px"><div class="disp" style="font-size:24px;line-height:31px;font-weight:650;text-wrap:balance">' + L('Worauf sollen wir nächste Woche mehr achten?', 'What should we focus on more next week?') + '</div>' +
       '<div class="stack s8" role="radiogroup">' + opts.map((o, i) => '<button class="choice" id="tm-focus-' + i + '" data-act="tmfocus" data-i="' + i + '" role="radio" aria-checked="' + (f === i) + '" style="min-height:64px;' + (f === i ? 'box-shadow:0 0 0 2px var(--act) inset' : '') + '"><span class="tm-radio' + (f === i ? ' on' : '') + '"></span><span style="display:flex;flex-direction:column;gap:1px"><span>' + o[0] + '</span><span style="font-size:13px;color:var(--fg-2);font-weight:500">' + o[1] + '</span></span></button>').join('') + '</div>' +
       '<p class="p2">' + L('Der Fokus ändert nur die Auswahl der Übungen. Kapitelweg und Tagesdauer bleiben.', 'The focus only changes which exercises you get. Chapter path and daily length stay the same.') + '</p></div></div>' +
-      exFoot(btnPri('tm-focus-done', L('Fertig', 'Done'), 'h1-done'));
+      exFoot(btnPri('tm-focus-done', L('Weiter', 'Continue'), 'h10-adapt'));
   }
   return top + '<div class="ex-body gx">' + blockLine('s', L('Wochenabschluss · KW 44', 'Week review · week 44')) +
     '<div class="stack s16" style="padding:16px 0 20px"><h1 class="tm-title disp" style="font-size:28px;line-height:34px">' + L('Deine Woche', 'Your week') + '</h1>' + tmWeekCore('') +
@@ -689,7 +689,7 @@ function tmCurve() {
     '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-3);padding:6px 4px 0 0;margin-left:8%"><span>' + L('Einstufung · Woche 0', 'Placement · week 0') + '</span><span>' + L('Woche 4', 'Week 4') + '</span></div></div>';
 }
 function h31(v) {
-  const blocks = NORMAL();
+  const blocks = dayBlocks('test');
   if (v === 'chapter') {
     const lines = [[ic('gram', 'sm'), L('4 von 4 Themen bestanden', '4 of 4 topics passed')], [ic('check', 'sm'), L('Kapitel-Test: 11 von 12, frei 4 von 4', 'Chapter test: 11 of 12, free 4 of 4')], [ic('pen', 'sm'), L('Projekt-Update per Mail und Statusbericht erledigt', 'Project update email and status report done')]];
     return '<div class="ex-body gx" style="justify-content:center;gap:28px;padding-top:40px">' +
@@ -757,7 +757,7 @@ function tmMailMarked(cat) {
     '<p>' + m('mark-good', 'Could we have a quick call on Monday to go through the details?') + '</p><p>Best regards,</p></div>';
 }
 function h32(v) {
-  const blocks = NORMAL();
+  const blocks = dayBlocks('writing');
   if (v === 'writing') {
     const t = S.ui.mail != null ? S.ui.mail : TM_DRAFT;
     return exTop(blocks, 4, 0.3) + '<div class="tm-count gx" id="tm-checks" aria-live="polite">' + tmMailChecks(t) + '</div>' +
@@ -792,7 +792,7 @@ function h32(v) {
     '<p class="p">' + L('Die Lieferzeit geht von 10 auf 8 Wochen. Der Preis ist schon um 5 % gesenkt, mehr geht nicht. Schlag einen kurzen Call am Montag vor.', 'Lead time goes from 10 to 8 weeks. The price is already 5 % lower, no more room. Suggest a short call on Monday.') + '</p></div>' +
     '<div class="stack s8"><div class="lbl">' + L('Darauf kommt es an', 'What counts') + '</div><div class="checklist" style="padding:0">' +
     [L('80–150 Wörter', '80–150 words'), L('2 deiner Wörter: <span class="en">lead time, discount</span>', '2 of your words: lead time, discount'), L('Zielstruktur: <span class="en">past simple vs. present perfect</span>', 'Target: past simple vs. present perfect'), L('Ton: freundlich und klar', 'Tone: friendly and clear')].map(x => '<div class="ci">' + tmCk(false) + x + '</div>').join('') + '</div></div>' +
-    '<p class="p2">' + L('Etwa 12 Minuten. Am Laptop wartet derselbe Entwurf.', 'About 12 minutes. The same draft waits on your laptop.') + '</p></div></div>' +
+    '<p class="p2">' + L('Etwa 6 Minuten. Am Laptop wartet derselbe Entwurf.', 'About 6 minutes. The same draft waits on your laptop.') + '</p></div></div>' +
     exFoot(btnSec('tm-mail-later', L('Pause, später weiter', 'Pause, continue later'), 'data-go="h1-mid"') + btnPri('tm-mail-write', L('Schreiben', 'Write'), 'h32-writing')) +
     overlays({ whyTask });
 }

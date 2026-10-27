@@ -38,7 +38,7 @@ DESK.side = function (active, idp, rail) {
     n('heute', 'today', L('Heute', 'Today'), 'l1') + n('woerter', 'words', L('Wörter', 'Words'), 'l5') + n('grammatik', 'gram', L('Grammatik', 'Grammar'), 'l4') +
     n('praxis', S.tab4 === 'praxis' ? 'praxis' : 'speak', t4, 'l6-talk') + subs + n('fortschritt', 'prog', L('Fortschritt', 'Progress'), 'l8') +
     '<div class="sp"></div>' +
-    n('claude', 'claude', 'Claude', 'l7') + n('uebersetzer', 'trans', L('Übersetzer', 'Translator'), 'l7-translate') + n('einstellungen', 'gear', L('Einstellungen', 'Preferences'), '') +
+    n('claude', 'claude', 'Claude', 'l7') + n('uebersetzer', 'trans', L('Übersetzer', 'Translator'), 'l7-translate') + n('einstellungen', 'gear', L('Einstellungen', 'Preferences'), 'l15-overview') +
     '<button class="nav" id="' + idp + 'nav-rail" data-act="rail" aria-label="' + esc(rail ? L('Seitenleiste ausklappen', 'Expand sidebar') : L('Seitenleiste einklappen', 'Collapse sidebar')) + '">' + ic('sidebar') + '<span class="lbl2">' + L('Einklappen', 'Collapse') + '</span></button></nav>';
 };
 ACTS.rail = () => { const d = $('.desk'); const isRail = d && d.classList.contains('rail'); S.ui.rail = !isRail; render(); };
@@ -68,38 +68,56 @@ ACTS.khelp = () => { S.ui.help = !S.ui.help; render(); };
 function inField() { const a = document.activeElement; return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA'); }
 
 /* ---------- L1 Heute ---------- */
+/* L1-Varianten: main (Donnerstag, Normaltag), done, writing (Schreibtag), review (Samstag, Wochenabschluss). */
+const L1_GO = { main: 'l3', writing: 'l9-p1', review: 'l17-report' };
 function l1Stage(v, idp) {
-  const blocks = dayBlocks('normal');
-  const done = v === 'done' ? blocks.length : 2, partial = v === 'done' ? 0 : 0.4;
-  const total = 28, rem = 16;
+  const blocks = dayBlocks(v === 'writing' || v === 'review' ? v : 'normal');
+  const done = v === 'done' ? blocks.length : v === 'writing' || v === 'review' ? 4 : 2;
+  const partial = v === 'review' ? 0.9 : v === 'main' ? 0.4 : 0;
+  const total = blocks.reduce((a, b) => a + b.m, 0);
+  const rem = Math.round(total - blocks.slice(0, done).reduce((a, b) => a + b.m, 0) - (blocks[done] ? blocks[done].m * partial : 0));
   const ring = ringSvg(blocks, done, partial, {}).replace('id="ring"', 'id="' + idp + 'ring"').replace('class="ring', 'style="width:13em;height:13em" class="ring');
   const center = v === 'done' ? '<div class="ringc"><span style="color:var(--act-text)">' + ic('check') + '</span><b class="disp num" style="font-size:2.1em;line-height:1.2">' + total + ' Min.</b></div>'
     : '<div class="ringc"><b class="disp num" style="font-size:3em;line-height:1">' + rem + '</b><span style="font-size:.85em">' + L('Min. übrig', 'min left') + '</span></div>';
+  const sub = {
+    done: L('Pflicht geschafft. Morgen geht es mit Schritt 4 von 7 weiter.', 'Daily plan done. Tomorrow continues with step 4 of 7.'),
+    writing: L('Schreibtag: heute schreibst du deine Wochen-Mail.', 'Writing day: today you write your weekly email.'),
+    review: L('Wochenabschluss: dein Rückblick auf die Woche.', 'Week review: a look back at your week.')
+  }[v];
+  const next = {
+    main: ['g', L('Als Nächstes: Grammatik · <em>past simple vs. present perfect</em>', 'Next: grammar · <em>past simple vs. present perfect</em>')],
+    writing: ['s', L('Als Nächstes: Wochen-Mail · <em>Rückmeldung zu deinem Entwurf</em>', 'Next: weekly email · <em>feedback on your draft</em>')],
+    review: ['s', L('Zum Schluss: dein Wochenbericht und die Wochenfrage', 'Last step: your weekly report and the week question')]
+  }[v];
   return '<div class="dscroll"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2em"><h1 class="dh1 disp" style="margin:0">' + L('Heute', 'Today') + '</h1>' +
     '<button class="btn sec" id="' + idp + 'd-ask" data-go="l7" style="min-height:2.6em;font-size:.95em">' + ic('ask', 'sm') + L('Fragen', 'Ask') + '</button></div>' +
     '<div class="daycard" style="flex-direction:row;align-items:center;gap:2.2em;padding:2em 2.2em">' +
     '<div class="ringwrap" style="flex:none">' + ring + center + '</div>' +
     '<div class="stack s16" style="flex:1;min-width:0"><div class="dtopic" style="text-align:left"><div class="t disp" style="font-size:1.6em;line-height:1.2">' + TOPIC() + '</div>' +
-    (v === 'done' ? '<div class="sub">' + L('Pflicht geschafft. Morgen geht es mit Schritt 4 von 7 weiter.', 'Daily plan done. Tomorrow continues with step 4 of 7.') + '</div>' : '') + '</div>' +
-    (v === 'done' ? '' : '<div class="nextl" style="justify-content:flex-start"><span class="dot g"></span><span>' + L('Als Nächstes: Grammatik · <em>past simple vs. present perfect</em>', 'Next: grammar · <em>past simple vs. present perfect</em>') + '</span></div>' +
-      '<div><button class="btn pri" id="' + idp + 'd-go" data-go="l3" style="min-width:12em">' + L('Weiter', 'Continue') + kb('⏎') + '</button></div>') + '</div></div>' +
-    weekStrip(v === 'done').replace('<div class="gx"><div class="week"', '<div><div class="week" style="padding:1.6em .2em .4em;max-width:30em"') + '</div>';
+    (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>' +
+    (v === 'done' ? '' : '<div class="nextl" style="justify-content:flex-start"><span class="dot ' + next[0] + '"></span><span>' + next[1] + '</span></div>' +
+      '<div><button class="btn pri" id="' + idp + 'd-go" data-go="' + L1_GO[v] + '" style="min-width:12em">' + L('Weiter', 'Continue') + kb('⏎') + '</button></div>') + '</div></div>' +
+    weekStrip(v === 'done', v === 'review' ? 5 : 3).replace('<div class="gx"><div class="week"', '<div><div class="week" style="padding:1.6em .2em .4em;max-width:30em"') + '</div>';
 }
-function l1Ctx(idp) {
+function l1Ctx(idp, v) {
   idp = idp || '';
+  const today = v === 'review' ? 5 : 3;
   const days = S.lang === 'en' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-  const plan = [L('Wörter · Grammatik · Hören', 'Words · grammar · listening'), L('erledigt', 'done'), L('erledigt', 'done'), L('heute · Grammatik Schritt 3', 'today · grammar step 3'), L('Mission: Preis-Einwand', 'Mission: price objection'), L('Schreibtag: Projekt-Update', 'Writing day: project update'), L('Ruhetag', 'Rest day')];
-  plan[0] = L('erledigt', 'done');
-  return ctxBlock(L('Diese Woche', 'This week'), '<div class="card" style="padding:.4em 1em">' + days.map((d, i) => '<div class="st ' + (i < 3 ? 'done' : i === 3 ? 'run' : 'open') + '" style="min-height:2.5em;font-size:.92em"><span class="mk">' + (i < 3 ? ic('check', 'xs') : '') + '</span><span style="width:2.4em;color:var(--fg-2)">' + d + '</span><span class="nm">' + plan[i] + '</span>' + (i === 4 ? '<span style="margin-left:auto;color:var(--fg-2)">' + ic('flag', 'xs') + '</span>' : '') + '</div>').join('') + '</div>') +
+  /* Wochentage fest nach Konzept 2.3: Szenenwechsel Montag, Mission Freitag, Wochenabschluss Samstag, Sonntag Ruhetag. */
+  const plan = [L('Szene: ', 'Scene: ') + TOPIC(), L('erledigt', 'done'), L('erledigt', 'done'),
+    v === 'writing' ? L('heute · Schreibtag: Projekt-Update', 'today · writing day: project update') : L('heute · Grammatik Schritt 3', 'today · grammar step 3'),
+    L('Mission: Preis-Einwand', 'Mission: price objection'), L('Wochenabschluss', 'Week review'), L('Ruhetag', 'Rest day')];
+  if (today === 5) { plan[3] = L('erledigt', 'done'); plan[4] = L('erledigt · Mission: Preis-Einwand', 'done · mission: price objection'); plan[5] = L('heute · Wochenabschluss', 'today · week review'); }
+  return ctxBlock(L('Diese Woche', 'This week'), '<div class="card" style="padding:.4em 1em">' + days.map((d, i) => '<div class="st ' + (i < today ? 'done' : i === today ? 'run' : 'open') + '" style="min-height:2.5em;font-size:.92em"><span class="mk">' + (i < today ? ic('check', 'xs') : '') + '</span><span style="width:2.4em;flex:none;color:var(--fg-2)">' + d + '</span><span class="nm">' + plan[i] + '</span>' + (i === 4 ? '<span style="margin-left:auto;color:var(--fg-2)">' + ic('flag', 'xs') + '</span>' : '') + '</div>').join('') + '</div>') +
     ctxBlock(L('Kapitelstand', 'Chapter status'), '<div class="card stack s6"><div style="font-weight:600">' + L('Kapitel 1 · Zeiten im Projektverlauf', 'Chapter 1 · Tenses in project updates') + '</div><div class="p2">' + L('Thema 1 von 4 · Schritt 3 von 7 · noch 4 richtige bis frei', 'Topic 1 of 4 · step 3 of 7 · 4 more correct until free') + '</div></div>') +
     ctxBlock(L('Dein nächster Termin', 'Your next meeting'), '<button class="row" id="' + idp + 'd-termin" data-go="termin-filled" style="border:0;min-height:3em"><span class="ri">' + ic('cal', 'sm') + '</span><span class="rt"><b>' + L('Dienstag · Call mit dem Einkauf', 'Tuesday · call with purchasing') + '</b><span>' + L('Die Mission am Freitag bereitet dich darauf vor · ändern', 'Friday’s mission prepares you for it · change') + '</span></span></button>') +
     ctxBlock(L('Wenn du mehr willst', 'If you want more'), moreRows(false).replace(/<div class="more-div gx">.*?<\/div>/, '').replace('<div class="gx">', '<div>').replace(/id="more-/g, 'id="' + idp + 'more-'));
 }
 reg('l1', {
   code: 'L1', name: 'Heute', kind: 'desk', nav: 'heute',
-  variants: [['main', 'unterwegs'], ['done', 'erledigt']],
-  render(v, o) { return { stage: l1Stage(v, o.idp), ctx: l1Ctx(o.idp) }; },
-  keys(e) { if (e.key === 'Enter' && !inField() && curVariant() !== 'done') go('l3'); }
+  variants: [['main', 'unterwegs'], ['done', 'erledigt'], ['writing', 'Schreibtag (Do)'], ['review', 'Wochenabschluss (Sa)']],
+  render(v, o) { return { stage: l1Stage(v, o.idp), ctx: l1Ctx(o.idp, v) }; },
+  keys(e) { const t = L1_GO[curVariant()]; if (e.key === 'Enter' && !inField() && t) go(t); }
 });
 
 /* ---------- L2 Wörter-Übung ---------- */
@@ -200,8 +218,8 @@ reg('l4', {
     return {
       stage: '<div class="dscroll"><h1 class="dh1 disp">' + L('Grammatik', 'Grammar') + '</h1><div class="stack s16">' + hereCard() +
         '<div><div class="lbl" style="padding:.6em 0 .2em">' + L('Dein Weg zu C1 · 8 Kapitel', 'Your path to C1 · 8 chapters') + '</div>' +
-        CHAPTERS().map(c => '<button class="row" id="dch-' + c[0] + '" data-act="noop"><span class="ri num' + (c[3] === 'run' ? ' pulsing' : '') + '" style="' + (c[3] === 'run' ? 'background:var(--act-soft);color:var(--act-text);font-weight:700' : 'font-weight:600') + '">' + c[0] + '</span><span class="rt"><b>' + c[1] + '</b><span>' + c[2] + '</span></span>' + (c[3] === 'run' ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '') + '</button>').join('') + '</div></div></div>',
-      ctx: chapterDetail().replace(/id="ch-explain"/, 'id="d-ch-explain"')
+        CHAPTERS().map(c => '<button class="row" id="dch-' + c[0] + '"' + (c[3] === 'run' ? ' data-go="l16-topic"' : ' data-act="noop" aria-disabled="true"') + '><span class="ri num' + (c[3] === 'run' ? ' pulsing' : '') + '" style="' + (c[3] === 'run' ? 'background:var(--act-soft);color:var(--act-text);font-weight:700' : 'font-weight:600') + '">' + c[0] + '</span><span class="rt"><b>' + c[1] + '</b><span>' + c[2] + '</span></span>' + (c[3] === 'run' ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '<span class="chev" style="opacity:.6">' + ic('lock', 'sm') + '</span>') + '</button>').join('') + '</div></div></div>',
+      ctx: chapterDetail().replace(/id="ch-/g, 'id="d-ch-').replace('data-go="h27-topic"', 'data-go="l16-topic"').replace('data-go="h26-list"', 'data-go="l16-errors"')
     };
   }
 });
@@ -248,7 +266,7 @@ reg('l5', {
 
 /* ---------- L6 Mission ---------- */
 function missionCtx(states, report) {
-  const items = [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Fix the next meeting')];
+  const items = [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
   return ctxBlock(L('Abhakliste', 'Checklist'), '<div class="checklist" style="padding:0">' + items.map((t, i) => '<div class="ci"><span class="ck' + (states[i] ? ' y' : '') + '">' + (states[i] ? ic('check', 'xs') : '') + '</span>' + t + '</div>').join('') + '</div>') +
     ctxBlock(L('Gegenüber', 'Counterpart'), '<div class="persona"><span class="avatar">LK</span><div><b>Laura Keller</b><div class="p2" style="font-size:.85em">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented') + '</div></div></div><p class="p2" style="margin:0">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren.', 'Goal: hold the price without losing the next meeting.') + '</p>') +
     ctxBlock(L('Zielstruktur und Kernwörter', 'Target structure and key words'), '<div style="display:flex;flex-wrap:wrap;gap:.4em"><span class="chip en">past simple / present perfect</span><span class="chip en">discount</span><span class="chip en">lead time</span><span class="chip en">sign off on</span></div>') +
@@ -264,7 +282,7 @@ reg('l6', {
         stage: dTop(blocks, 4, 0.9) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Mission · Bericht', 'Mission · report')) +
           '<div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Einwand gut behandelt, Termin noch offen', 'Objection handled well, meeting still open') + '</div>' +
           '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„We’ve already reduced the lead time to eight weeks.“</div><p class="p2" style="margin:0">' + L('Ergebnis zuerst, ohne Zeitpunkt: genau richtig im present perfect.', 'Result first, no time given: exactly right in the present perfect.') + '</p></div>' +
-          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', 'Practise 2 points') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; <s class="en" style="color:var(--fg-2)">We have met last year</s> → <b class="en">We met last year</b></div></div>' +
+          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; <s class="en" style="color:var(--fg-2)">We have met last year</s> → <b class="en">We met last year</b></div></div>' +
           pageDots(4, 0) + '</div>' + dKeys('<button class="btn pri" id="d-next" data-go="l1-done">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'),
         ctx: missionCtx([1, 1, 0], true)
       };
@@ -335,7 +353,7 @@ reg('l9', {
   code: 'L9', name: 'Schreibtag', kind: 'desk', nav: 'heute',
   variants: [['p1', 'Rückmeldung mit Markierungen'], ['end', 'Abschluss']],
   render(v) {
-    const blocks = dayBlocks('normal');
+    const blocks = dayBlocks('writing');
     if (v === 'end') {
       return {
         stage: dTop(blocks, 4, 1) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Schreibtag · deine überarbeitete Fassung', 'Writing day · your revised version')) +

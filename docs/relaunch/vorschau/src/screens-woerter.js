@@ -673,11 +673,11 @@ function twManageRows(idp, compact) {
   idp = idp || '';
   const rows = [
     ['pen', L('Bearbeiten', 'Edit'), L('Bedeutung, Satz, Notiz', 'meaning, sentence, note'), 'h23-edit'],
-    ['check', L('Kenne ich sicher', 'I know this well'), L('Die App prüft es einmal frei. Sitzt es, kommt es nur noch selten.', 'The app checks it once. If it holds, it comes up rarely.'), ''],
+    ['check', L('Kenne ich sicher', 'I know this well'), L('Wir fragen es morgen einmal frei ab. Sitzt es, springt es eine Stufe weiter.', 'We’ll ask for it once tomorrow, without help. If you get it, it moves up one stage.'), ''],
     ['cal', L('Morgen wieder', 'Again tomorrow'), L('Termin auf morgen, die Stufe bleibt.', 'Due tomorrow, the stage stays.'), ''],
     ['pause', L('Pausieren', 'Pause'), L('Setzt keine Termine. Die Daten bleiben.', 'Sets no dates. Your data stays.'), ''],
     ['list', L('Zu Stapel', 'Add to a deck'), L('z. B. „Kunde Keller“ oder „Messe“', 'e.g. “Keller account” or “trade fair”'), ''],
-    ['refresh', L('Von vorn', 'Start over'), L('Zurück auf den Anfang. Der Verlauf bleibt sichtbar.', 'Back to the start. History stays visible.'), ''],
+    ['refresh', L('Von vorn', 'Start over'), L('Startet wieder bei der Einführung. Dein Verlauf bleibt.', 'Starts again with the introduction. Your history stays.'), ''],
     ['close', L('Ausblenden', 'Hide'), L('Kommt nirgends mehr vor. Gelöscht wird nichts.', 'Never shows up again. Nothing is deleted.'), 'h23-hidden']
   ];
   return '<div>' + rows.map((r, i) => '<button class="row" id="' + idp + 'tw-a-' + i + '"' + (r[3] ? ' data-go="' + r[3] + '"' : ' data-act="noop"') + '><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span>' + (r[3] && !compact ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '') + '</button>').join('') +

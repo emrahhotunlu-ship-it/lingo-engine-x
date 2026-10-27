@@ -101,6 +101,10 @@ function dayBlocks(kind) {
   ];
   if (kind === 'mission') return n.slice(0, 4).concat([{ c: 's', n: L('Mission', 'Mission'), m: 9, mission: true }]);
   if (kind === 'catchup') return [2, 6, 4, 3, 2, 3].map((m, i) => Object.assign({}, n[i], { m }));
+  /* Tagestypen nach Konzept 2.3: Schreibtag (Do), Testtag, Wochenabschluss (Sa). Jeweils 28 Min. */
+  if (kind === 'writing') return n.slice(0, 4).concat([{ c: 's', n: L('Wochen-Mail', 'Weekly email'), m: 6 }, Object.assign({}, n[5], { m: 3 })]);
+  if (kind === 'test') return [n[0], n[1], { c: 'g', n: L('Themen-Test', 'Topic test'), m: 10 }, n[3], Object.assign({}, n[5], { m: 4 })];
+  if (kind === 'review') return [3, 5, 3, 7].map((m, i) => Object.assign({}, n[i], { m })).concat([Object.assign({}, n[5], { m: 10 })]);
   return n;
 }
 
@@ -187,7 +191,8 @@ function phead(title, right) {
   return '<header class="phead gx"><h1 class="disp">' + title + '</h1>' + (right || '') + '</header>';
 }
 const askBtn = () => '<button class="iconbtn" id="ask-open" data-go="h15-claude" aria-label="' + esc(L('Fragen', 'Ask')) + '">' + ic('ask') + '</button>';
-const gearBtn = () => '<button class="iconbtn" id="settings-open" data-act="noop" aria-label="' + esc(L('Einstellungen', 'Preferences')) + '">' + ic('gear') + '</button>';
+/* Zahnrad: am Handy H24, am Laptop L15 (je nach Art des offenen Bildschirms). */
+const gearBtn = () => '<button class="iconbtn" id="settings-open" data-go="' + (curDef() && curDef().kind === 'desk' ? 'l15-overview' : 'h24-overview') + '" aria-label="' + esc(L('Einstellungen', 'Preferences')) + '">' + ic('gear') + '</button>';
 
 function sheet(id, title, body, foot, opts) {
   opts = opts || {};
@@ -257,7 +262,7 @@ function render() {
   clearTimeout(autoTimer);
   const p = parseHash();
   const changed = p.screen !== S.screen || p.v !== S.v;
-  if (changed) { S.ui = {}; S.typed = null; }
+  if (changed) { S.ui = {}; S.typed = null; S.from = S.screen; }
   const kindBefore = curDef() ? curDef().kind : null;
   S.screen = p.screen; S.v = p.v;
   const def = curDef();

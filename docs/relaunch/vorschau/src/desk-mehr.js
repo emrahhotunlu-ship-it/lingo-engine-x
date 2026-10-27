@@ -91,7 +91,7 @@ reg('l17', {
     const f = S.ui.focus != null ? S.ui.focus : 0;
     const opts = [[L('Wortpartner', 'Collocations'), L('empfohlen', 'recommended')], [L('Sprechen unter Zeitdruck', 'Speaking under time pressure'), ''], [L('Hören schneller', 'Faster listening'), ''], [L('Keine Vorgabe', 'No preference'), '']];
     return {
-      stage: dTop(NORMAL(), 5, 0.96) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Wochenabschluss · KW 44', 'Week review · week 44')) +
+      stage: dTop(dayBlocks('review'), 4, 0.96) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Wochenabschluss · KW 44', 'Week review · week 44')) +
         '<h1 class="dh1 disp" style="margin:.2em 0 0">' + L('Deine Woche', 'Your week') + '</h1>' + tmWeekCore('d') +
         dKeys('<button class="btn pri" id="dwk-done" data-go="l1">' + L('Fertig', 'Done') + kb('↵') + '</button>') + '</div>',
       ctx: ctxBlock(L('Fokus für nächste Woche', 'Focus for next week'), '<div class="stack s6" role="radiogroup">' + opts.map((o, i) => '<button class="choice" id="dfocus-' + i + '" data-act="tmfocus" data-i="' + i + '" role="radio" aria-checked="' + (f === i) + '" style="min-height:3em;font-size:.95em;' + (f === i ? 'box-shadow:0 0 0 2px var(--act) inset' : '') + '"><span class="tm-radio' + (f === i ? ' on' : '') + '"></span><span style="flex:1">' + o[0] + '</span>' + (o[1] ? '<span class="tm-state">' + o[1] + '</span>' : '') + '</button>').join('') + '</div>') +

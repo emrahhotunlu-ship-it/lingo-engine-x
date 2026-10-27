@@ -48,7 +48,7 @@ function tsMoreList() {
     '<div class="stack s6">' + tsSec(L('Wörter', 'Words'), tsExtra()) +
     '<div>' + tsRow('mo-ws', 'pen', L('Wort-Werkstatt', 'Word workshop'), L('5 Wörter brauchen eine neue Darstellung', '5 words need a fresh look'), 'h33-workshop', '<span class="ts-count num">5</span>') +
     tsRow('mo-extra', 'repeat', L('Freiwillige Zusatzrunde', 'Optional extra round'), L('10 Wiederholungen, zählt als Extra', '10 reviews, counts as extra'), 'h17-default') +
-    tsRow('mo-tempo', 'clock', L('Tempo-Runde', 'Speed round'), L('2 Minuten, nur Wörter, die du selbst bildest', '2 minutes, only words you produce'), 'h22-run') + '</div></div>' +
+    tsRow('mo-tempo', 'clock', L('Tempo-Runde', 'Speed round'), L('90 Sekunden, nur Wörter, die du selbst bildest', '90 seconds, only words you produce'), 'h22-run') + '</div></div>' +
     '<div class="stack s8">' + tsSec(L('Grammatik', 'Grammar'), tsExtra()) +
     '<div>' + tsRow('mo-topic', 'gram', L('Thema frei üben', 'Practice a topic freely'), '<span class="en">past simple vs. present perfect</span>', 'h27-topic') + '</div>' +
     '<div class="lbl" style="padding-top:4px">' + L('Sechs Trainings', 'Six trainings') + '</div>' + tsGrid('mo-tr', trainings) + '</div>' +
