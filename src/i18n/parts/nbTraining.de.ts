@@ -104,7 +104,7 @@ export const nbTrainingDe = {
   // Posteingang
   // Aussprache-Minute (Soll N109)
   // Nachsprechen
-  nbTrainingLevel: 'Stufe {n} von 5 · {name}',
+  nbTrainingLevel: 'Stufe {n} · {name}',
   nbTrainingLevel_1: 'Vorbild',
   nbTrainingLevel_2: 'Gelenkt',
   nbTrainingLevel_3: 'Satzanfänge',

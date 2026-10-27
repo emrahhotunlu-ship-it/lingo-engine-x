@@ -16,7 +16,8 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   const { errors, external } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(6), ...forcedPatch() } } });
   await screen(page, 'today');
   // Neubau: Die Tageskarte zählt Blöcke und Minuten; die 6 Karten stehen in der Leiste der Runde.
-  await expect(page.getByTestId('today-status')).toHaveText('0 von 1 · noch ca. 10 Min.');
+  await expect(page.getByTestId('today-status')).toHaveText('Schritte: 0 von 1 erledigt');
+  await expect(page.getByTestId('today-min')).toHaveText('10');
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-now', 'true');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');

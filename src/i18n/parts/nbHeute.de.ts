@@ -4,7 +4,9 @@
 export const nbHeuteDe = {
   // Heute: Unterzeile und Tageskarte (plan.md §1.3)
   nbHeuteUnit: 'Heute',
-  nbHeuteRing: '{done} von {total} · noch ca. {min} Min.',
+  // UX-Audit U1: die Minuten stehen nur im Ring, die Zeile darunter zählt nur Schritte.
+  nbHeuteRing: 'Schritte: {done} von {total} erledigt',
+  nbHeuteBetweenHead: 'Schritt {done} von {total} geschafft · noch ca. {min} Min.',
   nbHeuteRingLabel: '{done} von {total} Blöcken erledigt',
   nbHeuteStart: 'Starten',
   nbHeuteContinue: 'Weiter: {block}',
@@ -24,7 +26,10 @@ export const nbHeuteDe = {
   nbHeuteBlock_order: 'Satzbau',
   // Grund je Block (eine kurze Zeile)
   nbHeuteWhy_review: '{n} Karten · Fällige zuerst',
-  nbHeuteWhy_reviewBehind: '{n} Karten · überfällig',
+  nbHeuteWhy_reviewOne: '1 Karte · Fällige zuerst',
+  // Nicht „überfällig“: von den geplanten Karten ist nur ein Teil überfällig (UX-Audit U1).
+  nbHeuteWhy_reviewBehind: '{n} Karten · Rückstand wird abgebaut',
+  nbHeuteWhy_reviewBehindOne: '1 Karte · Rückstand wird abgebaut',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
@@ -65,7 +70,7 @@ export const nbHeuteDe = {
   nbHeuteEndBack: 'Zurück zu Heute',
   nbHeuteClose: 'Einheit schließen',
   nbHeuteSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',
-  nbHeuteNote: 'Heute · Schritt {n} von {total}',
+  nbHeuteNote: 'Heute · Pflicht',
   // Ersatzschritte (bis die Anbieter der Pakete kommen)
   nbHeuteAgainTask: 'Schreib es noch einmal aus dem Kopf – kürzer, klarer, richtig.',
   nbHeuteAgainPurpose: 'Neu formulieren festigt, was du vorhin gelernt hast (Generierungseffekt).',

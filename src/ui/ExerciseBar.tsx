@@ -60,10 +60,11 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
             </div>
             {counter ? (
               <span className="lx-tnum lx-t-meta flex-none text-muted" data-testid={progressTestId} data-counter="">
-                {counter.duty && <span data-testid="counter-duty">{t('exCounterDuty', { n: counter.duty[0], total: counter.duty[1] })} · </span>}
+                {/* Höchstens ein sichtbarer Zähler (UX-Audit U1): der Pflichtschritt steht nur für Vorleseprogramme da. */}
+                {counter.duty && <span className="sr-only" data-testid="counter-duty">{t('exCounterDuty', { n: counter.duty[0], total: counter.duty[1] })} · </span>}
                 <span data-testid="counter-card">{t('exCounterCard', { n, total: progress.total })}</span>
                 {!!counter.extra && (
-                  <span className="ml-1 text-subtle" data-testid="round-extra" aria-label={t('exCounterExtraLabel', { n: counter.extra })}>
+                  <span className="sr-only" data-testid="round-extra" aria-label={t('exCounterExtraLabel', { n: counter.extra })}>
                     {t('exCounterExtra', { n: counter.extra })}
                   </span>
                 )}
@@ -73,8 +74,9 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
                 {t('nvProgress', { n, total: progress.total })}
               </span>
             )}
+            {/* Wiedervorlagen („+1“) nur für Vorleseprogramme: sichtbar wuchs der Zähler sonst während der Runde (UX-Audit U1, „3 von 52 +1“). */}
             {!counter && !!progress.extra && (
-              <span className="lx-tnum -ml-2 flex-none text-xs text-subtle" data-testid="round-extra" aria-label={`+${progress.extra}`}>
+              <span className="sr-only" data-testid="round-extra" data-n={progress.extra}>
                 +{progress.extra}
               </span>
             )}

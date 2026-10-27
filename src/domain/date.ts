@@ -71,6 +71,14 @@ export function dayKeyNoon(key: string): number {
   return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1, 12).getTime();
 }
 
+/**
+ * Kurzname des Wochentags für jeden Wochenstreifen („Mo“, „Di“ … / „Mon“, „Tue“ …), ohne Abkürzungspunkt. Eine Stelle,
+ * damit Heute-Abschluss und Profil dieselben Beschriftungen zeigen (UX-Audit U1: vorher „Mo Di Mi“ und „M D M“).
+ */
+export function weekdayShort(key: string, lang: 'de' | 'en'): string {
+  return new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'short' }).format(dayKeyNoon(key)).replace(/\.$/, '');
+}
+
 /** Beginn des laufenden Lerntags (letztes 04:00 Uhr) in ms. */
 export function learningDayStart(nowMs: number): number {
   const d = new Date(nowMs);

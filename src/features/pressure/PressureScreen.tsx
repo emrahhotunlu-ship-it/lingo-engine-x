@@ -168,7 +168,8 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
   ) : null;
   const common: Common = {
     meta: { ex: 'objection', id: o.id, kind: lv <= 2 ? 'choose' : lv === 3 ? 'complete' : 'speak' },
-    status: { area: 'words', state: null, kindLabel: t('nbTrainingObjection'), badge: t('nbTrainingObjectionOf', { n: s.pos + 1, total: s.ids.length }) },
+    // Kein zweiter Zähler (UX-Audit U1: „1 von 5“, „Einwand 1 von 5“ und „Stufe 2 von 5“ auf einem Bildschirm): die Leiste zählt die Einwände.
+    status: { area: 'words', state: null, kindLabel: t('nbTrainingObjection') },
     task: { text: staged ? t(LEVEL_TASK[lv]) : t('nbTrainingPressureTask'), purpose: staged ? t('nbTrainingLevelPurpose') : t('nbTrainingPressurePurpose') },
     aid: lv > 2 ? <Pattern answer={s.phase === 'review' ? answer : null} /> : null,
     prompt: <LineBlock id={o.id} line={o.line} de={o.de} area="business" source={`objection/${o.id}`} speakId="objection-speak" lineId="objection-line" level={levelLine} />,

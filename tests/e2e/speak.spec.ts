@@ -121,7 +121,11 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   await screen(page, 'today');
   // Plan v2: Sonntag = Wiederholen + Wochen-Check + Fehler korrigieren (Seed hat fällige Fehlersätze, Grenze 3); das Gespräch zählt in keinen.
   // Wiederholen darf bei Rückstand länger dauern (Seed: viele überfällige Karten; Sonntag 5 Min. + höchstens 50 %), Wochen-Check 5, Fehler korrigieren 2.
-  await expect(page.getByTestId('today-status')).toHaveText(/^0 von 3 · noch ca\. (13|14|15|16) Min\.$/);
+  // UX-Audit U1: die Minuten stehen nur im Ring, die Zeile zählt nur die Schritte.
+  await expect(page.getByTestId('today-status')).toHaveText('Schritte: 0 von 3 erledigt');
+  await expect(page.getByTestId('today-min')).toHaveText(/^(13|14|15|16)$/);
+  // „27 Min.“ nie doppelt: die Minutenzahl des Rings steht kein zweites Mal als „noch ca. … Min.“ auf der Karte.
+  await expect(page.getByTestId('today-card')).not.toContainText('noch ca.');
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);
   // Sprechen (Seite über Heute): erledigt ist Zustand, kein Knopf (Kap. 2.2).
