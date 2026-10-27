@@ -85,8 +85,8 @@ test('Beispielsatz: „Deutsch“ übersetzt einmal per Claude, zeigt es und spe
   await page.getByTestId('choice').nth(labels.findIndex((l) => l === answer)).click();
   await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toBeVisible();
-  // „Zum Wort ▸“ führt die Beispiele mit „Deutsch“ (einmal von Claude, dann an der Karte gespeichert).
-  await page.getByTestId('word-more').click();
+  // „Mehr ▸“ (früher „Zum Wort ▸“) führt die Beispiele mit „Deutsch“ (einmal von Claude, dann an der Karte gespeichert).
+  await page.getByTestId('explanation-more').click();
   const btn = page.getByTestId('example-trans-btn').first();
   await expect(btn).toBeVisible();
   await btn.click();

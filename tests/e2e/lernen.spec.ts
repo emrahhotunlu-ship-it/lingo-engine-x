@@ -292,8 +292,8 @@ test('Anwenden › Hörübung mit Frage: Text verdeckt, erst Hören, dann Frage,
     await page.getByTestId('choice').filter({ hasText: 'The client asked for it.' }).click();
     await expect(page.getByTestId('listen-q-result')).toBeVisible();
     await expect(page.getByTestId('listen-q-quote')).toContainText('because the client asked for it');
-    // Die Begründung steht im Ergebnisabschnitt des Gerüsts (eine Karte, kein zweiter Kasten).
-    await expect(page.getByTestId('result')).toContainText('Richtig, weil');
+    // Die Begründung steht im Ergebnisabschnitt des Gerüsts (eine Karte, kein zweiter Kasten), im Block „Warum“ (U3).
+    await expect(page.getByTestId('result').locator('[data-block="why"]')).toContainText('Warum');
     await page.getByTestId('listen-q-next').click();
   }
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '3');

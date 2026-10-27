@@ -162,7 +162,7 @@ export function CheckItem({ item, inp, last, onAnswer }: Props) {
         <PrimaryAction iconAfter="arrowRight" disabled={!resp} onClick={submit} testId="ck-next">
           {last ? t('pxCkFinish') : t('pxCkNext')}
         </PrimaryAction>
-        <Button variant="ghost" onClick={() => onAnswer(null)} data-testid="ck-dontknow">
+        <Button variant="quiet" onClick={() => onAnswer(null)} data-testid="ck-dontknow">
           {t('pxCkDontKnow')}
         </Button>
       </ActionBar>

@@ -24,8 +24,8 @@ export const ttPolicyEn = {
   ttWhy_known: 'Something familiar for a moment, then on we go.',
   ttWhy_freer: 'Your last answers were solid, so this form is one step freer.',
   ttWhy_supported: 'One step easier, so the rule sticks first.',
-  ttWin: 'Something familiar for a moment, then on we go.',
-  ttLessonWhy: 'More questions will not help right now. The rule in short:',
+  ttWin: 'Something familiar',
+  ttLessonWhy: 'A quick look at the rule, then we move on.',
   ttProof: '{name}: {weeks} weeks ago {thenOk} of {thenN} reliably right, now {nowOk} of {nowN}.',
   ttSureNote: 'Reliably means: no guiding question, formula or first letter, right on the first try and at your usual pace.',
 };

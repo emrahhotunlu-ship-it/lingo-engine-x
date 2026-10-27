@@ -4,6 +4,7 @@ import type { UnitState } from "../domain/metrics";
 import { useT, type MessageKey } from "../i18n";
 import { ActionBar, PrimaryAction } from "./ActionBar";
 import { Button } from "./Button";
+import { CountUp } from "./CountUp";
 import { Odometer } from "./Odometer";
 import { roundSparks } from "../domain/moments/detect";
 import { Eyebrow } from "./Eyebrow";
@@ -40,22 +41,22 @@ type SessionEndPropsAlt = {
  */
 export type SessionEndProps = SessionEndPropsAlt & {
   mode?: "tiles" | "growth";
-  /** Je geübter Einheit eine Zeile; die Punkte wandern in 300 ms von `from` zu `to` (von `max`). */
+  /**
+   * Je geübter Einheit eine Zeile; die Punkte wandern in 300 ms von `from` zu `to` (von `max`). U3: die Zeile bündelt alles zu dieser
+   * Einheit – Status-Punkt, Hinweise (`notes`, z. B. „Neu sicher“) und Fehler (`mistakes`) –, damit kein Thema dreimal dasteht.
+   */
   items?: Array<{
     label: string;
     from: number;
     to: number;
     max: number;
     state: UnitState | null;
+    notes?: string[];
+    mistakes?: EndMistake[];
   }>;
   /** „Neu sicher: wish + Past (3 von 3 ohne Hilfe)“ – nur Tatsachen, die wirklich eintraten. */
   facts?: string[];
-  mistakes?: Array<{
-    wrong: string;
-    right: string;
-    rule: string;
-    when: string;
-  }>;
+  mistakes?: EndMistake[];
   /**
    * Lernplattform 3.0 P28 (Motivation §4.7): Wachstum statt Antwortzahl. Alle Zahlen kommen aus dem Selektor `roundGrowth`
    * (`domain/metrics/round.ts`): Namen der Aufgestiegenen (höchstens 6 genannt), sonst die Gedächtnis-Zeit, Rückfälle, schwerer Block.
@@ -69,6 +70,30 @@ export type SessionEndProps = SessionEndPropsAlt & {
   /** Keine Zeile „a von b richtig“ unter der Überschrift (wenn die Überschrift die Zahl schon nennt). */
   hideScore?: boolean;
 };
+
+export type EndMistake = {
+  wrong: string;
+  right: string;
+  rule: string;
+  when: string;
+};
+
+/** Farbe des Status-Punkts: Smaragd = sitzt, Gold = noch üben, Spur = neu. */
+export const stateTone = (s: UnitState | null): "ok" | "near" | undefined =>
+  s === "safe" || s === "firm" ? "ok" : s === "learning" || s === "wobbly" ? "near" : undefined;
+
+/** Falsch → richtig in einer Zeile (UX-Audit U1: falsch nie grün – eigene Antwort rot durchgestrichen, Lösung neutral). */
+function WrongRight({ m }: { m: EndMistake }) {
+  return (
+    <span className="lx-t-support" lang="en">
+      <span className="text-wrong-text line-through decoration-wrong/60" data-slot="wrong">
+        {m.wrong}
+      </span>
+      {" → "}
+      <span className="font-semibold text-fg" data-slot="right">{m.right}</span>
+    </span>
+  );
+}
 
 export type GrowthView = {
   up: ReadonlyArray<{ id: string; word: string; to: UnitState }>;
@@ -239,7 +264,8 @@ function GrowthEnd({
         </h1>
         {total > 0 && !hideScore && (
           <p className="lx-tnum lx-t-support m-0 text-muted">
-            {t("nbShEndScore", { right, total })}
+            {/* U3: zählende Zahl (300 ms; Stufe „Aus“/reduzierte Bewegung: sofort der Endwert). */}
+            <CountUp text={t("nbShEndScore", { right, total })} ms={300} />
           </p>
         )}
       </div>
@@ -260,18 +286,32 @@ function GrowthEnd({
               return (
                 <li
                   key={it.label}
-                  className="flex items-center justify-between gap-3 border-t border-line py-3 first:border-t-0"
+                  className="flex items-start justify-between gap-3 border-t border-line py-3 first:border-t-0"
                   data-testid="session-end-item"
                 >
                   <span className="flex min-w-0 flex-col gap-0.5">
-                    <span className="lx-t-answer" lang="en">
-                      {it.label}
+                    <span className="flex items-center gap-2">
+                      <span className="lx-sdot" data-tone={stateTone(it.state)} aria-hidden="true" data-testid="status-dot" />
+                      <span className="lx-t-answer" lang="en">
+                        {it.label}
+                      </span>
                     </span>
                     {word && (
-                      <span className="lx-t-meta text-muted" aria-hidden="true">
+                      <span className="lx-t-meta pl-4 text-muted" aria-hidden="true">
                         {word}
                       </span>
                     )}
+                    {it.notes?.map((n) => (
+                      <span key={n} className="lx-t-support pl-4 text-fg" data-testid="session-end-note">
+                        {n}
+                      </span>
+                    ))}
+                    {it.mistakes?.map((m) => (
+                      <span key={`${m.wrong}|${m.right}`} className="flex flex-col gap-0.5 pl-4" data-testid="session-end-mistake">
+                        <WrongRight m={m} />
+                        <span className="lx-t-meta text-muted">{t("exEndWhen", { when: m.when })}</span>
+                      </span>
+                    ))}
                   </span>
                   <GrowthDots
                     from={it.from}
@@ -312,14 +352,7 @@ function GrowthEnd({
                 className="lx-inset flex flex-col gap-0.5"
                 data-testid="session-end-mistake"
               >
-                <span className="lx-t-support" lang="en">
-                  {/* UX-Audit U1: falsch nie grün – eigene Antwort rot durchgestrichen, Lösung neutral. */}
-                  <span className="text-wrong-text line-through decoration-wrong/60" data-slot="wrong">
-                    {m.wrong}
-                  </span>
-                  {" → "}
-                  <span className="font-semibold text-fg" data-slot="right">{m.right}</span>
-                </span>
+                <WrongRight m={m} />
                 <span className="lx-t-meta text-muted">
                   {m.rule} · {t("exEndWhen", { when: m.when })}
                 </span>

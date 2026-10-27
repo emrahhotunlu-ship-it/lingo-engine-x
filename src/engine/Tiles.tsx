@@ -62,6 +62,8 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
   const refs = useRef(new Map<number, HTMLButtonElement>());
   const [drag, setDrag] = useState<Drag | null>(null);
   const [over, setOver] = useState(false);
+  // Beim Öffnen schon platzierte Bausteine (z. B. vorgeordneter Satzanfang bei „Fehler korrigieren“): ohne Geister-Stelle im Vorrat.
+  const [preset] = useState(() => new Set(placed));
   const justDragged = useRef(false);
   const byId = new Map(tiles.map((t) => [t.id, t]));
   const dups = dupIndex(tiles);
@@ -257,7 +259,8 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
       <div ref={pool} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool" style={locked ? undefined : { touchAction: 'pan-y' }}>
         {tiles.map((t) =>
           placed.includes(t.id) ? (
-            locked ? null : (
+            // U3: vorgelegte Bausteine (schon beim Öffnen in der Zeile) lassen keine Geister-Stelle im Vorrat zurück.
+            locked || preset.has(t.id) ? null : (
               <span key={t.id} className="lx-tile lx-tile-ghost" aria-hidden="true" data-testid="tile-ghost">
                 {t.text}
               </span>

@@ -254,19 +254,18 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
   const badge = [t(`rxSrc_${item.src}` as MessageKey), status].filter(Boolean).join(' · ') || null;
   const primaryDisabled = busy || (form === 'spots' ? (cur === null ? !tapped : !typed.trim()) : form === 'tiles' ? placed.length < tiles.texts.length : !text.trim() || text.trim() === item.wrong.trim());
   const checkLabel = form === 'spots' && cur === null ? t('fxRCheckSpot') : t('exCheck');
-  // Paket FK (B3): Fehlerart mit Zahl, gespeicherter Kontext und Lückenhinweis der damaligen Aufgabe stehen über dem Satz (Kap. 15: „Karten ohne Ursprungssatz“).
+  // Paket FK (B3): Fehlerart mit Zahl, gespeicherter Kontext und Lückenhinweis der damaligen Aufgabe (Kap. 15: „Karten ohne Ursprungssatz“).
+  // U3: die Aufgabe kommt zuerst; die Herkunft steht danach als eine leise Zeile unter der Eingabe.
   const kindName = patName ? (lang === 'de' ? patName.de : patName.en) : item.topic ? topicName(item.topic, lang) : null;
   const ctxLines = [
     kindName ? (item.n === 1 ? t('fxRKindLineOnce', { name: kindName }) : item.n && item.n > 1 ? t('fxRKindLineN', { name: kindName, n: item.n }) : t('fxRKindLine', { name: kindName })) : null,
     item.ctx?.trim() ? t(item.ctx.includes('___') ? 'fxRCtxTask' : 'fxRCtxLine', { ctx: item.ctx.trim() }) : null,
     item.gapHint?.trim() ? t('fxRGapLine', { hint: item.gapHint.trim() }) : null,
   ].filter((x): x is string => !!x);
-  const aid = !res && ctxLines.length ? (
-    <ul className="flex flex-col gap-0.5 text-sm text-muted" data-testid="repair-context">
-      {ctxLines.map((l, k) => (
-        <li key={k}>{l}</li>
-      ))}
-    </ul>
+  const origin = !res && ctxLines.length ? (
+    <p className="lx-t-meta m-0 mt-4 text-subtle" data-testid="repair-context">
+      {ctxLines.join(' · ')}
+    </p>
   ) : null;
 
   return (
@@ -275,9 +274,15 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
         meta={{ ex: 'repair', id: item.id, kind: form }}
         status={{ area: 'grammar', state: null, kindLabel: t('rxKind'), topic: null, pattern: boxLabel, badge, badgeTone: 'neutral' }}
         task={{ text: multi ? t(taskKey, { n: stepNo, total }) : t(taskKey), purpose: t('fxRPurpose') }}
-        aid={aid}
         prompt={prompt}
-        answer={answer}
+        answer={
+          answer || origin ? (
+            <>
+              {answer}
+              {origin}
+            </>
+          ) : null
+        }
         hint={hint}
         secondary={secondary}
         primary={res ? { label: nextLabel ?? t('exNext'), onClick: onNext, testId: 'repair-next' } : { label: checkLabel, onClick: submit, testId: 'repair-check', disabled: primaryDisabled, busy, busyLabel: t('exChecking') }}

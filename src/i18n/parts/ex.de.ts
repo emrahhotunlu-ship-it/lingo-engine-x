@@ -22,6 +22,9 @@ export const exDe = {
   exLineContrast: 'Nicht verwechseln',
   exLineNote: 'Hinweis',
   exLineWhyNot: 'Warum ist das so?',
+  /** Bauplan der Ergebnis-Karte (U3): feste Blocknamen für alle Übungsarten. */
+  exBlockWhy: 'Warum',
+  exBlockRemember: 'Merke',
   // Fehler finden: Kopf der Rückmeldung (Rückmeldung 7)
   exFindSpotted: 'Richtig erkannt',
   exFindNotQuite: 'Nicht ganz',

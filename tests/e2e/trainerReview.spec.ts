@@ -79,7 +79,7 @@ test.describe('Desktop', () => {
     await expect(page.getByTestId('form-hint')).toHaveCount(0);
     // Keine doppelte Bedeutung: Die Frage zeigt sie, die Erklär-Karte wiederholt sie nicht.
     const cue = (await page.getByTestId('cue-meaning').innerText()).trim();
-    await expect(page.getByTestId('explanation')).not.toContainText(cue);
+    await expect(page.getByTestId('result')).not.toContainText(cue);
     expect(errors).toEqual([]);
   });
 
@@ -170,8 +170,8 @@ test.describe('Desktop', () => {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type('avoid', { delay: 20 });
     await page.keyboard.press('Enter');
-    // Die Erklär-Karte steht; das Hervorheben des Zielworts in den Beispielen fehlt noch (Befund für P1, `Examples` kennt kein `mark`).
-    await expect(page.getByTestId('explanation')).toBeVisible();
+    // Die Ergebnis-Karte steht (U3: ohne eigene Begründung kein leerer Warum-Block); das Hervorheben des Zielworts in den Beispielen fehlt noch (Befund für P1, `Examples` kennt kein `mark`).
+    await expect(page.getByTestId('result')).toBeVisible();
     expect(errors).toEqual([]);
   });
 

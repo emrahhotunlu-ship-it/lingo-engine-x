@@ -3,8 +3,15 @@ import { useEffect, useId, useState, type ReactNode } from 'react';
 // Kleiner Aufklappbereich „Mehr ▸“ innerhalb der Ergebnisfläche (keine eigene Karte, kein Rahmen).
 // Meldet seinen Zustand nach außen, damit das Gerüst „automatisch weiter“ anhalten kann.
 
-export function FoldToggle({ label, children, onOpenChange, testId }: { label: string; children: ReactNode; onOpenChange?: ((open: boolean) => void) | undefined; testId: string }) {
-  const [open, setOpen] = useState(false);
+/** `openSignal`: wird es wahr, klappt der Bereich auf (z. B. Menü „Mehr Infos“ öffnet „Mehr“ der Ergebnis-Karte). */
+export function FoldToggle({ label, children, onOpenChange, testId, openSignal = false }: { label: string; children: ReactNode; onOpenChange?: ((open: boolean) => void) | undefined; testId: string; openSignal?: boolean }) {
+  const [open, setOpen] = useState(openSignal);
+  // Signal beim Zeichnen übernehmen (kein Effekt): nur der Wechsel auf „wahr“ öffnet, Schließen bleibt dem Nutzer.
+  const [sig, setSig] = useState(openSignal);
+  if (sig !== openSignal) {
+    setSig(openSignal);
+    if (openSignal) setOpen(true);
+  }
   const id = useId();
   useEffect(() => {
     // Nur offene Phasen melden sich an und beim Schließen wieder ab (so zählt der Aufrufer sauber mit).

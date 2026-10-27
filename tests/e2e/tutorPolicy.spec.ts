@@ -57,8 +57,8 @@ test('drei getippte Fehler in Folge: etwas Bekanntes, die Runde wird nicht kürz
     await expect(page.getByTestId('gr-item')).toBeVisible();
   }
   expect(typedWrong).toBe(3);
-  await expect(page.getByTestId('tutor-win')).toHaveText('Kurz etwas Bekanntes, dann weiter.');
-  // Platz reserviert (Rückmeldung 21.10.2026): die Statuszeile schiebt die Aufgabe nicht nach unten.
+  await expect(page.getByTestId('tutor-win')).toHaveText('Kurz etwas Bekanntes');
+  // Rückmeldung 21.10.2026: der Hinweis schiebt die Aufgabe nicht nach unten (U3: Plakette in der Statuszeile, kein reservierter Platz).
   await expect.poll(() => itemTop(page)).toBe(top0);
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', 'pres-simple-cont');
   // Der Grund steht schon als Statuszeile da: im ⓘ kein zweiter Grund.

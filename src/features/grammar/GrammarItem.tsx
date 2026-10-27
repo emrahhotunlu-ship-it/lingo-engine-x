@@ -71,6 +71,8 @@ export type GrammarItemProps = {
   badge?: string | null;
   /** Farbe des Zusatzes (`hint` = neutral-cyan, z. B. „Themen-Test“); Standard Bernstein. */
   badgeTone?: 'near' | 'hint';
+  /** Kennung der Plakette (Tausch gegen etwas Bekanntes: `tutor-win`). */
+  badgeTestId?: string;
   /** Wochen-Check und Vortest (M10): ohne Tipp, ohne Platzhalter und ohne Zweitversuch – es wird gemessen, nicht geholfen. */
   noHelp?: boolean;
   /** Eingabeprofil der Runde (einmal eingefroren). Ohne Angabe das des Geräts. */
@@ -146,7 +148,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -1018,7 +1020,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     >
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
-        status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), noInfo: noHelp }}
+        status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), ...(badgeTestId ? { badgeTestId } : {}), noInfo: noHelp }}
         task={{ text: taskText, purpose: t(purposeKey), reason: reason ? () => reason(!!fb) : null }}
         // UX-Prüfung W1/W4: keine Regelkarte vor dem Prüfen (verrät die Lösung) – weder am Handy noch rechts am Laptop; die Regel gibt es als Tipp.
         aid={null}

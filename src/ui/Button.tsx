@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { Icon, type IconName } from './Icon';
 import { DURATION } from './motion';
 
-type Variant = 'primary' | 'secondary' | 'ghost';
+/** `quiet` (UX-Audit U3): leise Knopfform für Nebenhandlungen („Tipp“, „Weiß ich nicht“, „Anhören“) – feine Fläche mit Rand statt nacktem Text. */
+type Variant = 'primary' | 'secondary' | 'ghost' | 'quiet';
 type Size = 'md' | 'lg';
 
 type Props = Omit<HTMLMotionProps<'button'>, 'children'> & {
@@ -25,6 +26,7 @@ const variants: Record<Variant, string> = {
   primary: 'lx-btn-primary bg-accent text-accent-fg hover:brightness-110',
   secondary: 'lx-glass text-fg hover:bg-surface-strong',
   ghost: 'text-muted hover:bg-surface hover:text-fg',
+  quiet: 'lx-btn-quiet rounded-full border border-line bg-track text-fg hover:bg-surface-strong',
 };
 
 const sizes: Record<Size, string> = {

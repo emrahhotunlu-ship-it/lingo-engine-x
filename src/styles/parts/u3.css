@@ -1,0 +1,91 @@
+/* UX-Audit U3 (27.10.2026): Abschlussmomente. Dauern 150–300 ms; bei reduzierter Bewegung nur Überblenden. */
+
+.lx-done {
+  flex: none;
+  overflow: visible;
+}
+.lx-done-track,
+.lx-done-ring,
+.lx-done-check {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lx-done-track {
+  stroke: var(--lx-track);
+  stroke-width: 4;
+}
+.lx-done-ring {
+  stroke: var(--lx-ok);
+  stroke-width: 4;
+  stroke-dasharray: 100;
+  stroke-dashoffset: var(--lx-done-to, 0);
+}
+.lx-done-check {
+  stroke: var(--lx-ok-text);
+  stroke-width: 3.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+:root:not([data-fx='off']) .lx-done-ring {
+  animation: lx-done-ring 250ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+:root:not([data-fx='off']) .lx-done-check {
+  animation: lx-done-check 200ms cubic-bezier(0.2, 0, 0, 1) 200ms both;
+}
+@keyframes lx-done-ring {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: var(--lx-done-to, 0);
+  }
+}
+@keyframes lx-done-check {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Reduzierte Bewegung / Stufe „Aus“: Endzustand, nur sanft eingeblendet (200 ms). */
+:root[data-fx='off'] .lx-done,
+:root[data-fx='off'] .lx-fade-in {
+  animation: lx-fade-in 200ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-done-ring,
+  .lx-done-check {
+    animation: none !important;
+  }
+  .lx-done,
+  .lx-fade-in {
+    animation: lx-fade-in 200ms ease-out both;
+  }
+}
+@keyframes lx-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Rundenende: Status-Punkt je Thema (Smaragd = sitzt, Gold = noch üben, Spur = neu/offen). */
+.lx-sdot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 9999px;
+  background: var(--lx-track);
+}
+.lx-sdot[data-tone='ok'] {
+  background: var(--lx-ok);
+}
+.lx-sdot[data-tone='near'] {
+  background: var(--lx-near, var(--lx-hint));
+}
