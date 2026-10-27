@@ -2,6 +2,7 @@ import { isDayKey, legacyDayKey } from '../date';
 import type { IntakeBatch } from '../grammar/pool';
 import { normalizeTask } from '../grammar/tasks';
 import type { GrammarTask } from '../learn/types';
+import { holdBackTask } from '../quality/gate';
 import { hash32 } from '../random';
 import { newVocabDoc } from '../srs/newCard';
 import { asText } from '../text/str';
@@ -96,7 +97,7 @@ export function dailyOpenTasks(daily: ReadonlyMap<string, Readonly<Doc>>, seen: 
   for (const k of keys) {
     for (const raw of arr(daily.get(k)?.grammarItems)) {
       const t = normalizeTask(raw, 'daily', `daily/${k}`);
-      if (!t || have.has(t.key) || seen.get(t.topic)?.has(t.key)) continue;
+      if (!t || have.has(t.key) || seen.get(t.topic)?.has(t.key) || holdBackTask(t, `daily/${k}`)) continue;
       have.add(t.key);
       out.push(t);
     }

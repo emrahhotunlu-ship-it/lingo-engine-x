@@ -15,7 +15,28 @@
      "de": "Nach Hardly steht had vor dem Subjekt: Hardly had the update finished when …",
      "en": "After Hardly, had stands before the subject: Hardly had the update finished when …"
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "the update has finished",
+      "de": "Nach Hardly am Satzanfang muss das Hilfsverb vor das Subjekt, und die Zeit ist Vergangenheit: had the update finished.",
+      "en": "After a fronted Hardly the auxiliary goes before the subject, and the time is past: had the update finished."
+     },
+     {
+      "opt": "has the update finished",
+      "de": "Die Umstellung stimmt, aber die Zeit nicht: Die Klagen kamen in der Vergangenheit, also had.",
+      "en": "The inversion is right but the tense is not: the complaints came in the past, so had."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „the update had finished“, nicht hier.",
+      "en": "The mistake is at “the update had finished”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „the update had finished“. Richtig ist had the update finished.",
+      "en": "There is a mistake: “the update had finished”. The right form is had the update finished."
+     }
+    ]
    },
    "bad": {
     "span": "the update had finished",
@@ -44,7 +65,28 @@
      "de": "Nach Only after steht das Hilfsverb vor dem Subjekt: could we begin.",
      "en": "After Only after the auxiliary comes before the subject: could we begin."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "could begin we",
+      "de": "Das Subjekt steht zwischen Hilfsverb und Verb: could we begin, nicht could begin we.",
+      "en": "The subject goes between the auxiliary and the verb: could we begin, not could begin we."
+     },
+     {
+      "opt": "began we",
+      "de": "Ohne Hilfsverb geht die Umstellung nicht. Man braucht could oder did: could we begin.",
+      "en": "Inversion needs an auxiliary. Use could or did: could we begin."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „we could begin“, nicht hier.",
+      "en": "The mistake is at “we could begin”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „we could begin“. Richtig ist could we begin.",
+      "en": "There is a mistake: “we could begin”. The right form is could we begin."
+     }
+    ]
    },
    "bad": {
     "span": "we could begin",
@@ -65,7 +107,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "inversion",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "inv.negative",
@@ -74,7 +116,28 @@
      "de": "Nach Under no circumstances steht should vor dem Subjekt: should you share.",
      "en": "After Under no circumstances, should stands before the subject: should you share."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "you must share",
+      "de": "Nach Under no circumstances am Satzanfang muss das Hilfsverb vor das Subjekt: should you share.",
+      "en": "After a fronted Under no circumstances the auxiliary goes before the subject: should you share."
+     },
+     {
+      "opt": "should share you",
+      "de": "Das Subjekt steht direkt hinter should, vor dem Verb: should you share.",
+      "en": "The subject goes right after should and before the verb: should you share."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „you should share“, nicht hier.",
+      "en": "The mistake is at “you should share”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „you should share“. Richtig ist should you share.",
+      "en": "There is a mistake: “you should share”. The right form is should you share."
+     }
+    ]
    },
    "bad": {
     "span": "you should share",
@@ -95,7 +158,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "inversion",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "inv.cond",
@@ -104,7 +167,28 @@
      "de": "Nach Should you steht die Grundform ohne will: Should you have …",
      "en": "After Should you the base form follows without will: Should you have …"
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "had",
+      "de": "Nach Should you steht die Grundform, nicht die Vergangenheit: Should you have …",
+      "en": "After Should you comes the base form, not the past: Should you have …"
+     },
+     {
+      "opt": "having",
+      "de": "Nach Should you steht die Grundform, keine -ing-Form: Should you have …",
+      "en": "After Should you comes the base form, not the -ing form: Should you have …"
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will have“, nicht hier.",
+      "en": "The mistake is at “will have”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will have“. Richtig ist have.",
+      "en": "There is a mistake: “will have”. The right form is have."
+     }
+    ]
    },
    "bad": {
     "span": "will have",
@@ -133,7 +217,13 @@
      "de": "Kein Fehler: Nach Not until am Anfang steht did vor dem Subjekt, wie hier.",
      "en": "No mistake: after Not until at the start, did stands before the subject, as here."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Nach Not until am Anfang steht did vor dem Subjekt, wie hier.",
+      "en": "This sentence is correct. After Not until at the start, did stands before the subject, as here."
+     }
+    ]
    },
    "bad": null,
    "text": "Not until the audit began did the team realize how many files were missing."
@@ -152,7 +242,13 @@
      "de": "Kein Fehler: Had we invested ersetzt If we had invested.",
      "en": "No mistake: Had we invested replaces If we had invested."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Had we invested ersetzt If we had invested.",
+      "en": "This sentence is correct. Had we invested replaces If we had invested."
+     }
+    ]
    },
    "bad": null,
    "text": "Had we invested in monitoring earlier, the outage would have been much shorter."
@@ -162,7 +258,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "inversion",
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "pat": "inv.negative",
@@ -171,7 +267,28 @@
      "de": "Nach Never am Satzanfang steht have vor dem Subjekt: Never have I seen.",
      "en": "After Never at the start, have stands before the subject: Never have I seen."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "I did see",
+      "de": "Nach Never am Satzanfang muss das Hilfsverb vor das Subjekt: Never have I seen.",
+      "en": "After a fronted Never the auxiliary goes before the subject: Never have I seen."
+     },
+     {
+      "opt": "saw I",
+      "de": "Ein Vollverb wird im modernen Englisch nicht umgestellt. Man braucht ein Hilfsverb: have I seen.",
+      "en": "Modern English does not invert a main verb. You need an auxiliary: have I seen."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „I have seen“, nicht hier.",
+      "en": "The mistake is at “I have seen”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „I have seen“. Richtig ist have I seen.",
+      "en": "There is a mistake: “I have seen”. The right form is have I seen."
+     }
+    ]
    },
    "bad": {
     "span": "I have seen",
@@ -197,20 +314,42 @@
    "pat": "inv.sooner",
    "why": {
     "ok": {
-     "de": "Nach No sooner steht had vor dem Subjekt: No sooner had we left.",
-     "en": "After No sooner, had stands before the subject: No sooner had we left."
+     "de": "Nach No sooner am Satzanfang kommt das Hilfsverb vor das Subjekt: No sooner had we left (auch: did we leave).",
+     "en": "After a fronted No sooner, the auxiliary comes before the subject: No sooner had we left (also: did we leave)."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "we left",
+      "de": "Nach No sooner fehlt hier die Umstellung: Hilfsverb vor das Subjekt, also had we left.",
+      "en": "No sooner needs inversion here: auxiliary before the subject, so had we left."
+     },
+     {
+      "opt": "have we left",
+      "de": "Die Umstellung stimmt, aber die Zeit nicht: Die Geschichte spielt in der Vergangenheit, also had we left.",
+      "en": "The inversion is right but the tense is not: the story is in the past, so had we left."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „we had left“, nicht hier.",
+      "en": "The mistake is at “we had left”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „we had left“ braucht die Umstellung.",
+      "en": "There is a mistake: “we had left” needs inversion."
+     }
+    ]
    },
    "bad": {
     "span": "we had left",
     "fix": [
-     "had we left"
+     "had we left",
+     "did we leave"
     ],
     "choices": [
      "had we left",
      "we left",
-     "did we leave"
+     "have we left"
     ]
    },
    "text": "No sooner we had left the house than we remembered the keys."
@@ -229,7 +368,13 @@
      "de": "Kein Fehler: Nach Only after und dem Nebensatz steht did vor dem Subjekt, wie hier.",
      "en": "No mistake: after Only after and the clause, did stands before the subject, as here."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Nach Only after und dem Nebensatz steht did vor dem Subjekt, wie hier.",
+      "en": "This sentence is correct. After Only after and the clause, did stands before the subject, as here."
+     }
+    ]
    },
    "bad": null,
    "text": "Only after the movie had ended did the children admit that they were scared."
@@ -239,7 +384,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "ep.do-emph",
@@ -248,7 +393,28 @@
      "de": "Nach does steht die Grundform: does send.",
      "en": "After does the base form follows: does send."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "sent",
+      "de": "Nach does steht die Grundform, nicht die Vergangenheit: does send.",
+      "en": "After does comes the base form, not the past: does send."
+     },
+     {
+      "opt": "sending",
+      "de": "Nach does steht die Grundform, keine -ing-Form: does send.",
+      "en": "After does comes the base form, not the -ing form: does send."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „sends“, nicht hier.",
+      "en": "The mistake is at “sends”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „sends“. Richtig ist send.",
+      "en": "There is a mistake: “sends”. The right form is send."
+     }
+    ]
    },
    "bad": {
     "span": "sends",
@@ -277,7 +443,28 @@
      "de": "Bei der Voranstellung fehlt as: Hard as we tried, … Ohne as ist der Einwand nicht ausgedrückt.",
      "en": "The as is missing in the fronting: Hard as we tried, … Without as the concession is not expressed."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "Hard that we tried",
+      "de": "Das Bindewort ist as, nicht that: Hard as we tried = So sehr wir uns auch bemühten.",
+      "en": "The linking word is as, not that: Hard as we tried = however hard we tried."
+     },
+     {
+      "opt": "Hard so we tried",
+      "de": "So passt hier nicht. Die feste Form ist Adjektiv + as + Satz: Hard as we tried.",
+      "en": "So does not work here. The fixed pattern is adjective + as + clause: Hard as we tried."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „Hard we tried“, nicht hier.",
+      "en": "The mistake is at “Hard we tried”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „Hard we tried“. Richtig ist Hard as we tried.",
+      "en": "There is a mistake: “Hard we tried”. The right form is Hard as we tried."
+     }
+    ]
    },
    "bad": {
     "span": "Hard we tried",
@@ -308,7 +495,28 @@
      "de": "Der that-Satz nennt die Folge: Such was the demand that …",
      "en": "The that-clause names the result: Such was the demand that …"
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "which",
+      "de": "Which leitet einen Relativsatz ein. Die Folge nach such … nennt ein that-Satz.",
+      "en": "Which starts a relative clause. After such … the result comes in a that-clause."
+     },
+     {
+      "opt": "as",
+      "de": "Such … as vergleicht oder nennt Beispiele. Für die Folge steht that: Such was the demand that …",
+      "en": "Such … as compares or gives examples. For a result use that: Such was the demand that …"
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „what“, nicht hier.",
+      "en": "The mistake is at “what”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „what“. Richtig ist that.",
+      "en": "There is a mistake: “what”. The right form is that."
+     }
+    ]
    },
    "bad": {
     "span": "what",
@@ -337,7 +545,28 @@
      "de": "Nach einem vorgezogenen Objekt bleibt die normale Reihenfolge: we must reverse.",
      "en": "After a fronted object the normal order stays: we must reverse."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "must reverse we",
+      "de": "Das Subjekt steht vor dem Verb: we must reverse. Ein vorgezogenes Objekt ändert daran nichts.",
+      "en": "The subject comes before the verb: we must reverse. A fronted object does not change that."
+     },
+     {
+      "opt": "we reverse must",
+      "de": "Das Modalverb steht vor dem Vollverb: we must reverse.",
+      "en": "The modal comes before the main verb: we must reverse."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „must we reverse“, nicht hier.",
+      "en": "The mistake is at “must we reverse”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „must we reverse“. Richtig ist we must reverse.",
+      "en": "There is a mistake: “must we reverse”. The right form is we must reverse."
+     }
+    ]
    },
    "bad": {
     "span": "must we reverse",
@@ -366,7 +595,13 @@
      "de": "Kein Fehler: Nach as bleibt die normale Stellung (it is).",
      "en": "No mistake: after as the normal order (it is) stays."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Nach as bleibt die normale Stellung (it is).",
+      "en": "This sentence is correct. After as the normal order (it is) stays."
+     }
+    ]
    },
    "bad": null,
    "text": "Tempting as it is, we should not skip the final review."
@@ -385,7 +620,13 @@
      "de": "Kein Fehler: Nach So great steht das Verb was vor dem Subjekt.",
      "en": "No mistake: after So great the verb was stands before the subject."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Nach So great steht das Verb was vor dem Subjekt.",
+      "en": "This sentence is correct. After So great the verb was stands before the subject."
+     }
+    ]
    },
    "bad": null,
    "text": "So great was the interest that we added a second session on Friday."
@@ -404,7 +645,28 @@
      "de": "Bei vorangestelltem Objekt bleibt die Reihenfolge danach normal: This we must always remember.",
      "en": "With a fronted object the order after it stays normal: This we must always remember."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "must always we remember",
+      "de": "Nach einem vorgezogenen Objekt bleibt die normale Reihenfolge: we must always remember.",
+      "en": "After a fronted object the order stays normal: we must always remember."
+     },
+     {
+      "opt": "we always must to remember",
+      "de": "Nach must steht die Grundform ohne to, und always steht hinter must: we must always remember.",
+      "en": "After must comes the base form without to, and always follows must: we must always remember."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „must we always remember“, nicht hier.",
+      "en": "The mistake is at “must we always remember”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „must we always remember“. Richtig ist we must always remember.",
+      "en": "There is a mistake: “must we always remember”. The right form is we must always remember."
+     }
+    ]
    },
    "bad": {
     "span": "must we always remember",
@@ -424,7 +686,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "emph-plus",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "ep.do-emph",
@@ -433,7 +695,28 @@
      "de": "Nach does steht die Grundform: does love.",
      "en": "After does the base form follows: does love."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "do love",
+      "de": "She ist 3. Person Singular, darum does: She does love.",
+      "en": "She is third person singular, so it is does: She does love."
+     },
+     {
+      "opt": "does loving",
+      "de": "Nach does steht die Grundform, keine -ing-Form: does love.",
+      "en": "After does comes the base form, not the -ing form: does love."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „does loves“, nicht hier.",
+      "en": "The mistake is at “does loves”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „does loves“. Richtig ist does love.",
+      "en": "There is a mistake: “does loves”. The right form is does love."
+     }
+    ]
    },
    "bad": {
     "span": "does loves",
@@ -462,7 +745,13 @@
      "de": "Kein Fehler: Adjektiv + as + it may seem räumt etwas ein.",
      "en": "No mistake: adjective + as + it may seem concedes a point."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Adjektiv + as + it may seem räumt etwas ein.",
+      "en": "This sentence is correct. Adjective + as + it may seem concedes a point."
+     }
+    ]
    },
    "bad": null,
    "text": "Strange as it may seem, the best coffee in town is sold at the gas station."
@@ -472,7 +761,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.so-not",
@@ -481,7 +770,28 @@
      "de": "Nach hope steht not direkt: I hope not. Hope that not ist im Englischen nicht üblich.",
      "en": "After hope, not follows directly: I hope not. Hope that not is not used in English."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "hope it not",
+      "de": "Hope it not gibt es nicht. Der verneinte Gedanke ist ein einfaches not: I hope not.",
+      "en": "Hope it not does not exist. The negative thought is a plain not: I hope not."
+     },
+     {
+      "opt": "hope no",
+      "de": "No passt als Antwort, aber nicht nach hope. Es heißt I hope not.",
+      "en": "No works as an answer, but not after hope. Say I hope not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „hope that not“, nicht hier.",
+      "en": "The mistake is at “hope that not”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „hope that not“. Richtig ist hope not.",
+      "en": "There is a mistake: “hope that not”. The right form is hope not."
+     }
+    ]
    },
    "bad": {
     "span": "hope that not",
@@ -501,7 +811,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.do-so",
@@ -510,7 +820,13 @@
      "de": "Kein Fehler: Did the same ersetzt changed our logo.",
      "en": "No mistake: Did the same replaces changed our logo."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Did the same ersetzt changed our logo.",
+      "en": "This sentence is correct. Did the same replaces changed our logo."
+     }
+    ]
    },
    "bad": null,
    "text": "Our rivals changed their logo, and we did the same last month."
@@ -520,7 +836,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.one-ones",
@@ -529,7 +845,28 @@
      "de": "Hinter dem Adjektiv cheaper braucht es one.",
      "en": "After the adjective cheaper you need one."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "a cheaper it",
+      "de": "It steht für ein bestimmtes Ding. Für „einen günstigeren“ braucht es one: a cheaper one.",
+      "en": "It refers to one specific thing. For “a cheaper one” you need one."
+     },
+     {
+      "opt": "cheaper one a",
+      "de": "Der Artikel steht vorn: a cheaper one.",
+      "en": "The article comes first: a cheaper one."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „a cheaper“, nicht hier.",
+      "en": "The mistake is at “a cheaper”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „a cheaper“. Richtig ist a cheaper one.",
+      "en": "There is a mistake: “a cheaper”. The right form is a cheaper one."
+     }
+    ]
    },
    "bad": {
     "span": "a cheaper",
@@ -549,7 +886,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.to-aux",
@@ -558,7 +895,28 @@
      "de": "Am Ende muss to stehen bleiben: I would like to.",
      "en": "At the end to has to stay: I would like to."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "would like for",
+      "de": "Nach would like bleibt to stehen, nicht for: I would like to.",
+      "en": "After would like, to stays, not for: I would like to."
+     },
+     {
+      "opt": "would like of",
+      "de": "Of passt nicht nach like. Das Verb entfällt, to bleibt: I would like to.",
+      "en": "Of does not follow like. The verb is dropped, to stays: I would like to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would like“, nicht hier.",
+      "en": "The mistake is at “would like”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would like“. Richtig ist would like to.",
+      "en": "There is a mistake: “would like”. The right form is would like to."
+     }
+    ]
    },
    "bad": {
     "span": "would like",
@@ -587,7 +945,28 @@
      "de": "Gebühren werden mit Gebühren verglichen: those of the new provider.",
      "en": "Fees are compared with fees: those of the new provider."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "than that of the new provider",
+      "de": "Fees ist Mehrzahl, darum those, nicht that: those of the new provider.",
+      "en": "Fees is plural, so those, not that: those of the new provider."
+     },
+     {
+      "opt": "than the ones the new provider",
+      "de": "Hier fehlt of oder ein Verb. Für den Vergleich steht those of the new provider.",
+      "en": "Of or a verb is missing here. For the comparison use those of the new provider."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „than the new provider“, nicht hier.",
+      "en": "The mistake is at “than the new provider”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „than the new provider“. Richtig ist than those of the new provider.",
+      "en": "There is a mistake: “than the new provider”. The right form is than those of the new provider."
+     }
+    ]
    },
    "bad": {
     "span": "than the new provider",
@@ -608,7 +987,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.one-ones",
@@ -617,7 +996,13 @@
      "de": "Kein Fehler: One ersetzt das Nomen tool.",
      "en": "No mistake: One replaces the noun tool."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. One ersetzt das Nomen tool.",
+      "en": "This sentence is correct. One replaces the noun tool."
+     }
+    ]
    },
    "bad": null,
    "text": "The new tool is faster than the old one, but the old one is cheaper to run."
@@ -627,7 +1012,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.do-so",
@@ -636,7 +1021,28 @@
      "de": "Vor same steht the: do the same.",
      "en": "Before same you need the: do the same."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "do it same",
+      "de": "It passt hier nicht. Die feste Form heißt do the same.",
+      "en": "It does not fit here. The fixed phrase is do the same."
+     },
+     {
+      "opt": "does same",
+      "de": "Nach will steht die Grundform do, und vor same fehlt the: do the same.",
+      "en": "After will comes the base form do, and same needs the: do the same."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „do same“, nicht hier.",
+      "en": "The mistake is at “do same”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „do same“. Richtig ist do the same.",
+      "en": "There is a mistake: “do same”. The right form is do the same."
+     }
+    ]
    },
    "bad": {
     "span": "do same",
@@ -656,7 +1062,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.so-not",
@@ -665,7 +1071,28 @@
      "de": "Nach be afraid steht not für den verneinten Gedanken: I am afraid not.",
      "en": "After be afraid, not stands for the negative thought: I am afraid not."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "afraid that no",
+      "de": "That no gibt es nicht. Der verneinte Gedanke ist ein einfaches not: I am afraid not.",
+      "en": "That no does not exist. The negative thought is a plain not: I am afraid not."
+     },
+     {
+      "opt": "afraid nothing",
+      "de": "Nothing heißt „nichts“ und passt nicht. Es heißt I am afraid not.",
+      "en": "Nothing means “no thing” and does not fit. Say I am afraid not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „afraid no“, nicht hier.",
+      "en": "The mistake is at “afraid no”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „afraid no“. Richtig ist afraid not.",
+      "en": "There is a mistake: “afraid no”. The right form is afraid not."
+     }
+    ]
    },
    "bad": {
     "span": "afraid no",
@@ -685,7 +1112,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.to-aux",
@@ -694,7 +1121,13 @@
      "de": "Kein Fehler: Das Verb join entfällt, aber to bleibt: told me not to.",
      "en": "No mistake: the verb join is dropped, but to stays: told me not to."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Das Verb join entfällt, aber to bleibt: told me not to.",
+      "en": "This sentence is correct. The verb join is dropped, but to stays: told me not to."
+     }
+    ]
    },
    "bad": null,
    "text": "I wanted to join the choir, but my friends told me not to."
@@ -704,7 +1137,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.so-not",
@@ -713,7 +1146,28 @@
      "de": "Es heißt I hope not, nicht I do not hope so. Not ersetzt den Gedanken.",
      "en": "It is I hope not, not I do not hope so. Not replaces the thought."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "do not hope not",
+      "de": "Zwei Verneinungen sind zu viel. Es heißt einfach I hope not.",
+      "en": "Two negatives are too many. Simply say I hope not."
+     },
+     {
+      "opt": "hope so not",
+      "de": "So not gibt es nicht. Für den verneinten Gedanken steht not allein: I hope not.",
+      "en": "So not does not exist. For the negative thought use not alone: I hope not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „do not hope so“, nicht hier.",
+      "en": "The mistake is at “do not hope so”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „do not hope so“. Richtig ist hope not.",
+      "en": "There is a mistake: “do not hope so”. The right form is hope not."
+     }
+    ]
    },
    "bad": {
     "span": "do not hope so",
@@ -733,7 +1187,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.so-not",
@@ -742,7 +1196,28 @@
      "de": "Nach neither steht das Hilfsverb vor dem Subjekt: neither does my wife.",
      "en": "After neither the auxiliary comes before the subject: neither does my wife."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "neither my wife does",
+      "de": "Das ist genau der Fehler: Nach neither muss does vor das Subjekt: neither does my wife.",
+      "en": "That is the mistake itself: after neither, does must go before the subject: neither does my wife."
+     },
+     {
+      "opt": "so does my wife",
+      "de": "So does bestätigt etwas Positives. Nach einem verneinten Satz steht neither: neither does my wife.",
+      "en": "So does agrees with a positive statement. After a negative one use neither: neither does my wife."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „neither my wife does“, nicht hier.",
+      "en": "The mistake is at “neither my wife does”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „neither my wife does“. Richtig ist neither does my wife.",
+      "en": "There is a mistake: “neither my wife does”. The right form is neither does my wife."
+     }
+    ]
    },
    "bad": {
     "span": "neither my wife does",
@@ -762,7 +1237,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.one-ones",
@@ -771,7 +1246,28 @@
      "de": "Hinter dem Adjektiv new braucht es one.",
      "en": "After the adjective new you need one."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "a new ones",
+      "de": "Nach a steht die Einzahl: a new one.",
+      "en": "After a comes the singular: a new one."
+     },
+     {
+      "opt": "the new it",
+      "de": "Hinter einem Adjektiv steht one statt it. Für „ein neues“ heißt es a new one.",
+      "en": "It never follows an adjective. For “a new one” use a new one."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „a new“, nicht hier.",
+      "en": "The mistake is at “a new”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „a new“. Richtig ist a new one.",
+      "en": "There is a mistake: “a new”. The right form is a new one."
+     }
+    ]
    },
    "bad": {
     "span": "a new",
@@ -791,7 +1287,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.contact",
@@ -800,7 +1296,28 @@
      "de": "Nach dem Nomen offer steht that, which oder nichts, nie what.",
      "en": "After the noun offer comes that, which or nothing, never what."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "who",
+      "de": "Who steht für Personen. Ein Angebot ist eine Sache: that oder which.",
+      "en": "Who is for people. An offer is a thing: that or which."
+     },
+     {
+      "opt": "whom",
+      "de": "Whom steht für Personen. Für eine Sache steht that oder which.",
+      "en": "Whom is for people. For a thing use that or which."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „what“, nicht hier.",
+      "en": "The mistake is at “what”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „what“. Richtig ist that.",
+      "en": "There is a mistake: “what”. The right form is that."
+     }
+    ]
    },
    "bad": {
     "span": "what",
@@ -821,7 +1338,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.participle",
@@ -830,7 +1347,28 @@
      "de": "Die Dokumente werden erstellt: Passiv braucht die 3. Form prepared.",
      "en": "The documents are prepared: the passive needs the past participle prepared."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "preparing",
+      "de": "Die Dokumente bereiten nichts vor, sie werden vorbereitet: prepared.",
+      "en": "The documents do not prepare anything, they are prepared: prepared."
+     },
+     {
+      "opt": "prepares",
+      "de": "Hier braucht es kein konjugiertes Verb, sondern das Partizip: documents prepared by …",
+      "en": "No finite verb is needed here, only the participle: documents prepared by …"
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „prepare“, nicht hier.",
+      "en": "The mistake is at “prepare”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „prepare“. Richtig ist prepared.",
+      "en": "There is a mistake: “prepare”. The right form is prepared."
+     }
+    ]
    },
    "bad": {
     "span": "prepare",
@@ -859,7 +1397,28 @@
      "de": "Der Besitz steht mit ’s: the manager’s decision.",
      "en": "Possession takes ’s: the manager’s decision."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "managers decision",
+      "de": "Ohne Apostroph ist es eine Mehrzahl. Besitz zeigt ’s: the manager’s decision.",
+      "en": "Without an apostrophe it is just a plural. Possession needs ’s: the manager’s decision."
+     },
+     {
+      "opt": "manager decisions",
+      "de": "Gemeint ist eine Entscheidung des Managers, nicht mehrere: the manager’s decision.",
+      "en": "One decision by the manager is meant: the manager’s decision."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „manager decision“, nicht hier.",
+      "en": "The mistake is at “manager decision”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „manager decision“. Richtig ist manager's decision.",
+      "en": "There is a mistake: “manager decision”. The right form is manager's decision."
+     }
+    ]
    },
    "bad": {
     "span": "manager decision",
@@ -879,7 +1438,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "np.to-inf",
@@ -888,7 +1447,28 @@
      "de": "Nach way steht to + Grundform: to increase.",
      "en": "After way comes to + base form: to increase."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "for increase",
+      "de": "Das ist genau der Fehler. Nach way steht to + Grundform: the best way to increase.",
+      "en": "That is the mistake itself. After way comes to + base form: the best way to increase."
+     },
+     {
+      "opt": "to increasing",
+      "de": "Nach to steht hier die Grundform, nicht -ing: to increase.",
+      "en": "After to the base form follows here, not -ing: to increase."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „for increase“, nicht hier.",
+      "en": "The mistake is at “for increase”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „for increase“. Richtig ist to increase.",
+      "en": "There is a mistake: “for increase”. The right form is to increase."
+     }
+    ]
    },
    "bad": {
     "span": "for increase",
@@ -909,7 +1489,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.participle",
@@ -918,7 +1498,13 @@
      "de": "Kein Fehler: Working ersetzt who is working.",
      "en": "No mistake: Working replaces who is working."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Working ersetzt who is working.",
+      "en": "This sentence is correct. Working replaces who is working."
+     }
+    ]
    },
    "bad": null,
    "text": "Everyone working on the migration received the new access rules."
@@ -928,7 +1514,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "np.to-inf",
@@ -937,7 +1523,13 @@
      "de": "Kein Fehler: Nach the last speaker folgt to + Grundform.",
      "en": "No mistake: after the last speaker comes to + base form."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Nach the last speaker folgt to + Grundform.",
+      "en": "This sentence is correct. After the last speaker comes to + base form."
+     }
+    ]
    },
    "bad": null,
    "text": "He was the last speaker to present at the conference on Thursday."
@@ -956,7 +1548,28 @@
      "de": "Das Partizip mit Ergänzung steht hinter dem Nomen: a package tailored to small teams.",
      "en": "The participle with its phrase stands after the noun: a package tailored to small teams."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "tailored package to small teams",
+      "de": "To small teams gehört zu tailored. Partizip und Ergänzung stehen zusammen hinter dem Nomen.",
+      "en": "To small teams belongs to tailored. The participle and its phrase go together after the noun."
+     },
+     {
+      "opt": "package that tailored to small teams",
+      "de": "Nach that fehlt das Verb is. Ohne that geht es kürzer: a package tailored to small teams.",
+      "en": "After that the verb is is missing. Without that it is shorter: a package tailored to small teams."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „tailored to small teams package“, nicht hier.",
+      "en": "The mistake is at “tailored to small teams package”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „tailored to small teams package“. Richtig ist package tailored to small teams.",
+      "en": "There is a mistake: “tailored to small teams package”. The right form is package tailored to small teams."
+     }
+    ]
    },
    "bad": {
     "span": "tailored to small teams package",
@@ -976,7 +1589,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "pat": "np.participle",
@@ -985,7 +1598,28 @@
      "de": "Die Kinder werden einbezogen, deshalb das passive Partizip: the children involved.",
      "en": "The children are involved, so the passive participle is used: the children involved."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "involve",
+      "de": "Hier braucht es ein Partizip, keine Grundform: the children involved.",
+      "en": "A participle is needed here, not the base form: the children involved."
+     },
+     {
+      "opt": "involves",
+      "de": "Hier braucht es kein konjugiertes Verb, sondern das Partizip: the children involved.",
+      "en": "No finite verb is needed here, only the participle: the children involved."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „involving“, nicht hier.",
+      "en": "The mistake is at “involving”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „involving“. Richtig ist involved.",
+      "en": "There is a mistake: “involving”. The right form is involved."
+     }
+    ]
    },
    "bad": {
     "span": "involving",
@@ -1005,7 +1639,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "np.to-inf",
@@ -1014,7 +1648,28 @@
      "de": "Nach the best way steht to + Grundform: the best way to save.",
      "en": "After the best way comes to + base form: the best way to save."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "for to save",
+      "de": "For to ist veraltet. Nach the best way steht to allein: the best way to save.",
+      "en": "For to is old-fashioned. After the best way use only to: the best way to save."
+     },
+     {
+      "opt": "of save",
+      "de": "Nach of käme saving. Üblich ist the best way to save.",
+      "en": "After of you would need saving. The usual form is the best way to save."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „for save“, nicht hier.",
+      "en": "The mistake is at “for save”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „for save“. Richtig ist to save.",
+      "en": "There is a mistake: “for save”. The right form is to save."
+     }
+    ]
    },
    "bad": {
     "span": "for save",
@@ -1034,7 +1689,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "noun-phrase",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "np.of-s",
@@ -1043,7 +1698,13 @@
      "de": "Kein Fehler: Zeitangaben nehmen ’s, und last week’s ersetzt das Nomen.",
      "en": "No mistake: time words take ’s, and last week’s replaces the noun."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Zeitangaben nehmen ’s, und last week’s ersetzt das Nomen.",
+      "en": "This sentence is correct. Time words take ’s, and last week’s replaces the noun."
+     }
+    ]
    },
    "bad": null,
    "text": "Yesterday’s lesson was much shorter than last week’s."

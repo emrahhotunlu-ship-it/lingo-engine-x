@@ -42,7 +42,7 @@
   "model": {
    "acknowledge": "That makes sense. It's smart to compare options for a decision like this.",
    "ask": "What do you like about their approach so far, and is there anything you're still unsure about?",
-   "answer": "Many of our customers compared us with other providers, and the deciding factors were usually our audit-proof archive and how quickly the team could start.",
+   "answer": "Many of our customers compared us with other providers, and the deciding factors were usually our tamper-proof, legally compliant archive and how quickly the team could start.",
    "secure": "Would it be useful if I showed you those two points in a 20-minute demo, so you have a fair comparison?"
   },
   "tip": {
@@ -331,8 +331,8 @@
   "model": {
    "acknowledge": "I'm glad to hear it's working well for you.",
    "ask": "Are there any processes where your team still works with paper or email attachments?",
-   "answer": "Some customers add one department at a time, and the price per user goes down as they grow.",
-   "secure": "Would you be open to a short workshop with HR to see if it's relevant?"
+   "answer": "Many teams start with one paper-heavy process, such as invoice approval, and leave everything else as it is.",
+   "secure": "Would you be open to a short call with the people who handle that process to see if it's relevant?"
   },
   "tip": {
    "de": "Zufriedenheit feiern, dann nach Lücken fragen statt Funktionen anpreisen.",

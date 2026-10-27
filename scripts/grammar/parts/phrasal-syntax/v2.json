@@ -263,35 +263,36 @@
     "type": "kwt",
     "pat": "ph.together",
     "from": "The merger failed at the last minute.",
-    "key": "MERGER",
-    "frame": "At the last minute, the ___.",
-    "answer": "merger fell through",
+    "key": "FELL",
+    "frame": "At the last minute, the merger ___.",
+    "answer": "fell through",
     "accepted": [
-      "merger fell apart"
+      "fell apart"
     ],
     "words": [
-      3,
-      3
+      2,
+      2
     ],
     "why": {
       "ok": {
-        "de": "Richtig: fall through = scheitern. Ohne Objekt steht through am Ende.",
-        "en": "Right: fall through = fail. With no object, through comes last."
+        "de": "Richtig: fall through = scheitern (Pläne, Geschäfte). Ohne Objekt steht through am Ende. Fell apart passt auch.",
+        "en": "Right: fall through = fail (plans, deals). With no object, through comes last. Fell apart also works."
       },
       "wrong": [
         {
           "not": [
-            "merger"
+            "fell"
           ],
-          "de": "Das Schlüsselwort merger muss unverändert in der Lücke stehen.",
-          "en": "The key word merger must stay unchanged in the gap."
+          "de": "Das Schlüsselwort fell muss unverändert in der Lücke stehen.",
+          "en": "The key word fell must stay unchanged in the gap."
         },
         {
           "if": [
-            "failed"
+            "fell",
+            "down"
           ],
-          "de": "Richtig gedacht, doch gefragt ist ein Phrasal Verb: fall through.",
-          "en": "Good thinking, but a phrasal verb is asked for: fall through."
+          "de": "Fall down heißt hinfallen. Für ein gescheitertes Geschäft sagt man fall through.",
+          "en": "Fall down means to fall to the ground. A failed deal falls through."
         },
         {
           "not": [

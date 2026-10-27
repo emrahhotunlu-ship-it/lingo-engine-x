@@ -1,4 +1,5 @@
 import { clip } from '../../prompts/common';
+import { holdBackRepair } from '../quality/gate';
 import { repairNorm, type NewRepair, type RepairSrc } from '../repair/repair';
 import { repairsFromText } from '../repair/sources';
 import { wordCount } from '../text/textStats';
@@ -208,10 +209,12 @@ export function repairsFromEdits(text: string, edits: readonly Edit[], src: Repa
     const hit = errs.filter((e) => repairNorm(r.wrong).includes(repairNorm(e.from)));
     const rank = hit.length ? Math.min(...hit.map((e) => KIND_RANK[e.kind])) : 9;
     const pat = hit.find((e) => e.pat)?.pat ?? null;
-    return { r: pat ? { ...r, pat } : r, rank, i };
+    return { r: pat ? { ...r, pat } : r, rank, i, kinds: hit.map((e) => e.kind) };
   });
   ranked.sort((a, b) => a.rank - b.rank || a.i - b.i);
-  return ranked.slice(0, cap).map((x) => x.r);
+  // E1a Einfehler-Regel: ein Fehlersatz mit mehreren Fehlern, Tippfehler-Mix oder abgeschnittener Begründung wird zurückgehalten (gemeldet, nie still).
+  const ok = ranked.filter((x) => !holdBackRepair({ wrong: x.r.wrong, right: x.r.right, why: x.r.why ?? null, kinds: x.kinds }, src));
+  return ok.slice(0, cap).map((x) => x.r);
 }
 
 /** Fehler je 100 Wörter (eine Stelle), `null` ohne Wörter. */

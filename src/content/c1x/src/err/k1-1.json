@@ -659,19 +659,19 @@
    "bad": {
     "span": "went",
     "fix": [
-     "gone",
-     "been"
+     "been",
+     "gone"
     ],
     "choices": [
      "go",
      "going",
-     "gone"
+     "been"
     ]
    },
    "why": {
     "ok": {
-     "de": "Nach have steht die 3. Form (gone/been), nicht das Past Simple went. Deutsch „bist du je gefahren“ hat nur ein Partizip, die Formen sind ähnlich.",
-     "en": "After have comes the participle (gone/been), not the past simple went. The two forms look similar to German learners."
+     "de": "Nach have steht die 3. Form, nicht das Past Simple went. Für Besuche sagt man meist been: Have you ever been to …?",
+     "en": "After have comes the past participle, not the past simple went. For visits we usually say been: Have you ever been to …?"
     },
     "wrong": [
      {

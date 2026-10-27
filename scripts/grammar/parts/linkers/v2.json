@@ -43,8 +43,8 @@
      "if": [
       "but"
      ],
-     "de": "Mit but davor entsteht ein Kommafehler. Although trägt den Gegensatz schon.",
-     "en": "With but in front you get a comma splice. Although already carries the contrast."
+     "de": "Although und but zusammen sind doppelt: although trägt den Gegensatz schon, but fällt weg.",
+     "en": "Although and but together say the same thing twice: although already carries the contrast, so drop but."
     }
    ]
   }
@@ -277,8 +277,8 @@
      "if": [
       "but"
      ],
-     "de": "Mit but vorn entsteht ein Kommafehler. Gesucht ist ein Bindewort für den Vergleich.",
-     "en": "But at the start gives a comma splice. A linker for the comparison is needed."
+     "de": "But verbindet zwei Hauptsätze und kann keinen Satz vorn einleiten. Gesucht ist ein Bindewort für den Vergleich.",
+     "en": "But joins two main clauses and cannot open the first clause here. A linker for the comparison is needed."
     }
    ]
   }
@@ -331,8 +331,8 @@
      "if": [
       "but"
      ],
-     "de": "Mit but vorn entsteht ein Kommafehler. Gesucht ist ein Bindewort für den Vergleich.",
-     "en": "But at the start gives a comma splice. A linker for the comparison is needed."
+     "de": "But verbindet zwei Hauptsätze und kann keinen Satz vorn einleiten. Gesucht ist ein Bindewort für den Vergleich.",
+     "en": "But joins two main clauses and cannot open the first clause here. A linker for the comparison is needed."
     }
    ]
   }

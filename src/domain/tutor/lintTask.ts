@@ -4,8 +4,9 @@ import { foreignSignalPattern, patternNearGap, patternOf, patternsOf } from '../
 import { splitTransform } from '../grammar/tasks';
 import type { GrammarTask } from '../learn/types';
 
-// Prüfung der Aufgaben-Hülle (Tutor-Engine v3 §4.2). Rein. Bis zum Inhalts-Audit nur eine Warnliste (Test über den ganzen Bestand,
-// `tests/tutor/lint.test.ts`); zur Sperre wird sie erst danach und vor jeder Annahme von Claude-Aufgaben (E5).
+// Prüfung der Aufgaben-Hülle (Tutor-Engine v3 §4.2). Rein. Seit E1a (Lehrer-Audit 26.10.2026) eine SPERRE für erzeugte Aufgaben:
+// Annahme von Claude-Aufgaben (`acceptGrammarItem`) und das Qualitätstor `src/domain/quality/gate.ts` (Tagesauftrag, Pool).
+// Für den festen Bestand bleibt sie eine Meldung mit Ausnahmeliste (`tests/unit/qualityContent.test.ts`, `tests/tutor/lint.test.ts`).
 //
 //   ambiguous      mehrere Lücken, doppelte Auswahl, `alt` und `accepted` überschneiden sich (eine Antwort wäre zugleich Ziel und „anderes Muster“)
 //   no_goal        Fehler finden / Satz verbessern ohne Ziel-Satz (`goal`): Emrah weiß nicht, worauf die Aufgabe hinaus will

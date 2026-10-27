@@ -15,7 +15,28 @@
      "de": "Well steht direkt hinter may, ohne be: may well reject.",
      "en": "Well stands right after may, without be: may well reject."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "may be reject",
+      "de": "Nach may steht die Grundform reject, ohne be: may well reject.",
+      "en": "After may comes the base form reject, without be: may well reject."
+     },
+     {
+      "opt": "may well rejecting",
+      "de": "Nach may well steht die Grundform, keine -ing-Form: may well reject.",
+      "en": "After may well comes the base form, not the -ing form: may well reject."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „may be well reject“, nicht hier.",
+      "en": "The mistake is at “may be well reject”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „may be well reject“. Richtig ist may well reject.",
+      "en": "There is a mistake: “may be well reject”. The right form is may well reject."
+     }
+    ]
    },
    "bad": {
     "span": "may be well reject",
@@ -35,7 +56,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "pat": "mp.bound",
@@ -44,7 +65,28 @@
      "de": "Nach bound steht to und die Grundform: bound to get.",
      "en": "After bound comes to and the base form: bound to get."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "bound to getting",
+      "de": "Nach to steht hier die Grundform, nicht -ing: bound to get.",
+      "en": "After to the base form follows here, not -ing: bound to get."
+     },
+     {
+      "opt": "bound get",
+      "de": "Nach bound fehlt to: bound to get.",
+      "en": "To is missing after bound: bound to get."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „bound getting“, nicht hier.",
+      "en": "The mistake is at “bound getting”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „bound getting“. Richtig ist bound to get.",
+      "en": "There is a mistake: “bound getting”. The right form is bound to get."
+     }
+    ]
    },
    "bad": {
     "span": "bound getting",
@@ -64,7 +106,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "mp.likely",
@@ -73,7 +115,28 @@
      "de": "Mit dem Subjekt vorn folgt likely to und die Grundform.",
      "en": "With the subject first, likely to and the base form follow."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "likely finishing",
+      "de": "Nach likely steht to + Grundform: likely to finish.",
+      "en": "After likely comes to + base form: likely to finish."
+     },
+     {
+      "opt": "likely finishes",
+      "de": "Is ist schon das Verb. Danach folgt to + Grundform: is likely to finish.",
+      "en": "Is is already the verb. Then comes to + base form: is likely to finish."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „likely that finish“, nicht hier.",
+      "en": "The mistake is at “likely that finish”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „likely that finish“. Richtig ist likely to finish.",
+      "en": "There is a mistake: “likely that finish”. The right form is likely to finish."
+     }
+    ]
    },
    "bad": {
     "span": "likely that finish",
@@ -93,7 +156,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "mp.chance",
@@ -102,7 +165,28 @@
      "de": "Englisch sagt there is, nicht it exists.",
      "en": "English says there is, not it exists."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "There exist",
+      "de": "There exist braucht die Mehrzahl und klingt nach Fachtext. Hier heißt es There is a slim chance.",
+      "en": "There exist needs a plural and sounds technical. Here say There is a slim chance."
+     },
+     {
+      "opt": "It has",
+      "de": "Das ist Deutsch gedacht („es gibt“). Englisch sagt there is: There is a slim chance.",
+      "en": "That is German thinking (“es gibt”). English says there is: There is a slim chance."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „It exists“, nicht hier.",
+      "en": "The mistake is at “It exists”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „It exists“. Richtig ist There is.",
+      "en": "There is a mistake: “It exists”. The right form is There is."
+     }
+    ]
    },
    "bad": {
     "span": "It exists",
@@ -122,7 +206,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "mp.likely",
@@ -131,7 +215,13 @@
      "de": "Kein Fehler: Unlikely to + Grundform nennt eine unwahrscheinliche Handlung.",
      "en": "No mistake: Unlikely to + base form names an improbable action."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Unlikely to + Grundform nennt eine unwahrscheinliche Handlung.",
+      "en": "This sentence is correct. Unlikely to + base form names an improbable action."
+     }
+    ]
    },
    "bad": null,
    "text": "Our neighbors are unlikely to move before the summer."
@@ -141,7 +231,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "mp.chance",
@@ -150,7 +240,13 @@
      "de": "Kein Fehler: There is a high chance that … nennt eine Möglichkeit.",
      "en": "No mistake: There is a high chance that … names a possibility."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. There is a high chance that … nennt eine Möglichkeit.",
+      "en": "This sentence is correct. There is a high chance that … names a possibility."
+     }
+    ]
    },
    "bad": null,
    "text": "There is a high chance that the supplier will ask for an extension."
@@ -160,7 +256,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.trend",
@@ -169,7 +265,28 @@
      "de": "Mit at the moment braucht es die Verlaufsform: are rising.",
      "en": "With at the moment you need the continuous: are rising."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "rises at the moment",
+      "de": "Costs ist Mehrzahl, und at the moment braucht die Verlaufsform: are rising.",
+      "en": "Costs is plural, and at the moment needs the progressive: are rising."
+     },
+     {
+      "opt": "rising at the moment",
+      "de": "Vor rising fehlt are: Fuel costs are rising at the moment.",
+      "en": "Are is missing before rising: Fuel costs are rising at the moment."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „rise at the moment“, nicht hier.",
+      "en": "The mistake is at “rise at the moment”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „rise at the moment“. Richtig ist are rising at the moment.",
+      "en": "There is a mistake: “rise at the moment”. The right form is are rising at the moment."
+     }
+    ]
    },
    "bad": {
     "span": "rise at the moment",
@@ -189,7 +306,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.soft",
@@ -198,7 +315,28 @@
      "de": "Nach wondering folgt if und normale Satzstellung: if we could shift.",
      "en": "After wondering comes if and normal word order: if we could shift."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "if could we shift",
+      "de": "Nach if steht die normale Reihenfolge, keine Frage-Stellung: if we could shift.",
+      "en": "After if the order is normal, not question order: if we could shift."
+     },
+     {
+      "opt": "whether could we shift",
+      "de": "Nach whether steht die normale Reihenfolge, keine Frage-Stellung: whether we could shift.",
+      "en": "After whether the order is normal, not question order: whether we could shift."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „could we shift“, nicht hier.",
+      "en": "The mistake is at “could we shift”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „could we shift“. Richtig ist if we could shift.",
+      "en": "There is a mistake: “could we shift”. The right form is if we could shift."
+     }
+    ]
    },
    "bad": {
     "span": "could we shift",
@@ -219,7 +357,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.being",
@@ -228,7 +366,28 @@
      "de": "Müdigkeit ist ein Zustand, deshalb ohne being: is very tired.",
      "en": "Tiredness is a state, so no being: is very tired."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "been very tired",
+      "de": "Is been gibt es nicht. Müde sein ist ein Zustand: is very tired.",
+      "en": "Is been does not exist. Being tired is a state: is very tired."
+     },
+     {
+      "opt": "being tired very",
+      "de": "Very steht vor dem Adjektiv, und für einen Zustand fällt being weg: is very tired.",
+      "en": "Very goes before the adjective, and for a state being is dropped: is very tired."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „being very tired“, nicht hier.",
+      "en": "The mistake is at “being very tired”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „being very tired“. Richtig ist very tired.",
+      "en": "There is a mistake: “being very tired”. The right form is very tired."
+     }
+    ]
    },
    "bad": {
     "span": "being very tired",
@@ -249,7 +408,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.no-ing",
@@ -258,7 +417,28 @@
      "de": "Need ist ein Zustandsverb und bleibt einfach: We need.",
      "en": "Need is a stative verb and stays simple: We need."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "needing",
+      "de": "Need ist ein Zustandsverb und hat hier keine -ing-Form: We need.",
+      "en": "Need is a state verb and takes no -ing form here: We need."
+     },
+     {
+      "opt": "do needing",
+      "de": "Do needing gibt es nicht. Need ist ein Zustandsverb: We need.",
+      "en": "Do needing does not exist. Need is a state verb: We need."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „are needing“, nicht hier.",
+      "en": "The mistake is at “are needing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „are needing“. Richtig ist need.",
+      "en": "There is a mistake: “are needing”. The right form is need."
+     }
+    ]
    },
    "bad": {
     "span": "are needing",
@@ -278,7 +458,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2+",
    "dom": "life",
    "src": "seed",
    "pat": "sa.being",
@@ -287,7 +467,13 @@
      "de": "Kein Fehler: Funny beschreibt Verhalten, deshalb passt is being.",
      "en": "No mistake: funny describes behavior, so is being fits."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Funny beschreibt Verhalten, deshalb passt is being.",
+      "en": "This sentence is correct. Funny describes behavior, so is being fits."
+     }
+    ]
    },
    "bad": null,
    "text": "My cousin is being very funny tonight because he wants us all to laugh."
@@ -297,7 +483,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "sa.soft",
@@ -306,7 +492,13 @@
      "de": "Kein Fehler: Are hoping macht die Einladung freundlich und weich.",
      "en": "No mistake: are hoping makes the invitation friendly and soft."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Are hoping macht die Einladung freundlich und weich.",
+      "en": "This sentence is correct. Are hoping makes the invitation friendly and soft."
+     }
+    ]
    },
    "bad": null,
    "text": "We are hoping to see you at the barbecue on Saturday."
@@ -316,7 +508,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "fp.was-going",
@@ -325,7 +517,28 @@
      "de": "Der Plan liegt in der Vergangenheit: were going to.",
      "en": "The plan lies in the past: were going to."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "was going to",
+      "de": "Der Plan liegt in der Vergangenheit, aber we braucht were: we were going to.",
+      "en": "The plan is in the past, but we needs were: we were going to."
+     },
+     {
+      "opt": "had going to",
+      "de": "Had going to gibt es nicht. Der Plan von damals heißt were going to.",
+      "en": "Had going to does not exist. The plan from back then is were going to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „are going to“, nicht hier.",
+      "en": "The mistake is at “are going to”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „are going to“. Richtig ist were going to.",
+      "en": "There is a mistake: “are going to”. The right form is were going to."
+     }
+    ]
    },
    "bad": {
     "span": "are going to",
@@ -345,7 +558,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "fp.about-to",
@@ -354,7 +567,28 @@
      "de": "Nach about steht to und die Grundform: about to announce.",
      "en": "After about comes to and the base form: about to announce."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "about to announcing",
+      "de": "Nach to steht hier die Grundform, nicht -ing: about to announce.",
+      "en": "After to the base form follows here, not -ing: about to announce."
+     },
+     {
+      "opt": "about for announce",
+      "de": "Die feste Form ist about to + Grundform: about to announce.",
+      "en": "The fixed form is about to + base form: about to announce."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „about announcing“, nicht hier.",
+      "en": "The mistake is at “about announcing”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „about announcing“. Richtig ist about to announce.",
+      "en": "There is a mistake: “about announcing”. The right form is about to announce."
+     }
+    ]
    },
    "bad": {
     "span": "about announcing",
@@ -383,7 +617,28 @@
      "de": "Aus der Vergangenheit auf Späteres: would later employ.",
      "en": "From the past at something later: would later employ."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "would later employs",
+      "de": "Nach would steht die Grundform ohne -s: would later employ.",
+      "en": "After would comes the base form without -s: would later employ."
+     },
+     {
+      "opt": "is later employing",
+      "de": "Die Geschichte spielt in der Vergangenheit. Für Späteres von damals aus steht would: would later employ.",
+      "en": "The story is in the past. For a later event seen from then use would: would later employ."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will later employ“, nicht hier.",
+      "en": "The mistake is at “will later employ”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will later employ“. Richtig ist would later employ.",
+      "en": "There is a mistake: “will later employ”. The right form is would later employ."
+     }
+    ]
    },
    "bad": {
     "span": "will later employ",
@@ -414,7 +669,28 @@
      "de": "Für einen Plan in der Vergangenheit gilt was to: was to join.",
      "en": "For a plan in the past was to is used: was to join."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "was to joining",
+      "de": "Nach was to steht die Grundform, nicht -ing: was to join.",
+      "en": "After was to comes the base form, not -ing: was to join."
+     },
+     {
+      "opt": "is to join",
+      "de": "Der Plan liegt in der Vergangenheit, sie hat einen anderen Job angenommen: was to join.",
+      "en": "The plan is in the past, she took another job: was to join."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „should join“, nicht hier.",
+      "en": "The mistake is at “should join”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „should join“. Richtig ist was to join.",
+      "en": "There is a mistake: “should join”. The right form is was to join."
+     }
+    ]
    },
    "bad": {
     "span": "should join",
@@ -438,7 +714,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "fp.about-to",
@@ -447,7 +723,13 @@
      "de": "Kein Fehler: Was about to + Grundform, dann kommt etwas dazwischen.",
      "en": "No mistake: was about to + base form, then something intervenes."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Was about to + Grundform, dann kommt etwas dazwischen.",
+      "en": "This sentence is correct. Was about to + base form, then something intervenes."
+     }
+    ]
    },
    "bad": null,
    "text": "I was about to leave the house when I noticed that the oven was still on."
@@ -457,7 +739,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "future-past",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "fp.was-going",
@@ -466,7 +748,13 @@
      "de": "Kein Fehler: Were going to nennt den Plan von damals.",
      "en": "No mistake: were going to names the plan from back then."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Were going to nennt den Plan von damals.",
+      "en": "This sentence is correct. Were going to names the plan from back then."
+     }
+    ]
    },
    "bad": null,
    "text": "We were going to move to Lisbon, but the apartment prices changed our minds."
@@ -476,7 +764,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.none",
@@ -485,7 +773,28 @@
      "de": "Für „keiner von“ mit Nomen steht none of.",
      "en": "For “not one of” with a noun none of is used."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "Nothing of",
+      "de": "Nothing steht für Dinge und nicht vor of. Für „keiner von“ steht none of.",
+      "en": "Nothing is for things and does not go before of. For “not one of” use none of."
+     },
+     {
+      "opt": "No of",
+      "de": "No steht direkt vor einem Nomen, nicht vor of. Hier heißt es None of.",
+      "en": "No goes straight before a noun, never before of. Here it is None of."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „No one of“, nicht hier.",
+      "en": "The mistake is at “No one of”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „No one of“. Richtig ist None of.",
+      "en": "There is a mistake: “No one of”. The right form is None of."
+     }
+    ]
    },
    "bad": {
     "span": "No one of",
@@ -505,7 +814,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.hardly",
@@ -514,7 +823,28 @@
      "de": "Hardly ist schon verneint, ein zweites not ist zu viel.",
      "en": "Hardly is already negative, a second not is too much."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "did hardly changed",
+      "de": "Nach did steht die Grundform, und did ist hier unnötig: We hardly changed.",
+      "en": "After did comes the base form, and did is not needed here: We hardly changed."
+     },
+     {
+      "opt": "not hardly changed",
+      "de": "Hardly ist schon verneint, not ist zu viel: We hardly changed.",
+      "en": "Hardly is already negative, not is too much: We hardly changed."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „did not hardly change“, nicht hier.",
+      "en": "The mistake is at “did not hardly change”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „did not hardly change“. Richtig ist hardly changed.",
+      "en": "There is a mistake: “did not hardly change”. The right form is hardly changed."
+     }
+    ]
    },
    "bad": {
     "span": "did not hardly change",
@@ -535,7 +865,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.no-longer",
@@ -544,7 +874,28 @@
      "de": "Die feste Form heißt no longer.",
      "en": "The fixed form is no longer."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "not later",
+      "de": "Not later heißt „nicht später“. Gemeint ist „nicht mehr“: no longer.",
+      "en": "Not later means “not after”. The meaning is “not anymore”: no longer."
+     },
+     {
+      "opt": "non longer",
+      "de": "Non gibt es so nicht. Die feste Form heißt no longer.",
+      "en": "Non does not work here. The fixed form is no longer."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „not longer“, nicht hier.",
+      "en": "The mistake is at “not longer”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „not longer“. Richtig ist no longer.",
+      "en": "There is a mistake: “not longer”. The right form is no longer."
+     }
+    ]
    },
    "bad": {
     "span": "not longer",
@@ -564,7 +915,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "qn.number",
@@ -573,7 +924,28 @@
      "de": "Bei the number of steht das Verb im Singular: has.",
      "en": "With the number of the verb is singular: has."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "opt": "number of defects are",
+      "de": "Bei the number of zählt number, und das ist Einzahl: has.",
+      "en": "With the number of, number is the subject, and it is singular: has."
+     },
+     {
+      "opt": "numbers of defects have",
+      "de": "Gemeint ist eine Zahl, also the number of … has.",
+      "en": "One number is meant, so the number of … has."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „number of defects have“, nicht hier.",
+      "en": "The mistake is at “number of defects have”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „number of defects have“. Richtig ist number of defects has.",
+      "en": "There is a mistake: “number of defects have”. The right form is number of defects has."
+     }
+    ]
    },
    "bad": {
     "span": "number of defects have",
@@ -593,7 +965,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "qn.hardly",
@@ -602,7 +974,13 @@
      "de": "Kein Fehler: Hardly any heißt „kaum“ und braucht kein not.",
      "en": "No mistake: hardly any means “barely any” and needs no not."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. Hardly any heißt „kaum“ und braucht kein not.",
+      "en": "This sentence is correct. Hardly any means “barely any” and needs no not."
+     }
+    ]
    },
    "bad": null,
    "text": "There was hardly any traffic, so we arrived early."
@@ -612,7 +990,7 @@
    "kind": "err",
    "area": "gram",
    "topic": "quant-neg",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "qn.none",
@@ -621,7 +999,13 @@
      "de": "Kein Fehler: None of + Nomen heißt „keiner von“.",
      "en": "No mistake: none of + noun means “not one of”."
     },
-    "wrong": []
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Dieser Satz ist richtig. None of + Nomen heißt „keiner von“.",
+      "en": "This sentence is correct. None of + noun means “not one of”."
+     }
+    ]
    },
    "bad": null,
    "text": "None of my cousins lives in the same city as my parents."

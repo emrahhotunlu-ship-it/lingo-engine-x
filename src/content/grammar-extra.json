@@ -10,8 +10,8 @@
       "alt": [
         "had"
       ],
-      "expl": "Früher war es so, heute nicht mehr: „used to“ + Grundform (We used to have a paper archive).",
-      "expl_en": "It was like that before, but not anymore: “used to” + base verb (We used to have a paper archive)."
+      "expl": "Früher war es so, heute nicht mehr: „used to“ + Grundform (We used to have a paper archive). „had“ ist auch richtig, gesucht sind aber 3 Wörter: used to have betont, dass es heute anders ist.",
+      "expl_en": "It was like that before, but not anymore: “used to” + base verb (We used to have a paper archive). “had” is also correct, but 3 words are asked for: used to have stresses that it is different now."
     },
     {
       "topic": "used-to",
@@ -111,8 +111,8 @@
       "type": "correct",
       "prompt": "She works as engineer at a software company.",
       "answer": "She works as an engineer at a software company.",
-      "expl": "Nach „as“ steht bei Berufen im Singular immer a/an.",
-      "expl_en": "After “as”, a job in the singular always needs a/an."
+      "expl": "Nennt „as“ einen Beruf im Singular, steht a/an (as an engineer). Bei einem Titel oder einer einmaligen Rolle fehlt er: as Head of Sales.",
+      "expl_en": "When “as” names a job in the singular, use a/an (as an engineer). A title or unique role takes no article: as Head of Sales."
     }
   ]
 }

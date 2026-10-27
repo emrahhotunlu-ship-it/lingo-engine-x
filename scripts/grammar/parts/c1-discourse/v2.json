@@ -575,10 +575,10 @@
   "type": "meaning",
   "pat": "dm.build",
   "a": "Anna proposed a pilot. To build on that, we could add a second team.",
-  "b": "Anna proposed a pilot. Despite that, we could add a second team.",
+  "b": "Anna proposed a pilot. On the other hand, we could add a second team.",
   "q": {
-   "de": "Welcher Text führt Annas Idee weiter, statt gegen sie zu argumentieren?",
-   "en": "Which text extends Anna's idea instead of arguing against it?"
+   "de": "Welcher Text führt Annas Idee weiter, statt eine andere Möglichkeit daneben zu stellen?",
+   "en": "Which text extends Anna's idea instead of setting another option next to it?"
   },
   "answer": "a",
   "why": {
@@ -589,14 +589,14 @@
    "wrong": [
     {
      "opt": "b",
-     "pat": "dm.concede",
-     "de": "In b zeigt Despite that einen Gegensatz zu Annas Pilot. Die Idee wird nicht weitergeführt.",
-     "en": "In b, Despite that signals a contrast to Anna's pilot. The idea is not developed."
+     "pat": "dm.contrast",
+     "de": "In b stellt On the other hand eine andere Möglichkeit neben Annas Pilot: Pilot oder zweites Team. Ihre Idee wird nicht weitergeführt.",
+     "en": "In b, On the other hand sets another option next to Anna's pilot: pilot or second team. Her idea is not developed."
     },
     {
      "opt": "both",
-     "de": "Nicht gleich: Despite that setzt einen Einwand, to build on that eine Ergänzung.",
-     "en": "Not the same: Despite that sets an objection, to build on that an addition."
+     "de": "Nicht gleich: On the other hand zeigt die Gegenseite, to build on that eine Ergänzung.",
+     "en": "Not the same: On the other hand shows the other side, to build on that an addition."
     }
    ]
   }

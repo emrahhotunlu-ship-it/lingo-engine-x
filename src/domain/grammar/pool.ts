@@ -1,5 +1,6 @@
 import { validateDoc } from '../../data/validate';
 import type { GrammarTask, TaskSrc } from '../learn/types';
+import { holdBackTask } from '../quality/gate';
 import { asText } from '../text/str';
 import { legacyTaskKey } from './key';
 import { normalizeTask, toPoolItem } from './tasks';
@@ -54,7 +55,8 @@ export function poolTasks(doc: Readonly<Doc> | undefined): GrammarTask[] {
   const out: GrammarTask[] = [];
   for (const it of items) {
     const t = normalizeTask(it, 'pool');
-    if (t) out.push(t);
+    // E1a: Qualitätstor auch für Aufgaben, die schon vor dem Tor im Pool lagen (zurückgehalten, nie gelöscht).
+    if (t && !holdBackTask(t, 'pool')) out.push(t);
   }
   return out;
 }
@@ -81,7 +83,8 @@ export function poolIntake(
     const ref = b.day ? `daily/${b.day}` : null;
     for (const raw of b.items) {
       const t = normalizeTask(raw, b.src, ref);
-      if (!t) {
+      // E1a: Qualitätstor (lintTask & Co.) sperrt; die Aufgabe zählt als `bad` und bleibt im Tagesauftrag liegen.
+      if (!t || holdBackTask(t, ref ?? b.src)) {
         bad++;
         continue;
       }
