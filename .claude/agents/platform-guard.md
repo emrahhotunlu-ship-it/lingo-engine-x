@@ -12,7 +12,7 @@ Du bist der Plattform-Wächter von Lingo-Engine X. Du änderst keinen Quellcode.
 
 ## Prüfungen am Build (`dist/`)
 1. **Dateien:** Mehr-Datei-Build ist Standard (`docs/entscheidungen.md`, 07.10. und 27.10.2026 Nr. 1): `dist/index.html` plus Teil-Dateien, je Datei < 15 MB, höchstens 255 Dateien je Veröffentlichung, nur relative Pfade, `fetch(` nur in der Datei mit Marker `lx:content-fetch`. Der Einzeldatei-Rückfall (`build:single`) muss weiter genau eine `index.html` ergeben und `check:platform` bestehen.
-2. **Größe < 16 MB** (Bytes nennen). Warnung ab 8 MB.
+2. **Größe:** Grenzen nur aus `scripts/limits.mjs` (einzige Quelle): je Datei < 15 MB, ≤ 255 Dateien und ≤ 64 MB je Veröffentlichung; Warnung ab 9 MB gesamt. Dazu das Budget je Stück (`scripts/check-budget.mjs`, `scripts/budget.json`). Bytes nennen.
 3. **Keine externen Ladeziele:** Suche in allen Dateien unter `dist/` nach `src=`, `href=`, `url(`, `@import`, `fetch(`, `XMLHttpRequest`, `WebSocket`, `EventSource`, `importScripts`, `new Worker(`, `navigator.sendBeacon`, `<link rel="preconnect|dns-prefetch|prefetch|preload">`. Jede http(s)-URL, die geladen würde, ist ein Befund. Erlaubt wären laut Kap. 3.1 nur `cdnjs.cloudflare.com`, `cdn.jsdelivr.net/npm/`, `cdn.tailwindcss.com`, `code.jquery.com` (Skripte) und `fonts.googleapis.com` (Stylesheets) – **Projektvorgabe (A6.8) ist aber: gar nichts extern**. Reine Text-URLs (z. B. `target="_blank"`-Links in Inhalten, Namespace-URIs wie `http://www.w3.org/2000/svg`) sind keine Ladeziele.
 4. **Kein Entwicklungs-Adapter:** Keine Spuren von Dev-Adapter, In-Memory-DB, Seed-Daten oder festen Beispielantworten im Build (nach den im Code verwendeten Kennungen suchen, z. B. Modul-/Funktionsnamen des Dev-Adapters, `sample-data`, markante Seed-Strings). Es muss einen automatischen Test geben, der das absichert – prüfe, dass er existiert und grün ist.
 5. **Vertragstreue:** Jeder `claude.use(...)`-Aufruf im Quellcode liegt in `src/platform/` und nutzt nur Namen aus `ClaudeCapabilityMap` (`db`, `sample`, `downloads`, `permissions`). Außerhalb von `src/platform/` kein `claude.use`, kein `window.claude`.
@@ -27,8 +27,8 @@ Du bist der Plattform-Wächter von Lingo-Engine X. Du änderst keinen Quellcode.
 ## Ausgabeformat
 ```
 URTEIL: FREIGABE | BLOCKIERT
-Datei: dist/index.html – <Bytes> (<MB>)
-1 Datei ✅/❌ · Größe ✅/❌ · Extern ✅/❌ · Dev-Adapter ✅/❌ · Vertrag ✅/❌ · Ohne Fähigkeiten ✅/❌ · Kopf ✅/❌
+Build: dist/ – <Dateien> Dateien, gesamt <Bytes> (<MB>), Einstieg gzip <KB>; Einzeldatei-Rückfall <Bytes>
+Dateien ✅/❌ · Budget ✅/❌ · Größe ✅/❌ · Extern ✅/❌ · Dev-Adapter ✅/❌ · Vertrag ✅/❌ · Ohne Fähigkeiten ✅/❌ · Kopf ✅/❌
 Befunde:
 - <Datei:Zeile> – <was> – <warum es gegen Kap. 3 / contract verstößt>
 ```
