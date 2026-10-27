@@ -44,6 +44,10 @@ async function touchPath(page: Page, selector: string, path: ReadonlyArray<reado
 
 /** Datenbankstand, sobald er sich 600 ms nicht mehr ändert (Hintergrundarbeiten nach dem Start sind dann fertig). */
 async function stableDump(page: Page): Promise<string> {
+  // Letzte Hintergrundarbeit nach dem Start ist `app/schema.pflichtSince` (today/store `afterPlan`). Unter Last lag zwischen den
+  // Schritten mehr als 600 ms Ruhe, und der Eintrag kam erst NACH dem Vorher-Stand (Wackler im Gesamtlauf 26.10.2026:
+  // „app/schema geändert“). Deshalb zuerst auf diesen Zustand warten, dann auf Ruhe.
+  await expect.poll(async () => (await dump(page))['app/schema']?.pflichtSince, { timeout: 20_000 }).toBeTruthy();
   let prev = JSON.stringify(await dump(page));
   for (let i = 0; i < 20; i++) {
     await page.waitForTimeout(600);
