@@ -546,7 +546,226 @@ svg { display: block; }
 .realkb .ph:not(.framed) { height: calc(100% - var(--kbh, 0px)); }
 .hintband { border-radius: 16px 16px 0 0; }
 
-/* style-woerter.css: siehe bauliste.md */
+/* Paket A „Wörter“ (Nora-A). Präfix tw-. Nur Tokens; Maße in em, damit Handy (16 px) und Laptop (16–20 px) dieselben Bausteine nutzen. */
+
+/* ---------- H1 Heute: ruhige Zusatzwege ---------- */
+.tw-quiet { display: block; margin: 0.25em auto 0; min-height: 2.75em; padding: 0 1em; font-size: 0.94em; font-weight: 550; color: var(--fg-2); border-radius: var(--r); }
+.tw-quiet:active { background: var(--surface-2); }
+.tw-restart { margin-top: 1.4em; padding: 1em 1.1em 0.9em; border-radius: var(--r); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset; }
+.tw-rs-h { display: flex; flex-direction: column; gap: 0.15em; font-weight: 650; font-size: 0.95em; }
+.tw-rs-h span { font-weight: 450; font-size: 0.9em; color: var(--fg-2); }
+.tw-rs-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6em; margin-top: 0.9em; height: 6.4em; align-items: end; }
+.tw-rs-d { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 0.25em; }
+.tw-rs-d i { display: block; width: 100%; max-width: 2.6em; border-radius: 0.45em; background: var(--surface-3); min-height: 0.4em; max-height: calc(100% - 2.6em); }
+.tw-rs-d.on i { background: var(--act); }
+.tw-rs-d b { font-size: 0.8em; font-weight: 650; line-height: 1; }
+.tw-rs-d span { font-size: 0.75em; color: var(--fg-3); line-height: 1; }
+.tw-rs-d.on span { color: var(--act-text); font-weight: 650; }
+.tw-notice { margin-top: 0; }
+.gx > .tw-notice:first-child { margin-top: 1.2em; }
+.tw-notice b { font-weight: 650; }
+
+/* ---------- H2 Mehr-Blatt ---------- */
+.tw-trans { display: flex; flex-direction: column; gap: 0.3em; padding: 0.85em 1em; border-radius: var(--r); background: var(--surface-2); }
+.tw-trans b { font-weight: 600; font-size: 1.02em; line-height: 1.4; }
+.tw-trans span { font-size: 0.94em; line-height: 1.4; color: var(--fg-2); }
+.tw-hook { display: flex; gap: 0.75em; align-items: flex-start; padding: 0.85em 1em; border-radius: var(--r); background: color-mix(in oklch, var(--surface-2) 80%, var(--act)); }
+.tw-hook .ic { color: var(--act-text); flex: none; margin-top: 0.1em; }
+
+/* ---------- H12 Wörter ---------- */
+.tw-practice { display: flex; align-items: center; gap: 1em; padding: 1em 1em 1em 1.15em; border-radius: calc(var(--r) + 4px); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset; }
+.tw-pt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.15em; }
+.tw-pt b { font-size: 1.06em; font-weight: 650; }
+.tw-pt span { font-size: 0.85em; line-height: 1.35; color: var(--fg-2); }
+.tw-practice .btn { flex: none; min-width: 6.5em; }
+.tw-chiprow { display: flex; gap: 6px; overflow-x: auto; margin: 0 -20px; padding: 0 20px; scrollbar-width: none; }
+.tw-chiprow::-webkit-scrollbar { display: none; }
+.tw-restrow .rt b { color: var(--fg-2); }
+.tw-restrow .rt span { color: var(--fg-3); }
+.tw-lockic { display: inline-grid; place-items: center; color: var(--fg-3); }
+.tw-selrow { background: var(--surface); padding-left: 0.8em; padding-right: 0.8em; border-radius: var(--r); border-bottom-color: transparent; }
+.tw-wact .btn.pri { min-height: 3.25em; }
+.tw-wagrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em; }
+.tw-wa { display: flex; align-items: center; gap: 0.6em; min-height: 3em; padding: 0 0.9em; border-radius: var(--r); background: var(--surface-2); color: var(--fg); font-weight: 600; font-size: 0.94em; text-align: left; }
+.tw-wa .ic { color: var(--fg-2); flex: none; }
+.tw-wa:active { transform: scale(0.98); }
+.tw-wa[aria-pressed="true"] { background: var(--act-soft); color: var(--act-text); }
+.tw-empty { display: flex; flex-direction: column; gap: 0.6em; padding: 1em; border-radius: var(--r); background: var(--surface); }
+.tw-empty b { font-weight: 600; font-size: 1em; line-height: 1.35; }
+.tw-empty > span { font-size: 0.85em; color: var(--fg-2); }
+.tw-switch { flex: none; width: 2.75em; height: 1.6em; border-radius: 1em; background: var(--surface-3); position: relative; }
+.tw-switch i { position: absolute; top: 0.2em; left: 0.2em; width: 1.2em; height: 1.2em; border-radius: 50%; background: var(--fg-2); }
+
+/* ---------- Gemeinsame Bausteine ---------- */
+.tw-badge { display: inline-flex; align-items: center; height: 1.55em; padding: 0 0.55em; border-radius: 0.45em; font-size: 0.75em; font-weight: 700; letter-spacing: 0.02em; color: var(--fg-2); box-shadow: 0 0 0 1px var(--line-2) inset; flex: none; vertical-align: middle; }
+.tw-tag { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.1em 0.5em; border-radius: 0.4em; font-size: 0.75em; font-weight: 600; color: var(--fg-2); background: var(--surface-2); white-space: nowrap; }
+.tw-note { display: flex; gap: 0.5em; align-items: flex-start; margin: 0; font-size: 0.85em; line-height: 1.4; color: var(--fg-2); }
+.tw-note .ic { flex: none; margin-top: 0.15em; color: var(--fg-3); }
+.tw-hl { display: flex; align-items: center; gap: 0.25em; min-width: 0; }
+.tw-hl h1 { margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; }
+.tw-in { min-height: 0; font-size: 1em; padding: 0.8em 1em; display: flex; align-items: center; }
+.tw-focus { box-shadow: 0 0 0 2px var(--act) inset; }
+.tw-focus .caret { width: 2px; height: 1.1em; background: var(--act-text); margin-left: 2px; animation: blink 1s steps(1) infinite; }
+
+/* ---------- Trainer-Rahmen ---------- */
+.tw-top { gap: 0.65em; }
+.tw-bar { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; position: relative; }
+.tw-bar i { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--act); transition: width 380ms var(--ease-soft); }
+.tw-count { font-size: 0.85em; font-weight: 650; color: var(--fg-2); white-space: nowrap; }
+.tw-count em { font-style: normal; color: var(--act-text); }
+.tw-lage { display: flex; gap: 0.5em; align-items: flex-start; margin: 0.15em 0 0.35em; font-size: 0.85em; line-height: 1.4; color: var(--fg-2); }
+.tw-lage .ic { flex: none; margin-top: 0.15em; }
+.tw-said { font-size: 1.25em; line-height: 1.45; font-weight: 550; padding: 0.7em 0.9em; border-radius: var(--r); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset; }
+.tw-said.st-ok { box-shadow: 0 0 0 1.5px var(--ok) inset; }
+.tw-said.st-near { box-shadow: 0 0 0 1.5px var(--near) inset; }
+.tw-said.st-bad { box-shadow: 0 0 0 1.5px var(--bad) inset; }
+.tw-said.st-idk { color: var(--fg-2); }
+.tw-play { width: 6em; height: 6em; border-radius: 50%; display: grid; place-items: center; background: var(--act-soft); color: var(--act-text); align-self: center; }
+.tw-play .ic { width: 2em; height: 2em; }
+.tw-play:active { transform: scale(0.96); }
+.tw-micwrap { display: flex; flex-direction: column; align-items: center; gap: 0.6em; padding-top: 1.2em; font-size: 0.85em; color: var(--fg-2); }
+.tw-mic { width: 5.6em; height: 5.6em; border-radius: 50%; display: grid; place-items: center; background: var(--act); color: var(--act-fg); box-shadow: 0 0 0 0.6em var(--act-soft); }
+.tw-mic .ic { width: 1.9em; height: 1.9em; }
+.tw-ctr { padding: 0.9em 1.1em; }
+.tw-de { font-family: var(--font); font-size: 0.85em; color: var(--fg-2); font-weight: 450; }
+
+/* ---------- H17 / L11 Trainer-Start ---------- */
+.tw-hero { display: flex; flex-direction: column; gap: 0.75em; padding: 1.2em 1.15em 1.15em; border-radius: calc(var(--r) + 6px); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset; }
+.tw-hero.tw-sub { background: transparent; }
+.tw-hero .btn { margin-top: 0.25em; }
+.tw-big { font-size: 1.75em; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+.tw-mid { font-size: 1.3em; line-height: 1.25; font-weight: 650; }
+.tw-hero .p2 b { color: var(--fg); font-weight: 600; }
+.tw-words { display: flex; flex-wrap: wrap; gap: 0.35em; }
+.tw-words span { padding: 0.25em 0.6em; border-radius: 0.5em; background: var(--surface-2); font-size: 0.85em; font-weight: 550; color: var(--fg); }
+.tw-meta { display: flex; flex-wrap: wrap; gap: 0.25em 0.9em; margin: 0; font-size: 0.85em; color: var(--fg-2); }
+.tw-meta span + span::before { content: '·'; margin-right: 0.9em; color: var(--fg-3); }
+.tw-newcard { display: flex; align-items: center; justify-content: space-between; gap: 0.75em; padding: 0.8em 0.95em; border-radius: var(--r); background: var(--surface-2); }
+.tw-newcard div { display: flex; flex-direction: column; gap: 0.1em; min-width: 0; }
+.tw-newcard b { font-size: 1.15em; font-weight: 650; }
+.tw-newcard div span { font-size: 0.85em; color: var(--fg-2); }
+.tw-adj { display: flex; align-items: center; gap: 0.75em; width: 100%; min-height: 3.4em; padding: 0 1em; border-radius: var(--r); background: var(--surface-2); text-align: left; font-weight: 600; }
+.tw-adj .tw-sum { flex: 1; min-width: 0; font-size: 0.85em; font-weight: 450; color: var(--fg-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+.tw-adj .ic { color: var(--fg-3); flex: none; }
+.tw-adjbody { display: flex; flex-direction: column; gap: 1em; padding: 0.2em 0.1em 0.4em; }
+.tw-grp { display: flex; flex-direction: column; gap: 0.5em; }
+.tw-chips { display: flex; flex-wrap: wrap; gap: 0.4em; }
+.tw-chip { display: inline-flex; align-items: center; gap: 0.35em; min-height: 2.5em; padding: 0 0.85em; border-radius: 0.65em; background: var(--surface-2); color: var(--fg); font-size: 0.9em; font-weight: 550; box-shadow: 0 0 0 1px transparent inset; transition: background 140ms, box-shadow 140ms; }
+.tw-chip .num { color: var(--fg-3); font-weight: 600; font-size: 0.9em; }
+.tw-chip.on { background: var(--act-soft); color: var(--act-text); box-shadow: 0 0 0 1.5px var(--act) inset; }
+.tw-chip.on .num { color: var(--act-text); opacity: 0.8; }
+.tw-lockline { display: flex; gap: 0.5em; align-items: flex-start; margin: 0; padding: 0 0.1em; font-size: 0.85em; line-height: 1.4; color: var(--fg-3); }
+.tw-lockline .ic { flex: none; margin-top: 0.15em; }
+
+/* ---------- H19 / L13 Anki ---------- */
+.tw-card { display: flex; flex-direction: column; gap: 0.9em; padding: 1.8em 1.3em; border-radius: calc(var(--r) + 6px); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset, var(--shadow); text-align: center; }
+.tw-card.flipped { animation: springOpen 420ms var(--ease-spring) both; }
+.tw-cardsent { margin: 0; font-size: 1em; line-height: 1.5; color: var(--fg-2); text-wrap: pretty; }
+.tw-cardline { height: 1px; background: var(--line); margin: 0.2em -0.4em; }
+.tw-back { display: flex; flex-direction: column; gap: 0.4em; align-items: center; }
+.tw-mean { font-size: 1.6em; line-height: 1.25; font-weight: 650; }
+.tw-rate { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4em; }
+.tw-rb { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1em; min-height: 3.6em; border-radius: var(--r); background: var(--surface-2); }
+.tw-rb b { font-size: 0.94em; font-weight: 650; }
+.tw-rb span { font-size: 0.78em; color: var(--fg-2); }
+.tw-rb i { display: none; }
+.tw-rb:active { transform: scale(0.97); }
+#tw-r-good { background: var(--act-soft); color: var(--act-text); }
+#tw-r-good span { color: var(--act-text); }
+.tw-footnote { margin: -0.4em 0 0.9em; font-size: 0.78em; color: var(--fg-3); text-align: center; }
+.tw-undo { position: absolute; left: 12px; right: 12px; bottom: 96px; z-index: 6; display: flex; align-items: center; gap: 0.75em; padding: 0.35em 0.5em 0.35em 1em; border-radius: var(--r); background: var(--fg); color: var(--bg); font-size: 0.92em; box-shadow: var(--shadow); overflow: hidden; animation: swapIn 220ms var(--ease-soft) both; }
+.tw-undo span { flex: 1; min-width: 0; }
+.tw-undo .link { color: var(--bg); text-decoration: underline; text-underline-offset: 0.2em; padding: 0 0.6em; }
+.tw-undo i { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--act); transform-origin: left; animation: twUndo 5s linear both; }
+.tw-undo-d { position: relative; left: auto; right: auto; bottom: auto; max-width: 34em; margin: 0 auto; width: 100%; }
+@keyframes twUndo { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.desk .tw-drb { flex-direction: row; gap: 0.5em; }
+.desk .tw-drb .tw-iv { font-size: 0.85em; color: var(--fg-2); font-weight: 500; }
+
+/* ---------- H20 / L14 Ergebnis ---------- */
+.tw-resicon { display: grid; place-items: center; }
+.tw-resicon span { width: 4em; height: 4em; border-radius: 50%; display: grid; place-items: center; background: var(--act-soft); color: var(--act-text); animation: springOpen 520ms var(--ease-spring) both; }
+.tw-resicon .ic { width: 1.8em; height: 1.8em; }
+.tw-res .st { border-bottom-color: var(--line); }
+.tw-st-step { color: var(--fg); }
+.tw-step { display: grid; place-items: center; width: 1.6em; height: 1.6em; border-radius: 50%; background: var(--act); color: var(--act-fg); }
+.tw-step .ic { width: 1em; height: 1em; }
+.tw-mk-ok { background: color-mix(in oklch, var(--ok) 22%, transparent) !important; color: var(--ok) !important; }
+.tw-mk-near { background: color-mix(in oklch, var(--near) 24%, transparent) !important; color: var(--near) !important; }
+.tw-mk-bad { background: color-mix(in oklch, var(--bad) 20%, transparent) !important; color: var(--bad) !important; }
+.tw-rr .nm { color: var(--fg) !important; }
+.tw-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25em; }
+.tw-legend .ic { width: 1em; height: 1em; }
+
+/* ---------- H21 Wörter sammeln ---------- */
+.tw-search input { border: 0; background: transparent; outline: none; flex: 1; min-width: 0; font-size: 16px; color: var(--fg); }
+.tw-art { font-size: 19px; line-height: 31px; padding: 0.6em 0 1em; }
+.tw-art .w.sel { background: var(--act-soft); box-shadow: 0 2px 0 var(--act); }
+.tw-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em; }
+.tw-mode { display: flex; flex-direction: column; gap: 0.25em; align-items: flex-start; text-align: left; padding: 0.85em 0.9em; border-radius: var(--r); background: var(--surface-2); box-shadow: 0 0 0 1px transparent inset; }
+.tw-mode b { font-size: 0.95em; font-weight: 650; }
+.tw-mode span { font-size: 0.8em; line-height: 1.35; color: var(--fg-2); }
+.tw-mode.on { background: var(--act-soft); box-shadow: 0 0 0 2px var(--act) inset; }
+.tw-mode.on b { color: var(--act-text); }
+.tw-mode.off { opacity: 0.45; }
+.tw-src { padding: 0.9em 1em; border-radius: var(--r); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset; font-size: 0.94em; line-height: 1.5; color: var(--fg-2); }
+.tw-pick .ck { width: 1.5em; height: 1.5em; flex: none; }
+
+/* ---------- H22 Tempo ---------- */
+.tw-time { position: relative; display: flex; align-items: center; gap: 0.75em; margin-top: 1.4em; }
+.tw-time .timeline { position: relative; left: auto; right: auto; bottom: auto; flex: 1; height: 4px; border-radius: 2px; }
+.tw-time .timeline i { background: var(--act); }
+.tw-time span { font-size: 0.85em; font-weight: 650; color: var(--fg-2); }
+.tw-ti { padding: 0.6em 0; border-bottom: 1px solid var(--line); }
+.tw-ti:last-child { border-bottom: 0; }
+.tw-tr { display: flex; align-items: center; gap: 0.7em; font-size: 0.94em; }
+.tw-tq { flex: 1; min-width: 0; color: var(--fg-2); }
+.tw-tr b { font-weight: 600; }
+.tw-tx { display: flex; flex-direction: column; gap: 0.3em; padding: 0.5em 0 0.2em 2.1em; }
+.tw-tx .cmp { font-size: 0.94em; line-height: 1.4; }
+.tw-tx .p2 { font-size: 0.85em; line-height: 1.4; }
+
+/* ---------- H23 Verwalten ---------- */
+.tw-danger .ri { color: var(--bad); background: color-mix(in oklch, var(--bad) 14%, transparent); }
+.tw-danger .rt b { color: var(--bad); }
+.tw-delbtn { color: var(--bad); }
+.tw-dim { opacity: 0.55; filter: saturate(0.6); }
+
+/* ---------- H15 gespeichert ---------- */
+.tw-saved { display: flex; align-items: center; gap: 0.6em; margin-bottom: 0.6em; padding: 0.3em 0.4em 0.3em 0.8em; border-radius: var(--r); background: var(--surface-2); font-size: 0.9em; line-height: 1.35; animation: swapIn 220ms var(--ease-soft) both; }
+.tw-saved > span:nth-child(2) { flex: 1; min-width: 0; }
+.tw-savedic { display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; flex: none; background: color-mix(in oklch, var(--ok) 22%, transparent); color: var(--ok); }
+.tw-saved .link { flex: none; padding: 0 0.5em; }
+.tw-nosave { margin: 0.6em 0 0; }
+
+/* ---------- Laptop ---------- */
+.tw-dhead { display: flex; align-items: center; gap: 0.75em; margin-bottom: 1.2em; }
+.tw-dhead .grow { flex: 1; }
+.tw-dhead .btn { min-height: 2.75em; font-size: 0.95em; }
+.tw-dsub { margin: -0.8em 0 1.2em !important; font-size: 0.9em !important; }
+.tw-fin { min-height: 2.5em !important; font-size: 0.9em !important; padding: 0 0.8em !important; }
+.desk .tw-top { gap: 1em; }
+.desk .tw-bar { height: 0.4em; }
+.desk .tw-hero { padding: 1.5em 1.6em; }
+.desk .tw-hero .btn.pri { align-self: flex-start; min-width: 16em; }
+.desk .tw-big { font-size: 2em; }
+.tw-adjd { padding: 1.1em 1.2em; border-radius: calc(var(--r) + 4px); box-shadow: 0 0 0 1px var(--line) inset; }
+.tw-prev { font-size: 0.92em; }
+.tw-pv { display: flex; align-items: center; gap: 0.6em; min-height: 2.3em; border-bottom: 1px solid var(--line); }
+.tw-pv:last-child { border-bottom: 0; }
+.tw-pn { width: 1.3em; color: var(--fg-3); font-size: 0.85em; text-align: right; flex: none; }
+.tw-pv b { font-weight: 600; white-space: nowrap; }
+.tw-pm { flex: 1; min-width: 0; color: var(--fg-2); font-size: 0.9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw-counts { gap: 0.6em; }
+.tw-cl { display: flex; gap: 0.6em; align-items: flex-start; margin: 0; font-size: 0.92em; line-height: 1.45; color: var(--fg-2); }
+.tw-cl b { color: var(--fg); font-weight: 600; }
+.tw-ci { flex: none; display: grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; background: var(--surface-2); color: var(--fg-2); margin-top: 0.05em; }
+.tw-ci.ok { background: color-mix(in oklch, var(--ok) 20%, transparent); color: var(--ok); }
+.tw-ci.bad { background: color-mix(in oklch, var(--bad) 18%, transparent); color: var(--bad); }
+.tw-ci .ic { width: 0.95em; height: 0.95em; }
+.desk .tw-wa { min-height: 2.8em; }
+.desk .tw-card { padding: 2.2em 2em; }
+.desk .tw-play { width: 5em; height: 5em; }
 
 /* Paket B „Rund um den Tag“ (H24–H32, L15–L17). Nur tm-Klassen, nur Tokens aus style.css. */
 
@@ -2754,7 +2973,7 @@ function twStartHero(v, c, idp) {
   return '<div class="tw-hero"><div class="lbl">' + L('Vorschlag', 'Suggestion') + '</div><div class="tw-big disp">' + L('10 fällige Wörter', '10 due words') + '</div>' +
     '<p class="p2"><b>' + L('Warum diese?', 'Why these?') + '</b> ' + L('Die 10 mit der niedrigsten Chance, dass du sie noch weißt.', 'The 10 you are least likely to still remember.') + '</p>' +
     twPreview(round) +
-    '<p class="tw-meta"><span>' + L('≈ 6 Min.', '≈ 6 min') + '</span><span>' + L('zählt als Extra', 'counts as extra') + '</span><span>' + L('noch 4 weitere fällig', '4 more due') + '</span></p>' +
+    '<p class="tw-meta"><span>' + L('≈ 6 Min.', '≈ 6 min') + '</span><span>' + L('zählt als Extra', 'counts as extra') + '</span></p>' +
     '<button class="btn pri full" id="' + idp + 'tw-go" data-go="' + btn[1] + '">' + btn[0] + '</button></div>';
 }
 function h17(v) {
@@ -4845,12 +5064,14 @@ function l12Ctx(v) {
   const lage = t.lage === 'early' || v === 'contrast'
     ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
     : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');
+  /* Merke und Mehr wiederholen die Warum-Zeile der Bühne nicht: Merke = Falle oder Wortpartner, Mehr = Bedeutung und Beispiel. */
+  const merkeTxt = v === 'contrast' ? L('<em class="en">delivery</em> ist die Lieferung, <em class="en">lead time</em> die Dauer bis dahin.', '<em>delivery</em> is the delivery, <em>lead time</em> the time until it.') : (m.trap || m.partners);
   const merke = checked
-    ? '<p class="p2" style="margin:0">' + (v === 'contrast' ? L('<em class="en">delivery</em> ist die Lieferung, <em class="en">lead time</em> die Dauer bis dahin.', '<em>delivery</em> is the delivery, <em>lead time</em> the time until it.') : t.whyl[st]) + '</p>'
+    ? '<p class="p2" style="margin:0">' + merkeTxt + '</p>'
     : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Erscheint nach dem Prüfen.', 'Appears after you check.') + '</p>';
   const mehr = checked
-    ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + (m.trap ? '<p class="p2" style="margin:0">' + m.trap + '</p>' : '') + '</div>'
-    : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Wortpartner und typische Falle nach dem Prüfen.', 'Meaning, collocations and common trap after you check.') + '</p>';
+    ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.ex ? '<p class="p2 en" style="margin:0;color:var(--fg)">' + m.ex[0] + '</p>' : '') + (m.trap && m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + '</div>'
+    : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Beispiel und Wortpartner nach dem Prüfen.', 'Meaning, example and collocations after you check.') + '</p>';
   return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + t.why + '</p>') +
     ctxBlock(L('Merke', 'Remember'), merke) +
     ctxBlock(L('Mehr', 'More'), mehr) +

@@ -133,12 +133,14 @@ function l12Ctx(v) {
   const lage = t.lage === 'early' || v === 'contrast'
     ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
     : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');
+  /* Merke und Mehr wiederholen die Warum-Zeile der Bühne nicht: Merke = Falle oder Wortpartner, Mehr = Bedeutung und Beispiel. */
+  const merkeTxt = v === 'contrast' ? L('<em class="en">delivery</em> ist die Lieferung, <em class="en">lead time</em> die Dauer bis dahin.', '<em>delivery</em> is the delivery, <em>lead time</em> the time until it.') : (m.trap || m.partners);
   const merke = checked
-    ? '<p class="p2" style="margin:0">' + (v === 'contrast' ? L('<em class="en">delivery</em> ist die Lieferung, <em class="en">lead time</em> die Dauer bis dahin.', '<em>delivery</em> is the delivery, <em>lead time</em> the time until it.') : t.whyl[st]) + '</p>'
+    ? '<p class="p2" style="margin:0">' + merkeTxt + '</p>'
     : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Erscheint nach dem Prüfen.', 'Appears after you check.') + '</p>';
   const mehr = checked
-    ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + (m.trap ? '<p class="p2" style="margin:0">' + m.trap + '</p>' : '') + '</div>'
-    : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Wortpartner und typische Falle nach dem Prüfen.', 'Meaning, collocations and common trap after you check.') + '</p>';
+    ? '<div class="stack s6"><p class="p2" style="margin:0">' + m.meaning + '</p>' + (m.ex ? '<p class="p2 en" style="margin:0;color:var(--fg)">' + m.ex[0] + '</p>' : '') + (m.trap && m.partners ? '<p class="p2 en" style="margin:0">' + m.partners + '</p>' : '') + '</div>'
+    : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Bedeutung, Beispiel und Wortpartner nach dem Prüfen.', 'Meaning, example and collocations after you check.') + '</p>';
   return ctxBlock(L('Warum', 'Why'), '<p class="p2" style="margin:0">' + t.why + '</p>') +
     ctxBlock(L('Merke', 'Remember'), merke) +
     ctxBlock(L('Mehr', 'More'), mehr) +

@@ -432,7 +432,7 @@ function twStartHero(v, c, idp) {
   return '<div class="tw-hero"><div class="lbl">' + L('Vorschlag', 'Suggestion') + '</div><div class="tw-big disp">' + L('10 fällige Wörter', '10 due words') + '</div>' +
     '<p class="p2"><b>' + L('Warum diese?', 'Why these?') + '</b> ' + L('Die 10 mit der niedrigsten Chance, dass du sie noch weißt.', 'The 10 you are least likely to still remember.') + '</p>' +
     twPreview(round) +
-    '<p class="tw-meta"><span>' + L('≈ 6 Min.', '≈ 6 min') + '</span><span>' + L('zählt als Extra', 'counts as extra') + '</span><span>' + L('noch 4 weitere fällig', '4 more due') + '</span></p>' +
+    '<p class="tw-meta"><span>' + L('≈ 6 Min.', '≈ 6 min') + '</span><span>' + L('zählt als Extra', 'counts as extra') + '</span></p>' +
     '<button class="btn pri full" id="' + idp + 'tw-go" data-go="' + btn[1] + '">' + btn[0] + '</button></div>';
 }
 function h17(v) {
