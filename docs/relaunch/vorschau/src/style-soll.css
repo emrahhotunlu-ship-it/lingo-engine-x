@@ -1,1 +1,158 @@
-/* style-soll.css: siehe bauliste.md */
+/* style-soll.css: Paket C „Soll“ (H33–H37), nur Klassen mit Präfix ts-. Siehe bauliste.md. */
+
+/* Allgemein */
+.ts-title { font-size: 26px; line-height: 32px; }
+.ts-extra { display: inline-flex; align-items: center; min-height: 20px; padding: 0 7px; border-radius: 6px; box-shadow: 0 0 0 1px var(--line-2) inset; color: var(--fg-2); font-size: 11px; font-weight: 650; letter-spacing: 0.02em; text-transform: uppercase; }
+.ts-sec { display: flex; align-items: center; gap: 8px; padding-top: 6px; }
+.ts-sec > span:first-child { font-size: 19px; line-height: 24px; font-weight: 650; letter-spacing: -0.01em; }
+.ts-count { min-width: 24px; height: 24px; padding: 0 7px; border-radius: 12px; background: var(--surface-2); color: var(--fg-2); font-size: 13px; font-weight: 650; display: grid; place-items: center; flex: none; }
+.ts-foot { padding-top: 4px; }
+.ts-ai { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12px; color: var(--fg-3); }
+.ts-no { color: var(--fg-3); text-decoration: line-through; text-decoration-color: var(--bad); }
+.ts-fix { color: var(--act-text); font-weight: 650; }
+.ts-subnav { display: flex; gap: 6px; overflow-x: auto; margin: 0 -20px; padding: 0 20px; scrollbar-width: none; }
+.ts-subnav::-webkit-scrollbar { display: none; }
+.ts-subnav .chip { flex: none; min-height: 34px; }
+.ts-subnav .chip.on { background: var(--act-soft); color: var(--act-text); }
+.ts-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ts-chips .chip { font-weight: 550; color: var(--fg); }
+
+/* H33 Bibliothek */
+.ts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ts-gi { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 72px; padding: 12px 14px; border-radius: var(--r); background: var(--surface); text-align: left; min-width: 0; transition: transform 140ms var(--ease-soft); }
+.ts-gi:active { transform: scale(0.98); }
+.ts-gi b { font-size: 15px; line-height: 20px; font-weight: 600; }
+.ts-gi span { font-size: 13px; line-height: 18px; color: var(--fg-2); overflow-wrap: anywhere; }
+.ts-xtop .ts-xprog { flex: 1; display: flex; gap: 4px; height: 6px; }
+.ts-xprog i { flex: 1; border-radius: 3px; background: var(--surface-3); }
+.ts-xprog i.d { background: var(--fg-2); }
+.ts-xprog i.c { background: var(--ch-words); }
+.ts-vs { display: flex; flex-direction: column; gap: 8px; }
+.ts-vc { padding: 14px 16px; border-radius: var(--r); box-shadow: 0 0 0 1px var(--line-2) inset; display: flex; flex-direction: column; gap: 6px; }
+.ts-vc.on { background: var(--surface); box-shadow: 0 0 0 1.5px var(--ch-words) inset; }
+.ts-vh { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ts-vh b { font-size: 19px; font-weight: 650; }
+.ts-vh span { font-size: 14px; color: var(--fg-2); }
+.ts-vc p { margin: 0; font-size: 16px; line-height: 23px; color: var(--fg-2); }
+.ts-vc p b { color: var(--fg); font-weight: 600; }
+.ts-done { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--act-soft); color: var(--act-text); }
+
+/* H34 Fortschritt-Details */
+.ts-bign { display: flex; align-items: baseline; gap: 10px; }
+.ts-bign b { font-size: 40px; line-height: 44px; font-weight: 600; }
+.ts-bign span { font-size: 16px; color: var(--fg-2); font-weight: 500; }
+.ts-wbar { height: 12px; border-radius: 6px; box-shadow: 0 0 0 1px var(--line-2) inset; position: relative; overflow: hidden; }
+.ts-wbar i { position: absolute; top: 0; bottom: 0; }
+.ts-wbar .f5 { left: 0; background: var(--fg); }
+.ts-wbar .f34 { background: var(--fg); opacity: 0.4; }
+.ts-leg { display: flex; flex-direction: column; }
+.ts-leg > div { display: flex; align-items: center; gap: 10px; min-height: 36px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.ts-leg > div:last-child { border-bottom: 0; }
+.ts-leg > div > span:nth-child(2) { flex: 1; }
+.ts-leg em { font-style: normal; font-size: 12px; color: var(--fg-3); margin-left: 4px; }
+.ts-leg b { font-weight: 600; }
+.ts-leg .tot { color: var(--fg-2); }
+.ts-sw { width: 14px; height: 10px; border-radius: 3px; flex: none; }
+.ts-sw.f5 { background: var(--fg); }
+.ts-sw.f34 { background: var(--fg); opacity: 0.4; }
+.ts-sw.out { box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+.ts-cols { display: flex; align-items: flex-end; gap: 8px; height: 120px; padding-top: 18px; }
+.ts-col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+.ts-col span { font-size: 11px; color: var(--fg-3); }
+.ts-col i { display: block; width: 100%; border-radius: 4px 4px 2px 2px; background: var(--fg); opacity: 0.28; }
+.ts-col.last i { opacity: 1; }
+.ts-col.last span { color: var(--fg); font-weight: 650; }
+.ts-colx { display: flex; justify-content: space-between; font-size: 12px; color: var(--fg-3); }
+.ts-ba { display: flex; align-items: center; gap: 14px; }
+.ts-ba > div { display: flex; flex-direction: column; gap: 2px; }
+.ts-ba > div span { font-size: 26px; line-height: 30px; font-weight: 650; }
+.ts-ba > div:last-child span { color: var(--act-text); }
+.ts-ba em { font-style: normal; font-size: 13px; color: var(--fg-2); }
+.ts-arrow { color: var(--fg-3); }
+.ts-map { display: flex; flex-direction: column; position: relative; }
+.ts-map::before { content: ''; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 2px; background: var(--line-2); border-radius: 1px; }
+.ts-mi { display: flex; gap: 14px; align-items: flex-start; padding: 8px 0; position: relative; }
+.ts-mn { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--bg); box-shadow: 0 0 0 1.5px var(--line-2) inset; color: var(--fg-2); font-size: 13px; font-weight: 650; }
+.ts-mi.run .ts-mn { background: var(--act); color: var(--act-fg); box-shadow: none; }
+.ts-mb { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; padding-top: 3px; }
+.ts-mb > b { font-weight: 600; font-size: 16px; line-height: 21px; }
+.ts-mb > span { font-size: 13px; color: var(--fg-2); }
+.ts-mi.run .ts-mb { background: var(--surface); border-radius: var(--r); padding: 12px 14px 4px; margin-top: -6px; }
+.ts-topics { margin-top: 8px; }
+.ts-topics .st { min-height: 48px; font-size: 15px; }
+.ts-topics .nm { display: flex; flex-direction: column; min-width: 0; }
+.ts-topics .nm em { font-style: normal; font-size: 13px; color: var(--fg-2); }
+.ts-lv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.ts-lv > div { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px; border-radius: 12px; background: var(--surface-2); color: var(--fg-2); }
+.ts-lv > div b { font-size: 16px; font-weight: 650; }
+.ts-lv > div span { font-size: 12px; }
+.ts-lv > div.on { background: var(--act-soft); color: var(--act-text); box-shadow: 0 0 0 1.5px var(--act) inset; }
+.ts-month { display: flex; align-items: center; justify-content: space-between; margin: -8px -8px 0; }
+.ts-month b { font-size: 17px; font-weight: 650; }
+.ts-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px 2px; justify-items: center; }
+.ts-ch { font-size: 11px; font-weight: 600; color: var(--fg-3); padding-bottom: 2px; }
+.ts-day { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; position: relative; font-size: 14px; font-weight: 550; color: var(--fg-2); }
+.ts-day.done { background: var(--act-soft); color: var(--act-text); }
+.ts-day.rest { box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+.ts-day.today { box-shadow: 0 0 0 2px var(--act) inset; color: var(--fg); font-weight: 650; }
+.ts-day.future { color: var(--fg-3); opacity: 0.5; }
+.ts-day.miss { color: var(--fg-3); }
+.ts-day.sel { outline: 2px solid var(--fg); outline-offset: 2px; }
+.ts-day i { position: absolute; bottom: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--fg-2); }
+.ts-calleg { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--fg-2); }
+.ts-calleg span { display: inline-flex; align-items: center; gap: 6px; }
+.ts-calleg i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.ts-calleg i.done { background: var(--act-soft); box-shadow: 0 0 0 1px var(--act) inset; }
+.ts-calleg i.rest { box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+.ts-calleg i.ex { width: 5px; height: 5px; background: var(--fg-2); }
+.ts-dayinfo b { font-size: 16px; font-weight: 650; }
+
+/* H35 Kurse und Archiv */
+.ts-lock { color: var(--fg-3); }
+.ts-lock .mk { color: var(--fg-3); }
+.ts-art { display: flex; flex-direction: column; gap: 14px; }
+.ts-art h3 { margin: 0; font-size: 24px; line-height: 30px; font-weight: 700; }
+.ts-art p { margin: 0; font-size: 18px; line-height: 30px; color: var(--fg); }
+.ts-art b { font-weight: 600; }
+.ts-s { cursor: pointer; border-radius: 4px; transition: background 160ms; }
+.ts-s.on { background: color-mix(in oklch, var(--ch-words) 16%, transparent); }
+.ts-pair { display: block; margin: 6px 0 4px; padding-left: 12px; border-left: 2px solid var(--ch-words); font-size: 15px; line-height: 22px; color: var(--fg-2); font-feature-settings: normal; }
+.ts-search { min-height: 46px; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: var(--fg-3); }
+.ts-search input { border: 0; background: transparent; outline: none; flex: 1; min-width: 0; font-size: 16px; color: var(--fg); }
+.ts-am { width: 22px; height: 22px; border-radius: 50%; flex: none; display: grid; place-items: center; box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+.ts-am.read { background: var(--act-soft); color: var(--act-text); box-shadow: none; }
+.ts-am.run { box-shadow: 0 0 0 2px var(--act) inset; }
+.ts-am.run::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--act); }
+
+/* H36 Prüfen */
+.seg2.ts-seg3 { grid-template-columns: repeat(3, 1fr); }
+.ts-sub { display: inline-flex; align-self: flex-start; gap: 4px; padding: 3px; border-radius: 10px; box-shadow: 0 0 0 1px var(--line-2) inset; }
+.ts-sub button { min-height: 32px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--fg-2); }
+.ts-sub button.on { background: var(--surface-2); color: var(--fg); }
+.ts-fl { display: flex; justify-content: space-between; align-items: baseline; }
+.ts-mine { min-height: 0; line-height: 27px; }
+.ts-mail { white-space: normal; }
+.ts-x { text-decoration: underline; text-decoration-color: var(--near); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.ts-x sup { font-size: 10px; font-weight: 700; color: var(--near); margin-left: 1px; }
+.ts-spot { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.ts-spot:first-child { border-top: 0; padding-top: 0; }
+.ts-sn { width: 22px; height: 22px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--near); box-shadow: 0 0 0 1.5px var(--near) inset; }
+.ts-spot .en { font-size: 17px; line-height: 24px; }
+.ts-tog { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; padding: 0 16px; border-radius: var(--r); background: var(--surface-2); font-size: 15px; font-weight: 600; color: var(--fg); }
+.ts-areas b { font-size: 15px; }
+.ts-areas span { font-size: 14px; line-height: 20px; }
+
+/* H37 So funktioniert's */
+.ts-how { display: flex; flex-direction: column; }
+.ts-hi { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.ts-hi:last-child { border-bottom: 0; }
+.ts-hi b { font-size: 17px; font-weight: 650; }
+.ts-hic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--surface); color: var(--fg-2); }
+.ts-ring { width: 30px; height: 30px; }
+.ts-stages { padding: 4px 16px; }
+.ts-stg { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: flex-start; }
+.ts-stg:last-child { border-bottom: 0; }
+.ts-stg .stagepill { margin-top: 1px; flex: none; }
+.ts-stg b { font-size: 16px; font-weight: 650; }
+.ts-next { display: flex; gap: 6px; align-items: flex-start; margin: 0; font-size: 13px; line-height: 18px; color: var(--fg-3); }
+.ts-next .ic { margin-top: 2px; flex: none; }
