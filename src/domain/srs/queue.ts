@@ -1,6 +1,7 @@
 import { isDue } from '../metrics/definitions';
 import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
+import { meaningForTask } from './cards';
 import { isLearningState, retrievability } from './scheduler';
 import { chunkParts } from './chunkCards';
 import type { Lang, QueueItem, TrainCard } from './types';
@@ -70,8 +71,13 @@ export function tierSrc(c: Pick<TrainCard, 'src' | 'doc'>): string | null {
   return o && typeof o === 'object' && (o as { kind?: unknown }).kind === 'daily' ? 'daily' : c.src;
 }
 
-/** Kann die Karte in dieser Sprache überhaupt abgefragt werden? */
-export const quizzable = (c: TrainCard, lang: Lang, poolSize: number): boolean => availableExercises(c, lang, poolSize).length > 0;
+/**
+ * Kann die Karte in dieser Sprache überhaupt abgefragt werden?
+ * Abkürzung (U2, Start-Tempo): Mit Bedeutung ist immer eine Art der Stufe 4 verfügbar – `cloze`, wenn ein Satz als Lücke taugt, sonst `type`
+ * (`supports` in modes.ts) –, und Stufe 4 liegt für jede Stufe 1–5 im Suchbereich von `availableExercises`. Das spart die Satzsuche je Karte;
+ * das Ergebnis ist dasselbe (Test: tests/unit/quizzableFast.test.ts).
+ */
+export const quizzable = (c: TrainCard, lang: Lang, poolSize: number): boolean => !!meaningForTask(c, lang) || availableExercises(c, lang, poolSize).length > 0;
 
 function active(cards: readonly TrainCard[], lang: Lang): TrainCard[] {
   const pool = cards.filter((c) => !c.hidden);

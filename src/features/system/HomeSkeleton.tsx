@@ -10,7 +10,7 @@ import { dateLabelOf } from '../today/dateLabel';
 /** Platzhalter der Tageskarte: Ring, Titel, drei Schritte, Knopf unten, Fußzeile. */
 export function TodaySkeletonCard() {
   return (
-    <div className="lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6" aria-hidden="true" data-testid="today-skeleton">
+    <div className="lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6" aria-hidden="true" data-testid="today-skeleton" data-settled="true">
       <div className="flex items-center gap-3.5">
         <div className="lx-skeleton size-28 flex-none rounded-full" />
         <div className="flex min-w-0 flex-1 flex-col gap-2">

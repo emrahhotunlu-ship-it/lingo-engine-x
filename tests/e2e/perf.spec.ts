@@ -92,6 +92,8 @@ const harnessAt = (page: Page) => page.evaluate(() => performance.getEntriesByNa
 //   Plan vorhanden  1×: 1,64–1,75 s (1,32–1,43 s)   4×: 8,3–9,9 s (6,1–7,6 s)
 //   erster Start    1×: 2,36–2,65 s (2,06–2,38 s)  4×: 9,4–13,9 s (7,9–11,5 s)
 //   unter starker Fremdlast (Lastmittel 14): erster Start 1× 2,8–3,0 s, 4× 8,0–10,6 s – die Rechenzeit bleibt nah beieinander, die Wanduhr nicht.
+// U2 (27.10.2026, nach Start-Bild und schnellerem `quizzable`, Projekt `perf` allein, je 1 Lauf): Plan vorhanden 1× 1,29 s (1,21 s), 4× 4,98 s (3,79 s);
+//   erster Start 1× 1,66 s (1,58 s), 4× 6,76 s (5,64 s). Grenzen unverändert gelassen (keine Messreihe zum Verschärfen).
 // Grenzen = Regressionsgrenzen mit ca. 30–40 % Luft über dem höchsten Messwert (CPU_LIMIT_MS). Die Vorgabe aus Kap. 14 (< 2 s bis „klar, was heute
 // dran ist“) erfüllt „Plan vorhanden“ auch auf der Wanduhr; „erster Start“ (einmal am Tag) liegt mit 1.500 Wörtern darüber (Ursache 4, offen).
 // Am iPhone mit echten Daten prüft das Emrah (Einstellungen → Diagnose zeigt `lx:status`); dieser Test schützt vor Rückschritten.
@@ -123,6 +125,83 @@ for (const kind of ['Plan von heute vorhanden', 'erster Start des Tages'] as con
       expect(live).toBeLessThanOrEqual(at);
       expect(cpuMs, `Rechenzeit ${cpuMs} ms (Wanduhr ab Test-Hülle ${appMs} ms)`).toBeGreaterThan(0);
       expect(cpuMs, `Rechenzeit ${cpuMs} ms (Wanduhr ab Test-Hülle ${appMs} ms)`).toBeLessThan(CPU_LIMIT_MS[kind][rate]);
+      expect(errors).toEqual([]);
+    });
+  }
+}
+
+// U2 Start-Bild (27.10.2026): Das HTML zeigt vor dem 6-MB-Skript Datum, Tab-Leiste und Kartenskelett (index.html, scripts/vite-boot-first.mjs).
+// Vorher (Messung 27.10.2026, Großdatensatz, ab Seitenstart): erstes Bild leer bei 1× ≈ 0,8 s, erstes Bild mit Inhalt ≈ 1,2 s (1×) bzw. ≈ 5,1 s (4×).
+// Nachher: erstes Bild mit Inhalt ≈ 0,05–0,1 s (1×) bzw. ≈ 0,2 s (4×) nach Ende der Test-Hülle. Grenze: 1,0 s (Vorgabe U2).
+// Gemessen ab Ende der Test-Hülle (`lxt:harness`), wie die Statuszeile oben.
+
+/** Protokolliert je Bild (requestAnimationFrame), wo Karte und Start-Knopf stehen: Start-Bild, Ladeskelett, echte Karte. */
+async function trackLayout(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __lay: { t: number; boot: boolean; card: number | null; h: number | null; start: number | null; date: string }[] };
+    w.__lay = [];
+    const tick = () => {
+      const q = (s: string) => document.querySelector(s)?.getBoundingClientRect() ?? null;
+      const card = q('[data-testid="today-card"]') ?? q('[data-testid="today-skeleton"]') ?? q('#lx-boot .lx-today-card');
+      const start = q('[data-testid="start"]');
+      w.__lay.push({ t: performance.now(), boot: !!document.getElementById('lx-boot'), card: card ? card.y : null, h: card ? card.height : null, start: start ? start.y : null, date: document.querySelector('h1')?.textContent?.trim() ?? '' });
+      if (performance.now() < 30_000) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+type Lay = { t: number; boot: boolean; card: number | null; h: number | null; start: number | null; date: string };
+const layoutLog = (page: Page): Promise<Lay[]> => page.evaluate(() => (window as unknown as { __lay: Lay[] }).__lay);
+
+for (const rate of [1, 4] as const) {
+  test(`U2 Start-Bild: erstes Bild mit Datum und Karte ≤ 1,0 s nach der Test-Hülle · CPU ${rate}×`, async ({ page }) => {
+    await throttle(page, rate);
+    await trackLayout(page);
+    const errors = await bootReal(page);
+    await page.getByTestId('today-status').waitFor({ state: 'visible' });
+    const r = await page.evaluate(() => ({
+      harness: performance.getEntriesByName('lxt:harness')[0]?.startTime ?? -1,
+      fcp: performance.getEntriesByName('first-contentful-paint')[0]?.startTime ?? -1,
+      status: performance.getEntriesByName('lx:status')[0]?.startTime ?? -1,
+    }));
+    const log = await layoutLog(page);
+    // Das allererste Bild ist schon das Start-Bild: Datum und Kartenskelett stehen da, bevor das Skript läuft.
+    const first = log.find((e) => e.card !== null);
+    expect(first?.boot, 'erstes Bild mit Karte stammt aus dem Start-Bild').toBe(true);
+    expect(first?.date, 'Datum steht im Start-Bild').not.toBe('');
+    const fcpMs = Math.round(r.fcp - r.harness);
+    test.info().annotations.push({ type: 'erstes Bild (FCP)', description: `${fcpMs} ms` });
+    test.info().annotations.push({ type: 'Start bedienbar (lx:status)', description: `${Math.round(r.status - r.harness)} ms` });
+    expect(r.fcp).toBeGreaterThan(0);
+    expect(fcpMs).toBeLessThanOrEqual(1000);
+    expect(errors).toEqual([]);
+  });
+}
+
+// U2 Layout-Sprung: Start-Bild → Ladeskelett → Heute-Karte stehen an derselben Stelle (≤ 2 px), und der Start-Knopf bewegt sich nach dem
+// Erscheinen nicht mehr (vorher: Karte rutschte ≈ 14 px, weil Kopfzeile und Wochenrückblick-Band vor ihr erschienen, dazu das Aufsteigen um 8 px).
+// Beide Startarten (mit Plan / erster Start des Tages), Handy und Desktop.
+for (const width of [390, 1280] as const) {
+  for (const kind of ['Plan von heute vorhanden', 'erster Start des Tages'] as const) {
+    test(`U2 kein Layout-Sprung > 2 px beim Start · ${kind} · ${width} px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await trackLayout(page);
+      const plan = { d: learningDay(Date.now()), v: 1, ids: ['gram', 'cloze', 'order'], why: [[['whyRotation']], [['whyRotation']], [['whyRotation']]], duty: ['review', 'ch:gram'], goal: { review: 10 }, lesson: null, at: 1 };
+      const errors = await bootReal(page, kind === 'Plan von heute vorhanden' ? { 'app/profile': { plan } } : {});
+      await page.getByTestId('start').waitFor({ state: 'visible' });
+      // Nach dem Erscheinen des Knopfs noch 1,5 s beobachten (Einblendungen, spät eintreffende Bänder).
+      await page.waitForTimeout(1500);
+      const log = await layoutLog(page);
+      const tops = log.filter((e) => e.card !== null).map((e) => e.card as number);
+      const starts = log.filter((e) => e.start !== null).map((e) => e.start as number);
+      const spread = (xs: number[]): number => Math.max(...xs) - Math.min(...xs);
+      test.info().annotations.push({ type: 'Karte oben', description: `${Math.round(Math.min(...tops))}–${Math.round(Math.max(...tops))} px` });
+      test.info().annotations.push({ type: 'Start-Knopf', description: `${Math.round(Math.min(...starts))}–${Math.round(Math.max(...starts))} px` });
+      expect(log.some((e) => e.boot && e.card !== null), 'Start-Bild war zu sehen').toBe(true);
+      expect(tops.length).toBeGreaterThan(0);
+      expect(spread(tops), 'Oberkante der Karte (Start-Bild, Skelett, Karte)').toBeLessThanOrEqual(2);
+      expect(starts.length).toBeGreaterThan(0);
+      expect(spread(starts), 'Start-Knopf nach dem Erscheinen').toBeLessThanOrEqual(2);
       expect(errors).toEqual([]);
     });
   }

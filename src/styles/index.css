@@ -1164,7 +1164,7 @@ h3 {
     --lx-today-card-h: 33.125rem;
   }
 }
-/* U2: Die Tageskarte, die das Ladeskelett ersetzt, steigt nicht noch einmal auf (sonst rutscht der Start-Knopf 8 px). */
+/* U2: Das Kartenskelett und die Tageskarte, die es ersetzt, steigen nicht auf (sonst rutschen Karte und Start-Knopf 8 px). */
 :root[data-fx] [data-layer='tab'] .lx-card[data-settled] {
   animation: none;
 }
