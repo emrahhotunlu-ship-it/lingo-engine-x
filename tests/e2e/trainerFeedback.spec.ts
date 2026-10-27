@@ -70,7 +70,8 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   // Beispiele: Kollokationssätze, nicht der schon sichtbare Satz (bei dieser Stufe unter „Weitere Beispiele“).
   await page.getByTestId('explanation-more').click();
   await expect(page.getByTestId('examples').getByTestId('example')).toHaveCount(3);
-  await expect(page.getByTestId('examples')).not.toContainText('Try to avoid driving');
+  // U3: der erste Beispielsatz kann offen im Merke-Block stehen, die übrigen unter „Mehr“ – keiner davon ist der Aufgabensatz.
+  await expect(page.getByTestId('example').filter({ hasText: 'Try to avoid driving' })).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   if (process.env.LX_SHOTS) await page.screenshot({ path: `${process.env.LX_SHOTS}/desktop-result.png` });
   // Der Fokus liegt auf „Weitere Beispiele“: weiter geht es mit dem Knopf.
