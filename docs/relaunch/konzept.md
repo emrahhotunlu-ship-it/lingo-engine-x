@@ -760,6 +760,38 @@ Grundschrift ab 1920 px 18 px statt 16 px, ab 2400 px 20 px, alles in rem. Bei 2
 
 Außerdem: Lesen mit Tagesartikel und Kursen, Routinen (`daily`, `feed`, `read`, Kurse) mit eingefrorenen Pfaden.
 
+### 15.1 Nachtrag 27.10.2026: keine stillen Verluste (Kais Lückenliste)
+
+Grundlage: `vorschau/luecken.md` (87 heutige Funktionen) und `vokabeltrainer.md`. Jede Funktion, die das Konzept bisher weder übernahm noch strich, steht hier mit ihrem Ort. Die Bildschirm-Codes stehen in `vorschau/bauliste.md`.
+
+| Heute (Nr. in `luecken.md`) | Bleibt, und zwar hier | Bildschirm |
+|---|---|---|
+| Einstellungen (69–78): Sprache, Modus, Farbe, Stimme mit Probe, Klänge, Haptik, Effekte, Abfrageart, Richtung, neue Wörter pro Tag, Tagesziel, Lernzeit und Erinnerung, Eingabe, Mein Beruf, Arbeitskontext, „Claude merkt sich“ | Zahnrad → sechs Gruppen: Lernen, Wörter, Stimme und Ton, Mein Kontext, Aussehen, Daten. Neu dabei: Ruhetag, Urlaub, Ziel ändern (Kai E1, E3, E7). | H24, L15 |
+| Datensicherung, Anki-Export, Quellen, Diagnose (36, 80, 82) | Einstellungen → Daten. Die Sicherung lädt Emrah selbst als Datei (Auftrag 6.14). | H24 `data`, `diagnosis` |
+| Freier Vokabeltrainer, Anki-Modus, Stapel (Nr. 22–27, 34) | eigener Trainer: ein Plan, eine Tabelle (`vokabeltrainer.md`) | H17–H22, L11–L14 |
+| Wörter hinzufügen, aus Text, bearbeiten, ausblenden, „Kenne ich sicher“, „Morgen wieder“, „Von vorn“, löschen, Rückgängig (22–27, 61) | Reiter Wörter: Suche ohne Treffer → Hinzufügen; Wort-Detail → Verwalten | H21, H23, L5 |
+| Neue Wörter auf Abruf | im Trainer nach der Pflicht, mit Tagesdeckel (siehe Kap. 19, Frage 15) | H17 `new-words`, H21 `quota-full` |
+| Hörschleife, Eselsbrücke, Satzübersetzung (32, 33) | Wort-Detail „Anhören“; Mehr-Blatt in der Aufgabe | H12 `detail`, H2 `more` |
+| Synonym-Prüfung (33) | „War das auch richtig?“ (bleibt, Kap. 15 Nr. 2) | H2 |
+| Grammatik-Thema frei üben, Nachschlagen, Struktur-Film, Deutsch-Falle (39, 40) | Reiter Grammatik → Thema → „Üben (Extra)“ / Nachschlagen | H27, L16 |
+| Sechs Trainings, C1-Formate, Tempo-Runde, Wort-Werkstatt (43, 44, 48) | „Mehr üben“, erreichbar aus „Wenn du mehr willst“ → „Alles anzeigen“ | H33, H22 |
+| Einwand-Training, Zeit gewinnen, Hot Seat, freie Szenen (48) | Praxis → Sprechen → „Alle“ | H29 |
+| Lehrer-Korrekturen einfügen, Preply-Zettel, Monatsformular (41, 58) | eigener Ort „Lehrer“ | H28 |
+| Fehler-Übersicht (57) | „Deine Fehler“ aus Grammatik und Fortschritt | H26, L16 |
+| Verlauf, Fortschritt-Details (65) | Fortschritt → Detail und Verlauf | H34 |
+| Fokus für die nächste Woche (13) | Wochenabschluss → Fokus wählen | H30 |
+| Freiwillige Tests: C1-Check, Wortschatztest (68) | Test-Ergebnis-Bild; Start über „Mehr üben“ | H31, H33 |
+| Satz-Klinik, Mail-Werkstatt (53, 54) | Fragen-Blatt → dritter Reiter „Prüfen“ | H36 |
+| Lese-Archiv, Kursseite (52) | Lesen → Kurse und Archiv | H35 |
+| „So funktioniert's“ (Kai E4) | aus Fortschritt und Einstellungen | H37 |
+| Kurzer Tag, lange Pause, Urlaub (Kai E1, E2) | Varianten auf Heute | H1 `short`, `pause`, `vacation` |
+| Speichern geht nicht | ruhiger Zustand, nichts geht verloren | H16 `nosave` |
+
+**Fällt weg, weil …**
+- **Abend-Check nach der Runde** (heutige `offers.ts`): Er schönt den Gestern-Check am nächsten Morgen und damit die Kennzahl A1 (`vokabeltrainer.md` §3.4).
+- **„Aus diesem Browser nachtragen“** (84): Er war nur für den Umzug im September nötig; seitdem ist alles in der Datenbank. Die Umstellung bleibt im Code, der Hinweis entfällt.
+- **Anki-Abstände bei Deutsch → Englisch:** Dort plant Aufdecken nicht mehr. Es bleibt „Wusste ich / Wusste ich nicht“ ohne Abstände (Kap. 3, `vokabeltrainer.md` §3.6).
+
 ---
 
 ## 16. Technik, Daten, Messplan
@@ -907,6 +939,13 @@ Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inh
 12. **Rückweg:** Wörter in den neuen Sammeldokumenten sieht die alte Version v86 nicht; sie gehen dabei aber nicht verloren.
 13. **Dauer:** erster Durchgang durch die 8 Kapitel ehrlich nachgerechnet **18–22 Wochen** (vorher 16–20; feste Tage wie Schreib-, Missions- und Meilensteintag lassen weniger Platz für Themenstarts). C1 realistisch weiter in 12–15 Monaten.
 14. **Mission erst ab Stufe 5:** Bis die Missionen gebaut sind, ist der Freitag ein normaler Lerntag.
+
+**Offen (Nachtrag 27.10.2026, Vorschläge von Lena, Mara und Kai):**
+15. **Neue Wörter auf Abruf:** Du kannst im Trainer nach der Pflicht jederzeit neue Wörter dazunehmen, aber zusammen mit der Pflicht höchstens 5 am Tag. Mehr würde der Gestern-Check am nächsten Morgen nicht mehr sauber prüfen. Weitere Funde kommen als „erkennst du“ dazu. **Vorschlag: so.**
+16. **Anki-Modus:** Englisch → Deutsch mit 4 Knöpfen und echten Abständen; Deutsch → Englisch nur „Wusste ich / Wusste ich nicht“ ohne Wirkung auf den Plan. **Vorschlag: so.**
+17. **Abend-Check fällt weg**, damit der Test am nächsten Morgen ehrlich bleibt. **Vorschlag: so.**
+18. **„Wörter üben“ auf Heute erst nach der Pflicht;** im Reiter Wörter ist es immer da. **Vorschlag: so.**
+19. **Eigene Funde:** höchstens 1 je Tag in der Pflicht, weitere über den Trainer. **Vorschlag: so** (James prüft).
 
 ---
 
