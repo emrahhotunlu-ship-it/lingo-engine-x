@@ -96,7 +96,7 @@ function Ccq({ q, s, a, topic }: { q: { de: string; en: string }; s: string; a: 
             key={String(v)}
             type="button"
             className="lx-choice min-h-11 min-w-20 justify-center"
-            data-state={pick === null ? 'idle' : v === a ? 'correct' : v === pick ? 'wrong' : 'dim'}
+            data-state={pick === null ? 'idle' : v === a ? (pick === a ? 'correct' : 'answer') : v === pick ? 'wrong' : 'dim'}
             disabled={pick !== null}
             onClick={() => setPick(v)}
             data-testid="intro-ccq-answer"

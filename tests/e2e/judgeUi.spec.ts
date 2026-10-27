@@ -67,6 +67,9 @@ test('had → Zielform „used to have“: die App prüft selbst und bucht halb'
   const n0 = Number((await dump(page))['grammar/used-to']?.n);
   await typeInGap(page, 'had');
   await page.getByTestId('check').click();
+  // Das Feld kommt erst auf Wunsch (UX-Audit U1).
+  await expect(page.getByTestId('target-input')).toHaveCount(0);
+  await page.getByTestId('target-open').click();
   await page.getByTestId('target-input').fill('used to have');
   await page.getByTestId('target-check').click();
   await expect(page.getByTestId('target-result')).toHaveAttribute('data-ok', '1');

@@ -639,8 +639,12 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const lesson = composed?.lesson ?? false;
   const model = composed?.model ?? null;
 
-  const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? (fb.unsure ? 'near' : 'near') : 'wrong';
-  const depth: ExplainDepth = explainDepth({ verdict: rv, p, learning });
+  // UX-Audit U1: Während Claude eine schon bewertete Antwort nachprüft („Claude fragen“), steht das Urteil neutral auf „Wird geprüft …“ –
+  // nie erst rot und dann grün. Die Lücke zeigt dabei nur die eigene Antwort, ohne Strich und ohne Lösung.
+  const checking = !!fb && fit.busy && fb.verdict !== 'correct' && !fb.override && !fb.dontKnow;
+  const judged: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
+  const rv: ResultVerdict = checking ? 'unchecked' : judged;
+  const depth: ExplainDepth = explainDepth({ verdict: judged, p, learning });
 
   // ------------------------------------------------------------------ Hinweise (Tipp-Leiter und Zweitversuch)
 
@@ -668,8 +672,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   // ------------------------------------------------------------------ Satz und Eingabe
 
   const src = { area, source: `grammar/${task.topic}` };
-  const gapState: GapState = !fb ? 'input' : fb.verdict;
-  const gapReveal = fb && fb.verdict === 'wrong' && gapKind ? { solution, given: fb.given.trim() ? fb.given : null } : null;
+  const gapState: GapState = !fb || checking ? 'input' : fb.verdict;
+  const gapReveal = fb && !checking && fb.verdict === 'wrong' && gapKind ? { solution, given: fb.given.trim() ? fb.given : null } : null;
   const gapNode = (
     <KineticGap
       label={t('grGapLabel')}
@@ -917,7 +921,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const found = stage === 'replace' && !!tappedNow && tappedNow !== 'none';
       const errWord = errSpan ? wordsOfPrompt.slice(errSpan[0], errSpan[1] + 1).join(' ') : null;
       const fix = found && !fb.dontKnow ? fb.given.trim() : '';
-      const h = findHead({ verdict: rv, errWord, tapped: tappedNow, found, ...(fix ? { fix } : {}), answer: spotAnswer }, lang);
+      const h = findHead({ verdict: judged, errWord, tapped: tappedNow, found, ...(fix ? { fix } : {}), answer: spotAnswer }, lang);
       find = {
         ...(h.title ? { title: h.title } : {}),
         // Andere gültige Stelle (`errAlt`): „Du hast … getippt“ entfällt, die Zeile sagt schon, was passiert ist.
@@ -964,7 +968,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const unsureHead = fb.unsure && !fb.override && fb.verdict === 'near' && !lesson;
     feedback = {
       verdict: rv,
-      ...(alsoRight ? { title: t('exAlsoRight') } : unsureHead ? { title: t('ttJgUnsureTitle') } : {}),
+      ...(checking ? { title: t('exJudgingTitle') } : alsoRight ? { title: t('exAlsoRight') } : unsureHead ? { title: t('ttJgUnsureTitle') } : {}),
       sub,
       comparison,
       explanation: shown,

@@ -6,7 +6,7 @@ import { ankiPatch } from './wortschatzHelpers';
 
 // Emrahs Meldung 25.10.2026 (live v83, „Auch ne blöde Aufgabe“): Abruf 2 zeigte „…technique and ____. Their recommendations were based on …
 // the system had obvious…“ ohne deutsche Bedeutung. Jetzt: „Gesucht: Einstellung“ als ruhige Zeile unter der Aufgabe und genau ein kurzer,
-// vollständiger Satz (der abgeschnittene Auszug weicht einem anderen Satz der Karte). Übersprungen heißt „Nicht beantwortet“, nicht „–“.
+// vollständiger Satz (der abgeschnittene Auszug weicht einem anderen Satz der Karte). Übersprungen zeigt keine leere „Deine Antwort“-Zeile.
 
 type Doc = Record<string, unknown>;
 const SHOTS = process.env.LX_SHOTS ?? '';
@@ -79,11 +79,12 @@ for (const width of [390, 1440]) {
     expect(axe.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
     expect(await layoutProblems(page)).toEqual([]);
 
-    // Nichts getippt, „Weiß ich nicht“: „Nicht beantwortet“ statt „–“; die Gesucht-Zeile bleibt stehen.
+    // Nichts getippt, „Weiß ich nicht“: keine Zeile „Deine Antwort“ (UX-Audit U1, vorher „Nicht beantwortet“); die Gesucht-Zeile bleibt stehen.
     await page.getByTestId('dont-know').click();
     await expect(page.getByTestId('verdict')).toBeVisible();
     await expect(sought).toHaveText('Gesucht: Einstellung');
-    await expect(page.getByTestId('diff-given')).toHaveText('Nicht beantwortet');
+    await expect(page.getByTestId('diff-given')).toHaveCount(0);
+    await expect(page.getByTestId('diff-correct')).toBeVisible();
     if (SHOTS) await page.screenshot({ path: `${SHOTS}/abruf2-ergebnis-${width}.png`, fullPage: true });
     const axe2 = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(axe2.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);

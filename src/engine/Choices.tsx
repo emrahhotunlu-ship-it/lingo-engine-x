@@ -7,7 +7,7 @@ import { CHOICE_LETTERS, keyToIndex } from './choiceKeys';
 
 // Auswahl aus Optionen. Zwei Formen mit gemeinsamer Optik:
 //  - NEU (Lernplattform 2.0 §4.4): `options` + Zahlen (`chosen`, `correct`, `revealed`). Große Karten A–D, Tasten A–D und 1–4,
-//    nach dem Prüfen ✓ an der richtigen und ✕ an der gewählten falschen Option, `why` unter der gewählten falschen Option,
+//    nach dem Prüfen ✓ an der richtig gewählten, ✕ an der gewählten falschen und ein neutraler Rahmen an der Lösung (`answer`), `why` unter der gewählten falschen Option,
 //    am Handy (`collapse`) bleiben danach nur diese beiden. Haptik und Ton gehören dem Urteil (`Verdict`), nicht diesem Baustein.
 //    `aria-pressed` zeigt nur die Auswahl VOR dem Prüfen (Ausgewählt ist nicht Richtig).
 //  - ALT: `items` + `onChoose`; wählt sofort und löst Haptik/Ton selbst aus (bestehende Aufrufer).
@@ -61,7 +61,9 @@ function LegacyChoices({ items, chosen, onChoose, label, letters = false }: Lega
   return (
     <div role="group" aria-label={label} className={letters ? 'grid grid-cols-1 gap-3' : 'grid gap-2 sm:grid-cols-2'} data-testid="choices">
       {items.map((o, i) => {
-        const state = !done ? 'idle' : o.correct ? 'correct' : o.id === chosen ? 'wrong' : 'dim';
+        const pickedRight = !!items.find((x) => x.id === chosen)?.correct;
+        // UX-Audit U1: falsch sieht nie nach Erfolg aus – nach einer falschen Wahl steht die Lösung neutral (`answer`, ohne ✓).
+        const state = !done ? 'idle' : o.correct ? (pickedRight ? 'correct' : 'answer') : o.id === chosen ? 'wrong' : 'dim';
         return (
           <motion.button
             key={o.id}
@@ -130,7 +132,8 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
       <AnimatePresence initial={false}>
         {options.map((text, i) => {
           const isMuted = !revealed && !!muted?.includes(i);
-          const state = !revealed ? (isMuted ? 'dim' : 'idle') : i === correct ? 'correct' : i === chosen ? 'wrong' : 'dim';
+          // UX-Audit U1: Grün nur, wenn die eigene Wahl richtig war. Nach falscher Wahl oder „Weiß ich nicht“ steht die Lösung neutral (`answer`, ohne ✓).
+          const state = !revealed ? (isMuted ? 'dim' : 'idle') : i === correct ? (chosen === correct ? 'correct' : 'answer') : i === chosen ? 'wrong' : 'dim';
           if (revealed && collapse && state === 'dim') return null;
           // Am Handy (collapse) direkt unter der gewählten Option; sonst unter der Liste, damit keine Option verrutscht (UX-Prüfung 19.10.2026).
           const line = collapse && revealed && state === 'wrong' ? why?.[i] : undefined;

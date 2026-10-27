@@ -108,10 +108,14 @@
   outline: 2px solid var(--lx-focus);
   outline-offset: 2px;
 }
-.lx-fm-tap[data-state='right'],
-.lx-fm-tap[data-state='answer'] {
+.lx-fm-tap[data-state='right'] {
   color: var(--lx-ok-text);
   background: var(--lx-ok-soft);
+}
+/* UX-Audit U1 „Falsch ist nie grün“: die gesuchte Stelle neben einer falschen Vermutung steht neutral, nicht grün. */
+.lx-fm-tap[data-state='answer'] {
+  color: var(--lx-fg);
+  background: var(--lx-surface-strong);
 }
 .lx-fm-tap[data-state='wrong'] {
   color: var(--lx-wrong-text);

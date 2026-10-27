@@ -70,6 +70,7 @@ export const exDe = {
   exNoSound: 'Gerade kein Ton',
   exCheck: 'Prüfen',
   exChecking: 'Prüft …',
+  exJudgingTitle: 'Wird geprüft …',
   exThinking: 'Denkt nach …',
   exNext: 'Weiter',
   exRetry: 'Erneut versuchen',

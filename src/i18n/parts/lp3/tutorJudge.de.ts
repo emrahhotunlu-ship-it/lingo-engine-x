@@ -10,6 +10,7 @@ export const ttJudgeDe = {
   ttJgTargetLabelPat: 'Schreib die Lücke einmal mit dem geübten Muster',
   ttJgTargetLabelPatSentence: 'Schreib den Satz einmal mit dem geübten Muster',
   ttJgTargetCheck: 'Prüfen',
+  ttJgTargetOpen: 'Mit dem geübten Muster üben',
   ttJgTargetOk: 'Richtig. Zählt halb, weil es der zweite Versuch war.',
   ttJgTargetWrong: 'Noch nicht das geübte Muster. So wäre es richtig: {form}.',
   ttJgAiYes: 'Claude: Auch so richtig.',

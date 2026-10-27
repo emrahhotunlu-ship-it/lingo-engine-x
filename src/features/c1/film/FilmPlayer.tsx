@@ -205,7 +205,7 @@ export function FilmPlayer({ film, onClose }: { film: Film; onClose?: (() => voi
               className="lx-choice min-h-12 justify-start text-left"
               lang="en"
               disabled={answered}
-              data-state={!answered ? 'idle' : i === p.ans ? 'correct' : i === guess ? 'wrong' : 'dim'}
+              data-state={!answered ? 'idle' : i === p.ans ? (guess === p.ans ? 'correct' : 'answer') : i === guess ? 'wrong' : 'dim'}
               onClick={() => pickGuess(i)}
               data-testid="film-option"
             >

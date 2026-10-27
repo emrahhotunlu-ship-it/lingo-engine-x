@@ -11,10 +11,18 @@ import type { Pattern } from './patternTypes';
 
 const pick = (b: { de: string; en: string }, lang: Lang): string => (lang === 'de' ? b.de : b.en);
 
+/**
+ * Lücke füllen. Der Wort-Hinweis direkt nach der Lücke („___ (have)“) fällt weg (UX-Audit U1: „We used to have (have) …“):
+ * im fertigen Satz ist er nur ein Rest, der das Wort doppelt zeigt. Ohne Lücke bleibt der Satz unverändert.
+ */
+export function fillGap(prompt: string, answer: string): string {
+  return /_{3,}/.test(prompt) ? prompt.replace(/_{3,}(\s*\([^()]*\))?/, () => answer) : prompt;
+}
+
 /** Der Satz der Aufgabe mit eingesetzter Lösung (für Beispielausschluss und Signalwörter). */
 export function filledSentence(task: Pick<GrammarTask, 'prompt' | 'answer' | 'type'>): string {
   const p = task.type === 'transform' ? (task.prompt.split('→').pop() ?? task.prompt) : task.prompt;
-  return /_{3,}/.test(p) ? p.replace(/_{3,}/, task.answer) : p;
+  return fillGap(p, task.answer);
 }
 
 const norm = (s: string): string => s.toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();

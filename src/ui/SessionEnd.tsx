@@ -313,11 +313,12 @@ function GrowthEnd({
                 data-testid="session-end-mistake"
               >
                 <span className="lx-t-support" lang="en">
-                  <span className="text-muted line-through decoration-wrong/60">
+                  {/* UX-Audit U1: falsch nie grün – eigene Antwort rot durchgestrichen, Lösung neutral. */}
+                  <span className="text-wrong-text line-through decoration-wrong/60" data-slot="wrong">
                     {m.wrong}
                   </span>
                   {" → "}
-                  <span className="font-semibold text-ok-text">{m.right}</span>
+                  <span className="font-semibold text-fg" data-slot="right">{m.right}</span>
                 </span>
                 <span className="lx-t-meta text-muted">
                   {m.rule} · {t("exEndWhen", { when: m.when })}

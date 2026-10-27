@@ -22,7 +22,8 @@ export function ChipRow({ options, chosen, correct = null, revealed = false, onP
   return (
     <div role="group" aria-label={label} className="flex flex-wrap gap-2" data-testid={testId}>
       {options.map((o, i) => {
-        const state = !revealed ? (i === chosen ? 'picked' : 'idle') : i === correct ? 'correct' : i === chosen ? 'wrong' : 'dim';
+        // UX-Audit U1: Grün nur bei richtiger Wahl; sonst steht die Lösung neutral (`answer`, ohne ✓).
+        const state = !revealed ? (i === chosen ? 'picked' : 'idle') : i === correct ? (chosen === correct ? 'correct' : 'answer') : i === chosen ? 'wrong' : 'dim';
         return (
           <button
             key={`${i}:${o}`}

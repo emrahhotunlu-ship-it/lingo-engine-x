@@ -65,6 +65,7 @@ export const exEn = {
   exNoSound: 'No sound right now',
   exCheck: 'Check',
   exChecking: 'Checking …',
+  exJudgingTitle: 'Checking …',
   exThinking: 'Thinking …',
   exNext: 'Next',
   exRetry: 'Try again',
