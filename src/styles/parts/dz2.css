@@ -217,9 +217,9 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
 .lx-ring[data-today][data-state='done'] {
   box-shadow: none;
 }
-/* Durchgestrichene eigene Eingabe in der Lücke: volle Schriftfarbe, Strich in der Fehlerfarbe (lesbar, Kontrast). */
+/* Durchgestrichene eigene Eingabe in der Lücke: rot und durchgestrichen (UX-Audit U1), die Lösung darunter neutral. */
 .lx-gap-given {
-  color: var(--lx-fg);
+  color: var(--lx-wrong-text);
   text-decoration-color: var(--lx-wrong-text);
   text-decoration-thickness: 2px;
 }
@@ -237,4 +237,11 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
     -webkit-backdrop-filter: blur(16px) saturate(1.2);
     backdrop-filter: blur(16px) saturate(1.2);
   }
+}
+
+/* UX-Audit U1: Der Übungskopf (✕, Fortschritt, Claude) bleibt beim Bildlauf oben stehen. Deckend in der Hintergrundfarbe, damit der Text darunter nicht durchscheint. */
+.lx-exbar {
+  background: color-mix(in srgb, var(--lx-bg) 92%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }

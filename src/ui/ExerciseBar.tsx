@@ -41,7 +41,7 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
   const n = has ? Math.max(1, Math.min(progress.total, progress.n)) : 0;
   const pct = has ? Math.round((n / progress.total) * 100) : 0;
   return (
-    <div className="flex min-h-12 items-center gap-2 sm:gap-3" data-testid="exercise-bar">
+    <div className="lx-exbar sticky top-0 z-30 flex min-h-12 items-center gap-2 sm:gap-3" data-testid="exercise-bar">
       <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         {middleOverlay ? (
