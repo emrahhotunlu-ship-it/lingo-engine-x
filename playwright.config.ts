@@ -10,4 +10,8 @@ export default defineConfig({
   expect: { timeout: 10_000 },
   reporter: [['list']],
   use: { browserName: 'chromium', trace: 'retain-on-failure', timezoneId: 'Europe/Berlin', locale: 'de-DE' },
+  projects: [
+    { name: 'main', testIgnore: /perf\.spec\.ts$/ },
+    { name: 'perf', testMatch: /perf\.spec\.ts$/, workers: 1, dependencies: ['main'] },
+  ],
 });
