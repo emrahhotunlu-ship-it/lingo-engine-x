@@ -27,22 +27,22 @@ const tsAi = () => '<p class="ts-ai">' + ic('claude', 'xs') + L('Von Claude gepr
    H33 Mehr üben
    ========================================================= */
 function tsGrid(prefix, items) {
-  return '<div class="ts-grid">' + items.map((x, i) => '<button class="ts-gi" id="' + prefix + '-' + i + '" data-go="' + (x[2] || '') + '"' + (x[2] ? '' : ' data-act="noop"') + '><b>' + x[0] + '</b><span>' + x[1] + '</span></button>').join('') + '</div>';
+  return '<div class="ts-grid">' + items.map((x, i) => '<button class="ts-gi" id="' + prefix + '-' + i + '" data-go="' + x[2] + '">' + (x[3] ? '<em class="ts-c1tag">' + L('C1-Format', 'C1 format') + '</em>' : '') + '<b>' + x[0] + '</b><span>' + x[1] + '</span></button>').join('') + '</div>';
 }
 function tsMoreList() {
   const trainings = [
     [L('Wortpartner', 'Collocations'), '<span class="en">reduce the lead time</span>', 'h18-partner'],
-    [L('Umformen', 'Rephrasing'), L('ein Satz, zwei Formen', 'one sentence, two forms')],
-    [L('Wortform', 'Word forms'), '<span class="en">approve → approval</span>'],
-    [L('Förmlicher sagen', 'Say it more formally'), '<span class="en">get → receive</span>'],
-    ['Phrasal Verbs', '<span class="en">follow up on</span>'],
-    [L('Übergänge', 'Transitions'), '<span class="en">As for the price, …</span>']
+    [L('Umformen', 'Rephrasing'), L('ein Satz, zwei Formen', 'one sentence, two forms'), 'h18-speak'],
+    [L('Wortform', 'Word forms'), '<span class="en">approve → approval</span>', 'h18-free'],
+    [L('Förmlicher sagen', 'Say it more formally'), '<span class="en">get → receive</span>', 'h18-situation'],
+    ['Phrasal Verbs', '<span class="en">follow up on</span>', 'h18-recognize'],
+    [L('Übergänge', 'Transitions'), '<span class="en">As for the price, …</span>', 'h18-gap']
   ];
   const formats = [
-    [L('Umformen mit Schlüsselwort', 'Key word transformation'), L('gleicher Sinn, ein Wort vorgegeben', 'same meaning, one word given')],
-    [L('Fehler finden', 'Find the error'), L('ein Satz, eine falsche Stelle', 'one sentence, one wrong spot')],
-    [L('Kleines Wort', 'Small word'), L('eine Lücke, ein kurzes Wort', 'one gap, one short word')],
-    [L('Passendes Wort', 'Right word'), L('vier Wörter, eins passt', 'four words, one fits')]
+    [L('Umformen mit Schlüsselwort', 'Key word transformation'), L('gleicher Sinn, ein Wort vorgegeben', 'same meaning, one word given'), 'h18-speak', 1],
+    [L('Fehler finden', 'Find the error'), L('ein Satz, eine falsche Stelle', 'one sentence, one wrong spot'), 'h18-gap', 1],
+    [L('Kleines Wort', 'Small word'), L('eine Lücke, ein kurzes Wort', 'one gap, one short word'), 'h18-word', 1],
+    [L('Passendes Wort', 'Right word'), L('vier Wörter, eins passt', 'four words, one fits'), 'h18-partner', 1]
   ];
   return tsTitle(L('Mehr üben', 'More practice'), L('Alles hier ist freiwillig und zählt als Extra, nie als Pflicht. Nimm, was dich gerade interessiert.', 'Everything here is optional and counts as extra, never as your daily plan. Pick whatever interests you.')) +
     '<div class="stack s6">' + tsSec(L('Wörter', 'Words'), tsExtra()) +
@@ -59,7 +59,7 @@ function tsMoreList() {
     tsRow('mo-mail', 'send', L('Mail-Werkstatt', 'Email workshop'), L('eine Mail vor dem Senden prüfen', 'check an email before you send it'), 'h36-mail') + '</div></div>' +
     '<div class="stack s6">' + tsSec(L('Tests, wenn du willst', 'Tests, if you want')) +
     '<div>' + tsRow('mo-c1check', 'flag', L('C1-Check', 'C1 check'), L('etwa 20 Minuten, gemischt', 'about 20 minutes, mixed'), 'act:test') +
-    tsRow('mo-vocab', 'words', L('Wortschatztest', 'Vocabulary test'), L('etwa 10 Minuten', 'about 10 minutes'), 'act:test') + '</div>' +
+    tsRow('mo-vocab', 'words', L('Wortschatztest', 'Vocabulary test'), L('etwa 10 Minuten', 'about 10 minutes'), 'act:vtest') + '</div>' +
     '<p class="p2" style="font-size:14px">' + L('Tests startest nur du. Die App plant sie nie ein.', 'Only you start tests. The app never schedules them.') + '</p></div>' +
     '<p class="p2 ts-foot">' + L('Hören, Sprechen und Lesen findest du unter ', 'Listening, speaking and reading are under ') + '<button class="link" id="mo-praxis" data-go="h13-main" style="min-height:0;display:inline;font-size:15px">' + L('Praxis', 'Practice') + '</button>.</p>';
 }
@@ -68,6 +68,12 @@ function tsTestSheet() {
     '<div class="stack s16"><p class="p">' + L('Etwa 20 Minuten: Wörter, Grammatik, Hören und ein kurzer Text. Du kannst jederzeit aufhören.', 'About 20 minutes: words, grammar, listening and a short text. You can stop at any time.') + '</p>' +
     '<div class="notice">' + ic('info', 'sm') + '<span>' + L('Freiwillig. Zählt als Extra und ändert deinen Tagesplan nicht.', 'Optional. Counts as extra and doesn’t change your daily plan.') + '</span></div></div>',
     '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-test-later" data-act="closesheet" style="flex:1">' + L('Später', 'Later') + '</button><button class="btn pri" id="ts-test-go" data-go="h31-passed" style="flex:1">' + L('Test starten', 'Start test') + '</button></div>');
+}
+function tsVocabSheet() {
+  return sheet('ts-vtest', L('Wortschatztest starten?', 'Start the vocabulary test?'),
+    '<div class="stack s16"><p class="p">' + L('Etwa 10 Minuten: 40 Wörter erkennen, dann 18 selbst bilden, mit Anfangsbuchstabe. Du kannst jederzeit aufhören.', 'About 10 minutes: recognize 40 words, then produce 18 yourself, with the first letter given. You can stop at any time.') + '</p>' +
+    '<div class="notice">' + ic('info', 'sm') + '<span>' + L('Freiwillig. Zählt als Extra und ändert deinen Tagesplan nicht.', 'Optional. Counts as extra and doesn’t change your daily plan.') + '</span></div></div>',
+    '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-vtest-later" data-act="closesheet" style="flex:1">' + L('Später', 'Later') + '</button><button class="btn pri" id="ts-vtest-go" data-go="h18-recognize" style="flex:1">' + L('Test starten', 'Start test') + '</button></div>');
 }
 function tsXTop(n, i) {
   return '<div class="ex-top gx ts-xtop"><button class="iconbtn" id="ex-close" data-go="h33-list" aria-label="' + esc(L('Schließen', 'Close')) + '">' + ic('close') + '</button>' +
@@ -91,7 +97,7 @@ function tsWorkshop() {
     '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">earn a commission · pay a commission · a commission on sales</p></div>' +
     tsAi() +
     '<p class="p2">' + L('Am Samstag fragt dich die App wieder, neu ab Stufe S2.', 'On Saturday the app asks you again, restarting at stage S2.') + '</p></div></div>' +
-    exFoot(btnSec('ts-listen', ic('speaker', 'sm') + L('Anhören', 'Listen'), 'data-act="noop"') + btnPri('ts-ws-next', L('Weiter', 'Continue'), 'h33-result')) +
+    exFoot(btnSec('ts-listen', ic('speaker', 'sm') + (S.ui.tsListen ? L('Spielt …', 'Playing …') : L('Anhören', 'Listen')), 'data-act="tslisten" aria-pressed="' + (S.ui.tsListen ? 'true' : 'false') + '"') + btnPri('ts-ws-next', L('Weiter', 'Continue'), 'h33-result')) +
     overlays({ whyTask });
 }
 function tsResult() {
@@ -112,11 +118,13 @@ reg('h33', {
   render(v) {
     if (v === 'workshop') return tsWorkshop();
     if (v === 'result') return tsResult();
-    return tsPage('h1-done', askBtn(), tsMoreList(), 'h1') + (S.ui.sheet === 'test' ? tsTestSheet() : '');
+    return tsPage('h1-done', askBtn(), tsMoreList(), 'h1') + (S.ui.sheet === 'test' ? tsTestSheet() : '') + (S.ui.sheet === 'vtest' ? tsVocabSheet() : '');
   },
   acts: {
     whysheet() { S.ui.menu = false; S.ui.sheet = 'why'; render(); },
-    test() { S.ui.sheet = 'test'; render(); }
+    test() { S.ui.sheet = 'test'; render(); },
+    vtest() { S.ui.sheet = 'vtest'; render(); },
+    tslisten() { S.ui.tsListen = !S.ui.tsListen; render(); }
   }
 });
 
@@ -137,6 +145,8 @@ function tsCurve(pts, lo, hi) {
     '<polyline fill="none" stroke="var(--fg)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" points="' + pts.map((p, i) => X(i).toFixed(1) + ',' + Y(p).toFixed(1)).join(' ') + '"/>' +
     pts.map((p, i) => '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p).toFixed(1) + '" r="1.1" fill="var(--fg)"/>').join('') + '</svg>';
 }
+/* Kurven über mehrere Wochen reichen vor den Umstieg zurück: ehrlich beschriften. */
+const TS_OLD = () => '<span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('seit September, aus der alten App übernommen', 'since September, carried over from the old app') + '</span>';
 function tsWords() {
   const tot = 491, f5 = 38 / tot * 100, f34 = 41 / tot * 100;
   return tsProgNav('words') + tsTitle(L('Wörter', 'Words'), L('Gezählt wird nur, was du frei abrufst. Auswählen zählt nicht.', 'Only free recall counts. Choosing from options doesn’t.')) +
@@ -147,7 +157,7 @@ function tsWords() {
     '<div><span class="ts-sw f34"></span><span>' + L('Auf dem Weg', 'On the way') + ' <em>S3–S4</em></span><b class="num">41</b></div>' +
     '<div><span class="ts-sw out"></span><span>' + L('Erkennst du', 'You recognize') + '</span><b class="num">412</b></div>' +
     '<div class="tot"><span></span><span>' + L('Alle Wörter', 'All words') + '</span><b class="num">491</b></div></div></div>' +
-    '<div class="card stack s8"><div class="lbl">' + L('Zuwachs · bildest du selbst · 8 Wochen', 'Growth · you produce · 8 weeks') + '</div>' +
+    '<div class="card stack s8"><div class="lbl">' + L('Zuwachs · bildest du selbst · 8 Wochen', 'Growth · you produce · 8 weeks') + '</div>' + TS_OLD() +
     tsCols([14, 17, 20, 24, 27, 31, 35, 38], [L('KW 36', 'Wk 36'), L('KW 43', 'Wk 43')], 38) +
     '<p class="p2">' + L('Diese Woche <b class="num">+3</b>. Ein Wort kommt erst dazu, wenn es nach 21 Tagen Pause noch sitzt.', 'This week <b class="num">+3</b>. A word only counts once it still works after 21 days without practice.') + '</p></div>' +
     '<div class="card stack s8"><div class="lbl">' + L('Vorher, nachher', 'Before and after') + '</div>' +
@@ -166,9 +176,9 @@ function tsGrammar() {
     ['past perfect', L('offen', 'open'), 'open']
   ];
   const ch = CHAPTERS();
-  return tsProgNav('grammar') + tsTitle(L('Grammatik', 'Grammar'), L('Dein Weg zu C1 in 8 Kapiteln, je etwa zwei Wochen.', 'Your path to C1 in 8 chapters, about two weeks each.')) +
+  return tsProgNav('grammar') + tsTitle(L('Grammatik', 'Grammar'), L('Die Grammatik bis C1 in 8 Kapiteln, je zwei bis drei Wochen. Der erste Durchgang dauert etwa 18 bis 22 Wochen.', 'C1 grammar in 8 chapters, two to three weeks each. The first pass takes about 18 to 22 weeks.')) +
     '<div class="card c1"><p class="s disp">' + L('C1 voraussichtlich zwischen Oktober 2027 und Januar 2028', 'C1 expected between October 2027 and January 2028') + '</p>' + c1Band(false) +
-    '<p class="p2" style="font-size:13px">' + L('aus 2 Meilensteinen und 5 belegten Kann-Beschreibungen · ein Trend, keine geeichte Note', 'from 2 milestones and 5 proven can-do statements · a trend, not a calibrated grade') + '</p></div>' +
+    '<p class="p2" style="font-size:13px">' + C1_BASIS() + '</p></div>' +
     '<div class="stack s8"><div class="lbl">' + L('C1-Karte · 8 Kapitel', 'C1 map · 8 chapters') + '</div>' +
     '<div class="ts-map">' +
     '<div class="ts-mi run"><span class="ts-mn num">1</span><div class="ts-mb"><b>' + ch[0][1] + '</b><span>' + L('in Arbeit · Thema 1 von 4', 'in progress · topic 1 of 4') + '</span>' +
@@ -185,7 +195,7 @@ function tsListening() {
   return tsProgNav('listening') + tsTitle(L('Hören', 'Listening'), L('Diktate bei normalem Tempo und Verstehensfragen, letzte 14 Tage.', 'Dictations at normal speed and comprehension questions, last 14 days.')) +
     '<div class="card stack s16"><div class="ts-bign"><b class="disp num">71 %</b><span>' + L('verstanden', 'understood') + '</span></div>' +
     '<div class="ts-lv" role="img" aria-label="' + esc(L('Hörstufe normal, 1,0×', 'Listening level normal, 1.0×')) + '">' + lv.map((x, i) => '<div class="' + (i === 1 ? 'on' : '') + '"><b class="num">' + L(x[0], x[1]) + '</b><span>' + x[2] + '</span></div>').join('') + '</div></div>' +
-    '<div class="card">' + tsCurve([58, 60, 63, 62, 65, 67, 69, 71], 50, 80) +
+    '<div class="card stack s8">' + TS_OLD() + tsCurve([58, 60, 63, 62, 65, 67, 69, 71], 50, 80) +
     '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-3)" class="num"><span>' + L('KW 36', 'Wk 36') + '</span><span>' + L('KW 43', 'Wk 43') + '</span></div></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Was oft untergeht', 'What often gets lost') + '</div><p class="p">' + L('Kurze Endungen bei schnellem Sprechen, etwa das -t in <em class="en">sent</em>.', 'Short endings in fast speech, like the -t in <em>sent</em>.') + '</p></div>' +
     '<div class="notice">' + ic('pen', 'sm') + '<span>' + L('Lehrerin am 14.10.: „Versteht Zahlen und Fristen sicher. Bei schnellen Sprechern fehlen noch Endungen.“', 'Teacher on Oct 14: “Understands numbers and deadlines reliably. Still misses endings with fast speakers.”') + '</span></div>' +
@@ -215,11 +225,11 @@ function tsHistory() {
     cells += '<button class="ts-day ' + st + (d === sel ? ' sel' : '') + '" id="ts-d-' + d + '" data-act="day" data-d="' + d + '"' + (d > 29 ? ' disabled' : '') + ' aria-label="' + d + '"><span class="num">' + d + '</span>' + (TS_EXTRA.indexOf(d) >= 0 ? '<i></i>' : '') + '</button>';
   }
   return tsProgNav('history') + tsTitle(L('Verlauf', 'History'), L('Welche Tage du gelernt hast. Ohne Minuten und ohne Punkte.', 'Which days you studied. No minutes, no points.')) +
-    '<div class="card stack s16"><div class="ts-month"><button class="iconbtn" id="ts-prev" data-act="noop" aria-label="' + esc(L('September', 'September')) + '">' + ic('chevL', 'sm') + '</button><b>' + L('Oktober 2026', 'October 2026') + '</b><button class="iconbtn" id="ts-next" data-act="noop" aria-label="' + esc(L('November', 'November')) + '" disabled style="opacity:.35">' + ic('chevR', 'sm') + '</button></div>' +
+    '<div class="card stack s16"><div class="ts-month"><button class="iconbtn" id="ts-prev" data-act="tsprev" aria-label="' + esc(L('September', 'September')) + '">' + ic('chevL', 'sm') + '</button><b>' + L('Oktober 2026', 'October 2026') + '</b><button class="iconbtn" id="ts-next" data-act="noop" aria-label="' + esc(L('November', 'November')) + '" disabled style="opacity:.35">' + ic('chevR', 'sm') + '</button></div>' +
     '<div class="ts-cal">' + heads.map(h => '<span class="ts-ch">' + h + '</span>').join('') + cells + '</div>' +
     '<div class="ts-calleg"><span><i class="done"></i>' + L('Pflicht erledigt', 'Daily plan done') + '</span><span><i class="rest"></i>' + L('Ruhetag', 'Rest day') + '</span><span><i class="ex"></i>' + L('mit Extra', 'with extra') + '</span></div></div>' +
     tsDayInfo(sel) +
-    '<div class="row" style="border:0"><span class="ri">' + ic('today', 'sm') + '</span><span class="rt"><b class="num">' + L('12 Tage Serie', '12-day streak') + '</b><span>' + L('Ein Ruhetag pro Woche ist eingeplant und unterbricht nichts.', 'One rest day a week is planned and breaks nothing.') + '</span></span></div>';
+    '<div class="row" style="border:0"><span class="ri">' + ic('today', 'sm') + '</span><span class="rt"><b class="num">' + L('14 Tage Serie', '14-day streak') + '</b><span>' + L('Ein Ruhetag pro Woche ist eingeplant und unterbricht nichts.', 'One rest day a week is planned and breaks nothing.') + '</span></span></div>';
 }
 reg('h34', {
   code: 'H34', name: 'Fortschritt-Details und Verlauf', kind: 'phone',
@@ -228,7 +238,10 @@ reg('h34', {
     const inner = v === 'grammar' ? tsGrammar() : v === 'listening' ? tsListening() : v === 'history' ? tsHistory() : tsWords();
     return tsPage('h14-main', gearBtn(), inner, 'h14');
   },
-  acts: { day(el) { S.ui.tsDay = +el.getAttribute('data-d'); render(); } }
+  acts: {
+    day(el) { S.ui.tsDay = +el.getAttribute('data-d'); render(); },
+    tsprev() { toast(L('September und davor stammen aus der alten App. Sie sind übernommen und zählen für die Serie.', 'September and earlier come from the old app. They carried over and count toward your streak.'), 'info'); }
+  }
 });
 
 /* =========================================================
@@ -260,8 +273,8 @@ function tsCourse() {
     '<button class="btn pri full" id="ts-course-go" data-go="h35-lesson" style="margin-top:6px">' + L('Weiter mit Lektion ' + (cur + 1), 'Continue with lesson ' + (cur + 1)) + '</button></div>' +
     '<div class="card" style="padding:4px 16px">' + ls.map((l, i) => '<div class="st ' + (l[1] === 'lock' ? 'open ts-lock' : l[1]) + '" style="min-height:54px"><span class="mk">' + (l[1] === 'done' ? ic('check', 'xs') : l[1] === 'lock' ? ic('lock', 'xs') : '') + '</span><span class="nm" style="display:flex;flex-direction:column"><span style="font-weight:550"><span class="num" style="color:var(--fg-3)">' + (i + 1) + '&nbsp;&nbsp;</span>' + l[0] + '</span><span class="p2" style="font-size:13px">' + stTxt[l[1]] + '</span></span></div>').join('') + '</div>' +
     '<div class="stack s6">' + tsSec(L('Deine anderen Kurse', 'Your other courses')) + '<div>' +
-    tsRow('ts-c-ai', 'spark', L('KI im Unternehmen', 'AI in the company'), L('Lektion 2 von 10 · angefangen', 'lesson 2 of 10 · started'), 'act:noop') +
-    tsRow('ts-c-cc', 'laptop', 'Claude Code in 10 Tagen', L('Lektion 5 von 10 · angefangen', 'lesson 5 of 10 · started'), 'act:noop') +
+    tsRow('ts-c-ai', 'spark', L('KI im Unternehmen', 'AI in the company'), L('Lektion 2 von 10 · angefangen', 'lesson 2 of 10 · started'), 'act:othercourse') +
+    tsRow('ts-c-cc', 'laptop', 'Claude Code in 10 Tagen', L('Lektion 5 von 10 · angefangen', 'lesson 5 of 10 · started'), 'act:othercourse') +
     tsRow('ts-c-arch', 'book', L('Ältere Tagesartikel', 'Older daily articles'), L('Archiv aller Artikel', 'archive of all articles'), 'h35-archive') + '</div></div>';
 }
 const TS_TEXT = [
@@ -336,7 +349,8 @@ reg('h35', {
     sent(el) { S.ui.tsSent = +el.getAttribute('data-i'); render(); },
     q(el) { S.ui.tsQ = +el.getAttribute('data-i'); render(); },
     filter(el) { S.ui.tsF = +el.getAttribute('data-i'); render(); },
-    finish() { S.tsL3 = true; go('h35-course'); }
+    finish() { S.tsL3 = true; go('h35-course'); },
+    othercourse() { toast(L('In dieser Vorschau ist nur der Kurs „Verhandeln auf Englisch“ ausgebaut. Die anderen Kurse sehen genauso aus.', 'Only the course “Negotiating in English” is built out in this preview. The other courses look the same.'), 'info'); }
   }
 });
 
@@ -353,6 +367,11 @@ function tsSpot(n, from, to, why, pat) {
 }
 function tsVerdict(text) {
   return '<div class="verdict" style="color:var(--near);font-size:18px"><span class="vi" style="background:color-mix(in oklch, var(--near) 22%, transparent)">' + ic('near', 'xs') + '</span>' + text + '</div>';
+}
+function tsClinicEmpty() {
+  return '<div class="stack s16"><div class="stack s6"><div class="ts-fl"><span class="lbl">' + L('Dein Satz', 'Your sentence') + '</span><span class="lbl num">0 / 300</span></div>' +
+    '<textarea class="field ts-mine en" id="ts-new-in" rows="3" placeholder="' + esc(L('Schreib einen Satz oder füge ihn ein', 'Type or paste a sentence')) + '"></textarea></div>' +
+    '<p class="p2">' + L('Die Prüfung erklärt jede Stelle und schlägt eine C1-Fassung vor.', 'The check explains every spot and suggests a C1 version.') + '</p></div>';
 }
 function tsClinic() {
   const raw = 'We have received your feedback last week and will send you an answer until Friday.';
@@ -390,21 +409,24 @@ function tsMail() {
     (added ? '<p class="p2 springopen" style="color:var(--ok)">' + L('2 Wendungen sind jetzt in deinen Wörtern.', '2 phrases are now in your words.') + '</p>' : '') + '</div>';
 }
 reg('h36', {
-  code: 'H36', name: 'Prüfen (Satz-Klinik, Mail-Werkstatt)', kind: 'phone',
+  code: 'H36', name: 'Prüfen (Satz-Klinik, Mail-Werkstatt)', kind: 'phone', borrow: ['h2'],
   variants: [['sentence', 'Satz-Klinik'], ['mail', 'Mail-Werkstatt']],
   render(v) {
     S.typed = null; S.ui.checked = true;
     const under = gramTask({ checked: true, st: 'wrong' });
     const seg = '<div class="seg2 ts-seg3" role="tablist"><button id="ask-claude" data-go="h15-claude" role="tab">Claude</button><button id="ask-trans" data-go="h15-translate" role="tab">' + L('Übersetzen', 'Translate') + '</button><button id="ask-check" data-go="h36-sentence" class="on" role="tab" aria-selected="true">' + L('Prüfen', 'Check') + '</button></div>';
     const sub = '<div class="ts-sub"><button id="ts-k-sent" data-go="h36-sentence" class="' + (v === 'mail' ? '' : 'on') + '">' + L('Satz', 'Sentence') + '</button><button id="ts-k-mail" data-go="h36-mail" class="' + (v === 'mail' ? 'on' : '') + '">' + L('Mail', 'Email') + '</button></div>';
-    const body = v === 'mail' ? tsMail() : tsClinic();
+    const fresh = v !== 'mail' && S.ui.tsNew;
+    const body = v === 'mail' ? tsMail() : fresh ? tsClinicEmpty() : tsClinic();
     const foot = v === 'mail'
       ? '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-add" data-act="add" style="flex:1">' + (S.ui.tsAdded ? L('Hinzugefügt', 'Added') : L('In die Wörter', 'Add to words')) + '</button><button class="btn pri" id="ts-copy" data-act="copy" style="flex:1">' + (S.ui.tsCopied ? ic('check', 'sm') + L('Kopiert', 'Copied') : L('Kopieren', 'Copy')) + '</button></div>'
-      : '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-new" data-act="noop" style="flex:1">' + L('Neuer Satz', 'New sentence') + '</button><button class="btn pri" id="ts-three" data-go="h27-free-round" style="flex:1">' + L('Dazu üben', 'Practice this') + '</button></div>';
+      : fresh ? '<button class="btn pri full" id="ts-check" data-act="tsnew">' + L('Prüfen', 'Check') + '</button>'
+      : '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-new" data-act="tsnew" style="flex:1">' + L('Neuer Satz', 'New sentence') + '</button><button class="btn pri" id="ts-three" data-go="h27-free-round" style="flex:1">' + L('Dazu üben', 'Practice this') + '</button></div>';
     return under + '<div class="scrim" data-go="h4-band"></div><div class="sheet" id="ask-sheet" role="dialog" aria-label="' + esc(L('Fragen', 'Ask')) + '" style="height:88%;max-height:88%"><div class="grab"></div><div class="gx" style="padding-bottom:6px">' + seg + '</div><div class="sb gx"><div class="stack s16">' + sub + body + '</div></div><div class="sf gx">' + foot + '</div></div>';
   },
   acts: {
     c1() { S.ui.tsC1 = !S.ui.tsC1; render(); },
+    tsnew() { S.ui.tsNew = !S.ui.tsNew; render(); },
     add() { S.ui.tsAdded = true; render(); },
     copy() { S.ui.tsCopied = true; render(); }
   }
@@ -463,3 +485,6 @@ reg('h37', {
     return tsPage('h14-main', gearBtn(), tsHow(), 'h14');
   }
 });
+
+/* H10 Abschlusskarte: der Ring ist hier Rückblick, kein Knopf. */
+(() => { const r = SCREENS.h10.render; SCREENS.h10.render = function (v, o) { return r.call(this, v, o).replace(' data-act="ring"', '').replace('role="button" tabindex="0"', 'role="img"'); }; })();

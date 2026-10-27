@@ -27,12 +27,12 @@ DESK.shell = function (def, v, w, h, idp) {
   return '<div class="desk ' + cls + '" id="' + (idp || '') + 'desk" style="width:' + w + 'px;height:' + h + 'px;font-size:' + bp.fs + 'px">' +
     DESK.side(def.nav, idp || '', rail) +
     '<div class="dmain"><div class="stage">' + out.stage + '</div>' + (out.ctx ? '<aside class="ctx" aria-label="' + esc(L('Kontext', 'Context')) + '">' + out.ctx + '</aside>' : '') + '</div>' +
-    (out.over || '') + '</div>';
+    (out.over || helpOverlay()) + toastHtml() + '</div>';
 };
 DESK.side = function (active, idp, rail) {
   const t4 = S.tab4 === 'praxis' ? L('Praxis', 'Practice') : L('Sprechen', 'Speaking');
   const n = (id, icon, label, go, sub) => '<button class="nav' + (sub ? ' sub' : '') + (active === id ? ' on' : '') + '" id="' + idp + 'nav-' + id + '"' + (go ? ' data-go="' + go + '"' : ' data-act="noop"') + (rail ? ' aria-label="' + esc(label) + '" title="' + esc(label) + '"' : '') + (active === id ? ' aria-current="page"' : '') + '>' + (sub ? '' : ic(icon)) + '<span class="lbl2">' + label + '</span></button>';
-  const subs = S.tab4 === 'praxis' && !rail ? n('sprechen', '', L('Sprechen', 'Speaking'), 'l6-talk', true) + n('hoeren', '', L('Hören', 'Listening'), '', true) + n('lesen', '', L('Lesen', 'Reading'), '', true) : '';
+  const subs = S.tab4 === 'praxis' && !rail ? n('sprechen', '', L('Sprechen', 'Speaking'), 'l6-talk', true) + n('hoeren', '', L('Hören', 'Listening'), 'h7-predict', true) + n('lesen', '', L('Lesen', 'Reading'), 'h35-archive', true) : '';
   return '<nav class="side" aria-label="' + esc(L('Hauptbereiche', 'Main sections')) + '">' +
     '<div class="wm"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="var(--act)"/><path d="M8 7v10h8" fill="none" stroke="var(--act-fg)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Lingo</b></div>' +
     n('heute', 'today', L('Heute', 'Today'), 'l1') + n('woerter', 'words', L('Wörter', 'Words'), 'l5') + n('grammatik', 'gram', L('Grammatik', 'Grammar'), 'l4') +
@@ -41,12 +41,20 @@ DESK.side = function (active, idp, rail) {
     n('claude', 'claude', 'Claude', 'l7') + n('uebersetzer', 'trans', L('Übersetzer', 'Translator'), 'l7-translate') + n('einstellungen', 'gear', L('Einstellungen', 'Preferences'), 'l15-overview') +
     '<button class="nav" id="' + idp + 'nav-rail" data-act="rail" aria-label="' + esc(rail ? L('Seitenleiste ausklappen', 'Expand sidebar') : L('Seitenleiste einklappen', 'Collapse sidebar')) + '">' + ic('sidebar') + '<span class="lbl2">' + L('Einklappen', 'Collapse') + '</span></button></nav>';
 };
+/* Handy-Bildschirm im Laptop-Rahmen (zentral für alle H-Bildschirme): Seitenleiste bleibt, Inhalt in Handy-Breite, keine Reiterleiste. */
+DESK.host = function (inner, w, h) {
+  const bp = DESK.bp(w);
+  const rail = S.ui.rail != null ? S.ui.rail : bp.cls.indexOf('rail') >= 0;
+  inner = inner.replace(/data-go="h1-(mid|start|ring)"/g, 'data-go="l1-main"').replace(/data-go="h1-done"/g, 'data-go="l1-done"');
+  return '<div class="view dhostv"><div class="desk' + (rail ? ' rail' : '') + '" id="desk" style="font-size:' + bp.fs + 'px">' + DESK.side(S.deskCtx, '', rail) + '</div>' +
+    '<div class="dhostmain"><div class="ph dph" id="ph">' + inner + '</div></div></div>';
+};
 ACTS.rail = () => { const d = $('.desk'); const isRail = d && d.classList.contains('rail'); S.ui.rail = !isRail; render(); };
 
 function dTop(blocks, cur, frac, o) {
   o = o || {};
   return '<div class="dtop"><button class="iconbtn" id="dx-close" data-go="' + (o.closeTo || 'l1') + '" aria-label="' + esc(L('Schließen', 'Close')) + '">' + ic('close') + '</button>' +
-    progBar(blocks, cur, frac, o) + '<button class="iconbtn" id="dx-more" data-act="noop" aria-label="' + esc(L('Mehr Möglichkeiten', 'More options')) + '">' + ic('more') + '</button></div>';
+    progBar(blocks, cur, frac, o) + '<button class="iconbtn" id="dx-more" data-act="dxmore" aria-label="' + esc(L('Mehr Möglichkeiten', 'More options')) + '">' + ic('more') + '</button></div>';
 }
 const kb = k => ' <span class="num" style="opacity:.62;font-size:.85em;margin-left:.35em">' + k + '</span>';
 function dKeys(btns) { return '<div class="keys"><button class="btn ghost" id="dk-help" data-act="khelp" aria-label="' + esc(L('Tastenkürzel', 'Shortcuts')) + '">' + ic('kbd', 'sm') + '</button><span class="grow"></span>' + btns + '</div>'; }
@@ -93,11 +101,24 @@ function l1Stage(v, idp) {
     '<button class="btn sec" id="' + idp + 'd-ask" data-go="l7" style="min-height:2.6em;font-size:.95em">' + ic('ask', 'sm') + L('Fragen', 'Ask') + '</button></div>' +
     '<div class="daycard" style="flex-direction:row;align-items:center;gap:2.2em;padding:2em 2.2em">' +
     '<div class="ringwrap" style="flex:none">' + ring + center + '</div>' +
-    '<div class="stack s16" style="flex:1;min-width:0"><div class="dtopic" style="text-align:left"><div class="t disp" style="font-size:1.6em;line-height:1.2">' + TOPIC() + '</div>' +
-    (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>' +
+    '<div class="stack s16" style="flex:1;min-width:0">' + (S.ui.ring ? l1Blocks(blocks, done, partial) : '<div class="dtopic" style="text-align:left"><div class="t disp" style="font-size:1.6em;line-height:1.2">' + TOPIC() + '</div>' +
+    (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>') +
     (v === 'done' ? '' : '<div class="nextl" style="justify-content:flex-start"><span class="dot ' + next[0] + '"></span><span>' + next[1] + '</span></div>' +
       '<div><button class="btn pri" id="' + idp + 'd-go" data-go="' + L1_GO[v] + '" style="min-width:12em">' + L('Weiter', 'Continue') + kb('⏎') + '</button></div>') + '</div></div>' +
-    weekStrip(v === 'done', v === 'review' ? 5 : 3).replace('<div class="gx"><div class="week"', '<div><div class="week" style="padding:1.6em .2em .4em;max-width:30em"') + '</div>';
+    l1Mid(idp) + '</div>';
+}
+/* Ring angetippt: Blöcke von heute statt Thema. */
+function l1Blocks(blocks, done, partial) {
+  return '<div class="statelist springopen" id="ring-list" style="padding:0" aria-label="' + esc(L('Blöcke von heute', 'Today’s blocks')) + '">' + blocks.map((b, i) => {
+    const st = i < done ? 'done' : (i === done && partial ? 'run' : 'open');
+    return '<div class="st ' + st + '" style="min-height:2.4em;font-size:.92em"><span class="mk">' + (st === 'done' ? ic('check', 'xs') : '') + '</span><span class="dot ' + b.c + '"></span><span class="nm">' + b.n + '</span><span class="sm num">' + (st === 'run' ? L('läuft', 'now') : b.m + ' Min.') + '</span></div>';
+  }).join('') + '</div>';
+}
+/* Ruhige Mitte: Kapitelstand und nächster Termin (die Woche steht nur einmal, rechts). */
+function l1Mid(idp) {
+  return '<div class="l1mid">' +
+    '<div class="card stack s6"><div class="lbl">' + L('Kapitelstand', 'Chapter status') + '</div><div style="font-weight:600">' + L('Kapitel 1 · Woche 2 · Zeiten im Projektverlauf', 'Chapter 1 · week 2 · Tenses in project updates') + '</div><div class="p2">' + L('Thema 1 von 4 · Schritt 3 von 7 · noch 4 richtige bis frei', 'Topic 1 of 4 · step 3 of 7 · 4 more correct until free') + '</div></div>' +
+    '<div class="card stack s6"><div class="lbl">' + L('Dein nächster Termin', 'Your next meeting') + '</div><button class="row" id="' + idp + 'd-termin" data-go="termin-filled"><span class="ri">' + ic('cal', 'sm') + '</span><span class="rt"><b>' + L('Dienstag · Call mit dem Einkauf', 'Tuesday · call with purchasing') + '</b><span>' + L('Die Mission am Freitag bereitet dich darauf vor · ändern', 'Friday’s mission prepares you for it · change') + '</span></span></button></div></div>';
 }
 function l1Ctx(idp, v) {
   idp = idp || '';
@@ -106,11 +127,9 @@ function l1Ctx(idp, v) {
   /* Wochentage fest nach Konzept 2.3: Szenenwechsel Montag, Mission Freitag, Wochenabschluss Samstag, Sonntag Ruhetag. */
   const plan = [L('Szene: ', 'Scene: ') + TOPIC(), L('erledigt', 'done'), L('erledigt', 'done'),
     v === 'writing' ? L('heute · Schreibtag: Projekt-Update', 'today · writing day: project update') : L('heute · Grammatik Schritt 3', 'today · grammar step 3'),
-    L('Mission: Preis-Einwand', 'Mission: price objection'), L('Wochenabschluss', 'Week review'), L('Ruhetag', 'Rest day')];
-  if (today === 5) { plan[3] = L('erledigt', 'done'); plan[4] = L('erledigt · Mission: Preis-Einwand', 'done · mission: price objection'); plan[5] = L('heute · Wochenabschluss', 'today · week review'); }
+    L('Mission: ', 'Mission: ') + MISSION_NAME(), L('Wochenabschluss', 'Week review'), L('Ruhetag', 'Rest day')];
+  if (today === 5) { plan[3] = L('erledigt', 'done'); plan[4] = L('erledigt · Mission: ', 'done · mission: ') + MISSION_NAME(); plan[5] = L('heute · Wochenabschluss', 'today · week review'); }
   return ctxBlock(L('Diese Woche', 'This week'), '<div class="card" style="padding:.4em 1em">' + days.map((d, i) => '<div class="st ' + (i < today ? 'done' : i === today ? 'run' : 'open') + '" style="min-height:2.5em;font-size:.92em"><span class="mk">' + (i < today ? ic('check', 'xs') : '') + '</span><span style="width:2.4em;flex:none;color:var(--fg-2)">' + d + '</span><span class="nm">' + plan[i] + '</span>' + (i === 4 ? '<span style="margin-left:auto;color:var(--fg-2)">' + ic('flag', 'xs') + '</span>' : '') + '</div>').join('') + '</div>') +
-    ctxBlock(L('Kapitelstand', 'Chapter status'), '<div class="card stack s6"><div style="font-weight:600">' + L('Kapitel 1 · Zeiten im Projektverlauf', 'Chapter 1 · Tenses in project updates') + '</div><div class="p2">' + L('Thema 1 von 4 · Schritt 3 von 7 · noch 4 richtige bis frei', 'Topic 1 of 4 · step 3 of 7 · 4 more correct until free') + '</div></div>') +
-    ctxBlock(L('Dein nächster Termin', 'Your next meeting'), '<button class="row" id="' + idp + 'd-termin" data-go="termin-filled" style="border:0;min-height:3em"><span class="ri">' + ic('cal', 'sm') + '</span><span class="rt"><b>' + L('Dienstag · Call mit dem Einkauf', 'Tuesday · call with purchasing') + '</b><span>' + L('Die Mission am Freitag bereitet dich darauf vor · ändern', 'Friday’s mission prepares you for it · change') + '</span></span></button>') +
     ctxBlock(L('Wenn du mehr willst', 'If you want more'), moreRows(false).replace(/<div class="more-div gx">.*?<\/div>/, '').replace('<div class="gx">', '<div>').replace(/id="more-/g, 'id="' + idp + 'more-'));
 }
 reg('l1', {
@@ -134,7 +153,8 @@ function l2Stage(v) {
     '<div style="padding-top:.5em">' + gapHtml(shown, { big: true, caret: !checked, input: !checked, st: checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '' }) + '</div></div>';
   if (checked) {
     s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, you[st], WORD.right) + '<p class="whyl" style="margin:.2em 0 0">' + WD.why[st] + '</p>' +
-      '<div class="bandbtns" style="padding-top:.5em;max-width:28em"><button class="btn sec sm" id="d-more" data-act="noop">' + L('Mehr', 'More') + '</button>' + (st === 'wrong' || st === 'typo' ? '<button class="btn sec sm" id="d-also" data-go="l7">' + L('War das auch richtig?', 'Was mine also right?') + '</button>' : '') + '</div></div>';
+      '<div class="bandbtns" style="padding-top:.5em;max-width:28em"><button class="btn sec sm" id="d-more" data-act="dmore" aria-expanded="' + (S.ui.dmore ? 'true' : 'false') + '">' + (S.ui.dmore ? L('Weniger', 'Less') : L('Mehr', 'More')) + '</button>' + (st === 'wrong' || st === 'typo' ? '<button class="btn sec sm" id="d-also" data-go="l7">' + L('War das auch richtig?', 'Was mine also right?') + '</button>' : '') + '</div></div>';
+    if (S.ui.dmore) s += dMoreBody(moreWordSheet());
   }
   s += '</div>';
   s += dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l3">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'
@@ -189,9 +209,10 @@ function l3Stage(v, claude) {
     instr(L('Setz das Verb in der passenden Zeitform ein.', 'Put the verb in the right tense.'), 'd-why') +
     '<div class="stack s16" style="padding:3em 0 1.5em">' + gramPattern(checked && st !== 'wrong') +
     '<div class="sent en">We ' + gapHtml(shown, { caret: !checked, input: !checked, st: checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '' }) + ' <span style="color:var(--fg-3)">(send)</span> the revised quote yesterday.</div></div>';
-  if (!checked) s += '<div class="dverdict s-idk" id="d-hintband" style="flex-direction:row;align-items:center;gap:.7em">' + ic('bulb', 'sm') + '<span style="font-weight:550">' + L('Fast. Welche Zeitform passt zu <em class="en">yesterday</em>?', 'Almost. Which tense goes with <em>yesterday</em>?') + '</span></div>';
+  if (!checked) s += '<div class="dverdict s-idk" id="d-hintband" style="flex-direction:row;align-items:center;gap:.7em">' + ic('bulb', 'sm') + '<span style="font-weight:550">' + L('Noch nicht. Welche Zeitform passt zu <em class="en">yesterday</em>?', 'Not yet. Which tense goes with <em>yesterday</em>?') + '</span></div>';
   else s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, GRAM.you[st], GRAM.right) + '<p class="whyl" style="margin:.2em 0 0">' + WHY_GRAM() + '</p>' +
-    '<div class="bandbtns" style="padding-top:.5em;max-width:28em"><button class="btn sec sm" id="d-more" data-act="noop">' + L('Mehr', 'More') + '</button>' + (st === 'wrong' || st === 'typo' ? '<button class="btn sec sm" id="d-also" data-go="l7">' + L('War das auch richtig?', 'Was mine also right?') + '</button>' : '') + '</div></div>';
+    '<div class="bandbtns" style="padding-top:.5em;max-width:28em"><button class="btn sec sm" id="d-more" data-act="dmore" aria-expanded="' + (S.ui.dmore ? 'true' : 'false') + '">' + (S.ui.dmore ? L('Weniger', 'Less') : L('Mehr', 'More')) + '</button>' + (st === 'wrong' || st === 'typo' ? '<button class="btn sec sm" id="d-also" data-go="l7">' + L('War das auch richtig?', 'Was mine also right?') + '</button>' : '') + '</div></div>';
+  if (checked && S.ui.dmore) s += dMoreBody(gramMoreSheet());
   s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l1">' + L('Weiter', 'Continue') + kb('⏎') + '</button>' : '<button class="btn pri" id="d-check" data-go="l3-band">' + L('Prüfen', 'Check') + kb('⏎') + '</button>');
   return s;
 }
@@ -217,19 +238,28 @@ reg('l4', {
   render() {
     return {
       stage: '<div class="dscroll"><h1 class="dh1 disp">' + L('Grammatik', 'Grammar') + '</h1><div class="stack s16">' + hereCard() +
-        '<div><div class="lbl" style="padding:.6em 0 .2em">' + L('Dein Weg zu C1 · 8 Kapitel', 'Your path to C1 · 8 chapters') + '</div>' +
-        CHAPTERS().map(c => '<button class="row" id="dch-' + c[0] + '"' + (c[3] === 'run' ? ' data-go="l16-topic"' : ' data-act="noop" aria-disabled="true"') + '><span class="ri num' + (c[3] === 'run' ? ' pulsing' : '') + '" style="' + (c[3] === 'run' ? 'background:var(--act-soft);color:var(--act-text);font-weight:700' : 'font-weight:600') + '">' + c[0] + '</span><span class="rt"><b>' + c[1] + '</b><span>' + c[2] + '</span></span>' + (c[3] === 'run' ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '<span class="chev" style="opacity:.6">' + ic('lock', 'sm') + '</span>') + '</button>').join('') + '</div></div></div>',
+        '<div><div class="lbl" style="padding:.6em 0 .2em">' + L('Dein Weg zu C1 · 8 Kapitel, je zwei bis drei Wochen', 'Your path to C1 · 8 chapters, two to three weeks each') + '</div>' +
+        CHAPTERS().map(c => '<button class="row" id="dch-' + c[0] + '"' + (c[3] === 'run' ? ' data-go="l16-topic"' : ' data-act="locked" data-n="' + c[0] + '" aria-disabled="true" style="opacity:.62"') + '><span class="ri num' + (c[3] === 'run' ? ' pulsing' : '') + '" style="' + (c[3] === 'run' ? 'background:var(--act-soft);color:var(--act-text);font-weight:700' : 'font-weight:600') + '">' + c[0] + '</span><span class="rt"><b>' + c[1] + '</b><span>' + c[2] + '</span></span>' + (c[3] === 'run' ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '<span class="chev" style="opacity:.6">' + ic('lock', 'sm') + '</span>') + '</button>').join('') + '</div></div></div>',
       ctx: chapterDetail().replace(/id="ch-/g, 'id="d-ch-').replace('data-go="h27-topic"', 'data-go="l16-topic"').replace('data-go="h26-list"', 'data-go="l16-errors"')
     };
   }
 });
 
+/* „Mehr“ auf dem Laptop: derselbe Inhalt wie das Handy-Blatt, aufgeklappt unter dem Urteil. */
+function dMoreBody(sheetHtml) {
+  const a = sheetHtml.indexOf('<div class="sb gx">') + 19, b = sheetHtml.indexOf('<div class="sf gx">');
+  return '<div class="card d-moreb" id="d-moreb" style="max-width:36em;margin-top:1em">' + sheetHtml.slice(a, b < 0 ? sheetHtml.length : b).replace(/<\/div>$/, '') + '</div>';
+}
+ACTS.dmore = () => { S.ui.dmore = !S.ui.dmore; render(); };
+/* L7: Claude ist schon offen, „War das auch richtig?“ füllt die Frage vor. */
+ACTS.askalso = () => { const t = $('#d-claude-in'); if (!t) { go('l7-claude'); return; } if (t) { t.value = L('War meine Antwort auch richtig?', 'Was my answer also right?'); t.focus(); } };
+
 /* ---------- L5 Reiter Wörter ---------- */
 /* Kopf mit „Üben ⏎“ und „Hinzufügen“; Kontextspalte zeigt das Wortfenster (main), das ruhende Wort (resting) oder Verwalten (manage). */
 function l5Stage(v, idp) {
-  const filters = WF_STAND().slice(0, 3).concat([WF_STAND()[4]]);
+  const filters = WF_STAND().slice(0, 4);
   const sel = v === 'resting' ? 'flexibility' : 'lead time';
-  const rows = wordRows(idp + 'd', 'l5-main', 'l5-resting').replace(new RegExp('(<button class="row[^"]*)(" id="[^"]*" data-go="[^"]*" data-w="' + sel + '")'), '$1 tw-selrow$2');
+  const rows = wordRows(idp + 'd', 'l5-main', 'l5-resting').replace(/data-go="l5-main" data-w="(?!lead time")/g, 'data-act="dwother" data-w="').replace(new RegExp('(<button class="row[^"]*)(" id="[^"]*" data-go="[^"]*" data-w="' + sel + '")'), '$1 tw-selrow$2');
   return '<div class="dscroll"><div class="tw-dhead"><h1 class="dh1 disp" style="margin:0">' + L('Wörter', 'Words') + '</h1><span class="grow"></span>' +
     '<button class="btn sec" id="' + idp + 'dw-add" data-go="h21-search-empty">' + ic('plus', 'sm') + L('Hinzufügen', 'Add') + '</button>' +
     '<button class="btn pri" id="' + idp + 'dw-practice" data-go="l11-default">' + L('Üben', 'Practice') + kb('⏎') + '</button></div>' +
@@ -261,12 +291,16 @@ reg('l5', {
     if (e.key === 'Escape' && curVariant() !== 'main') go('l5-main');
     else if (e.key === 'Enter') { e.preventDefault(); go('l11-default'); }
   },
-  acts: { wpause() { S.ui.wpause = !S.ui.wpause; render(); } }
+  acts: {
+    wpause() { S.ui.wpause = !S.ui.wpause; render(); },
+    wloop() { S.ui.wloop = !S.ui.wloop; render(); },
+    dwother() { toast(L('In dieser Vorschau ist nur <em class="en">lead time</em> ausgearbeitet. Andere Wörter sehen genauso aus.', 'Only <em>lead time</em> is built out in this preview. Other words look the same.'), 'info'); }
+  }
 });
 
 /* ---------- L6 Mission ---------- */
 function missionCtx(states, report) {
-  const items = [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
+  const items = [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
   return ctxBlock(L('Abhakliste', 'Checklist'), '<div class="checklist" style="padding:0">' + items.map((t, i) => '<div class="ci"><span class="ck' + (states[i] ? ' y' : '') + '">' + (states[i] ? ic('check', 'xs') : '') + '</span>' + t + '</div>').join('') + '</div>') +
     ctxBlock(L('Gegenüber', 'Counterpart'), '<div class="persona"><span class="avatar">LK</span><div><b>Laura Keller</b><div class="p2" style="font-size:.85em">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented') + '</div></div></div><p class="p2" style="margin:0">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren.', 'Goal: hold the price without losing the next meeting.') + '</p>') +
     ctxBlock(L('Zielstruktur und Kernwörter', 'Target structure and key words'), '<div style="display:flex;flex-wrap:wrap;gap:.4em"><span class="chip en">past simple / present perfect</span><span class="chip en">discount</span><span class="chip en">lead time</span><span class="chip en">sign off on</span></div>') +
@@ -282,14 +316,14 @@ reg('l6', {
         stage: dTop(blocks, 4, 0.9) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Mission · Bericht', 'Mission · report')) +
           '<div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Einwand gut behandelt, Termin noch offen', 'Objection handled well, meeting still open') + '</div>' +
           '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„We’ve already reduced the lead time to eight weeks.“</div><p class="p2" style="margin:0">' + L('Ergebnis zuerst, ohne Zeitpunkt: genau richtig im present perfect.', 'Result first, no time given: exactly right in the present perfect.') + '</p></div>' +
-          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; <s class="en" style="color:var(--fg-2)">We have met last year</s> → <b class="en">We met last year</b></div></div>' +
+          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; ' + L('Zum Schluss zusammenfassen: <em class="en">So, just to sum up: eight weeks at the current price.</em>', 'Sum up at the end: <em>So, just to sum up: eight weeks at the current price.</em>') + '</div></div>' +
           pageDots(4, 0) + '</div>' + dKeys('<button class="btn pri" id="d-next" data-go="l1-done">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'),
         ctx: missionCtx([1, 1, 0], true)
       };
     }
     const phone = S.ui.phone;
     return {
-      stage: dTop(blocks, 4, 0.45) + '<div class="dscroll" style="display:flex;flex-direction:column;gap:.7em;padding-top:1em">' + blockLine('s', L('Mission · Preis-Einwand beim Einkauf', 'Mission · price objection from purchasing')) +
+      stage: dTop(blocks, 4, 0.45) + '<div class="dscroll" style="display:flex;flex-direction:column;gap:.7em;padding-top:1em">' + blockLine('s', L('Mission · ', 'Mission · ') + MISSION_NAME()) +
         '<div class="stack s8" style="flex:1;justify-content:flex-end;display:flex;flex-direction:column;gap:.7em">' +
         '<div class="bubble them en">Thanks for calling back. I’ll be honest: your price is still too high for us.</div>' +
         '<div class="bubble me en">I understand. Could you tell me which offer you’re comparing us with?</div>' +
@@ -307,6 +341,7 @@ reg('l6', {
 /* ---------- L7 Claude in der Kontextspalte ---------- */
 reg('l7', {
   code: 'L7', name: 'Claude in der Kontextspalte', kind: 'desk', nav: 'claude',
+  why: () => L('Du bist in Schritt 3: gelenkt üben. Jede richtige Antwort im ersten Versuch bringt dich näher an „frei“.', 'You are in step 3: guided practice. Every first-try answer brings you closer to “free”.'),
   variants: [['claude', 'Claude'], ['translate', 'Übersetzer']],
   render(v) {
     const seg = '<div class="seg2" role="tablist"><button id="d-ask-claude" data-go="l7-claude" class="' + (v === 'claude' ? 'on' : '') + '" role="tab">Claude</button><button id="d-ask-trans" data-go="l7-translate" class="' + (v === 'translate' ? 'on' : '') + '" role="tab">' + L('Übersetzen', 'Translate') + '</button></div>';
@@ -316,13 +351,13 @@ reg('l7', {
       body = '<span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('Aufgabe + deine Antwort sind dabei', 'Task + your answer included') + '</span>' +
         '<div class="bubble me" style="max-width:92%">' + L('Warum nicht <span class="en">have sent</span>? Es ist doch gerade erst passiert.', 'Why not have sent? It only just happened.') + '</div>' +
         '<div class="p" style="line-height:1.55">' + L('Weil <em class="en">yesterday</em> im Satz steht. Ein vergangener Zeitpunkt macht die Handlung abgeschlossen, egal wie kurz sie her ist. Ohne Zeitangabe wäre <em class="en">We’ve sent the revised quote</em> richtig. Ist es eben erst passiert: <em class="en">We’ve just sent it</em> (US auch <em class="en">We just sent it</em>).', 'Because yesterday is in the sentence. A past time expression makes the action finished, however recent. Without a time word, We’ve sent the revised quote would be right. If it only just happened: We’ve just sent it (US also We just sent it).') + '</div>' +
-        '<div style="flex:1"></div><div style="display:flex;gap:.5em"><textarea class="field" id="d-claude-in" rows="1" style="min-height:3em;padding:.7em .9em" placeholder="' + esc(L('Frag Claude …', 'Ask Claude …')) + '"></textarea><button class="btn pri" id="d-claude-send" data-act="noop" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:3.2em;padding:0">' + ic('send', 'sm') + '</button></div>';
+        '<div style="flex:1"></div><div style="display:flex;gap:.5em"><textarea class="field" id="d-claude-in" rows="1" style="min-height:3em;padding:.7em .9em" placeholder="' + esc(L('Frag Claude …', 'Ask Claude …')) + '"></textarea><button class="btn pri" id="d-claude-send" data-act="sendq" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:3.2em;padding:0">' + ic('send', 'sm') + '</button></div>';
     } else {
       body = '<textarea class="field" id="d-trans-in" rows="2" style="min-height:4.5em">Wir haben die Lieferzeit bereits verkürzt.</textarea>' +
         '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:1.1em;margin:0">We’ve already reduced the lead time.</p><p class="p2 en" style="margin:0">also: We’ve already shortened the lead time. · We’ve already cut the lead time.</p><p class="p2" style="margin:0">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div>' +
-        '<button class="btn sec" id="d-tr-add" data-act="noop" style="align-self:flex-start">' + ic('plus', 'sm') + L('In die Wörter', 'Add to words') + '</button>';
+        '<button class="btn sec" id="d-tr-add" data-act="addw" data-w="reduce the lead time" style="align-self:flex-start">' + ic('plus', 'sm') + L('In die Wörter', 'Add to words') + '</button>';
     }
-    return { stage: l3Stage('band', true), ctx: head + '<div class="stack s16" style="flex:1;display:flex;flex-direction:column">' + body + '</div>' };
+    return { stage: l3Stage('band', true).replace('id="d-also" data-go="l7"', 'id="d-also" data-act="askalso"'), ctx: head + '<div class="stack s16" style="flex:1;display:flex;flex-direction:column">' + body + '</div>' };
   }
 });
 
@@ -334,9 +369,13 @@ reg('l8', {
     return {
       stage: '<div class="dscroll"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1em"><h1 class="dh1 disp" style="margin:0">' + L('Fortschritt', 'Progress') + '</h1>' + gearBtn() + '</div>' +
         '<div class="stack s24"><div class="c1"><p class="s disp" style="font-size:1.6em;line-height:1.25">' + L('C1 voraussichtlich zwischen Oktober 2027 und Januar 2028', 'C1 expected between October 2027 and January 2028') + '</p>' + c1Band(false) +
-        '<p class="p2" style="font-size:.85em;margin:0">' + L('aus 2 Meilensteinen und 5 belegten Kann-Beschreibungen', 'from 2 milestones and 5 proven can-do statements') + '</p></div>' + tiles(false) + '</div></div>',
-      ctx: ctxBlock(L('Diese Woche', 'This week'), '<div class="card stack s6"><div class="p">' + L('5 von 6 Pflicht-Tagen erledigt, 1 Ruhetag', '5 of 6 required days done, 1 rest day') + '</div><div class="p2">' + L('3 Wörter neu frei · Thema 1 bei 55 %', '3 words newly free · topic 1 at 55 %') + '</div></div>') +
-        ctxBlock(L('Kann-Beschreibungen', 'Can-do statements'), '<div class="checklist" style="padding:0">' + [[1, L('Projektstand am Telefon berichten', 'Report project status on the phone')], [1, L('Preis-Einwand ruhig beantworten', 'Answer a price objection calmly')], [0, L('Verhandlung mit Bedingungen führen', 'Negotiate with conditions')]].map(x => '<div class="ci" style="font-size:.92em"><span class="ck' + (x[0] ? ' y' : '') + '">' + (x[0] ? ic('check', 'xs') : '') + '</span>' + x[1] + '</div>').join('') + '</div>') +
+        '<p class="p2" style="font-size:.85em;margin:0">' + C1_BASIS() + '</p></div>' + tiles(false) +
+        '<div>' + [['flag', L('Deine Fehler', 'Your errors'), L('3 offen · alle aus deinen Übungen und von der Lehrerin', '3 open · all from your exercises and your teacher'), 'l16-errors', 'dp-errors'],
+          ['cal', L('Verlauf', 'History'), L('Wochen, Einstufung, Lehrerin', 'Weeks, placement, teacher'), 'h34-history', 'dp-history'],
+          ['info', L('So funktioniert’s', 'How it works'), L('Stufen, Tagesplan, was zählt', 'Stages, daily plan, what counts'), 'h37-overview', 'dp-howto']].map(r =>
+          '<button class="row" id="' + r[4] + '" data-go="' + r[3] + '"><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>').join('') + '</div></div></div>',
+      ctx: ctxBlock(L('Diese Woche', 'This week'), '<div class="card stack s6"><div class="p">' + L('3 von 3 Pflicht-Tagen bisher', '3 of 3 required days so far') + '</div><div class="p2">' + L('3 Wörter neu frei · Thema 1 bei 55 %', '3 words newly free · topic 1 at 55 %') + '</div></div>') +
+        ctxBlock(L('Kann-Beschreibungen · 2 von 12', 'Can-do statements · 2 of 12'), '<div class="checklist" style="padding:0">' + [[1, L('Projektstand am Telefon berichten', 'Report project status on the phone')], [1, L('Preis-Einwand ruhig beantworten', 'Answer a price objection calmly')], [0, L('Verhandlung mit Bedingungen führen', 'Negotiate with conditions')]].map(x => '<div class="ci" style="font-size:.92em"><span class="ck' + (x[0] ? ' y' : '') + '">' + (x[0] ? ic('check', 'xs') : '') + '</span>' + x[1] + '</div>').join('') + '</div>') +
         ctxBlock(L('Lehrerin', 'Teacher'), '<div class="notice" style="font-size:.92em">' + ic('pen', 'sm') + '<span>' + L('14.10.: „Spricht flüssiger, Aussprache von <em class="en">th</em> noch unsicher.“', 'Oct 14: “More fluent, <em>th</em> still unsure.”') + '</span></div>')
     };
   }
@@ -374,7 +413,7 @@ reg('l9', {
       ctx: ctxBlock(L('Rückmeldung in vier Bereichen', 'Feedback in four areas'), '<div>' + CATS().map(c => '<div class="cat"><div class="ct"><span class="sw ' + c[0] + '" style="box-shadow:none;background:' + c[1] + '"></span>' + c[2] + '</div><div class="p2" style="font-size:.92em">' + c[3] + '</div></div>').join('') + '</div>')
     };
   },
-  acts: { copy() { const t = $('.mailtext'); try { navigator.clipboard.writeText(t ? t.innerText : '').catch(() => {}); } catch (e) { /* Zwischenablage nicht verfügbar: Text bleibt markierbar */ } } }
+  acts: { copy() { const t = $('.mailtext'); try { navigator.clipboard.writeText(t ? t.innerText : '').catch(() => {}); } catch (e) { /* Zwischenablage nicht verfügbar: Text bleibt markierbar */ } toast(L('Text kopiert.', 'Text copied.'), 'info'); } }
 });
 
 /* ---------- L10 Breitenproben ---------- */

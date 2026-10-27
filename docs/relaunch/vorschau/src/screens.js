@@ -53,9 +53,12 @@ function menuHtml(opts) {
     '<button id="m-howto" data-go="h8-guide" role="menuitem">' + ic('mic', 'sm') + L('So sprichst du', 'How to speak') + '</button>' +
     '<button id="m-whytask" data-act="whysheet" role="menuitem">' + ic('info', 'sm') + L('Warum diese Aufgabe?', 'Why this task?') + '</button>' +
     (opts.checked ? '<button id="m-explain" data-go="h15-claude" role="menuitem">' + ic('bulb', 'sm') + L('Erklär mir meine Antwort', 'Explain my answer') + '</button>' : '') +
+    (opts.easy ? '<button id="m-easy" data-act="tooeasy" data-w="' + opts.easy + '" role="menuitem">' + ic('check', 'sm') + L('Zu leicht · kenne ich längst', 'Too easy · I’ve known this for ages') + '</button>' : '') +
     (opts.pause ? '<hr><button id="m-pause" data-go="h1-mid" role="menuitem">' + ic('clock', 'sm') + L('Pause, später weiter', 'Pause, continue later') + '</button>' : '') +
-    '<hr><button id="m-report" data-act="noop" role="menuitem">' + ic('flag', 'sm') + L('Problem melden', 'Report a problem') + '</button></div>';
+    '<hr><button id="m-report" data-act="report" role="menuitem">' + ic('flag', 'sm') + L('Problem melden', 'Report a problem') + '</button></div>';
 }
+/* E8: „Zu leicht“ nimmt das Wort aus dem Lernen und prüft es nur noch selten, mit Rückgängig. */
+ACTS.tooeasy = el => toast(L('<em class="en">' + el.getAttribute('data-w') + '</em>: kenne ich längst · nur noch eine Kontrolle in 30 Tagen', '<em>' + el.getAttribute('data-w') + '</em>: known for ages · just one check in 30 days'));
 function whySheet(text) {
   return sheet('why-sheet', L('Warum diese Aufgabe?', 'Why this task?'), '<p class="p">' + text + '</p>',
     '<button class="btn pri full" id="why-ok" data-act="closesheet">' + L('Weiter', 'Continue') + '</button>');
@@ -80,7 +83,7 @@ function weekStrip(todayDone, today) {
   const st = [0, 1, 2, 3, 4, 5, 6].map(i => i === 6 ? 'rest' : i < today ? 'done' : i === today ? (todayDone ? 'done today' : 'today') : '');
   return '<div class="gx"><div class="week" aria-label="' + esc(L('Diese Woche', 'This week')) + '">' + names.map((n, i) =>
     '<div class="wd ' + st[i] + '"><i>' + (st[i].indexOf('done') >= 0 ? ic('check', 'xs') : '') + '</i>' + n + '</div>').join('') +
-    '<div class="streak"><b class="disp num">' + (12 + today - 3 + (todayDone ? 1 : 0)) + '</b>' + L('Tage Serie', 'day streak') + '</div></div></div>';
+    '<div class="streak"><b class="disp num">14</b>' + L('Tage Serie', 'day streak') + '</div></div></div>';
 }
 /* „Wenn du mehr willst“: höchstens 3 Zeilen. Der Vokabeltrainer steht nur nach erledigter Pflicht dort, dann an erster Stelle
    und verdrängt „Kurse“ (Vokabeltrainer §1). trainer: 'due' | 'resume' | null. Ohne Angabe gilt L1 „erledigt“ als nach der Pflicht. */
@@ -91,7 +94,7 @@ function moreRows(missionDay, trainer) {
   else if (trainer === 'due') rows.push(['words', L('Wörter üben', 'Practice words'), L('14 fällig, zählt als Extra', '14 due, counts as extra'), 'h17-default']);
   rows.push(['book', L('Lesen', 'Reading'), L('Lieferketten unter Druck · 4 Min.', 'Daily article: supply chains under pressure · 4 min'), 'h13-reader']);
   rows.push(['pen', L('Wort-Werkstatt', 'Word workshop'), L('5 Wörter brauchen eine neue Darstellung', '5 words need a fresh look'), 'h33-workshop']);
-  if (!trainer) rows.push(['list', L('Kurse', 'Courses'), L('Verhandeln auf Englisch · Lektion 3', 'Negotiating in English · lesson 3'), 'h13-main']);
+  if (!trainer) rows.push(['list', L('Kurse', 'Courses'), L('Verhandeln auf Englisch · Lektion 3', 'Negotiating in English · lesson 3'), 'h35-course']);
   return '<div class="more-div gx">' + L('Wenn du mehr willst', 'If you want more') + '</div><div class="gx">' + rows.map((r, i) =>
     '<button class="row" id="more-' + i + '" data-go="' + r[3] + '"><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>').join('') +
     '<div style="display:flex;justify-content:flex-end"><button class="link" id="more-all" data-go="h33-list" style="font-size:14px">' + L('Alles anzeigen', 'Show all') + '</button></div></div>';
@@ -103,7 +106,7 @@ function h1(v) {
       '<div class="sk" style="width:72%;height:22px"></div><div class="sk" style="width:54%;height:16px"></div><div class="sk" style="width:100%;height:52px;border-radius:14px"></div></div></div>' +
       '<div class="gx" style="padding-top:22px;display:flex;gap:10px">' + '<div class="sk" style="flex:1;height:44px"></div>'.repeat(3) + '</div></div>' + tabbar('h1');
   }
-  const kind = (v === 'mission' || v === 'termin') ? 'mission' : (v === 'catchup' || v === 'writing' || v === 'test' || v === 'review') ? v : 'normal';
+  const kind = v === 'first' ? 'placement' : (v === 'mission' || v === 'termin') ? 'mission' : (v === 'catchup' || v === 'writing' || v === 'test' || v === 'review') ? v : 'normal';
   let blocks = dayBlocks(kind);
   /* Kurzer Tag: Pflicht anteilig gekürzt (Konzept 2.4, Kai E2). Lange Pause: ruhiger Neustart. Urlaub: vorher leicht vorgezogen. */
   if (v === 'short') blocks = blocks.map((b, i) => Object.assign({}, b, { m: [2, 3, 3, 2, 2, 2][i] }));
@@ -127,11 +130,13 @@ function h1(v) {
     : '<div class="ringc"><b class="disp num">' + rem + '</b><span>' + (done || partial ? L('Min. übrig', 'min left') : L('Min. heute', 'min today')) + '</span></div>';
   let sub = '';
   if (kind === 'catchup') sub = '<div class="sub">' + L('noch 3 Tage Aufholen, danach normal', '3 more catch-up days, then back to normal') + '</div>';
-  if (v === 'mission') sub = '<div class="sub">' + L('Heute mit Mission: <em>Preis-Einwand beim Einkauf</em>', 'Today with mission: <em>price objection from purchasing</em>') + '</div>';
+  if (v === 'mission') sub = '<div class="sub">' + L('Heute mit Mission: <em>Rückruf zum Angebot</em>', 'Today with mission: <em>follow-up call on the offer</em>') + '</div>';
   if (v === 'termin') sub = '<div class="sub">' + L('Heute mit Mission: <em>dein Call mit dem Einkauf</em>', 'Today with mission: <em>your call with purchasing</em>') + '</div>';
   if (v === 'done') sub = '<div class="sub">' + L('Pflicht geschafft. Morgen geht es mit Schritt 4 von 7 weiter.', 'Daily plan done. Tomorrow continues with step 4 of 7.') + '</div>';
   if (v === 'short') sub = '<div class="sub">' + L('Kurzer Tag: 14 statt 28 Min. Die Serie zählt.', 'Short day: 14 instead of 28 min. Your streak counts.') + '</div>';
-  if (v === 'pause') sub = '<div class="sub">' + L('Willkommen zurück. Wir starten ruhig und steigern in 5 Tagen auf deine 28 Min.', 'Welcome back. We start gently and build up to your 28 min over 5 days.') + '</div>';
+  if (v === 'pause') sub = '<div class="sub">' + L('Willkommen zurück. Wir starten ruhig und steigern in 5 Lerntagen auf deine 28 Min.', 'Welcome back. We start gently and build up to your 28 min over 5 learning days.') + '</div>';
+  if (v === 'first') sub = '<div class="sub">' + L('Heute Sitzung 1, morgen Sitzung 2. Danach beginnt dein Plan.', 'Session 1 today, session 2 tomorrow. Then your plan begins.') + '</div>';
+  if (v === 'day1') sub = '<div class="sub">' + L('Erster Tag mit deinem Plan: Kapitel 1 beginnt.', 'First day with your plan: chapter 1 begins.') + '</div>';
   if (v === 'writing') sub = '<div class="sub">' + L('Schreibtag: heute schreibst du deine Wochen-Mail.', 'Writing day: today you write your weekly email.') + '</div>';
   if (v === 'test') sub = '<div class="sub">' + L('Testtag: Thema 1 ist reif für den Test.', 'Test day: topic 1 is ready for its test.') + '</div>';
   if (v === 'review') sub = '<div class="sub">' + L('Wochenabschluss: dein Rückblick auf die Woche.', 'Week review: a look back at your week.') + '</div>';
@@ -141,10 +146,12 @@ function h1(v) {
     if (v === 'writing') next = '<div class="nextl"><span class="dot s"></span><span>' + L('Als Nächstes: Wochen-Mail · <em>Projekt-Update an den Einkauf</em>', 'Next: weekly email · <em>project update to purchasing</em>') + '</span></div>';
     else if (v === 'test') next = '<div class="nextl"><span class="dot g"></span><span>' + L('Als Nächstes: Themen-Test · <em>past simple vs. present perfect</em>', 'Next: topic test · <em>past simple vs. present perfect</em>') + '</span></div>';
     else if (v === 'review') next = '<div class="nextl"><span class="dot s"></span><span>' + L('Zum Schluss: Wochenfrage, dann dein Wochenbericht', 'Last step: week question, then your weekly report') + '</span></div>';
+    else if (v === 'first') next = '<div class="nextl"><span class="dot g"></span><span>' + L('Als Nächstes: Einstufung · <em>Grammatik, passt sich an</em>', 'Next: placement · <em>grammar, adaptive</em>') + '</span></div>';
     else if (done === 0) next = '<div class="nextl"><span class="dot w"></span><span>' + L('Als Nächstes: Gestern-Check · <em>6 Wörter</em>', 'Next: yesterday check · <em>6 words</em>') + '</span></div>';
     else next = '<div class="nextl"><span class="dot g"></span><span>' + L('Als Nächstes: Grammatik · <em>past simple vs. present perfect</em>', 'Next: grammar · <em>past simple vs. present perfect</em>') + '</span></div>';
     btn = done === 0 ? btnPri('today-go', L('Los geht’s', 'Let’s go'), 'h2-intro', ' style="width:100%"') : btnPri('today-go', L('Weiter', 'Continue'), 'h4-task', ' style="width:100%"');
     if (v === 'writing') btn = btnPri('today-go', L('Weiter', 'Continue'), 'h32-task', ' style="width:100%"');
+    if (v === 'first') btn = btnPri('today-go', L('Los geht’s', 'Let’s go'), 'h25-welcome', ' style="width:100%"');
     if (v === 'test') btn = btnPri('today-go', L('Test starten', 'Start test'), 'h31-passed', ' style="width:100%"');
     if (v === 'review') btn = btnPri('today-go', L('Weiter', 'Continue'), 'woche-ask', ' style="width:100%"');
     /* Kai E2: leiser Weg zum kurzen Tag direkt unter dem Knopf, nur vor dem ersten Block. */
@@ -153,24 +160,23 @@ function h1(v) {
   }
   let strip = weekStrip(v === 'done', kind === 'mission' ? 4 : kind === 'review' ? 5 : 3);
   /* Erster Start nach dem Umstieg: ruhiger Hinweis unter der Tageskarte, kein zweiter Hauptknopf. */
-  if (v === 'first') strip = '<div class="gx"><button class="notice tw-notice" id="today-new" data-go="h25-welcome" style="width:100%;text-align:left;margin-top:16px;align-items:center">' + ic('info', 'sm') + '<span style="flex:1"><b>' + L('Was ist neu nach dem Umstieg', 'What’s new after the switch') + '</b><br>' + L('Drei Dinge sind anders, in einer Minute erklärt.', 'Three things are different, explained in a minute.') + '</span>' + ic('chevR', 'sm') + '</button></div>' + strip;
-  if (v === 'pause') strip = '<div class="gx"><div class="tw-restart"><div class="tw-rs-h">' + L('Neustart-Woche', 'Restart week') + '<span>' + L('nichts geht verloren, deine Wörter warten', 'nothing is lost, your words are waiting') + '</span></div><div class="tw-rs-row">' +
-    [[L('Do', 'Thu'), 15, 'on'], [L('Fr', 'Fri'), 18, ''], [L('Sa', 'Sat'), 22, ''], [L('So', 'Sun'), 25, ''], [L('Mo', 'Mon'), 28, '']].map(d => '<div class="tw-rs-d ' + d[2] + '"><i style="height:' + Math.round(d[1] / 28 * 100) + '%"></i><b class="num">' + d[1] + '</b><span>' + d[0] + '</span></div>').join('') + '</div></div></div>';
+  if (v === 'pause') strip = '<div class="gx"><div class="tw-restart"><div class="tw-rs-h">' + L('Neustart-Woche', 'Restart week') + '<span>' + L('nichts geht verloren, deine Wörter warten', 'nothing is lost, your words are waiting') + '</span></div><div class="tw-rs-row" style="grid-template-columns:repeat(6,1fr)">' +
+    [[L('Do', 'Thu'), 15, 'on'], [L('Fr', 'Fri'), 18, ''], [L('Sa', 'Sat'), 22, ''], [L('So', 'Sun'), 0, 'rest'], [L('Mo', 'Mon'), 25, ''], [L('Di', 'Tue'), 28, '']].map(d => '<div class="tw-rs-d ' + d[2] + '"><i style="height:' + Math.round(d[1] / 28 * 100) + '%"></i><b class="num">' + (d[1] || L('Ruhetag', 'rest')) + '</b><span>' + d[0] + '</span></div>').join('') + '</div></div></div>';
   if (v === 'vacation') strip = '<div class="gx"><div class="notice tw-notice">' + ic('cal', 'sm') + '<span>' + L('<b>Urlaub 2.–6.11.</b> Deine Serie ruht in der Zeit. Bis Sonntag ziehen wir Wiederholungen leicht vor, damit danach nichts drängt.', '<b>Vacation Nov 2–6.</b> Your streak rests during that time. Until Sunday we move reviews slightly forward so nothing piles up afterward.') + '</span></div></div>' + strip;
   const stateList = '<div class="statelist springopen" id="ring-list" aria-label="' + esc(L('Blöcke von heute', 'Today’s blocks')) + '">' + blocks.map((b, i) => {
     const st = i < done ? 'done' : (i === done && partial ? 'run' : 'open');
-    return '<div class="st ' + st + '"><span class="mk">' + (st === 'done' ? ic('check', 'xs') : '') + '</span><span class="dot ' + b.c + '"></span><span class="nm">' + b.n + (b.mission ? ' · ' + L('Preis-Einwand', 'price objection') : '') + '</span><span class="sm num">' + (st === 'run' ? L('läuft', 'in progress') : b.m + ' Min.') + '</span></div>';
+    return '<div class="st ' + st + '"><span class="mk">' + (st === 'done' ? ic('check', 'xs') : '') + '</span><span class="dot ' + b.c + '"></span><span class="nm">' + b.n + (b.mission ? ' · ' + MISSION_NAME() : '') + '</span><span class="sm num">' + (st === 'run' ? L('läuft', 'in progress') : b.m + ' Min.') + '</span></div>';
   }).join('') + '</div>';
   return '<div class="scroll">' + phead(L('Heute', 'Today'), askBtn()) +
     '<div class="gx"><div class="daycard">' +
     '<div class="ringwrap">' + ringSvg(blocks, done, partial, { draw }) + center + '</div>' +
-    (showList ? stateList : '<div class="dtopic"><div class="t disp">' + TOPIC() + '</div>' + sub + '</div>' + next) +
+    (showList ? stateList : '<div class="dtopic"><div class="t disp">' + (v === 'first' ? L('Einstufung 1 von 2', 'Placement 1 of 2') : TOPIC()) + '</div>' + sub + '</div>' + next) +
     btn + extra + '</div></div>' +
     strip + moreRows(kind === 'mission', isDone ? (S.v === 'resume' ? 'resume' : 'due') : null) + '<div style="height:20px"></div></div>' + tabbar('h1');
 }
 reg('h1', {
   code: 'H1', name: 'Heute', kind: 'phone',
-  variants: [['start', 'Tagesanfang'], ['mid', 'unterwegs'], ['ring', 'Ring angetippt'], ['done', 'erledigt'], ['catchup', 'Aufholen'], ['mission', 'Missionstag'], ['termin', 'Missionstag mit Termin'], ['skeleton', 'Lade-Skelett'], ['resume', 'Runde fortsetzen'], ['pause', 'nach langer Pause'], ['vacation', 'Urlaub angekündigt'], ['short', 'Heute wenig Zeit'], ['writing', 'Schreibtag (Do)'], ['test', 'Testtag'], ['review', 'Wochenabschluss (Sa)'], ['first', 'erster Start nach dem Umstieg']],
+  variants: [['start', 'Tagesanfang'], ['mid', 'unterwegs'], ['ring', 'Ring angetippt'], ['done', 'erledigt'], ['catchup', 'Aufholen'], ['mission', 'Missionstag'], ['termin', 'Missionstag mit Termin'], ['skeleton', 'Lade-Skelett'], ['resume', 'Runde fortsetzen'], ['pause', 'nach langer Pause'], ['vacation', 'Urlaub angekündigt'], ['short', 'Heute wenig Zeit'], ['writing', 'Schreibtag (Do)'], ['test', 'Testtag'], ['review', 'Wochenabschluss (Sa)'], ['first', 'erster Start nach dem Umstieg'], ['day1', 'erster Lerntag nach der Einstufung']],
   render: h1
 });
 
@@ -182,7 +188,7 @@ function h2(v) {
   const fr = { intro: 0.15, type: 0.35, gap: 0.6, band: 0.6, more: 0.6, menu: 0.6, word: 0.6 }[v] || 0.5;
   const top = exTop(blocks, 1, fr);
   const bl = blockLine('w', L('Wörter · ', 'Words · ') + TOPIC());
-  const whyTask = L('lead time hast du vorgestern neu gelernt. Heute holst du es frei ab, ohne Auswahl. So wird es dein Wort.', 'You learned lead time two days ago. Today you recall it freely, without choices. That is how it becomes yours.');
+  const whyTask = H2_WHY();
   if (v === 'intro') {
     return top + '<div class="ex-body gx">' + bl + instr(L('Neues Wort. Hör es dir an und lies den Satz.', 'New word. Listen and read the sentence.')) +
       '<div class="stagec" style="justify-content:center;gap:18px">' +
@@ -193,7 +199,7 @@ function h2(v) {
       '<div class="card stack s8"><div class="lbl">' + L('Ursprungssatz', 'Source sentence') + '</div><div class="sent en" style="font-size:19px;line-height:28px">' + words('We sent the') + ' <b style="font-weight:650">quote</b> ' + words('on Monday.') + '</div>' +
       '<div class="hr"></div><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><div class="p en">send · revise · accept a quote</div></div>' +
       '<div class="notice">' + ic('info', 'sm') + '<span>' + L('Für ein schriftliches Preisangebot sagt man meist <em class="en">a quote</em>. <em class="en">An offer</em> ist allgemeiner.', 'For a written price quote, people usually say <em>a quote</em>. <em>An offer</em> is more general.') + '</span></div>' +
-      '</div></div>' + exFoot(btnPri('intro-next', L('Weiter', 'Continue'), 'h2-type')) + overlays({ whyTask });
+      '</div></div>' + exFoot(btnPri('intro-next', L('Weiter', 'Continue'), 'h2-type')) + overlays({ whyTask, easy: 'quote' });
   }
   if (v === 'type') {
     const checked = S.ui.checked;
@@ -205,7 +211,7 @@ function h2(v) {
       '<div style="padding-top:8px">' + gapHtml(shown, { big: true, caret: !checked, input: !checked, st: checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '' }) + '</div></div></div>' +
       (checked ? band(st, Object.assign({}, D, { you: Object.assign({}, WORD.you, S.typed ? { [st]: esc(S.typed) } : {}) }), { next: 'h2-gap' }) :
         exFoot(btnSec('hint', L('Tipp', 'Hint'), 'data-act="tip"') + btnSec('idk', L('Weiß ich nicht', 'Don’t know'), 'data-act="idk"') + btnPri('check', L('Prüfen', 'Check'), '', ' data-act="check"'), true) + drawnKbd({ go: 'go' })) +
-      overlays({ whyTask, checked });
+      overlays({ whyTask, checked, easy: 'lead time' });
   }
   // gap / band / also / more / menu / word: Lückensatz
   if (v === 'also') { S.typed = 'delivery time'; S.ui.ownInput = true; S.ui.checked = true; }
@@ -223,7 +229,7 @@ function h2(v) {
   if (v === 'more' || S.ui.sheet === 'more') s += moreWordSheet();
   if (v === 'word') s += wordPopup();
   if (v === 'menu' && S.ui.menu == null) S.ui.menu = true;
-  s += overlays({ whyTask, checked });
+  s += overlays({ whyTask, checked, easy: 'lead time' });
   return s;
 }
 function moreWordSheet() {
@@ -245,7 +251,7 @@ function wordPopup() {
     '<div style="display:flex;gap:8px"><button class="btn sec" id="word-ask" data-go="h15-claude" style="flex:1">' + L('Claude fragen', 'Ask Claude') + '</button><button class="btn pri" id="word-close" data-go="h2-gap" style="flex:1">' + L('Schließen', 'Close') + '</button></div>');
 }
 reg('h2', {
-  code: 'H2', name: 'Wörter-Block', kind: 'phone', demo: true,
+  code: 'H2', name: 'Wörter-Block', kind: 'phone', demo: true, closeTo: { word: 'h2-gap' },
   variants: [['intro', 'Neues Wort'], ['type', 'frei tippen'], ['gap', 'Lücke'], ['band', 'Band'], ['also', 'Band: auch richtig'], ['more', '„Mehr“-Blatt'], ['menu', 'Menü „…“'], ['word', 'Wort angetippt']],
   render: h2,
   after(v) {
@@ -269,8 +275,9 @@ reg('h2', {
 /* =========================================================
    H3 Blockwechsel
    ========================================================= */
+const H2_WHY = () => L('lead time hast du vorgestern neu gelernt. Heute holst du es frei ab, ohne Auswahl. So wird es dein Wort.', 'You learned lead time two days ago. Today you recall it freely, without choices. That is how it becomes yours.');
 reg('h3', {
-  code: 'H3', name: 'Blockwechsel', kind: 'phone', demo: true,
+  code: 'H3', name: 'Blockwechsel', kind: 'phone', demo: true, borrow: ['h4'],
   variants: [['before', 'letzte Wort-Aufgabe'], ['after', 'Lichtimpuls + Blockzeile']],
   render(v) {
     const blocks = NORMAL();
@@ -279,7 +286,7 @@ reg('h3', {
       const shown = st === 'idk' ? WORD.right : WORD.you[st];
       return exTop(blocks, 1, 1) + '<div class="ex-body gx with-band">' + blockLine('w', L('Wörter · ', 'Words · ') + TOPIC()) + instr(L('Setz das fehlende Wort ein.', 'Fill in the missing word.')) +
         '<div class="stagec"><div class="sent en">' + words('Can you reduce the') + ' ' + gapHtml(shown, { st: { ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st] }) + ' ' + words('to four weeks?') + '</div></div></div>' +
-        band(st, wordData('gap'), { next: 'h3-after', nextLabel: L('Weiter: Grammatik', 'Continue: Grammar') });
+        band(st, wordData('gap'), { next: 'h3-after', nextLabel: L('Weiter: Grammatik', 'Continue: Grammar') }) + (S.ui.sheet === 'more' ? moreWordSheet().replace('data-go="h3-before"', 'data-act="closesheet"') : '') + overlays({ whyTask: H2_WHY() });
     }
     return gramTask({ pulse: 1, flash: true });
   }
@@ -312,7 +319,7 @@ function gramTask(o) {
     '<div class="sent en" id="sent">' + words('We') + ' ' + gapHtml(shown, { caret: !checked, input: !checked, st: gapSt }) + ' <span class="w" style="color:var(--fg-3)">(send)</span> ' + words('the revised quote yesterday.') + '</div></div></div>';
   if (checked) s += band(st, Object.assign({}, GRAM, { you: Object.assign({}, GRAM.you, S.typed && S.ui.ownInput ? { [st]: esc(S.typed) } : {}) }), { next: 'h7-dictation', nextLabel: L('Weiter: Hören', 'Continue: Listening') });
   else {
-    if (hint) s += '<div class="hintband gx" id="hintband" style="position:relative">' + ic('bulb', 'sm') + '<span>' + L('Fast. Welche Zeitform passt zu <em class="en">yesterday</em>?', 'Almost. Which tense goes with <em>yesterday</em>?') + '</span></div>';
+    if (hint) s += '<div class="hintband gx" id="hintband" style="position:relative">' + ic('bulb', 'sm') + '<span>' + L('Noch nicht. Welche Zeitform passt zu <em class="en">yesterday</em>?', 'Not yet. Which tense goes with <em>yesterday</em>?') + '</span></div>';
     s += exFoot((hint ? '' : btnSec('hint', L('Tipp', 'Hint'), 'data-act="tip"') + btnSec('idk', L('Weiß ich nicht', 'Don’t know'), 'data-act="idk"')) + btnPri('check', L('Prüfen', 'Check'), '', ' data-act="check"'), true) + drawnKbd({ go: 'go' });
   }
   if (v === 'more' || S.ui.sheet === 'more') s += gramMoreSheet();
@@ -399,7 +406,7 @@ function explainMoreSheet() {
     '<button class="btn pri full" id="more-next" data-act="closesheet">' + L('Weiter', 'Continue') + '</button>', { h: '85%' });
 }
 reg('h5', {
-  code: 'H5', name: 'Grammatik-Erklärung', kind: 'phone',
+  code: 'H5', name: 'Grammatik-Erklärung', kind: 'phone', closeTo: { more: 'h5-explain' },
   variants: [['problem', 'Problem zuerst'], ['explain', 'Erklärung (Muster-Tabelle)'], ['more', '„Mehr“ aufgeklappt']],
   render(v) {
     const blocks = NORMAL();
@@ -410,13 +417,14 @@ reg('h5', {
         '<div class="stagec" style="justify-content:flex-start;gap:10px;padding-top:18px">' + items.map((t, i) =>
           '<div class="card" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px"><span class="num" style="color:var(--fg-3);font-weight:650;width:16px">' + (i + 1) + '</span><span class="p">' + t + '</span></div>').join('') +
         '<p class="p2" style="padding-top:6px">' + L('Du sprichst oder tippst jeden Satz. Das zählt noch nicht, es zeigt nur, wo du stehst.', 'You say or type each sentence. It doesn’t count yet, it only shows where you are.') + '</p></div></div>' +
-        '<div class="gx" style="flex:none">' + pageDots(2, 0) + '</div>' + exFoot(btnPri('ex-next', L('Los geht’s', 'Let’s go'), 'h5-explain'));
+        '<div class="gx" style="flex:none">' + pageDots(2, 0) + '</div>' + exFoot(btnPri('ex-next', L('Los geht’s', 'Let’s go'), 'h5-explain')) +
+        overlays({ whyTask: L('Erst versuchen, dann die Regel: Wenn du zuerst merkst, wo es hakt, bleibt die Erklärung danach besser hängen.', 'Try first, then the rule: once you notice where it gets tricky, the explanation sticks better.') });
     }
     const body = '<div class="ex-body gx" style="padding-bottom:12px">' + blockLine('g', L('Grammatik · Erklärung · ca. 70 Sekunden', 'Grammar · explanation · about 70 seconds')) + '<div class="stack s16" style="padding-top:10px">' + explainBody() +
       '<button class="btn sec full" id="explain-more" data-act="more">' + L('Mehr', 'More') + ' ' + ic('chevD', 'sm') + '</button></div></div>';
     return exTop(blocks, 2, 0.1) + body + '<div class="gx" style="flex:none">' + pageDots(2, 1) + '</div>' + exFoot(btnPri('ex-next', L('Weiter', 'Continue'), 'h4-task')) + (v === 'more' || S.ui.sheet === 'more' ? explainMoreSheet() : '');
   },
-  acts: { more() { S.ui.sheet = 'more'; render(); } }
+  acts: { more() { S.ui.sheet = 'more'; render(); }, whysheet() { S.ui.menu = false; S.ui.sheet = 'why'; render(); } }
 });
 
 /* =========================================================
@@ -424,13 +432,13 @@ reg('h5', {
    ========================================================= */
 const CHAPTERS = () => [
   [1, L('Zeiten im Projektverlauf', 'Tenses in project updates'), L('in Arbeit · Thema 1 von 4', 'in progress · topic 1 of 4'), 'run'],
-  [2, L('Fragen, Wortstellung, Artikel', 'Questions, word order, articles'), L('Woche 3–4', 'weeks 3–4'), ''],
-  [3, L('Zukunft, Pläne, Präzision', 'Future, plans, precision'), L('Woche 5–6', 'weeks 5–6'), ''],
-  [4, L('Bedingen, Verhandeln, Diplomatie', 'Conditions, negotiating, diplomacy'), L('Woche 7–8', 'weeks 7–8'), ''],
-  [5, L('Modalität und Hedging', 'Modality and hedging'), L('Woche 9–10', 'weeks 9–10'), ''],
-  [6, L('Verbmuster, Relativsätze, Verbindungen', 'Verb patterns, relative clauses, linkers'), L('Woche 11–12', 'weeks 11–12'), ''],
-  [7, L('Passiv, Berichten, Nominalstil', 'Passive, reporting, nominal style'), L('Woche 13–14', 'weeks 13–14'), ''],
-  [8, L('Satzbau für Wirkung', 'Sentence structure for impact'), L('Woche 15–16', 'weeks 15–16'), '']
+  [2, L('Fragen, Wortstellung, Artikel', 'Questions, word order, articles'), L('etwa Woche 3–5', 'about weeks 3–5'), ''],
+  [3, L('Zukunft, Pläne, Präzision', 'Future, plans, precision'), L('etwa Woche 5–8', 'about weeks 5–8'), ''],
+  [4, L('Bedingen, Verhandeln, Diplomatie', 'Conditions, negotiating, diplomacy'), L('etwa Woche 8–11', 'about weeks 8–11'), ''],
+  [5, L('Modalität und Hedging', 'Modality and hedging'), L('später, je nach Tempo', 'later, depending on pace'), ''],
+  [6, L('Verbmuster, Relativsätze, Verbindungen', 'Verb patterns, relative clauses, linkers'), L('später, je nach Tempo', 'later, depending on pace'), ''],
+  [7, L('Passiv, Berichten, Nominalstil', 'Passive, reporting, nominal style'), L('später, je nach Tempo', 'later, depending on pace'), ''],
+  [8, L('Satzbau für Wirkung', 'Sentence structure for impact'), L('Ziel: nach 18–22 Wochen', 'goal: after 18–22 weeks'), '']
 ];
 function hereCard() {
   return '<div class="card stack s8" style="box-shadow:var(--shadow)"><div class="lbl">' + L('Du bist hier', 'You are here') + '</div>' +
@@ -446,7 +454,7 @@ function chapterDetail() {
     ['past perfect', L('offen', 'open'), '']
   ];
   return '<div class="stack s16 springopen">' +
-    '<div class="stack s6"><div class="lbl">' + L('Kapitel 1 · Woche 1–2', 'Chapter 1 · weeks 1–2') + '</div><div class="h2 disp" style="font-size:26px;line-height:32px">' + CHAPTERS()[0][1] + '</div></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Kapitel 1 · jetzt Woche 2', 'Chapter 1 · now week 2') + '</div><div class="h2 disp" style="font-size:26px;line-height:32px">' + CHAPTERS()[0][1] + '</div></div>' +
     '<div class="card" style="padding:4px 16px">' + topics.map((t, i) => '<div class="st ' + (t[2] === 'run' ? 'run' : 'open') + '" style="min-height:58px"><span class="mk"></span>' + (i === 0 ? '<button class="nm" id="ch-topic" data-go="h27-topic" style="display:flex;flex-direction:column;flex:1;min-width:0;min-height:44px;justify-content:center;text-align:left">' : '<span class="nm" style="display:flex;flex-direction:column">') + '<span class="en" style="font-weight:600">' + t[0] + '</span><span class="p2" style="font-size:13px">' + t[1] + '</span>' + (i === 0 ? '</button>' : '</span>') +
       (i === 0 ? '<button class="link" id="ch-explain" data-go="h5-explain" style="margin-left:auto;font-size:14px">' + L('Erklärung', 'Explanation') + '</button>' : '') + '</div>').join('') + '</div>' +
     '<div>' + [['flag', L('Deine Fehler', 'Your errors'), L('3 offen in diesem Kapitel', '3 open in this chapter'), 'h26-list', 'ch-errors'],
@@ -464,8 +472,8 @@ reg('h6', {
         '<div class="scroll gx" style="padding-bottom:24px">' + chapterDetail() + '</div>' + tabbar('h6');
     }
     return '<div class="scroll">' + phead(L('Grammatik', 'Grammar'), askBtn()) + '<div class="gx stack s16" style="padding-bottom:24px">' + hereCard() +
-      '<div class="stack s6"><div class="lbl" style="padding:6px 0 2px">' + L('Dein Weg zu C1 · 8 Kapitel', 'Your path to C1 · 8 chapters') + '</div>' +
-      CHAPTERS().map(c => '<button class="row" id="ch-' + c[0] + '" data-go="h6-chapter"><span class="ri num' + (c[3] === 'run' ? ' pulsing' : '') + '" style="' + (c[3] === 'run' ? 'background:var(--act-soft);color:var(--act-text);font-weight:700' : 'font-weight:600') + '">' + c[0] + '</span><span class="rt"><b>' + c[1] + '</b><span>' + c[2] + '</span></span>' + (c[3] === 'run' ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '<span class="chev" style="opacity:.6">' + ic('lock', 'sm') + '</span>') + '</button>').join('') +
+      '<div class="stack s6"><div class="lbl" style="padding:6px 0 2px">' + L('Dein Weg zu C1 · 8 Kapitel, je zwei bis drei Wochen', 'Your path to C1 · 8 chapters, two to three weeks each') + '</div>' +
+      CHAPTERS().map(c => '<button class="row" id="ch-' + c[0] + '"' + (c[3] === 'run' ? ' data-go="h6-chapter"' : ' data-act="locked" data-n="' + c[0] + '" aria-disabled="true" style="opacity:.62"') + '><span class="ri num' + (c[3] === 'run' ? ' pulsing' : '') + '" style="' + (c[3] === 'run' ? 'background:var(--act-soft);color:var(--act-text);font-weight:700' : 'font-weight:600') + '">' + c[0] + '</span><span class="rt"><b>' + c[1] + '</b><span>' + c[2] + '</span></span>' + (c[3] === 'run' ? '<span class="chev">' + ic('chevR', 'sm') + '</span>' : '<span class="chev" style="opacity:.6">' + ic('lock', 'sm') + '</span>') + '</button>').join('') +
       '</div><button class="tw-quiet" id="g-more" data-go="h33-list">' + L('Mehr üben, freiwillig', 'More practice, optional') + '</button></div></div>' + tabbar('h6');
   }
 });
@@ -603,7 +611,7 @@ function h8(v) {
       '<div class="ex-body gx" style="justify-content:flex-start">' +
       (german ? '<div class="notice" style="margin-bottom:10px">' + ic('globe', 'sm') + '<span>' + L('Das kam auf Deutsch an. Globus-Taste → English, dann noch einmal.', 'That came through in German. Globe key → English, then try again.') + '</span></div>' : '') +
       '<div class="fieldwrap"><textarea class="field" id="say-field" rows="5" style="min-height:' + (german ? 116 : 150) + 'px" aria-label="' + esc(L('Deine Antwort', 'Your answer')) + '">' + esc(txt) + '</textarea></div></div>' +
-      '<div class="ex-foot gx abovekb">' + btnSec('type-instead', L('Lieber tippen', 'Type instead'), 'data-act="noop"') + (german ? btnPri('again', L('Noch einmal', 'Try again'), 'h8-keyboard') : btnPri('send', L('Senden', 'Send'), 'h8-p1')) + '</div>' +
+      '<div class="ex-foot gx abovekb">' + btnSec('type-instead', L('Lieber tippen', 'Type instead'), 'data-act="typeinstead"') + (german ? btnPri('again', L('Noch einmal', 'Try again'), 'h8-keyboard') : btnPri('send', L('Senden', 'Send'), 'h8-p1')) + '</div>' +
       '<div style="position:relative;flex:none">' + (german ? '' : '<div class="arrowtip" id="mic-tip">' + ic('mic', 'xs') + L('Mikrofon unten rechts', 'Microphone bottom right') + '</div>') + drawnKbd({ mic: !german, globe: german, go: 'return' }) + '</div>';
   }
   if (v === 'p1') {
@@ -631,7 +639,7 @@ function h8(v) {
   const ph = [['Since then, we’ve …'], ['Could we have a quick call on …?', L('<em class="en">quick call</em> ist die häufigste Verbindung', '<em>quick call</em> is the most common combination')], ['We can reduce the lead time to …']];
   return top + reportPage(3, 4,
     blockLine('s', L('Wendungen zum Mitnehmen', 'Phrases to keep')) +
-    '<div class="stack s8" style="padding-top:14px">' + ph.map((p, i) => '<div class="row" style="min-height:56px"><span class="rt"><b class="en">' + p[0] + '</b>' + (p[1] ? '<span>' + p[1] + '</span>' : '') + '</span><button class="iconbtn" id="ph-add-' + i + '" data-act="noop" aria-label="' + esc(L('In die Wörter', 'Add to words')) + '" style="margin:0">' + ic('plus', 'sm') + '</button></div>').join('') +
+    '<div class="stack s8" style="padding-top:14px">' + ph.map((p, i) => '<div class="row" style="min-height:56px"><span class="rt"><b class="en">' + p[0] + '</b>' + (p[1] ? '<span>' + p[1] + '</span>' : '') + '</span><button class="iconbtn" id="ph-add-' + i + '" data-act="addw" data-w="' + esc(p[0]) + '" aria-label="' + esc(L('In die Wörter', 'Add to words')) + '" style="margin:0">' + ic('plus', 'sm') + '</button></div>').join('') +
     '<p class="p2" style="padding-top:8px">' + L('Ein Tipp aufs Plus legt die Wendung in deine Wörter.', 'Tap plus to add the phrase to your words.') + '</p></div>',
     'h9-antic', L('Weiter: Flüssigkeit', 'Continue: Fluency'), btnSec('again-better', L('Nochmal, aber besser', 'Again, but better'), 'data-go="h8-keyboard"'));
 }
@@ -659,7 +667,7 @@ function h9(v) {
     return top + '<div class="pinned gx">' + ic('spark', 'xs') + '<b>' + L('4 von 8 · „Wir haben den Preis schon um 5 Prozent gesenkt.“', '4 of 8 · “We’ve already reduced the price by 5 percent.”') + '</b></div>' +
       '<div class="ex-body gx" style="justify-content:flex-start"><div class="fieldwrap"><textarea class="field en" id="serial-field" rows="3" style="min-height:96px">We’ve already reduced the price by 5</textarea><div class="timeline"><i style="width:48%"></i></div></div>' +
       '<p class="p2" style="padding-top:10px;display:flex;align-items:center;gap:6px">' + ic('mic', 'xs') + L('unten rechts · Feld und Tastatur bleiben offen', 'bottom right · field and keyboard stay open') + '</p></div>' +
-      '<div class="ex-foot gx abovekb">' + btnSec('type-instead', L('Lieber tippen', 'Type instead'), 'data-act="noop"') + btnPri('send', L('Senden', 'Send'), 'h9-quick') + '</div>' + drawnKbd({ mic: true, go: 'return' });
+      '<div class="ex-foot gx abovekb">' + btnSec('type-instead', L('Lieber tippen', 'Type instead'), 'data-act="typeinstead"') + btnPri('send', L('Senden', 'Send'), 'h9-quick') + '</div>' + drawnKbd({ mic: true, go: 'return' });
   }
   if (v === 'quick') {
     return top + '<div class="ex-body gx">' + blockLine('s', L('Flüssigkeit · Schnellabruf · 6 von 8', 'Fluency · quick recall · 6 of 8')) + instr(L('So schnell es geht, ohne Hetze.', 'As fast as you can, no rush.'), false) +
@@ -687,10 +695,10 @@ function closingCard(v) {
   const lines = v === 'adapt'
     ? [[ic('repeat', 'sm'), L('Wortpartner fielen dir schwer, deshalb kommen diese Woche mehr davon.', 'Collocations were hard for you, so more of them are coming this week.')],
       [ic('gram', 'sm'), '<span class="en">past simple vs. present perfect</span>: <b class="num">55 % → 70 %</b>'],
-      [ic('today', 'sm'), L('Serie: <b class="num">15 Tage</b>', 'Streak: <b class="num">15 days</b>')]]
+      [ic('today', 'sm'), L('Serie: <b class="num">14 Tage</b>', 'Streak: <b class="num">14 days</b>')]]
     : [[ic('words', 'sm'), L('Heute neu und gleich frei abgerufen: <em class="en">quote</em> · frei an 1 Tag', 'New today and recalled freely right away: <em>quote</em> · free on 1 day')],
       [ic('gram', 'sm'), '<span class="en">past simple vs. present perfect</span>: <b class="num">40 % → 55 %</b>'],
-      [ic('today', 'sm'), L('Serie: <b class="num">13 Tage</b>', 'Streak: <b class="num">13 days</b>')]];
+      [ic('today', 'sm'), L('Serie: <b class="num">14 Tage</b>', 'Streak: <b class="num">14 days</b>')]];
   return lines;
 }
 reg('h10', {
@@ -710,7 +718,7 @@ reg('h10', {
    H11 Mission im Rahmen
    ========================================================= */
 function missionChecklist(states, open) {
-  const items = [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
+  const items = [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
   const marks = states.map(x => '<span class="ck' + (x ? ' y' : '') + '">' + (x ? ic('check', 'xs') : '') + '</span>').join('');
   return '<button class="checkrow gx" id="cl-toggle" data-act="cl" aria-expanded="' + (open ? 'true' : 'false') + '"><span class="cks">' + marks + '</span><span>' + L('Abhakliste', 'Checklist') + '</span><span style="margin-left:auto">' + ic(open ? 'chevU' : 'chevD', 'sm') + '</span></button>' +
     (open ? '<div class="checklist gx springopen">' + items.map((t, i) => '<div class="ci"><span class="ck' + (states[i] ? ' y' : '') + '">' + (states[i] ? ic('check', 'xs') : '') + '</span>' + t + '</div>').join('') +
@@ -720,12 +728,12 @@ function h11(v) {
   const blocks = MISSION();
   const top = exTop(blocks, 4, { prep: 0.05, talk: 0.45, report: 0.9 }[v] || 0.1, { closeTo: 'mission' });
   if (v === 'prep') {
-    return top + '<div class="ex-body gx">' + blockLine('s', L('Mission · Preis-Einwand beim Einkauf', 'Mission · price objection from purchasing')) +
+    return top + '<div class="ex-body gx">' + blockLine('s', L('Mission · ', 'Mission · ') + MISSION_NAME()) +
       '<div class="stagec" style="gap:16px;justify-content:flex-start;padding-top:16px">' +
       '<div class="persona"><span class="avatar" style="width:52px;height:52px;font-size:17px">LK</span><div><b style="font-size:18px">Laura Keller</b><div class="p2">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented persona') + '</div></div></div>' +
       '<div class="card stack s8"><div class="lbl">' + L('Dein Ziel', 'Your goal') + '</div><p class="p" style="font-size:18px;line-height:25px;font-weight:550">' + L('Halte den Preis, ohne den nächsten Termin zu verlieren.', 'Hold the price without losing the next meeting.') + '</p></div>' +
       '<div class="stack s8"><div class="lbl">' + L('Abhakliste', 'Checklist') + '</div><div class="checklist" style="padding:0">' +
-      [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci"><span class="ck"></span>' + t + '</div>').join('') + '</div>' +
+      [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci"><span class="ck"></span>' + t + '</div>').join('') + '</div>' +
       '<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px"><span class="chip en">past simple / present perfect</span><span class="chip en">discount</span><span class="chip en">lead time</span><span class="chip en">sign off on</span></div></div>' +
       '<p class="p2">' + L('Etwa 9 Minuten, gesprochen. In den ersten zwei Zügen läuft keine Zeit.', 'About 9 minutes, spoken. No timer in the first two turns.') + '</p></div></div>' +
       exFoot(btnSec('pause', L('Pause, später weiter', 'Pause, continue later'), 'data-go="h1-mission"') + btnPri('mission-go', L('Los geht’s', 'Let’s go'), 'h11-talk'));
@@ -737,14 +745,14 @@ function h11(v) {
       '<div class="bubble me en">I understand. Could you tell me which offer you’re comparing us with?</div>' +
       '<div class="bubble them en">Another supplier quoted about 10 percent less, and they can deliver in six weeks.</div>' +
       '<div class="fieldwrap" style="margin-top:6px"><div class="field" style="min-height:64px;color:var(--fg-3)">' + L('Deine Antwort …', 'Your answer …') + '</div><div class="timeline"><i style="width:22%"></i></div></div></div>' +
-      exFoot(btnSec('aloud', L('Laut gesagt', 'Said aloud'), 'data-act="noop"') + btnPri('speak', L('Sprechen', 'Speak'), 'h11-report'));
+      exFoot(btnSec('aloud', L('Laut gesagt', 'Said aloud'), 'data-go="h11-report"') + btnPri('speak', L('Sprechen', 'Speak'), 'h11-report'));
   }
   return top + reportPage(0, 4,
     blockLine('s', L('Mission · Bericht', 'Mission · report')) +
     '<div class="stack s16" style="padding-top:14px"><div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Einwand gut behandelt, Termin noch offen', 'Objection handled well, meeting still open') + '</div>' +
-    '<div class="checklist" style="padding:0">' + [[1, L('Bedarf erfragen', 'Ask about needs')], [1, L('Einwand Preis behandeln', 'Handle the price objection')], [0, L('nächsten Termin fixieren', 'Set up the next meeting')]].map(x => '<div class="ci"><span class="ck' + (x[0] ? ' y' : '') + '">' + (x[0] ? ic('check', 'xs') : '') + '</span>' + x[1] + '</div>').join('') + '</div>' +
+    '<div class="checklist" style="padding:0">' + [[1, L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received')], [1, L('Einwand Preis behandeln', 'Handle the price objection')], [0, L('nächsten Termin fixieren', 'Set up the next meeting')]].map(x => '<div class="ci"><span class="ck' + (x[0] ? ' y' : '') + '">' + (x[0] ? ic('check', 'xs') : '') + '</span>' + x[1] + '</div>').join('') + '</div>' +
     '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„We’ve already reduced the lead time to eight weeks.“</div><p class="p2">' + L('Ergebnis zuerst, ohne Zeitpunkt: genau richtig im present perfect.', 'Result first, no time given: exactly right in the present perfect.') + '</p></div>' +
-    '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen', 'Suggest the meeting yourself') + '</div><div class="p">2&nbsp; <span class="en">We have met last year</span> → <b class="en">We met last year</b></div></div></div>', 'h10-day');
+    '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen', 'Suggest the meeting yourself') + '</div><div class="p">2&nbsp; ' + L('Zum Schluss zusammenfassen: <em class="en">So, just to sum up: eight weeks at the current price.</em>', 'Sum up at the end: <em>So, just to sum up: eight weeks at the current price.</em>') + '</div></div></div>', 'h10-day');
 }
 reg('h11', {
   code: 'H11', name: 'Mission im Rahmen', kind: 'phone',
@@ -781,7 +789,7 @@ function wordDetail() {
     '<div class="disp" style="font-size:22px;line-height:28px;font-weight:600">' + L('die Lieferzeit', 'time from order to delivery') + '</div>' +
     '<div class="card stack s8"><div class="lbl">' + L('Stand', 'Status') + '</div><div style="display:flex;gap:4px">' + steps.map((s, i) => '<i style="flex:1;height:6px;border-radius:3px;background:' + (i <= 3 ? 'var(--fg)' : 'var(--surface-3)') + ';opacity:' + (i <= 3 ? (0.4 + i * 0.15) : 1) + '"></i>').join('') + '</div>' +
     '<p class="p">' + L('Auf dem Weg: frei an 1 von 2 Tagen. Nächster Abruf morgen, ohne Satz.', 'On the way: free on 1 of 2 days. Next recall tomorrow, without a sentence.') + '</p></div>' +
-    '<div class="stack s6"><div class="lbl">' + L('Ursprungssatz · aus Hören, 24.10.', 'Source sentence · from listening, Oct 24') + '</div><p class="p en" style="font-size:18px;line-height:26px">Another supplier has also offered us a <b>lead time</b> of six weeks.</p></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Ursprungssatz · aus Sprachnachrichten, Di 27.10.', 'Source sentence · from voicemails, Tue Oct 27') + '</div><p class="p en" style="font-size:18px;line-height:26px">Another supplier has also offered us a <b>lead time</b> of six weeks.</p></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">reduce · shorten · quote a lead time</p></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Letzte Versuche', 'Recent attempts') + '</div><div style="display:flex;gap:6px">' +
     [['ok', 'check'], ['bad', 'cross'], ['ok', 'check']].map(x => '<span class="ck' + (x[0] === 'ok' ? ' y' : '') + '" style="' + (x[0] === 'bad' ? 'color:var(--bad);box-shadow:0 0 0 1.5px var(--bad) inset' : '') + '">' + ic(x[1], 'xs') + '</span>').join('') + '</div></div></div>';
@@ -796,6 +804,7 @@ function wordActions(idp) {
       : '<button class="btn pri full" id="' + idp + 'w-practice" data-go="h18-word">' + L('Dieses Wort üben', 'Practice this word') + '</button>' +
       '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('5 Karten, <em class="en">lead time</em> kommt als letzte. Noch nicht fällig: Übung, der Termin startet ab jetzt neu.', '5 cards, <em>lead time</em> comes last. Not due yet: practice, the review restarts from now.') + '</span></p>') +
     '<div class="tw-wagrid">' +
+    sec('w-listen', 'speaker', S.ui.wloop ? L('Hört in Schleife · stoppen', 'Looping · stop') : L('Anhören in Schleife', 'Listen on loop'), 'data-act="wloop" style="grid-column:1/-1" aria-pressed="' + (S.ui.wloop ? 'true' : 'false') + '"') +
     sec('w-say', 'mic', L('Sag es', 'Say it'), 'data-go="h8-scenario"') +
     sec('w-pause', paused ? 'play' : 'pause', paused ? L('Fortsetzen', 'Resume') : L('Pausieren', 'Pause'), 'data-act="wpause" aria-pressed="' + (paused ? 'true' : 'false') + '"') +
     sec('w-ask', 'claude', L('Claude fragen', 'Ask Claude'), 'data-go="h15-claude"') +
@@ -804,13 +813,14 @@ function wordActions(idp) {
 function restingSheetBody() {
   return '<p class="p">' + L('<b class="en">flexibility</b> ruht bis 12.11. Dann prüfen wir, ob es nach 3 Wochen ohne Kontakt noch sitzt. Öffnen setzt die 3 Wochen zurück.', '<b>flexibility</b> rests until Nov 12. Then we check whether it still holds after 3 weeks without contact. Opening it resets the 3 weeks.') + '</p>';
 }
-const WF_STAND = () => [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Im Aufbau', 'Building'), 24], [L('Erkennst du', 'You recognize'), 388], [L('Ruht', 'Resting'), 3], [L('Pausiert', 'Paused'), 2]];
+/* Gleiche Gruppen überall, Summe 491: 38 + 41 + 412. „Im Aufbau“ (S2) ist ein Teil von „Erkennst du“. */
+const WF_STAND = () => [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Erkennst du', 'You recognize'), 412], [L('davon im Aufbau', 'of these building'), 24], [L('Ruht', 'Resting'), 3], [L('Pausiert', 'Paused'), 2]];
 function wordFilterBody() {
-  const grp = (t, items, on) => '<div class="tw-grp"><div class="lbl">' + t + '</div><div class="tw-chips">' + items.map((x, i) => '<button class="tw-chip' + (i === on ? ' on' : '') + '" id="wfs-' + t.length + '-' + i + '" data-act="noop">' + x[0] + ' <span class="num">' + x[1] + '</span></button>').join('') + '</div></div>';
+  const grp = (t, items, on) => '<div class="tw-grp"><div class="lbl">' + t + '</div><div class="tw-chips">' + items.map((x, i) => '<button class="tw-chip' + (i === on ? ' on' : '') + '" id="wfs-' + t.length + '-' + i + '" data-act="wfchip">' + x[0] + ' <span class="num">' + x[1] + '</span></button>').join('') + '</div></div>';
   return '<div class="stack s16">' + grp(L('Stand', 'Status'), WF_STAND(), 0) +
     grp(L('Art', 'Type'), [[L('Wort', 'Word'), 402], [L('Wendung', 'Phrase'), 61], [L('Wortpartner', 'Collocation'), 28]], -1) +
     grp(L('Herkunft', 'Source'), [[L('Thema', 'Topic'), 312], [L('Eigene Funde', 'My finds'), 97], [L('Lehrer', 'Teacher'), 54], [L('Mission', 'Mission'), 28]], -1) +
-    '<button class="row" id="wfs-hard" data-act="noop" aria-pressed="false"><span class="ri">' + ic('flag', 'sm') + '</span><span class="rt"><b>' + L('Schwierig', 'Hard') + '</b><span>' + L('zweimal danebengelegen in 30 Tagen · 9', 'missed twice in 30 days · 9') + '</span></span><span class="tw-switch" aria-hidden="true"><i></i></span></button></div>';
+    '<button class="row" id="wfs-hard" data-act="wfshard" aria-pressed="false"><span class="ri">' + ic('flag', 'sm') + '</span><span class="rt"><b>' + L('Schwierig', 'Hard') + '</b><span>' + L('zweimal danebengelegen in 30 Tagen · 9', 'missed twice in 30 days · 9') + '</span></span><span class="tw-switch" aria-hidden="true"><i></i></span></button></div>';
 }
 function h12List(v) {
   const card = {
@@ -819,7 +829,7 @@ function h12List(v) {
     'list-nothing-due': [L('Nichts fällig · schwierige Wörter üben', 'Nothing due · practice hard words'), 'h17-nothing-due', L('Üben', 'Practice')]
   }[v] || null;
   const c = card || [L('14 fällig · zählt als Extra', '14 due · counts as extra'), 'h17-default', L('Üben', 'Practice')];
-  const filters = WF_STAND().slice(0, 3).concat([WF_STAND()[4]]);
+  const filters = WF_STAND().slice(0, 4);
   return '<div class="scroll">' + phead(L('Wörter', 'Words'), askBtn()) + '<div class="gx stack s16" style="padding-bottom:24px">' +
     '<div class="tw-practice"><div class="tw-pt"><b>' + L('Wörter üben', 'Practice words') + '</b><span>' + c[0] + '</span></div><button class="btn pri" id="w-go" data-go="' + c[1] + '">' + c[2] + '</button></div>' +
     '<label class="field" style="min-height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="w-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:16px;color:var(--fg)" autocomplete="off"></label>' +
@@ -828,6 +838,19 @@ function h12List(v) {
     '<div id="w-rows">' + wordRows() + '</div><div id="w-found"></div></div></div>' + tabbar('h12');
 }
 /* Suche filtert sofort; unter den Treffern „Diese N üben“, ohne Treffer der Weg ins Wörterbuch (H21). */
+/* E5: Die Wortsuche zeigt auch Treffer in Grammatik und in deinen Fehlern. */
+function alsoHits(q, idp) {
+  if (q.length < 3) return '';
+  const desk = idp === 'd';
+  const gram = [['past simple vs. present perfect', 'We sent the revised quote yesterday.', desk ? 'l16-topic' : 'h27-topic'],
+    [L('Zeitpräpositionen', 'Time prepositions'), 'for · since · by · until', desk ? 'l4' : 'h6-chapter']].filter(g => (g[0] + ' ' + g[1]).toLowerCase().indexOf(q) >= 0);
+  const errs = TM_ERRS().filter(e => (e.w + ' ' + e.r).toLowerCase().indexOf(q) >= 0);
+  if (!gram.length && !errs.length) return '';
+  const row = (id, lbl, txt, goT) => '<button class="row" id="' + idp + id + '" data-go="' + goT + '"><span class="rt"><b>' + lbl + '</b><span class="en">' + txt + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>';
+  return '<div class="tw-also" style="padding-top:12px">' +
+    gram.map((g, i) => row('w-ag-' + i, L('Auch in Grammatik: ', 'Also in grammar: ') + '<span class="en">' + g[0] + '</span>', g[1], g[2])).join('') +
+    errs.slice(0, 2).map((e, i) => row('w-ae-' + i, L('Auch in deinen Fehlern', 'Also in your errors') + ' · ' + e.src, esc(e.w) + ' → ' + esc(e.r), desk ? 'l16-errors' : 'h26-list')).join('') + '</div>';
+}
 function wireWordSearch(idp, practiceGo, emptyGo) {
   idp = idp || '';
   const inp = document.getElementById(idp + 'w-search');
@@ -842,6 +865,7 @@ function wireWordSearch(idp, practiceGo, emptyGo) {
     f.innerHTML = n
       ? '<button class="btn sec full" id="' + idp + 'w-these" data-go="' + practiceGo + '">' + L('Diese ' + n + ' üben', 'Practice these ' + n) + '</button>'
       : '<div class="tw-empty"><b>' + L('„' + esc(inp.value.trim()) + '“ ist noch nicht in deinen Wörtern.', '“' + esc(inp.value.trim()) + '” isn’t in your words yet.') + '</b><button class="btn sec full" id="' + idp + 'w-dict" data-go="' + emptyGo + '">' + ic('search', 'sm') + L('Im Wörterbuch suchen', 'Look it up') + '</button></div>';
+    f.innerHTML += alsoHits(q, idp);
   });
 }
 reg('h12', {
@@ -865,7 +889,8 @@ reg('h12', {
   after(v) { if (v.indexOf('list') === 0) wireWordSearch('', 'h18-free', 'h21-search-empty'); },
   acts: {
     tolist() { go('h12-list'); },
-    wpause() { S.ui.wpause = !S.ui.wpause; render(); }
+    wpause() { S.ui.wpause = !S.ui.wpause; render(); },
+    wloop() { S.ui.wloop = !S.ui.wloop; render(); }
   }
 });
 
@@ -889,12 +914,13 @@ reg('h13', {
     const sec = (t, rows) => '<div class="stack s6"><div style="display:flex;align-items:center;justify-content:space-between"><div class="h2 disp" style="font-size:19px">' + t[0] + '</div><button class="link" id="all-' + t[1] + '"' + (t[2] ? ' data-go="' + t[2] + '"' : ' data-act="noop"') + ' style="font-size:14px">' + L('Alle', 'All') + '</button></div><div>' + rows.map((r, i) => '<button class="row" id="' + t[1] + '-' + i + '" data-go="' + (r[3] || 'h13-main') + '"><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>').join('') + '</div></div>';
     return '<div class="scroll">' + phead(title, askBtn()) + '<div class="gx stack s24" style="padding-bottom:24px">' +
       '<div class="card stack s8" style="box-shadow:var(--shadow)"><div style="display:flex;align-items:center;gap:8px"><span class="dot s"></span><span class="lbl">' + L('Mission der Woche', 'Mission of the week') + '</span><span class="chip" style="margin-left:auto;min-height:26px">' + ic('cal', 'xs') + L('Freitag in deiner Pflicht', 'Friday in your daily plan') + '</span></div>' +
-      '<div class="h2 disp" style="font-size:22px;line-height:28px">' + L('Preis-Einwand beim Einkauf', 'Price objection from purchasing') + '</div>' +
-      '<p class="p2">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren.', 'Goal: hold the price without losing the next meeting.') + '</p>' +
-      '<div class="checklist" style="padding:2px 0 0">' + [L('Bedarf erfragen', 'Ask about needs'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci" style="font-size:14px;min-height:26px"><span class="ck" style="width:16px;height:16px"></span>' + t + '</div>').join('') + '</div></div>' +
-      sec([L('Sprechen', 'Speaking'), 'sp', 'h29-list'], [['cal', L('Mein nächster Termin', 'My next meeting'), L('Dienstag Call mit Einkauf · ändern', 'Tuesday call with purchasing · change'), 'termin-filled'], ['speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date')], ['spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage', 'one unexpected client question')]]) +
-      sec([L('Hören', 'Listening'), 'li'], [['ear', L('Sprachnachrichten', 'Voicemails'), L('3 neue aus dem Einkauf', '3 new from purchasing')], ['repeat', 'Shadowing', L('kurze Sätze nachsprechen', 'repeat short sentences')]]) +
+      '<div class="h2 disp" style="font-size:22px;line-height:28px">' + MISSION_NAME() + '</div>' +
+      '<p class="p2">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren. Teilziel: der Preis-Einwand.', 'Goal: hold the price without losing the next meeting. Sub-goal: the price objection.') + '</p>' +
+      '<div class="checklist" style="padding:2px 0 0">' + [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci" style="font-size:14px;min-height:26px"><span class="ck" style="width:16px;height:16px"></span>' + t + '</div>').join('') + '</div></div>' +
+      sec([L('Sprechen', 'Speaking'), 'sp', 'h29-list'], [['cal', L('Mein nächster Termin', 'My next meeting'), L('Dienstag Call mit Einkauf · ändern', 'Tuesday call with purchasing · change'), 'termin-filled'], ['speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date'), 'h11-prep'], ['spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage', 'one unexpected client question'), 'h9-antic']]) +
+      sec([L('Hören', 'Listening'), 'li', 'h33-list'], [['ear', L('Sprachnachrichten', 'Voicemails'), L('3 neue aus dem Einkauf', '3 new from purchasing'), 'h7-predict'], ['repeat', 'Shadowing', L('kurze Sätze nachsprechen', 'repeat short sentences'), 'h8-guide']]) +
       sec([L('Lesen', 'Reading'), 're', 'h35-archive'], [['book', L('Tagesartikel', 'Daily article'), L('Lieferketten unter Druck · 4 Min.', 'Supply chains under pressure · 4 min'), 'h13-reader'], ['list', L('Kurse', 'Courses'), L('Verhandeln auf Englisch · Lektion 3', 'Negotiating in English · lesson 3'), 'h35-course']]) +
+      '<div class="stack s6"><div class="h2 disp" style="font-size:19px">' + L('Lehrerin', 'Teacher') + '</div><button class="row" id="pr-teacher" data-go="h28-paste"><span class="ri">' + ic('pen', 'sm') + '</span><span class="rt"><b>' + L('Korrekturen aus der Stunde', 'Corrections from your lesson') + '</b><span>' + L('einfügen, Lingo sortiert sie ein', 'paste them, Lingo sorts them in') + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button></div>' +
       '</div></div>' + tabbar('h13');
   }
 });
@@ -902,6 +928,8 @@ reg('h13', {
 /* =========================================================
    H14 Reiter Fortschritt
    ========================================================= */
+/* Woche 2 ehrlich: bisher nur die Einstufung als Messung. */
+const C1_BASIS = () => L('vorläufig: aus 1 Messung (Einstufung) und 2 von 12 Kann-Beschreibungen · erste echte Schätzung nach Woche 4', 'provisional: from 1 measurement (placement) and 2 of 12 can-do statements · first real estimate after week 4');
 function c1Band(thin) {
   const months = ['10/26', '04/27', '10/27', '04/28'];
   const x = m => 8 + m / 18 * 84; // Monate ab Okt 2026, 0..18
@@ -917,7 +945,7 @@ function tiles(thin) {
   const w = thin
     ? '<div class="tile" id="tile-w"><div class="th"><span class="dot w"></span>' + L('Bildest du selbst', 'You produce') + '</div><div class="big disp num">0</div><div class="way">' + L('auf dem Weg: 6', 'on the way: 6') + '</div><div class="wbar"><i class="f34" style="left:0;width:4%"></i></div><div class="one">' + L('erkennst du: noch nicht gemessen', 'you recognize: not measured yet') + '</div></div>'
     : '<button class="tile" id="tile-w" data-go="h34-words"><div class="th"><span class="dot w"></span>' + L('Bildest du selbst', 'You produce') + trend('up') + '</div><div class="big disp num">38</div><div class="way num">' + L('auf dem Weg: 41', 'on the way: 41') + '</div>' +
-      '<div class="wbar" title="' + esc(L('voll: bildest du selbst · halbtonig: auf dem Weg · Umriss: erkennst du', 'full: you produce · halftone: on the way · outline: you recognize')) + '"><i class="f5" style="width:' + (38 / 412 * 100).toFixed(1) + '%"></i><i class="f34" style="left:' + (38 / 412 * 100).toFixed(1) + '%;width:' + (41 / 412 * 100).toFixed(1) + '%"></i></div><div class="one num">' + L('erkennst du: 412', 'you recognize: 412') + '</div></button>';
+      '<div class="wbar" title="' + esc(L('voll: bildest du selbst · halbtonig: auf dem Weg · Umriss: erkennst du', 'full: you produce · halftone: on the way · outline: you recognize')) + '"><i class="f5" style="width:' + (38 / 491 * 100).toFixed(1) + '%"></i><i class="f34" style="left:' + (38 / 491 * 100).toFixed(1) + '%;width:' + (41 / 491 * 100).toFixed(1) + '%"></i></div><div class="one num">' + L('erkennst du: 412', 'you recognize: 412') + '</div></button>';
   const t = (id, dot, head, big, small, line, tr) => '<button class="tile" id="' + id + '" data-go="' + ({ 'tile-s': 'h14-speech', 'tile-g': 'h34-grammar', 'tile-l': 'h34-listening' }[id]) + '"><div class="th"><span class="dot ' + dot + '"></span>' + head + (thin ? '' : trend(tr)) + '</div><div class="big disp num">' + big + (small ? '<small>' + small + '</small>' : '') + '</div><div class="one">' + line + '</div></button>';
   return '<div class="tiles">' + w +
     t('tile-g', 'g', L('Grammatik', 'Grammar'), thin ? '1' : '1', L('von 8', 'of 8'), thin ? L('Kapitel 1 · Diagnose läuft', 'Chapter 1 · diagnosis running') : L('Kapitel in Arbeit · Thema 1 von 4', 'chapter in progress · topic 1 of 4'), 'flat') +
@@ -940,7 +968,7 @@ reg('h14', {
     if (v === 'speech') {
       return '<header class="phead gx"><button class="iconbtn" id="s-back" data-go="h14-main" aria-label="' + esc(L('Zurück', 'Back')) + '" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button>' + gearBtn() + '</header>' +
         '<div class="scroll gx" style="padding-bottom:24px"><div class="stack s16 springopen"><div class="h2 disp" style="font-size:26px;line-height:32px">' + L('Antworttempo', 'Response pace') + '</div>' +
-        '<p class="p2">' + L('Wörter pro Minute bis Senden, nur gesprochene Antworten, 8 Wochen.', 'Words per minute until send, spoken answers only, 8 weeks.') + '</p>' +
+        '<p class="p2">' + L('Wörter pro Minute bis Senden, nur gesprochene Antworten.', 'Words per minute until send, spoken answers only.') + '</p><span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('seit September, aus der alten App übernommen', 'since September, carried over from the old app') + '</span>' +
         '<div class="card">' + speechCurve() + '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-3)" class="num"><span>' + L('KW 36', 'Wk 36') + '</span><span>' + L('KW 43', 'Wk 43') + '</span></div></div>' +
         '<div class="notice">' + ic('pen', 'sm') + '<span>' + L('Lehrerin am 14.10.: „Spricht flüssiger, Aussprache von <em class="en">th</em> noch unsicher.“', 'Teacher on Oct 14: “More fluent, <em>th</em> still unsure.”') + '</span></div>' +
         '<p class="p2">' + L('Pausen misst die App nicht, weil sie nichts aufnimmt. Die Kurve zeigt nur, was sie wirklich weiß.', 'The app doesn’t measure pauses because it records nothing. The curve only shows what it really knows.') + '</p></div></div>' + tabbar('h14');
@@ -948,10 +976,10 @@ reg('h14', {
     const thin = v === 'thin';
     return '<div class="scroll">' + phead(L('Fortschritt', 'Progress'), gearBtn()) + '<div class="gx stack s24" style="padding-bottom:24px">' +
       '<div class="c1"><p class="s disp">' + (thin ? L('C1-Schätzung: noch zu wenig Belege', 'C1 estimate: not enough evidence yet') : L('C1 voraussichtlich zwischen Oktober 2027 und Januar 2028', 'C1 expected between October 2027 and January 2028')) + '</p>' + c1Band(thin) +
-      '<p class="p2" style="font-size:13px">' + (thin ? L('Die erste Schätzung kommt nach dem Meilenstein in Woche 4.', 'The first estimate comes after the milestone in week 4.') : L('aus 2 Meilensteinen und 5 belegten Kann-Beschreibungen', 'from 2 milestones and 5 proven can-do statements')) + '</p></div>' +
+      '<p class="p2" style="font-size:13px">' + (thin ? L('Bisher 1 Messung (Einstufung). Die erste echte Schätzung kommt nach Woche 4.', 'So far 1 measurement (placement). The first real estimate comes after week 4.') : C1_BASIS()) + '</p></div>' +
       tiles(thin) +
       '<div>' + [['flag', L('Deine Fehler', 'Your errors'), L('3 offen · alle aus deinen Übungen und von der Lehrerin', '3 open · all from your exercises and your teacher'), 'h26-list', 'p-errors'],
-        ['cal', L('Verlauf', 'History'), L('Wochen, Meilensteine, Lehrerin', 'Weeks, milestones, teacher'), 'h34-history', 'p-history'],
+        ['cal', L('Verlauf', 'History'), L('Wochen, Einstufung, Lehrerin', 'Weeks, placement, teacher'), 'h34-history', 'p-history'],
         ['info', L('So funktioniert’s', 'How it works'), L('Stufen, Tagesplan, was zählt', 'Stages, daily plan, what counts'), 'h37-overview', 'p-howto']].map(r =>
         '<button class="row" id="' + r[4] + '" data-go="' + r[3] + '"><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>').join('') + '</div>' +
       '</div></div>' + tabbar('h14');
@@ -962,7 +990,7 @@ reg('h14', {
    H15 Blatt Fragen
    ========================================================= */
 reg('h15', {
-  code: 'H15', name: 'Blatt „Fragen“', kind: 'phone',
+  code: 'H15', name: 'Blatt „Fragen“', kind: 'phone', borrow: ['h2'],
   variants: [['claude', 'Claude'], ['translate', 'Übersetzen'], ['saved', 'In die Wörter gespeichert']],
   render(v) {
     const saved = v === 'saved';
@@ -980,7 +1008,7 @@ reg('h15', {
         '<div class="card stack s8"><p class="p en" style="font-weight:600;font-size:18px">We’ve already reduced the lead time.</p><p class="p2 en">also: We’ve already shortened the lead time. · We’ve already cut the lead time.</p>' +
         '<p class="p2">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div></div>';
     }
-    const foot = v === 'claude' ? '<div style="display:flex;gap:8px"><div class="field" style="min-height:48px;flex:1;padding:12px 14px;color:var(--fg-3)">' + L('Frag Claude …', 'Ask Claude …') + '</div><button class="btn pri" id="ask-send" data-act="noop" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:52px;padding:0">' + ic('send', 'sm') + '</button></div>'
+    const foot = v === 'claude' ? '<div style="display:flex;gap:8px"><div class="field" style="min-height:48px;flex:1;padding:12px 14px;color:var(--fg-3)">' + L('Frag Claude …', 'Ask Claude …') + '</div><button class="btn pri" id="ask-send" data-act="sendq" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:52px;padding:0">' + ic('send', 'sm') + '</button></div>'
       : (saved ? '<div class="tw-saved" role="status" id="tr-saved"><span class="tw-savedic">' + ic('check', 'xs') + '</span><span><b class="en">reduce the lead time</b>' + L(' ist in deinen Wörtern · erkennst du', ' is in your words · you recognize') + '</span><button class="link" id="tr-undo" data-go="h15-translate">' + L('Rückgängig', 'Undo') + '</button></div>' : '') +
         '<div style="display:flex;gap:8px">' + (saved ? '' : '<button class="btn sec" id="tr-add" data-go="h15-saved" style="flex:1">' + L('In die Wörter', 'Add to words') + '</button>') + '<button class="btn pri" id="tr-done" data-go="h4-band" style="flex:1">' + L('Fertig', 'Done') + '</button></div>';
     return under + '<div class="scrim" data-go="h4-band"></div><div class="sheet" id="ask-sheet" role="dialog" aria-label="' + esc(L('Fragen', 'Ask')) + '" style="height:78%"><div class="grab"></div><div class="gx" style="padding-bottom:6px">' + seg + '</div><div class="sb gx">' + body + '</div><div class="sf gx">' + foot + '</div></div>';
@@ -991,7 +1019,7 @@ reg('h15', {
    H16 Ausfälle
    ========================================================= */
 reg('h16', {
-  code: 'H16', name: 'Ausfälle', kind: 'phone',
+  code: 'H16', name: 'Ausfälle', kind: 'phone', borrow: ['h18'],
   variants: [['noai', 'Claude nicht erreichbar'], ['tts', 'Vorlesen geht nicht'], ['empty', 'leere Liste'], ['nosave', 'Speichern geht gerade nicht']],
   render(v) {
     if (v === 'nosave') {
@@ -1005,7 +1033,7 @@ reg('h16', {
         '<div class="stagec" style="gap:16px"><div class="notice">' + ic('offline', 'sm') + '<span>' + L('Claude antwortet gerade nicht. Deine Antwort ist gespeichert. Die Rückmeldung kommt, sobald es wieder geht.', 'Claude isn’t responding right now. Your answer is saved. Feedback will follow as soon as it’s back.') + '</span></div>' +
         '<div class="card stack s8"><div class="lbl">' + L('Deine Antwort', 'Your answer') + '</div><p class="p en" style="color:var(--fg-2)">' + esc(SAY_TEXT) + '</p></div>' +
         '<p class="p2">' + L('Der Block zählt trotzdem. Du kannst einfach weitermachen.', 'The block still counts. You can simply continue.') + '</p></div></div>' +
-        exFoot(btnSec('retry', L('Erneut versuchen', 'Try again'), 'data-act="noop"') + btnPri('cont', L('Weiter', 'Continue'), 'h9-antic'));
+        exFoot(btnSec('retry', L('Erneut versuchen', 'Try again'), 'data-act="retry"') + btnPri('cont', L('Weiter', 'Continue'), 'h9-antic'));
     }
     if (v === 'tts') {
       const blocks = NORMAL();

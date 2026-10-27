@@ -89,7 +89,9 @@ function ic(name, cls) { return '<svg class="ic ' + (cls || '') + '" viewBox="0 
 const STATE_IC = { ok: 'check', typo: 'near', near: 'near', wrong: 'cross', bad: 'cross', idk: 'ring' };
 
 /* ---------- Tagesmodell (erfunden) ---------- */
-const TOPIC = () => L('Nachfassen nach dem Angebot', 'Following up on the quote');
+const TOPIC = () => L('Nachfassen nach dem Angebot', 'Following up on the offer');
+/* Wochengeschichte: Kapitel 1, Woche 2. Freitags-Mission „Rückruf zum Angebot“, Teilziel Preis-Einwand. */
+const MISSION_NAME = () => L('Rückruf zum Angebot', 'Follow-up call on the offer');
 function dayBlocks(kind) {
   const n = [
     { c: 'w', n: L('Gestern-Check', 'Yesterday check'), m: 3 },
@@ -99,6 +101,8 @@ function dayBlocks(kind) {
     { c: 's', n: L('Sag es', 'Say it'), m: 4 },
     { c: 's', n: L('Flüssigkeit', 'Fluency'), m: 5 }
   ];
+  /* Erster Start: Einstufung Sitzung 1 statt Normaltag (25 Min.). */
+  if (kind === 'placement') return [{ c: 'g', n: L('Einstufung · Grammatik', 'Placement · grammar'), m: 12 }, { c: 'w', n: L('Wörter erkennen', 'Recognize words'), m: 8 }, { c: 'w', n: L('Wörter selbst bilden', 'Produce words'), m: 5 }];
   if (kind === 'mission') return n.slice(0, 4).concat([{ c: 's', n: L('Mission', 'Mission'), m: 9, mission: true }]);
   if (kind === 'catchup') return [2, 6, 4, 3, 2, 3].map((m, i) => Object.assign({}, n[i], { m }));
   /* Tagestypen nach Konzept 2.3: Schreibtag (Do), Testtag, Wochenabschluss (Sa). Jeweils 28 Min. */
@@ -131,7 +135,7 @@ function ringSvg(blocks, done, partial, opts) {
     }
     a += span;
   });
-  return '<svg class="ring' + (opts.draw ? ' draw' : '') + '" id="ring" viewBox="0 0 200 200" role="button" tabindex="0" aria-label="' + esc(L('Blöcke von heute zeigen', 'Show today’s blocks')) + '">' + out + '</svg>';
+  return '<svg class="ring' + (opts.draw ? ' draw' : '') + '" id="ring" data-act="ring" viewBox="0 0 200 200" role="button" tabindex="0" aria-label="' + esc(L('Blöcke von heute zeigen', 'Show today’s blocks')) + '">' + out + '</svg>';
 }
 
 function progBar(blocks, cur, frac, opts) {
@@ -263,10 +267,17 @@ function render() {
   const p = parseHash();
   const changed = p.screen !== S.screen || p.v !== S.v;
   if (changed) { S.ui = {}; S.typed = null; S.from = S.screen; }
+  /* Laptop-Rahmen: Handy-Bildschirme, die vom Laptop aus geöffnet werden, bleiben im Laptop (Seitenleiste bleibt). */
+  if (changed && SCREENS[p.screen]) {
+    const fromDef = SCREENS[S.from];
+    if (S.navFromTool) S.deskCtx = null;
+    else if (SCREENS[p.screen].kind === 'phone' && fromDef && fromDef.kind === 'desk') S.deskCtx = fromDef.nav || 'heute';
+  }
+  S.navFromTool = false;
   const kindBefore = curDef() ? curDef().kind : null;
   S.screen = p.screen; S.v = p.v;
   const def = curDef();
-  if (S.toolOpen === null || kindBefore !== def.kind) S.toolOpen = window.innerWidth >= 1100 && def.kind === 'phone';
+  if (S.toolOpen === null || (kindBefore !== def.kind && !S.deskCtx)) S.toolOpen = window.innerWidth >= 1100 && def.kind === 'phone';
   applyRootAttrs();
   const lx = $('#lx');
   const W = window.innerWidth, H = window.innerHeight;
@@ -275,8 +286,9 @@ function render() {
   const toolPad = S.toolOpen && W >= 1100 ? 300 : 0;
   lx.style.paddingLeft = toolPad ? toolPad + 'px' : '';
   if (def.kind === 'phone') {
-    const inner = '<div class="scr" id="scr">' + def.render(v) + '</div>';
-    if (isPhoneWidth()) html = '<div class="view"><div class="ph" id="ph">' + inner + '</div></div>';
+    const inner = '<div class="scr" id="scr">' + phoneOverlays(def.render(v), def) + toastHtml() + '</div>';
+    if (S.deskCtx && !isPhoneWidth() && W - toolPad >= 1024) html = DESK.host(inner, W - toolPad, H);
+    else if (isPhoneWidth()) html = '<div class="view"><div class="ph" id="ph">' + inner + '</div></div>';
     else {
       const sc = Math.min(1, (H - 40) / 844, (W - toolPad - 40) / 390);
       html = '<div class="view centered"><div class="ph framed" id="ph" style="transform:scale(' + sc.toFixed(4) + ')">' + inner + '</div></div>';
@@ -301,16 +313,80 @@ const ACTS = {};
 function act(name, el) {
   if (ACTS[name]) { ACTS[name](el); return; }
   const def = curDef();
-  if (def && def.acts && def.acts[name]) def.acts[name](el);
+  if (def && def.acts && def.acts[name]) { def.acts[name](el); return; }
+  /* borrow: Zustandsbilder, die den Bildschirm eines anderen Schritts zeigen, leihen dessen Aktionen. */
+  const lend = def && def.borrow ? def.borrow.map(id => SCREENS[id] && SCREENS[id].acts && SCREENS[id].acts[name]).find(Boolean) : null;
+  if (lend) { lend(el); return; }
+  if (FALLBACK[name]) FALLBACK[name](el);
 }
-ACTS.noop = () => {};
-ACTS.closesheet = () => { S.ui.sheet = null; S.ui.menu = false; render(); };
+/* Rückfall für den Laptop: „Wozu?“ hebt die passende Erklärung in der Kontextspalte hervor. */
+function ctxFlash() {
+  const c = document.querySelector('.ctx section');
+  if (!c || !c.offsetParent) return false;
+  c.scrollIntoView({ block: 'nearest' });
+  c.classList.remove('ctx-hl'); void c.offsetWidth; c.classList.add('ctx-hl');
+  return true;
+}
+const FALLBACK = {
+  whysheet() {
+    const def = curDef();
+    if (def.kind === 'phone') { S.ui.menu = false; S.ui.sheet = 'why'; render(); return; }
+    if (ctxFlash()) return;
+    const p = document.querySelector('.ctx section p');
+    toast(def.why ? def.why() : p ? esc(p.innerText) : L('Diese Aufgabe gehört zu deinem heutigen Plan.', 'This task is part of today’s plan.'), 'info');
+  },
+  dxmore() { toast(L('Auf dem Laptop stehen „Wozu?“ und Claude rechts in der Spalte.', 'On the laptop, “Why?” and Claude sit in the right column.'), 'info'); }
+};
+/* Knöpfe ohne Ziel in der Vorschau (z. B. Vorlesen): kurzer sichtbarer Impuls statt Stille. */
+ACTS.noop = el => { if (!el || el.disabled) return; el.classList.remove('lx-tap'); void el.offsetWidth; el.classList.add('lx-tap'); };
+ACTS.report = () => toast(L('Gemeldet. Aufgabe und deine Antwort sind zur Prüfung gespeichert.', 'Reported. The task and your answer are saved for review.'), 'info');
+ACTS.retry = () => toast(L('Claude antwortet noch nicht. Deine Antwort bleibt gespeichert.', 'Claude still isn’t responding. Your answer stays saved.'), 'info');
+ACTS.sendq = () => toast(L('In der Vorschau antwortet Claude nicht live. In der App geht deine Frage mit Aufgabe und Antwort an Claude.', 'Claude doesn’t answer live in this preview. In the app, your question goes to Claude with the task and your answer.'), 'info');
+ACTS.addw = el => toast('<b class="en">' + el.getAttribute('data-w') + '</b>' + L(' ist in deinen Wörtern · erkennst du', ' is in your words · you recognize'));
+ACTS.wfchip = el => { Array.from(el.parentElement.children).forEach(c => c.classList.toggle('on', c === el)); };
+ACTS.typeinstead = () => { const f = document.querySelector('.fieldwrap textarea'); const t = $('#mic-tip'); if (t) t.remove(); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } };
+ACTS.wfshard = el => { const on = el.getAttribute('aria-pressed') !== 'true'; el.setAttribute('aria-pressed', on ? 'true' : 'false'); };
+ACTS.closesheet = () => {
+  /* Zustände, die ein Blatt fest zeigen (z. B. „Wort angetippt“): Schließen führt zum Zustand ohne Blatt. */
+  const def = curDef(), to = def && def.closeTo && def.closeTo[curVariant()];
+  if (to && !S.ui.menu) { go(to); return; }
+  S.ui.sheet = null; S.ui.menu = false; render();
+};
+/* Menü „Mehr Möglichkeiten“ und „Wozu?“-Blatt für Handy-Bildschirme, die sie nicht selbst zeichnen. */
+const WHY_FALLBACK = () => ({
+  h5: L('Erst versuchen, dann die Regel: Wenn du zuerst merkst, wo es hakt, bleibt die Erklärung danach besser hängen.', 'Try first, then the rule: once you notice where it gets tricky, the explanation sticks better.'),
+  h7: L('Im Kundengespräch hörst du ständig Zahlen, Termine und Sprachnachrichten. Hier übst du, sie beim ersten Hören zu verstehen.', 'In client calls you constantly hear numbers, dates and voicemails. Here you practice understanding them the first time.'),
+  h8: L('Hier verwendest du die neuen Wörter und die Zeitform selbst. Das ist der Beleg, dass du sie im Gespräch bildest.', 'Here you use the new words and the tense yourself. That is the proof you can produce them in a conversation.'),
+  h9: L('Flüssigkeit heißt: ohne Nachdenken abrufen. Kurze, schnelle Runden machen sichere Wörter schneller, neue lernst du hier nicht.', 'Fluency means recalling without stopping to think. Short, fast rounds make solid words faster; they don’t teach new ones.'),
+  h11: L('Die Mission ist die Probe für das echte Gespräch: Ziel, Wörter und Zeitform der Woche in einem Telefonat.', 'The mission is the rehearsal for the real call: the week’s goal, words and tense in one phone call.'),
+  h30: L('Der Wochenabschluss zeigt, was diese Woche sitzt, und legt den Fokus für die nächste Woche fest.', 'The weekly wrap-up shows what stuck this week and sets the focus for next week.'),
+  h31: L('Der Meilenstein misst alle 4 Wochen dasselbe wie die Einstufung. Nur so bleibt die C1-Schätzung ehrlich.', 'The milestone measures the same things as the placement every 4 weeks. That keeps the C1 estimate honest.'),
+  h32: L('Am Schreibtag schreibst du eine echte Mail aus deiner Woche. Die Rückmeldung zeigt, was du schon selbst bildest.', 'On writing day you write a real email from your week. The feedback shows what you already produce yourself.'),
+  termin: L('Mit deinem echten Termin richtet sich die Mission danach: dieselbe Lage, dieselben Wörter.', 'With your real appointment, the mission follows it: the same situation, the same words.'),
+  woche: L('Die Wochenfrage misst dein Ziel „sicher im Kundengespräch“ direkt, als Kurve im Fortschritt.', 'The weekly question measures your goal “confident in client calls” directly, as a curve in Progress.')
+});
+function phoneOverlays(html, def) {
+  if (S.ui.menu && html.indexOf('class="menu"') < 0 && typeof menuHtml === 'function') html += menuHtml({});
+  if (S.ui.sheet === 'why' && html.indexOf('id="why-sheet"') < 0 && typeof whySheet === 'function') html += whySheet(WHY_FALLBACK()[S.screen] || L('Diese Aufgabe gehört zu deinem heutigen Plan.', 'This task is part of today’s plan.'));
+  return html;
+}
 ACTS.menu = () => { S.ui.menu = !S.ui.menu; render(); };
-ACTS.ring = () => { S.ui.ring = !S.ui.ring; render(); };
+ACTS.ring = () => { if (S.screen === 'h1' && S.v === 'ring') { go('h1-mid'); return; } S.ui.ring = !S.ui.ring; render(); };
+/* Kurze Bestätigung mit „Rückgängig“ (wie H15 gespeichert). S.ui.toast = HTML-Text. */
+function toastHtml() {
+  if (!S.ui.toast) return '';
+  const info = S.ui.toastInfo;
+  return '<div class="lx-toast"><div class="tw-saved" role="status" id="lx-toast"><span class="tw-savedic"' + (info ? ' style="background:var(--surface-3);color:var(--fg-2)"' : '') + '>' + ic(info || 'check', 'xs') + '</span><span>' + S.ui.toast + '</span><button class="link" id="lx-undo" data-act="toastundo">' + (info ? L('OK', 'OK') : L('Rückgängig', 'Undo')) + '</button></div></div>';
+}
+function toast(html, icon) { S.ui.toast = html; S.ui.toastInfo = icon || false; S.ui.menu = false; S.ui.sheet = null; render(); }
+/* Gesperrtes Kapitel: sichtbar gesperrt, kurzer Hinweis statt toter Zeile. */
+ACTS.locked = el => { const n = +el.getAttribute('data-n'); toast(L('Kapitel ' + n + ' ist noch gesperrt. Es öffnet sich, sobald Kapitel ' + (n - 1) + ' abgeschlossen ist.', 'Chapter ' + n + ' is still locked. It opens once chapter ' + (n - 1) + ' is finished.'), 'lock'); };
+ACTS.toastundo = () => { S.ui.toast = null; S.ui.toastInfo = false; render(); };
 
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-go],[data-act],[data-set]');
   if (!t) return;
+  if (t.closest('#tool')) S.navFromTool = true;
   if (t.hasAttribute('data-set')) { const [k, val] = t.getAttribute('data-set').split(':'); setPref(k, val); return; }
   if (t.hasAttribute('data-act')) { act(t.getAttribute('data-act'), t); return; }
   const g = t.getAttribute('data-go');
@@ -322,19 +398,21 @@ document.addEventListener('keydown', e => {
 });
 
 function setPref(k, val) {
-  if (k === 'demo') { S.demo = val; S.typed = null; S.carry = null; S.ui.ownInput = false; }
+  if (k === 'demo') { S.demo = val; S.demoPicked = true; S.typed = null; S.carry = null; S.ui.ownInput = false; }
   else if (k in S) S[k] = val;
   savePrefs();
   render();
 }
 
 /* ---------- Vorführleiste ---------- */
+/* Versionen, die in der Vorschau nur über die Vorführleiste erreichbar sind (kein Weg in der App führt hin). */
+const STATE_ONLY = new Set([]);
 function toolHtml() {
   const def = curDef(), v = curVariant();
   const opt = (k, val, label) => '<button id="t-' + k + '-' + val + '" data-set="' + k + ':' + val + '" class="' + (S[k] === val ? 'on' : '') + '">' + label + '</button>';
   const groups = [['phone', 'Handy'], ['desk', 'Laptop']];
   const sel = '<select id="t-screen" aria-label="Bildschirm">' + groups.map(g => '<optgroup label="' + g[1] + '">' + ORDER.filter(id => SCREENS[id].kind === g[0]).map(id => '<option value="' + id + '"' + (id === S.screen ? ' selected' : '') + '>' + SCREENS[id].code + ' · ' + SCREENS[id].name + '</option>').join('') + '</optgroup>').join('') + '</select>';
-  const vars = def.variants.length > 1 ? '<div><div class="tl">ZUSTAND</div><div class="opts">' + def.variants.map(x => '<button id="t-v-' + x[0] + '" data-go="' + S.screen + '-' + x[0] + '" class="' + (x[0] === v ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div></div>' : '';
+  const vars = def.variants.length > 1 ? '<div><div class="tl">ZUSTAND</div><div class="opts">' + def.variants.map(x => '<button id="t-v-' + x[0] + '" data-go="' + S.screen + '-' + x[0] + '" class="' + (x[0] === v ? 'on' : '') + '">' + x[1] + (STATE_ONLY.has(S.screen + '-' + x[0]) ? ' <i class="t-only">nur Zustand</i>' : '') + '</button>').join('') + '</div></div>' : '';
   const open = !!S.toolOpen;
   return '<aside class="tool' + (open ? '' : ' closed') + '" id="tool" aria-label="Vorführleiste"' + (open ? '' : ' aria-hidden="true"') + '>' +
     '<header><b>Vorführleiste</b><span class="tg">VORSCHAU</span><button id="t-close" data-act="tooltoggle" aria-label="Vorführleiste schließen">' + ic('chevL', 'sm') + '</button></header>' +
@@ -355,7 +433,7 @@ ACTS.tooltoggle = () => { S.toolOpen = !S.toolOpen; render(); };
 ACTS.prev = () => { const i = ORDER.indexOf(S.screen); go(ORDER[(i - 1 + ORDER.length) % ORDER.length]); };
 ACTS.next = () => { const i = ORDER.indexOf(S.screen); go(ORDER[(i + 1) % ORDER.length]); };
 document.addEventListener('change', e => {
-  if (e.target && e.target.id === 't-screen') go(e.target.value);
+  if (e.target && e.target.id === 't-screen') { S.navFromTool = true; go(e.target.value); }
 });
 ACTS.replay = () => {
   if (isPhoneWidth()) S.toolOpen = false;

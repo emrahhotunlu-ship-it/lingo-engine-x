@@ -4,7 +4,7 @@
 /* ---------- Gemeinsamer Zustand, bleibt über Bildschirmwechsel ---------- */
 const TMS = {
   sw: { sounds: true, haptics: true, effects: true, anki: false },
-  voice: 'us1', speed: 'normal', round: '10', auto: false,
+  voice: 'us1', speed: 'normal', round: '10', auto: false, time: '730', rest: 'su', by: 'jan', days: '6',
   mem: [0, 1, 2, 3], undo: null
 };
 
@@ -67,11 +67,43 @@ function tmGrpLearn(p, desk) {
     tmRow({ id: p + 's-new', tall: true, k: L('Neue Wörter am Tag', 'New words per day'), fix: L('fest', 'fixed'), sub: L('Meist 3–4, höchstens 5. Pflicht und Trainer zählen zusammen, in der Woche höchstens 20 (mit Nachholen 25). So bleibt jedes neue Wort stark genug.', 'Usually 3–4, at most 5. Daily plan and trainer count together, at most 20 a week (25 with catch-up). That keeps every new word strong enough.') }),
     tmRow({ id: p + 's-brake', tall: true, k: L('Bremse', 'Brake'), fix: L('automatisch', 'automatic'), sub: L('Sinkt der Abruf am Folgetag unter 70 %, kommen nur noch 2 neue am Tag, bis es wieder sitzt.', 'If next-day recall drops below 70 %, only 2 new words a day come until things hold again.') }),
     tmRow({ id: p + 's-len', tall: true, k: L('Tagesdauer', 'Daily length'), fix: L('fest', 'fixed'), sub: L('Etwa 28 Minuten in 6 Blöcken. Ein fester Rahmen ist leichter durchzuhalten als ein Regler.', 'About 28 minutes in 6 blocks. A fixed frame is easier to keep up than a slider.') }),
-    tmRow({ id: p + 's-time', k: L('Lernzeit und Erinnerung', 'Study time and reminder'), v: L('7:30 · Claude-Tagesauftrag', '7:30 · Claude daily task'), attr: ' data-act="noop"' }),
-    tmRow({ id: p + 's-rest', k: L('Ruhetag', 'Rest day'), v: L('Sonntag', 'Sunday'), attr: ' data-act="noop"' }),
-    tmRow({ id: p + 's-away', k: L('Urlaub', 'Vacation'), sub: L('Vorher ankündigen, dann pausiert die Serie ohne Bruch.', 'Announce it ahead, then your streak pauses without breaking.'), v: L('ankündigen', 'announce'), attr: ' data-act="noop"' }),
-    tmRow({ id: p + 's-goal', k: L('Ziel', 'Goal'), v: L('C1 im Beruf', 'C1 at work'), attr: ' data-act="noop"' })
+    tmRow({ id: p + 's-time', k: L('Lernzeit und Erinnerung', 'Study time and reminder'), v: tmPickVal('time') + L(' · Claude-Tagesauftrag', ' · Claude daily task'), nav: true, attr: ' data-act="tmpick" data-k="time"' }) + (desk ? tmPickInline('time', p) : ''),
+    tmRow({ id: p + 's-rest', k: L('Ruhetag', 'Rest day'), v: tmPickVal('rest'), nav: true, attr: ' data-act="tmpick" data-k="rest"' }) + (desk ? tmPickInline('rest', p) : ''),
+    tmRow({ id: p + 's-away', k: L('Urlaub', 'Vacation'), sub: L('Vorher ankündigen, dann pausiert die Serie ohne Bruch.', 'Announce it ahead, then your streak pauses without breaking.'), v: L('ankündigen', 'announce'), nav: true, attr: ' data-go="h1-vacation"' }),
+    tmRow({ id: p + 's-goal', tall: true, k: L('Ziel', 'Goal'), sub: tmPickVal('goal'), nav: true, attr: ' data-act="tmpick" data-k="goal"' }) + (desk ? tmPickInline('goal', p) : '')
   ], p + 'g-learn');
+}
+/* Auswahl für Lernzeit, Ruhetag und Ziel: am Handy als Sheet, am Laptop direkt unter der Zeile. */
+const TM_PICK = () => ({
+  time: [['630', '6:30'], ['730', '7:30'], ['1230', '12:30'], ['1800', '18:00'], ['2030', '20:30']],
+  rest: [['mo', L('Mo', 'Mon')], ['tu', L('Di', 'Tue')], ['we', L('Mi', 'Wed')], ['th', L('Do', 'Thu')], ['fr', L('Fr', 'Fri')], ['sa', L('Sa', 'Sat')], ['su', L('So', 'Sun')]],
+  by: [['oct', L('Okt. 2027', 'Oct 2027')], ['jan', L('Jan. 2028', 'Jan 2028')], ['apr', L('Apr. 2028', 'Apr 2028')]],
+  days: [['6', '6', L('mit Ruhetag', 'with rest day')], ['7', '7', L('ohne Ruhetag', 'no rest day')]]
+});
+const TM_DAYNAME = () => ({ mo: L('Montag', 'Monday'), tu: L('Dienstag', 'Tuesday'), we: L('Mittwoch', 'Wednesday'), th: L('Donnerstag', 'Thursday'), fr: L('Freitag', 'Friday'), sa: L('Samstag', 'Saturday'), su: L('Sonntag', 'Sunday') });
+function tmPickVal(k) {
+  const P = TM_PICK();
+  if (k === 'time') return P.time.find(x => x[0] === TMS.time)[1];
+  if (k === 'rest') return TMS.days === '7' ? L('keiner', 'none') : TM_DAYNAME()[TMS.rest];
+  return L('C1 im Beruf · bis ', 'C1 at work · by ') + P.by.find(x => x[0] === TMS.by)[1] + ' · ' + L(TMS.days + ' Tage pro Woche', TMS.days + ' days a week');
+}
+function tmPickBody(k, p) {
+  const P = TM_PICK();
+  if (k === 'time') return '<div class="stack s12">' + tmSeg(p + 'pk-time', P.time, TMS.time, 'tmpickset" data-k="time') + '<p class="p2">' + L('Zu dieser Zeit erinnert dich der Claude-Tagesauftrag. Die neue Zeit gilt ab morgen.', 'Your Claude daily task reminds you at this time. The new time applies from tomorrow.') + '</p></div>';
+  if (k === 'rest') return '<div class="stack s12">' + tmSeg(p + 'pk-rest', P.rest, TMS.rest, 'tmpickset" data-k="rest') + '<p class="p2">' + L('Ein Ruhetag pro Woche bricht die Serie nicht. Ein neuer Ruhetag gilt ab der nächsten Woche.', 'One rest day a week doesn’t break your streak. A new rest day applies from next week.') + '</p></div>';
+  return '<div class="stack s16"><p class="p" style="font-weight:600">' + L('C1 im Beruf', 'C1 at work') + '</p>' +
+    '<div class="stack s6"><div class="lbl">' + L('Bis wann', 'By when') + '</div>' + tmSeg(p + 'pk-by', P.by, TMS.by, 'tmpickset" data-k="by') + '</div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Tage pro Woche', 'Days a week') + '</div>' + tmSeg(p + 'pk-days', P.days, TMS.days, 'tmpickset" data-k="days') + '</div>' +
+    '<p class="p2">' + (TMS.by === 'oct' && TMS.days === '6' ? L('Oktober 2027 ist mit 6 Tagen pro Woche knapp. Die Tagesdauer bleibt fest, schneller geht es nur mit 7 Tagen.', 'October 2027 is tight with 6 days a week. The daily length stays fixed; it only goes faster with 7 days.') : L('Die 8 Grammatik-Kapitel dauern etwa 18 bis 22 Wochen, C1 im Beruf realistisch 12 bis 15 Monate. Die Tagesdauer bleibt fest.', 'The 8 grammar chapters take about 18 to 22 weeks; C1 at work realistically takes 12 to 15 months. The daily length stays fixed.')) + '</p></div>';
+}
+const TM_PICK_TITLE = () => ({ time: L('Lernzeit und Erinnerung', 'Study time and reminder'), rest: L('Ruhetag', 'Rest day'), goal: L('Ziel', 'Goal') });
+function tmPickSheet() {
+  const k = S.ui.sheet && S.ui.sheet.indexOf('pk-') === 0 ? S.ui.sheet.slice(3) : null;
+  if (!k) return '';
+  return sheet('tm-pick-sheet', TM_PICK_TITLE()[k], tmPickBody(k, ''), '<button class="btn pri full" id="tm-pick-ok" data-act="closesheet">' + L('Fertig', 'Done') + '</button>', { h: k === 'goal' ? '64%' : '42%' });
+}
+function tmPickInline(k, p) {
+  return S.ui.sheet === 'pk-' + k ? '<div class="tm-pickin" id="' + p + 'pk-' + k + '-box">' + tmPickBody(k, p) + '</div>' : '';
 }
 function tmGrpWords(p) {
   const rounds = [['10', '10', L('Standard', 'default')], ['20', '20'], ['30', '30'], ['all', L('bis leer', 'until empty'), L('max. 60', 'max 60')]];
@@ -79,6 +111,7 @@ function tmGrpWords(p) {
     tmRow({ id: p + 's-art', tall: true, k: L('Abfrageart', 'Practice type'), v: 'Normal', sub: L('Anki, Nur Hören, Nur Sprechen und Tempo wählst du beim Start einer Runde.', 'Anki, listening only, speaking only and speed you pick when you start a round.') }),
     tmRow({ id: p + 's-dir', tall: true, k: L('Richtung', 'Direction'), v: L('Deutsch → Englisch', 'German → English'), sub: L('Nur diese Richtung hebt deine Stufen. Englisch → Deutsch zählt für „erkennst du“.', 'Only this direction raises your stages. English → German counts for “you recognize”.') }),
     '<div class="tm-row tm-tall" id="' + p + 's-round" style="flex-direction:column;align-items:stretch;gap:10px"><span class="tm-k"><span>' + L('Wörter je Runde im Trainer', 'Words per trainer round') + '</span><small>' + L('„Bis leer“ endet spätestens nach 60 Wörtern.', '“Until empty” stops after 60 words at most.') + '</small></span>' + tmSeg(p + 'round', rounds, TMS.round, 'tmround') + '</div>',
+    tmRow({ id: p + 's-autocorr', tall: true, k: L('Autokorrektur', 'Autocorrect'), fix: L('aus', 'off'), sub: L('Autokorrektur ist beim freien Abruf immer aus.', 'Autocorrect is always off for free recall.') }),
     tmRow({ id: p + 's-anki', tall: true, k: L('Anki-Modus', 'Anki mode'), sw: TMS.sw.anki, attr: ' data-act="tmsw" data-k="anki"', sub: L('Aufdecken und selbst einschätzen. Hebt nie eine Stufe.', 'Reveal and rate yourself. Never raises a stage.') })
   ], p + 'g-words');
 }
@@ -95,7 +128,8 @@ function tmGrpContext(p, desk) {
   return tmGroup(L('Mein Kontext', 'My context'), [
     tmRow({ id: p + 's-job', k: L('Mein Beruf', 'My job'), v: L('Vertrieb, Industriegüter', 'Sales, industrial goods'), nav: true, attr: tmTo(desk, 'h24-context', 'context') }),
     tmRow({ id: p + 's-free', k: L('Mein Arbeitskontext', 'My work context'), v: L('3 Sätze', '3 sentences'), nav: true, attr: tmTo(desk, 'h24-context', 'context') }),
-    tmRow({ id: p + 's-mem', k: L('Claude merkt sich', 'Claude remembers'), v: TMS.mem.length + ' ' + L('Einträge', 'items'), nav: true, attr: tmTo(desk, 'h24-context', 'context') })
+    tmRow({ id: p + 's-mem', k: L('Claude merkt sich', 'Claude remembers'), v: TMS.mem.length + ' ' + L('Einträge', 'items'), nav: true, attr: tmTo(desk, 'h24-context', 'context') }),
+    tmRow({ id: p + 's-teacher', k: L('Meine Lehrerin', 'My teacher'), v: L('Korrekturen einfügen', 'Paste corrections'), nav: true, attr: ' data-go="h28-paste"' })
   ], p + 'g-context');
 }
 function tmGrpLook(p) {
@@ -174,7 +208,8 @@ function tmDataBody(p, desk) {
       : '<button class="btn sec" id="' + p + 'dl" data-act="tmdl" style="align-self:flex-start">' + L('Herunterladen', 'Download') + '</button>') + '</div>' +
     '<div class="card stack s8"><div class="h2 disp" style="font-size:18px">' + L('Anki-Export', 'Anki export') + '</div>' +
     '<p class="p2">' + L('491 Wörter als Textdatei für Anki, mit Ursprungssatz. Stufen und Termine bleiben in Lingo.', '491 words as a text file for Anki, with source sentence. Stages and schedules stay in Lingo.') + '</p>' +
-    '<button class="btn sec" id="' + p + 'anki" data-act="noop" style="align-self:flex-start">' + L('Exportieren', 'Export') + '</button></div>' +
+    (S.ui.ankiDl ? '<div class="notice fadein" id="' + p + 'anki-ok">' + ic('check', 'sm') + '<span class="num">lingo-anki-2026-10-29.txt · 491 ' + L('Wörter', 'words') + '</span></div>'
+      : '<button class="btn sec" id="' + p + 'anki" data-act="tmanki" style="align-self:flex-start">' + L('Exportieren', 'Export') + '</button>') + '</div>' +
     tmGroup(L('Mehr', 'More'), [
       tmRow({ id: p + 'd-src', tall: true, k: L('Quellen und Lizenzen', 'Sources and licenses'), sub: L('Schrift Inter (SIL Open Font License). Wörterbuch und Lautschrift mit ihren Quellen, sobald Stufe 1 live ist.', 'Inter typeface (SIL Open Font License). Dictionary and phonetics with their sources once stage 1 is live.') }),
       tmRow({ id: p + 'd-diag', k: L('Diagnose', 'Diagnostics'), v: L('Knopf nach 1,8 s', 'button after 1.8 s'), nav: true, attr: tmTo(desk, 'h24-diagnosis', 'diag') })
@@ -219,7 +254,10 @@ const TM_SET_ACTS = {
   tmmemall() { TMS.undo = TMS.mem.slice(); TMS.mem = []; render(); },
   tmundo() { if (TMS.undo) TMS.mem = TMS.undo; TMS.undo = null; render(); },
   tmdl() { S.ui.dl = true; render(); },
-  tmcopydiag() { tmCopy('.tm-kv'); }
+  tmanki() { S.ui.ankiDl = true; render(); },
+  tmcopydiag() { tmCopy('.tm-kv'); },
+  tmpick(el) { const k = 'pk-' + el.getAttribute('data-k'); S.ui.sheet = S.ui.sheet === k ? null : k; render(); },
+  tmpickset(el) { TMS[el.getAttribute('data-k')] = el.getAttribute('data-v'); render(); }
 };
 reg('h24', {
   code: 'H24', name: 'Einstellungen', kind: 'phone',
@@ -231,7 +269,7 @@ reg('h24', {
     if (v === 'data') return tmSub('h24-overview', 'h14', tmTitle(L('Daten', 'Data')) + tmDataBody(''));
     if (v === 'diagnosis') return tmSub('h24-data', 'h14', tmTitle(L('Diagnose', 'Diagnostics')) + tmDiagBody(''));
     return tmSub('h14-main', 'h14', tmTitle(L('Einstellungen', 'Preferences')) +
-      tmGrpLearn('') + tmGrpWords('') + tmGrpVoice('') + tmGrpContext('') + tmGrpLook('') + tmGrpData(''));
+      tmGrpLearn('') + tmGrpWords('') + tmGrpVoice('') + tmGrpContext('') + tmGrpLook('') + tmGrpData('')) + tmPickSheet();
   },
   acts: TM_SET_ACTS
 });
@@ -269,7 +307,7 @@ function h25(v) {
       '<p class="tm-sub">' + L('Zwei Sitzungen von etwa 25 Minuten an zwei Tagen. Sie zählen als Pflicht. Es gibt kein Bestehen, nur deinen Ausgangspunkt.', 'Two sessions of about 25 minutes on two days. They count as your daily plan. There is no pass or fail, only your starting point.') + '</p></div>' +
       sess([L('Sitzung 1', 'Session 1'), L('heute · 25 Min.', 'today · 25 min')], s1, true) + sess([L('Sitzung 2', 'Session 2'), L('morgen · 25 Min.', 'tomorrow · 25 min')], s2, false) +
       '<p class="p2">' + L('Danach weißt du, wo du stehst und welche Themen du nur noch bestätigen musst.', 'Afterwards you know where you stand and which topics you only need to confirm.') + '</p>',
-      btnSec('tm-pl-later', L('Später', 'Later'), 'data-go="h1-mid"') + btnPri('tm-pl-go', L('Sitzung 1 starten', 'Start session 1'), 'h25-placement-mid'));
+      btnSec('tm-pl-later', L('Später', 'Later'), 'data-go="h1-first"') + btnPri('tm-pl-go', L('Sitzung 1 starten', 'Start session 1'), 'h25-placement-mid'));
   }
   if (v === 'placement-mid') {
     const opts = ['had changed', 'has changed', 'changed', 'was changing'];
@@ -299,7 +337,7 @@ function h25(v) {
       '<div class="card stack s8"><div class="lbl">' + L('Vorschlag', 'Suggestion') + '</div><p class="p">' + L('Beginnen mit Kapitel 1: <span class="en">past simple vs. present perfect</span>, da lagst du bei 40 %.', 'Start with chapter 1: past simple vs. present perfect, where you scored 40 %.') + '</p>' +
       '<p class="p2">' + L('Wahrscheinlich nur bestätigen: Zeitpräpositionen und Fragen bilden. Dafür genügt jeweils ein kurzer Test.', 'Probably just confirm: time prepositions and forming questions. A short test is enough for each.') + '</p></div>' +
       '<p class="p2" style="font-size:13px">' + L('Eine Schätzung, kein Zeugnis. Der erste Meilenstein in Woche 4 zeigt den Trend.', 'An estimate, not a certificate. The first milestone in week 4 shows the trend.') + '</p></div></div>' +
-      exFoot(btnPri('tm-pl-start', L('Zum ersten Tag', 'Go to day one'), 'h1-mid'));
+      exFoot(btnPri('tm-pl-start', L('Zum ersten Tag', 'Go to day one'), 'h1-day1'));
   }
   return tmIntro(0,
     '<div>' + TM_LOGO + '</div><div class="stack s8"><h1 class="tm-title disp">' + L('Lingo ist neu gebaut', 'Lingo has been rebuilt') + '</h1><p class="tm-sub">' + L('Deine Daten sind übernommen. Drei Dinge sind anders:', 'Your data has carried over. Three things are different:') + '</p></div>' +
@@ -492,7 +530,7 @@ function tmTeacherSeg(cur) {
   return '<div class="tm-seg" role="tablist" id="tm-tseg">' + [['paste', L('Einfügen', 'Paste')], ['note', L('Zettel', 'Notes')], ['monthly', L('Monat', 'Monthly')]].map(x =>
     '<button role="tab" id="tm-tseg-' + x[0] + '" data-go="h28-' + x[0] + '" class="' + (cur === x[0] || (cur === 'confirm' && x[0] === 'paste') ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>';
 }
-const TM_NOTE = 'Week 44 · Following up on a quote\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in “When …?” questions (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
+const TM_NOTE = 'Week 44 · Following up on the offer\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in “When …?” questions (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
 function h28(v) {
   const head = tmTitle(L('Lehrerin', 'Teacher'), L('Preply · jeden Mittwoch', 'Preply · every Wednesday')) + tmTeacherSeg(v);
   if (v === 'confirm') {
@@ -549,7 +587,7 @@ reg('h28', {
    ========================================================= */
 const TM_SCENES = () => [
   [1, L('Small Talk auf der Messe', 'Small talk at a trade fair'), 1, 'done'],
-  [2, L('Projektstatus intern', 'Internal project status'), 1, 'now'],
+  [2, L('Nachfassen nach dem Angebot', 'Following up on the offer'), 1, 'now'],
   [3, L('Bedarf erfragen', 'Finding out needs'), 2, ''],
   [4, L('Fachklärung IT und Datenschutz', 'IT and data protection questions'), 2, ''],
   [5, L('Präsentieren und Demo', 'Presenting and demo'), 3, ''],
@@ -557,6 +595,12 @@ const TM_SCENES = () => [
   [7, L('Einwand Preis', 'Price objection'), 4, ''],
   [8, L('Verhandeln: Rabatt gegen Laufzeit', 'Negotiating: discount for contract length'), 4, '']
 ];
+/* Ehrliche Zeitangaben: Kapitel 1 hat feste Wochen, danach nur Spannen wie im Lernweg (H6). */
+function tmSceneWhen(c) {
+  if (c[2] === 1) return L('Kapitel 1 · Woche ' + c[0], 'Chapter 1 · week ' + c[0]);
+  const span = { 2: L('etwa Woche 3–5', 'about weeks 3–5'), 3: L('etwa Woche 5–8', 'about weeks 5–8'), 4: L('etwa Woche 8–11', 'about weeks 8–11') }[c[2]];
+  return L('Kapitel ', 'Chapter ') + c[2] + ' · ' + span;
+}
 const TM_TIME = ['That’s a fair question. Let me think about that for a second.', 'Good point. Can I get back to you on that by Friday?', 'Just to make sure I understand: you mean the total price, not the unit price?'];
 function h29(v) {
   if (v === 'objection') {
@@ -580,10 +624,10 @@ function h29(v) {
     return s + overlays({ whyTask, checked: !!said });
   }
   if (v === 'scene') {
-    const sel = S.ui.sc != null ? S.ui.sc : 6;
+    const sel = S.ui.sc != null ? S.ui.sc : 1;
     const sc = TM_SCENES();
-    return tmSub('h29-list', 'h13', tmTitle(L('Szene wählen', 'Choose a scene'), L('Die Szene der Woche steht in deiner Pflicht. Hier übst du jede andere frei, als Extra.', 'The scene of the week is in your daily plan. Here you practice any other one freely, as extra.')) +
-      '<div class="stack s8">' + sc.map((c, i) => '<button class="choice" id="tm-sc-' + c[0] + '" data-act="tmscene" data-i="' + i + '" style="min-height:62px;' + (sel === i ? 'box-shadow:0 0 0 2px var(--act) inset' : '') + '"><span class="n num">' + c[0] + '</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span>' + c[1] + '</span><span style="font-size:13px;color:var(--fg-2);font-weight:500">' + L('Woche ' + c[0] + ' · Kapitel ' + c[2], 'Week ' + c[0] + ' · chapter ' + c[2]) + '</span></span>' +
+    return tmSub('h29-list', 'h13', tmTitle(L('Szene wählen', 'Choose a scene'), L('Die Szene der Woche kommt in deiner Pflicht. Hier übst du sie oder jede andere frei, als Extra.', 'The scene of the week comes up in your daily plan. Here you can practice it or any other one freely, as extra.')) +
+      '<div class="stack s8">' + sc.map((c, i) => '<button class="choice" id="tm-sc-' + c[0] + '" data-act="tmscene" data-i="' + i + '" style="min-height:62px;' + (sel === i ? 'box-shadow:0 0 0 2px var(--act) inset' : '') + '"><span class="n num">' + c[0] + '</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span>' + c[1] + '</span><span style="font-size:13px;color:var(--fg-2);font-weight:500">' + tmSceneWhen(c) + '</span></span>' +
         (c[3] === 'done' ? '<span class="tm-state fixed">' + L('geübt', 'practiced') + '</span>' : c[3] === 'now' ? '<span class="tm-state">' + L('diese Woche', 'this week') + '</span>' : '') + '</button>').join('') +
       '<p class="p2" style="font-size:13px;text-align:center;padding-top:4px">' + L('8 weitere Szenen ab Kapitel 5', '8 more scenes from chapter 5') + '</p></div>' +
       '<button class="btn pri full" id="tm-sc-go" data-go="h11-prep">' + L('Szene starten', 'Start scene') + ': ' + sc[sel][1] + '</button>', askBtn());
@@ -595,7 +639,7 @@ function h29(v) {
     row('tm-sp-obj', 'speak', L('Einwand-Training', 'Objection training'), L('5 Stufen · du bist bei Stufe 2', '5 levels · you are at level 2'), 'data-go="h29-objection"') +
     row('tm-sp-time', 'clock', L('Zeit gewinnen', 'Buying time'), L('Sätze, die dir ruhig Denkzeit geben', 'Phrases that calmly give you time to think'), 'data-act="tmtime" aria-expanded="' + open + '"', open ? 'chevU' : 'chevD') +
     (open ? '<div class="ex-list en springopen" style="padding:0 0 8px 50px">' + TM_TIME.map(t => '<div><b>' + t + '</b></div>').join('') + '</div>' : '') +
-    row('tm-sp-hot', 'spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage, 5 Sekunden Denkzeit', 'one unexpected client question, 5 seconds to think'), 'data-act="noop"') + '</div></section>' +
+    row('tm-sp-hot', 'spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage, 5 Sekunden Denkzeit', 'one unexpected client question, 5 seconds to think'), 'data-go="h9-antic"') + '</div></section>' +
     '<section class="stack s6"><div class="h2 disp" style="font-size:19px">' + L('Szenen', 'Scenes') + '</div><div>' +
     row('tm-sp-scene', 'list', L('Szene frei wählen', 'Choose any scene'), L('16 Szenen entlang des Verkaufs', '16 scenes along the sales process'), 'data-go="h29-scene"') + '</div></section>' +
     '<section class="stack s6"><div class="h2 disp" style="font-size:19px">' + L('Für deinen Termin', 'For your meeting') + '</div><div>' +
@@ -679,14 +723,14 @@ reg('h30', {
    ========================================================= */
 function tmCurve() {
   const Y = { c1: 16, edge: 50, b2: 84 };
-  const pts = [[14, 80], [86, 66]];
+  const pts = [[14, 80], [50, 74], [86, 66]];
   return '<div class="tm-curve"><div style="position:relative"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
     '<rect x="0" y="0" width="100" height="33" fill="var(--fg)" opacity=".05"/><rect x="0" y="67" width="100" height="33" fill="var(--fg)" opacity=".05"/>' +
     [33, 67].map(y => '<line x1="0" x2="100" y1="' + y + '" y2="' + y + '" stroke="var(--line-2)" stroke-dasharray="2 2" vector-effect="non-scaling-stroke"/>').join('') +
-    '<line x1="' + pts[0][0] + '" y1="' + pts[0][1] + '" x2="' + pts[1][0] + '" y2="' + pts[1][1] + '" stroke="var(--fg)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round"/>' +
-    '</svg>' + pts.map((p, i) => '<i style="position:absolute;left:' + p[0] + '%;top:' + p[1] + '%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:' + (i ? 'var(--act)' : 'var(--fg)') + ';box-shadow:0 0 0 3px var(--surface)"></i>').join('') + '</div>' +
+    '<polyline points="' + pts.map(p => p.join(',')).join(' ') + '" fill="none" stroke="var(--fg)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '</svg>' + pts.map((p, i) => '<i style="position:absolute;left:' + p[0] + '%;top:' + p[1] + '%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:' + (i === pts.length - 1 ? 'var(--act)' : 'var(--fg)') + ';box-shadow:0 0 0 3px var(--surface)"></i>').join('') + '</div>' +
     '<span class="tm-yl" style="top:' + Y.c1 + '%">C1</span><span class="tm-yl" style="top:' + Y.edge + '%">' + L('C1-Grenze', 'C1 edge') + '</span><span class="tm-yl" style="top:' + Y.b2 + '%">' + L('B2 sicher', 'B2 solid') + '</span>' +
-    '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-3);padding:6px 4px 0 0;margin-left:8%"><span>' + L('Einstufung · Woche 0', 'Placement · week 0') + '</span><span>' + L('Woche 4', 'Week 4') + '</span></div></div>';
+    '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-3);padding:6px 4px 0 0;margin-left:8%"><span>' + L('Einstufung', 'Placement') + '</span><span>' + L('Woche 4', 'Week 4') + '</span><span>' + L('Woche 8', 'Week 8') + '</span></div></div>';
 }
 function h31(v) {
   const blocks = dayBlocks('test');
@@ -700,13 +744,14 @@ function h31(v) {
       exFoot(btnPri('tm-ch-next', L('Weiter', 'Continue'), 'h6-path'));
   }
   if (v === 'milestone') {
-    const kv = [[L('Wörter, die du selbst bildest', 'Words you produce'), '38 → 64'], [L('Hören bei 1,0×', 'Listening at 1.0×'), '64 % → 74 %'], [L('Sprechen', 'Speaking'), L('68 → 95 Wörter/Min.', '68 → 95 wpm')], [L('Kann-Beschreibungen', 'Can-do statements'), L('2 → 5 von 12', '2 → 5 of 12')]];
+    const kv = [[L('Wörter, die du selbst bildest', 'Words you produce'), '38 → 64'], [L('Hören bei 1,0×', 'Listening at 1.0×'), '64 % → 74 %'], [L('Sprechen', 'Speaking'), L('68 → 95 Wörter/Min.', '68 → 95 wpm')], [L('Kann-Beschreibungen', 'Can-do statements'), L('2 → 3 von 12', '2 → 3 of 12')]];
     return tmHead('h14-main', '', 'tm-ms-back') + '<div class="scroll gx" style="padding-bottom:16px"><div class="stack s24 springopen">' +
-      '<div class="stack s8"><div class="lbl">' + L('Meilenstein A · Woche 4', 'Milestone A · week 4') + '</div><h1 class="tm-title disp">' + L('Dein Trend nach 4 Wochen', 'Your trend after 4 weeks') + '</h1></div>' +
+      '<div class="notice" id="tm-ms-example">' + ic('info', 'sm') + '<span>' + L('Beispiel: so sieht ein Meilenstein aus (frühestens Woche 8).', 'Example: this is what a milestone looks like (week 8 at the earliest).') + '</span></div>' +
+      '<div class="stack s8"><div class="lbl">' + L('Meilenstein · Woche 8', 'Milestone · week 8') + '</div><h1 class="tm-title disp">' + L('Dein Trend nach 8 Wochen', 'Your trend after 8 weeks') + '</h1></div>' +
       '<div class="card stack s8"><div style="display:flex;align-items:center;justify-content:space-between"><span class="lbl">' + L('Gesamtbild', 'Overall') + '</span><span class="chip" style="min-height:24px">' + L('Trend, nicht geeicht', 'Trend, not calibrated') + '</span></div>' + tmCurve() + '</div>' +
       '<div class="card" style="padding:4px 16px"><div class="tm-kv">' + kv.map(r => '<span class="tm-kl">' + r[0] + '</span><span class="tm-kr num">' + r[1] + '</span>').join('') + '</div></div>' +
       '<p class="p" style="font-weight:550">' + L('C1 voraussichtlich zwischen Oktober 2027 und Januar 2028.', 'C1 expected between October 2027 and January 2028.') + '</p>' +
-      '<p class="p2" style="font-size:13px">' + L('Eine Schätzung aus zwei Messungen, kein Zeugnis. Mit jedem Meilenstein wird sie genauer.', 'An estimate from two measurements, not a certificate. It gets more precise with every milestone.') + '</p></div></div>' +
+      '<p class="p2" style="font-size:13px">' + L('Eine Schätzung aus drei Messungen (Einstufung, Woche 4, Woche 8), kein Zeugnis. Mit jedem Meilenstein wird sie genauer.', 'An estimate from three measurements (placement, week 4, week 8), not a certificate. It gets more precise with every milestone.') + '</p></div></div>' +
       exFoot(btnPri('tm-ms-next', L('Zum Fortschritt', 'Go to progress'), 'h14-main'));
   }
   const top = exTop(blocks, 2, 1);

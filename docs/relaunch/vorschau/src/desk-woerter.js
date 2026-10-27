@@ -77,8 +77,9 @@ reg('l11', {
 
 /* ---------- L12 Trainer-Aufgabe ---------- */
 function l12Round(v) {
-  const done = v === 'checked-early' || v === 'contrast'
-    ? [['shortlist', 'ok'], ['deadline', 'near'], ['lead time', v === 'contrast' ? 'bad' : 'run'], ['upfront', ''], ['invoice', ''], ['reach out', ''], ['in stock', ''], ['ship', ''], ['on hold', '']]
+  const done = v === 'checked-early'
+    ? [['shortlist', 'ok'], ['surcharge', 'near'], ['lead time', 'run'], ['warranty', ''], ['on hold', ''], ['reach out', ''], ['in stock', ''], ['ship', ''], ['minimum order', '']]
+    : v === 'contrast' ? [['budget approval', 'near'], ['revise a quote', 'ok'], ['follow up', 'ok'], ['sign off on', 'ok'], ['procurement', 'bad'], ['reduce', ''], ['discount', ''], ['supplier', ''], ['call back', ''], ['deliver on time', '']]
     : [['budget approval', 'near'], ['revise a quote', 'ok'], ['follow up', 'ok'], ['sign off on', 'run'], ['procurement', ''], ['reduce', ''], ['discount', ''], ['supplier', ''], ['call back', ''], ['deliver on time', '']];
   const mk = { ok: ['ok', 'check'], near: ['near', 'near'], bad: ['bad', 'cross'] };
   return '<div class="card" style="padding:.3em 1em">' + done.map(w => {
@@ -107,36 +108,36 @@ function l12Stage(v) {
     s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, you[st], t.rightShow) + '<p class="whyl" style="margin:.2em 0 0">' + why[st] + '</p>' + twLageLine(t, st) + '</div>';
   }
   s += '</div>';
-  const next = (st === 'wrong' || st === 'idk') && v === 'checked-early' ? 'l12-contrast' : (v === 'checked-early' ? 'l14' : 'l12-task');
+  const next = v === 'checked-early' ? 'l14' : 'l12-task';
   s += dKeys(checked ? '<button class="btn pri" id="d-next" data-go="' + next + '">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'
     : '<button class="btn sec" id="d-tip" data-act="tip">' + L('Tipp', 'Hint') + kb('T') + '</button><button class="btn sec" id="d-idk" data-act="idk">' + L('Weiß ich nicht', 'Don’t know') + kb('W') + '</button><button class="btn pri" id="d-check" data-act="check">' + L('Prüfen', 'Check') + kb('⏎') + '</button>');
   return s;
 }
 function l12Contrast() {
+  const C = TW_CTR();
   const pick = S.ui.pick;
   const checked = !!pick;
-  const st = pick === 'lead time' ? 'ok' : 'wrong';
-  let s = twDTop(4, 9, { done: checked }) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' + blockLine('w', L('Wörter üben · Kontrast', 'Practice words · contrast')) +
+  const st = pick === C.right ? 'ok' : 'wrong';
+  let s = twDTop(6, 10, { done: checked }) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' + blockLine('w', L('Wörter üben · Kontrast', 'Practice words · contrast')) +
     instr(L('Was passt in die Lücke?', 'What fits the gap?'), 'd-why') +
-    '<div class="stack s16" style="padding:2.2em 0 1.5em"><div class="card tw-ctr"><div class="contrast en"><span class="k">A</span><span><b>delivery</b> <span class="tw-de">' + L('die Lieferung selbst', 'the delivery itself') + '</span></span><span class="k">B</span><span><b>lead time</b> <span class="tw-de">' + L('die Dauer bis zur Lieferung', 'the time until delivery') + '</span></span></div></div>' +
-    '<div class="sent en">' + words('Our standard') + ' ' + gapHtml(checked ? pick : '', { st: checked ? TW_GAPST[st] : '' }) + ' ' + words('is ten weeks.') + '</div>' +
-    (checked ? '' : '<div class="stack s8" style="max-width:24em">' + [['delivery', 1], ['lead time', 2]].map(c => '<button class="choice en" id="d-c' + c[1] + '" data-act="pick" data-v="' + c[0] + '"><span class="n">' + c[1] + '</span>' + c[0] + '</button>').join('') + '</div>') + '</div>';
-  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, 'lead time') + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? L('Es geht um die Dauer, also <em class="en">lead time</em>.', 'It is about duration, so <em>lead time</em>.') : L('Zehn Wochen sind eine Dauer: <em class="en">lead time</em>.', 'Ten weeks is a duration: <em>lead time</em>.')) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + TW_CTR_LAGE() + '</span></p></div>';
-  s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l14">' + L('Zum Ergebnis', 'See result') + kb('⏎') + '</button>' : '<span class="p2" style="font-size:.9em">' + L('Taste 1 oder 2', 'Press 1 or 2') + '</span>');
+    '<div class="stack s16" style="padding:2.2em 0 1.5em">' + twCtrCard(C).replace('card stack s8 tw-ctr', 'card tw-ctr') +
+    '<div class="sent en">' + words(C.before) + ' ' + gapHtml(checked ? pick : '', { st: checked ? TW_GAPST[st] : '' }) + ' ' + words(C.after) + '</div>' +
+    (checked ? '' : '<div class="stack s8" style="max-width:24em">' + [[C.a[0], 1], [C.b[0], 2]].map(c => '<button class="choice en" id="d-c' + c[1] + '" data-act="pick" data-v="' + c[0] + '"><span class="n">' + c[1] + '</span>' + c[0] + '</button>').join('') + '</div>') + '</div>';
+  if (checked) s += '<div class="dverdict ' + stCls(st) + '" role="status">' + verdictRow(st) + cmpLine(st, pick, C.right) + '<p class="whyl" style="margin:.2em 0 0">' + (st === 'ok' ? C.ok : C.wrong) + '</p><p class="tw-lage">' + ic('clock', 'xs') + '<span>' + TW_CTR_LAGE() + '</span></p></div>';
+  s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l12-task">' + L('Weiter', 'Continue') + kb('⏎') + '</button>' : '<span class="p2" style="font-size:.9em">' + L('Taste 1 oder 2', 'Press 1 or 2') + '</span>');
   return s;
 }
 function l12Ctx(v) {
-  const t = v === 'contrast' ? TW_T().gap : TW_T()[v === 'checked-early' ? 'gap' : 'recognize'];
+  const t = v === 'contrast' ? TW_T().listen : TW_T()[v === 'checked-early' ? 'gap' : 'recognize'];
   const checked = v === 'checked' || v === 'checked-early' || !!S.ui.checked || (v === 'contrast' && !!S.ui.pick);
-  const st = checked ? (v === 'contrast' ? (S.ui.pick === 'lead time' ? 'ok' : 'wrong') : twSt(t)) : null;
   const m = t.more || {};
   const lage = v === 'contrast'
-    ? L('<b>Kontrast nach Widerspruch.</b> Das feste Wort <em class="en">delivery</em> (S5) ging daneben. Die Auswahl ist Übung, keine Wirkung auf die Stufe.', '<b>Contrast after a contradiction.</b> The solid word <em>delivery</em> (S5) went wrong. The choice is practice, no effect on the stage.')
+    ? L('<b>Kontrast nach Widerspruch.</b> ', '<b>Contrast after a contradiction.</b> ') + TW_CTR_LAGE()
     : t.lage === 'early'
     ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
     : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');
   /* Merke und Mehr wiederholen die Warum-Zeile der Bühne nicht: Merke = Falle oder Wortpartner, Mehr = Bedeutung und Beispiel. */
-  const merkeTxt = v === 'contrast' ? L('<em class="en">delivery</em> ist die Lieferung, <em class="en">lead time</em> die Dauer bis dahin.', '<em>delivery</em> is the delivery, <em>lead time</em> the time until it.') : (m.trap || m.partners);
+  const merkeTxt = v === 'contrast' ? TW_CTR().merke : (m.trap || m.partners);
   const merke = checked
     ? '<p class="p2" style="margin:0">' + merkeTxt + '</p>'
     : '<p class="p2" style="margin:0;color:var(--fg-3)">' + L('Erscheint nach dem Prüfen.', 'Appears after you check.') + '</p>';
@@ -164,8 +165,8 @@ reg('l12', {
     if (e.key === 'Escape') { if (inField()) document.activeElement.blur(); else go('l14'); return; }
     if (inField()) return;
     if (v === 'contrast') {
-      if (!S.ui.pick && (e.key === '1' || e.key === '2')) { S.ui.pick = e.key === '1' ? 'delivery' : 'lead time'; render(); }
-      else if (S.ui.pick && e.key === 'Enter') { e.preventDefault(); go('l14'); }
+      if (!S.ui.pick && (e.key === '1' || e.key === '2')) { S.ui.pick = e.key === '1' ? 'procurement' : 'production'; render(); }
+      else if (S.ui.pick && e.key === 'Enter') { e.preventDefault(); go('l12-task'); }
       return;
     }
     const checked = v !== 'task' || S.ui.checked;
@@ -178,8 +179,7 @@ reg('l12', {
     check() { const t = TW_T().recognize; const inp = $('#gap-in'); if (inp && inp.value && inp.value !== t.you[S.demo]) { S.ui.ownInput = true; S.typed = inp.value; } S.ui.checked = true; render(); },
     idk() { S.ui.ownInput = false; S.demo = 'idk'; S.ui.checked = true; render(); },
     tip() { const h = $('#d-hint'); const t = TW_T()[curVariant() === 'checked-early' ? 'gap' : 'recognize']; if (h) h.innerHTML = t.tip; },
-    pick(el) { S.ui.pick = el.getAttribute('data-v'); render(); },
-    whysheet() {}
+    pick(el) { S.ui.pick = el.getAttribute('data-v'); render(); }
   }
 });
 

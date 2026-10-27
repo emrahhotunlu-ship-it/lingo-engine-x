@@ -510,7 +510,7 @@ Ein **Kapitel** umfasst etwa 2 Wochen (Planwert; ehrlich eher 2–3 Wochen, sieh
 | Wo. | Szene | Kapitel | Wo. | Szene | Kapitel |
 |---|---|---|---|---|---|
 | 1 | Small Talk Messe | 1 | 9 | Einwand Risiko/Regulierung (ViDA) | 5 |
-| 2 | Projektstatus intern | 1 | 10 | Forecast intern | 5 |
+| 2 | Nachfassen nach dem Angebot (Mission: Rückruf zum Angebot, Teilziel Preis-Einwand) | 1 | 10 | Forecast und Projektstatus intern | 5 |
 | 3 | Bedarf erfragen | 2 | 11 | Abschluss/Verlängerung/Upsell | 6 |
 | 4 | Fachklärung IT/DSGVO | 2 | 12 | Partner/Reseller | 6 |
 | 5 | Präsentieren/Demo | 3 | 13 | Eskalation/Beschwerde | 7 |
@@ -768,16 +768,16 @@ Grundlage: `vorschau/luecken.md` (87 heutige Funktionen) und `vokabeltrainer.md`
 |---|---|---|
 | Einstellungen (69–78): Sprache, Modus, Farbe, Stimme mit Probe, Klänge, Haptik, Effekte, Abfrageart, Richtung, neue Wörter pro Tag, Tagesziel, Lernzeit und Erinnerung, Eingabe, Mein Beruf, Arbeitskontext, „Claude merkt sich“ | Zahnrad → sechs Gruppen: Lernen, Wörter, Stimme und Ton, Mein Kontext, Aussehen, Daten. Neu dabei: Ruhetag, Urlaub, Ziel ändern (Kai E1, E3, E7). | H24, L15 |
 | Datensicherung, Anki-Export, Quellen, Diagnose (36, 80, 82) | Einstellungen → Daten. Die Sicherung lädt Emrah selbst als Datei (Auftrag 6.14). | H24 `data`, `diagnosis` |
-| Freier Vokabeltrainer, Anki-Modus, Stapel (Nr. 22–27, 34) | eigener Trainer: ein Plan, eine Tabelle (`vokabeltrainer.md`) | H17–H22, L11–L14 |
+| Freier Vokabeltrainer, Anki-Modus, Stapel (Nr. 19, 26, 34) | eigener Trainer: ein Plan, eine Tabelle (`vokabeltrainer.md`) | H17–H22, L11–L14 |
 | Wörter hinzufügen, aus Text, bearbeiten, ausblenden, „Kenne ich sicher“, „Morgen wieder“, „Von vorn“, löschen, Rückgängig (22–27, 61) | Reiter Wörter: Suche ohne Treffer → Hinzufügen; Wort-Detail → Verwalten | H21, H23, L5 |
 | Neue Wörter auf Abruf | im Trainer nach der Pflicht, mit Tagesdeckel (siehe Kap. 19, Frage 15) | H17 `new-words`, H21 `quota-full` |
-| Hörschleife, Eselsbrücke, Satzübersetzung (32, 33) | Wort-Detail „Anhören“; Mehr-Blatt in der Aufgabe | H12 `detail`, H2 `more` |
+| Hörschleife, Eselsbrücke, Satzübersetzung (32, 33) | Wort-Detail „Anhören in Schleife“; Trainer-Art „Anhören (ohne Tippen)“; Mehr-Blatt in der Aufgabe | H12 `detail`, H17 `hear`, H2 `more` |
 | Synonym-Prüfung (33) | „War das auch richtig?“ (bleibt, Kap. 15 Nr. 2) | H2 |
 | Grammatik-Thema frei üben, Nachschlagen, Struktur-Film, Deutsch-Falle (39, 40) | Reiter Grammatik → Thema → „Üben (Extra)“ / Nachschlagen | H27, L16 |
-| Sechs Trainings, C1-Formate, Tempo-Runde, Wort-Werkstatt (43, 44, 48) | „Mehr üben“, erreichbar aus „Wenn du mehr willst“ → „Alles anzeigen“ | H33, H22 |
+| Sechs Trainings, C1-Formate, Tempo-Runde, Wort-Werkstatt (31, 43, 44, 48) | „Mehr üben“, erreichbar aus „Wenn du mehr willst“ → „Alles anzeigen“ | H33, H22 |
 | Einwand-Training, Zeit gewinnen, Hot Seat, freie Szenen (48) | Praxis → Sprechen → „Alle“ | H29 |
-| Lehrer-Korrekturen einfügen, Preply-Zettel, Monatsformular (41, 58) | eigener Ort „Lehrer“ | H28 |
-| Fehler-Übersicht (57) | „Deine Fehler“ aus Grammatik und Fortschritt | H26, L16 |
+| Lehrer-Korrekturen einfügen, Preply-Zettel, Monatsformular (57, 58) | eigener Ort „Lehrer“ | H28 |
+| Fehler-Übersicht (41) | „Deine Fehler“ aus Grammatik und Fortschritt | H26, L16 |
 | Verlauf, Fortschritt-Details (65) | Fortschritt → Detail und Verlauf | H34 |
 | Fokus für die nächste Woche (13) | Wochenabschluss → Fokus wählen | H30 |
 | Freiwillige Tests: C1-Check, Wortschatztest (68) | Test-Ergebnis-Bild; Start über „Mehr üben“ | H31, H33 |

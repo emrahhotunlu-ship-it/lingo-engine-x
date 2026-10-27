@@ -156,3 +156,33 @@
 .ts-stg b { font-size: 16px; font-weight: 650; }
 .ts-next { display: flex; gap: 6px; align-items: flex-start; margin: 0; font-size: 13px; line-height: 18px; color: var(--fg-3); }
 .ts-next .ic { margin-top: 2px; flex: none; }
+
+/* ---------- Korrekturrunde K ---------- */
+/* Laptop-Rahmen für Handy-Bildschirme: Seitenleiste bleibt, Inhalt mittig in Handy-Breite, keine Handy-Reiterleiste. */
+.dhostv { display: flex; background: var(--bg); }
+.dhostv > .desk { height: 100%; flex: none; }
+.dhostmain { flex: 1; min-width: 0; display: flex; justify-content: center; background: var(--bg-deep); }
+.dhostmain > .ph.dph { width: 390px; height: 100%; flex: none; box-shadow: 0 0 0 1px var(--line); }
+.dhostmain > .ph.dph .tabbar { display: none; }
+/* Kurze Bestätigung mit Rückgängig */
+.lx-toast { position: absolute; left: 16px; right: 16px; bottom: 92px; z-index: 40; }
+.lx-toast .tw-saved { margin: 0; box-shadow: var(--shadow); background: var(--surface); }
+.tool .t-only { font-style: normal; font-size: 10px; opacity: .7; margin-left: 4px; white-space: nowrap; }
+/* Laptop Heute: ruhige Mitte statt Wochenpunkte */
+.l1mid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1em; padding-top: 1.6em; max-width: 45em; }
+.l1mid .row { border: 0; min-height: 3em; padding: 0; }
+.desk > .lx-toast { left: auto; right: 2em; bottom: 2em; width: 26em; font-size: 0.95em; }
+.ts-gi .ts-c1tag { font-style: normal; align-self: flex-start; font-size: 11px; font-weight: 650; letter-spacing: .02em; padding: 2px 6px; border-radius: 6px; background: var(--act-soft); color: var(--act-text); margin-bottom: 2px; }
+.tm-pickin { padding: 12px 16px 16px; border-top: 1px solid var(--line); }
+/* Laptop: „Wozu?“ hebt die Erklärung in der Kontextspalte kurz hervor. */
+.ctx section.ctx-hl { animation: ctxhl 1600ms var(--ease-soft); border-radius: 12px; }
+@keyframes ctxhl { 0%, 45% { background: var(--act-soft); box-shadow: 0 0 0 0.6em var(--act-soft); } 100% { background: transparent; box-shadow: 0 0 0 0.6em transparent; } }
+/* Knöpfe ohne Ziel in der Vorschau (Vorlesen u. a.): kurzer Impuls. */
+.lx-tap { animation: lxtap 900ms var(--ease-soft); }
+@keyframes lxtap { 0% { box-shadow: 0 0 0 0 var(--act-soft); } 30% { box-shadow: 0 0 0 6px var(--act-soft); } 100% { box-shadow: 0 0 0 0 transparent; } }
+/* Schalter in Zeilen mit aria-pressed (Filter „Schwierig“). */
+.row[aria-pressed="true"] .tw-switch { background: var(--act); }
+.row[aria-pressed="true"] .tw-switch i { left: auto; right: 0.2em; background: var(--act-fg); }
+.d-moreb .lbl { margin: 0; }
+/* Laptop: Symbolknöpfe am rechten Rand der Spalten ohne negativen Rand, sonst scrollt die Spalte seitlich. */
+.ctx .iconbtn, .desk .dscroll .iconbtn { margin-right: 0; }
