@@ -492,3 +492,7 @@ Lehre: Für Aufgabenfragen mit Gestaltungsspielraum zuerst Emrah mit Vorschau fr
 
 ## 26.10.2026 – Masterplan 9,5 gestartet
 Vier Opus-Prüfungen (Technik, Lernmethoden, Inhalt, UI/UX), Plan `masterplan-9-5.md`, Emrah: „Beides ja, über Nacht anfangen“. Start E1 (Qualitätstor + Testorganisation).
+
+## 27.10.2026 – Test-Link 8 (Masterplan E1 + U1–U3)
+- `AXHkh6…` Version 73 `1793078154-eb7e` (Rückweg v72 `1793029176-aeb7`). Live weiter v85 `1793030281-a776`.
+- Inhalt: Qualitätstor (Sperre statt Warnung, `src/domain/quality`), Lehrer-geprüfte Inhaltsfixes + 104 Erklärungen, ehrliche Zahlen (`reviewFigures`), falsch nie grün, Start-Bild + sprungfreies Laden, Ergebnis-Karte (3 Teile), Abschlussmomente, Flug-Fix (`engine/shared.tsx`), `verify:fast`. Prüfung: Gesamtlauf (6 von 8 E2E-Gruppen grün, 2 rot → behoben, gezielt `verify:fast` grün). Offen: Start-Knopf ≤2 s bei 4×-Bremse nicht erreicht (~4–5,5 s), sentenceClinic:275 nicht nachstellbar, c1Check-Kontrast-Wackler, escalate-Satz (colloc-44), Bundle 5,96 von 6 MiB.
