@@ -19,6 +19,8 @@ const WHY_GRAM = () => L('Ein vergangener Zeitpunkt wie yesterday oder last week
   'A past time expression like yesterday or last week needs the past simple. The present perfect doesn’t fit here.');
 const GRAM = {
   right: 'sent',
+  /* Lehrer M1: andere Zeitform oder falsche Verbform ist ein Fehler, kein Tippfehler. */
+  wrongForms: ['send', 'sends', 'sended', 'have sent', 'has sent'],
   you: { ok: 'sent', typo: 'snet', wrong: 'have sent', idk: '' },
   get why() { const w = WHY_GRAM(); return { ok: w, typo: w, wrong: w, idk: w }; }
 };
@@ -36,7 +38,7 @@ function wordData(kind) {
   return d;
 }
 function curSt(data) {
-  if (S.typed != null && S.ui.ownInput) return judge(S.typed, data.right, data.alts);
+  if (S.typed != null && S.ui.ownInput) return judge(S.typed, data.right, data.alts, data.wrongForms);
   return S.demo;
 }
 function words(str) {
@@ -130,7 +132,7 @@ function h1(v) {
     : '<div class="ringc"><b class="disp num">' + rem + '</b><span>' + (done || partial ? L('Min. übrig', 'min left') : L('Min. heute', 'min today')) + '</span></div>';
   let sub = '';
   if (kind === 'catchup') sub = '<div class="sub">' + L('noch 3 Tage Aufholen, danach normal', '3 more catch-up days, then back to normal') + '</div>';
-  if (v === 'mission') sub = '<div class="sub">' + L('Heute mit Mission: <em>Rückruf zum Angebot</em>', 'Today with mission: <em>follow-up call on the offer</em>') + '</div>';
+  if (v === 'mission') sub = '<div class="sub">' + L('Heute mit Mission: <em>Rückruf zum Angebot</em>', 'Today with mission: <em>follow-up call on the quote</em>') + '</div>';
   if (v === 'termin') sub = '<div class="sub">' + L('Heute mit Mission: <em>dein Call mit dem Einkauf</em>', 'Today with mission: <em>your call with purchasing</em>') + '</div>';
   if (v === 'done') sub = '<div class="sub">' + L('Pflicht geschafft. Morgen geht es mit Schritt 4 von 7 weiter.', 'Daily plan done. Tomorrow continues with step 4 of 7.') + '</div>';
   if (v === 'short') sub = '<div class="sub">' + L('Kurzer Tag: 14 statt 28 Min. Die Serie zählt.', 'Short day: 14 instead of 28 min. Your streak counts.') + '</div>';
@@ -356,7 +358,7 @@ reg('h4', {
       const v = curVariant();
       if (inp && inp.value && inp.value !== GRAM.you[S.demo] && !(v === 'hint' && inp.value === 'have sent')) S.ui.ownInput = true;
       if (v === 'task' && !S.ui.ownInput && S.demo === 'wrong') { go('h4-hint'); return; }
-      if (v === 'task' && S.ui.ownInput && judge(S.typed, GRAM.right) === 'wrong') { S.carry = S.typed; go('h4-hint'); return; }
+      if (v === 'task' && S.ui.ownInput && judge(S.typed, GRAM.right, null, GRAM.wrongForms) === 'wrong') { S.carry = S.typed; go('h4-hint'); return; }
       S.ui.checked = true; render();
     },
     idk() { S.ui.ownInput = false; S.demo = 'idk'; savePrefs(); S.ui.checked = true; render(); },
@@ -438,7 +440,7 @@ const CHAPTERS = () => [
   [5, L('Modalität und Hedging', 'Modality and hedging'), L('später, je nach Tempo', 'later, depending on pace'), ''],
   [6, L('Verbmuster, Relativsätze, Verbindungen', 'Verb patterns, relative clauses, linkers'), L('später, je nach Tempo', 'later, depending on pace'), ''],
   [7, L('Passiv, Berichten, Nominalstil', 'Passive, reporting, nominal style'), L('später, je nach Tempo', 'later, depending on pace'), ''],
-  [8, L('Satzbau für Wirkung', 'Sentence structure for impact'), L('Ziel: nach 18–22 Wochen', 'goal: after 18–22 weeks'), '']
+  [8, L('Satzbau für Wirkung', 'Sentence structure for impact'), L('etwa Woche 18–22 · Ende des ersten Durchgangs', 'about weeks 18–22 · end of first pass'), '']
 ];
 function hereCard() {
   return '<div class="card stack s8" style="box-shadow:var(--shadow)"><div class="lbl">' + L('Du bist hier', 'You are here') + '</div>' +
@@ -718,22 +720,37 @@ reg('h10', {
    H11 Mission im Rahmen
    ========================================================= */
 function missionChecklist(states, open) {
-  const items = [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
+  const items = [L('Nachfragen, wie das Angebot ankam', 'Ask how the quote was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
   const marks = states.map(x => '<span class="ck' + (x ? ' y' : '') + '">' + (x ? ic('check', 'xs') : '') + '</span>').join('');
   return '<button class="checkrow gx" id="cl-toggle" data-act="cl" aria-expanded="' + (open ? 'true' : 'false') + '"><span class="cks">' + marks + '</span><span>' + L('Abhakliste', 'Checklist') + '</span><span style="margin-left:auto">' + ic(open ? 'chevU' : 'chevD', 'sm') + '</span></button>' +
     (open ? '<div class="checklist gx springopen">' + items.map((t, i) => '<div class="ci"><span class="ck' + (states[i] ? ' y' : '') + '">' + (states[i] ? ic('check', 'xs') : '') + '</span>' + t + '</div>').join('') +
       '<div class="ci" style="color:var(--fg-2);font-size:14px">' + L('Zielstruktur: <span class="en">past simple vs. present perfect</span> · <span class="en">discount, lead time, sign off on</span>', 'Target: past simple vs. present perfect · discount, lead time, sign off on') + '</div></div>' : '');
 }
+/* Kai D: Freie Mission (Extra) hat eine eigene Vorbereitung und öffnet nicht die Wochenmission. */
+function h11Free() {
+  const back = backTo('h11', 'h29-list');
+  return '<div class="ex-top gx"><button class="iconbtn" id="ex-close" data-go="' + back + '" aria-label="' + esc(L('Schließen', 'Close')) + '">' + ic('close') + '</button><div style="flex:1"></div>' + tsExtra() + '</div>' +
+    '<div class="ex-body gx">' + blockLine('s', L('Freie Mission · Rückfrage zum Liefertermin', 'Optional mission · Question about the delivery date')) +
+    '<div class="stagec" style="gap:16px;justify-content:flex-start;padding-top:16px">' +
+    '<div class="persona"><span class="avatar" style="width:52px;height:52px;font-size:17px">LK</span><div><b style="font-size:18px">Laura Keller</b><div class="p2">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented persona') + '</div></div></div>' +
+    '<div class="card stack s8"><div class="lbl">' + L('Dein Ziel', 'Your goal') + '</div><p class="p" style="font-size:18px;line-height:25px;font-weight:550">' + L('Kläre, ob der Liefertermin hält, und vereinbare den nächsten Schritt.', 'Find out whether the delivery date holds and agree on the next step.') + '</p></div>' +
+    '<div class="stack s8"><div class="lbl">' + L('Abhakliste', 'Checklist') + '</div><div class="checklist" style="padding:0">' +
+    [L('Nach dem Liefertermin fragen', 'Ask about the delivery date'), L('Die Lieferzeit bestätigen lassen', 'Get the lead time confirmed'), L('Den nächsten Schritt vereinbaren', 'Agree on the next step')].map(t => '<div class="ci"><span class="ck"></span>' + t + '</div>').join('') + '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px"><span class="chip en">past simple / present perfect</span><span class="chip en">lead time</span><span class="chip en">follow up on</span></div></div>' +
+    '<p class="p2">' + L('Etwa 6 Minuten, gesprochen. Freiwillig: zählt als Extra, nicht zur Pflicht.', 'About 6 minutes, spoken. Optional: counts as extra, not toward your daily plan.') + '</p></div></div>' +
+    exFoot(btnSec('free-later', L('Später', 'Later'), 'data-go="' + back + '"') + btnPri('free-go', L('Los geht’s', 'Let’s go'), '', ' data-act="freego"'));
+}
 function h11(v) {
+  if (v === 'free') return h11Free();
   const blocks = MISSION();
   const top = exTop(blocks, 4, { prep: 0.05, talk: 0.45, report: 0.9 }[v] || 0.1, { closeTo: 'mission' });
   if (v === 'prep') {
     return top + '<div class="ex-body gx">' + blockLine('s', L('Mission · ', 'Mission · ') + MISSION_NAME()) +
       '<div class="stagec" style="gap:16px;justify-content:flex-start;padding-top:16px">' +
       '<div class="persona"><span class="avatar" style="width:52px;height:52px;font-size:17px">LK</span><div><b style="font-size:18px">Laura Keller</b><div class="p2">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented persona') + '</div></div></div>' +
-      '<div class="card stack s8"><div class="lbl">' + L('Dein Ziel', 'Your goal') + '</div><p class="p" style="font-size:18px;line-height:25px;font-weight:550">' + L('Halte den Preis, ohne den nächsten Termin zu verlieren.', 'Hold the price without losing the next meeting.') + '</p></div>' +
+      '<div class="card stack s8"><div class="lbl">' + L('Dein Ziel', 'Your goal') + '</div><p class="p" style="font-size:18px;line-height:25px;font-weight:550">' + L('Halte den Preis und sichere trotzdem den nächsten Termin.', 'Hold the price and still secure the next meeting.') + '</p></div>' +
       '<div class="stack s8"><div class="lbl">' + L('Abhakliste', 'Checklist') + '</div><div class="checklist" style="padding:0">' +
-      [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci"><span class="ck"></span>' + t + '</div>').join('') + '</div>' +
+      [L('Nachfragen, wie das Angebot ankam', 'Ask how the quote was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci"><span class="ck"></span>' + t + '</div>').join('') + '</div>' +
       '<div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px"><span class="chip en">past simple / present perfect</span><span class="chip en">discount</span><span class="chip en">lead time</span><span class="chip en">sign off on</span></div></div>' +
       '<p class="p2">' + L('Etwa 9 Minuten, gesprochen. In den ersten zwei Zügen läuft keine Zeit.', 'About 9 minutes, spoken. No timer in the first two turns.') + '</p></div></div>' +
       exFoot(btnSec('pause', L('Pause, später weiter', 'Pause, continue later'), 'data-go="h1-mission"') + btnPri('mission-go', L('Los geht’s', 'Let’s go'), 'h11-talk'));
@@ -750,15 +767,18 @@ function h11(v) {
   return top + reportPage(0, 4,
     blockLine('s', L('Mission · Bericht', 'Mission · report')) +
     '<div class="stack s16" style="padding-top:14px"><div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Einwand gut behandelt, Termin noch offen', 'Objection handled well, meeting still open') + '</div>' +
-    '<div class="checklist" style="padding:0">' + [[1, L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received')], [1, L('Einwand Preis behandeln', 'Handle the price objection')], [0, L('nächsten Termin fixieren', 'Set up the next meeting')]].map(x => '<div class="ci"><span class="ck' + (x[0] ? ' y' : '') + '">' + (x[0] ? ic('check', 'xs') : '') + '</span>' + x[1] + '</div>').join('') + '</div>' +
+    '<div class="checklist" style="padding:0">' + [[1, L('Nachfragen, wie das Angebot ankam', 'Ask how the quote was received')], [1, L('Einwand Preis behandeln', 'Handle the price objection')], [0, L('nächsten Termin fixieren', 'Set up the next meeting')]].map(x => '<div class="ci"><span class="ck' + (x[0] ? ' y' : '') + '">' + (x[0] ? ic('check', 'xs') : '') + '</span>' + x[1] + '</div>').join('') + '</div>' +
     '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„We’ve already reduced the lead time to eight weeks.“</div><p class="p2">' + L('Ergebnis zuerst, ohne Zeitpunkt: genau richtig im present perfect.', 'Result first, no time given: exactly right in the present perfect.') + '</p></div>' +
-    '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen', 'Suggest the meeting yourself') + '</div><div class="p">2&nbsp; ' + L('Zum Schluss zusammenfassen: <em class="en">So, just to sum up: eight weeks at the current price.</em>', 'Sum up at the end: <em>So, just to sum up: eight weeks at the current price.</em>') + '</div></div></div>', 'h10-day');
+    '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen', 'Suggest the meeting yourself') + '</div><div class="p">2&nbsp; ' + L('Zum Schluss zusammenfassen: <em class="en">So, just to recap: an eight-week lead time at the current price.</em>', 'Sum up at the end: <em>So, just to recap: an eight-week lead time at the current price.</em>') + '</div></div></div>', 'h10-day');
 }
 reg('h11', {
   code: 'H11', name: 'Mission im Rahmen', kind: 'phone',
-  variants: [['prep', 'Vorbereiten'], ['talk', 'Gespräch'], ['report', 'Bericht Seite 1']],
+  variants: [['prep', 'Vorbereiten'], ['talk', 'Gespräch'], ['report', 'Bericht Seite 1'], ['free', 'Freie Mission (Extra)']],
   render: h11,
-  acts: { cl() { S.ui.cl = !S.ui.cl; render(); } }
+  acts: {
+    cl() { S.ui.cl = !S.ui.cl; render(); },
+    freego() { toast(L('In der Vorschau ist nur die Wochenmission ausgebaut. Das Gespräch der freien Mission sieht gleich aus.', 'Only the weekly mission is built out in this preview. The optional mission’s conversation looks the same.'), 'info'); }
+  }
 });
 
 /* =========================================================
@@ -814,7 +834,7 @@ function restingSheetBody() {
   return '<p class="p">' + L('<b class="en">flexibility</b> ruht bis 12.11. Dann prüfen wir, ob es nach 3 Wochen ohne Kontakt noch sitzt. Öffnen setzt die 3 Wochen zurück.', '<b>flexibility</b> rests until Nov 12. Then we check whether it still holds after 3 weeks without contact. Opening it resets the 3 weeks.') + '</p>';
 }
 /* Gleiche Gruppen überall, Summe 491: 38 + 41 + 412. „Im Aufbau“ (S2) ist ein Teil von „Erkennst du“. */
-const WF_STAND = () => [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Erkennst du', 'You recognize'), 412], [L('davon im Aufbau', 'of these building'), 24], [L('Ruht', 'Resting'), 3], [L('Pausiert', 'Paused'), 2]];
+const WF_STAND = () => [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Erkennst du', 'You recognize'), 412], [L('davon im Aufbau', 'of these, still building'), 24], [L('Ruht', 'Resting'), 3], [L('Pausiert', 'Paused'), 2]];
 function wordFilterBody() {
   const grp = (t, items, on) => '<div class="tw-grp"><div class="lbl">' + t + '</div><div class="tw-chips">' + items.map((x, i) => '<button class="tw-chip' + (i === on ? ' on' : '') + '" id="wfs-' + t.length + '-' + i + '" data-act="wfchip">' + x[0] + ' <span class="num">' + x[1] + '</span></button>').join('') + '</div></div>';
   return '<div class="stack s16">' + grp(L('Stand', 'Status'), WF_STAND(), 0) +
@@ -915,9 +935,9 @@ reg('h13', {
     return '<div class="scroll">' + phead(title, askBtn()) + '<div class="gx stack s24" style="padding-bottom:24px">' +
       '<div class="card stack s8" style="box-shadow:var(--shadow)"><div style="display:flex;align-items:center;gap:8px"><span class="dot s"></span><span class="lbl">' + L('Mission der Woche', 'Mission of the week') + '</span><span class="chip" style="margin-left:auto;min-height:26px">' + ic('cal', 'xs') + L('Freitag in deiner Pflicht', 'Friday in your daily plan') + '</span></div>' +
       '<div class="h2 disp" style="font-size:22px;line-height:28px">' + MISSION_NAME() + '</div>' +
-      '<p class="p2">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren. Teilziel: der Preis-Einwand.', 'Goal: hold the price without losing the next meeting. Sub-goal: the price objection.') + '</p>' +
-      '<div class="checklist" style="padding:2px 0 0">' + [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci" style="font-size:14px;min-height:26px"><span class="ck" style="width:16px;height:16px"></span>' + t + '</div>').join('') + '</div></div>' +
-      sec([L('Sprechen', 'Speaking'), 'sp', 'h29-list'], [['cal', L('Mein nächster Termin', 'My next meeting'), L('Dienstag Call mit Einkauf · ändern', 'Tuesday call with purchasing · change'), 'termin-filled'], ['speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date'), 'h11-prep'], ['spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage', 'one unexpected client question'), 'h9-antic']]) +
+      '<p class="p2">' + L('Ziel: den Preis halten und trotzdem den nächsten Termin sichern. Teilziel: den Preis-Einwand behandeln.', 'Goal: hold the price and still secure the next meeting. Sub-goal: handle the price objection.') + '</p>' +
+      '<div class="checklist" style="padding:2px 0 0">' + [L('Nachfragen, wie das Angebot ankam', 'Ask how the quote was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')].map(t => '<div class="ci" style="font-size:14px;min-height:26px"><span class="ck" style="width:16px;height:16px"></span>' + t + '</div>').join('') + '</div></div>' +
+      sec([L('Sprechen', 'Speaking'), 'sp', 'h29-list'], [['cal', L('Mein nächster Termin', 'My next meeting'), L('Dienstag Call mit Einkauf · ändern', 'Tuesday call with purchasing · change'), 'termin-filled'], ['speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date'), 'h11-free'], ['spark', L('Hot Seat', 'Hot seat'), L('eine unerwartete Kundenfrage', 'one unexpected client question'), 'h9-antic']]) +
       sec([L('Hören', 'Listening'), 'li', 'h33-list'], [['ear', L('Sprachnachrichten', 'Voicemails'), L('3 neue aus dem Einkauf', '3 new from purchasing'), 'h7-predict'], ['repeat', 'Shadowing', L('kurze Sätze nachsprechen', 'repeat short sentences'), 'h8-guide']]) +
       sec([L('Lesen', 'Reading'), 're', 'h35-archive'], [['book', L('Tagesartikel', 'Daily article'), L('Lieferketten unter Druck · 4 Min.', 'Supply chains under pressure · 4 min'), 'h13-reader'], ['list', L('Kurse', 'Courses'), L('Verhandeln auf Englisch · Lektion 3', 'Negotiating in English · lesson 3'), 'h35-course']]) +
       '<div class="stack s6"><div class="h2 disp" style="font-size:19px">' + L('Lehrerin', 'Teacher') + '</div><button class="row" id="pr-teacher" data-go="h28-paste"><span class="ri">' + ic('pen', 'sm') + '</span><span class="rt"><b>' + L('Korrekturen aus der Stunde', 'Corrections from your lesson') + '</b><span>' + L('einfügen, Lingo sortiert sie ein', 'paste them, Lingo sorts them in') + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button></div>' +
@@ -968,7 +988,7 @@ reg('h14', {
     if (v === 'speech') {
       return '<header class="phead gx"><button class="iconbtn" id="s-back" data-go="h14-main" aria-label="' + esc(L('Zurück', 'Back')) + '" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button>' + gearBtn() + '</header>' +
         '<div class="scroll gx" style="padding-bottom:24px"><div class="stack s16 springopen"><div class="h2 disp" style="font-size:26px;line-height:32px">' + L('Antworttempo', 'Response pace') + '</div>' +
-        '<p class="p2">' + L('Wörter pro Minute bis Senden, nur gesprochene Antworten.', 'Words per minute until send, spoken answers only.') + '</p><span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('seit September, aus der alten App übernommen', 'since September, carried over from the old app') + '</span>' +
+        '<p class="p2">' + L('Wörter pro Minute bis Senden, nur gesprochene Antworten.', 'Words per minute before you hit Send, spoken answers only.') + '</p><span class="chip" style="align-self:flex-start">' + ic('info', 'xs') + L('seit September, aus der alten App übernommen', 'since September, carried over from the old app') + '</span>' +
         '<div class="card">' + speechCurve() + '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--fg-3)" class="num"><span>' + L('KW 36', 'Wk 36') + '</span><span>' + L('KW 43', 'Wk 43') + '</span></div></div>' +
         '<div class="notice">' + ic('pen', 'sm') + '<span>' + L('Lehrerin am 14.10.: „Spricht flüssiger, Aussprache von <em class="en">th</em> noch unsicher.“', 'Teacher on Oct 14: “More fluent, <em>th</em> still unsure.”') + '</span></div>' +
         '<p class="p2">' + L('Pausen misst die App nicht, weil sie nichts aufnimmt. Die Kurve zeigt nur, was sie wirklich weiß.', 'The app doesn’t measure pauses because it records nothing. The curve only shows what it really knows.') + '</p></div></div>' + tabbar('h14');

@@ -132,7 +132,7 @@ function l12Ctx(v) {
   const checked = v === 'checked' || v === 'checked-early' || !!S.ui.checked || (v === 'contrast' && !!S.ui.pick);
   const m = t.more || {};
   const lage = v === 'contrast'
-    ? L('<b>Kontrast nach Widerspruch.</b> ', '<b>Contrast after a contradiction.</b> ') + TW_CTR_LAGE()
+    ? L('<b>Kontrast nach einem Ausrutscher bei einem festen Wort.</b> ', '<b>Contrast after a slip on a solid word.</b> ') + TW_CTR_LAGE()
     : t.lage === 'early'
     ? L('<b>Noch nicht fällig.</b> Schwierig-Runde: Übung, der nächste Termin wird ab jetzt gerechnet. Falsch zählt trotzdem.', '<b>Not due yet.</b> Hard-words round: practice, the next review is counted from now. Wrong still counts.')
     : L('<b>Fällig.</b> Zählt für deinen Plan, Erkennen zählt für „Erkennst du“.', '<b>Due.</b> Counts for your plan; recognition counts toward “you recognize”.');

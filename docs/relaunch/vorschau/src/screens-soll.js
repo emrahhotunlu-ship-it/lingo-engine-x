@@ -27,7 +27,7 @@ const tsAi = () => '<p class="ts-ai">' + ic('claude', 'xs') + L('Von Claude gepr
    H33 Mehr üben
    ========================================================= */
 function tsGrid(prefix, items) {
-  return '<div class="ts-grid">' + items.map((x, i) => '<button class="ts-gi" id="' + prefix + '-' + i + '" data-go="' + x[2] + '">' + (x[3] ? '<em class="ts-c1tag">' + L('C1-Format', 'C1 format') + '</em>' : '') + '<b>' + x[0] + '</b><span>' + x[1] + '</span></button>').join('') + '</div>';
+  return '<div class="ts-grid">' + items.map((x, i) => '<button class="ts-gi" id="' + prefix + '-' + i + '" data-act="sample" data-to="' + x[2] + '" data-c1="' + (x[3] ? 1 : 0) + '">' + (x[3] ? '<em class="ts-c1tag">' + L('C1-Format', 'C1 format') + '</em>' : '') + '<b>' + x[0] + '</b><span>' + x[1] + '</span></button>').join('') + '</div>';
 }
 function tsMoreList() {
   const trainings = [
@@ -73,7 +73,7 @@ function tsVocabSheet() {
   return sheet('ts-vtest', L('Wortschatztest starten?', 'Start the vocabulary test?'),
     '<div class="stack s16"><p class="p">' + L('Etwa 10 Minuten: 40 Wörter erkennen, dann 18 selbst bilden, mit Anfangsbuchstabe. Du kannst jederzeit aufhören.', 'About 10 minutes: recognize 40 words, then produce 18 yourself, with the first letter given. You can stop at any time.') + '</p>' +
     '<div class="notice">' + ic('info', 'sm') + '<span>' + L('Freiwillig. Zählt als Extra und ändert deinen Tagesplan nicht.', 'Optional. Counts as extra and doesn’t change your daily plan.') + '</span></div></div>',
-    '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-vtest-later" data-act="closesheet" style="flex:1">' + L('Später', 'Later') + '</button><button class="btn pri" id="ts-vtest-go" data-go="h18-recognize" style="flex:1">' + L('Test starten', 'Start test') + '</button></div>');
+    '<div style="display:flex;gap:8px"><button class="btn sec" id="ts-vtest-later" data-act="closesheet" style="flex:1">' + L('Später', 'Later') + '</button><button class="btn pri" id="ts-vtest-go" data-act="sample" data-to="h18-recognize" data-c1="0" style="flex:1">' + L('Test starten', 'Start test') + '</button></div>');
 }
 function tsXTop(n, i) {
   return '<div class="ex-top gx ts-xtop"><button class="iconbtn" id="ex-close" data-go="h33-list" aria-label="' + esc(L('Schließen', 'Close')) + '">' + ic('close') + '</button>' +
@@ -118,13 +118,15 @@ reg('h33', {
   render(v) {
     if (v === 'workshop') return tsWorkshop();
     if (v === 'result') return tsResult();
-    return tsPage('h1-done', askBtn(), tsMoreList(), 'h1') + (S.ui.sheet === 'test' ? tsTestSheet() : '') + (S.ui.sheet === 'vtest' ? tsVocabSheet() : '');
+    return tsPage(backTo('h33', 'h1-start'), askBtn(), tsMoreList(), 'h1') + (S.ui.sheet === 'test' ? tsTestSheet() : '') + (S.ui.sheet === 'vtest' ? tsVocabSheet() : '');
   },
   acts: {
     whysheet() { S.ui.menu = false; S.ui.sheet = 'why'; render(); },
     test() { S.ui.sheet = 'test'; render(); },
     vtest() { S.ui.sheet = 'vtest'; render(); },
-    tslisten() { S.ui.tsListen = !S.ui.tsListen; render(); }
+    tslisten() { S.ui.tsListen = !S.ui.tsListen; render(); },
+    /* Kai A: Kacheln öffnen eine Beispielaufgabe; der Trainer zeigt das sichtbar an (C1-Formate zusätzlich mit „C1-Format“). */
+    sample(el) { S.sample = { c1: el.getAttribute('data-c1') === '1' }; go(el.getAttribute('data-to')); }
   }
 });
 

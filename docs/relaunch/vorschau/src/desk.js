@@ -203,15 +203,17 @@ reg('l2', {
 function l3Stage(v, claude) {
   const blocks = dayBlocks('normal');
   const checked = v === 'band';
-  const st = checked ? (claude ? 'wrong' : S.demo) : null;
-  const shown = checked ? (st === 'idk' ? GRAM.right : GRAM.you[st]) : (S.typed != null ? S.typed : 'have sent');
+  /* Eigene Eingabe wird wie am Handy beurteilt (Lehrer M1: falsche Formen sind Fehler, kein „Fast“). */
+  const own = !claude && S.typed != null && S.typed !== '' && S.typed !== 'have sent' && S.typed !== GRAM.you[S.demo];
+  const st = checked ? (claude ? 'wrong' : own ? judge(S.typed, GRAM.right, null, GRAM.wrongForms) : S.demo) : null;
+  const shown = checked ? (st === 'idk' ? GRAM.right : own ? S.typed : GRAM.you[st]) : (S.typed != null ? S.typed : 'have sent');
   let s = dTop(blocks, 2, checked ? 0.3 : 0.2) + '<div class="dscroll" style="display:flex;flex-direction:column;padding-top:1em">' +
     blockLine('g', L('Grammatik · <em>past simple vs. present perfect</em> · Schritt 3 von 7', 'Grammar · <em>past simple vs. present perfect</em> · step 3 of 7')) +
     instr(L('Setz das Verb in der passenden Zeitform ein.', 'Put the verb in the right tense.'), 'd-why') +
     '<div class="stack s16" style="padding:3em 0 1.5em">' + gramPattern(checked && st !== 'wrong') +
     '<div class="sent en">We ' + gapHtml(shown, { caret: !checked, input: !checked, st: checked ? ({ ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' }[st]) : '' }) + ' <span style="color:var(--fg-3)">(send)</span> the revised quote yesterday.</div></div>';
   if (!checked) s += '<div class="dverdict s-idk" id="d-hintband" style="flex-direction:row;align-items:center;gap:.7em">' + ic('bulb', 'sm') + '<span style="font-weight:550">' + L('Noch nicht. Welche Zeitform passt zu <em class="en">yesterday</em>?', 'Not yet. Which tense goes with <em>yesterday</em>?') + '</span></div>';
-  else s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, GRAM.you[st], GRAM.right) + '<p class="whyl" style="margin:.2em 0 0">' + WHY_GRAM() + '</p>' +
+  else s += '<div class="dverdict ' + stCls(st) + '" id="d-verdict" role="status">' + verdictRow(st) + cmpLine(st, own ? S.typed : GRAM.you[st], GRAM.right) + '<p class="whyl" style="margin:.2em 0 0">' + WHY_GRAM() + '</p>' +
     '<div class="bandbtns" style="padding-top:.5em;max-width:28em"><button class="btn sec sm" id="d-more" data-act="dmore" aria-expanded="' + (S.ui.dmore ? 'true' : 'false') + '">' + (S.ui.dmore ? L('Weniger', 'Less') : L('Mehr', 'More')) + '</button>' + (st === 'wrong' || st === 'typo' ? '<button class="btn sec sm" id="d-also" data-go="l7">' + L('War das auch richtig?', 'Was mine also right?') + '</button>' : '') + '</div></div>';
   if (checked && S.ui.dmore) s += dMoreBody(gramMoreSheet());
   s += '</div>' + dKeys(checked ? '<button class="btn pri" id="d-next" data-go="l1">' + L('Weiter', 'Continue') + kb('⏎') + '</button>' : '<button class="btn pri" id="d-check" data-go="l3-band">' + L('Prüfen', 'Check') + kb('⏎') + '</button>');
@@ -301,9 +303,9 @@ reg('l5', {
 
 /* ---------- L6 Mission ---------- */
 function missionCtx(states, report) {
-  const items = [L('Nachfragen, wie das Angebot ankam', 'Ask how the offer was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
+  const items = [L('Nachfragen, wie das Angebot ankam', 'Ask how the quote was received'), L('Einwand Preis behandeln', 'Handle the price objection'), L('nächsten Termin fixieren', 'Set up the next meeting')];
   return ctxBlock(L('Abhakliste', 'Checklist'), '<div class="checklist" style="padding:0">' + items.map((t, i) => '<div class="ci"><span class="ck' + (states[i] ? ' y' : '') + '">' + (states[i] ? ic('check', 'xs') : '') + '</span>' + t + '</div>').join('') + '</div>') +
-    ctxBlock(L('Gegenüber', 'Counterpart'), '<div class="persona"><span class="avatar">LK</span><div><b>Laura Keller</b><div class="p2" style="font-size:.85em">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented') + '</div></div></div><p class="p2" style="margin:0">' + L('Ziel: den Preis halten, ohne den nächsten Termin zu verlieren.', 'Goal: hold the price without losing the next meeting.') + '</p>') +
+    ctxBlock(L('Gegenüber', 'Counterpart'), '<div class="persona"><span class="avatar">LK</span><div><b>Laura Keller</b><div class="p2" style="font-size:.85em">' + L('Leiterin Einkauf · erfundene Persona', 'Head of Procurement · invented') + '</div></div></div><p class="p2" style="margin:0">' + L('Ziel: den Preis halten und trotzdem den nächsten Termin sichern.', 'Goal: hold the price and still secure the next meeting.') + '</p>') +
     ctxBlock(L('Zielstruktur und Kernwörter', 'Target structure and key words'), '<div style="display:flex;flex-wrap:wrap;gap:.4em"><span class="chip en">past simple / present perfect</span><span class="chip en">discount</span><span class="chip en">lead time</span><span class="chip en">sign off on</span></div>') +
     (report ? '' : '<p class="p2" style="margin:0;font-size:.85em">' + L('Korrekturen kommen erst im Bericht, nicht während des Gesprächs.', 'Corrections come in the report, not during the conversation.') + '</p>');
 }
@@ -317,7 +319,7 @@ reg('l6', {
         stage: dTop(blocks, 4, 0.9) + '<div class="dscroll stack s16" style="padding-top:1em">' + blockLine('s', L('Mission · Bericht', 'Mission · report')) +
           '<div class="verdict" style="color:var(--ok)"><span class="vi" style="background:color-mix(in oklch, var(--ok) 20%, transparent)">' + ic('check', 'xs') + '</span>' + L('Einwand gut behandelt, Termin noch offen', 'Objection handled well, meeting still open') + '</div>' +
           '<div class="stack s8"><div class="lbl">' + L('Das war stark', 'That was strong') + '</div><div class="quote en">„We’ve already reduced the lead time to eight weeks.“</div><p class="p2" style="margin:0">' + L('Ergebnis zuerst, ohne Zeitpunkt: genau richtig im present perfect.', 'Result first, no time given: exactly right in the present perfect.') + '</p></div>' +
-          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; ' + L('Zum Schluss zusammenfassen: <em class="en">So, just to sum up: eight weeks at the current price.</em>', 'Sum up at the end: <em>So, just to sum up: eight weeks at the current price.</em>') + '</div></div>' +
+          '<div class="stack s8"><div class="lbl">' + L('2 Punkte üben', '2 things to practice') + '</div><div class="p">1&nbsp; ' + L('Termin aktiv vorschlagen: <em class="en">Could we pencil in Monday at ten?</em>', 'Suggest the meeting yourself: <em>Could we pencil in Monday at ten?</em>') + '</div><div class="p">2&nbsp; ' + L('Zum Schluss zusammenfassen: <em class="en">So, just to recap: an eight-week lead time at the current price.</em>', 'Sum up at the end: <em>So, just to recap: an eight-week lead time at the current price.</em>') + '</div></div>' +
           pageDots(4, 0) + '</div>' + dKeys('<button class="btn pri" id="d-next" data-go="l1-done">' + L('Weiter', 'Continue') + kb('⏎') + '</button>'),
         ctx: missionCtx([1, 1, 0], true)
       };

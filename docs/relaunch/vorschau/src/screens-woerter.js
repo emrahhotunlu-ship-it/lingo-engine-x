@@ -177,13 +177,14 @@ function TW_T() {
       /* Die Zeile zu by/of nur, wenn in der eigenen Eingabe wirklich of steht. */
       whyFix(why, st, x) {
         /* Die Warum-Zeile passt sich der eigenen Antwort an: past simple ist im US-Englisch auch richtig, „schon“ = already. */
-        if (st === 'ok' && x != null && !/(have|'ve|has) (already )?reduced/.test(x)) why.ok = L('Richtig. Im US-Englisch geht hier auch past simple: <em class="en">We already reduced the price by 5 percent.</em> Um 5 Prozent heißt <em class="en">by</em> 5 percent.', 'Correct. In US English the past simple works here too: <em>We already reduced the price by 5 percent.</em> The amount takes <em>by</em>.');
-        if (st === 'ok' && x != null && !/\balready\b/.test(x)) why.ok += ' ' + L('Für „schon“ fehlt noch <em class="en">already</em>.', 'For “schon”, add <em>already</em>.');
+        if (st === 'ok' && x != null && !/(have|'ve|has) (already )?reduced/.test(x)) why.ok = L('Richtig. Im US-Englisch geht hier auch past simple: <em class="en">We already reduced the price by 5 percent.</em> Für den Betrag nimmst du <em class="en">by</em>.', 'Correct. In US English the past simple works here too: <em>We already reduced the price by 5 percent.</em> Use <em>by</em> for the amount.');
+        if (st === 'ok' && x != null && !/\balready\b/.test(x)) why.ok += ' ' + L('Behalte <em class="en">already</em> für „schon“.', 'Keep <em>already</em> for “schon”.');
         if (st === 'wrong' && x != null && !/\bof\b/.test(x)) why.wrong = L('Gesucht ist <em class="en">reduce … by</em>: <em class="en">We’ve already reduced the price by 5 percent.</em>', 'The target is <em>reduce … by</em>: <em>We’ve already reduced the price by 5 percent.</em>'); },
       you: { ok: 'We’ve already reduced the price by 5 percent.', typo: 'We’ve already reduce the price by 5 percent.', wrong: 'We’ve already reduced the price of 5 percent.', idk: '' },
       whyl: {
         ok: L('Ergebnis ohne Zeitpunkt: present perfect mit <em class="en">already</em>. Um 5 Prozent heißt <em class="en">by</em> 5 percent.', 'A result with no time: present perfect with <em>already</em>. The amount takes <em>by</em>.'),
-        typo: L('Fast: Nach <em class="en">have</em> kommt die dritte Form, <em class="en">reduced</em>.', 'Almost: after <em>have</em> comes the past participle, <em>reduced</em>.'),
+        /* Lehrer M2: „have reduce“ ist ein Formfehler, kein „Fast“. Er führt zu „Noch einmal sprechen“, nicht zur Herabstufung. */
+        typo: L('Nicht ganz: Nach <em class="en">have</em> kommt die dritte Form, <em class="en">reduced</em>. Sprich das -d vor <em class="en">the</em> deutlich und sag den Satz noch einmal.', 'Not quite: after <em>have</em> comes the past participle, <em>reduced</em>. Say the -d clearly before <em>the</em> and try once more.'),
         wrong: L('Beim Verb heißt es <em class="en">reduce by 5 percent</em>. <em class="en">of</em> gehört zum Nomen: <em class="en">a reduction of 5 percent</em>.', 'With the verb, use <em>by</em>: reduce by 5 percent. <em>of</em> goes with the noun: <em>a reduction of 5 percent</em>.'),
         idk: L('<em class="en">reduce the price by 5 percent</em>: um 5 Prozent senken.', 'reduce … by: lower by an amount.')
       },
@@ -241,7 +242,7 @@ function TW_T() {
   };
 }
 function twSt(t) {
-  if (S.typed != null && S.ui.ownInput) return t.judge ? t.judge(S.typed) : judge(twNorm(S.typed), t.right, t.alts);
+  if (S.typed != null && S.ui.ownInput) return t.judge ? t.judge(S.typed) : judge(twNorm(S.typed), t.right, t.alts, t.wrongForms);
   /* Ohne eigene Wahl zeigt die erste Karte den Tippfehler, damit „budget approval war nah dran“ im Ergebnis stimmt. */
   return !S.demoPicked && t.demoDefault && S.demo === 'ok' ? t.demoDefault : S.demo;
 }
@@ -249,7 +250,7 @@ const TW_GAPST = { ok: 'ok', typo: 'near', wrong: 'bad', idk: 'idk' };
 function twLageLine(t, st) {
   let txt = '';
   if (t.lage === 'early') txt = (st === 'wrong' || st === 'idk') ? L('Zählt trotzdem: Nochmal, morgen wieder dran.', 'Still counts: again, back tomorrow.') : L('Noch nicht fällig: gute Übung. Dein nächster Termin startet ab jetzt neu.', 'Not due yet: good practice. Your next review starts from now.');
-  else if (t.lage === 'seen') txt = L('Vorhin gesehen: Übung, ändert keinen Termin.', 'Seen earlier: practice, changes no review date.');
+  else if (t.lage === 'seen') txt = L('Vorhin gesehen: Übung, ändert keinen Termin.', 'Seen earlier: practice, doesn’t change your review date.');
   else if (st === 'wrong' || st === 'idk') txt = L('Kommt am Ende der Runde noch einmal und morgen wieder.', 'Comes back at the end of this round and again tomorrow.');
   return txt ? '<p class="tw-lage">' + ic('clock', 'xs') + '<span>' + txt + '</span></p>' : '';
 }
@@ -259,8 +260,15 @@ function twBand(t, st) {
   if (st === 'ok' && S.ui.ownInput && t.alsoOk && (t.alsoIf ? t.alsoIf(twNorm(S.typed)) : t.alts.indexOf(twNorm(S.typed)) >= 0)) why.ok = t.alsoOk;
   if (t.whyFix) t.whyFix(why, st, S.ui.ownInput && S.typed ? twNorm(S.typed) : null);
   const next = (st === 'wrong' || st === 'idk') && t.nextWrong ? t.nextWrong : t.next;
-  return band(st, { you, right: t.rightShow, why }, { next, nextLabel: next.indexOf('h20') === 0 ? L('Zum Ergebnis', 'See result') : t.nextLabel })
+  let html = band(st, { you, right: t.rightShow, why }, { next, nextLabel: next.indexOf('h20') === 0 ? L('Zum Ergebnis', 'See result') : t.nextLabel })
     .replace('<div class="bandbtns">', twLageLine(t, st) + '<div class="bandbtns">');
+  /* Lehrer M2: Formfehler beim Sprechen heißt „Nicht ganz“ und führt zu „Noch einmal sprechen“, ohne Rückschritt. */
+  if (t.form === 'speak' && st === 'typo') {
+    html = html.replace(verdictRow('typo'), '<div class="verdict"><span class="vi">' + ic('near', 'xs') + '</span>' + L('Nicht ganz', 'Not quite') + '</div>')
+      .replace('<div class="bandbtns">', '<p class="tw-lage">' + ic('clock', 'xs') + '<span>' + L('Kein Rückschritt: Erst dein zweiter Versuch zählt.', 'No step back: your second try is the one that counts.') + '</span></p><div class="bandbtns">')
+      .replace(/<button class="btn pri full" id="band-next" data-go="[^"]*">[^]*?<\/button>/, '<button class="btn pri full" id="band-next" data-act="speakagain">' + ic('mic', 'sm') + L('Noch einmal sprechen', 'Say it again') + '</button>');
+  }
+  return html;
 }
 function twShown(t, st, checked) {
   if (!checked) return S.typed || '';
@@ -274,7 +282,7 @@ function h18(v) {
   const checked = v === 'band-early' || !!S.ui.checked;
   const st = checked ? twSt(t) : null;
   const total = t.total || 10;
-  let s = twTop(t.n, total, { plus: t.plus, done: checked }) + '<div class="ex-body gx' + (checked ? ' with-band' : '') + '">' + blockLine('w', t.bl) + instr(t.instr, 'tw-why');
+  let s = twTop(t.n, total, { plus: t.plus, done: checked }) + '<div class="ex-body gx' + (checked ? ' with-band' : '') + '">' + blockLine('w', t.bl) + tsSampleLine() + instr(t.instr, 'tw-why');
   const shown = twShown(t, st, checked);
   const gst = checked ? TW_GAPST[st] : '';
   let typing = true;
@@ -304,7 +312,7 @@ function h18(v) {
   else if (!typing) s += exFoot(btnSec('tw-idk', L('Weiß ich nicht', 'Don’t know'), 'data-act="idk"') + btnPri('tw-check', L('Sprechen', 'Speak'), '', ' data-act="check"'));
   else s += exFoot(btnSec('tw-tip', L('Tipp', 'Hint'), 'data-act="tip"') + btnSec('tw-idk', L('Weiß ich nicht', 'Don’t know'), 'data-act="idk"') + btnPri('tw-check', L('Prüfen', 'Check'), '', ' data-act="check"'), true) + drawnKbd({ go: t.form === 'field' ? 'return' : 'go' });
   s += twOverlays({ why: t.why, checked, task: t });
-  return s;
+  return tsSampleNav(s);
 }
 /* Kontrastkarte: Widerspruch, ein S4/S5-Wort geht selbst daneben → sofort eigene Aufgabe (VT 3.8, 3.9).
    Hier: das feste Wort procurement (S5) wurde beim Hören als Produktion verstanden. */
@@ -315,10 +323,14 @@ const TW_CTR = () => ({
   before: 'Our', after: 'team negotiates prices with suppliers.', right: 'procurement',
   ok: L('Richtig. Mit Lieferanten verhandelt der Einkauf, also <em class="en">procurement</em>. <em class="en">production</em> stellt die Ware her.', 'Correct. The team that negotiates with suppliers is purchasing, so <em>procurement</em>. <em>production</em> makes the goods.'),
   wrong: L('<em class="en">production</em> stellt die Ware her. Mit Lieferanten verhandelt der Einkauf: <em class="en">procurement</em>.', '<em>production</em> makes the goods. The team that negotiates with suppliers is <em>procurement</em>.'),
+  stress: 'pro-<b>CURE</b>-ment · pro-<b>DUC</b>-tion',
   merke: L('<em class="en">procurement</em> kauft ein, <em class="en">production</em> stellt her.', '<em>procurement</em> buys, <em>production</em> makes.')
 });
+/* Lehrer S2: Beide Wörter hörbar, dazu die Betonung (pro-CURE-ment · pro-DUC-tion). */
 function twCtrCard(C) {
-  return '<div class="card stack s8 tw-ctr"><div class="contrast en"><span class="k">A</span><span><b>' + C.a[0] + '</b> <span class="tw-de">' + C.a[1] + '</span></span><span class="k">B</span><span><b>' + C.b[0] + '</b> <span class="tw-de">' + C.b[1] + '</span></span></div></div>';
+  const say = (w, k) => '<button class="iconbtn tw-ctrsay" id="ctr-say-' + k + '" data-act="noop" aria-label="' + esc(L('Anhören: ', 'Listen: ') + w) + '">' + ic('speaker', 'xs') + '</button>';
+  return '<div class="card stack s8 tw-ctr"><div class="contrast en"><span class="k">A</span><span><b>' + C.a[0] + '</b>' + say(C.a[0], 'a') + '<span class="tw-de">' + C.a[1] + '</span></span><span class="k">B</span><span><b>' + C.b[0] + '</b>' + say(C.b[0], 'b') + '<span class="tw-de">' + C.b[1] + '</span></span></div>' +
+    '<div class="tw-stress"><span class="lbl">' + L('Betonung', 'Stress') + '</span><span class="en">' + C.stress + '</span></div></div>';
 }
 function twContrast() {
   const C = TW_CTR();
@@ -337,6 +349,16 @@ function twContrast() {
   }
   s += twOverlays({ why: TW_CTR_WHY(), checked, task: t, finish: 'h20-stopped' });
   return s;
+}
+/* Beispielaufgabe aus „Mehr üben“ (Kai A): sichtbare Zeile, Schließen und Weiter führen zurück zu „Mehr üben“. */
+function tsSampleLine() {
+  if (!S.sample) return '';
+  return '<div class="ts-sample" role="note">' + ic('info', 'xs') + '<span>' + L('Beispielaufgabe · die echte Übung kommt in Stufe 1', 'Sample task · the real exercise comes in stage 1') + '</span>' + (S.sample.c1 ? '<em class="ts-c1tag">' + L('C1-Format', 'C1 format') + '</em>' : '') + '</div>';
+}
+function tsSampleNav(s) {
+  if (!S.sample) return s;
+  return s.replace(/id="ex-close" data-go="[^"]*"/, 'id="ex-close" data-go="h33-list"')
+    .replace(/(<button class="btn pri full" id="band-next" data-go=")[^"]*(">)[^<]*(<\/button>)/, '$1h33-list$2' + L('Zurück zu „Mehr üben“', 'Back to More practice') + '$3');
 }
 function twFieldType(text) {
   const f = document.getElementById('tw-field');
@@ -371,6 +393,8 @@ reg('h18', {
       S.ui.checked = true; render();
     },
     idk() { S.ui.ownInput = false; S.demo = 'idk'; S.ui.checked = true; render(); },
+    /* Zweiter Versuch nach Formfehler beim Sprechen: in der Vorschau gelingt er. */
+    speakagain() { S.ui.checked = false; S.ui.ownInput = false; S.typed = null; S.demo = 'ok'; render(); },
     tip() { const t = TW_T()[curVariant()]; const h = $('.hintline'); if (h && t) h.innerHTML = t.tip; },
     pick(el) { S.ui.pick = el.getAttribute('data-v'); render(); }
   })
@@ -408,7 +432,7 @@ function twNote(c) {
   if (c.art === 'anki') return L('Anki plant nur dein Erkennen. Stufen steigen hier nie.', 'Anki only schedules recognition. Stages never go up here.');
   if (c.art === 'tempo') return L('Nur Wörter, die fest sitzen. Abgelaufene Zeit heißt langsam, nicht falsch.', 'Only solid words. Running out of time means slow, not wrong.');
   if (c.art === 'listen') return L('Zählt nur für „Erkennst du“. „Anhören“ ohne Abfrage zählt nichts.', 'Counts only toward “you recognize”. Plain listening counts nothing.');
-  if (c.art === 'hear') return L('Englisch, kurze Pause, Deutsch, dann der Satz. Nur Zuhören, z. B. im Auto: ändert keine Termine und keine Stufen.', 'English, a short pause, German, then the sentence. Just listening, e.g. in the car: changes no review dates or stages.');
+  if (c.art === 'hear') return L('Englisch, kurze Pause, Deutsch, dann der Satz. Nur Zuhören, z. B. im Auto: ändert keine Termine und keine Stufen.', 'English, a short pause, German, then the sentence. Just listening, e.g. in the car: doesn’t change any review dates or stages.');
   if (c.dir === 'recognize') return L('Zählt nur für „Erkennst du“.', 'Counts only toward “you recognize”.');
   if (c.was === 'stage') return L('„Auf dem Weg“ ab 3 Wochen Ruhe ist nicht wählbar: Diese Wörter warten auf ihre Probe.', 'Words resting before their 3-week check can’t be picked.');
   if (c.n === '20' || c.n === '30') return L('Vorgezogene sind Übung: ihr nächster Termin wird ab jetzt gerechnet.', 'Early ones are practice: their next review is counted from now.');
@@ -473,7 +497,7 @@ function twHear() {
     '<p class="p en" style="color:var(--fg-2)">I’m following up on the quote we sent on Monday.</p>' +
     '<button class="tw-play" id="tw-hear-play" data-act="hearpause" aria-pressed="' + (paused ? 'true' : 'false') + '" aria-label="' + esc(paused ? L('Weiter abspielen', 'Resume') : L('Pause', 'Pause')) + '">' + ic(paused ? 'play' : 'pause') + '</button>' +
     '<p class="p2">' + (paused ? L('Pausiert', 'Paused') : L('Spielt: Englisch, Pause, Deutsch, Satz', 'Playing: English, pause, German, sentence')) + '</p></div>' +
-    '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('Nur Zuhören: ändert keine Termine und keine Stufen.', 'Just listening: changes no review dates or stages.') + '</span></p>' +
+    '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('Nur Zuhören: ändert keine Termine und keine Stufen.', 'Just listening: doesn’t change any review dates or stages.') + '</span></p>' +
     '<button class="btn pri full" id="tw-hear-stop" data-go="h12-list">' + L('Fertig', 'Done') + '</button></div></div>';
 }
 function h17(v) {
@@ -571,16 +595,16 @@ function twResultLines(v) {
   const I = n => ic(n, 'sm');
   if (v === 'all-early') return [
     [I('repeat'), L('9 Wörter geübt · keins war fällig.', '9 words practiced · none were due.')],
-    [I('near'), L('<em class="en">surcharge</em> war nah dran: 1 Buchstabe.', '<em>surcharge</em> was close: 1 letter.')],
+    [I('near'), L('<em class="en">surcharge</em> war nah dran: 1 Buchstabe.', '<em>surcharge</em>: almost, one letter off.')],
     [I('clock'), L('Gute Übung: ihr nächster Termin startet ab heute.', 'Good practice: their next review starts from today.')],
     [I('cal'), L('Morgen fällig: <b class="num">9</b>', 'Due tomorrow: <b class="num">9</b>')]];
   if (v === 'stopped') return [
     [I('repeat'), L('4 Wörter geübt · alle 4 waren fällig und zählen.', '4 words practiced · all 4 were due and count.')],
-    [I('near'), L('<em class="en">budget approval</em> war nah dran: 1 Buchstabe.', '<em>budget approval</em> was close: 1 letter.')],
+    [I('near'), L('<em class="en">budget approval</em> war nah dran: 1 Buchstabe.', '<em>budget approval</em>: almost, one letter off.')],
     [I('cal'), L('Die anderen 6 bleiben fällig. Gespeichert ist alles, was du beantwortet hast.', 'The other 6 stay due. Everything you answered is saved.')]];
   const lines = [[I('repeat'), L('10 Wörter geübt · alle 10 waren fällig und zählen.', '10 words practiced · all 10 were due and count.')]];
   if (v === 'with-step') lines.push(['<span class="tw-step">' + ic('up', 'sm') + '</span>', L('<em class="en">budget approval</em>: frei an 2 Tagen, jetzt auf dem Weg.', '<em>budget approval</em>: free on 2 days, now on the way.'), 'step']);
-  lines.push([I('cross'), v === 'with-step' ? L('<em class="en">discount</em> kommt morgen wieder.', '<em>discount</em> comes back tomorrow.') : L('<em class="en">discount</em> kommt morgen wieder. <em class="en">budget approval</em> war nah dran: 1 Buchstabe.', '<em>discount</em> comes back tomorrow. <em>budget approval</em> was close: 1 letter.')]);
+  lines.push([I('cross'), v === 'with-step' ? L('<em class="en">discount</em> kommt morgen wieder.', '<em>discount</em> comes back tomorrow.') : L('<em class="en">discount</em> kommt morgen wieder. <em class="en">budget approval</em> war nah dran: 1 Buchstabe.', '<em>discount</em> comes back tomorrow. <em>budget approval</em>: almost, one letter off.')]);
   lines.push([I('cal'), L('Noch 4 fällig für heute.', '4 more due today.')]);
   return lines;
 }
@@ -695,7 +719,7 @@ reg('h22', {
       return top + '<div class="ex-body gx">' + blockLine('w', L('Tempo · nur Wörter, die fest sitzen', 'Speed · only solid words')) + instr(L('So schnell es geht, ohne Hetze.', 'As fast as you can, no rush.'), 'tw-why') +
         '<div class="stagec"><div class="prompt disp">' + L('die Frist', 'die Frist') + '</div><div style="padding-top:8px;position:relative">' + gapHtml('deadl', { big: true, caret: true }) + '</div>' +
         '<div class="tw-time"><div class="timeline"><i style="width:58%"></i></div><span class="num">0:38</span></div>' +
-        '<p class="tw-note" style="align-self:center">' + ic('info', 'xs') + '<span>' + L('Ein Fehler setzt das Wort zurück. Abgelaufene Zeit heißt nur langsam.', 'A mistake sets the word back. Running out of time just means slow.') + '</span></p></div></div>' +
+        '<p class="tw-note" style="align-self:center">' + ic('info', 'xs') + '<span>' + L('Ein Fehler setzt das Wort zurück. Abgelaufene Zeit heißt nur langsam.', 'A mistake sets the word back. Running out of time just counts as slow.') + '</span></p></div></div>' +
         exFoot(btnPri('tw-check', L('Prüfen', 'Check'), 'h22-end'), true) + drawnKbd({ go: 'go' }) +
         twOverlays({ why: L('Tempo holt feste Wörter schnell ab. So wird aus „ich weiß es“ ein „es kommt sofort“. Läuft die Zeit ab, heißt das nur langsam, nicht falsch.', 'Speed recalls solid words fast, turning “I know it” into “it comes right away”. Running out of time means slow, not wrong.') });
     }

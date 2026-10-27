@@ -94,7 +94,7 @@ function tmPickBody(k, p) {
   return '<div class="stack s16"><p class="p" style="font-weight:600">' + L('C1 im Beruf', 'C1 at work') + '</p>' +
     '<div class="stack s6"><div class="lbl">' + L('Bis wann', 'By when') + '</div>' + tmSeg(p + 'pk-by', P.by, TMS.by, 'tmpickset" data-k="by') + '</div>' +
     '<div class="stack s6"><div class="lbl">' + L('Tage pro Woche', 'Days a week') + '</div>' + tmSeg(p + 'pk-days', P.days, TMS.days, 'tmpickset" data-k="days') + '</div>' +
-    '<p class="p2">' + (TMS.by === 'oct' && TMS.days === '6' ? L('Oktober 2027 ist mit 6 Tagen pro Woche knapp. Die Tagesdauer bleibt fest, schneller geht es nur mit 7 Tagen.', 'October 2027 is tight with 6 days a week. The daily length stays fixed; it only goes faster with 7 days.') : L('Die 8 Grammatik-Kapitel dauern etwa 18 bis 22 Wochen, C1 im Beruf realistisch 12 bis 15 Monate. Die Tagesdauer bleibt fest.', 'The 8 grammar chapters take about 18 to 22 weeks; C1 at work realistically takes 12 to 15 months. The daily length stays fixed.')) + '</p></div>';
+    '<p class="p2">' + (TMS.by === 'oct' && TMS.days === '6' ? L('Oktober 2027 ist mit 6 Tagen pro Woche knapp. Die Tagesdauer bleibt fest, schneller geht es nur mit 7 Tagen.', 'October 2027 is tight with 6 days a week. The daily length stays fixed; it only goes faster with 7 days.') : L('Die 8 Grammatik-Kapitel dauern etwa 18 bis 22 Wochen. Mit deinen Preply-Stunden dauert C1 im Beruf realistisch 12 bis 15 Monate. Die Tagesdauer bleibt fest.', 'The 8 grammar chapters take about 18 to 22 weeks. With your Preply lessons, C1 at work realistically takes 12 to 15 months. The daily length stays fixed.')) + '</p></div>';
 }
 const TM_PICK_TITLE = () => ({ time: L('Lernzeit und Erinnerung', 'Study time and reminder'), rest: L('Ruhetag', 'Rest day'), goal: L('Ziel', 'Goal') });
 function tmPickSheet() {
@@ -366,12 +366,12 @@ const TM_ERRS = () => [
   { id: 'e6', t: 'col', w: 'We can make you a discount of 3 percent.', r: 'We can offer you a discount of 3 percent.', st: 'firm', src: L('Lehrerin · 23.9.', 'Teacher · Sep 23'), nx: L('seit 21 Tagen sicher', 'solid for 21 days') }
 ];
 const TM_TOPICS = () => ({ pspp: ['past simple vs. present perfect', true], prep: [L('Zeitpräpositionen', 'Time prepositions'), false], col: [L('Wortpartner', 'Collocations'), false] });
-const tmStName = st => ({ open: L('offen', 'open'), rec: L('kehrt wieder', 'recurring'), fixed: L('behoben', 'fixed'), firm: L('gefestigt', 'solid') }[st]);
+const tmStName = st => ({ open: L('offen', 'open'), rec: L('kehrt wieder', 'recurring'), fixed: L('behoben', 'fixed'), firm: L('behoben · gefestigt', 'fixed · solid') }[st]);
 function tmErrFilters(cur, p) {
   const all = TM_ERRS();
   const n = k => all.filter(e => k === 'all' || (k === 'done' ? (e.st === 'fixed' || e.st === 'firm') : e.st === k)).length;
   const f = [['all', L('Alle', 'All')], ['open', L('Offen', 'Open')], ['rec', L('Kehrt wieder', 'Recurring')], ['done', L('Behoben', 'Fixed')]];
-  return '<div class="tm-chips">' + f.map(x => '<button class="chip" id="' + p + 'ef-' + x[0] + '" data-act="tmef" data-v="' + x[0] + '" style="flex:none;min-height:34px;' + (cur === x[0] ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + x[1] + ' <span class="num" style="opacity:.7">' + (cur === 'none' && x[0] !== 'all' && x[0] !== 'done' ? 0 : n(x[0])) + '</span></button>').join('') + '</div>';
+  return '<div class="tm-chips">' + f.map(x => '<button class="chip" id="' + p + 'ef-' + x[0] + '" data-act="tmef" data-v="' + x[0] + '" style="flex:none;min-height:34px;' + (cur === x[0] ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + x[1] + ' <span class="num" style="opacity:.7">' + (cur === 'none' ? (x[0] === 'all' ? n('done') : x[0] === 'done' ? n('done') : 0) : n(x[0])) + '</span></button>').join('') + '</div>';
 }
 function tmErrList(p, desk, sel) {
   const ef = S.ui.ef || 'all';
@@ -379,7 +379,7 @@ function tmErrList(p, desk, sel) {
   const list = TM_ERRS().filter(e => ef === 'all' || (ef === 'done' ? (e.st === 'fixed' || e.st === 'firm') : e.st === ef));
   const groups = Object.keys(tp).map(k => [k, list.filter(e => e.t === k)]).filter(g => g[1].length);
   return groups.map(g => '<section class="stack s6"><div style="display:flex;align-items:center;gap:8px"><span class="dot g"></span><b class="' + (tp[g[0]][1] ? 'en' : '') + '" style="font-size:15px;font-weight:650">' + tp[g[0]][0] + '</b>' +
-    (g[0] === 'pspp' ? '<span class="tm-state rec" style="margin-left:auto">' + L('kehrt wieder', 'recurring') + '</span>' : '') + '</div>' +
+    (g[0] === 'pspp' ? '<span style="margin-left:auto;font-size:13px;color:var(--fg-2)">' + L('Thema wieder in Arbeit', 'topic back in progress') + '</span>' : '') + '</div>' +
     '<div class="card" style="padding:0 16px">' + g[1].map(e => '<button class="tm-err' + (sel === e.id ? ' tm-sel' : '') + '" id="' + p + 'err-' + e.id + '" ' + (desk ? 'data-act="tmerr" data-e="' + e.id + '"' : 'data-go="h26-open"') + '>' +
       '<span class="tm-w en">' + esc(e.w) + '</span><span class="tm-r en">' + esc(e.r) + '</span>' +
       '<span class="tm-m"><span class="tm-state ' + e.st + '">' + tmStName(e.st) + '</span><span>' + e.src + ' · ' + e.nx + '</span></span></button>').join('') + '</div></section>').join('') +
@@ -433,9 +433,11 @@ reg('h26', {
    ========================================================= */
 const TM_FREE = {
   right: 'hasn’t signed off on', alts: ["hasn't signed off on", 'has not signed off on'],
+  /* Lehrer M1: falsche Verbform oder Zeitform zählt als falsch, nicht als „Fast“. */
+  wrongForms: ['hasn’t sign off on', 'haven’t signed off on', 'hasn’t sign off', 'didn’t sign off on'],
   why: () => ({
     ok: L('<em class="en">yet</em> zeigt: bis jetzt noch offen. Kein Zeitpunkt, also present perfect.', '<em>yet</em> shows: still open up to now. No time named, so present perfect.'),
-    typo: L('Fast. <em class="en">yet</em> verlangt present perfect: <em class="en">hasn’t signed off on</em>. Achte auf die Schreibweise.', 'Almost. <em>yet</em> calls for present perfect: <em>hasn’t signed off on</em>. Watch the spelling.'),
+    typo: L('Fast: Zeitform richtig, nur die Schreibweise. Richtig: <em class="en">hasn’t signed off on</em>.', 'Almost: right tense, just the spelling. Correct: <em>hasn’t signed off on</em>.'),
     wrong: L('Mit <em class="en">yet</em> geht es um „bis jetzt“. Past simple bräuchte einen vergangenen Zeitpunkt, und hier steht keiner.', 'With <em>yet</em> it’s about “up to now”. Past simple would need a finished time, and there isn’t one here.'),
     idk: L('<em class="en">yet</em> zeigt: bis jetzt noch offen. Kein Zeitpunkt, also present perfect.', '<em>yet</em> shows: still open up to now. No time named, so present perfect.')
   })
@@ -462,7 +464,8 @@ function tmLookupBody() {
     '<span class="k" style="color:var(--bad)">' + ic('cross', 'xs') + '</span><span class="no">I have signed the contract yesterday.</span></div>' +
     '<p class="p2">' + L('Im Deutschen sagst du „habe … gemacht“, auch wenn es vorbei ist. Im Englischen entscheidet der Zeitpunkt.', 'In German you say “habe … gemacht” even when it’s over. In English, the time decides.') + '</p></div>' +
     '<div class="card stack s8"><div class="lbl">' + L('Signalwörter', 'Signal words') + '</div>' + sig.map(s => '<div class="stack s6" style="padding:6px 0"><b class="en" style="color:var(--act-text);font-size:15px">' + s[0] + '</b><span class="en p">' + s[1] + '</span></div>').join('') +
-    '<p class="p2" style="font-size:13px">' + L('Signalwörter helfen, entscheiden muss die Frage: vorbei oder bis jetzt?', 'Signal words help, but the real question decides: over, or up to now?') + '</p></div>';
+    '<p class="p2" style="font-size:13px">' + L('Signalwörter helfen, entscheiden muss die Frage: vorbei oder bis jetzt?', 'Signal words help, but the real question decides: over, or up to now?') + '</p>' +
+    '<p class="p2" style="font-size:13px">' + L('US-Englisch: Gesprochen gehen <em class="en">already</em> und <em class="en">yet</em> auch mit past simple.', 'US English: in speech, <em>already</em> and <em>yet</em> also work with the past simple.') + '</p></div>';
 }
 function h27(v) {
   if (v === 'free-round') {
@@ -509,7 +512,7 @@ reg('h27', {
   after: tmFreeAfter,
   acts: {
     whysheet: tmWhyAct,
-    tmcheck() { S.ui.chk = judge(S.typed, TM_FREE.right, TM_FREE.alts); render(); },
+    tmcheck() { S.ui.chk = judge(S.typed, TM_FREE.right, TM_FREE.alts, TM_FREE.wrongForms); render(); },
     tmidk() { S.typed = null; S.ui.chk = 'idk'; render(); },
     more() { go('h27-lookup'); },
     also() { go('h15-claude'); }
@@ -530,7 +533,7 @@ function tmTeacherSeg(cur) {
   return '<div class="tm-seg" role="tablist" id="tm-tseg">' + [['paste', L('Einfügen', 'Paste')], ['note', L('Zettel', 'Notes')], ['monthly', L('Monat', 'Monthly')]].map(x =>
     '<button role="tab" id="tm-tseg-' + x[0] + '" data-go="h28-' + x[0] + '" class="' + (cur === x[0] || (cur === 'confirm' && x[0] === 'paste') ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>';
 }
-const TM_NOTE = 'Week 44 · Following up on the offer\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in “When …?” questions (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
+const TM_NOTE = 'Week 44 · Following up on the quote\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in “When …?” questions (“When have you sent it?”)\n\nRole-play idea for our lesson: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
 function h28(v) {
   const head = tmTitle(L('Lehrerin', 'Teacher'), L('Preply · jeden Mittwoch', 'Preply · every Wednesday')) + tmTeacherSeg(v);
   if (v === 'confirm') {
@@ -587,7 +590,7 @@ reg('h28', {
    ========================================================= */
 const TM_SCENES = () => [
   [1, L('Small Talk auf der Messe', 'Small talk at a trade fair'), 1, 'done'],
-  [2, L('Nachfassen nach dem Angebot', 'Following up on the offer'), 1, 'now'],
+  [2, L('Nachfassen nach dem Angebot', 'Following up on the quote'), 1, 'now'],
   [3, L('Bedarf erfragen', 'Finding out needs'), 2, ''],
   [4, L('Fachklärung IT und Datenschutz', 'IT and data protection questions'), 2, ''],
   [5, L('Präsentieren und Demo', 'Presenting and demo'), 3, ''],
@@ -597,9 +600,8 @@ const TM_SCENES = () => [
 ];
 /* Ehrliche Zeitangaben: Kapitel 1 hat feste Wochen, danach nur Spannen wie im Lernweg (H6). */
 function tmSceneWhen(c) {
-  if (c[2] === 1) return L('Kapitel 1 · Woche ' + c[0], 'Chapter 1 · week ' + c[0]);
-  const span = { 2: L('etwa Woche 3–5', 'about weeks 3–5'), 3: L('etwa Woche 5–8', 'about weeks 5–8'), 4: L('etwa Woche 8–11', 'about weeks 8–11') }[c[2]];
-  return L('Kapitel ', 'Chapter ') + c[2] + ' · ' + span;
+  /* Szenen laufen im Wochentakt (Konzept 8.4), unabhängig vom Grammatik-Stand. */
+  return L('Woche ', 'Week ') + c[0];
 }
 const TM_TIME = ['That’s a fair question. Let me think about that for a second.', 'Good point. Can I get back to you on that by Friday?', 'Just to make sure I understand: you mean the total price, not the unit price?'];
 function h29(v) {
@@ -629,7 +631,7 @@ function h29(v) {
     return tmSub('h29-list', 'h13', tmTitle(L('Szene wählen', 'Choose a scene'), L('Die Szene der Woche kommt in deiner Pflicht. Hier übst du sie oder jede andere frei, als Extra.', 'The scene of the week comes up in your daily plan. Here you can practice it or any other one freely, as extra.')) +
       '<div class="stack s8">' + sc.map((c, i) => '<button class="choice" id="tm-sc-' + c[0] + '" data-act="tmscene" data-i="' + i + '" style="min-height:62px;' + (sel === i ? 'box-shadow:0 0 0 2px var(--act) inset' : '') + '"><span class="n num">' + c[0] + '</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span>' + c[1] + '</span><span style="font-size:13px;color:var(--fg-2);font-weight:500">' + tmSceneWhen(c) + '</span></span>' +
         (c[3] === 'done' ? '<span class="tm-state fixed">' + L('geübt', 'practiced') + '</span>' : c[3] === 'now' ? '<span class="tm-state">' + L('diese Woche', 'this week') + '</span>' : '') + '</button>').join('') +
-      '<p class="p2" style="font-size:13px;text-align:center;padding-top:4px">' + L('8 weitere Szenen ab Kapitel 5', '8 more scenes from chapter 5') + '</p></div>' +
+      '<p class="p2" style="font-size:13px;text-align:center;padding-top:4px">' + L('Eine Szene pro Woche, unabhängig von deinem Grammatik-Stand. 8 weitere Szenen ab Woche 9.', 'One scene per week, independent of where you are in grammar. 8 more scenes from week 9.') + '</p></div>' +
       '<button class="btn pri full" id="tm-sc-go" data-go="h11-prep">' + L('Szene starten', 'Start scene') + ': ' + sc[sel][1] + '</button>', askBtn());
   }
   const open = !!S.ui.time;
@@ -644,7 +646,7 @@ function h29(v) {
     row('tm-sp-scene', 'list', L('Szene frei wählen', 'Choose any scene'), L('16 Szenen entlang des Verkaufs', '16 scenes along the sales process'), 'data-go="h29-scene"') + '</div></section>' +
     '<section class="stack s6"><div class="h2 disp" style="font-size:19px">' + L('Für deinen Termin', 'For your meeting') + '</div><div>' +
     row('tm-sp-termin', 'cal', L('Mein nächster Termin', 'My next meeting'), L('Dienstag Call mit Einkauf · ändern', 'Tuesday call with purchasing · change'), 'data-go="termin-filled"') +
-    row('tm-sp-mission', 'speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date'), 'data-go="h11-prep"') + '</div></section>', askBtn());
+    row('tm-sp-mission', 'speak', L('Freie Mission', 'Optional mission'), L('Rückfrage zum Liefertermin', 'Question about the delivery date'), 'data-go="h11-free"') + '</div></section>', askBtn());
 }
 reg('h29', {
   code: 'H29', name: 'Sprechen: alle Einträge', kind: 'phone',

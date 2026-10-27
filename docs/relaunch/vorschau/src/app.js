@@ -89,9 +89,9 @@ function ic(name, cls) { return '<svg class="ic ' + (cls || '') + '" viewBox="0 
 const STATE_IC = { ok: 'check', typo: 'near', near: 'near', wrong: 'cross', bad: 'cross', idk: 'ring' };
 
 /* ---------- Tagesmodell (erfunden) ---------- */
-const TOPIC = () => L('Nachfassen nach dem Angebot', 'Following up on the offer');
+const TOPIC = () => L('Nachfassen nach dem Angebot', 'Following up on the quote');
 /* Wochengeschichte: Kapitel 1, Woche 2. Freitags-Mission „Rückruf zum Angebot“, Teilziel Preis-Einwand. */
-const MISSION_NAME = () => L('Rückruf zum Angebot', 'Follow-up call on the offer');
+const MISSION_NAME = () => L('Rückruf zum Angebot', 'Follow-up call on the quote');
 function dayBlocks(kind) {
   const n = [
     { c: 'w', n: L('Gestern-Check', 'Yesterday check'), m: 3 },
@@ -252,12 +252,18 @@ function parseHash() {
   if (!SCREENS[sid]) return { screen: 'h1', v: '' };
   return { screen: sid, v: SCREENS[sid].variants.some(x => x[0] === v) ? v : '' };
 }
+/* Laptop-Rahmen (Kai C): Wer vom Laptop aus in einen Handy-Bildschirm geht, landet beim Zurück auf der Laptop-Seite,
+   nicht auf der Handy-Startseite des Reiters. Gilt zentral für data-go und go(); die Vorführleiste ist ausgenommen. */
+const HOST_MAP = { h1: 'l1-main', 'h1-mid': 'l1-main', 'h1-start': 'l1-main', 'h1-ring': 'l1-main', 'h1-done': 'l1-done', h12: 'l5-main', 'h12-list': 'l5-main', h14: 'l8-main', 'h14-main': 'l8-main', h6: 'l4-main', 'h6-path': 'l4-main', h24: 'l15-overview', 'h24-overview': 'l15-overview', h13: 'l6-talk', 'h13-main': 'l6-talk' };
 function go(target) {
   if (!target) return;
+  if (S.deskCtx && !S.navFromTool && HOST_MAP[target] && curDef() && curDef().kind === 'phone') target = HOST_MAP[target];
   if (('#' + target) === location.hash) { render(); return; }
   location.hash = target;
 }
 function curDef() { return SCREENS[S.screen]; }
+/* Zurück-Ziel: der Bildschirm, von dem aus man hierher kam; sonst das angegebene Ersatzziel. */
+function backTo(id, fallback) { const o = S.origin && S.origin[id]; return o && o !== id ? o : fallback; }
 function curVariant() { const d = curDef(); return S.v || d.variants[0][0]; }
 
 function isPhoneWidth() { return window.innerWidth < 600; }
@@ -266,7 +272,18 @@ function render() {
   clearTimeout(autoTimer);
   const p = parseHash();
   const changed = p.screen !== S.screen || p.v !== S.v;
-  if (changed) { S.ui = {}; S.typed = null; S.from = S.screen; }
+  if (changed) {
+    /* Herkunft je Bildschirm (Kai B): „Zurück“ führt dorthin, woher man kam, nicht fest auf einen Zustand. */
+    if (S.screen && p.screen !== S.screen) {
+      S.origin = S.origin || {};
+      const back = S.origin[S.screen];
+      /* Rückweg (zurück dorthin, woher man kam) überschreibt die Herkunft nicht. */
+      if (!(back && back.split('-')[0] === p.screen)) S.origin[p.screen] = S.screen + (S.v ? '-' + S.v : '');
+    }
+    /* Beispielaufgaben aus „Mehr üben“ (Kai A): Kennzeichen gilt nur, solange man im Trainer bleibt. */
+    if (p.screen !== 'h18') S.sample = null;
+    S.ui = {}; S.typed = null; S.from = S.screen;
+  }
   /* Laptop-Rahmen: Handy-Bildschirme, die vom Laptop aus geöffnet werden, bleiben im Laptop (Seitenleiste bleibt). */
   if (changed && SCREENS[p.screen]) {
     const fromDef = SCREENS[S.from];
@@ -362,7 +379,7 @@ const WHY_FALLBACK = () => ({
   h30: L('Der Wochenabschluss zeigt, was diese Woche sitzt, und legt den Fokus für die nächste Woche fest.', 'The weekly wrap-up shows what stuck this week and sets the focus for next week.'),
   h31: L('Der Meilenstein misst alle 4 Wochen dasselbe wie die Einstufung. Nur so bleibt die C1-Schätzung ehrlich.', 'The milestone measures the same things as the placement every 4 weeks. That keeps the C1 estimate honest.'),
   h32: L('Am Schreibtag schreibst du eine echte Mail aus deiner Woche. Die Rückmeldung zeigt, was du schon selbst bildest.', 'On writing day you write a real email from your week. The feedback shows what you already produce yourself.'),
-  termin: L('Mit deinem echten Termin richtet sich die Mission danach: dieselbe Lage, dieselben Wörter.', 'With your real appointment, the mission follows it: the same situation, the same words.'),
+  termin: L('Mit deinem echten Termin richtet sich die Mission danach: dieselbe Lage, dieselben Wörter.', 'If you add a real appointment, the mission is built around it: same situation, same words.'),
   woche: L('Die Wochenfrage misst dein Ziel „sicher im Kundengespräch“ direkt, als Kurve im Fortschritt.', 'The weekly question measures your goal “confident in client calls” directly, as a curve in Progress.')
 });
 function phoneOverlays(html, def) {
@@ -389,9 +406,16 @@ document.addEventListener('click', e => {
   if (t.closest('#tool')) S.navFromTool = true;
   if (t.hasAttribute('data-set')) { const [k, val] = t.getAttribute('data-set').split(':'); setPref(k, val); return; }
   if (t.hasAttribute('data-act')) { act(t.getAttribute('data-act'), t); return; }
-  const g = t.getAttribute('data-go');
+  let g = t.getAttribute('data-go');
+  /* Laptop-Rahmen (Kai C): Zurück/Schließen in einem eingebetteten Handy-Bildschirm führt dorthin zurück,
+     woher man kam, wenn das eine Laptop-Seite war (statt auf eine Handy-Seite, die man nie gesehen hat). */
+  if (g && S.deskCtx && !S.navFromTool && curDef() && curDef().kind === 'phone' && BACK_LABELS.indexOf(t.getAttribute('aria-label')) >= 0) {
+    const o = S.origin && S.origin[S.screen];
+    if (o && SCREENS[o.split('-')[0]] && SCREENS[o.split('-')[0]].kind === 'desk') g = o;
+  }
   if (g) go(g);
 });
+const BACK_LABELS = ['Zurück', 'Back', 'Schließen', 'Close'];
 document.addEventListener('keydown', e => {
   const def = curDef();
   if (def && def.keys && !e.metaKey && !e.ctrlKey && !e.altKey) def.keys(e);
@@ -477,11 +501,15 @@ function editDist(a, b) {
   for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
   return d[m][n];
 }
-function judge(typed, right, alts) {
-  const t = (typed || '').trim().toLowerCase();
+/* Lehrer M1: bekannte falsche Formen (andere Zeitform, falsche Verbform) zählen vor der Abstandsprüfung als falsch.
+   „Fast“ gibt es nur für echte Tippfehler. Apostrophe ’ und ' werden gleich behandelt. */
+const normAp = x => (x || '').trim().toLowerCase().replace(/[’‘`]/g, "'").replace(/\s+/g, ' ');
+function judge(typed, right, alts, wrongForms) {
+  const t = normAp(typed), r = normAp(right);
   if (!t) return 'idk';
-  if (t === right || (alts || []).indexOf(t) >= 0) return 'ok';
-  if (editDist(t, right) <= (right.length > 5 ? 2 : 1)) return 'typo';
+  if (t === r || (alts || []).map(normAp).indexOf(t) >= 0) return 'ok';
+  if ((wrongForms || []).map(normAp).indexOf(t) >= 0) return 'wrong';
+  if (editDist(t, r) <= (r.length > 5 ? 2 : 1)) return 'typo';
   return 'wrong';
 }
 function wireGap(id, onEnter) {

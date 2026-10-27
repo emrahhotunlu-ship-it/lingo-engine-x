@@ -186,3 +186,13 @@
 .d-moreb .lbl { margin: 0; }
 /* Laptop: Symbolknöpfe am rechten Rand der Spalten ohne negativen Rand, sonst scrollt die Spalte seitlich. */
 .ctx .iconbtn, .desk .dscroll .iconbtn { margin-right: 0; }
+
+/* Kontrastkarte: Hör-Knöpfe und Betonung (Lehrer S2). */
+.tw-ctr .tw-ctrsay { display: inline-grid; width: 32px; height: 32px; margin: -6px 2px -6px 4px; vertical-align: middle; color: var(--fg-2); }
+.tw-ctr .tw-stress { display: flex; gap: 10px; align-items: baseline; font-size: 14px; color: var(--fg-2); padding-top: 2px; border-top: 1px solid var(--line); margin-top: 4px; padding-top: 10px; }
+.tw-ctr .tw-stress b { color: var(--fg); font-weight: 650; }
+.tw-ctr .tw-stress .lbl { margin: 0; }
+
+/* Beispielaufgabe aus „Mehr üben“ (Kai A). */
+.ts-sample { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; font-size: 13px; line-height: 18px; color: var(--fg-2); background: var(--surface-2); border-radius: 10px; padding: 7px 10px; margin: 2px 0 6px; }
+.ts-sample .ts-c1tag { font-style: normal; font-size: 11px; font-weight: 650; letter-spacing: .02em; padding: 2px 6px; border-radius: 6px; background: var(--act-soft); color: var(--act-text); }

@@ -135,3 +135,47 @@ Reine Wochentags-, Monats- und Knopfwörter (Mon … Sun, Feb 2027, OK, Done, Ba
 ## Einzelwörter
 
 Mon · Tue · Wed · Thu · Fri · Sat · Sun · Monday … Saturday · Feb 2027 · Mar 2027 · Apr 2027 · words · Chapter · Mission · rest · Teacher · Continue · Back · Listen · Extra · Resume · Pause · Done · OK · Undo · nachfassen (deutsche Bedeutung in der Hörschleife)
+
+## Runde K2 (Lehrer M1–M4, S1–S8, Kai A–G)
+
+| Bildschirm | Satz | Zweck |
+|---|---|---|
+| H27 Tippfehler | Almost: right tense, just the spelling. Correct: <em>hasn’t signed off on</em>. | M1 |
+| H18 Sprechen | Not quite | Urteil statt „Fast“ (M2) |
+| H18 Sprechen | Not quite: after <em>have</em> comes the past participle, <em>reduced</em>. Say the -d clearly before <em>the</em> and try once more. | M2 |
+| H18 Sprechen | No step back: your second try is the one that counts. | M2, Lage-Zeile |
+| H18 Sprechen | Say it again | M2, Knopf |
+| H11, L6, Szenen | Following up on the quote · Follow-up call on the quote · Ask how the quote was received · Today with mission: <em>follow-up call on the quote</em> | M3 („quote“ statt „offer“) |
+| H28 Preply-Zettel | Week 44 · Following up on the quote | M3 |
+| H6 Kapitel | about weeks 18–22 · end of first pass | M4 |
+| H6, Ziel | The 8 grammar chapters take about 18 to 22 weeks. With your Preply lessons, C1 at work realistically takes 12 to 15 months. The daily length stays fixed. | S1 |
+| H18, L12 Kontrast | Stress · pro-CURE-ment · pro-DUC-tion | S2 |
+| H18, L12 Kontrast | Listen: procurement · Listen: production | S2, Knöpfe |
+| L12 | Contrast after a slip on a solid word. | S3 |
+| H18 Sprechen | Correct. In US English the past simple works here too: <em>We already reduced the price by 5 percent.</em> Use <em>by</em> for the amount. | S4 |
+| H18 Sprechen | Keep <em>already</em> for “schon”. | S4 |
+| H27, L16 | US English: in speech, <em>already</em> and <em>yet</em> also work with the past simple. | S5 |
+| H11, L6 | Goal: hold the price and still secure the next meeting. Sub-goal: handle the price objection. | S6 |
+| H11, L6 | Hold the price and still secure the next meeting. · Handle the price objection | S6 |
+| H11 Bericht, L6 | Sum up at the end: <em>So, just to recap: an eight-week lead time at the current price.</em> | S7 |
+| H17, L11 | <em>surcharge</em>: almost, one letter off. · <em>budget approval</em>: almost, one letter off. | S8 |
+| H34 | of these, still building | S8 |
+| H22 | A mistake sets the word back. Running out of time just counts as slow. | S8 |
+| H34 | Words per minute before you hit Send, spoken answers only. | S8 |
+| Termin „Wozu?“ | If you add a real appointment, the mission is built around it: same situation, same words. | S8 |
+| H12 Hörschleife | Just listening: doesn’t change any review dates or stages. · English, a short pause, German, then the sentence. Just listening, e.g. in the car: doesn’t change any review dates or stages. | S8 |
+| H17 | Seen earlier: practice, doesn’t change your review date. | S8 |
+| H28 Preply-Zettel | Role-play idea for our lesson: You are the head of procurement. … | S8 |
+| H33 → Beispielkarten | Sample task · the real exercise comes in stage 1 | Kai A |
+| H33 → Beispielkarten | C1 format | Kai A |
+| H33 → Beispielkarten | Back to More practice | Kai A, Knopf am Ende |
+| H11 `free` | Optional mission · Question about the delivery date | Kai D |
+| H11 `free` | Head of Procurement · invented persona | Kai D |
+| H11 `free` | Find out whether the delivery date holds and agree on the next step. | Kai D, Ziel |
+| H11 `free` | Ask about the delivery date · Get the lead time confirmed · Agree on the next step | Kai D, Abhakliste |
+| H11 `free` | About 6 minutes, spoken. Optional: counts as extra, not toward your daily plan. | Kai D |
+| H11 `free` | Only the weekly mission is built out in this preview. The optional mission’s conversation looks the same. | Kai D, Hinweis in der Vorschau |
+| H29 Szenen | Week 1 … Week 8 | Kai E |
+| H29 Szenen | One scene per week, independent of where you are in grammar. 8 more scenes from week 9. | Kai E |
+| H26 | fixed · solid | Kai G, Status „gefestigt“ |
+| H26 | topic back in progress | Kai G, Kopf der Themengruppe |

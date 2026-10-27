@@ -774,8 +774,8 @@ Grundlage: `vorschau/luecken.md` (87 heutige Funktionen) und `vokabeltrainer.md`
 | Hörschleife, Eselsbrücke, Satzübersetzung (32, 33) | Wort-Detail „Anhören in Schleife“; Trainer-Art „Anhören (ohne Tippen)“; Mehr-Blatt in der Aufgabe | H12 `detail`, H17 `hear`, H2 `more` |
 | Synonym-Prüfung (33) | „War das auch richtig?“ (bleibt, Kap. 15 Nr. 2) | H2 |
 | Grammatik-Thema frei üben, Nachschlagen, Struktur-Film, Deutsch-Falle (39, 40) | Reiter Grammatik → Thema → „Üben (Extra)“ / Nachschlagen | H27, L16 |
-| Sechs Trainings, C1-Formate, Tempo-Runde, Wort-Werkstatt (31, 43, 44, 48) | „Mehr üben“, erreichbar aus „Wenn du mehr willst“ → „Alles anzeigen“ | H33, H22 |
-| Einwand-Training, Zeit gewinnen, Hot Seat, freie Szenen (48) | Praxis → Sprechen → „Alle“ | H29 |
+| Sechs Trainings, C1-Formate, Tempo-Runde, Wort-Werkstatt (31, 43, 44) | „Mehr üben“, erreichbar aus „Wenn du mehr willst“ → „Alles anzeigen“ | H33, H22 |
+| Einwand-Training, Zeit gewinnen, Hot Seat, freie Szenen (47, 48) | Praxis → Sprechen → „Alle“ | H29 |
 | Lehrer-Korrekturen einfügen, Preply-Zettel, Monatsformular (57, 58) | eigener Ort „Lehrer“ | H28 |
 | Fehler-Übersicht (41) | „Deine Fehler“ aus Grammatik und Fortschritt | H26, L16 |
 | Verlauf, Fortschritt-Details (65) | Fortschritt → Detail und Verlauf | H34 |
