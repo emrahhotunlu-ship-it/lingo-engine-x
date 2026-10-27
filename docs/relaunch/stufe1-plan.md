@@ -35,7 +35,7 @@ Nach **1a** merkt Emrah: neues Aussehen, 5 Reiter, am Laptop eine Seitenleiste, 
 | A6 | Nur additive Daten | Keine Feldlöschung, keine Umbenennung, kein neuer Pflichtwert in einem bestehenden Dokument. Neu sind nur `fk`/`in` (und `ms` in `hist`), `app/today`, `app/profile.theme.a` und `app/profile.dk` | data-guard (G3) und Rückweg-Test (Abschnitt 4.6) |
 | A7 | Rückweg auf v86 | v86 (`3377252:dist/index.html`) läuft mit einem Datenstand, den Stufe 1 geschrieben hat, ohne Fehler, ohne Datenverlust und ohne Serienbruch | `tests/e2e/rueckweg.spec.ts` (P0 legt an, P4/P6/P7 erweitern) |
 | A8 | Rückmeldung passt auf den Bildschirm | Die längste vorhandene Rückmeldung passt auf 390 × 844 ohne Scrollen im Band; Band ≤ 45 % der Höhe | neue `tests/e2e/band.spec.ts` (P3) |
-| A9 | Budget eingehalten | 1a: kein Stück wächst über den Ausgangswert (Sperrklinke). 1b: Einstieg ≤ 300 KB gepackt, je Bereich ≤ 150 KB, je `.bin` ≤ 500 KB, < 100 Dateien, CSS gesamt ≤ 30 KB gepackt | `scripts/check-budget.mjs` in `verify` (P0, Grenzen in P10) |
+| A9 | Budget eingehalten | 1a: kein Stück wächst über Ausgangswert plus den vorab genannten Zuwachs des Pakets (Sperrklinke, P0 Nr. 4). 1b: Einstieg ≤ 300 KB gepackt, je Bereich ≤ 150 KB, je `.bin` ≤ 500 KB, < 100 Dateien, CSS gesamt ≤ 30 KB gepackt | `scripts/check-budget.mjs` in `verify` (P0, Grenzen in P10) |
 | A10 | Blockwechsel | < 300 ms von „Weiter“ bis zur nächsten Aufgabe (Konzept 14.2) | `perf.spec.ts` (P10) |
 | A11 | Zahlen unverändert | Jede Zahl auf Heute, Wörter, Grammatik, Fortschritt ist vor und nach dem Umbau gleich | Golden-Test `tests/unit/metricsGolden.test.ts` (P5) |
 
@@ -66,21 +66,24 @@ Nach **1a** merkt Emrah: neues Aussehen, 5 Reiter, am Laptop eine Seitenleiste, 
 | 1a-1 | **P5 S1-ZAHL**: Kennzahlen-Schicht vollständig | `claude/umbau-s1-zahl` | M | P0 | Tarek, learning-scientist |
 | 1a-2 | **P2 S1-SHELL**: Rahmen Handy/Rail/Laptop, 5 Reiter | `claude/umbau-s1-shell` | L | P1 | Nora, ux-reviewer |
 | 1a-2 | **P3 S1-BAND**: Übungsrahmen mit Band | `claude/umbau-s1-band` | L | P1 | Nora, ux-reviewer, learning-scientist |
-| 1a-3 | **P6 S1-START**: Startbild aus `app/today`, Boot ohne Warten | `claude/umbau-s1-start` | L | P2, P4, P5 | Tarek, data-guard, platform-guard |
+| 1a-3 | **P6 S1-START**: Startbild aus `app/today`, Boot ohne Warten | `claude/umbau-s1-start` | L | P2, P3, P4, P5 | Tarek, data-guard, platform-guard |
 | 1a-3 | **P7 S1-DIKTAT**: Laptop-Diktat-Probe | `claude/umbau-s1-diktat` | S–M | P3, P4 | Nora, data-guard |
 | → | **Test-Link 1a** (G0–G4) | | | P0–P7 | |
 | 1b-0 | **P8 S1-LADEN-0**: Ladeprobe (Messung, kein Umbau) | `claude/umbau-s1-ladeprobe` | S | Test-Link 1a | Tarek, platform-guard |
-| 1b-1 | **P9 S1-INHALT** (9a Grammatik/Muster, 9b Atlas/Lexikon/C1/Drills): Inhalte als `.bin` nachladen | `claude/umbau-s1-inhalt-a`, `…-inhalt-b` | XL (2 × L) | P8 | Tarek, platform-guard, data-guard |
-| 1b-1 | **P10 S1-SPLIT**: Bereiche, Slots, Shells und Texte getrennt laden | `claude/umbau-s1-split` | L | P8 | Tarek, platform-guard, Nora |
+| 1b-1 | **P9 S1-INHALT** (9a Grammatik/Muster, 9b Atlas/Lexikon/C1/Drills/Rest): Inhalte als `.bin` nachladen | `claude/umbau-s1-inhalt-a`, `…-inhalt-b` | XL (2 × L) | P8 | Tarek, platform-guard, data-guard, **learning-scientist** (Plan bleibt gleich) |
+| 1b-1 | **P10 S1-SPLIT** Nr. 1–6: Bereiche, Slots, Rail/Desk-Hülle und Texte getrennt laden | `claude/umbau-s1-split` | L | P8 | Tarek, platform-guard, Nora |
+| 1b-2 | **P10 Nr. 7 Abschluss**: Endgrenzen in `budget.json` und `perf.spec.ts` | `claude/umbau-s1-split-ende` | S | P10 Nr. 1–6 **und** P9b zusammengeführt | Tarek, platform-guard |
 | → | **Test-Link 1b** (G0–G4), danach live nach „Ja live nehmen“ | | | P8–P10 | |
 
-**Gleichzeitig höchstens 3.** Welle 1a-1 hat drei Pakete (P1, P4, P5). P9a und P9b laufen **nacheinander**, parallel zu P10. So sind es in 1b-1 höchstens zwei gleichzeitig.
+**Gleichzeitig höchstens 3.** Welle 1a-1 hat drei Pakete (P1, P4, P5). P9a und P9b laufen **nacheinander**, parallel zu P10. So sind es in 1b-1 höchstens zwei gleichzeitig. Der Abschlussschritt P10 Nr. 7 läuft erst, wenn alles andere zusammengeführt ist, weil die Endgrenzen nur dann messbar sind.
 
 ### 3.2 Gemeinsame Dateien und Konflikte
 
 | Datei | Besitzer | Wer sonst berührt sie | Regel |
 |---|---|---|---|
-| `src/data/schemas.ts` | **P4** (Welle 1a-1) | P1 (nur über `theme`, looseObject, kein Schemaeingriff nötig, siehe 6.1), P6, P7 | P6 und P7 (Welle 1a-3) setzen auf P4 auf. P1 ändert `schemas.ts` **nicht** |
+| `src/data/schemas.ts` | **P4** (Welle 1a-1) | P6 (`app/today`), P7 (`profile.dk`) | Jedes Paket schreibt **einen eigenen, abgegrenzten Block** mit Kommentarkopf (`// S1-ZEIT`, `// S1-START`, `// S1-DIKTAT`) und ändert keine fremde Zeile. P6 und P7 laufen gleichzeitig (Welle 1a-3), die Hauptsitzung führt die beiden Blöcke zusammen. P1 ändert `schemas.ts` **nicht** (`theme` ist looseObject, siehe 6.1) |
+| `src/features/settings/SettingsSheet.tsx` | **P6** (Diagnose-Zeile „Knopf nach“, Z. 233) | P7 | P7 legt seinen Einstieg als eigene Datei `src/features/settings/DictationEntry.tsx` an und hängt ihn mit **genau einer** Einbauzeile in `SettingsSheet.tsx` ein; die Hauptsitzung führt zusammen |
+| `src/app/shell/contextColumn.ts` (neu) | **P2**, als **erster Schritt** angelegt und danach eingefroren | P3 (Kontextspalte in Übungen), P7 | P2 legt Typ, Portal-Ziel und Store der Kontextspalte an und führt diese Datei vor dem Rest von P2 zusammen. P3 baut nur dagegen, ändert sie nicht. Änderungen daran nur über die Hauptsitzung |
 | `src/data/paths.ts` (`APP_DOCS`, Z. 50) | P6 | – | – |
 | `src/ui/exercise/ExerciseShell.tsx` | **P3** | P4 nur über die Übergabe `fk`/`in` am Rand, nicht im Shell-Code | P4 ändert nur `ExerciseView.tsx`, `GrammarItem.tsx`, `useC1Item.ts` und die Logik. Läuft P4 in Welle 1a-1 vor P3, gibt es keinen Konflikt |
 | `src/features/vocab/ExerciseView.tsx` | P4 (Messwerte) | P3 (nur, falls das Band neue Props braucht) | P3 setzt auf P4 auf (Welle 1a-2 nach 1a-1) |
@@ -107,18 +110,19 @@ Nach **1a** merkt Emrah: neues Aussehen, 5 Reiter, am Laptop eine Seitenleiste, 
 - `scripts/check-platform.mjs` kennt `WARN_BYTES` 6 MiB (Z. 19), ein Gesamtbudget (Z. 65/66) und `MULTI_WARN_TOTAL` (Z. 84), aber **kein Budget je Stück**.
 - `tests/e2e/perf.spec.ts:282–284` prüft „dist/index.html < 6 MiB“, das passt nicht zum Mehr-Datei-Build.
 
-**Pfade:** `package.json`, `vite.config.ts`, `scripts/check-platform.mjs`, neu `scripts/check-budget.mjs`, neu `scripts/budget.json`, `tests/e2e/perf.spec.ts` (nur Größentest Z. 282–284), `playwright.config.*` (Ziel `dist/`), neu `tests/e2e/rueckweg.spec.ts`, neu `tests/fixtures/v86.html` (wird im Test aus `git show 3377252:dist/index.html` erzeugt, nicht eingecheckt), `scripts/verify-fast-map.mjs`.
+**Pfade:** `package.json`, `vite.config.ts`, `scripts/check-platform.mjs`, `scripts/publish-manifest.mjs` (nur Grenzen aus der gemeinsamen Quelle lesen), neu `scripts/limits.mjs`, neu `scripts/check-budget.mjs`, neu `scripts/budget.json`, neu `docs/relaunch/publish/` (Manifeste je Link), `tests/e2e/perf.spec.ts` (nur Größentest Z. 282–284), `playwright.config.*` (Ziel `dist/`), neu `tests/e2e/rueckweg.spec.ts`, neu `scripts/v86-checkout.mjs` (holt den v86-Stand in ein Testverzeichnis, nichts eingecheckt), `scripts/verify-fast-map.mjs`.
 
 **Umfang:**
-1. `build` → Mehr-Datei, `build:single` bleibt als Rückfall erhalten. `check:platform` prüft beides: höchstens 255 Dateien je Veröffentlichung (Artefakt-Grenze), < 100 Dateien als Ziel, gesamt ≤ 9 MB (Warnung, Tarek 3.3), jede Datei ≤ 15 MB, kein externer Host, kein Entwicklungs-Adapter.
-2. Vite-Manifest (`build.manifest: true`). `check-budget.mjs` liest das Manifest, packt jedes Stück mit gzip und vergleicht es mit `scripts/budget.json`.
-3. **Sperrklinke in 1a:** `budget.json` enthält die heutigen Werte als Obergrenze (Haupt-JS 2.744.021 B gzip, CSS 25 KB gzip, Lazy-Stücke wie gemessen) plus 2 % Spielraum. Ein Paket, das ein Stück wachsen lässt, fällt durch und muss den Zuwachs begründen. Erhöhen darf nur die Hauptsitzung mit einer Zeile Begründung in `budget.json`.
-4. `verify` und `verify:fast` (`package.json:25/26`) rufen `check-budget.mjs` auf.
-5. E2E laufen gegen den Mehr-Datei-Build. Der Größentest in perf.spec wird auf „Einstieg (Manifest-Eintrag `index.html`) im Budget“ umgestellt.
-6. Rückweg-Gerüst: `rueckweg.spec.ts` lädt die v86-Datei mit dem Entwicklungs-Adapter von außen (wie heute `tests/.runtime/fake-claude.js`) und einen Seed mit allen neuen Feldern. Geprüft wird: Heute lädt, Wörter-Liste lädt, eine Übung lässt sich beenden, keine Meldung in der Diagnose. P4, P6 und P7 erweitern den Seed um ihre Felder.
-7. Veröffentlichungsweg dokumentiert in `docs/relaunch/stufe1-plan.md` Abschnitt 9: Beim Veröffentlichen alle Dateien aus `dist/` über `files`, Dateien der Vorversion, die es nicht mehr gibt, mit `null` entfernen.
+1. `build` → Mehr-Datei, `build:single` bleibt als Rückfall erhalten. `check:platform` prüft beides: < 100 Dateien als Ziel, gesamt ≤ 9 MB (Warnung, Tarek 3.3), kein externer Host, kein Entwicklungs-Adapter.
+2. **Grenzen aus einer Quelle** (`scripts/limits.mjs`), jeweils der strengste Wert aus Artefakt-Tool und `scripts/publish-manifest.mjs`: **höchstens 255 Dateien je Veröffentlichung** (`publish-manifest.mjs:13` `MAX_FILES = 255`), **höchstens 15 MB je Datei** (Artefakt-Grenze für Binärdateien; `publish-manifest.mjs:7` prüft heute nur < 16 MB), ≤ 64 MB je Veröffentlichung. `check-platform.mjs`, `publish-manifest.mjs` und `check-budget.mjs` lesen nur noch diese Datei.
+3. Vite-Manifest (`build.manifest: true`). `check-budget.mjs` liest das Manifest, packt jedes Stück mit gzip und vergleicht es mit `scripts/budget.json`.
+4. **Sperrklinke in 1a mit festem Zuwachs je Paket:** `budget.json` enthält die heutigen Werte (Haupt-JS 2.744.021 B gzip, CSS 25 KB gzip, Lazy-Stücke wie gemessen) und **je Paket einen vorab genannten Zuwachs**: P1 +4 KB CSS (Tokens, Brücke; Glas und Literale fallen weg), P2 +18 KB JS / +4 KB CSS (drei Hüllen, Kontextspalte), P3 +14 KB JS / +3 KB CSS (Band, Mehr-Blatt, Menü), P4 +3 KB JS, P5 +2 KB JS, P6 +8 KB JS, P7 +6 KB JS. Jedes Paket erhöht den Wert in `budget.json` nur um seinen Betrag, mit Paketname daneben. Mehr ist ein G0-Befund und braucht die Zustimmung der Hauptsitzung.
+5. `verify` und `verify:fast` (`package.json:25/26`) rufen `check-budget.mjs` auf.
+6. E2E laufen gegen den Mehr-Datei-Build. Der Größentest in perf.spec wird auf „Einstieg (Manifest-Eintrag `index.html`) im Budget“ umgestellt. **Einzeldatei-Rückfall:** `build:single` + `check:platform` + smoke-Spec laufen in G4 mit (Hinweis H2), damit der Rückfall nicht still verrottet.
+7. **Rückweg-Gerüst:** `scripts/v86-checkout.mjs` holt den v86-Stand per `git worktree add` (bzw. `git archive 3377252 src dist/index.html`) in ein Testverzeichnis und prüft zuerst, dass die Commit-Nachricht von `3377252` „Live v86“ enthält (heute zutreffend: „Live v86: Masterplan Schritt 1 …“). `rueckweg.spec.ts` lädt die v86-`dist/index.html` mit dem Entwicklungs-Adapter von außen (wie heute `tests/.runtime/fake-claude.js`) und einen Seed mit allen neuen Feldern. Geprüft wird: Heute lädt, Wörter-Liste lädt, eine Übung lässt sich beenden, keine Meldung in der Diagnose, **und nach dem Zurückschreiben durch v86 sind `fk`/`ms`/`in` in älteren `hist`-Einträgen, `theme.a`, `dk` und `app/today` noch da** (v86 schreibt `theme` verschmolzen: `src/app/actions.ts:47/56` `persist({ theme: { m } })`). P4, P6 und P7 erweitern den Seed um ihre Felder.
+8. **Veröffentlichungsweg** (Abschnitt 9): je Link liegt das zuletzt veröffentlichte Manifest im Repo (`docs/relaunch/publish/AXHkh6.json`, `docs/relaunch/publish/JLL8.json`). Jede Veröffentlichung läuft über `npm run publish:manifest -- --previous docs/relaunch/publish/<link>.json --out …` (`package.json:14`); das Ergebnis enthält `removeMap` (`publish-manifest.mjs:25–27`), das mit in den Aufruf des Artefakt-Tools geht. Danach wird das neue Manifest unter `docs/relaunch/publish/<link>.json` eingecheckt.
 
-**Abnahme:** `npm run verify` grün im Mehr-Datei-Build; `check-budget` schlägt bei einem künstlich vergrößerten Stück an (Unit-Test des Skripts); `rueckweg.spec.ts` grün.
+**Abnahme:** `npm run verify` grün im Mehr-Datei-Build; `check-budget` schlägt bei einem künstlich vergrößerten Stück an (Unit-Test des Skripts); `rueckweg.spec.ts` grün; `limits.mjs` ist die einzige Fundstelle der Zahlen 255 und 15 MB in `scripts/`.
 
 **Tests:** `tests/unit/checkBudget.test.ts` (neu), `rueckweg.spec.ts` (neu), `perf.spec.ts` angepasst.
 **verify-fast-map:** `scripts/check-budget` und `scripts/budget.json` → `platform`, `perf`; `vite.config.ts` bleibt → `platform`/`perf`; neue Regel `tests/e2e/rueckweg` → sich selbst.
@@ -146,6 +150,7 @@ Nach **1a** merkt Emrah: neues Aussehen, 5 Reiter, am Laptop eine Seitenleiste, 
 - **Schrift:** Inter mit `font-variation-settings: 'opsz' 32` für Überschriften, wenn die eingebettete Datei die Achse hat. Falls nicht, bleibt es beim heutigen Schnitt (kein neuer Download, Budget).
 - **Form:** ein Radius `--r: 14px`, 8-px-Raster, eine Schattenstufe `--shadow`, **keine Glasflächen** (`backdrop-filter` wird überall entfernt, 15 Stellen).
 - Es entstehen **keine neuen part-Dateien** außer den leeren Gerüsten `parts/shell.css` und `parts/band.css` für P2/P3.
+- **OKLCH-Ableitung bewusst später** (Hinweis H5): Stufe 1 übernimmt die Werte der Vorschau als **feste OKLCH-Werte je Modus und Akzent** (`--act`, `--act-soft`, `--act-text` … ausgeschrieben). Eine rechnerische Ableitung aller Töne aus einem Grundton (z. B. `oklch(from var(--act) …)`) kommt erst, wenn ein dritter Akzent dazukommt. Grund: Relative-Color-Syntax ist in älteren iOS-Safari-Versionen nicht sicher, und feste Werte lassen sich im Kontrasttest einzeln belegen.
 
 **Pfade:** `src/styles/index.css`, neu `src/styles/bridge.css`, `src/styles/parts/*.css` (nur Literale → Tokens, Glas raus), `index.html` (Theme-Skript Z. 16–27), `src/app/settings.ts`, die Darstellungs-Einstellung in `src/features/settings/` (Akzent statt Palette), neue Teildatei `src/i18n/parts/theme.de.ts`/`.en.ts`, `tests/unit/contrast.test.ts`.
 
@@ -199,11 +204,13 @@ Siehe Abschnitt 5. Umfang: alle Selbstrechnungen in `src/domain/metrics/` verleg
 
 Siehe Abschnitt 6.2–6.5.
 
+**Erster Schritt (vor allem anderen, eigener Zusammenführ-Punkt):** `src/app/shell/contextColumn.ts` anlegen: Typ eines Kontextspalten-Inhalts (`{ kind: 'claude'|'word'|'explain'|'more', node, title }`), Portal-Ziel (`#lx-context`) und ein kleiner Store (`open/close/current`). Am Handy und im Rail-Bereich unter 1024 px öffnet derselbe Store stattdessen ein Blatt. Die Datei wird von der Hauptsitzung sofort zusammengeführt und ist danach **eingefroren**; P3 und P7 bauen nur dagegen (Befund W8).
+
 **Pfade:** `src/app/shell/**` **außer `Player.tsx`**, `src/app/shell/tabs.ts`, die Registry, `src/areas/*` (nur Zuordnung zu Reitern, keine Inhalte), `index.html` (Skelett `#lx-boot`), `src/styles/parts/shell.css`, neue Teildatei `src/i18n/parts/shell.*.ts`.
 
-**Abnahme:** A3, A4, A5; Navigation je Breitenstufe wie Tabelle 6.2; in Übungen keine Leiste; Zahnrad nur auf Fortschritt; ein Symbol „Fragen“ im Kopf; Screenshots gegen H1, H6, H12, H13, H14, H15, H16, L1, L4, L5, L7, L8, L10.
+**Abnahme:** A3, A4, A5; Navigation je Breitenstufe wie Tabelle 6.2; in Übungen keine Leiste; Zahnrad nur auf Fortschritt; ein Symbol „Fragen“ im Kopf; **Claude/Chat verdeckt nie die Bühne** (am Laptop in der Kontextspalte neben der Bühne, am Handy als Blatt mit sichtbarem Satz darüber; Kap. 15 „Chat als schmale Seitenleiste ohne Kontext, Chat springt beim Lesen nach unten“); Screenshots gegen H1, H6, H12, H13, H14, H15, H16, L1, L4, L5, L7, L8, L10.
 
-**Tests:** `tests/e2e/rahmen.spec.ts` (neu: 5 Reiter, Seitenleiste ab 1280, Rail 600–1279, Praxis aufklappbar, Fragen-Blatt), `breiten.spec.ts` (neu), `erreichbar.spec.ts` (neu), bestehende Specs mit `tab-read` (2 Fundstellen) und `tab-apply` (1) auf den neuen Weg umstellen (Praxis → Lesen).
+**Tests:** `tests/e2e/rahmen.spec.ts` (neu: 5 Reiter, Seitenleiste ab 1280, Rail 600–1279, Praxis aufklappbar, Fragen-Blatt; **Bühne nicht verdeckt:** bei offener Kontextspalte und offenem Claude-Blatt überschneidet sich das Rechteck der Aufgabenzeile nicht mit Spalte bzw. Blatt, bei 390, 1024, 1440; Chat-Verlauf springt beim Lesen nicht nach unten), `breiten.spec.ts` (neu), `erreichbar.spec.ts` (neu), bestehende Specs mit `tab-read` (2 Fundstellen) und `tab-apply` (1) auf den neuen Weg umstellen (Praxis → Lesen).
 **verify-fast-map:** `src/app/shell/` → `rahmen`, `breiten`, `erreichbar` + smoke; `src/areas/` → `erreichbar` + smoke.
 **Prüfer:** Nora (Veto), ux-reviewer.
 
@@ -215,10 +222,16 @@ Siehe Abschnitt 6.4.
 
 **Pfade:** `src/ui/exercise/**` (vor allem `ExerciseShell.tsx`, 450 Zeilen), `src/ui/ActionBar.tsx` (109 Zeilen), `src/app/shell/Player.tsx` (Balken mit Abschnitten, Menü „…“), `src/styles/parts/band.css`, neu `src/i18n/parts/band.*.ts`, neu `scripts/audit-why-length.mjs`.
 
-**Abnahme:** A8; ≤ 2 Nebenknöpfe; Hinweis-Runde einzeilig und ohne Rot; „Lösung gezeigt“ neutral; Zustand immer mit Symbol und Wort; Mehr-Blatt bis 85 %; Laptop-Knopfzeile T/W/⏎ und Kontextspalte; alle 17 Nutzer von `ExerciseShell` (Liste in 6.4) zeigen das Band, ohne dass ihr Inhalt umgebaut wird.
+**Abhängigkeit:** baut gegen `src/app/shell/contextColumn.ts` aus dem ersten Schritt von P2 (eingefroren, W8); startet erst, wenn diese Datei zusammengeführt ist.
 
-**Tests:** `tests/e2e/band.spec.ts` (neu: längste Rückmeldung auf 390 × 844, zusätzlich 390 × 700 als vorläufige Probe, bis Emrah am iPhone misst; Band scrollt nicht, verschwindet nicht von selbst; „…“-Menü enthält „Pause, später weiter“), `resultCard`, `trainerFeedback`, `grammarPatterns` laufen mit, `tests/unit/autoAdvance.test.ts` unverändert grün (`src/ui/exercise/autoAdvance.ts:20`).
-**verify-fast-map:** `src/ui/exercise/` → bestehend `resultCard`/`trainerFeedback`/`grammarPatterns`, ergänzen um `band`; `src/app/shell/Player` → `band` + TRAINER.
+**Tastatur vollständig (Laptop, Hinweis H5):** ⏎ prüfen bzw. weiter, **Esc** schließt Mehr-Blatt, Menü und Kontextspalte (in dieser Reihenfolge, nie die Übung), **1–4** wählt bei Auswahlaufgaben, **T** Tipp, **W** Wort nachschlagen, **?** zeigt die Tastenübersicht. Kürzel greifen nie, solange ein Textfeld den Fokus hat (außer ⏎ und Esc). Sichtbarer Fokusrahmen überall.
+
+**Blockwechsel (Hinweis H5):** Die Optik des Übergangs zwischen zwei Blöcken (Balken springt in den nächsten Abschnitt, Vorschau H3) gehört zu **P3** und ist Teil von G2. Die Zeit < 300 ms (A10) misst **P10**; in 1a ist sie kein Prüfpunkt.
+
+**Abnahme:** A8; ≤ 2 Nebenknöpfe; Hinweis-Runde einzeilig und ohne Rot; „Lösung gezeigt“ neutral; Zustand immer mit Symbol und Wort; Mehr-Blatt bis 85 %; Laptop-Knopfzeile T/W/⏎ und Kontextspalte; vollständige Tastaturbedienung; alle 17 Nutzer von `ExerciseShell` (Liste in 6.4) zeigen das Band, ohne dass ihr Inhalt umgebaut wird.
+
+**Tests:** `tests/e2e/band.spec.ts` (neu: längste Rückmeldung auf 390 × 844, zusätzlich 390 × 700 als vorläufige Probe, bis Emrah am iPhone misst; Band scrollt nicht, verschwindet nicht von selbst; „…“-Menü enthält „Pause, später weiter“), `tests/e2e/tastatur.spec.ts` (neu: eine Wörter-Runde und eine Grammatik-Runde bei 1440 px **nur mit der Tastatur** von Heute bis zur Abschlusskarte, ohne Maus; Esc, 1–4, ?), `resultCard`, `trainerFeedback`, `grammarPatterns` laufen mit, `tests/unit/autoAdvance.test.ts` unverändert grün (`src/ui/exercise/autoAdvance.ts:20`).
+**verify-fast-map:** `src/ui/exercise/` → bestehend `resultCard`/`trainerFeedback`/`grammarPatterns`, ergänzen um `band`, `tastatur`; `src/app/shell/Player` → `band`, `tastatur` + TRAINER.
 **Prüfer:** Nora (Veto), ux-reviewer, learning-scientist (die vier Fragen stehen weiter an fester Stelle).
 
 ---
@@ -230,18 +243,26 @@ Siehe Abschnitte 4.3 und 8.
 **Ist:** `src/app/boot.ts:125`: `if (db === 'pending' || status !== 'ready' || !c1xReady) return 'loading';` Der ganze Bildschirm wartet auf alle Live-Abos (`src/data/live.ts:23` `LIVE_DOCS`) und den c1x-Vorlauf (`src/main.tsx:17` `startC1xPreload()`). `performance.mark('lx:status')` in `TodayScreen.tsx:324`. `PERF_NAMES = ['lx:boot','lx:live','lx:status','lx:card']` (`src/features/settings/perfMarks.ts:6`), eine Zeile „Knopf nach“ gibt es nicht.
 
 **Umfang:**
-1. Dokument `app/today` (Abschnitt 4.3) in `APP_DOCS` (`src/data/paths.ts:50`), Schema, Schreiben über `writer.ts`.
-2. Boot holt zuerst `app/today` mit einem einzelnen `get` und zeichnet daraus Startbild und Knopf. Die großen Abos laufen danach weiter.
-3. Kein globales `'loading'` mehr: `boot.ts:125` wird in „Rahmen bereit“ und „Bereich bereit“ getrennt. Jeder Bereich zeigt sein eigenes Skelett, bis seine Daten da sind. c1x lädt nach dem ersten Bild.
-4. **Wartender Start:** Tippt Emrah den Knopf, bevor der Plan vollständig berechnet ist, öffnet sich sofort der Übungsrahmen mit Skelett und die erste Aufgabe startet automatisch. Der iPhone-Fokus muss im selben Tipp gesetzt werden (heute gelöst über `useStartUnit` synchron, `TodayScreen.tsx:151–159`). Das unsichtbare Eingabefeld wird im Tipp fokussiert und hält den Fokus, bis die Aufgabe steht.
-5. Stimmt `app/today` nicht mit dem frisch berechneten Plan überein (z. B. anderer Tag oder anderes Gerät war schneller), gewinnt der berechnete Plan, das Bild wechselt ohne Springen (gleiche Höhe) und `app/today` wird aktualisiert.
-6. Marken `lx:skeleton`, `lx:button`, `lx:first-task` und eine Diagnose-Zeile in den Einstellungen: „Knopf nach 1,4 s · erste Aufgabe nach 2,1 s“ (letzte 5 Starts aus `localStorage` `lx:perf`, nur Bequemlichkeit).
+1. Dokument `app/today` (Abschnitt 4.3) **nur** in `APP_DOCS` (`src/data/paths.ts:50`), **nie** in `LIVE_DOCS` (`src/data/live.ts:23`; ein Sammel-Abo auf `app/*` gibt es nicht). Schema im eigenen Block in `schemas.ts` (3.2). Pfad in `REPLACEABLE` (`src/data/writer.ts:85`).
+2. **Schreiben (W1, W2):** immer als ganzes Dokument über `writer.transform('app/today', () => ({ replace: next }))` (`writer.ts:26/166–177`; `replace` ist nur für Pfade in `REPLACEABLE` erlaubt, Z. 175). Vor dem Schreiben Vergleich **ohne `at`**; gleich → kein Schreibvorgang. **Nie `writer.update`** (braucht ein bestehendes Dokument und verschmilzt verschachtelte Felder, alte Blöcke blieben stehen). Geschrieben wird **nur** aus `ensureDay` (`src/features/today/store.ts:304`) und nach Nutzeraktionen (Block abgeschlossen, Runde beendet, Plan angepasst), **nie** aus einem Snapshot-Rückruf und nie aus einem Zeitgeber (`contract/db.d.ts:279–286`: „write on a user action or a real state change, never from render code, a snapshot callback, or a timer“). Der Tageswechsel schreibt beim **nächsten** `ensureDay` (heute angestoßen bei Sichtbarkeit, `src/app/boot.ts:136`), nicht um 04:00 per Zeitgeber.
+3. **Boot:** holt zuerst `app/today` mit einem einzelnen `get` und zeichnet daraus Startbild und Knopf. Die großen Abos laufen danach weiter.
+4. **Gültigkeit beim Zeichnen (W3):** Der aktuelle Lerntag wird **jedes Mal frisch** berechnet (Wechsel 04:00, CLAUDE.md A6 Nr. 13). Ist `app/today.d` nicht der aktuelle Lerntag, fehlt das Dokument oder ist es ungültig, werden `rest`, `ring`, `b` und `go` **nicht** angezeigt; an ihrer Stelle steht das Skelett in gleicher Höhe, bis der berechnete Plan da ist. Nur das Thema darf aus einem gestrigen Dokument nicht gezeigt werden (es wäre falsch); es bleibt ebenfalls Skelett.
+5. **Ohne Datenbank oder spät (W3):** `claude.use('db')` kann `null` liefern oder spät kommen (`src/platform/capabilities.ts:26` startet mit `'pending'`, `boot.ts:123` kennt `'absent'` → `'nodb'`). Bis die Fähigkeit da ist, zeigt der Rahmen das Skelett von Heute (kein Vollbild-Laden). Kommt sie bis 10 s nicht, bleibt das Skelett mit dem ruhigen Hinweis „Verbindung zu deinen Daten dauert länger“ und „Erneut versuchen“ (Knopf, keine Schleife, kein Abbruch-Timer auf den Aufruf selbst, CLAUDE.md A6 Nr. 2). Bei `'absent'` gilt der heutige `nodb`-Zustand.
+6. Kein globales `'loading'` mehr: `boot.ts:125` wird in „Rahmen bereit“ und „Bereich bereit“ getrennt. Jeder Bereich zeigt sein eigenes Skelett, bis seine Daten da sind. c1x lädt nach dem ersten Bild.
+7. **Wartender Start (W3):** Tippt Emrah den Knopf, bevor der Plan vollständig berechnet ist, öffnet sich sofort der Übungsrahmen mit Skelett, und die erste Aufgabe startet automatisch, sobald der Plan steht. **Welcher Block startet, entscheidet der berechnete Plan**, nicht `app/today.go`; `go` ist nur die Beschriftung des Knopfs. Der iPhone-Fokus muss im selben Tipp gesetzt werden (heute gelöst über `useStartUnit` synchron, `TodayScreen.tsx:151–159`). Das unsichtbare Eingabefeld wird im Tipp fokussiert und hält den Fokus, bis die Aufgabe steht.
+8. Stimmt `app/today` nicht mit dem frisch berechneten Plan überein (anderes Gerät war schneller), gewinnt der berechnete Plan, das Bild wechselt ohne Springen (gleiche Höhe), und `app/today` wird beim nächsten erlaubten Schreibanlass (Nr. 2) ersetzt.
+9. Marken `lx:skeleton`, `lx:button`, `lx:first-task` und eine Diagnose-Zeile in den Einstellungen: „Knopf nach 1,4 s · erste Aufgabe nach 2,1 s“ (letzte 5 Starts unter `lx:perf`, nur Bequemlichkeit, **ausschließlich über `local` in `src/platform/storage.ts:60`**, Hinweis H6).
 
-**Pfade:** `src/app/boot.ts`, `src/main.tsx`, `src/data/paths.ts`, `src/data/schemas.ts` (neues Schema), neu `src/data/todayDoc.ts`, `src/features/today/*` (Startbild), `src/features/settings/perfMarks.ts`, `SettingsSheet.tsx` (Diagnose-Zeile, Z. 233), Bereichs-Skelette.
+**Pfade:** `src/app/boot.ts`, `src/main.tsx`, `src/data/paths.ts`, `src/data/writer.ts` (nur `REPLACEABLE`), `src/data/schemas.ts` (eigener Block), neu `src/data/todayDoc.ts`, `src/features/today/*` (Startbild), `src/features/settings/perfMarks.ts`, **`src/features/settings/SettingsSheet.tsx` (Besitzer: P6, Diagnose-Zeile, Z. 233)**, Bereichs-Skelette.
 
-**Abnahme:** Startbild erscheint aus `app/today`, bevor `lx:live` fällt (E2E mit absichtlich verzögerten Abos im Entwicklungs-Adapter); Knopf vor `lx:live` bedienbar; wartender Start öffnet die erste Aufgabe mit Tastatur am iPhone-Profil (WebKit-Projekt in Playwright); Diagnose-Zeile vorhanden; `app/today` wird nur geschrieben, wenn sich etwas geändert hat; Tageswechsel um 04:00 schreibt einen neuen Tag per `transform`.
+**Abhängigkeiten:** P2 (Rahmen, Skelett), **P3** (der wartende Start öffnet den neuen Übungsrahmen mit Balken aus `Player.tsx`), P4, P5 (`metrics.todaySummary`).
 
-**Tests:** `tests/unit/todayDoc.test.ts` (Ableitung, ≤ 2 KiB, ungültig → neu, Tageswechsel), `tests/e2e/start.spec.ts` (neu: verzögerte Abos, wartender Start, Fokus), `perf.spec.ts` (Marken), `rueckweg.spec.ts` (Seed mit `app/today`).
+**Abnahme:** Startbild erscheint aus `app/today`, bevor `lx:live` fällt (E2E mit absichtlich verzögerten Abos im Entwicklungs-Adapter); Knopf vor `lx:live` bedienbar; wartender Start öffnet die vom berechneten Plan bestimmte erste Aufgabe mit Tastatur am iPhone-Profil (WebKit-Projekt in Playwright); Diagnose-Zeile vorhanden; `app/today` wird nur bei Änderung, nur aus `ensureDay` oder Nutzeraktion und nur per `transform`/`replace` geschrieben.
+
+**Tests:**
+- `tests/unit/todayDoc.test.ts`: Ableitung, ≤ 2 KiB, Vergleich ohne `at`, ungültig → ganz ersetzt, Tageswechsel beim nächsten `ensureDay`, **ein Snapshot-Ereignis von außen (anderes Gerät) erzeugt 0 Schreibvorgänge**, 10 Neuzeichnungen ohne Änderung erzeugen 0 Schreibvorgänge, `app/today` steht nicht in `LIVE_DOCS`.
+- `tests/e2e/start.spec.ts` (neu): verzögerte Abos; wartender Start (berechneter Plan gewinnt gegen ein abweichendes `go`); Fokus; **`app/today` fehlt**; **`app/today` ungültig**; **`d` von gestern** (keine Zahlen von gestern sichtbar, Skelett); **`?fake=nodb`**; Fähigkeit `db` kommt erst nach 8 s.
+- `perf.spec.ts` (Marken), `rueckweg.spec.ts` (Seed mit `app/today`).
 **verify-fast-map:** `src/app/boot`, `src/main` → `start`, `perf` + smoke; `src/data/todayDoc` → `start` + TODAY + rueckweg.
 **Prüfer:** Tarek, data-guard, platform-guard (ein Abo je Abfrage, Vertrag `db.d.ts`).
 
@@ -251,56 +272,91 @@ Siehe Abschnitte 4.3 und 8.
 
 Siehe Abschnitt 7.
 
-**Pfade:** neu `src/features/settings/DictationProbe.tsx`, `src/features/settings/*` (Einstieg in der Diagnose), `src/data/schemas.ts` (`profile.dk`, optional), Hinweiszeile in der Übung (über das Band aus P3), `src/app/resume.ts` (nur Aufruf von `saveResume`, Z. 76), neu `src/i18n/parts/diktat.*.ts`.
+**Pfade:** neu `src/features/settings/DictationProbe.tsx`, neu `src/features/settings/DictationEntry.tsx` (Einstieg in der Diagnose; in `SettingsSheet.tsx`, Besitzer P6, kommt **genau eine** Einbauzeile, W7), `src/data/schemas.ts` (eigener Block `// S1-DIKTAT`, `profile.dk`, optional), Kontextspalte nur über `src/app/shell/contextColumn.ts` (eingefroren, W8), Hinweiszeile in der Übung (über das Band aus P3), `src/app/resume.ts` (nur Aufruf von `saveResume`, Z. 76), neu `src/i18n/parts/diktat.*.ts`.
 
 **Abnahme:** Probe nur ab 1024 px mit Tastatur sichtbar (`useSplitLayout`, `src/platform/input.ts:41`); Ergebnis in `app/profile.dk`; Hinweiszeile tauscht nach Erfolg; beide Zeilen nie gleichzeitig; „Am Handy sprechen“ legt die Runde zurück wie „Pause, später weiter“.
 
 **Tests:** `tests/unit/dictationProbe.test.ts` (Wortübereinstimmung, Sprache, ohne Taste), `tests/e2e/diktat.spec.ts` (Diktat simuliert über `insertText` ohne `keydown`).
-**verify-fast-map:** `src/features/settings/DictationProbe` → `diktat` + `settings`.
+**verify-fast-map:** `src/features/settings/DictationProbe`, `src/features/settings/DictationEntry` → `diktat` + `settings`.
 **Prüfer:** Nora, data-guard.
 
 ---
 
-#### P8 S1-LADEN-0: Ladeprobe · Größe S (~300 Zeilen, kein Produktcode)
+#### P8 S1-LADEN-0: Ladeprobe · Größe S (~400 Zeilen, kein Produktcode)
 
 **Ziel:** Vor dem großen Umbau in 1b einmal messen, was er bringt, und Safari mit nachgeladenen Stücken in claude.ai prüfen (Risiko R1).
 
-**Umfang:** Probe-Build, in dem der Einstieg nur Rahmen + Heute + `app/today` enthält und alles andere als dynamischer Import hängt (ohne Umbau der Inhalte, mit einem Wegwerf-Zweig). Messung mit perf.spec (4×). Veröffentlichung auf dem Test-Link `AXHkh6…` als eigene Version; Emrah öffnet am iPhone Heute und danach den Reiter Wörter und schickt ein Foto der Diagnose-Zeile. Danach Test-Link zurück auf Test-Link 1a.
+**Richtige Deutung vorab (Befund W10):** Die meisten großen Inhalte sind schon heute als **Text** eingebettet (`?raw`) und werden erst bei Gebrauch geparst, z. B. der Atlas („erst beim ersten Öffnen des Atlas geparst“, `src/domain/atlas/atlas.ts:1–7`), das Wörterbuch (`src/domain/lexicon/dict.ts:44`, `JSON.parse` in `load()`), die Muster (`src/domain/grammar/patterns.ts:28–30`). In der Einzeldatei steckt das alles zusätzlich in Base64. **P9 spart deshalb vor allem Übertragung und die Auswertung riesiger Zeichenketten im Haupt-Skript, kaum `JSON.parse`.** Direkt importierte `.json` (ohne `?raw`) werden dagegen als JS-Objekte beim Start ausgewertet. Die Schätzung in 8.2 ist entsprechend korrigiert.
 
-**Abnahme:** Messwert und iPhone-Ergebnis stehen in `docs/umbau/stand.md`. Bringt der Probe-Build den Knopf nicht unter 2,5 s, wird P9/P10 vor dem Start mit Tarek neu geschnitten (einzige erlaubte Neuplanung, weil echter Befund).
+**Umfang:**
+1. Probe-Build auf einem Wegwerf-Zweig: Der Einstieg enthält nur `ShellPhone` (Handy-Hülle **bleibt** im Einstieg, nur Rail/Desk werden nachgeladen), Heute-Startbild und `app/today`. Alles andere hängt als dynamischer Import, **auch `buildTodayPlan`** (`src/features/today/store.ts:200`) mit seinen Inhalten (er gehört nicht in den Einstieg; das Startbild kommt aus `app/today`).
+2. **Messung mit Modul-Aufschlüsselung:** Einstiegsgröße gepackt, aufgeschlüsselt nach Modulen (Vite-Manifest + `rollup-plugin-visualizer`-Ausgabe als JSON, nur im Probe-Zweig), dazu perf.spec bei 4×.
+3. **Abbruchkriterium:** Rechnet man aus der Aufschlüsselung hoch, dass der Einstieg auch nach P9/P10 über 300 KB gepackt bleibt, oder kommt der Knopf im Probe-Build nicht unter 2,5 s, werden P9/P10 vor dem Start mit Tarek **neu geschnitten** (einzige erlaubte Neuplanung, weil echter Befund).
+4. **iPhone-Probe** auf dem Test-Link `AXHkh6…` als eigene Version: Emrah öffnet Heute, dann den Reiter Wörter (lädt ein nachgeladenes Stück) und eine Übung mit C1-Aufgabe (lädt eine c1x-`.bin`), und schickt ein Foto der Diagnose-Zeile. Danach Test-Link zurück auf Test-Link 1a.
+5. **Der Probe-Build schreibt höchstens `app/today`, nie `app/profile.plan`** (Hinweis H8): `ensureDay` und alle Plan-Schreibwege sind im Probe-Zweig abgeschaltet; ein E2E-Test im Probe-Zweig prüft, dass keine anderen Schreibvorgänge stattfinden.
+6. **Inhaltsliste für den Plan-/Heute-Pfad (W6, Ergebnis von P8, Voraussetzung für P9):** je Funktion, die `ensureDay`/`buildTodayPlan` aufruft (`store.ts:1–30` importiert u. a. `drills/cloze`, `drills/orderPool`, `drills/sprint`, `plan/*`, `metrics`, `c1/checkSchedule`, `grammar/path`, `grammar/patterns`, `progress/weekly3`, `srs/chunkCards`, `srs/queue`, `unit/plan`, `unit/review`, `today/pack`), welche Inhaltsdateien sie braucht. Ablage als Tabelle in diesem Plan (Abschnitt 3.4, von P8 nachgetragen).
+
+**Abnahme:** Messwert, Modul-Aufschlüsselung, Hochrechnung und iPhone-Ergebnis stehen in `docs/umbau/stand.md`; Inhaltsliste 3.4 ist ausgefüllt.
 
 **Prüfer:** Tarek, platform-guard.
 
 ---
 
-#### P9 S1-INHALT: Inhalte als `.bin` nachladen · Größe XL, geschnitten in 9a und 9b (je L, ~1.500 Zeilen)
+#### P9 S1-INHALT: Inhalte als `.bin` nachladen · Größe XL, geschnitten in 9a und 9b (je L, ~1.700 Zeilen)
 
-**Ist:** Die größten statischen Inhalte werden direkt importiert und landen im Haupt-Skript:
+**Ist:** Alle Inhalte stecken im Haupt-Skript, entweder als Text (`?raw`, Auswertung bei Gebrauch) oder als direkt importiertes JSON (JS-Objekt beim Start). Vollständige Liste (W10):
 
-| Datei | Größe | importiert in |
-|---|---|---|
-| `src/content/atlas/atlas.json` | 1,42 MB | `src/domain/atlas/atlas.ts` |
-| `grammar/tasks-v2.json` | 1,32 MB | `src/domain/grammar/tasks.ts`, `raw.ts` |
-| `grammar/pattern-map.json` | 0,63 MB | `src/domain/grammar/patternTypes.ts`, `patterns.ts`, `rules.ts` |
-| `c1/order.json` | 0,39 MB | `src/domain/drills/orderPool.ts` |
-| `pron/us-ipa.json` | 0,33 MB | `src/domain/lexicon/pron.ts` |
-| `legacy/dict.json` | 0,29 MB | `src/domain/lexicon/dict.ts`, `src/domain/content.ts` |
-| `c1/pack.json` | 0,28 MB | `src/domain/c1pack/pack.ts`, `packFields.ts` |
-| `c1/toolkit.json` | 0,25 MB | `src/domain/c1pack/*` |
-| `c1x/src/gate/k1.json` | 0,18 MB | c1x (schon heute als `.bin`, 13 Dateien je ≤ 41 KB) |
+| Datei | Größe | Art | importiert in |
+|---|---|---|---|
+| `src/content/atlas/atlas.json` | 1,42 MB | `?raw` | `src/domain/atlas/atlas.ts:1` |
+| `grammar/tasks-v2.json` | 1,32 MB | `?raw` | `src/domain/grammar/patterns.ts:4` |
+| `grammar/patterns/*.json` | 0,77 MB gesamt | `?raw`, `glob` eager | `src/domain/grammar/patterns.ts:26` |
+| `grammar/pattern-map.json` | 0,63 MB | `?raw` | `src/domain/grammar/patterns.ts:1` |
+| `c1/order.json` | 0,39 MB | `?raw` | `src/domain/drills/orderPool.ts:2` |
+| `pron/us-ipa.json` | 0,33 MB | `?raw` | `src/domain/lexicon/pron.ts:1` |
+| `legacy/dict.json` | 0,29 MB | `?raw` | `src/domain/lexicon/dict.ts:1` |
+| `c1/pack.json` | 0,28 MB | `?raw` | `src/domain/c1pack/pack.ts:2`, `packFields.ts:2`, `src/domain/lexicon/unitKnown.ts:1` |
+| `c1/toolkit.json` | 0,25 MB | JSON **und** `?raw` | `src/domain/content.ts:6`, `src/domain/grammar/raw.ts:3` (zweimal im Bundle) |
+| `c1/anim/*.json` | 0,21 MB gesamt | `?raw`, `glob` eager | `src/domain/c1/anim.ts:66` |
+| `nb/*.json` | 0,22 MB gesamt | `?raw` | `src/content/nb/load.ts:2–8` |
+| `c1x/src/gate/k1.json` | 0,18 MB | schon `.bin` | c1x (13 Dateien je ≤ 41 KB, über `loadPacked`) |
+| `grammar-bank.json` | 116 KB | JSON | `src/domain/grammar/tasks.ts:1`, `seedExpl.ts:1` |
+| `fk/b1.json`, `fk/b2.json` | 88 KB, 20 KB | `?raw` | `src/domain/repair/fk.ts:2–3` |
+| `legacy/rules.json`, `legacy/grammar.json` | 56 KB, 40 KB | `?raw` und JSON | `src/domain/grammar/raw.ts:1–2`, `src/domain/content.ts:4` |
+| `tutor/l1.json` | 40 KB | `?raw` | `src/domain/tutor/l1.ts:2` |
+| `legacy/vocab.json` | 32 KB | JSON | `src/domain/content.ts:5`, `src/domain/lexicon/unitKnown.ts:3` |
+| `col/charge1.json` | 32 KB | JSON | `src/content/col/index.ts:2`, `src/domain/lexicon/unitKnown.ts:2` |
+| `legacy/course.json` | 24 KB | JSON | `src/domain/content.ts:1` |
+| `legacy/cefr.json` | 20 KB | JSON | `src/domain/assessment/evidence.ts:2`, `src/domain/progress/cando.ts:1` |
+| `c1/mail-situations.json` | 20 KB | `?raw` | `src/domain/tutor/mail.ts:2` |
+| `irregular.json` | 16 KB | JSON | `src/domain/text/lemma.ts:1`, `src/domain/c1x/kwtNorm.ts:1`, `src/domain/answer/form.ts:1` |
+| `c1/program.json` | 12 KB | `?raw` | `src/domain/c1/chapters.ts:1` |
+| `legacy/scenes.json`, `speak/scenes.json` | 8 KB, 4 KB | JSON | `src/domain/chunks/legacyScene.ts:1–2` |
+| `lexicon/units.json`, `lexicon/sense-extra.json` | je 8 KB | JSON / `?raw` | `src/domain/lexicon/unitKnown.ts:4`, `dict.ts:2` |
+| `grammar-extra.json` | 8 KB | JSON | `src/domain/grammar/tasks.ts:2`, `seedExpl.ts:2` |
+| `atlas/meta.json` | 4 KB | JSON | `src/domain/metrics/today.ts:1` |
 
-**Umfang:** Jede dieser Quellen bekommt eine asynchrone Ladefunktion (`await loadGrammarTasks()`), die eine `.bin`-Datei (Muster wie c1x, ≤ 500 KB je Datei) holt, prüft (zod) und im Speicher hält. Aufrufer werden auf „bereit / lädt / Fehler“ umgestellt; jeder Bereich zeigt ein Skelett und bei Fehler „Erneut laden“ (Knopf, keine Schleife, A6 CLAUDE.md). Synchrone Aufrufer in reiner Logik bekommen die Daten als Parameter statt über einen Import.
-- **9a:** Grammatik (`tasks`, `raw`, `patternTypes`, `patterns`, `rules`), Muster.
-- **9b:** Atlas, Lexikon (`unitKnown`, `pron`, `dict`), `content.ts`, C1-Pack, `orderPool`.
+Kleinteile unter 8 KB (`legacy/context.json`, `legacy/vtest.json`, `vtest-en.json`, `grammar/path.json`, `grammar/retired.json`) bleiben im Bereichs-Stück ihres Bildschirms, nicht im Einstieg. Demo-Dateien (`content/demo/*.json`) gehören in ihr Bereichs-Stück.
 
-**Abnahme:** keine JSON über 50 KB mehr im Einstieg (Manifest-Prüfung); jeder Bereich funktioniert bei verzögertem und bei fehlgeschlagenem Laden; Zahlen unverändert (Golden-Test aus P5).
-**Tests:** je Quelle ein Unit-Test für Laden/Prüfen/Fehler; `tests/e2e/nachladen.spec.ts` (neu: verzögerte `.bin`, fehlende `.bin` → „Erneut laden“).
-**verify-fast-map:** `src/domain/grammar/` → GRAMMAR + `nachladen`; `src/domain/atlas/`, `src/domain/lexicon/`, `src/domain/c1pack/`, `src/domain/drills/` → VOCAB/C1X + `nachladen`.
-**Prüfer:** Tarek, platform-guard, data-guard (nur gelesen, keine Daten, trotzdem Pflicht: Schemas).
+**Umfang:**
+1. **Ein Ladeweg (Hinweis H1):** Jede `.bin` wird **ausschließlich** über den bestehenden `contentStore` (`src/content/store/index.ts`) und `loadPacked` (`src/content/store/loadPacked.ts:54`, Marker `lx:content-fetch` Z. 11) geholt, geprüft (zod) und im Speicher gehalten. Kein zweiter Ladeweg, keine eigene `fetch`-Stelle. Lint-Regel: `fetch(` nur in `src/content/store/`.
+2. Jede Quelle bekommt eine asynchrone Ladefunktion (`await loadGrammarTasks()`), ≤ 500 KB je `.bin`. Aufrufer werden auf „bereit / lädt / Fehler“ umgestellt; jeder Bereich zeigt ein Skelett und bei Fehler „Erneut laden“ (Knopf, keine Schleife, CLAUDE.md A6). Synchrone Aufrufer in reiner Logik bekommen die Daten als Parameter statt über einen Import.
+3. **Plan wartet auf alle Inhalte (W6):** Nach der Inhaltsliste aus P8 (Abschnitt 3.4) lädt `ensureDay` zuerst alle Inhalte, die der Plan-/Heute-Pfad braucht, und **rechnet und schreibt erst, wenn alle da sind**. Fehlt eine Datei, wird nichts gerechnet und nichts geschrieben; das Startbild aus `app/today` (nur wenn `d` aktuell ist) und der Hinweis „Erneut laden“ bleiben. Grund: Ein Plan aus halben Inhalten würde anders würfeln und `app/profile.plan` dauerhaft falsch festschreiben (Kap. 15 „Tagesplan, der sich neu würfelt“).
+4. `c1/toolkit.json` wird nur noch einmal eingebunden (heute JSON in `content.ts:6` und `?raw` in `grammar/raw.ts:3`).
+- **9a:** Grammatik (`tasks-v2`, `patterns/*`, `pattern-map`, `grammar-bank`, `grammar-extra`, `legacy/rules`, `legacy/grammar`, `c1/toolkit`), Fehlersätze (`fk/b1`, `fk/b2`).
+- **9b:** Atlas, Lexikon (`unitKnown`, `pron`, `dict`, `sense-extra`, `units`, `col/charge1`), `content.ts` (`legacy/vocab`, `legacy/course`), C1 (`pack`, `program`, `anim/*`, `order`), `nb/*`, `tutor/l1`, `mail-situations`, `legacy/cefr`, `irregular`, Szenen, `atlas/meta`.
+
+**Abnahme:** keine Inhaltsdatei über 8 KB mehr im Einstieg (Manifest-Prüfung in `check-budget`); jeder Bereich funktioniert bei verzögertem und bei fehlgeschlagenem Laden; Zahlen unverändert (Golden-Test aus P5); **Plan unverändert**.
+**Tests:**
+- je Quelle ein Unit-Test für Laden/Prüfen/Fehler;
+- `tests/unit/planWithLazyContent.test.ts` (neu, W6): Seed und Großdatensatz, Inhalte mit künstlicher Verzögerung in zufälliger Reihenfolge → der Plan ist **identisch** mit dem Plan bei sofort verfügbaren Inhalten; **solange ein Inhalt fehlt, 0 Schreibvorgänge** (`app/profile.plan`, `app/today`, Pflicht);
+- `tests/e2e/nachladen.spec.ts` (neu: verzögerte `.bin`, fehlende `.bin` → „Erneut laden“, Marker `lx:content-fetch` zählt nur erwartete Abrufe).
+**verify-fast-map:** `src/domain/grammar/`, `src/domain/repair/` → GRAMMAR + `nachladen` + `planWithLazyContent`; `src/domain/atlas/`, `src/domain/lexicon/`, `src/domain/c1pack/`, `src/domain/c1/`, `src/domain/drills/`, `src/content/` → VOCAB/C1X + `nachladen` + `planWithLazyContent`.
+**Prüfer:** Tarek, platform-guard, data-guard (Schemas, keine Schreibvorgänge vor vollständigen Inhalten), **learning-scientist** (Plan und Aufgabenauswahl unverändert, W6).
 
 ---
 
-#### P10 S1-SPLIT: Bereiche, Slots, Shells und Texte getrennt laden · Größe L (~1.400 Zeilen)
+#### P10 S1-SPLIT: Bereiche, Slots, Rail/Desk-Hülle und Texte getrennt laden · Größe L (~1.400 Zeilen) + Abschlussschritt S
 
 **Ist:**
 - `src/areas/index.ts:16` lädt alle Bereiche (`system, heute, lernen, anwenden, wortschatz, readArea, sprechen, profil, training`) sofort.
@@ -309,26 +365,30 @@ Siehe Abschnitt 7.
 - framer-motion steckt im Startpfad, `startC1xPreload()` in `src/main.tsx:17`.
 
 **Umfang:**
-1. Bereiche und Routen per `React.lazy`/dynamischem Import; nur Heute und der Rahmen bleiben im Einstieg.
+1. Bereiche und Routen per `React.lazy`/dynamischem Import; nur Heute (Startbild, ohne `buildTodayPlan`) und der Rahmen bleiben im Einstieg.
 2. Slots nicht mehr eager außer denen von Heute; die übrigen registrieren sich beim Laden ihres Bereichs.
-3. `ShellPhone`, `ShellRail`, `ShellDesk` getrennt nachladen (Konzept 13.3); im Einstieg nur die Hülle der aktuellen Breite.
+3. **`ShellPhone` bleibt im Einstieg** (der häufigste Start ist das Handy, W10); nur `ShellRail` und `ShellDesk` werden nachgeladen (Konzept 13.3). Bis die Laptop-Hülle da ist, zeigt der Rahmen die Bühne mittig ohne Seitenleiste.
 4. Texte: ein kleines Start-Wörterbuch (Heute, Rahmen, Fehlermeldungen) im Einstieg, der Rest je Sprache als eigenes Stück. Nur die aktive Sprache wird geladen.
 5. framer-motion aus dem Startbild (CSS-Übergänge im Startbild, Motion lädt mit dem ersten Bereich).
 6. c1x-Vorlauf nach dem ersten Bild (`requestIdleCallback` mit Rückfall).
-7. perf.spec mit den neuen Grenzen (A1, A10); Budget-Tor auf die Endwerte (A9).
+7. **Abschlussschritt, eigener Zweig nach dem Zusammenführen von P9b (W9):** Endgrenzen in `scripts/budget.json` (A9) und `perf.spec.ts` (A1, A10, Blockwechsel < 300 ms). Erst dann sind die Werte messbar; vorher gelten die Sperrklinken-Werte.
 
-**Abnahme:** A1, A9, A10 grün; Wechsel in jeden Reiter < 300 ms nach dem ersten Laden, beim allerersten Öffnen mit Skelett.
-**Tests:** `perf.spec.ts` (neue Grenzen), `tests/e2e/lazy.spec.ts` (neu: jeder Reiter lädt, Sprachwechsel lädt die andere Sprache), smoke.
+**Abnahme:** Nr. 1–6: Einstieg ohne Bereichs-, Rail/Desk- und Fremdsprachen-Code (Manifest); jeder Reiter lädt. Nr. 7: A1, A9, A10 grün; Wechsel in jeden Reiter < 300 ms nach dem ersten Laden, beim allerersten Öffnen mit Skelett.
+**Tests:** `perf.spec.ts` (neue Grenzen, in Nr. 7), `tests/e2e/lazy.spec.ts` (neu: jeder Reiter lädt, Sprachwechsel lädt die andere Sprache, Breitenwechsel 390 → 1440 lädt die Laptop-Hülle), smoke.
 **verify-fast-map:** `src/areas/`, `src/app/registerAll`, `src/i18n/index` → `lazy`, `perf` + smoke.
 **Prüfer:** Tarek, platform-guard, Nora (Skelette sehen ruhig aus).
 
----
+### 3.4 Inhaltsliste Plan-/Heute-Pfad (füllt P8 aus, Voraussetzung für P9)
+
+| Funktion (Aufruf aus `ensureDay`/`buildTodayPlan`) | Fundstelle | benötigte Inhaltsdateien |
+|---|---|---|
+| *von P8 auszufüllen; Startpunkt sind die Importe in `src/features/today/store.ts:1–30`* | | |
 
 ## 4. Daten (Tarek)
 
 ### 4.1 Grenzen aus dem Vertrag
 
-`contract/db.d.ts`: 256 KiB je Dokument (Z. 76, 418), 5.000 Dokumente (Z. 419), 64 Abos je Ansicht (Z. 81, 388), `limit` 1–1000 (Z. 376), Pfad ≤ 1000 Byte und ≤ 16 Segmente (Z. 149). Stufe 1 legt **genau ein** neues Dokument an (`app/today`) und **kein** neues Abo (P6 holt es per `get`, das bestehende Abo auf `app/*` bleibt).
+`contract/db.d.ts`: 256 KiB je Dokument (Z. 76, 418), 5.000 Dokumente (Z. 419), 64 Abos je Ansicht (Z. 81, 388), `limit` 1–1000 (Z. 376), Pfad ≤ 1000 Byte und ≤ 16 Segmente (Z. 149). Stufe 1 legt **genau ein** neues Dokument an (`app/today`) und **kein** neues Abo: P6 holt es per einzelnem `get`. Es kommt nur in `APP_DOCS` (`src/data/paths.ts:50`), **nie** in `LIVE_DOCS` (`src/data/live.ts:23`); ein Sammel-Abo auf `app/*` gibt es nicht.
 
 ### 4.2 Zeit je Versuch
 
@@ -360,9 +420,10 @@ app/today = {
 }
 ```
 
-- **Abgeleitet und ersetzbar:** Quelle bleibt `app/profile.plan` und `app/profile.pflicht`. `app/today` ist ein Abbild für den schnellen Start. Bei ungültigem Inhalt wird es per `transform` neu geschrieben (Eintrag in `REPLACEABLE`, `writer.ts:85`, neben `app/lookup`).
+- **Abgeleitet und ersetzbar:** Quelle bleibt `app/profile.plan` und `app/profile.pflicht`. `app/today` ist ein Abbild für den schnellen Start. Es wird **immer als Ganzes ersetzt**, auch bei ungültigem Inhalt (Eintrag in `REPLACEABLE`, `writer.ts:85`, neben `app/lookup`).
 - **Größe:** ≤ 2 KiB (Test).
-- **Schreiben:** nur wenn sich der Inhalt geändert hat (Vergleich ohne `at`), über `writer.update`; Tageswechsel über `writer.transform`.
+- **Schreiben (W1, W2):** ausschließlich `writer.transform('app/today', () => ({ replace: next }))` (`writer.ts:26`, `replace`-Zweig Z. 173–177, der bei gleichem Inhalt selbst `'unchanged'` liefert), vorher eigener Vergleich **ohne `at`**. **Nie `writer.update`**: Es setzt ein bestehendes Dokument voraus und verschmilzt verschachtelte Felder, alte Blöcke aus `b` blieben stehen. Schreibanlässe nur `ensureDay` (`src/features/today/store.ts:304`) und Nutzeraktionen; nie aus Snapshot-Rückruf oder Zeitgeber (`contract/db.d.ts:279–286`). Der Tageswechsel wird beim nächsten `ensureDay` geschrieben.
+- **Lesen (W3):** Der Lerntag wird bei jedem Zeichnen frisch berechnet (04:00). Ist `d` nicht der aktuelle Lerntag, fehlt das Dokument oder ist es ungültig, zeigt Heute für `rest`, `ring`, `b`, `go` und `th` das Skelett, nie alte Zahlen. Beim wartenden Start entscheidet der berechnete Plan; `go` ist nur die Beschriftung des Knopfs.
 - **Schema:** `looseObject`, alle Felder außer `v` und `d` optional.
 - **Rückweg:** v86 kennt `app/today` nicht und liest es nie (nicht in `APP_DOCS` von v86, `paths.ts:50`). Unschädlich.
 
@@ -375,7 +436,7 @@ app/today = {
 
 1. Jedes neue Feld ist optional; kein bestehendes Feld ändert Typ oder Bedeutung (Diff von `schemas.ts`).
 2. Alle Schreibvorgänge laufen über `writer.ts` (Lint-Regel besteht).
-3. `app/today` ≤ 2 KiB, in `APP_DOCS`, kein eigenes Abo, wird nur bei Änderung geschrieben (Unit-Test zählt Schreibvorgänge bei 10 Neuzeichnungen = 0).
+3. `app/today` ≤ 2 KiB, nur in `APP_DOCS`, nicht in `LIVE_DOCS`, kein eigenes Abo; nur per `transform`/`replace` geschrieben, nie per `update`; nur aus `ensureDay` und Nutzeraktionen (Unit-Test: 10 Neuzeichnungen = 0 Schreibvorgänge, Snapshot von außen = 0 Schreibvorgänge).
 4. Karten- und Loggrößen mit dem Großdatensatz (Seed × 10) unter den Grenzen.
 5. Dokumentenzahl: +1.
 6. Seed (`seed/sample-data.json`) bleibt unverändert; neue Felder nur im Rückweg-Seed `tests/fixtures/s1-seed.json` (erfunden).
@@ -383,7 +444,8 @@ app/today = {
 
 ### 4.6 Rückweg-Test
 
-- **Unit:** `tests/unit/rueckwegSchema.test.ts` liest einen Datenstand mit allen neuen Feldern mit den Schemas von v86 (aus `git show 3377252:src/data/schemas.ts` und `3377252:src/domain/srs/applyReview.ts` in ein Testverzeichnis geholt) und prüft: alles gültig, `fk`/`ms`/`in` überleben einen Review durch v86 (v86 hängt per `[...hist, histEntry(...)].slice(-HIST_MAX)` an, `applyReview.ts:328/365/400`, alte Einträge bleiben als Objekte unverändert).
+- **v86-Stand holen (Hinweis H3):** `scripts/v86-checkout.mjs` (P0) holt `3377252` per `git worktree add` bzw. `git archive 3377252 src dist/index.html` in ein Testverzeichnis und bricht ab, wenn die Commit-Nachricht nicht „Live v86“ enthält (heute: „Live v86: Masterplan Schritt 1 …“). Keine Einzeldateien per `git show`, damit alle Importe der v86-Schemas aufgehen.
+- **Unit:** `tests/unit/rueckwegSchema.test.ts` liest einen Datenstand mit allen neuen Feldern mit den Schemas von v86 (aus diesem Testverzeichnis: `src/data/schemas.ts`, `src/domain/srs/applyReview.ts`) und prüft: alles gültig, `fk`/`ms`/`in` überleben einen Review durch v86 (v86 hängt per `[...hist, histEntry(...)].slice(-HIST_MAX)` an, `applyReview.ts:328/365/400`, alte Einträge bleiben als Objekte unverändert). **Zurückschreiben:** Ein Test lässt v86 eine Karte bewerten und das Thema ändern und prüft danach, dass `fk`/`ms`/`in` in den älteren `hist`-Einträgen und `theme.a` noch da sind (v86 schreibt `theme` verschmolzen, `src/app/actions.ts:47/56`), ebenso `dk` und `app/today`.
 - **E2E:** `rueckweg.spec.ts` (P0) startet die v86-Datei gegen den Seed, macht eine Wörter-Übung, prüft Serie und Heute.
 - **Probe auf dem Test-Link** (einmal in 1a, Abschnitt 9): Test-Link mit 1a-Stand üben lassen, dann v86 als Einzeldatei auf denselben Test-Link veröffentlichen (mit `null` für alle Mehr-Datei-Dateien), öffnen, prüfen, wieder 1a veröffentlichen.
 
@@ -419,7 +481,7 @@ Dazu der Befund von Kai: vier widersprüchliche Zahlen auf Fortschritt (`docs/re
 
 - **Was:** gepackte Größe (gzip) jedes Stücks laut Vite-Manifest, Zahl der Dateien, Gesamtgröße.
 - **Wo:** `scripts/check-budget.mjs` mit `scripts/budget.json`, aufgerufen in `verify` und `verify:fast` (P0).
-- **Grenzen 1a (Sperrklinke):** heutige Werte + 2 %. **Grenzen 1b (Ziel, Konzept 14.2):** Einstieg ≤ 300 KB, je Bereich ≤ 150 KB, je `.bin` ≤ 500 KB, CSS ≤ 30 KB, < 100 Dateien; Warnung ab 9 MB gesamt.
+- **Grenzen 1a (Sperrklinke):** heutige Werte plus der je Paket vorab genannte Zuwachs (P0 Nr. 4), kein pauschaler Prozent-Spielraum. **Grenzen 1b (Ziel, Konzept 14.2):** Einstieg ≤ 300 KB, je Bereich ≤ 150 KB, je `.bin` ≤ 500 KB, CSS ≤ 30 KB, < 100 Dateien; Warnung ab 9 MB gesamt.
 - **Prüfung des Tors selbst:** Unit-Test mit einem künstlichen Manifest (zu groß → Fehlercode 1, passend → 0).
 - **Laufzeit-Seite:** Diagnose-Zeile „Knopf nach x,x s“ (P6). perf.spec misst auf dem Rechner, Emrah am iPhone.
 
@@ -474,7 +536,7 @@ Zustandsfarben immer mit Symbol und Wort (`--ok` ✓ „Richtig“, `--near` ≈
 - **Handy oben:** nur Schließen und Balken; alles andere hinter „…“ (dort auch „Pause, später weiter“, Entscheidung 27.10.2026).
 - **Laptop:** Knopfzeile mit Tastenhinweisen T (Tipp), W (Wort nachschlagen), ⏎ (Weiter); Kontextspalte statt Mehr-Blatt.
 - **Warum-Länge:** Heute erlaubt `src/domain/explain/types.ts` 140 Zeichen (`WhyRule.de/en`). Stufe 1 ändert keine Inhalte. Deshalb bleibt die Grenze 140, das Band ist für 140 Zeichen gebaut, und `scripts/audit-why-length.mjs` listet alle Texte über 120 Zeichen für James' Inhaltsstrang (kein Kürzen in Stufe 1).
-- **Eingabe-Attribute vereinheitlicht** wie in `src/ui/exercise/SentenceInput.tsx:13` (`lang:'en'`, `autoCapitalize:'off'`, `autoCorrect:'off'`, `autoComplete:'off'`, `spellCheck:false`, `enterKeyHint:'go'`), auch für `src/engine/HiddenInput.tsx:140`.
+- **Eingabe-Attribute vereinheitlicht, aber nur für Abruffelder** (Antwortfelder in Übungen, in denen Emrah ein Wort oder einen Satz aus dem Gedächtnis schreibt): wie in `src/ui/exercise/SentenceInput.tsx:13` (`lang:'en'`, `autoCapitalize:'off'`, `autoCorrect:'off'`, `autoComplete:'off'`, `spellCheck:false`, `enterKeyHint:'go'`), auch für `src/engine/HiddenInput.tsx:140`. **Nicht** für Suche, Claude-Fragen, Übersetzer, Wort hinzufügen und Schreibwerkstatt: Dort helfen Autokorrektur und Vorschläge und verfälschen keinen Abruf (Hinweis H5).
 - **Einbau an einer Stelle:** `src/ui/exercise/ExerciseShell.tsx` ist das eine Gerüst (Slot-Reihenfolge Kommentar Z. 27–31). Es wird genutzt von 17 Dateien: `patterns/FreeItem`, `vocab/anki/FlipCard`, `vocab/ExerciseView`, `IntroCard`, `WerkstattCard`, `pressure/PressureScreen`, `grammar/focus/FocusItem`, `GrammarItem`, `apply/ListenQuestion`, `ComboSentence`, `repair/FkItem`, `RepairItem`, `c1x/ResultCard`, `useC1Item`, `C1Item`, `nbdrill/NbDrillScreen`, `drills/DrillItems`. Damit bekommen alle Übungen das Band, ohne dass ihr Inhalt neu gebaut wird.
 - Die vier Fragen (Kap. 2 Nr. 4) bleiben an fester Stelle: Was tun = Aufgabenzeile, Wozu = Zeile unter dem Balken bzw. „…“ → „Warum diese Aufgabe“, Was hatte ich/was ist richtig = Band Zeile 1–2, Warum = Band Zeile 3, auch bei richtiger Antwort.
 
@@ -513,7 +575,7 @@ Screenshots bei 390 × 844 und 1440 × 900, in Dunkel, Gedämpft und Hell, gegen
 | App-Bildschirm | Vorschau Handy | Vorschau Laptop | Achten auf |
 |---|---|---|---|
 | Heute | H1 (`screens.js:180`) | L1 (`desk.js:137`) | ein Knopf, Ring, Blöcke, Pflicht/Extra getrennt |
-| Wörter-Übung | H2 (256), H3 Blockwechsel (282) | L2 (166) | Band, Balken, „…“ |
+| Wörter-Übung | H2 (256), H3 Blockwechsel (282, Optik aus P3; Zeit erst P10) | L2 (166) | Band, Balken, „…“ |
 | Grammatik-Übung | H4 (342), H5 Erklärung (411) | L3 (230) | Band, Mehr-Blatt bzw. Kontextspalte |
 | Reiter Grammatik | H6 (469) | L4 (239) | Rahmen, Abstände |
 | Reiter Wörter | H12 (892) | L5 (288) | Rahmen |
@@ -579,8 +641,8 @@ Bewertet wird Rahmen, Farben, Abstände, Schrift und Band, **nicht** der Inhalt 
 |---|---|---|
 | Mehr-Datei (kein base64, paralleles Laden, Zwischenspeicher) | P0 | 15–30 % |
 | Startbild aus `app/today`, kein Warten auf alle Abos und c1x | P6 | 0,8–1,5 s |
-| Inhalte als `.bin` | P9 | größter Anteil am Parsen: ~4,7 MB JSON fallen aus dem Einstieg |
-| Bereiche, Slots, Shells, Texte getrennt | P10 | Einstieg auf ≤ 300 KB |
+| Inhalte als `.bin` | P9 | größter Anteil an der **Übertragung**: ~6 MB Inhalt (meist `?raw`-Text) fallen aus dem Haupt-Skript; gespart wird vor allem Laden und Auswerten der riesigen Zeichenketten, **kaum `JSON.parse`**, denn die `?raw`-Inhalte werden schon heute erst bei Gebrauch geparst (W10, P8) |
+| Bereiche, Slots, Rail/Desk-Hülle, Texte getrennt; `buildTodayPlan` nicht im Einstieg | P10 | Einstieg auf ≤ 300 KB (Hochrechnung aus P8 entscheidet) |
 
 Nach 1a ist der Start spürbar schneller (P0, P6), das Ziel < 2 s erreicht erst 1b. Das wird Emrah beim Test-Link 1a so gesagt.
 
@@ -598,18 +660,26 @@ Nach 1a ist der Start spürbar schneller (P0, P6), das Ziel < 2 s erreicht erst 
 | **G0** | je Paket vor dem Zusammenführen | `npm run verify:fast` (mit den Einträgen aus `verify-fast-map.mjs`), `typecheck`, `lint`, `check-budget`, `check:platform` | Paket-Agent, Hauptsitzung prüft das Protokoll |
 | **G1** | je Test-Link | english-teacher liest nur die **neuen** englischen Oberflächentexte (Teildateien `shell`, `band`, `theme`, `diktat`, ~60 Schlüssel) und den Diktat-Zielsatz; learning-scientist bestätigt, dass `src/domain/grade`, `srs/queue`, `plan` und die Quoten unverändert sind und die vier Fragen an fester Stelle stehen | english-teacher, learning-scientist |
 | **G2** | je Test-Link | ux-reviewer (Opus) mit der Vergleichsliste 6.7, 390/1440, drei Modi, beide Akzente auf Heute; Noras Veto | ux-reviewer, Nora |
-| **G3** | je Test-Link | data-guard (Liste 4.5, betrifft P1, P4, P6, P7, P9); `check:platform`; platform-guard (Mehr-Datei, Budget, keine externen Anfragen, jeder `claude.use`-Aufruf nach `contract/`, kein Entwicklungs-Adapter, < 255 Dateien) | data-guard, platform-guard |
-| **G4** | einmal je Test-Link | volles `npm run verify` (~53 Min.), perf zuletzt und allein; Pflichtfeld `nicht_gelaufen` im Bericht | qa-runner |
+| **G3** | je Test-Link | data-guard (Liste 4.5, betrifft P1, P4, P6, P7, P9); `check:platform`; platform-guard (Mehr-Datei, Budget, keine externen Anfragen, jeder `claude.use`-Aufruf nach `contract/`, kein Entwicklungs-Adapter, Grenzen aus `scripts/limits.mjs`: ≤ 255 Dateien je Veröffentlichung, ≤ 15 MB je Datei; alle `.bin` nur über `contentStore`/`loadPacked`) | data-guard, platform-guard |
+| **G4** | einmal je Test-Link | volles `npm run verify` (~53 Min.), perf zuletzt und allein; **zusätzlich Einzeldatei-Rückfall: `build:single` + `check:platform` + smoke** (Hinweis H2); Pflichtfeld `nicht_gelaufen` im Bericht | qa-runner |
 
-**Test-Link:** `AXHkh6…` (zuletzt v73 `1793078154-eb7e`) mit Emrahs Datenkopie, Fähigkeiten `db`, `sample`, `downloads`. Vor dem Veröffentlichen die aktuelle Version lesen und notieren. Veröffentlicht werden alle Dateien aus `dist/` über `files`, Dateien der Vorversion, die es nicht mehr gibt, werden mit `null` entfernt.
+**Test-Link:** `AXHkh6…` (zuletzt v73 `1793078154-eb7e`) mit Emrahs Datenkopie, Fähigkeiten `db`, `sample`, `downloads`. Vor dem Veröffentlichen die aktuelle Version lesen und notieren.
+
+**Veröffentlichungsweg (W5):** Je Link liegt das **zuletzt veröffentlichte Manifest im Repo**: `docs/relaunch/publish/AXHkh6.json` und `docs/relaunch/publish/JLL8.json`. Jede Veröffentlichung läuft so:
+1. `npm run build`, dann `npm run publish:manifest -- --previous docs/relaunch/publish/<link>.json --out <scratchpad>/manifest.json` (`package.json:14`, `scripts/publish-manifest.mjs:6`). Das Skript prüft die Grenzen aus `scripts/limits.mjs` (≤ 255 Dateien je Veröffentlichung, ≤ 15 MB je Datei, ≤ 64 MB gesamt) und liefert `files` sowie `removeMap` (alte Dateien → `null`, `publish-manifest.mjs:25–27`).
+2. Artefakt-Veröffentlichung mit `files` **und** `removeMap` in einem Aufruf.
+3. Das neue Manifest wird unter `docs/relaunch/publish/<link>.json` abgelegt und von der Hauptsitzung committet. Ohne dieses Manifest wird nicht veröffentlicht.
+4. Rückweg auf v86 (Einzeldatei): `--previous` mit dem Manifest des Links, sodass alle Mehr-Datei-Stücke per `null` entfernt werden.
+
+**iPhone-Test 1a (Hinweis H7):** Emrah öffnet nicht nur Heute, sondern auch einen Bildschirm mit nachgeladenem Stück (Wörter → Atlas mit der Wortwolke, `src/features/vocab/atlas/WordSky.tsx`, heute schon ein eigenes Stück) und eine Übung mit C1-Aufgabe (lädt eine c1x-`.bin`). Damit ist Safari mit der Mehr-Datei-Anordnung schon in 1a belegt.
 
 **Rückweg-Probe (einmal, nach G4 von 1a):** v86 als Einzeldatei auf den Test-Link, öffnen (Heute, Wörter, eine Übung), Version notieren, dann wieder 1a. Ergebnis in `docs/umbau/stand.md`.
 
-**Live (`JLL8…`):** nur nach Emrahs ausdrücklichem „Ja live nehmen“. Vorher die Live-Version lesen (heute v86 `1793087421-695a`) und als Rückweg notieren. Nie über die laufende App veröffentlichen, um etwas zu zeigen.
+**Live (`JLL8…`):** nur nach Emrahs ausdrücklichem „Ja live nehmen“. Vorher die Live-Version lesen (heute v86 `1793087421-695a`) und als Rückweg notieren. **Höchstens ein Live-Gang pro Woche** (Konzept 14.1, `docs/relaunch/konzept.md:731`), jeder mit Test-Link, Sicherung und notiertem Rückweg. Nie über die laufende App veröffentlichen, um etwas zu zeigen.
 
 **Bericht an Emrah je Test-Link** (CLAUDE.md A2): was geändert ist (in Alltagssprache), wie er es am Handy testet (genaue Klicks), woran er erkennt, dass es stimmt, und was er schicken soll, wenn nicht. Für 1a zusätzlich: Diagnose-Foto „Knopf nach“, Laptop-Diktat-Probe (7.2), Höhe des Bands am iPhone (Foto einer langen Rückmeldung).
 
-**Vor Stufe 1 anzupassen (Hauptsitzung):** CLAUDE.md A1 („Standard eine HTML-Datei“) und A3 Nr. 2 („Genau eine Datei `dist/index.html`“) widersprechen Entscheidung 1 (Mehr-Datei als Standard). Vorschlag: „`dist/` mit `index.html` und den Stücken, `build:single` als Rückfall.“ Ebenso A8 (`npm run build` → genau eine Datei).
+**Vor Stufe 1 anzupassen (Hauptsitzung):** CLAUDE.md A1, A3 Nr. 2 und A8 an Entscheidung 1 (Mehr-Datei als Standard) angleichen (**erledigt**, Commit `efb9310`). Ebenso die Agent-Anweisungen **`.claude/agents/platform-guard.md`, `.claude/agents/qa-runner.md` und `.claude/agents/architect.md`**, die noch „eine Datei“ prüfen bzw. fordern (übernimmt die Hauptsitzung, W4). **Teil B von CLAUDE.md (Kap. 3.1 „Eine einzige, selbstständige HTML-Datei“) bleibt wörtlich** stehen; die Abweichung ist durch Entscheidung 1 in `docs/entscheidungen.md` gedeckt.
 
 ---
 
@@ -624,10 +694,10 @@ Nach 1a ist der Start spürbar schneller (P0, P6), das Ziel < 2 s erreicht erst 
 | R5 | viele E2E-Selektoren hängen am alten Rahmen | viele rote Tests in P2 | Test-IDs bleiben; neue IDs zusätzlich; nur 2 Specs mit `tab-read` und 1 mit `tab-apply` |
 | R6 | 1b ist größer als geschätzt | Verzögerung | Schnitt 9a/9b; 1a kann allein live gehen |
 | R7 | Brücken-Aliase lassen alte Bildschirme „halb neu“ aussehen | Optik uneinheitlich | Noras G2-Prüfung mit 6.7; was nicht passt, wird in P1 auf Tokens umgestellt, nicht mit neuen Regeln überstimmt |
-| R8 | Dateizahl je Veröffentlichung (255) | Veröffentlichung scheitert | `check:platform` prüft < 100 als Ziel und < 255 als Tor |
+| R8 | Dateizahl je Veröffentlichung (255) oder vergessene alte Stücke | Veröffentlichung scheitert oder alte Stücke bleiben liegen | Grenzen aus `scripts/limits.mjs`; < 100 als Ziel; Manifest je Link im Repo und `removeMap` bei jeder Veröffentlichung (Abschnitt 9) |
 | R9 | v86 stolpert über neue Felder oder unbekannte Palette | Rückweg kaputt | nur optionale Felder in looseObjects; `theme.p` unangetastet; Rückweg-Test Unit + E2E + Probe |
 | R10 | Zahlen ändern sich unbemerkt beim Verlegen in metrics | Widersprüche (Kap. 15) | Golden-Test vor dem Umbau |
-| R11 | `app/today` zeigt einen veralteten Stand (anderes Gerät) | falscher Knopf für einen Augenblick | berechneter Plan gewinnt, Bild wechselt ohne Springen; Datum im Dokument |
+| R11 | `app/today` zeigt einen veralteten Stand (anderes Gerät, gestern) | falsche Zahlen oder falscher Knopf | `d` ≠ aktueller Lerntag → Skelett statt Zahlen; berechneter Plan entscheidet beim Start, `go` ist nur Beschriftung; Bild wechselt ohne Springen; E2E-Fälle fehlend/ungültig/gestern/`nodb` |
 | R12 | Konflikte zwischen parallelen Paketen | Mehrarbeit beim Zusammenführen | Besitztabelle 3.2; `verify-fast-map.mjs` nur anhängen |
 | R13 | Diktat am Laptop funktioniert in claude.ai gar nicht (z. B. Windows-Diktat in Edge) | Hinweiszeile bleibt | Ehrliche Zeile bleibt, kein Fehler; Befund an Tarek; das ist ein erwartetes, gültiges Ergebnis der Probe |
 
@@ -639,9 +709,9 @@ Nach 1a ist der Start spürbar schneller (P0, P6), das Ziel < 2 s erreicht erst 
 
 Was nur Emrah tun kann (Startzeit und Bandhöhe am iPhone messen, Laptop-Diktat-Probe, Safari-Probe in P8), ist im Ablauf eingeplant und hält den Bau nicht auf.
 
-Selbst entschieden (mit Begründung oben): Schnitt 1a/1b (Abschnitt 0, 8); Attributnamen `data-theme` bleiben (P1); Iris 0,62 (6.1); Akzent in `theme.a`, Palette bleibt gespeichert (P1, 4.4); Warum-Grenze bleibt in Stufe 1 bei 140 (6.4); `INTERRUPT_MS` bleibt 60 s (2); Lesen unter Praxis mit `tab-apply` (6.3); Widerspruch der Fortschritt-Zahlen wird in Stufe 1 nur dokumentiert, nicht behoben (5.2); `app/today` ohne eigenes Abo (4.3).
+Selbst entschieden (mit Begründung oben): Schnitt 1a/1b (Abschnitt 0, 8); Attributnamen `data-theme` bleiben (P1); Iris 0,62 (6.1); Akzent in `theme.a`, Palette bleibt gespeichert (P1, 4.4); Warum-Grenze bleibt in Stufe 1 bei 140 (6.4); `INTERRUPT_MS` bleibt 60 s (2); Lesen unter Praxis mit `tab-apply` (6.3); Widerspruch der Fortschritt-Zahlen wird in Stufe 1 nur dokumentiert, nicht behoben (5.2); `app/today` ohne eigenes Abo (4.3). Außerdem: **F1 (Sprechen) wird erst in Stufe 4 aus `in`/`dev`/`dk` gezählt**, Stufe 1 sammelt nur (7.1; Grund: Lernlogik ist in Stufe 1 tabu, und ohne Diktat-Probe ließe sich Getipptes nicht von Gesprochenem trennen); OKLCH-Werte fest statt abgeleitet (P1); Eingabe-Attribute nur für Abruffelder (6.4); Blockwechsel-Optik in P3, Blockwechsel-Zeit in P10 (P3); Sperrklinke mit festem Zuwachs je Paket statt Prozent (P0); `ShellPhone` im Einstieg, nur Rail/Desk nachgeladen (P10).
 
-Die Hauptsitzung passt vor Paketstart CLAUDE.md A1/A3/A8 an Entscheidung 1 an (Abschnitt 9).
+CLAUDE.md A1/A3/A8 ist an Entscheidung 1 angepasst (`efb9310`); die drei Agent-Dateien passt die Hauptsitzung an (Abschnitt 9).
 
 ---
 
@@ -649,6 +719,8 @@ Die Hauptsitzung passt vor Paketstart CLAUDE.md A1/A3/A8 an Entscheidung 1 an (A
 
 | Teil | Pakete | Zeilen (Code + Tests, geschätzt) | Agenten-Arbeitstage |
 |---|---|---|---|
-| 1a | P0–P7 | ~10.200 | 4–5 (plus ein G4-Lauf ~53 Min.) |
-| 1b | P8–P10 | ~4.700 | 3–4 (plus ein G4-Lauf) |
-| **Gesamt** | 11 Pakete (P9 in 9a/9b) | **~15.000** | **7–9** |
+| 1a | P0–P7 | ~11.000 | 4,5–5,5 (plus ein G4-Lauf ~53 Min.) |
+| 1b | P8, P9a, P9b, P10, P10-Abschluss | ~5.600 | 3,5–4,5 (plus ein G4-Lauf) |
+| **Gesamt** | 11 Pakete (P9 in 9a/9b, P10 mit Abschlussschritt) | **~16.500** | **8–10** |
+
+Zuwachs gegenüber der ersten Fassung (~15.000) durch die Prüfbefunde: P0 (Grenzen-Quelle, Manifeste, v86-Checkout), P6 (Gültigkeit, `nodb`, Schreibregeln), P8 (Modul-Aufschlüsselung, Inhaltsliste), P9 (vollständige Inhaltsliste, Plan wartet auf Inhalte), Tastatur-E2E.
