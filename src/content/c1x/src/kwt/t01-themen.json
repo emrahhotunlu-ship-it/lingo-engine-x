@@ -180,7 +180,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "inversion",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "inv.cond",
@@ -470,7 +470,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "inversion",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "inv.cond",
@@ -747,7 +747,8 @@
     {
      "a": [
       "Surprising as",
-      "As surprising as"
+      "As surprising as",
+      "Surprising though"
      ],
      "b": [
       "it"
@@ -1188,7 +1189,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.do-so",
@@ -1243,7 +1244,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "el.one-ones",
@@ -1423,7 +1424,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.so-not",
@@ -1475,7 +1476,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "ellipsis",
-   "level": "C1",
+   "level": "B2",
    "dom": "life",
    "src": "seed",
    "pat": "el.do-so",
@@ -1552,7 +1553,7 @@
        "what"
       ],
       "de": "What leitet keinen Relativsatz nach einem Nomen ein. Es heißt the ones that.",
-      "en": "What never follows a noun. Say the ones that."
+      "en": "What does not start a relative clause after a noun. Say the ones that."
      },
      {
       "not": [
@@ -1609,7 +1610,7 @@
        "what"
       ],
       "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach training steht that oder nichts.",
-      "en": "What never follows a noun. After training use that or nothing."
+      "en": "What does not start a relative clause after a noun. After training use that or nothing."
      },
      {
       "if": [
@@ -1639,7 +1640,9 @@
       "I have ever",
       "I've ever",
       "that I have ever",
-      "that I've ever"
+      "that I've ever",
+      "I've",
+      "that I've"
      ],
      "b": [
       "attended"
@@ -1677,7 +1680,7 @@
        "what"
       ],
       "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach proposal steht that, which oder nichts.",
-      "en": "What never follows a noun. After proposal use that, which or nothing."
+      "en": "What does not start a relative clause after a noun. After proposal use that, which or nothing."
      },
      {
       "if": [
@@ -2075,7 +2078,7 @@
        "what"
       ],
       "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach flight steht that oder nichts.",
-      "en": "What never follows a noun. After flight use that or nothing."
+      "en": "What does not start a relative clause after a noun. After flight use that or nothing."
      },
      {
       "if": [

@@ -1198,9 +1198,9 @@
     },
     "wrong": [
      {
-      "opt": "neither my wife does",
-      "de": "Das ist genau der Fehler: Nach neither muss does vor das Subjekt: neither does my wife.",
-      "en": "That is the mistake itself: after neither, does must go before the subject: neither does my wife."
+      "opt": "either does my wife",
+      "de": "Either steht am Ende eines verneinten Satzes (my wife doesn't either). Vorn steht neither: neither does my wife.",
+      "en": "Either goes at the end of a negative clause (my wife doesn't either). At the front use neither: neither does my wife."
      },
      {
       "opt": "so does my wife",
@@ -1226,7 +1226,7 @@
     ],
     "choices": [
      "neither does my wife",
-     "neither my wife does",
+     "either does my wife",
      "so does my wife"
     ]
    },
@@ -1255,7 +1255,7 @@
      {
       "opt": "the new it",
       "de": "Hinter einem Adjektiv steht one statt it. Für „ein neues“ heißt es a new one.",
-      "en": "It never follows an adjective. For “a new one” use a new one."
+      "en": "After an adjective use one, not it: a new one."
      },
      {
       "tap": "*",
@@ -1449,9 +1449,9 @@
     },
     "wrong": [
      {
-      "opt": "for increase",
-      "de": "Das ist genau der Fehler. Nach way steht to + Grundform: the best way to increase.",
-      "en": "That is the mistake itself. After way comes to + base form: the best way to increase."
+      "opt": "for increasing",
+      "de": "Nach way steht to + Grundform oder of + -ing, nicht for: to increase.",
+      "en": "After way use to + base form or of + -ing, not for: to increase."
      },
      {
       "opt": "to increasing",
@@ -1478,7 +1478,7 @@
     ],
     "choices": [
      "to increase",
-     "for increase",
+     "for increasing",
      "to increasing"
     ]
    },
@@ -1651,8 +1651,8 @@
     "wrong": [
      {
       "opt": "for to save",
-      "de": "For to ist veraltet. Nach the best way steht to allein: the best way to save.",
-      "en": "For to is old-fashioned. After the best way use only to: the best way to save."
+      "de": "For to ist falsch (höchstens in Mundarten). Nach the best way steht to allein: the best way to save.",
+      "en": "For to is wrong (at most in dialects). After the best way use to alone: the best way to save."
      },
      {
       "opt": "of save",
@@ -1674,7 +1674,8 @@
    "bad": {
     "span": "for save",
     "fix": [
-     "to save"
+     "to save",
+     "of saving"
     ],
     "choices": [
      "to save",

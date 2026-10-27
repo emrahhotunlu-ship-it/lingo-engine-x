@@ -136,7 +136,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "modals-prob",
-   "level": "C1",
+   "level": "B2+",
    "dom": "biz",
    "src": "seed",
    "pat": "mp.bound",
@@ -265,8 +265,8 @@
       "if": [
        "exists"
       ],
-      "de": "It exists ist Deutsch gedacht. Englisch sagt There is a good chance.",
-      "en": "It exists is German thinking. English says There is a good chance."
+      "de": "It exists ist wörtlich übersetzt („es existiert“). Englisch sagt There is a good chance.",
+      "en": "It exists is a word-for-word translation (“es existiert”). English says There is a good chance."
      },
      {
       "if": [
@@ -582,7 +582,7 @@
    "kind": "kwt",
    "area": "gram",
    "topic": "stative-adv",
-   "level": "C1",
+   "level": "B2",
    "dom": "biz",
    "src": "seed",
    "pat": "sa.no-ing",
@@ -596,8 +596,8 @@
       "if": [
        "needing"
       ],
-      "de": "Need ist ein Zustandsverb und steht nicht in der Verlaufsform.",
-      "en": "Need is a stative verb and does not take the continuous."
+      "de": "Need ist ein Zustandsverb und steht normalerweise nicht in der Verlaufsform: we need.",
+      "en": "Need is a stative verb and usually does not take the continuous: we need."
      }
     ]
    },
@@ -1506,7 +1506,7 @@
        "no"
       ],
       "de": "No steht nicht vor of. Für „keiner von“ steht None of.",
-      "en": "No never goes before of. For “not one of” use None of."
+      "en": "No does not go before of. For “not one of” use None of."
      },
      {
       "if": [

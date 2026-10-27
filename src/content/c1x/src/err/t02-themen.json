@@ -173,8 +173,8 @@
      },
      {
       "opt": "It has",
-      "de": "Das ist Deutsch gedacht („es gibt“). Englisch sagt there is: There is a slim chance.",
-      "en": "That is German thinking (“es gibt”). English says there is: There is a slim chance."
+      "de": "It has passt hier nicht. Für „es gibt“ sagt man there is: There is a slim chance.",
+      "en": "It has does not fit here. For “es gibt” English uses there is: There is a slim chance."
      },
      {
       "tap": "*",
@@ -776,13 +776,13 @@
     "wrong": [
      {
       "opt": "Nothing of",
-      "de": "Nothing steht für Dinge und nicht vor of. Für „keiner von“ steht none of.",
-      "en": "Nothing is for things and does not go before of. For “not one of” use none of."
+      "de": "Nothing heißt „nichts“. Für „keiner von den Anbietern“ steht None of.",
+      "en": "Nothing means “no thing”. For “not one of the vendors” use None of."
      },
      {
       "opt": "No of",
       "de": "No steht direkt vor einem Nomen, nicht vor of. Hier heißt es None of.",
-      "en": "No goes straight before a noun, never before of. Here it is None of."
+      "en": "No goes straight before a noun. No does not go before of. Here it is None of."
      },
      {
       "tap": "*",
