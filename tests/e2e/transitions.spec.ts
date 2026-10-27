@@ -8,16 +8,26 @@ import { forcedPatch, planPatch } from './trainerHelpers';
 // heranfliegt (Transform in den ersten Bildern, danach Ruhe), dass es ohne Tippen nicht fliegt und
 // dass `prefers-reduced-motion` die Bewegung abschaltet.
 
-type Probe = { frames: string[]; gaps: number[]; done: boolean };
+type Probe = { frames: string[]; writes: string[]; gaps: number[]; done: boolean };
 
 /**
  * Zeichnet ab jetzt je Bild den Transform des ersten Treffers von `selector` auf – bis das Element
  * da ist und 12 Bilder lang ruht (höchstens 8 s; unter Last kann der Wechsel dauern).
+ * Zusätzlich hält ein MutationObserver JEDEN gesetzten Transform fest (`writes`): Unter Last (vier Testprozesse
+ * gleichzeitig) kann der kurze Flug zwischen zwei abgetasteten Bildern liegen; der Wackler „0 bewegte Bilder“
+ * (Gesamtlauf 26.10.2026, transitions.spec.ts:46) kam genau daher. Geprüft wird jetzt der Zustand, den die App setzt.
  */
 async function probe(page: Page, selector: string): Promise<void> {
   await page.evaluate((sel) => {
     const w = window as unknown as { __probe: Probe };
-    w.__probe = { frames: [], gaps: [], done: false };
+    w.__probe = { frames: [], writes: [], gaps: [], done: false };
+    const mo = new MutationObserver((list) => {
+      for (const m of list) {
+        const el = m.target as HTMLElement;
+        if (el instanceof HTMLElement && el.matches(sel)) w.__probe.writes.push(el.style.transform || 'none');
+      }
+    });
+    mo.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['style'] });
     let last = performance.now();
     const start = last;
     let calm = 0;
@@ -30,8 +40,10 @@ async function probe(page: Page, selector: string): Promise<void> {
       }
       w.__probe.gaps.push(t - last);
       last = t;
-      if (calm >= 12 || t - start > 8000) w.__probe.done = true;
-      else requestAnimationFrame(tick);
+      if (calm >= 12 || t - start > 8000) {
+        mo.disconnect();
+        w.__probe.done = true;
+      } else requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
   }, selector);
@@ -41,7 +53,8 @@ async function probed(page: Page): Promise<Probe> {
   await expect.poll(() => page.evaluate(() => (window as unknown as { __probe: Probe }).__probe.done), { timeout: 12_000 }).toBe(true);
   return page.evaluate(() => (window as unknown as { __probe: Probe }).__probe);
 }
-const moving = (p: Probe): string[] => p.frames.filter((f) => f !== 'none' && /-?[1-9]/.test(f.replace(/scale[XY]?\(1\)|scale\(1, 1\)|0px/g, '')));
+/** Bewegte Transforms: abgetastete Bilder und jede gesetzte Änderung (`writes`). */
+const moving = (p: Probe): string[] => [...p.frames, ...p.writes].filter((f) => f !== 'none' && /-?[1-9]/.test(f.replace(/scale[XY]?\(1\)|scale\(1, 1\)|0px/g, '')));
 
 test('Heldenkarte → erste Übung: die Karte gleitet in die Übung', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...forcedPatch() } } });

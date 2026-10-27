@@ -92,6 +92,10 @@ test.describe('Desktop 1440', () => {
     const after = await log.evaluate((el) => el.scrollTop);
     expect(Math.abs(after - before)).toBeLessThanOrEqual(1);
     await expect(page.getByTestId('chat-jump')).toBeVisible();
+    // Lesemodus: Die Pille springt ans Ende des JETZIGEN Inhalts, danach folgt die Ansicht bewusst nicht mehr. Unter Last lief die Antwort
+    // nach dem Klick noch weiter und das Ende rückte weg (Wackler im Gesamtlauf 26.10.2026, Abstand 1465 px). Deshalb erst die fertige Antwort abwarten.
+    await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done', { timeout: 30_000 });
+    await expect(page.getByTestId('chat-jump')).toBeVisible();
     await page.getByTestId('chat-jump').click();
     await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThanOrEqual(48);
   });

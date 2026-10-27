@@ -11,3 +11,6 @@ tests/tutor/lint-report.txt
 
 # Arbeitskopien der Hintergrund-Helfer (Claude Code)
 .claude/worktrees/
+
+# Zwischenspeicher des schnellen Laufs (scripts/verify-fast.mjs: inkrementelle Typprüfung, Lint-Cache, Stufen-Marken)
+.cache/

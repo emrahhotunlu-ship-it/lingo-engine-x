@@ -82,3 +82,26 @@ Quellen: Anthropic Engineering („multi-agent research system“, „effective 
 6. **CLAUDE.md schlank halten** (wird in jeden Agenten geladen): Entscheidungen stehen in `docs/entscheidungen.md`, Spezialwissen in Fachdokumenten.
 7. **Prompt-Cache:** Mechanismus belegt (Lesen 10 % des Preises, im Abo 1 h). Fester Vorspann vorn hilft; die Ersparnis bei uns ist nicht gemessen.
 8. **Nach jedem Release** frische Sitzung oder `/clear`; Übergabe über `docs/umbau/stand.md` (lange Sitzungen sind laut Docs ein Kostentreiber).
+
+## 10. Testorganisation (E1b, 27.10.2026, Emrahs Auftrag: Testen darf nicht Stunden kosten)
+Gemessen auf der Cloud-Maschine (4 Kerne): Gesamtlauf `npm run verify` am 26.10.2026 rund 53 Min. (Typprüfung 1,5 · Lint 3,75 · Unit 2,5 · E2E in 8 Gruppen ca. 45 Min.), dazu Wackler und 4 rote perf-Tests.
+1. **Nach jeder Änderung: `npm run verify:fast`** (`scripts/verify-fast.mjs`, Ziel unter 5 Min.). Er prüft nur, was die Änderung betrifft:
+   Typprüfung (inkrementell) und Lint der geänderten Dateien gleichzeitig → Unit-Tests über den Importgraph (`vitest related`) →
+   Build → nur die E2E-Specs der geänderten Bereiche (Tabelle `scripts/verify-fast-map.mjs`; unbekannte oder überall wirkende Pfade
+   bekommen zusätzlich eine feste Rauch-Auswahl) → `check:platform`. Basis ist der gemeinsame Stand mit `claude/umbau-fokus`
+   (`--base <ref>` ändert sie). Am Ende steht eine Tabelle: ✓ ok · ✘ FEHLER (mit Log-Pfad) · – nicht gelaufen (mit Grund).
+   Gemessen 27.10.2026 (unter Last anderer Agenten): eine Datei in `src/features/today/` geändert → **2:38 Min.** (Typprüfung+Lint 0:39,
+   Unit 0:15, Build 0:07, 7 E2E-Specs 1:37). Schlimmster Fall (package.json/Test-Konfiguration geändert → alle Unit-Tests, volle Typprüfung,
+   Rauch-Auswahl) → 11:43 Min.; dann lieber gleich den Gesamtlauf planen.
+2. **Vor einem Test-Link: genau einmal `npm run verify`** (Gesamtlauf, unverändert) auf dem Endstand, nicht je Paket (G4 in §4).
+   Die Leistungstests (`perf.spec.ts`) laufen dort als eigenes Projekt `perf` **zuletzt und allein** (Messungen unter Last der
+   anderen Testprozesse waren wertlos). Ist ein anderer Test rot, laufen sie nicht („did not run“) – erst den Rest grün machen.
+3. **Keine Wiederholung ohne Änderung.** `verify:fast` merkt sich einen Fingerabdruck aus Basis, HEAD und Inhalt der Änderungen
+   (`.cache/verify-fast/`) und startet bei gleichem Stand keinen neuen Lauf (`--force` nur mit Grund). Ein abgebrochener Lauf
+   macht beim nächsten Aufruf nur die noch nicht grünen Stufen. Für den Gesamtlauf gilt dieselbe Regel (§5 Nr. 1).
+4. **Prüfer gebündelt:** urteilende Prüfer (ux-reviewer, learning-scientist, english-teacher, data-guard, platform-guard) laufen
+   einmal je Test-Link auf dem Endstand, zusammen mit dem Gesamtlauf – nicht nach jeder kleinen Änderung.
+5. **Wackler werden behoben, nicht als „bekannt“ geführt.** Tests warten auf einen Zustand (Attribut, Datenbankstand,
+   `expect.poll`/`toPass`), nie auf eine feste Wartezeit, wenn es um Animation oder Hintergrundarbeit geht. Ein Wackler bekommt
+   höchstens zwei Behebungsversuche je Ursache; danach Befund an Emrah. Eine Messgrenze wird nur mit Messreihe und Begründung im Test geändert, nie gelöscht oder übersprungen.
+6. **Tabelle pflegen:** Wer eine neue Spec anlegt, trägt sie in `scripts/verify-fast-map.mjs` bei ihrem Bereich ein (ein Unit-Test prüft, dass jede genannte Spec existiert).

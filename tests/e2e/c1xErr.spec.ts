@@ -126,8 +126,12 @@ test.describe('Laptop', () => {
     const { errors } = await start(page, 0.5, OLD);
     const item = page.getByTestId('gr-item');
     await expect(item.getByTestId('c1x-err')).toHaveAttribute('data-err-mode', 'desk');
-    await page.keyboard.press('n');
-    await expect(item.getByTestId('verdict')).toBeVisible();
+    // Der Tastendruck-Hörer hängt erst nach dem Zeichnen (useEffect). Unter Last kam „N“ früher an und ging verloren
+    // (Wackler im Gesamtlauf 26.10.2026). Deshalb: drücken, bis das Urteil steht – ein weiteres „N“ ist danach wirkungslos (Hörer nur, solange offen).
+    await expect(async () => {
+      await page.keyboard.press('n');
+      await expect(item.getByTestId('verdict')).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15_000 });
     await expect(item.getByTestId('verdict-sub')).toContainText('0 von 2');
     expect(errors).toEqual([]);
   });

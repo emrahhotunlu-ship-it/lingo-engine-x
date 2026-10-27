@@ -124,6 +124,9 @@ const max = (rows: readonly Row[], f: (r: Row) => number): number => rows.reduce
 describe('Wiederholungs-Planung über 120 Tage (echter Tagesplan)', () => {
   const withControl = simulate(120, { control: true });
   const without = simulate(120, { control: false });
+  // E1b: Wie die beiden anderen Läufe beim Einsammeln rechnen statt im Test – im Test galt eine feste Zeitgrenze (30 s),
+  // die auf der geteilten Maschine unter Fremdlast riss (verify:fast 27.10.2026: „Test timed out in 30000ms“).
+  const pause = simulate(120, { control: true, pause: [40, 47] });
 
   it('Kontrolle: ohne Rückstand-Steuerung wächst der Berg fälliger Karten weit über den Startwert (das Modell zeigt das Problem)', () => {
     expect(max(without.rows, (r) => r.dueBefore)).toBeGreaterThan(150);
@@ -152,10 +155,9 @@ describe('Wiederholungs-Planung über 120 Tage (echter Tagesplan)', () => {
   });
 
   it('nach 7 Tagen Pause baut sich der Rückstand wieder ab', () => {
-    const pause = simulate(120, { control: true, pause: [40, 47] });
     const peak = max(pause.rows.slice(40, 60), (r) => r.overdueBefore);
     expect(peak).toBeGreaterThan(40);
     expect(max(pause.rows.slice(-30), (r) => r.overdueBefore)).toBeLessThanOrEqual(60);
     expect(retention(pause.rows.slice(-30))).toBeGreaterThanOrEqual(0.85);
-  }, 30_000);
+  });
 });
