@@ -1,6 +1,6 @@
 # Relaunch-Konzept Lingo-Engine X
 
-**Stand:** 27.10.2026, **Entwurf 2.1 nach Nachprüfung** (Leitung). Er enthält alle Vetos aus der Prüfung (Lena 7, James 6, Tarek 4, Nora 5), Kais Lücken je Facette und alle Ersatztexte der Nachprüfung (0.2). **Status:** alle Vetos aufgehoben, Kai hat freigegeben (8,8, erwartet 9,0 mit seinen übernommenen Ersatztexten); jetzt entscheidet Emrah (19). Ablauf nach `docs/relaunch/team.md`.
+**Stand:** 27.10.2026, **Entwurf 2.1 nach Nachprüfung** (Leitung). Er enthält alle Vetos aus der Prüfung (Lena 7, James 6, Tarek 4, Nora 5), Kais Lücken je Facette und alle Ersatztexte der Nachprüfung (0.2). **Status:** alle Vetos aufgehoben, Kai hat freigegeben (8,8, erwartet 9,0 mit seinen übernommenen Ersatztexten). **Emrah hat am 27.10.2026 alle Entscheidungen in 19 wie empfohlen getroffen** (`docs/entscheidungen.md`). Nächster Schritt: Vorschau (Stufe 0). Ablauf nach `docs/relaunch/team.md`.
 
 **Grundlagen:** `docs/relaunch/recherche/` (Mara, Ilias, Nora, Lena, Tarek, Kai, James, Mikrofon-Probe) und `docs/relaunch/pruefung/` (Lena, James, Tarek, Nora, Kai). Wo dieses Konzept einer Rolle folgt, steht das Kürzel in eckigen Klammern, z. B. [Lena V1] = Lenas Veto 1, [Kai F5] = Kais Lücke zu Facette 5, [Nora V3], [Tarek V2], [James V4].
 
@@ -890,7 +890,7 @@ Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inh
 
 **Schon entschieden (Plattform):** Sprechen läuft über die Diktiertaste. Eine eigene Spracherkennung und Pausenmessung gibt es nicht, weil die Claude-App kein Mikrofon für Apps freigibt (Probe vom 27.10.2026).
 
-**Emrah entscheidet:**
+**Emrah hat entschieden (27.10.2026, „Alles wie empfohlen“):** Mehr-Datei-Build · „Praxis“ · Iris · Mission Pflicht ab Stufe 5 · 28 Minuten · ehrlicher Neustart · Termin ja · Wochenfrage ja · 15 s mit Umstellregel. Die Fragen im Wortlaut:
 1. **Ladeform:** Mehr-Datei-Build als Standard (schnellerer Start) oder weiter eine Hauptdatei mit nachgeladenen Inhaltsdateien (14.2).
 2. **Reitername:** „Praxis“ oder „Sprechen“ (Vorschau-Schalter).
 3. **Handlungsfarbe:** A „Iris“ oder B „Bernstein“ (Vorschau-Schalter).

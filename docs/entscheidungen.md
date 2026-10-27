@@ -575,3 +575,16 @@ Auslöser: Emrahs Rückmeldung vom 19.10.2026 und die Echtdaten-Analyse (Wendung
 
 ## 26.10.2026 – Masterplan 9,5
 Emrah: „Beides ja“ → (1) Pflicht ~28 statt ~23 Min (Sprechen/Flüssigkeit + Input mit Lernwörtern), ändert die Entscheidung vom 04.10.; (2) Artefakt bleibt, kein Cloudflare. Ziel 9,5/10 (UI/UX, Bedienung, Intelligenz, Vielfalt, roter Faden C1). Plan: `docs/umbau/masterplan-9-5.md`. Live weiter nur nach „Ja live“.
+
+## 27.10.2026 – Relaunch: Emrahs Entscheidungen zu Konzept 2.1 (Abschnitt 19)
+Emrah: „Alles wie empfohlen“. Damit gilt:
+1. Mehr-Datei-Build wird Standard (schnellerer Start).
+2. Reitername „Praxis“ (Sprechen, Hören, Lesen, Kurse).
+3. Handlungsfarbe A „Iris“ (in der Vorschau noch umschaltbar zum Vergleich).
+4. Mission einmal pro Woche als Pflicht (~9 Min. statt Block 5 + 6), ab Stufe 5.
+5. Pflicht 28 Minuten je Lerntag, nach einer Pause anteilig höchstens 20.
+6. Ehrlicher Neustart der Wortzahl: „Bildest du selbst“ = nur S5, darunter „auf dem Weg: x“; Polster kommen in derselben Stufe (Kai-N N5). Lenas Veto 1 bleibt damit aufgehoben.
+7. „Mein nächster Termin“: einmal pro Woche vor der ersten Sprechaufgabe, überspringbar, ohne Namen.
+8. Wochenfrage zur Selbstsicherheit (1–5) am Ende des Wochenabschlusses.
+9. Grenze „sicher“ für gesprochene Wendungen 15 s; nach 4 Wochen 20 s, wenn > 30 % der richtigen gesprochenen Wendungen zwischen 15 und 20 s liegen.
+Zur Kenntnis genommen: Hören/Sprechen bis ~8 (kein Mikrofon), Grammatik 18–22 Wochen, Mission erst ab Stufe 5 Pflicht. Nächster Schritt: Noras Vorschau (Stufe 0) als separates Test-Artefakt ohne Fähigkeiten, Blindtest-Tor 4 von 5.
