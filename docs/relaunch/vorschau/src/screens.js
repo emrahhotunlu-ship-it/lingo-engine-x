@@ -80,14 +80,18 @@ function weekStrip(todayDone) {
     '<div class="wd ' + st[i] + '"><i>' + (st[i].indexOf('done') >= 0 ? ic('check', 'xs') : '') + '</i>' + n + '</div>').join('') +
     '<div class="streak"><b class="disp num">' + (todayDone ? 13 : 12) + '</b>' + L('Tage Serie', 'day streak') + '</div></div></div>';
 }
-function moreRows(missionDay) {
-  const rows = [
-    ['book', L('Lesen', 'Reading'), L('Lieferketten unter Druck · 4 Min.', 'Daily article: supply chains under pressure · 4 min')],
-    ['pen', L('Wort-Werkstatt', 'Word workshop'), L('5 Wörter warten auf deinen Satz', '5 words are waiting for your sentence')],
-    ['repeat', L('Freiwillige Zusatzrunde', 'Optional extra round'), L('10 Wiederholungen, zählt als Extra', '10 reviews, counts as extra')]
-  ];
+/* „Wenn du mehr willst“: höchstens 3 Zeilen. Der Vokabeltrainer steht nur nach erledigter Pflicht dort, dann an erster Stelle
+   und verdrängt „Kurse“ (Vokabeltrainer §1). trainer: 'due' | 'resume' | null. Ohne Angabe gilt L1 „erledigt“ als nach der Pflicht. */
+function moreRows(missionDay, trainer) {
+  if (trainer === undefined) trainer = (S.screen === 'l1' && curVariant() === 'done') ? 'due' : null;
+  const rows = [];
+  if (trainer === 'resume') rows.push(['repeat', L('Runde fortsetzen', 'Resume round'), L('6 von 10 · zählt als Extra', '6 of 10 · counts as extra'), 'h18-speak']);
+  else if (trainer === 'due') rows.push(['words', L('Wörter üben', 'Practice words'), L('14 fällig, zählt als Extra', '14 due, counts as extra'), 'h17-default']);
+  rows.push(['book', L('Lesen', 'Reading'), L('Lieferketten unter Druck · 4 Min.', 'Daily article: supply chains under pressure · 4 min'), 'h13-reader']);
+  rows.push(['pen', L('Wort-Werkstatt', 'Word workshop'), L('5 Wörter warten auf deinen Satz', '5 words are waiting for your sentence'), 'h12-list']);
+  if (!trainer) rows.push(['list', L('Kurse', 'Courses'), L('Verhandeln auf Englisch · Lektion 3', 'Negotiating in English · lesson 3'), 'h13-main']);
   return '<div class="more-div gx">' + L('Wenn du mehr willst', 'If you want more') + '</div><div class="gx">' + rows.map((r, i) =>
-    '<button class="row" id="more-' + i + '" data-go="' + (i === 0 ? 'h13-reader' : 'h12-list') + '"><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>').join('') + '</div>';
+    '<button class="row" id="more-' + i + '" data-go="' + r[3] + '"><span class="ri">' + ic(r[0], 'sm') + '</span><span class="rt"><b>' + r[1] + '</b><span>' + r[2] + '</span></span><span class="chev">' + ic('chevR', 'sm') + '</span></button>').join('') + '</div>';
 }
 function h1(v) {
   if (v === 'skeleton') {
@@ -97,7 +101,13 @@ function h1(v) {
       '<div class="gx" style="padding-top:22px;display:flex;gap:10px">' + '<div class="sk" style="flex:1;height:44px"></div>'.repeat(3) + '</div></div>' + tabbar('h1');
   }
   const kind = (v === 'mission' || v === 'termin') ? 'mission' : v === 'catchup' ? 'catchup' : 'normal';
-  const blocks = dayBlocks(kind);
+  let blocks = dayBlocks(kind);
+  /* Kurzer Tag: Pflicht anteilig gekürzt (Konzept 2.4, Kai E2). Lange Pause: ruhiger Neustart. Urlaub: vorher leicht vorgezogen. */
+  if (v === 'short') blocks = blocks.map((b, i) => Object.assign({}, b, { m: [2, 3, 3, 2, 2, 2][i] }));
+  if (v === 'pause') blocks = blocks.slice(0, 5).map((b, i) => Object.assign({}, b, { m: [3, 5, 3, 2, 2][i] }));
+  if (v === 'vacation') blocks = blocks.map((b, i) => Object.assign({}, b, { m: [3, 10, 5, 4, 4, 5][i] }));
+  const isDone = v === 'done' || v === 'resume';
+  if (isDone) v = 'done';
   const total = blocks.reduce((a, b) => a + b.m, 0);
   let done = 0, partial = 0;
   if (v === 'mid' || v === 'ring') { done = 2; partial = 0.4; }
@@ -114,12 +124,22 @@ function h1(v) {
   if (v === 'mission') sub = '<div class="sub">' + L('Heute mit Mission: <em>Preis-Einwand beim Einkauf</em>', 'Today with mission: <em>price objection from purchasing</em>') + '</div>';
   if (v === 'termin') sub = '<div class="sub">' + L('Heute mit Mission: <em>dein Call mit dem Einkauf</em>', 'Today with mission: <em>your call with purchasing</em>') + '</div>';
   if (v === 'done') sub = '<div class="sub">' + L('Pflicht geschafft. Morgen geht es mit Schritt 4 von 7 weiter.', 'Daily plan done. Tomorrow continues with step 4 of 7.') + '</div>';
-  let next = '', btn = '';
+  if (v === 'short') sub = '<div class="sub">' + L('Kurzer Tag: 14 statt 28 Min. Die Serie zählt.', 'Short day: 14 instead of 28 min. Your streak counts.') + '</div>';
+  if (v === 'pause') sub = '<div class="sub">' + L('Willkommen zurück. Wir starten ruhig und steigern in 5 Tagen auf deine 28 Min.', 'Welcome back. We start gently and build up to your 28 min over 5 days.') + '</div>';
+  if (v === 'vacation') sub = '<div class="sub">' + L('Vor dem Urlaub: ein paar Wiederholungen leicht vorgezogen.', 'Before your vacation: a few reviews moved slightly forward.') + '</div>';
+  let next = '', btn = '', extra = '';
   if (v !== 'done') {
     if (done === 0) next = '<div class="nextl"><span class="dot w"></span><span>' + L('Als Nächstes: Gestern-Check · <em>6 Wörter</em>', 'Next: yesterday check · <em>6 words</em>') + '</span></div>';
     else next = '<div class="nextl"><span class="dot g"></span><span>' + L('Als Nächstes: Grammatik · <em>past simple vs. present perfect</em>', 'Next: grammar · <em>past simple vs. present perfect</em>') + '</span></div>';
     btn = done === 0 ? btnPri('today-go', L('Los geht’s', 'Let’s go'), 'h2-intro', ' style="width:100%"') : btnPri('today-go', L('Weiter', 'Continue'), 'h4-task', ' style="width:100%"');
+    /* Kai E2: leiser Weg zum kurzen Tag direkt unter dem Knopf, nur vor dem ersten Block. */
+    if (v === 'start') extra = '<button class="tw-quiet" id="today-short" data-go="h1-short">' + L('Heute wenig Zeit?', 'Short on time today?') + '</button>';
+    if (v === 'short') extra = '<button class="tw-quiet" id="today-full" data-go="h1-start">' + L('Doch den ganzen Plan', 'Do the full plan after all') + '</button>';
   }
+  let strip = weekStrip(v === 'done');
+  if (v === 'pause') strip = '<div class="gx"><div class="tw-restart"><div class="tw-rs-h">' + L('Neustart-Woche', 'Restart week') + '<span>' + L('nichts geht verloren, deine Wörter warten', 'nothing is lost, your words are waiting') + '</span></div><div class="tw-rs-row">' +
+    [[L('Do', 'Thu'), 15, 'on'], [L('Fr', 'Fri'), 18, ''], [L('Sa', 'Sat'), 22, ''], [L('So', 'Sun'), 25, ''], [L('Mo', 'Mon'), 28, '']].map(d => '<div class="tw-rs-d ' + d[2] + '"><i style="height:' + Math.round(d[1] / 28 * 100) + '%"></i><b class="num">' + d[1] + '</b><span>' + d[0] + '</span></div>').join('') + '</div></div></div>';
+  if (v === 'vacation') strip = '<div class="gx"><div class="notice tw-notice">' + ic('cal', 'sm') + '<span>' + L('<b>Urlaub 2.–6.11.</b> Deine Serie ruht in der Zeit. Bis Sonntag ziehen wir Wiederholungen leicht vor, damit danach nichts drängt.', '<b>Vacation Nov 2–6.</b> Your streak rests during that time. Until Sunday we move reviews slightly forward so nothing piles up afterward.') + '</span></div></div>' + strip;
   const stateList = '<div class="statelist springopen" id="ring-list" aria-label="' + esc(L('Blöcke von heute', 'Today’s blocks')) + '">' + blocks.map((b, i) => {
     const st = i < done ? 'done' : (i === done && partial ? 'run' : 'open');
     return '<div class="st ' + st + '"><span class="mk">' + (st === 'done' ? ic('check', 'xs') : '') + '</span><span class="dot ' + b.c + '"></span><span class="nm">' + b.n + (b.mission ? ' · ' + L('Preis-Einwand', 'price objection') : '') + '</span><span class="sm num">' + (st === 'run' ? L('läuft', 'in progress') : b.m + ' Min.') + '</span></div>';
@@ -128,12 +148,12 @@ function h1(v) {
     '<div class="gx"><div class="daycard">' +
     '<div class="ringwrap">' + ringSvg(blocks, done, partial, { draw }) + center + '</div>' +
     (showList ? stateList : '<div class="dtopic"><div class="t disp">' + TOPIC() + '</div>' + sub + '</div>' + next) +
-    btn + '</div></div>' +
-    weekStrip(v === 'done') + moreRows(kind === 'mission') + '<div style="height:20px"></div></div>' + tabbar('h1');
+    btn + extra + '</div></div>' +
+    strip + moreRows(kind === 'mission', isDone ? (S.v === 'resume' ? 'resume' : 'due') : null) + '<div style="height:20px"></div></div>' + tabbar('h1');
 }
 reg('h1', {
   code: 'H1', name: 'Heute', kind: 'phone',
-  variants: [['start', 'Tagesanfang'], ['mid', 'unterwegs'], ['ring', 'Ring angetippt'], ['done', 'erledigt'], ['catchup', 'Aufholen'], ['mission', 'Missionstag'], ['termin', 'Missionstag mit Termin'], ['skeleton', 'Lade-Skelett']],
+  variants: [['start', 'Tagesanfang'], ['mid', 'unterwegs'], ['ring', 'Ring angetippt'], ['done', 'erledigt'], ['catchup', 'Aufholen'], ['mission', 'Missionstag'], ['termin', 'Missionstag mit Termin'], ['skeleton', 'Lade-Skelett'], ['resume', 'Runde fortsetzen'], ['pause', 'nach langer Pause'], ['vacation', 'Urlaub angekündigt'], ['short', 'Heute wenig Zeit']],
   render: h1
 });
 
@@ -192,6 +212,8 @@ function h2(v) {
 function moreWordSheet() {
   return sheet('more-sheet', L('Mehr zu lead time', 'More about lead time'),
     '<div class="stack s16"><div class="stack s6"><div class="lbl">' + L('Bedeutung', 'Meaning') + '</div><p class="p">' + L('Die Zeit zwischen Bestellung und Lieferung. Im Einkauf das Standardwort, oft in Wochen angegeben.', 'The time between order and delivery. The standard word in purchasing, usually given in weeks.') + '</p></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Dieser Satz auf Deutsch', 'This sentence in German') + '</div><div class="tw-trans"><b class="en">Can you reduce the lead time to four weeks?</b><span>Können Sie die Lieferzeit auf vier Wochen verkürzen?</span></div></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Eselsbrücke', 'Memory hook') + '</div><div class="tw-hook">' + ic('bulb', 'sm') + '<p class="p">' + L('<em class="en">to lead</em> heißt vorangehen: die <em class="en">lead time</em> ist die Zeit, die der Lieferung vorausgeht.', '<em>to lead</em> means to go ahead: the <em>lead time</em> is the time that goes ahead of the delivery.') + '</p></div></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Beispiele', 'Examples') + '</div><div class="ex-list en"><div><b>Our standard lead time is ten weeks.</b><span>' + L('Unsere normale Lieferzeit beträgt zehn Wochen.', 'Normal delivery time.') + '</span></div><div><b>We’ve already reduced the lead time to eight weeks.</b><span>' + L('Wir haben die Lieferzeit schon auf acht Wochen verkürzt.', 'Present perfect, no past time named.') + '</span></div></div></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">reduce · shorten · quote a lead time</p></div>' +
     '<div class="stack s6"><div class="lbl">' + L('Typische Falle', 'Common trap') + '</div><p class="p">' + L('<em class="en">delivery</em> ist die Lieferung selbst, nicht ihre Dauer. <em class="en">delivery time</em> geht auch, im Einkauf hörst du meist <em class="en">lead time</em>.', '<em>delivery</em> is the delivery itself, not its duration.') + '</p></div></div>',
@@ -714,16 +736,25 @@ reg('h11', {
 /* =========================================================
    H12 Reiter Wörter
    ========================================================= */
+/* Wortliste: [Wort, Bedeutung, Stufe, Zustand, Art] · Art: '' normal, 'rest' Wartefenster (S4, nur Wort + Datum), 'new' heute eingeführt. */
 const WORDLIST = () => [
-  ['quote', L('Preisangebot', 'price quote'), 'S1', L('neu', 'new')],
-  ['lead time', L('Lieferzeit', 'lead time'), 'S3', L('auf dem Weg · frei an 1 Tag', 'on the way · free on 1 day')],
-  ['follow up', L('nachfassen', 'follow up'), 'S3', L('auf dem Weg', 'on the way')],
-  ['procurement', L('Einkauf, Beschaffung', 'purchasing'), 'S5', L('bildest du selbst', 'you produce it')],
-  ['discount', L('Rabatt', 'discount'), 'S4', L('auf dem Weg · sicher', 'on the way · solid')],
-  ['budget approval', L('Budgetfreigabe', 'budget approval'), 'S2', L('im Aufbau', 'building')],
-  ['sign off on', L('freigeben, absegnen', 'approve'), 'S5', L('bildest du selbst', 'you produce it')],
-  ['deadline', L('Frist', 'deadline'), 'S5', L('bildest du selbst', 'you produce it')]
+  ['quote', L('Preisangebot', 'price quote'), 'S1', L('neu · ruht bis morgen früh', 'new · rests until tomorrow morning'), 'new'],
+  ['lead time', L('Lieferzeit', 'lead time'), 'S3', L('auf dem Weg · frei an 1 Tag', 'on the way · free on 1 day'), ''],
+  ['follow up', L('nachfassen', 'follow up'), 'S3', L('auf dem Weg · fällig', 'on the way · due'), ''],
+  ['procurement', L('Einkauf, Beschaffung', 'purchasing'), 'S5', L('bildest du selbst · fällig', 'you produce it · due'), ''],
+  ['flexibility', '', 'S4', L('ruht bis 12.11.', 'rests until Nov 12'), 'rest'],
+  ['discount', L('Rabatt', 'discount'), 'S3', L('auf dem Weg · fällig', 'on the way · due'), ''],
+  ['budget approval', L('Budgetfreigabe', 'budget approval'), 'S2', L('im Aufbau · fällig', 'building · due'), ''],
+  ['sign off on', L('freigeben, absegnen', 'approve'), 'S5', L('bildest du selbst · fällig', 'you produce it · due'), ''],
+  ['deadline', L('Frist', 'deadline'), 'S5', L('bildest du selbst', 'you produce it'), '']
 ];
+/* Eine Zeile je Wort. Ruhende Wörter im Wartefenster zeigen nur Wort und Datum (VT 3.5). */
+function wordRows(idp, goDetail, goRest) {
+  idp = idp || '';
+  return WORDLIST().map((w, i) => w[4] === 'rest'
+    ? '<button class="row tw-restrow" id="' + idp + 'w-' + i + '" data-go="' + (goRest || 'h12-resting-sheet') + '" data-w="' + w[0] + '"><span class="rt"><b class="en">' + w[0] + '</b><span>' + w[3] + '</span></span><span class="tw-lockic" aria-hidden="true">' + ic('lock', 'xs') + '</span></button>'
+    : '<button class="row" id="' + idp + 'w-' + i + '" data-go="' + (goDetail || 'h12-detail') + '" data-w="' + w[0] + '"><span class="rt"><b class="en">' + w[0] + '</b><span>' + w[1] + ' · ' + w[3] + '</span></span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></button>').join('');
+}
 function wordDetail() {
   const steps = ['S0', 'S1', 'S2', 'S3', 'S4', 'S5'];
   return '<div class="stack s16 springopen"><div class="stack s6"><div class="prompt disp en" style="font-size:36px;line-height:42px">lead time</div><div class="p2 en">/ˈliːd ˌtaɪm/ · ' + L('Nomen', 'noun') + '</div></div>' +
@@ -735,19 +766,86 @@ function wordDetail() {
     '<div class="stack s6"><div class="lbl">' + L('Letzte Versuche', 'Recent attempts') + '</div><div style="display:flex;gap:6px">' +
     [['ok', 'check'], ['bad', 'cross'], ['ok', 'check']].map(x => '<span class="ck' + (x[0] === 'ok' ? ' y' : '') + '" style="' + (x[0] === 'bad' ? 'color:var(--bad);box-shadow:0 0 0 1.5px var(--bad) inset' : '') + '">' + ic(x[1], 'xs') + '</span>').join('') + '</div></div></div>';
 }
+/* Handlungen zum geöffneten Wort (VT 3.7, Muss 4). idp für die Laptop-Kontextspalte. */
+function wordActions(idp) {
+  idp = idp || '';
+  const paused = !!S.ui.wpause;
+  const sec = (id, icon, label, attr) => '<button class="tw-wa" id="' + idp + id + '" ' + attr + '>' + ic(icon, 'sm') + '<span>' + label + '</span></button>';
+  return '<div class="stack s16 tw-wact">' +
+    (paused ? '<div class="notice tw-notice">' + ic('pause', 'sm') + '<span>' + L('<b>Pausiert.</b> Setzt keine Termine, kommt in keiner Übung. Alles bleibt gespeichert.', '<b>Paused.</b> No dates are set and it won’t appear in exercises. Everything is kept.') + '</span></div>'
+      : '<button class="btn pri full" id="' + idp + 'w-practice" data-go="h18-word">' + L('Dieses Wort üben', 'Practice this word') + '</button>' +
+      '<p class="tw-note">' + ic('info', 'xs') + '<span>' + L('5 Karten, <em class="en">lead time</em> kommt als letzte. Noch nicht fällig: Übung, der Termin startet ab jetzt neu.', '5 cards, <em>lead time</em> comes last. Not due yet: practice, the review restarts from now.') + '</span></p>') +
+    '<div class="tw-wagrid">' +
+    sec('w-say', 'mic', L('Sag es', 'Say it'), 'data-go="h8-scenario"') +
+    sec('w-pause', paused ? 'play' : 'pause', paused ? L('Fortsetzen', 'Resume') : L('Pausieren', 'Pause'), 'data-act="wpause" aria-pressed="' + (paused ? 'true' : 'false') + '"') +
+    sec('w-ask', 'claude', L('Claude fragen', 'Ask Claude'), 'data-go="h15-claude"') +
+    sec('w-manage', 'gear', L('Verwalten', 'Manage'), 'data-go="h23-actions"') + '</div></div>';
+}
+function restingSheetBody() {
+  return '<p class="p">' + L('<b class="en">flexibility</b> ruht bis 12.11. Dann prüfen wir, ob es nach 3 Wochen ohne Kontakt noch sitzt. Öffnen setzt die 3 Wochen zurück.', '<b>flexibility</b> rests until Nov 12. Then we check whether it still holds after 3 weeks without contact. Opening it resets the 3 weeks.') + '</p>';
+}
+const WF_STAND = () => [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Im Aufbau', 'Building'), 24], [L('Erkennst du', 'You recognize'), 388], [L('Ruht', 'Resting'), 3], [L('Pausiert', 'Paused'), 2]];
+function wordFilterBody() {
+  const grp = (t, items, on) => '<div class="tw-grp"><div class="lbl">' + t + '</div><div class="tw-chips">' + items.map((x, i) => '<button class="tw-chip' + (i === on ? ' on' : '') + '" id="wfs-' + t.length + '-' + i + '" data-act="noop">' + x[0] + ' <span class="num">' + x[1] + '</span></button>').join('') + '</div></div>';
+  return '<div class="stack s16">' + grp(L('Stand', 'Status'), WF_STAND(), 0) +
+    grp(L('Art', 'Type'), [[L('Wort', 'Word'), 402], [L('Wendung', 'Phrase'), 61], [L('Wortpartner', 'Collocation'), 28]], -1) +
+    grp(L('Herkunft', 'Source'), [[L('Thema', 'Topic'), 312], [L('Eigene Funde', 'My finds'), 97], [L('Lehrer', 'Teacher'), 54], [L('Mission', 'Mission'), 28]], -1) +
+    '<button class="row" id="wfs-hard" data-act="noop" aria-pressed="false"><span class="ri">' + ic('flag', 'sm') + '</span><span class="rt"><b>' + L('Schwierig', 'Hard') + '</b><span>' + L('zweimal danebengelegen in 30 Tagen · 9', 'missed twice in 30 days · 9') + '</span></span><span class="tw-switch" aria-hidden="true"><i></i></span></button></div>';
+}
+function h12List(v) {
+  const card = {
+    list: [L('14 fällig · zählt als Extra', '14 due · counts as extra'), 'h17-default', L('Üben', 'Practice')],
+    'list-before': [L('Deine Pflicht ist noch offen. Hier übst du zusätzlich.', 'Your daily plan is still open. This is extra practice.'), 'h17-before-duty', L('Üben', 'Practice')],
+    'list-nothing-due': [L('Nichts fällig · schwierige Wörter üben', 'Nothing due · practice hard words'), 'h17-nothing-due', L('Üben', 'Practice')]
+  }[v] || null;
+  const c = card || [L('14 fällig · zählt als Extra', '14 due · counts as extra'), 'h17-default', L('Üben', 'Practice')];
+  const filters = WF_STAND().slice(0, 3).concat([WF_STAND()[4]]);
+  return '<div class="scroll">' + phead(L('Wörter', 'Words'), askBtn()) + '<div class="gx stack s16" style="padding-bottom:24px">' +
+    '<div class="tw-practice"><div class="tw-pt"><b>' + L('Wörter üben', 'Practice words') + '</b><span>' + c[0] + '</span></div><button class="btn pri" id="w-go" data-go="' + c[1] + '">' + c[2] + '</button></div>' +
+    '<label class="field" style="min-height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="w-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:16px;color:var(--fg)" autocomplete="off"></label>' +
+    '<div class="tw-chiprow">' + filters.map((f, i) => '<button class="chip" id="wf-' + i + '" style="flex:none;min-height:34px;' + (i === 0 ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + f[0] + ' <span class="num" style="opacity:.7">' + f[1] + '</span></button>').join('') +
+    '<button class="chip" id="wf-more" data-go="h12-filter" style="flex:none;min-height:34px">' + ic('list', 'xs') + L('Filter', 'Filter') + '</button></div>' +
+    '<div id="w-rows">' + wordRows() + '</div><div id="w-found"></div></div></div>' + tabbar('h12');
+}
+/* Suche filtert sofort; unter den Treffern „Diese N üben“, ohne Treffer der Weg ins Wörterbuch (H21). */
+function wireWordSearch(idp, practiceGo, emptyGo) {
+  idp = idp || '';
+  const inp = document.getElementById(idp + 'w-search');
+  if (!inp) return;
+  inp.addEventListener('input', () => {
+    const q = inp.value.trim().toLowerCase();
+    let n = 0;
+    document.querySelectorAll('#' + idp + 'w-rows .row').forEach(r => { const hit = !q || r.textContent.toLowerCase().indexOf(q) >= 0; r.style.display = hit ? '' : 'none'; if (hit) n++; });
+    const f = document.getElementById(idp + 'w-found');
+    if (!f) return;
+    if (!q) { f.innerHTML = ''; return; }
+    f.innerHTML = n
+      ? '<button class="btn sec full" id="' + idp + 'w-these" data-go="' + practiceGo + '">' + L('Diese ' + n + ' üben', 'Practice these ' + n) + '</button>'
+      : '<div class="tw-empty"><b>' + L('„' + esc(inp.value.trim()) + '“ ist noch nicht in deinen Wörtern.', '“' + esc(inp.value.trim()) + '” isn’t in your words yet.') + '</b><button class="btn sec full" id="' + idp + 'w-dict" data-go="' + emptyGo + '">' + ic('search', 'sm') + L('Im Wörterbuch suchen', 'Look it up') + '</button></div>';
+  });
+}
 reg('h12', {
   code: 'H12', name: 'Reiter Wörter', kind: 'phone',
-  variants: [['list', 'Liste'], ['detail', 'Wort geöffnet']],
+  variants: [['list', 'Liste mit Üben'], ['list-before', 'Pflicht noch offen'], ['list-nothing-due', 'nichts fällig'], ['detail', 'Wort geöffnet'], ['resting-sheet', 'ruhendes Wort angetippt'], ['filter', 'Filter-Blatt']],
   render(v) {
     if (v === 'detail') {
       return '<header class="phead gx"><button class="iconbtn" id="w-back" data-go="h12-list" aria-label="' + esc(L('Zurück', 'Back')) + '" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button>' + askBtn() + '</header>' +
-        '<div class="scroll gx" style="padding-bottom:24px">' + wordDetail() + '</div>' + tabbar('h12');
+        '<div class="scroll gx stack s24" style="padding-bottom:24px">' + wordDetail() + wordActions() + '</div>' + tabbar('h12');
     }
-    const filters = [[L('Alle', 'All'), 491], [L('Bildest du selbst', 'You produce'), 38], [L('Auf dem Weg', 'On the way'), 41], [L('Erkennst du', 'You recognize'), 412]];
-    return '<div class="scroll">' + phead(L('Wörter', 'Words'), askBtn()) + '<div class="gx stack s16" style="padding-bottom:24px">' +
-      '<label class="field" style="min-height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--fg-3)">' + ic('search', 'sm') + '<input id="w-search" placeholder="' + esc(L('Wort suchen', 'Search words')) + '" style="border:0;background:transparent;outline:none;flex:1;min-width:0;font-size:16px;color:var(--fg)" autocomplete="off"></label>' +
-      '<div style="display:flex;gap:6px;overflow-x:auto;margin:0 -20px;padding:0 20px;scrollbar-width:none">' + filters.map((f, i) => '<button class="chip" id="wf-' + i + '" style="flex:none;min-height:34px;' + (i === 0 ? 'background:var(--act-soft);color:var(--act-text)' : '') + '">' + f[0] + ' <span class="num" style="opacity:.7">' + f[1] + '</span></button>').join('') + '</div>' +
-      '<div>' + WORDLIST().map((w, i) => '<button class="row" id="w-' + i + '" data-go="h12-detail"><span class="rt"><b class="en">' + w[0] + '</b><span>' + w[1] + ' · ' + w[3] + '</span></span><span class="stagepill' + (w[2] === 'S5' ? ' s5' : '') + '">' + w[2] + '</span></button>').join('') + '</div></div></div>' + tabbar('h12');
+    if (v === 'resting-sheet') {
+      return h12List('list') + sheet('w-rest-sheet', 'flexibility', restingSheetBody(),
+        '<div class="stack s8"><button class="btn pri full" id="w-rest-back" data-go="h12-list">' + L('Zurück', 'Back') + '</button><button class="btn ghost full" id="w-rest-open" data-go="h12-list">' + L('Trotzdem öffnen', 'Open anyway') + '</button></div>', { h: '44%', closeAct: 'tolist' });
+    }
+    if (v === 'filter') {
+      return h12List('list') + sheet('w-filter-sheet', L('Filter', 'Filter'), wordFilterBody(),
+        '<button class="btn pri full" id="wfs-show" data-go="h12-list">' + L('491 Wörter zeigen', 'Show 491 words') + '</button>', { h: '84%', closeAct: 'tolist' });
+    }
+    return h12List(v);
+  },
+  after(v) { if (v.indexOf('list') === 0) wireWordSearch('', 'h18-free', 'h21-search-empty'); },
+  acts: {
+    tolist() { go('h12-list'); },
+    wpause() { S.ui.wpause = !S.ui.wpause; render(); }
   }
 });
 
@@ -840,8 +938,10 @@ reg('h14', {
    ========================================================= */
 reg('h15', {
   code: 'H15', name: 'Blatt „Fragen“', kind: 'phone',
-  variants: [['claude', 'Claude'], ['translate', 'Übersetzen']],
+  variants: [['claude', 'Claude'], ['translate', 'Übersetzen'], ['saved', 'In die Wörter gespeichert']],
   render(v) {
+    const saved = v === 'saved';
+    if (saved) v = 'translate';
     S.typed = null; S.ui.checked = true;
     const under = gramTask({ checked: true, st: 'wrong' });
     const seg = '<div class="seg2" role="tablist"><button id="ask-claude" data-go="h15-claude" class="' + (v === 'claude' ? 'on' : '') + '" role="tab">Claude</button><button id="ask-trans" data-go="h15-translate" class="' + (v === 'translate' ? 'on' : '') + '" role="tab">' + L('Übersetzen', 'Translate') + '</button></div>';
@@ -856,7 +956,8 @@ reg('h15', {
         '<p class="p2">' + L('Kein Zeitpunkt, Ergebnis zählt: present perfect.', 'No time named, result matters: present perfect.') + '</p></div></div>';
     }
     const foot = v === 'claude' ? '<div style="display:flex;gap:8px"><div class="field" style="min-height:48px;flex:1;padding:12px 14px;color:var(--fg-3)">' + L('Frag Claude …', 'Ask Claude …') + '</div><button class="btn pri" id="ask-send" data-act="noop" aria-label="' + esc(L('Senden', 'Send')) + '" style="width:52px;padding:0">' + ic('send', 'sm') + '</button></div>'
-      : '<div style="display:flex;gap:8px"><button class="btn sec" id="tr-add" data-act="noop" style="flex:1">' + L('In die Wörter', 'Add to words') + '</button><button class="btn pri" id="tr-done" data-go="h4-band" style="flex:1">' + L('Fertig', 'Done') + '</button></div>';
+      : (saved ? '<div class="tw-saved" role="status" id="tr-saved"><span class="tw-savedic">' + ic('check', 'xs') + '</span><span><b class="en">reduce the lead time</b>' + L(' ist in deinen Wörtern · erkennst du', ' is in your words · you recognize') + '</span><button class="link" id="tr-undo" data-go="h15-translate">' + L('Rückgängig', 'Undo') + '</button></div>' : '') +
+        '<div style="display:flex;gap:8px">' + (saved ? '' : '<button class="btn sec" id="tr-add" data-go="h15-saved" style="flex:1">' + L('In die Wörter', 'Add to words') + '</button>') + '<button class="btn pri" id="tr-done" data-go="h4-band" style="flex:1">' + L('Fertig', 'Done') + '</button></div>';
     return under + '<div class="scrim" data-go="h4-band"></div><div class="sheet" id="ask-sheet" role="dialog" aria-label="' + esc(L('Fragen', 'Ask')) + '" style="height:78%"><div class="grab"></div><div class="gx" style="padding-bottom:6px">' + seg + '</div><div class="sb gx">' + body + '</div><div class="sf gx">' + foot + '</div></div>';
   }
 });
@@ -866,8 +967,13 @@ reg('h15', {
    ========================================================= */
 reg('h16', {
   code: 'H16', name: 'Ausfälle', kind: 'phone',
-  variants: [['noai', 'Claude nicht erreichbar'], ['tts', 'Vorlesen geht nicht'], ['empty', 'leere Liste']],
+  variants: [['noai', 'Claude nicht erreichbar'], ['tts', 'Vorlesen geht nicht'], ['empty', 'leere Liste'], ['nosave', 'Speichern geht gerade nicht']],
   render(v) {
+    if (v === 'nosave') {
+      S.ui.checked = true; S.ui.ownInput = false;
+      const note = '<div class="notice tw-notice tw-nosave" role="status">' + ic('offline', 'sm') + '<span>' + L('<b>Speichern geht gerade nicht.</b> Deine Antworten bleiben auf diesem Gerät und gehen von selbst hoch, sobald es wieder geht. Nichts geht verloren.', '<b>Saving isn’t working right now.</b> Your answers stay on this device and upload on their own once it works again. Nothing is lost.') + '</span></div>';
+      return h18('free').replace('<div class="ex-body gx with-band">', '<div class="ex-body gx with-band">' + note);
+    }
     if (v === 'noai') {
       const blocks = NORMAL();
       return exTop(blocks, 4, 0.7) + '<div class="ex-body gx">' + blockLine('s', L('Sag es · Rückmeldung', 'Say it · feedback')) +
