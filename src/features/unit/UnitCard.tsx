@@ -4,6 +4,7 @@ import type { ScreenProps } from '../../app/registry';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
+import { DoneMark } from '../../ui/DoneMark';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { toast } from '../../ui/Toast';
 import { ExerciseTop } from '../learn/ui';
@@ -49,15 +50,25 @@ function Next() {
     );
   }
   const b = up.blocks.find((x) => x.channel === nextRow.id);
+  const nextName = blockName(nextRow.kind, nextRow.block, t, nextRow.fmt);
+  const doneLabel = prev ? t('nbHeuteBetweenDone', { block: blockName(prev.kind, prev.block, t, prev.fmt) }) : null;
+  // U3: Abschlussmoment – Ring füllt sich bis zum Tagesstand, Häkchen zeichnet sich (Smaragd); der Knopf nennt den nächsten Schritt.
   return (
-    <section className="flex flex-col gap-5" data-testid="unit-between" data-next={nextRow.id}>
-      <div className="lx-glass flex flex-col items-center gap-2 rounded-[var(--radius-card)] px-5 py-7 text-center">
-        {prev && <p className="lx-eyebrow text-accent-text">✓ {t('nbHeuteBetweenDone', { block: blockName(prev.kind, prev.block, t, prev.fmt) })}</p>}
-        <h2 className="text-xl font-semibold tracking-tight" data-testid="unit-between-head">{t('nbHeuteBetweenHead', { done: view.duties.done, total: view.duties.total, min: rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) })}</h2>
-        <p className="text-sm text-muted">{t('nbHeuteBetweenNext', { block: blockName(nextRow.kind, nextRow.block, t, nextRow.fmt), why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '' })}</p>
+    <section className="flex flex-col gap-4" data-testid="unit-between" data-next={nextRow.id}>
+      <div className="lx-glass flex flex-col items-center gap-2 rounded-[var(--radius-card)] px-6 py-8 text-center">
+        <DoneMark done={view.duties.done} total={view.duties.total} label={doneLabel ?? t('nbHeuteBetweenHead', { done: view.duties.done, total: view.duties.total, min: 0 })} />
+        {doneLabel && (
+          <p className="lx-eyebrow mt-2 text-ok-text" data-testid="unit-between-done">
+            {doneLabel}
+          </p>
+        )}
+        <h2 className="text-xl font-semibold tracking-tight" data-testid="unit-between-head">
+          {t('nbHeuteBetweenHead', { done: view.duties.done, total: view.duties.total, min: rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) })}
+        </h2>
+        {b && <p className="text-sm text-muted">{blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec)}</p>}
       </div>
       <Button variant="primary" size="lg" className="w-full" iconAfter="arrowRight" onClick={() => continueUnit(api)} data-testid="unit-next">
-        {t('nbHeuteBetweenGo')}
+        {t('nbHeuteBetweenGo', { block: nextName })}
       </Button>
     </section>
   );

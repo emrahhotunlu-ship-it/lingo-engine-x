@@ -61,8 +61,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteLegacy: 'Today still follows your earlier plan. The new daily plan starts tomorrow.',
   // Phone mode (Emrah 2026-10-01)
   nbHeuteBetweenDone: '{block} done',
-  nbHeuteBetweenNext: 'Up next: {block} · {why}',
-  nbHeuteBetweenGo: 'Continue',
+  nbHeuteBetweenGo: 'Next: {block}',
   nbHeuteEndBack: 'Back to Today',
   nbHeuteClose: 'Close session',
   nbHeuteSaved: 'Saved. You can pick up where you left off anytime.',

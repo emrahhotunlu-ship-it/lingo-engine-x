@@ -55,8 +55,8 @@ export const gxDe = {
   gxSheetNote: 'Hinweis',
   // Rundenende
   gxEndTitle: 'Grammatik geschafft',
-  gxEndSafe: 'Neu sicher: {name} ({k} von {n} ohne Hilfe)',
-  gxEndWobbly: 'Noch wackelig: {name} · kommt morgen wieder',
+  gxEndSafe: 'Neu sicher · {k} von {n} ohne Hilfe',
+  gxEndWobbly: 'Noch wackelig · kommt morgen wieder',
   gxEndTomorrow: 'morgen',
   gxEndNextBlock: 'Weiter',
   gxEndBack: 'Zurück',

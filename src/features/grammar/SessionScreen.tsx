@@ -139,18 +139,15 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
     const p = patternById(id);
     return p ? pick(p.name) : id;
   };
-  const items = growth.map((g) => ({
-    label: name(g.pat),
-    from: dots(patternState(g.from, s.day)),
-    to: dots(patternState(g.to, s.day)),
-    max: 4,
-    state: patternState(g.to, s.day),
-  }));
+  // U3: je Muster EINE Zeile mit Status-Punkt; „Neu sicher“, „Noch wackelig“, der Fortschrittsbeleg und die Fehler dieses Musters stehen in
+  // dieser Zeile (vorher stand dasselbe Thema bis zu dreimal da: Punkte, Satz, Fehlerliste). Nur was keinem Muster gehört, bleibt darunter.
+  const notes = new Map<string, string[]>();
+  const note = (pat: string, text: string) => notes.set(pat, [...(notes.get(pat) ?? []), text]);
   const facts: string[] = [];
   for (const g of growth) {
     const was = patternState(g.from, s.day);
     const now = patternState(g.to, s.day);
-    if ((was === 'new' || was === 'learning') && (now === 'safe' || now === 'firm')) facts.push(t('gxEndSafe', { name: name(g.pat), k: g.clean, n: g.n }));
+    if ((was === 'new' || was === 'learning') && (now === 'safe' || now === 'firm')) note(g.pat, t('gxEndSafe', { k: g.clean, n: g.n }));
   }
   // Fortschrittsbeleg (Tutor-Engine v3 S2): nur aus dem Protokoll (`progressProof`), nur bei echtem Zuwachs, höchstens zwei Zeilen.
   if (proofs) {
@@ -158,18 +155,31 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
     for (const g of growth) {
       const pr = proofs.get(g.pat);
       if (pr && pr.trend === 'up' && k < 2) {
-        facts.push(proofText(g.pat, pr, lang));
+        note(g.pat, proofText(g.pat, pr, lang));
         k++;
       }
     }
     if (k > 0) facts.push(sureNote(lang));
   }
   const wrongPats = new Set(s.results.filter((r) => !r.ok && r.pat).map((r) => r.pat as string));
-  for (const g of growth) if (wrongPats.has(g.pat) && patternState(g.to, s.day) === 'learning') facts.push(t('gxEndWobbly', { name: name(g.pat) }));
-  const mistakes = s.results
+  const grown = new Set(growth.map((g) => g.pat));
+  const allMistakes = s.results
     .filter((r): r is typeof r & { right: string } => !r.ok && !!r.right)
     .slice(0, 4)
-    .map((r) => ({ wrong: (r.given ?? '').trim() || '…', right: r.right, rule: r.pat ? name(r.pat) : topicName(r.topic, lang), when: t('gxEndTomorrow') }));
+    .map((r) => ({ pat: r.pat ?? null, wrong: (r.given ?? '').trim() || '…', right: r.right, rule: r.pat ? name(r.pat) : topicName(r.topic, lang), when: t('gxEndTomorrow') }));
+  // „Noch wackelig · kommt morgen wieder“ nur, wenn die Zeile nicht schon einen Fehler mit „kommt morgen wieder“ zeigt.
+  for (const g of growth) if (wrongPats.has(g.pat) && patternState(g.to, s.day) === 'learning' && !allMistakes.some((m) => m.pat === g.pat)) note(g.pat, t('gxEndWobbly'));
+  const strip = (m: (typeof allMistakes)[number]) => ({ wrong: m.wrong, right: m.right, rule: m.rule, when: m.when });
+  const mistakes = allMistakes.filter((m) => !m.pat || !grown.has(m.pat)).map(strip);
+  const items = growth.map((g) => ({
+    label: name(g.pat),
+    from: dots(patternState(g.from, s.day)),
+    to: dots(patternState(g.to, s.day)),
+    max: 4,
+    state: patternState(g.to, s.day),
+    notes: notes.get(g.pat) ?? [],
+    mistakes: allMistakes.filter((m) => m.pat === g.pat).map(strip),
+  }));
   // Ohne Muster (Themen ohne Musterdatei): die geübten Themen als Zeilen ohne Punkte.
   const plain = growth.length ? [] : [...new Set(s.results.map((r) => r.topic))].map((tp) => t('gxEndNoPattern', { topic: topicName(tp, lang) }));
   const right = s.results.filter((r) => r.ok).length;
@@ -201,7 +211,7 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
         total={s.results.length}
         ms={s.activeMs}
         lead={<TestResult test={testRes} lang={lang} skipped={skipped} onSkip={setSkipped} />}
-        mistakes={mistakes}
+        mistakes={allMistakes.map(strip)}
         next={main}
         {...(!s.block && (chapterNext || next) ? { secondary: { label: t('sumBack'), run: back } } : {})}
       />

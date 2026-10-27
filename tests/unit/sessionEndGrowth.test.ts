@@ -32,8 +32,8 @@ describe('Rundenende Wachstum', () => {
     expect(out).toContain('und 2 weitere');
     expect(out).not.toContain('session-end-right');
     expect(out).not.toContain('session-end-time');
-    // „18 von 22 richtig“ bleibt eine kleine graue Zeile unter dem Titel.
-    expect(out).toMatch(/lx-t-support m-0 text-muted[^>]*>[^<]*18[^<]*22/);
+    // „18 von 22 richtig“ bleibt eine kleine graue Zeile unter dem Titel (U3: die Zahl zählt hoch, der Endwert steht für Vorleseprogramme daneben).
+    expect(out).toMatch(/lx-t-support m-0 text-muted[^>]*>(?:(?!<\/p>).)*18 von 22/s);
   });
 
   it('ohne Aufgestiegene: Gedächtnis-Zeit mit den Zahlen des Selektors; mit Aufgestiegenen entfällt sie', () => {

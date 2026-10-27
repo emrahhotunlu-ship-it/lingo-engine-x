@@ -65,8 +65,7 @@ export const nbHeuteDe = {
   nbHeuteLegacy: 'Heute gilt noch der Plan von vorhin. Ab morgen gilt der neue Tagesplan.',
   // Zwischen- und Bestätigungskarte (unitCard)
   nbHeuteBetweenDone: '{block} geschafft',
-  nbHeuteBetweenNext: 'Als Nächstes: {block} · {why}',
-  nbHeuteBetweenGo: 'Weiter',
+  nbHeuteBetweenGo: 'Weiter: {block}',
   nbHeuteEndBack: 'Zurück zu Heute',
   nbHeuteClose: 'Einheit schließen',
   nbHeuteSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',
