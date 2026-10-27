@@ -12,8 +12,12 @@ const font = readFileSync(join(root, 'node_modules/@fontsource-variable/inter/fi
 let css = src('style.css');
 if (!css.includes('__INTER_WOFF2_BASE64__')) throw new Error('Platzhalter für die Schrift fehlt in style.css');
 css = css.replace('__INTER_WOFF2_BASE64__', font.toString('base64'));
+// Ergänzungen je Bau-Paket (nur neue Klassen mit eigenem Präfix).
+css += '\n' + ['style-woerter.css', 'style-mehr.css', 'style-soll.css'].map(src).join('\n');
 
-const js = [src('app.js'), src('screens.js'), src('desk.js'), 'boot();'].join('\n');
+// Reihenfolge = Reihenfolge im Bildschirm-Menü (ORDER). Teil-Dateien gehören je einem Bau-Agenten.
+const parts = ['app.js', 'screens.js', 'screens-woerter.js', 'screens-mehr.js', 'screens-soll.js', 'desk.js', 'desk-woerter.js', 'desk-mehr.js'];
+const js = [...parts.map(src), 'boot();'].join('\n');
 if (/<\/script/i.test(js)) throw new Error('Skript enthält </script');
 
 const out = '<title>Lingo Vorschau</title>\n' +
