@@ -5,7 +5,7 @@ export const exDe = {
   exVerdictOk: 'Richtig',
   exVerdictNear: 'Fast richtig',
   exVerdictWrong: 'Noch nicht',
-  exVerdictDontKnow: 'Kein Problem – so geht es',
+  exVerdictDontKnow: 'Kein Problem – so\u00a0geht’s',
   exVerdictUnchecked: 'Ohne Prüfung gespeichert',
   // Zustand einer Einheit (Wort, Muster)
   exStateNew: 'Neu',

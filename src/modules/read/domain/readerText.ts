@@ -26,6 +26,15 @@ export function topicKey(topic: string | null | undefined): RdrKey {
   return key in rdrDe ? key : 'rdrTopic_custom';
 }
 
+/** Erscheinungstag „2026-09-19“ als kurzes Datum („19. Sep.“ / „Sep 19“), nie als ISO-Zeichenkette (UX-Audit U1). Unlesbar → leer. */
+export function formatPubDay(lang: RdrLang, pub: string | null | undefined): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec((pub ?? '').trim());
+  if (!m) return '';
+  const d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+  if (Number.isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(d);
+}
+
 /**
  * Zeitangabe des Artikels je Sprache („2026-01“ → „Januar 2026“ / „January 2026“, „2026“ → „2026“).
  * Das Modell liefert nur `JJJJ` oder `JJJJ-MM`; ältere Artikel tragen noch Freitext („general state as of early 2026“):

@@ -97,7 +97,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   grRewriteLabel: 'Your rewritten sentence',
   grJudging: 'Claude is checking your answer …',
   grUnsure: 'Can’t check this for sure – it won’t count against you',
-  grVerdictDontKnow: 'No problem – here is how it goes:',
+  grVerdictDontKnow: 'No problem – here’s how it\u00a0goes:',
   grVerdictContraction: 'Correct – contracted form',
   exAlsoRight: 'Also correct',
   grAltWanted: 'Practiced here: {want}. {why}.',

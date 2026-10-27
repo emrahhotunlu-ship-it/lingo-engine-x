@@ -188,8 +188,8 @@ function TodayCard({ h }: { h: ReadHome }) {
   }
 
   return (
-    <HeroCard testId="read-today" eyebrow={t('rdToday')} tone={!empty && !h.next ? 'done' : 'default'} title={empty ? t('rdEmptyTitle') : !h.next ? t('rdAllDone') : undefined} action={action}>
-      {empty && !busy && <p className="m-0 text-sm text-muted">{h.aiOn ? t('rdEmptyBody') : t('rdAiOff')}</p>}
+    <HeroCard testId="read-today" eyebrow={t('rdToday')} tone={!empty && !h.next ? 'done' : 'default'} title={empty ? t(h.earlier.length > 0 ? 'rdEmptyTodayTitle' : 'rdEmptyTitle') : !h.next ? t('rdAllDone') : undefined} action={action}>
+      {empty && !busy && <p className="m-0 text-sm text-muted">{h.aiOn ? t(h.earlier.length > 0 ? 'rdEmptyTodayBody' : 'rdEmptyBody') : t('rdAiOff')}</p>}
       {!empty && (
         <ul className="m-0 flex list-none flex-col p-0" data-testid="read-list" aria-label={t('rdToday')}>
           {h.entries.map((e) => (

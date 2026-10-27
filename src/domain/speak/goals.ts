@@ -22,6 +22,20 @@ export function mergeGoalMarks(prev: readonly GoalMark[], next: readonly GoalMar
 /** Zahl der erreichten Ziele (für „2 von 3“). */
 export const metCount = (marks: readonly GoalMark[]): number => marks.filter((m) => m.state === 'met').length;
 
+export type OverallGoal = 'reached' | 'partly' | 'missed';
+
+/**
+ * Gesamturteil des Berichts mit der Checkliste abgleichen (UX-Audit U1, Kap. 2.2): Steht in der Checkliste „alle Ziele erreicht“, sagt der
+ * Bericht nie gleichzeitig „noch nicht erreicht“ (und umgekehrt bei null erreichten Zielen nie „erreicht“). Dann gilt „teilweise“.
+ */
+export function overallGoal(state: OverallGoal, marks: readonly GoalMark[], n: number): OverallGoal {
+  if (n <= 0) return state;
+  const met = metCount(marks);
+  if (state === 'missed' && met >= n) return 'partly';
+  if (state === 'reached' && met === 0) return 'partly';
+  return state;
+}
+
 /** Gespeicherte Markierungen tolerant lesen (Fortsetzen nach Neuladen). */
 export function readGoalMarks(v: unknown): GoalMark[] {
   if (!Array.isArray(v)) return [];

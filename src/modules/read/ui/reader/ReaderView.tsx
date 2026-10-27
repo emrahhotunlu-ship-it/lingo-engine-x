@@ -4,7 +4,7 @@ import type { ArticleItem, ReadState, ReadView } from '../../schemas';
 import { VIEWS } from '../../schemas';
 import { summarizeChecks } from '../../domain/readerCheck';
 import { buildModel, highlightMap, initialRevealed, pickChecks, pickKeyWords, toggleAll, toggleSentence, topVisibleSentence, userRevealCount, viewOf } from '../../domain/readerModel';
-import { formatAsOf, rdrText, topicKey, type RdrKey } from '../../domain/readerText';
+import { formatAsOf, formatPubDay, rdrText, topicKey, type RdrKey } from '../../domain/readerText';
 import { buildStatePatch, canFinish, clockSeconds, newClock, pauseClock, resumeClock, type ReadClock } from '../../domain/readerTiming';
 import { countWords, minutesFor } from '../../domain/text';
 import { Button, Icon, Segmented, lookupOpenMs, speak, unlockSpeech, useT } from '../../sharedUi';
@@ -257,7 +257,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
         ) : article.by === 'routine' && article.source ? (
           <p className="m-0 text-xs text-subtle" data-testid="rdr-routine">
             {rdrText(lang, 'rdrRoutineLine', { source: article.source })}
-            {article.pub ? ` · ${article.pub}` : ''} · {rdrText(lang, 'rdrRoutineHint')}
+            {formatPubDay(lang, article.pub) ? ` · ${formatPubDay(lang, article.pub)}` : ''} · {rdrText(lang, 'rdrRoutineHint')}
             {article.url ? (
               <>
                 {' · '}

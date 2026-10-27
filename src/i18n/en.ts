@@ -223,7 +223,7 @@ export const en: Record<MessageKey, string> = {
   measuresMastery: 'Mastery (estimate)',
   measuresAnswers_one: '{n} answer',
   measuresAnswers_other: '{n} answers',
-  migratedOn: 'Upgraded on {date}',
+  migratedOn: 'Your data from the old app has been here since {date}.',
 
   settingsLanguage: 'Language',
   settingsAppearance: 'Appearance',

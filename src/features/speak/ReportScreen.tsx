@@ -17,7 +17,7 @@ import { repairsFromTalk } from '../../domain/repair/sources';
 import { ExerciseTop } from '../learn/ui';
 import { RepairStep } from '../repair/RepairStep';
 import { sceneCriteria, sceneGoals } from '../../domain/speak/bizScenes';
-import { metCount } from '../../domain/speak/goals';
+import { metCount, overallGoal } from '../../domain/speak/goals';
 import { CriteriaGrid, GoalChecklist } from './GoalChecklist';
 import type { UnitBlockNo } from '../../app/unit/types';
 import { unitResult, type Correction } from '../../domain/speak/unitResult';
@@ -45,7 +45,7 @@ function reportUnit(scene: SceneView, rp: RoleplayApi, block: UnitBlockNo): void
 }
 
 export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp: RoleplayApi; unit?: UnitBlockNo | null }) {
-  const { t, lang } = useT();
+  const { t, tn, lang } = useT();
   const go = useNav((s) => s.go);
   const back = useNav((s) => s.back);
   const route = useNav((s) => s.route);
@@ -80,7 +80,7 @@ export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp:
       </header>
 
       <Card channel="speak" data-testid="report-stats">
-        <p className="lx-tnum text-base font-medium">{t('repStats', { turns: stats.turns, min: stats.minutes, clean: stats.clean, total: stats.analysed })}</p>
+        <p className="lx-tnum text-base font-medium">{tn('repStats', stats.turns, { min: stats.minutes, clean: stats.clean, total: stats.analysed })}</p>
         {stats.topCats.length > 0 && (
           <p className="mt-3 flex flex-wrap items-center gap-2 text-sm">
             <span className="text-muted">{t('repTopCats')}</span>
@@ -101,7 +101,7 @@ export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp:
             <span className="text-muted">{t('repTaken')}</span> <span lang="en">{stats.taken.join(' · ')}</span>
           </p>
         )}
-        {stats.chipTurns > 0 && <p className="mt-2 text-xs text-muted">{t('repChips', { n: stats.chipTurns })}</p>}
+        {stats.chipTurns > 0 && <p className="mt-2 text-xs text-muted">{tn('repChips', stats.chipTurns)}</p>}
         {c.saveFailed && (
           <p role="alert" className="mt-3 text-sm text-danger-text">
             {t('repNotSaved')}
@@ -165,9 +165,9 @@ export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp:
         {aiState === 'done' && rep.data && (
           <>
             <Card as="div">
-              <p className="flex items-center gap-2 text-base font-semibold" data-testid="report-goal" data-goal={rep.data.goal.state}>
+              <p className="flex items-center gap-2 text-base font-semibold" data-testid="report-goal" data-goal={overallGoal(rep.data.goal.state, rp.goals, goalList.length)}>
                 <Icon name="target" size={18} />
-                {t(GOAL_KEY[rep.data.goal.state])}
+                {t(GOAL_KEY[overallGoal(rep.data.goal.state, rp.goals, goalList.length)])}
               </p>
               <p className="mt-1 text-sm text-muted">{rep.data.goal.why}</p>
               <p className="mt-3 text-base leading-relaxed">{rep.data.summary}</p>
