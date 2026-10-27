@@ -22,7 +22,7 @@ describe('checkHtml', () => {
     expect(checkHtml(page('1'), WARN_BYTES).problems).toEqual([]);
     expect(checkHtml(page('1'), FAIL_BYTES - 1).problems).toEqual([]);
     expect(checkHtml(page('1'), FAIL_BYTES).problems.join()).toContain('9 MiB');
-    expect(checkHtml(page('1'), 16 * MIB).problems.join()).toContain('16 MB');
+    expect(checkHtml(page('1'), 16 * MIB).problems.join()).toContain('15.00 MB je Datei');
   });
 
   it('findet WebAssembly in jeder Schreibweise', () => {

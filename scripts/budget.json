@@ -1,0 +1,51 @@
+{
+  "$kommentar": [
+    "Budget-Tor des Mehr-Datei-Builds (Stufe 1, docs/relaunch/stufe1-plan.md P0 Nr. 4 und §5.4). Geprüft von scripts/check-budget.mjs in verify und verify:fast.",
+    "Einheit: Byte gzip (zlib-Standardstufe 6) je Stück; 1 KB = 1.000 Byte.",
+    "Grenze = basis + Summe der Einträge unter zuwachs (Schlüssel = Paketname). Ein Paket trägt beim Zusammenführen GENAU seinen vorab genannten Betrag ein, nicht mehr.",
+    "Mehr als vorab genannt ist ein G0-Befund: nur mit Zustimmung der Hauptsitzung, eingetragen als { \"bytes\": n, \"freigabe\": \"wer, wann, warum\" }.",
+    "basis = Messung unten, aufgerundet auf den nächsten vollen KB (Rauschen durch Bau-Kennung und Hash-Namen), kein Prozent-Spielraum.",
+    "lazyNeu: Grenze für ein neues nachgeladenes Stück, solange es nicht mit Paketname unter grenzen.lazy steht (Ziel 1b je Bereich, Konzept 14.2).",
+    "bin: Grenze je Inhalts-Bündel content-*.bin (Ziel 1b, Konzept 14.2). files: Dateien in dist/ ohne dist/.vite/ (Ziel unter 100).",
+    "Endgrenzen 1b (Einstieg höchstens 300 KB usw.) setzt erst P10 Nr. 7.",
+    "html gemessen MIT der P0-Änderung in index.html (Datum des Start-Bilds im Kopf-Skript), alle anderen Werte am Ausgangs-Commit."
+  ],
+  "gemessen": {
+    "am": "2026-10-27",
+    "commit": "31ac19f",
+    "befehl": "npm run build && node scripts/check-budget.mjs --json",
+    "entry": 2733322,
+    "css": 25107,
+    "html": 1951,
+    "lazy": {
+      "src/engine/fx/particles.ts": 1439,
+      "src/features/vocab/atlas/WordSky.tsx": 3218,
+      "src/features/c1/film/FilmPlayer.tsx": 4086
+    },
+    "binGroesstes": 41230,
+    "files": 19,
+    "totalRoh": 6112441
+  },
+  "grenzen": {
+    "entry": { "basis": 2734000, "zuwachs": {} },
+    "css": { "basis": 26000, "zuwachs": {} },
+    "html": { "basis": 2000, "zuwachs": {} },
+    "lazy": {
+      "src/engine/fx/particles.ts": { "basis": 2000, "zuwachs": {} },
+      "src/features/vocab/atlas/WordSky.tsx": { "basis": 4000, "zuwachs": {} },
+      "src/features/c1/film/FilmPlayer.tsx": { "basis": 5000, "zuwachs": {} }
+    },
+    "lazyNeu": 150000,
+    "bin": 500000,
+    "files": 99
+  },
+  "vorab": {
+    "P1 S1-TOK": { "css": 4000 },
+    "P2 S1-SHELL": { "entry": 18000, "css": 4000 },
+    "P3 S1-BAND": { "entry": 14000, "css": 3000 },
+    "P4 S1-ZEIT": { "entry": 3000 },
+    "P5 S1-ZAHL": { "entry": 2000 },
+    "P6 S1-START": { "entry": 8000 },
+    "P7 S1-DIKTAT": { "entry": 6000 }
+  }
+}

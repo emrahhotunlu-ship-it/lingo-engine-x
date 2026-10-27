@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkMulti, MULTI_MAX_FILE, MULTI_WARN_TOTAL } from '../../scripts/check-platform.mjs';
+import { MAX_FILE_BYTES, MAX_FILES_PER_PUBLISH, MAX_PUBLISH_BYTES, TARGET_MAX_FILES, WARN_TOTAL_BYTES, mb } from '../../scripts/limits.mjs';
 import { buildManifest } from '../../scripts/publish-manifest.mjs';
 
 // Mehr-Datei-Modus (docs/umbau/mehr-datei.md): Plattform-Prüfung und Veröffentlichungs-Manifest.
@@ -19,11 +20,25 @@ describe('checkMulti', () => {
     const p = checkMulti([...base(), { name: 'assets/x.js', size: 1, text: '' }, { name: 'x.exe', size: 1 }, { name: 'big.bin', size: MULTI_MAX_FILE }]).problems.join('|');
     expect(p).toContain('Unterordner');
     expect(p).toContain('Nicht erlaubter Dateityp');
-    expect(p).toContain('16 MB');
+    expect(p).toContain(mb(MAX_FILE_BYTES));
   });
-  it('Gesamtgröße: Warnung ab 12 MiB, Fehler über 64 MB', () => {
-    expect(checkMulti([...base(), { name: 'a.bin', size: MULTI_WARN_TOTAL + 1 }]).notes.join()).toContain('12 MiB');
-    expect(checkMulti([...base(), { name: 'a.bin', size: 15e6 }, { name: 'b.bin', size: 15e6 }, { name: 'c.bin', size: 15e6 }, { name: 'd.bin', size: 15e6 }, { name: 'e.bin', size: 15e6 }]).problems.join()).toContain('64 MB');
+  it('Grenzen kommen nur aus scripts/limits.mjs (255 Dateien, 15 MB je Datei, 64 MB je Veröffentlichung)', () => {
+    expect([MAX_FILES_PER_PUBLISH, MAX_FILE_BYTES, MAX_PUBLISH_BYTES]).toEqual([255, 15e6, 64e6]);
+    expect([MULTI_MAX_FILE, MULTI_WARN_TOTAL]).toEqual([MAX_FILE_BYTES, WARN_TOTAL_BYTES]);
+  });
+  it('Dateizahl: Hinweis ab 100, Fehler über 255', () => {
+    const many = (n: number) => [...base(), ...Array.from({ length: n - base().length }, (_, i) => ({ name: `c${i}.bin`, size: 1 }))];
+    expect(checkMulti(many(TARGET_MAX_FILES - 1)).notes).toEqual([]);
+    expect(checkMulti(many(TARGET_MAX_FILES)).notes.join()).toContain(String(TARGET_MAX_FILES));
+    expect(checkMulti(many(MAX_FILES_PER_PUBLISH)).problems).toEqual([]);
+    expect(checkMulti(many(MAX_FILES_PER_PUBLISH + 1)).problems.join()).toContain(String(MAX_FILES_PER_PUBLISH));
+  });
+  it('Gesamtgröße: Warnung ab 9 MB, Fehler über 64 MB', () => {
+    expect(checkMulti([...base(), { name: 'a.bin', size: MULTI_WARN_TOTAL + 1 }]).notes.join()).toContain(mb(WARN_TOTAL_BYTES));
+    const big = ['a', 'b', 'c', 'd', 'e'].map((n) => ({ name: `${n}.bin`, size: MAX_FILE_BYTES - 1 }));
+    const p = checkMulti([...base(), ...big]).problems;
+    expect(p).toHaveLength(1);
+    expect(p.join()).toContain(mb(MAX_PUBLISH_BYTES));
   });
   it('index.html: nur flach-relative, vorhandene Verweise', () => {
     const bad = (h: string) => checkMulti([{ name: 'index.html', size: 1, text: h }, ...base().slice(1)]).problems.join('|');

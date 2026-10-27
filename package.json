@@ -20,9 +20,12 @@
     "test": "TZ=Europe/Berlin vitest run",
     "test:e2e": "npm run build && npm run build:runtime && playwright test",
     "check:platform": "node scripts/check-platform.mjs",
+    "check:budget": "node scripts/check-budget.mjs",
+    "v86:checkout": "node scripts/v86-checkout.mjs",
     "test:read": "TZ=Europe/Berlin vitest run tests/unit/read",
     "check:read": "node scripts/check-read.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run test:e2e && npm run check:platform",
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run test:e2e && npm run check:platform && npm run check:budget && npm run verify:single",
+    "verify:single": "npm run build:single && npm run check:platform && npm run build:runtime && playwright test --no-deps --project=main tests/e2e/today.spec.ts tests/e2e/trainer.spec.ts tests/e2e/alsoRight.spec.ts tests/e2e/platform.spec.ts tests/e2e/acceptance.spec.ts; s=$?; npm run build > /dev/null && exit $s",
     "verify:fast": "node scripts/verify-fast.mjs",
     "grammar:check": "node --experimental-strip-types --no-warnings scripts/grammar/validate.mjs",
     "grammar:build": "node scripts/grammar/build-content.mjs"

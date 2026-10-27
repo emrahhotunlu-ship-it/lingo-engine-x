@@ -6,7 +6,7 @@
 //  1. Typprüfung (beide tsconfig, inkrementell) und Lint (nur geänderte Dateien, mit Cache) – gleichzeitig.
 //  2. Unit-Tests: `vitest related` über die geänderten Dateien (Importgraph) plus geänderte Testdateien.
 //  3. Build (App + Test-Laufzeit), dann nur die E2E-Specs der geänderten Bereiche (Tabelle scripts/verify-fast-map.mjs).
-//  4. check:platform auf dem frischen Build.
+//  4. check:platform und check:budget (Budget-Tor, scripts/budget.json) auf dem frischen Mehr-Datei-Build.
 // Geändert = `git diff <Basis>` (Commits seit der Basis UND nicht festgehaltene Änderungen) plus neue, nicht ignorierte Dateien.
 // Basis: `--base <ref>` oder VF_BASE, sonst der gemeinsame Stand mit claude/umbau-fokus (ohne ihn: HEAD).
 //
@@ -49,7 +49,8 @@ const head = git('rev-parse', 'HEAD');
 // dist/ entsteht durch den Build selbst und zählt nie als Änderung (sonst änderte jeder Lauf den Fingerabdruck).
 const NOT_DIST = ['--', '.', ':(exclude)dist'];
 const committedAndWorking = git('diff', '--name-only', base, ...NOT_DIST).split('\n').filter(Boolean);
-const untracked = git('ls-files', '--others', '--exclude-standard').split('\n').filter(Boolean);
+// Der Mehr-Datei-Build legt neue Dateien mit Hash-Namen in dist/ ab; auch sie zählen nicht.
+const untracked = git('ls-files', '--others', '--exclude-standard', ...NOT_DIST).split('\n').filter(Boolean);
 const changed = [...new Set([...committedAndWorking, ...untracked])].filter((f) => existsSync(join(ROOT, f)) || committedAndWorking.includes(f)).sort();
 
 const fingerprint = createHash('sha1')
@@ -211,13 +212,19 @@ async function main() {
       if (main.length) ok = (await step('e2e', [[npx, ['playwright', 'test', '--no-deps', '--project=main', ...main.map((s) => `tests/e2e/${s}`)], 'e2e']])) && ok;
       if (specs.includes('perf.spec.ts')) ok = (await step('e2e-perf', [[npx, ['playwright', 'test', '--no-deps', '--project=perf'], 'e2e-perf']])) && ok;
     } else skip('e2e', 'keine Spec betroffen');
-    // 4. Plattform-Prüfung auf dem frischen Build.
-    if (built) ok = (await step('check:platform', [['node', ['scripts/check-platform.mjs'], 'platform']])) && ok;
-    else skip('check:platform', 'Build fehlgeschlagen');
+    // 4. Plattform-Prüfung und Budget-Tor auf dem frischen Build.
+    if (built) {
+      ok = (await step('check:platform', [['node', ['scripts/check-platform.mjs'], 'platform']])) && ok;
+      ok = (await step('check:budget', [['node', ['scripts/check-budget.mjs'], 'budget']])) && ok;
+    } else {
+      skip('check:platform', 'Build fehlgeschlagen');
+      skip('check:budget', 'Build fehlgeschlagen');
+    }
   } else {
     skip('build', 'nichts am App-Code geändert');
     skip('e2e', 'nichts am App-Code und keine Spec geändert');
     skip('check:platform', 'kein neuer Build');
+    skip('check:budget', 'kein neuer Build');
   }
 
   if (ok) writeFileSync(okMark, new Date().toISOString());

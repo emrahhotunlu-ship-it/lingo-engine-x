@@ -1,0 +1,27 @@
+{
+  "$kommentar": [
+    "Rückweg-Seed Stufe 1 (docs/relaunch/stufe1-plan.md §4.5 Nr. 6 und §4.6): erfundene Werte, die neuen Felder aus Stufe 1 über seed/sample-data.json gelegt.",
+    "seed/sample-data.json bleibt unverändert. Genutzt von tests/e2e/rueckweg.spec.ts: v86 (Live) muss diese Felder lesen können und beim Zurückschreiben stehen lassen.",
+    "histExtra: an jeden älteren hist-Eintrag der Übungskarten gehängt (P4 S1-ZEIT: fk/ms/in). logExtra: an einen älteren Log-Eintrag des Tages (P4: fk/in; ms gibt es schon).",
+    "docs: Dokument-Felder, flach je Dokument über den Seed gelegt (InstallOptions.patch). theme.a (P1), dk (P7), app/today (P6).",
+    "P4, P6 und P7 ergänzen hier ihre endgültigen Felder, sobald es sie gibt."
+  ],
+  "histExtra": { "fk": 1840, "ms": 5230, "in": "t" },
+  "logExtra": { "fk": 2210, "in": "d" },
+  "docs": {
+    "app/profile": {
+      "theme": { "m": "dark", "p": "ocean", "a": "amber" },
+      "dk": { "v": 1, "mac": { "ok": true, "t": 1789920000000, "sig": "macos-chrome" } }
+    },
+    "app/today": {
+      "v": 1,
+      "d": "2026-09-20",
+      "th": { "k": "topic", "id": "meetings", "nm": { "de": "Besprechungen", "en": "Meetings" } },
+      "b": { "b1": { "st": "done", "n": 3, "of": 3 }, "b2": { "st": "open", "n": 0, "of": 5 } },
+      "rest": 12,
+      "ring": 0.42,
+      "go": { "k": "review", "id": "b2" },
+      "at": 1789927200000
+    }
+  }
+}
