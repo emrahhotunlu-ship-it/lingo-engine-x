@@ -3,6 +3,8 @@ import { examplesFor, formHint } from '../../src/domain/grammar/rules';
 import { legacyTaskKey } from '../../src/domain/grammar/key';
 import { chapters, familyOf, hasSignal, isRetired, mapEntryOf, patternById, patternBySignals, patternOf, patternsOf, taskWhy, topicsWithPatterns, v2Tasks, whyFor } from '../../src/domain/grammar/patterns';
 import { seedTasks } from '../../src/domain/grammar/tasks';
+import { checkGrammar } from '../../src/domain/grammar/check';
+import { markSpans } from '../../src/ui/exercise/MarkedSentence';
 
 // Lader und Abfragen der Grammatik-Muster (Lernplattform 2.0 §4.7).
 
@@ -79,6 +81,26 @@ describe('patternOf', () => {
     expect(hasSignal('We left last week.', 'last week')).toBe(true);
     expect(hasSignal('The forum was long.', 'for')).toBe(false);
     expect(hasSignal('As soon as you arrive.', 'as soon as')).toBe(true);
+  });
+
+  it('Signalwörter: Pronomen I groß geschrieben, Groß-/Kleinschreibung und Apostroph (’ gleich \') egal', () => {
+    expect(hasSignal('I think so.', 'I think so')).toBe(true);
+    expect(hasSignal('i think so.', 'I think so')).toBe(true);
+    expect(hasSignal('No, I don’t think so.', 'I don’t think so')).toBe(true);
+    expect(hasSignal('No, I don\'t think so.', 'I don’t think so')).toBe(true);
+    expect(hasSignal('No, I don’t think so.', 'I don\'t think so')).toBe(true);
+    expect(hasSignal('Had I known, I would have called.', 'had I')).toBe(true);
+    expect(hasSignal('I’d love to.', 'I')).toBe(false);
+    expect(markSpans('I don’t think so.', ['I don\'t think so'])).toEqual([[0, 16]]);
+    expect(markSpans('I don\'t think so.', ['I don’t think so'])).toEqual([[0, 16]]);
+  });
+
+  it('Falle „haven\'t still“: „yet“-Fassung gilt als Auch richtig, die Falle selbst bleibt falsch', () => {
+    const t = seedTasks().find((x) => x.prompt === 'We haven\'t still received the payment.');
+    expect(t?.alt).toEqual(['We haven\'t received the payment yet.']);
+    expect(checkGrammar(t!, 'We haven\'t received the payment yet.')).toMatchObject({ verdict: 'correct', kind: 'other' });
+    expect(checkGrammar(t!, 'We still haven\'t received the payment.').verdict).toBe('correct');
+    expect(checkGrammar(t!, 'We haven\'t still received the payment.').verdict).toBe('wrong');
   });
 
   it('die Signalwort-Zuordnung (für Pool- und Tagesaufgaben) trifft auf den Pilotaufgaben nur selten falsch', () => {

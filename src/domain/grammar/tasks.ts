@@ -138,7 +138,7 @@ export function toPoolItem(t: GrammarTask): Doc {
   return out;
 }
 
-type RuleTrap = { bad?: unknown; good?: unknown; why?: unknown };
+type RuleTrap = { bad?: unknown; good?: unknown; why?: unknown; alt?: unknown };
 /** Fallen des Regelwerks je Thema (geparst beim ersten Gebrauch, `raw.ts`). */
 function ruleTraps(): Record<string, { traps?: RuleTrap[] }> {
   return {
@@ -174,7 +174,7 @@ export function seedTasks(): readonly GrammarTask[] {
   for (const tp of TOPICS) {
     for (const trap of RULES[tp.id]?.traps ?? []) {
       const why = Array.isArray(trap.why) ? trap.why.map(s) : [];
-      push(normalizeTask({ topic: tp.id, type: 'correct', prompt: s(trap.bad), answer: s(trap.good), expl: why[0], expl_en: why[1] }, 'seed', `rules/${tp.id}`));
+      push(normalizeTask({ topic: tp.id, type: 'correct', prompt: s(trap.bad), answer: s(trap.good), expl: why[0], expl_en: why[1], ...(Array.isArray(trap.alt) ? { alt: trap.alt } : {}) }, 'seed', `rules/${tp.id}`));
     }
   }
   seedCache = out;

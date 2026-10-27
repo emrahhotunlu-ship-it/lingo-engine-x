@@ -85,6 +85,9 @@ describe('Register, Denglisch, absolute Regeln, du/Sie, Dubletten, DE/EN', () =>
     expect(absoluteClaims('Das gilt nicht nur hier.')).toEqual([]);
     expect(absoluteClaims('Use never with a positive verb; only then.')).toEqual(['never', 'only']);
     expect(absoluteClaims('Das ist meist so.')).toEqual([]);
+    expect(absoluteClaims('Das deutsche „noch immer nicht“ verleitet dazu.')).toEqual([]);
+    expect(absoluteClaims('Das englische “never” ist hier nicht gemeint.')).toEqual([]);
+    expect(absoluteClaims('Zitat „noch immer“ aber danach immer falsch.')).toEqual(['immer']);
   });
   it('du/Sie gemischt', () => {
     expect(duSieMix('Du bittest um einen Rabatt. Können Sie mir helfen?')).toBe(true);

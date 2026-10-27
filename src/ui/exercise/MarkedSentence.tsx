@@ -24,10 +24,10 @@ const isWordChar = (c: string | undefined): boolean => !!c && /[\p{L}\p{N}']/u.t
 
 /** Stellen im Satz, an denen ein Signalwort (ganze Wörter, Groß-/Kleinschreibung egal) steht. */
 export function markSpans(text: string, mark: readonly string[]): Span[] {
-  const hay = text.toLowerCase();
+  const hay = text.replace(/’/g, "'").toLowerCase();
   const spans: Span[] = [];
   for (const raw of mark) {
-    const m = raw.trim().toLowerCase();
+    const m = raw.replace(/’/g, "'").trim().toLowerCase();
     if (!m) continue;
     let from = 0;
     for (;;) {

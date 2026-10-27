@@ -36,7 +36,7 @@
    "wrong": [
     {
      "opt": "haven't still received",
-     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "de": "Das deutsche „noch immer nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
      "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
     },
     {
@@ -329,7 +329,7 @@
      "if": [
       "haven't still"
      ],
-     "de": "Das deutsche „weiterhin nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
+     "de": "Das deutsche „noch immer nicht“ verleitet dazu. Bei Verneinung steht still vor haven't.",
      "en": "German “noch immer nicht” tempts you here. In a negative, still goes before haven't."
     },
     {

@@ -94,18 +94,21 @@ type TaskRef = Pick<GrammarTask, 'topic' | 'prompt'> & { pat?: string | null; an
 const sentenceOf = (t: TaskRef): string => (t.answer ? t.prompt.replace(/_{3,}/, t.answer) + ' ' + t.answer : t.prompt);
 
 const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-/** Kommt das Signalwort als ganzes Wort (bzw. ganze Wortfolge) im Text vor? */
+/** Typografischer Apostroph ’ gleich gerader ' (gleiche Länge, Stellen bleiben deckungsgleich). */
+export const plainApos = (s: string): string => s.replace(/’/g, "'");
+/** Kommt das Signalwort als ganzes Wort (bzw. ganze Wortfolge) im Text vor? Groß-/Kleinschreibung und Apostrophform egal. */
 export function hasSignal(text: string, signal: string): boolean {
-  const s = signal.trim();
+  const s = plainApos(signal).trim();
   if (!s) return false;
-  return new RegExp(`(^|[^A-Za-z'])${escapeRe(s).replace(/\s+/g, '\\s+')}($|[^A-Za-z'])`, 'i').test(text);
+  return new RegExp(`(^|[^A-Za-z'])${escapeRe(s).replace(/\s+/g, '\\s+')}($|[^A-Za-z'])`, 'i').test(plainApos(text));
 }
 
 /** Kleinster Abstand (in Zeichen) eines Signalwort-Treffers zur gefüllten Lücke `[from, to)`; `null` ohne Treffer. */
 function signalDistance(text: string, signals: readonly string[], from: number, to: number): number | null {
   let best: number | null = null;
+  text = plainApos(text);
   for (const sg of signals) {
-    const s = sg.trim();
+    const s = plainApos(sg).trim();
     if (!s) continue;
     const re = new RegExp(`(^|[^A-Za-z'])(${escapeRe(s).replace(/\s+/g, '\\s+')})(?=$|[^A-Za-z'])`, 'gi');
     for (let m = re.exec(text); m; m = re.exec(text)) {
@@ -142,10 +145,10 @@ export function patternNearGap(tp: TopicPatterns, prompt: string, answer: string
 /** Trägt der Satz Signalwörter eines ANDEREN Musters desselben Themas (die das gewählte nicht auch führt)? Liefert dessen Kennung. */
 export function foreignSignalPattern(tp: TopicPatterns, patId: string, text: string): string | null {
   const own = tp.patterns.find((p) => p.id === patId);
-  const ownSig = (own?.signals ?? []).map((o) => o.toLowerCase());
+  const ownSig = (own?.signals ?? []).map((o) => plainApos(o).toLowerCase());
   for (const q of tp.patterns) {
     if (q.id === patId) continue;
-    if (q.signals.some((sg) => hasSignal(text, sg) && !ownSig.includes(sg.toLowerCase()))) return q.id;
+    if (q.signals.some((sg) => hasSignal(text, sg) && !ownSig.includes(plainApos(sg).toLowerCase()))) return q.id;
   }
   return null;
 }

@@ -145,9 +145,9 @@ function ContextBlock({ pat, tp, pick }: { pat: Pattern; tp: TopicPatterns; pick
 }
 
 const markIn = (text: string, signals: readonly string[]): [number, number] | null => {
-  const low = text.toLowerCase();
+  const low = text.replace(/’/g, "'").toLowerCase();
   for (const s of signals) {
-    const i = low.indexOf(s.toLowerCase());
+    const i = low.indexOf(s.replace(/’/g, "'").toLowerCase());
     if (i >= 0) return [i, i + s.length];
   }
   return null;

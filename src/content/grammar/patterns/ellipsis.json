@@ -48,14 +48,14 @@
     "en": "After think, hope, expect, suppose and be afraid, so replaces a whole clause in the answer, and not stands for the negative. With think people usually say I don’t think so, I think not sounds formal. There is no I don’t hope so, it is I hope not. “If so”, “If not”, “so do I” and “neither do I” also stand for a whole thought."
    },
    "signals": [
-    "i think so",
-    "i hope so",
-    "i hope not",
-    "i don’t think so",
+    "I think so",
+    "I hope so",
+    "I hope not",
+    "I don’t think so",
     "if so",
-    "i am afraid not",
-    "so do i",
-    "neither do i"
+    "I am afraid not",
+    "so do I",
+    "neither do I"
    ],
    "ex": [
     {
@@ -261,8 +261,8 @@
     "en": "When the verb is already known, only the auxiliary or to is left: “She can, but he can’t.” “I’d love to.” The verb is not repeated, and to must not be missing."
    },
    "signals": [
-    "i'd love to",
-    "i would like to",
+    "I'd love to",
+    "I would like to",
     "she can",
     "he can't",
     "if you want to"

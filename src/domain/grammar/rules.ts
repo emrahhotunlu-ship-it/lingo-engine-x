@@ -18,7 +18,7 @@ type RawRule = {
   steps?: [string[], string[]];
   forms?: Array<[Pair, string, string]>;
   signals?: Array<[string, Pair]>;
-  traps?: Array<{ bad: string; good: string; why: Pair }>;
+  traps?: Array<{ bad: string; good: string; why: Pair; /** Weitere richtige Fassungen der Korrektur („Auch richtig“). */ alt?: string[] }>;
   alts?: Array<{ note: Pair }>;
 };
 type AltFamily = { id: string; topics: string[]; note: Pair };

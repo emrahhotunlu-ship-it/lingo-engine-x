@@ -119,11 +119,11 @@
     "en": "The continuous softens a request: “I was wondering if you could …” sounds more polite than “Can you …?”. A clause in normal word order follows."
    },
    "signals": [
-    "i was hoping",
-    "i am hoping",
-    "i was wondering",
+    "I was hoping",
+    "I am hoping",
+    "I was wondering",
     "we were hoping",
-    "i was thinking"
+    "I was thinking"
    ],
    "ex": [
     {
@@ -260,8 +260,8 @@
    },
    "signals": [
     "we need",
-    "i understand",
-    "i know",
+    "I understand",
+    "I know",
     "belongs to",
     "we believe",
     "it seems"

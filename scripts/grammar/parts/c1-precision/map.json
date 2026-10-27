@@ -175,8 +175,8 @@
     },
     {
      "opt": "a few",
-     "de": "„A few“ zählt einzelne Dinge (a few users), nicht den Anteil einer Lizenz.",
-     "en": "“A few” counts single things (a few users), not a share of a license."
+     "de": "„A few“ zählt einzelne Dinge (a few users), nicht einen Anteil am Preis.",
+     "en": "“A few” counts single things (a few users), not a share of a price."
     },
     {
      "opt": "a little",
@@ -309,8 +309,8 @@
       "until"
      ],
      "pat": "cp.by-until",
-     "de": "„Until“ meint eine Dauer ohne Pause. Der Rollout soll aber spätestens fertig sein.",
-     "en": "“Until” means a duration without a break. The rollout must be finished at the latest."
+     "de": "„Until“ meint eine Dauer ohne Pause. Der Rollout soll aber bis dahin fertig sein.",
+     "en": "“Until” means a duration without a break. But the rollout has to be done by that date."
     },
     {
      "if": [

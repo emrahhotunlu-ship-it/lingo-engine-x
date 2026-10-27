@@ -71,7 +71,7 @@
     "why": {
       "ok": { "de": "Richtig: fill out (US) oder fill in (britisch) = ausfüllen. Das Nomen darf auch davor stehen.", "en": "Right: fill out (US) or fill in (British) = complete. The noun can also go before the particle." },
       "wrong": [
-        { "if": ["up"], "pat": "ph.particle", "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit in oder out aus.", "en": "“Fill up” means make full, like a tank. For forms use in or out." },
+        { "if": ["up"], "pat": "ph.particle", "de": "„fill up“ heißt vollmachen, etwa einen Tank. Formulare füllt man mit out (US) oder in aus.", "en": "“Fill up” means make full, like a tank. For forms use in or out." },
         { "if": ["on"], "de": "„fill on“ gibt es nicht. Ausfüllen heißt fill in oder fill out.", "en": "“Fill on” does not exist. To complete a form use fill in or fill out." },
         { "not": ["in", "out"], "de": "Gesucht ist in oder out: fill out this form.", "en": "You need in or out: fill out this form." }
       ]
@@ -124,7 +124,7 @@
     "why": {
       "ok": { "de": "Richtig: get along with (britisch: get on with) = sich verstehen mit. Es fehlte with.", "en": "Right: get along with (British: get on with) = have a good relationship with. With was missing." },
       "wrong": [
-        { "not": ["with"], "de": "Es fehlt with: get on with = sich verstehen mit.", "en": "The with is missing: get on with = have a good relationship with." },
+        { "not": ["with"], "de": "Es fehlt with: get along with = sich verstehen mit.", "en": "With is missing: get along with = have a good relationship with." },
         { "if": ["with", "well"], "de": "well steht vor with: got along well with her new team.", "en": "Well goes before with: got along well with her new team." }
       ]
     }
