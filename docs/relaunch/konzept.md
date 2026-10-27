@@ -106,16 +106,18 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 | 2 | **Wörter** | 7 | Fällige Abrufe nach niedrigster Abrufwahrscheinlichkeit, neue aktive Wörter des Themas eingestreut (Einführung, Abruf A, Abruf B). Formen nach Stufe (3.2). | Vorbereiten + Üben |
 | 3 | **Grammatik** | 5 | Der nächste Schritt des aktuellen Themas (4.2). Fehlersätze höchstens 30 % des Blocks, der Rest geht in Block 1 [Kai F3]. | Üben |
 | 4 | **Hören** | 4 | Mini-Diktat (2 Sätze, oft mit Zahlen, Preisen, Daten) → Hörtext 60–90 s zum Thema: Vorhersage → hören → Frage → mitlesen → ohne Text, letzte Runde eine Stufe schneller (5.1). | Üben |
-| 5 | **Sag/Schreib es** | 4 | Mini-Aufgabe zum Szenario (3–5 Sätze), in der **2 Themenwörter ab S3** und die Struktur des aktuellen Themas nötig sind [Lena V3]. Gibt es noch keine Themenwörter ab S3, nimmt die App Wörter ab S3 aus Emrahs Bestand oder verlangt nur die Struktur. 30 s Vorbereitung, dann **gesprochen per Diktiertaste** (6.1). Rückmeldung als Seitenfolge (12.1). | **Anwenden** |
+| 5 | **Sag/Schreib es** | 4 | Mini-Aufgabe zum Szenario (3–5 Sätze), in der **2 Wörter ab S3** (bevorzugt zum Thema, aus den letzten 3 Wochen) und die Struktur des aktuellen Themas nötig sind [Lena V3, James-N 1]. Gibt es keine passenden Wörter ab S3, nimmt die App Wörter ab S3 aus Emrahs Bestand oder verlangt nur die Struktur. Wörter der laufenden Woche sind ein Angebot, kein Beleg. 30 s Vorbereitung, dann **gesprochen per Diktiertaste** (6.1). Rückmeldung als Seitenfolge (12.1). | **Anwenden** |
 | 6 | **Flüssigkeit** | 5 | Rotation (6.2): Antizipation, Hot Seat, 4/3/2-Kurzform, Shadowing, Schnellabruf. **Diktiert und bewertet** als Standard [Kai F5]. Nur gesicherter Stoff. Endet mit einer Sammelkarte und einem Erfolgsmoment. | **Anwenden** |
 
-**Anwenden-Regel** [Kai F1]: Block 5 und 6 verlangen zusammen **mindestens 3 Wörter ab S3** (Thema oder fällig) und **1 Grammatikpunkt** des aktuellen Themas. Wörter unter S3 dürfen dort nicht verlangt werden; sie stehen höchstens als Wendungskarte zum Hören und Nachsprechen bereit, ihr Gebrauch ist kein Beleg [Lena V3].
+**Anwenden-Regel** [Kai F1]: Block 5 und 6 verlangen zusammen **mindestens 3 Wörter ab S3** (Thema oder fällig), **soweit vorhanden; sonst nur die Struktur** [Lena-N V3], und **1 Grammatikpunkt** des aktuellen Themas. Wörter unter S3 dürfen dort nicht verlangt werden; sie stehen höchstens als Wendungskarte zum Hören und Nachsprechen bereit, ihr Gebrauch ist kein Beleg [Lena V3].
 
 **Anteile am Normaltag:** Sprachfokus 15 Min. (54 %), Hören 4 (14 %), Output 4 (14 %), Flüssigkeit 5 (18 %). Über die Woche gleichen die Tagestypen (2.3) die Stränge aus.
 
 ### 2.3 Tagestypen und Woche [James V1, Kai F5]
 
-**Grundregel:** Jeder Lerntag hat 28 Minuten. Meilenstein-Tage dürfen bis 35 Minuten dauern und werden vorher angekündigt. **Jeder Lerntag enthält fünf Stränge:** Gestern-Check, Wörter, Grammatik des aktuellen Kapitels (≥ 3 Min.), Hören (≥ 2 Min.), Sprechen/Flüssigkeit (≥ 2 Min., **diktiert und bewertet**).
+**Grundregel:** Jeder Lerntag hat 28 Minuten. Meilenstein-Tage dürfen bis 35 Minuten dauern und werden vorher angekündigt. **Jeder Lerntag enthält fünf Stränge:** Gestern-Check, Wörter, Grammatik (≥ 3 Min., davon ≥ 70 % aktuelles Thema), Hören (≥ 2 Min.), Sprechen/Flüssigkeit (≥ 2 Min., **diktiert und bewertet**).
+
+**Anteile je Woche** [Lena-N N3]: Flüssigkeit ≥ 15 % und Block 1–3 ≤ 60 % gelten **je Kalenderwoche** (der freie Teil des Themen-Tests zählt als Output). Je Lerntag gelten die fünf Stränge. **An Aufholtagen gilt die Regel je Tag** (2.4); dort entfällt der Themen-Test, er rückt auf den ersten normalen Lerntag.
 
 | Tagestyp | Wann | B1 | B2 | B3 | B4 | B5 | B6 | Min. |
 |---|---|---:|---:|---|---|---|---|---:|
@@ -125,13 +127,15 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 | **Schreibtag** | Donnerstag | 3 | 7 | 5 | 4 | 6 Wochen-Mail (getippt, 2.5) | 3 | 28 |
 | **Missionstag** | einmal pro Woche (Regel unten) | 3 | 7 | 5 | 4 | 9 **Mission** (ersetzt B5 + B6, diktiert) | – | 28 |
 | **Wochenabschluss** | Samstag | 3 | 5 nur fällige | 3 (3 Aufgaben aktuelles Thema + 1 Spirale) | 7 langer Hörtext 3–4 Min. + Zusammenfassen | – | 10 volles 4/3/2, letzte Runde diktiert | 28 |
-| **Meilenstein A** | Samstag in Woche 4/8/12/16 | 3 | 5 | 12 Use of English | 8 Meilenstein-Hören | – | 2 | 30 |
-| **Meilenstein B** | Mittwoch in Woche 4/8/12/16, kein Themen-Test | 3 | 5 | 3 | 2 Mini-Diktat | 12–15 Meilenstein-Schreiben | 5 Long Turn + Vorher-Nachher | 30–35 |
+| **Meilenstein A** | Samstag in Woche 4/8/12/16 | 3 | 5 | 12 Use of English | 8 Meilenstein-Hören (ersetzt den langen Hörtext der Woche) | – | 2 Antizipation (diktiert) | 30 |
+| **Meilenstein B** | Mittwoch in Woche 4/8/12/16, kein Themen-Test | 3 | 5 | 3 | 2 Mini-Diktat | 12–15 Meilenstein-Schreiben | 5 Long Turn + Vorher-Nachher (ersetzt das volle 4/3/2 der Woche) | 30–35 |
 
 **Regeln für die Woche:**
 - **Fest an den Wochentag gebunden** sind nur: Szenenwechsel (Montag), Schreibtag (Donnerstag), Wochenabschluss (Samstag). Sonntag ist Ruhetag oder freiwillig; ein Ruhetag je Kalenderwoche bricht die Serie nie (A7).
-- **Themen-Takt nach Reife:** Thema-Start → mindestens 2 Übungstage → Testtag, im Mittel 3–4 Lerntage je Thema. Ein Testtag fällt nie auf Donnerstag oder Samstag; er rückt auf den nächsten freien Lerntag.
-- **Mission einmal pro Woche als Pflicht** [Kai F5, F12]: bevorzugt Freitag. Ist Freitag ein Testtag oder Thema-Start, legt der Planer die Mission auf den nächsten Normaltag derselben Woche (sonst den letzten davor). Ein Unit-Test prüft über 16 simulierte Wochen: **jede Woche genau eine Mission**, nie am Test-, Schreib-, Abschluss- oder Meilenstein-Tag.
+- **Themen-Takt nach Reife:** Thema-Start → mindestens 2 Übungstage → Testtag, im Mittel 3–4 Lerntage je Thema. Ein Testtag fällt nie auf Donnerstag, Samstag oder den Missionstag; er rückt auf den nächsten freien Lerntag.
+- **Thema-Start auch am Schreib- und Missionstag** [James-N 3]: Dort läuft nur die Diagnose in Block 3. Problem zuerst und Erklärung folgen bei < 90 % am nächsten Lerntag in Block 3 und zählen als erster Übungstag. Thema-Start ist der Lerntag nach dem bestandenen Test **oder nach einer Bestätigung** (4.1).
+- **Durchsatz ehrlich gerechnet:** Ein Unit-Test simuliert 16 Wochen mit allen festen Tagen und weist die Zahl der Themen aus. Die Dauerangaben in 4.2, 8.2 und 19 folgen diesem Wert; erwartet sind **18–22 Wochen** für die 27 Kernthemen, 16 nur bei mindestens 4 bestätigten Themen.
+- **Mission einmal pro Woche als Pflicht** [Kai F5, F12, James-N 2]: bevorzugt Freitag. **Die Mission hat Vorrang:** Ist bis Donnerstag keine Mission gelaufen, ist Freitag Missionstag, und ein reifer Test wartet bis Montag. Die Mission wird nur nach vorn verschoben, nie auf einen vergangenen Tag. Ein Unit-Test prüft über 16 simulierte Wochen: **jede Woche genau eine Mission**, nie am Test-, Schreib-, Abschluss- oder Meilenstein-Tag. Bis Stufe 5 live ist, ist der Missionstag ein Normaltag (18).
 - **Flüssigkeits-Rotation** über die Woche [James Verb. 2]: Hot Seat 2×, Zusammenfassen nach dem Hörtext 2× (einmal davon am Wochenabschluss), Shadowing 1×, Antizipation an den übrigen Tagen.
 - **Bewertetes Sprechen jeden Lerntag:** Normaltag (B5 + B6), Thema-Start (B6), Testtag (E9 per Diktat im Test + B6), Schreibtag (B6), Missionstag (Mission), Wochenabschluss (letzte 4/3/2-Runde). Zielmarke **F1 ≥ 5 von 6 Lerntagen** [Kai F5].
 - **Überhang:** Höchstens 1 Thema darf hinter dem Plan liegen. Ist der Rückstand größer, beginnt die nächste Szene nicht; stattdessen kommt eine **Vertiefungswoche** (Reserve-Hörtexte, rezeptive Wörter, Missionsvariante) [James V1].
@@ -141,12 +145,12 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 
 - **Sprechen** läuft über die Diktiertaste der Tastatur (6.1). Kein Teil der App setzt ein Mikrofon voraus.
 - **Ohne KI** (`sample` fehlt oder `rate_limited`): Block 1–4 und 6 laufen ohne KI. Block 5, Wochen-Mail und Mission bewerten dann regelbasiert (Zielwörter, Zielstruktur, Länge) und sagen das offen; die KI-Rückmeldung kommt nach, wenn sie wieder geht.
-- **Nach einer Pause** [Lena V5, Kai 12b]: Die Pflicht ist höchstens 20 Minuten lang. **Gekürzt wird anteilig über alle Blöcke.** In jeder Pflichtlänge gelten: Flüssigkeit ≥ 15 % und Block 1–3 zusammen ≤ 60 %. Beispiel 20 Min.: 2 / 6 / 4 / 3 / 2 / 3. Ausnahme sind Einstufungs- und Meilenstein-Tage. Rückstand wird über Tage verteilt („noch 3 Tage Aufholen, danach normal“).
+- **Nach einer Pause** [Lena V5, Kai 12b]: Die Pflicht ist höchstens 20 Minuten lang. **Gekürzt wird anteilig über alle Blöcke.** An diesen Aufholtagen gelten **je Tag**: Flüssigkeit ≥ 15 % und Block 1–3 zusammen ≤ 60 % (sonst je Woche, 2.3). Beispiel 20 Min.: 2 / 6 / 4 / 3 / 2 / 3. Ausnahme sind Einstufungs- und Meilenstein-Tage. Rückstand wird über Tage verteilt („noch 3 Tage Aufholen, danach normal“).
 - **Dauer-Anzeige:** Die Restzeit kommt aus Emrahs eigenen gemessenen Zeiten je Block und weicht im Mittel höchstens 20 % ab [Kai 14b].
 
 ### 2.5 Schreiben [James V5]
 
-- **Schreibtag (Donnerstag), Block 5 = Wochen-Mail:** 80–150 Wörter, getippt, Lage aus der Szene der Woche. Nötig sind 2 Wörter der Woche **ab S3** [Lena V3] und die Zielstruktur. In der 2. Woche eines Kapitels ist die Wochen-Mail die **Kapitelaufgabe Schreiben**.
+- **Schreibtag (Donnerstag), Block 5 = Wochen-Mail:** 80–150 Wörter, getippt, Lage aus der Szene der Woche. Nötig sind **2 Wörter ab S3 aus den letzten 3 Wochen**, bevorzugt zur Szene [Lena V3, James-N 1], und die Zielstruktur. Wörter der laufenden Woche sind ein Angebot, kein Beleg (ein Montagswort erreicht S3 frühestens am Freitag). In der 2. Woche eines Kapitels ist die Wochen-Mail die **Kapitelaufgabe Schreiben**.
 - **Rückmeldung** nach vier Kategorien: Inhalt/Wirkung · Register · Aufbau · Sprache. Eine Stärke mit Zitat, höchstens 3 Arbeitspunkte, eine umformulierte Fassung. Fehler gehen in die Fehlerschleife.
 - **Je Kapitel mindestens 2 E2-Aufgaben „Welche Fassung schickst du?“** (Register-Vergleich). Erklärungen nennen immer auch „wann nicht“.
 - Am Laptop ist der Schreibtag die Stärke des großen Bildschirms (13.3).
@@ -178,13 +182,13 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 | S4 | Sicher | gemischte freie Formen, jeder 2. Termin mit sanftem Zeitdruck | frei richtig ohne Hilfe nach **≥ 21 Tagen ohne Kontakt**, im reservierten ungesehenen Satz oder ohne Satz, ≤ 1,5 × Zeitbasis; Kernwörter zusätzlich 1 geprüfte Verwendung im Output der letzten 60 Tage | Deckel 21 Tage |
 | S5 | **Fest** | Erhaltung nach FSRS, jeder 3. Termin als Flüssigkeits-Abruf | – | FSRS frei (Ziel 0,9, max. 365 Tage) |
 
-**Kontakt** [Lena Verb.] heißt: jede Aufgabe zu dem Wort, jedes Vorkommen in einem Hör- oder Lesetext der Pflicht und jedes Öffnen im Wort-Fenster. Damit die 21 Tage ohne Kontakt halten, sind **S4-Wörter im Wartefenster für Block 5, Block 6 und Mission gesperrt**.
+**Kontakt** [Lena Verb., Lena-N N2] heißt: jede Aufgabe, die das Wort abfragt oder als Zielwort verlangt, und jedes Öffnen im Wort-Fenster. Ein Vorkommen in Hör- oder Lesetexten zählt **nicht** (sonst würden häufige Business-Wörter S5 nie erreichen); es wird in `lm` vermerkt. Damit die 21 Tage ohne Kontakt halten, sind **S4-Wörter im Wartefenster für Block 5, Block 6 und Mission gesperrt**.
 
 **Abstieg:** falscher freier Abruf → FSRS „Nochmal“, Stufe −1 (nie unter S2), Fehlerschleife. „Weiß nicht“ genauso, ohne Fehlerton. 2 Fehler in 30 Tagen oder 4 insgesamt → **Wort-Werkstatt** (neue Darstellung, 2 Tage Pause, Neustart S2; ab 6 Fehlern Angebot „vorerst pausieren“).
 
 **Neue Wörter** [Lena P4, James]:
 - Je Lerntag 3–4 neue aktive Wörter aus dem Thema, **höchstens 5**. Wochendeckel 20 neue aktive (mit Nachholern höchstens 25).
-- **Bremsen setzen auf 2, nie auf 0:** Folgetag-Abruf der letzten 7 Tage unter 70 %, Korridor unter 70 %, Zeitbremse (Block 2 läuft über). Was liegen bleibt, rutscht in die nächsten Tage.
+- **Bremsen setzen auf 2, nie auf 0:** Folgetag-Abruf der letzten 7 Tage unter 70 %, Korridor unter 70 %, Zeitbremse (Block 2 läuft über). Was liegen bleibt, rutscht in die nächsten Tage. **Nachholer nur, solange keine Bremse greift.** Kein Bericht spricht von einem nicht geschafften Paket [Lena-N P4].
 - Nie zwei verwechselbare Wörter am selben Tag (Feld „verwechselbar mit“).
 - Die 40 rezeptiven Wörter der Woche kommen **nicht** in Block 2. Sie stehen im Hör- und Lesetext; ihre R-Termine laufen in Block 4 (höchstens 1 Minute).
 
@@ -197,7 +201,7 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 | Antwort | Beleg „bildest du“ | Beleg „erkennst du“ | FSRS | Aufstiegs-Tag? |
 |---|---|---|---|---|
 | frei richtig, ≤ Zeitbasis | 1,0 | 1,0 | Gut (Leicht nur getippt, ab S4, ≤ 0,6 × Basis, fällig) | ja |
-| frei richtig, ≤ 2 × Zeitbasis | 0,8 | 1,0 | Gut | ja |
+| frei richtig, ≤ 2 × Zeitbasis, **höchstens 15 s** | 0,8 | 1,0 | Gut | ja |
 | frei richtig, langsamer („wackelig“) | 0,5 | 0,8 | Schwer | nein |
 | frei richtig mit 1 Tippfehler | 0,7 | 1,0 | Schwer | ja, Schreibform wird gemeldet |
 | richtig mit Hilfe 1 (Wortart/Bedeutung) | 0,5 | – | Schwer | nein |
@@ -209,7 +213,7 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 | Bedeutung frei genannt | 0 | 1,0 | R: Gut | nur R |
 | „Weiß nicht“ / falsch | 0 | 0 | Nochmal | nein, Fehlerschleife, kein Tadel |
 
-**Ab S2 gibt es keine Bausteine, weder als Aufgabe noch als Hilfe.**
+**Ab S2 gibt es keine Bausteine, weder als Aufgabe noch als Hilfe.** **Abruf A (S1) ändert P nie, auch nicht mit Anfangsbuchstabe;** die Zeile „Hilfe 2 → Schwer“ gilt ab S2 [Lena-N V2].
 
 **Unterscheider statt Hilfe** [Kai F2]: Satzfreie Abrufe zeigen einen Unterscheider (Lage, Register oder Wortpartner), z. B. „zögern (im Meeting, höflich)“. Er gilt **nicht** als Hilfe. Jede gleichwertige englische Lösung zählt über „Auch richtig“ als frei richtig; britische Formen gelten als richtig (A7).
 
@@ -217,11 +221,12 @@ Das **Tagesthema** stammt aus dem Wochen-Szenario (8.4). **Neue Wörter, Hörtex
 
 **Zeitbasis je Eingabeart:**
 - **Getippt:** Median von `fk` bei richtigen getippten Antworten ab S4 über 30 Tage. Start 4 s (Wort) bzw. 6 s (Wendung). Über 45 s zählt als Unterbrechung, nicht als Antwortzeit.
-- **Gesprochen** [Lena P1, Kai F2, Leitung]: eigene Basis aus `ms` (Zeit vom Tipp auf „Sprechen“ bis Senden). Start 8 s (Wort) bzw. 10 s (Wendung). Bei gesprochenen Antworten gibt es kein „Leicht“.
-- **Diktat erkannt** an einer Einfügung mehrerer Zeichen ohne Tastendruck (`in:'d'`). Das ist eine Schätzung und wird so markiert.
-- **Antwortzeit über 15 s oder nach Hilfe zählt nie als sicher** [Kai 2c]; das ergibt sich aus der Tabelle (≥ 2 × Basis = wackelig, Hilfe ≤ 0,5).
+- **Gesprochen** [Lena P1, Kai F2, Leitung, Tarek-N 3]: eigene Basis aus `ms` (Zeit vom Tipp auf „Sprechen“ bis Senden, genau gemessen). Start 8 s (Wort) bzw. 10 s (Wendung). Bei gesprochenen Antworten gibt es kein „Leicht“. Die Basis gilt **nur im Sprechen-Ablauf und bei `in:'d'` ohne Tastendruck**. Mischfälle (Tasten und Einfügung gemischt, Text nachbearbeitet, zweiter Versuch nach „kam auf Deutsch an“) bekommen keine Zeitwertung und werden benotet wie „frei richtig, ≤ 2 × Basis“.
+- **Eigener Median erst ab 10 Werten:** Bis dahin gilt der Startwert, getippt wie gesprochen. Über 45 s ist auch beim Sprechen eine Unterbrechung.
+- **Diktat erkannt** an einer Einfügung mehrerer Zeichen ohne Tastendruck (`in:'d'`). Das ist eine Schätzung (auch Wortvorschläge der Tastatur fügen ganze Wörter ein) und wird so markiert. **Vor Stufe 2** wird die Erkennung einmal auf Emrahs iPhone geprüft (3 Antworten diktiert, 3 getippt, 3 mit Wortvorschlägen); das Ergebnis steht in der Diagnose, bevor die Basis Noten beeinflusst.
+- **Grenze für „sicher“ = das Kleinere von 2 × Basis und 15 s** [Kai 2c, Lena-N N1, Tarek-N W1]. Getippt wird mit `fk` verglichen, gesprochen mit `ms`. Antworten nach Hilfe zählen nie als sicher (Hilfe ≤ 0,5). Ob für **gesprochene Wendungen** 15 oder 20 s gelten, entscheidet Emrah (19).
 
-**Auswahl zählen** [Lena P5]: Der Auswahl-Anteil wird je Tag über Block 1 und 2 gezählt. „Erkennen“ heißt Auswahl + Aufdecken.
+**Auswahl zählen** [Lena P5]: Der Auswahl-Anteil wird je Tag über Block 1 und 2 gezählt. „Erkennen“ heißt Auswahl + Aufdecken. Für A3 und W9 zählt als freier Abruf nur der **freie P-Abruf**; freier R-Abruf (Bedeutung nennen) und Hörfragen zählen auf keiner Seite [Lena-N P5].
 
 **Grammatik nutzt dieselbe Tabelle** [Lena Verb.]: frei richtig ohne Hilfe im ersten Versuch zählt für „8 von 10“ und für den Fortschritt (4.3); mit Hinweis-Runde oder Hilfe zählt es als Übung, nicht als Beleg.
 
@@ -263,7 +268,8 @@ Wendungen (Chunks) laufen durch dieselbe Leiter. **Bausteine gibt es nur in S1 a
 - Die neue Stufe kommt aus vorhandenen **Belegen**, nicht aus der alten Stufe.
   - Frei oder Auswahl wird über `exerciseDef(x).input` bestimmt; `m = recog` gilt als Auswahl. **Auswahl zählt nicht für P.**
   - Alte getippte Antworten ohne Aufgabenart `x` gelten als „frei, Hilfe unbekannt“ und reichen höchstens für **S2**.
-  - **S3** braucht 2 freie Tage mit bekannter Aufgabenart, **S4** zusätzlich die Bedingungen aus `lg`, **S5** zusätzlich `ff`.
+  - **S3** braucht 2 freie Tage mit bekannter Aufgabenart, **davon einer satzfrei** (`x` ∈ type, speed), **S4** zusätzlich die Bedingungen aus `lg`, **S5** zusätzlich `ff` [Tarek-N W2].
+  - `x = dictation` und `listen_mc` zählen nur für R, obwohl `dictation` im Code als getippt geführt wird.
   - Keine Zeitkriterien rückwirkend. `ms` wird nur bei genauer Übereinstimmung aus `log` übernommen, und nur im Trockenlauf geprüft.
 - Folge: **Die Zahl „bildest du selbst“ startet ehrlich niedriger als die heutige Zahl.** Das ist gewollt und wird beim ersten Öffnen in einem Satz erklärt: „Wir zählen jetzt nur noch, was du selbst bilden kannst. Das ist dein ehrlicher Startpunkt.“
 - Die Umrechnung läuft als Trockenlauf mit Bericht, ergänzt nur (alte Felder bleiben stehen), über `writer.transform` (A6 Nr. 14).
@@ -272,7 +278,7 @@ Wendungen (Chunks) laufen durch dieselbe Leiter. **Bausteine gibt es nur in S1 a
 
 ## 4. Grammatik als Kurs
 
-> **Begriffe (James 8.2):** Ein **Thema** (z. B. *indirekte Fragen*) ist die Lerneinheit mit eigenem Ablauf (4.2). Ein **Kapitel** bündelt 3–4 Kernthemen über etwa 2 Wochen. **Ein Kapitel ist abgeschlossen**, wenn (1) alle Kernthemen bestanden oder bestätigt sind, (2) das **Kapitel-Gate** bestanden ist (12 gemischte Aufgaben, ≥ 4 frei, ≥ 80 %, eingestreut in Block 3 an 2 Lerntagen nach dem letzten Themen-Test; Pool 20 je Kapitel) und (3) die **Kapitelaufgaben Schreiben und Sprechen** erfüllt sind. **Gefestigt** ist ein Kapitel, wenn alle Kernthemen gefestigt sind.
+> **Begriffe (James 8.2):** Ein **Thema** (z. B. *indirekte Fragen*) ist die Lerneinheit mit eigenem Ablauf (4.2). Ein **Kapitel** bündelt 3–4 Kernthemen über etwa 2 Wochen. **Ein Kapitel ist abgeschlossen**, wenn (1) alle Kernthemen bestanden oder bestätigt sind, (2) das **Kapitel-Gate** bestanden ist (12 gemischte Aufgaben, ≥ 4 frei, ≥ 80 %, eingestreut in Block 3 an 2 Lerntagen nach dem letzten Themen-Test; Pool 24 je Kapitel = Erstversuch 12 + Wiederholung 12) und (3) die **Kapitelaufgaben Schreiben und Sprechen** erfüllt sind. **Gefestigt** ist ein Kapitel, wenn alle Kernthemen gefestigt sind.
 
 **Kapitelaufgaben** sind je Kapitel festgelegt (James 2.3) und in der Pflicht erfüllbar: Schreiben über die Wochen-Mail der 2. Kapitelwoche (2.5), Sprechen über Block 5 per Diktat. Beispiele: Kap. 2 Discovery-Fragen schriftlich, Kap. 3 2-Minuten-Pitch per Diktat, Kap. 8 3-Minuten-Vorstandspitch + Meinungsabsatz. Die Mission ist ein zusätzlicher Beleg.
 
@@ -298,13 +304,13 @@ Wendungen (Chunks) laufen durch dieselbe Leiter. **Bausteine gibt es nur in S1 a
 
 **Abgeschlossen** heißt (alle vier): Test ≥ 80 %, frei ≥ 4/5, Zeitteil ≥ 4/5, Schritt 4 an einem anderen Tag erfüllt. Nicht bestanden → gezielte Nacharbeit der Fehlerkategorien, neuer Test frühestens am nächsten Lerntag mit neuen Aufgaben aus dem getrennten Wiederholungs-Pool. Nach 2 Fehlversuchen eine andere Erklärung (von James geprüft), Test frühestens 3 Tage später aus dem **Reserve-Pool** (10 Aufgaben je Thema) [James Verb. 5].
 
-**Takt-Grenzen** [Lena P3]: Mindestabstand **3 Lerntage** zwischen zwei Themenstarts; **höchstens 2 Themen gleichzeitig** offen (eins in Arbeit, eins mit offenem Test); kein neues Thema, solange ≥ 10 Fehlersätze fällig sind. Ehrliche Dauer für die 27 Kernthemen: **16–20 Wochen**.
+**Takt-Grenzen** [Lena P3]: Mindestabstand **3 Lerntage** zwischen zwei Themenstarts; ein **bestätigtes** Thema zählt dafür nicht, das nächste startet am nächsten Lerntag [Lena-N N4]. **Höchstens 2 Themen gleichzeitig** offen (eins in Arbeit, eins mit offenem Test); kein neues Thema, solange ≥ 10 Fehlersätze fällig sind. Ehrliche Dauer für die 27 Kernthemen: **18–22 Wochen** nach der Simulation in 2.3 (16 nur bei mindestens 4 bestätigten Themen).
 
 **Kein Thema startet mit einem Test, auf den keine Erklärung folgt** [Kai 3a]: Die Diagnose führt bei unter 90 % immer in Schritt 1 und 2.
 
 ### 4.3 Platz im Tag und sichtbarer Fortschritt [Lena V6, Kai F3, Nora V5]
 
-- Die Tages-Grammatik der Pflicht stammt **an jedem Tag zu mindestens 70 % aus dem aktuellen Thema** und heißt nie „Extra“ [Kai 3b]. Fehlersätze höchstens 30 % des Blocks, der Rest in Block 1. Am Wochenabschluss 3 + 1 (75 %). Ausnahme: Meilenstein-Tage, ausdrücklich so benannt.
+- Die Tages-Grammatik der Pflicht stammt **an jedem Tag zu mindestens 70 % aus dem aktuellen Thema** und heißt nie „Extra“ [Kai 3b]. Fehlersätze höchstens 30 % des Blocks, der Rest in Block 1. Am Wochenabschluss 3 + 1 (75 %). Ausnahme: Meilenstein- und Gate-Tage, ausdrücklich so benannt [James-N 4].
 - **Fortschritt steigt nur durch Leistung:** richtige Antworten im ersten Versuch ohne Hilfe auf dem Weg zu 8 von 10, freie Verwendungen in Schritt 4, Test, Check. Diagnose, Problem zuerst und Erklärung bringen **0 %**.
 - Die **Abschlusskarte des Tages** (11) zeigt „vorher → nachher“, z. B. „*Zeitformen im Bericht*: 40 % → 55 %“. Steigt nichts, sagt sie ehrlich, was fehlt („noch 3 richtige im ersten Versuch bis zum freien Teil“).
 - Es gibt **kein Block-Ergebnis als eigene Karte**, nur die eine Abschlusskarte des Tages. Ergebniskarten gibt es nur für freiwillige Einzelrunden.
@@ -375,7 +381,7 @@ Die Probe vom 27.10.2026 zeigt: Die App bekommt kein Mikrofon (`getUserMedia` ge
 ### 6.3 Missionen (Rollenspiele mit Auftrag) [Ilias 5.1–5.4, Kai F5, F12]
 
 **Einmal pro Woche Pflicht** am Missionstag (2.3), ~9 Minuten, diktiert. Weitere Missionen sind freiwillig.
-- **Vorbereiten:** Ziel und eine **Abhakliste mit der Zielstruktur und 3 Kernwörtern** („Bedarf erfragen · Einwand Preis behandeln · nächsten Termin fixieren“). Wörter auf der Abhakliste sind **nur Wörter ab S3** [Lena V3]. Jüngere Wörter stehen als Wendungskarte zum Hören und Nachsprechen bereit; ihr Gebrauch ist kein Beleg.
+- **Vorbereiten:** Ziel und eine **Abhakliste mit der Zielstruktur und 3 Kernwörtern ab S3 aus den letzten Wochen** („Bedarf erfragen · Einwand Preis behandeln · nächsten Termin fixieren“) [Lena V3, James-N 1]. Die Kernwörter der laufenden Woche stehen als Wendungskarte zum Hören und Nachsprechen bereit; ihr Gebrauch ist kein Beleg. Sie kommen auf die Abhakliste der nächsten Mission, in der sie ab S3 sind.
 - **Mein nächster Termin** (2.1): Liegt einer vor, baut die Mission darauf auf.
 - **Üben:** Gespräch mit Persona aus dem Szenario, Antworten per Diktat. **Keine Zeit in den ersten 2 Zügen**, danach höchstens die dünne Zeitlinie [Kai 5b]. Im Gespräch keine Korrektur, höchstens eine unauffällige Umformulierung.
 - **Bericht als Seitenfolge** (12.1): Seite 1 Urteil, Abhakliste, Stärke mit Zitat, „2 Punkte üben“; eine Seite je Arbeitspunkt mit Prompt-Runde und „besser so“-Fassung zum Nachsprechen; letzte Seite mit Wendungen (ein Tipp in die Wörter) und „Nochmal, aber besser“.
@@ -389,6 +395,7 @@ Die Probe vom 27.10.2026 zeigt: Die App bekommt kein Mikrofon (`getUserMedia` ge
   - **Anteil korrekter Sätze** (Claude, nur sichere Fehler).
   - **Zahl der Wendungen** aus dem Wortschatz.
   - Zusätzlich als Schätzung: Zeit von der ersten bis zur letzten Einfügung, Eingabeart `in` [Tarek Verb. 4].
+  - Die Kurve nutzt nur Werte mit `in:'d'`; getippte Werte fließen nicht ein [Tarek-N].
 - **Pausen misst die App nicht** (keine eigene Aufnahme). Die Kurve sagt das offen, statt einen Wert zu erfinden.
 - Die Kurve zeigt mindestens 4 Wochen, immer gegen Emrahs eigene Werte. Einmal im Monat bewertet der **Preply-Lehrer** Aussprache und Flüssigkeit in Worten; das Urteil erscheint auf der Kurve. Das ist der einzige ehrliche Weg zu einer Aussage über Aussprache.
 - **Aussprache in der App:** nur „So hat dich die Diktierfunktion verstanden“ mit Erklärung und Mini-Übung. **Keine Prozentwerte** für Aussprache [Lena Veto 21, Ilias 5.12].
@@ -441,9 +448,9 @@ Quelle: `docs/relaunch/recherche/james-lehrplan.md` und `docs/relaunch/pruefung/
 - **Vor dem ersten Test-Link mit neuen Inhalten zu korrigieren:** `c1/toolkit.json` (280 Einträge prüfen; c1-precision „roughly üblicher als about“ ist falsch), `tasks-v2` `cm-par-k1` (Bedeutung verschoben), Umformungen mit nur 2 Wörtern (nur noch als Übung, im Test 3–6 Wörter), Wortstellung „in Munich tomorrow“ (B1).
 - **Vor Stufe 2 zu korrigieren** [Kai F2, F13]: 57 Bedeutungs-Zwillinge, ~4.400 unmarkierte Wortart-Stellen.
 
-### 8.2 Grammatik: 8 Kapitel, 27 Kernthemen, 16–20 Wochen
+### 8.2 Grammatik: 8 Kapitel, 27 Kernthemen, 18–22 Wochen
 
-Ein **Kapitel** umfasst etwa 2 Wochen, ein **Thema** hat den Ablauf aus 4.2. Abschluss-Definition siehe Kapitel 4. Die Themen-Kennungen bleiben, nur die Zuordnung in `path.json` ändert sich. Reihenfolge nach Schaden im Kundengespräch, nicht nach Lehrbuch.
+Ein **Kapitel** umfasst etwa 2 Wochen (Planwert; ehrlich eher 2–3 Wochen, siehe 2.3), ein **Thema** hat den Ablauf aus 4.2. Abschluss-Definition siehe Kapitel 4. Die Themen-Kennungen bleiben, nur die Zuordnung in `path.json` ändert sich. Reihenfolge nach Schaden im Kundengespräch, nicht nach Lehrbuch.
 
 | Kap. | Wochen | Titel | Kernthemen | Ergänzung (2. Durchgang) |
 |---|---|---|---|---|
@@ -456,7 +463,7 @@ Ein **Kapitel** umfasst etwa 2 Wochen, ein **Thema** hat den Ablauf aus 4.2. Abs
 | 7 | 13–14 | Passiv, Berichten, Nominalstil | passive, report-verbs, c1-nominal | passive-plus, reported, mandative |
 | 8 | 15–16 | Satzbau für Wirkung | c1-emphasis, inversion, c1-participle, c1-discourse | emph-plus, ellipsis, noun-phrase, compound-mod, comparison |
 
-**Einstufung schlägt nur vor** [Lena V4]: Was die Einstufung als beherrscht zeigt, startet trotzdem mit der Diagnose (Schritt 0); bei ≥ 90 % ist das Thema „bestätigt“ (4.1). Die Wochenangaben sind Planwerte; ehrlich sind **16–20 Wochen** für den ersten Durchgang. Realistisch bis C1: **12–15 Monate**.
+**Einstufung schlägt nur vor** [Lena V4]: Was die Einstufung als beherrscht zeigt, startet trotzdem mit der Diagnose (Schritt 0); bei ≥ 90 % ist das Thema „bestätigt“ (4.1). Die Wochenangaben sind Planwerte; ehrlich sind **18–22 Wochen** für den ersten Durchgang (Simulation in 2.3). Die 16 Wochen-Szenarien (8.4) laufen unabhängig davon weiter. Realistisch bis C1: **12–15 Monate**.
 
 **Aufgabenleiter je Thema (E1–E9):** Erkennen → Unterscheiden → Ergänzen → Umformen (3–6 Wörter) → Korrigieren → Bauen → **Sag es richtig** (deutsche Absicht → eigener Satz) → **Schreiben** (60–150 Wörter) → **Sprechen** (Diktiertaste). E1 dient der Diagnose, E2 „Problem zuerst“ und dem Register-Vergleich, E3–E6 dem gelenkten Teil, E7–E9 dem freien Teil. Test-, Wiederholungs-, Reserve- und Check-Pool sind getrennt.
 
@@ -464,7 +471,7 @@ Ein **Kapitel** umfasst etwa 2 Wochen, ein **Thema** hat den Ablauf aus 4.2. Abs
 
 - **Rangfolge:** Redemittel und Wortpartner vor Einzelwörtern (*raise a concern, iron out the details, I take your point, but …*). Gruppen: Redemittel Meeting/Verhandlung/Einwand/E-Mail, Zeit gewinnen, Wortpartner, Phrasal Verbs, Business-Kern (Vertrieb/SaaS), C1-Diskurs, rezeptiv Fachwörter. Klischee-Idiome und Buzzwords nur rezeptiv.
 - **Menge:** je Woche **20 aktiv** (6 Redemittel, 5 Wortpartner, 3 Phrasal Verbs, 4 C1-Diskurs, 2 Business-Kern) und **40 rezeptiv**; je Lerntag 3–4 neu aktiv, höchstens 5, Wochendeckel 20 (mit Nachholern 25). Nach 16 Wochen 320 aktiv / 640 rezeptiv, bis C1 etwa 1.200 / 3.000.
-- **Kernwörter:** je Woche 5 (2 Business-Kern + 3 Wörter der Missions-Abhakliste), nach 16 Wochen 80.
+- **Kernwörter:** je Woche 5 (2 Business-Kern + 3 Redemittel der Szene), nach 16 Wochen 80. Sie kommen auf die Abhakliste der nächsten Mission, in der sie ab S3 sind (spätestens 3 Wochen später); in ihrer eigenen Woche stehen sie als Wendungskarte bereit [Lena-N V3, James-N 1].
 - **Die Wortkarte, 10 Pflichtfelder:**
   1. Einheit (Wort oder feste Wendung)
   2. Bedeutung auf Deutsch + kurze englische Erklärung
@@ -474,10 +481,10 @@ Ein **Kapitel** umfasst etwa 2 Wochen, ein **Thema** hat den Ablauf aus 4.2. Abs
   6. 2–4 Wortpartner
   7. Register + „wann nicht“
   8. typischer Fehler Deutscher **oder** geprüfter Vermerk „keine typische Falle“
-  9. Wortfamilie
+  9. Wortfamilie, wo nützlich (sonst Vermerk „keine“)
   10. Abrufauslöser auf Deutsch (Lage + Absicht)
 - **Zuordnung** (kein Lernfeld, aber Pflicht): Woche, Kapitel, Szene, Zielgrammatik; dazu „verwechselbar mit“.
-- **Vorrat:** etwa 650 Kandidaten aus `pack`, `col`, `nb/extras`, `units`; rund 25 Kernwörter fehlen (*procurement, renewal, churn, concede, albeit, whereby* …).
+- **Vorrat:** etwa 650 Kandidaten aus `pack`, `col`, `nb/extras`, `units`; rund 25 Business-Kernwörter fehlen (*procurement, renewal, churn, concede, albeit, whereby* …).
 
 ### 8.4 Wochen-Szenarien (16, entlang des Verkaufsablaufs)
 
@@ -506,14 +513,14 @@ Jede Woche erzeugt die App einen Zettel für die Preply-Stunde: Wochenthema, 5 R
 |---|---:|
 | E7 „Sag es richtig“ (freie Sätze) | ~350 |
 | Prüfungsformate für Themen ohne `c1x` | ~240 |
-| Kapitel-Gates Kap. 2, 5, 6, 7, 8 (je 20) | 100 |
+| Kapitel-Gates Kap. 2, 5, 6, 7, 8 (je 24) | 120 |
 | Wiederholungstest-Pool (Rest nach Bestand) | ~150 |
 | Reserve-Pool 3. Versuch (10 je Thema) | ~270 |
 | Mail- und Sprechlagen | ~65 |
 | zweite Erklärung mit Deutsch-Kontrast | ~15 |
 | Sätze für Wortkarten (240 × 5 + 80 × 8 = 1.840, abzüglich ~340 Bestand) | ~1.500 |
 | neue Übungssätze für fällige Bestandswörter (4 je Wort, Wochen 1–4) | nach Fälligkeit |
-| fehlende Kernwörter | ~25 |
+| fehlende Business-Kernwörter | ~25 |
 | Hörtexte (6 kurze + 1 langer je Woche) | ~112 |
 | Diktatsätze (12 je Woche) | ~190 |
 | Missionen | 16 (aus Bestand ausbauen) |
@@ -528,7 +535,7 @@ Jede Woche erzeugt die App einen Zettel für die Preply-Stunde: Wochenthema, 5 R
 | Stufe 1 | Bestandskorrekturen 8.1, `c1/toolkit.json` (280) prüfen, kwt mit 2 Wörtern nur als Übung | ~300 |
 | Stufe 2 | 57 Zwillinge + Wortart-Stellen; Wortkarten Woche 1–2 (40 aktiv, 10 Felder, Satzbank ≥ 5/8); neue Sätze für Bestandswörter, die in Woche 1–2 fällig werden | ~200 Sätze + Korrekturen |
 | Stufe 3 | Kapitel 1 und 2 vollständig (Diagnose, Problem zuerst, Erklärung mit DE-Kontrast, gelenkt, ≥ 15 E7, 2 Testpools, Reserve-Pool, Check-Pool), Gate Kap. 2 neu, Kapitelaufgaben; Einstufungs-Itembank (Use of English 30 adaptiv, Wortschatz 40 + 18, Mail, Sprechen, Hören 2 Texte + 6 Sätze) | ~300 + ~120 |
-| Stufe 4 | Woche 1–4 komplett: Wortkarten Woche 3–4, ~25 fehlende Kernwörter, Hörtexte 28 + Diktatsätze 48, Wochen-Mails, Missionen Woche 1–4, Itembank Meilenstein 1 | ~250 Sätze, ~80, ~40 |
+| Stufe 4 | Woche 1–4 komplett: Wortkarten Woche 3–4, ~25 fehlende Business-Kernwörter, Hörtexte 28 + Diktatsätze 48, Wochen-Mails, Missionen Woche 1–4, Itembank Meilenstein 1 | ~350 Sätze, ~80, ~40 |
 | Live-Gang Stufe 4 | Die Einstufung läuft **vor Woche 1** (gebaut in Stufe 3/4; Stufe 6 macht nur die Darstellung). Woche 5–6 sind in der Gegenlesung. | – |
 | laufend | mindestens 2 Wochen Vorlauf; Meilenstein n fertig vor Woche 4n−1; reicht der Vorlauf nicht, kommt eine Vertiefungswoche; nie ungeprüft | ~450 je Kapitel |
 
@@ -705,7 +712,7 @@ Grundschrift ab 1920 px 18 px statt 16 px, ab 2400 px 20 px, alles in rem. Bei 2
 
 - **Ladeform:** Ein Mehr-Datei-Build ist erlaubt (A7), ob er Standard wird, **entscheidet Emrah** (19). Bis dahin: eine Hauptdatei, Inhalte als nachgeladene `.bin`-Dateien je Woche bzw. Familie (≤ 500 KB je Datei, < 100 Dateien), nicht in `vocab.sb` kopiert.
 - **Einstiegsstück ≤ 300 KB gepackt** bis „Heute bedienbar“; je Bereich ≤ 150 KB.
-- **Startbild ohne Datenbank-Abfrage:** Heute zeigt sofort ein Skelett; das kleine Dokument `app/today` füllt Thema, Ring und Knopf. Zahlen, die noch fehlen, bleiben Skelett statt einer falschen Zahl. Ein Hinweis zum Thema darf aus dem Browser-Speicher kommen, nie eine Zahl. Große Abos erst nach dem ersten Bild.
+- **Startbild:** Heute zeigt sofort ein Skelett, das ohne Datenbank auskommt; das kleine Dokument `app/today` füllt Thema, Ring und Knopf. Zahlen, die noch fehlen, bleiben Skelett statt einer falschen Zahl. Ein Hinweis zum Thema darf aus dem Browser-Speicher kommen, nie eine Zahl. Große Abos erst nach dem ersten Bild.
 - **Ziel:** Skelett < 1 s, Start-Knopf bedienbar < 2 s (Entwicklungs-Adapter mit 4-facher CPU-Bremse). **Das Budget ist ein hartes Tor in `verify`:** Ist ein Ladestück darüber, ist `verify` rot und es gibt keinen Test-Link.
 - **Messung auf Emrahs iPhone:** Die Diagnose zeigt nach jedem Start „Knopf nach x,x s“. Emrah schickt nach Stufe 1 ein Foto davon.
 - **Blockwechsel ohne Warten:** Der nächste Block (Hörtext, Stimmen, Aufgaben) wird während des laufenden vorgeladen; Wechsel < 300 ms, gemessen.
@@ -745,22 +752,23 @@ Außerdem: Lesen mit Tagesartikel und Kursen, Routinen (`daily`, `feed`, `read`,
 | Neue Aufgabenformen | neue `x`-Werte; `modes` behält nur die 6 alten | – |
 | Themen-Zustand | `grammar/<id>.ch` | ≤ 0,5 KB |
 | **Fehlerschleife** | `err/<JJJJ-MM>` (Fortsetzung `-b`), `e:{<id>:{id,t,d,src,ref,cat,topic,w,r,why,f,fix,st}}`; `src` ∈ ex/gr/say/wri/mis/tch/c1x; `w`/`r` ≤ 160 Zeichen; `fix` ≤ 4; `st` ∈ open/fixed/firm/rec | 0,7–1 KB je Eintrag, Wächter bei 200 KiB, ~150 Einträge/Monat |
-| Index offener Fehler | `app/errq = {m:[…], n, at}` | – |
-| Tagesplan/Startbild | `app/today = {d, th, b:{b1…b6:{st,n,of}}, rest, ring, bt, at}`; Pflege per `update`, Tageswechsel per `transform`; **nie** `app/profile.plan` | ≤ 2 KiB; `pflicht` bleibt wie heute |
-| Sprechen | `fluency/<Monat>.rounds[]` (+ `wpm`, `in`), `say/<Monat>` | – |
+| Index offener Fehler | `app/errq = {m:[…], n, at}` | < 1 KB, abgeleitet, jederzeit neu berechenbar |
+| Tagesplan/Startbild | `app/today = {d, th, b:{b1…b6:{st,n,of}}, rest, ring, bt, at}`; Pflege per `update`, Tageswechsel per `transform`; **nie** `app/profile.plan`. `bt` = gleitender Mittelwert der Minuten je Block, beim Tageswechsel übernommen; bei `d` ≠ heute wird `app/today` neu abgeleitet | ≤ 2 KiB; ob die Pflicht erledigt ist, steht weiter in `app/profile.pflicht` |
+| Sprechen | `fluency/<Monat>.rounds[]` (+ `wpm`, `in`), `say/<Monat>`: **ein Eintrag je Block, nicht je Wendung**, Text ≤ 600 Zeichen | Wächter 200 KiB mit Fortsetzung `-b` wie bei `err` |
 | Diktat/Hören | `out/<Monat>` mit `k:'dict'`/`'hear'` | – |
-| Missionen | `talk/<Monat>.runs[].mis:{id, ok[], err[]}` | – |
+| Missionen | `talk/<Monat>.runs[].mis:{id, ok[], err[]}` | +0,5 KB je Lauf |
 | Vorher-Nachher | `app/compare` | – |
-| Einstufung, Meilensteine, Kann-Beschreibungen | `app/c1.ms[]`, `app/c1.can{}` | – |
-| Können je Form, Hörstufe | `app/levels.k.<art>`, `app/levels.hear` | – |
-| Wochen-Szenario, nächster Termin, Wochenfrage | `app/week.sc`, `app/week.next`, `app/week.conf` | ohne Namen |
+| Einstufung, Meilensteine, Kann-Beschreibungen | `app/c1.ms[]`, `app/c1.can{}` | `ms` ≤ 30 × 0,5 KB, `can` 12 Einträge, zusammen ≤ 20 KiB |
+| Können je Form, Hörstufe | `app/levels.k.<art>`, `app/levels.hear` | ≤ 10 KiB |
+| Wochen-Szenario, Wochenfrage | `app/week.sc`, `app/week.conf = {<JJJJ-Www>: 1–5}` (höchstens 104 Wochen, älteste fallen heraus) | `app/week` zusammen < 3 KiB; v86 liest `app/week` nicht |
+| Nächster Termin | im bestehenden Termin-Speicher `meeting/<JJJJ-MM>.items[]` mit **leerem `who`**, Text ≤ 200 Zeichen; `app/week.next = {m, id, d}` ist nur ein Verweis. Nach dem Termin-Tag wird er nicht mehr verwendet | „ohne Namen“ ist ein Hinweis in der Oberfläche (diktierter Text kann Namen enthalten, bleibt aber nur in Emrahs Datenbank); Seed und Tests nur mit erfundenen Terminen, Diagnose zeigt den Text nie |
 | Rezeptive Wörter | Sammeldokumente `vs/<seg>` (s. u.) | v86 sieht sie nicht |
 
 - **Messwerte nicht in `log`:** `log` kappt bei 300 Einträgen bzw. 240 KiB; Sprech-, Hör- und Missionswerte liegen deshalb in den Monatsdokumenten oben.
 - **Übernahme in die Fehlerschleife:** `grammar.errors`, `app/repair` und Lehrer-Korrekturen werden einmal mit festen Kennungen nach `err` übernommen (Trockenlauf, wiederholbar ohne Doppeleffekt).
 - **Spiegel:** Neue Grammatikfehler gehen zusätzlich in `grammar/<id>.errors[]` (Deckel 10, Überlauf nach `app/repair`), nur in eine Richtung. Der Spiegel endet frühestens 4 Wochen nach dem Live-Gang von Stufe 4.
 - **Registrieren:** `err` und `vs` in `COLLECTIONS`/`paths.ts`, `app/errq` und `app/today` in `APP_DOCS`.
-- **Grundsatz:** Kein neues Feld ist die einzige Quelle einer Entscheidung, die auch v86 trifft.
+- **Grundsatz:** Kein neues Feld ist die einzige Quelle einer Entscheidung, die auch v86 trifft. v86 ignoriert alle neuen Felder.
 
 **Speichermodell für viele Wörter (Tarek V2), als erster Schritt von Stufe 2:**
 - Die Datenbank erlaubt höchstens 5.000 Dokumente je Artefakt (eigene Sperre bei 4.300), und eine Abfrage liefert höchstens 1.000 Treffer. Mit einem Dokument je Wort wären nach ~10 Wochen ~800 Karten erreicht, nach ~13 Wochen würde v86 still kappen, bis C1 wären es ~4.200 Dokumente.
@@ -782,14 +790,14 @@ Außerdem: Lesen mit Tagesartikel und Kursen, Routinen (`daily`, `feed`, `read`,
 | A5 Korridor erster Versuch | 75–90 % | laufend über 7.1 | Schalter Formstufe |
 | A6 behobene / neue Fehler (28 Tage) | ≥ 1,0 ab Woche 6 | nach 6 Wochen | – |
 | A7 Anteil Wort-Werkstatt | < 5 % | nach 4 Wochen | – |
-| W8 Anteil „satzgebunden“ | sinkt | 8 Wochen | – |
+| W8 Anteil „satzgebunden“ | sinkt | 8 Wochen | Anteil „ohne Satz“ (3.5) per Schalter |
 | W9 Auswahl ab S2 je Tag | ≤ 20 % | laufend | – |
 | G1 Themen-Test im 1. Versuch bestanden | 60–85 % | 8 Wochen | Schalter Schritt 3 / 6 |
-| G2 verzögerter Check bestanden | ≥ 75 % | 12 Wochen | – |
+| G2 verzögerter Check bestanden | ≥ 75 % | 12 Wochen | Check-Abstand und Schwelle per Schalter |
 | G3 Lerntage je Thema | 3–6 | 8 Wochen | Themenabstand per Schalter |
-| H1 Diktat bei 1,0× | steigt gegen Einstufung | 8 Wochen | – |
+| H1 Diktat bei 1,0× | steigt gegen Einstufung | 8 Wochen | Stufenschwellen 90/60 % (5.2) per Schalter |
 | S1 Antworttempo und korrekte Sätze | steigen | Woche 8 und 12 | – |
-| F1 Lerntage mit bewerteter gesprochener Antwort | ≥ 5 von 6 | wöchentlich | – |
+| F1 Lerntage mit bewerteter gesprochener Antwort | ≥ 5 von 6 | wöchentlich | Hinweis an Emrah, keine Strafe |
 | Wochenfrage Selbstsicherheit | steigt | Woche 8 und 12 | – |
 | Dauer-Genauigkeit | ± 20 % | laufend | – |
 | Start | Skelett < 1 s, Knopf < 2 s (4× Bremse) | je Build (Tor) | – |
@@ -844,10 +852,10 @@ Jede Stufe endet mit einem Test-Link (`AXHkh6…`, mit Datenkopie), Prüfung dur
 | **0 Vorschau** | Klickbare Design-Vorschau Handy + Laptop (12.2), Kapitel 1 mit echtem Inhalt. **Tor:** Blindtest 4 von 5 | Nora, Kai, english-teacher | sieht und klickt das neue Aussehen, bevor gebaut wird |
 | **1 Fundament** | Token-System, Rahmen Handy/Rail/Laptop, Übungsrahmen mit Band, Startbild aus `app/today`, Kennzahlen-Schicht, Budget-Tor, **Zeitaufzeichnung je Versuch** (`fk`/`ms`/`in`) | Nora, Tarek, platform-guard | App sieht neu aus und startet schneller; Inhalte noch wie heute |
 | **vor Stufe 2** | Rückweg-Test (v86 gegen neue Daten), Pfade registriert, Dokumentzahl gemessen, Bestandsfehler (Zwillinge, Wortart) korrigiert | Tarek, data-guard, Kai | – |
-| **2 Wörter neu** | **zuerst das Speichermodell** (`vs`, Wächter, Kappungstest), dann zwei Spuren, Stufen, Notentabelle, Rate-Signale, Satzbank-Regeln, Gestern-Check, Umrechnung mit Trockenlauf; der alte Planer liest die neue Wortlogik | Lena, Tarek, data-guard | Wörter fühlen sich anders an: frei abrufen, kaum noch Auswahl; ehrliche Zahl |
+| **2 Wörter neu** | **vorher:** Diktat-Erkennung auf Emrahs iPhone geprüft (3.3); **zuerst das Speichermodell** (`vs`, Wächter, Kappungstest), dann zwei Spuren, Stufen, Notentabelle, Rate-Signale, Satzbank-Regeln, Gestern-Check, Umrechnung mit Trockenlauf; der alte Planer liest die neue Wortlogik | Lena, Tarek, data-guard | Wörter fühlen sich anders an: frei abrufen, kaum noch Auswahl; ehrliche Zahl |
 | **3 Grammatik-Kurs** | Themen-Zustand, Ablauf 0–7, Gate, Kapitel 1 und 2 vollständig, Einstufungs-Itembank | Lena, James, english-teacher | Grammatik ist ein Kurs mit Abschluss |
 | **4 Der Tag** | sechs Blöcke mit Tagestypen, Hören mit Stufen und Stimmenliste, Sag/Schreib es per Diktat, Schreibtag, Flüssigkeits-Rotation, eine Fehlerschleife, Aufholen, **Einstufung vor Woche 1**, Woche 1–4 vollständig | Lena, James, Kai, ux-reviewer | ein Knopf, 28 Minuten, alles am selben Thema, Hören und Sprechen täglich |
-| **5 Missionen** | Mission als Wochen-Pflicht, Bericht als Seitenfolge, Fehler herauslocken, „Mein nächster Termin“, Sprechkurve | Lena, Kai | Sprechen mit Auftrag und Bericht |
+| **5 Missionen** | Mission als Wochen-Pflicht (bis Stufe 5 live ist, ist der Missionstag ein Normaltag; „jede Woche genau eine Mission“ gilt ab Stufe 5) [James-N 2], Bericht als Seitenfolge, Fehler herauslocken, „Mein nächster Termin“, Sprechkurve | Lena, Kai | Sprechen mit Auftrag und Bericht |
 | **6 Fortschritt** | Fortschritt-Seite, Darstellung von Einstufung und Meilensteinen, Vorher-Nachher (7 Tage, 4 Wochen), Wochenbericht, Wochenfrage, Preply-Formular, C1-Schätzung | Lena, Kai | ehrliches Bild, sichtbares Besserwerden |
 
 Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inhaltsstrang, jede Charge mit `english-teacher`-Gegenlesung und Stichprobe.
@@ -862,17 +870,19 @@ Inhalte entstehen nach dem Vorlauf in 8.7, je Test-Link höchstens ein neuer Inh
 1. **Ladeform:** Mehr-Datei-Build als Standard (schnellerer Start) oder weiter eine Hauptdatei mit nachgeladenen Inhaltsdateien (14.2).
 2. **Reitername:** „Praxis“ oder „Sprechen“ (Vorschau-Schalter).
 3. **Handlungsfarbe:** A „Iris“ oder B „Bernstein“ (Vorschau-Schalter).
-4. **Mission als Pflicht** einmal pro Woche (~9 Min. statt Block 5 + 6).
+4. **Mission als Pflicht** einmal pro Woche (~9 Min. statt Block 5 + 6), ab Stufe 5; vorher ist der Missionstag ein normaler Lerntag.
 5. **Länge der Pflicht:** 28 Minuten an jedem Lerntag (nach einer Pause anteilig auf 20 gekürzt), oder dauerhaft 20 Minuten mit denselben Anteilen.
-6. **Ehrlicher Neustart der Wortzahl:** „Bildest du selbst“ zählt nur feste Wörter (S5) und startet deutlich niedriger als heute; darunter steht „auf dem Weg: x“.
+6. **Ehrlicher Neustart der Wortzahl:** „Bildest du selbst“ zählt nur feste Wörter (S5) und startet deutlich niedriger als heute; darunter steht „auf dem Weg: x“. *Hinweis: Lehnst du das ab, lebt Lenas Einspruch wieder auf; dann müssten wir die Zählweise neu klären.*
 7. **„Mein nächster Termin“:** echte Kundentermine in 1–2 Sätzen diktieren (ohne Namen, nur in deiner Datenbank).
 8. **Wochenfrage zur Selbstsicherheit** (1–5, ein Tipp pro Woche).
+9. **Zeitgrenze für gesprochene Wendungen:** Eine gesprochene Wendung gilt als „sicher“, wenn du sie in höchstens **15 Sekunden** sagst (strenger, wie beim Tippen) oder in höchstens **20 Sekunden** (großzügiger, weil Diktieren länger dauert). Tarek empfiehlt, mit 15 zu starten und nach 4 Wochen Messung zu prüfen.
 
 **Zur Kenntnis (ehrliche Grenzen):**
-9. **API-Guthaben:** Fremde Sprachdienste (bezahlte Spracherkennung oder Stimmen) sind im Artefakt nicht nutzbar: Es darf nichts von außen geladen werden, und Schlüssel gehören nicht in die App. Die KI läuft weiter über das Claude-Abo. Emrahs Wunsch „am liebsten ohne API“ ist damit erfüllt.
-10. **Hören und Sprechen** sind in der Claude-App bis etwa 8 von 10 erreichbar. Der Preply-Lehrer ist der menschliche Maßstab (einmal im Monat ein kurzes Formular).
-11. **Rückweg:** Wörter in den neuen Sammeldokumenten sieht die alte Version v86 nicht; sie gehen dabei aber nicht verloren.
-12. **Dauer:** erster Durchgang durch die 8 Kapitel 16–20 Wochen, C1 realistisch in 12–15 Monaten.
+10. **API-Guthaben:** Fremde Sprachdienste (bezahlte Spracherkennung oder Stimmen) sind im Artefakt nicht nutzbar: Es darf nichts von außen geladen werden, und Schlüssel gehören nicht in die App. Die KI läuft weiter über das Claude-Abo. Emrahs Wunsch „am liebsten ohne API“ ist damit erfüllt.
+11. **Hören und Sprechen** sind in der Claude-App bis etwa 8 von 10 erreichbar. Der Preply-Lehrer ist der menschliche Maßstab (einmal im Monat ein kurzes Formular).
+12. **Rückweg:** Wörter in den neuen Sammeldokumenten sieht die alte Version v86 nicht; sie gehen dabei aber nicht verloren.
+13. **Dauer:** erster Durchgang durch die 8 Kapitel ehrlich nachgerechnet **18–22 Wochen** (vorher 16–20; feste Tage wie Schreib-, Missions- und Meilensteintag lassen weniger Platz für Themenstarts). C1 realistisch weiter in 12–15 Monaten.
+14. **Mission erst ab Stufe 5:** Bis die Missionen gebaut sind, ist der Freitag ein normaler Lerntag.
 
 ---
 
