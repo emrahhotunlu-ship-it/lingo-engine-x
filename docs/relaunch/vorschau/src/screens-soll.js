@@ -88,7 +88,7 @@ function tsWorkshop() {
     '<div class="ts-vc on"><div class="ts-vh"><b class="en">commission</b><span>' + L('die Provision', 'share of a sale') + '</span></div><p class="en">Our sales team earns a <b>commission</b> on every new contract.</p></div>' +
     '<div class="ts-vc"><div class="ts-vh"><b class="en">provision</b><span>' + L('die Bestimmung im Vertrag', 'a clause in a contract') + '</span></div><p class="en">The contract includes a <b>provision</b> for price changes.</p></div></div>' +
     '<div class="notice">' + ic('bulb', 'sm') + '<span>' + L('<b>Deutsch-Falle:</b> „Provision“ sieht aus wie <span class="en">provision</span>, heißt aber <span class="en">commission</span>. Merksatz: Die <span class="en">commission</span> bringt Geld, die <span class="en">provision</span> steht im Vertrag.', '<b>German trap:</b> the German word “Provision” looks like provision but means commission. Memory hook: the commission brings money, the provision sits in the contract.') + '</span></div>' +
-    '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">earn · pay · a commission on</p></div>' +
+    '<div class="stack s6"><div class="lbl">' + L('Wortpartner', 'Collocations') + '</div><p class="p en">earn a commission · pay a commission · a commission on sales</p></div>' +
     tsAi() +
     '<p class="p2">' + L('Am Samstag fragt dich die App wieder, neu ab Stufe S2.', 'On Saturday the app asks you again, restarting at stage S2.') + '</p></div></div>' +
     exFoot(btnSec('ts-listen', ic('speaker', 'sm') + L('Anhören', 'Listen'), 'data-act="noop"') + btnPri('ts-ws-next', L('Weiter', 'Continue'), 'h33-result')) +
@@ -267,7 +267,7 @@ function tsCourse() {
 const TS_TEXT = [
   ['In a negotiation, every concession should buy you something.', 'In einer Verhandlung sollte dir jedes Zugeständnis etwas einbringen.'],
   ['If you lower your price, ask for something <b>in return</b>: a longer contract, a larger order, or faster payment.', 'Wenn du mit dem Preis heruntergehst, verlange etwas dafür: einen längeren Vertrag, eine größere Bestellung oder schnellere Zahlung.'],
-  ['The easiest way to do this is a <b>conditional offer</b>: “If you can <b>commit to</b> two years, we can reduce the price by 5 percent.”', 'Am einfachsten geht das mit einem Angebot unter einer Bedingung: „Wenn Sie sich auf zwei Jahre festlegen, können wir den Preis um 5 Prozent senken.“'],
+  ['The easiest way to do this is with a <b>conditional offer</b>: “If you can <b>commit to</b> two years, we can reduce the price by 5 percent.”', 'Am einfachsten geht das mit einem Angebot unter einer Bedingung: „Wenn Sie sich auf zwei Jahre festlegen, können wir den Preis um 5 Prozent senken.“'],
   ['The other side hears two things at once: you are <b>willing to move</b>, but only if they move too.', 'Die andere Seite hört zwei Dinge zugleich: Du bist bereit, dich zu bewegen, aber nur, wenn sie sich auch bewegt.'],
   ['A common mistake is to offer a discount first and hope for goodwill later.', 'Ein häufiger Fehler: erst einen Rabatt anbieten und dann auf Entgegenkommen hoffen.'],
   ['Experienced buyers will accept the discount and then ask for more.', 'Erfahrene Einkäufer nehmen den Rabatt an und fordern dann mehr.']
@@ -282,7 +282,7 @@ function tsLesson() {
     '<p class="p2">' + L('Ziel: Du bietest ein Zugeständnis nur gegen eine Gegenleistung an.', 'Goal: you only offer a concession in exchange for something.') + '</p></div>' +
     '<div class="stack s8"><div class="lbl">' + L('Schlüsselwendungen', 'Key phrases') + '</div><div class="ts-chips en"><span class="chip">in return</span><span class="chip">commit to</span><span class="chip">a conditional offer</span><span class="chip">be willing to move</span></div></div>' +
     '<div class="stack s8"><div class="lbl">' + L('Text · Satz antippen für Deutsch', 'Text · tap a sentence for German') + '</div>' +
-    '<article class="ts-art en"><h3 class="disp">Never give a concession for free</h3>' +
+    '<article class="ts-art en"><h3 class="disp">Never make a concession for free</h3>' +
     '<p>' + sent(0) + ' ' + sent(1) + '</p><p>' + sent(2) + ' ' + sent(3) + '</p><p>' + sent(4) + ' ' + sent(5) + '</p></article></div>' +
     '<div class="card stack s8"><div class="lbl">' + ic('bulb', 'xs') + ' ' + L('Sprachtipp', 'Language tip') + '</div>' +
     '<p class="p"><b class="en">If you can …, we can …</b></p><p class="p2">' + L('Erst die Bedingung, dann dein Zugeständnis. So hört die andere Seite zuerst, was du dafür willst. Mehr dazu in Kapitel 4.', 'Condition first, then your concession. That way the other side first hears what you want for it. More in chapter 4.') + '</p></div>' +
@@ -362,7 +362,7 @@ function tsClinic() {
     '<div class="field ts-mine en">We ' + tsMark(1, 'have received') + ' your feedback last week and will send you an answer ' + tsMark(2, 'until') + ' Friday.</div></div>' +
     tsPurpose(3) +
     tsVerdict(L('Fast richtig · 2 Stellen', 'Almost right · 2 spots')) +
-    '<div class="card stack s6"><div class="lbl">' + L('Richtig wäre', 'Correct would be') + '</div><p class="p en" style="font-size:18px;line-height:26px">We <b class="ts-fix">received</b> your feedback last week and will send you an answer <b class="ts-fix">by</b> Friday.</p></div>' +
+    '<div class="card stack s6"><div class="lbl">' + L('Richtig wäre', 'Correct version') + '</div><p class="p en" style="font-size:18px;line-height:26px">We <b class="ts-fix">received</b> your feedback last week and will send you an answer <b class="ts-fix">by</b> Friday.</p></div>' +
     '<div>' + tsSpot(1, 'have received', 'received', L('<em class="en">last week</em> ist ein vergangener Zeitpunkt. Dazu passt past simple.', '<em>last week</em> is a past time expression. It goes with the past simple.'), 'past simple + last week') +
     tsSpot(2, 'until Friday', 'by Friday', L('„Bis Freitag“ als Frist heißt <em class="en">by Friday</em>. <em class="en">until</em> heißt: die ganze Zeit bis dahin.', 'A deadline is <em>by Friday</em>. <em>until</em> means: the whole time up to then.'), 'by + deadline') + '</div>' +
     '<button class="ts-tog" id="ts-c1" data-act="c1" aria-expanded="' + open + '"><span>' + L('C1-Fassung', 'C1 version') + '</span>' + ic(open ? 'chevU' : 'chevD', 'sm') + '</button>' +
@@ -377,7 +377,7 @@ function tsMail() {
     [L('Inhalt und Wirkung', 'Content and impact'), L('Klar: was fehlt, seit wann und was du brauchst. Die Bitte steht am Ende, gut so.', 'Clear: what’s missing, since when and what you need. The request comes last, good.')],
     [L('Register', 'Register'), L('<s class="en ts-no">Many greetings</s> ist wörtlich aus „Viele Grüße“. Üblich: <b class="en">Best regards</b>. Mit <b class="en">Could you</b> klingt die Bitte höflicher.', '<s class="ts-no">Many greetings</s> is a literal translation from German. Usual: <b>Best regards</b>. <b>Could you</b> makes the request more polite.')],
     [L('Aufbau', 'Structure'), L('Kurz und in guter Reihenfolge. Nach <em class="en">Hello Mr. Brandt,</em> beginnt die nächste Zeile groß: <b class="en">Thank you</b>.', 'Short and well ordered. After <em>Hello Mr. Brandt,</em> the next line starts with a capital: <b>Thank you</b>.')],
-    [L('Sprache', 'Language'), L('<s class="en ts-no">have ordered them already on</s> → <b class="en">ordered them on</b>: vergangener Zeitpunkt, also past simple. <s class="en ts-no">until when</s> → <b class="en">when</b>: „bis wann“ fragst du mit <em class="en">when</em>.', '<s class="ts-no">have ordered them already on</s> → <b>ordered them on</b>: a past point in time, so past simple. <s class="ts-no">until when</s> → <b>when</b>.')]
+    [L('Sprache', 'Language'), L('<s class="en ts-no">have ordered them already on</s> → <b class="en">ordered them on</b>: vergangener Zeitpunkt, also past simple. <s class="en ts-no">until when</s> → <b class="en">when</b>: „bis wann“ fragst du mit <em class="en">when</em>. Natürlicher klingt <b class="en">we still haven’t received</b>, und nach <em class="en">Unfortunately</em> steht ein Komma.', '<s class="ts-no">have ordered them already on</s> → <b>ordered them on</b>: a past point in time, so past simple. <s class="ts-no">until when</s> → <b>when</b>. <b>we still haven’t received</b> sounds more natural, and <em>Unfortunately</em> takes a comma.')]
   ];
   return '<div class="stack s16">' +
     '<div class="stack s6"><div class="ts-fl"><span class="lbl">' + L('Deine Mail', 'Your email') + '</span><span class="lbl num">' + TS_MAIL_RAW.length + ' / 1500</span></div>' +

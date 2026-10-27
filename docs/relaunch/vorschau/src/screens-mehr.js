@@ -355,8 +355,8 @@ function tmErrDetail(p, id) {
     e2: L('<em class="en">on Monday</em> ist ein vergangener Zeitpunkt, also past simple.', '<em>on Monday</em> is a finished time, so past simple.'),
     e3: L('<em class="en">last year</em> ist vorbei, also past simple. Dieser Fehler kam in 30 Tagen zum dritten Mal, deshalb ist das Thema wieder „in Arbeit“.', '<em>last year</em> is over, so past simple. This error came up for the third time in 30 days, so the topic is back “in progress”.'),
     e4: L('Mit <em class="en">yesterday</em> fragst du mit <em class="en">did</em>.', 'With <em>yesterday</em>, ask with <em>did</em>.'),
-    e5: L('Ein Zeitraum bis jetzt: <em class="en">for</em> plus Dauer, dazu present perfect continuous.', 'A period up to now: <em>for</em> plus a length of time, with present perfect continuous.'),
-    e6: L('Ein Rabatt wird angeboten oder gewährt: <em class="en">offer</em> oder <em class="en">give a discount</em>.', 'You offer or give a discount.')
+    e5: L('Ein Zeitraum bis jetzt: <em class="en">for</em> plus Dauer (<em class="en">for two weeks</em>), <em class="en">since</em> nur mit Zeitpunkt (<em class="en">since Monday</em>). Dazu present perfect continuous, nicht present.', 'A period up to now: <em>for</em> plus a length of time (<em>for two weeks</em>), <em>since</em> only with a point in time (<em>since Monday</em>). Use present perfect continuous, not present.'),
+    e6: L('Ein Rabatt wird angeboten oder gewährt: <em class="en">offer</em> oder <em class="en">give a discount</em>. „Rabatt machen“ heißt nicht <em class="en">make a discount</em>.', 'You offer or give a discount, not <em>make</em> one.')
   }[e.id];
   const done = e.st === 'fixed' || e.st === 'firm' ? 2 : 0;
   return '<div class="stack s16">' +
@@ -416,7 +416,7 @@ function tmTopicLinks(p, desk) {
     '<div class="stack s6"><div class="lbl">' + L('Frühere Themen wiederholen', 'Review earlier topics') + '</div><p class="p2">' + L('Noch keins. Sobald ein Thema bestanden ist, kannst du es hier jederzeit üben.', 'None yet. Once a topic is passed, you can practice it here any time.') + '</p></div>';
 }
 function tmLookupBody() {
-  const sig = [['past simple', 'yesterday · last week · on Monday · two days ago · in 2025 · When …?'], ['present perfect', 'yet · already · so far · ever · since · for']];
+  const sig = [['past simple', 'yesterday · last week · on Monday · two days ago · in 2025 · When …?'], ['present perfect', 'yet · already · so far · ever · since … · for … (up to now)']];
   return '<div class="stack s8"><div class="lbl">' + L('Muster', 'Pattern') + '</div>' + gramPattern(true) + '</div>' +
     '<div class="card stack s8"><div class="lbl">' + L('Deutsch-Falle', 'German trap') + '</div><div class="contrast en">' +
     '<span class="k">DE</span><span style="font-family:var(--font)">Ich habe den Vertrag gestern unterschrieben.</span>' +
@@ -450,7 +450,7 @@ function h27(v) {
       '<div class="stack s8" style="text-align:center;align-items:center"><div class="lbl">' + L('Extra-Runde · <span class="en">past simple vs. present perfect</span>', 'Extra round · past simple vs. present perfect') + '</div>' +
       '<div class="disp num" style="font-size:34px;line-height:40px;font-weight:700">' + L('8 von 10 richtig', '8 of 10 correct') + '</div></div>' +
       '<div class="card stack s8"><div class="lbl">' + L('Zwei waren noch nicht richtig', 'Two weren’t right yet') + '</div>' + miss.map(m => '<div class="contrast en" style="padding:6px 0"><span class="k" style="color:var(--bad)">' + ic('cross', 'xs') + '</span><span class="no">' + m[0] + '</span><span class="k" style="color:var(--ok)">' + ic('check', 'xs') + '</span><span><b>' + m[1] + '</b></span></div>').join('') +
-      '<p class="p2">' + L('Beide Male stand ein vergangener Zeitpunkt dabei. Sie kommen in deine Fehler und morgen in der Pflicht zuerst dran.', 'Both times a finished time was named. They go to your errors and come first in tomorrow’s daily plan.') + '</p></div>' +
+      '<p class="p2">' + L('Beide Male ging es um einen vergangenen Zeitpunkt: <em class="en">When …?</em> fragt danach, <em class="en">in June</em> nennt ihn. Sie kommen in deine Fehler und morgen in der Pflicht zuerst dran.', 'Both times it was about a finished time: <em>When …?</em> asks for it, <em>in June</em> names it. They go to your errors and come first in tomorrow’s daily plan.') + '</p></div>' +
       '<p class="p2" style="text-align:center;font-size:13px">' + L('Zählt als Extra. Dein Tagesziel und Schritt 3 von 7 bleiben, wie sie sind.', 'Counts as extra. Your daily goal and step 3 of 7 stay as they are.') + '</p></div></div>' +
       exFoot(btnSec('tm-again', L('Noch eine Runde', 'One more round'), 'data-go="h27-free-round"') + btnPri('tm-done', L('Fertig', 'Done'), 'h27-topic'));
   }
@@ -492,7 +492,7 @@ function tmTeacherSeg(cur) {
   return '<div class="tm-seg" role="tablist" id="tm-tseg">' + [['paste', L('Einfügen', 'Paste')], ['note', L('Zettel', 'Notes')], ['monthly', L('Monat', 'Monthly')]].map(x =>
     '<button role="tab" id="tm-tseg-' + x[0] + '" data-go="h28-' + x[0] + '" class="' + (cur === x[0] || (cur === 'confirm' && x[0] === 'paste') ? 'on' : '') + '">' + x[1] + '</button>').join('') + '</div>';
 }
-const TM_NOTE = 'Week 44 · Following up on a quote\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in questions with a time (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
+const TM_NOTE = 'Week 44 · Following up on a quote\n\nPhrases: quote · lead time · follow up · discount · sign off on\nGrammar: past simple vs. present perfect\n\nMy most frequent errors:\n1. Present perfect with a finished time (“I have sent it on Monday”)\n2. “since” instead of “for” with a length of time (“since two weeks”)\n3. Present perfect in “When …?” questions (“When have you sent it?”)\n\nRole-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time.';
 function h28(v) {
   const head = tmTitle(L('Lehrerin', 'Teacher'), L('Preply · jeden Mittwoch', 'Preply · every Wednesday')) + tmTeacherSeg(v);
   if (v === 'confirm') {
@@ -572,8 +572,8 @@ function h29(v) {
       (said ? '' : '<div class="fieldwrap"><div class="field" style="min-height:72px;color:var(--fg-3)">' + L('Deine Rückfrage …', 'Your question …') + '</div></div>' +
         '<p class="hintline">' + L('Stufe 2 ohne Uhr. Ab Stufe 4 läuft die Zeit.', 'Level 2 has no timer. From level 4 the clock runs.') + '</p>') + '</div></div>';
     if (said) {
-      const you = 'Too long compared to what? Which lead time would work for you?';
-      s += band('ok', { you: { ok: you }, right: you, why: { ok: L('Du fragst zuerst nach dem Maßstab. So erfährst du, worum es wirklich geht, bevor du nachgibst.', 'You ask for the benchmark first. That way you learn what it’s really about before you give anything away.') } }, { next: 'h29-list' });
+      const you = 'I understand. What lead time would work for you?';
+      s += band('ok', { you: { ok: you }, right: you, why: { ok: L('Du fragst zuerst, was sie brauchen. So erfährst du, worum es wirklich geht, bevor du nachgibst.', 'You ask what they need first. That way you learn what it’s really about before you give anything away.') } }, { next: 'h29-list' });
     } else {
       s += exFoot(btnSec('tm-aloud', L('Laut gesagt', 'Said aloud'), 'data-act="tmsay"') + btnPri('tm-speak', L('Sprechen', 'Speak'), '', ' data-act="tmsay"'));
     }

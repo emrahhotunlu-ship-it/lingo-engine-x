@@ -53,7 +53,7 @@ Diese Sätze stehen schon in `inhalte-kapitel1.md` und sind deshalb nicht aufgef
 | note | Week 44 · Following up on a quote | Kopf des Zettels für die Lehrerin |
 | note | Phrases: quote · lead time · follow up · discount · sign off on | Wendungen der Woche |
 | note | Grammar: past simple vs. present perfect | Grammatik der Woche |
-| note | My most frequent errors: 1. Present perfect with a finished time (“I have sent it on Monday”) 2. “since” instead of “for” with a length of time (“since two weeks”) 3. Present perfect in questions with a time (“When have you sent it?”) | die drei häufigsten Fehler |
+| note | My most frequent errors: 1. Present perfect with a finished time (“I have sent it on Monday”) 2. “since” instead of “for” with a length of time (“since two weeks”) 3. Present perfect in “When …?” questions (“When have you sent it?”) | die drei häufigsten Fehler |
 | note | Role-play for you: You are the head of procurement. Our price is about 10 percent above a competitor’s. Push back on the price, ask about the lead time, and agree to a follow-up call only if I suggest a specific time. | Rollenspiel-Auftrag an die Lehrerin |
 
 ## H29 Sprechen
@@ -61,7 +61,7 @@ Diese Sätze stehen schon in `inhalte-kapitel1.md` und sind deshalb nicht aufgef
 | Variante | Text | Zweck |
 |---|---|---|
 | objection | Honestly, your lead time is just too long for us. | Einwand von Laura, Stufe 2 |
-| objection | Too long compared to what? Which lead time would work for you? | Musterantwort mit Rückfrage |
+| objection | I understand. What lead time would work for you? | Musterantwort mit Rückfrage |
 | list (Zeit gewinnen) | That’s a fair question. Let me think about that for a second. | Wendung „Zeit gewinnen“ |
 | list (Zeit gewinnen) | Good point. Can I get back to you on that by Friday? | Wendung „Zeit gewinnen“ |
 | list (Zeit gewinnen) | Just to make sure I understand: you mean the total price, not the unit price? | Wendung „Zeit gewinnen“ |

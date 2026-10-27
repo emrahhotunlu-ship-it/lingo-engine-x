@@ -21,10 +21,10 @@ Schon in `inhalte-kapitel1.md`, deshalb nicht aufgeführt: reduce the lead time,
 |---|---|---|
 | course | Kurs „Verhandeln auf Englisch“, Lektionstitel nur deutsch (EN-Modus: Setting your target and your limit … Following up after the negotiation) | Kursübersicht |
 | lesson | in return · commit to · a conditional offer · be willing to move | Schlüsselwendungen der Lektion 3 |
-| lesson | Never give a concession for free | Titel des Lektionstexts |
+| lesson | Never make a concession for free | Titel des Lektionstexts |
 | lesson | In a negotiation, every concession should buy you something. | Text, Satz 1 |
 | lesson | If you lower your price, ask for something in return: a longer contract, a larger order, or faster payment. | Text, Satz 2 (Beispiel für „Satz antippen für Deutsch“) |
-| lesson | The easiest way to do this is a conditional offer: “If you can commit to two years, we can reduce the price by 5 percent.” | Text, Satz 3 |
+| lesson | The easiest way to do this is with a conditional offer: “If you can commit to two years, we can reduce the price by 5 percent.” | Text, Satz 3 |
 | lesson | The other side hears two things at once: you are willing to move, but only if they move too. | Text, Satz 4 |
 | lesson | A common mistake is to offer a discount first and hope for goodwill later. | Text, Satz 5 |
 | lesson | Experienced buyers will accept the discount and then ask for more. | Text, Satz 6 |
