@@ -8,7 +8,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 # TEIL A – ARBEITSGRUNDLAGE
 
 ## A1. Auftrag in Kürze
-- **Was:** Neubau von null (Greenfield) einer persönlichen High-End-Englisch-App (B2 → C1) für Emrah. Sie läuft als **veröffentlichtes Claude-Artefakt** (Standard eine HTML-Datei; Mehr-Datei-Build seit 07.10.2026 erlaubt, siehe A7), Datenbank und KI ausschließlich über `claude.use("db")` / `claude.use("sample")`.
+- **Was:** Neubau von null (Greenfield) einer persönlichen High-End-Englisch-App (B2 → C1) für Emrah. Sie läuft als **veröffentlichtes Claude-Artefakt** (Mehr-Datei-Build seit 07.10.2026 erlaubt und seit Relaunch-Entscheidung 1 vom 27.10.2026 Standard, umgesetzt mit Stufe 1 Paket P0; siehe A7), Datenbank und KI ausschließlich über `claude.use("db")` / `claude.use("sample")`.
 - **Vorgänger-App:** Von ihr werden nur **die Daten und die Funktionsideen** übernommen, **kein Code**.
 - **Fokus seit 04.10.2026 (Umbau):** Die App trainiert nur noch **Wörter und Grammatik** (dazu freiwillig Sprechen mit Rollenspiel und Einwand-Training, Übersetzer, Claude). Kap. 2 Nr. 5 (kombinierte Aufgaben), Kap. 6 (Funktionsumfang) und Kap. 14 („alle Module“) des Auftrags gelten nur dafür. Maßgeblich sind `docs/umbau/gesamtkonzept.md`, `docs/umbau/uebergabe.md` und der Merkzettel `docs/umbau/stand.md`; Arbeits-Branch `claude/umbau-fokus`, Rückweg Marke `pre-fokus` (Commit `6aaf4af`).
 - **Aktueller Plan (seit 06.10.2026):** Lernplattform 2.0 (`docs/umbau/lernplattform-2.md`, fertig und live) und **Lernplattform 3.0** (`docs/umbau/lernplattform-3.md`, Releases R1–R7, Pakete P9–P84) mit den Ergänzungen `c1-programm.md`, `c1-aufgaben.md`, `erlebnis-engine.md`, `ki-tutor.md`, `motivation.md`. Freigegebene Design-Vorschau: Artefakt `4dDepfJ8H1Hwsm8BUvbCHd`. Laufender Stand immer in `docs/umbau/stand.md` (nur anhängen).
@@ -36,7 +36,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 
 ## A3. Auslieferung am Ende jeder Phase
 1. Alle Tests grün (Subagent `qa-runner`). `platform-guard` und `data-guard` ohne Befund. **Keine Auslieferung, solange ein Test rot ist.**
-2. Genau **eine** Datei `dist/index.html` im Repository. `dist/` steht **nicht** in `.gitignore`.
+2. Das Bauergebnis liegt in `dist/` im Repository (`dist/index.html`, ab Relaunch Stufe 1 P0 dazu die nachgeladenen Teil-Dateien). `dist/` steht **nicht** in `.gitignore`.
 3. **Ein Commit je Phase** mit klarer Nachricht, z. B. „Phase 1: Kern-Erlebnis", damit jeder Stand zurückholbar ist.
 4. Entwickelt wird auf `claude/umbau-fokus` (seit 04.10.2026; `main` wird für den Umbau nicht benutzt). Unter-Agenten arbeiten auf eigenen Zweigen `claude/umbau-<name>`, die Hauptsitzung führt zusammen. `dist/index.html` liegt auf `claude/umbau-fokus`.
 5. **Bericht an Emrah in genau drei Sätzen:** was neu ist · was Emrah testen soll · was als Nächstes kommt.
@@ -131,7 +131,7 @@ Ausgelagert nach **`docs/entscheidungen.md`** (vollständig, unverändert; neue 
 - Planversion `u.v`/`p.v` bleibt 1, Regelversion über `u.rv`; Eingabeprofil (`src/platform/input.ts`) nie planwirksam.
 - Serie: Pflicht erledigt, ein Ruhetag je Kalenderwoche; Tageswechsel 04:00; US-Englisch Standard, britische Formen gelten als richtig.
 - Keine Selbstbewertung außer im Anki-Modus; die App benotet aus Richtigkeit, Zeit und Hilfe.
-- Mehr-Datei-Build erlaubt (Standard bleibt eine Datei); keine externen Anfragen, kein eigener Server.
+- Mehr-Datei-Build ist Standard (Relaunch-Entscheidung 1, 27.10.2026; umgesetzt ab Stufe 1 P0); keine externen Anfragen, kein eigener Server.
 - Arbeitsweise, Modelle, Prüftore: `docs/umbau/arbeitsweise.md`.
 
 ## A8. Befehle und Projektstruktur
@@ -140,7 +140,7 @@ Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **n
 | Befehl | Zweck |
 |---|---|
 | `npm run dev` | Dev-Server mit Entwicklungs-Adapter; `?fake=nodb,nosample,empty,persist` steuert ihn |
-| `npm run build` | Produktions-Build → genau eine `dist/index.html` |
+| `npm run build` | Produktions-Build → `dist/index.html` (ab Stufe 1 P0 mit Teil-Dateien, Mehr-Datei-Standard) |
 | `npm run typecheck` · `npm run lint` | TypeScript strict (App ohne Node-Typen und gesamt) · ESLint mit Typinformationen |
 | `npm test` | Unit-Tests (Vitest, `TZ=Europe/Berlin`) |
 | `npm run test:e2e` | baut App und Test-Laufzeit, dann Playwright gegen `dist/index.html` |
