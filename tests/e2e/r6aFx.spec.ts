@@ -328,9 +328,9 @@ test.describe('Laptop', () => {
 
   test('Reiter-Pille gleitet (eine Pille), Lichtfeld liegt hinter allem', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'apply' }, { localStorage: { 'lx:fx': 'full' } });
-    await expect(page.locator('.dz-tab-pill:visible')).toHaveCount(1);
+    await expect(page.locator('.lx-nav-pill:visible')).toHaveCount(1);
     await openTab(page, 'vocab');
-    await expect(page.locator('.dz-tab-pill:visible')).toHaveCount(1);
+    await expect(page.locator('.lx-nav-pill:visible')).toHaveCount(1);
     expect(await page.getByTestId('ambient').evaluate((el) => [getComputedStyle(el).position, getComputedStyle(el).zIndex, getComputedStyle(el).pointerEvents])).toEqual(['fixed', '-1', 'none']);
     expect(errors).toEqual([]);
   });

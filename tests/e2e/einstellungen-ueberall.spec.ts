@@ -48,6 +48,14 @@ test('Einstellungen von jeder Reiter-Seite und von jeder Seite in höchstens zwe
   await screen(page, 'weekly');
   await expect(page.getByTestId('page-bar').getByTestId('open-settings')).toHaveCount(0);
   await expect(page.getByTestId('page-bar').getByTestId('open-companion')).toBeVisible();
+  // Seite mit eigenem Kopf (ScreenHeader, z. B. die Wortliste): ebenfalls nur „Fragen“, kein Zahnrad, kein Übersetzer (P2-Nachbesserung).
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-all').click();
+  await screen(page, 'vocabList');
+  const head = page.locator('[data-screen="vocabList"] header').first();
+  await expect(head.getByTestId('open-companion')).toBeVisible();
+  await expect(head.getByTestId('open-settings')).toHaveCount(0);
+  await expect(head.getByTestId('open-translate')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

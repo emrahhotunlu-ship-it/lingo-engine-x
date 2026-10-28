@@ -24,14 +24,9 @@ declare module '../app/router/types' {
   }
 }
 
-/** Reiter-Wurzel: der Hub, darunter die Abschnitte des Platzes `apply`. */
+/** Reiter-Wurzel: der Hub; die Abschnitte des Platzes `apply` (Lesen und Sprechen) stehen oben unter dem Titel (P2, Vorschau H13). */
 function ApplyRoot() {
-  return (
-    <>
-      <ApplyHub />
-      <HubSections places={placesOf('apply')} />
-    </>
-  );
+  return <ApplyHub lead={<HubSections places={placesOf('apply')} />} />;
 }
 
 export const anwenden = defineArea({

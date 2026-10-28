@@ -5,7 +5,7 @@
    < 600 px    Handy: Leiste unten (5 Reiter), Bühne mit 1rem Rand, keine Kontextspalte.
    600–1023    Schiene links (nur Symbole), Bühne ≤ 45rem.
    1024–1279   Schiene, Bühne ≤ 42.5rem, Kontextspalte 20rem nur, wenn etwas offen ist.
-   ≥ 1280      Seitenleiste 14.5rem, Kontextspalte immer reserviert (22.5rem, ab 1440 24rem).
+   ≥ 1280      Seitenleiste 14.5rem, Kontextspalte immer reserviert (21rem, damit die Bühne bei 1280 ≥ 640 px bleibt; ab 1440 24rem).
    ≥ 1920      Schrift 112.5 % (index.css), Bühne 50rem, Spalte 27.5rem; ≥ 2400 Schrift 125 %, Bühne 54rem, Spalte 29rem
                (A4: höchstens ein Viertel der Breite bleibt leer). */
 
@@ -105,12 +105,24 @@
 .lx-nav-item {
   isolation: isolate;
 }
+/* Aktiver Reiter in Iris (alle Reiter gleich, nie nur Farbe: Pille + Schriftgewicht). */
+.lx-nav-pill-item,
+.lx-nav-pill-icon {
+  position: absolute;
+  z-index: -1;
+  background: var(--lx-accent-soft);
+  border-radius: var(--radius-control);
+}
 .lx-nav-pill-icon {
   inset: -0.125rem -0.875rem;
 }
 .lx-nav-pill-item {
   display: none;
-  border-radius: var(--radius-control);
+  inset: 0;
+}
+.lx-nav-item[aria-current='page'],
+.lx-nav-item[aria-current='page'] .lx-nav-icon {
+  color: var(--lx-accent-text);
 }
 @media (min-width: 600px) {
   .lx-nav-pill-item {
@@ -286,8 +298,8 @@
   .lx-frame,
   .lx-frame[data-ctx] {
     --lx-stage-max: 45rem;
-    --lx-ctx-w: 22.5rem;
-    --lx-ctx-gap: 1.5rem;
+    --lx-ctx-w: 21rem;
+    --lx-ctx-gap: 1.25rem;
     --lx-bar-right: calc(var(--lx-ctx-w) + var(--lx-dmain-pad));
   }
   .lx-frame[data-nav] {
@@ -351,7 +363,10 @@
     height: 2.75rem;
     border-radius: var(--radius-control);
     color: var(--lx-fg-muted);
-    transition: transform var(--lx-dur-fast) ease-out;
+    transition: color var(--lx-dur-fast) ease-out, background-color var(--lx-dur-fast) ease-out;
+  }
+  .lx-nav-toggle > svg {
+    transition: transform 200ms ease-out;
   }
   .lx-nav-toggle:hover {
     color: var(--lx-fg);
@@ -364,6 +379,30 @@
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
+    animation: lx-shell-fade-in 200ms ease-out both;
+  }
+  /* Ein aktiver Unterpunkt ist DIE aktive Zeile: „Praxis“ darüber zeigt dann keine Pille und keine Akzentfarbe (nie zwei aktive Zeilen). */
+  .lx-nav-group:has(.lx-nav-sub[aria-current='page']) > .lx-nav-row > .lx-nav-item {
+    font-weight: 500;
+    color: var(--lx-fg);
+  }
+  .lx-nav-group:has(.lx-nav-sub[aria-current='page']) > .lx-nav-row > .lx-nav-item .lx-nav-icon {
+    color: var(--lx-fg);
+  }
+  .lx-nav-group:has(.lx-nav-sub[aria-current='page']) > .lx-nav-row .lx-nav-pill {
+    display: none;
+  }
+  .lx-nav-sub[aria-current='page'] {
+    background: var(--lx-accent-soft);
+  }
+  /* Abzeichen in der Seitenleiste am Zeilenende statt auf dem Symbol (verdeckt die Sonne nicht). */
+  .lx-nav-item > .lx-nav-icon {
+    position: static;
+  }
+  .lx-nav-item .lx-nav-badge {
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
   }
   .lx-nav-sub {
     padding-left: 2.85rem;
@@ -419,5 +458,46 @@
   }
   .lx-frame[data-wide]:not([data-ctx]) .lx-ctx {
     display: none;
+  }
+}
+
+/* „Lesen und Sprechen“ auf Praxis: ab 1280 px führt die Seitenleiste beide Einstiege (P2-Nachbesserung, nie doppelt).
+   Zeigt sonst kein Abschnitt oben etwas (z. B. „Weiterlesen“), fällt der ganze Kopfbereich weg, ohne Leerraum. */
+@media (min-width: 1280px) {
+  .lx-frame[data-nav] [data-section='practice-more'],
+  .lx-frame[data-nav] .lx-hub-lead:not(:has(> [data-testid='hub-sections'] > [data-section]:not([data-section='practice-more']):not(:empty))) {
+    display: none;
+  }
+}
+
+/* Unterpunkte und Inhalt der Kontextspalte blenden ruhig ein (Vorschau); bei reduzierter Bewegung oder Effekten „Aus“ sofort da. */
+@keyframes lx-shell-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lx-ctx-body,
+.lx-ctx-empty {
+  animation: lx-shell-fade-in 240ms ease-out both;
+}
+:root[data-fx='off'] :is(.lx-nav-subs, .lx-ctx-body, .lx-ctx-empty) {
+  animation: none;
+}
+:root[data-fx='off'] .lx-nav-toggle > svg {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-nav-subs,
+  .lx-ctx-body,
+  .lx-ctx-empty {
+    animation: none;
+  }
+  .lx-nav-toggle > svg {
+    transition: none;
   }
 }

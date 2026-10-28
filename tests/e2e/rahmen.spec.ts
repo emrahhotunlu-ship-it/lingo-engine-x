@@ -197,6 +197,9 @@ test('Praxis am Handy: Lesen und Sprechen hängen unter „Praxis“ (Hub-Zeilen
   await screen(page, 'today');
   await openTab(page, 'apply');
   await expect(page.getByTestId('practice-more')).toBeVisible();
+  // „Sprechen“ nur einmal auf Praxis (keine zweite Rollenspiel-Kachel), Lesen und Sprechen oben.
+  await expect(page.getByTestId('hub-speak')).toHaveCount(0);
+  expect((await boxOf(page, 'practice-more')).y).toBeLessThan(400);
   await page.getByTestId('hub-read').click();
   await screen(page, 'read');
   await expect(page.getByTestId('page-back')).toContainText('Praxis');
@@ -302,11 +305,17 @@ test('Seitenleiste ab 1280 px: Wortmarke, Praxis aufklappbar (Sprechen, Hören, 
   await screen(page, 'read');
   await expect(page.getByTestId('side-read')).toHaveAttribute('aria-current', 'page');
   await expect(page.getByTestId('tab-apply')).toHaveAttribute('aria-current', 'page');
+  // Nie zwei aktive Zeilen: ist ein Unterpunkt aktiv, trägt „Praxis“ keine Pille (P2-Nachbesserung K2).
+  await expect(page.getByTestId('tab-apply').locator('.lx-nav-pill-item')).toBeHidden();
+  await expect(page.getByTestId('side-speak')).not.toHaveAttribute('aria-current', 'page');
+  await expect(page.getByTestId('side-listen')).not.toHaveAttribute('aria-current', 'page');
   await page.getByTestId('side-speak').click();
   await screen(page, 'speak');
   await expect(page.getByTestId('side-speak')).toHaveAttribute('aria-current', 'page');
   await page.getByTestId('side-listen').click();
   await screen(page, 'apply');
+  // Die Hub-Zeilen „Lesen und Sprechen“ führt hier die Seitenleiste – auf Praxis stehen sie nicht doppelt.
+  await expect(page.getByTestId('practice-more')).toBeHidden();
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await expect(page.getByTestId('side-read')).toBeHidden();
@@ -343,6 +352,9 @@ for (const [width, height] of [
   test(`Claude bei ${width} px dockt in die Kontextspalte und verdeckt die Bühne nicht`, async ({ browser }) => {
     const { page, errors, close } = await at(browser, width, height, TRAINER);
     await startTrainer(page);
+    // Ab 1024 px bleiben Schiene/Seitenleiste auch in Übungen stehen („keine Leiste“ gilt nur für die Handy-Leiste unten).
+    await expect(page.getByTestId('tabbar')).toBeVisible();
+    expect(meets(await boxOf(page, 'tabbar'), await boxOf(page, 'stage'))).toBe(false);
     await page.getByTestId('open-companion').click();
     await expect(page.getByTestId('frame')).toHaveAttribute('data-ctx', '');
     await expect(page.getByTestId('context-column')).toHaveAttribute('data-kind', 'claude');
@@ -362,6 +374,16 @@ for (const [width, height] of [
     await close();
   });
 }
+
+test('Ohne KI (1440 px): der Platzhalter der Kontextspalte nennt Claude nicht, die Bühne ist bei 1280 px mindestens 640 px breit', async ({ browser }) => {
+  const { page, errors, close } = await at(browser, 1440, 900, { capabilities: { sample: false } });
+  await expect(page.getByTestId('context-empty')).toBeVisible();
+  await expect(page.getByTestId('context-empty')).not.toContainText('Claude');
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect.poll(async () => (await boxOf(page, 'stage')).width).toBeGreaterThanOrEqual(640);
+  expect(errors).toEqual([]);
+  await close();
+});
 
 test('Chat in der Spalte (1440 px) springt beim Lesen nicht nach unten', async ({ browser }) => {
   const { page, close } = await at(browser, 1440, 900, { sampleTickMs: 150 });

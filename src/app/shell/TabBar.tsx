@@ -10,7 +10,7 @@ import { markNavStart } from '../perf';
 import { useNav } from '../nav';
 import { badgeOf, type BadgeDef } from '../registry';
 import { openSettings } from '../sheets';
-import type { RouteName } from '../router/types';
+import type { Route, RouteName } from '../router/types';
 import { requestScrollTop } from './Layers';
 import { TABS, type TabDef, type TabId } from './tabs';
 
@@ -53,12 +53,13 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
       }}
       data-testid={`tab-${tab.id}`}
       data-tab={tab.id}
-      className="lx-nav-item dz-tab"
+      className="lx-nav-item"
+      title={t(tab.label)}
     >
       {/* Aktiver Reiter: Pille (nie nur Farbe), gleitet als EIN Element zum neuen Reiter (P54, `layoutId`). Handy: hinter dem Symbol; Schiene/Seitenleiste: hinter dem Eintrag. */}
-      {active && <TabPill id="tab-pill-d" className="dz-tab-pill lx-nav-pill-item" />}
-      <span className="lx-nav-icon dz-tab-icon">
-        {active && <TabPill id="tab-pill-m" className="dz-tab-pill lx-nav-pill-icon" />}
+      {active && <TabPill id="tab-pill-d" className="lx-nav-pill lx-nav-pill-item" />}
+      <span className="lx-nav-icon">
+        {active && <TabPill id="tab-pill-m" className="lx-nav-pill lx-nav-pill-icon" />}
         <Icon name={tab.icon} size={22} />
         {badge && <BadgeCount badge={badge} />}
       </span>
@@ -77,25 +78,34 @@ function atPracticeRoot(then: () => void): void {
 }
 
 const READ_ROUTES: readonly RouteName[] = ['read', 'readArticle', 'readCourse', 'readLesson'];
+const LISTEN_ROUTES: readonly RouteName[] = ['listenQ', 'listenLoop'];
+
+/** Welcher Unterpunkt gerade gilt – nur im Reiter „Praxis“, höchstens einer. */
+function currentSub(route: Route): Sub['id'] | null {
+  if (route.name === 'speak') return 'speak';
+  if (LISTEN_ROUTES.includes(route.name) || (route.name === 'drill' && route.kind === 'dictate')) return 'listen';
+  if (READ_ROUTES.includes(route.name)) return 'read';
+  return null;
+}
 
 type Sub = { id: 'speak' | 'listen' | 'read'; label: MessageKey; icon: IconName; on: boolean; run: () => void };
 
-/** Unterpunkte von „Praxis“ (nur Seitenleiste, aufgeklappt). */
-function PracticeSubs({ route }: { route: RouteName }) {
+/** Unterpunkte von „Praxis“ (nur Seitenleiste, aufgeklappt). `on` nur, solange der Reiter „Praxis“ offen ist. */
+function PracticeSubs({ current }: { current: Sub['id'] | null }) {
   const { t } = useT();
   const subs: Sub[] = [
-    { id: 'speak', label: 'shSpeak', icon: 'chat', on: route === 'speak', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'speak' })) },
+    { id: 'speak', label: 'shSpeak', icon: 'chat', on: current === 'speak', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'speak' })) },
     {
       id: 'listen',
       label: 'shListen',
       icon: 'headphones',
-      on: false,
+      on: current === 'listen',
       run: () =>
         atPracticeRoot(() => {
           window.requestAnimationFrame(() => document.getElementById('ap-listen')?.scrollIntoView({ block: 'start' }));
         }),
     },
-    { id: 'read', label: 'shRead', icon: 'book', on: READ_ROUTES.includes(route), run: () => atPracticeRoot(() => useNav.getState().go({ name: 'read' })) },
+    { id: 'read', label: 'shRead', icon: 'book', on: current === 'read', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'read' })) },
   ];
   return (
     <div className="lx-nav-subs" id="lx-nav-practice">
@@ -126,7 +136,7 @@ function ToolButton({ icon, label, onClick, testId }: { icon: IconName; label: s
 export function TabBar() {
   const { t } = useT();
   const tab = useNav((s) => s.tab);
-  const route = useNav((s) => s.route.name);
+  const route = useNav((s) => s.route);
   const ai = useAiAvailable();
   // „Praxis“ ist aufgeklappt, solange der Reiter offen ist – außer man hat es selbst zu- oder aufgeklappt.
   const [practiceOpen, setPracticeOpen] = useState<boolean | null>(null);
@@ -154,7 +164,7 @@ export function TabBar() {
                   <Icon name="chevronDown" size={16} />
                 </button>
               </div>
-              {expanded && <PracticeSubs route={route} />}
+              {expanded && <PracticeSubs current={tab === 'apply' ? currentSub(route) : null} />}
             </div>
           ) : (
             <TabButton key={d.id} tab={d} active={tab === d.id} />

@@ -1,4 +1,5 @@
 import { useEffect, useRef, type RefObject } from 'react';
+import { useAiAvailable } from '../../ai/scope';
 import { closeCompanion, useCompanion } from '../../features/companion/store';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
@@ -72,6 +73,8 @@ export function ContextColumn() {
   const presentation = useContextPresentation();
   const current = useContextColumn((s) => s.current);
   const docked = useClaudeDock(presentation === 'column');
+  // Ohne KI nennt der Platzhalter Claude nicht (es gibt ihn dann nicht).
+  const ai = useAiAvailable();
   useDockMetrics(ref, docked);
   const show = presentation === 'column' && current !== null && current.kind !== 'claude';
   return (
@@ -86,7 +89,7 @@ export function ContextColumn() {
         </div>
       ) : current === null ? (
         <p className="lx-ctx-empty text-sm text-subtle" data-testid="context-empty">
-          {t('shContextEmpty')}
+          {t(ai ? 'shContextEmpty' : 'shContextEmptyNoAi')}
         </p>
       ) : null}
     </aside>

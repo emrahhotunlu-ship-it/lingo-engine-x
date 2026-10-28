@@ -46,7 +46,7 @@
   box-shadow: var(--lx-shadow);
 }
 
-/* ------------------------------------------------------------------ Reiterleiste (EE B5): deckend, aktiver Reiter in Bereichsfarbe, gleitende Pille */
+/* ------------------------------------------------------------------ Reiterleiste (EE B5): deckend. Aktiver Reiter und Pille seit P2 S1-SHELL in Iris (shell.css `.lx-nav-pill`). */
 .dz-tabbar {
   background: var(--lx-surface-solid);
 }
@@ -56,33 +56,6 @@
     box-shadow: var(--lx-elev-2);
   }
 }
-.dz-tab {
-  --dz-tc: var(--lx-fg);
-}
-.dz-tab[data-tab='vocab'] {
-  --dz-tc: var(--lx-ch-cards);
-}
-.dz-tab[data-tab='learn'] {
-  --dz-tc: var(--lx-ch-grammar);
-}
-.dz-tab[data-tab='apply'] {
-  --dz-tc: var(--lx-cyan-text);
-}
-.dz-tab[aria-current='page'] .dz-tab-icon {
-  color: var(--dz-tc);
-}
-.dz-tab-pill {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--dz-tc) 16%, transparent);
-}
-:root[data-fx='full'] .dz-tab[aria-current='page'] .dz-tab-icon,
-:root[data-fx='calm'] .dz-tab[aria-current='page'] .dz-tab-icon {
-  animation: dz-pop 240ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
-}
-
 /* ------------------------------------------------------------------ Hauptknopf (EE B1): Lichtkante oben, in Wörtern/Grammatik ein Schein in der Bereichsfarbe */
 button.lx-btn-primary:not(:disabled) {
   box-shadow: none;

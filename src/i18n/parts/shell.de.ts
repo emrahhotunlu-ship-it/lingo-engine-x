@@ -15,6 +15,7 @@ export const shellDe = {
   shPracticeClose: 'Praxis zuklappen',
   shContext: 'Kontext',
   shContextEmpty: 'Hier erscheinen Claude, Wort-Details und Erklärungen, sobald du sie öffnest.',
+  shContextEmptyNoAi: 'Hier erscheinen Wort-Details und Erklärungen, sobald du sie öffnest.',
   shPracticeMore: 'Lesen und Sprechen',
   shReadSub: 'Artikel von heute und Kurse',
   shSpeakSub: 'Rollenspiel und Einwand-Training',

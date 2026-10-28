@@ -29,7 +29,7 @@ import { RootBoundary, RootNotice } from './Boundary';
 import { SheetHost } from './SheetHost';
 import { TabBar } from './TabBar';
 import { ContextColumn, ContextSheet, SentenceGuard } from './ContextHost';
-import { useContextColumn } from './contextColumn';
+import { useContextColumn, useContextPresentation } from './contextColumn';
 import { tabOfPlace, type Place } from './tabs';
 import { TopBar } from './TopBar';
 import { AmbientLight } from '../../engine/fx/AmbientLight';
@@ -114,8 +114,10 @@ function Frame() {
     return () => root.removeAttribute('data-lx-tab');
   }, [activeTab]);
   const tabRoot = !system && kind === 'tab';
-  // In Übungen keine Leiste (Plan §6.2); beim Laden steht sie schon da (Start-Bild, U2).
-  const showNav = (!system || screen === 'loading') && !exercise;
+  // In Übungen keine Handy-Leiste (Plan §6.2); ab 1024 px bleiben Schiene/Seitenleiste auch in Übungen stehen (P2-Nachbesserung).
+  // Beim Laden steht sie schon da (Start-Bild, U2).
+  const wide = useContextPresentation() === 'column';
+  const showNav = (!system || screen === 'loading') && (!exercise || wide);
   const ctxOpen = useContextColumn((s) => s.current !== null);
 
   return (
@@ -147,7 +149,7 @@ function Frame() {
                 <SettingsButton />
               </div>
             )}
-            <main id="main" className={`flex-1 ${showNav ? 'lx-main-nav' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
+            <main id="main" className={`flex-1 ${showNav && !exercise ? 'lx-main-nav' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
               {system ? <SystemView screen={screen} /> : <Layers />}
             </main>
             <div id={ACTIONBAR_HOST} />

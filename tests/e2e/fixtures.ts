@@ -212,7 +212,10 @@ export async function openSettings(page: Page): Promise<void> {
 export async function openRead(page: Page): Promise<void> {
   if (await page.locator('[data-screen="read"]').isVisible()) return;
   await openTab(page, 'apply');
-  await page.getByTestId('hub-read').click();
+  // Ab 1280 px führt die Seitenleiste „Lesen“ (die Hub-Zeile ist dort ausgeblendet), darunter die Zeile auf Praxis.
+  const side = page.getByTestId('side-read');
+  if (await side.isVisible()) await side.click();
+  else await page.getByTestId('hub-read').click();
   await screen(page, 'read');
 }
 

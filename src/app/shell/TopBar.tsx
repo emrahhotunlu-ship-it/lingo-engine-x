@@ -1,9 +1,6 @@
-import { useAiAvailable } from '../../ai/scope';
-import { openCompanion } from '../../features/companion/store';
 import { useT } from '../../i18n';
-import { IconButton } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
-import { SettingsButton } from '../../features/system/Chrome';
+import { AskButton, SettingsButton } from '../../features/system/Chrome';
 import { useNav } from '../nav';
 import { screenOf } from '../registry';
 import { openSheet } from '../sheets';
@@ -32,14 +29,6 @@ export function ProfileButton() {
       </span>
     </button>
   );
-}
-
-/** „Fragen“: das eine Claude-Symbol im Kopf (Test-ID `open-companion` bleibt). Ohne KI unsichtbar. */
-export function AskButton() {
-  const { t } = useT();
-  const ai = useAiAvailable();
-  if (!ai) return null;
-  return <IconButton icon="sparkle" label={t('shAsk')} onClick={() => openCompanion()} className="text-accent-text hover:text-accent-text" data-testid="open-companion" data-ai="" />;
 }
 
 /** Kopf auf jeder Reiter-Wurzel (einmal im Rahmen, nicht je Bildschirm – eindeutige Test-IDs). */
