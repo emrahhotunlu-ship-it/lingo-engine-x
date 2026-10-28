@@ -62,7 +62,7 @@ export type ShellStatus = {
   noInfo?: boolean;
 };
 export type ShellAction = { /** Pfeil auch ohne Ergebnis (z. B. „Weiter“ mitten in der Aufgabe). */ arrow?: boolean; label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
-export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound'; label: string; onClick: () => void; testId: string; disabled?: boolean; /** Standard `quiet` (leise Knopfform, U3); umrandeter Glasknopf für die Einführungskarte „Kenne ich“. */ variant?: 'quiet' | 'ghost' | 'secondary' };
+export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound' | 'phone'; label: string; onClick: () => void; testId: string; disabled?: boolean; /** Standard `quiet` (leise Knopfform, U3); umrandeter Glasknopf für die Einführungskarte „Kenne ich“. */ variant?: 'quiet' | 'ghost' | 'secondary' };
 export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;

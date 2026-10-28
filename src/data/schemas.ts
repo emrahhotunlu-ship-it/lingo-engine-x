@@ -119,6 +119,12 @@ export const archiveSchema = z.looseObject({
   pflicht: z.record(z.string(), z.unknown()).nullish(),
 });
 
+// S1-DIKTAT (Relaunch Stufe 1 P7, docs/relaunch/stufe1-plan.md §7.2): Ergebnis der Laptop-Diktat-Probe je Betriebssystem.
+// `app/profile.dk = { v: 1, mac?: { ok, t, sig }, win?: { ok, t, sig } }`, kleiner als 200 Byte; `sig` = Betriebssystem und Browser
+// („macos-chrome“), nie eine Gerätekennung. Im Profil tolerant gelesen (ein kaputtes `dk` sperrt nie das Profil), streng über `dkSchema`.
+const dkOsSchema = z.looseObject({ ok: z.boolean(), t: z.number(), sig: z.string().regex(/^[a-z-]{1,24}$/) });
+export const dkSchema = z.looseObject({ v: z.literal(1), mac: dkOsSchema.optional(), win: dkOsSchema.optional() });
+
 export const profileSchema = z.looseObject({
   name: str,
   created: str,
@@ -191,6 +197,7 @@ export const profileSchema = z.looseObject({
   ms: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Lernplattform 3.0 P50, nur ergänzend): Wochenfokus `[{w: 'JJJJ-Www', a: Musterkennung oder '' (die App entscheidet), t}]`, höchstens 12, nie gelöscht. */
   wf: z.array(z.looseObject({ w: str, a: str, t: num })).nullish(),
+  dk: loose, // S1-DIKTAT: Diktat-Probe (streng: dkSchema)
 });
 
 export const courseSchema = z.looseObject({
