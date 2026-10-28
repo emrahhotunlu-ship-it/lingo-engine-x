@@ -130,7 +130,7 @@ let waiting: { day: string; promise: Promise<SyncResult>; end: (r: SyncResult) =
 /**
  * `ensureDay` (und die Kapitelwahl, deren neuer Plan erst gespeichert zurückkommen muss): Tagesprotokoll oder gespeicherter Plan können noch
  * unterwegs sein. Dann wartet der Anlass auf GENAU diesen ersten Stand und schreibt einmal. Das ist ein einmaliger, AUFGESCHOBENER Anlass
- * (stufe1-plan §4.3, Ausnahme), kein snapshot-getriebenes Schreiben: Der Wartende entsteht nur aus `ensureDay` bzw. der Nutzeraktion,
+ * (stufe1-plan §4.3, Ausnahme): Ausgelöst wird das eine Schreiben vom ersten passenden Snapshot, aber der Wartende entsteht nur aus `ensureDay` bzw. der Nutzeraktion,
  * höchstens einer je Lerntag, schreibt höchstens einmal und meldet sich danach ab; spätere Snapshots lösen nichts mehr aus. Kein Zeitgeber,
  * keine Schleife. Wechselt inzwischen der Lerntag, endet er mit `'skipped'` (der neue Tag bekommt seinen eigenen Wartenden).
  */
