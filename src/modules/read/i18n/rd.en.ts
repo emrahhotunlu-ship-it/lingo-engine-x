@@ -1,8 +1,8 @@
 import { rdcEn } from './rdCourses.en';
 // UI texts of the Read module, English (US spelling). Keys must match rd.de.ts exactly (tests/unit/read/i18n.test.ts).
 export const rdEn = {
-  rdTab: 'Read',
-  rdTitle: 'Read',
+  rdTab: 'Reading',
+  rdTitle: 'Reading',
   rdByClaude: 'Written by Claude · current news with sources, your own articles from general knowledge',
   rdRoutineTag: 'Current news · Source: {source}',
   rdToday: 'Today',

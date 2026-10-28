@@ -189,7 +189,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await bootRead(page, { migrated: true, now: EVENING_19, lang: 'en' });
     await screen(page, 'today');
     await openRead(page);
-    await expect(page.getByTestId('read-title')).toHaveText('Read');
+    await expect(page.getByTestId('read-title')).toHaveText('Reading');
     await expect(page.getByTestId('read-primary')).toHaveText('Keep reading');
     await expect(page.getByTestId('read-fetch')).toHaveText('Get today’s articles');
     await expect(page.getByTestId('read-week')).toContainText('This week: 1 article · 8 min');
