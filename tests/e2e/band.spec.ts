@@ -30,7 +30,12 @@ async function longest(page: Page, choice: 'has signed off' | 'will sign off') {
   const item = page.getByTestId('gr-item');
   await expect(item.getByTestId('c1x-err')).toBeVisible();
   await item.getByTestId('spot-word').nth(5).click();
-  await item.getByTestId('chip').filter({ hasText: choice }).click();
+  // Handy: Wahl-Chips; Laptop (Feinzeiger): die Korrektur wird getippt.
+  const chip = item.getByTestId('chip').filter({ hasText: choice });
+  const field = item.getByRole('textbox', { name: 'Korrektur' });
+  await expect(chip.or(field).first()).toBeVisible();
+  if (await chip.isVisible()) await chip.click();
+  else await field.fill(choice);
   await page.getByTestId('check').click();
   await expect(item.getByTestId('result')).toBeVisible();
   // Einblenden abwarten (220 ms), dann messen.
@@ -159,3 +164,35 @@ test.describe('Handy 390×700 (vorläufige Probe)', () => {
     expect(m.band + m.bar).toBeLessThanOrEqual(Math.round(m.vh * 0.45) + 1);
   });
 });
+
+// Ab 1024 px gibt es die Kontextspalte des Rahmens (P2, `#lx-context`): „Mehr“ öffnet dort statt im Blatt (Hauptsitzung 28.10.2026).
+for (const v of [
+  { label: 'Laptop 1440 (geteilt)', viewport: { width: 1440, height: 900 }, hasTouch: false },
+  { label: 'Tablet quer 1024 mit Touch (Band)', viewport: { width: 1024, height: 768 }, hasTouch: true },
+] as const) {
+  test.describe(v.label, () => {
+    test.use({ viewport: v.viewport, hasTouch: v.hasTouch });
+
+    test('„Mehr“ öffnet die Kontextspalte, kein Blatt; ✕ schließt sie, die Übung bleibt', async ({ page }) => {
+      const { errors } = await longest(page, 'will sign off');
+      // Unter 1280 px erscheint die Spalte erst, wenn etwas darin offen ist (P2).
+      const col = page.getByTestId('context-column');
+      const more = page.getByTestId('result').getByTestId('explanation-more');
+      await expect(more).toBeVisible();
+      await more.click();
+      await expect(col).toHaveAttribute('data-kind', 'more');
+      await expect(page.getByTestId('context-more')).toBeVisible();
+      await expect(page.getByTestId('band-more')).toHaveCount(0);
+      await expect(page.getByRole('dialog')).toHaveCount(0);
+      // Die Spalte sitzt rechts neben der Bühne, nicht darüber.
+      const [stage, aside] = await Promise.all([page.getByTestId('stage').boundingBox(), col.boundingBox()]);
+      expect((aside?.x ?? 0) + 1).toBeGreaterThanOrEqual((stage?.x ?? 0) + (stage?.width ?? 0));
+      await expect(more).toHaveAttribute('aria-expanded', 'true');
+      await page.getByTestId('context-close').click();
+      await expect(page.getByTestId('context-more')).toHaveCount(0);
+      await expect(more).toHaveAttribute('aria-expanded', 'false');
+      await expect(page.getByTestId('result')).toBeVisible();
+      expect(errors).toEqual([]);
+    });
+  });
+}

@@ -1,20 +1,26 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { useAiAvailable } from '../../ai/scope';
 import { useFxLevel } from '../../engine/fx/level';
-import { useT } from '../../i18n';
+import { openCompanion } from '../../features/companion/store';
+import { useT, type MessageKey } from '../../i18n';
+import { Icon, type IconName } from '../../ui/Icon';
 import { SPRINGS } from '../../ui/motion';
-import { Icon } from '../../ui/Icon';
 import { markNavStart } from '../perf';
 import { useNav } from '../nav';
 import { badgeOf, type BadgeDef } from '../registry';
+import { openSettings } from '../sheets';
+import type { Route, RouteName } from '../router/types';
 import { requestScrollTop } from './Layers';
 import { TABS, type TabDef, type TabId } from './tabs';
 
-// Reiterleiste aus den Daten in `tabs.ts` (docs/neubau/architektur.md §2.4, Prototyp v1 `.tabbar`):
-// am Handy unten fest, halbdurchsichtig mit Unschärfe; aktiver Reiter in Akzentfarbe, fett und mit
-// Pille (nie nur Farbe). Abzeichen je Reiter liefert der Bereich, der es angemeldet hat. Tippen auf
-// den aktiven Reiter führt zur Wurzel und nach oben (N01).
-// Sechs Reiter am Handy (Lesen kam am 13.10.2026 dazu; gemessen bei 360/390/412 px, Pille unter 400 px schmaler, damit „Grammatik“ und „Anwenden“ Luft behalten): Breite nach Inhalt (`flex-auto`) statt gleich breit, sonst passt „Fortschritt“
-// (längste Beschriftung) bei 390 px nicht einzeilig neben „Wortschatz“.
+// Navigation des Rahmens (Relaunch Stufe 1, P2 S1-SHELL, docs/relaunch/stufe1-plan.md §6.2/§6.3, Vorschau `.tabbar`/`.side`):
+// EIN Baustein für alle Breiten, die Darstellung macht `styles/parts/shell.css`:
+// - Handy (< 600 px): Leiste unten, fünf gleich breite Reiter (Symbol + Beschriftung), in Übungen ausgeblendet.
+// - Schiene (600–1279 px): schmale Spalte links, nur Symbole (Beschriftung bleibt für Screenreader).
+// - Seitenleiste (ab 1280 px): Wortmarke, fünf Reiter, „Praxis“ aufklappbar (Sprechen, Hören, Lesen),
+//   unten Claude, Übersetzer und Einstellungen.
+// Abzeichen je Reiter liefert der Bereich, der es angemeldet hat. Tippen auf den aktiven Reiter führt zur Wurzel und nach oben (N01).
 
 function BadgeCount({ badge }: { badge: BadgeDef }) {
   const { t } = useT();
@@ -22,7 +28,7 @@ function BadgeCount({ badge }: { badge: BadgeDef }) {
   const n = useCount();
   if (n <= 0) return null;
   return (
-    <span className="lx-tnum absolute -top-1 right-1 inline-flex min-w-4 items-center justify-center rounded-full bg-accent px-1 text-2xs leading-4 font-semibold text-accent-fg md:-top-2 md:-right-1.5" data-testid="tab-badge" aria-label={t('tabOpen', { n })}>
+    <span className="lx-nav-badge lx-tnum" data-testid="tab-badge" aria-label={t('tabOpen', { n })}>
       {n}
     </span>
   );
@@ -47,36 +53,129 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
       }}
       data-testid={`tab-${tab.id}`}
       data-tab={tab.id}
-      className={`dz-tab relative isolate flex min-h-12 min-w-0 flex-auto flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-0.5 pt-1.5 pb-1 text-2xs transition-colors md:min-h-11 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-fg' : 'font-medium text-subtle hover:text-fg'}`}
+      className="lx-nav-item"
+      title={t(tab.label)}
     >
-      {/* Aktiver Reiter: Symbol auf heller Pille + fette Schrift (nicht nur Farbe). */}
-      {/* Design-Lead: Pille in der Bereichsfarbe hinter dem aktiven Reiter, das Symbol springt kurz auf (Erlebnis-Engine B5). P54: die Pille gleitet
-          als EIN gemeinsames Element zum neuen Reiter (`layoutId`, Feder `snap`; leistung.md §4 Nr. 8 erlaubt `layoutId` für Einzelelemente). */}
-      {active && <TabPill id="tab-pill-d" className="dz-tab-pill hidden md:block" />}
-      <span className={`relative isolate inline-flex rounded-full px-2 py-0.5 transition-colors duration-150 min-[400px]:px-3.5 md:py-0 md:pr-2 md:pl-0 `}>
-        {active && <TabPill id="tab-pill-m" className="dz-tab-pill md:hidden" />}
-        <span className="dz-tab-icon inline-flex">
-          <Icon name={tab.icon} size={24} />
-        </span>
+      {/* Aktiver Reiter: Pille (nie nur Farbe), gleitet als EIN Element zum neuen Reiter (P54, `layoutId`). Handy: hinter dem Symbol; Schiene/Seitenleiste: hinter dem Eintrag. */}
+      {active && <TabPill id="tab-pill-d" className="lx-nav-pill lx-nav-pill-item" />}
+      <span className="lx-nav-icon">
+        {active && <TabPill id="tab-pill-m" className="lx-nav-pill lx-nav-pill-icon" />}
+        <Icon name={tab.icon} size={22} />
         {badge && <BadgeCount badge={badge} />}
       </span>
-      <span className="whitespace-nowrap">{t(tab.label)}</span>
+      <span className="lx-nav-label">{t(tab.label)}</span>
     </button>
   );
 }
 
+/** Praxis-Wurzel herstellen (Reiter „Praxis“, Stapel nur die Wurzel), dann `then` ausführen. */
+function atPracticeRoot(then: () => void): void {
+  markNavStart();
+  const s = useNav.getState();
+  if (s.tab !== 'apply' || s.overlay) s.switchTab('apply');
+  if (useNav.getState().stacks.apply.length > 1) useNav.getState().switchTab('apply');
+  then();
+}
+
+const READ_ROUTES: readonly RouteName[] = ['read', 'readArticle', 'readCourse', 'readLesson'];
+const LISTEN_ROUTES: readonly RouteName[] = ['listenQ', 'listenLoop'];
+
+/** Welcher Unterpunkt gerade gilt – nur im Reiter „Praxis“, höchstens einer. */
+function currentSub(route: Route): Sub['id'] | null {
+  if (route.name === 'speak') return 'speak';
+  if (LISTEN_ROUTES.includes(route.name) || (route.name === 'drill' && route.kind === 'dictate')) return 'listen';
+  if (READ_ROUTES.includes(route.name)) return 'read';
+  return null;
+}
+
+type Sub = { id: 'speak' | 'listen' | 'read'; label: MessageKey; icon: IconName; on: boolean; run: () => void };
+
+/** Unterpunkte von „Praxis“ (nur Seitenleiste, aufgeklappt). `on` nur, solange der Reiter „Praxis“ offen ist. */
+function PracticeSubs({ current }: { current: Sub['id'] | null }) {
+  const { t } = useT();
+  const subs: Sub[] = [
+    { id: 'speak', label: 'shSpeak', icon: 'chat', on: current === 'speak', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'speak' })) },
+    {
+      id: 'listen',
+      label: 'shListen',
+      icon: 'headphones',
+      on: current === 'listen',
+      run: () =>
+        atPracticeRoot(() => {
+          window.requestAnimationFrame(() => document.getElementById('ap-listen')?.scrollIntoView({ block: 'start' }));
+        }),
+    },
+    { id: 'read', label: 'shRead', icon: 'book', on: current === 'read', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'read' })) },
+  ];
+  return (
+    <div className="lx-nav-subs" id="lx-nav-practice">
+      {subs.map((s) => (
+        <button key={s.id} type="button" className="lx-nav-item lx-nav-sub" aria-current={s.on ? 'page' : undefined} onClick={s.run} data-testid={`side-${s.id}`}>
+          <span className="lx-nav-icon">
+            <Icon name={s.icon} size={18} />
+          </span>
+          <span className="lx-nav-label">{t(s.label)}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ToolButton({ icon, label, onClick, testId }: { icon: IconName; label: string; onClick: () => void; testId: string }) {
+  return (
+    <button type="button" className="lx-nav-item lx-nav-tool" onClick={onClick} data-testid={testId} title={label}>
+      <span className="lx-nav-icon">
+        <Icon name={icon} size={20} />
+      </span>
+      <span className="lx-nav-label">{label}</span>
+    </button>
+  );
+}
+
+/** Die Navigation des Rahmens (Test-ID `tabbar` bleibt für alle Breiten). */
 export function TabBar() {
   const { t } = useT();
   const tab = useNav((s) => s.tab);
+  const route = useNav((s) => s.route);
+  const ai = useAiAvailable();
+  // „Praxis“ ist aufgeklappt, solange der Reiter offen ist – außer man hat es selbst zu- oder aufgeklappt.
+  const [practiceOpen, setPracticeOpen] = useState<boolean | null>(null);
+  const expanded = practiceOpen ?? tab === 'apply';
   return (
-    <nav
-      aria-label={t('navLabel')}
-      className="dz-tabbar fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 border-t border-line px-1.5 pt-0.5 pb-[max(env(safe-area-inset-bottom),0.375rem)] md:sticky md:top-0 md:bottom-auto md:mx-auto md:mt-3 md:w-fit md:gap-1 md:rounded-full md:border md:px-1.5 md:py-1.5"
-      data-testid="tabbar"
-    >
-      {TABS.map((d) => (
-        <TabButton key={d.id} tab={d} active={tab === d.id} />
-      ))}
+    <nav aria-label={t('shNavLabel')} className="lx-nav dz-tabbar" data-testid="tabbar">
+      <div className="lx-nav-mark" aria-hidden="true">
+        {t('shWordmark')}
+      </div>
+      <div className="lx-nav-tabs">
+        {TABS.map((d) =>
+          d.id === 'apply' ? (
+            <div key={d.id} className="lx-nav-group">
+              <div className="lx-nav-row">
+                <TabButton tab={d} active={tab === d.id} />
+                <button
+                  type="button"
+                  className="lx-nav-toggle"
+                  aria-expanded={expanded}
+                  aria-controls="lx-nav-practice"
+                  aria-label={expanded ? t('shPracticeClose') : t('shPracticeOpen')}
+                  onClick={() => setPracticeOpen(!expanded)}
+                  data-testid="side-practice-toggle"
+                >
+                  <Icon name="chevronDown" size={16} />
+                </button>
+              </div>
+              {expanded && <PracticeSubs current={tab === 'apply' ? currentSub(route) : null} />}
+            </div>
+          ) : (
+            <TabButton key={d.id} tab={d} active={tab === d.id} />
+          ),
+        )}
+      </div>
+      <div className="lx-nav-tools">
+        {ai && <ToolButton icon="sparkle" label={t('shClaude')} onClick={() => openCompanion({ tab: 'chat' })} testId="side-claude" />}
+        {ai && <ToolButton icon="translate" label={t('shTranslator')} onClick={() => openCompanion({ tab: 'translate' })} testId="side-translate" />}
+        <ToolButton icon="gear" label={t('shSettings')} onClick={openSettings} testId="side-settings" />
+      </div>
     </nav>
   );
 }

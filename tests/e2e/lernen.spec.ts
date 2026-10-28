@@ -264,7 +264,8 @@ test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort
   await openApplyFolds(page);
   await expect(page.getByTestId('hub-drill-cloze')).toBeVisible();
   await expect(page.getByTestId('hub-drill-order')).toBeVisible();
-  await expect(page.getByTestId('hub-speak')).toBeVisible();
+  // „Sprechen“ steht einmal auf Praxis (P2): als Zeile oben, ab 1280 px in der Seitenleiste.
+  await expect(page.getByTestId('hub-speak-page').or(page.getByTestId('side-speak')).filter({ visible: true })).toHaveCount(1);
   // Wort-und-Regel-Übungen (Kollokationen, Umformung, Wortbildung …) stehen seit „Go Kombi“ hier.
   for (const id of ['training-colloc', 'training-transform', 'training-wordform']) await expect(page.getByTestId(id)).toBeVisible();
   await openTab(page, 'learn');

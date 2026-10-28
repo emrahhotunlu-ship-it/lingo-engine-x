@@ -2,11 +2,18 @@ import { expect, test } from '@playwright/test';
 import { bootAt } from './fixtures';
 import { answerGrammar, grammarKey, nextItem, shownPrompt, skipMiniLesson } from './learnHelpers';
 
-// Tutor-Engine (S3, Rang 3) – Mini-Lektion statt Abfrage: zweimal dieselbe Ursache (Formfehler „use to“) am selben Muster (`used to`)
+// Tutor-Engine (S3, Rang 3) – Mini-Lektion statt Abfrage: zweimal dieselbe Ursache (Formfehler „use to“ / „used to“) am selben Muster (`used to`)
 // → die zweite Rückmeldung ist eine kurze Lektion (Ziel, deine Antwort mit Grund, Regel, Beispiel) mit dem Untertitel „Abfragen hilft hier gerade nicht“.
 // Handy (390) und Desktop (1440); mit `UX_OUT` legt der Test Bilder für die UX-Prüfung ab.
 
 const solve = grammarKey();
+/**
+ * Der Formfehler aus der Lösung: „used to“ → „use to“ und umgekehrt („didn’t use to“ → „didn’t used to“). Welche Muster die Runde stellt (`ut.used-to`,
+ * `ut.get-used-to`, `ut.be-used-to`, `ut.did-use-to` …), mischt der Aufgabenvorrat; er wächst mit den Inhalten. Deshalb zählt jede Aufgabe mit
+ * Eingabe, deren Lösung use/used to enthält – nicht nur die mit „used to“ (sonst fehlt dem zweiten Fehler am selben Muster oft die Aufgabe).
+ */
+const flip = (sol: string): string | null => (/\bused to\b/i.test(sol) ? sol.replace(/\bused to\b/i, 'use to') : /\buse to\b/i.test(sol) ? sol.replace(/\buse to\b/i, 'used to') : null);
+
 const begun = (id: string) => ({ id, p: 0.5, n: 14, c: 10, last: Date.parse('2026-09-18T10:00:00+02:00'), hist: [{ d: '2026-09-10', p: 0.4 }], recent: [1, 1, 1], seen: [], seenText: [], errors: [] });
 
 for (const vp of [
@@ -24,9 +31,10 @@ for (const vp of [
       await expect(item).toBeVisible();
       const type = (await item.getAttribute('data-type')) ?? '';
       const sol = solve(await shownPrompt(page));
-      const typed = type !== 'mc' && type !== 'meaning' && type !== 'find' && (await item.getByTestId('correct-input').count()) === 0;
-      if (typed && sol && /\bused to\b/i.test(sol)) {
-        await answerGrammar(page, solve, { given: sol.replace(/\bused to\b/i, 'use to') });
+      const typed = type !== 'mc' && type !== 'meaning' && (await item.getByTestId('correct-input').count()) === 0;
+      const given = typed && sol ? flip(sol) : null;
+      if (given) {
+        await answerGrammar(page, solve, { given });
         wrongs++;
         if ((await item.getAttribute('data-lesson')) !== null) found = true;
       } else {

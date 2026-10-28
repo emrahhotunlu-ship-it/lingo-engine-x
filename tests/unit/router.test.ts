@@ -4,7 +4,7 @@ import { goBack, isForward, navigate } from '../../src/app/nav';
 import { installAreas, kindOf, screenOf, type AreaDef } from '../../src/app/registry';
 import { parseRoute, routeFromHash, routeToString } from '../../src/app/router/deeplink';
 import type { Route } from '../../src/app/router/types';
-import { TABS } from '../../src/app/shell/tabs';
+import { TABS, tabOfPlace } from '../../src/app/shell/tabs';
 
 // Neubau-Rahmen (docs/neubau/architektur.md §2.3): Reiter-Stapel, Übungsebene, Deep-Links.
 // Die Bereiche werden hier mit leeren Komponenten nachgebildet (keine React-Bildschirme im Test).
@@ -19,7 +19,7 @@ const AREAS: AreaDef[] = [
       speak: { kind: 'tab', component: Empty },
       learn: { kind: 'tab', component: Empty },
       apply: { kind: 'tab', component: Empty },
-      read: { kind: 'tab', component: Empty },
+      read: { kind: 'page', component: Empty },
       grammar: { kind: 'page', component: Empty },
       wissen: { kind: 'page', component: Empty },
       overview: { kind: 'tab', component: Empty, params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'history']).optional() }) },
@@ -37,8 +37,10 @@ const top = (c: Core): Route => c.overlay?.route ?? (c.stacks[c.tab].at(-1) as R
 beforeAll(() => installAreas(AREAS));
 
 describe('Register', () => {
-  it('sechs Reiter mit Wurzeln (Fokus Vokabeln und Grammatik, 04.10.2026; „Anwenden“ per „Go Anwenden“; „Lesen“ seit 13.10.2026; zuletzt „Fortschritt“ = Dein Stand); `learn` bleibt die Test-ID von „Grammatik“', () => {
-    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'read', 'progress']);
+  it('fünf Reiter mit Wurzeln (Relaunch Stufe 1 P2: Heute · Wörter · Grammatik · Praxis · Fortschritt); `learn` bleibt die Test-ID von „Grammatik“, `apply` die von „Praxis“; Lesen und Sprechen hängen an Praxis', () => {
+    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'progress']);
+    expect(tabOfPlace('read')).toBe('apply');
+    expect(tabOfPlace('speak')).toBe('apply');
     expect(TABS.find((t) => t.id === 'progress')?.root.name).toBe('overview');
   });
 

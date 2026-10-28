@@ -134,7 +134,8 @@ function CompanionOverlay() {
     };
   }, []);
 
-  // Leisten messen: bei Größen- und Seitenwechsel sowie wenn die Aktionsleiste erscheint oder verschwindet (`html[data-actionbar]`).
+  // Leisten messen: bei Größen- und Seitenwechsel, wenn die Aktionsleiste erscheint oder verschwindet (`html[data-actionbar]`)
+  // und wenn das Fenster in die Kontextspalte dockt oder sie freigibt (`html[data-lx-dock]`).
   useEffect(() => {
     let raf = 0;
     const measure = () => {
@@ -154,7 +155,8 @@ function CompanionOverlay() {
     };
     later();
     const obs = new MutationObserver(later);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-actionbar', 'data-theme'] });
+    // `data-lx-dock`: Andocken in die Kontextspalte und Lösen davon ändern die Breite der Aktionsleiste (app/shell/ContextHost).
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-actionbar', 'data-theme', 'data-lx-dock'] });
     const host = document.getElementById('lx-actionbar-host');
     if (host) obs.observe(host, { childList: true, subtree: true });
     window.addEventListener('resize', later);

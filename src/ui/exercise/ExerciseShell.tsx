@@ -454,6 +454,13 @@ export function ExerciseShell(props: ExerciseShellProps) {
       </>
     );
     const sheetTutor = feedback.tutor && !tutorInBand ? <div data-slot="tutor">{feedback.tutor}</div> : null;
+    const sheetBody = (
+      <div className="flex flex-col gap-4">
+        <ResultBlocks plan={rememberOnly} area="trainer" depth={feedback.depth} testId="explanation-remember" />
+        {foldContent}
+        {sheetTutor}
+      </div>
+    );
     const sheetHas = !!(rememberOnly.why.length > 0 || rememberOnly.remember.length || rememberOnly.example || hasMore || sheetTutor);
     result = (
       <section key={resultKey} ref={resultRef} className="lx-band" data-testid="result" aria-label={t('exExplanationLabel')} data-verdict={feedback.verdict} data-band="">
@@ -477,7 +484,25 @@ export function ExerciseShell(props: ExerciseShellProps) {
           {(sheetHas || feedback.act || tutorInBand) && (
             <div className="lx-band-btns" data-slot="more">
               {sheetHas && (
-                <Button variant="quiet" onClick={() => setBandMoreOpen(true)} data-testid="explanation-more" aria-haspopup="dialog" aria-expanded={moreOpen}>
+                <Button
+                  variant="quiet"
+                  onClick={() => {
+                    // Ab 1024 px mit Kontextspalte (Rahmen P2) steht „Mehr“ in der Spalte statt im Blatt (Hauptsitzung 28.10.2026).
+                    if (presentation === 'column' && contextPortalTarget()) {
+                      if (ctxMore) {
+                        closeContext('more');
+                        return;
+                      }
+                      setCtxMore(true);
+                      openContext({ kind: 'more', title: t('bandMoreTitle'), node: sheetBody, onClose: () => setCtxMore(false) });
+                      return;
+                    }
+                    setBandMoreOpen(true);
+                  }}
+                  data-testid="explanation-more"
+                  aria-haspopup={presentation === 'column' ? undefined : 'dialog'}
+                  aria-expanded={moreOpen || ctxMore}
+                >
                   {t('bandMore')}
                 </Button>
               )}
@@ -497,11 +522,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             },
           }}
         >
-          <div className="flex flex-col gap-4">
-            <ResultBlocks plan={rememberOnly} area="trainer" depth={feedback.depth} testId="explanation-remember" />
-            {foldContent}
-            {sheetTutor}
-          </div>
+          {sheetBody}
         </BandSheet>
       </section>
     );

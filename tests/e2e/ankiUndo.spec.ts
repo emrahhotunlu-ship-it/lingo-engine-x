@@ -25,7 +25,8 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   // Befund 28.09. (Emrahs Kommentar): der Streifen deckte ✕, Übersetzer, Claude und Einstellungen
   // zu. Jetzt ersetzt er nur den Fortschrittsbalken, die Symbole bleiben immer erreichbar.
   await expect(page.getByTestId('trainer-close')).toBeVisible();
-  await expect(page.getByTestId('open-translate')).toBeVisible();
+  // Ab 1024 px steht der Übersetzer in der Seitenleiste, nicht doppelt in der Übungsleiste (ux N1).
+  await expect(page.getByTestId('open-translate').or(page.getByTestId('side-translate')).first()).toBeVisible();
   await expect(page.getByTestId('open-companion')).toBeVisible();
   // Relaunch P3: Einstellungen stehen in Übungen im Menü „…“ (kein Zahnrad in der Übungsleiste).
   await expect(page.getByTestId('exercise-bar').getByTestId('exercise-menu')).toBeVisible();

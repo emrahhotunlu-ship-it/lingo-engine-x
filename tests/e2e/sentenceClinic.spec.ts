@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openTab, screen, type BootOptions } from './fixtures';
+import { boot, layoutProblems, openSettings, openTab, screen, type BootOptions } from './fixtures';
 import { WED, WED_9, donePatch } from './c1CheckHelpers';
 import { dump } from './trainerHelpers';
 
@@ -306,7 +306,7 @@ test.describe('Laptop 1440 px', () => {
 
   test('Einstellungen: Abschnitt „Mein Arbeitsalltag“ (nur mit Schalter und Claude)', async ({ page }) => {
     await start(page);
-    await page.getByTestId('open-settings').first().click();
+    await openSettings(page);
     await expect(page.getByTestId('settings-work-profile')).toBeVisible();
   });
 });

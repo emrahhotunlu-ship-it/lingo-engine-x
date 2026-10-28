@@ -60,6 +60,8 @@ const paths = {
   user: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c1.5-4 4.5-6 8-6s6.5 2 8 6',
   chevronRight: 'M9 6l6 6-6 6',
   chevronLeft: 'M15 6l-6 6 6 6',
+  // „Fragen“ (Relaunch P2, Vorschau `ic('ask')`): Sprechblase mit Fragezeichen – unterscheidet sich vom Funkeln „Claude“
+  ask: 'M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v8a2.5 2.5 0 0 1-2.5 2.5H12l-4 3v-3h-.5A2.5 2.5 0 0 1 5 14.5zM10.2 8.8a1.9 1.9 0 1 1 2.6 1.8c-.5.2-.8.6-.8 1.1v.4M12 14.2v.01',
 } as const;
 
 export type IconName = keyof typeof paths;

@@ -20,31 +20,42 @@ async function openAndClose(page: Page, scope: string): Promise<void> {
   await expect(page.getByRole('dialog')).toHaveCount(0);
 }
 
-test('Einstellungen aus jeder Reiter-Seite und von einer Seite mit einem Tipp', async ({ page }) => {
+test('Einstellungen von jeder Reiter-Seite und von jeder Seite in höchstens zwei Tipps (Zahnrad auf „Fortschritt“)', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  // Seit 04.10.2026 vier Reiter (Lesen und Sprechen sind keine Reiter mehr).
-  for (const id of ['today', 'vocab', 'learn', 'progress'] as const) {
+  // Relaunch P2 S1-SHELL (stufe1-plan.md §6.3): im Kopf jeder Reiter-Wurzel EIN „Fragen“; das Zahnrad steht nur auf „Fortschritt“,
+  // von jedem anderen Reiter also zwei Tipps (Fortschritt → Zahnrad). Ab 600 px steht „Einstellungen“ zusätzlich in der Navigation.
+  for (const id of ['today', 'vocab', 'learn', 'apply'] as const) {
     await openTab(page, id);
-    // Kopf: Übersetzen · Claude · Zahnrad.
     const top = page.getByTestId('topbar');
-    await expect(top.getByTestId('open-translate')).toBeVisible();
     await expect(top.getByTestId('open-companion')).toBeVisible();
+    await expect(top.getByTestId('open-settings')).toHaveCount(0);
+    await page.getByTestId('tab-progress').click();
+    await screen(page, tabRoot('progress'));
     await openAndClose(page, 'topbar');
-    await screen(page, tabRoot(id));
+    await screen(page, tabRoot('progress'));
   }
-  // Sprechen als freiwilliges Extra (Seite über Heute): Zahnrad in der Seitenleiste.
+  // Seiten (Sprechen, Wochenbericht): Kopf „‹ Herkunft · Fragen“ ohne Zahnrad; die Einstellungen liegen zwei Tipps entfernt (Fortschritt → Zahnrad).
   await openSpeak(page);
-  await openAndClose(page, 'page-bar');
-  await screen(page, 'speak');
-  // Von einer Seite (nicht Reiter-Wurzel): der Wochenbericht aus dem Profil-Blatt.
-  await openTab(page, 'today');
+  await expect(page.getByTestId('page-bar').getByTestId('open-companion')).toBeVisible();
+  await expect(page.getByTestId('page-bar').getByTestId('open-settings')).toHaveCount(0);
+  await page.getByTestId('tab-progress').click();
+  await screen(page, tabRoot('progress'));
+  await openAndClose(page, 'topbar');
   await openProfile(page);
   await page.getByTestId('profile-weekly').click();
   await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
   await screen(page, 'weekly');
-  await openAndClose(page, 'page-bar');
-  await screen(page, 'weekly');
+  await expect(page.getByTestId('page-bar').getByTestId('open-settings')).toHaveCount(0);
+  await expect(page.getByTestId('page-bar').getByTestId('open-companion')).toBeVisible();
+  // Seite mit eigenem Kopf (ScreenHeader, z. B. die Wortliste): ebenfalls nur „Fragen“, kein Zahnrad, kein Übersetzer (P2-Nachbesserung).
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-all').click();
+  await screen(page, 'vocabList');
+  const head = page.locator('[data-screen="vocabList"] header').first();
+  await expect(head.getByTestId('open-companion')).toBeVisible();
+  await expect(head.getByTestId('open-settings')).toHaveCount(0);
+  await expect(head.getByTestId('open-translate')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

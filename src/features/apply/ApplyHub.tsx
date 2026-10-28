@@ -82,7 +82,8 @@ function Tile({ icon, channel, title, sub, meta, onClick, testId, featured }: { 
 // UX-Prüfung KLEIN: eine ruhige Liste je Abschnitt (eine Fläche, Trennlinien, neutrale Symbole) statt 13 bunter Kacheln.
 const GRID = 'lx-glass dz-list flex flex-col overflow-hidden rounded-[var(--radius-card)]';
 
-export function ApplyHub() {
+/** `lead`: Einstiege, die oben unter dem Titel stehen (P2: „Lesen und Sprechen“ des Bereichs Praxis, Vorschau H13). */
+export function ApplyHub({ lead }: { lead?: ReactNode } = {}) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -161,7 +162,7 @@ export function ApplyHub() {
   const startWf = (): void => startKind('wf', () => oldWordform?.run());
   const findErr: TileData | null = kindEnabled('err') ? { id: 'hub-find-err', icon: 'search', channel: 'grammar', title: t('hxApplyFindErr'), sub: t('hxApplyFindErrSub'), meta: touch, run: () => startKind('err', () => toast(t('hxApplyFindErrNone'))) } : null;
   const transform = kindEnabled('kwt') && oldTransform ? withMeta({ ...oldTransform, run: startKwt }, touch) : withMeta(oldTransform, laptop);
-  const speak: TileData = { id: 'hub-speak', icon: 'chat', channel: 'speak', title: t('apRoleplay'), sub: t('apRoleplaySub'), meta: profile === 'touch' ? t('hxApplySpeakPhone') : laptop, run: () => go({ name: 'speak' }) };
+  // „Sprechen“ steht nur einmal auf Praxis (P2, Kap. 15): als Zeile oben in `lead` (Bereich Praxis), keine eigene Kachel mehr.
   const repair: TileData | null = moreFix > 0 ? { id: 'hub-repair-round', icon: 'refresh', channel: 'grammar', title: t('hxApplyMoreFix', { n: moreFix }), sub: t('apRepairSub', { n: moreFix }), meta: touch, run: () => go({ name: 'repairRound' }) } : null;
 
   const list = (xs: Array<TileData | null>): TileData[] => xs.filter((x): x is TileData => x !== null);
@@ -173,7 +174,7 @@ export function ApplyHub() {
   const featured = phoneFirst[0];
   const phoneRest = phoneFirst.slice(1);
   const listenTiles = list([listenQ, loop]);
-  const laptopTiles = list([dictate, own, ...(kindEnabled('kwt') ? [] : [transform]), speak]);
+  const laptopTiles = list([dictate, own, ...(kindEnabled('kwt') ? [] : [transform])]);
   const more = list([cloze]);
 
   return (
@@ -181,6 +182,12 @@ export function ApplyHub() {
       <motion.div variants={item}>
         <TabTitle title={t('apTitle')} sub={t('apLead')} />
       </motion.div>
+
+      {lead && (
+        <motion.div variants={item} className="lx-hub-lead">
+          {lead}
+        </motion.div>
+      )}
 
       {profile === 'touch' ? (
         <>
@@ -199,11 +206,13 @@ export function ApplyHub() {
               <div className={GRID}>{render(listenTiles)}</div>
             </Section>
           )}
-          <motion.div variants={item}>
-            <Disclosure label={t('hxApplyLaptopFold', { n: laptopTiles.length })} testId="apply-laptop-fold">
-              <div className={GRID}>{render(laptopTiles)}</div>
-            </Disclosure>
-          </motion.div>
+          {laptopTiles.length > 0 && (
+            <motion.div variants={item}>
+              <Disclosure label={t('hxApplyLaptopFold', { n: laptopTiles.length })} testId="apply-laptop-fold">
+                <div className={GRID}>{render(laptopTiles)}</div>
+              </Disclosure>
+            </motion.div>
+          )}
         </>
       ) : (
         <>
@@ -212,9 +221,6 @@ export function ApplyHub() {
           </Section>
           <Section id="ap-build" title={t('apBuild')}>
             <div className={GRID}>{render(list([repair, wordPartner, order, ...ruleTiles, transform]))}</div>
-          </Section>
-          <Section id="ap-speak" title={t('apSpeak')}>
-            <div className={GRID}>{render([speak])}</div>
           </Section>
         </>
       )}

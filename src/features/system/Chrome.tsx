@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useAiAvailable } from '../../ai/scope';
+import { useContextPresentation } from '../../app/shell/contextColumn';
 import { useLayer } from '../../app/shell/layer';
 import { openSettings } from '../../app/sheets';
 import { useT } from '../../i18n';
@@ -12,7 +13,7 @@ import { openCompanion } from '../companion/store';
 // - Reiter-Wurzel: Kopf des Rahmens (`app/shell/TopBar`) mit Profil links, Übersetzen und Claude
 //   rechts. Die Titelzeile der Seite zeigt nur noch den Titel (und eigene Knöpfe) – `TitleActions`
 //   zeichnet in der Ebene `tab` kein zweites Übersetzen/Claude.
-// - Seite: rechts Übersetzen, Claude und das Zahnrad.
+// - Seite: rechts nur „Fragen“ (Relaunch P2 S1-SHELL; Übersetzer und Einstellungen in der Navigation bzw. auf „Fortschritt“).
 // - Übung: die gemeinsame Übungsleiste mit Übersetzen, Claude und Zahnrad.
 // Emrahs feste Vorgabe (CLAUDE.md A7, Paket 2; Fehlermeldung am iPhone 28.09.): Übersetzer, Claude
 // und Einstellungen auf jeder Seite und in jeder Übung mit einem Tipp. Die Einstellungen sind ein
@@ -50,8 +51,21 @@ export function SettingsButton() {
 }
 
 /**
- * Rechte Seite einer Titelzeile: eigene Knöpfe, dann Übersetzer, Claude und Zahnrad. Auf einer
- * Reiter-Wurzel stehen Übersetzer und Claude schon im Kopf des Rahmens – dort nur die eigenen Knöpfe.
+ * „Fragen“: das eine Claude-Symbol in Kopf und Seitenköpfen (Relaunch P2 S1-SHELL, stufe1-plan.md §6.3; Test-ID `open-companion`
+ * bleibt). Sprechblase mit Fragezeichen (Vorschau `ic('ask')`). Ohne KI unsichtbar. Liegt hier, damit `app/shell/TopBar` und die
+ * Seiten es ohne Kreis-Import teilen.
+ */
+export function AskButton() {
+  const { t } = useT();
+  const ai = useAiAvailable();
+  if (!ai) return null;
+  return <IconButton icon="ask" label={t('shAsk')} onClick={() => openCompanion()} className="text-accent-text hover:text-accent-text" data-testid="open-companion" data-ai="" />;
+}
+
+/**
+ * Rechte Seite einer Titelzeile: eigene Knöpfe, dann EIN „Fragen“ (Relaunch P2: Seitenköpfe ohne Übersetzer und Zahnrad –
+ * die stehen auf „Fortschritt“, in der Übungsleiste und ab 600 px in der Navigation). Auf einer Reiter-Wurzel steht „Fragen“
+ * schon im Kopf des Rahmens – dort nur die eigenen Knöpfe.
  */
 export function TitleActions({ children }: { children?: ReactNode }) {
   const { kind } = useLayer();
@@ -59,9 +73,7 @@ export function TitleActions({ children }: { children?: ReactNode }) {
   return (
     <div className="flex flex-none items-center gap-1">
       {children}
-      <TranslateButton />
-      <ClaudeButton />
-      <SettingsButton />
+      <AskButton />
     </div>
   );
 }
@@ -86,7 +98,7 @@ export function TabTitle({ title, sub, actions, testId }: { title: ReactNode; su
 /**
  * Rechte Seite der Übungsleiste (plan.md §1.2, A7 Paket 2; seit dem Band Relaunch Stufe 1 P3, stufe1-plan §6.4): Menü „…“.
  * Handy (< 768 px): oben nur ✕ und Balken – Übersetzer, Claude und „Pause, später weiter“ stehen hinter „…“ (gleiche Kennungen).
- * Ab 768 px stehen Übersetzer und Claude daneben. Das Zahnrad steht nie in der Übungsleiste (Hauptsitzung 28.10.2026);
+ * Ab 768 px stehen Übersetzer und Claude daneben, ab 1024 px (Seitenleiste sichtbar) nur noch Claude. Das Zahnrad steht nie in der Übungsleiste (Hauptsitzung 28.10.2026);
  * die Einstellungen bleiben als Punkt im Menü erreichbar (Emrahs Vorgabe „überall“). `onPause` = dasselbe wie ✕.
  */
 export function ExerciseActions({ onPause }: { onPause: () => void }) {
@@ -100,12 +112,15 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
           { id: 'translate', label: t('cmpTabTranslate'), onClick: () => openCompanion({ tab: 'translate' }), testId: 'open-translate' },
         ]
       : [];
-  const tail: MenuEntry[] = [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
+  // Ab 1024 px steht die Seitenleiste auch in Übungen (Shell `showNav`) mit Claude, Übersetzer und Einstellungen. Die Leiste zeigt
+  // dann nur, was die Navigation nicht hat (ux N1): kein Übersetzer, kein Einstellungs-Punkt. Claude bleibt, denn es sieht die Aufgabe.
+  const nav = useContextPresentation() === 'column';
+  const tail: MenuEntry[] = nav ? [] : [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
   return (
     <div className="flex flex-none items-center gap-0.5" data-testid="exercise-actions">
       {wide && (
         <>
-          <TranslateButton />
+          {!nav && <TranslateButton />}
           <ClaudeButton />
         </>
       )}

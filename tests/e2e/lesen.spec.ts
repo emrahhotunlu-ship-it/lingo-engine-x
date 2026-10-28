@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openTab, screen, type BootOptions, type Lang, type Theme } from './fixtures';
+import { boot, openRead as openReadPage, openTab, screen, type BootOptions, type Lang, type Theme } from './fixtures';
 
 // Reiter „Lesen“ (Paket L3, docs/umbau/lesen-plan.md §2.1, §3, §6): sechster Reiter, Liste, Artikel holen (Dev-Adapter), Stopp, Fehlerzustände,
 // Themen, Reiterleiste bei 360/390/412 px und am Desktop, Barrierefreiheit in drei Modi. Alle Daten erfunden (seed/sample-data.json, `read/…`).
@@ -25,8 +25,9 @@ const calls = (page: Page): Promise<number> =>
 /** Ohne `read/…`-Dokumente: erste Nutzung. */
 const NO_READ: BootOptions['fake'] = { patch: { 'read/p': null, 'read/m-2026-09': null, 'read/d-2026-09-17': null, 'read/d-2026-09-19': null, 'read/r-2026-09-20': null }, sampleTickMs: 1 };
 
+/** Lesen ist seit Relaunch P2 S1-SHELL eine Seite unter „Praxis“ (vorher eigener Reiter). */
 async function openRead(page: Page): Promise<void> {
-  await openTab(page, 'read');
+  await openReadPage(page);
   await expect(page.getByTestId('read')).toHaveAttribute('data-load', 'ready');
 }
 
@@ -34,16 +35,16 @@ async function expectNoOverflow(page: Page): Promise<void> {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
 
-// ---------------------------------------------------------------- sechs Reiter am Handy und am Desktop
+// ---------------------------------------------------------------- fünf Reiter am Handy, Lesen unter „Praxis“ (Relaunch P2 S1-SHELL)
 
 for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
   for (const w of [360, 390, 412]) {
-    test(`Reiterleiste mit sechs Reitern bei ${w} px einzeilig und mit Luft (${lang})`, async ({ browser }) => {
+    test(`Reiterleiste mit fünf Reitern bei ${w} px einzeilig und mit Luft (${lang})`, async ({ browser }) => {
       const context = await browser.newContext({ viewport: { width: w, height: 800 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin' });
       const page = await context.newPage();
       const { errors } = await bootRead(page, { lang, migrated: true });
       await screen(page, 'today');
-      const boxes = await page.getByTestId('tabbar').locator('button').evaluateAll((els) =>
+      const boxes = await page.getByTestId('tabbar').locator('button[data-tab]').evaluateAll((els) =>
         els.map((el) => {
           const label = [...el.querySelectorAll('span')].find((sp) => [...sp.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) && !sp.closest('[data-testid="tab-badge"]'));
           const text = label ? [...label.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) : undefined;
@@ -55,8 +56,8 @@ for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
           return { id: el.getAttribute('data-tab') ?? '', label: text?.textContent ?? '', lines, h: b.height, left: b.left, right: b.right, textLeft: tr.left, textRight: tr.right };
         }),
       );
-      expect(boxes.map((b) => b.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'read', 'progress']);
-      expect(boxes.map((b) => b.label)[4]).toBe(lang === 'de' ? 'Lesen' : 'Read');
+      expect(boxes.map((b) => b.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'progress']);
+      expect(boxes.map((b) => b.label)[3]).toBe(lang === 'de' ? 'Praxis' : 'Practice');
       for (const b of boxes) {
         expect(b.lines, b.label).toBe(1);
         expect(b.h, b.label).toBeGreaterThanOrEqual(44);
@@ -76,14 +77,18 @@ for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
   }
 }
 
-test('Desktop: sechs Reiter in der Pillen-Leiste, Lesen öffnet den Bildschirm', async ({ browser }) => {
+test('Desktop: fünf Reiter in der Seitenleiste, Praxis › Lesen öffnet den Bildschirm', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, timezoneId: 'Europe/Berlin' });
   const page = await context.newPage();
   const { errors } = await bootRead(page, { migrated: true });
   await screen(page, 'today');
-  await expect(page.getByTestId('tabbar').locator('button')).toHaveCount(6);
-  await openRead(page);
+  await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(5);
+  await page.getByTestId('side-practice-toggle').click();
+  await page.getByTestId('side-read').click();
+  await screen(page, 'read');
+  await expect(page.getByTestId('read')).toHaveAttribute('data-load', 'ready');
   await expect(page.getByTestId('read-title')).toHaveText('Lesen');
+  await expect(page.getByTestId('side-read')).toHaveAttribute('aria-current', 'page');
   await expectNoOverflow(page);
   expect(errors).toEqual([]);
   await context.close();
@@ -156,8 +161,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
   test('erste Nutzung: freundlicher Leerzustand, ein großer Knopf, Skelett beim Laden', async ({ page }) => {
     await bootRead(page, { migrated: true, fake: NO_READ });
     await screen(page, 'today');
-    await page.getByTestId('tab-read').click();
-    await screen(page, 'read');
+    await openReadPage(page);
     await expect(page.getByTestId('read')).toHaveAttribute('data-load', 'ready');
     await expect(page.getByTestId('read-today')).toContainText('Dein erster Artikel wartet');
     const primary = page.getByTestId('read-primary');
@@ -185,7 +189,7 @@ test.describe('Bildschirm „Lesen“ (390 px)', () => {
     await bootRead(page, { migrated: true, now: EVENING_19, lang: 'en' });
     await screen(page, 'today');
     await openRead(page);
-    await expect(page.getByTestId('read-title')).toHaveText('Read');
+    await expect(page.getByTestId('read-title')).toHaveText('Reading');
     await expect(page.getByTestId('read-primary')).toHaveText('Keep reading');
     await expect(page.getByTestId('read-fetch')).toHaveText('Get today’s articles');
     await expect(page.getByTestId('read-week')).toContainText('This week: 1 article · 8 min');

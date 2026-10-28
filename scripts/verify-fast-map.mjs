@@ -152,6 +152,16 @@ export const RULES = [
   { prefix: 'src/styles/parts/band', specs: ['band.spec.ts', 'resultCard.spec.ts'] },
   { prefix: 'tests/e2e/band', specs: ['band.spec.ts'] },
   { prefix: 'tests/e2e/tastatur', specs: ['tastatur.spec.ts'] },
+  { prefix: 'src/features/system/Chrome', specs: ['uebungRahmen.spec.ts', 'rahmen.spec.ts'] },
+  { prefix: 'tests/e2e/uebungRahmen', specs: ['uebungRahmen.spec.ts'] },
+  // Relaunch P2 S1-SHELL: Rahmen (5 Reiter, Schiene/Seitenleiste, Kontextspalte, „Fragen“), Breiten-Stufen, Erreichbarkeit, Start-Bild.
+  { prefix: 'src/app/shell/', specs: ['rahmen.spec.ts', 'breiten.spec.ts', 'erreichbar.spec.ts', 'perf.spec.ts'], smoke: true },
+  { prefix: 'src/areas/', specs: ['erreichbar.spec.ts'], smoke: true },
+  { prefix: 'src/styles/parts/shell.css', specs: ['rahmen.spec.ts', 'breiten.spec.ts', 'perf.spec.ts'] },
+  { prefix: 'index.html', specs: ['perf.spec.ts', 'breiten.spec.ts'] },
+  { prefix: 'tests/e2e/rahmen', specs: ['rahmen.spec.ts'] },
+  { prefix: 'tests/e2e/breiten', specs: ['breiten.spec.ts'] },
+  { prefix: 'tests/e2e/erreichbar', specs: ['erreichbar.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

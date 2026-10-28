@@ -160,11 +160,11 @@ export async function openLearnPage(page: Page): Promise<void> {
   await openTab(page, 'learn');
 }
 
-/** Profil-Blatt öffnen (WP0b): Profil-Knopf oben links auf jeder Reiter-Wurzel. */
+/** Profil-Blatt öffnen: Profil-Knopf oben links auf „Fortschritt“ (Relaunch P2 S1-SHELL, vorher auf jeder Reiter-Wurzel). */
 export async function openProfile(page: Page): Promise<void> {
   const btn = page.getByTestId('open-profile');
   await page.getByTestId('tabbar').waitFor();
-  for (let i = 0; i < 2 && !(await btn.isVisible()); i++) await page.getByTestId('tab-today').click();
+  for (let i = 0; i < 2 && !(await btn.isVisible()); i++) await page.getByTestId('tab-progress').click();
   await btn.click();
   await page.getByTestId('profile-sheet').waitFor();
 }
@@ -187,13 +187,20 @@ export async function openOverview(page: Page): Promise<void> {
 }
 
 /**
- * Einstellungen öffnen: Das Zahnrad steht im Kopf, auf jeder Seite, in jeder Übung und auf den
- * System-Bildschirmen. Sonst über das Profil-Blatt („Einstellungen ›“).
+ * Einstellungen öffnen: das Zahnrad (Kopf von „Fortschritt“, Übungsleiste, System-Bildschirme), ab 600 px
+ * „Einstellungen“ in der Navigation, sonst über „Fortschritt“ › Profil-Blatt („Einstellungen ›“).
  */
 export async function openSettings(page: Page): Promise<void> {
+  // Das Zahnrad des Lade-Bilds verschwindet mit dem Laden; erst danach entscheiden, welcher Weg gilt.
+  await page.locator('[data-screen="loading"]').waitFor({ state: 'detached' });
   const gear = page.locator('[data-testid="open-settings"]:visible').first();
   if (await gear.isVisible().catch(() => false)) {
     await gear.click();
+    return;
+  }
+  const side = page.getByTestId('side-settings');
+  if (await side.isVisible().catch(() => false)) {
+    await side.click();
     return;
   }
   // In Übungen steht das Zahnrad nicht in der Leiste (Relaunch P3): „Einstellungen“ ist ein Punkt im Menü „…“.
@@ -206,6 +213,17 @@ export async function openSettings(page: Page): Promise<void> {
   await openProfile(page);
   await page.getByTestId('profile-settings').click();
   await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
+}
+
+/** Lesen öffnen (Relaunch P2 S1-SHELL: kein eigener Reiter mehr, sondern eine Seite unter „Praxis“). */
+export async function openRead(page: Page): Promise<void> {
+  if (await page.locator('[data-screen="read"]').isVisible()) return;
+  await openTab(page, 'apply');
+  // Ab 1280 px führt die Seitenleiste „Lesen“ (die Hub-Zeile ist dort ausgeblendet), darunter die Zeile auf Praxis.
+  const side = page.getByTestId('side-read');
+  if (await side.isVisible()) await side.click();
+  else await page.getByTestId('hub-read').click();
+  await screen(page, 'read');
 }
 
 /** Fehlergrenze testen (G4): der Bildschirm `route` wirft beim nächsten Zeichnen genau einmal. */

@@ -49,7 +49,7 @@ const PRACTICE: Record<CritId, Route | null> = {
 
 const STATE_TONE: Record<Criterion['state'], string> = {
   met: 'text-success-text',
-  course: 'text-accent',
+  course: 'text-accent-text',
   open: 'text-muted',
   few: 'text-subtle',
 };
@@ -267,7 +267,7 @@ function Verdict({ way }: { way: Way }) {
       </h3>
       {c1 ? (
         <>
-          <span className="text-sm font-semibold text-accent" data-testid="way-status">
+          <span className="text-sm font-semibold text-accent-text" data-testid="way-status">
             {t(`pxWayStatus_${c1.status}`)}
           </span>
           <p className="text-base text-fg" data-testid="way-why">
