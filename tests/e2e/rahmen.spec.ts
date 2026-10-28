@@ -64,8 +64,11 @@ test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur 
   // Übung (aus dem Profil-Blatt): keine Reiterleiste, ✕ führt zurück zur Herkunft.
   await openVtest(page);
   await expect(page.getByTestId('tabbar')).toHaveCount(0);
-  // Einstellungen auch in der Übung (A7 Paket 2): das Zahnrad steht in der Übungsleiste.
-  await expect(page.getByTestId('exercise-bar').getByTestId('open-settings')).toBeVisible();
+  // Einstellungen auch in der Übung (A7 Paket 2): am Handy im Menü „…“ der Übungsleiste (Relaunch P3, Band).
+  await page.getByTestId('exercise-bar').getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('exercise-menu-list').getByTestId('open-settings')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('exercise-menu-list')).toHaveCount(0);
   await page.getByTestId('vt-close').click();
   await screen(page, 'today');
   // Bildlauf der Reiter-Wurzel bleibt über eine Seite hinweg erhalten.

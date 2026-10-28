@@ -146,6 +146,12 @@ export const RULES = [
   { prefix: 'src/engine/fx/rgb', specs: ['wordSky.spec.ts', 'fxStage1.spec.ts'] },
   { prefix: 'index.html', specs: ['settings.spec.ts', 'rueckweg.spec.ts'] },
   { prefix: 'src/engine/fx/AmbientLight', specs: ['r6aFx.spec.ts'] },
+  // Relaunch P3 S1-BAND: Übungsrahmen mit Band, Menü „…“, Tastatur (⏎, T, W, 1–4, Esc, ?).
+  { prefix: 'src/ui/exercise/', specs: ['band.spec.ts', 'tastatur.spec.ts'] },
+  { prefix: 'src/app/shell/Player', specs: ['band.spec.ts', 'tastatur.spec.ts', ...TRAINER] },
+  { prefix: 'src/styles/parts/band', specs: ['band.spec.ts', 'resultCard.spec.ts'] },
+  { prefix: 'tests/e2e/band', specs: ['band.spec.ts'] },
+  { prefix: 'tests/e2e/tastatur', specs: ['tastatur.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

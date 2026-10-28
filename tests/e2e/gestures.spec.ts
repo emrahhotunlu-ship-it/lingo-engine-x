@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, screen } from './fixtures';
+import { openBandMore } from './learnHelpers';
 import { answerOnly as sharedAnswerOnly, forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.5 Wischgesten, sparsam: (1) im Trainer nach der Rückmeldung nach links wischen =
@@ -97,7 +98,9 @@ test('Nachschlage-Blatt am Handy: am Griff nach unten wischen schließt', async 
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
   await answerOnly(page);
-  await page.getByTestId('examples').locator('button.lx-word').first().click();
+  // Band (Relaunch P3): Beispiele stehen am Handy im Mehr-Blatt.
+  await openBandMore(page);
+  await page.getByTestId('band-more').getByTestId('examples').locator('button.lx-word').first().click();
   const lookup = page.getByTestId('lookup');
   await expect(lookup).toBeVisible();
   await page.waitForTimeout(400);

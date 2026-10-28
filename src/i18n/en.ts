@@ -39,6 +39,7 @@ import { hxEn } from './parts/hx.en';
 import { fxEn } from './parts/fx.en';
 import { awEn } from './parts/aw.en';
 import { themeEn } from './parts/theme.en';
+import { bandEn } from './parts/band.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -100,6 +101,8 @@ export const en: Record<MessageKey, string> = {
   ...fxEn,
   ...awEn,
   ...themeEn,
+  // Relaunch Stufe 1, P3: Übungsrahmen mit Band
+  ...bandEn,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3En,
   appName: 'Lingo-Engine X',

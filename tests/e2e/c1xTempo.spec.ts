@@ -118,7 +118,7 @@ test.describe('Handy', () => {
 test.describe('Laptop', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('direkt geöffnet baut die Runde selbst; Esc verlässt sie; Aufgabe bleibt nach der Zielzeit bedienbar', async ({ page }) => {
+  test('direkt geöffnet baut die Runde selbst; Esc bleibt in der Runde, ✕ verlässt sie; Aufgabe bleibt nach der Zielzeit bedienbar', async ({ page }) => {
     await start(page, { name: 'tempoRound' });
     const round = page.getByTestId('tempo-round');
     await expect(round).toHaveAttribute('data-state', 'open');
@@ -127,7 +127,10 @@ test.describe('Laptop', () => {
     await expect(first).toBeVisible();
     // Keine Hilfe in der Runde (wie ein Messmodus).
     await expect(page.getByTestId('hint')).toHaveCount(0);
+    // Relaunch P3 S1-BAND: Esc verlässt eine Übung nie (nur Blatt, Menü, Kontextspalte); raus geht es mit ✕.
     await page.keyboard.press('Escape');
+    await expect(round).toHaveCount(1);
+    await page.getByTestId('round-close').click();
     await expect(round).toHaveCount(0);
   });
 });

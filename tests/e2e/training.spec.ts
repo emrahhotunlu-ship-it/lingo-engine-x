@@ -4,6 +4,7 @@ import { boot, bootAt, crashOnce, layoutProblems, openApplyFolds, openEntry, ope
 import { nbLog, outItems, typeGap } from './trainingHelpers';
 import { dump } from './trainerHelpers';
 import { setInputProfile } from './input';
+import { nextItem, openBandMore } from './learnHelpers';
 
 // Training: Kollokationen, Satz-Umformung, Register, Überleitungen/Wortbildung und das Einwand-Training
 // (freiwilliges Extra). Posteingang, Nachsprechen und Aussprache entfallen seit dem Umbau (04.10.2026).
@@ -40,8 +41,10 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await expect(item).toHaveAttribute('data-state', 'close');
   // Lösung mit Grund (Lehnübersetzung als Kontrast), auch wenn es am Ende geklappt hat.
   await expect(page.getByTestId('result')).toContainText('close a deal');
+  // Band (Relaunch P3): weitere Begründungen und Beispiele stehen im Mehr-Blatt.
+  await openBandMore(page);
   await expect(page.getByTestId('result')).toContainText('seal');
-  await page.getByTestId('next').click();
+  await nextItem(page);
 
   // c02 deadline: falsch → Hinweis (Anfangsbuchstabe) → falsch → Lösung.
   await expect(page.getByTestId('colloc-noun')).toHaveText('deadline');
@@ -161,8 +164,9 @@ test('Einwand-Training mit KI, Stufe 5: Bedenkzeit, Zeitziel, Claude prüft das 
   await page.getByTestId('pressure-check').click();
   await expect(page.getByTestId('pressure-review')).toHaveAttribute('data-mode', 'ai');
   await expect(page.getByTestId('pressure-pattern').locator('[data-move="ask"]')).toHaveAttribute('data-on', 'true');
+  await openBandMore(page);
   await expect(page.getByTestId('result')).toContainText('side by side');
-  await page.getByTestId('next').click();
+  await nextItem(page);
   await expect(page.getByTestId('round-progress')).toHaveText('2 von 5');
 });
 

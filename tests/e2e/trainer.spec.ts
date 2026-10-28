@@ -178,7 +178,8 @@ test('Handy mit Touch: Tippen auf die Lücke fokussiert das Eingabefeld, kein Qu
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'near');
   expect(await layoutProblems(page)).toEqual([]);
-  await page.keyboard.press('Escape');
+  // Relaunch P3 S1-BAND: Esc verlässt die Übung nie; raus geht es mit ✕.
+  await page.getByTestId('trainer-close').tap();
   await screen(page, 'today');
   expect(errors).toEqual([]);
   await context.close();

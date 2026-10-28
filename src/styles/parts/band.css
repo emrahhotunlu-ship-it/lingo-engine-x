@@ -1,2 +1,455 @@
-/* Relaunch Stufe 1: Gerüst für das Band (Tagesweg auf Heute). Leer angelegt in P1 S1-TOK;
-   das Band-Paket der Stufe 1 füllt es nur mit Tokens aus index.css (keine Farbwerte, kein Weichzeichner). */
+/* Relaunch Stufe 1: Übungsrahmen mit Band (P3 S1-BAND, docs/relaunch/stufe1-plan.md §6.4, Vorschau `band`/`sheet`/`bar`/`kbdhelp`).
+   Nur Tokens aus index.css (keine Farbwerte, kein Weichzeichner). Zustand nie nur über Farbe: Zeichen + Wort stehen im Urteil.
+   Nora 1: Fortschritt in Iris (`--act`), Bereichsfarbe höchstens als dünne Linie. Nora 2: Urteilszeichen als weicher Kreis.
+   Nora 3: „Fast richtig“ ohne trübe Tönung (nur eine dünne Linie oben). „Lösung gezeigt“ neutral, Tipps nie rot. */
+
+/* ------------------------------------------------------------------ Band (Handy, Tablet: kein Split) */
+.lx-band {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom));
+  z-index: 31;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(45dvh - var(--lx-bar-h) - env(safe-area-inset-bottom));
+  overflow: hidden;
+  padding: 12px max(1rem, env(safe-area-inset-right)) 8px max(1rem, env(safe-area-inset-left));
+  border-radius: 22px 22px 0 0;
+  background: var(--lx-band-bg, var(--surface));
+  box-shadow: var(--shadow);
+  animation: lx-band-up 220ms var(--ease-spring) backwards;
+}
+/* Ausnahme vom „rollt nicht“: eine Rückfrage, die Emrah selbst geöffnet hat („Sicher?“ nach „Als richtig werten“, das Feld
+   „Mit dem geübten Muster üben“), darf nie abgeschnitten werden. Nur dann rollt das Band, und die Rückfrage holt sich selbst ins Bild. */
+.lx-band:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1']) {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.lx-band:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1']) :is(.lx-band-inner, .lx-band-why) {
+  flex-shrink: 0;
+}
+/* Im Band liegt die Rückfrage schon über der Leiste: der Abstand für den Balken (Inline-Stil der Karte) entfällt hier. */
+.lx-band [data-testid='override-sure'] {
+  scroll-margin: 8px !important;
+}
+.lx-band-btns > [data-slot]:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1']) {
+  flex-basis: 100%;
+}
+.lx-band[data-verdict='ok'] {
+  --lx-band-bg: color-mix(in oklch, var(--surface) 90%, var(--ok));
+}
+.lx-band[data-verdict='wrong'] {
+  --lx-band-bg: color-mix(in oklch, var(--surface) 91%, var(--bad));
+}
+.lx-band[data-verdict='near'] {
+  box-shadow:
+    inset 0 2px 0 0 var(--near),
+    var(--shadow);
+}
+.lx-band-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+.lx-band-verdict {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: none;
+}
+.lx-band [data-testid='verdict'] {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 650;
+}
+.lx-band [data-slot='comparison'] {
+  font-size: 17px;
+  line-height: 23px;
+}
+/* Zeile 3 „Warum“: schrumpft als Erstes; reicht der Platz nicht, läuft der Text weich aus (nie Rollen im Band). */
+.lx-band-why {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.lx-band-why > [data-slot='explanation'] {
+  gap: 0;
+}
+.lx-band-why :is([data-block='why'], [data-block='remember']) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  gap: 4px;
+  color: var(--fg-2);
+}
+.lx-band-why :is([data-block='why'], [data-block='remember']) .lx-t-support,
+.lx-band-why [data-slot='why'] {
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--fg-2);
+}
+/* Zeile 3 als EINE Zeile mit Vorspann („Warum  Nach until …“): Überschrift läuft in den Text hinein (spart eine Zeile). */
+.lx-band-why :is([data-block='why'], [data-block='remember']):not(:has(> [data-slot='why'])) {
+  display: block;
+}
+.lx-band-why :is([data-block='why'], [data-block='remember']):not(:has(> [data-slot='why'])) > h3 {
+  display: inline;
+  margin-right: 0.5em;
+}
+.lx-band-why :is([data-block='why'], [data-block='remember']):not(:has(> [data-slot='why'])) > ul,
+.lx-band-why :is([data-block='why'], [data-block='remember']):not(:has(> [data-slot='why'])) > ul > li,
+.lx-band-why :is([data-block='why'], [data-block='remember']):not(:has(> [data-slot='why'])) > ul > li > .lx-t-support {
+  display: inline;
+}
+.lx-band-why [data-testid='ai-note'] {
+  margin-top: 2px;
+}
+.lx-band-btns {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.lx-band-btns > button,
+.lx-band-btns > [data-slot] {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.lx-band-btns > [data-slot] > * {
+  width: 100%;
+}
+.lx-band-btns > [data-slot]:empty {
+  display: none;
+}
+/* Leiste und Band sind EIN Dock: dieselbe Fläche, keine Linie dazwischen. */
+html[data-band] .lx-actionbar {
+  border-top-color: transparent;
+}
+html[data-band='ok'] .lx-actionbar {
+  background: color-mix(in oklch, var(--surface) 90%, var(--ok));
+}
+html[data-band='wrong'] .lx-actionbar {
+  background: color-mix(in oklch, var(--surface) 91%, var(--bad));
+}
+html[data-band='near'] .lx-actionbar,
+html[data-band='dontKnow'] .lx-actionbar {
+  background: var(--surface);
+}
+html[data-band][data-actionbar] #main {
+  padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + var(--lx-band-h, 0px) + 1rem);
+}
+@keyframes lx-band-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes lx-band-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Querformat am Handy: die Leiste steht im Fluss (index.css), das Band auch – direkt über ihr am Ende der Übung. */
+@media (max-height: 500px) {
+  .lx-band {
+    position: static;
+    max-height: none;
+    border-radius: var(--radius-card);
+    box-shadow: none;
+  }
+}
+
+/* ------------------------------------------------------------------ Urteilszeichen (Nora 2: weicher Kreis wie in der Vorschau) */
+.lx-vi {
+  width: 28px;
+  height: 28px;
+}
+.lx-vi[data-mark='ok'] {
+  background: color-mix(in oklch, var(--ok) 20%, transparent);
+  color: var(--ok);
+}
+.lx-vi[data-mark='near'] {
+  background: color-mix(in oklch, var(--near) 20%, transparent);
+  color: var(--near);
+}
+.lx-vi[data-mark='wrong'] {
+  background: color-mix(in oklch, var(--bad) 20%, transparent);
+  color: var(--bad);
+}
+/* „Lösung gezeigt“: neutraler Ring, keine Zustandsfarbe. */
+.lx-vi[data-mark='dontKnow'] {
+  background: transparent;
+  box-shadow: 0 0 0 2px var(--fg-3) inset;
+  color: var(--fg);
+}
+
+/* ------------------------------------------------------------------ Seitenspalte am Laptop (Split): gleiche Tönung, kein Schlamm */
+.lx-result {
+  animation: lx-band-fade 220ms var(--ease-soft) backwards;
+}
+.lx-result[data-verdict='ok'] .lx-result-head {
+  background: color-mix(in oklch, var(--surface) 90%, var(--ok));
+}
+.lx-result[data-verdict='wrong'] .lx-result-head {
+  background: color-mix(in oklch, var(--surface) 91%, var(--bad));
+}
+.lx-result[data-verdict='near'] .lx-result-head {
+  box-shadow: inset 0 2px 0 0 var(--near);
+}
+
+/* ------------------------------------------------------------------ Tipp-Runde: EINE ruhige Zeile (Vorschau `hintband`) */
+.lx-hintband {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--surface-2);
+}
+.lx-hintband > [data-testid='hint-line'] {
+  color: var(--fg);
+  font-weight: 550;
+  margin: 0;
+}
+.lx-hintband-icon {
+  flex: none;
+  color: var(--act-text);
+}
+
+/* ------------------------------------------------------------------ Mehr-Blatt und Tastenübersicht */
+.lx-band-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.lx-band-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  animation: lx-band-fade 200ms var(--ease-soft) backwards;
+}
+.lx-band-sheet {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 40rem;
+  max-height: 85dvh;
+  border-radius: 22px 22px 0 0;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding-bottom: env(safe-area-inset-bottom);
+  outline: none;
+  animation: lx-sheet-up 500ms var(--ease-spring) backwards;
+}
+.lx-band-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 8px 4px 20px;
+}
+.lx-band-sheet-foot {
+  flex: none;
+  padding: 10px 20px 12px;
+  border-top: 1px solid var(--line);
+}
+.lx-band-sheet-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 20px 20px;
+}
+@keyframes lx-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+.lx-keys-layer {
+  align-items: center;
+  padding: 1rem;
+}
+.lx-keys {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 26rem;
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding-bottom: 12px;
+  animation: lx-band-fade 160ms var(--ease-soft) backwards;
+}
+.lx-keys-list {
+  margin: 0;
+  padding: 4px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lx-keys-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 40px;
+  border-top: 1px solid var(--line);
+}
+.lx-keys-row:first-child {
+  border-top: 0;
+}
+.lx-keys-row dt {
+  flex: none;
+  width: 3.5rem;
+}
+.lx-keys-row dd {
+  margin: 0;
+  color: var(--fg-2);
+}
+.lx-keys kbd,
+.lx-actionbar-column [data-kbd]::after {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid var(--line-2);
+  background: var(--surface-2);
+  color: var(--fg-2);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+.lx-keys-open {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  color: var(--fg-3);
+  font-weight: 650;
+}
+.lx-keys-open:hover {
+  color: var(--fg);
+  background: var(--surface-2);
+}
+/* Laptop: Tastenzeichen T/W/⏎ an den Knöpfen der Leiste (nur mit feinem Zeiger, nie am Handy). */
+.lx-actionbar-column [data-kbd]::after {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .lx-actionbar-column [data-kbd]::after {
+    display: inline-flex;
+    content: attr(data-kbd);
+    margin-left: 8px;
+  }
+  .lx-actionbar-column [data-kbd][data-auto]::after {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ Menü „…“: Gruppen mit Trennlinie */
+.lx-menu-sep {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--line);
+  list-style: none;
+}
+
+/* ------------------------------------------------------------------ Balken mit Abschnitten (Vorschau `bar`) */
+/* Auch der einfache Balken der Übungsleiste (Runden ohne Abschnitte) sieht aus wie die Vorschau-`progBar`: 6 px, Spur `--surface-3`,
+   Füllung immer Iris (`--act`), nie die Bereichs- oder eine Zustandsfarbe (Hauptsitzung 28.10.2026; überstimmt dz.css „Bereichsfarbe“). */
+[data-testid='exercise-bar'].lx-exbar [role='progressbar']:not(.lx-segs) {
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--surface-3);
+}
+html[data-lx-area] [data-testid='exercise-bar'].lx-exbar [role='progressbar']:not(.lx-segs) > div,
+[data-testid='exercise-bar'].lx-exbar [role='progressbar']:not(.lx-segs) > div {
+  border-radius: 3px;
+  background-color: var(--act);
+}
+.lx-segs {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 4px;
+  min-width: 0;
+  height: 6px;
+}
+.lx-segs > i {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--surface-3);
+}
+.lx-segs > i[data-done] {
+  background: var(--act);
+}
+.lx-segs > i > b {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 3px;
+  background: var(--act);
+  transition: width 380ms var(--ease-spring);
+}
+.lx-segs > i[data-pulse] {
+  animation: lx-seg-pulse 300ms var(--ease-soft);
+}
+@keyframes lx-seg-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--act) 60%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 6px color-mix(in oklch, var(--act) 0%, transparent);
+  }
+}
+
+/* ------------------------------------------------------------------ Reduzierte Bewegung: nur Überblenden, keine Wege */
+@media (prefers-reduced-motion: reduce) {
+  .lx-band {
+    animation: lx-band-fade 150ms linear backwards;
+  }
+  .lx-band-sheet {
+    animation: lx-band-fade 150ms linear backwards;
+  }
+  .lx-segs > i > b {
+    transition: none;
+  }
+  .lx-segs > i[data-pulse] {
+    animation: none;
+  }
+}
+:root[data-fx='off'] .lx-band,
+:root[data-fx='off'] .lx-band-sheet {
+  animation: lx-band-fade 150ms linear backwards;
+}
+:root[data-fx='off'] .lx-segs > i[data-pulse] {
+  animation: none;
+}

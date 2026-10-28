@@ -161,7 +161,7 @@ function Block({ name, title, items, body, before, after }: { name: 'why' | 'rem
 }
 
 /** Blöcke „Warum“ und „Merke“. `before`: eigener Inhalt der Übung oben im Warum-Block (Wörter: „overcame = Vergangenheit von overcome“). */
-export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai = false }: { plan: ResultPlan; area?: WordTapArea; before?: ReactNode; source?: string; depth?: string; ai?: boolean }) {
+export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai = false, testId = 'explanation' }: { plan: ResultPlan; area?: WordTapArea; before?: ReactNode; source?: string; depth?: string; ai?: boolean; /** Band (P3): der Merke-Teil im Mehr-Blatt trägt eine eigene Kennung. */ testId?: string }) {
   const { t } = useT();
   const body = useItemBody(area);
   // Text von Claude ohne eigene Kennzeichnung an der Zeile: die Kennzeichnung steht einmal am Ende des Warum-Blocks.
@@ -197,7 +197,7 @@ export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai
   );
   if (!whyShown && !plan.remember.length && !example) return null;
   return (
-    <div className="flex flex-col gap-4" data-testid="explanation" data-slot="explanation" data-source={source} data-depth={depth}>
+    <div className="flex flex-col gap-4" data-testid={testId} data-slot="explanation" data-source={source} data-depth={depth}>
       {why}
       {remember}
     </div>

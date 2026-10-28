@@ -191,9 +191,16 @@ export async function openOverview(page: Page): Promise<void> {
  * System-Bildschirmen. Sonst über das Profil-Blatt („Einstellungen ›“).
  */
 export async function openSettings(page: Page): Promise<void> {
-  const gear = page.getByTestId('open-settings').first();
-  if (await gear.isVisible()) {
+  const gear = page.locator('[data-testid="open-settings"]:visible').first();
+  if (await gear.isVisible().catch(() => false)) {
     await gear.click();
+    return;
+  }
+  // In Übungen steht das Zahnrad nicht in der Leiste (Relaunch P3): „Einstellungen“ ist ein Punkt im Menü „…“.
+  const menu = page.getByTestId('exercise-menu').first();
+  if (await menu.isVisible().catch(() => false)) {
+    await menu.click();
+    await page.getByTestId('exercise-menu-list').getByTestId('open-settings').click();
     return;
   }
   await openProfile(page);

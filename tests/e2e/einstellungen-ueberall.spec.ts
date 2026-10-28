@@ -57,10 +57,12 @@ test('Einstellungen aus einer laufenden Übung: Blatt über der Übung, danach g
   const progress = await page.getByTestId('trainer-progress').innerText();
   const card = (await page.getByTestId('exercise').getAttribute('data-card')) ?? '';
   const bar = page.getByTestId('exercise-bar');
-  // Übungsleiste: Übersetzen · Claude · Zahnrad.
-  await expect(bar.getByTestId('open-translate')).toBeVisible();
-  await expect(bar.getByTestId('open-companion')).toBeVisible();
-  await bar.getByTestId('open-settings').click();
+  // Übungsleiste am Handy (Relaunch P3, Band): ✕ · Balken · „…“ – Übersetzen, Claude und Zahnrad stehen im Menü.
+  await bar.getByTestId('exercise-menu').click();
+  const menu = page.getByTestId('exercise-menu-list');
+  await expect(menu.getByTestId('open-translate')).toBeVisible();
+  await expect(menu.getByTestId('open-companion')).toBeVisible();
+  await menu.getByTestId('open-settings').click();
   await expect(settingsDialog(page)).toBeVisible();
   // Eine Einstellung ändern – die Übung bleibt darunter stehen.
   await settingsDialog(page).getByRole('radio', { name: 'Hell' }).click();

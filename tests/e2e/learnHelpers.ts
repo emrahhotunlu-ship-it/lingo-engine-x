@@ -154,8 +154,38 @@ export async function typeInGap(page: Page, text: string): Promise<void> {
 
 /** Weiter zur nächsten Aufgabe (ohne auf den automatischen Wechsel zu warten). */
 export async function nextItem(page: Page): Promise<void> {
+  // Offenes Mehr-Blatt (Band, Relaunch P3): „Weiter“ steht am Fuß des Blatts.
+  const sheetNext = page.getByTestId('band-more-next');
+  if (await sheetNext.isVisible().catch(() => false)) {
+    await sheetNext.click();
+    return;
+  }
   const btn = page.getByTestId('next');
   if (await btn.isVisible().catch(() => false)) await btn.click().catch(() => undefined);
+}
+
+/** Band am Handy (Relaunch P3): Merke, Beispiele, Tutor und Rest stehen im Mehr-Blatt – öffnet es, falls es zu ist. Laptop: nichts zu tun. */
+export async function openBandMore(page: Page): Promise<void> {
+  const more = page.getByTestId('explanation-more');
+  const band = page.locator('section.lx-band');
+  if ((await band.count()) === 0 || !(await more.isVisible().catch(() => false))) return;
+  if (await page.getByTestId('band-more').isVisible().catch(() => false)) return;
+  await more.click();
+  await expect(page.getByTestId('band-more')).toBeVisible();
+}
+
+/** Übungsleiste: am Handy stehen Übersetzer, Claude und Zahnrad im Menü „…“ (Relaunch P3). Öffnet es bei Bedarf, dann den Eintrag. */
+export async function barAction(page: Page, testId: 'open-companion' | 'open-translate' | 'open-settings', how: 'click' | 'tap' = 'click'): Promise<void> {
+  const direct = page.locator(`[data-testid="${testId}"]:visible`).first();
+  const menu = page.getByTestId('exercise-menu').first();
+  let target = direct;
+  if (!(await direct.isVisible().catch(() => false)) && (await menu.isVisible().catch(() => false))) {
+    if (how === 'tap') await menu.tap();
+    else await menu.click();
+    target = page.getByTestId('exercise-menu-list').getByTestId(testId);
+  }
+  if (how === 'tap') await target.tap();
+  else await target.click();
 }
 
 // ------------------------------------------------------------------ Übungen

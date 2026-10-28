@@ -27,7 +27,8 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   await expect(page.getByTestId('trainer-close')).toBeVisible();
   await expect(page.getByTestId('open-translate')).toBeVisible();
   await expect(page.getByTestId('open-companion')).toBeVisible();
-  await expect(page.getByTestId('open-settings')).toBeVisible();
+  // Relaunch P3: Einstellungen stehen in Übungen im Menü „…“ (kein Zahnrad in der Übungsleiste).
+  await expect(page.getByTestId('exercise-bar').getByTestId('exercise-menu')).toBeVisible();
   // Befund 29.09. (Emrahs Kommentar „blockiert den Counter"): die Zahl „n / total" bleibt jetzt
   // auch während „Rückgängig" sichtbar, statt für die 5 s zu verschwinden.
   // R4: Nenner fest (geplante Runde), die Wiedervorlage der „Nochmal“-Karte steht getrennt als „+1“.

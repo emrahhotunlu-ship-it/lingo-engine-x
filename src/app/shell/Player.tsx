@@ -10,6 +10,7 @@ import { routeToString } from '../router/deeplink';
 import type { Route } from '../router/types';
 import { CrashProbe, ErrorBoundary, ExerciseErrorNotice } from './Boundary';
 import { LayerContext } from './layer';
+import { ExerciseKeys } from '../../ui/exercise/Band';
 
 // Übungsebene (docs/neubau/architektur.md §2.7, plan.md §1.2, N02): Jede Route mit
 // `kind:'exercise'` läuft hier – mit Fehlergrenze, Überspringen, Fortsetzen und `ensure()`.
@@ -108,6 +109,8 @@ export function Player({ route, children }: { route: Route; children: ReactNode 
     <LayerContext.Provider value={{ kind: 'exercise', route }}>
       <PlayerContext.Provider value={api}>
         <Notes route={route} onNote={setNote} />
+        {/* Relaunch Stufe 1 P3: Esc-Reihenfolge (Tastenübersicht → Mehr → Menü → Kontextspalte, nie die Übung) und „?“. */}
+        <ExerciseKeys />
         <ErrorBoundary
           scope={`ui:${route.name}`}
           detail={text}

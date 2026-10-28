@@ -1,6 +1,6 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, bootAt, screen } from './fixtures';
-import { answerGrammar, grammarKey, shownPrompt, typeInGap } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openBandMore, shownPrompt, typeInGap } from './learnHelpers';
 import { DAY, dump, expected, planPatch } from './trainerHelpers';
 import { TYPE_MODE } from './trainerHelpers';
 
@@ -66,11 +66,12 @@ async function vocabRetryCorrect(page: Page) {
   // Hinweis „beginnt mit …" hieß: das Wort war nicht bekannt → trotz Treffer „Nochmal" (Lernwissenschaft 27.09.).
   await expect(page.getByTestId('next-in')).toHaveText('Wieder in 1 Min.');
   await expect(page.locator('[data-testid="hint-line"][data-tone="near"]')).toHaveCount(0);
-  // Erklärung und Beispiele auch nach richtigem zweitem Versuch; kein automatisches Weiter.
-  await expect(page.getByTestId('examples')).toBeVisible();
+  // Erklärung und Beispiele auch nach richtigem zweitem Versuch; kein automatisches Weiter. Am Handy (Band) stehen die Beispiele im Mehr-Blatt.
   await page.waitForTimeout(1500);
   await expect(page.getByTestId('next')).toBeVisible();
-  await page.getByTestId('next').click();
+  await openBandMore(page);
+  await expect(page.getByTestId('examples').first()).toBeVisible();
+  await nextItem(page);
   await expect.poll(async () => (await entriesFor(page, 'overcome')).length).toBe(before + 1);
   const last = (await entriesFor(page, 'overcome')).at(-1);
   expect(last).toMatchObject({ ok: false, ans: answer });

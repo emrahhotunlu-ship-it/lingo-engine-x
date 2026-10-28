@@ -172,7 +172,7 @@ export function TrainingBar({ unit, progress, onClose }: { route?: Route; unit: 
       progress={progress}
       progressLabel={progress ? t('nvProgress', { n: progress.n, total: progress.total }) : undefined}
       note={<span data-testid="training-note">{note}</span>}
-      end={<ExerciseActions />}
+      end={<ExerciseActions onPause={close} />}
     />
   );
 }
