@@ -82,7 +82,7 @@ const KNOWN_CODES = new Set([
 ]);
 
 /** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher. */
-const REPLACEABLE = new Set(['app/lookup']);
+const REPLACEABLE = new Set(['app/lookup', 'app/today']);
 /** Dokumente, die `compact` ersetzen darf (Plan §12.3). */
 const COMPACTABLE = new Set(['app/profile']);
 

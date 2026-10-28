@@ -42,7 +42,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
 
   const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});
-  expect(Object.keys(dump)).toHaveLength(222); // 220 + 2 Kurslektionen der Routine (read/c-k1-01, read/c-k1-02; Paket L8; träge Sammlung `read`).
+  expect(Object.keys(dump)).toHaveLength(223); // 220 + 2 Kurslektionen der Routine (read/c-k1-01, read/c-k1-02; Paket L8; träge Sammlung `read`) + app/today (Relaunch P6, Startbild nach der Umstellung).
   expect(dump['app/schema']).toMatchObject({ version: 1, cutover: '2026-09-20' });
   expect(dump['vocab/reliable']).toHaveProperty('fsrs');
 

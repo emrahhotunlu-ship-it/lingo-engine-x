@@ -17,7 +17,6 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { addDays } from '../../domain/date';
 import { dateLabelOf } from './dateLabel';
-import { TodaySkeletonCard } from '../system/HomeSkeleton';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
@@ -29,11 +28,12 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { DoneCard3, StreakFoot } from './DoneCard3';
 import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
+import { DAY_CARD_CLS, DAY_FOOT_CLS, DAY_GO_CLS, DAY_HEAD_CLS, DAY_LIST_CLS, DAY_TITLE_CLS, DayRows, dayRowName, GoLabel, StartCard, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
+import { useValidTodayDoc } from '../../data/todayDoc';
+import { markStart } from './startPerf';
+import { requestStart } from './startRun';
 import { flush, usePending } from '../progress/persist';
-import { startDuty } from '../learn/flow';
-import { dutyLabel } from '../learn/ui';
-import { unlockSpeech } from '../../platform/speech';
-import { firstOpenDuty, useToday, type TodayView } from './state';
+import { useToday, type TodayView } from './state';
 import { healToday, retryPlan } from './store';
 import { TabTitle } from '../system/Chrome';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
@@ -41,12 +41,11 @@ import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
 import { buildTrainCards, legacyDutyMinutes, overdueUnits, todaySummary, type TodaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
-import { startUnit } from '../unit/run';
-import { blockName, blockWhy } from '../unit/labels';
+import { blockWhy } from '../unit/labels';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
-import { StandSide } from './StandSide';
+import { StandMid } from './StandSide';
 
 // „Heute" (plan.md §1.3): die rote Linie. Unterzeile mit Datum und Serie, darunter EINE
 // Tageskarte – „Deine Tageseinheit“ mit Ring „2 von 5 · noch ca. 18 Min.“, Kernaufgabe der Woche,
@@ -117,7 +116,7 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
     const min = legacyDutyMinutes(d.id);
     return {
       id: d.id,
-      name: dutyLabel(d.id, t),
+      name: dayRowName({ kind: d.id === 'review' ? 'review' : 'legacy', block: 0, id: d.id }, t),
       why,
       whyKey,
       min,
@@ -129,31 +128,13 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
 }
 
 
-function BlockDot({ state, kind }: { state: CardRow['state']; kind?: string }) {
-  // Design-Lead: der nächste Schritt trägt seine Bereichsfarbe (Wörter violett, sonst Grammatik blau), wie in der Vorschau.
-  const tc = kind === 'review' ? 'var(--lx-ch-cards)' : 'var(--lx-ch-grammar)';
-  if (state === 'done')
-    return (
-      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok" style={{ color: 'var(--fg-on)' }} aria-hidden="true">
-        <Icon name="check" size={14} />
-      </span>
-    );
-  return (
-    <span className="inline-flex size-6 flex-none items-center justify-center rounded-full border-2" style={{ borderColor: state === 'now' ? tc : 'var(--lx-line-strong)' }} aria-hidden="true">
-      {state === 'now' && <span className="size-2.5 rounded-full" style={{ background: tc }} />}
-    </span>
-  );
-}
-
-/** Start der Tageseinheit (Tageskarte und Willkommens-Karte): der erste offene Block, sonst der alte Weg. SYNCHRON im Klick (iPhone-Tastatur). */
-function useStartUnit(view: TodayView): () => void {
+/**
+ * Start der Tageseinheit (Tageskarte und Willkommens-Karte): der erste offene Block, sonst der alte Weg. SYNCHRON im Klick (iPhone-Tastatur).
+ * Relaunch P6: über `requestStart` – fehlt noch etwas (gepackte Inhalte), wartet der Start im Übungsrahmen statt ins Leere zu laufen.
+ */
+function useStartUnit(): () => void {
   const api = useHiddenInput();
-  return () => {
-    unlockSpeech();
-    if (startUnit(api)) return;
-    const id = firstOpenDuty(view);
-    if (id) startDuty(id, api);
-  };
+  return () => requestStart(api, true);
 }
 
 /** Titel der Tageskarte: der nächste Schritt. Das Grammatikthema kommt nur aus dem eingefrorenen `u.gt` (§2.3), nie aus einer Neuberechnung. */
@@ -175,28 +156,41 @@ function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows
   const { t, lang } = useT();
   const { done, total } = sum;
   const now = rows.find((r) => r.state === 'now') ?? null;
-  const start = useStartUnit(view);
+  const start = useStartUnit();
   const title = nextTitle(now, view.plan?.u?.gt ?? null, t, lang);
+  const shown: DayRow[] = rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    why: r.id === 'review' && r.progress && r.state !== 'done' && r.progress.done > 0 ? t('tdProgressLabel', { done: r.progress.done, total: r.progress.total }) : r.why,
+    whyKey: r.whyKey,
+    min: r.min,
+    kind: r.kind,
+    state: r.state,
+  }));
+  useEffect(() => markStart('lx:button'), []);
+  useEnterStart(true, start);
   return (
     <section
-      className="lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6"
+      className={DAY_CARD_CLS}
       data-settled={settled ? '' : undefined}
       aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
-      <div className="flex items-center gap-3.5">
-        <DayRing fills={sum.fills} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
-          <span className="flex flex-col items-center gap-0.5">
-            <span className="text-2xl leading-none font-semibold tracking-tight" data-testid="today-min">
-              {sum.rest}
+      <div className={DAY_HEAD_CLS}>
+        <span className="lx-td-ring flex flex-none">
+          <DayRing fills={sum.fills} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
+            <span className="flex flex-col items-center gap-0.5">
+              <span className="text-2xl leading-none font-semibold tracking-tight lg:text-5xl" data-testid="today-min">
+                {sum.rest}
+              </span>
+              <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
             </span>
-            <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
-          </span>
-        </DayRing>
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h2 id="td-unit-title" className="text-lg leading-7 font-semibold tracking-tight text-balance" data-testid="today-title">
+          </DayRing>
+        </span>
+        <div className={DAY_TITLE_CLS}>
+          <h2 id="td-unit-title" className="text-lg leading-7 font-semibold tracking-tight text-balance lg:text-2xl lg:leading-8" data-testid="today-title">
             {title}
           </h2>
           <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="lx-tnum text-xs text-muted">
@@ -204,36 +198,8 @@ function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows
           </span>
         </div>
       </div>
-      <div className="flex flex-col gap-4" data-testid="hero" data-duty={now?.id}>
-        <ol className="flex flex-col gap-1.5" aria-label={t('tdPflicht')} data-testid="duties">
-          {rows.map((r) => (
-            <li
-              key={r.id}
-              data-testid="duty"
-              data-duty={r.id}
-              data-state={r.state === 'done' ? 'done' : 'open'}
-              data-now={r.state === 'now' ? 'true' : undefined}
-              className={`flex min-h-[3.25rem] items-center gap-3 rounded-[0.875rem] px-3 py-1.5 ${r.state === 'now' ? 'bg-surface-strong' : ''}`}
-            >
-              <BlockDot state={r.state} kind={r.kind} />
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className={`text-base font-medium ${r.state === 'now' ? 'text-fg' : 'text-muted'}`}>{r.name}</span>
-                <span className="text-xs text-muted" data-testid="reason" data-why={r.whyKey}>
-                  {r.id === 'review' && r.progress && r.state !== 'done' && r.progress.done > 0
-                    ? t('tdProgressLabel', {
-                        done: r.progress.done,
-                        total: r.progress.total,
-                      })
-                    : r.why}
-                </span>
-              </span>
-              <span className="lx-tnum flex-none text-xs text-muted">
-                {r.state === 'done' ? t('nbHeuteBlockDone') : t('nbHeuteMin', { min: r.min })}
-                <span className="sr-only"> · {r.state === 'done' ? t('nbHeuteBlockDone') : r.state === 'now' ? t('nbHeuteBlockNow') : t('nbHeuteBlockOpen')}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
+      <div className={DAY_LIST_CLS} data-testid="hero" data-duty={now?.id}>
+        <DayRows rows={shown} prefix="today" />
         {fixNone && (
           <p className="flex min-h-9 items-center gap-3 border-t border-line pt-2 text-xs text-muted" data-testid="fix-none">
             <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok-soft text-ok-text" aria-hidden="true">
@@ -244,10 +210,10 @@ function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows
         )}
       </div>
       {/* U2: Knopf unten in der Karte mit fester Mindesthöhe (.lx-today-card), Fußzeile hat immer ihre Zeile – der Knopf steht dort, wo das Skelett ihn zeigte. */}
-      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start" data-duty={now?.id} className="mt-auto w-full">
-        {done > 0 && now ? t('nbHeuteContinue', { block: now.name }) : t('nbHeuteStart')}
+      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start" data-duty={now?.id} className={DAY_GO_CLS}>
+        <GoLabel label={done > 0 && now ? t('nbHeuteContinue', { block: now.name }) : t('nbHeuteStart')} />
       </Button>
-      <div className="min-h-4">
+      <div className={DAY_FOOT_CLS}>
         <StreakFoot />
       </div>
     </section>
@@ -255,9 +221,10 @@ function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows
 }
 
 /** Willkommens-Karte der Neustart-Woche (Pause ≥ 14 Lerntage): steht statt der Tageskarte, solange heute noch nichts gestartet wurde. */
-function RestartCard({ view, gap, overdue, minutes }: { view: TodayView; gap: number; overdue: number; minutes: number }) {
+function RestartCard({ view, gap, overdue, minutes }: { view: Pick<TodayView, 'day'>; gap: number; overdue: number; minutes: number }) {
   const { t } = useT();
-  const start = useStartUnit(view);
+  const start = useStartUnit();
+  useEffect(() => markStart('lx:button'), []);
   const go = () => {
     local.set(`${KEY_PREFIX}restart:${view.day}`, '1');
     start();
@@ -309,6 +276,10 @@ export function TodayScreen() {
   const profile = useLive((s) => s.docs['app/profile']);
   const saveFailed = usePending((s) => s.failed);
   const { ready, dayLoaded, planStatus, plan } = view;
+  // Relaunch P6: Startbild aus `app/today`, bei JEDEM Zeichnen frisch gegen den Lerntag geprüft (sonst Skelett). Der berechnete Plan gewinnt,
+  // sobald er steht (`ok`): Die echte Karte ersetzt das Startbild an derselben Stelle und in derselben Höhe.
+  const startDoc = useValidTodayDoc();
+  useEffect(() => markStart('lx:skeleton'), []);
 
   // Selbstheilung (Regel 1): alles erledigt, aber `pflicht[heute]` fehlt noch.
   const marked = pflichtMarked(profile, today);
@@ -351,7 +322,7 @@ export function TodayScreen() {
       const b: UnitBlock | undefined = up.blocks.find((x) => x.channel === r.id);
       return {
         id: r.id,
-        name: blockName(r.kind, r.block, t, r.fmt),
+        name: dayRowName({ kind: r.kind, block: r.block, id: r.id, fmt: r.fmt }, t),
         why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,
@@ -414,9 +385,8 @@ export function TodayScreen() {
       <motion.div variants={item}>
         <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
       </motion.div>
-      {/* Laptop (≥ 1.024 px): Tageskarte links (7/12), „Fortschritt“ rechts (5/12) wie in der Vorschau; am Handy eine Spalte wie bisher. */}
-      <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
-      <div className="flex flex-col gap-5 lg:col-span-7">
+      {/* Laptop (≥ 1.024 px, Vorschau L1): Tageskarte quer über die Bühne, darunter die ruhige Mitte (`l1mid`); am Handy eine Spalte wie bisher. */}
+      <div className="flex flex-col gap-5">
 
       {planStatus === 'error' && (
         <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">
@@ -429,7 +399,7 @@ export function TodayScreen() {
 
       {!ok && planStatus !== 'error' && (
         <div role="status" aria-label={t('tdLoading')}>
-          <TodaySkeletonCard />
+          {startDoc ? <StartCard doc={startDoc} /> : <TodaySkeletonCard />}
         </div>
       )}
 
@@ -465,7 +435,7 @@ export function TodayScreen() {
 
       {ok && done && (
         <motion.div variants={item} className="flex flex-col gap-5">
-          <DoneCard3 view={view} tomorrow={tomorrow.line} tomorrowTopic={tomorrow.topic} today={today} />
+          <DoneCard3 view={view} sum={sum} tomorrow={tomorrow.line} tomorrowTopic={tomorrow.topic} today={today} />
           <Slot name="today.done" />
           <ExtraRow today={today} />
           <Slot name="today.extra" />
@@ -488,10 +458,9 @@ export function TodayScreen() {
         </div>
       )}
       {planStatus === 'local' && <p className="text-xs text-subtle">{t('nbHeuteLocal')}</p>}
-      </div>
       {wide && ok && (
-        <motion.div variants={item} className="lg:sticky lg:top-4 lg:col-span-5">
-          <StandSide />
+        <motion.div variants={item}>
+          <StandMid />
         </motion.div>
       )}
       </div>

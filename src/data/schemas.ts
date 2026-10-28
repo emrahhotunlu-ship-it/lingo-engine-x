@@ -1037,3 +1037,21 @@ export const c1Schema = z.looseObject({
   ch: z.looseObject({ n: num, d: str }).nullish(),
   chh: z.array(z.unknown()).nullish(),
 });
+
+// S1-START (Relaunch Stufe 1 P6, docs/relaunch/stufe1-plan.md §4.3): Startbild `app/today`.
+/**
+ * Abbild des Tages für den schnellen Start (`app/today`): `{v: 1, d, th?, b?, rest?, ring?, go?, at?}`. Abgeleitet aus
+ * `app/profile.plan`/`pflicht` über `metrics.todaySummary`, immer als Ganzes ersetzt (`REPLACEABLE`), ≤ 2 KiB, nie live abonniert.
+ * Alle Felder außer `v` und `d` optional; `bt` ist für Stufe 4 reserviert.
+ */
+export const todayBlockSchema = z.looseObject({ st: str, n: num, of: num, k: str, bl: num, m: num, f: str, id: str });
+export const todaySchema = z.looseObject({
+  v: z.number(),
+  d: z.string(),
+  th: z.looseObject({ k: str, id: str, nm: z.looseObject({ de: str, en: str }).nullish(), ch: num }).nullish(),
+  b: z.record(z.string(), todayBlockSchema).nullish(),
+  rest: num,
+  ring: num,
+  go: z.looseObject({ k: str, id: str }).nullish(),
+  at: num,
+});

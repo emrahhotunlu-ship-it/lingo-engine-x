@@ -14,6 +14,8 @@ export type MemoryDbOptions = {
   seed?: Record<string, Json>;
   /** Künstliche Latenz je Aufruf in ms. */
   latencyMs?: number;
+  /** Relaunch P6: nur die ERSTE Lieferung eines Abonnements so lange verzögern (späte große Abos, `get` bleibt schnell). */
+  subscribeDelayMs?: number;
   /** Jeder Schreibaufruf schlägt mit diesem Code fehl (Fehlerpfade testen). */
   failWrites?: DbErrCode;
   /** Jedes Abonnement endet sofort mit diesem Code (abgebrochene Verbindung testen). */
@@ -300,7 +302,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
         };
         const entry = { spec, fire };
         queryListeners.add(entry);
-        setTimeout(fire, opts.latencyMs ?? 0);
+        setTimeout(fire, opts.subscribeDelayMs ?? opts.latencyMs ?? 0);
         return () => {
           if (!active) return;
           active = false;
@@ -399,7 +401,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
           docListeners.set(path, set);
         }
         set.add(fn);
-        setTimeout(() => fn(snapshotOf(path)), opts.latencyMs ?? 0);
+        setTimeout(() => fn(snapshotOf(path)), opts.subscribeDelayMs ?? opts.latencyMs ?? 0);
         return () => {
           if (!active) return;
           active = false;

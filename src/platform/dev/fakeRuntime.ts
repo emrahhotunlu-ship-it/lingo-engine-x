@@ -17,6 +17,10 @@ export type FakeOptions = {
   latencyMs?: number;
   /** Zeit, bis `use()` antwortet (echte Viewer antworten verzögert). */
   useDelayMs?: number;
+  /** Relaunch P6: Zeit je Fähigkeit (z. B. `{ db: 8000 }`), sonst `useDelayMs`. */
+  useDelayMsBy?: Partial<Record<'db' | 'sample' | 'downloads' | 'permissions', number>>;
+  /** Relaunch P6: erste Lieferung jedes Datenbank-Abonnements verzögern (ms); `get` bleibt schnell. */
+  subscribeDelayMs?: number;
   sampleMode?: FakeSampleMode;
   /** Jedes Datenbank-Abonnement endet sofort mit diesem Code. */
   failSubscriptions?: DbErrCode;
@@ -76,6 +80,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
   const seed = (opts.persist ? readPersisted() : null) ?? opts.seed ?? {};
   const dbOpts: Parameters<typeof createMemoryDb>[0] = { seed };
   if (opts.latencyMs !== undefined) dbOpts.latencyMs = opts.latencyMs;
+  if (opts.subscribeDelayMs !== undefined) dbOpts.subscribeDelayMs = opts.subscribeDelayMs;
   if (opts.failSubscriptions) dbOpts.failSubscriptions = opts.failSubscriptions;
   if (opts.failSubscriptionsTimes !== undefined) dbOpts.failSubscriptionsTimes = opts.failSubscriptionsTimes;
   if (opts.persist) {
@@ -152,7 +157,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
       if (!enabled(name)) return Promise.resolve(null);
       let p = memo.get(name);
       if (!p) {
-        p = new Promise((resolve) => setTimeout(() => resolve(namespaces[name]), opts.useDelayMs ?? 30));
+        p = new Promise((resolve) => setTimeout(() => resolve(namespaces[name]), opts.useDelayMsBy?.[name] ?? opts.useDelayMs ?? 30));
         memo.set(name, p);
       }
       return p;

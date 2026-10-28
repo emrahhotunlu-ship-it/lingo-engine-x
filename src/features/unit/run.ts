@@ -28,6 +28,7 @@ import { recordProfileFields, usePending } from '../progress/persist';
 import { markUnitLocal } from '../today/marks';
 import { todayNow } from '../today/state';
 import { healDay } from '../today/store';
+import { syncTodayDoc } from '../today/startDoc';
 import { startSession } from '../vocab/session';
 import { EMPTY_RUN, useUnitRun, type UnitRun, type UnitVia } from './runStore';
 
@@ -269,6 +270,8 @@ export function markBlockDone(day: string, duty: string): void {
       if (!ok) logWarn('unit:done', { code: 'not_saved', message: `${key} nicht gespeichert – wird nachgeholt` }, 'app/profile');
       return healDay(day);
     })
+    // Startbild (P6): Block abgeschlossen ist eine Nutzeraktion → das Startbild folgt (nur bei Änderung ohne `at`).
+    .then(() => syncTodayDoc(day, 'block'))
     .catch((err: unknown) => logError('unit:done', err, key));
 }
 

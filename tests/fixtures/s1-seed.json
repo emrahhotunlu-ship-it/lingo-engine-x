@@ -18,11 +18,15 @@
     "app/today": {
       "v": 1,
       "d": "2026-09-20",
-      "th": { "k": "topic", "id": "meetings", "nm": { "de": "Besprechungen", "en": "Meetings" } },
-      "b": { "b1": { "st": "done", "n": 3, "of": 3 }, "b2": { "st": "open", "n": 0, "of": 5 } },
+      "th": { "k": "ch", "id": "present-perfect", "nm": { "de": "Present Perfect", "en": "Present Perfect" }, "ch": 3 },
+      "b": {
+        "b1": { "st": "done", "n": 3, "of": 3, "k": "review", "bl": 1, "m": 6, "id": "review" },
+        "b2": { "st": "now", "n": 0, "of": 5, "k": "grammar", "bl": 2, "m": 6, "id": "ch:u-gram" },
+        "b3": { "st": "open", "n": 0, "of": 1, "k": "task.order", "bl": 3, "m": 4, "f": "kwt", "id": "ch:u-order" }
+      },
       "rest": 12,
       "ring": 0.42,
-      "go": { "k": "review", "id": "b2" },
+      "go": { "k": "grammar", "id": "ch:u-gram" },
       "at": 1789927200000
     }
   }

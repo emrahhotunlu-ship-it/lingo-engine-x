@@ -13,6 +13,7 @@ import { todayNow, useToday } from '../features/today/state';
 import { UnitCardScreen } from '../features/unit/UnitCard';
 import { UnitStepScreen } from '../features/unit/UnitStep';
 import { handleUnitDone, installUnitWatch } from '../features/unit/run';
+import { installTodayDocRounds } from '../features/today/startDoc';
 import { EMPTY_RUN, useUnitRun, type UnitRun } from '../features/unit/runStore';
 import { useT } from '../i18n';
 
@@ -116,5 +117,7 @@ export const heute = defineArea({
       return !!u && u.day === p.env.day && JSON.stringify(r) === JSON.stringify(p.env.route);
     });
     installUnitWatch();
+    // Startbild (P6): Runde beendet → Startbild folgt (Sammel-Puffer, nie aus Datenbank-Snapshots).
+    installTodayDocRounds();
   },
 });

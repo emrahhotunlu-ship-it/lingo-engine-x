@@ -77,7 +77,7 @@ describe('Entfernungs-Audit', () => {
       ['act', 'archive', 'articles', 'biz', 'chunk', 'daily', 'feed', 'fluency', 'grammar', 'lesson', 'log', 'lpool', 'meeting', 'out', 'preply', 'read', 'reading', 'say', 'scene', 'talk', 'teacher', 'tones', 'vocab', 'writing', 'wprompt'].sort(),
     );
     expect([...APP_DOC_PATHS].sort()).toEqual(
-      ['app/assess', 'app/c1', 'app/chat', 'app/compare', 'app/course', 'app/decks', 'app/levels', 'app/lookup', 'app/memory', 'app/patterns', 'app/pool', 'app/profile', 'app/radar', 'app/repair', 'app/schema', 'app/week', 'app/weekly'].sort(),
+      ['app/assess', 'app/c1', 'app/chat', 'app/compare', 'app/course', 'app/decks', 'app/levels', 'app/lookup', 'app/memory', 'app/patterns', 'app/pool', 'app/profile', 'app/radar', 'app/repair', 'app/schema', 'app/today', 'app/week', 'app/weekly'].sort(),
     );
   });
 

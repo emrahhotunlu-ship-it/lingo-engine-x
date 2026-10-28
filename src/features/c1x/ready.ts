@@ -29,13 +29,21 @@ export function startC1xPreload(): void {
     .finally(() => set(true));
 }
 
+/**
+ * Relaunch P6: Das Laden beginnt erst NACH dem ersten Bild (`main.tsx`). Bereit heißt deshalb: geladen ODER keine Art eingeschaltet – nie schon
+ * „nicht gestartet“ (sonst begänne eine Übung vor ihren Inhalten). Gewartet wird nur dort, wo Aufgaben gebaut werden (`useScreen`, wartender Start).
+ */
+export function c1xReadyNow(): boolean {
+  return ready || !C1_KINDS.some((k) => kindEnabled(k));
+}
+
 export function useC1xReady(): boolean {
   return useSyncExternalStore(
     (cb) => {
       listeners.add(cb);
       return () => listeners.delete(cb);
     },
-    () => ready || !started,
+    c1xReadyNow,
     () => true,
   );
 }
