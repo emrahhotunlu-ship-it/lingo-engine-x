@@ -757,6 +757,8 @@ export type Answer = {
   noteOnly?: true;
   /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
   t?: number;
+  /** Nachtrag LS3: beim Verlassen gebucht über einen eigenen Schreibweg (`onCommit`, Wochen-Check) – im Protokoll `left: true`. */
+  left?: true;
   /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
   rec?: ActRecord;
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; nur gespeichert (`hist`, Log), nie ausgewertet. */

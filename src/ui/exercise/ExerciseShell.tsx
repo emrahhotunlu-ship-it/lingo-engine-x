@@ -274,7 +274,12 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const wasMore = useRef(false);
   useEffect(() => {
     if (split && wasMore.current && !moreOpen) {
-      document.querySelector<HTMLElement>('[data-testid="result"] [data-slot="verdict"]')?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
+      const v = document.querySelector<HTMLElement>('[data-testid="result"] [data-slot="verdict"]');
+      v?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
+      // C: nie hinter der festen Übungsleiste – liegt das Urteil darunter, rollt die Seite um den Rest (Leistenunterkante + 16 px).
+      const barBottom = document.querySelector<HTMLElement>('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0;
+      const top = v?.getBoundingClientRect().top;
+      if (top !== undefined && top < barBottom + 8) window.scrollBy({ top: top - barBottom - 16, behavior: 'auto' });
     }
     wasMore.current = moreOpen;
   }, [moreOpen, split]);
@@ -354,9 +359,18 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const [clip, setClip] = useState<{ why: boolean; sol: boolean }>({ why: false, sol: false });
   useLayoutEffect(() => {
     if (!band || !verdictNow) return;
-    const over = (el: HTMLElement | null): boolean => !!el && el.scrollHeight > el.clientHeight + 1;
+    // Gemessen wird der Inhalt (Unterkante der Kinder), nicht `scrollHeight`: die vergrößerte Trefferfläche der antippbaren Wörter
+    // (`.lx-word::after`) ragt über die Zeile hinaus und machte eine einzeilige Lösung fälschlich „abgeschnitten“ (Nachprüfung P3, A).
+    // Abgeschnitten heißt: mindestens eine ganze Zeile passt nicht mehr (Lösung 23 px, Warum 20 px; 2 px Spiel für Rundung).
+    const over = (el: HTMLElement | null, line: number): boolean => {
+      if (!el) return false;
+      const top = el.getBoundingClientRect().top;
+      let bottom = top;
+      for (const c of el.children) bottom = Math.max(bottom, c.getBoundingClientRect().bottom);
+      return bottom - top - el.clientHeight >= line - 2;
+    };
     const measure = (): void => {
-      const next = { why: over(whyBoxRef.current), sol: over(solRef.current) };
+      const next = { why: over(whyBoxRef.current, 20), sol: over(solRef.current, 23) };
       setClip((c) => (c.why === next.why && c.sol === next.sol ? c : next));
     };
     measure();
@@ -450,20 +464,6 @@ export function ExerciseShell(props: ExerciseShellProps) {
         )}
       </p>
     ) : null;
-  const nextNotes = feedback ? (
-    <>
-      {feedback.nextIn && (
-        <p className="lx-t-meta mt-1 text-muted" data-testid="next-in">
-          {feedback.nextIn}
-        </p>
-      )}
-      {feedback.stageNote && (
-        <p className="lx-t-meta mt-1 text-muted" data-testid="stage-hold">
-          {feedback.stageNote}
-        </p>
-      )}
-    </>
-  ) : null;
   const taskMenu = feedback?.menu && Object.keys(feedback.menu).length > 0 && hosts === 0 ? <ExerciseMenu items={feedback.menu} onOpenChange={setMenuOpen} /> : null;
   // Inhalt hinter „Mehr“ (Seitenspalte: Aufklappbereich bzw. Kontextspalte).
   const foldContent = feedback ? (
@@ -594,10 +594,24 @@ export function ExerciseShell(props: ExerciseShellProps) {
     result = (
       <section key={resultKey} ref={resultRef} className="lx-card lx-result relative flex scroll-mt-4 flex-col gap-4 overflow-hidden p-4" data-testid="result" aria-label={t('exExplanationLabel')} data-verdict={feedback.verdict}>
         <div data-block="verdict" className="flex flex-col gap-4">
-          <div data-slot="verdict" className="lx-result-head -mx-4 -mt-4 scroll-mt-4 px-4 py-4 pr-14">
-            {verdictNode}
-            {feedback.parts}
-            {nextNotes}
+          <div data-slot="verdict" className="lx-result-head -mx-4 -mt-4 px-4 py-4 pr-14">
+            {/* „Wieder in …“ rechts neben dem Urteil, wie im Band (Nachprüfung P3, G). */}
+            <div className="lx-band-vline">
+              <div className="min-w-0 flex-1">
+                {verdictNode}
+                {feedback.parts}
+              </div>
+              {feedback.nextIn && (
+                <span className="lx-t-meta lx-band-next text-muted" data-testid="next-in">
+                  {feedback.nextIn}
+                </span>
+              )}
+            </div>
+            {feedback.stageNote && (
+              <p className="lx-t-meta mt-1 text-muted" data-testid="stage-hold">
+                {feedback.stageNote}
+              </p>
+            )}
           </div>
           {feedback.head && <div data-slot="head">{feedback.head}</div>}
           {feedback.right && <div data-slot="right">{feedback.right}</div>}

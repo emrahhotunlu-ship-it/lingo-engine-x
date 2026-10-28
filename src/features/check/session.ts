@@ -18,6 +18,7 @@ import { useLearnInputs } from '../learn/inputs';
 import { learnRecorder, nextT, recordAnswer, recordProfileFields, recordRoundEnd } from '../progress/persist';
 import { saveCard } from '../vocab/persist';
 import type { Answer, FirstKind } from '../vocab/session';
+import { flushLeaveBook } from '../../ui/exercise/leaveBook';
 
 // Wochen-Check (Funktionsabgleich M10): 12 gemischte Aufgaben ohne Tipps aus den vorhandenen
 // Bausteinen (Vokabel-Übung, Wendung/Kollokation, Grammatikaufgabe). Freiwillig (Extra), höchstens
@@ -178,6 +179,8 @@ export function commitCheckWord(ans: Answer, step: number): FirstKind {
   };
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
   if (ans.override) a.override = true;
+  // Nachtrag LS3: beim Verlassen (✕, Aushängen, Seite verlassen) gebucht.
+  if (ans.left) a.left = true;
   // S1-ZEIT (P4): Messwerte der Oberfläche und die Lernstufe VOR der Antwort (nur gespeichert, nie ausgewertet).
   Object.assign(a, pickAttempt(ans));
   a.st = card.stage;
@@ -223,6 +226,8 @@ async function finish(aborted: boolean): Promise<void> {
 
 /** Check verlassen: Beantwortetes ist gespeichert bzw. vorgemerkt. */
 export function leaveCheck(): void {
+  // Nachtrag LS3: ein geprüftes, nicht bestätigtes Wort zuerst buchen (die Übung meldet sich in `leaveBook` an), dann abräumen.
+  if (useCheck.getState().active) flushLeaveBook();
   const s = useCheck.getState();
   if (!s.active) return;
   if (s.status === 'running') void finish(true);

@@ -157,3 +157,31 @@ test('Grammatik: ✕ mit offenem Ergebnis bucht die Antwort genau einmal (`left`
   expect((await logEntries(page)).filter((e) => e.k === 'g').length).toBe(g0 + 1);
   expect(errors).toEqual([]);
 });
+
+test('C1-Aufgabe (Fehler finden) in der Grammatikrunde: ✕ mit offenem Ergebnis bucht genau einmal (`left`)', async ({ page }) => {
+  const OLD = Date.parse('2020-01-01T10:00:00+01:00');
+  // err-0039 (src/content/c1x/src/err/k1-2.json items[11]), wie band.spec.
+  const err = { q: 'Please don’t deploy until QA signed off on the release candidate.', given: '', ans: 'Please don’t deploy until QA has signed off on the release candidate.', t: OLD, due: OLD, box: 0, src: 'seed', cid: 'err-0039', pat: 'tc.present-perfect', pts: [0, 2] };
+  const topic = { id: 'time-clauses', p: 0.5, anchor: 0.5, anchorD: '2026-09-15', n: 8, c: 6, due: OLD, last: OLD, recent: [1, 1, 1, 1], seen: [], seenText: [], hist: [{ d: '2026-09-15', p: 0.5 }], errors: [err] };
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { localStorage: { 'lx:flags': 'err' }, fake: { patch: { 'grammar/time-clauses': topic } } });
+  const item = page.getByTestId('gr-item');
+  await expect(item.getByTestId('c1x-err')).toBeVisible();
+  await item.getByTestId('spot-word').nth(5).click();
+  const chip = item.getByTestId('chip').filter({ hasText: 'has signed off' });
+  const field = item.getByRole('textbox', { name: 'Korrektur' });
+  await expect(chip.or(field).first()).toBeVisible();
+  if (await chip.isVisible()) await chip.click();
+  else await field.fill('has signed off');
+  await page.getByTestId('check').click();
+  await expect(item.getByTestId('result')).toBeVisible();
+  const grammarLeft = async () => (await logEntries(page)).filter((e) => e.k === 'g' && e.left === true).length;
+  const g0 = (await logEntries(page)).filter((e) => e.k === 'g').length;
+  expect(await grammarLeft()).toBe(0);
+  await page.getByTestId('round-close').click();
+  await expect(page.getByTestId('gr-item')).toHaveCount(0);
+  await expect.poll(grammarLeft).toBe(1);
+  await page.waitForTimeout(300);
+  expect(await grammarLeft()).toBe(1);
+  expect((await logEntries(page)).filter((e) => e.k === 'g').length).toBe(g0 + 1);
+  expect(errors).toEqual([]);
+});

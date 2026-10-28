@@ -59,7 +59,7 @@ import { companionOpenedSince, companionOpenMs } from '../companion/store';
 import { saveRepairs } from '../repair/store';
 import { requestExamples, useExamples } from './examples';
 import { answerDueIn, commitAnswer, prepareNext, releaseLeft, useSession, type ActRecord, type Answer, type FirstKind, type LeaveMode } from './session';
-import { registerLeaveBook } from '../../ui/exercise/leaveBook';
+import { leaveAction, registerLeaveBook, type LeaveCause } from '../../ui/exercise/leaveBook';
 import { nextT } from './persist';
 import { WordExtras } from './WordExtras';
 import { reportWordCtx } from './wordCtx';
@@ -642,48 +642,48 @@ export function ExerciseView({
   };
 
   /**
-   * Punkt 4 (LS3): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen (`left: true`). Nur in der Trainer-Runde (eigene
-   * Schreibwege wie der Wochen-Check buchen selbst), nur solange diese Aufgabe in der Runde steht, nie während Claude noch prüft.
+   * Punkt 4 (LS3): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen (`left: true`), nie während Claude noch prüft.
+   * Trainer-Runde: verborgen speichern und stehen lassen (`stay`), beim Gehen weiterrechnen. Eigener Schreibweg (`onCommit`, Wochen-Check,
+   * Nachtrag LS3): beim Gehen (✕, Aushängen) und `pagehide` über diesen Weg buchen; verborgen nichts (er kann nicht halten).
    */
-  const bookLeft = (mode: LeaveMode): void => {
-    if (!fb || done.current || onCommit || synBusy.current) return;
-    if (useSession.getState().exercise !== exercise) return;
-    done.current = mode;
-    commitAnswer(answerOf(fb), mode);
-  };
-  /** Verlassen (Runde, Reiter, Bildschirm): buchen und weiterrechnen – oder nach einer `stay`-Buchung nur noch weitergehen. */
-  const leaveNow = (): void => {
-    if (done.current === 'stay') {
+  const leave = (cause: LeaveCause): void => {
+    if (!onCommit && useSession.getState().exercise !== exercise) return;
+    const act = leaveAction(cause, { result: !!fb, done: done.current, busy: synBusy.current, own: !!onCommit });
+    if (act === 'none' || !fb) return;
+    if (act === 'release') {
       done.current = 'go';
       releaseLeft();
       return;
     }
-    bookLeft('go');
+    done.current = act;
+    if (onCommit) onCommit({ ...answerOf(fb), left: true });
+    else commitAnswer(answerOf(fb), act);
   };
-  const leaveRef = useRef({ bookLeft, leaveNow });
+  const leaveRef = useRef(leave);
   useEffect(() => {
-    leaveRef.current = { bookLeft, leaveNow };
+    leaveRef.current = leave;
   });
   // Seite verborgen (App gewechselt, Bildschirm aus) bzw. verlassen: speichern, die Karte bleibt mit ihrem Ergebnis stehen.
   useEffect(() => {
     const onVis = () => {
-      if (document.visibilityState === 'hidden') leaveRef.current.bookLeft('stay');
+      if (document.visibilityState === 'hidden') leaveRef.current('hidden');
     };
-    const onHide = () => leaveRef.current.bookLeft('stay');
+    const onHide = () => leaveRef.current('pagehide');
     document.addEventListener('visibilitychange', onVis);
     window.addEventListener('pagehide', onHide);
     return () => {
       document.removeEventListener('visibilitychange', onVis);
       window.removeEventListener('pagehide', onHide);
       // Aushängen ohne „Weiter“ (Reiter gewechselt, Runde verlassen): buchen und weiterrechnen.
-      leaveRef.current.leaveNow();
+      leaveRef.current('go');
     };
   }, []);
-  // ✕, Pause, Esc: `leaveSession` bucht über diese Anmeldung, BEVOR es die Aufgabe abräumt.
+  // ✕, Pause, Esc: `leaveSession` bzw. `leaveCheck` bucht über diese Anmeldung, BEVOR es die Aufgabe abräumt.
+  const hasFb = !!fb;
   useEffect(() => {
-    if (!fb || onCommit) return;
-    return registerLeaveBook(() => leaveRef.current.leaveNow());
-  }, [fb, onCommit]);
+    if (!hasFb) return;
+    return registerLeaveBook(() => leaveRef.current('go'));
+  }, [hasFb]);
 
   const next = () => {
     if (!fb) return;

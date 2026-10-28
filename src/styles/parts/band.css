@@ -69,10 +69,16 @@
   font-weight: 650;
 }
 /* (a) Urteilszeile: Urteil links, „Wieder in …“ als ruhiger Zusatz rechts (eine Zeile, kürzt mit …), Menü „…“ ganz rechts. */
-.lx-band-vline {
+.lx-band-vline,
+[data-slot='verdict'].lx-band-vline {
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
   gap: 8px;
+}
+/* G: „Wieder in …“ steht rechts neben dem Urteil (dz2.css zieht es in der Rückmeldekarte sonst VOR das Urteil). */
+.lx-band-vline > [data-testid='next-in'] {
+  order: 0;
 }
 .lx-band-next {
   flex: 0 1 auto;
@@ -96,6 +102,13 @@
   font-size: 17px;
   line-height: 23px;
 }
+/* A: kein Polster über der Zeile (dz2.css gibt `right`/`comparison` sonst 4 px), die Lösung selbst in voller Schriftfarbe. */
+.lx-band-sol > [data-slot] {
+  padding-top: 0;
+}
+.lx-band-sol :is([data-testid='diff-correct'], [data-slot='right'] .font-semibold, [data-testid='band-choice'] .font-semibold) {
+  color: var(--fg);
+}
 .lx-band-sol[data-clipped],
 .lx-band-why[data-clipped] {
   mask-image: linear-gradient(to bottom, var(--fg) calc(100% - 18px), transparent);
@@ -105,7 +118,8 @@
 .lx-band-why {
   flex: 0 1 auto;
   min-height: 0;
-  max-height: 64px;
+  /* Genau drei Zeilen (3 × 20 px): was übersteht, ist immer eine ganze Zeile – nie ein halb sichtbarer Rest. */
+  max-height: 60px;
   overflow: hidden;
 }
 .lx-band-why > [data-slot='explanation'] {
@@ -153,8 +167,9 @@
   flex: 1 1 0;
   min-width: 0;
 }
-/* Neben einem zweiten Knopf nimmt „Mehr“ nur seine eigene Breite – der längere Text („War das auch richtig?“) bekommt den Rest. */
-.lx-band-btns > button:has(+ [data-slot]) {
+/* Neben einem zweiten Knopf nimmt „Mehr“ nur seine eigene Breite – der längere Text („War das auch richtig?“) bekommt den Rest.
+   E: Nur, wenn der zweite Platz auch etwas zeigt (ein leerer Platz ist ausgeblendet; „Mehr“ allein steht immer gleich breit). */
+.lx-band-btns > button:has(+ [data-slot]:not(:empty)) {
   flex: none;
 }
 .lx-band-btns button {
@@ -250,6 +265,29 @@ html[data-band][data-actionbar] #main {
 }
 
 /* ------------------------------------------------------------------ Seitenspalte am Laptop (Split): gleiche Tönung, kein Schlamm */
+/* C: Die Ergebnisspalte steht unter der festen Übungsleiste (48 px + Abstand) und rollt für sich, nie länger als der Bildschirm.
+   Holt Esc/„Weniger“ das Urteil zurück, landet es unter der Leiste (`scroll-margin-top`), nie dahinter. */
+@media (min-width: 1024px) {
+  /* B: Der Übungsbehälter (max-w-3xl) gibt die Breite frei, damit Bühne und Ergebnisspalte nebeneinander passen (index.css). */
+  .max-w-3xl:has(.lx-split[data-split]) {
+    max-width: none;
+  }
+  .lx-split[data-split] > [data-col='side'] {
+    top: 4rem;
+    max-height: calc(100dvh - 7rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  .lx-split[data-split] [data-slot='verdict'] {
+    scroll-margin-top: 4rem;
+  }
+}
+/* F: In der Ergebnisspalte stehen die Handlungen („War das auch richtig?“, „Erklär mir meine Antwort“) gleich breit untereinander. */
+.lx-result [data-block='act'] :is([data-testid='synonym-ask'], [data-testid='tutor-ask']) {
+  width: 100%;
+  justify-content: center;
+}
 .lx-result {
   animation: lx-band-fade 220ms var(--ease-soft) backwards;
 }
