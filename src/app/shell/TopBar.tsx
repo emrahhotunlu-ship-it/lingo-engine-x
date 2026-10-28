@@ -1,16 +1,19 @@
+import { useAiAvailable } from '../../ai/scope';
+import { openCompanion } from '../../features/companion/store';
 import { useT } from '../../i18n';
+import { IconButton } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
-import { ClaudeButton, SettingsButton, TitleActions, TranslateButton } from '../../features/system/Chrome';
+import { SettingsButton } from '../../features/system/Chrome';
 import { useNav } from '../nav';
 import { screenOf } from '../registry';
 import { openSheet } from '../sheets';
 import { useInitial } from './useStreak';
 
-// Kopf des Rahmens (docs/neubau/architektur.md §2.5, plan.md §1.2, Prototyp v1 `.top`):
-// - Reiter-Wurzel: links der Profil-Knopf (nur die Initiale, keine Serienzahl: Gesamtkonzept 3.1) → Profil-Blatt; rechts
-//   Übersetzen und Claude (ohne KI unsichtbar), dazu immer das Zahnrad (A7 Paket 2: Einstellungen
-//   überall mit einem Tipp). Den großen Titel zeichnet die Seite selbst.
-// - Seite: links „‹ Herkunft“, rechts Übersetzen, Claude und das Zahnrad (`PageTop`).
+// Kopf des Rahmens (Relaunch Stufe 1, P2 S1-SHELL, docs/relaunch/stufe1-plan.md §6.3, Vorschau `phead`):
+// - Reiter-Wurzel: rechts EIN Symbol „Fragen“ (öffnet Claude; ohne KI unsichtbar). Den großen Titel zeichnet die Seite selbst.
+// - Fortschritt: links der Profil-Knopf (nur die Initiale) → Profil-Blatt, rechts das Zahnrad – nur hier (Plan §6.3).
+// - Seite: links „‹ Herkunft“, rechts „Fragen“ (`PageTop`). Einstellungen, Übersetzer und Claude stehen am Laptop
+//   zusätzlich in der Seitenleiste.
 
 /** Profil-Knopf oben links (öffnet das Profil-Blatt). */
 export function ProfileButton() {
@@ -31,16 +34,28 @@ export function ProfileButton() {
   );
 }
 
+/** „Fragen“: das eine Claude-Symbol im Kopf (Test-ID `open-companion` bleibt). Ohne KI unsichtbar. */
+export function AskButton() {
+  const { t } = useT();
+  const ai = useAiAvailable();
+  if (!ai) return null;
+  return <IconButton icon="sparkle" label={t('shAsk')} onClick={() => openCompanion()} className="text-accent-text hover:text-accent-text" data-testid="open-companion" data-ai="" />;
+}
+
 /** Kopf auf jeder Reiter-Wurzel (einmal im Rahmen, nicht je Bildschirm – eindeutige Test-IDs). */
 export function TopBar() {
-  return (
-    <div className="flex min-h-11 items-center justify-between gap-3 pt-3" data-testid="topbar">
-      <ProfileButton />
-      <div className="flex flex-none items-center gap-1">
-        <TranslateButton />
-        <ClaudeButton />
+  const tab = useNav((s) => s.tab);
+  if (tab === 'progress') {
+    return (
+      <div className="flex min-h-11 items-center justify-between gap-3 pt-3" data-testid="topbar">
+        <ProfileButton />
         <SettingsButton />
       </div>
+    );
+  }
+  return (
+    <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="topbar">
+      <AskButton />
     </div>
   );
 }
@@ -79,8 +94,8 @@ export function PageTop() {
   return (
     <div className="flex min-h-11 items-center justify-between gap-3 pt-3" data-testid="page-bar">
       <BackLink onClick={back} />
-      <div data-testid="stand-actions">
-        <TitleActions />
+      <div className="flex flex-none items-center gap-1" data-testid="stand-actions">
+        <AskButton />
       </div>
     </div>
   );

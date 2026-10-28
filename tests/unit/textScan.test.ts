@@ -28,6 +28,8 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   // Wort-Lernen 2, Teil 2 (Emrahs Auftrag 21.10.2026): Übung „Sag es“ (Diktiertaste), „Sag es einmal laut“, Angebot „Sag es selbst“ und die
   // Werkstatt-Diagnose „Beim Hören …“ gehören zum Wörter-Training (kein eigenes Sprech- oder Hörmodul).
   /^(exName_say_it|pxWw)/,
+  // Relaunch Stufe 1, P2 S1-SHELL (stufe1-plan.md §6.2/§6.3): die Navigation führt unter „Praxis“ Sprechen · Hören · Lesen (frühere Reiter/Seiten).
+  /^sh(Speak|SpeakSub|Listen|Read|ReadSub|PracticeMore)$/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,
 ];

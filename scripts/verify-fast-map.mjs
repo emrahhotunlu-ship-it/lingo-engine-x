@@ -146,6 +146,14 @@ export const RULES = [
   { prefix: 'src/engine/fx/rgb', specs: ['wordSky.spec.ts', 'fxStage1.spec.ts'] },
   { prefix: 'index.html', specs: ['settings.spec.ts', 'rueckweg.spec.ts'] },
   { prefix: 'src/engine/fx/AmbientLight', specs: ['r6aFx.spec.ts'] },
+  // Relaunch P2 S1-SHELL: Rahmen (5 Reiter, Schiene/Seitenleiste, Kontextspalte, „Fragen“), Breiten-Stufen, Erreichbarkeit, Start-Bild.
+  { prefix: 'src/app/shell/', specs: ['rahmen.spec.ts', 'breiten.spec.ts', 'erreichbar.spec.ts', 'perf.spec.ts'], smoke: true },
+  { prefix: 'src/areas/', specs: ['erreichbar.spec.ts'], smoke: true },
+  { prefix: 'src/styles/parts/shell.css', specs: ['rahmen.spec.ts', 'breiten.spec.ts', 'perf.spec.ts'] },
+  { prefix: 'index.html', specs: ['perf.spec.ts', 'breiten.spec.ts'] },
+  { prefix: 'tests/e2e/rahmen', specs: ['rahmen.spec.ts'] },
+  { prefix: 'tests/e2e/breiten', specs: ['breiten.spec.ts'] },
+  { prefix: 'tests/e2e/erreichbar', specs: ['erreichbar.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

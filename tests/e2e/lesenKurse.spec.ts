@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, bootAt, openTab, screen, type BootOptions, type Lang, type Theme } from './fixtures';
+import { boot, bootAt, openRead as openReadPage, screen, type BootOptions, type Lang, type Theme } from './fixtures';
 import { typeInGap } from './learnHelpers';
 
 // Kurse im Reiter „Lesen“ (Paket L8, docs/umbau/lesen-kurse.md, docs/umbau/lesen-routine-kurse.md): Kursübersicht, Lektionsliste, Lektion lesen,
@@ -27,7 +27,7 @@ async function expectNoOverflow(page: Page): Promise<void> {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
 async function openRead(page: Page): Promise<void> {
-  await openTab(page, 'read');
+  await openReadPage(page);
   await expect(page.getByTestId('read')).toHaveAttribute('data-load', 'ready');
   await expect(page.getByTestId('read-courses')).toHaveAttribute('data-load', 'ready');
 }

@@ -28,6 +28,8 @@ import { Layers, useVisibleKind } from './Layers';
 import { RootBoundary, RootNotice } from './Boundary';
 import { SheetHost } from './SheetHost';
 import { TabBar } from './TabBar';
+import { ContextColumn, ContextSheet, SentenceGuard } from './ContextHost';
+import { useContextColumn } from './contextColumn';
 import { tabOfPlace, type Place } from './tabs';
 import { TopBar } from './TopBar';
 import { AmbientLight } from '../../engine/fx/AmbientLight';
@@ -38,6 +40,8 @@ import { LevelUpHost } from '../../ui/moments/LevelUp';
 
 // App-Rahmen (docs/neubau/architektur.md §2.2): Kopf · Ebenen · Reiterleiste · Blätter · Hinweise,
 // dazu die Wurzel-Fehlergrenze, das Fortsetzen nach Neuladen und der Diagnose-Kontext.
+// Relaunch Stufe 1, P2 S1-SHELL (stufe1-plan.md §6.2): EIN Rahmen für alle Breiten – Navigation (Leiste unten / Schiene /
+// Seitenleiste) · Bühne (Kopf, Ebenen, Aktionsleiste) · Kontextspalte. Die Breiten-Stufen stehen in `styles/parts/shell.css`.
 
 /** Systemzustände (Laden, keine Datenbank, offline, Umstellung): kein Reiter, keine Route. */
 function SystemView({ screen }: { screen: SystemScreen }) {
@@ -110,6 +114,9 @@ function Frame() {
     return () => root.removeAttribute('data-lx-tab');
   }, [activeTab]);
   const tabRoot = !system && kind === 'tab';
+  // In Übungen keine Leiste (Plan §6.2); beim Laden steht sie schon da (Start-Bild, U2).
+  const showNav = (!system || screen === 'loading') && !exercise;
+  const ctxOpen = useContextColumn((s) => s.current !== null);
 
   return (
     <>
@@ -121,21 +128,35 @@ function Frame() {
         {t('skipToContent')}
       </a>
       {/* Bei offenem Blatt ist der Hintergrund inert: kein Fokus, kein VoiceOver-Wischen dorthin. */}
-      <div className="relative mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 pt-[env(safe-area-inset-top)] sm:px-6 lg:px-10" inert={sheetOpen || companionOpen}>
-        {/* U2: Beim Laden steht die Reiterleiste schon da (wie im Start-Bild, index.html) – sonst schiebt sie am Laptop alles nach unten. */}
-        {(!system || screen === 'loading') && !exercise && <TabBar />}
-        {tabRoot && <TopBar />}
-        {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts (gleiche Höhe wie der Kopf, U2). */}
-        {system && (
-          <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="system-actions">
-            <SettingsButton />
+      <div
+        className="lx-frame"
+        data-nav={showNav ? '' : undefined}
+        data-exercise={exercise ? '' : undefined}
+        data-wide={!system && kind !== 'tab' ? '' : undefined}
+        data-ctx={ctxOpen ? '' : undefined}
+        data-testid="frame"
+        inert={sheetOpen || companionOpen}
+      >
+        {showNav && <TabBar />}
+        <div className="lx-dmain">
+          <div className="lx-stage" data-testid="stage">
+            {tabRoot && <TopBar />}
+            {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts (gleiche Höhe wie der Kopf, U2). */}
+            {system && (
+              <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="system-actions">
+                <SettingsButton />
+              </div>
+            )}
+            <main id="main" className={`flex-1 ${showNav ? 'lx-main-nav' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
+              {system ? <SystemView screen={screen} /> : <Layers />}
+            </main>
+            <div id={ACTIONBAR_HOST} />
           </div>
-        )}
-        <main id="main" className={`flex-1 ${!system && !exercise ? 'pb-28 md:pb-16' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
-          {system ? <SystemView screen={screen} /> : <Layers />}
-        </main>
-        <div id={ACTIONBAR_HOST} />
+          {(!system || screen === 'loading') && <ContextColumn />}
+        </div>
       </div>
+      <ContextSheet />
+      <SentenceGuard />
       <SheetHost />
       <Toaster />
       <CompanionLayer />

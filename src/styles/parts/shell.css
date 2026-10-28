@@ -1,2 +1,423 @@
 /* Relaunch Stufe 1: Gerüst für die neue App-Hülle (Kopf, Reiterleiste, Seitenrahmen). Leer angelegt in P1 S1-TOK;
    die Hüllen-Pakete der Stufe 1 füllen es nur mit Tokens aus index.css (keine Farbwerte, kein Weichzeichner). */
+
+/* P2 S1-SHELL (docs/relaunch/stufe1-plan.md §6.2, Vorschau `.side`/`.dmain`/`.stage`/`.ctx`/`.tabbar`): EIN Rahmen, Breiten-Stufen per CSS.
+   < 600 px    Handy: Leiste unten (5 Reiter), Bühne mit 1rem Rand, keine Kontextspalte.
+   600–1023    Schiene links (nur Symbole), Bühne ≤ 45rem.
+   1024–1279   Schiene, Bühne ≤ 42.5rem, Kontextspalte 20rem nur, wenn etwas offen ist.
+   ≥ 1280      Seitenleiste 14.5rem, Kontextspalte immer reserviert (22.5rem, ab 1440 24rem).
+   ≥ 1920      Schrift 112.5 % (index.css), Bühne 50rem, Spalte 27.5rem; ≥ 2400 Schrift 125 %, Bühne 54rem, Spalte 29rem
+               (A4: höchstens ein Viertel der Breite bleibt leer). */
+
+.lx-frame {
+  --lx-side-w: 0px;
+  --lx-ctx-w: 0px;
+  --lx-ctx-gap: 0px;
+  --lx-bar-right: 0px;
+  --lx-stage-max: 45rem;
+  --lx-dmain-pad: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+}
+/* Bühne mittig im Platz zwischen Navigation und Kontextspalte; die Spalte steht immer am rechten Rand (dort endet auch die Aktionsleiste). */
+.lx-dmain {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  gap: var(--lx-ctx-gap);
+  min-width: 0;
+  padding-inline: var(--lx-dmain-pad);
+}
+.lx-stage {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  max-width: var(--lx-stage-max);
+  margin-inline: auto;
+  min-height: calc(100dvh - env(safe-area-inset-top));
+}
+.lx-main-nav {
+  padding-bottom: 7rem;
+}
+
+/* ------------------------------------------------------------------ Navigation: Handy (Leiste unten) */
+.lx-nav.dz-tabbar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  min-height: calc(3.25rem + env(safe-area-inset-bottom));
+  padding: 0 0.25rem max(env(safe-area-inset-bottom), 0.25rem);
+  background: var(--lx-bg);
+  border-top: 1px solid var(--lx-border);
+  box-shadow: none;
+}
+.lx-nav-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.lx-nav-group,
+.lx-nav-row {
+  display: contents;
+}
+.lx-nav-mark,
+.lx-nav-toggle,
+.lx-nav-subs,
+.lx-nav-tools {
+  display: none;
+}
+.lx-nav-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  min-width: 0;
+  min-height: 3.25rem;
+  padding: 0.375rem 0.125rem 0.25rem;
+  border-radius: var(--radius-control);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  color: var(--lx-fg-muted);
+  transition: color var(--lx-dur-fast) ease-out, background-color var(--lx-dur-fast) ease-out;
+}
+.lx-nav-item:hover {
+  color: var(--lx-fg);
+}
+.lx-nav-item[aria-current='page'] {
+  font-weight: 600;
+  color: var(--lx-accent-text);
+}
+.lx-nav-icon {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: none;
+}
+/* Pille des aktiven Reiters (TabBar.tsx): Handy hinter dem Symbol, ab 600 px hinter dem ganzen Eintrag. */
+.lx-nav-item {
+  isolation: isolate;
+}
+.lx-nav-pill-icon {
+  inset: -0.125rem -0.875rem;
+}
+.lx-nav-pill-item {
+  display: none;
+  border-radius: var(--radius-control);
+}
+@media (min-width: 600px) {
+  .lx-nav-pill-item {
+    display: block;
+  }
+  .lx-nav-pill-icon {
+    display: none;
+  }
+}
+.lx-nav-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lx-nav-badge {
+  position: absolute;
+  top: -0.375rem;
+  right: -0.625rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--lx-accent);
+  color: var(--lx-accent-fg);
+  font-size: 0.625rem;
+  line-height: 1rem;
+  font-weight: 600;
+}
+
+/* Kontextspalte: unter 1024 px nie (dort Blatt). */
+.lx-ctx {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ ab 600 px: Schiene links */
+@media (min-width: 600px) {
+  .lx-frame {
+    --lx-dmain-pad: 1.5rem;
+  }
+  .lx-frame[data-nav] {
+    --lx-side-w: 4.75rem;
+    display: grid;
+    grid-template-columns: var(--lx-side-w) minmax(0, 1fr);
+    align-items: start;
+  }
+  .lx-frame[data-nav] > .lx-dmain {
+    grid-column: 2;
+    min-height: calc(100dvh - env(safe-area-inset-top));
+  }
+  .lx-main-nav {
+    padding-bottom: 4rem;
+  }
+  .lx-nav.dz-tabbar {
+    position: sticky;
+    top: 0;
+    inset-inline: auto;
+    bottom: auto;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0.75rem 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-top: 0;
+    border-right: 1px solid var(--lx-border);
+    background: var(--lx-bg);
+    box-shadow: none;
+  }
+  /* Die Schiene bleibt stehen, auch wenn am Handy-Rand die Aktionsleiste oder ein Eingabefeld die Leiste ersetzen würde (index.css). */
+  html[data-actionbar] nav.lx-nav[data-testid='tabbar'],
+  html[data-field-focus] nav.lx-nav[data-testid='tabbar'] {
+    display: flex;
+  }
+  .lx-nav-tabs,
+  .lx-nav-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .lx-nav-tools {
+    margin-top: auto;
+    padding-top: 0.75rem;
+  }
+  .lx-nav-item {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem;
+  }
+  /* Schiene: Beschriftung nur für Screenreader (unsichtbar ausgeschnitten, ohne Überlauf-Abschneiden). */
+  .lx-nav-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    overflow: visible;
+    clip-path: inset(50%);
+    pointer-events: none;
+  }
+  /* Die Aktionsleiste (fest unten) beginnt rechts der Navigation und endet vor der Kontextspalte. */
+  .lx-frame .lx-actionbar {
+    left: var(--lx-side-w);
+    right: var(--lx-bar-right);
+  }
+}
+
+/* ------------------------------------------------------------------ ab 1024 px: Kontextspalte, wenn etwas offen ist */
+@media (min-width: 1024px) {
+  .lx-frame {
+    --lx-stage-max: 42.5rem;
+    --lx-dmain-pad: 1rem;
+  }
+  .lx-frame[data-ctx] {
+    --lx-ctx-w: 20rem;
+    --lx-ctx-gap: 1.5rem;
+    --lx-bar-right: calc(var(--lx-ctx-w) + var(--lx-dmain-pad));
+  }
+  .lx-frame[data-ctx] .lx-ctx {
+    display: block;
+  }
+  .lx-ctx {
+    position: sticky;
+    top: 0;
+    flex: 0 0 var(--lx-ctx-w);
+    align-self: flex-start;
+    width: var(--lx-ctx-w);
+    height: 100dvh;
+    overflow-y: auto;
+    padding: 1rem 0 1rem 1.5rem;
+    border-left: 1px solid var(--lx-border);
+  }
+  .lx-ctx-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .lx-ctx-empty {
+    padding-top: 4.5rem;
+  }
+
+  /* Claude dockt in die Spalte: das Begleiter-Fenster liegt genau auf ihr (Maße aus ContextHost), nie über der Bühne. */
+  html[data-lx-dock='claude'] [data-testid='companion'][data-mode='float']:not([data-minimized]) {
+    top: 0 !important;
+    left: var(--lx-dock-left) !important;
+    width: var(--lx-dock-w) !important;
+    height: 100dvh !important;
+    transform: none !important;
+    border-width: 0 0 0 1px !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  html[data-lx-dock='claude'] [data-testid='companion'] :is([data-testid='companion-foot'], [data-testid='companion-grab'], [data-testid^='companion-edge-']) {
+    display: none !important;
+  }
+}
+
+/* Unter 1024 px in einer Übung: das Begleiter-Blatt beginnt unter dem Aufgabensatz (ContextHost.tsx SentenceGuard). */
+@media (max-width: 1023.98px) {
+  html[data-lx-sheet-guard] [data-testid='companion'][data-mode='float']:not([data-minimized]):not([data-low]) {
+    top: var(--lx-sheet-top) !important;
+    height: var(--lx-sheet-h) !important;
+  }
+}
+
+/* ------------------------------------------------------------------ ab 1280 px: Seitenleiste, Spalte immer reserviert */
+@media (min-width: 1280px) {
+  .lx-frame,
+  .lx-frame[data-ctx] {
+    --lx-stage-max: 45rem;
+    --lx-ctx-w: 22.5rem;
+    --lx-ctx-gap: 1.5rem;
+    --lx-bar-right: calc(var(--lx-ctx-w) + var(--lx-dmain-pad));
+  }
+  .lx-frame[data-nav] {
+    --lx-side-w: 14.5rem;
+  }
+  .lx-ctx {
+    display: block;
+  }
+  .lx-nav.dz-tabbar {
+    padding: 1.25rem 0.75rem;
+    gap: 0.125rem;
+  }
+  .lx-nav-mark {
+    display: block;
+    padding: 0.25rem 0.75rem 1rem;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--lx-fg);
+  }
+  .lx-nav-tabs,
+  .lx-nav-tools {
+    gap: 0.125rem;
+  }
+  .lx-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  .lx-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+  .lx-nav-row > .lx-nav-item {
+    flex: 1 1 auto;
+  }
+  .lx-nav-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+  }
+  .lx-nav-label {
+    position: static;
+    max-width: 100%;
+    overflow: hidden;
+    clip-path: none;
+    pointer-events: auto;
+  }
+  .lx-nav-toggle {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-control);
+    color: var(--lx-fg-muted);
+    transition: transform var(--lx-dur-fast) ease-out;
+  }
+  .lx-nav-toggle:hover {
+    color: var(--lx-fg);
+    background: var(--lx-surface);
+  }
+  .lx-nav-toggle[aria-expanded='true'] > svg {
+    transform: rotate(180deg);
+  }
+  .lx-nav-subs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  .lx-nav-sub {
+    padding-left: 2.85rem;
+    font-size: 0.875rem;
+  }
+  .lx-nav-sub .lx-nav-icon {
+    display: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .lx-frame,
+  .lx-frame[data-ctx] {
+    --lx-dmain-pad: 2.5rem;
+    --lx-ctx-w: 24rem;
+    --lx-ctx-gap: 2rem;
+  }
+  .lx-ctx {
+    padding-left: 2rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .lx-frame,
+  .lx-frame[data-ctx] {
+    --lx-stage-max: 50rem;
+    --lx-ctx-w: 27.5rem;
+  }
+}
+
+@media (min-width: 2400px) {
+  :root {
+    font-size: 125%;
+  }
+  .lx-frame,
+  .lx-frame[data-ctx] {
+    --lx-stage-max: 54rem;
+    --lx-ctx-w: 29rem;
+  }
+}
+
+/* Seiten und Übungen haben eigene Aufbauten (z. B. Rollenspiel: Gespräch + Analysespur, Atlas, Lückentext mit Tipp-Box):
+   sie behalten die frühere Breite (Rahmen 76rem, Inhalt bis 71rem); die Kontextspalte nimmt hier nur Platz, wenn etwas offen ist
+   (z. B. Claude angedockt). Steht am Ende, damit es die Breiten-Stufen oben überstimmt. */
+.lx-frame[data-wide] {
+  --lx-stage-max: 71rem;
+}
+@media (min-width: 1280px) {
+  .lx-frame[data-wide]:not([data-ctx]) {
+    --lx-ctx-w: 0px;
+    --lx-ctx-gap: 0px;
+    --lx-bar-right: 0px;
+  }
+  .lx-frame[data-wide]:not([data-ctx]) .lx-ctx {
+    display: none;
+  }
+}

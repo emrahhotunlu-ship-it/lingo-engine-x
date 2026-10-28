@@ -27,21 +27,15 @@ export type TabDef = {
   readonly badge?: BadgeId;
 };
 
-// Sechs Reiter: Heute · Wortschatz · Üben · Lesen · Sprechen (docs/neubau/plan.md §1.1) und, seit
-// Emrahs Wunsch vom 01.10.2026 („Fortschritt ist zu versteckt“), Fortschritt = die Seite „Dein Stand“
-// (Route `overview`), die vorher nur über das Profil-Blatt erreichbar war.
-// Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
-// Lesen (13.10.2026, Emrahs Entscheidung „eigener Reiter“): sechster Reiter zwischen Anwenden und Fortschritt, gebaut vom Modul src/modules/read.
-// Seit 04.10.2026 (Emrahs Vorgabe „Fokus komplett auf Vokabeln und Grammatik“) nur noch vier Reiter:
-// Heute · Wortschatz · Grammatik (bisher „Üben“) · Fortschritt; dazu seit „Go Anwenden“ (04.10.2026) der Reiter
-// „Anwenden“ (Diktat, Hörschleife, Lücke, Satzbau, Rollenspiel – freiwillig). Lesen und Sprechen sind keine Reiter mehr;
-// Sprechen ist als freiwilliges Extra über Heute erreichbar (Seite `speak`).
+// Fünf Reiter (Relaunch Stufe 1, P2 S1-SHELL, docs/relaunch/stufe1-plan.md §6.3, Konzept 13.1):
+// Heute · Wörter · Grammatik · Praxis · Fortschritt. „Praxis“ ist der frühere Reiter „Anwenden“ (Test-ID `tab-apply` bleibt);
+// Lesen (früher eigener Reiter, 13.10.2026) und Sprechen hängen als Seiten darunter (Plätze `read`/`speak` stehen auf Praxis).
+// Fortschritt = die Seite „Dein Stand“ (Route `overview`, Emrahs Wunsch vom 01.10.2026). Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
 export const TABS = [
   { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today'], badge: 'openDuties' },
   { id: 'vocab', label: 'nbShTabVocab', icon: 'cards', root: { name: 'vocab' }, places: ['vocab'] },
   { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
-  { id: 'apply', label: 'nbShTabApply', icon: 'bolt', root: { name: 'apply' }, places: ['apply'] },
-  { id: 'read', label: 'rdTab', icon: 'book', root: { name: 'read' }, places: ['read'] },
+  { id: 'apply', label: 'shTabPractice', icon: 'bolt', root: { name: 'apply' }, places: ['apply', 'read', 'speak'] },
   { id: 'progress', label: 'nbShTabProgress', icon: 'chart', root: { name: 'overview' }, places: [] },
 ] as const satisfies readonly TabDef[];
 

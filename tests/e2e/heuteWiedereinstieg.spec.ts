@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openProfile, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { MON, MON_9, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
 
@@ -75,7 +75,7 @@ test('Serie: im Kopf nie, auf Heute nur im Kartenfuß ab 1 Tag, nach einer Pause
   await expect(page.getByTestId('today-streak')).toHaveText('Serie 12');
   await expect(page.getByTestId('today-card').getByTestId('today-streak')).toHaveCount(1);
   // Profil-Blatt zeigt sie auch.
-  await page.getByTestId('open-profile').click();
+  await openProfile(page);
   await expect(page.getByTestId('profile-sheet-streak')).toHaveText('Serie: 12 Tage');
   await page.keyboard.press('Escape');
   await page.close();
@@ -85,7 +85,7 @@ test('Serie: im Kopf nie, auf Heute nur im Kartenfuß ab 1 Tag, nach einer Pause
   await screen(p, 'today');
   await expect(p.getByTestId('today-streak')).toHaveCount(0);
   await expect(p.locator('body')).not.toContainText('Serie: 0');
-  await p.getByTestId('open-profile').click();
+  await openProfile(p);
   await expect(p.getByTestId('profile-sheet')).toBeVisible();
   await expect(p.getByTestId('profile-sheet-streak')).toHaveCount(0);
   expect(errors).toEqual([]);

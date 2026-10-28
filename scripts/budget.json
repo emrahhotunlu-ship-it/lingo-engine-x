@@ -32,13 +32,15 @@
       "basis": 2736000,
       "zuwachs": {
         "P5 S1-ZAHL": 2000,
-        "P4 S1-ZEIT": 3000
+        "P4 S1-ZEIT": 3000,
+        "P2 S1-SHELL": 18000
       }
     },
     "css": {
       "basis": 25000,
       "zuwachs": {
-        "P1 S1-TOK": 4000
+        "P1 S1-TOK": 4000,
+        "P2 S1-SHELL": 4000
       }
     },
     "html": {
