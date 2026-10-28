@@ -6,10 +6,9 @@ import { useDocWatch } from '../../data/watch';
 import { readAssess } from '../../domain/assessment/envelope';
 import { lastVtest } from '../../domain/assessment/sources';
 import { TOPICS } from '../../domain/content';
-import { topicP } from '../../domain/grammar/bkt';
 import { canDoEvidence, canDoStatus, canDoSummary, CANDO_DIMS, FOCUS_CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
 import { radarTotals } from '../../domain/progress/radar';
-import { buildTrainCards } from '../../domain/metrics';
+import { buildTrainCards, topicShown } from '../../domain/metrics';
 import { C1_MARK, vocabGoal } from '../../domain/vocab/goal';
 import { useT, type MessageKey } from '../../i18n';
 import { Card } from '../../ui/Card';
@@ -54,7 +53,10 @@ export function PathTab({ part }: { part: 'goal' | 'cando' }) {
       .map((v) => ({ passive: v.passive as number, active: typeof v.active === 'number' ? v.active : 0 }));
     return {
       vtests,
-      grammar: new Map(TOPICS.map((tp) => [tp.id, { p: topicP(tp.id, grammar.get(tp.id), now), n: typeof grammar.get(tp.id)?.n === 'number' ? (grammar.get(tp.id)?.n as number) : 0 }])),
+      grammar: new Map(TOPICS.map((tp) => {
+        const { p, n } = topicShown(tp.id, grammar.get(tp.id), now);
+        return [tp.id, { p, n }];
+      })),
       vtest: vt ? { passive: vt.passive, active: vt.active } : null,
       colloc: { ema: typeof ema.colloc === 'number' ? ema.colloc : null, n: typeof n.colloc === 'number' ? n.colloc : 0 },
       radar: radarTotals(radar.data?.events, now),

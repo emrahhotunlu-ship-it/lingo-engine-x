@@ -30,7 +30,9 @@
   "grenzen": {
     "entry": {
       "basis": 2736000,
-      "zuwachs": {}
+      "zuwachs": {
+        "P5 S1-ZAHL": 2000
+      }
     },
     "css": {
       "basis": 25000,

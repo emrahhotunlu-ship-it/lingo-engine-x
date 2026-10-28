@@ -37,3 +37,27 @@ describe('Architektur: eine Quelle je Zahl', () => {
     expect(bad).toEqual([]);
   });
 });
+
+// Relaunch Stufe 1 P5 S1-ZAHL (docs/relaunch/stufe1-plan.md §5.2): Anzeige-Dateien rechnen keine Zahl selbst. Dieselbe Liste wie
+// `SCREEN_NUMBER_NAMES` in eslint.config.js; die Lern-Logik (GrammarItem, c1x, drills, generate) ruft `topicP` weiter direkt.
+const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
+const isDisplay = (rel: string): boolean => (rel.startsWith('features/') && /Screen\.tsx$/.test(rel)) || rel.startsWith('features/progress/') || rel.startsWith('features/vocab/hub/') || rel.startsWith('ui/');
+
+describe('Architektur: Anzeige-Zahlen nur aus domain/metrics (P5 S1-ZAHL)', () => {
+  it('Bildschirme, Fortschritt, Wörter-Übersicht und Bausteine importieren keine Rechenbausteine für Anzeige-Zahlen', () => {
+    const display = all.filter((f) => isDisplay(f.rel));
+    expect(display.length).toBeGreaterThan(10);
+    const bad = display.flatMap((f) => SCREEN_NUMBER_NAMES.filter((n) => new RegExp(`import\\s*(type\\s*)?\\{[^}]*\\b${n}\\b[^}]*\\}\\s*from`).test(f.text)).map((n) => `${f.rel}: ${n}`));
+    expect(bad).toEqual([]);
+  });
+
+  it('die Ringfüllung (höchstens 95 % offen) steht nur in domain/metrics', () => {
+    const bad = outside.filter((f) => /\bdutyFills\b|Math\.min\(\s*0\.95\s*,/.test(f.text)).map((f) => f.rel);
+    expect(bad).toEqual([]);
+  });
+
+  it('domain/metrics bietet die Quellen an, die die Anzeige nutzt', () => {
+    const index = all.find((f) => f.rel === 'domain/metrics/index.ts')?.text ?? '';
+    for (const n of ['todaySummary', 'ringFills', 'newQuotaToday', 'topicShown']) expect(index).toMatch(new RegExp(`\\b${n}\\b`));
+  });
+});

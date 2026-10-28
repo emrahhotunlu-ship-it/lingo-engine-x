@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import { useClock } from '../../../app/clock';
 import { invalidIdsOf, useLive } from '../../../data/live';
-import { buildTrainCards } from '../../../domain/metrics';
+import { buildTrainCards, newQuotaToday } from '../../../domain/metrics';
 import { buildChunkCards } from '../../../domain/srs/chunkCards';
 import type { DeckCtx } from '../../../domain/srs/decks';
 import { weekStartMs } from '../../../domain/srs/flip';
-import { newQuotaLeft } from '../../../domain/srs/queue';
 import type { TrainCard } from '../../../domain/srs/types';
 
 // Karten des Wortschatz-Bereichs (Vokabeln + Wendungen) – einmal je Datenstand gebaut. Die Hubs
@@ -38,8 +37,7 @@ export function useQuota(cards: readonly TrainCard[]): { left: number; perDay: u
   const today = useClock((s) => s.today);
   const perDay = useLive((s) => s.docs['app/profile']?.newPerDay);
   return useMemo(() => {
-    const intro = cards.filter((c) => c.intro === today);
-    return { left: newQuotaLeft(perDay, intro.length, intro.filter((c) => c.src === 'lesson').length), perDay };
+    return { left: newQuotaToday(cards, today, perDay), perDay };
   }, [cards, today, perDay]);
 }
 

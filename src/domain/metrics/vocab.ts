@@ -1,5 +1,6 @@
 import { dayKey, daysBetween, isDayKey } from '../date';
 import { histOf } from '../srs/flip';
+import { newQuotaLeft } from '../srs/queue';
 import { retrievability } from '../srs/scheduler';
 import { KERN_FROM } from '../srs/spacing';
 import { FREE_ANSWER } from '../srs/variety';
@@ -202,4 +203,13 @@ function growthOf(key: GrowthKey, now: number, history: unknown, today: string, 
 export function festGrowthUnits(i: { vocabFest: number; unitsFest: number; history: unknown; today: string; ruleFrom?: string }): FestGrowth | null {
   const from = i.ruleFrom ?? FEST_RULE_FROM;
   return growthOf('vu', i.unitsFest, i.history, i.today, GROWTH_WINDOW_DAYS, from) ?? growthOf('va', i.vocabFest, i.history, i.today, GROWTH_MIN_DAYS, from);
+}
+
+/**
+ * Rest-Kontingent neuer Karten heute (EIN Kontingent für alle Wege, anki-regeln §5): Karten mit `intro === today`, davon die aus Lektionen
+ * gesondert (`newQuotaLeft`). Quelle für die Zahl im Reiter Wörter (`useQuota`, P5 S1-ZAHL). Rein, nichts wird gespeichert.
+ */
+export function newQuotaToday(cards: readonly TrainCard[], today: string, perDay: unknown): number {
+  const intro = cards.filter((c) => c.intro === today);
+  return newQuotaLeft(perDay, intro.length, intro.filter((c) => c.src === 'lesson').length);
 }

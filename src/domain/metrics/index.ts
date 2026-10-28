@@ -7,11 +7,13 @@ export { computeStreak } from '../streak';
 export { FEST_DAYS, FEST_STAGE, UNIT_RANK, UNIT_STATES, counts, dueCount, isDue, isOverdue, overdueCount, unitState, type CardCounts, type UnitState } from './definitions';
 export { WEEK_GOAL, restInfo, streak, streakInputOf, streakWeek, weekGoal, type RestInfo, type StreakDocs, type WeekGoal } from './streak';
 // Fortschritt (Gesamtkonzept 3.5): reine Zahlen für die Seite „Fortschritt“.
-export { FEST_GOAL, FEST_RULE_FROM, festNoteActive, expectedKnown, festCount, festForecast, festGrowth28, festGrowthUnits, festUnits, isFest, onTheWay, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
-export { errorSentenceStats, grammarDistribution, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicStage } from './grammar';
+export { FEST_GOAL, FEST_RULE_FROM, festNoteActive, expectedKnown, festCount, newQuotaToday, festForecast, festGrowth28, festGrowthUnits, festUnits, isFest, onTheWay, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
+export { errorSentenceStats, grammarDistribution, topicShown, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicShown, type TopicStage } from './grammar';
 export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
 // Lernplattform 2.0 (§4.9): Zahlen von Heute, Wörtern und Grammatik, Musterzustand, Messwerte.
-export { EXTRA_ROUND_MAX, atlasCounts, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, dueLineSplit, reviewAll, reviewFigures, reviewToday, vocabEstimate, wordsToday } from './today';
+export { EXTRA_ROUND_MAX, atlasCounts, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, dueLineSplit, reviewAll, reviewFigures, reviewToday, todaySummary, vocabEstimate, wordsToday, type TodaySummary } from './today';
+// Relaunch Stufe 1 P5 S1-ZAHL: Tagesring und Heute-Zusammenfassung (Quelle für Heute und später `app/today`).
+export { RING_OPEN_MAX, ringFills, ringShare } from './ring';
 export { PATTERN_STATES, patPush, patternState, patternStateNo, patsOf, readPatEntry, topicStateFromPatterns, type PatEntry, type PatternState } from './pattern';
 export { EFFECT_RULES, learningEffect, motivationSignals, type LearningEffect, type MotivationSignals, type Rate } from './effect';
 export { nextGoal, type GoalId, type NextGoal } from './goals';
