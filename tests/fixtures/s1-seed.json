@@ -2,13 +2,13 @@
   "$kommentar": [
     "Rückweg-Seed Stufe 1 (docs/relaunch/stufe1-plan.md §4.5 Nr. 6 und §4.6): erfundene Werte, die neuen Felder aus Stufe 1 über seed/sample-data.json gelegt.",
     "seed/sample-data.json bleibt unverändert. Genutzt von tests/e2e/rueckweg.spec.ts: v86 (Live) muss diese Felder lesen können und beim Zurückschreiben stehen lassen.",
-    "histExtra: an jeden älteren hist-Eintrag der Übungskarten gehängt (P4 S1-ZEIT: fk/ms/in). logExtra: an einen älteren Log-Eintrag des Tages (P4: fk/in; ms gibt es schon).",
+    "histExtra: an jeden älteren hist-Eintrag der Übungskarten gehängt (P4 S1-ZEIT: fk/ms/in). logExtra: an einen älteren Log-Eintrag des Tages (P4: fk/in; ms gibt es schon; LS3: left = beim Verlassen gebucht).",
     "P4 S1-ZEIT endgültig: fk und ms in ms, auf 10 gerundet, höchstens 600000; in ist t (getippt), d (diktiert) oder c (gewählt); mx 1 gemischt, pl Prompt-Zeichen, n 2 zweiter Versuch, bg 1 Seite verborgen, st Stufe vorher. Im Log zusätzlich sm (Senden ohne Claude-Wartezeit, nur wenn ≠ ms).",
     "docs: Dokument-Felder, flach je Dokument über den Seed gelegt (InstallOptions.patch). theme.a (P1), dk (P7), app/today (P6).",
     "P4, P6 und P7 ergänzen hier ihre endgültigen Felder, sobald es sie gibt."
   ],
   "histExtra": { "fk": 1840, "ms": 5230, "in": "t", "mx": 1, "pl": 58, "n": 2, "bg": 1, "st": 3 },
-  "logExtra": { "fk": 2210, "in": "d", "mx": 1, "sm": 4320, "pl": 58, "n": 2, "bg": 1, "st": 3 },
+  "logExtra": { "fk": 2210, "in": "d", "mx": 1, "sm": 4320, "pl": 58, "n": 2, "bg": 1, "st": 3, "left": true },
   "docs": {
     "app/profile": {
       "theme": { "m": "dark", "p": "ocean", "a": "amber" },

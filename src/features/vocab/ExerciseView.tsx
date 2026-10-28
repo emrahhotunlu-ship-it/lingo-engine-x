@@ -61,6 +61,7 @@ import { requestExamples, useExamples } from './examples';
 import { answerDueIn, commitAnswer, prepareNext, releaseLeft, useSession, type ActRecord, type Answer, type FirstKind, type LeaveMode } from './session';
 import { leaveAction, registerLeaveBook, type LeaveCause } from '../../ui/exercise/leaveBook';
 import { nextT } from './persist';
+import { logError } from '../../platform/diagnostics';
 import { WordExtras } from './WordExtras';
 import { reportWordCtx } from './wordCtx';
 import { AiMark } from '../../ui/AiMark';
@@ -228,6 +229,8 @@ export function ExerciseView({
   // Korrekturrunde P3 (Punkt 4, LS3): Buchung beim Verlassen. `done`: schon gebucht – `go` (Weiter oder Verlassen) bzw. `stay` (beim Verbergen
   // gespeichert, Weitergehen steht aus). Nie zweimal. Solange Claude „War das auch richtig?“ prüft, wird nichts gebucht.
   const done = useRef<false | LeaveMode>(false);
+  // Beim Verbergen schon gebucht (`stay`): was die Wertung ändern würde („Ich lag richtig“, „War das auch richtig?“) bliebe wirkungslos – nicht anbieten.
+  const [held, setHeld] = useState(false);
   const synBusy = useRef(false);
   const [onSynBusy] = useState(() => (b: boolean) => {
     synBusy.current = b;
@@ -647,17 +650,23 @@ export function ExerciseView({
    * Nachtrag LS3): beim Gehen (✕, Aushängen) und `pagehide` über diesen Weg buchen; verborgen nichts (er kann nicht halten).
    */
   const leave = (cause: LeaveCause): void => {
-    if (!onCommit && useSession.getState().exercise !== exercise) return;
-    const act = leaveAction(cause, { result: !!fb, done: done.current, busy: synBusy.current, own: !!onCommit });
-    if (act === 'none' || !fb) return;
-    if (act === 'release') {
-      done.current = 'go';
-      releaseLeft();
-      return;
+    // Ein Fehler beim Buchen darf das Verlassen nie aufhalten (Aushängen, ✕, Seite weg): protokollieren, nicht werfen.
+    try {
+      if (!onCommit && useSession.getState().exercise !== exercise) return;
+      const act = leaveAction(cause, { result: !!fb, done: done.current, busy: synBusy.current, own: !!onCommit });
+      if (act === 'none' || !fb) return;
+      if (act === 'release') {
+        done.current = 'go';
+        releaseLeft();
+        return;
+      }
+      done.current = act;
+      if (onCommit) onCommit({ ...answerOf(fb), left: true });
+      else commitAnswer(answerOf(fb), act);
+      if (act === 'stay') setHeld(true);
+    } catch (err) {
+      logError('leave:book', err, `${card.path}:${e.ex}`);
     }
-    done.current = act;
-    if (onCommit) onCommit({ ...answerOf(fb), left: true });
-    else commitAnswer(answerOf(fb), act);
   };
   const leaveRef = useRef(leave);
   useEffect(() => {
@@ -1258,7 +1267,7 @@ export function ExerciseView({
         </p>
       ) : null;
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
-    if (wrongTyped && (isTyped || card.col.some((x) => x.ai))) menu.override = override;
+    if (wrongTyped && !held && (isTyped || card.col.some((x) => x.ai))) menu.override = override;
     if (wrongTyped && isTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.moreInfo = () => setMoreOpen(true);
     // „Weiß ich nicht“ hat keine Antwort, die man sich erklären lassen könnte (UX-Prüfung 14.10.).
@@ -1298,7 +1307,7 @@ export function ExerciseView({
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} meaning={fb.sentence ? null : headMeaning} pos={posKey(card.pos)} />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
       // Punkt 1d: im Band neben „Mehr“ (zweiter und letzter Zweitknopf); Ergebnis und Annehmen wachsen darunter.
-      act: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} onBusy={onSynBusy} /> : undefined,
+      act: !held && !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} onBusy={onSynBusy} /> : undefined,
       foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="body" />,
       moreOpen,
       auto: fb.hint === 0 && !fb.override && !fb.sentence && !fb.dontKnow,

@@ -116,6 +116,37 @@ test('ohne Claude (?fake=nosample): unsicher wird wie „Fast“ gebucht, kein C
   expect(errors).toEqual([]);
 });
 
+test('Seite verborgen mit offenem Ergebnis (schon gebucht): kein „Claude fragen“, kein „Ich lag richtig“ – nichts, was nicht wirkt', async ({ page }) => {
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
+  await skipMiniLesson(page);
+  await toPrompt(page, ARCHIVE);
+  await typeInGap(page, 'used to keep');
+  await page.getByTestId('check').click();
+  // Vor dem Verbergen sind beide Angebote da.
+  await expect(page.getByTestId('ask-claude')).toBeVisible();
+  await page.getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('menu-override')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  // Gebucht (`left`), die Aufgabe steht noch: die Wertung ist festgeschrieben, also gibt es nichts mehr zu ändern – „Weiter“ bleibt.
+  await expect(page.getByTestId('verdict')).toBeVisible();
+  await expect(page.getByTestId('ask-claude')).toHaveCount(0);
+  await page.getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('menu-override')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('next')).toBeVisible();
+  expect(await fitCalls(page)).toBe(0);
+  await page.getByTestId('next').click();
+  expect(errors).toEqual([]);
+});
+
 test('Einspruch „Ich lag richtig“: als richtig gewertet und gemerkt, kein Claude-Knopf mehr', async ({ page }) => {
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
   await skipMiniLesson(page);
