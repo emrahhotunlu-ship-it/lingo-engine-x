@@ -89,6 +89,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* In der Ergebnisspalte (Laptop) ist Platz zum Umbrechen: die Angabe ist dort immer ganz lesbar, nie mit … gekürzt. */
+.lx-result .lx-band-next {
+  max-width: 50%;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
 /* (b) EINE Lösungszeile („Du: … → Richtig: …“), höchstens zwei Zeilen; was nicht passt, steht im Mehr-Blatt (`data-clipped`). */
 .lx-band-sol {
   display: flex;
