@@ -85,7 +85,7 @@ describe('Nacharbeit: weitere Messwerte im Log', () => {
 
   it('schlimmster Fall: 300 Einträge mit allen Feldern und langen Texten bleiben unter LOG_DOC_MAX_BYTES, nichts fällt heraus', () => {
     const long = 'This is a deliberately long answer that keeps going well past the clip limit so that every text field is as large as it can get. '.repeat(3);
-    const worst = { fk: 600_000, in: 'd' as const, mx: 1 as const, sm: 599_990, pl: 9_999, n: 2 as const, bg: 1 as const, st: 5 };
+    const worst = { fk: 600_000, in: 'd' as const, mx: 1 as const, sm: 599_990, pl: 9_999, n: 2 as const, bg: 1 as const, st: 5, left: true as const };
     const added: AnyLogEntry[] = [];
     for (let i = 0; i < LOG_ENTRIES_MAX; i++) {
       const t = T0 + i * 1000;

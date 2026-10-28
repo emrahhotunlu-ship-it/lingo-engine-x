@@ -185,7 +185,7 @@ export function commitCheckWord(ans: Answer, step: number): FirstKind {
   Object.assign(a, pickAttempt(ans));
   a.st = card.stage;
   void saveCard(a, card.inDb ? null : { ...card.doc });
-  recordAnswer(a, false);
+  recordAnswer(a, !!ans.left);
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
   const cards = new Map(s.cards);
   cards.set(card.key, toTrainCard(card.id, nextDoc, true, a.t) ?? card);

@@ -128,9 +128,11 @@ function pushEntry(e: AnyLogEntry, day: string): void {
   usePending.setState((s) => ({ entries: [...s.entries, { ...e, day }] }));
 }
 
-function afterAnswer(immediate: boolean): void {
+/** `left`: beim Verlassen gebucht (Punkt 4, LS3) – die Seite ist vielleicht gleich weg, also auch bei belegter Sperre schreiben (`flushOnHide`). */
+function afterAnswer(immediate: boolean, left = false): void {
   bufferedAnswers++;
-  if (immediate || bufferedAnswers >= FLUSH_EVERY) void flush();
+  if (left) void flushOnHide();
+  else if (immediate || bufferedAnswers >= FLUSH_EVERY) void flush();
   else schedule();
 }
 
@@ -138,7 +140,7 @@ function afterAnswer(immediate: boolean): void {
 export function recordAnswer(a: AnswerEvent, immediate: boolean): void {
   open.answers.push(a);
   pushEntry(logEntry(a), a.day);
-  afterAnswer(immediate);
+  afterAnswer(immediate, a.left === true);
 }
 
 function addRound(r: RoundEnd, sprint?: SprintEntry): void {
@@ -268,8 +270,8 @@ export const learnRecorder: LearnRecorder = {
     open.counts.push({ day: a.day, kind: 'g', channel: grammarChannel(a), ok: right });
     pushEntry(grammarLogEntry(a), a.day);
     if (!right && !a.dontKnow) radarQueue.push(radarEvent(topicCat(a.task.topic), 'g', a.t, { q: a.task.prompt, g: a.given, a: a.task.answer }));
-    // Beim Verlassen gebucht (Punkt 4): sofort schreiben, die Seite ist vielleicht gleich weg.
-    afterAnswer(!!a.left);
+    // Beim Verlassen gebucht (Punkt 4): sofort und erzwungen schreiben, die Seite ist vielleicht gleich weg.
+    afterAnswer(!!a.left, a.left === true);
     return ok;
   },
   drill(a) {

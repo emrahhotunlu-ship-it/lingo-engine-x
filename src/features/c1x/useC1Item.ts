@@ -23,7 +23,7 @@ import { bindInputKind, createAttemptTracker, pickAttempt, promptChars } from '.
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
-import { logWarn } from '../../platform/diagnostics';
+import { logError, logWarn } from '../../platform/diagnostics';
 import { inputProfile } from '../../platform/input';
 import { toast } from '../../ui/Toast';
 import { explainDepth, findHead, type ShellFeedback, type ShellMenuId, type ShellSecondary, type ExerciseShellProps } from '../../ui/exercise';
@@ -390,27 +390,36 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   // (dieselbe Antwort geht später mit „Weiter“ weiter, ohne zweites Speichern); `done`: endgültig weitergegeben. Nie während Claude prüft.
   const leftBooked = useRef<(GrammarAnswer & AttemptTiming) | null>(null);
   const done = useRef(false);
+  // Beim Verbergen schon gebucht: was die Wertung ändern würde („Ich lag richtig“, „Claude fragen“, „Als richtig werten“, Zielform) bliebe
+  // wirkungslos (das spätere „Weiter“ führt nur die gebuchte Antwort weiter) – nicht anbieten.
+  const [held, setHeld] = useState(false);
   const leaveNow = (mode: 'stay' | 'go'): void => {
-    if (!onLeave || !fb || done.current) return;
-    // Claude prüft die Antwort gerade nach („Claude fragen“): offen lassen, nichts buchen.
-    const aiOpen = fit.busy;
-    if (mode === 'stay') {
-      if (leftBooked.current || aiOpen) return;
+    // Ein Fehler beim Buchen darf das Verlassen nie aufhalten (Aushängen, ✕, Seite weg): protokollieren, nicht werfen.
+    try {
+      if (!onLeave || !fb || done.current) return;
+      // Claude prüft die Antwort gerade nach („Claude fragen“): offen lassen, nichts buchen.
+      const aiOpen = fit.busy;
+      if (mode === 'stay') {
+        if (leftBooked.current || aiOpen) return;
+        const r = answerOf(fb);
+        leftBooked.current = r.a;
+        r.lex?.();
+        onLeave(r.a, 'stay');
+        setHeld(true);
+        return;
+      }
+      if (!leftBooked.current && aiOpen) return;
+      done.current = true;
+      if (leftBooked.current) {
+        onLeave(leftBooked.current, 'go');
+        return;
+      }
       const r = answerOf(fb);
-      leftBooked.current = r.a;
       r.lex?.();
-      onLeave(r.a, 'stay');
-      return;
+      onLeave({ ...r.a, left: true }, 'go');
+    } catch (err) {
+      logError('leave:book', err, task.key);
     }
-    if (!leftBooked.current && aiOpen) return;
-    done.current = true;
-    if (leftBooked.current) {
-      onLeave(leftBooked.current, 'go');
-      return;
-    }
-    const r = answerOf(fb);
-    r.lex?.();
-    onLeave({ ...r.a, left: true }, 'go');
   };
   const leaveRef = useRef(leaveNow);
   useEffect(() => {
@@ -551,7 +560,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const wanted = item.kind === 'err' && item.bad ? (item.bad.fix[0] ?? '') : task.answer;
   const altSub = altWhy ? t('grAltWanted', { want: wanted, why: altWhy }) : t('grAltWantedBare', { want: wanted });
   // Tutor-Engine v3: die eine Handlung unter der Rückmeldung (`composeFeedback`); die Erklärung selbst bleibt das c1x-Modell oben.
-  const action: FeedbackAction =
+  const rawAction: FeedbackAction =
     fb && model && fb.tv
       ? composeFeedback({
           base: model,
@@ -570,11 +579,12 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
           texts: { altNoCount: t('grAltNoCount') },
         }).action
       : 'next';
+  const action: FeedbackAction = held ? 'next' : rawAction;
   let feedback: ShellFeedback | null = null;
   if (fb && model && rv) {
     const typedWrong = fb.score.free && fb.score.verdict !== 'correct' && !fb.dontKnow && !fb.override;
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
-    if (typedWrong) menu.override = override;
+    if (typedWrong && !held) menu.override = override;
     menu.report = () => {
       logWarn('c1x:report', { message: 'Aufgabe gemeldet (lokal, nur im Protokoll)' }, item.id);
       toast(t('cxReported'));
@@ -620,7 +630,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
         target: fb.target ?? null,
         onTarget: tryTarget,
       }),
-      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt && action === 'next' && !fb.aiMsg,
+      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt && rawAction === 'next' && !fb.aiMsg,
     };
   }
 

@@ -153,7 +153,7 @@ test('v86 läuft mit den Daten von Stufe 1 und lässt die neuen Felder beim Zur�
     expect(hist.slice(0, oldHist().length), id).toEqual(oldHist());
     expect(hist.length, id).toBe(oldHist().length + 1);
   }
-  // Log: der ältere Eintrag behält fk/in/mx/sm/pl/n/bg/st.
+  // Log: der ältere Eintrag behält fk/in/mx/sm/pl/n/bg/st und left (LS3: beim Verlassen gebucht) – v86 schreibt den Tag zurück, ohne Felder zu verlieren.
   expect(((db[LOG]?.entries as Doc[]) ?? []).find((e) => e.t === oldLog.t && e.id === oldLog.id)).toEqual(oldLog);
   // Profil: theme.a und theme.p bleiben neben dem neuen theme.m; dk unverändert.
   const profile = db['app/profile'] as Doc;

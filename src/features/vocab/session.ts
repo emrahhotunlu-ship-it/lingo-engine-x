@@ -916,7 +916,8 @@ export function commitAnswer(ans: Answer, left?: LeaveMode): FirstKind {
   if (ans.unverified) a.unverified = true;
   // Wort-Werkstatt: falsch Getipptes für die Diagnose (`hist[].v`, gekürzt) und der Abruf am Ende der Werkstatt (Ruhe danach, `wk`).
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) a.wrong = ans.given;
-  // Hinweisrunde (LS10): der erste, falsche Versuch zählt als getippter Fehler, auch wenn der zweite stimmt.
+  // Hinweisrunde (LS10): der erste, falsche Versuch gilt als getippter Fehler (`a.wrong`, Verwechslung für den Wörter-Tutor), auch wenn der zweite stimmt.
+  // In `hist[].v` landet er nur, wenn die Note 1 ist (`histEntry`: `grade === 1 && wrong`); bei richtigem zweiten Versuch nicht.
   else if (e.input === 'typed' && ans.firstWrong?.trim()) a.wrong = ans.firstWrong;
   if (e.wk) a.wk = true;
   if (left) a.left = true;

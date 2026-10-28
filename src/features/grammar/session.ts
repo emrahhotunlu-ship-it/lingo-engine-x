@@ -417,27 +417,22 @@ const isOk = (a: GrammarAnswer): boolean => answerRight(a) && a.firstWrong === u
 const VT_MS = 20_000;
 const cleanAnswer = (a: GrammarAnswer): boolean => isOk(a) && a.help.level === 0 && a.ms <= VT_MS;
 
-/** Antwort übernehmen und weiter. Rückgabe: Eingabeart der nächsten Aufgabe. */
 /**
- * Korrekturrunde P3 (Punkt 4, LS3): beim Verbergen der Seite gebuchte Antworten (Zeitstempel). Gespeichert ist schon; das spätere
+ * Korrekturrunde P3 (Punkt 4, LS3): beim Verbergen gebuchte Antworten (Zeitstempel). Gespeichert ist schon; das spätere
  * „Weiter“ bzw. Verlassen rechnet die Runde weiter, ohne ein zweites Mal zu speichern.
  */
 const bookedT = new Set<number>();
 
-/** Beim Verbergen: die Antwort speichern (mit `left: true`), die Aufgabe bleibt mit ihrem Ergebnis stehen. Genau einmal je Antwort. */
-export function bookGrammarLeft(a: GrammarAnswer): void {
-  const s = useGrammarSession.getState();
-  if (!s.active || bookedT.has(a.t)) return;
-  bookedT.add(a.t);
-  if (!inRepeat(s)) void learnRecorder.grammar({ ...a, left: true });
-}
+/** Die Antwort mit dem, was an dieser Stelle der Runde feststeht (Vortest, Themen-Test), und der daraus folgende Zustand. */
+type Enriched = { a: GrammarAnswer; intro: State['intro']; tasks: GrammarTask[]; test: State['test'] };
 
-export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
-  if (!a0.left) touchGrammar();
-  const s = useGrammarSession.getState();
+/**
+ * Die Antwort so anreichern, wie sie gebucht wird: mit der zweiten (bzw. vierten) Vortest-Antwort steht das Ergebnis fest (`vt`), mit der
+ * letzten Themen-Test-Antwort ebenfalls (`tt`). EINE Stelle für „Weiter“ und für das Buchen beim Verlassen (`bookGrammarLeft`) – sonst gingen
+ * `vt`/`tt` verloren, wenn die Antwort beim Verbergen gebucht wurde (der spätere „Weiter“-Weg schreibt dann nicht mehr). Rein: ändert den Zustand nicht.
+ */
+function enrichGrammar(s: State, a0: GrammarAnswer, repeating: boolean): Enriched {
   let a = a0;
-  // N47: Die Wiederholung am Rundenende wird nicht noch einmal gespeichert oder gezählt.
-  const repeating = inRepeat(s);
   let intro = s.intro;
   let tasks = s.tasks;
   // Vortest: Mit der zweiten Antwort steht das Ergebnis fest und geht als `vt` mit dieser Antwort ins Thema.
@@ -463,6 +458,29 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     a = { ...a, tt: { c, n: test.n, ...(w.length ? { w } : {}) } };
     test = { ...test, result: { c, n: test.n, ok: ttPassed(c, test.n) } };
   }
+  return { a, intro, tasks, test };
+}
+
+/** Beim Verbergen: die Antwort speichern (mit `left: true`, angereichert wie bei „Weiter“), die Aufgabe bleibt mit ihrem Ergebnis stehen. Genau einmal je Antwort. */
+export function bookGrammarLeft(a: GrammarAnswer): void {
+  const s = useGrammarSession.getState();
+  if (!s.active || bookedT.has(a.t)) return;
+  bookedT.add(a.t);
+  const repeating = inRepeat(s);
+  if (!repeating) void learnRecorder.grammar({ ...enrichGrammar(s, a, repeating).a, left: true });
+}
+
+/** Antwort übernehmen und weiter. Rückgabe: Eingabeart der nächsten Aufgabe. */
+export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
+  if (!a0.left) touchGrammar();
+  const s = useGrammarSession.getState();
+  // N47: Die Wiederholung am Rundenende wird nicht noch einmal gespeichert oder gezählt.
+  const repeating = inRepeat(s);
+  const e = enrichGrammar(s, a0, repeating);
+  const a = e.a;
+  const intro = e.intro;
+  const test = e.test;
+  let tasks = e.tasks;
   // Schon beim Verbergen gespeichert (Punkt 4): nicht noch einmal.
   const booked = bookedT.delete(a.t);
   if (!repeating && !booked) void learnRecorder.grammar(a);

@@ -132,6 +132,34 @@ test('Seite verborgen mit offenem Ergebnis: sofort gebucht (`left`), die Aufgabe
   expect(errors).toEqual([]);
 });
 
+test('Wort falsch getippt, Seite verborgen (schon gebucht): kein „Ich lag richtig“, kein „War das auch richtig?“ mehr', async ({ page }) => {
+  const forced = forcedPatch();
+  // „avoid“ (getippte Lückenabfrage) zuerst.
+  const patch = { 'app/profile': planPatch(6), ...forced, 'vocab/avoid': { ...forced['vocab/avoid'], due: 1_600_000_000_000 } };
+  const { errors } = await boot(page, { migrated: true, fake: { patch } });
+  await screen(page, 'today');
+  await page.getByTestId('start').click();
+  await screen(page, 'trainer');
+  const id = (await page.getByTestId('exercise').getAttribute('data-card')) ?? '';
+  expect(id).toBe('avoid');
+  await answerOnly(page, { wrong: true });
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+  // Vor dem Verbergen sind beide Angebote da.
+  await expect(page.getByTestId('synonym-ask')).toBeVisible();
+  await page.getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('menu-override')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await hideAndShow(page);
+  await expect.poll(async () => leftEntries(page, id)).toBe(1);
+  await expect(page.getByTestId('result')).toBeVisible();
+  await expect(page.getByTestId('synonym-ask')).toHaveCount(0);
+  await page.getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('menu-override')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await page.getByTestId('next').click();
+  expect(errors).toEqual([]);
+});
+
 test('Grammatik: ✕ mit offenem Ergebnis bucht die Antwort genau einmal (`left`)', async ({ page }) => {
   const OLD = Date.parse('2020-01-01T10:00:00+01:00');
   const err = { q: 'It was the first time she ___ such a large account.', given: 'has handled', ans: 'had handled', t: OLD, due: OLD, box: 0, src: 'seed' };

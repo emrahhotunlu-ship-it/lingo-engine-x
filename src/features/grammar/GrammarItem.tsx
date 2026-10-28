@@ -48,7 +48,7 @@ import type { Verdict as TutorVerdict } from '../../domain/tutor/tutorTypes';
 import { legacyNorm } from '../../domain/grammar/key';
 import { GRAMMAR_FIT_PV, type GrammarFitOut, type GrammarFitVars } from '../../prompts/grammarFit';
 import { learnerNow, lintOnce, scheduleLearner } from '../tutor/learnerLive';
-import { logWarn } from '../../platform/diagnostics';
+import { logError, logWarn } from '../../platform/diagnostics';
 import { isC1Task } from '../../domain/c1x/runtime';
 import { C1Item } from '../c1x/C1Item';
 import { TopicSheet } from './GrammarScreen';
@@ -602,19 +602,28 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   // (derselbe Zeitstempel geht später mit „Weiter“ weiter, ohne zweites Speichern); `done`: endgültig weitergegeben. Nie während Claude prüft.
   const booked = useRef<(GrammarAnswer & AttemptTiming) | null>(null);
   const done = useRef(false);
+  // Beim Verbergen schon gebucht: was die Wertung ändern würde („Ich lag richtig“, „Claude fragen“, „Als richtig werten“, Zielform) bliebe
+  // wirkungslos (das spätere „Weiter“ führt nur die gebuchte Antwort weiter) – nicht anbieten.
+  const [held, setHeld] = useState(false);
   const leaveNow = (mode: 'stay' | 'go'): void => {
-    if (!onLeave || !fb || done.current) return;
-    // Claude prüft die Antwort gerade nach („Claude fragen“): offen lassen, nichts buchen.
-    const aiOpen = fit.busy && fb.verdict !== 'correct' && !fb.override && !fb.dontKnow;
-    if (mode === 'stay') {
-      if (booked.current || aiOpen) return;
-      booked.current = answerOf(fb);
-      onLeave(booked.current, 'stay');
-      return;
+    // Ein Fehler beim Buchen darf das Verlassen nie aufhalten (Aushängen, ✕, Seite weg): protokollieren, nicht werfen.
+    try {
+      if (!onLeave || !fb || done.current) return;
+      // Claude prüft die Antwort gerade nach („Claude fragen“): offen lassen, nichts buchen.
+      const aiOpen = fit.busy && fb.verdict !== 'correct' && !fb.override && !fb.dontKnow;
+      if (mode === 'stay') {
+        if (booked.current || aiOpen) return;
+        booked.current = answerOf(fb);
+        onLeave(booked.current, 'stay');
+        setHeld(true);
+        return;
+      }
+      if (!booked.current && aiOpen) return;
+      done.current = true;
+      onLeave(booked.current ?? { ...answerOf(fb), left: true }, 'go');
+    } catch (err) {
+      logError('leave:book', err, task.key);
     }
-    if (!booked.current && aiOpen) return;
-    done.current = true;
-    onLeave(booked.current ?? { ...answerOf(fb), left: true }, 'go');
   };
   const leaveRef = useRef(leaveNow);
   useEffect(() => {
@@ -983,7 +992,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     // Einspruch auch bei „unsicher“ (gebucht wie „Fast“): die Antwort war vielleicht richtig, die App konnte es nur nicht belegen.
     const disputable = wrongTyped || (fb.verdict === 'near' && fb.tv === 'unsure' && !choiceType && !fb.dontKnow && !fb.override);
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
-    if (disputable && !findTask) menu.override = override;
+    if (disputable && !findTask && !held) menu.override = override;
     if (wrongTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.wholeTopic = () => setSheet(true);
     if (film) menu.showMe = () => setFilmOpen(true);
@@ -999,7 +1008,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       return [...wordsOfPrompt.slice(0, tapped[0]), fb.given.trim(), ...wordsOfPrompt.slice(tapped[1] + 1)].filter(Boolean).join(' ');
     };
     // Handlung aus `composeFeedback`: „Claude fragen“, „Als richtig werten“ oder Zielform schreiben; dazu die Zeile zum Urteil von Claude (§6.4).
-    const action: FeedbackAction = composed?.action ?? 'next';
+    const rawAction: FeedbackAction = composed?.action ?? 'next';
+    const action: FeedbackAction = held ? 'next' : rawAction;
     // Nur EIN KI-Einstieg je Karte (Kap. 15): steht „Claude fragen“ da (oder läuft „Sicher?“), gibt es „Erklär mir meine Antwort“ erst danach.
     const tutor = fb.dontKnow || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
       <TutorButton
@@ -1053,7 +1063,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         form={findTask ? spotAnswer : solution}
         target={fb.target ?? null}
         onTarget={tryTarget}
-        sure={fb.sure && formMistake(fb) ? { onYes: overrideNow, onNo: cancelSure, onAsk: fb.ask && fb.aiMsg !== 'no' && fb.aiMsg !== 'unsure' ? askNow : null } : null}
+        sure={!held && fb.sure && formMistake(fb) ? { onYes: overrideNow, onNo: cancelSure, onAsk: fb.ask && fb.aiMsg !== 'no' && fb.aiMsg !== 'unsure' ? askNow : null } : null}
       />
     );
     // Höchstens drei Erklärblöcke bei „Noch nicht“ (Deine Antwort · Muster · Beispiel): „Deine Antwort“ sagt schon, warum – die allgemeine
@@ -1083,7 +1093,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       tutor,
       act: foot,
       ...(foldWhy ? { fold: ['why' as const] } : {}),
-      auto: fb.help.level === 0 && !fb.override && !alsoRight && action === 'next' && !fb.aiMsg && !lesson,
+      auto: fb.help.level === 0 && !fb.override && !alsoRight && rawAction === 'next' && !fb.aiMsg && !lesson,
       ...find,
       ...(alsoRight ? { unfold: [...(find.unfold ?? []), 'note' as const] } : {}),
     };
