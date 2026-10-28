@@ -4,16 +4,17 @@
    (die globale Sofort-Regel in index.css gilt weiter). Bei `off` steht sofort der Endzustand. */
 
 /* ------------------------------------------------------------------ Tokens (EE §8.2, §8.3)
-   Tiefe, Glanz, Schein und Funken zeigen seit dem Relaunch auf die Grund-Tokens (src/styles/bridge.css); hier bleibt nur die Feldstärke. */
+   Tiefe, Glanz, Schein und Funken zeigen seit dem Relaunch auf die Grund-Tokens (src/styles/bridge.css); hier bleibt nur die Feldstärke.
+   Nora 28.10.2026: Lichtfeld aus (0 % in allen Modi), AmbientLight zeichnet dann nichts und startet keinen rAF. */
 :root,
 :root[data-theme='dark'] {
-  --lx-field-strength: 16%;
+  --lx-field-strength: 0%;
 }
 :root[data-theme='dim'] {
-  --lx-field-strength: 12%;
+  --lx-field-strength: 0%;
 }
 :root[data-theme='light'] {
-  --lx-field-strength: 10%;
+  --lx-field-strength: 0%;
 }
 
 /* Bereichsfarbe je Reiter (Vorschau: Wörter violett, Grammatik blau, Anwenden türkis). Der aktive Reiter und das Lichtfeld lesen sie. */

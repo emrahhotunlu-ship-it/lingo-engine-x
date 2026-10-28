@@ -65,12 +65,16 @@ test('Grammatik: Urteil, Lösung, Warum und Merke auf 390×844 ohne Scrollen; be
   await skipMiniLesson(page);
   await expect(page.getByTestId('gr-item')).toBeVisible();
   // Kein reservierter Platz über der Aufgabe: die Statuszeile steht direkt unter der Kopfzeile (vorher ~64 Geräte-px tiefer).
+  // Gemessen ab der Inhaltskante der Karte (P1 S1-TOK: Kartenpolster 1,5rem statt 1,25rem), damit nur reservierter Platz zählt.
   const gap = await page.evaluate(() => {
-    const ex = document.querySelector('[data-testid="exercise"]')?.getBoundingClientRect().top ?? 0;
+    const exEl = document.querySelector('[data-testid="exercise"]');
+    if (!exEl) return 999;
+    const cs = getComputedStyle(exEl);
+    const ex = exEl.getBoundingClientRect().top + parseFloat(cs.paddingTop) + parseFloat(cs.borderTopWidth);
     const st = document.querySelector('[data-slot="status"]')?.getBoundingClientRect().top ?? 0;
     return Math.round(st - ex);
   });
-  expect(gap).toBeLessThan(24);
+  expect(gap).toBeLessThan(4);
   await answerGrammar(page, solve, { wrong: true });
   const res = page.getByTestId('result');
   await expect(res).toBeVisible();
@@ -128,10 +132,29 @@ test('Zwischenkarte: Ring und Häkchen in Smaragd, Knopf „Weiter: …“ nennt
   const mark = page.getByTestId('done-mark');
   await expect(mark).toBeVisible();
   await expect(page.getByTestId('unit-next')).toContainText(/^Weiter: .+/);
+  // Smaragd ist das Token --lx-ok (P1 S1-TOK); Lightning CSS schreibt oklch als lab(), daher Pixelvergleich (±1) statt Farbtext.
   const ring = await mark.locator('.lx-done-ring').evaluate((el) => {
     const cs = getComputedStyle(el);
-    return { stroke: cs.stroke, dur: cs.animationDuration };
+    const px = (color: string): number[] => {
+      const c = document.createElement('canvas');
+      c.width = c.height = 1;
+      const g = c.getContext('2d');
+      if (!g) return [];
+      g.fillStyle = color;
+      g.fillRect(0, 0, 1, 1);
+      return [...g.getImageData(0, 0, 1, 1).data];
+    };
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--lx-ok)';
+    el.parentElement?.appendChild(probe);
+    const ok = getComputedStyle(probe).color;
+    probe.remove();
+    const a = px(cs.stroke);
+    const b = px(ok);
+    return { delta: a.length && b.length ? Math.max(...a.map((v, i) => Math.abs(v - (b[i] ?? 0)))) : 255, rgb: a, dur: cs.animationDuration };
   });
-  expect(ring.stroke).toMatch(/rgb\((16, 185, 129|4, 120, 87)\)/);
+  expect(ring.delta).toBeLessThanOrEqual(1);
+  // Smaragd: Grün überwiegt Rot und Blau.
+  expect(ring.rgb[1] ?? 0).toBeGreaterThan(Math.max(ring.rgb[0] ?? 255, ring.rgb[2] ?? 255));
   expect(ring.dur).toBe('0.25s');
 });

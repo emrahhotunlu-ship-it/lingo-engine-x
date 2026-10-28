@@ -45,7 +45,6 @@ export const standEn = {
   lvTitle: 'Level',
   lvCaption: 'Claude’s level {level} · {conf}',
   // Settings: color theme (M21) and work context (M22)
-  setPalette: 'Color theme',
   palette_sage: 'Sage',
   palette_ocean: 'Ocean',
   palette_plum: 'Plum',

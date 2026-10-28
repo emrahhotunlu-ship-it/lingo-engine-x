@@ -46,7 +46,6 @@ export const standDe = {
   lvTitle: 'Niveau',
   lvCaption: 'Claudes Stufe {level} · {conf}',
   // Einstellungen: Farbthema (M21) und beruflicher Kontext (M22)
-  setPalette: 'Farbthema',
   palette_sage: 'Salbei',
   palette_ocean: 'Ozean',
   palette_plum: 'Pflaume',

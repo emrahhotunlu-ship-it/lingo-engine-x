@@ -136,6 +136,7 @@ export const RULES = [
   { prefix: 'src/features/settings/AccentSection', specs: ['stand-gaps.spec.ts'] },
   { prefix: 'src/engine/fx/rgb', specs: ['wordSky.spec.ts', 'fxStage1.spec.ts'] },
   { prefix: 'index.html', specs: ['settings.spec.ts', 'rueckweg.spec.ts'] },
+  { prefix: 'src/engine/fx/AmbientLight', specs: ['r6aFx.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

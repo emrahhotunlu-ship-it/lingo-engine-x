@@ -598,3 +598,7 @@ Emrah zur Vorschau v2 (`WBft3EEx7jYYv4QHdepuNm` Version 2 `1793137833-35a1`): �
 - **18.** „Wörter üben“ auf Heute erst nach der Pflicht; im Reiter Wörter immer.
 - **19.** Eigene Funde höchstens 1 je Tag in der Pflicht, weitere über den Trainer.
 - **Offene Punkte aus Vorschau v1, wie vorgeschlagen:** Eingabetaste am iPhone darf „go/Los“ heißen (der Browser erlaubt kein „Prüfen“; „Prüfen“ steht als Knopf über der Tastatur); „Pause, später weiter“ im Menü „…“; Dunkel ist Standard; „Höhe messen“ und Startzeit misst Emrah nach Stufe 1 am iPhone (Foto der Diagnose).
+
+## 28.10.2026 – Relaunch Stufe 1, P1 S1-TOK: Design-Entscheidungen Nora
+- **Nora, 28.10.2026: Iris 0,56/0,18 statt 0,62/0,16.** Grund: weiße Knopfschrift wie in der freigegebenen Vorschau (Weiß auf Iris 0,56: 4,76:1). In Gedämpft dunkle Schrift (Kontrast): dort bleibt Iris 0,62/0,16 mit dunkler Knopfschrift (5,15:1), weil Iris 0,56 auf dem gedämpften Grund nur 2,93:1 erreicht.
+- Bernstein liegt im Farbton ≥ 25° von „fast richtig“ entfernt (Bernstein 55°/52°, fast richtig 92°); Lichtfeld auf Heute aus; Überschriften ohne Großbuchstaben.

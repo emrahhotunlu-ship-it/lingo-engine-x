@@ -68,8 +68,8 @@
   --lx-ch-listen: var(--ch-listen);
   --lx-ch-write: var(--ch-speak);
   --lx-ch-speak: var(--ch-speak);
-  --lx-ch-business: var(--near);
-  --lx-ch-discover: var(--ok);
+  --lx-ch-business: var(--ch-speak);
+  --lx-ch-discover: var(--ch-words);
 }
 
 /* Tailwind-Hilfsklassen (bg-surface, text-muted …) zeigen direkt auf die neuen Tokens. */
@@ -113,6 +113,6 @@
   --color-ch-listen: var(--ch-listen);
   --color-ch-write: var(--ch-speak);
   --color-ch-speak: var(--ch-speak);
-  --color-ch-business: var(--near);
-  --color-ch-discover: var(--ok);
+  --color-ch-business: var(--ch-speak);
+  --color-ch-discover: var(--ch-words);
 }

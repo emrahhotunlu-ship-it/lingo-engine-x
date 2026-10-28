@@ -9,6 +9,7 @@ import { cssRgb } from './rgb';
 // CSS-Verläufe je Gerätepixel und glättet die Stufen selbst). Radien in vw, Lagen in %: unabhängig von Fenstergröße und Pixeldichte. 24 Bilder je Sekunde. Nach jedem Bildschirmwechsel oder Moment 12 s Bewegung auf Lissajous-Bahnen,
 // danach Standbild ohne einen einzigen rAF-Aufruf. In Übungen gedimmt (50 %) und still; Stufe „Ruhig“/„Aus“, reduzierte Bewegung und verdeckter Tab:
 // Standbild. Das Standbild ist deterministisch (Startphase aus dem Lerntag). Ersetzt den festen `body::before`-Verlauf (`html[data-ambient]`).
+// Relaunch P1 (Nora, 28.10.2026): `--lx-field-strength` ist in allen Modi 0 % – dann zeichnet das Feld nichts und startet keinen rAF.
 
 /** So lange bewegt sich das Licht nach einem Wechsel. */
 export const ACTIVE_MS = 12_000;
@@ -117,7 +118,8 @@ export function AmbientLight({ scene, exercise, day }: Props) {
     let lastDraw = 0;
     let t = 0;
     const paint = (): void => {
-      const next = ambientBackground(blobsAt(t, phase, colors.strength, exercise ? 0.5 : 1), [shownField, colors.cyan, colors.shade]);
+      // Stärke 0 (Nora 28.10.2026: Lichtfeld aus): früher Ausstieg, nichts zeichnen.
+      const next = colors.strength <= 0 ? 'none' : ambientBackground(blobsAt(t, phase, colors.strength, exercise ? 0.5 : 1), [shownField, colors.cyan, colors.shade]);
       // Nur schreiben, wenn sich das Bild ändert (kein Neuzeichnen ohne Grund).
       if (next !== shown) {
         shown = next;
@@ -139,6 +141,13 @@ export function AmbientLight({ scene, exercise, day }: Props) {
       if (el < ACTIVE_MS && !document.hidden) raf = requestAnimationFrame(frame);
     };
     const start = (): void => {
+      // Stärke 0: kein rAF, kein Bild (nur das Rauschen .lx-ambient-dither bleibt).
+      if (colors.strength <= 0) {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+        paint();
+        return;
+      }
       if (!moving || document.hidden) {
         shownField = colors.field;
         paint();

@@ -65,14 +65,14 @@ test('Akzentfarbe: Standard Iris, Bernstein wählen, nach Neuladen bleibt die Wa
   const html = page.locator('html');
   await expect(html).toHaveAttribute('data-theme', 'dark');
   await expect(html).toHaveAttribute('data-accent', 'iris');
-  expect(await tokenDelta(page, '--act', 'oklch(0.62 0.16 275)')).toBeLessThanOrEqual(1);
+  expect(await tokenDelta(page, '--act', 'oklch(0.56 0.18 275)')).toBeLessThanOrEqual(1);
 
   await openSettings(page);
   const group = page.getByRole('dialog', { name: 'Einstellungen' }).getByTestId('set-accent');
   await expect(group.getByRole('radio', { name: 'Iris' })).toHaveAttribute('aria-checked', 'true');
   await group.getByRole('radio', { name: 'Bernstein' }).click();
   await expect(html).toHaveAttribute('data-accent', 'amber');
-  expect(await tokenDelta(page, '--act', 'oklch(0.75 0.15 70)')).toBeLessThanOrEqual(1);
+  expect(await tokenDelta(page, '--act', 'oklch(0.74 0.16 55)')).toBeLessThanOrEqual(1);
   await expect.poll(async () => (await dump(page))['app/profile']?.theme).toEqual({ m: 'dark', p: 'ocean', a: 'amber' });
   expect(await page.evaluate(() => window.localStorage.getItem('lx:accent'))).toBe('amber');
 

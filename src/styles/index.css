@@ -45,10 +45,12 @@
    Nur in diesen Blöcken stehen Farbwerte (tests/unit/noColorLiterals.test.ts). Die alten Namen --lx-* und --color-* sind Aliase in
    src/styles/bridge.css. tests/unit/contrast.test.ts rechnet jeden Wert nach (3 Modi × 2 Akzente).
    Ergänzungen gegenüber der Vorschau (die App braucht sie, die Vorschau nicht): --ok-soft, --near-soft, --bad-soft, --words-soft (Füllung hinter
-   Schrift) und --fg-on (Schrift auf einer Zustandsfarbe). --act-fg ist für Iris dunkel statt hell: Weiß auf Iris erreicht nur 3,7:1
-   (0,62) bzw. 4,0:1 (0,6), dunkle Schrift auf Iris 0,62 dagegen 5,15:1 (Messung im Kontrasttest).
+   Schrift), --fg-on (Schrift auf einer Zustandsfarbe) und --swatch-* (Farbpunkte der Akzent-Auswahl).
+   Iris ist 0,56/0,18 (Nora, 28.10.2026): weiße Knopfschrift wie in der freigegebenen Vorschau (≥ 4,5:1 in Dunkel und Hell). Nur Gedämpft
+   nimmt Iris 0,62/0,16 mit dunkler Knopfschrift (Weiß hielte dort, aber Iris 0,56 nicht 3:1 auf dem gedämpften Grund). Bernstein liegt im
+   Farbton ≥ 25° von „fast richtig“ (near) entfernt.
    Weitere Abweichungen von der Vorschau nur, wo 4,5:1 (Text) bzw. 3:1 (Bedienelement) sonst nicht hält: Dunkel fg-3; Gedämpft
-   line-2, fg-2, fg-3, act-text, ok, near, bad, ch-words und die weichen Füllungen; Hell fg-3, ok, near, bad, ch-words; Hell + Amber act (0,64 statt 0,75). */
+   line-2, fg-2, fg-3, act-text, ok, near, bad, ch-words und die weichen Füllungen; Hell fg-3, ok, near, bad, ch-words. Bernstein und Hell + Bernstein nach Nora (28.10.2026). */
 
 :root,
 :root[data-theme='dark'] {
@@ -64,12 +66,12 @@
   --fg-2: oklch(0.76 0.014 268);
   --fg-3: oklch(0.66 0.016 268);
   --fg-on: oklch(0.16 0.012 268);
-  --act: oklch(0.62 0.16 275);
-  --act-fg: oklch(0.16 0.03 275);
+  --act: oklch(0.56 0.18 275);
+  --act-fg: oklch(0.99 0.005 275);
   --act-text: oklch(0.77 0.12 275);
-  --act-soft: oklch(0.62 0.16 275 / 0.18);
+  --act-soft: oklch(0.56 0.18 275 / 0.18);
   --ok: oklch(0.77 0.15 155);
-  --ok-soft: oklch(0.77 0.15 155 / 0.14);
+  --ok-soft: oklch(0.77 0.15 155 / 0.18);
   --near: oklch(0.83 0.13 92);
   --near-soft: oklch(0.83 0.13 92 / 0.14);
   --bad: oklch(0.72 0.16 25);
@@ -80,6 +82,8 @@
   --ch-speak: oklch(0.77 0.12 60);
   --words-soft: oklch(0.76 0.11 195 / 0.12);
   --mark: oklch(0.76 0.11 195 / 0.26);
+  --swatch-iris: oklch(0.56 0.18 275);
+  --swatch-amber: oklch(0.74 0.16 55);
   --kb: oklch(0.3 0.006 268);
   --kb-key: oklch(0.44 0.006 268);
   --kb-key-2: oklch(0.36 0.006 268);
@@ -98,11 +102,14 @@
   --line: oklch(0.96 0.01 268 / 0.1);
   --line-2: oklch(0.96 0.01 268 / 0.15);
   --fg: oklch(0.94 0.006 268);
-  --fg-2: oklch(0.88 0.012 268);
-  --fg-3: oklch(0.8 0.014 268);
+  --fg-2: oklch(0.86 0.012 268);
+  --fg-3: oklch(0.76 0.014 268);
+  --act: oklch(0.62 0.16 275);
+  --act-fg: oklch(0.16 0.03 275);
   --act-text: oklch(0.83 0.1 275);
+  --act-soft: oklch(0.62 0.16 275 / 0.18);
   --ok: oklch(0.82 0.15 155);
-  --ok-soft: oklch(0.82 0.15 155 / 0.1);
+  --ok-soft: oklch(0.82 0.15 155 / 0.14);
   --near: oklch(0.86 0.12 92);
   --near-soft: oklch(0.86 0.12 92 / 0.1);
   --bad: oklch(0.82 0.12 25);
@@ -126,11 +133,11 @@
   --fg-3: oklch(0.5 0.014 268);
   --fg-on: oklch(1 0 0);
   --act-text: oklch(0.5 0.18 275);
-  --act-soft: oklch(0.62 0.16 275 / 0.12);
+  --act-soft: oklch(0.56 0.18 275 / 0.12);
   --ok: oklch(0.47 0.13 155);
   --ok-soft: oklch(0.5 0.13 155 / 0.08);
-  --near: oklch(0.5 0.11 70);
-  --near-soft: oklch(0.55 0.12 75 / 0.1);
+  --near: oklch(0.5 0.11 92);
+  --near-soft: oklch(0.5 0.11 92 / 0.1);
   --bad: oklch(0.52 0.19 25);
   --bad-soft: oklch(0.54 0.19 25 / 0.08);
   --ch-words: oklch(0.48 0.1 200);
@@ -139,6 +146,7 @@
   --ch-speak: oklch(0.6 0.14 55);
   --words-soft: oklch(0.5 0.1 200 / 0.08);
   --mark: oklch(0.7 0.12 195 / 0.24);
+  --swatch-amber: oklch(0.65 0.16 52);
   --kb: oklch(0.86 0.006 268);
   --kb-key: oklch(1 0 0);
   --kb-key-2: oklch(0.74 0.008 268);
@@ -148,16 +156,16 @@
 }
 
 :root[data-accent='amber'] {
-  --act: oklch(0.75 0.15 70);
+  --act: oklch(0.74 0.16 55);
   --act-fg: oklch(0.2 0.04 60);
-  --act-text: oklch(0.8 0.13 72);
-  --act-soft: oklch(0.75 0.15 70 / 0.18);
+  --act-text: oklch(0.8 0.13 60);
+  --act-soft: oklch(0.74 0.16 55 / 0.18);
 }
 
 :root[data-theme='light'][data-accent='amber'] {
-  --act: oklch(0.64 0.15 62);
-  --act-text: oklch(0.52 0.12 62);
-  --act-soft: oklch(0.75 0.15 70 / 0.18);
+  --act: oklch(0.65 0.16 52);
+  --act-text: oklch(0.52 0.13 52);
+  --act-soft: oklch(0.65 0.16 52 / 0.12);
 }
 
 /* Form: ein Radius, 8-px-Raster, eine Schattenstufe (--shadow), Bewegungskurven der Vorschau. */
@@ -318,11 +326,11 @@ h2,
   }
 
   .lx-eyebrow {
-    font-size: var(--text-2xs);
-    line-height: var(--text-2xs--line-height);
+    font-size: 0.8125rem;
+    line-height: 1.1rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--lx-fg-muted);
   }
 
@@ -966,7 +974,7 @@ h2,
   .lx-ring[data-state='done'] {
     background: var(--lx-ok);
     border-color: var(--lx-ok);
-    color: var(--lx-accent-fg);
+    color: var(--fg-on);
   }
   .lx-ring[data-state='rest'] {
     border-style: dashed;
@@ -1214,11 +1222,11 @@ html[data-actionbar] #main {
     line-height: 1.2rem;
   }
   .lx-t-label {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     line-height: 1.1rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    text-transform: none;
+    letter-spacing: 0;
     color: var(--lx-fg-muted);
   }
 

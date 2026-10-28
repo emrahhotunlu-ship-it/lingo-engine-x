@@ -201,7 +201,7 @@ test('M21 + M22: Akzent statt Farbthema (theme.p bleibt stehen), umschaltbar; be
   await expect.poll(async () => (await profileOf(page)).theme).toEqual({ m: 'dark', p: 'ocean', a: 'amber' });
   await dialog.getByRole('radio', { name: 'Hell' }).click();
   await expect.poll(async () => (await profileOf(page)).theme).toEqual({ m: 'light', p: 'ocean', a: 'amber' });
-  expect(await tokenDelta(page, '--act-text', 'oklch(0.52 0.12 62)')).toBeLessThanOrEqual(1);
+  expect(await tokenDelta(page, '--act-text', 'oklch(0.52 0.13 52)')).toBeLessThanOrEqual(1);
 
   const ctx = dialog.getByTestId('work-ctx');
   await expect(ctx.getByTestId('work-ctx-save')).toBeDisabled();
