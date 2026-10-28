@@ -51,6 +51,7 @@ import { dayLabel } from '../../domain/activation/actDoc';
 import { ActPanel } from './ActPanel';
 import { ownTextsOf, reusableSentencesOf } from './actStore';
 import { TutorButton } from '../../ui/exercise/TutorButton';
+import { DictationHint } from '../../ui/exercise/DictationHint';
 import { ExerciseShell, SentenceInput, explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { Button } from '../../ui/Button';
@@ -159,6 +160,7 @@ export function ExerciseView({
   onDone,
   onCommit,
   noHelp = false,
+  onPause,
 }: {
   exercise: Exercise;
   knownWords: ReadonlySet<string>;
@@ -169,6 +171,8 @@ export function ExerciseView({
   onCommit?: (ans: Answer) => FirstKind;
   /** Wochen-Check (M10): ohne Tipp-Knopf – der Check misst, statt zu helfen. */
   noHelp?: boolean;
+  /** P7 S1-DIKTAT: „Am Handy sprechen“ beim Sprechschritt, wirkt wie „Pause, später weiter“ (nur Pflicht-Runde des Trainers). */
+  onPause?: () => void;
 }) {
   const { t, tn, lang, dateShort } = useT();
   const api = useHiddenInput();
@@ -1040,6 +1044,7 @@ export function ExerciseView({
     );
     answer = (
       <div className="flex flex-col gap-2">
+        {e.ex === 'say_it' && !fb && <DictationHint onPhone={onPause} />}
         <SentenceInput
           mode="free"
           value={sentenceText}

@@ -1,0 +1,36 @@
+import type { diktatDe } from './diktat.de';
+
+// Interface texts for the laptop dictation check (Relaunch stage 1, P7 S1-DIKTAT), English (US spelling).
+
+export const diktatEn: Record<keyof typeof diktatDe, string> = {
+  dkEntryTitle: 'Dictation on laptop',
+  dkEntryOpen: 'Check dictation on laptop',
+  dkEntryClose: 'Close check',
+  dkStatusMac: 'Mac',
+  dkStatusWin: 'Windows',
+  dkStatusOk: 'works',
+  dkStatusFail: 'didn’t work',
+  dkStatusNone: 'not checked',
+  dkWhy: 'Why: If dictation works, you can answer speaking tasks out loud on your laptop too. The check doesn’t count toward your progress.',
+  dkDo: 'How: Click into the field, start dictation and say the sentence. Don’t type anything.',
+  dkSay: 'Say this sentence:',
+  dkCheck: 'Check',
+  dkOk: '✓ Dictation works',
+  dkOkSub: 'From now on, speaking tasks on your laptop show the dictation hint.',
+  dkFail: 'Dictation didn’t work',
+  dkReasonEmpty: 'No text arrived.',
+  dkReasonKeys: 'The text came from key presses, not dictation.',
+  dkReasonPaste: 'The text was pasted, not dictated.',
+  dkReasonNotDictation: 'The text arrived word by word and wasn’t recognized as dictation.',
+  dkReasonNotEnglish: 'The text isn’t English. Set the dictation language to English.',
+  dkReasonMismatch: 'The text differs too much from the sentence.',
+  dkYou: 'You: {text}',
+  dkTech: 'Details: {key} typed · {free} dictated · {paste} pasted · {match}% match',
+  dkRetry: 'Try again',
+  dkNoMore: 'Two tries are enough. You speak on your phone anyway.',
+  dkNotSaved: 'Neither Mac nor Windows detected: the result won’t be saved.',
+  dkSaveFailed: 'Couldn’t save the result.',
+  dkHintType: 'On your laptop you type your answers. Speaking happens on your phone.',
+  dkHintDictate: 'Mac: press the dictation or globe key twice · Windows: Win + H',
+  dkPhone: 'Speak on phone',
+};
