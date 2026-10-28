@@ -1,23 +1,28 @@
-// Plattform-Prüfung des Produktions-Builds (Kap. 3.1, Kap. 12):
-// - genau eine Datei dist/index.html, kleiner als 16 MB
-// - Budget (Lernplattform 3.0 §9): Warnung ab 6 MiB, blockiert ab 9 MiB
-// - keine Ladeziele außerhalb der Datei (Skripte, Stylesheets, Schriften, Bilder, Netz-APIs, WebAssembly)
-// - kein Entwicklungs-Adapter und keine Testdaten im Build
-// - Viewport mit viewport-fit=cover, lang-Attribut, Titel
-// Mehr-Datei-Modus (LX_BUILD=multi, docs/umbau/mehr-datei.md): dist/ = index.html + flache Zusatzdateien. Dann gilt:
-// - keine Unterordner, nur erlaubte Dateitypen, jede Datei < 16 MB, Gesamtgröße ≤ 64 MB (Warnung ab 12 MB)
+// Plattform-Prüfung des Produktions-Builds (Kap. 3.1, Kap. 12). Alle Grenzen stammen aus scripts/limits.mjs (einzige Quelle).
+// Mehr-Datei (STANDARD, `npm run build`, docs/umbau/mehr-datei.md): dist/ = index.html + flache Zusatzdateien. Dann gilt:
+// - keine Unterordner, nur erlaubte Dateitypen, jede Datei unter MAX_FILE_BYTES, Summe höchstens MAX_PUBLISH_BYTES
+//   (Hinweis ab WARN_TOTAL_BYTES), höchstens MAX_FILES_PER_PUBLISH Dateien (Hinweis ab TARGET_MAX_FILES)
 // - index.html verweist nur flach-relativ auf vorhandene Dateien
 // - alle Skripte/Stylesheets/JSON werden wie die HTML-Datei auf Ladeziele und Entwicklungs-Spuren geprüft;
 //   `fetch(` ist nur in der Datei erlaubt, die den Marker `lx:content-fetch` trägt (Inhalts-Bündel)
-// Aufruf nach `npm run build` bzw. `npm run build:multi`: npm run check:platform (erkennt den Modus am Inhalt von dist/)
+// - dist/.vite/ (Vite-Manifest, nur Bau-Metadaten für scripts/check-budget.mjs) wird übergangen; es wird nie veröffentlicht.
+// Einzeldatei (Rückfall, `npm run build:single`): genau dist/index.html, unter MAX_FILE_BYTES,
+// Budget (Lernplattform 3.0 §9) Hinweis ab SINGLE_WARN_BYTES, blockiert ab SINGLE_FAIL_BYTES.
+// Beide: keine Ladeziele außerhalb (Skripte, Stylesheets, Schriften, Bilder, Netz-APIs, WebAssembly), kein Entwicklungs-Adapter,
+// keine Testdaten, Viewport mit viewport-fit=cover, lang-Attribut, Titel.
+// Aufruf nach `npm run build` bzw. `npm run build:single`: npm run check:platform (erkennt den Modus am Inhalt von dist/)
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { MAX_FILE_BYTES, MAX_FILES_PER_PUBLISH, MAX_PUBLISH_BYTES, SINGLE_FAIL_BYTES, SINGLE_WARN_BYTES, TARGET_MAX_FILES, WARN_TOTAL_BYTES, mb } from './limits.mjs';
 
-export const MAX_BYTES = 16 * 1024 * 1024;
-export const WARN_BYTES = 6 * 1024 * 1024;
-export const FAIL_BYTES = 9 * 1024 * 1024;
+// Alte Namen bleiben als Verweise auf scripts/limits.mjs (Tests und Aufrufer lesen sie weiter von hier).
+export const MAX_BYTES = MAX_FILE_BYTES;
+export const WARN_BYTES = SINGLE_WARN_BYTES;
+export const FAIL_BYTES = SINGLE_FAIL_BYTES;
+/** Bau-Metadaten in dist/ (Vite-Manifest), werden weder geprüft noch veröffentlicht. */
+export const BUILD_META_DIR = '.vite';
 
 // Ladeziele, die eine Anfrage auslösen würden.
 const loaders = [
@@ -61,9 +66,9 @@ const BASE64_BLOCK = /[A-Za-z0-9+/=]{512,}/g;
 export function checkHtml(html, size) {
   const problems = [];
   const notes = [];
-  if (size >= MAX_BYTES) problems.push(`dist/index.html ist ${size} Bytes groß (Grenze 16 MB)`);
-  else if (size >= FAIL_BYTES) problems.push(`Budget überschritten: ${(size / 1048576).toFixed(2)} MiB (Grenze 9 MiB, Lernplattform 3.0 §9)`);
-  else if (size >= WARN_BYTES) notes.push(`Achtung: ${(size / 1048576).toFixed(2)} MiB – über der Warnschwelle von 6 MiB (Lernplattform 3.0 §9): das nächste Paket packt bestehende Inhalte`);
+  if (size >= MAX_BYTES) problems.push(`dist/index.html ist ${size} Bytes groß (Grenze ${mb(MAX_BYTES)} je Datei)`);
+  else if (size >= FAIL_BYTES) problems.push(`Budget überschritten: ${(size / 1048576).toFixed(2)} MiB (Grenze ${(FAIL_BYTES / 1048576).toFixed(0)} MiB, Lernplattform 3.0 §9)`);
+  else if (size >= WARN_BYTES) notes.push(`Achtung: ${(size / 1048576).toFixed(2)} MiB – über der Warnschwelle von ${(WARN_BYTES / 1048576).toFixed(0)} MiB (Lernplattform 3.0 §9): das nächste Paket packt bestehende Inhalte`);
 
   const text = html.replace(BASE64_BLOCK, '');
   for (const [re, label] of loaders) if (re.test(text)) problems.push(`Ladeziel gefunden: ${label}`);
@@ -79,9 +84,9 @@ export function checkHtml(html, size) {
 }
 
 // ---- Mehr-Datei-Modus ----
-export const MULTI_MAX_FILE = 16 * 1024 * 1024;
-export const MULTI_MAX_TOTAL = 64 * 1024 * 1024;
-export const MULTI_WARN_TOTAL = 12 * 1024 * 1024;
+export const MULTI_MAX_FILE = MAX_FILE_BYTES;
+export const MULTI_MAX_TOTAL = MAX_PUBLISH_BYTES;
+export const MULTI_WARN_TOTAL = WARN_TOTAL_BYTES;
 export const MULTI_EXT = new Set(['.html', '.js', '.css', '.json', '.woff2', '.png', '.jpg', '.webp', '.svg', '.mp4', '.webm', '.bin']);
 const TEXT_EXT = new Set(['.js', '.css', '.json', '.svg']);
 const FETCH_MARKER = 'lx:content-fetch';
@@ -104,10 +109,12 @@ export function checkMulti(files) {
     total += f.size;
     if (f.name.includes('/')) problems.push(`Unterordner/nicht flacher Pfad: ${f.name}`);
     if (!MULTI_EXT.has(extname(f.name).toLowerCase())) problems.push(`Nicht erlaubter Dateityp: ${f.name}`);
-    if (f.size >= MULTI_MAX_FILE) problems.push(`${f.name} ist ${f.size} Bytes groß (Grenze 16 MB je Datei)`);
+    if (f.size >= MULTI_MAX_FILE) problems.push(`${f.name} ist ${f.size} Bytes groß (Grenze ${mb(MULTI_MAX_FILE)} je Datei)`);
   }
-  if (total > MULTI_MAX_TOTAL) problems.push(`Gesamtgröße ${(total / 1048576).toFixed(2)} MiB über 64 MB`);
-  else if (total > MULTI_WARN_TOTAL) notes.push(`Achtung: Gesamtgröße ${(total / 1048576).toFixed(2)} MiB – über der Warnschwelle von 12 MiB`);
+  if (files.length > MAX_FILES_PER_PUBLISH) problems.push(`${files.length} Dateien: mehr als ${MAX_FILES_PER_PUBLISH} je Veröffentlichung`);
+  else if (files.length >= TARGET_MAX_FILES) notes.push(`Achtung: ${files.length} Dateien – Ziel sind weniger als ${TARGET_MAX_FILES}`);
+  if (total > MULTI_MAX_TOTAL) problems.push(`Gesamtgröße ${mb(total)} über ${mb(MULTI_MAX_TOTAL)} je Veröffentlichung`);
+  else if (total > MULTI_WARN_TOTAL) notes.push(`Achtung: Gesamtgröße ${mb(total)} – über der Warnschwelle von ${mb(MULTI_WARN_TOTAL)}`);
 
   const html = files.find((f) => f.name === 'index.html')?.text ?? '';
   for (const m of html.matchAll(/<(script|link|img|source)\b[^>]*?\b(src|href)\s*=\s*["']([^"']*)["']/gi)) {
@@ -136,9 +143,14 @@ export function checkMulti(files) {
   return { problems, notes };
 }
 
+/** Einträge von dist/ ohne die Bau-Metadaten (dist/.vite/). */
+export function distEntries(dir) {
+  return readdirSync(dir, { withFileTypes: true }).filter((e) => !(e.isDirectory() && e.name === BUILD_META_DIR));
+}
+
 function main() {
   const dir = new URL('../dist/', import.meta.url);
-  const entries = readdirSync(dir, { withFileTypes: true });
+  const entries = distEntries(dir);
   if (entries.length > 1 || process.env.LX_BUILD === 'multi') {
     const files = entries.map((e) => {
       if (e.isDirectory()) return { name: `${e.name}/`, size: 0 };
@@ -148,7 +160,7 @@ function main() {
     });
     const res = checkMulti(files);
     const total = files.reduce((a, f) => a + f.size, 0);
-    console.log(`Mehr-Datei-Build: ${files.length} Dateien, ${(total / 1048576).toFixed(2)} MiB gesamt, index.html ${files.find((f) => f.name === 'index.html')?.size ?? 0} Bytes`);
+    console.log(`Mehr-Datei-Build: ${files.length} Dateien, ${mb(total)} gesamt, index.html ${files.find((f) => f.name === 'index.html')?.size ?? 0} Bytes`);
     res.notes.forEach((n) => console.log(n));
     if (res.problems.length) {
       console.error(`PLATTFORM-PRÜFUNG (Mehr-Datei): BLOCKIERT (${res.problems.length})`);
@@ -167,7 +179,7 @@ function main() {
   const res = checkHtml(html, size);
   problems.push(...res.problems);
   console.log(`dist/index.html: ${size} Bytes (${(size / 1048576).toFixed(2)} MiB)`);
-  console.log(`Budget: ${(size / 1048576).toFixed(2)} von 6 MiB`);
+  console.log(`Budget: ${(size / 1048576).toFixed(2)} von ${(WARN_BYTES / 1048576).toFixed(0)} MiB`);
   res.notes.forEach((n) => console.log(n));
   if (problems.length) {
     console.error(`PLATTFORM-PRÜFUNG: BLOCKIERT (${problems.length})`);

@@ -58,7 +58,8 @@ const GONE_AREAS = 'input|read|listen|discover|write|business|pron|inbox|fluency
 
 export default defineConfig(
   {
-    ignores: ['dist/**', 'tests/.runtime/**', 'node_modules/**', 'contract/**', 'test-results/**', 'playwright-report/**', '.claude/worktrees/**'],
+    // .cache/: Bau- und Testablagen (verify:fast, v86-Stand aus scripts/v86-checkout.mjs). docs/relaunch/vorschau/: eigenständige Design-Vorschau, kein App-Code.
+    ignores: ['dist/**', 'tests/.runtime/**', 'node_modules/**', 'contract/**', 'test-results/**', 'playwright-report/**', '.claude/worktrees/**', '.cache/**', 'docs/relaunch/vorschau/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

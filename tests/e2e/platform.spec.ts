@@ -6,7 +6,7 @@ import { boot, openSettings, openOverview, expectStreak, screen } from './fixtur
 // kein Entwicklungs-Adapter im Produktions-Build.
 
 test('der Produktions-Build enthält keinen Entwicklungs-Adapter und keine Testdaten', () => {
-  // Einzeldatei: nur index.html; Mehr-Datei (LX_BUILD=multi): alle Textdateien in dist/.
+  // Einzeldatei: nur index.html; Mehr-Datei (Standard): alle Textdateien in dist/ (dist/.vite/ ist ein Ordner und fällt heraus).
   const dist = new URL('../../dist/', import.meta.url);
   const html = readdirSync(dist).filter((f) => /\.(html|js|css|json)$/.test(f)).map((f) => readFileSync(new URL(f, dist), 'utf8')).join('\n');
   const markers = [

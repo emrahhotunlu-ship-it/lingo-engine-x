@@ -1,16 +1,19 @@
-// Veröffentlichungs-Hilfe für den Mehr-Datei-Build (docs/umbau/mehr-datei.md).
-// Liest dist/ (nach `npm run build:multi`) und gibt JSON für den Artifact-Aufruf aus:
-//   page   = Quelldatei der Seite (`file_path`)
-//   files  = { "<veröffentlichter flacher Pfad>": "<absoluter Quellpfad>" } (die `files`-Map; index.html steht NICHT darin)
-//   stale  = Hinweis auf Dateien der vorigen Version, die nach dem Veröffentlichen als „alt“ stehen bleiben (nur mit --previous <manifest.json>)
-// Aufruf: node scripts/publish-manifest.mjs [--out datei.json] [--previous alt.json]
-// Prüft vorher die Grenzen (flach, erlaubte Typen, < 16 MB je Datei, Summe ≤ 64 MB, höchstens 255 Dateien je Veröffentlichung).
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+// Veröffentlichungs-Hilfe für den Mehr-Datei-Build (docs/umbau/mehr-datei.md, Veröffentlichungsweg: docs/relaunch/publish/README.md).
+// Liest dist/ (nach `npm run build`) und gibt JSON für den Artifact-Aufruf aus:
+//   page     = Quelldatei der Seite (`file_path`)
+//   files    = { "<veröffentlichter flacher Pfad>": "<absoluter Quellpfad>" } (die `files`-Map; index.html steht NICHT darin)
+//   stale    = Dateien der vorigen Veröffentlichung, die die neue nicht mehr hat (nur mit --previous <manifest.json>)
+//   removeMap = { "<alter Pfad>": null } – geht zusammen mit `files` in DENSELBEN Artifact-Aufruf, damit alte Stücke gelöscht werden
+// Aufruf: node scripts/publish-manifest.mjs [--out datei.json] [--previous docs/relaunch/publish/<link>.json] [--dist <ordner>]
+//   --dist: anderer Bau-Ordner als dist/ (z. B. der v86-Stand aus scripts/v86-checkout.mjs für den Rückweg auf die Einzeldatei)
+// Prüft vorher die Grenzen aus scripts/limits.mjs (über checkMulti: flach, erlaubte Typen, Größe je Datei, Summe, Dateizahl je Veröffentlichung).
+// dist/.vite/ (Vite-Manifest) ist Bau-Metadatum und wird nie veröffentlicht.
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkMulti } from './check-platform.mjs';
+import { checkHtml, checkMulti, distEntries } from './check-platform.mjs';
 
-const MAX_FILES = 255;
 const TEXT = new Set(['.js', '.css', '.json', '.svg']);
 
 /** Baut das Manifest aus einer Dateiliste `{ name, size }` (rein, testbar). */
@@ -32,14 +35,16 @@ export function buildManifest(entries, dir, previous) {
 function main() {
   const args = process.argv.slice(2);
   const arg = (k) => (args.includes(k) ? args[args.indexOf(k) + 1] : undefined);
-  const dir = fileURLToPath(new URL('../dist/', import.meta.url));
-  const entries = readdirSync(dir, { withFileTypes: true }).map((e) => {
+  const distArg = arg('--dist');
+  const dir = distArg ? resolve(distArg) : fileURLToPath(new URL('../dist/', import.meta.url));
+  const entries = distEntries(dir).map((e) => {
     if (e.isDirectory()) return { name: `${e.name}/`, size: 0 };
     const p = resolve(dir, e.name);
     return { name: e.name, size: statSync(p).size, text: TEXT.has(extname(e.name).toLowerCase()) || e.name === 'index.html' ? readFileSync(p, 'utf8') : undefined };
   });
-  const check = checkMulti(entries);
-  if (entries.length > MAX_FILES) check.problems.push(`${entries.length} Dateien: mehr als ${MAX_FILES} je Veröffentlichung`);
+  // Einzeldatei (nur index.html, z. B. Rückweg auf v86): Prüfung wie check:platform im Einzeldatei-Modus.
+  const single = entries.length === 1 && entries[0].name === 'index.html';
+  const check = single ? checkHtml(entries[0].text ?? '', entries[0].size) : checkMulti(entries);
   if (check.problems.length) {
     console.error('Manifest abgebrochen, Plattform-Prüfung nicht bestanden:');
     check.problems.forEach((p) => console.error(`  - ${p}`));
@@ -47,6 +52,16 @@ function main() {
   }
   const prevPath = arg('--previous');
   const manifest = buildManifest(entries, dir, prevPath ? JSON.parse(readFileSync(prevPath, 'utf8')) : undefined);
+  // Stand, aus dem gebaut wurde (für den Rückweg und die Notiz in docs/umbau/stand.md). Beim v86-Rückweg (`--dist .cache/v86/dist`)
+  // steht er in der Datei COMMIT daneben (scripts/v86-checkout.mjs), sonst ist es HEAD.
+  const stamp = resolve(dir, '..', 'COMMIT');
+  try {
+    manifest.commit = distArg && existsSync(stamp)
+      ? readFileSync(stamp, 'utf8').split('\n')[0].slice(0, 7)
+      : execFileSync('git', ['rev-parse', '--short', 'HEAD'], { encoding: 'utf8', cwd: fileURLToPath(new URL('..', import.meta.url)) }).trim();
+  } catch (err) {
+    console.error('Hinweis: Commit nicht lesbar –', err instanceof Error ? err.message : err);
+  }
   const json = JSON.stringify(manifest, null, 2);
   const outPath = arg('--out');
   if (outPath) writeFileSync(outPath, json + '\n');

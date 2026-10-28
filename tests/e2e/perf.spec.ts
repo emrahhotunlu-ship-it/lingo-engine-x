@@ -279,9 +279,21 @@ test('H6: eine geänderte Karte → das Vokabel-Abo prüft genau ein Dokument ne
   expect(errors).toEqual([]);
 });
 
-test('dist/index.html bleibt unter der Warnschwelle von 6 MiB (Lernplattform 3.0 §9)', async () => {
-  const { statSync } = await import('node:fs');
-  expect(statSync(new URL('../../dist/index.html', import.meta.url)).size).toBeLessThan(6 * 1024 * 1024);
+// Stufe 1 P0 S1-TOR Nr. 6: Größentest des Mehr-Datei-Builds = Einstieg (Manifest-Eintrag `index.html` samt statischer Importe)
+// gzip im Budget (scripts/budget.json, dieselbe Messung wie `npm run check:budget`). Der Einzeldatei-Rückfall hat kein Manifest;
+// seine Größe prüft `check:platform` in `npm run verify:single`.
+test('Einstieg (Manifest-Eintrag index.html) bleibt im Budget (Stufe 1 P0)', async () => {
+  const { existsSync } = await import('node:fs');
+  const { fileURLToPath } = await import('node:url');
+  const { MANIFEST, evaluate, loadBudget, measure } = await import('../../scripts/check-budget.mjs');
+  const dist = fileURLToPath(new URL('../../dist/', import.meta.url));
+  test.skip(!existsSync(`${dist}${MANIFEST}`), 'Einzeldatei-Build ohne Vite-Manifest: Größe prüft check:platform (verify:single)');
+  const m = measure(dist);
+  const res = evaluate(m, loadBudget());
+  const entry = res.rows.find((r) => r.name === 'entry');
+  expect(m.entryFiles.length).toBeGreaterThan(0);
+  expect(entry?.ok, `Einstieg ${m.entry} B gzip, Grenze ${entry?.limit} B`).toBe(true);
+  expect(res.problems).toEqual([]);
 });
 
 // P10: Ein gepacktes 600-KB-Bündel (Roh-JSON) wird bei 4-facher CPU-Drossel in höchstens 150 ms entpackt und gelesen

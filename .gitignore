@@ -14,3 +14,6 @@ tests/tutor/lint-report.txt
 
 # Zwischenspeicher des schnellen Laufs (scripts/verify-fast.mjs: inkrementelle Typprüfung, Lint-Cache, Stufen-Marken)
 .cache/
+
+# Bau-Manifest (scripts/check-budget.mjs liest es nach jedem Bau); wird nicht veröffentlicht. dist/ selbst bleibt im Repository.
+dist/.vite/

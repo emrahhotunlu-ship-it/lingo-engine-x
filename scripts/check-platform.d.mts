@@ -1,10 +1,13 @@
+import type { Dirent } from 'node:fs';
 export const MAX_BYTES: number;
 export const WARN_BYTES: number;
 export const FAIL_BYTES: number;
+export const BUILD_META_DIR: string;
 export const devMarkers: string[];
 export const removedTemplates: string[];
 export function checkHtml(html: string, size: number): { problems: string[]; notes: string[] };
 export function checkMulti(files: { name: string; size: number; text?: string }[]): { problems: string[]; notes: string[] };
+export function distEntries(dir: URL | string): Dirent[];
 export const MULTI_MAX_FILE: number;
 export const MULTI_MAX_TOTAL: number;
 export const MULTI_WARN_TOTAL: number;

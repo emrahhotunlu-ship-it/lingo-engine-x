@@ -1,10 +1,10 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { extname } from 'node:path';
 import type { Route } from '@playwright/test';
 
 // Liefert dist/ für die E2E-Tests unter der Test-Adresse (fixtures.ts `ORIGIN`). Ein Mechanismus für beide Bauweisen:
-//  - Einzeldatei (Standard): nur `/` -> dist/index.html.
-//  - Mehr-Datei (LX_BUILD=multi): zusätzlich flache Pfade (`/index-<hash>.js`, `/content-*.bin` …) aus dist/.
+//  - Einzeldatei (Rückfall `npm run build:single`): nur `/` -> dist/index.html.
+//  - Mehr-Datei (Standard `npm run build`, erkannt am Inhalt von dist/): zusätzlich flache Pfade (`/index-<hash>.js`, `/content-*.bin` …) aus dist/.
 // Ein eigener Server ist nicht nötig: `route.fulfill` ersetzt ihn und lässt die Zählung fremder Anfragen (fixtures `external`) intakt.
 // Alles, was nicht in dist/ liegt, bleibt „extern“ und wird abgebrochen.
 
@@ -23,7 +23,8 @@ const TYPES: Record<string, string> = {
 };
 
 export const HTML = readFileSync(new URL('index.html', DIST), 'utf8');
-export const MULTI = process.env.LX_BUILD === 'multi';
+/** Mehr-Datei-Build (Standard seit Stufe 1 P0): dist/ enthält außer index.html weitere Dateien (dist/.vite/ = Bau-Metadaten, zählt nicht). */
+export const MULTI = process.env.LX_BUILD === 'multi' || readdirSync(DIST).some((f) => f !== 'index.html' && f !== '.vite');
 
 /** Beantwortet die Anfrage aus dist/ und gibt `true` zurück; sonst `false` (Aufrufer behandelt sie als extern). */
 export async function serveDist(route: Route, origin: string): Promise<boolean> {

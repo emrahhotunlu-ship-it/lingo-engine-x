@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source not '../../dist';
 @import './parts/gx.css';
 @import './parts/wx.css';
 @import './parts/hx.css';
