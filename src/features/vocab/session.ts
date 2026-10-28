@@ -40,7 +40,7 @@ import { legacySceneDoc } from '../../domain/chunks/legacyScene';
 import { buildQueue, introducedKindsToday, longIntroducedToday, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState, previewIntervals, readFsrs, reviewFsrs } from '../../domain/srs/scheduler';
 import { noteWeight } from '../../domain/srs/weight';
-import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
+import type { AnswerEvent, AttemptInput, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, saveNoteOnly, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
@@ -757,6 +757,9 @@ export type Answer = {
   t?: number;
   /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
   rec?: ActRecord;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; nur gespeichert (`hist`, Log), nie ausgewertet. */
+  fk?: number;
+  in?: AttemptInput;
 };
 
 /** Was die Oberfläche von einer Aktivierung festhält; `commitAnswer` ergänzt Karte, Schritt, Format und Code zum Eintrag der Sammelakte. */
@@ -857,6 +860,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (actStep && !(ans.rec && ans.rec.k === 1 && ans.rec.v !== 'w' && !ans.rec.hp)) a.actUnverified = true;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
+  if (ans.fk !== undefined) a.fk = ans.fk;
+  if (ans.in) a.in = ans.in;
   if (ans.hint) a.hint = ans.hint;
   if (ans.interrupted && ans.ok && !ans.override) a.interrupted = true;
   if (ans.unverified) a.unverified = true;

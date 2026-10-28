@@ -177,6 +177,8 @@ export function commitCheckWord(ans: Answer, step: number): FirstKind {
   };
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
   if (ans.override) a.override = true;
+  if (ans.fk !== undefined) a.fk = ans.fk;
+  if (ans.in) a.in = ans.in;
   void saveCard(a, card.inDb ? null : { ...card.doc });
   recordAnswer(a, false);
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));

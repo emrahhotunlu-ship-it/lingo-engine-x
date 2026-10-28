@@ -30,7 +30,9 @@
   "grenzen": {
     "entry": {
       "basis": 2736000,
-      "zuwachs": {}
+      "zuwachs": {
+        "P4 S1-ZEIT": 3000
+      }
     },
     "css": {
       "basis": 25000,

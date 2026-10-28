@@ -131,6 +131,13 @@ export const RULES = [
   { prefix: 'src/domain/studytime.ts', specs: ['studyTime.spec.ts'] },
   { prefix: 'src/domain/metrics/', specs: ['diagnose.spec.ts', 'progress.spec.ts'] },
   { prefix: 'src/domain/radar/', specs: ['progress.spec.ts'] },
+  // P4 S1-ZEIT: Zeit je Versuch (fk/ms/in) in hist und Tagesprotokoll.
+  { prefix: 'src/engine/inputKind', specs: ['zeit.spec.ts'] },
+  { prefix: 'src/domain/srs/applyReview', specs: ['zeit.spec.ts', 'rueckweg.spec.ts'] },
+  { prefix: 'src/domain/progress/logPatch', specs: ['zeit.spec.ts', ...TRAINER, 'rueckweg.spec.ts'] },
+  { prefix: 'src/features/grammar/GrammarItem', specs: ['zeit.spec.ts'] },
+  { prefix: 'src/features/vocab/ExerciseView', specs: ['zeit.spec.ts'] },
+  { prefix: 'tests/e2e/zeit', specs: ['zeit.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

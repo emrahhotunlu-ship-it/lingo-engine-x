@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { fsrsSchema, type FsrsStored } from '../../data/schemas';
+import { attemptMs, attemptTimingFields, fsrsSchema, type FsrsStored } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
 import { dayKey, isDayKey } from '../date';
 import { naOf } from './actBase';
@@ -50,7 +50,7 @@ export const cardPatchSchema = z
     stage: z.number().int().min(1).max(5),
     modes: z.partialRecord(legacyMode, countsSchema),
     xs: z.record(z.string().max(24), countsSchema),
-    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional(), ...attemptTimingFields })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     lg: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
@@ -83,7 +83,7 @@ export const chunkPatchSchema = z
     stage: z.number().int().min(1).max(5),
     modes: z.partialRecord(z.enum(['cloze', 'produce']), countsSchema).optional(),
     xs: z.record(z.string().max(24), countsSchema),
-    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional(), ...attemptTimingFields })).max(HIST_MAX),
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     lg: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
@@ -257,7 +257,21 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
   const v = a.grade === 1 && a.wrong ? a.wrong.trim().slice(0, WRONG_MAX) : '';
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(a.hint ? { h: a.hint } : {}), ...(v ? { v } : {}) };
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(a.hint ? { h: a.hint } : {}), ...(v ? { v } : {}), ...attemptTiming(a) };
+}
+
+// S1-ZEIT (Relaunch Stufe 1 P4): Zeit je Versuch in `hist` – nur gespeichert, nie ausgewertet.
+
+/**
+ * `fk` (erster Kontakt), `ms` (Antwortzeit), `in` (Eingabeart) für einen Verlaufseintrag.
+ * `ms` nur, wenn gemessen (> 0; 0 heißt „nicht gemessen“, z. B. Wort-Popup), `fk` nur bei Kontakt.
+ */
+export function attemptTiming(a: Pick<AnswerEvent, 'ms' | 'fk' | 'in'>): { fk?: number; ms?: number; in?: AnswerEvent['in'] } {
+  const out: { fk?: number; ms?: number; in?: AnswerEvent['in'] } = {};
+  if (typeof a.fk === 'number' && Number.isFinite(a.fk) && a.fk >= 0) out.fk = attemptMs(a.fk);
+  if (typeof a.ms === 'number' && Number.isFinite(a.ms) && a.ms > 0) out.ms = attemptMs(a.ms);
+  if (a.in === 't' || a.in === 'd' || a.in === 'c') out.in = a.in;
+  return out;
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {
@@ -307,7 +321,7 @@ export const partnerMissPatchSchema = z
   .object({
     modes: z.partialRecord(legacyMode, countsSchema),
     xs: z.record(z.string().max(24), countsSchema),
-    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional(), ...attemptTimingFields })).max(HIST_MAX),
     co: z.number().min(0).max(1),
     col: chargeColSchema.optional(),
   })

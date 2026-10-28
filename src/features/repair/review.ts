@@ -1,4 +1,4 @@
-import { repairLogEntry } from '../../domain/progress/logPatch';
+import { repairLogEntry, type AttemptTiming } from '../../domain/progress/logPatch';
 import type { Fehlersatz } from '../../domain/repair/fehlersaetze';
 import { nextT, recordRepairAnswer } from '../progress/persist';
 import { recordGrammarError, recordRepair } from './store';
@@ -19,10 +19,10 @@ export type RepairAnswer = {
   near?: boolean;
   /** Erste Antwort der Runde: sofort speichern. */
   first: boolean;
-};
+} & AttemptTiming;
 
 export function commitRepairAnswer(a: RepairAnswer): void {
-  const entry = repairLogEntry({ t: nextT(), ok: a.ok, lang: a.lang, id: a.item.id, q: a.item.wrong, given: a.given, ans: a.item.right, g: a.near ? 2 : a.ok ? 3 : 1, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx });
+  const entry = repairLogEntry({ t: nextT(), ok: a.ok, lang: a.lang, id: a.item.id, q: a.item.wrong, given: a.given, ans: a.item.right, g: a.near ? 2 : a.ok ? 3 : 1, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.fk !== undefined ? { fk: a.fk } : {}), ...(a.in ? { in: a.in } : {}) });
   recordRepairAnswer(entry, a.day, a.first);
   const { store, topic, errorT } = a.item;
   if (store === 'grammar' && topic && errorT !== undefined) void recordGrammarError(topic, errorT, a.ok, a.ok ? '' : a.given, !!a.near);

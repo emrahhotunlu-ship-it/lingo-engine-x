@@ -441,6 +441,20 @@ export const lessonSchema = z.looseObject({
   lx: loose,
 });
 
+// S1-ZEIT (Relaunch Stufe 1 P4): Zeitfelder je Versuch, streng für den Schreibweg (`applyReview.ts`).
+// `fk` ms bis zum ersten Kontakt, `ms` Antwortzeit (beide auf 10 ms gerundet, gedeckelt bei 600.000),
+// `in` Eingabeart: `t` getippt, `d` diktiert/eingesetzt, `c` gewählt. Alle optional.
+export const ATTEMPT_MS_MAX = 600_000;
+export const attemptTimingFields = {
+  fk: z.number().int().min(0).max(ATTEMPT_MS_MAX).optional(),
+  ms: z.number().int().min(0).max(ATTEMPT_MS_MAX).optional(),
+  in: z.enum(['t', 'd', 'c']).optional(),
+};
+/** Versuchszeit für die Speicherung: auf 10 ms gerundet, 0 … 600.000 ms (ein Ausreißer sprengt nie Karte oder Log). */
+export function attemptMs(v: number): number {
+  return Math.min(ATTEMPT_MS_MAX, Math.max(0, Math.round(v / 10) * 10));
+}
+
 export const logSchema = z.looseObject({
   date: str,
   // `given`/`ans` sind je nach Übungsart Text oder Liste (z. B. Satzbau) – tolerant lesen.
@@ -466,6 +480,10 @@ export const logSchema = z.looseObject({
         lesson: str,
         // Neu (Phase 2, M4): Einspruch „Ich lag richtig".
         override: bool,
+        // S1-ZEIT (Relaunch Stufe 1 P4): Zeit bis zum ersten Kontakt und Eingabeart (t/d/c).
+        // Nur gespeichert, nie ausgewertet; Altbestand ohne die Felder bleibt gültig.
+        fk: num,
+        in: str,
       }),
     )
     .nullish(),

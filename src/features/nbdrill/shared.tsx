@@ -10,6 +10,7 @@ import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types'
 import { getWriter } from '../../data';
 import { outPath, upsertOut, type OutItem } from '../../domain/nbdrill/outDoc';
 import { channelLogEntry } from '../../domain/progress/channelLog';
+import { timingOf, type AttemptTiming } from '../../domain/progress/logPatch';
 import type { WeekTargets } from '../../domain/unit/types';
 import { useT } from '../../i18n';
 import { logError } from '../../platform/diagnostics';
@@ -94,7 +95,7 @@ export type NbAnswer = {
   t: number;
   /** Gerät der Runde (`'t'` Touch, `'k'` Tastatur), einmal beim Start gelesen (§4.1, §8). */
   dev?: DevTag;
-};
+} & AttemptTiming;
 
 export type DevTag = 't' | 'k';
 
@@ -112,7 +113,8 @@ export function logAnswers(rows: readonly NbAnswer[]): void {
     recordChannelEntries(
       rows.map((r) => {
         const base = channelLogEntry({ t: r.t, ok: r.ok, lang: r.lang, type: r.type, ref: r.ref, q: r.q, given: r.given, ans: r.ans, ms: r.ms, ctx: r.duty ? 'duty' : 'extra' });
-        return { ...base, day: r.day, ...(r.dev ? { dev: r.dev } : {}) };
+        // S1-ZEIT (P4): `fk`/`in` nur, wenn die Übung sie liefert (gerundet und gedeckelt wie im Wörter-Log).
+        return { ...base, day: r.day, ...(r.dev ? { dev: r.dev } : {}), ...timingOf(r) };
       }),
     );
   } catch (err) {

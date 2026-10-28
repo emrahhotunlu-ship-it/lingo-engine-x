@@ -260,6 +260,13 @@ export type AnswerEvent = {
   wrong?: string;
   /** Abruf am Ende der Wort-Werkstatt: schreibt `wk` und legt die Fälligkeit 2–3 Lerntage später (`werkstatt.ts`). */
   wk?: true;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt (Taste oder Antippen), ohne Nachschlage-/Begleiter-Pausen. Fehlt ohne Kontakt. Nur gespeichert, nie ausgewertet. */
+  fk?: number;
+  /** S1-ZEIT (P4): Eingabeart – `t` getippt, `d` diktiert/eingesetzt, `c` gewählt. Nur gespeichert, nie ausgewertet. */
+  in?: AttemptInput;
 };
+
+/** S1-ZEIT (P4): Eingabeart eines Versuchs (`src/engine/inputKind.ts`): getippt, diktiert/eingesetzt, gewählt. */
+export type AttemptInput = 't' | 'd' | 'c';
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

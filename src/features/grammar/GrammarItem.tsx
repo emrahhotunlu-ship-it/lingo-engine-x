@@ -18,10 +18,12 @@ import { scaffolded, splitTransform, wholeSentence, type InputProfile } from '..
 import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, GrammarAnswer, GrammarCheck, GrammarTask, Help, Verdict } from '../../domain/learn/types';
 import { patsOf, patternState } from '../../domain/metrics/pattern';
-import type { Grade } from '../../domain/srs/types';
+import type { AttemptTiming } from '../../domain/progress/logPatch';
+import type { AttemptInput, Grade } from '../../domain/srs/types';
 import { Choices } from '../../engine/Choices';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
+import { bindInputKind, createAttemptTracker } from '../../engine/inputKind';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { SpotSentence } from '../../engine/SpotSentence';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -97,6 +99,9 @@ type Fb = {
   dontKnow: boolean;
   grade: Grade;
   ms: number;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; fehlen ohne Kontakt. Nur gespeichert, nie für die Note. */
+  fk?: number;
+  in?: AttemptInput;
   help: Help;
   judged: GrammarAnswer['judged'];
   unsure: boolean;
@@ -134,6 +139,8 @@ const TJ_V: Record<TutorVerdict, 'c' | 'a' | 'n' | 'w' | 'u'> = { correct: 'c', 
 
 /** Uhr (eigene Funktion, damit die Zeitnahme nie als Teil des Zeichnens gilt). */
 const tick = (): number => performance.now();
+/** S1-ZEIT (P4): Zeitfelder der Rückmeldung für die Antwort (nur gespeichert, `grammarLogEntry`). */
+const timingOf = (fb: AttemptTiming): AttemptTiming => ({ ...(fb.fk !== undefined ? { fk: fb.fk } : {}), ...(fb.in ? { in: fb.in } : {}) });
 const GAP = /_{3,}/;
 const MEANING_KEYS = ['a', 'b', 'both'] as const;
 /** „Ohne Hilfe“ im Vortest: jede Antwort in höchstens 20 s (§5.3). */
@@ -198,6 +205,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
   const root = useRef<HTMLDivElement>(null);
+  // S1-ZEIT (P4): erster Kontakt und Eingabeart, getrennt von `firstKeyAt` (das bleibt allein für die Note). Pause wie `elapsed()`.
+  const [attempt] = useState(createAttemptTracker);
   // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Aufgabe (nur direkt nach dem Start).
   const { ref: sharedRef, shared } = useSharedTarget<HTMLDivElement>('lx-hero');
 
@@ -207,6 +216,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const a = document.activeElement;
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, []);
+  // S1-ZEIT (P4): Tasten und Einfügungen in der versteckten Eingabe (außerhalb der Übung) oder in einem Feld der Übung.
+  useEffect(() => bindInputKind(document, (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), attempt, tick, () => lookupOpenMs() - lookupAt.current), [api, attempt]);
   // Tutor-Engine v3: Aufgaben-Prüfung als Warnzähler (§4.2) und Lernermodell zum Rundenstart (§3.1, verzögert).
   useEffect(() => {
     lintOnce(task);
@@ -239,6 +250,12 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   });
 
   const elapsed = () => Math.max(0, Math.round(performance.now() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
+  /** S1-ZEIT (P4): `fk`/`in` zum Zeitpunkt der Wertung (wie `ms`); Auswahl und das Antippen der Stelle sind `c`. Ohne Kontakt leer. */
+  const timing = (given: string): { fk?: number; in?: AttemptInput } => {
+    const fk = attempt.fk(shownAt.current);
+    if (fk === undefined) return {};
+    return { fk, in: attempt.kind(given, choiceType || (findTask && stage === 'locate') ? 'c' : 't') };
+  };
   const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || type === 'gap' || type === 'transform');
 
   // ------------------------------------------------------------------ Prüfen
@@ -257,7 +274,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
     const grade = learnGrade(type, verdict, { submitMs: ms, firstKeyMs }, help, profile);
     const tv: TutorVerdict = verdict === 'correct' ? (check?.kind === 'other' ? 'alt_ok' : 'correct') : verdict;
-    setFb({ verdict, check, given, dontKnow: false, grade, ms, help, judged: 'local', unsure: false, override: false, tv, by: 'local', fitsGoal: null, dx: null, ask: false, ...extra });
+    setFb({ verdict, check, given, dontKnow: false, grade, ms, help, judged: 'local', unsure: false, override: false, tv, by: 'local', fitsGoal: null, dx: null, ask: false, ...timing(given), ...extra });
     if ((gapKind || findTask) && profile === 'touch') api.blur();
   };
 
@@ -401,6 +418,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           shownAt.current = tick();
           firstKeyAt.current = null;
           lookupAt.current = lookupOpenMs();
+          attempt.reset();
           typed.current = '';
           api.focusNow();
           return;
@@ -431,6 +449,13 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     settleTyped(given);
   };
 
+  /** Auswahl: erster Kontakt (S1-ZEIT) und Wahl. */
+  const pick = (i: number) => {
+    if (fb) return;
+    attempt.contact(tick(), lookupOpenMs() - lookupAt.current);
+    setChosen(i);
+  };
+
   const tappedWord = (): string | undefined => (tapped ? wordsOfPrompt.slice(tapped[0], tapped[1] + 1).join(' ') : undefined);
 
   /** Stelle verfehlt (oder „Kein Fehler“ bei einem Satz mit Fehler): erst Leitfrage und ein zweiter Versuch, dann die Auflösung. */
@@ -447,6 +472,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
 
   const noError = () => {
     if (fb || !findTask) return;
+    attempt.contact(tick(), lookupOpenMs() - lookupAt.current);
     const res = checkFind(task, { tapped: 'none' });
     if (res.verdict === 'correct') finishCheck('correct', res, '', { tapped: 'none', picked: 'none' });
     else missLocate('none', res);
@@ -459,7 +485,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       fit.cancel();
     }
     const spot = findTask && stage === 'replace' ? tappedWord() : undefined;
-    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false, tv: 'wrong', by: 'local', fitsGoal: null, dx: null, ask: false, ...(spot ? { spot } : {}) });
+    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false, tv: 'wrong', by: 'local', fitsGoal: null, dx: null, ask: false, ...timing(typed.current || text), ...(spot ? { spot } : {}) });
     api.blur();
   };
 
@@ -516,7 +542,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     };
     const alt = fb.check?.kind === 'other' && !fb.override;
     const sameAsFirst = firstWrong.current !== null && legacyNorm(firstWrong.current) === legacyNorm(fb.given);
-    const a: GrammarAnswer = fb.target?.ok
+    const a: GrammarAnswer & AttemptTiming = fb.target?.ok
       ? {
           // Zielform im Zweitversuch richtig: halbes Gewicht (Hilfe-Stufe 1), ohne `firstWrong`, nicht mehr „Auch richtig“.
           kind: 'g',
@@ -535,6 +561,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           dev: profile === 'touch' ? 't' : 'k',
           tj: { v: 'c' },
           ...(fb.fit ? { fit: fb.fit } : {}),
+          ...timingOf(fb),
         }
       : {
           kind: 'g',
@@ -556,6 +583,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           ...(retry && firstWrong.current !== null && !(alt && sameAsFirst) ? { firstWrong: firstWrong.current } : {}),
           tj,
           ...(fb.fit ? { fit: fb.fit } : {}),
+          ...timingOf(fb),
         };
     const kind = onDone(a);
     if (kind === 'typed') api.focusNow();
@@ -723,7 +751,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const yours = model.lines.find((l) => l.k === 'yours');
       if (yours && yours.k === 'yours') why[chosen] = yours.text;
     }
-    answer = <Choices options={opts} chosen={chosen} correct={opts.indexOf(solution) >= 0 ? opts.indexOf(solution) : null} revealed={!!fb} onPick={(i) => !fb && setChosen(i)} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
+    answer = <Choices options={opts} chosen={chosen} correct={opts.indexOf(solution) >= 0 ? opts.indexOf(solution) : null} revealed={!!fb} onPick={pick} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
   } else if (type === 'meaning' && task.x?.kind === 'meaning') {
     const x = task.x;
     prompt = (
@@ -737,7 +765,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const yours = model.lines.find((l) => l.k === 'yours');
       if (yours && yours.k === 'yours') why[chosen] = yours.text;
     }
-    answer = <Choices options={[x.a, x.b, t('gxMeaningBoth')]} langs={['en', 'en', lang]} chosen={chosen} correct={correctIdx >= 0 ? correctIdx : null} revealed={!!fb} onPick={(i) => !fb && setChosen(i)} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
+    answer = <Choices options={[x.a, x.b, t('gxMeaningBoth')]} langs={['en', 'en', lang]} chosen={chosen} correct={correctIdx >= 0 ? correctIdx : null} revealed={!!fb} onPick={pick} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
   } else if (type === 'gap') {
     prompt = (
       <>
@@ -780,7 +808,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const marks = errSpan ? [{ span: [errSpan[0], errSpan[1]] as [number, number], tone: fb.verdict === 'correct' && fixText ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
       prompt = <SpotSentence words={words} pick="one" selected={null} onSelect={() => undefined} locked marks={marks} area={area} source={src.source} testId="spot-sentence" />;
     } else if (stage === 'locate') {
-      prompt = <SpotSentence words={words} pick="one" selected={tapped} onSelect={setTapped} area={area} source={src.source} testId="spot-sentence" />;
+      prompt = <SpotSentence words={words} pick="one" selected={tapped} onSelect={(w) => { attempt.contact(tick(), lookupOpenMs() - lookupAt.current); setTapped(w); }} area={area} source={src.source} testId="spot-sentence" />;
     } else if (errSpan) {
       const before = words.slice(0, errSpan[0]).join(' ');
       const after = words.slice(errSpan[1] + 1).join(' ');
