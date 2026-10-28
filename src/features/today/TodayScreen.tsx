@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { comebackBand, comebackGap, lastReturn, RESTART_DAYS, RESTART_GAP } from '../../domain/plan/comeback';
-import { cardStats } from '../../domain/plan/dayStats';
 import { dowOf, unitPlanFor } from '../../domain/unit/planFor';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { armShared } from '../../engine/shared';
@@ -40,7 +39,7 @@ import { TabTitle } from '../system/Chrome';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
-import { buildTrainCards, legacyDutyMinutes, ringFills, todaySummary } from '../../domain/metrics';
+import { buildTrainCards, legacyDutyMinutes, overdueUnits, todaySummary, type TodaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
@@ -168,11 +167,13 @@ function nextTitle(now: CardRow | null, gt: GrammarDay | null, t: T, lang: Lang)
   return t('hxTodayNext', { what: now.name });
 }
 
-/** Die Tageskarte (offen): Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, Pflichtschritte als Zustand und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist. */
-function UnitCard({ view, rows, minLeft, fixNone, settled }: { view: TodayView; rows: CardRow[]; minLeft: number; fixNone: boolean; settled: boolean }) {
+/**
+ * Die Tageskarte (offen): Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, Pflichtschritte als Zustand und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist.
+ * Alle Zahlen (Ring, „x von N“, Restminuten) kommen aus EINEM `todaySummary` (P5 S1-ZAHL).
+ */
+function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean }) {
   const { t, lang } = useT();
-  const done = view.duties.done;
-  const total = view.duties.total;
+  const { done, total } = sum;
   const now = rows.find((r) => r.state === 'now') ?? null;
   const start = useStartUnit(view);
   const title = nextTitle(now, view.plan?.u?.gt ?? null, t, lang);
@@ -186,10 +187,10 @@ function UnitCard({ view, rows, minLeft, fixNone, settled }: { view: TodayView; 
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
       <div className="flex items-center gap-3.5">
-        <DayRing fills={ringFills(view.duties.items)} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
+        <DayRing fills={sum.fills} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
           <span className="flex flex-col items-center gap-0.5">
             <span className="text-2xl leading-none font-semibold tracking-tight" data-testid="today-min">
-              {minLeft}
+              {sum.rest}
             </span>
             <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
           </span>
@@ -360,8 +361,8 @@ export function TodayScreen() {
       };
     });
   }, [plan, up, view.duties.items, t, lang]);
-  // Restminuten aus der einen Quelle (P5 S1-ZAHL, `metrics.todaySummary`).
-  const minLeft = useMemo(() => todaySummary({ plan, items: view.duties.items }).rest, [plan, view.duties.items]);
+  // Alle Zahlen von Heute aus EINER Quelle (P5 S1-ZAHL, `metrics.todaySummary`): Ring (`fills`), „x von N“ (`done`, `total`), Restminuten (`rest`).
+  const sum = useMemo(() => todaySummary({ plan, items: view.duties.items }), [plan, view.duties.items]);
 
   // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`). `topic` allein (R5): für die eine Zeile mit der Lernzeit.
   const tomorrow = useMemo((): { line: string; topic: string } => {
@@ -392,13 +393,13 @@ export function TodayScreen() {
   const done = view.status === 'allDone' || view.status === 'nothing';
   // Neustart-Woche: die Willkommens-Karte steht statt der Tageskarte, bis heute etwas gestartet wurde (oder der Knopf gedrückt ist).
   const restartStarted = local.get(`${KEY_PREFIX}restart:${today}`) === '1';
-  const welcome = ok && !done && comeback === 'restart' && unit !== null && view.duties.done === 0 && !restartStarted;
+  const welcome = ok && !done && comeback === 'restart' && unit !== null && sum.done === 0 && !restartStarted;
   const overdueNow = useMemo(() => {
     if (!welcome) return 0;
     try {
       const live = useLive.getState();
       const cards = buildTrainCards(live.collections.vocab ?? new Map(), clockNow, invalidIdsOf(live.invalid, 'vocab'));
-      return cardStats([...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), clockNow, invalidIdsOf(live.invalid, 'chunk'))], lang, clockNow).overdue;
+      return overdueUnits([...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), clockNow, invalidIdsOf(live.invalid, 'chunk'))], lang, clockNow);
     } catch (err) {
       logWarn('today:overdue', err);
       return 0;
@@ -434,13 +435,13 @@ export function TodayScreen() {
 
       {welcome && (
         <motion.div variants={item}>
-          <RestartCard view={view} gap={gap ?? 0} overdue={overdueNow} minutes={minLeft} />
+          <RestartCard view={view} gap={gap ?? 0} overdue={overdueNow} minutes={sum.rest} />
         </motion.div>
       )}
 
-      {ok && !done && !welcome && view.duties.total > 0 && (
+      {ok && !done && !welcome && sum.total > 0 && (
         <motion.div variants={item} initial={settled ? false : undefined}>
-          <UnitCard view={view} rows={rows} minLeft={minLeft} fixNone={fixNone} settled={settled} />
+          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} />
         </motion.div>
       )}
 

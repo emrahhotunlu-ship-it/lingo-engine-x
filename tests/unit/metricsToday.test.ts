@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { addDays } from '../../src/domain/date';
+import { addDays, dayKey } from '../../src/domain/date';
+import { histOf } from '../../src/domain/srs/flip';
 import { addError } from '../../src/domain/grammar/errors';
 import { AGAIN_OLD, againSource } from '../../src/domain/repair/unit';
 import { dueFehlersaetze } from '../../src/domain/repair/fehlersaetze';
-import { atlasSize, buildTrainCards, dayLeft, ringShare, todaySummary, fehlersaetzeDue, festNow, fixAll, fixToday, grammarErrorsDue, laptopDeepen, dueLineSplit, newToday, reviewAll, reviewFigures, reviewToday, vocabEstimate, wordsToday } from '../../src/domain/metrics';
+import { atlasSize, buildTrainCards, ringShare, todaySummary, fehlersaetzeDue, festNow, fixAll, fixToday, grammarErrorsDue, laptopDeepen, dueLineSplit, newToday, reviewAll, reviewFigures, reviewToday, vocabEstimate, wordsToday, wrongToday } from '../../src/domain/metrics';
 import { deckCounts } from '../../src/domain/srs/decks';
 import { dueCount } from '../../src/domain/metrics/definitions';
 import { newQuotaLeft } from '../../src/domain/srs/queue';
@@ -128,23 +129,25 @@ describe('Wörter: reviewAll, reviewToday, newToday', () => {
   });
 });
 
-describe('Tag: dayLeft', () => {
-  it('offene Schritte und Restminuten aus dem Plan und den erledigten Blocknummern', () => {
+describe('Tag: todaySummary', () => {
+  it('offene Schritte und Restminuten aus dem Plan und den erledigten Schritten', () => {
     const plan = stored(2, 5);
-    expect(dayLeft(plan, new Set())).toEqual({ blocks: 4, minutes: plan.u!.min });
-    expect(dayLeft(plan, new Set([1, 2]))).toEqual({ blocks: 2, minutes: plan.u!.b.filter(([b]) => b > 2).reduce((s, [, , m]) => s + m, 0) });
-    expect(dayLeft(plan, new Set([1, 2, 3, 5]))).toEqual({ blocks: 0, minutes: 0 });
-    expect(dayLeft(null, new Set())).toEqual({ blocks: 0, minutes: 0 });
+    const items = (doneIds: readonly string[]) => plan.duty.map((id) => ({ id, state: doneIds.includes(id) ? ('done' as const) : ('open' as const), progress: null }));
+    const blockOf = (id: string): number => plan.u!.b[plan.duty.indexOf(id as StoredPlan['duty'][number])]![0];
+    const none = todaySummary({ plan, items: items([]) });
+    expect([none.total - none.done, none.rest]).toEqual([4, plan.u!.min]);
+    const two = todaySummary({ plan, items: items(plan.duty.filter((id) => blockOf(id) <= 2)) });
+    expect([two.total - two.done, two.rest]).toEqual([2, plan.u!.b.filter(([b]) => b > 2).reduce((s, [, , m]) => s + m, 0)]);
+    const all = todaySummary({ plan, items: items(plan.duty) });
+    expect([all.total - all.done, all.rest]).toEqual([0, 0]);
   });
 
-  it('P5 S1-ZAHL: dayLeft rechnet wie todaySummary().rest (Wiederholung anteilig), Ring und Zähler aus denselben Pflichtpunkten', () => {
+  it('P5 S1-ZAHL: Restminuten (Wiederholung anteilig), Ring und Zähler aus denselben Pflichtpunkten', () => {
     const plan = stored(2, 5);
-    const blockOf = (id: string): number => plan.u!.b[plan.duty.indexOf(id as StoredPlan['duty'][number])]![0];
     for (const review of [null, { done: 0, total: 24 }, { done: 7, total: 24 }, { done: 24, total: 24 }]) {
       for (const doneIds of [[], [plan.duty[1]!], plan.duty.slice(1), plan.duty]) {
         const items = plan.duty.map((id) => ({ id, state: doneIds.includes(id) ? ('done' as const) : ('open' as const), progress: id === 'review' ? review : null }));
         const sum = todaySummary({ plan, items });
-        expect(dayLeft(plan, new Set(doneIds.map(blockOf)), review).minutes).toBe(sum.rest);
         expect(sum.done).toBe(doneIds.length);
         expect(sum.total).toBe(plan.duty.length);
         expect(sum.fills).toHaveLength(plan.duty.length);
@@ -206,5 +209,24 @@ describe('Ohne Verhaltensänderung: erledigte Hilfsfunktionen bleiben gleich', (
     reviewAll(cards, NOW);
     wordsToday({ cards, plan: null, nowMs: NOW });
     expect(JSON.stringify(cards)).toBe(before);
+  });
+});
+
+describe('Heute falsch: wrongToday (P5 S1-ZAHL, Nacharbeit)', () => {
+  it('liefert dieselben Karten wie die frühere Rechnung in ExtraRow und der Wörter-Übersicht, versteckte Karten ausgenommen', () => {
+    const cards = buildTrainCards(coll('vocab'), NOW);
+    let hit = 0;
+    for (let i = -40; i <= 0; i++) {
+      const day = addDays(TODAY, i);
+      const old = cards.filter((c) => !c.hidden).filter((c) => histOf(c.doc).some((h) => h.g === 1 && dayKey(h.t) === day));
+      const got = wrongToday(cards, day);
+      expect(got.map((c) => c.key)).toEqual(old.map((c) => c.key));
+      if (got.length > 0) {
+        hit++;
+        const hidden = cards.map((c) => (c.key === got[0]?.key ? { ...c, hidden: true } : c));
+        expect(wrongToday(hidden, day).length).toBe(got.length - 1);
+      }
+    }
+    expect(hit).toBeGreaterThan(0);
   });
 });

@@ -11,6 +11,7 @@ import { newQuotaLeft, newCards, quizzable } from '../srs/queue';
 import { estimateRoundMinutes } from '../srs/cost';
 import { deckCounts } from '../srs/decks';
 import { lemmaOf } from '../srs/context';
+import { histOf } from '../srs/flip';
 import { pickDissimilar } from '../srs/similar';
 import { C1_MARK, vocabGoal } from '../vocab/goal';
 import type { DutyState, StoredPlan } from '../plan/types';
@@ -103,21 +104,6 @@ export const festNow = (cards: readonly TrainCard[], nowMs?: number): number => 
 
 // ------------------------------------------------------------------ Tag
 
-/**
- * @deprecated Ohne Aufrufer in `src`; Heute rechnet über `todaySummary` (P5 S1-ZAHL, learning-scientist H2). Zählt über `plan.duty`
- * mit `u.b[k]`: bei einem gekürzten Plan (`domain/plan/retire.ts`) weicht `blocks` von der früheren Zählung über `u.b` ab.
- * Was vom Tag noch offen ist: Zahl der offenen Schritte und ihre Restminuten. `done` = erledigte Blocknummern (1 bis 5).
- * Seit P5 S1-ZAHL dieselbe Rechnung wie die Anzeige (`todaySummary().rest`, `minutesLeft`): mit `review` (Fortschritt der Wiederholung)
- * zählt der offene Wiederholblock anteilig, ohne ihn voll, wie bisher.
- */
-export function dayLeft(plan: StoredPlan | null, done: ReadonlySet<number>, review: DutyState['progress'] = null): { blocks: number; minutes: number } {
-  if (!plan?.u) return { blocks: 0, minutes: 0 };
-  const b = plan.u.b;
-  const items = plan.duty.map((id, k): DutyState => ({ id, state: done.has(b[k]?.[0] ?? 0) ? 'done' : 'open', progress: id === 'review' ? review : null }));
-  const rows = unitRows(plan, items) ?? [];
-  return { blocks: rows.filter((r) => r.state !== 'done').length, minutes: minutesLeft(rows) };
-}
-
 export type TodaySummary = {
   /** Restminuten, wie sie Heute zeigt (`today-min`, Wiedereinstiegskarte): Einheit anteilig nach Rest der Wiederholung, alter Plan je Schritt. */
   rest: number;
@@ -204,6 +190,11 @@ export function wordsToday(i: { cards: readonly TrainCard[]; plan: StoredPlan | 
     }
   }
   return out;
+}
+
+/** „Heute falsch“ (Extra-Blatt nach der Pflicht, P5 S1-ZAHL Nacharbeit): sichtbare Karten mit einer falschen Antwort (`g === 1`) an diesem Lerntag. */
+export function wrongToday(cards: readonly TrainCard[], today: string): TrainCard[] {
+  return cards.filter((c) => !c.hidden && histOf(c.doc).some((h) => h.g === 1 && dayKey(h.t) === today));
 }
 
 /** „Am Laptop vertiefen“: Wörter, die heute am Handy geübt wurden (`log/<tag>`, `dev: 't'`) und fest sitzen (Stufe ≥ 4) oder heute neu sind. Nie `localStorage`. */

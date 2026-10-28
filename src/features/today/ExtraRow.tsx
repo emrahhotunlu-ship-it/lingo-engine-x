@@ -2,9 +2,8 @@ import { useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
-import { addDays, dayKey } from '../../domain/date';
-import { laptopDeepen } from '../../domain/metrics';
-import { histOf } from '../../domain/srs/flip';
+import { addDays } from '../../domain/date';
+import { laptopDeepen, wrongToday } from '../../domain/metrics';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
 import { useInputProfile } from '../../platform/input';
@@ -66,7 +65,7 @@ function ExtraSheet({ today, onClose }: { today: string; onClose: () => void }) 
         },
       });
     } else {
-      const wrong = cards.filter((c) => !c.hidden && histOf(c.doc).some((h) => h.g === 1 && dayKey(h.t) === today));
+      const wrong = wrongToday(cards, today);
       if (wrong.length > 0) {
         const keys = new Set(wrong.map((c) => c.key));
         out.push({

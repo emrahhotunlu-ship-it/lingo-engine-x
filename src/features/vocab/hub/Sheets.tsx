@@ -13,7 +13,8 @@ import { forecast } from '../../../domain/srs/forecast';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
 import { backlogBraked, overdueCount } from '../../../domain/unit/backlog';
 import { BUILTIN_DECKS, createDeckOp, deckCards, deckCounts, inboxReach, isLeechCard, newDeckId, visibleDecks, wrongSince, type DeckFilter } from '../../../domain/srs/decks';
-import { histOf, weekStartMs } from '../../../domain/srs/flip';
+import { weekStartMs } from '../../../domain/srs/flip';
+import { wrongToday } from '../../../domain/metrics';
 import type { TrainCard } from '../../../domain/srs/types';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../../i18n';
@@ -148,7 +149,7 @@ export function ExtraSheet({ onClose, params }: SheetProps) {
   const tts = useSpeech((s) => s.status === 'ready');
   const opts = useMemo((): ExtraOpt[] => {
     const vis = cards.filter((c) => !c.hidden);
-    const forgot = vis.filter((c) => histOf(c.doc).some((h) => h.g === 1 && dayKey(h.t) === today));
+    const forgot = wrongToday(cards, today);
     const tomorrowEnd = learningDayEnd(learningDayEnd(now) + 1000);
     const tomorrow = vis.filter((c) => !c.isNew && c.fsrs.due >= learningDayEnd(now) && c.fsrs.due < tomorrowEnd);
     const hard = deckCards(vis, 'hard', decks, ctx).filter((c) => !c.isNew);

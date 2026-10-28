@@ -3,7 +3,7 @@ import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { useDocWatch } from '../../data/watch';
 import { radarOpenTopics } from '../../domain/radar/open';
-import { dueErrors } from '../../domain/grammar/errors';
+import { errorsDueByTopic } from '../../domain/metrics';
 import { lernweg, type TopicState } from '../../domain/grammar/path';
 import { useT, type MessageKey } from '../../i18n';
 import { useWide } from '../../platform/input';
@@ -31,11 +31,7 @@ export function PathList({ onOpen, highlight = null, program = false }: { onOpen
   const wide = useWide();
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const [toggled, setToggled] = useState<Record<string, boolean>>({});
-  const dueByTopic = useMemo(() => {
-    const m = new Map<string, number>();
-    for (const d of dueErrors(docs, now)) m.set(d.topic, (m.get(d.topic) ?? 0) + 1);
-    return m;
-  }, [docs, now]);
+  const dueByTopic = useMemo(() => errorsDueByTopic(docs, now), [docs, now]);
   // „Sicher“ und ein Radar mit frischen Fehlern zum selben Thema widersprechen sich (Kap. 2 Nr. 2): das Zeichen sagt es ehrlich (Prüfung N4).
   const radar = useDocWatch('app/radar');
   const radarOpen = useMemo(() => radarOpenTopics(radar.data?.events, now), [radar.data, now]);

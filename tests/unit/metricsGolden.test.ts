@@ -1,8 +1,11 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type * as Zustand from 'zustand';
-import { addDays } from '../../src/domain/date';
+import type * as Input from '../../src/platform/input';
+import { addDays, dayKey } from '../../src/domain/date';
 import type { StoredPlan } from '../../src/domain/plan/types';
 import { berlin, loadSeed, SEED_ANCHOR, type Doc } from './helpers';
 
@@ -11,7 +14,20 @@ import { berlin, loadSeed, SEED_ANCHOR, type Doc } from './helpers';
 // die echten Bildschirme werden mit Daten gezeichnet (renderToStaticMarkup), festgehalten werden alle Zahlen im Text und alle
 // `data-*`-Zustände. Drei Datensätze (Seed, Großdatensatz Seed × 10, leer), 30 Lerntage rund um den Stichtag, mehrere
 // Tagesstände (nichts erledigt, Wiederholen halb, Schritt 1 + 2 erledigt, Plan der alten Form) und beide Sprachen.
-// Eine Abweichung ist ein Fehler, keine Anpassung: Die Golden-Datei wird im Umbau NICHT neu geschrieben.
+// Nacharbeit P5 (Technik-Prüfung): dazu Heute „fertig“ (Erledigt-Karte und Extra-Zeile), „fast“ (Wiederholen bis auf eine Karte voll,
+// 95-%-Deckel im Ring), breiter Bildschirm (Spalte „Dein Stand“) und 02:30 Uhr Berliner Zeit (Fenster 0–4 Uhr, Tageswechsel 04:00).
+// Diese Fälle sind zusätzlich auf dem Stand vor P5 (Commit 7f4828e) aufgenommen worden und dort identisch.
+//
+// ZWEI TEILE, ZWEI REGELN
+//  Teil A „Kennzahlen“ (`__golden__/metrics-kennzahlen.json`): nur benannte Werte – Restminuten `today-min`, Tagesring `data-fills`,
+//    „x von N“-Zähler (`today-status`, `chapter-safe`, `topic-pats`, `cando-count`, Wiedereinstiegs-Tag, Wiederholen „x von N“),
+//    `quota`, `gr-raw`, Fortschritt-Kacheln, Wörter-Zähler (`ws-counts`, `ws-behind`, `ws-new-left` …); die Liste ist `KENN_IDS`.
+//    Teil A ist aus den Werten von Teil B abgeleitet (gleiche Zahlen, jeder Lauf prüft das) und wird per `toEqual` gegen die Datei
+//    verglichen, nicht per Schnappschuss: `vitest -u` schreibt Teil A nie neu. Teil A darf im Umbau NIE neu geschrieben werden.
+//  Teil B „Struktur“ (`metrics-today.json`, `metrics-screens.json`, `metrics-today-extra.json`): alle übrigen Ziffern und `data-*`.
+//    Darf nur nach Diff-Prüfung durch die Hauptsitzung neu geschrieben werden (`vitest -u` auf dieser Datei, dann `git diff` lesen).
+// Vor jedem Vergleich muss die Golden-Datei existieren: Eine gelöschte Datei entsteht nicht still neu.
+// Eine Abweichung ist ein Fehler, keine Anpassung.
 
 // Ohne Schreibzugriff: Der Test liest nur.
 vi.mock('../../src/data', () => ({ getWriter: () => null }));
@@ -32,6 +48,18 @@ vi.mock('zustand', async (orig) => {
 // Blätter und Aufklapper zeigen ihren Inhalt direkt (kein Portal, nichts eingeklappt), damit ihre Zahlen mitgezählt werden.
 vi.mock('../../src/ui/Sheet', async (orig) => ({ ...(await orig<Record<string, unknown>>()), Sheet: ({ open, children }: { open: boolean; children?: unknown }) => (open ? children : null) }));
 vi.mock('../../src/ui/Disclosure', async (orig) => ({ ...(await orig<Record<string, unknown>>()), Disclosure: ({ children }: { children?: unknown }) => children }));
+// Breiter Bildschirm (Heute ab 1.024 px, `useMediaQuery('(min-width: 1024px)')` in TodayScreen): im Server-Bild sonst immer schmal.
+const media = vi.hoisted(() => ({ wide: false }));
+vi.mock('../../src/platform/input', async (orig) => {
+  const real = await orig<typeof Input>();
+  return {
+    ...real,
+    useMediaQuery: (q: string): boolean => {
+      const m = real.useMediaQuery(q);
+      return m || (media.wide && q === '(min-width: 1024px)');
+    },
+  };
+});
 
 const { useClock } = await import('../../src/app/clock');
 const { useSettings } = await import('../../src/app/settings');
@@ -49,6 +77,87 @@ const { useQuota, useVocabCards } = await import('../../src/features/vocab/hub/d
 
 const D = 86_400_000;
 type Lang = 'de' | 'en';
+
+// ------------------------------------------------------------------ Golden-Dateien (Teil A und Teil B)
+
+const GOLDEN_DIR = join(import.meta.dirname, '__golden__');
+const KENN_FILE = 'metrics-kennzahlen.json';
+
+/** Teil B: Schnappschuss-Vergleich, aber nur gegen eine VORHANDENE Datei (sonst schriebe vitest sie still neu). */
+async function matchB(out: unknown, file: string): Promise<void> {
+  expect(existsSync(join(GOLDEN_DIR, file)), `Golden-Datei fehlt: ${file}`).toBe(true);
+  await expect(JSON.stringify(out, null, 1)).toMatchFileSnapshot(`./__golden__/${file}`);
+}
+
+/** Eine Golden-Datei lesen (Teil A oder Teil B); vorher muss sie existieren. */
+function readGolden(file: string): Record<string, unknown> {
+  expect(existsSync(join(GOLDEN_DIR, file)), `Golden-Datei fehlt: ${file}`).toBe(true);
+  return JSON.parse(readFileSync(join(GOLDEN_DIR, file), 'utf8')) as Record<string, unknown>;
+}
+
+/**
+ * Teil A: die benannten Kennzahlen. Je Element (Zeile aus `states`) zählt es, wenn eine seiner Kennungen hier steht.
+ * Heute: Ring, „x von N“, Wiedereinstieg (Tag n von 7), „noch da“, Zähler der Erledigt-Karte. Wörter: Zähler, Rückstand, neue Wörter,
+ * Schätzung. Grammatik: sicher x/y je Kapitel und Thema, Fehlersätze je Kapitel. Fortschritt: Kacheln und Kann-Zähler.
+ */
+const KENN_IDS = new Set([
+  'today-ring',
+  'today-status',
+  'comeback-band',
+  'still-there',
+  'odometer',
+  'quota',
+  'ws-counts',
+  'ws-behind',
+  'ws-new-left',
+  'ws-goal-now',
+  'ws-evening',
+  'chapter-safe',
+  'chapter-due',
+  'topic-pats',
+  'stand-fest',
+  'vocab-goal',
+  'retention-28',
+  'ready-measure',
+  'cando-count',
+  'fest-card',
+]);
+const kenn = (lines: unknown): string[] => (lines as string[]).filter((l) => l.split(' ').some((tok) => !tok.includes('=') && KENN_IDS.has(tok)));
+
+type Shown = { n: string; s: string[] };
+/** Benannte Zusatzwerte der neuen Heute-Fälle (Teil B `metrics-today-extra.json`), alle Kennzahlen. */
+const TODAY_NAMED = ['rev', 'stand', 'truth', 'goal', 'streak'] as const;
+
+function kennToday(cases: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, raw] of Object.entries(cases)) {
+    const c = raw as Shown & Record<string, unknown>;
+    const e: Record<string, unknown> = { min: c.min, restart: c.restart, k: kenn(c.s) };
+    for (const n of TODAY_NAMED) if (n in c) e[n] = c[n];
+    out[k] = e;
+  }
+  return out;
+}
+
+function kennScreens(cases: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, raw] of Object.entries(cases)) {
+    const c = raw as Record<string, unknown>;
+    const e: Record<string, unknown> = { quota: kenn(c.quota) };
+    for (const part of ['vocab', 'grammar', 'progress', 'pathGoal', 'pathCando']) e[part] = kenn((c[part] as Shown).s);
+    if (c.topics) e.topics = Object.fromEntries(Object.entries(c.topics as Record<string, { raw: string }>).map(([id, tp]) => [id, tp.raw]));
+    out[k] = e;
+  }
+  return out;
+}
+
+/** Teil A prüfen: (1) aus den Werten von Teil B abgeleitet, (2) der jetzige Lauf zeigt dieselben Kennzahlen. */
+function matchA(section: 'today' | 'screens' | 'extra', current: Record<string, unknown>, fileB: string): void {
+  const a = readGolden(KENN_FILE)[section];
+  const derive = section === 'screens' ? kennScreens : kennToday;
+  expect(derive(readGolden(fileB)), `Teil A „${section}“ ist nicht aus ${fileB} abgeleitet`).toEqual(a);
+  expect(derive(current)).toEqual(a);
+}
 
 // ------------------------------------------------------------------ Datensätze (erfunden)
 
@@ -94,8 +203,8 @@ const DAYS = Array.from({ length: 30 }, (_, i) => addDays(SEED_ANCHOR, i - 6));
 
 // ------------------------------------------------------------------ Aufbau eines Tages
 
-function setDay(set: Data, day: string, lang: Lang, entries: Doc[] = []): number {
-  const now = berlin(day, 10);
+/** Lerntag `day` zum Zeitpunkt `now` (Standard 10:00 desselben Kalendertags; 02:30 liegt am Kalendertag danach). */
+function setDay(set: Data, day: string, lang: Lang, entries: Doc[] = [], now = berlin(day, 10)): number {
   vi.setSystemTime(now);
   useSettings.setState({ lang });
   useClock.setState({ now, today: day });
@@ -163,7 +272,11 @@ const screen = (html: string): { n: string; s: string[] } => ({ n: nums(html), s
 
 // ------------------------------------------------------------------ Heute
 
-type Variant = 'leer' | 'halb' | 'zwei' | 'alt';
+/**
+ * Tagesstände: nichts erledigt, Wiederholen ein Drittel, Schritt 1 + 2, alter Plan; neu: alles erledigt, Wiederholen bis auf eine Karte,
+ * „bilanz“ = alles erledigt mit Morgenwerten im Plan (7 mehr überfällig, 3 weniger sicher als jetzt), damit die Wahrheitszeile Zahlen zeigt.
+ */
+type Variant = 'leer' | 'halb' | 'zwei' | 'alt' | 'fertig' | 'fast' | 'bilanz';
 
 /** Plan der alten Form (Phase 1/2, ohne `u`): gilt nach einem Update noch bis 04:00. */
 const legacyPlan = (day: string): StoredPlan => ({ d: day, ids: [], why: [], v: 1, duty: ['review', 'ch:gram', 'lesson'], goal: { review: 12 }, lesson: null, at: 0 });
@@ -173,26 +286,56 @@ function reviewEntries(set: Data, n: number): Doc[] {
   return ids.map((id, i) => ({ t: 1_000 + i, k: 'v', id, ok: i % 3 !== 2, ctx: 'rev' }));
 }
 
-function todayCase(set: Data, day: string, lang: Lang, v: Variant): Record<string, unknown> {
-  const now = setDay(set, day, lang);
+/** Heute zeichnen: Lerntag, Tagesstand, Zeitpunkt (`now`, sonst 10:00) und Bildschirmbreite. */
+function renderToday(set: Data, day: string, lang: Lang, v: Variant, o: { now?: number; wide?: boolean } = {}): string {
+  const now = setDay(set, day, lang, [], o.now);
   store.resetTodayForTests();
   const built = store.buildTodayPlan(day, now);
-  const plan = v === 'alt' ? legacyPlan(day) : built;
+  const plan = v === 'alt' ? legacyPlan(day) : v === 'bilanz' && built.u ? { ...built, u: { ...built.u, ov: (built.u.ov ?? 0) + 7, sure: Math.max(0, (built.u.sure ?? 0) - 3) } } : built;
   const goal = plan.duty.includes('review') ? plan.goal.review : 0;
-  const entries = v === 'halb' ? reviewEntries(set, Math.ceil(goal / 3)) : v === 'alt' ? reviewEntries(set, 4) : [];
-  setDay(set, day, lang, entries);
-  store.useTodayPlan.setState({ day, plan, status: 'ready', exhausted: v === 'zwei' ? day : null });
+  const entries = v === 'halb' ? reviewEntries(set, Math.ceil(goal / 3)) : v === 'alt' ? reviewEntries(set, 4) : v === 'fast' ? reviewEntries(set, Math.max(0, goal - 1)) : [];
+  setDay(set, day, lang, entries, o.now);
+  const allDone = v === 'fertig' || v === 'bilanz';
+  store.useTodayPlan.setState({ day, plan, status: 'ready', exhausted: v === 'zwei' || allDone ? day : null });
   if (v === 'zwei') {
     const ch = plan.duty.find((d) => d !== 'review');
     if (ch?.startsWith('ch:')) useUnitMarks.setState({ done: { [day]: [ch.slice(3)] } });
   }
-  const html = render(TodayScreen as ComponentType<never>);
+  if (allDone) useUnitMarks.setState({ done: { [day]: plan.duty.filter((d) => d.startsWith('ch:')).map((d) => d.slice(3)) } });
+  media.wide = !!o.wide;
+  try {
+    return render(TodayScreen as ComponentType<never>);
+  } finally {
+    media.wide = false;
+  }
+}
+
+function todayOf(html: string): Record<string, unknown> {
   const ring = /data-testid="today-min"[^>]*>(\d+)</.exec(html)?.[1] ?? null;
   const restart = /data-testid="restart-start"[^>]*>([\s\S]*?)<\/button>/.exec(html);
   return {
     min: ring,
     restart: restart ? nums(restart[1]!) : null,
     ...screen(html),
+  };
+}
+
+function todayCase(set: Data, day: string, lang: Lang, v: Variant): Record<string, unknown> {
+  return todayOf(renderToday(set, day, lang, v));
+}
+
+/** Neue Fälle: dazu benannte Kennzahlen aus Text (Wiederholen „x von N“, Spalte „Dein Stand“, Erledigt-Karte). `null` = nicht gezeichnet. */
+function extraCase(set: Data, day: string, lang: Lang, v: Variant, o: { now?: number; wide?: boolean } = {}): Record<string, unknown> {
+  const html = renderToday(set, day, lang, v, o);
+  const named = (id: string): string | null => (html.includes(`data-testid="${id}"`) ? nums(section(html, id)) : null);
+  const rev = /data-duty="review"[^>]*>[\s\S]*?data-testid="reason"[^>]*>([^<]*)</.exec(html);
+  return {
+    ...todayOf(html),
+    rev: rev ? nums(rev[1]!) : null,
+    stand: named('today-stand'),
+    truth: named('today-truth'),
+    goal: named('today-goal'),
+    streak: named('today-streak'),
   };
 }
 
@@ -247,8 +390,52 @@ describe('Kennzahlen-Golden (A11: jede Zahl vor und nach dem Umbau gleich)', () 
       }
     }
     for (const day of DAYS.filter((_, i) => i % 5 === 0)) out[`seed ${day} leer en`] = todayCase(SETS.seed!, day, 'en', 'leer');
-    await expect(JSON.stringify(out, null, 1)).toMatchFileSnapshot('./__golden__/metrics-today.json');
+    matchA('today', out, 'metrics-today.json');
+    await matchB(out, 'metrics-today.json');
   }, 120_000);
+
+  it('Heute, Nacharbeit: fertig, fast voll, breiter Bildschirm, 02:30 Uhr', async () => {
+    const out: Record<string, unknown> = {};
+    for (const [name, set] of Object.entries(SETS)) {
+      DAYS.forEach((day, i) => {
+        if (name !== 'seed' && i % 3 !== 0) return;
+        out[`${name} ${day} fertig`] = extraCase(set, day, 'de', 'fertig');
+        out[`${name} ${day} fast`] = extraCase(set, day, 'de', 'fast');
+        if (name !== 'leer') out[`${name} ${day} bilanz`] = extraCase(set, day, 'de', 'bilanz');
+      });
+    }
+    // Breit (≥ 1.024 px): Tageskarte und „Dein Stand“ nebeneinander, offen und erledigt.
+    DAYS.forEach((day, i) => {
+      if (i % 5 !== 0) return;
+      for (const v of ['leer', 'fertig'] as const) out[`seed ${day} ${v} breit`] = extraCase(SETS.seed!, day, 'de', v, { wide: true });
+    });
+    out[`gross ${DAYS[6]} halb breit`] = extraCase(SETS.gross!, DAYS[6]!, 'de', 'halb', { wide: true });
+    out[`leer ${DAYS[6]} leer breit`] = extraCase(SETS.leer!, DAYS[6]!, 'de', 'leer', { wide: true });
+    // 02:30 Uhr am Kalendertag danach: gehört noch zum Lerntag `day` (Tageswechsel 04:00).
+    for (const [name, set] of Object.entries(SETS)) {
+      DAYS.forEach((day, i) => {
+        if (i % (name === 'seed' ? 3 : 5) !== 0) return;
+        const now = berlin(addDays(day, 1), 2, 30);
+        expect(dayKey(now)).toBe(day);
+        for (const v of ['leer', 'halb'] as const) out[`${name} ${day} ${v} 02:30`] = extraCase(set, day, 'de', v, { now });
+      });
+    }
+    for (const day of DAYS.filter((_, i) => i % 5 === 0)) out[`seed ${day} fertig en`] = extraCase(SETS.seed!, day, 'en', 'fertig');
+
+    // Die Fälle zeigen, was sie zeigen sollen (sonst prüfte der Golden-Test nichts).
+    const cases = Object.entries(out) as Array<[string, { s: string[]; stand: string | null; min: string | null }]>;
+    const fertig = cases.filter(([k]) => / (fertig|bilanz)/.test(k));
+    expect(fertig.length).toBeGreaterThan(0);
+    for (const [k, c] of fertig) expect(c.s.some((l) => l.includes('today-card done=true') || l.includes('status=nothing')), k).toBe(true);
+    expect(fertig.some(([, c]) => c.s.some((l) => l.includes('status=allDone')))).toBe(true);
+    expect(cases.some(([k, c]) => / fast/.test(k) && c.s.some((l) => /today-ring .*fills=0\.95/.test(l))), 'kein Fall mit 95-%-Deckel').toBe(true);
+    expect(cases.some(([k, c]) => / bilanz/.test(k) && !!(c as { truth?: string | null }).truth), 'keine Wahrheitszeile mit Zahlen').toBe(true);
+    for (const [k, c] of cases.filter(([k]) => / breit/.test(k))) expect(c.stand, k).not.toBeNull();
+    expect(cases.filter(([k, c]) => / 02:30/.test(k) && c.min !== null).length).toBeGreaterThan(0);
+
+    matchA('extra', out, 'metrics-today-extra.json');
+    await matchB(out, 'metrics-today-extra.json');
+  }, 240_000);
 
   it('Wörter, Grammatik, Fortschritt: alle Zahlen und Zustände je Datensatz und Lerntag', async () => {
     const out: Record<string, unknown> = {};
@@ -259,6 +446,7 @@ describe('Kennzahlen-Golden (A11: jede Zahl vor und nach dem Umbau gleich)', () 
       });
     }
     out[`seed ${DAYS[6]} en`] = screensCase(SETS.seed!, DAYS[6]!, 'en', true);
-    await expect(JSON.stringify(out, null, 1)).toMatchFileSnapshot('./__golden__/metrics-screens.json');
+    matchA('screens', out, 'metrics-screens.json');
+    await matchB(out, 'metrics-screens.json');
   }, 120_000);
 });

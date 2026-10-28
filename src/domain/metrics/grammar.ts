@@ -1,11 +1,21 @@
 import { topicP } from '../grammar/bkt';
-import { liveErrorsOf } from '../grammar/errors';
+import { dueErrors, liveErrorsOf } from '../grammar/errors';
 import { readRepairs } from '../repair/repair';
 
 // Grammatikzahlen für „Fortschritt“ (Gesamtkonzept 3.5, K5 und K6). Rein, nur Lesen, nichts wird gespeichert.
 
 type Doc = Readonly<Record<string, unknown>>;
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
+
+/**
+ * Fällige Fehlersätze je Thema (P5 S1-ZAHL, Nacharbeit): die Zahl am Kapitelkopf im Lernweg (`PathList`) und in der Spalte „Dein Stand“
+ * (`StandSide`). Dieselbe Liste wie die Fehlerrunde (`dueErrors`), je Thema gezählt.
+ */
+export function errorsDueByTopic(grammarDocs: ReadonlyMap<string, Doc>, nowMs: number): Map<string, number> {
+  const m = new Map<string, number>();
+  for (const d of dueErrors(grammarDocs, nowMs)) m.set(d.topic, (m.get(d.topic) ?? 0) + 1);
+  return m;
+}
 
 export type TopicStage = 'new' | 'learning' | 'safe' | 'firm';
 export const TOPIC_STAGES: readonly TopicStage[] = ['new', 'learning', 'safe', 'firm'];

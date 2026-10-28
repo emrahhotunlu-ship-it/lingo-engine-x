@@ -57,6 +57,45 @@ const STORE_TEMP = [
 const GONE_AREAS = 'input|read|listen|discover|write|business|pron|inbox|fluency|meeting|tones|say|compare';
 /** Rechenbausteine, die Anzeige-Dateien nicht selbst importieren (P5 S1-ZAHL; tests/unit/archGuards.test.ts nennt dieselbe Liste). */
 const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyChannelMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
+/**
+ * P5 S1-ZAHL (Nacharbeit): Erlaubnisliste statt Sperrliste. Die Namen aus `SCREEN_NUMBER_NAMES` dürfen nur in `src/domain/**` und in diesen
+ * Lernlogik-Dateien importiert werden; überall sonst in `src/**` sperrt `SCREEN_NUMBER_PATTERN`. `tests/unit/archGuards.test.ts` prüft dasselbe
+ * zusätzlich mit `import * as`, `export … from` und dynamischem `import()`, die ESLint nicht vollständig sieht.
+ */
+const SCREEN_NUMBER_OK = [
+  'src/features/grammar/GrammarItem.tsx',
+  'src/features/c1x/useC1Item.ts',
+  'src/features/c1x/resolve.ts',
+  'src/features/drills/session.ts',
+  'src/features/grammar/generate.ts',
+  'src/features/today/store.ts',
+  'src/features/vocab/session.ts',
+];
+const SCREEN_NUMBER_PATTERN = {
+  regex: '(^|/)domain/', // Herkunft aller Namen; ein Weiterreichen über die Lernlogik-Dateien sperrt archGuards.test.ts
+  importNames: SCREEN_NUMBER_NAMES,
+  message: 'Anzeige-Zahlen nur über domain/metrics (todaySummary, ringFills, newQuotaToday, topicShown; P5 S1-ZAHL). Erlaubt nur in src/domain und den Lernlogik-Dateien (SCREEN_NUMBER_OK).',
+};
+/** Rohe Zählfunktionen, die Anzeige-Dateien nicht selbst rufen: dafür gibt es `metrics` (errorsDueByTopic, doneDay, overdueUnits, wrongToday …). */
+const DISPLAY_RAW_NAMES = ['dueErrors', 'cardStats', 'fixedStats', 'truthParts', 'newMilestones', 'topicsFest'];
+const DISPLAY_RAW_PATTERN = {
+  regex: '(^|/)domain/',
+  importNames: DISPLAY_RAW_NAMES,
+  message: 'Anzeige-Dateien rechnen keine Zahl selbst: errorsDueByTopic, doneDay, overdueUnits, wrongToday … aus domain/metrics (P5 S1-ZAHL).',
+};
+/** Anzeige-Dateien (P5 S1-ZAHL §5.2, Nacharbeit: dazu ganz „Heute“ außer Zustand/Laden, Grammatik-Lernweg und die Lern-Bausteine). */
+const DISPLAY_FILES = [
+  'src/features/**/*Screen.tsx',
+  'src/features/progress/**/*.{ts,tsx}',
+  'src/features/vocab/hub/**/*.{ts,tsx}',
+  'src/ui/**/*.{ts,tsx}',
+  'src/features/today/**/*.{ts,tsx}',
+  'src/features/grammar/PathList.tsx',
+  'src/features/learn/ui.tsx',
+];
+const GONE_PATTERN = { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' };
+const CARDS_PATTERN = { regex: '(^|/)srs/cards$', importNames: ['buildTrainCards'], message: 'Karten nur über domain/metrics (eine Quelle je Zahl).' };
+const STREAK_PATTERN = { regex: '(^|/)streak$', importNames: ['computeStreak'], message: 'Serie nur über domain/metrics (streak, streakWeek).' };
 
 export default defineConfig(
   {
@@ -132,53 +171,44 @@ export default defineConfig(
   {
     // Eine Quelle je Zahl (Gesamtkonzept Kap. 6, tests/unit/archGuards.test.ts): Karten und Serie nur über `domain/metrics`.
     // (Die Umstellung der alten App rechnet die alte Serie bewusst selbst.) Wiederholt das Entfernungs-Audit, weil `no-restricted-imports` je Datei nur einmal gilt.
+    // Seit P5 S1-ZAHL (Nacharbeit) sperrt der Block auch die Namen aus `SCREEN_NUMBER_NAMES`; der nächste Block gibt sie für die Erlaubnisliste frei.
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['src/domain/metrics/**', 'src/domain/migration/**', 'src/platform/**', 'src/modules/read/**'],
     rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
-            { regex: '(^|/)srs/cards$', importNames: ['buildTrainCards'], message: 'Karten nur über domain/metrics (eine Quelle je Zahl).' },
-            { regex: '(^|/)streak$', importNames: ['computeStreak'], message: 'Serie nur über domain/metrics (streak, streakWeek).' },
-            DEV_PATTERN,
-            READ_DOOR_PATTERN,
-          ],
-        },
-      ],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, SCREEN_NUMBER_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
+    },
+  },
+  {
+    // Erlaubnisliste (P5 S1-ZAHL, Nacharbeit): `src/domain/**` und die Lernlogik-Dateien dürfen `SCREEN_NUMBER_NAMES` importieren.
+    files: ['src/domain/**/*.{ts,tsx}', ...SCREEN_NUMBER_OK],
+    ignores: ['src/domain/metrics/**', 'src/domain/migration/**'],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
     },
   },
   {
     // Dieselbe Regel für die beiden Ordner, die die Block oben auslässt (metrics, migration), mit Seed-/Adapter-Sperre.
     files: ['src/domain/metrics/**/*.{ts,tsx}', 'src/domain/migration/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': [
-        'error',
-        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, DEV_PATTERN, READ_DOOR_PATTERN] },
-      ],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
     },
   },
   {
-    // Relaunch Stufe 1 P5 S1-ZAHL (docs/relaunch/stufe1-plan.md §5.2): Bildschirme, Fortschritt, Wörter-Übersicht und Bausteine rechnen
-    // keine Zahl selbst. Restminuten, Ringfüllung, Kontingent neuer Wörter und Themen-Beherrschung kommen nur aus `domain/metrics`
-    // (`todaySummary`, `ringFills`, `newQuotaToday`, `topicShown`). Die Lern-Logik (GrammarItem, c1x, drills, generate) ruft `topicP` weiter direkt.
-    // Wiederholt die Muster des Blocks „Eine Quelle je Zahl“, weil `no-restricted-imports` je Datei nur einmal gilt.
-    files: ['src/features/**/*Screen.tsx', 'src/features/progress/**/*.{ts,tsx}', 'src/features/vocab/hub/**/*.{ts,tsx}', 'src/ui/**/*.{ts,tsx}'],
+    // Die Plattform-Schicht darf Seed und Entwicklungs-Adapter laden, aber keine Anzeige-Zahlen selbst rechnen (Erlaubnisliste, P5 S1-ZAHL).
+    files: ['src/platform/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
-            { regex: '(^|/)srs/cards$', importNames: ['buildTrainCards'], message: 'Karten nur über domain/metrics (eine Quelle je Zahl).' },
-            { regex: '(^|/)streak$', importNames: ['computeStreak'], message: 'Serie nur über domain/metrics (streak, streakWeek).' },
-            { regex: '.', importNames: SCREEN_NUMBER_NAMES, message: 'Anzeige-Zahlen nur über domain/metrics (todaySummary, ringFills, newQuotaToday, topicShown; P5 S1-ZAHL).' },
-            DEV_PATTERN,
-            READ_DOOR_PATTERN,
-          ],
-        },
-      ],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN] }],
+    },
+  },
+  {
+    // Relaunch Stufe 1 P5 S1-ZAHL (docs/relaunch/stufe1-plan.md §5.2): Anzeige-Dateien rechnen keine Zahl selbst. Restminuten, Ringfüllung,
+    // Kontingent neuer Wörter, Themen-Beherrschung, fällige Fehlersätze je Thema, Abschluss-Zahlen und „heute falsch“ kommen nur aus
+    // `domain/metrics`. Wiederholt alle Muster, weil `no-restricted-imports` je Datei nur einmal gilt; `today/store.ts` und `today/state.ts`
+    // sind Zustand und Laden, keine Anzeige.
+    files: DISPLAY_FILES,
+    ignores: ['src/features/today/store.ts', 'src/features/today/state.ts'],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, SCREEN_NUMBER_PATTERN, DISPLAY_RAW_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
     },
   },
   {
@@ -194,6 +224,7 @@ export default defineConfig(
           patterns: [
             { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
             DEV_PATTERN,
+            SCREEN_NUMBER_PATTERN,
             { regex: '^\\.\\./', message: 'Lesen-Modul: Importe von außen nur in modules/read/shared.ts (docs/umbau/lesen-plan.md §5.2).' },
           ],
         },
@@ -209,6 +240,7 @@ export default defineConfig(
           patterns: [
             { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
             DEV_PATTERN,
+            SCREEN_NUMBER_PATTERN,
             { regex: '^\\.\\./\\.\\./', message: 'Lesen-Modul: höchstens ein Schritt hoch (../shared); Fremdes nur über shared.ts (docs/umbau/lesen-plan.md §5.2).' },
           ],
         },
@@ -225,6 +257,7 @@ export default defineConfig(
           patterns: [
             { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
             DEV_PATTERN,
+            SCREEN_NUMBER_PATTERN,
             { regex: '^\\.\\./\\.\\./\\.\\./', message: 'Lesen-Modul: höchstens zwei Schritte hoch (../../shared); Fremdes nur über shared.ts (docs/umbau/lesen-plan.md §5.2).' },
           ],
         },
@@ -237,7 +270,7 @@ export default defineConfig(
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, DEV_PATTERN] },
+        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN] },
       ],
     },
   },

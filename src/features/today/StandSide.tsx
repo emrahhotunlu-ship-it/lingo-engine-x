@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
-import { FEST_GOAL } from '../../domain/metrics';
-import { dueErrors } from '../../domain/grammar/errors';
+import { FEST_GOAL, errorsDueByTopic } from '../../domain/metrics';
 import { useT } from '../../i18n';
 import { CountUp } from '../../ui/CountUp';
 import { chapterNodes } from '../grammar/chapters';
@@ -29,11 +28,7 @@ export function StandSide() {
   const today = useClock((s) => s.today);
   const { fest, onWay } = useVocabMetrics();
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
-  const path = useMemo(() => {
-    const due = new Map<string, number>();
-    for (const d of dueErrors(docs, now)) due.set(d.topic, (due.get(d.topic) ?? 0) + 1);
-    return chapterNodes({ docs, nowMs: now, today, dueByTopic: due });
-  }, [docs, now, today]);
+  const path = useMemo(() => chapterNodes({ docs, nowMs: now, today, dueByTopic: errorsDueByTopic(docs, now) }), [docs, now, today]);
   const cur = path.chapters[path.current];
   return (
     <aside className="lx-card flex flex-col gap-5 p-6" aria-label={t('ovTitle')} data-testid="today-stand">

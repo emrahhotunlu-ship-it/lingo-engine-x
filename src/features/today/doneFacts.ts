@@ -3,8 +3,8 @@ import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { readC1 } from '../../domain/c1/c1doc';
-import { cardStats, fixedStats, newMilestones, topicsFest, truthParts, type Milestone } from '../../domain/plan/dayStats';
-import { buildTrainCards, festUnits } from '../../domain/metrics';
+import type { Milestone } from '../../domain/plan/dayStats';
+import { buildTrainCards, doneDay } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { logWarn } from '../../platform/diagnostics';
 import { goalLine, type TextRef } from './goalLine';
@@ -49,28 +49,11 @@ export function useDoneFacts(view: Pick<TodayView, 'plan' | 'status'>, active: b
     try {
       const live = useLive.getState();
       const cards = buildTrainCards(vocab, now, invalidIdsOf(live.invalid, 'vocab'));
-      const all = [...cards, ...buildChunkCards(chunk, now, invalidIdsOf(live.invalid, 'chunk'))];
-      const st = cardStats(all, lang, now);
-      const fixed = fixedStats({ grammarDocs: grammar, repairDoc, today });
-      const ov = plan?.u?.ov ?? null;
-      const sure0 = plan?.u?.sure ?? null;
-      const parts = truthParts({ sure: st.sure, sure0, fixed: fixed.today, overdue: st.overdue, overdue0: ov });
-      // Wort-Marken zählen Wörter UND Wendungen (`festUnits`, K-14); die Umstellung merkt schon erreichte Marken still (`pickMilestone`).
-      const fest = festUnits(all, now);
-      const c1 = readC1(c1Raw);
-      const ms = newMilestones({
-        fest,
-        topicsFest: topicsFest(grammar, now),
-        fixTotal: fixed.total,
-        overdue0: ov,
-        overdue: ov === null ? null : st.overdue,
-        seen: profile?.ms as Record<string, unknown> | undefined,
-        chapters: c1.gates.filter((g) => g.ok).map((g) => g.ch),
-        place: !!c1.place,
-        checks: c1.checks.length,
-      });
-      const goal = goalLine({ nx: plan?.u?.nx, festUnits: festUnits(all, now), vocabFest: festUnits(cards, now), history: profile?.history, today });
-      return { parts, ms, goal };
+      const chunkCards = buildChunkCards(chunk, now, invalidIdsOf(live.invalid, 'chunk'));
+      // Alle Zahlen der Karte aus einer Quelle (P5 S1-ZAHL, `metrics.doneDay`): Wahrheitszeile, Meilensteine, feste Einheiten.
+      const d = doneDay({ cards, chunkCards, grammarDocs: grammar, repairDoc, c1: readC1(c1Raw), seen: profile?.ms, plan, lang, nowMs: now, today });
+      const goal = goalLine({ nx: plan?.u?.nx, festUnits: d.festUnits, vocabFest: d.vocabFest, history: profile?.history, today });
+      return { parts: d.parts, ms: d.milestones, goal };
     } catch (err) {
       logWarn('today:done', err);
       return null;
