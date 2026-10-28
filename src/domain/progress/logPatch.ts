@@ -1,6 +1,7 @@
 import { answerRight } from '../learn/right';
 import type { DrillAnswer, GrammarAnswer } from '../learn/types';
-import type { AnswerEvent } from '../srs/types';
+import { ATTEMPT_MS_MAX, attemptMs, attemptPl, attemptSt } from '../../data/schemas';
+import type { AnswerEvent, AttemptInput, AttemptMeta } from '../srs/types';
 import type { ChannelLogEntry } from './channelLog';
 
 // Tagesprotokoll `log/<tag>` im Format der alten App (Daten-Entwurf §4): ein Dokument je
@@ -29,6 +30,16 @@ export type LogEntry = {
   lesson?: string;
   override?: true;
   dev?: 't' | 'k';
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /**
@@ -50,6 +61,16 @@ export type ChunkLogEntry = {
   ctx: 'rev' | 'duty' | 'xtra';
   override?: true;
   dev?: 't' | 'k';
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /**
@@ -101,6 +122,16 @@ export type GrammarLogEntry = {
   v?: 'c' | 'a' | 'n' | 'w' | 'u';
   h?: string;
   vs?: string;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; `tm` bleibt daneben unverändert. Nur gespeichert. */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -118,6 +149,16 @@ export type DrillLogEntry = {
   lesson?: string;
   override?: true;
   dev?: 't' | 'k';
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /**
@@ -137,10 +178,48 @@ export type RepairLogEntry = {
   g: number;
   ms: number;
   ctx: 'rev' | 'xtra';
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart. Nur gespeichert. */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 export function repairLogEntry(i: Omit<RepairLogEntry, 'type' | 'm'>): RepairLogEntry {
-  return { ...i, type: 'repair', m: 'repair', q: clip(i.q), given: clip(i.given), ans: clip(i.ans) };
+  const { fk, in: kind, mx, sm, pl, n, bg, st, ...rest } = i;
+  return { ...rest, type: 'repair', m: 'repair', q: clip(i.q), given: clip(i.given), ans: clip(i.ans), ...timingOf({ fk, in: kind, mx, sm, pl, n, bg, st, ms: i.ms }) };
+}
+
+// ------------------------------------------------------------------ S1-ZEIT (Relaunch Stufe 1 P4)
+
+/** Messwerte eines Versuchs, wie sie eine Übung übergibt (alle optional, nie ausgewertet; Bedeutung in `AnswerEvent`). */
+export type AttemptTiming = AttemptMeta;
+
+/**
+ * Messwerte für einen Protokolleintrag; fehlt ein Wert oder ist er ungültig, bleibt das Feld weg (Altbestand, Antworten ohne Kontakt).
+ * `fk` gerundet auf 10 ms (≤ 600.000); `ms` bleibt roh wie bisher (Note und Lernzeit lesen es), `sm` (Senden ohne Claude-Wartezeit) nur, wenn es von `ms` abweicht.
+ */
+export function timingOf(a: AttemptTiming & { ms?: number }): AttemptTiming {
+  const out: AttemptTiming = {};
+  if (typeof a.fk === 'number' && Number.isFinite(a.fk) && a.fk >= 0) out.fk = attemptMs(a.fk);
+  if (a.in === 't' || a.in === 'd' || a.in === 'c') out.in = a.in;
+  if (a.mx === 1) out.mx = 1;
+  if (typeof a.sm === 'number' && Number.isFinite(a.sm) && a.sm >= 0) {
+    const sm = Math.min(ATTEMPT_MS_MAX, Math.round(a.sm));
+    if (typeof a.ms !== 'number' || sm !== Math.round(a.ms)) out.sm = sm;
+  }
+  const pl = attemptPl(a.pl);
+  if (pl !== undefined) out.pl = pl;
+  if (a.n === 2) out.n = 2;
+  if (a.bg === 1) out.bg = 1;
+  const st = attemptSt(a.st);
+  if (st !== undefined) out.st = st;
+  return out;
 }
 
 /** Phase 4: Verständnisfragen aus Lesen, Hören, Entdecken (`channelLog.ts`, ohne `id`/`k`). */
@@ -154,7 +233,7 @@ function hlOf(a: GrammarAnswer): { hl?: 1 | 2 } {
   return lv === 1 || lv === 2 ? { hl: lv } : {};
 }
 
-export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
+export function grammarLogEntry(a: GrammarAnswer & AttemptTiming): GrammarLogEntry {
   const lesson = a.task.src === 'lesson' && a.task.ref?.startsWith('lesson/') ? a.task.ref.slice(7) : undefined;
   return {
     t: a.t,
@@ -182,10 +261,11 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ...(a.tempo ? { tp: true as const } : {}),
     ...hlOf(a),
     ...(a.tj ? { v: a.tj.v, ...(a.tj.h ? { h: a.tj.h.slice(0, 12) } : {}), ...(a.tj.vs ? { vs: a.tj.vs.slice(0, 40) } : {}) } : {}),
+    ...timingOf(a),
   };
 }
 
-export function drillLogEntry(a: DrillAnswer): DrillLogEntry {
+export function drillLogEntry(a: DrillAnswer & AttemptTiming): DrillLogEntry {
   return {
     t: a.t,
     ok: a.verdict !== 'wrong',
@@ -200,6 +280,7 @@ export function drillLogEntry(a: DrillAnswer): DrillLogEntry {
     ...(a.lesson ? { lesson: a.lesson } : {}),
     ...(a.override ? { override: true as const } : {}),
     ...(a.dev ? { dev: a.dev } : {}),
+    ...timingOf(a),
   };
 }
 
@@ -229,9 +310,9 @@ export function activityEntry(e: ActivityLogEntry): ActivityLogEntry {
 
 export function logEntry(a: AnswerEvent): LogEntry | ChunkLogEntry {
   if (a.kind === 'chunk') {
-    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}) };
+    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}), ...timingOf(a) };
   }
-  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}) };
+  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}), ...timingOf(a) };
 }
 
 const keyOf = (e: unknown): string => {

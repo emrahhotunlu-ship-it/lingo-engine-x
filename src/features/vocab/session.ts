@@ -40,7 +40,8 @@ import { legacySceneDoc } from '../../domain/chunks/legacyScene';
 import { buildQueue, introducedKindsToday, longIntroducedToday, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState, previewIntervals, readFsrs, reviewFsrs } from '../../domain/srs/scheduler';
 import { noteWeight } from '../../domain/srs/weight';
-import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
+import type { AnswerEvent, AttemptInput, AttemptMeta, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
+import { pickAttempt } from '../../engine/inputKind';
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, saveNoteOnly, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
@@ -757,6 +758,15 @@ export type Answer = {
   t?: number;
   /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
   rec?: ActRecord;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; nur gespeichert (`hist`, Log), nie ausgewertet. */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4-Nacharbeit): gemischt, Senden vor Claude, Prompt-Länge, zweiter Versuch, verborgene Seite (siehe `AttemptMeta`). */
+  mx?: AttemptMeta['mx'];
+  sm?: number;
+  pl?: number;
+  n?: AttemptMeta['n'];
+  bg?: AttemptMeta['bg'];
 };
 
 /** Was die Oberfläche von einer Aktivierung festhält; `commitAnswer` ergänzt Karte, Schritt, Format und Code zum Eintrag der Sammelakte. */
@@ -857,6 +867,9 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (actStep && !(ans.rec && ans.rec.k === 1 && ans.rec.v !== 'w' && !ans.rec.hp)) a.actUnverified = true;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
+  // S1-ZEIT (P4): Messwerte der Oberfläche und die Lernstufe VOR der Antwort (nur gespeichert, nie ausgewertet).
+  Object.assign(a, pickAttempt(ans));
+  a.st = card.stage;
   if (ans.hint) a.hint = ans.hint;
   if (ans.interrupted && ans.ok && !ans.override) a.interrupted = true;
   if (ans.unverified) a.unverified = true;

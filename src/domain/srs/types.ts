@@ -260,6 +260,28 @@ export type AnswerEvent = {
   wrong?: string;
   /** Abruf am Ende der Wort-Werkstatt: schreibt `wk` und legt die Fälligkeit 2–3 Lerntage später (`werkstatt.ts`). */
   wk?: true;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt (Taste oder Antippen), ohne Nachschlage-/Begleiter-Pausen. Fehlt ohne Kontakt. Nur gespeichert, nie ausgewertet. */
+  fk?: number;
+  /** S1-ZEIT (P4): Eingabeart – `t` getippt, `d` diktiert/eingesetzt, `c` gewählt. Nur gespeichert, nie ausgewertet. */
+  in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischte Eingabe (Tasten und Diktat, Einfügen, Löschen nach Diktat). */
+  mx?: 1;
+  /** S1-ZEIT (P4): Antwortzeit beim Tippen auf „Prüfen“, ohne Wartezeit auf Claude (fehlt ohne Claude-Prüfung). `hist.ms` nimmt sie. */
+  sm?: number;
+  /** S1-ZEIT (P4): Zeichenzahl des sichtbaren Prompts (Satz, Hinweis). */
+  pl?: number;
+  /** S1-ZEIT (P4): zweiter Versuch bzw. zweites Senden. */
+  n?: 2;
+  /** S1-ZEIT (P4): die Seite war zwischen Zeigen und Senden verborgen. */
+  bg?: 1;
+  /** S1-ZEIT (P4): Lernstufe der Karte vor der Antwort. */
+  st?: number;
 };
+
+/** S1-ZEIT (P4): Eingabeart eines Versuchs (`src/engine/inputKind.ts`): getippt, diktiert/eingesetzt, gewählt. */
+export type AttemptInput = 't' | 'd' | 'c';
+
+/** S1-ZEIT (P4): alle Messwerte eines Versuchs (nur gespeichert, nie ausgewertet). Bedeutung wie in `AnswerEvent`. */
+export type AttemptMeta = Pick<AnswerEvent, 'fk' | 'in' | 'mx' | 'sm' | 'pl' | 'n' | 'bg' | 'st'>;
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

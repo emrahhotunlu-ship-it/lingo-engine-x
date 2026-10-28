@@ -15,8 +15,11 @@ import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/re
 import type { InputProfile } from '../../domain/grammar/tasks';
 import type { HelpLevel } from '../../domain/grade';
 import type { Ctx, GrammarAnswer } from '../../domain/learn/types';
+import type { AttemptTiming } from '../../domain/progress/logPatch';
+import type { AttemptInput, AttemptMeta } from '../../domain/srs/types';
 import { patsOf, patternState } from '../../domain/metrics/pattern';
 import { useHiddenInput } from '../../engine/HiddenInput';
+import { bindInputKind, createAttemptTracker, pickAttempt, promptChars } from '../../engine/inputKind';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
@@ -56,6 +59,15 @@ type Fb = {
   override: boolean;
   ms: number;
   firstKeyMs: number;
+  /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; fehlen ohne Kontakt. Nur gespeichert, nie für Note oder Tempo (`tm` bleibt). */
+  fk?: number;
+  in?: AttemptInput;
+  /** S1-ZEIT (P4-Nacharbeit): gemischt, Senden vor Claude, Prompt-Länge, zweiter Versuch, verborgene Seite (siehe `AttemptMeta`). */
+  mx?: AttemptMeta['mx'];
+  sm?: number;
+  pl?: number;
+  n?: AttemptMeta['n'];
+  bg?: AttemptMeta['bg'];
   help: HelpLevel;
   /** „Auch richtig“ (Claude, `grammar-fit@1`): zählt nie als Fehler und nicht als Beleg fürs Muster. */
   alt?: boolean;
@@ -125,6 +137,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const shownAt = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
+  // S1-ZEIT (P4): erster Kontakt und Eingabeart, getrennt von `firstKeyAt` (das bleibt allein für Note und Tempo). Pause wie `elapsed()`.
+  const [attempt] = useState(createAttemptTracker);
 
   // Tutor-Engine v3: Aufgaben-Prüfung als Warnzähler (nie Sperre); Lernermodell bei Rundenstart und bei jeder Rückmeldung, verzögert.
   useEffect(() => {
@@ -141,32 +155,49 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const a = document.activeElement;
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, [root]);
+  // S1-ZEIT (P4): Tasten und Einfügungen in der versteckten Eingabe (außerhalb der Aufgabe) oder in einem Feld der Aufgabe.
+  useEffect(() => bindInputKind(document, { accept: (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), tracker: attempt, now: tick, paused: () => lookupOpenMs() - lookupAt.current }), [api, attempt, root]);
 
   const elapsed = (): number => Math.max(0, Math.round(tick() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
   const help: HelpLevel = tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0;
 
-  const setResponse = useCallback((r: C1Response | null, meta: ResponseMeta = { form: 'default' }) => {
-    respRef.current = r ? { r, meta } : null;
-    setHas(r !== null);
-  }, []);
+  const setResponse = useCallback(
+    (r: C1Response | null, meta: ResponseMeta = { form: 'default' }) => {
+      // S1-ZEIT (P4): die erste Antwort (Wahl, Antippen, Baustein) ist ein Kontakt; Tasten erfasst `bindInputKind`.
+      if (r) attempt.contact(tick(), lookupOpenMs() - lookupAt.current);
+      respRef.current = r ? { r, meta } : null;
+      setHas(r !== null);
+    },
+    [attempt],
+  );
   const markFirstKey = useCallback(() => {
     if (firstKeyAt.current === null) firstKeyAt.current = tick();
-  }, []);
+    attempt.contact(tick(), lookupOpenMs() - lookupAt.current);
+  }, [attempt]);
   const restartClock = useCallback(() => {
     shownAt.current = tick();
     firstKeyAt.current = null;
     lookupAt.current = lookupOpenMs();
-  }, []);
+    attempt.reset();
+  }, [attempt]);
+  /** S1-ZEIT (P4): Messwerte zum Zeitpunkt der Wertung (wie `ms`); getippte Formen `t`, Auswahl, Bausteine, Antippen `c`. Ohne Kontakt fehlen `fk`/`in`/`mx`. */
+  const timing = (score: C1Score | null, meta: ResponseMeta | undefined, given: string): AttemptTiming => {
+    const typed = !!score?.free || meta?.form === 'typed' || meta?.form === 'tapfix' || meta?.form === 'part';
+    return attempt.meta({ start: shownAt.current, answer: given, base: typed ? 't' : 'c', second: !!retry, pl: promptChars(root.current) });
+  };
 
   const finish = (score: C1Score, response: C1Response, meta: ResponseMeta, extra: Partial<Fb> = {}): void => {
     const ms = elapsed();
     const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
-    setFb({ score, response, meta, given: givenOf(item, response), dontKnow: false, override: false, ms, firstKeyMs, help, ...extra });
+    const given = givenOf(item, response);
+    setFb({ score, response, meta, given, dontKnow: false, override: false, ms, firstKeyMs, help, ...timing(score, meta, given), ...extra });
     if (profile === 'touch') api.blur();
   };
 
   const submit = (): void => {
     if (fb || fit.ctl.current) return;
+    // S1-ZEIT: ein früheres Senden (erster Versuch vor dem Hinweis) gilt nicht für diesen Versuch.
+    attempt.unsend();
     const cur = respRef.current;
     if (!cur) return;
     const score = scoreC1(item, cur.r);
@@ -187,6 +218,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
         return;
       }
       if (j.askAi === 'auto') {
+        // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
+        attempt.send(elapsed(), promptChars(root.current));
         runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVarsFor(given)), (out) => finish(full, cur.r, cur.meta, aiYes(out, given)), (res) => settle(score, cur, { ...jx, ...aiNotYes(res, true) }));
         return;
       }
@@ -280,7 +313,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const cur = respRef.current;
     const response: C1Response = cur?.r ?? ({ kind: item.kind, ...(item.kind === 'kwt' || item.kind === 'ocl' || item.kind === 'wf' ? { text: '' } : item.kind === 'err' ? { tap: 'none' } : {}) } as C1Response);
     const score = scoreC1(item, response);
-    setFb({ score: { ...score, got: 0, verdict: 'wrong' }, response, meta: cur?.meta ?? { form: 'default' }, given: '', dontKnow: true, override: false, ms: elapsed(), firstKeyMs: elapsed(), help });
+    setFb({ score: { ...score, got: 0, verdict: 'wrong' }, response, meta: cur?.meta ?? { form: 'default' }, given: '', dontKnow: true, override: false, ms: elapsed(), firstKeyMs: elapsed(), help, ...timing(null, cur?.meta, cur ? givenOf(item, cur.r) : '') });
     api.blur();
   };
 
@@ -313,7 +346,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       const full: C1Score = { ...fb.score, got: fb.score.max, verdict: 'correct', parts: fb.score.parts.map((x) => ({ ...x, ok: true })) };
       const runT: C1Run = { form: fb.meta.form, inp, timeMs: fb.ms, firstKeyMs: fb.firstKeyMs, help: 1, ...(seenBefore ? { again: true } : {}), day, t: nextT(), lang, ctx, given: fb.target.given };
       const aT = bookAnswer(task, full, response, runT);
-      const kindT = onDone({ ...aT, tj: { v: 'c' }, ...(fb.fit ? { fit: fb.fit } : {}) });
+      // S1-ZEIT: die Zielform ist ein zweiter Versuch.
+      const secondTry: AttemptTiming = { ...pickAttempt(fb), n: 2 };
+      const kindT = onDone({ ...aT, tj: { v: 'c' }, ...(fb.fit ? { fit: fb.fit } : {}), ...secondTry });
       if (kindT === 'typed') api.focusNow();
       else api.blur();
       return;
@@ -342,11 +377,12 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       const score = fb.override ? { ...fb.score, verdict: 'correct' as const } : fb.score;
       void bookLex({ item, score, grade: a.grade, day, lang, ms: fb.ms, given: fb.given, dev: inp === 'touch' ? 't' : 'k', ...(seenBefore ? { again: true } : {}), ...(noHelp ? { measure: true } : {}) });
     }
-    const booked: GrammarAnswer = {
+    const booked: GrammarAnswer & AttemptTiming = {
       ...(retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a),
       ...(fb.alt && !fb.override ? { alt: true } : {}),
       tj,
       ...(fb.fit && !fb.dontKnow ? { fit: fb.fit } : {}),
+      ...pickAttempt(fb),
     };
     const kind = onDone(booked);
     if (kind === 'typed') api.focusNow();

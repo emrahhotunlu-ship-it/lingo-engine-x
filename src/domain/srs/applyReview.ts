@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { fsrsSchema, type FsrsStored } from '../../data/schemas';
+import { attemptMs, attemptPl, attemptSt, attemptTimingFields, fsrsSchema, type FsrsStored } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
 import { dayKey, isDayKey } from '../date';
 import { naOf } from './actBase';
@@ -37,6 +37,16 @@ const chargeColSchema = z.array(chargeCollocSchema).min(1).max(COL_MAX);
 /** Wort-Werkstatt (`werkstatt.ts`): Runden, Zeitpunkt, Lerntag. `p` (pausiert) schreibt nur „pausieren“, nie eine Antwort. */
 const wkSchema = z.object({ n: z.number().int().min(1).max(99), t: z.number().int().positive(), d: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), p: z.literal(1).optional() }).strict();
 
+/**
+ * S1-ZEIT (P4): Verlauf im Patch. Ältere Einträge tolerant wie bisher (`{t, g?}`); streng geprüft wird nur der NEUE Eintrag
+ * (der letzte, Ergebnis von `histEntry`) samt Messwerten – ein alter Eintrag mit fremden Werten blockiert nie eine Bewertung.
+ */
+export const histNewEntrySchema = z.looseObject({ t: z.number(), g: z.number().optional(), ...attemptTimingFields });
+const histPatchSchema = z
+  .array(z.looseObject({ t: z.number(), g: z.number().optional() }))
+  .max(HIST_MAX)
+  .refine((h) => h.length === 0 || histNewEntrySchema.safeParse(h[h.length - 1]).success, { message: 'hist: neuer Eintrag ungültig' });
+
 /** Streng, nur für die geschriebenen Felder (Daten-Entwurf §1.5). Die Lese-Schemas bleiben locker. */
 export const cardPatchSchema = z
   .object({
@@ -50,7 +60,7 @@ export const cardPatchSchema = z
     stage: z.number().int().min(1).max(5),
     modes: z.partialRecord(legacyMode, countsSchema),
     xs: z.record(z.string().max(24), countsSchema),
-    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    hist: histPatchSchema,
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     lg: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
@@ -83,7 +93,7 @@ export const chunkPatchSchema = z
     stage: z.number().int().min(1).max(5),
     modes: z.partialRecord(z.enum(['cloze', 'produce']), countsSchema).optional(),
     xs: z.record(z.string().max(24), countsSchema),
-    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    hist: histPatchSchema,
     intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     ff: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
     lg: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
@@ -257,7 +267,31 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  */
 function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
   const v = a.grade === 1 && a.wrong ? a.wrong.trim().slice(0, WRONG_MAX) : '';
-  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(a.hint ? { h: a.hint } : {}), ...(v ? { v } : {}) };
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}), ...(a.act ? { a: a.act } : {}), ...((a.actStep && a.actUnverified) || a.unverified ? { u: 1 } : {}), ...(a.colIndex !== undefined && a.colIndex >= 0 ? { ci: a.colIndex } : {}), ...(a.hint ? { h: a.hint } : {}), ...(v ? { v } : {}), ...attemptTiming(a) };
+}
+
+// S1-ZEIT (Relaunch Stufe 1 P4): Zeit je Versuch in `hist` – nur gespeichert, nie ausgewertet.
+
+type HistTiming = { fk?: number; ms?: number; in?: AnswerEvent['in']; mx?: 1; pl?: number; n?: 2; bg?: 1; st?: number };
+
+/**
+ * Messwerte für einen Verlaufseintrag: `fk` (erster Kontakt), `ms` (Antwortzeit beim Senden: `sm`, ohne Wartezeit auf Claude, sonst `ms`),
+ * `in`, `mx`, `pl`, `n`, `bg`, `st`. `ms` nur, wenn gemessen (> 0; 0 heißt „nicht gemessen“, z. B. Wort-Popup), `fk` nur bei Kontakt; Ungültiges bleibt weg.
+ */
+export function attemptTiming(a: Pick<AnswerEvent, 'ms' | 'fk' | 'in' | 'mx' | 'sm' | 'pl' | 'n' | 'bg' | 'st'>): HistTiming {
+  const out: HistTiming = {};
+  if (typeof a.fk === 'number' && Number.isFinite(a.fk) && a.fk >= 0) out.fk = attemptMs(a.fk);
+  const ms = typeof a.sm === 'number' && Number.isFinite(a.sm) && a.sm > 0 ? a.sm : a.ms;
+  if (typeof ms === 'number' && Number.isFinite(ms) && ms > 0) out.ms = attemptMs(ms);
+  if (a.in === 't' || a.in === 'd' || a.in === 'c') out.in = a.in;
+  if (a.mx === 1) out.mx = 1;
+  const pl = attemptPl(a.pl);
+  if (pl !== undefined) out.pl = pl;
+  if (a.n === 2) out.n = 2;
+  if (a.bg === 1) out.bg = 1;
+  const st = attemptSt(a.st);
+  if (st !== undefined) out.st = st;
+  return out;
 }
 
 export function levelFor(ex: ExerciseId, stage: number): number {
@@ -307,7 +341,7 @@ export const partnerMissPatchSchema = z
   .object({
     modes: z.partialRecord(legacyMode, countsSchema),
     xs: z.record(z.string().max(24), countsSchema),
-    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    hist: histPatchSchema,
     co: z.number().min(0).max(1),
     col: chargeColSchema.optional(),
   })

@@ -13,7 +13,7 @@ import { ankiPatch } from './wortschatzHelpers';
 //
 // - Die Seite ist die v86-`dist/index.html` aus scripts/v86-checkout.mjs (.cache/v86/), nicht der aktuelle Build.
 // - Der Entwicklungs-Adapter kommt wie in allen E2E-Tests von außen (tests/.runtime/fake-claude.js).
-// - Daten: seed/sample-data.json + tests/fixtures/s1-seed.json (neue Felder: hist fk/ms/in, Log fk/in, theme.a, dk, app/today).
+// - Daten: seed/sample-data.json + tests/fixtures/s1-seed.json (neue Felder: hist fk/ms/in/mx/pl/n/bg/st, Log fk/in/mx/sm/pl/n/bg/st, theme.a, dk, app/today).
 // - Bedienung nur über Test-Kennungen des v86-Stands (eingefroren), nicht über die Helfer in fixtures.ts, die mit der neuen Hülle wandern.
 
 type Doc = Record<string, unknown>;
@@ -147,13 +147,13 @@ test('v86 läuft mit den Daten von Stufe 1 und lässt die neuen Felder beim Zur�
   await expect.poll(logged, { timeout: 15_000 }).toBeGreaterThanOrEqual(CARDS);
 
   const db = await dump(page);
-  // hist: ältere Einträge unverändert, samt fk/ms/in.
+  // hist: ältere Einträge unverändert, samt fk/ms/in/mx/pl/n/bg/st.
   for (const id of ids) {
     const hist = db[`vocab/${id}`]?.hist as Doc[];
     expect(hist.slice(0, oldHist().length), id).toEqual(oldHist());
     expect(hist.length, id).toBe(oldHist().length + 1);
   }
-  // Log: der ältere Eintrag behält fk/in.
+  // Log: der ältere Eintrag behält fk/in/mx/sm/pl/n/bg/st.
   expect(((db[LOG]?.entries as Doc[]) ?? []).find((e) => e.t === oldLog.t && e.id === oldLog.id)).toEqual(oldLog);
   // Profil: theme.a und theme.p bleiben neben dem neuen theme.m; dk unverändert.
   const profile = db['app/profile'] as Doc;

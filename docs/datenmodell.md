@@ -253,3 +253,31 @@ Browser-Speicher (nur Bequemlichkeit): `lx:speak-new` (`'0'` = „Neue Wörter b
 | `vocab/<id>` gesamt | Größentest im ungünstigsten Fall mit allen Feldern (12 × `hist` mit `s, a, u, ci, h, v`, `sb` 8, `col` 2, `mnemo`, `wk`, `lg`, `ff`, `axs`, `aiEx`, `exDe`): gültig und < 64 KiB (Vertrag: 256 KiB). | < 64 KiB | Test `tests/unit/vocabDocSize.test.ts` |
 
 Nur im Arbeitsspeicher (nicht gespeichert): Werkstatt-Abruf in der Runde (`QueueItem.wk`: `1` = verzögerter Abruf drei Karten nach der Werkstatt, `2` = einmalige Wiederholung drei Karten nach einem Fehler dort). „Ich kenne es schon“ in der Wortliste verkürzt bei Karten ab Stufe 3 mit späterer Fälligkeit den Abstand nicht mehr (nur Verlaufseintrag `m: 'known'`). Eine Merkhilfe wird nur in ein vorhandenes Dokument geschrieben (`saveOwnMemo` prüft `inDb`).
+
+## Relaunch Stufe 1 P4 S1-ZEIT: Messwerte je Versuch (28.10.2026, additiv, Dokumentzahl +0)
+
+Alle Felder sind optional. Sie werden in Stufe 1 nur gesammelt und von keiner Note, keiner Planung und keiner Kennzahl gelesen. Ohne Messwert fehlt das Feld (Altform). Gelesen wird tolerant (`attemptReadFields` in `src/data/schemas.ts`), auch Altbestand mit fremden Werten. Streng geprüft wird nur der **neue** `hist`-Eintrag (`histNewEntrySchema` in `applyReview.ts`); ältere Einträge bleiben `{t, g?}`, damit ein alter Eintrag wie `ms: 12.5, in: 'x'` keine Bewertung blockiert.
+
+**Bewusste Lücke (Stufe 2):** In Stufe 1 liefern nur `ExerciseView.tsx`, `GrammarItem.tsx` und `useC1Item.ts` die Werte. Fehlersatz-Runde, `nbdrill`, Druck-Runde, Drills, Anki-Aufdecken, Einführung/Werkstatt und „Sag es“ schreiben die Altform.
+
+**Zwei Verwechslungsgefahren:**
+- `dev: 't'` (Gerät: Touch) ist etwas anderes als `in: 't'` (Eingabeart: getippt).
+- `hist[].ms` ist auf 10 ms gerundet, gedeckelt bei 600.000 und ist die Zeit beim Senden (`sm`, sonst `ms`). `log.ms` ist roh und bleibt die Antwortzeit wie bisher, die auch die Note liest.
+
+| Feld | Ort | Bedeutung | Grenze |
+|---|---|---|---|
+| `fk` | `hist[]`, Log | ms vom Zeigen (Hören: Tonende) bis zum ersten Kontakt (Taste, Einfügen, Antippen). Pausen für Nachschlagen und Begleiter sind herausgerechnet. Fehlt ohne Kontakt | 0…600.000, 10-ms-Raster |
+| `ms` | `hist[]` (neu) | Antwortzeit beim Tippen auf „Prüfen“, ohne Wartezeit auf Claude | wie `fk` |
+| `in` | `hist[]`, Log | Eingabeart: `t` getippt, `d` diktiert (Diktat oder Einfügung ohne Taste mit ≥ 2 Wörtern, für mindestens die Hälfte des Texts), `c` gewählt (Auswahl, Bausteine, Antippen) | `'t'`/`'d'`/`'c'` |
+| `mx` | `hist[]`, Log | gemischt: Tasten und Diktat, Einfügen aus Zwischenablage/Ziehen oder Löschen nach einer Einfügung ohne Taste. `in` bleibt wie berechnet | `1` |
+| `sm` | Log | Antwortzeit beim Senden vor dem Warten auf Claude, roh; nur gesetzt, wenn ≠ `ms` | 0…600.000 |
+| `pl` | `hist[]`, Log | Zeichen des sichtbaren Prompts (Satz bzw. Aufgabe samt Suchhilfe und Hinweis) | 0…9.999 |
+| `n` | `hist[]`, Log | zweiter Versuch (nach Hinweis, Vorprüfung oder Zielform) oder zweites Senden an Claude | `2` |
+| `bg` | `hist[]`, Log | Die Seite war zwischen Zeigen und Senden verborgen. `ms` bleibt unverändert | `1` |
+| `st` | `hist[]`, Log (Wörter, Wendungen) | Lernstufe der Karte vor der Antwort | 0…5 |
+
+**Größe im schlimmsten Fall** (Tests `histTiming`/`logTiming`):
+- je `hist`-Eintrag +70 Byte; eine Karte mit 12 Einträgen hat 2.133 Byte (Grenze 64 KiB)
+- ein Log mit 300 Einträgen und langen Texten hat 170.059 Byte (Grenze 240 KiB)
+
+**Rückweg:** Die Felder liegen in `tests/fixtures/s1-seed.json`; `rueckweg.spec.ts` prüft, dass v86 sie beim Zurückschreiben stehen lässt.

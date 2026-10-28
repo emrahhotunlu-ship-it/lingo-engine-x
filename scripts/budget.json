@@ -31,7 +31,8 @@
     "entry": {
       "basis": 2736000,
       "zuwachs": {
-        "P5 S1-ZAHL": 2000
+        "P5 S1-ZAHL": 2000,
+        "P4 S1-ZEIT": 3000
       }
     },
     "css": {
