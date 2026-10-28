@@ -676,3 +676,5 @@ Ergebnis:
   - **Nicht gebraucht**, aber über Sammelmodule (`domain/metrics/index.ts`, `lexicon/unitKnown.ts:7`) statisch erreichbar: Atlas (1,42 MB), Lautschrift (0,33 MB), `fk/b2`, `tutor/l1`, `atlas/meta`, `grammar/path`. Diese Dateien dürfen das Plan-Stück nicht blockieren.
 
 **Offen:** iPhone-Probe (P8 Nr. 4) übernimmt die Hauptsitzung.
+
+**28.10.2026 – Hauptsitzung zu P8:** Abbruchkriterium nicht erfüllt, P9/P10 bleiben wie geschnitten. Festlegung für P9: Die Grenze „≤ 500 KB je Bündel“ gilt für die **ausgelieferte Datei** (`.txt`, Base64 des Deflate), nicht für den Rohinhalt; `tasks-v2`/`pattern-map` dürfen also je ein Bündel bleiben, solange die `.txt` ≤ 500 KB ist. iPhone-Probe (P8 Nr. 4): erledigt sich mit Test-Link 1a, der die c1x-Inhalte schon nachlädt (Emrahs Schritt „C1-Übung öffnen“); keine eigene Probe-Version auf dem Test-Link, damit Emrahs Test nicht gestört wird. Reihenfolge 1b wegen „ein Helfer gleichzeitig“: P9a → P9b → P10 Nr. 1–6 → Nr. 7.
