@@ -55,6 +55,8 @@ const STORE_TEMP = [
 
 /** Ordner der Bereiche, die der Umbau „Fokus Wörter und Grammatik“ gelöscht hat (Entfernungs-Audit, tests/unit/removalAudit.test.ts). */
 const GONE_AREAS = 'input|read|listen|discover|write|business|pron|inbox|fluency|meeting|tones|say|compare';
+/** Rechenbausteine, die Anzeige-Dateien nicht selbst importieren (P5 S1-ZAHL; tests/unit/archGuards.test.ts nennt dieselbe Liste). */
+const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
 
 export default defineConfig(
   {
@@ -154,6 +156,28 @@ export default defineConfig(
       'no-restricted-imports': [
         'error',
         { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, DEV_PATTERN, READ_DOOR_PATTERN] },
+      ],
+    },
+  },
+  {
+    // Relaunch Stufe 1 P5 S1-ZAHL (docs/relaunch/stufe1-plan.md §5.2): Bildschirme, Fortschritt, Wörter-Übersicht und Bausteine rechnen
+    // keine Zahl selbst. Restminuten, Ringfüllung, Kontingent neuer Wörter und Themen-Beherrschung kommen nur aus `domain/metrics`
+    // (`todaySummary`, `ringFills`, `newQuotaToday`, `topicShown`). Die Lern-Logik (GrammarItem, c1x, drills, generate) ruft `topicP` weiter direkt.
+    // Wiederholt die Muster des Blocks „Eine Quelle je Zahl“, weil `no-restricted-imports` je Datei nur einmal gilt.
+    files: ['src/features/**/*Screen.tsx', 'src/features/progress/**/*.{ts,tsx}', 'src/features/vocab/hub/**/*.{ts,tsx}', 'src/ui/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
+            { regex: '(^|/)srs/cards$', importNames: ['buildTrainCards'], message: 'Karten nur über domain/metrics (eine Quelle je Zahl).' },
+            { regex: '(^|/)streak$', importNames: ['computeStreak'], message: 'Serie nur über domain/metrics (streak, streakWeek).' },
+            { regex: '.', importNames: SCREEN_NUMBER_NAMES, message: 'Anzeige-Zahlen nur über domain/metrics (todaySummary, ringFills, newQuotaToday, topicShown; P5 S1-ZAHL).' },
+            DEV_PATTERN,
+            READ_DOOR_PATTERN,
+          ],
+        },
       ],
     },
   },

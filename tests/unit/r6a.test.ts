@@ -6,7 +6,8 @@ import { AXIS_LOCK_PX, followPose, lockAxis, MAX_ROTATE, RELEASE_PX, releaseDeci
 import { ACTIVE_MS, ambientBackground, blobsAt, FPS, phaseOf } from '../../src/engine/fx/AmbientLight';
 import { LINES_MAX, MOMENT_MAX_MS, momentLine, momentLines, momentStats, pushLine, resetMeasure } from '../../src/engine/fx/measure';
 import { SPARK_MAX } from '../../src/engine/fx/moments';
-import { ARC_GAP_DEG, dutyFills, ringArcs } from '../../src/ui/DayRing';
+import { ARC_GAP_DEG, ringArcs } from '../../src/ui/DayRing';
+import { ringFills as dutyFills } from '../../src/domain/metrics';
 import { EMBLEM_IDS, EMBLEM_MARK } from '../../src/ui/moments/Emblem';
 import { movingCols, odometerCols, ROLL_MS } from '../../src/ui/Odometer';
 import { STACK } from '../../src/ui/motion';

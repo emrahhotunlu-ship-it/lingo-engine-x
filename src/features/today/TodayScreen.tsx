@@ -9,7 +9,7 @@ import { useNav } from '../../app/nav';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
-import { DayRing, dutyFills } from '../../ui/DayRing';
+import { DayRing } from '../../ui/DayRing';
 import { noteDayOpen } from './dayMoment';
 import { topicName } from '../grammar/topicUi';
 import type { GrammarDay } from '../../domain/plan/types';
@@ -19,7 +19,7 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { addDays } from '../../domain/date';
 import { dateLabelOf } from './dateLabel';
 import { TodaySkeletonCard } from '../system/HomeSkeleton';
-import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
+import { dutyChannelMinutes } from '../../domain/plan/buildPlan';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
@@ -38,10 +38,10 @@ import { unlockSpeech } from '../../platform/speech';
 import { firstOpenDuty, useToday, type TodayView } from './state';
 import { healToday, retryPlan } from './store';
 import { TabTitle } from '../system/Chrome';
-import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
+import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
-import { buildTrainCards } from '../../domain/metrics';
+import { buildTrainCards, ringFills, todaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
@@ -187,7 +187,7 @@ function UnitCard({ view, rows, minLeft, fixNone, settled }: { view: TodayView; 
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
       <div className="flex items-center gap-3.5">
-        <DayRing fills={dutyFills(view.duties.items)} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
+        <DayRing fills={ringFills(view.duties.items)} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
           <span className="flex flex-col items-center gap-0.5">
             <span className="text-2xl leading-none font-semibold tracking-tight" data-testid="today-min">
               {minLeft}
@@ -361,11 +361,8 @@ export function TodayScreen() {
       };
     });
   }, [plan, up, view.duties.items, t, lang]);
-  const minLeft = useMemo(() => {
-    if (!plan) return 0;
-    if (unit) return minutesLeft(unitRows(unit, view.duties.items) ?? []);
-    return rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) || dutyMinutes(plan);
-  }, [plan, unit, rows, view.duties.items]);
+  // Restminuten aus der einen Quelle (P5 S1-ZAHL, `metrics.todaySummary`).
+  const minLeft = useMemo(() => todaySummary({ plan, items: view.duties.items }).rest, [plan, view.duties.items]);
 
   // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`). `topic` allein (R5): für die eine Zeile mit der Lernzeit.
   const tomorrow = useMemo((): { line: string; topic: string } => {

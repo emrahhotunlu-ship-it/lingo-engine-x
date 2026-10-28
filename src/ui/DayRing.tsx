@@ -25,17 +25,6 @@ export function ringArcs(n: number, size: number, stroke: number, closed = false
   return Array.from({ length: k }, (_, i) => ({ start: i * step + gap / 2, len }));
 }
 
-/** Füllanteile je Pflichtschritt aus dem Pflichtzustand: erledigt = 1, offen mit Fortschritt = Anteil (unter 1), sonst 0. */
-export function dutyFills(items: ReadonlyArray<{ state: 'done' | 'open'; progress: { done: number; total: number } | null }>): number[] {
-  return items.map((d) => {
-    if (d.state === 'done') return 1;
-    const p = d.progress;
-    if (!p || p.total <= 0 || p.done <= 0) return 0;
-    // Offen bleibt sichtbar offen: höchstens 95 %, damit „fast fertig“ nie wie „erledigt“ aussieht.
-    return Math.min(0.95, p.done / p.total);
-  });
-}
-
 type Props = {
   /** Füllung je Bogen, 0–1. */
   fills: readonly number[];

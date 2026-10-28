@@ -13,7 +13,10 @@ import { deckCounts } from '../srs/decks';
 import { lemmaOf } from '../srs/context';
 import { pickDissimilar } from '../srs/similar';
 import { C1_MARK, vocabGoal } from '../vocab/goal';
-import type { StoredPlan } from '../plan/types';
+import type { DutyState, StoredPlan } from '../plan/types';
+import { dutyChannelMinutes, dutyMinutes } from '../plan/buildPlan';
+import { minutesLeft, unitRows } from '../unit/rows';
+import { ringFills, ringShare } from './ring';
 import type { TrainCard } from '../srs/types';
 
 // EINE Quelle je Zahl für Heute, Wörter, Grammatik und Fortschritt (Lernplattform 2.0 §4.9, Leitsatz 4). Jede sichtbare Zahl dieser Art kommt von hier;
@@ -100,17 +103,48 @@ export const festNow = (cards: readonly TrainCard[], nowMs?: number): number => 
 
 // ------------------------------------------------------------------ Tag
 
-/** Was vom Tag noch offen ist: Zahl der offenen Schritte und ihre Restminuten. `done` = erledigte Blocknummern (1 bis 5). */
-export function dayLeft(plan: StoredPlan | null, done: ReadonlySet<number>): { blocks: number; minutes: number } {
+/**
+ * Was vom Tag noch offen ist: Zahl der offenen Schritte und ihre Restminuten. `done` = erledigte Blocknummern (1 bis 5).
+ * Seit P5 S1-ZAHL dieselbe Rechnung wie die Anzeige (`todaySummary().rest`, `minutesLeft`): mit `review` (Fortschritt der Wiederholung)
+ * zählt der offene Wiederholblock anteilig, ohne ihn voll, wie bisher.
+ */
+export function dayLeft(plan: StoredPlan | null, done: ReadonlySet<number>, review: DutyState['progress'] = null): { blocks: number; minutes: number } {
   if (!plan?.u) return { blocks: 0, minutes: 0 };
-  let blocks = 0;
-  let minutes = 0;
-  for (const [block, , min] of plan.u.b) {
-    if (done.has(block)) continue;
-    blocks++;
-    minutes += min;
+  const b = plan.u.b;
+  const items = plan.duty.map((id, k): DutyState => ({ id, state: done.has(b[k]?.[0] ?? 0) ? 'done' : 'open', progress: id === 'review' ? review : null }));
+  const rows = unitRows(plan, items) ?? [];
+  return { blocks: rows.filter((r) => r.state !== 'done').length, minutes: minutesLeft(rows) };
+}
+
+export type TodaySummary = {
+  /** Restminuten, wie sie Heute zeigt (`today-min`, Wiedereinstiegskarte): Einheit anteilig nach Rest der Wiederholung, alter Plan je Schritt. */
+  rest: number;
+  /** Füllung je Pflichtschritt (Tagesring), Reihenfolge wie `items`. */
+  fills: number[];
+  /** Ein Wert für den ganzen Ring (0–1, `ringShare`). */
+  ring: number;
+  /** Erledigte und alle Pflichtschritte („x von 4“). */
+  done: number;
+  total: number;
+};
+
+/**
+ * Die Zahlen von Heute aus Plan und Pflichtzustand (P5 S1-ZAHL): rein, ohne React und ohne Datenbank. Quelle für den Bildschirm Heute
+ * und später für `app/today` (P6). `items` = `deriveToday(...).duties.items`.
+ * Restminuten: ohne Plan 0. Einheit (`u`) = `minutesLeft(unitRows(...))`. Alter Plan = Minuten der offenen Schritte (Wiederholen 10,
+ * Lektion 12, Kanal nach `dutyChannelMinutes`); ist das 0, die Planminuten (`dutyMinutes`), wie bisher auf dem Bildschirm.
+ */
+export function todaySummary(i: { plan: StoredPlan | null; items: readonly DutyState[] }): TodaySummary {
+  const { plan, items } = i;
+  let rest = 0;
+  if (plan) {
+    if (plan.u) rest = minutesLeft(unitRows(plan, items) ?? []);
+    else {
+      for (const d of items) if (d.state !== 'done') rest += d.id === 'review' ? 10 : d.id === 'lesson' ? 12 : dutyChannelMinutes(d.id.slice(3));
+      rest = rest || dutyMinutes(plan);
+    }
   }
-  return { blocks, minutes };
+  return { rest, fills: ringFills(items), ring: ringShare(items), done: items.filter((d) => d.state === 'done').length, total: items.length };
 }
 
 // ------------------------------------------------------------------ Fehlersätze

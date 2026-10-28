@@ -10,6 +10,15 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 export type TopicStage = 'new' | 'learning' | 'safe' | 'firm';
 export const TOPIC_STAGES: readonly TopicStage[] = ['new', 'learning', 'safe', 'firm'];
 
+/** Angezeigte Themenzahlen (P5 S1-ZAHL): Beherrschung `p` mit Verfall (`topicP`), dazu gerundet in Prozent, Antworten `n`, richtige `c` (fehlt = 0). */
+export type TopicShown = { p: number; pct: number; n: number; c: number };
+
+/** Eine Quelle für die Themenzahlen auf Themenblatt (GrammarScreen) und Fortschritt (PathTab). Rein, nur Lesen. */
+export function topicShown(topic: string, doc: Doc | undefined, nowMs: number): TopicShown {
+  const p = topicP(topic, doc, nowMs);
+  return { p, pct: Math.round(p * 100), n: typeof doc?.n === 'number' ? doc.n : 0, c: typeof doc?.c === 'number' ? doc.c : 0 };
+}
+
 /** Schwellen (03-lernmodell 1.2): Neu n = 0 · Lernt p ≤ 0,6 oder n < 4 · Sicher p ≤ 0,8 · Fest p > 0,8, n ≥ 15, Belege an ≥ 3 Tagen. */
 export const SAFE_P = 0.6;
 export const FIRM_P = 0.8;

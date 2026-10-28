@@ -6,7 +6,8 @@ import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
 import { logWarn } from '../../platform/diagnostics';
 import { topicById } from '../../domain/content';
-import { certainty, topicP } from '../../domain/grammar/bkt';
+import { certainty } from '../../domain/grammar/bkt';
+import { topicShown } from '../../domain/metrics';
 import { errorsOf } from '../../domain/grammar/errors';
 import { lernweg } from '../../domain/grammar/path';
 import { patternsOf } from '../../domain/grammar/patterns';
@@ -102,8 +103,9 @@ function RuleSheet({ topic, onStarted, inRound = false }: { topic: string; onSta
   // Mit Musterdatei ersetzt das Themenblatt den Querschnitt (Lernplattform 2.0 §5.5); ohne bleibt das Regelblatt wie bisher.
   const tpats = patternsOf(topic);
   useCompanionSee({ area: 'grammar', label: `${t('grTitle')} · ${topicName(topic, lang)}`, phase: 'idle' });
-  const p = topicP(topic, doc, now);
-  const cert = certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null });
+  const shown = topicShown(topic, doc, now);
+  const p = shown.p;
+  const cert = certainty(p, { n: shown.n, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null });
   const weg = lernweg(topic, doc, now);
   const errs = errorsOf(doc).filter((e) => e.done !== true);
   const unseen = unseenCount(topic, doc, [inputs.pool, inputs.dailyOpen]);
@@ -305,11 +307,11 @@ function RuleSheet({ topic, onStarted, inRound = false }: { topic: string; onSta
       <Disclosure label={t('grRaw')}>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="gr-raw">
           <dt className="text-muted">{t('grRawP')}</dt>
-          <dd className="lx-tnum">{num(Math.round(p * 100))} %</dd>
+          <dd className="lx-tnum">{num(shown.pct)} %</dd>
           <dt className="text-muted">{t('grRawN')}</dt>
-          <dd className="lx-tnum">{num(typeof doc?.n === 'number' ? doc.n : 0)}</dd>
+          <dd className="lx-tnum">{num(shown.n)}</dd>
           <dt className="text-muted">{t('grRawC')}</dt>
-          <dd className="lx-tnum">{num(typeof doc?.c === 'number' ? doc.c : 0)}</dd>
+          <dd className="lx-tnum">{num(shown.c)}</dd>
         </dl>
       </Disclosure>
     </div>

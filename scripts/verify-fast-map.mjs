@@ -131,6 +131,8 @@ export const RULES = [
   { prefix: 'src/domain/studytime.ts', specs: ['studyTime.spec.ts'] },
   { prefix: 'src/domain/metrics/', specs: ['diagnose.spec.ts', 'progress.spec.ts'] },
   { prefix: 'src/domain/radar/', specs: ['progress.spec.ts'] },
+  // P5 S1-ZAHL: Kennzahlen speisen Heute, Grammatik und Wörter (Unit: metricsGolden findet `vitest related` über die Importe).
+  { prefix: 'src/domain/metrics/', specs: [...TODAY, ...GRAMMAR, ...VOCAB] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */
