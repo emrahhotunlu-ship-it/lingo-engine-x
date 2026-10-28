@@ -173,6 +173,8 @@ test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runde
 });
 
 test('Fehler von heute kommt am nächsten Tag in der Wiederholung', async ({ browser }) => {
+  // Zwei Tage mit je einer ganzen Runde: allein ~22 s, unter Last (parallele Läufe) über 45 s.
+  test.setTimeout(90_000);
   // Tag 1: eine Aufgabe falsch.
   const ctx1 = await browser.newContext({ timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const p1 = await ctx1.newPage();
