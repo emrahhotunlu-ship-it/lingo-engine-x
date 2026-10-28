@@ -1,0 +1,35 @@
+{
+  "artifact": "AXHkh6xneA4xfjpHkmy1wE",
+  "version": 74,
+  "versionId": "1793226310-7a2a",
+  "label": "Test-Link 1a",
+  "publishedAt": "2026-10-28",
+  "rollback": {
+    "version": 73,
+    "versionId": "1793078154-eb7e",
+    "note": "Einzeldatei; beim Zurückgehen die Teil-Dateien dieser Liste mit null entfernen"
+  },
+  "commit": "ed3a36b",
+  "count": 19,
+  "totalBytes": 6280084,
+  "files": [
+    "FilmPlayer-C-f0W6TT.js",
+    "WordSky-DBWWGpUC.js",
+    "content-c1x-check-58b161e7.txt",
+    "content-c1x-cnet-d1c83457.txt",
+    "content-c1x-err-49d110e3.txt",
+    "content-c1x-gate-6930f0c3.txt",
+    "content-c1x-kwt-feb2fb8b.txt",
+    "content-c1x-mcc-ca087cfc.txt",
+    "content-c1x-ocl-e8099b9b.txt",
+    "content-c1x-pair-d1c83457.txt",
+    "content-c1x-para-d1c83457.txt",
+    "content-c1x-place-5c940991.txt",
+    "content-c1x-reg-d1c83457.txt",
+    "content-c1x-wf-2aa75d35.txt",
+    "index-DdjJyiHK.js",
+    "inter-latin-standard-normal-BwkfbSeq.woff2",
+    "particles-CsaVnRwx.js",
+    "style-65oKgTdn.css"
+  ]
+}
