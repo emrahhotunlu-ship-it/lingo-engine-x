@@ -73,7 +73,7 @@ export function unpack(buf) {
 }
 
 /**
- * Entwicklungs-Spuren in gepackten Inhalten (Base64-Blöcke im Bündel, `.bin`-Dateien): sie werden vor den Marker-Prüfungen
+ * Entwicklungs-Spuren in gepackten Inhalten (Base64-Blöcke im Bündel, Bündeldateien `.txt`): sie werden vor den Marker-Prüfungen
  * entpackt statt nur ausgeblendet (platform-guard S2/S3, 28.10.2026). Rein: `texts` = entpackte Texte.
  * @returns {string[]} gefundene Marker
  */
@@ -122,7 +122,7 @@ export function checkHtml(html, size) {
 export const MULTI_MAX_FILE = MAX_FILE_BYTES;
 export const MULTI_MAX_TOTAL = MAX_PUBLISH_BYTES;
 export const MULTI_WARN_TOTAL = WARN_TOTAL_BYTES;
-export const MULTI_EXT = new Set(['.html', '.js', '.css', '.json', '.woff2', '.png', '.jpg', '.webp', '.svg', '.mp4', '.webm', '.bin']);
+export const MULTI_EXT = new Set(['.html', '.js', '.css', '.json', '.woff2', '.png', '.jpg', '.webp', '.svg', '.mp4', '.webm', '.txt']);
 const TEXT_EXT = new Set(['.js', '.css', '.json', '.svg']);
 const FETCH_MARKER = 'lx:content-fetch';
 // Verweise, die in der HTML separat geprüft werden (flach-relativ + vorhanden) und deshalb nicht als Ladeziel zählen.
@@ -132,7 +132,7 @@ const flatRel = (u) => /^[A-Za-z0-9._-]+(\?[^#]*)?(#.*)?$/.test(u.replace(/^\.\/
 
 /**
  * Prüft einen Mehr-Datei-Build. Rein: `files` = Liste `{ name, size, text?, packed? }` (text nur für Textdateien,
- * packed = entpackter Inhalt einer `.bin`-Datei, `null` = nicht entpackbar), `name` relativ zu dist/.
+ * packed = entpackter Inhalt einer Bündeldatei `.txt` (Base64 des rohen deflate), `null` = nicht entpackbar), `name` relativ zu dist/.
  * @returns {{ problems: string[], notes: string[] }}
  */
 export function checkMulti(files) {
@@ -166,7 +166,7 @@ export function checkMulti(files) {
 
   // Ladeziele wie im Einzeldatei-Modus in JEDER Textdatei; `fetch(` nur in der Datei mit dem Marker (Inhalts-Bündel, relativ).
   for (const f of files) {
-    if (f.name.endsWith('.bin')) {
+    if (f.name.endsWith('.txt')) {
       if (f.packed === null) problems.push(`${f.name}: Inhalts-Bündel lässt sich nicht entpacken`);
       else if (f.packed !== undefined) for (const m of markersInPacked([f.packed])) problems.push(`${f.name}: Entwicklungs-Spur in gepackten Inhalten: "${m}"`);
     }
@@ -214,7 +214,7 @@ function main() {
       if (e.isDirectory()) return { name: `${e.name}/`, size: 0 };
       const size = statSync(new URL(e.name, dir)).size;
       const text = TEXT_EXT.has(extname(e.name).toLowerCase()) || e.name === 'index.html' ? readFileSync(new URL(e.name, dir), 'utf8') : undefined;
-      const packed = extname(e.name).toLowerCase() === '.bin' ? (unpack(readFileSync(new URL(e.name, dir))) ?? null) : undefined;
+      const packed = extname(e.name).toLowerCase() === '.txt' ? (unpack(Buffer.from(readFileSync(new URL(e.name, dir), 'utf8').trim(), 'base64')) ?? null) : undefined;
       return { name: e.name, size, text, packed };
     });
     const res = checkMulti(files);

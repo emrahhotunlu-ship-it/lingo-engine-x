@@ -5,7 +5,7 @@
 //   css    = alle Stylesheets
 //   html   = dist/index.html selbst
 //   lazy   = jedes nachgeladene Skript-Stück einzeln (Schlüssel = Quellpfad im Manifest, unabhängig vom Hash im Dateinamen)
-//   bin    = jedes Inhalts-Bündel `content-<name>-<hash>.bin` einzeln (Schlüssel `content-<name>`)
+//   bin    = jedes Inhalts-Bündel `content-<name>-<hash>.txt` einzeln (Schlüssel `content-<name>`)
 //   files  = Zahl der Dateien in dist/ (ohne dist/.vite/), total = Summe der Rohgrößen (nur Hinweis, Grenze aus scripts/limits.mjs)
 //
 // Sperrklinke (Plan P0 Nr. 4): Grenze = `basis` + Summe der eingetragenen `zuwachs`-Beträge (je Paketname). Ein Zuwachs darf
@@ -22,7 +22,7 @@ import { MAX_FILES_PER_PUBLISH, WARN_TOTAL_BYTES, mb } from './limits.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const MANIFEST = join('.vite', 'manifest.json');
-const BIN_KEY = /^(content-.+)-[0-9a-f]{6,}\.bin$/;
+const BIN_KEY = /^(content-.+)-[0-9a-f]{6,}\.txt$/;
 
 /** Gepackte Größe in Byte (gzip, Standardstufe). */
 export const gz = (buf) => gzipSync(buf).length;
@@ -60,7 +60,7 @@ export function measure(dir) {
     const ext = extname(f).toLowerCase();
     if (ext === '.js' && !entryFiles.has(f)) lazy[keyOfFile.get(f) ?? f.replace(/-[^-]+\.js$/, '')] = { file: f, gz: gzOf(f) };
     else if (ext === '.css') css += gzOf(f);
-    else if (ext === '.bin') bin[BIN_KEY.exec(f)?.[1] ?? f] = { file: f, gz: gzOf(f) };
+    else if (ext === '.txt') bin[BIN_KEY.exec(f)?.[1] ?? f] = { file: f, gz: gzOf(f) };
   }
   return {
     entry: [...entryFiles].reduce((a, f) => a + gzOf(f), 0),

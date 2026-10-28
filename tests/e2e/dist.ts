@@ -4,7 +4,7 @@ import type { Route } from '@playwright/test';
 
 // Liefert dist/ für die E2E-Tests unter der Test-Adresse (fixtures.ts `ORIGIN`). Ein Mechanismus für beide Bauweisen:
 //  - Einzeldatei (Rückfall `npm run build:single`): nur `/` -> dist/index.html.
-//  - Mehr-Datei (Standard `npm run build`, erkannt am Inhalt von dist/): zusätzlich flache Pfade (`/index-<hash>.js`, `/content-*.bin` …) aus dist/.
+//  - Mehr-Datei (Standard `npm run build`, erkannt am Inhalt von dist/): zusätzlich flache Pfade (`/index-<hash>.js`, `/content-*.txt` …) aus dist/.
 // Ein eigener Server ist nicht nötig: `route.fulfill` ersetzt ihn und lässt die Zählung fremder Anfragen (fixtures `external`) intakt.
 // Alles, was nicht in dist/ liegt, bleibt „extern“ und wird abgebrochen.
 
@@ -15,7 +15,7 @@ const TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json',
   '.woff2': 'font/woff2',
-  '.bin': 'application/octet-stream',
+  '.txt': 'text/plain; charset=utf-8',
   '.png': 'image/png',
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',

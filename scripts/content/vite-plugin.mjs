@@ -10,14 +10,15 @@ const PREFIX = 'virtual:content/';
 
 /**
  * @param {{ multi?: boolean }} [opts] multi = Mehr-Datei-Build (LX_BUILD=multi): jedes Bündel wird als eigene flache Datei
- *   `content-<name>-<hash>.bin` (rohes deflate) ausgeliefert und zur Laufzeit per fetch nachgeladen, statt als Base64 im Skript zu stehen.
+ *   `content-<name>-<hash>.txt` (Base64 des rohen deflate) ausgeliefert und zur Laufzeit per fetch nachgeladen, statt im Skript zu stehen.
+ *   Text statt `.bin`: das Artefakt liefert nur Web-Dateitypen aus, `application/octet-stream` wird abgelehnt (Veröffentlichung Test-Link 1a, 28.10.2026).
  */
 export function contentStore(opts = {}) {
   const multi = opts.multi === true;
   const fileOf = (name) => {
     const b = pack(name);
     const hash = createHash('sha1').update(b.json).digest('hex').slice(0, 8);
-    return `content-${name}-${hash}.bin`;
+    return `content-${name}-${hash}.txt`;
   };
   /** @type {Map<string, ReturnType<typeof packBundle>>} */
   let cache = new Map();
@@ -41,7 +42,7 @@ export function contentStore(opts = {}) {
     generateBundle() {
       if (!multi) return;
       for (const name of Object.keys(bundles())) {
-        this.emitFile({ type: 'asset', fileName: fileOf(name), source: deflateRawSync(Buffer.from(pack(name).json, 'utf8'), { level: 9 }) });
+        this.emitFile({ type: 'asset', fileName: fileOf(name), source: deflateRawSync(Buffer.from(pack(name).json, 'utf8'), { level: 9 }).toString('base64') });
       }
     },
     resolveId(id) {

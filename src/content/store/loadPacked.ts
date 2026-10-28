@@ -24,11 +24,11 @@ export async function inflateBase64(b64: string): Promise<string> {
   return new Response(stream).text();
 }
 
-/** Entpackt rohe deflate-Bytes (Mehr-Datei-Build: Antwort-Strom direkt, ohne Base64). */
+/** Mehr-Datei-Build: die Bündeldatei ist Text (Base64 des rohen deflate), weil das Artefakt nur Web-Dateitypen ausliefert. */
 /* eslint-disable no-restricted-globals -- einziger erlaubter fetch: relative Inhaltsdatei im Mehr-Datei-Build (docs/umbau/mehr-datei.md), geprüft von check-platform */
 async function inflateResponse(res: Response): Promise<string> {
-  if (!res.ok || !res.body) throw new Error(`Inhaltsdatei nicht ladbar (HTTP ${res.status}).`);
-  return new Response(res.body.pipeThrough(new DecompressionStream('deflate-raw'))).text();
+  if (!res.ok) throw new Error(`Inhaltsdatei nicht ladbar (HTTP ${res.status}).`);
+  return inflateBase64((await res.text()).trim());
 }
 
 /**

@@ -23,7 +23,7 @@ function fakeBuild(opts: { entryBytes?: number; lazyBytes?: number; manifest?: b
   writeFileSync(join(dir, 'shared-b2.js'), noise(500));
   writeFileSync(join(dir, 'Sky-c3.js'), noise(opts.lazyBytes ?? 800));
   writeFileSync(join(dir, 'style-d4.css'), 'a{color:red}'.repeat(50));
-  writeFileSync(join(dir, 'content-c1x-err-0123abcd.bin'), noise(300));
+  writeFileSync(join(dir, 'content-c1x-err-0123abcd.txt'), noise(300).toString('base64'));
   if (opts.manifest !== false) {
     mkdirSync(join(dir, '.vite'));
     writeFileSync(

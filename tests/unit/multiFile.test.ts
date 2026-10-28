@@ -18,9 +18,11 @@ describe('checkMulti', () => {
     expect(checkMulti(base()).problems).toEqual([]);
   });
   it('lehnt Unterordner, fremde Dateitypen und zu große Dateien ab', () => {
-    const p = checkMulti([...base(), { name: 'assets/x.js', size: 1, text: '' }, { name: 'x.exe', size: 1 }, { name: 'big.bin', size: MULTI_MAX_FILE }]).problems.join('|');
+    const p = checkMulti([...base(), { name: 'assets/x.js', size: 1, text: '' }, { name: 'x.exe', size: 1 }, { name: 'big.txt', size: MULTI_MAX_FILE }, { name: 'alt.bin', size: 1 }]).problems.join('|');
     expect(p).toContain('Unterordner');
     expect(p).toContain('Nicht erlaubter Dateityp');
+    // `.bin` liefert das Artefakt nicht aus (application/octet-stream abgelehnt, Test-Link 1a 28.10.2026): Bündel sind `.txt`.
+    expect(p).toContain('Nicht erlaubter Dateityp: alt.bin');
     expect(p).toContain(mb(MAX_FILE_BYTES));
   });
   it('Grenzen kommen nur aus scripts/limits.mjs (255 Dateien, 15 MB je Datei, 64 MB je Veröffentlichung)', () => {
@@ -28,15 +30,15 @@ describe('checkMulti', () => {
     expect([MULTI_MAX_FILE, MULTI_WARN_TOTAL]).toEqual([MAX_FILE_BYTES, WARN_TOTAL_BYTES]);
   });
   it('Dateizahl: Hinweis ab 100, Fehler über 255', () => {
-    const many = (n: number) => [...base(), ...Array.from({ length: n - base().length }, (_, i) => ({ name: `c${i}.bin`, size: 1 }))];
+    const many = (n: number) => [...base(), ...Array.from({ length: n - base().length }, (_, i) => ({ name: `c${i}.txt`, size: 1 }))];
     expect(checkMulti(many(TARGET_MAX_FILES - 1)).notes).toEqual([]);
     expect(checkMulti(many(TARGET_MAX_FILES)).notes.join()).toContain(String(TARGET_MAX_FILES));
     expect(checkMulti(many(MAX_FILES_PER_PUBLISH)).problems).toEqual([]);
     expect(checkMulti(many(MAX_FILES_PER_PUBLISH + 1)).problems.join()).toContain(String(MAX_FILES_PER_PUBLISH));
   });
   it('Gesamtgröße: Warnung ab 9 MB, Fehler über 64 MB', () => {
-    expect(checkMulti([...base(), { name: 'a.bin', size: MULTI_WARN_TOTAL + 1 }]).notes.join()).toContain(mb(WARN_TOTAL_BYTES));
-    const big = ['a', 'b', 'c', 'd', 'e'].map((n) => ({ name: `${n}.bin`, size: MAX_FILE_BYTES - 1 }));
+    expect(checkMulti([...base(), { name: 'a.txt', size: MULTI_WARN_TOTAL + 1 }]).notes.join()).toContain(mb(WARN_TOTAL_BYTES));
+    const big = ['a', 'b', 'c', 'd', 'e'].map((n) => ({ name: `${n}.txt`, size: MAX_FILE_BYTES - 1 }));
     const p = checkMulti([...base(), ...big]).problems;
     expect(p).toHaveLength(1);
     expect(p.join()).toContain(mb(MAX_PUBLISH_BYTES));
@@ -62,8 +64,8 @@ describe('gepackte Inhalte (platform-guard S2/S3)', () => {
   // Füllung mit wenig Wiederholung, damit der Base64-Block die Mindestlänge von 512 Zeichen erreicht.
   const fill = Array.from({ length: 400 }, (_, i) => ((i * 7919) % 10007).toString(36)).join(',');
   const pack = (t: string) => deflateRawSync(Buffer.from(`${t}${fill}`));
-  it('findet Entwicklungs-Spuren in .bin-Bündeln und meldet nicht entpackbare', () => {
-    const bin = (packed: string | null) => checkMulti([...base(), { name: 'content-x.bin', size: 10, packed }]).problems.join('|');
+  it('findet Entwicklungs-Spuren in Bündeldateien (.txt) und meldet nicht entpackbare', () => {
+    const bin = (packed: string | null) => checkMulti([...base(), { name: 'content-x.txt', size: 10, packed }]).problems.join('|');
     expect(bin(unpack(pack('{"a":"ok"}')) ?? null)).toBe('');
     expect(bin(unpack(pack('{"a":"__LINGO_FAKE__"}')) ?? null)).toContain('__LINGO_FAKE__');
     expect(bin(null)).toContain('nicht entpacken');
