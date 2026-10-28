@@ -233,7 +233,7 @@ Siehe Abschnitt 6.4.
 
 **Abhängigkeit:** baut gegen `src/app/shell/contextColumn.ts` aus dem ersten Schritt von P2 (eingefroren, W8); startet erst, wenn diese Datei zusammengeführt ist.
 
-**Tastatur vollständig (Laptop, Hinweis H5):** ⏎ prüfen bzw. weiter, **Esc** schließt Mehr-Blatt, Menü und Kontextspalte (in dieser Reihenfolge, nie die Übung), **1–4** wählt bei Auswahlaufgaben, **T** Tipp, **W** Wort nachschlagen, **?** zeigt die Tastenübersicht. Kürzel greifen nie, solange ein Textfeld den Fokus hat (außer ⏎ und Esc). Sichtbarer Fokusrahmen überall.
+**Tastatur vollständig (Laptop, Hinweis H5):** ⏎ prüfen bzw. weiter, **Esc** schließt Mehr-Blatt, Menü und Kontextspalte (in dieser Reihenfolge, nie die Übung), **1–4** wählt bei Auswahlaufgaben, **T** Tipp, **W** Weiß ich nicht (im Eingabefeld erst Esc; nachgeschlagen wird per Antippen/Klick auf das Wort), **?** zeigt die Tastenübersicht. Kürzel greifen nie, solange ein Textfeld den Fokus hat (außer ⏎ und Esc). Sichtbarer Fokusrahmen überall.
 
 **Blockwechsel (Hinweis H5):** Die Optik des Übergangs zwischen zwei Blöcken (Balken springt in den nächsten Abschnitt, Vorschau H3) gehört zu **P3** und ist Teil von G2. Die Zeit < 300 ms (A10) misst **P10**; in 1a ist sie kein Prüfpunkt.
 
@@ -552,7 +552,7 @@ Zustandsfarben immer mit Symbol und Wort (`--ok` ✓ „Richtig“, `--near` ≈
 - **Mehr-Blatt** bis 85 % Höhe (Eselsbrücke, Satzübersetzung, ausführliche Erklärung), Blätter ~500 ms mit Bounce 0,1.
 - **Hinweis-Runde** einzeilig, ohne Rot (Vorschau `hintband`, `style.css:293`).
 - **Handy oben:** nur Schließen und Balken; alles andere hinter „…“ (dort auch „Pause, später weiter“, Entscheidung 27.10.2026).
-- **Laptop:** Knopfzeile mit Tastenhinweisen T (Tipp), W (Wort nachschlagen), ⏎ (Weiter); Kontextspalte statt Mehr-Blatt.
+- **Laptop:** Knopfzeile mit Tastenhinweisen T (Tipp), W (Weiß ich nicht), ⏎ (Weiter); Kontextspalte statt Mehr-Blatt.
 - **Warum-Länge:** Heute erlaubt `src/domain/explain/types.ts` 140 Zeichen (`WhyRule.de/en`). Stufe 1 ändert keine Inhalte. Deshalb bleibt die Grenze 140, das Band ist für 140 Zeichen gebaut, und `scripts/audit-why-length.mjs` listet alle Texte über 120 Zeichen für James' Inhaltsstrang (kein Kürzen in Stufe 1).
 - **Eingabe-Attribute vereinheitlicht, aber nur für Abruffelder** (Antwortfelder in Übungen, in denen Emrah ein Wort oder einen Satz aus dem Gedächtnis schreibt): wie in `src/ui/exercise/SentenceInput.tsx:13` (`lang:'en'`, `autoCapitalize:'off'`, `autoCorrect:'off'`, `autoComplete:'off'`, `spellCheck:false`, `enterKeyHint:'go'`), auch für `src/engine/HiddenInput.tsx:140`. **Nicht** für Suche, Claude-Fragen, Übersetzer, Wort hinzufügen und Schreibwerkstatt: Dort helfen Autokorrektur und Vorschläge und verfälschen keinen Abruf (Hinweis H5).
 - **Einbau an einer Stelle:** `src/ui/exercise/ExerciseShell.tsx` ist das eine Gerüst (Slot-Reihenfolge Kommentar Z. 27–31). Es wird genutzt von 17 Dateien: `patterns/FreeItem`, `vocab/anki/FlipCard`, `vocab/ExerciseView`, `IntroCard`, `WerkstattCard`, `pressure/PressureScreen`, `grammar/focus/FocusItem`, `GrammarItem`, `apply/ListenQuestion`, `ComboSentence`, `repair/FkItem`, `RepairItem`, `c1x/ResultCard`, `useC1Item`, `C1Item`, `nbdrill/NbDrillScreen`, `drills/DrillItems`. Damit bekommen alle Übungen das Band, ohne dass ihr Inhalt neu gebaut wird.
