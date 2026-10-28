@@ -82,8 +82,8 @@ describe('Note nach dem zweiten Versuch', () => {
 
 describe('Texte', () => {
   it('beide Sprachen, Mehrzahl und Platzhalter', () => {
-    expect(translatePlural('de', 'rhStartWord', 8, { start: 'ne' })).toBe('Gesucht ist ein anderes Wort – es beginnt mit „ne…“ (8 Buchstaben)');
-    expect(translatePlural('en', 'rhStartWord', 8, { start: 'ne' })).toBe('It’s a different word – it starts with “ne…” (8 letters)');
+    expect(translatePlural('de', 'rhStartWord', 8, { start: 'ne' })).toBe('Anderes Wort – beginnt mit „ne…“ (8)');
+    expect(translatePlural('en', 'rhStartWord', 8, { start: 'ne' })).toBe('Different word – starts with “ne…” (8)');
     expect(translate('de', 'rhGrammarTopic', { topic: 'Present Perfect' })).toBe('Achte auf: Present Perfect');
     expect(translate('en', 'rhSpelling')).toBe('Almost – check the spelling');
   });

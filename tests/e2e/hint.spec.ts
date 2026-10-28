@@ -45,7 +45,7 @@ async function vocabRetryCorrect(page: Page) {
   const hint = page.locator('[data-testid="hint-line"][data-tone="near"]');
   await expect(hint).toBeVisible();
   await expect(hint).toContainText(`„${answer.slice(0, 2)}…“`);
-  await expect(hint).toContainText(`(${answer.length} Buchstaben)`);
+  await expect(hint).toContainText(`(${answer.length})`);
   // Noch kein Ergebnis, keine Lösung im DOM, die falsche Eingabe steht noch in der Lücke.
   await expect(page.getByTestId('result')).toHaveCount(0);
   await expect(page.getByTestId('verdict')).toHaveCount(0);

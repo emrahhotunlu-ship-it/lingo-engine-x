@@ -113,14 +113,15 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
         ]
       : [];
   // Ab 1024 px steht die Seitenleiste auch in Übungen (Shell `showNav`) mit Claude, Übersetzer und Einstellungen. Die Leiste zeigt
-  // dann nur, was die Navigation nicht hat (ux N1): kein Übersetzer, kein Einstellungs-Punkt. Claude bleibt, denn es sieht die Aufgabe.
+  // dann nur, was die Navigation nicht hat (ux N1): kein Übersetzer, kein Einstellungs-Punkt und – Korrekturrunde P3, Punkt 13 – kein
+  // eigenes Claude-Symbol: „Claude“ in der Seitenleiste öffnet denselben Begleiter mit demselben Aufgaben-Kontext (`useSeeing`).
   const nav = useContextPresentation() === 'column';
   const tail: MenuEntry[] = nav ? [] : [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
   return (
     <div className="flex flex-none items-center gap-0.5" data-testid="exercise-actions">
-      {wide && (
+      {wide && !nav && (
         <>
-          {!nav && <TranslateButton />}
+          <TranslateButton />
           <ClaudeButton />
         </>
       )}

@@ -507,6 +507,8 @@ export const logSchema = z.looseObject({
         n: num,
         bg: num,
         st: num,
+        // Korrekturrunde P3 (Punkt 4): beim Verlassen gebucht (geprüft, nicht mit „Weiter“ bestätigt). Nur gespeichert.
+        left: bool,
       }),
     )
     .nullish(),

@@ -276,6 +276,8 @@ export type AnswerEvent = {
   bg?: 1;
   /** S1-ZEIT (P4): Lernstufe der Karte vor der Antwort. */
   st?: number;
+  /** Korrekturrunde P3 (Punkt 4, LS3): geprüft, aber nicht mit „Weiter“ bestätigt – beim Verlassen gebucht. Im Protokoll `left: true`. */
+  left?: true;
 };
 
 /** S1-ZEIT (P4): Eingabeart eines Versuchs (`src/engine/inputKind.ts`): getippt, diktiert/eingesetzt, gewählt. */

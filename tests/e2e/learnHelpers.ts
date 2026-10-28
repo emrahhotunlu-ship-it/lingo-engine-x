@@ -176,7 +176,9 @@ export async function openBandMore(page: Page): Promise<void> {
 
 /** Übungsleiste: am Handy stehen Übersetzer, Claude und Zahnrad im Menü „…“ (Relaunch P3). Öffnet es bei Bedarf, dann den Eintrag. */
 export async function barAction(page: Page, testId: 'open-companion' | 'open-translate' | 'open-settings', how: 'click' | 'tap' = 'click'): Promise<void> {
-  const direct = page.locator(`[data-testid="${testId}"]:visible`).first();
+  // Ab 1024 px steht Claude nur in der Seitenleiste (Korrekturrunde P3, Punkt 13).
+  const side = page.getByTestId('side-claude');
+  const direct = testId === 'open-companion' && (await side.isVisible().catch(() => false)) ? side : page.locator(`[data-testid="${testId}"]:visible`).first();
   const menu = page.getByTestId('exercise-menu').first();
   let target = direct;
   if (!(await direct.isVisible().catch(() => false)) && (await menu.isVisible().catch(() => false))) {

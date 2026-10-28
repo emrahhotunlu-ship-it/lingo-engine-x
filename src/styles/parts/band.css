@@ -23,18 +23,18 @@
 }
 /* Ausnahme vom „rollt nicht“: eine Rückfrage, die Emrah selbst geöffnet hat („Sicher?“ nach „Als richtig werten“, das Feld
    „Mit dem geübten Muster üben“), darf nie abgeschnitten werden. Nur dann rollt das Band, und die Rückfrage holt sich selbst ins Bild. */
-.lx-band:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1']) {
+.lx-band:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1'], [data-testid='synonym-result']) {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-.lx-band:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1']) :is(.lx-band-inner, .lx-band-why) {
+.lx-band:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1'], [data-testid='synonym-result']) :is(.lx-band-inner, .lx-band-why) {
   flex-shrink: 0;
 }
 /* Im Band liegt die Rückfrage schon über der Leiste: der Abstand für den Balken (Inline-Stil der Karte) entfällt hier. */
 .lx-band [data-testid='override-sure'] {
   scroll-margin: 8px !important;
 }
-.lx-band-btns > [data-slot]:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1']) {
+.lx-band-btns > [data-slot]:has([data-testid='override-sure'], [data-testid='target-form'][data-open='1'], [data-testid='synonym-result']) {
   flex-basis: 100%;
 }
 .lx-band[data-verdict='ok'] {
@@ -68,14 +68,44 @@
   line-height: 26px;
   font-weight: 650;
 }
-.lx-band [data-slot='comparison'] {
+/* (a) Urteilszeile: Urteil links, „Wieder in …“ als ruhiger Zusatz rechts (eine Zeile, kürzt mit …), Menü „…“ ganz rechts. */
+.lx-band-vline {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.lx-band-next {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 45%;
+  padding-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* (b) EINE Lösungszeile („Du: … → Richtig: …“), höchstens zwei Zeilen; was nicht passt, steht im Mehr-Blatt (`data-clipped`). */
+.lx-band-sol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 46px;
+  overflow: hidden;
+}
+.lx-band-sol,
+.lx-band-sol .lx-t-support {
   font-size: 17px;
   line-height: 23px;
 }
-/* Zeile 3 „Warum“: schrumpft als Erstes; reicht der Platz nicht, läuft der Text weich aus (nie Rollen im Band). */
+.lx-band-sol[data-clipped],
+.lx-band-why[data-clipped] {
+  mask-image: linear-gradient(to bottom, var(--fg) calc(100% - 18px), transparent);
+}
+/* (c) „Warum“ bzw. „Merke“: höchstens drei Zeilen; schrumpft als Erstes. Reicht der Platz nicht, läuft der Text sichtbar aus
+   (`data-clipped`, Maske) und „Mehr“ zeigt den vollen Text – nie Rollen im Band. */
 .lx-band-why {
   flex: 0 1 auto;
   min-height: 0;
+  max-height: 64px;
   overflow: hidden;
 }
 .lx-band-why > [data-slot='explanation'] {
@@ -110,6 +140,7 @@
 .lx-band-why [data-testid='ai-note'] {
   margin-top: 2px;
 }
+/* (d) Knopfzeile: immer ganz sichtbar (`flex: none`), höchstens zwei Zweitknöpfe gleicher Art, je EINE Zeile. */
 .lx-band-btns {
   display: flex;
   flex: none;
@@ -121,6 +152,20 @@
 .lx-band-btns > [data-slot] {
   flex: 1 1 0;
   min-width: 0;
+}
+/* Neben einem zweiten Knopf nimmt „Mehr“ nur seine eigene Breite – der längere Text („War das auch richtig?“) bekommt den Rest. */
+.lx-band-btns > button:has(+ [data-slot]) {
+  flex: none;
+}
+.lx-band-btns button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lx-band-btns button > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .lx-band-btns > [data-slot] > * {
   width: 100%;
@@ -161,6 +206,13 @@ html[data-band][data-actionbar] #main {
   }
   to {
     opacity: 1;
+  }
+}
+/* Ab 600 px steht links die Schiene: das Band beginnt rechts davon und endet vor der Kontextspalte (wie die Leiste, shell.css). */
+@media (min-width: 600px) {
+  .lx-frame .lx-band {
+    left: var(--lx-side-w);
+    right: var(--lx-bar-right);
   }
 }
 /* Querformat am Handy: die Leiste steht im Fluss (index.css), das Band auch – direkt über ihr am Ende der Übung. */
@@ -261,6 +313,14 @@ html[data-band][data-actionbar] #main {
   outline: none;
   animation: lx-sheet-up 500ms var(--ease-spring) backwards;
 }
+.lx-band-grip {
+  flex: none;
+  width: 40px;
+  height: 6px;
+  margin: 8px auto 0;
+  border-radius: 999px;
+  background: var(--line);
+}
 .lx-band-sheet-head {
   display: flex;
   align-items: center;
@@ -348,15 +408,22 @@ html[data-band][data-actionbar] #main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 10px;
   border-radius: 999px;
   color: var(--fg-3);
-  font-weight: 650;
+  font-weight: 600;
+  white-space: nowrap;
 }
 .lx-keys-open:hover {
   color: var(--fg);
   background: var(--surface-2);
+}
+/* Am Iris-Hauptknopf (⏎): Zeichen und Rand in der Knopf-Schriftfarbe, Fläche nur leicht getönt (Punkt 7, N5) – kein graues Feld. */
+.lx-actionbar-column .lx-btn-primary[data-kbd]::after {
+  border-color: currentColor;
+  background: color-mix(in oklch, currentColor 18%, transparent);
+  color: inherit;
 }
 /* Laptop: Tastenzeichen T/W/⏎ an den Knöpfen der Leiste (nur mit feinem Zeiger, nie am Handy). */
 .lx-actionbar-column [data-kbd]::after {

@@ -19,12 +19,14 @@ const WORD: Record<ResultVerdict, MessageKey> = {
 const TONE: Record<ResultVerdict, string> = { ok: 'text-ok-text', near: 'text-near-text', wrong: 'text-wrong-text', dontKnow: 'text-fg', unchecked: 'text-muted' };
 const MARK: Record<ResultVerdict, string> = { ok: '✓', near: '≈', wrong: '✕', dontKnow: '○', unchecked: '' };
 
-export function Verdict({ verdict, sub = null, title = null }: { verdict: ResultVerdict; sub?: string | null; title?: string | null }) {
+export function Verdict({ verdict, sub = null, title = null, help = false }: { verdict: ResultVerdict; sub?: string | null; title?: string | null; help?: boolean }) {
   const { t } = useT();
-  const first = useRef(verdict);
+  const first = useRef({ verdict, help });
   useEffect(() => {
-    const v = first.current;
-    if (v === 'ok' || v === 'near' || v === 'wrong') emit({ k: 'verdict', v });
+    const { verdict: v, help: h } = first.current;
+    // Korrekturrunde P3 (Punkt 10): „Lösung gezeigt“ meldet genau ein `dontKnow` – kein Ton (der Dirigent schweigt), die Combo endet (`moments.ts`).
+    // Punkt 9: mit Hilfe geschafft trägt `help`, damit die Combo nicht wächst.
+    if (v === 'ok' || v === 'near' || v === 'wrong' || v === 'dontKnow') emit({ k: 'verdict', v, ...(h && v === 'ok' ? { help: true as const } : {}) });
   }, []);
   const mark = MARK[verdict];
   return (

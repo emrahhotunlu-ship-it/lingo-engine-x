@@ -106,7 +106,7 @@ test.describe('Desktop 1440', () => {
     await page.getByTestId('start').click();
     await screen(page, 'trainer');
     await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'cloze_hint');
-    await page.getByTestId('open-companion').click();
+    await barAction(page, 'open-companion');
     await expect(page.getByTestId('seeing')).toHaveAttribute('data-area', 'trainer');
     await page.getByTestId('chat-suggestion').first().click();
     const reply = page.locator('[data-testid="chat-msg"][data-role="assistant"]').last();

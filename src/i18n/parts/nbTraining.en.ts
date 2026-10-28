@@ -12,7 +12,7 @@ export const nbTrainingEn: Record<keyof typeof nbTrainingDe, string> = {
   nbTrainingUnitNote: 'Today · step {n}',
   nbTrainingCheck: 'Check',
   nbTrainingNext: 'Next',
-  nbTrainingDontKnow: "I don't know",
+  nbTrainingDontKnow: 'I don’t know',
   nbTrainingDone: 'Done',
   nbTrainingInfo: 'What is this for?',
   nbTrainingTryAgain: 'Try again.',

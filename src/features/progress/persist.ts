@@ -268,7 +268,8 @@ export const learnRecorder: LearnRecorder = {
     open.counts.push({ day: a.day, kind: 'g', channel: grammarChannel(a), ok: right });
     pushEntry(grammarLogEntry(a), a.day);
     if (!right && !a.dontKnow) radarQueue.push(radarEvent(topicCat(a.task.topic), 'g', a.t, { q: a.task.prompt, g: a.given, a: a.task.answer }));
-    afterAnswer(false);
+    // Beim Verlassen gebucht (Punkt 4): sofort schreiben, die Seite ist vielleicht gleich weg.
+    afterAnswer(!!a.left);
     return ok;
   },
   drill(a) {

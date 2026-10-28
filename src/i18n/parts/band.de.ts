@@ -16,9 +16,15 @@ export const bandDe = {
   bandKeysClose: 'Tastenkürzel schließen',
   bandKeyEnter: 'Prüfen bzw. weiter',
   bandKeyHint: 'Tipp',
-  bandKeyWord: 'Weiß ich nicht',
+  bandKeyDontKnow: 'Weiß ich nicht',
   bandKeyChoice: 'Antwort wählen',
   bandKeyEsc: 'Blatt, Menü oder Spalte schließen (nie die Übung)',
   bandKeyHelp: 'Diese Übersicht',
+  // Korrekturrunde P3: Lösungszeile im Band, Hilfe-Untertitel, Tastenzeile.
+  bandYou: 'Du',
+  bandRightHelped: 'Mit Hinweis geschafft – zählt als ‚Schwer‘',
+  bandRightStart: 'Mit Anfangsbuchstaben – kommt bald wieder',
+  bandKeysAll: '? alle Kürzel',
+  bandWhyMore: 'Nicht verwechseln',
   bandBar: 'Fortschritt: Abschnitt {n} von {total}',
 };

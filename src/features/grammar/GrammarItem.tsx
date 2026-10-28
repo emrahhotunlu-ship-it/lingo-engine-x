@@ -31,6 +31,8 @@ import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap'
 import { useT, type MessageKey } from '../../i18n';
 import { inputProfile } from '../../platform/input';
 import { TutorButton } from '../../ui/exercise/TutorButton';
+import { registerLeaveBook } from '../../ui/exercise/leaveBook';
+import { CHOICE_LETTERS } from '../../engine/choiceKeys';
 import { ExerciseShell, SentenceInput, explainDepth, findHead, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
@@ -85,6 +87,11 @@ export type GrammarItemProps = {
   tutor?: boolean;
   /** „Warum diese Aufgabe?“ (Tutor-Engine): Grund für das ⓘ, erst beim Öffnen gerechnet. */
   reason?: ((checked: boolean) => { text: string; code: string }) | null;
+  /**
+   * Korrekturrunde P3 (Punkt 4, LS3): Buchung beim Verlassen (nur Runden, die es anbieten). `stay` = Seite verborgen: speichern, die Aufgabe
+   * bleibt stehen; `go` = Runde, Reiter oder Bildschirm verlassen: buchen und weiterrechnen. Ohne Angabe bucht nur „Weiter“.
+   */
+  onLeave?: ((a: GrammarAnswer, mode: 'stay' | 'go') => void) | null;
 };
 
 type Fb = {
@@ -159,7 +166,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null, onLeave = null }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -534,12 +541,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     setFb({ ...fb, target: { given: value.trim(), ok } });
   };
 
-  const next = () => {
-    if (!fb) return;
-    if (fit.ctl.current) {
-      abandonFit(fit.ctl);
-      fit.cancel();
-    }
+  /** Die bewertete Antwort, wie „Weiter“ sie bucht (auch beim Verlassen, Punkt 4). */
+  const answerOf = (fb: Fb): GrammarAnswer & AttemptTiming => {
     const tj: GrammarAnswer['tj'] = {
       v: TJ_V[fb.tv],
       ...(fb.dx && fb.dx.cause !== 'unknown' ? { h: fb.dx.cause } : {}),
@@ -592,6 +595,58 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           ...(fb.fit ? { fit: fb.fit } : {}),
           ...pickAttempt(fb),
         };
+    return a;
+  };
+
+  // Punkt 4 (LS3): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen. `booked`: die beim Verbergen gebuchte Antwort
+  // (derselbe Zeitstempel geht später mit „Weiter“ weiter, ohne zweites Speichern); `done`: endgültig weitergegeben. Nie während Claude prüft.
+  const booked = useRef<(GrammarAnswer & AttemptTiming) | null>(null);
+  const done = useRef(false);
+  const leaveNow = (mode: 'stay' | 'go'): void => {
+    if (!onLeave || !fb || done.current) return;
+    // Claude prüft die Antwort gerade nach („Claude fragen“): offen lassen, nichts buchen.
+    const aiOpen = fit.busy && fb.verdict !== 'correct' && !fb.override && !fb.dontKnow;
+    if (mode === 'stay') {
+      if (booked.current || aiOpen) return;
+      booked.current = answerOf(fb);
+      onLeave(booked.current, 'stay');
+      return;
+    }
+    if (!booked.current && aiOpen) return;
+    done.current = true;
+    onLeave(booked.current ?? { ...answerOf(fb), left: true }, 'go');
+  };
+  const leaveRef = useRef(leaveNow);
+  useEffect(() => {
+    leaveRef.current = leaveNow;
+  });
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === 'hidden') leaveRef.current('stay');
+    };
+    const onHide = () => leaveRef.current('stay');
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('pagehide', onHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('pagehide', onHide);
+      leaveRef.current('go');
+    };
+  }, []);
+  useEffect(() => {
+    if (!hasFb || !onLeave) return;
+    return registerLeaveBook(() => leaveRef.current('go'));
+  }, [hasFb, onLeave]);
+
+  const next = () => {
+    if (!fb || done.current) return;
+    if (fit.ctl.current) {
+      abandonFit(fit.ctl);
+      fit.cancel();
+    }
+    done.current = true;
+    // Beim Verbergen schon gespeichert: dieselbe Antwort (Zeitstempel) geht weiter, gespeichert wird nicht noch einmal.
+    const a = booked.current ?? answerOf(fb);
     const kind = onDone(a);
     if (kind === 'typed') api.focusNow();
     else api.blur();
@@ -870,12 +925,17 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const why = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
     // Mit Muster steht die Formel schon in der Karte (Muster-Zeile): der Untertitel nennt nur die Lösung (Formel höchstens einmal, Kap. 15).
     const altLine = why && !pattern ? t('grAltWanted', { want: solution, why }) : t('grAltWantedBare', { want: solution });
+    // Punkt 9: mit Hilfe (Tipp, Hinweisrunde) geschafft – der Untertitel sagt, was das zählt; die Combo wächst nicht.
+    const helped = !fb.override && !fb.dontKnow && fb.help.level > 0;
+    const helpedRight = helped && fb.verdict === 'correct' && fb.check?.kind !== 'other' && fb.grade === 2;
     const sub: string | null = lesson
       ? t('ttLessonWhy')
       : fb.dontKnow
       ? null
       : fb.override
         ? t('lrOverridden')
+        : helpedRight
+        ? t('bandRightHelped')
         : fb.check?.kind === 'other'
           ? altLine
           : fb.unsure
@@ -912,6 +972,13 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         }
       }
     }
+    // Auswahl (LS6): „Du: B · Richtig: C …“ als Lösungszeile im Band.
+    const optTexts: string[] = type === 'mc' ? (task.options ?? []) : type === 'meaning' && task.x?.kind === 'meaning' ? [task.x.a, task.x.b, t('gxMeaningBoth')] : [];
+    const rightIdx = type === 'mc' ? optTexts.indexOf(solution) : type === 'meaning' ? MEANING_KEYS.indexOf(task.answer as 'a' | 'b' | 'both') : -1;
+    const choiceLine =
+      choiceType && rightIdx >= 0 && !fb.override && (fb.verdict === 'wrong' || fb.dontKnow)
+        ? { you: !fb.dontKnow && chosen !== null ? (CHOICE_LETTERS[chosen] ?? null) : null, right: CHOICE_LETTERS[rightIdx] ?? '', text: optTexts[rightIdx] ?? solution }
+        : null;
     const wrongTyped = fb.verdict === 'wrong' && !choiceType && !fb.dontKnow && !fb.override;
     // Einspruch auch bei „unsicher“ (gebucht wie „Fast“): die Antwort war vielleicht richtig, die App konnte es nur nicht belegen.
     const disputable = wrongTyped || (fb.verdict === 'near' && fb.tv === 'unsure' && !choiceType && !fb.dontKnow && !fb.override);
@@ -1008,6 +1075,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       ...(checking ? { title: t('exJudgingTitle') } : alsoRight ? { title: t('exAlsoRight') } : unsureHead ? { title: t('ttJgUnsureTitle') } : {}),
       sub,
       comparison,
+      ...(choiceLine ? { choice: choiceLine } : {}),
+      ...(helped ? { helped: true } : {}),
       explanation: shown,
       depth,
       menu,

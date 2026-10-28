@@ -50,6 +50,8 @@ export function BandSheet({ open, onClose, title, children, next }: { open: bool
     <div className="lx-band-layer" data-band-layer="" data-slot="more-sheet">
       <div className="lx-band-scrim" aria-hidden="true" data-testid="band-more-scrim" onClick={onClose} />
       <div ref={panel} className="lx-band-sheet" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} data-band-layer="" data-testid="band-more" onKeyDown={trapTab}>
+        {/* Griff wie am Menü-Blatt (Punkt 15, N7): zeigt, dass es ein Blatt ist. */}
+        <div aria-hidden="true" className="lx-band-grip" data-testid="sheet-grip" />
         <div className="lx-band-sheet-head">
           <h2 className="lx-t-task m-0">{title}</h2>
           <IconButton icon="close" label={t('bandMoreClose')} onClick={onClose} data-testid="band-more-close" />
@@ -70,7 +72,7 @@ export function BandSheet({ open, onClose, title, children, next }: { open: bool
 const KEYS: ReadonlyArray<{ k: string; label: MessageKey }> = [
   { k: '⏎', label: 'bandKeyEnter' },
   { k: 'T', label: 'bandKeyHint' },
-  { k: 'W', label: 'bandKeyWord' },
+  { k: 'W', label: 'bandKeyDontKnow' },
   { k: '1–4', label: 'bandKeyChoice' },
   { k: 'Esc', label: 'bandKeyEsc' },
   { k: '?', label: 'bandKeyHelp' },

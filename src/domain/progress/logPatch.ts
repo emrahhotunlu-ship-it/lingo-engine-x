@@ -30,6 +30,8 @@ export type LogEntry = {
   lesson?: string;
   override?: true;
   dev?: 't' | 'k';
+  /** Korrekturrunde P3 (Punkt 4): beim Verlassen gebucht (geprüft, nicht mit „Weiter“ bestätigt). */
+  left?: true;
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
@@ -61,6 +63,8 @@ export type ChunkLogEntry = {
   ctx: 'rev' | 'duty' | 'xtra';
   override?: true;
   dev?: 't' | 'k';
+  /** Korrekturrunde P3 (Punkt 4): beim Verlassen gebucht. */
+  left?: true;
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
@@ -105,6 +109,8 @@ export type GrammarLogEntry = {
   lesson?: string;
   override?: true;
   dev?: 't' | 'k';
+  /** Korrekturrunde P3 (Punkt 4): beim Verlassen gebucht. */
+  left?: true;
   /** c1x (Lernplattform 3.0 §10.0 Nr. 4): Punkte, Art, Muster, Aufgaben-ID, Claude-Aufgabe, getippt. */
   pts?: [number, number];
   c1k?: string;
@@ -259,6 +265,7 @@ export function grammarLogEntry(a: GrammarAnswer & AttemptTiming): GrammarLogEnt
     ...(a.task.c1?.src === 'ai' ? { ai: true as const } : {}),
     ...(a.pts && a.free ? { free: true as const, tm: Math.max(1, Math.round(a.ms)) } : {}),
     ...(a.tempo ? { tp: true as const } : {}),
+    ...(a.left ? { left: true as const } : {}),
     ...hlOf(a),
     ...(a.tj ? { v: a.tj.v, ...(a.tj.h ? { h: a.tj.h.slice(0, 12) } : {}), ...(a.tj.vs ? { vs: a.tj.vs.slice(0, 40) } : {}) } : {}),
     ...timingOf(a),
@@ -310,9 +317,9 @@ export function activityEntry(e: ActivityLogEntry): ActivityLogEntry {
 
 export function logEntry(a: AnswerEvent): LogEntry | ChunkLogEntry {
   if (a.kind === 'chunk') {
-    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}), ...timingOf(a) };
+    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}), ...(a.left ? { left: true as const } : {}), ...timingOf(a) };
   }
-  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}), ...timingOf(a) };
+  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}), ...(a.left ? { left: true as const } : {}), ...timingOf(a) };
 }
 
 const keyOf = (e: unknown): string => {

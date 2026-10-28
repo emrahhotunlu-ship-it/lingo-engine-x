@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { closeContext, contextPortalTarget, openContext, useContextPresentation } from '../../app/shell/contextColumn';
 import { useLive } from '../../data/live';
 import { useSharedTarget } from '../../engine/shared';
@@ -14,7 +14,6 @@ import { Skeleton } from '../Skeleton';
 import { Comparison } from './Comparison';
 import { ExerciseMenu } from './ExerciseMenu';
 import { ExerciseStatus } from './ExerciseStatus';
-import { FoldToggle } from './FoldToggle';
 import { Examples } from './Examples';
 import { MoreItems, ResultBlocks } from './ResultBlocks';
 import { planResult, type ResultPlan } from './resultPlan';
@@ -36,7 +35,12 @@ import { inTextField, setBandMoreOpen, useBand } from './bandStore';
 // Aktionsleiste (gleiche Fläche, ein Dock): Zeile 1–2 Urteil und Lösung („Was hatte ich, was ist richtig?“), Zeile 3 „Warum“
 // (auch bei richtiger Antwort), darunter höchstens zwei Zweitknöpfe (Mehr + Handlung der Rückmeldung). Alles Weitere im Mehr-Blatt
 // (≤ 85 % hoch). Das Band ist höchstens 45 % des Bildes hoch (samt Leiste), rollt nicht und verschwindet nie von selbst.
-// Am Laptop (Split) bleibt das Ergebnis in der Seitenspalte; „Mehr“ öffnet dort die Kontextspalte, sobald der Rahmen sie zeigt.
+// Korrekturrunde P3 (Punkt 1): feste Reihenfolge im Band – (a) Urteilszeile mit „Wieder in …“ als ruhiger Zusatz, (b) EINE Lösungszeile
+// („Du: … → Richtig: …“, bei Auswahl „Du: B · Richtig: C“), (c) Warum/Merke 2–3 Zeilen mit sichtbarem Auslaufen, (d) Knopfzeile, immer ganz
+// sichtbar. Der Wortkopf (Bedeutung, Lautschrift, Vorlesen) steht im Mehr-Blatt. Läuft (b) oder (c) über (`data-clipped`), steht „Mehr“
+// IMMER da, und das Blatt beginnt mit dem vollen Text.
+// Am Laptop (Split) bleibt das Ergebnis in der Seitenspalte; „Mehr“ und ⓘ klappen IN dieser Spalte auf (Punkt 2: nur EINE Spalte neben der
+// Bühne). Die Kontextspalte des Rahmens nutzt nur das Band (Tablet ab 1024 px mit Touch).
 // Tasten: T = Tipp, W = „Weiß ich nicht“ (nie in einem Textfeld); Esc und „?“ regelt die Übungsebene (`Band.tsx`).
 
 export type ExerciseArea = 'words' | 'grammar';
@@ -68,7 +72,12 @@ export type ShellFeedback = {
   /** Zusätzlich unter „Mehr“ (z. B. 'pattern') bzw. immer offen (z. B. 'contrast'); `unfold` gewinnt. */
   fold?: ReadonlyArray<ExplainLine['k']>;
   unfold?: ReadonlyArray<ExplainLine['k']>;
-  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string; correct?: string; hideCorrect?: boolean } | null;
+  /** `bandOnly`: nur im Band (Handy) – am Laptop zeigen Lücke und Optionen die Lösung schon. */
+  comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string; correct?: string; hideCorrect?: boolean; bandOnly?: boolean } | null;
+  /** Auswahl (Punkt 1b, LS6): Lösungszeile „Du: B · Richtig: C …“ im Band. `you` = Buchstabe der Wahl (`null` = nichts gewählt). */
+  choice?: { you: string | null; right: string; text?: string } | null;
+  /** Mit Hilfe geschafft (Hinweisrunde, Anfangsbuchstaben): die Combo wächst nicht (Punkt 9). */
+  helped?: boolean;
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
@@ -161,6 +170,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const fine = useMediaQuery('(pointer: fine)');
   const presentation = useContextPresentation();
   const [info, setInfo] = useState(false);
+  const sideRef = useRef<HTMLElement>(null);
   const [reason, setReason] = useState<{ text: string; code: string } | null>(null);
   const infoId = useId();
   // Ab 1024 px mit Kontextspalte des Rahmens steht „Wozu?“ in der Spalte statt über der Aufgabe (Hauptsitzung 28.10.2026, Vorschau L2/L3);
@@ -184,7 +194,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
   );
   /** „Wozu?“ öffnen (`toggle`: ⓘ schließt es auch wieder; der Menüpunkt öffnet nur). */
   const showWhy = (toggle: boolean): void => {
-    if (presentation === 'column' && contextPortalTarget()) {
+    // Laptop (Split): das Wozu klappt oben in der Seitenspalte auf – nie eine zweite Spalte (Punkt 2).
+    if (!split && presentation === 'column' && contextPortalTarget()) {
       if (toggle && closeContext('explain')) return;
       const r = task.reason ? task.reason() : null;
       openContext({ kind: 'explain', title: t('exInfo'), node: purposeBody(r), onClose: () => setInfoCtx(false) });
@@ -197,7 +208,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
     }
     if (task.reason) setReason(task.reason());
     setInfo(true);
-    if (!toggle) window.requestAnimationFrame(() => taskRef.current?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' }));
+    if (!toggle) window.requestAnimationFrame(() => (split ? sideRef.current : taskRef.current)?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' }));
   };
   const showWhyRef = useRef(showWhy);
   useEffect(() => {
@@ -205,8 +216,6 @@ export function ExerciseShell(props: ExerciseShellProps) {
   });
   useEffect(() => () => void closeContext('explain'), [meta.id]);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [folds, setFolds] = useState(0);
-  const onFold = useCallback((open: boolean) => setFolds((n) => Math.max(0, n + (open ? 1 : -1))), []);
   // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Übung (nur direkt nach dem Start; Grammatik und Drills nehmen sie vorher selbst).
   const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
   const autoPref = useLive((s) => s.docs['app/profile']?.autoNext);
@@ -215,25 +224,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const keysOpen = useBand((s) => s.keysOpen);
   const hosts = useBand((s) => s.hosts);
   const [ctxMore, setCtxMore] = useState(false);
-  // Band: Ist die Handlung der Rückmeldung (`feedback.act`) gerade leer (z. B. JudgeFoot ohne Rückfrage), nimmt „Claude erklärt“ ihren Platz
-  // im Band ein – sonst steht es im Mehr-Blatt (höchstens zwei Nebenknöpfe). Das Gerüst sieht nur, ob die Handlung etwas zeichnet.
-  const actRef = useRef<HTMLDivElement>(null);
-  const [actEmpty, setActEmpty] = useState(false);
+  // Korrekturrunde P3 (Punkt 1d): „Erklär mir meine Antwort“ steht nie im Band, sondern im Mehr-Blatt – im Band höchstens „Mehr“ und
+  // EINE Handlung der Rückmeldung (Wörter „War das auch richtig?“, Grammatik „Claude fragen“ & Co.).
 
   const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.title ?? ''}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
-  const hasAct = !!feedback?.act;
-  useEffect(() => {
-    const el = actRef.current;
-    if (!el) return;
-    const sync = (): void => setActEmpty(el.childElementCount === 0);
-    const raf = requestAnimationFrame(sync);
-    const mo = new MutationObserver(sync);
-    mo.observe(el, { childList: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      mo.disconnect();
-    };
-  }, [hasAct, resultKey, split]);
   const auto = feedback
     ? shouldAutoAdvance({
         verdict: feedback.verdict,
@@ -241,7 +235,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         depth: feedback.depth,
         autoNextPref: autoPref as boolean | null | undefined,
         menuOpen: menuOpen || topMenuOpen,
-        foldOpen: folds > 0 || moreOpen || keysOpen || ctxMore,
+        foldOpen: moreOpen || keysOpen || ctxMore,
       })
     : false;
   const { running, fire } = useAutoAdvance({ active: auto, onNext: primary.onClick, nextTestId: primary.testId, resetKey: resultKey });
@@ -274,8 +268,16 @@ export function ExerciseShell(props: ExerciseShellProps) {
   }, [resultKey]);
   const moreSignal = !!feedback?.moreOpen;
   useEffect(() => {
-    if (moreSignal && band) setBandMoreOpen(true);
-  }, [moreSignal, band]);
+    if (moreSignal) setBandMoreOpen(true);
+  }, [moreSignal]);
+  // Laptop: „Weniger“, Esc oder ✕ klappen „Mehr“ zu – das Urteil steht danach wieder im Bild (Punkt 2).
+  const wasMore = useRef(false);
+  useEffect(() => {
+    if (split && wasMore.current && !moreOpen) {
+      document.querySelector<HTMLElement>('[data-testid="result"] [data-slot="verdict"]')?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
+    }
+    wasMore.current = moreOpen;
+  }, [moreOpen, split]);
   useEffect(() => () => void closeContext('more'), [resultKey]);
 
   // T = Tipp, W = „Weiß ich nicht“ (Vorschau desk.js). Nie in einem Textfeld, nie unter einem Dialog, nur vor dem Prüfen.
@@ -304,6 +306,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const resultRef = useRef<HTMLElement>(null);
   const taskRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
   const hasResult = feedback !== null;
   const verdictNow = feedback?.verdict ?? null;
   useLayoutEffect(() => {
@@ -327,13 +330,13 @@ export function ExerciseShell(props: ExerciseShellProps) {
     };
   }, [band, verdictNow, resultKey]);
   // Am Handy steht das Band über dem unteren Teil der Übung: liegt die eigene Antwort dahinter, rückt die Seite so weit hoch,
-  // dass sie über dem Band steht – aber nie über die Aufgabenzeile hinaus (UX-Prüfung W8: die Aufgabe bleibt sichtbar).
+  // dass sie über dem Band steht – aber nie über die Statuszeile hinaus (UX-Prüfung W8, Korrekturrunde P3 Punkt 14: Status und ⓘ bleiben sichtbar).
   useEffect(() => {
     if (!hasResult || !band) return;
     const id = window.requestAnimationFrame(() => {
       const res = resultRef.current;
       const ans = answerRef.current;
-      const tk = taskRef.current;
+      const tk = statusRef.current;
       if (!res || !ans || !tk || getComputedStyle(res).position !== 'fixed') return;
       const top = res.getBoundingClientRect().top;
       const need = ans.getBoundingClientRect().bottom + 8 - top;
@@ -343,6 +346,25 @@ export function ExerciseShell(props: ExerciseShellProps) {
     });
     return () => window.cancelAnimationFrame(id);
   }, [hasResult, resultKey, band]);
+
+  // Band (Punkt 1): Läuft die Lösungszeile oder das Warum über, steht `data-clipped` am Band und „Mehr“ immer da; das Blatt beginnt dann
+  // mit dem vollen Text. Gemessen nach dem Zeichnen und bei jeder Größenänderung (Drehen, Schrift).
+  const whyBoxRef = useRef<HTMLDivElement>(null);
+  const solRef = useRef<HTMLDivElement>(null);
+  const [clip, setClip] = useState<{ why: boolean; sol: boolean }>({ why: false, sol: false });
+  useLayoutEffect(() => {
+    if (!band || !verdictNow) return;
+    const over = (el: HTMLElement | null): boolean => !!el && el.scrollHeight > el.clientHeight + 1;
+    const measure = (): void => {
+      const next = { why: over(whyBoxRef.current), sol: over(solRef.current) };
+      setClip((c) => (c.why === next.why && c.sol === next.sol ? c : next));
+    };
+    measure();
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(measure) : null;
+    for (const el of [whyBoxRef.current, solRef.current, resultRef.current]) if (el) ro?.observe(el);
+    return () => ro?.disconnect();
+  }, [band, verdictNow, resultKey]);
+  const clipped = band && (clip.why || clip.sol);
 
   // Hauptknopf in der Bereichsfarbe (Design LP2): Wörter violett, Grammatik blau; nur solange die Übung steht.
   const area = status.area;
@@ -395,12 +417,39 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const hasMore = !!feedback && (plan.more.length > 0 || examples.length > 0 || !!feedback.after || !!feedback.foot);
   const blocksSource = feedback?.explanation ? { source: feedback.explanation.source } : {};
   const whyBefore = feedback?.why ? { before: <div data-slot="why">{feedback.why}</div> } : {};
-  const verdictNode = feedback ? <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} /> : null;
-  const comparisonNode = feedback?.comparison ? (
+  const verdictNode = feedback ? <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} help={!!feedback.helped} /> : null;
+  // Im Band ersetzt die Auswahl-Zeile („Du: B · Richtig: C“) den Wortvergleich – EINE Lösungszeile (Punkt 1b).
+  const cmp = feedback?.comparison && (band ? !feedback.choice : !feedback.comparison.bandOnly) ? feedback.comparison : null;
+  const comparisonNode = cmp ? (
     <div data-slot="comparison">
-      <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} {...(feedback.comparison.label ? { label: feedback.comparison.label } : {})} {...(feedback.comparison.correct ? { correct: feedback.comparison.correct } : {})} hideCorrect={!!feedback.comparison.hideCorrect} />
+      <Comparison given={cmp.given} ops={cmp.ops} compact={!!cmp.compact} {...(cmp.label ? { label: cmp.label } : {})} {...(cmp.correct ? { correct: cmp.correct } : {})} hideCorrect={!!cmp.hideCorrect} inline={band} />
     </div>
   ) : null;
+  // Auswahl (LS6): „Du: B · Richtig: C …“ – nur im Band; am Laptop stehen Wahl und Lösung mit ✕/✓ an den Optionen.
+  const choiceNode =
+    band && feedback?.choice ? (
+      <p className="lx-t-support m-0" data-testid="band-choice">
+        {feedback.choice.you && (
+          <>
+            <span className="text-muted">{t('bandYou')}: </span>
+            <span className="font-semibold">{feedback.choice.you}</span>
+            <span aria-hidden="true" className="text-muted">
+              {' · '}
+            </span>
+          </>
+        )}
+        <span className="text-muted">{t('exCmpExpected')}: </span>
+        <span className="font-semibold">{feedback.choice.right}</span>
+        {feedback.choice.text && (
+          <>
+            {' '}
+            <span lang="en" className="font-semibold">
+              {feedback.choice.text}
+            </span>
+          </>
+        )}
+      </p>
+    ) : null;
   const nextNotes = feedback ? (
     <>
       {feedback.nextIn && (
@@ -432,8 +481,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
 
   let result: ReactNode = null;
   if (feedback && band) {
-    // Band: Zeile 1–2 Urteil und Lösung, Zeile 3 Warum, dann Mehr + Handlung. Merke, „Wieder in …“, Tutor und der Rest im Mehr-Blatt.
-    // Zeile 3 ist EIN Warum (Konzept 12.1: „Warum = Merke, höchstens 120 Zeichen“); weitere Begründungen stehen im Mehr-Blatt.
+    // Band (Punkt 1): (a) Urteilszeile mit „Wieder in …“ · (b) Lösungszeile · (c) EIN Warum bzw. Merke, 2–3 Zeilen · (d) Knöpfe.
+    // Zeile (c) ist EIN Warum (Konzept 12.1: „Warum = Merke, höchstens 120 Zeichen“); weitere Begründungen stehen im Mehr-Blatt.
     // Ausnahme: eine kurze Status-Zeile (`note`, z. B. „Zählt nicht als Fehler …“ bei „Auch richtig“) bleibt im Band – sie sagt, was die Antwort zählt.
     const inBand = (it: ResultPlan['why'][number], i: number): boolean => i === 0 || (it.t === 'text' && it.k === 'note');
     // Ohne eigenes Warum steht das erste Merke-Stück im Band (Konzept 12.1: „Warum = Merke“) – die dritte Frage hat immer ihren Platz.
@@ -442,52 +491,64 @@ export function ExerciseShell(props: ExerciseShellProps) {
     const bandExample = plan.why.length === 0 && !feedback.why && plan.remember.length === 0 ? plan.example : null;
     const whyOnly: ResultPlan = { why: plan.why.filter(inBand), remember: bandRemember, more: [], example: bandExample };
     const rememberOnly: ResultPlan = { why: plan.why.filter((it, i) => !inBand(it, i)), remember: plan.remember.slice(bandRemember.length), more: [], example: bandExample ? null : plan.example };
-    const tutorInBand = !!feedback.tutor && (!feedback.act || actEmpty);
-    const actNode = (
-      <>
-        {feedback.act && (
-          <div ref={actRef} data-slot="act">
-            {feedback.act}
-          </div>
-        )}
-        {tutorInBand && <div data-slot="tutor">{feedback.tutor}</div>}
-      </>
-    );
-    const sheetTutor = feedback.tutor && !tutorInBand ? <div data-slot="tutor">{feedback.tutor}</div> : null;
+    const hasSol = !!(feedback.right || comparisonNode || choiceNode);
+    // Das Mehr-Blatt: zuerst, was im Band abgeschnitten ist (Lösung, volles Warum), dann Wortkopf, Stufen-Zeile, Merke, Weiteres, Tutor.
     const sheetBody = (
       <div className="flex flex-col gap-4">
-        <ResultBlocks plan={rememberOnly} area="trainer" depth={feedback.depth} testId="explanation-remember" />
+        {clip.sol && hasSol && (
+          <div className="flex flex-col gap-2" data-slot="sheet-solution">
+            {feedback.right}
+            {cmp && <Comparison given={cmp.given} ops={cmp.ops} compact={!!cmp.compact} {...(cmp.label ? { label: cmp.label } : {})} {...(cmp.correct ? { correct: cmp.correct } : {})} hideCorrect={!!cmp.hideCorrect} />}
+            {choiceNode}
+          </div>
+        )}
+        {clip.why && <ResultBlocks plan={whyOnly} area="trainer" ai={!!feedback.explanation?.ai} depth={feedback.depth} testId="sheet-why" {...whyBefore} />}
+        {feedback.head && <div data-slot="head">{feedback.head}</div>}
+        {feedback.stageNote && (
+          <p className="lx-t-meta m-0 text-muted" data-testid="stage-hold">
+            {feedback.stageNote}
+          </p>
+        )}
+        <ResultBlocks plan={rememberOnly} area="trainer" depth={feedback.depth} testId="explanation-remember" whyTitle={t('bandWhyMore')} />
         {foldContent}
-        {sheetTutor}
+        {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
       </div>
     );
-    const sheetHas = !!(rememberOnly.why.length > 0 || rememberOnly.remember.length || rememberOnly.example || hasMore || sheetTutor);
+    const sheetHas = !!(clipped || feedback.head || feedback.stageNote || feedback.tutor || rememberOnly.why.length > 0 || rememberOnly.remember.length || rememberOnly.example || hasMore);
     result = (
-      <section key={resultKey} ref={resultRef} className="lx-band" data-testid="result" aria-label={t('exExplanationLabel')} data-verdict={feedback.verdict} data-band="">
+      <section key={resultKey} ref={resultRef} className="lx-band" data-testid="result" aria-label={t('exExplanationLabel')} data-verdict={feedback.verdict} data-band="" data-clipped={clipped ? '' : undefined}>
         <div className="lx-band-inner">
           <div data-block="verdict" className="lx-band-verdict">
-            <div data-slot="verdict" className="flex items-start justify-between gap-2">
+            <div data-slot="verdict" className="lx-band-vline">
               <div className="min-w-0 flex-1">
                 {verdictNode}
                 {feedback.parts}
-                {nextNotes}
               </div>
+              {feedback.nextIn && (
+                <span className="lx-t-meta lx-band-next text-muted" data-testid="next-in">
+                  {feedback.nextIn}
+                </span>
+              )}
               {taskMenu && <div className="-my-2 -mr-2 flex-none">{taskMenu}</div>}
             </div>
-            {feedback.head && <div data-slot="head">{feedback.head}</div>}
-            {feedback.right && <div data-slot="right">{feedback.right}</div>}
-            {comparisonNode}
+            {hasSol && (
+              <div ref={solRef} className="lx-band-sol" data-slot="solution" data-clipped={clip.sol ? '' : undefined}>
+                {feedback.right && <div data-slot="right">{feedback.right}</div>}
+                {comparisonNode}
+                {choiceNode}
+              </div>
+            )}
           </div>
-          <div className="lx-band-why">
+          <div ref={whyBoxRef} className="lx-band-why" data-clipped={clip.why ? '' : undefined}>
             <ResultBlocks plan={whyOnly} area="trainer" ai={!!feedback.explanation?.ai} {...blocksSource} depth={feedback.depth} {...whyBefore} />
           </div>
-          {(sheetHas || feedback.act || tutorInBand) && (
+          {(sheetHas || feedback.act) && (
             <div className="lx-band-btns" data-slot="more">
               {sheetHas && (
                 <Button
-                  variant="quiet"
+                  variant="secondary"
                   onClick={() => {
-                    // Ab 1024 px mit Kontextspalte (Rahmen P2) steht „Mehr“ in der Spalte statt im Blatt (Hauptsitzung 28.10.2026).
+                    // Tablet ab 1024 px mit Kontextspalte (Rahmen P2): „Mehr“ steht in der Spalte statt im Blatt (Hauptsitzung 28.10.2026).
                     if (presentation === 'column' && contextPortalTarget()) {
                       if (ctxMore) {
                         closeContext('more');
@@ -506,7 +567,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
                   {t('bandMore')}
                 </Button>
               )}
-              {actNode}
+              {feedback.act && <div data-slot="act">{feedback.act}</div>}
             </div>
           )}
         </div>
@@ -527,12 +588,13 @@ export function ExerciseShell(props: ExerciseShellProps) {
       </section>
     );
   } else if (feedback) {
-    // Laptop (Split): die ganze Rückmeldung in der Seitenspalte. „Mehr“ klappt auf – oder öffnet die Kontextspalte des Rahmens.
-    const column = presentation === 'column' && !!contextPortalTarget();
+    // Laptop (Split): die ganze Rückmeldung in der Seitenspalte. „Mehr“ klappt IN dieser Spalte auf (Vorschau desk.js `dMoreBody`):
+    // nur EINE Spalte neben der Bühne, die Bühne bleibt breit (Punkt 2). Offen-Zustand im Band-Speicher, damit Esc ihn schließt.
+    const moreId = `${infoId}-more`;
     result = (
       <section key={resultKey} ref={resultRef} className="lx-card lx-result relative flex scroll-mt-4 flex-col gap-4 overflow-hidden p-4" data-testid="result" aria-label={t('exExplanationLabel')} data-verdict={feedback.verdict}>
         <div data-block="verdict" className="flex flex-col gap-4">
-          <div data-slot="verdict" className="lx-result-head -mx-4 -mt-4 px-4 py-4 pr-14">
+          <div data-slot="verdict" className="lx-result-head -mx-4 -mt-4 scroll-mt-4 px-4 py-4 pr-14">
             {verdictNode}
             {feedback.parts}
             {nextNotes}
@@ -550,29 +612,22 @@ export function ExerciseShell(props: ExerciseShellProps) {
         )}
         {hasMore && (
           <div data-slot="more" className="-mx-4 -mb-2 border-t border-line px-4">
-            {column ? (
-              <button
-                type="button"
-                className="lx-t-support -mx-1 flex min-h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-inline)] px-1 font-semibold text-muted hover:text-fg"
-                aria-expanded={ctxMore}
-                data-testid="explanation-more"
-                onClick={() => {
-                  if (ctxMore) {
-                    closeContext('more');
-                    return;
-                  }
-                  setCtxMore(true);
-                  openContext({ kind: 'more', title: t('bandMoreTitle'), node: foldContent, onClose: () => setCtxMore(false) });
-                }}
-              >
-                <span>{t('exMore')}</span>
-                <span aria-hidden="true">▸</span>
-              </button>
-            ) : (
-              <FoldToggle label={t('exMore')} onOpenChange={onFold} testId="explanation-more" openSignal={moreSignal}>
-                {foldContent}
-              </FoldToggle>
-            )}
+            <button
+              type="button"
+              className="lx-t-support -mx-1 flex min-h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-inline)] px-1 font-semibold text-muted hover:text-fg"
+              aria-expanded={moreOpen}
+              aria-controls={moreId}
+              data-testid="explanation-more"
+              onClick={() => setBandMoreOpen(!moreOpen)}
+            >
+              <span>{moreOpen ? t('exLess') : t('exMore')}</span>
+              <span aria-hidden="true" className="inline-block transition-transform" style={{ transform: moreOpen ? 'rotate(90deg)' : undefined }}>
+                ▸
+              </span>
+            </button>
+            <div id={moreId} hidden={!moreOpen} data-testid="more-body">
+              {moreOpen ? foldContent : null}
+            </div>
           </div>
         )}
         {taskMenu && <div className="absolute right-1 top-2">{taskMenu}</div>}
@@ -590,7 +645,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const main = (
     <>
       {/* UX-Prüfung W1: Kopf in EINER Zeile („●●○○ Lernt · Lücke“) mit ⓘ rechts; dahinter Zweck und Thema. */}
-      <div data-slot="status" className="flex items-center justify-between gap-3">
+      <div ref={statusRef} data-slot="status" className="flex scroll-mt-2 items-center justify-between gap-3">
         <ExerciseStatus {...status} />
         {!status.noInfo && !task.open && (
           <button
@@ -618,7 +673,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             )}
           </p>
         )}
-        {info && !task.open && (
+        {info && !task.open && !split && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
             {[status.topic, status.pattern].filter(Boolean).length > 0 && (
               <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>
@@ -686,6 +741,26 @@ export function ExerciseShell(props: ExerciseShellProps) {
     </ActionBar>
   );
 
+  // Tastenzeile (Punkt 3): ohne „? Regel“; T nur vor dem Prüfen, danach „Enter geht weiter“; „? alle Kürzel“ öffnet die Übersicht.
+  const keysText = keysHint ?? (feedback ? t('exKeysHintNext') : null);
+  const keysLine =
+    fine && keysHint !== null && (split || keysHint) ? (
+      <div className="lx-keys-line flex items-center justify-between gap-3" data-testid="keys-line">
+        <p className="lx-t-meta m-0 text-subtle" data-testid="keys-hint">
+          {/* Hinweis je Art: nur wo Optionen stehen, nennt er „1–4 / A–D wählen“ (Auswahl per CSS `:has`, dz2.css). */}
+          {keysText ?? (
+            <>
+              <span className="dz-kh-choice">{keyRange ? t('exKeysHintN', keyRange) : t('exKeysHint')}</span>
+              <span className="dz-kh-typed">{t('exKeysHintTyped')}</span>
+            </>
+          )}
+        </p>
+        <button type="button" className="lx-keys-open lx-t-meta" aria-keyshortcuts="?" data-testid="keys-open" onClick={() => useBand.setState((s) => ({ keysOpen: !s.keysOpen }))}>
+          {t('bandKeysAll')}
+        </button>
+      </div>
+    ) : null;
+
   return (
     <article
       ref={sharedRef}
@@ -704,31 +779,20 @@ export function ExerciseShell(props: ExerciseShellProps) {
         <div data-col="main" className="flex min-w-0 flex-col gap-4">
           {main}
           {split && bar}
+          {split && keysLine}
         </div>
         {split && (
-          <aside data-col="side" className="flex min-w-0 flex-col gap-4" aria-label={t('exSideLabel')}>
+          <aside ref={sideRef} data-col="side" className="flex min-w-0 scroll-mt-4 flex-col gap-4" aria-label={t('exSideLabel')}>
+            {info && !task.open && (
+              <div id={infoId} className="lx-inset" data-slot="info">
+                {purposeBody(reason)}
+              </div>
+            )}
             {feedback ? result : (side ?? <p className="lx-t-support lx-inset text-muted" data-testid="side-placeholder">{sideNote ?? t('exSidePlaceholder')}</p>)}
           </aside>
         )}
       </div>
-      {fine && keysHint !== null && (split || keysHint) && (
-        <div className="flex items-center justify-between gap-3">
-          <p className="lx-t-meta text-subtle" data-testid="keys-hint">
-            {/* Hinweis je Art: nur wo Optionen stehen, nennt er „A–D oder 1–4 wählen“ (Auswahl per CSS `:has`, dz2.css). */}
-            {keysHint ?? (
-              <>
-                <span className="dz-kh-choice">{keyRange ? t('exKeysHintN', keyRange) : t('exKeysHint')}</span>
-                <span className="dz-kh-typed">{t('exKeysHintTyped')}</span>
-              </>
-            )}
-          </p>
-          {split && (
-            <button type="button" className="lx-keys-open" aria-label={t('bandKeys')} title={t('bandKeys')} aria-keyshortcuts="?" data-testid="keys-open" onClick={() => useBand.setState((s) => ({ keysOpen: !s.keysOpen }))}>
-              ?
-            </button>
-          )}
-        </div>
-      )}
+      {!split && keysLine}
       {!split && bar}
     </article>
   );

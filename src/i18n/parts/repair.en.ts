@@ -12,7 +12,7 @@ export const repairEn = {
   rxInputLabel: 'Your new sentence',
   rxCheck: 'Check',
   rxSkip: 'Skip',
-  rxDontKnow: "I don't know",
+  rxDontKnow: 'I don’t know',
   rxDontKnowShown: 'No problem. Here is the answer; the sentence comes back tomorrow.',
   rxStepStart: 'Try again, but better – start',
   rxSkipAll: 'Not now',

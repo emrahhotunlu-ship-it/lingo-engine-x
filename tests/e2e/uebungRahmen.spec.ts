@@ -1,14 +1,31 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
-import { answerCurrent, answerOnly, forcedPatch, planPatch, writes } from './trainerHelpers';
+import { boot, bootAt, screen } from './fixtures';
+import { answerCurrent, answerOnly, DAY, dump, forcedPatch, planPatch, writes } from './trainerHelpers';
+import { typeInGap } from './learnHelpers';
 
 // Übungsleiste neben der Seitenleiste und Reiterwechsel mitten in der Übung (Relaunch Stufe 1 P3 nach dem Merge mit P2).
 // - ux N1 (Nora): ab 1024 px steht die Seitenleiste auch in Übungen; die Übungsleiste zeigt nur, was die Navigation nicht hat
-//   (kein Übersetzer, kein Zahnrad bzw. Einstellungs-Punkt; Claude bleibt, weil es die Aufgabe sieht).
-// - Reiterwechsel: die Übung (Überlagerung) endet sauber. Mit „Weiter“ Bestätigtes bleibt gezählt, eine nur geprüfte Antwort
-//   zählt nicht und schreibt nichts; „Starten“ macht an derselben Stelle weiter, die Runde endet genau einmal.
+//   (kein Übersetzer, kein Zahnrad bzw. Einstellungs-Punkt, kein zweites Claude-Symbol – Korrekturrunde Punkt 13).
+// - Reiterwechsel: die Übung (Überlagerung) endet sauber. Mit „Weiter“ Bestätigtes bleibt gezählt; eine geprüfte, noch nicht
+//   bestätigte Antwort wird beim Verlassen gebucht (Korrekturrunde Punkt 4, LS3: `left: true`), genau einmal; die Runde endet genau einmal.
 
 test.use({ viewport: { width: 1440, height: 900 } });
+
+type Doc = Record<string, unknown>;
+const logEntries = async (page: Page): Promise<Doc[]> => ((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? [];
+const leftEntries = async (page: Page, id: string): Promise<number> => (await logEntries(page)).filter((e) => e.id === id && e.left === true).length;
+
+/** Seite verbergen (App-Wechsel am Handy): `visibilitychange` mit `hidden`, danach wieder sichtbar. */
+async function hideAndShow(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+}
 
 async function start(page: Page) {
   const booted = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(6), ...forcedPatch() } } });
@@ -29,7 +46,9 @@ test('ab 1024 px: Übungsleiste ohne Übersetzer und Zahnrad, die Seitenleiste h
     await expect(page.getByTestId('side-settings')).toBeVisible();
     await expect(bar.getByTestId('open-translate')).toHaveCount(0);
     await expect(bar.getByTestId('open-settings')).toHaveCount(0);
-    await expect(bar.getByTestId('open-companion')).toBeVisible();
+    // Punkt 13: Claude nur in der Seitenleiste (gleicher Aufgaben-Kontext), nicht doppelt in der Leiste.
+    await expect(bar.getByTestId('open-companion')).toHaveCount(0);
+    await expect(page.getByTestId('side-claude')).toBeVisible();
     await bar.getByTestId('exercise-menu').click();
     await expect(page.getByRole('menu')).toBeVisible();
     await expect(page.getByTestId('open-settings')).toHaveCount(0);
@@ -59,8 +78,8 @@ test('Reiterwechsel mitten in der Übung: die Übung endet sauber, Erledigtes z�
   await page.getByTestId('tab-today').click();
   await expect(page.getByTestId('exercise')).toHaveCount(0);
   await expect(card).toContainText('1 von 6 erledigt');
-  // 2) Weiter über „Starten“; Wechsel mit offenem Ergebnis: gespeichert wird erst mit „Weiter“. Die nicht bestätigte Antwort
-  //    zählt nicht und schreibt nichts; dieselbe Karte kommt beim nächsten „Starten“ wieder (nichts doppelt, nichts halb).
+  // 2) Weiter über „Starten“; Wechsel mit offenem Ergebnis: die geprüfte Antwort wird beim Verlassen gebucht (LS3), genau einmal,
+  //    mit `left: true` im Protokoll; beim nächsten „Starten“ kommt die nächste Karte.
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
   const id = await page.getByTestId('exercise').getAttribute('data-card');
@@ -70,11 +89,13 @@ test('Reiterwechsel mitten in der Übung: die Übung endet sauber, Erledigtes z�
   await expect(page.getByTestId('result')).toHaveCount(0);
   await page.getByTestId('tab-today').click();
   await expect(page.getByTestId('exercise')).toHaveCount(0);
-  await expect(card).toContainText('1 von 6 erledigt');
-  expect((await writes(page)).slice(w0).filter((x) => x.path === `vocab/${id}`)).toEqual([]);
+  await expect(card).toContainText('2 von 6 erledigt');
+  await expect.poll(async () => (await writes(page)).slice(w0).filter((x) => x.path === `vocab/${id}`).length).toBeGreaterThan(0);
+  await expect.poll(async () => leftEntries(page, id ?? '')).toBe(1);
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
-  await expect(page.getByTestId('exercise')).toHaveAttribute('data-card', id ?? '');
+  await expect(page.getByTestId('exercise')).not.toHaveAttribute('data-card', id ?? '');
+  expect(await leftEntries(page, id ?? '')).toBe(1);
   // 3) Runde zu Ende: eine Abschlusskarte, auch nach einem weiteren Wechsel; danach Heute mit erledigter Karte ohne Knopf.
   for (let i = 0; i < 30; i++) {
     await expect(page.getByTestId('summary').or(page.locator('[data-step]')).first()).toBeVisible();
@@ -92,5 +113,47 @@ test('Reiterwechsel mitten in der Übung: die Übung endet sauber, Erledigtes z�
   await expect(doneCard).toBeVisible();
   await expect(doneCard.locator('button')).toHaveCount(0);
   await expect(page.getByTestId('summary')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('Seite verborgen mit offenem Ergebnis: sofort gebucht (`left`), die Aufgabe bleibt stehen; „Weiter“ bucht nicht noch einmal', async ({ page }) => {
+  const { errors } = await start(page);
+  const id = (await page.getByTestId('exercise').getAttribute('data-card')) ?? '';
+  await answerOnly(page);
+  await hideAndShow(page);
+  await expect.poll(async () => leftEntries(page, id)).toBe(1);
+  // Nicht weitergerechnet: das Ergebnis steht noch.
+  await expect(page.getByTestId('result')).toBeVisible();
+  await expect(page.getByTestId('exercise')).toHaveAttribute('data-card', id);
+  await page.getByTestId('next').click();
+  await expect(page.getByTestId('exercise')).not.toHaveAttribute('data-card', id);
+  await page.waitForTimeout(300);
+  expect((await logEntries(page)).filter((e) => e.id === id).length).toBe(1);
+  expect(errors).toEqual([]);
+});
+
+test('Grammatik: ✕ mit offenem Ergebnis bucht die Antwort genau einmal (`left`)', async ({ page }) => {
+  const OLD = Date.parse('2020-01-01T10:00:00+01:00');
+  const err = { q: 'It was the first time she ___ such a large account.', given: 'has handled', ans: 'had handled', t: OLD, due: OLD, box: 0, src: 'seed' };
+  const topic = { id: 'past-perfect', p: 0.5, anchor: 0.5, anchorD: '2026-09-15', n: 8, c: 6, due: OLD, last: OLD, recent: [1, 1, 1, 1], seen: [], seenText: [], hist: [{ d: '2026-09-15', p: 0.5 }], errors: [err] };
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { fake: { patch: { 'grammar/past-perfect': topic } } });
+  const item = page.getByTestId('gr-item');
+  await expect(item).toBeVisible();
+  const choice = item.getByTestId('choice').filter({ hasText: 'had handled' });
+  if (await choice.count()) await choice.first().click();
+  else await typeInGap(page, 'had handled');
+  await page.getByTestId('check').click();
+  await expect(page.getByTestId('result')).toBeVisible();
+  const grammarLeft = async () => (await logEntries(page)).filter((e) => e.k === 'g' && e.left === true).length;
+  const g0 = (await logEntries(page)).filter((e) => e.k === 'g').length;
+  expect(await grammarLeft()).toBe(0);
+  await hideAndShow(page);
+  await expect.poll(grammarLeft).toBe(1);
+  await expect(page.getByTestId('result')).toBeVisible();
+  await page.getByTestId('round-close').click();
+  await expect(page.getByTestId('gr-item')).toHaveCount(0);
+  await page.waitForTimeout(300);
+  expect(await grammarLeft()).toBe(1);
+  expect((await logEntries(page)).filter((e) => e.k === 'g').length).toBe(g0 + 1);
   expect(errors).toEqual([]);
 });

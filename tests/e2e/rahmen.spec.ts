@@ -360,7 +360,7 @@ for (const [width, height] of [
     // Ab 1024 px bleiben Schiene/Seitenleiste auch in Übungen stehen („keine Leiste“ gilt nur für die Handy-Leiste unten).
     await expect(page.getByTestId('tabbar')).toBeVisible();
     expect(meets(await boxOf(page, 'tabbar'), await boxOf(page, 'stage'))).toBe(false);
-    await page.getByTestId('open-companion').click();
+    await barAction(page, 'open-companion');
     await expect(page.getByTestId('frame')).toHaveAttribute('data-ctx', '');
     await expect(page.getByTestId('context-column')).toHaveAttribute('data-kind', 'claude');
     const win = await companionSettled(page);

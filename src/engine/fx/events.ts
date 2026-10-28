@@ -19,6 +19,8 @@ export type VerdictEvent = {
   /** Das Element der Antwort (Lücke, Option), für spätere Effekte am Ort. Darf fehlen. */
   el?: Element | null;
   area?: FxArea;
+  /** Mit Hilfe geschafft (Hinweisrunde, zweiter Versuch, Anfangsbuchstaben): zählt nicht für die Combo (Korrekturrunde P3, Punkt 9). */
+  help?: true;
 };
 
 type Handler = (e: LearnEvent) => void;

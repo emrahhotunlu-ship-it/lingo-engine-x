@@ -49,7 +49,7 @@ for (const vp of [
     test.use({ viewport: vp });
     test('Fenster und Pille verdecken die Aktionsleiste nicht', async ({ page }) => {
       await trainer(page);
-      await page.getByTestId('open-companion').click();
+      await barAction(page, 'open-companion');
       await settled(page);
       expect(await overlap(page)).toEqual([]);
       await page.getByTestId('companion-min').click();

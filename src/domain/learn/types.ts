@@ -111,6 +111,8 @@ export type GrammarAnswer = {
   free?: boolean;
   /** Antwort aus einer Tempo-Runde: im Protokoll `tp: true`, zählt nicht für K6 (P44-Nachbesserung). */
   tempo?: boolean;
+  /** Korrekturrunde P3 (Punkt 4, LS3): geprüft, aber nicht mit „Weiter“ bestätigt – beim Verlassen gebucht. Im Protokoll `left: true`. */
+  left?: true;
   /** Zweite Sicht einer schon gesehenen Aufgabe: hebt BKT nie, setzt das Bit „ohne Hilfe“ nicht. */
   again?: boolean;
   /** Zahl der Wahlmöglichkeiten für die Ratekorrektur im BKT (z. B. `pair` = 6, `err` Fundort = Wortzahl); sonst aus der Aufgabenart. */

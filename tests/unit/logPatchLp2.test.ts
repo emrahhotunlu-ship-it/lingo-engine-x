@@ -51,3 +51,18 @@ describe('Protokoll: um', () => {
     expect(unitSecondsPatch({}, { block: 5, s: 99_999, dev: 't' })).toEqual({ um: { 5: { s: UM_MAX_SEC, dev: 't' } } });
   });
 });
+
+// Relaunch Stufe 1 P3, Korrekturrunde Punkt 4 (LS3): beim Verlassen gebuchte Antworten tragen `left: true`, sonst fehlt das Feld.
+describe('Protokoll: left', () => {
+  it('Vokabel, Wendung und Grammatik tragen left nur, wenn die Antwort beim Verlassen gebucht wurde', () => {
+    const v = { ...base, kind: 'vocab', id: 'w1', ex: 'cloze', grade: 3, given: 'a', ans: 'a' } as unknown as AnswerEvent;
+    expect(logEntry(v)).not.toHaveProperty('left');
+    expect(logEntry({ ...v, left: true })).toMatchObject({ left: true, k: 'v' });
+    const c = { ...base, kind: 'chunk', id: 'c1', ex: 'cloze', grade: 2, given: 'a', ans: 'a', q: 'q' } as unknown as AnswerEvent;
+    expect(logEntry({ ...c, left: true })).toMatchObject({ left: true, type: 'chunk' });
+    const task = { key: 'k', topic: 'passive', type: 'gap', prompt: 'p', answer: 'a', accepted: [], options: null, hint: null, expl: { de: null, en: null }, src: 'seed', ref: null, errorT: null };
+    const g = { t: 1, lang: 'de', grade: 3, given: 'a', ms: 10, ctx: 'duty', verdict: 'correct', task } as unknown as GrammarAnswer;
+    expect(grammarLogEntry(g)).not.toHaveProperty('left');
+    expect(grammarLogEntry({ ...g, left: true })).toMatchObject({ left: true, k: 'g' });
+  });
+});

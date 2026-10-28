@@ -12,6 +12,8 @@ import { ROUND_SPARK_MAX } from '../../domain/moments/detect';
 /** Richtige Antworten in Folge (nur Darstellung, nichts wird gespeichert). */
 let combo = 0;
 let lastVerdictAt = 0;
+/** Die letzte gezählte Meldung hat die Combo erhöht (für die Nachmeldung „mit Hilfe“ derselben Prüfung). */
+let lastGrew = false;
 type Engine = typeof Particles;
 let engine: Promise<Engine> | null = null;
 const load = (): Promise<Engine> => (engine ??= import('./particles'));
@@ -35,19 +37,35 @@ export function getCombo(): number {
   return combo;
 }
 
+/** Combo-Stufe am Wurzelelement (Darstellung). */
+function paintCombo(): void {
+  if (typeof document === 'undefined') return;
+  const lvl = comboLevel(combo);
+  if (lvl > 0) document.documentElement.dataset.combo = String(lvl);
+  else delete document.documentElement.dataset.combo;
+}
+
 export function playMoment(e: LearnEvent): void {
   if (e.k === 'verdict') {
     // Zwei Meldungen desselben Prüfens (Lücke und Urteilszeile) zählen einmal.
     const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
-    if (now - lastVerdictAt < 300) return;
-    lastVerdictAt = now;
-    if (e.v === 'ok') combo++;
-    else if (e.v === 'wrong' || e.v === 'dontKnow') combo = 0;
-    if (typeof document !== 'undefined') {
-      const lvl = comboLevel(combo);
-      if (lvl > 0) document.documentElement.dataset.combo = String(lvl);
-      else delete document.documentElement.dataset.combo;
+    if (now - lastVerdictAt < 300) {
+      // Die Lücke meldet zuerst (ohne Wissen um Hilfe), die Urteilszeile gleich danach mit `help`: dann zählt dieses Prüfen nicht mit.
+      if (e.v === 'ok' && e.help && lastGrew) {
+        combo = Math.max(0, combo - 1);
+        lastGrew = false;
+        paintCombo();
+      }
+      return;
     }
+    lastVerdictAt = now;
+    lastGrew = false;
+    // Mit Hilfe geschafft (Punkt 9): richtig, aber die Combo wächst nicht. „Lösung gezeigt“ (Punkt 10) beendet sie wie „falsch“.
+    if (e.v === 'ok' && !e.help) {
+      combo++;
+      lastGrew = true;
+    } else if (e.v === 'wrong' || e.v === 'dontKnow') combo = 0;
+    paintCombo();
     if (e.v !== 'ok' || effectiveLevel() !== 'full') return;
     // Nach dem Zeichnen messen (das Urteil steht dann im Bild).
     requestAnimationFrame(() => {
@@ -101,4 +119,5 @@ export const SPARK_MAX = 16;
 export function resetMoments(): void {
   combo = 0;
   lastVerdictAt = 0;
+  lastGrew = false;
 }
