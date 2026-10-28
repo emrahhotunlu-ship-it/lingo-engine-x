@@ -30,6 +30,8 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   /^(exName_say_it|pxWw)/,
   // Relaunch Stufe 1, P2 S1-SHELL (stufe1-plan.md §6.2/§6.3): die Navigation führt unter „Praxis“ Sprechen · Hören · Lesen (frühere Reiter/Seiten).
   /^sh(Speak|SpeakSub|Listen|Read|ReadSub|PracticeMore)$/,
+  // Relaunch Stufe 1, P7 S1-DIKTAT: die Erfolgsmeldung der Laptop-Diktat-Probe nennt die Wörter-Übung „Sag es“ (s. o. exName_say_it).
+  /^dkOkSub$/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,
 ];
