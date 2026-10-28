@@ -183,8 +183,9 @@ describe('Gegenproben: absichtliche Fremdimporte schlagen an', () => {
     const eslint = new ESLint({ cwd: ROOT });
     const patternsFor = async (file: string): Promise<Array<{ regex: string }>> => {
       const cfg = (await eslint.calculateConfigForFile(file)) as { rules?: Record<string, unknown> };
-      const rule = cfg.rules?.['no-restricted-imports'] as [unknown, { patterns?: Array<{ regex: string }> }] | undefined;
-      return rule?.[1]?.patterns ?? [];
+      const rule = cfg.rules?.['no-restricted-imports'] as [unknown, { patterns?: Array<{ regex: string; importNames?: string[] }> }] | undefined;
+      // Muster mit `importNames` sperren nur einzelne Namen (z. B. P5 S1-ZAHL), nicht den ganzen Pfad – sie zählen hier nicht.
+      return (rule?.[1]?.patterns ?? []).filter((p) => !p.importNames);
     };
     const hits = (patterns: Array<{ regex: string }>, spec: string): boolean => patterns.some((p) => new RegExp(p.regex).test(spec));
 
