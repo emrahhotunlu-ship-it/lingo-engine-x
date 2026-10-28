@@ -1325,6 +1325,12 @@ html[data-actionbar] #main {
       column-gap: 1.5rem;
     }
   }
+  /* Ab 1920 wächst die Schrift (html 112,5 %, ab 2400 125 %): die Ergebnisspalte wächst mit, sonst bricht die Urteilszeile ab. */
+  @media (min-width: 1920px) {
+    .lx-split[data-split] {
+      --lx-res-w: 25rem;
+    }
+  }
 }
 
 /* Bausteine: feste Plätze (gleich hoch) und gestrichelte Umrisse im Vorrat, damit beim Antippen nichts springt (R9). */

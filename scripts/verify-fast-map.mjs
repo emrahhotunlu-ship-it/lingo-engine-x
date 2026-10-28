@@ -171,6 +171,14 @@ export const RULES = [
   { prefix: 'src/features/today/DayCard', specs: ['start.spec.ts', 'perf.spec.ts', 'breiten.spec.ts'] },
   { prefix: 'src/features/system/HomeSkeleton', specs: ['start.spec.ts', 'perf.spec.ts', 'platform.spec.ts'] },
   { prefix: 'tests/e2e/start', specs: ['start.spec.ts'] },
+  // Relaunch P7 S1-DIKTAT: Laptop-Diktat-Probe (Einstellungen › Diagnose), Hinweiszeile bei „Sag es“, „Am Handy sprechen“.
+  { prefix: 'src/features/settings/DictationProbe', specs: ['diktat.spec.ts', 'settings.spec.ts'] },
+  { prefix: 'src/features/settings/DictationEntry', specs: ['diktat.spec.ts', 'settings.spec.ts'] },
+  { prefix: 'src/ui/exercise/DictationHint', specs: ['diktat.spec.ts'] },
+  { prefix: 'src/domain/dictation/', specs: ['diktat.spec.ts'] },
+  { prefix: 'src/i18n/parts/diktat', specs: ['diktat.spec.ts'] },
+  { prefix: 'src/features/vocab/TrainerScreen', specs: ['diktat.spec.ts'] },
+  { prefix: 'tests/e2e/diktat', specs: ['diktat.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

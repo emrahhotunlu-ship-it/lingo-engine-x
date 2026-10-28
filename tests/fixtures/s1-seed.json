@@ -5,14 +5,15 @@
     "histExtra: an jeden älteren hist-Eintrag der Übungskarten gehängt (P4 S1-ZEIT: fk/ms/in). logExtra: an einen älteren Log-Eintrag des Tages (P4: fk/in; ms gibt es schon; LS3: left = beim Verlassen gebucht).",
     "P4 S1-ZEIT endgültig: fk und ms in ms, auf 10 gerundet, höchstens 600000; in ist t (getippt), d (diktiert) oder c (gewählt); mx 1 gemischt, pl Prompt-Zeichen, n 2 zweiter Versuch, bg 1 Seite verborgen, st Stufe vorher. Im Log zusätzlich sm (Senden ohne Claude-Wartezeit, nur wenn ≠ ms).",
     "docs: Dokument-Felder, flach je Dokument über den Seed gelegt (InstallOptions.patch). theme.a (P1), dk (P7), app/today (P6).",
-    "P4, P6 und P7 ergänzen hier ihre endgültigen Felder, sobald es sie gibt."
+    "P4, P6 und P7 ergänzen hier ihre endgültigen Felder, sobald es sie gibt.",
+    "P7 S1-DIKTAT endgültig: dk = { v: 1, mac?: { ok, t, sig }, win?: { ok, t, sig } }, kleiner als 200 Byte; sig nur Betriebssystem-Browser (macos-chrome), keine Gerätekennung."
   ],
   "histExtra": { "fk": 1840, "ms": 5230, "in": "t", "mx": 1, "pl": 58, "n": 2, "bg": 1, "st": 3 },
   "logExtra": { "fk": 2210, "in": "d", "mx": 1, "sm": 4320, "pl": 58, "n": 2, "bg": 1, "st": 3, "left": true },
   "docs": {
     "app/profile": {
       "theme": { "m": "dark", "p": "ocean", "a": "amber" },
-      "dk": { "v": 1, "mac": { "ok": true, "t": 1789920000000, "sig": "macos-chrome" } }
+      "dk": { "v": 1, "mac": { "ok": true, "t": 1789920000000, "sig": "macos-chrome" }, "win": { "ok": false, "t": 1789923600000, "sig": "windows-edge" } }
     },
     "app/today": {
       "v": 1,

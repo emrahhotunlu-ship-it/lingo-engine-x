@@ -25,6 +25,7 @@ import { VoiceSection } from './VoiceSection';
 import { LearningSection, SoundSection } from './LearningSection';
 import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
+import { DictationEntry } from './DictationEntry';
 import { diagText } from './diagText';
 import { FxFramesLine } from './EffectsSection';
 import { perfText, readPerfMarks, type PerfName } from './perfMarks';
@@ -331,6 +332,7 @@ function Diagnostics({ open }: { open: boolean }) {
       <Fold title={t('settingsDiagnostics')} meta={t('diagVersion', { v: build })} testId="diag" toggleTestId="diag-toggle">
         <div className="flex flex-col gap-3">
           {COMPACT_ENABLED && size.compactable && <CompactOffer />}
+          <DictationEntry />
           <dl className="flex flex-col">
             {rows.map(([k, v]) => (
               <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5" data-testid={k === t('diagDocuments') ? 'diag-capacity' : k === t('diagProfileSize') ? 'diag-profile-size' : undefined}>

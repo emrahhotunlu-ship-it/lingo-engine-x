@@ -44,6 +44,7 @@ import { themeDe } from './parts/theme.de';
 import { bandDe } from './parts/band.de';
 import { shellDe } from './parts/shell.de';
 import { startDe } from './parts/start.de';
+import { diktatDe } from './parts/diktat.de';
 
 export const de = {
   ...aiDe,
@@ -110,6 +111,7 @@ export const de = {
   ...bandDe,
   ...shellDe,
   ...startDe,
+  ...diktatDe,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3De,
   appName: 'Lingo-Engine X',

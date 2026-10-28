@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { layoutProblems, type Lang, type Theme } from './fixtures';
 import { bootAt } from './fixtures';
-import { answerGrammar, grammarKey, nextItem } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openBandMore } from './learnHelpers';
 import { diagCalls, diagPatch, dumpDb, openDiagnose, setDiagMode, WEEK } from './diagnoseHelpers';
 
 // P49 (Lernplattform 3.0, KI-Tutor T5): Karte „Häufigste Verwechslungen · 28 Tage“ (ohne Claude immer da), Block „Diagnose von Claude“ (einmal je
@@ -255,6 +255,8 @@ test.describe('Handy 390: Verhalten', () => {
     // Ohne Nutzeraufruf (Zustimmung unbekannt) würde der Hintergrund schweigen: erst eine falsche Antwort und „Erklär mir meine Antwort“.
     await expect(page.getByTestId('gr-item')).toBeVisible();
     await answerGrammar(page, solve, { wrong: true });
+    // Am Handy steht „Erklär mir meine Antwort“ seit P3 im Mehr-Blatt des Bands.
+    await openBandMore(page);
     await page.getByTestId('tutor-ask').click();
     await page.getByTestId('tutor-go').click();
     await expect(page.getByTestId('tutor-text')).toBeVisible();

@@ -42,6 +42,7 @@ import { themeEn } from './parts/theme.en';
 import { bandEn } from './parts/band.en';
 import { shellEn } from './parts/shell.en';
 import { startEn } from './parts/start.en';
+import { diktatEn } from './parts/diktat.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -107,6 +108,7 @@ export const en: Record<MessageKey, string> = {
   ...bandEn,
   ...shellEn,
   ...startEn,
+  ...diktatEn,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3En,
   appName: 'Lingo-Engine X',

@@ -20,6 +20,8 @@ import { usePlayerSkip } from '../../app/shell/Player';
 import { cardShown } from './cardMark';
 import { useShallow } from 'zustand/react/shallow';
 import { ExerciseTop } from '../learn/ui';
+import { holdResume } from '../../app/resume';
+import { toast } from '../../ui/Toast';
 
 // Vokabeltrainer: eine Karte zur Zeit. Kartenwechsel ohne Warte-Animation (leistung.md §4 Nr. 4): die neue Karte steht sofort da und rückt aus dem
 // Kartenstapel nach vorn, die alte geht als tote Kopie nach links (`CardStack`, P54; nie ein Leerbild, Stufe „Aus“ ohne Bewegung). Jede Karte in einer
@@ -48,6 +50,13 @@ export function TrainerScreen() {
     leaveSession();
     void flush();
     back();
+  };
+
+  // P7 S1-DIKTAT: „Am Handy sprechen“ = „Pause, später weiter“ (wie ✕ in `ExerciseTop`: Stand sichern, schließen, ruhig bestätigen).
+  const pause = () => {
+    const kept = holdResume();
+    leave();
+    if (kept) toast(t('nbShSaved'));
   };
 
   useHotkeys({ escape: leave }, api.isInput);
@@ -120,7 +129,7 @@ export function TrainerScreen() {
             ) : exercise?.ex === 'flip' ? (
               <FlipCard key={`${exercise.card.key}-${step}`} exercise={exercise} again={item?.reason === 'again'} onDone={onDone} behind={queue.length - pos - 1} />
             ) : exercise ? (
-              <ExerciseView exercise={exercise} knownWords={knownWords} again={item?.reason === 'again'} onDone={onDone} />
+              <ExerciseView exercise={exercise} knownWords={knownWords} again={item?.reason === 'again'} onDone={onDone} {...(round === 'extra' ? {} : { onPause: pause })} />
             ) : null}
           </StepBoundary>
         )}
