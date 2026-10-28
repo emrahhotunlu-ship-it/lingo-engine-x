@@ -14,6 +14,7 @@ export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
 export { EXTRA_ROUND_MAX, atlasCounts, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, dueLineSplit, reviewAll, reviewFigures, reviewToday, todaySummary, vocabEstimate, wordsToday, type TodaySummary } from './today';
 // Relaunch Stufe 1 P5 S1-ZAHL: Tagesring und Heute-Zusammenfassung (Quelle für Heute und später `app/today`).
 export { RING_OPEN_MAX, ringFills, ringShare } from './ring';
+export { legacyDutyMinutes } from '../plan/buildPlan';
 export { PATTERN_STATES, patPush, patternState, patternStateNo, patsOf, readPatEntry, topicStateFromPatterns, type PatEntry, type PatternState } from './pattern';
 export { EFFECT_RULES, learningEffect, motivationSignals, type LearningEffect, type MotivationSignals, type Rate } from './effect';
 export { nextGoal, type GoalId, type NextGoal } from './goals';

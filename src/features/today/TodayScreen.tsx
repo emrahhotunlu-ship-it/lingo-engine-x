@@ -19,7 +19,6 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { addDays } from '../../domain/date';
 import { dateLabelOf } from './dateLabel';
 import { TodaySkeletonCard } from '../system/HomeSkeleton';
-import { dutyChannelMinutes } from '../../domain/plan/buildPlan';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
@@ -41,7 +40,7 @@ import { TabTitle } from '../system/Chrome';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
-import { buildTrainCards, ringFills, todaySummary } from '../../domain/metrics';
+import { buildTrainCards, legacyDutyMinutes, ringFills, todaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
@@ -116,7 +115,7 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
       why = whyText(plan.why[0], t, lang) || t('why_whyRotation');
       whyKey = (plan.why[0] ?? [['whyRotation']]).map((w) => w[0]).join(',');
     }
-    const min = d.id === 'review' ? 10 : d.id === 'lesson' ? 12 : dutyChannelMinutes(d.id.slice(3));
+    const min = legacyDutyMinutes(d.id);
     return {
       id: d.id,
       name: dutyLabel(d.id, t),

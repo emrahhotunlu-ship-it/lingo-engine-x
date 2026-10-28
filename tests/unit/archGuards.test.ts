@@ -40,7 +40,7 @@ describe('Architektur: eine Quelle je Zahl', () => {
 
 // Relaunch Stufe 1 P5 S1-ZAHL (docs/relaunch/stufe1-plan.md §5.2): Anzeige-Dateien rechnen keine Zahl selbst. Dieselbe Liste wie
 // `SCREEN_NUMBER_NAMES` in eslint.config.js; die Lern-Logik (GrammarItem, c1x, drills, generate) ruft `topicP` weiter direkt.
-const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
+const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyChannelMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
 const isDisplay = (rel: string): boolean => (rel.startsWith('features/') && /Screen\.tsx$/.test(rel)) || rel.startsWith('features/progress/') || rel.startsWith('features/vocab/hub/') || rel.startsWith('ui/');
 
 describe('Architektur: Anzeige-Zahlen nur aus domain/metrics (P5 S1-ZAHL)', () => {

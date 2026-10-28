@@ -150,11 +150,14 @@ export function buildPlan(i: { today: string; existing: unknown; round: RoundPla
 export const dutyChannelMinutes = (ch: string): number =>
   isUnitDutyChannel(ch) ? UNIT_CH_MINUTES[ch] : (STORED_DUTY_CHANNELS as readonly string[]).includes(ch) ? DUTY_CH_MINUTES[ch as DutyChannel] : 5;
 
+/** Minuten eines Pflichtschritts im alten Plan ohne Tageseinheit: Wiederholen 10, Lektion 12, Kanal nach `dutyChannelMinutes`. */
+export const legacyDutyMinutes = (id: string): number => (id === 'review' ? 10 : id === 'lesson' ? 12 : dutyChannelMinutes(id.slice(3)));
+
 /** Minuten der Pflicht laut Plan (D4, P-06; Tageseinheit: eingefrorene Minuten). */
 export function dutyMinutes(p: StoredPlan): number {
   if (p.u) return p.u.min;
   let m = 0;
-  for (const d of p.duty) m += d === 'review' ? 10 : d === 'lesson' ? 12 : dutyChannelMinutes(d.slice(3));
+  for (const d of p.duty) m += legacyDutyMinutes(d);
   return m;
 }
 

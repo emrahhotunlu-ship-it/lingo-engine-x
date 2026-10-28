@@ -56,7 +56,7 @@ const STORE_TEMP = [
 /** Ordner der Bereiche, die der Umbau „Fokus Wörter und Grammatik“ gelöscht hat (Entfernungs-Audit, tests/unit/removalAudit.test.ts). */
 const GONE_AREAS = 'input|read|listen|discover|write|business|pron|inbox|fluency|meeting|tones|say|compare';
 /** Rechenbausteine, die Anzeige-Dateien nicht selbst importieren (P5 S1-ZAHL; tests/unit/archGuards.test.ts nennt dieselbe Liste). */
-const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
+const SCREEN_NUMBER_NAMES = ['minutesLeft', 'dutyMinutes', 'dutyChannelMinutes', 'dutyFills', 'newQuotaLeft', 'topicP'];
 
 export default defineConfig(
   {

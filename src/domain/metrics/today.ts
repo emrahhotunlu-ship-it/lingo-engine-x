@@ -14,7 +14,7 @@ import { lemmaOf } from '../srs/context';
 import { pickDissimilar } from '../srs/similar';
 import { C1_MARK, vocabGoal } from '../vocab/goal';
 import type { DutyState, StoredPlan } from '../plan/types';
-import { dutyChannelMinutes, dutyMinutes } from '../plan/buildPlan';
+import { dutyMinutes, legacyDutyMinutes } from '../plan/buildPlan';
 import { minutesLeft, unitRows } from '../unit/rows';
 import { ringFills, ringShare } from './ring';
 import type { TrainCard } from '../srs/types';
@@ -104,6 +104,8 @@ export const festNow = (cards: readonly TrainCard[], nowMs?: number): number => 
 // ------------------------------------------------------------------ Tag
 
 /**
+ * @deprecated Ohne Aufrufer in `src`; Heute rechnet über `todaySummary` (P5 S1-ZAHL, learning-scientist H2). Zählt über `plan.duty`
+ * mit `u.b[k]`: bei einem gekürzten Plan (`domain/plan/retire.ts`) weicht `blocks` von der früheren Zählung über `u.b` ab.
  * Was vom Tag noch offen ist: Zahl der offenen Schritte und ihre Restminuten. `done` = erledigte Blocknummern (1 bis 5).
  * Seit P5 S1-ZAHL dieselbe Rechnung wie die Anzeige (`todaySummary().rest`, `minutesLeft`): mit `review` (Fortschritt der Wiederholung)
  * zählt der offene Wiederholblock anteilig, ohne ihn voll, wie bisher.
@@ -121,7 +123,10 @@ export type TodaySummary = {
   rest: number;
   /** Füllung je Pflichtschritt (Tagesring), Reihenfolge wie `items`. */
   fills: number[];
-  /** Ein Wert für den ganzen Ring (0–1, `ringShare`). */
+  /**
+   * Ein Kurzwert für den ganzen Ring (0–1, `ringShare`), nur für Diagnose und Zusammenfassungen. Der Tagesring wird IMMER aus `fills`
+   * gezeichnet (je Bogen, sonst springt er zwischen Startbild und geladenem Zustand); `app/today` speichert `fills`, `done`, `total`, `rest`.
+   */
   ring: number;
   /** Erledigte und alle Pflichtschritte („x von 4“). */
   done: number;
@@ -132,7 +137,7 @@ export type TodaySummary = {
  * Die Zahlen von Heute aus Plan und Pflichtzustand (P5 S1-ZAHL): rein, ohne React und ohne Datenbank. Quelle für den Bildschirm Heute
  * und später für `app/today` (P6). `items` = `deriveToday(...).duties.items`.
  * Restminuten: ohne Plan 0. Einheit (`u`) = `minutesLeft(unitRows(...))`. Alter Plan = Minuten der offenen Schritte (Wiederholen 10,
- * Lektion 12, Kanal nach `dutyChannelMinutes`); ist das 0, die Planminuten (`dutyMinutes`), wie bisher auf dem Bildschirm.
+ * Lektion 12, Kanal nach `dutyChannelMinutes`, alles über `legacyDutyMinutes`); ist das 0, die Planminuten (`dutyMinutes`), wie bisher auf dem Bildschirm.
  */
 export function todaySummary(i: { plan: StoredPlan | null; items: readonly DutyState[] }): TodaySummary {
   const { plan, items } = i;
@@ -140,7 +145,7 @@ export function todaySummary(i: { plan: StoredPlan | null; items: readonly DutyS
   if (plan) {
     if (plan.u) rest = minutesLeft(unitRows(plan, items) ?? []);
     else {
-      for (const d of items) if (d.state !== 'done') rest += d.id === 'review' ? 10 : d.id === 'lesson' ? 12 : dutyChannelMinutes(d.id.slice(3));
+      for (const d of items) if (d.state !== 'done') rest += legacyDutyMinutes(d.id);
       rest = rest || dutyMinutes(plan);
     }
   }
