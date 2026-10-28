@@ -216,7 +216,7 @@
   border-radius: 999px;
   border: 0;
   background: var(--lx-btn-grammar, var(--lx-ch-grammar));
-  color: #fff;
+  color: var(--act-fg);
   cursor: pointer;
   box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--lx-ch-grammar) 80%, transparent);
   transition: transform 120ms ease;

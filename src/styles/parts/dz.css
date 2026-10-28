@@ -3,30 +3,16 @@
    Bewegung: nur transform, opacity, clip-path. Alles hängt an `data-fx` (full · calm · off) und an prefers-reduced-motion
    (die globale Sofort-Regel in index.css gilt weiter). Bei `off` steht sofort der Endzustand. */
 
-/* ------------------------------------------------------------------ Tokens (EE §8.2, §8.3) */
+/* ------------------------------------------------------------------ Tokens (EE §8.2, §8.3)
+   Tiefe, Glanz, Schein und Funken zeigen seit dem Relaunch auf die Grund-Tokens (src/styles/bridge.css); hier bleibt nur die Feldstärke. */
 :root,
 :root[data-theme='dark'] {
-  --lx-elev-2: 0 1px 0 0 rgba(255, 255, 255, 0.06) inset, 0 18px 48px -18px rgba(0, 0, 0, 0.75);
-  --lx-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0) 42%);
-  --lx-glow-ok: rgba(16, 185, 129, 0.45);
-  --lx-spark-1: #34d399;
-  --lx-spark-2: #ecfdf5;
   --lx-field-strength: 16%;
 }
 :root[data-theme='dim'] {
-  --lx-elev-2: 0 1px 0 0 var(--lx-edge) inset, 0 18px 44px -18px rgba(0, 0, 0, 0.6);
-  --lx-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 42%);
-  --lx-glow-ok: rgba(16, 185, 129, 0.35);
-  --lx-spark-1: #4ade9f;
-  --lx-spark-2: #ecfdf5;
   --lx-field-strength: 12%;
 }
 :root[data-theme='light'] {
-  --lx-elev-2: 0 1px 0 0 var(--lx-edge) inset, 0 18px 40px -20px rgba(15, 23, 42, 0.3);
-  --lx-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 42%);
-  --lx-glow-ok: rgba(4, 120, 87, 0.22);
-  --lx-spark-1: #047857;
-  --lx-spark-2: #10b981;
   --lx-field-strength: 10%;
 }
 
@@ -98,7 +84,7 @@
 
 /* ------------------------------------------------------------------ Hauptknopf (EE B1): Lichtkante oben, in Wörtern/Grammatik ein Schein in der Bereichsfarbe */
 button.lx-btn-primary:not(:disabled) {
-  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.28) inset;
+  box-shadow: none;
 }
 
 

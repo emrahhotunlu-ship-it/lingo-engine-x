@@ -18,7 +18,7 @@
   animation-duration: 720ms;
 }
 :root[data-fx='full'][data-combo='3'] [data-testid='exercise-bar'] [role='progressbar'] > div {
-  background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  background-image: linear-gradient(90deg, transparent, var(--line-2), transparent);
   background-size: 40% 100%;
   background-repeat: no-repeat;
   animation: dz-sheen 900ms ease-out 1 both;
@@ -230,18 +230,14 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
   width: max(100% + 0.3em, 2rem);
   transform: translateX(-50%);
 }
-/* Laptop: Reiterleiste deckend mit Unschärfe dahinter. */
+/* Laptop: Reiterleiste deckend (ohne Weichzeichner, Relaunch P1). */
 @media (min-width: 768px) {
   .dz-tabbar {
     background: var(--lx-surface-solid);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    backdrop-filter: blur(16px) saturate(1.2);
   }
 }
 
 /* UX-Audit U1: Der Übungskopf (✕, Fortschritt, Claude) bleibt beim Bildlauf oben stehen. Deckend in der Hintergrundfarbe, damit der Text darunter nicht durchscheint. */
 .lx-exbar {
-  background: color-mix(in srgb, var(--lx-bg) 92%, transparent);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: var(--lx-bg);
 }

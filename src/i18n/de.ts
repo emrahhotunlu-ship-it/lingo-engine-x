@@ -40,6 +40,7 @@ import { wxDe } from './parts/wx.de';
 import { hxDe } from './parts/hx.de';
 import { fxDe } from './parts/fx.de';
 import { awDe } from './parts/aw.de';
+import { themeDe } from './parts/theme.de';
 
 export const de = {
   ...aiDe,
@@ -100,6 +101,8 @@ export const de = {
   ...hxDe,
   ...fxDe,
   ...awDe,
+  // Relaunch Stufe 1: Akzentfarbe (P1 S1-TOK)
+  ...themeDe,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3De,
   appName: 'Lingo-Engine X',

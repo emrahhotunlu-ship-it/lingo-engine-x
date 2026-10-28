@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="de" data-theme="dark">
+<html lang="de" data-theme="dark" data-accent="iris">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#0B0F19" />
+    <meta name="theme-color" content="#0C0E14" />
     <title>Lingo-Engine X</title>
     <!-- U2 Start-Bild: Darstellung vor dem ersten Zeichnen wie die App (src/app/settings.ts): gespeicherte Wahl, „auto“ = System, sonst Dunkel. -->
     <script>
@@ -13,18 +13,18 @@
         try {
           var s = window.localStorage;
           var t = s.getItem('lx:theme');
-          var p = s.getItem('lx:palette');
+          var a = s.getItem('lx:accent');
           if (t === 'auto') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
           if (t !== 'dark' && t !== 'dim' && t !== 'light') t = 'dark';
-          if (p !== 'sage' && p !== 'ocean' && p !== 'plum' && p !== 'graphite') p = 'sage';
+          if (a !== 'amber') a = 'iris';
           d.setAttribute('data-theme', t);
-          d.setAttribute('data-palette', p);
+          d.setAttribute('data-accent', a);
           d.lang = s.getItem('lx:lang') === 'en' ? 'en' : 'de';
           d.style.colorScheme = t === 'light' ? 'light' : 'dark';
           var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', t === 'light' ? '#F5F6FA' : t === 'dim' ? '#1A2030' : '#0B0F19');
+          if (m) m.setAttribute('content', t === 'light' ? '#F5F7FA' : t === 'dim' ? '#282A2F' : '#0C0E14');
         } catch (e) {
-          d.setAttribute('data-palette', 'sage');
+          d.setAttribute('data-accent', 'iris');
         }
         // Datum im Start-Bild: im Kopf vor dem Stylesheet, sonst wartet es im Mehr-Datei-Build auf das CSS (perf.spec U2).
         try {

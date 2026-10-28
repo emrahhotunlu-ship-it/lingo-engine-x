@@ -14,6 +14,9 @@
 @import './parts/r6a.css';
 @import './parts/r6b.css';
 @import './parts/u3.css';
+@import './parts/shell.css';
+@import './parts/band.css';
+@import './bridge.css';
 
 /* ==========================================================================
    Lingo-Engine X · Design-System (Kap. 8)
@@ -35,280 +38,139 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* ---------------------------------------------------------------- Tokens */
+/* ---------------------------------------------------------------- Tokens (Relaunch Stufe 1, P1 S1-TOK)
+   Quelle: Vorschau `docs/relaunch/vorschau/src/style.css` (Plan docs/relaunch/stufe1-plan.md §6.1). Feste OKLCH-Werte je Modus und
+   Akzent, keine rechnerische Ableitung (Plan P1, Hinweis H5). Dunkel ist Standard (bare :root, Entscheidung 27.10.2026).
+   Modi über [data-theme] (dark · dim · light; die Vorschau nennt Gedämpft „muted“), Handlungsfarbe über [data-accent] (iris Standard · amber).
+   Nur in diesen Blöcken stehen Farbwerte (tests/unit/noColorLiterals.test.ts). Die alten Namen --lx-* und --color-* sind Aliase in
+   src/styles/bridge.css. tests/unit/contrast.test.ts rechnet jeden Wert nach (3 Modi × 2 Akzente).
+   Ergänzungen gegenüber der Vorschau (die App braucht sie, die Vorschau nicht): --ok-soft, --near-soft, --bad-soft, --words-soft (Füllung hinter
+   Schrift) und --fg-on (Schrift auf einer Zustandsfarbe). --act-fg ist für Iris dunkel statt hell: Weiß auf Iris erreicht nur 3,7:1
+   (0,62) bzw. 4,0:1 (0,6), dunkle Schrift auf Iris 0,62 dagegen 5,15:1 (Messung im Kontrasttest).
+   Weitere Abweichungen von der Vorschau nur, wo 4,5:1 (Text) bzw. 3:1 (Bedienelement) sonst nicht hält: Dunkel fg-3; Gedämpft
+   line-2, fg-2, fg-3, act-text, ok, near, bad, ch-words und die weichen Füllungen; Hell fg-3, ok, near, bad, ch-words; Hell + Amber act (0,64 statt 0,75). */
 
 :root,
 :root[data-theme='dark'] {
-  --lx-bg: #0d1016;
-  --lx-bg-glow-1: rgba(16, 185, 129, 0.1);
-  --lx-bg-glow-2: rgba(34, 211, 238, 0.07);
-  --lx-surface: rgba(255, 255, 255, 0.045);
-  --lx-surface-strong: #1b2029;
-  --lx-surface-solid: #141821;
-  --lx-border: rgba(255, 255, 255, 0.08);
-  --lx-edge: rgba(255, 255, 255, 0.1);
-  --lx-fg: #f1f3f8;
-  --lx-fg-muted: #a8afc0;
-  --lx-fg-subtle: #8c94a8;
-  --lx-accent: #10b981;
-  --lx-accent-fg: #03140d;
-  --lx-accent-text: #34d399;
-  --lx-accent-soft: rgba(16, 185, 129, 0.14);
-  --lx-cyan: #22d3ee;
-  --lx-cyan-text: #67e3f5;
-  --lx-gold-text: #f4c56a;
-  --lx-danger-text: #ff8f8a;
-  --lx-danger-soft: rgba(240, 100, 95, 0.14);
-  --lx-gold-soft: rgba(242, 184, 75, 0.14);
-  --lx-cyan-soft: rgba(34, 211, 238, 0.12);
-  --lx-focus: #f1f3f8;
-  --lx-track: rgba(255, 255, 255, 0.08);
-  --lx-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.045) inset, 0 12px 32px -20px rgba(0, 0, 0, 0.7);
-  --lx-scrim: rgba(3, 6, 12, 0.62);
-  --lx-ok: #10b981;
-  --lx-ok-text: #34d399;
-  --lx-ok-soft: rgba(16, 185, 129, 0.14);
-  --lx-near: var(--lx-gold-text);
-  --lx-near-text: var(--lx-gold-text);
-  --lx-near-soft: var(--lx-gold-soft);
-  --lx-wrong: var(--lx-danger-text);
-  --lx-wrong-text: var(--lx-danger-text);
-  --lx-wrong-soft: var(--lx-danger-soft);
-  --lx-hint: var(--lx-cyan);
-  --lx-hint-text: var(--lx-cyan-text);
-  --lx-hint-soft: var(--lx-cyan-soft);
-  --lx-mark: rgba(34, 211, 238, 0.22);
-  --lx-line-strong: rgba(255, 255, 255, 0.17);
-
-  --lx-ch-cards: #a78bfa;
-  --lx-ch-grammar: #60a5fa;
-  --lx-ch-read: #38bdf8;
-  --lx-ch-listen: #e879f9;
-  --lx-ch-write: #fb923c;
-  --lx-ch-speak: #fb7185;
-  --lx-ch-business: #fbbf24;
-  --lx-ch-discover: #a3e635;
   color-scheme: dark;
+  --bg: oklch(0.165 0.012 268);
+  --bg-deep: oklch(0.13 0.01 268);
+  --surface: oklch(0.205 0.014 268);
+  --surface-2: oklch(0.245 0.016 268);
+  --surface-3: oklch(0.29 0.016 268);
+  --line: oklch(0.96 0.01 268 / 0.08);
+  --line-2: oklch(0.96 0.01 268 / 0.15);
+  --fg: oklch(0.955 0.006 268);
+  --fg-2: oklch(0.76 0.014 268);
+  --fg-3: oklch(0.66 0.016 268);
+  --fg-on: oklch(0.16 0.012 268);
+  --act: oklch(0.62 0.16 275);
+  --act-fg: oklch(0.16 0.03 275);
+  --act-text: oklch(0.77 0.12 275);
+  --act-soft: oklch(0.62 0.16 275 / 0.18);
+  --ok: oklch(0.77 0.15 155);
+  --ok-soft: oklch(0.77 0.15 155 / 0.14);
+  --near: oklch(0.83 0.13 92);
+  --near-soft: oklch(0.83 0.13 92 / 0.14);
+  --bad: oklch(0.72 0.16 25);
+  --bad-soft: oklch(0.72 0.16 25 / 0.14);
+  --ch-words: oklch(0.76 0.11 195);
+  --ch-gram: oklch(0.74 0.13 340);
+  --ch-listen: oklch(0.74 0.11 245);
+  --ch-speak: oklch(0.77 0.12 60);
+  --words-soft: oklch(0.76 0.11 195 / 0.12);
+  --mark: oklch(0.76 0.11 195 / 0.26);
+  --kb: oklch(0.3 0.006 268);
+  --kb-key: oklch(0.44 0.006 268);
+  --kb-key-2: oklch(0.36 0.006 268);
+  --kb-fg: oklch(0.97 0 0);
+  --scrim: oklch(0.08 0.01 268 / 0.62);
+  --shadow: 0 1px 0 0 oklch(1 0 0 / 0.04) inset, 0 18px 40px -24px oklch(0 0 0 / 0.8);
 }
 
 :root[data-theme='dim'] {
-  --lx-bg: #1a2030;
-  --lx-bg-glow-1: rgba(16, 185, 129, 0.07);
-  --lx-bg-glow-2: rgba(34, 211, 238, 0.05);
-  --lx-surface: rgba(255, 255, 255, 0.05);
-  --lx-surface-strong: rgba(255, 255, 255, 0.09);
-  --lx-surface-solid: #222a3c;
-  --lx-border: rgba(255, 255, 255, 0.1);
-  --lx-edge: rgba(255, 255, 255, 0.09);
-  --lx-fg: #e4e8f0;
-  --lx-fg-muted: #aab3c4;
-  --lx-fg-subtle: #959eb2;
-  --lx-accent: #10b981;
-  --lx-accent-fg: #03140d;
-  --lx-accent-text: #4ade9f;
-  --lx-accent-soft: rgba(16, 185, 129, 0.16);
-  --lx-cyan: #22d3ee;
-  --lx-cyan-text: #7ee9f7;
-  --lx-gold-text: #fcd34d;
-  --lx-danger-text: #fca5a5;
-  --lx-danger-soft: rgba(252, 165, 165, 0.14);
-  --lx-gold-soft: rgba(252, 211, 77, 0.14);
-  --lx-cyan-soft: rgba(126, 233, 247, 0.12);
-  --lx-focus: #e4e8f0;
-  --lx-track: rgba(255, 255, 255, 0.1);
-  --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -22px rgba(0, 0, 0, 0.55);
-  --lx-scrim: rgba(8, 11, 18, 0.55);
-  --lx-ok: #10b981;
-  --lx-ok-text: #4ade9f;
-  --lx-ok-soft: rgba(16, 185, 129, 0.16);
-  --lx-near: var(--lx-gold-text);
-  --lx-near-text: var(--lx-gold-text);
-  --lx-near-soft: var(--lx-gold-soft);
-  --lx-wrong: var(--lx-danger-text);
-  --lx-wrong-text: var(--lx-danger-text);
-  --lx-wrong-soft: var(--lx-danger-soft);
-  --lx-hint: var(--lx-cyan);
-  --lx-hint-text: var(--lx-cyan-text);
-  --lx-hint-soft: var(--lx-cyan-soft);
-  --lx-mark: rgba(126, 233, 247, 0.16);
-  --lx-line-strong: rgba(255, 255, 255, 0.17);
-
-  --lx-ch-cards: #b4a0fb;
-  --lx-ch-grammar: #7cb5fb;
-  --lx-ch-read: #5cc8f9;
-  --lx-ch-listen: #ec96fa;
-  --lx-ch-write: #fca66a;
-  --lx-ch-speak: #fc8a9b;
-  --lx-ch-business: #fcca4a;
-  --lx-ch-discover: #b3ec5e;
   color-scheme: dark;
+  --bg: oklch(0.285 0.01 268);
+  --bg-deep: oklch(0.25 0.01 268);
+  --surface: oklch(0.325 0.012 268);
+  --surface-2: oklch(0.365 0.013 268);
+  --surface-3: oklch(0.41 0.013 268);
+  --line: oklch(0.96 0.01 268 / 0.1);
+  --line-2: oklch(0.96 0.01 268 / 0.15);
+  --fg: oklch(0.94 0.006 268);
+  --fg-2: oklch(0.88 0.012 268);
+  --fg-3: oklch(0.8 0.014 268);
+  --act-text: oklch(0.83 0.1 275);
+  --ok: oklch(0.82 0.15 155);
+  --ok-soft: oklch(0.82 0.15 155 / 0.1);
+  --near: oklch(0.86 0.12 92);
+  --near-soft: oklch(0.86 0.12 92 / 0.1);
+  --bad: oklch(0.82 0.12 25);
+  --bad-soft: oklch(0.82 0.12 25 / 0.1);
+  --ch-words: oklch(0.8 0.11 195);
+  --words-soft: oklch(0.8 0.11 195 / 0.1);
+  --shadow: 0 1px 0 0 oklch(1 0 0 / 0.05) inset, 0 18px 40px -26px oklch(0 0 0 / 0.7);
 }
 
 :root[data-theme='light'] {
-  --lx-bg: #f5f6fa;
-  --lx-bg-glow-1: rgba(16, 185, 129, 0.08);
-  --lx-bg-glow-2: rgba(34, 211, 238, 0.07);
-  --lx-surface: rgba(255, 255, 255, 0.72);
-  --lx-surface-strong: rgba(255, 255, 255, 0.92);
-  --lx-surface-solid: #ffffff;
-  --lx-border: rgba(15, 23, 42, 0.09);
-  --lx-edge: rgba(255, 255, 255, 0.9);
-  --lx-fg: #0e1320;
-  --lx-fg-muted: #4b5467;
-  --lx-fg-subtle: #5b6477;
-  --lx-accent: #047857;
-  --lx-accent-fg: #ffffff;
-  --lx-accent-text: #047857;
-  --lx-accent-soft: rgba(4, 120, 87, 0.1);
-  --lx-cyan: #0891b2;
-  --lx-cyan-text: #0e7490;
-  /* Hell: etwas dunkler, damit die Plakette „fast richtig“ auf ihrer eigenen Tönung sicher über 4,5:1 bleibt (axe). */
-  --lx-gold-text: #96450a;
-  --lx-danger-text: #b91c1c;
-  --lx-danger-soft: rgba(185, 28, 28, 0.08);
-  --lx-gold-soft: rgba(180, 83, 9, 0.1);
-  --lx-cyan-soft: rgba(8, 145, 178, 0.1);
-  --lx-focus: #0e1320;
-  --lx-track: rgba(15, 23, 42, 0.13);
-  --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 12px 32px -18px rgba(15, 23, 42, 0.25);
-  --lx-scrim: rgba(15, 23, 42, 0.32);
-  --lx-ok: #047857;
-  --lx-ok-text: #047857;
-  --lx-ok-soft: rgba(4, 120, 87, 0.1);
-  --lx-near: var(--lx-gold-text);
-  --lx-near-text: var(--lx-gold-text);
-  --lx-near-soft: var(--lx-gold-soft);
-  --lx-wrong: var(--lx-danger-text);
-  --lx-wrong-text: var(--lx-danger-text);
-  --lx-wrong-soft: var(--lx-danger-soft);
-  --lx-hint: var(--lx-cyan);
-  --lx-hint-text: var(--lx-cyan-text);
-  --lx-hint-soft: var(--lx-cyan-soft);
-  --lx-mark: rgba(8, 145, 178, 0.14);
-  --lx-line-strong: rgba(15, 23, 42, 0.18);
-
-  --lx-ch-cards: #7c3aed;
-  --lx-ch-grammar: #2563eb;
-  --lx-ch-read: #0284c7;
-  --lx-ch-listen: #c026d3;
-  --lx-ch-write: #ea580c;
-  --lx-ch-speak: #e11d48;
-  --lx-ch-business: #b45309;
-  --lx-ch-discover: #4d7c0f;
   color-scheme: light;
+  --bg: oklch(0.975 0.004 268);
+  --bg-deep: oklch(0.945 0.006 268);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.955 0.006 268);
+  --surface-3: oklch(0.915 0.008 268);
+  --line: oklch(0.25 0.02 268 / 0.09);
+  --line-2: oklch(0.25 0.02 268 / 0.16);
+  --fg: oklch(0.21 0.016 268);
+  --fg-2: oklch(0.43 0.016 268);
+  --fg-3: oklch(0.5 0.014 268);
+  --fg-on: oklch(1 0 0);
+  --act-text: oklch(0.5 0.18 275);
+  --act-soft: oklch(0.62 0.16 275 / 0.12);
+  --ok: oklch(0.47 0.13 155);
+  --ok-soft: oklch(0.5 0.13 155 / 0.08);
+  --near: oklch(0.5 0.11 70);
+  --near-soft: oklch(0.55 0.12 75 / 0.1);
+  --bad: oklch(0.52 0.19 25);
+  --bad-soft: oklch(0.54 0.19 25 / 0.08);
+  --ch-words: oklch(0.48 0.1 200);
+  --ch-gram: oklch(0.55 0.15 340);
+  --ch-listen: oklch(0.53 0.13 245);
+  --ch-speak: oklch(0.6 0.14 55);
+  --words-soft: oklch(0.5 0.1 200 / 0.08);
+  --mark: oklch(0.7 0.12 195 / 0.24);
+  --kb: oklch(0.86 0.006 268);
+  --kb-key: oklch(1 0 0);
+  --kb-key-2: oklch(0.74 0.008 268);
+  --kb-fg: oklch(0.15 0 0);
+  --scrim: oklch(0.2 0.02 268 / 0.38);
+  --shadow: 0 1px 2px oklch(0.2 0.02 268 / 0.06), 0 18px 40px -24px oklch(0.2 0.02 268 / 0.28);
 }
 
-/* Farbthemen (M21, `app/profile.theme.p` wie in der alten App): Salbei ist der Standard oben
-   (Smaragd). Ozean, Pflaume und Graphit tauschen nur Akzent und Lichtschein, je Modus eigens
-   abgestimmt; Kanal-, Warn- und Fehlerfarben bleiben. Der Kontrasttest prüft jeden Satz. */
-:root[data-palette='ocean'] {
-  --lx-bg-glow-1: rgba(96, 165, 250, 0.1);
-  --lx-accent: #60a5fa;
-  --lx-accent-fg: #06121f;
-  --lx-accent-text: #93c5fd;
-  --lx-accent-soft: rgba(96, 165, 250, 0.14);
-}
-:root[data-palette='ocean'][data-theme='dim'] {
-  --lx-bg-glow-1: rgba(96, 165, 250, 0.07);
-  --lx-accent: #6aaefb;
-  --lx-accent-fg: #06121f;
-  --lx-accent-text: #a5cdfd;
-  --lx-accent-soft: rgba(106, 174, 251, 0.16);
-}
-:root[data-palette='ocean'][data-theme='light'] {
-  --lx-bg-glow-1: rgba(29, 78, 216, 0.07);
-  --lx-accent: #1d4ed8;
-  --lx-accent-fg: #ffffff;
-  --lx-accent-text: #1d4ed8;
-  --lx-accent-soft: rgba(29, 78, 216, 0.1);
-}
-:root[data-palette='plum'] {
-  --lx-bg-glow-1: rgba(216, 157, 201, 0.1);
-  --lx-accent: #d89dc9;
-  --lx-accent-fg: #1b1018;
-  --lx-accent-text: #e6b8da;
-  --lx-accent-soft: rgba(216, 157, 201, 0.14);
-}
-:root[data-palette='plum'][data-theme='dim'] {
-  --lx-bg-glow-1: rgba(216, 157, 201, 0.07);
-  --lx-accent: #dca5ce;
-  --lx-accent-fg: #1b1018;
-  --lx-accent-text: #ecc4e2;
-  --lx-accent-soft: rgba(220, 165, 206, 0.16);
-}
-:root[data-palette='plum'][data-theme='light'] {
-  --lx-bg-glow-1: rgba(122, 62, 108, 0.07);
-  --lx-accent: #7a3e6c;
-  --lx-accent-fg: #ffffff;
-  --lx-accent-text: #7a3e6c;
-  --lx-accent-soft: rgba(122, 62, 108, 0.1);
-}
-:root[data-palette='graphite'] {
-  --lx-bg-glow-1: rgba(229, 231, 235, 0.05);
-  --lx-accent: #e5e7eb;
-  --lx-accent-fg: #111318;
-  --lx-accent-text: #e5e7eb;
-  --lx-accent-soft: rgba(229, 231, 235, 0.12);
-}
-:root[data-palette='graphite'][data-theme='dim'] {
-  --lx-bg-glow-1: rgba(229, 231, 235, 0.04);
-  --lx-accent: #e5e7eb;
-  --lx-accent-fg: #111318;
-  --lx-accent-text: #eceef1;
-  --lx-accent-soft: rgba(229, 231, 235, 0.13);
-}
-:root[data-palette='graphite'][data-theme='light'] {
-  --lx-bg-glow-1: rgba(31, 35, 40, 0.05);
-  --lx-accent: #1f2328;
-  --lx-accent-fg: #ffffff;
-  --lx-accent-text: #1f2328;
-  --lx-accent-soft: rgba(31, 35, 40, 0.08);
+:root[data-accent='amber'] {
+  --act: oklch(0.75 0.15 70);
+  --act-fg: oklch(0.2 0.04 60);
+  --act-text: oklch(0.8 0.13 72);
+  --act-soft: oklch(0.75 0.15 70 / 0.18);
 }
 
-/* Tailwind-Hilfsklassen auf die Tokens abbilden (bg-surface, text-muted, …). */
+:root[data-theme='light'][data-accent='amber'] {
+  --act: oklch(0.64 0.15 62);
+  --act-text: oklch(0.52 0.12 62);
+  --act-soft: oklch(0.75 0.15 70 / 0.18);
+}
+
+/* Form: ein Radius, 8-px-Raster, eine Schattenstufe (--shadow), Bewegungskurven der Vorschau. */
+:root {
+  --r: 14px;
+  --sp: 8px;
+  --ease-spring: cubic-bezier(0.2, 1.12, 0.32, 1);
+  --ease-soft: cubic-bezier(0.25, 0.9, 0.3, 1);
+}
+
+/* Tailwind-Skala (Typografie, Radius). Die Farb-Hilfsklassen (bg-surface, text-muted …) stehen in bridge.css. */
 @theme inline {
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --color-bg: var(--lx-bg);
-  --color-surface: var(--lx-surface);
-  --color-surface-strong: var(--lx-surface-strong);
-  --color-surface-solid: var(--lx-surface-solid);
-  --color-line: var(--lx-border);
-  --color-fg: var(--lx-fg);
-  --color-muted: var(--lx-fg-muted);
-  --color-subtle: var(--lx-fg-subtle);
-  --color-accent: var(--lx-accent);
-  --color-accent-fg: var(--lx-accent-fg);
-  --color-accent-text: var(--lx-accent-text);
-  --color-accent-soft: var(--lx-accent-soft);
-  --color-cyan: var(--lx-cyan);
-  --color-cyan-text: var(--lx-cyan-text);
-  --color-gold-text: var(--lx-gold-text);
-  --color-danger-text: var(--lx-danger-text);
-  --color-danger-soft: var(--lx-danger-soft);
-  --color-gold-soft: var(--lx-gold-soft);
-  --color-track: var(--lx-track);
-  --color-ok: var(--lx-ok);
-  --color-ok-text: var(--lx-ok-text);
-  --color-ok-soft: var(--lx-ok-soft);
-  --color-near: var(--lx-near);
-  --color-near-text: var(--lx-near-text);
-  --color-near-soft: var(--lx-near-soft);
-  --color-wrong: var(--lx-wrong);
-  --color-wrong-text: var(--lx-wrong-text);
-  --color-wrong-soft: var(--lx-wrong-soft);
-  --color-hint: var(--lx-hint);
-  --color-hint-text: var(--lx-hint-text);
-  --color-hint-soft: var(--lx-hint-soft);
-  --color-mark: var(--lx-mark);
-  --color-line-strong: var(--lx-line-strong);
-  --color-ch-cards: var(--lx-ch-cards);
-  --color-ch-grammar: var(--lx-ch-grammar);
-  --color-ch-read: var(--lx-ch-read);
-  --color-ch-listen: var(--lx-ch-listen);
-  --color-ch-write: var(--lx-ch-write);
-  --color-ch-speak: var(--lx-ch-speak);
-  --color-ch-business: var(--lx-ch-business);
-  --color-ch-discover: var(--lx-ch-discover);
 
   /* Typografie-Skala (px): 12 · 13 · 15 · 17 · 20 · 24 · 32 · 44 · 64 */
   --text-2xs: 0.75rem;
@@ -330,11 +192,11 @@
   --text-4xl: 4rem;
   --text-4xl--line-height: 1;
 
-  --radius-card: 1.25rem;
-  --radius-control: 0.875rem;
+  --radius-card: var(--r);
+  --radius-control: var(--r);
   --radius-pill: 999px;
   --radius-inline: 0.375rem;
-  --shadow-glass: var(--lx-shadow);
+  --shadow-glass: var(--shadow);
 }
 
 /* ---------------------------------------------------------------- Grundlagen */
@@ -381,6 +243,14 @@ h3 {
   text-wrap: balance;
 }
 
+/* Überschriften im großen Schnitt: die eingebettete Inter hat die Achse opsz (14–32), geprüft in tests/unit/noColorLiterals.test.ts. */
+h1,
+h2,
+.lx-t-display,
+.lx-t-title {
+  font-variation-settings: 'opsz' 32;
+}
+
 :focus-visible {
   outline: 2px solid var(--lx-focus);
   outline-offset: 2px;
@@ -399,18 +269,11 @@ h3 {
 /* ---------------------------------------------------------------- Bausteine */
 
 @layer components {
+  /* Früher Glas mit Unschärfe; seit dem Relaunch eine deckende Fläche (kein Weichzeichner, Plan P1). */
   .lx-glass {
-    background: var(--lx-surface);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    backdrop-filter: blur(20px) saturate(140%);
+    background: var(--surface);
     border: 1px solid var(--lx-border);
     box-shadow: var(--lx-shadow);
-  }
-
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .lx-glass {
-      background: var(--lx-surface-solid);
-    }
   }
 
   /* Tippziel ≥ 44 px bei gleicher Optik: durchsichtiger Rand oben und unten, Füllung nur innerhalb (Messung R8), negativer Rand hält den Abstand. */
@@ -688,7 +551,7 @@ h3 {
     z-index: 50;
     background: var(--lx-surface-solid);
     border: 1px solid var(--lx-border);
-    box-shadow: var(--lx-shadow), 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+    box-shadow: var(--shadow);
     outline: none;
   }
   /* Aktiver Reiter: auch im Hell-Modus deutlich (Rand und Akzentstrich, F9). */
@@ -772,12 +635,12 @@ h3 {
   .lx-choice[data-state='correct'] .lx-choice-key,
   .lx-choice[data-state='correct'] .lx-choice-letter {
     background: var(--lx-ok);
-    color: #0b0f14;
+    color: var(--fg-on);
   }
   .lx-choice[data-state='wrong'] .lx-choice-key,
   .lx-choice[data-state='wrong'] .lx-choice-letter {
     background: var(--lx-wrong);
-    color: #0b0f14;
+    color: var(--fg-on);
   }
   .lx-choice[data-state='dim'] {
     opacity: 0.55;
@@ -994,7 +857,7 @@ h3 {
   .lx-tile[data-dragging] {
     cursor: grabbing;
     opacity: 0.85;
-    box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow);
     z-index: 5;
   }
   .lx-tile[data-selected] {
@@ -1283,21 +1146,22 @@ html[data-actionbar] #main {
 
 /* ---------------------------------------------------------------- Lernplattform 2.0 (P1): Rollen, Dichte, Gerüst */
 :root {
-  --radius-card: 1.25rem;
-  --radius-control: 0.875rem;
+  /* Ein Radius (--r) und das 8-px-Raster (Relaunch P1). */
+  --radius-card: var(--r);
+  --radius-control: var(--r);
   --radius-pill: 999px;
   --radius-inline: 0.375rem;
-  --lx-pad-card: 1.25rem;
+  --lx-pad-card: 1.5rem;
   --lx-gap-section: 1rem;
-  --lx-gap-tight: 0.375rem;
+  --lx-gap-tight: 0.5rem;
   --lx-dur-fast: 120ms;
   --lx-dur-base: 180ms;
   --lx-dur-slow: 260ms;
 }
 @media (min-width: 640px) {
   :root {
-    --lx-pad-card: 1.75rem;
-    --lx-gap-section: 1.25rem;
+    --lx-pad-card: 2rem;
+    --lx-gap-section: 1.5rem;
   }
 }
 
@@ -1381,8 +1245,6 @@ html[data-actionbar] #main {
     background: transparent;
     border-color: transparent;
     box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
     padding-inline: 0.25rem;
   }
   .lx-exercise[data-area='words'] {
@@ -1480,25 +1342,13 @@ html[data-actionbar] #main {
 
 
 /* ---------------------------------------------------------------- Design LP2 (Vorschau „Design-Entwurf“, 07.10.2026) */
-/* Hauptknopf: neutral hell (Heute), im Bereich Wörter violett, in der Grammatik blau; Sperre als flache Fläche. */
-:root {
-  --lx-btn-n: #f1f3f8;
-  --lx-btn-nf: #0d1016;
-  --lx-btn-words: #6b4de6;
-  --lx-btn-grammar: #2f62e0;
-}
-:root[data-theme='light'] {
-  --lx-btn-n: #11141c;
-  --lx-btn-nf: #ffffff;
-  --lx-btn-words: #5b3fd6;
-  --lx-btn-grammar: #2553c9;
-}
+/* Hauptknopf: Handlungsfarbe (Iris oder Amber, --lx-btn-n/--lx-btn-nf in bridge.css); Sperre als flache Fläche. */
 /* UX-Prüfung W8 (07.10.2026): EIN Hauptknopf-Stil überall (wie Heute); die Bereichsfarbe trägt nur Symbol, Balken und Kante. */
 button.lx-btn-primary {
   background: var(--lx-btn-bg, var(--lx-btn-n));
   color: var(--lx-btn-fg, var(--lx-btn-nf));
   box-shadow: none;
-  border-radius: 1rem;
+  border-radius: var(--r);
   font-size: 1.0625rem;
 }
 button.lx-btn-primary:disabled {

@@ -3,6 +3,7 @@ import type { AtlasEntry } from '../../../domain/atlas/atlas';
 import { SKY_RING_RANK, VTEST_BAND, rankRadius, skyCounts, skyGrid, skyHit, skyLayout, type SkyTone, type SkyVeil } from '../../../domain/atlas/sky';
 import type { UnitState } from '../../../domain/metrics/definitions';
 import { useFxLevel } from '../../../engine/fx/level';
+import { cssRgb } from '../../../engine/fx/rgb';
 import { formatDate, useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 
@@ -35,7 +36,7 @@ function readPalette(el: Element, ctx: CanvasRenderingContext2D): Palette {
     const v = cs.getPropertyValue(name).trim();
     ctx.fillStyle = fallback;
     if (v) ctx.fillStyle = v;
-    return String(ctx.fillStyle);
+    return cssRgb(String(ctx.fillStyle));
   };
   const light = document.documentElement.dataset.theme === 'light';
   return {
@@ -87,10 +88,10 @@ export function WordSky({ entries, tones, veil, onAdd }: WordSkyProps) {
     return () => ro.disconnect();
   }, []);
 
-  // Moduswechsel (Dunkel/Gedämpft/Hell, Farbthema): neu zeichnen.
+  // Moduswechsel (Dunkel/Gedämpft/Hell, Akzent): neu zeichnen.
   useEffect(() => {
     const mo = new MutationObserver(() => setTheme((n) => n + 1));
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-palette'] });
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-accent'] });
     return () => mo.disconnect();
   }, []);
 

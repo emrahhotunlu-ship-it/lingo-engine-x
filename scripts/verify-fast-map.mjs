@@ -131,6 +131,11 @@ export const RULES = [
   { prefix: 'src/domain/studytime.ts', specs: ['studyTime.spec.ts'] },
   { prefix: 'src/domain/metrics/', specs: ['diagnose.spec.ts', 'progress.spec.ts'] },
   { prefix: 'src/domain/radar/', specs: ['progress.spec.ts'] },
+  // Relaunch P1 S1-TOK: Tokens und Akzent (Einstellungen, M21), OKLCH-Umrechnung für Lichtfeld und Wörterhimmel, Theme-Skript im Start-Bild.
+  { prefix: 'src/styles/', specs: ['stand-gaps.spec.ts', 'settings.spec.ts'] },
+  { prefix: 'src/features/settings/AccentSection', specs: ['stand-gaps.spec.ts'] },
+  { prefix: 'src/engine/fx/rgb', specs: ['wordSky.spec.ts', 'fxStage1.spec.ts'] },
+  { prefix: 'index.html', specs: ['settings.spec.ts', 'rueckweg.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

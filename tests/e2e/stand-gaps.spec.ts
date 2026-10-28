@@ -5,6 +5,30 @@ import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
 import { openChecks, openProfileContent } from './profilHelpers';
 
+// Token gegen Sollwert als Pixel (r, g, b) über ein 1×1-Canvas, ±1: der Build schreibt oklch() als lab() um,
+// deshalb werden nie Farbtexte verglichen. Liefert die größte Kanal-Abweichung.
+const tokenDelta = (page: Page, token: string, want: string): Promise<number> =>
+  page.evaluate(
+    ([t, w]) => {
+      const probe = document.createElement('i');
+      probe.style.color = `var(${t})`;
+      document.body.append(probe);
+      const got = getComputedStyle(probe).color;
+      probe.remove();
+      const x = document.createElement('canvas').getContext('2d')!;
+      const rgb = (c: string): number[] => {
+        x.clearRect(0, 0, 1, 1);
+        x.fillStyle = c;
+        x.fillRect(0, 0, 1, 1);
+        return [...x.getImageData(0, 0, 1, 1).data].slice(0, 3);
+      };
+      const a = rgb(got);
+      const b = rgb(w);
+      return Math.max(...a.map((v, i) => Math.abs(v - (b[i] ?? 999))));
+    },
+    [token, want] as const,
+  );
+
 // Lücken aus dem Abgleich (Kap. 9/14, M7, M10, M13, M18, M20, M21, M22, W5, Kap. 4.1):
 // alte Daten sichtbar, Wochen-Check, Wochenstreifen und Niveau-Leiste, Farbthema und beruflicher
 // Kontext, Nachtragen-Hinweis auf Heute, Ladepunkt, „Was ist neu" und die
@@ -163,20 +187,21 @@ test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau
   expect(errors).toEqual([]);
 });
 
-test('M21 + M22: Farbthema aus theme.p, umschaltbar; beruflicher Kontext wird in app/profile.ctx gespeichert', async ({ page }) => {
+test('M21 + M22: Akzent statt Farbthema (theme.p bleibt stehen), umschaltbar; beruflicher Kontext wird in app/profile.ctx gespeichert', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openOverview(page);
-  // Seed: theme {m: dark, p: ocean} – die App übernimmt das Farbthema der alten App.
-  await expect(page.locator('html')).toHaveAttribute('data-palette', 'ocean');
-  expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--lx-accent').trim())).toBe('#60a5fa');
+  // Seed: theme {m: dark, p: ocean} – das alte Farbthema wird nicht mehr angeboten (Relaunch P1), der Akzent ist Iris.
+  await expect(page.locator('html')).toHaveAttribute('data-accent', 'iris');
+  await expect(page.locator('html')).not.toHaveAttribute('data-palette', /.*/);
   await openSettings(page);
   const dialog = page.getByRole('dialog');
-  await dialog.getByRole('radio', { name: 'Pflaume' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-palette', 'plum');
-  await expect.poll(async () => (await profileOf(page)).theme).toEqual({ m: 'dark', p: 'plum' });
+  await expect(dialog.getByRole('radio', { name: 'Pflaume' })).toHaveCount(0);
+  await dialog.getByRole('radio', { name: 'Bernstein' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-accent', 'amber');
+  await expect.poll(async () => (await profileOf(page)).theme).toEqual({ m: 'dark', p: 'ocean', a: 'amber' });
   await dialog.getByRole('radio', { name: 'Hell' }).click();
-  await expect.poll(async () => (await profileOf(page)).theme).toEqual({ m: 'light', p: 'plum' });
-  expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--lx-accent').trim())).toBe('#7a3e6c');
+  await expect.poll(async () => (await profileOf(page)).theme).toEqual({ m: 'light', p: 'ocean', a: 'amber' });
+  expect(await tokenDelta(page, '--act-text', 'oklch(0.52 0.12 62)')).toBeLessThanOrEqual(1);
 
   const ctx = dialog.getByTestId('work-ctx');
   await expect(ctx.getByTestId('work-ctx-save')).toBeDisabled();

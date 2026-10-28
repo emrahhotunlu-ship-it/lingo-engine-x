@@ -34,7 +34,9 @@
     },
     "css": {
       "basis": 25000,
-      "zuwachs": {}
+      "zuwachs": {
+        "P1 S1-TOK": 4000
+      }
     },
     "html": {
       "basis": 2000,

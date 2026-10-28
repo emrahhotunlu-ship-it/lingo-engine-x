@@ -1,0 +1,118 @@
+/* ---------------------------------------------------------------- Brücke alte Namen → neue Tokens (P1 S1-TOK)
+   Die Bausteine nutzen noch die alten Namen --lx-* und die Tailwind-Klassen aus --color-* (bg-surface, text-muted …).
+   Hier stehen NUR Verweise auf die neuen Tokens aus index.css, keine Farbwerte. Die Werte lösen auf :root auf, also
+   wirken Modus ([data-theme]) und Akzent ([data-accent]) automatisch mit. Die Pakete der Stufe 1 bauen die Bausteine
+   auf die neuen Namen um und streichen hier Zeile für Zeile; check:platform meldet die Zahl der Verweise als Hinweis. */
+
+:root {
+  /* Flächen: früher Glas, jetzt deckende Stufen */
+  --lx-bg: var(--bg);
+  --lx-surface: var(--surface-2);
+  --lx-surface-strong: var(--surface-3);
+  --lx-surface-solid: var(--surface);
+  --lx-border: var(--line);
+  --lx-edge: var(--line);
+  --lx-line-strong: var(--line-2);
+  --lx-track: var(--line-2);
+
+  /* Schrift und Fokus */
+  --lx-fg: var(--fg);
+  --lx-fg-muted: var(--fg-2);
+  --lx-fg-subtle: var(--fg-3);
+  --lx-focus: var(--act-text);
+
+  /* Handlung (Iris oder Amber) */
+  --lx-accent: var(--act);
+  --lx-accent-fg: var(--act-fg);
+  --lx-accent-text: var(--act-text);
+  --lx-accent-soft: var(--act-soft);
+  --lx-btn-n: var(--act);
+  --lx-btn-nf: var(--act-fg);
+  --lx-btn-grammar: var(--act);
+
+  /* Bedeutung: richtig · fast · falsch · Hinweis */
+  --lx-ok: var(--ok);
+  --lx-ok-text: var(--ok);
+  --lx-ok-soft: var(--ok-soft);
+  --lx-near: var(--near);
+  --lx-near-text: var(--near);
+  --lx-near-soft: var(--near-soft);
+  --lx-gold-text: var(--near);
+  --lx-gold-soft: var(--near-soft);
+  --lx-wrong: var(--bad);
+  --lx-wrong-text: var(--bad);
+  --lx-wrong-soft: var(--bad-soft);
+  --lx-danger-text: var(--bad);
+  --lx-danger-soft: var(--bad-soft);
+  --lx-hint: var(--ch-words);
+  --lx-hint-text: var(--ch-words);
+  --lx-hint-soft: var(--words-soft);
+  --lx-cyan: var(--ch-words);
+  --lx-cyan-text: var(--ch-words);
+  --lx-cyan-soft: var(--words-soft);
+  --lx-mark: var(--mark);
+
+  /* Überlagerung, eine Schattenstufe, Effekte */
+  --lx-scrim: var(--scrim);
+  --lx-shadow: var(--shadow);
+  --lx-elev-2: var(--shadow);
+  --lx-sheen: none;
+  --lx-glow-ok: var(--ok-soft);
+  --lx-spark-1: var(--ok);
+  --lx-spark-2: var(--act-text);
+
+  /* Bereiche: vier Kanäle der Vorschau, die alten acht zeigen darauf */
+  --lx-ch-cards: var(--ch-words);
+  --lx-ch-grammar: var(--ch-gram);
+  --lx-ch-read: var(--ch-listen);
+  --lx-ch-listen: var(--ch-listen);
+  --lx-ch-write: var(--ch-speak);
+  --lx-ch-speak: var(--ch-speak);
+  --lx-ch-business: var(--near);
+  --lx-ch-discover: var(--ok);
+}
+
+/* Tailwind-Hilfsklassen (bg-surface, text-muted …) zeigen direkt auf die neuen Tokens. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface-2);
+  --color-surface-strong: var(--surface-3);
+  --color-surface-solid: var(--surface);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-2);
+  --color-track: var(--line-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-2);
+  --color-subtle: var(--fg-3);
+  --color-accent: var(--act);
+  --color-accent-fg: var(--act-fg);
+  --color-accent-text: var(--act-text);
+  --color-accent-soft: var(--act-soft);
+  --color-ok: var(--ok);
+  --color-ok-text: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-near: var(--near);
+  --color-near-text: var(--near);
+  --color-near-soft: var(--near-soft);
+  --color-gold-text: var(--near);
+  --color-gold-soft: var(--near-soft);
+  --color-wrong: var(--bad);
+  --color-wrong-text: var(--bad);
+  --color-wrong-soft: var(--bad-soft);
+  --color-danger-text: var(--bad);
+  --color-danger-soft: var(--bad-soft);
+  --color-hint: var(--ch-words);
+  --color-hint-text: var(--ch-words);
+  --color-hint-soft: var(--words-soft);
+  --color-cyan: var(--ch-words);
+  --color-cyan-text: var(--ch-words);
+  --color-mark: var(--mark);
+  --color-ch-cards: var(--ch-words);
+  --color-ch-grammar: var(--ch-gram);
+  --color-ch-read: var(--ch-listen);
+  --color-ch-listen: var(--ch-listen);
+  --color-ch-write: var(--ch-speak);
+  --color-ch-speak: var(--ch-speak);
+  --color-ch-business: var(--near);
+  --color-ch-discover: var(--ok);
+}

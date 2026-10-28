@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { subscribe } from './events';
 import { useFxLevel } from './level';
+import { cssRgb } from './rgb';
 
 // Lichtfeld (Lernplattform 3.0 P57, Erlebnis-Engine §5.1): drei weiche Lichtflecken hinter allen Reitern – Bereichsfarbe oben (wie die freigegebene
 // Vorschau: eine ruhige Lichtquelle oben mittig), Cyan rechts und ein dunkler Schattenfleck für Tiefe. Gezeichnet als drei CSS-Radialverläufe in voller
@@ -40,7 +41,7 @@ type Colors = { field: string; cyan: string; shade: string; strength: number };
 function readColors(probe: HTMLElement): Colors {
   const cs = (v: string): string => {
     probe.style.color = `var(${v})`;
-    return getComputedStyle(probe).color;
+    return cssRgb(getComputedStyle(probe).color);
   };
   const raw = getComputedStyle(document.documentElement).getPropertyValue('--lx-field-strength').trim();
   const pct = Number.parseFloat(raw);

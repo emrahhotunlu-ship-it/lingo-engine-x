@@ -22,7 +22,7 @@ async function boot(): Promise<void> {
     installFakeRuntime(optionsFromUrl(window.location.search));
   }
   const s = useSettings.getState();
-  applyDocumentSettings(s.lang, resolveTheme(s.theme, window.matchMedia('(prefers-color-scheme: light)').matches), s.palette);
+  applyDocumentSettings(s.lang, resolveTheme(s.theme, window.matchMedia('(prefers-color-scheme: light)').matches), s.accent);
   const root = document.getElementById('root');
   if (!root) throw new Error('#root fehlt');
   // Wurzel-Ebene der Fehlergrenzen (architektur.md §3.1 Nr. 1): Was keine Grenze fängt, landet

@@ -1,5 +1,5 @@
 import { mkdirSync } from 'node:fs';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen, SEED_EVENING, type Lang, type Theme, openOverview, expectStreak } from './fixtures';
 import { DAY, dump, planPatch, writes } from './trainerHelpers';
 
@@ -9,7 +9,17 @@ import { DAY, dump, planPatch, writes } from './trainerHelpers';
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 const GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Einstellungen|Serie|Heute|Wiederholen)\b/;
-const BG: Record<Theme, string> = { dark: 'rgb(13, 16, 22)', dim: 'rgb(26, 32, 48)', light: 'rgb(245, 246, 250)' };
+const BG: Record<Theme, number[]> = { dark: [12, 14, 20], dim: [40, 42, 47], light: [245, 247, 250] };
+// Farbe als Pixel (r, g, b) über ein 1×1-Canvas: der Build schreibt oklch() als lab() um, Texte sind nicht vergleichbar.
+const px = (page: Page, color: string): Promise<number[]> =>
+  page.evaluate((c) => {
+    const x = document.createElement('canvas').getContext('2d')!;
+    x.fillStyle = c;
+    x.fillRect(0, 0, 1, 1);
+    return [...x.getImageData(0, 0, 1, 1).data].slice(0, 3);
+  }, color);
+const near = (a: number[], b: number[]): boolean => a.length === 3 && a.every((v, i) => Math.abs(v - (b[i] ?? -9)) <= 1);
+
 
 const SAMPLES: Array<{ width: number; theme: Theme; lang: Lang }> = [
   { width: 390, theme: 'dark', lang: 'de' },
@@ -28,7 +38,8 @@ for (const s of SAMPLES) {
     await screen(page, 'today');
     await expect(page.getByTestId('today-status')).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('data-theme', s.theme);
-    expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor)).toBe(BG[s.theme]);
+    const bg = await px(page, await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor));
+    expect(near(bg, BG[s.theme]), `Grund ${bg.join(',')}`).toBe(true);
     // Genau ein Primärknopf, ohne Scrollen sichtbar (Kap. 2.1).
     await expect(page.getByTestId('start')).toBeInViewport();
     await expect(page.locator('main button.bg-accent')).toHaveCount(1);

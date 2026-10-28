@@ -2,10 +2,10 @@ import { expect, test, type Page } from '@playwright/test';
 import { bootAt, screen } from './fixtures';
 
 // Lernplattform 2.0 §7 / §10.4 P1 (Abnahme): „Grün heißt richtig“ und „Ausgewählt ist nicht Richtig“ in allen
-// 4 Paletten × 3 Modi. Geprüft werden berechnete Stile von Bausteinen mit den Klassen der App; die Farben kommen
-// aus den Tokens (`--lx-ok*`), nie aus der Palette.
+// 2 Akzenten × 3 Modi (Relaunch P1: Iris, Amber; früher 4 Paletten). Geprüft werden berechnete Stile von Bausteinen mit den
+// Klassen der App; die Farben kommen aus den Tokens (`--lx-ok*` → `--ok`), nie aus dem Akzent.
 
-const PALETTES = ['sage', 'ocean', 'plum', 'graphite'] as const;
+const ACCENTS = ['iris', 'amber'] as const;
 const THEMES = ['dark', 'dim', 'light'] as const;
 
 type Probe = {
@@ -21,13 +21,12 @@ type Probe = {
   wrongSide: { gapReveal: string[]; revealText: string; given: string; choiceAnswer: string[]; chipAnswer: string[]; tapAnswer: string[] };
 };
 
-async function probe(page: Page, theme: string, palette: string): Promise<Probe> {
+async function probe(page: Page, theme: string, accent: string): Promise<Probe> {
   return page.evaluate(
-    ([th, pal]) => {
+    ([th, acc]) => {
       const root = document.documentElement;
       root.dataset.theme = th;
-      if (pal === 'sage') delete root.dataset.palette;
-      else root.dataset.palette = pal;
+      root.dataset.accent = acc;
       const host = document.createElement('div');
       host.id = 'lx-probe';
       host.innerHTML = `
@@ -70,16 +69,16 @@ async function probe(page: Page, theme: string, palette: string): Promise<Probe>
       host.remove();
       return out;
     },
-    [theme, palette] as const,
+    [theme, accent] as const,
   );
 }
 
-for (const palette of PALETTES) {
+for (const accent of ACCENTS) {
   for (const theme of THEMES) {
-    test(`Richtig ist grün, Ausgewählt ist neutral: ${palette} / ${theme}`, async ({ page }) => {
+    test(`Richtig ist grün, Ausgewählt ist neutral: ${accent} / ${theme}`, async ({ page }) => {
       await bootAt(page, { name: 'today' }, { theme });
       await screen(page, 'today');
-      const p = await probe(page, theme, palette);
+      const p = await probe(page, theme, accent);
       // Richtig: die Schrift der Urteilszeile trägt `--lx-ok-text`, Option und Lücke `--lx-ok` auf `--lx-ok-soft`.
       expect(p.verdict).toBe(p.tokens.okText);
       expect(p.choiceCorrect.border).toBe(p.tokens.ok);
