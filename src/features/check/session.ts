@@ -9,6 +9,7 @@ import type { GrammarAnswer } from '../../domain/learn/types';
 import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
 import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
+import { pickAttempt } from '../../engine/inputKind';
 import { buildExercise } from '../../domain/srs/exercise';
 import type { AnswerEvent, Exercise, Lang, TrainCard } from '../../domain/srs/types';
 import { logWarn } from '../../platform/diagnostics';
@@ -177,8 +178,9 @@ export function commitCheckWord(ans: Answer, step: number): FirstKind {
   };
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
   if (ans.override) a.override = true;
-  if (ans.fk !== undefined) a.fk = ans.fk;
-  if (ans.in) a.in = ans.in;
+  // S1-ZEIT (P4): Messwerte der Oberfläche und die Lernstufe VOR der Antwort (nur gespeichert, nie ausgewertet).
+  Object.assign(a, pickAttempt(ans));
+  a.st = card.stage;
   void saveCard(a, card.inDb ? null : { ...card.doc });
   recordAnswer(a, false);
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));

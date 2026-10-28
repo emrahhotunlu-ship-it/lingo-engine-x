@@ -19,11 +19,11 @@ import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, GrammarAnswer, GrammarCheck, GrammarTask, Help, Verdict } from '../../domain/learn/types';
 import { patsOf, patternState } from '../../domain/metrics/pattern';
 import type { AttemptTiming } from '../../domain/progress/logPatch';
-import type { AttemptInput, Grade } from '../../domain/srs/types';
+import type { AttemptInput, AttemptMeta, Grade } from '../../domain/srs/types';
 import { Choices } from '../../engine/Choices';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { bindInputKind, createAttemptTracker } from '../../engine/inputKind';
+import { bindInputKind, createAttemptTracker, pickAttempt, promptChars } from '../../engine/inputKind';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { SpotSentence } from '../../engine/SpotSentence';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -102,6 +102,12 @@ type Fb = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; fehlen ohne Kontakt. Nur gespeichert, nie für die Note. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4-Nacharbeit): gemischt, Senden vor Claude, Prompt-Länge, zweiter Versuch, verborgene Seite (siehe `AttemptMeta`). */
+  mx?: AttemptMeta['mx'];
+  sm?: number;
+  pl?: number;
+  n?: AttemptMeta['n'];
+  bg?: AttemptMeta['bg'];
   help: Help;
   judged: GrammarAnswer['judged'];
   unsure: boolean;
@@ -139,8 +145,6 @@ const TJ_V: Record<TutorVerdict, 'c' | 'a' | 'n' | 'w' | 'u'> = { correct: 'c', 
 
 /** Uhr (eigene Funktion, damit die Zeitnahme nie als Teil des Zeichnens gilt). */
 const tick = (): number => performance.now();
-/** S1-ZEIT (P4): Zeitfelder der Rückmeldung für die Antwort (nur gespeichert, `grammarLogEntry`). */
-const timingOf = (fb: AttemptTiming): AttemptTiming => ({ ...(fb.fk !== undefined ? { fk: fb.fk } : {}), ...(fb.in ? { in: fb.in } : {}) });
 const GAP = /_{3,}/;
 const MEANING_KEYS = ['a', 'b', 'both'] as const;
 /** „Ohne Hilfe“ im Vortest: jede Antwort in höchstens 20 s (§5.3). */
@@ -217,7 +221,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, []);
   // S1-ZEIT (P4): Tasten und Einfügungen in der versteckten Eingabe (außerhalb der Übung) oder in einem Feld der Übung.
-  useEffect(() => bindInputKind(document, (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), attempt, tick, () => lookupOpenMs() - lookupAt.current), [api, attempt]);
+  useEffect(() => bindInputKind(document, { accept: (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), tracker: attempt, now: tick, paused: () => lookupOpenMs() - lookupAt.current }), [api, attempt]);
   // Tutor-Engine v3: Aufgaben-Prüfung als Warnzähler (§4.2) und Lernermodell zum Rundenstart (§3.1, verzögert).
   useEffect(() => {
     lintOnce(task);
@@ -250,12 +254,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   });
 
   const elapsed = () => Math.max(0, Math.round(performance.now() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
-  /** S1-ZEIT (P4): `fk`/`in` zum Zeitpunkt der Wertung (wie `ms`); Auswahl und das Antippen der Stelle sind `c`. Ohne Kontakt leer. */
-  const timing = (given: string): { fk?: number; in?: AttemptInput } => {
-    const fk = attempt.fk(shownAt.current);
-    if (fk === undefined) return {};
-    return { fk, in: attempt.kind(given, choiceType || (findTask && stage === 'locate') ? 'c' : 't') };
-  };
+  /** S1-ZEIT (P4): Messwerte zum Zeitpunkt der Wertung (wie `ms`); Auswahl und das Antippen der Stelle sind `c`. Ohne Kontakt fehlen `fk`/`in`/`mx`. */
+  const timing = (given: string): AttemptMeta =>
+    attempt.meta({ start: shownAt.current, answer: given, base: choiceType || (findTask && stage === 'locate') ? 'c' : 't', second: !!retry, pl: promptChars(root.current) });
   const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || type === 'gap' || type === 'transform');
 
   // ------------------------------------------------------------------ Prüfen
@@ -370,6 +371,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (j.v === 'unsure') {
       const local = (r: FitResult | null): void => finishCheck('near', res, given, { ...jx, ...at, judged: 'noai', unsure: true, ...aiNotYes(r, j.askAi !== 'no') });
       if (j.askAi === 'auto') {
+        // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
+        attempt.send(elapsed());
         runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVars(given)), (out) => finishCheck('correct', asAlsoRight(res), given, { ...jx, ...at, ...aiYes(out, given) }), local);
         return;
       }
@@ -395,6 +398,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
 
   const submit = () => {
     if (fb || fit.ctl.current) return;
+    // S1-ZEIT: ein früheres Senden (erster Versuch vor dem Hinweis) gilt nicht für diesen Versuch.
+    attempt.unsend();
     if (choiceType) {
       if (chosen === null) return;
       if (type === 'mc') {
@@ -561,7 +566,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           dev: profile === 'touch' ? 't' : 'k',
           tj: { v: 'c' },
           ...(fb.fit ? { fit: fb.fit } : {}),
-          ...timingOf(fb),
+          // S1-ZEIT: die Zielform ist ein zweiter Versuch.
+          ...pickAttempt(fb),
+          n: 2,
         }
       : {
           kind: 'g',
@@ -583,7 +590,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           ...(retry && firstWrong.current !== null && !(alt && sameAsFirst) ? { firstWrong: firstWrong.current } : {}),
           tj,
           ...(fb.fit ? { fit: fb.fit } : {}),
-          ...timingOf(fb),
+          ...pickAttempt(fb),
         };
     const kind = onDone(a);
     if (kind === 'typed') api.focusNow();

@@ -4,8 +4,8 @@ import { drillLogEntry, grammarLogEntry, logEntry, LOG_DOC_MAX_BYTES, LOG_ENTRIE
 import type { DrillAnswer, GrammarAnswer } from '../../src/domain/learn/types';
 import type { AnswerEvent } from '../../src/domain/srs/types';
 
-// S1-ZEIT (Relaunch Stufe 1 P4 Nr. 4): Log-Einträge bekommen `fk` und `in`; `ms` bleibt mit gleicher Bedeutung, c1x behält `tm`.
-// Ohne Messwerte genau die alte Form. 300 Einträge mit allen Feldern bleiben unter LOG_DOC_MAX_BYTES.
+// S1-ZEIT (Relaunch Stufe 1 P4 Nr. 4): Log-Einträge bekommen `fk` und `in` und (Nacharbeit) `mx`/`sm`/`pl`/`n`/`bg`/`st`; `ms` bleibt roh mit
+// gleicher Bedeutung, `sm` nur, wenn es abweicht; c1x behält `tm`. Ohne Messwerte genau die alte Form. 300 Einträge bleiben unter LOG_DOC_MAX_BYTES.
 
 const T0 = Date.UTC(2026, 8, 20, 8, 0, 0);
 const vocab = (over: Partial<AnswerEvent> = {}): AnswerEvent => ({ t: T0, day: '2026-09-20', kind: 'v', id: 'struggle', ex: 'type', grade: 3, given: 'struggle', ans: 'struggle', ms: 5234, lang: 'de', ctx: 'rev', ...over });
@@ -66,5 +66,40 @@ describe('Loggröße', () => {
     const plain = out.map((e) => ({ ...(e as Record<string, unknown>), fk: undefined, in: undefined }));
     const without = new TextEncoder().encode(JSON.stringify({ date: '2026-09-20', entries: plain })).length;
     expect((bytes - without) / LOG_ENTRIES_MAX).toBeLessThan(30);
+  });
+});
+
+describe('Nacharbeit: weitere Messwerte im Log', () => {
+  it('mx, pl, n, bg, st; ms bleibt roh, sm nur wenn abweichend', () => {
+    const e = logEntry(vocab({ ms: 9876, sm: 4321, fk: 1203, in: 'd', mx: 1, pl: 58, n: 2, bg: 1, st: 4 }));
+    expect(e).toMatchObject({ ms: 9876, sm: 4321, fk: 1200, in: 'd', mx: 1, pl: 58, n: 2, bg: 1, st: 4 });
+    expect(logEntry(vocab({ ms: 4321, sm: 4321 }))).not.toHaveProperty('sm');
+    expect(grammarLogEntry({ ...grammar({ ms: 8000 }), sm: 3000, pl: 70, n: 2 })).toMatchObject({ ms: 8000, sm: 3000, pl: 70, n: 2 });
+    expect(timingOf({ ms: 100, sm: 100.4 })).toEqual({});
+    expect(timingOf({ mx: 2 as unknown as 1, st: 9, pl: Number.NaN })).toEqual({});
+  });
+
+  it('das Lese-Schema liest die neuen Felder', () => {
+    expect(logSchema.safeParse({ date: '2026-09-20', entries: [logEntry(vocab({ sm: 10, mx: 1, pl: 3, n: 2, bg: 1, st: 0 }))] }).success).toBe(true);
+  });
+
+  it('schlimmster Fall: 300 Einträge mit allen Feldern und langen Texten bleiben unter LOG_DOC_MAX_BYTES, nichts fällt heraus', () => {
+    const long = 'This is a deliberately long answer that keeps going well past the clip limit so that every text field is as large as it can get. '.repeat(3);
+    const worst = { fk: 600_000, in: 'd' as const, mx: 1 as const, sm: 599_990, pl: 9_999, n: 2 as const, bg: 1 as const, st: 5 };
+    const added: AnyLogEntry[] = [];
+    for (let i = 0; i < LOG_ENTRIES_MAX; i++) {
+      const t = T0 + i * 1000;
+      if (i % 3 === 0) added.push(logEntry(vocab({ t, id: `word-${i}`, given: long, ans: long, ms: 600_000, dev: 't', ...worst })));
+      else if (i % 3 === 1) added.push(grammarLogEntry({ ...grammar({ t, given: long, ms: 600_000, pts: [2, 2], free: true, c1k: 'kwt' }), ...worst }));
+      else added.push(repairLogEntry({ t, ok: false, lang: 'de', id: `r${i}`, q: long, given: long, ans: long, g: 1, ms: 600_000, ctx: 'rev', ...worst }));
+    }
+    const out = mergeLogEntries([], added);
+    expect(out).toHaveLength(LOG_ENTRIES_MAX);
+    const bytes = new TextEncoder().encode(JSON.stringify({ date: '2026-09-20', entries: out })).length;
+    expect(bytes).toBeLessThan(LOG_DOC_MAX_BYTES);
+    const keys = ['fk', 'in', 'mx', 'sm', 'pl', 'n', 'bg', 'st'];
+    const plain = out.map((e) => Object.fromEntries(Object.entries(e as Record<string, unknown>).filter(([k]) => !keys.includes(k))));
+    const without = new TextEncoder().encode(JSON.stringify({ date: '2026-09-20', entries: plain })).length;
+    expect((bytes - without) / LOG_ENTRIES_MAX).toBeLessThan(80);
   });
 });

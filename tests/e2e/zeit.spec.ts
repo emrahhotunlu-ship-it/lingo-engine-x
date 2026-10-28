@@ -3,8 +3,8 @@ import { boot, bootAt, screen } from './fixtures';
 import { nextItem } from './learnHelpers';
 import { DAY, dump, forcedPatch, planPatch, TYPE_MODE } from './trainerHelpers';
 
-// S1-ZEIT (Relaunch Stufe 1 P4): Zeit je Versuch. Eine Wörter-Übung beantworten und prüfen, dass `hist` (fk/ms/in) und
-// das Tagesprotokoll (fk/in, ms wie bisher) die Messwerte tragen. Nur gespeichert, nie ausgewertet.
+// S1-ZEIT (Relaunch Stufe 1 P4): Zeit je Versuch. Eine Wörter-Übung beantworten und prüfen, dass `hist` (fk/ms/in/mx/pl/n/bg/st) und
+// das Tagesprotokoll (fk/in/…, ms wie bisher) die Messwerte tragen. Nur gespeichert, nie ausgewertet.
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
@@ -47,15 +47,23 @@ test('getippt: hist trägt fk/ms/in, das Protokoll fk/in', async ({ page }) => {
   expect(log).toMatchObject({ k: 'v', m: 'tr-type', in: 't', fk: hist.fk });
   // `ms` im Protokoll bleibt ungerundet (gleiche Bedeutung wie bisher) und passt zu `hist.ms`.
   expect(Math.abs(Number(log.ms) - Number(hist.ms))).toBeLessThanOrEqual(5);
+  // Nacharbeit: Prompt-Länge (sichtbarer Satz samt Hilfe), Stufe vor der Antwort; ohne Claude kein `sm`, nur getippt kein `mx`, erster Versuch ohne `n`.
+  expect(Number(hist.pl)).toBeGreaterThan(10);
+  expect(log.pl).toBe(hist.pl);
+  expect(Number.isInteger(hist.st)).toBe(true);
+  expect(log.st).toBe(hist.st);
+  for (const k of ['mx', 'n', 'bg']) expect(hist, k).not.toHaveProperty(k);
+  expect(log).not.toHaveProperty('sm');
   expect(errors).toEqual([]);
 });
 
-test('ohne Taste eingesetzt (Diktat): in = d', async ({ page }) => {
+test('ohne Taste eingesetzt (Diktat), dann getippt: in = d, mx = 1', async ({ page }) => {
   const errors = await startWith(page, 'struggle');
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'type');
   await page.getByTestId('gap-input').click();
-  // Text in einem Stück ohne Tastendruck, wie es Diktat oder eine Vorhersage einsetzt.
-  await page.keyboard.insertText('to struggle');
+  // Zwei Wörter in einem Stück ohne Tastendruck, wie es Diktat einsetzt; dann ein Buchstabe per Taste (gemischt).
+  await page.keyboard.insertText('to struggl');
+  await page.keyboard.type('e');
   await expect(page.getByTestId('gap')).toContainText('struggle');
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('verdict')).toBeVisible();
@@ -63,6 +71,8 @@ test('ohne Taste eingesetzt (Diktat): in = d', async ({ page }) => {
   const { hist, log } = await saved(page, 'struggle');
   expect(hist.in).toBe('d');
   expect(log.in).toBe('d');
+  expect(hist.mx).toBe(1);
+  expect(log.mx).toBe(1);
   expect(isTenMs(hist.fk)).toBe(true);
   expect(errors).toEqual([]);
 });
@@ -111,6 +121,7 @@ test('Grammatik: Fehlersatz verbessern schreibt fk/in ins Protokoll', async ({ p
   await expect.poll(async () => (await grammarLog(page)).length, { timeout: 25_000 }).toBeGreaterThan(0);
   const e = (await grammarLog(page)).at(-1) ?? {};
   expect(e).toMatchObject({ k: 'g', m: 'gr-correct', in: 't' });
+  expect(Number(e.pl)).toBeGreaterThan(10);
   expect(isTenMs(e.fk)).toBe(true);
   // Erster Kontakt nie nach dem Prüfen (`ms` im Protokoll ungerundet).
   expect(Number(e.fk)).toBeLessThanOrEqual(Number(e.ms) + 5);

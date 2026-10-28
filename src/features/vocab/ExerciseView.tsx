@@ -7,7 +7,7 @@ import { choiceKeyRange } from '../../engine/choiceKeys';
 import { Tiles } from '../../engine/Tiles';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { bindInputKind, createAttemptTracker } from '../../engine/inputKind';
+import { bindInputKind, createAttemptTracker, pickAttempt, promptChars } from '../../engine/inputKind';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { SpotSentence } from '../../engine/SpotSentence';
 import { useSwipeLeft } from '../../engine/swipe';
@@ -39,7 +39,7 @@ import { stageStep } from '../../domain/srs/applyReview';
 import { GERMAN_HINT_EN, HARD_ISSUES, germanHints, jaccard, precheckProduce, selfCheckProduce, shownSentences, type GermanHintId, type PrecheckIssue, type SelfCheck } from '../../domain/srs/produce';
 import { sceneText } from '../../content/activation/scenes';
 import { trapForCard } from '../../domain/srs/traps';
-import type { AttemptInput, CheckResult, Exercise, ExerciseId, Grade, Option } from '../../domain/srs/types';
+import type { AttemptInput, AttemptMeta, CheckResult, Exercise, ExerciseId, Grade, Option } from '../../domain/srs/types';
 import { checkSayIt, type SayItCheck } from '../../domain/srs/sayIt';
 import { inputProfile } from '../../platform/input';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
@@ -100,6 +100,12 @@ type Feedback = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; fehlen ohne Kontakt. Nur gespeichert, nie für die Note. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4-Nacharbeit): gemischt, Senden vor Claude, Prompt-Länge, zweiter Versuch, verborgene Seite (siehe `AttemptMeta`). */
+  mx?: AttemptMeta['mx'];
+  sm?: number;
+  pl?: number;
+  n?: AttemptMeta['n'];
+  bg?: AttemptMeta['bg'];
   /** complete/produce: Claudes Prüfung bzw. die lokale Prüfung. */
   sentence?: { out: SentenceOut | null; self: SelfCheck | null; /** Vorprüfung ohne Claude: Mangel, der den Satz als „Noch nicht“ beendet. */ issue?: PrecheckIssue | ActIssue; hints?: GermanHintId[]; /** A2–A5: Die Vorprüfung hatte schon einen Hinweis gegeben. */ helped?: boolean; /** „Sag es“: lokale Prüfung (Zielwort, Länge). */ sayIt?: SayItCheck };
 };
@@ -251,7 +257,7 @@ export function ExerciseView({
   }, []);
 
   // S1-ZEIT (P4): Tasten und Einfügungen in der einen versteckten Eingabe (liegt außerhalb der Übung) oder in einem Feld der Übung.
-  useEffect(() => bindInputKind(document, (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), attempt, () => performance.now(), () => lookupOpenMs() - lookupAtStart.current + (companionOpenMs() - companionAtStart.current)), [api, attempt]);
+  useEffect(() => bindInputKind(document, { accept: (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), tracker: attempt, now: () => performance.now(), paused: () => lookupOpenMs() - lookupAtStart.current + (companionOpenMs() - companionAtStart.current) }), [api, attempt]);
 
   const isChoice = e.input === 'choice';
   const isSpot = e.input === 'spot';
@@ -335,10 +341,9 @@ export function ExerciseView({
     const interrupted = forced === undefined && result.verdict === 'correct' && wasInterrupted({ key: e.ex, timeMs: ms, firstKeyMs: firstKey });
     // Warum die Stufe nicht steigt (M1): richtig, aber das Tor der freien Antworten ist noch zu.
     const hold = grade > 1 ? stageStep(card.doc, { t: t0, day: useSession.getState().day, ex: e.ex, grade, ...(e.colloc && e.colloc.index >= 0 ? { colIndex: e.colloc.index } : {}), ...(interrupted ? { interrupted: true as const } : {}) }).missing : 0;
-    // S1-ZEIT (P4): nur gespeichert. Ohne Kontakt (z. B. „Weiß ich nicht“ sofort) fehlen `fk` und `in`.
-    const fk = attempt.fk(start);
-    const inKind = fk === undefined ? undefined : attempt.kind(given, isTyped || isSentence ? 't' : 'c');
-    setFb({ result, given, chosen: picked, grade, dueInMs, t: t0, ms, override: false, hint: hintUsed, ...(interrupted ? { interrupted: true as const } : {}), ...(hold > 0 ? { hold } : {}), ...(fk !== undefined ? { fk } : {}), ...(inKind ? { in: inKind } : {}), ...extraFb });
+    // S1-ZEIT (P4): nur gespeichert. Ohne Kontakt (z. B. „Weiß ich nicht“ sofort) fehlen `fk`, `in` und `mx`. Zweiter Versuch: nach dem Hinweis oder nach der Vorprüfung.
+    const meta = attempt.meta({ start, answer: given, base: isTyped || isSentence ? 't' : 'c', second: !!retry || precheckTries.current > 0, pl: promptChars(root.current) });
+    setFb({ result, given, chosen: picked, grade, dueInMs, t: t0, ms, override: false, hint: hintUsed, ...(interrupted ? { interrupted: true as const } : {}), ...(hold > 0 ? { hold } : {}), ...meta, ...extraFb });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen“).
     if (ai && wantsEnrichment(card, shownSentence, Date.now())) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -537,9 +542,14 @@ export function ExerciseView({
       checkSentenceLocal();
       return;
     }
+    // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
+    attempt.send(measure().ms);
     const out = await askAct.run(activateVars(pre.hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil auf Wunsch, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
-    if (!out) return;
+    if (!out) {
+      attempt.unsend();
+      return;
+    }
     // Hat die Vorprüfung schon einen Hinweis gegeben, zählt das als Hilfe: höchstens „Schwer“ (Lernwissenschaft N3).
     const grade = activateGrade(out, precheckTries.current > 0 || tip > 0);
     const verdict: CheckResult['verdict'] = out.verdict === 'correct' ? 'correct' : out.verdict === 'minor' ? 'near' : 'wrong';
@@ -552,6 +562,8 @@ export function ExerciseView({
 
   async function checkSentence(): Promise<void> {
     if (fb || !sentenceText.trim() || sentenceBusy) return;
+    // S1-ZEIT: ein früheres Senden gilt nicht für diesen Versuch.
+    attempt.unsend();
     if (e.act) {
       await checkAct();
       return;
@@ -589,9 +601,14 @@ export function ExerciseView({
       checkSentenceLocal();
       return;
     }
+    // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
+    attempt.send(measure().ms);
     const out = await askProduce.run(sentenceVars(hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
-    if (!out) return;
+    if (!out) {
+      attempt.unsend();
+      return;
+    }
     // Hat die Vorprüfung schon einen Hinweis gegeben (Wort, Form, typischer Fehler), zählt das als Hilfe: höchstens „Schwer“ (Lernwissenschaft N3).
     const grade = (precheckTries.current > 0 ? Math.min(produceGrade(out.verdict, out.usesTarget), 2) : produceGrade(out.verdict, out.usesTarget)) as Grade;
     const verdict: CheckResult['verdict'] = out.verdict === 'correct' ? 'correct' : out.verdict === 'minor' ? 'near' : 'wrong';
@@ -607,7 +624,7 @@ export function ExerciseView({
   const next = () => {
     if (!fb) return;
     const rec = actRecordOf(fb, e);
-    const timing = { ...(fb.fk !== undefined ? { fk: fb.fk } : {}), ...(fb.in ? { in: fb.in } : {}) };
+    const timing = pickAttempt(fb);
     const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t, ...timing } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override && fb.sentence.sayIt?.verified !== true ? { unverified: true as const } : {}), ...(fb.sentence?.sayIt?.noteOnly && !fb.override ? { noteOnly: true as const } : {}), ...(rec ? { rec } : {}), ...timing };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.

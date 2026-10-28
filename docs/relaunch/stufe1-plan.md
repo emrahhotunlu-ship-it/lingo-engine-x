@@ -171,14 +171,23 @@ Daten siehe Abschnitt 4. Hier nur Umfang und Pfade.
 **Umfang:**
 1. `AnswerEvent.fk?: number` und `AnswerEvent.in?: 't'|'d'|'c'`.
 2. Neue reine Erkennung `src/engine/inputKind.ts`: `t` = getippt (Tastendruck vor dem Text), `d` = Diktat (Text kommt als `insertText`/`insertReplacementText` mit mehreren Zeichen auf einmal oder über `compositionend` ohne vorherigen `keydown`), `c` = Auswahl (Antippen, Bausteine, Mehrfachwahl). Gemischt zählt das stärkste Signal; `d` nur, wenn mindestens die Hälfte des Antworttexts ohne Taste kam. Grund: iOS-Wortvorschläge erzeugen einzelne Mehrzeichen-Einfügungen, die allein kein Diktat sind (Risiko R2).
-3. `histEntry` (`applyReview.ts:258`) hängt `fk`, `ms`, `in` an; gerundet auf 10 ms, gedeckelt bei 600.000 ms. Nichts sonst an `histEntry` ändert sich.
+3. `histEntry` (`applyReview.ts:258`) hängt `fk`, `ms`, `in` an; gerundet auf 10 ms, gedeckelt bei 600.000 ms. Dazu (Nacharbeit nach den Prüfungen, 28.10.2026) nur die optionalen Messwerte `mx`, `pl`, `n`, `bg`, `st` (Abschnitt 4.2); `ms` ist in `hist` die Zeit beim Tippen auf „Prüfen“ (`sm`, ohne Wartezeit auf Claude). Sonst ändert sich nichts an `histEntry`.
 4. Log: `logEntry` (`logPatch.ts:230`) bekommt `fk` und `in`; `ms` bleibt mit gleicher Bedeutung. Ebenso Grammatik- und Chunk-Einträge, `repair/review.ts:25`, `nbdrill/shared.tsx:114`. c1x behält `tm` (`src/domain/metrics/tempo.ts`) und bekommt `fk`/`in` zusätzlich.
 5. Übergabe der Messwerte aus `ExerciseView.tsx`, `GrammarItem.tsx`, `useC1Item.ts`.
+   **Erkennung von `in` (Nacharbeit):**
+   - Eine Taste gilt nur als „Taste davor“, wenn sie druckbar ist (ein Zeichen, ohne Strg/Cmd/Alt) und die Einfügung höchstens 100 ms später kommt. `Unidentified`/`Process` und Löschen sind Kontakt, aber keine Taste davor.
+   - `d` gibt es nur bei `insertFromDictation` oder bei einer Einfügung bzw. Komposition ohne Taste mit mindestens zwei Wörtern. Ein einzelnes Wort ohne Taste (Vorschlag, Wischtippen) ist `t`.
+   - Safari: bei `data === null` wird der Text aus `dataTransfer` gelesen.
+   - `mx: 1` markiert gemischte Eingaben; `in` bleibt dabei wie berechnet.
 6. **Keine** Auswertung in Stufe 1. Die Zahlen werden nur gesammelt (Konzept 3.3: „aufgezeichnet ab Stufe 1“). `INTERRUPT_MS` bleibt.
 
 **Pfade:** `src/domain/srs/types.ts`, `src/domain/srs/applyReview.ts`, `src/domain/progress/logPatch.ts`, `src/data/schemas.ts` (nur optionale Felder), neu `src/engine/inputKind.ts`, `src/features/vocab/ExerciseView.tsx`, `src/features/grammar/GrammarItem.tsx`, `src/features/c1x/useC1Item.ts`, `src/features/repair/review.ts`, `src/features/nbdrill/shared.tsx`, Seed des Rückweg-Tests.
 
-**Abnahme:** jede Antwortart schreibt `fk`/`ms`/`in`; Kartengröße bleibt unter `MAX_CARD_BYTES` (`applyReview.ts:28`); Log bleibt unter `LOG_DOC_MAX_BYTES` (`logPatch.ts`); Rückweg-Test grün; learning-scientist bestätigt „keine Lernlogik verändert“ (Diff in `src/domain/grade`, `srs/queue`, `metrics` leer).
+**Abnahme:** In Stufe 1 gilt sie nur für die drei Erzeuger `ExerciseView.tsx` (Wörter), `GrammarItem.tsx` (Grammatik) und `useC1Item.ts` (c1x): Jede dieser Antwortarten schreibt `fk`/`ms`/`in` und die übrigen Messwerte.
+- **Bewusste Lücke (Stufe 2):** Diese Erzeuger liefern noch kein `fk`/`in`, ihre Einträge bleiben in der alten Form: Fehlersatz-Runde (`RepairRound`), `nbdrill`, Druck-Runde, Drills, Anki-Aufdecken, Einführung/Wort-Werkstatt und „Sag es“.
+- **Ebenfalls Stufe 2:** die Befunde LS 7–9 und 11 des learning-scientist (Hören, Definition des Kontakts, Sonderformen, Gerät).
+- **Ebenfalls Stufe 2:** Die Note der Satzprüfung mit Claude liest weiter die Zeit nach der Wartezeit. Das ist ein bestehender Fehler und wird in Stufe 1 nicht geändert.
+- **Weitere Abnahme:** Kartengröße bleibt unter `MAX_CARD_BYTES` (`applyReview.ts:28`); Log bleibt unter `LOG_DOC_MAX_BYTES` (`logPatch.ts`); Rückweg-Test grün; learning-scientist bestätigt „keine Lernlogik verändert“ (Diff in `src/domain/grade`, `srs/queue`, `metrics` leer).
 
 **Tests:** `tests/unit/inputKind.test.ts` (neu, mit iOS-Vorschlag, Diktat, Einfügen, Antippen), `tests/unit/histTiming.test.ts` (neu, Rundung, Deckel, Altbestand ohne Felder, `slice(-12)` bewahrt alte Einträge), `tests/unit/logTiming.test.ts` (neu, Größe bei 300 Einträgen), `tests/e2e/zeit.spec.ts` (neu, eine Übung tippen, in `hist` und Log nachsehen).
 **verify-fast-map:** `src/engine/inputKind` → `zeit` + TRAINER; `src/domain/srs/applyReview`, `src/domain/progress/logPatch` → `zeit` + TRAINER + rueckweg.
@@ -397,10 +406,19 @@ Kleinteile unter 8 KB (`legacy/context.json`, `legacy/vtest.json`, `vtest-en.jso
 | `vocab/<id>.hist[]` | `fk` | Zahl, ms, gerundet auf 10, ≤ 600.000 | Zeit vom Zeigen der Aufgabe (Hören: ab Tonende) bis zum ersten Tastendruck oder ersten Antippen; Pausen für Nachschlagen und Begleiter herausgerechnet (gleiche Regel wie `measure()`, `ExerciseView.tsx:291–296`) |
 | `vocab/<id>.hist[]` | `ms` | dito | Zeit bis Senden; gleiche Bedeutung wie `ms` im Log (`logPatch.ts:230–235`) |
 | `vocab/<id>.hist[]` | `in` | `'t'|'d'|'c'` | getippt, diktiert, ausgewählt |
+| `hist[]` und Log | `mx` | `1` | gemischt: Tasten und Diktat, Einfügen aus Zwischenablage/Ziehen oder Löschen nach einer Einfügung ohne Taste; `in` bleibt |
+| nur Log | `sm` | Zahl, ms (roh, ≤ 600.000) | Zeit beim Tippen auf „Prüfen“ vor dem Warten auf Claude, nur wenn ≠ `ms`; in `hist` steht dieser Wert als `ms` |
+| `hist[]` und Log | `pl` | Zahl, 0…9.999 | Zeichen des sichtbaren Prompts (Satz bzw. Aufgabe samt Suchhilfe und Hinweis) |
+| `hist[]` und Log | `n` | `2` | zweiter Versuch (nach Hinweis oder Vorprüfung, Zielform) oder zweites Senden an Claude |
+| `hist[]` und Log | `bg` | `1` | Die Seite war zwischen Zeigen und Senden verborgen (`visibilityState`); `ms` bleibt unverändert |
+| `hist[]` und Log (Wörter, Wendungen) | `st` | Zahl, 0…5 | Lernstufe der Karte vor der Antwort |
 | Log-Einträge (`logPatch.ts`, Vokabel, Chunk, Grammatik, Reparatur, NB-Drill, c1x) | `fk`, `in` | wie oben | `ms` gibt es bereits |
 
-- **Größe:** ~25 Byte je Versuch. `hist` hat höchstens 12 Einträge (`HIST_MAX`, `applyReview.ts:27`), also ≤ 300 Byte je Karte zusätzlich; Kartengrenze `MAX_CARD_BYTES = 64 KiB` (Z. 28). Log: 300 Einträge (`LOG_ENTRIES_MAX`, `logPatch.ts:12`) × ~20 Byte = ~6 KB bei `LOG_DOC_MAX_BYTES = 240 KiB`. Unkritisch.
-- **Schema:** `cardPatchSchema.hist` ist `z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX)` (`applyReview.ts:53/86/310`). `fk`/`ms`/`in` werden als `.optional()` ergänzt (zod 4, CLAUDE.md A6 Nr. 16). Im Log (`schemas.ts`, `logSchema` ab Z. 444) ebenso optional. Kein bestehendes Feld wird Pflicht.
+- **Größe nach der Nacharbeit (gemessen, schlimmster Fall):** Ein `hist`-Eintrag wächst um 70 Byte; eine Karte mit 12 Einträgen hat 2.133 Byte. Der Log mit 300 Einträgen und langen Texten hat 170.059 Byte (+70 Byte je Eintrag) bei 245.760 Byte Grenze (`tests/unit/histTiming.test.ts`, `tests/unit/logTiming.test.ts`).
+- **Größe (erste Schätzung):** ~25 Byte je Versuch. `hist` hat höchstens 12 Einträge (`HIST_MAX`, `applyReview.ts:27`), also ≤ 300 Byte je Karte zusätzlich; Kartengrenze `MAX_CARD_BYTES = 64 KiB` (Z. 28). Log: 300 Einträge (`LOG_ENTRIES_MAX`, `logPatch.ts:12`) × ~20 Byte = ~6 KB bei `LOG_DOC_MAX_BYTES = 240 KiB`. Unkritisch.
+- **Schema:** `cardPatchSchema.hist` ist `z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX)` (`applyReview.ts:53/86/310`). `fk`/`ms`/`in` (und `mx`/`pl`/`n`/`bg`/`st`) werden als `.optional()` ergänzt (zod 4, CLAUDE.md A6 Nr. 16).
+  - Streng geprüft wird nur der **neue** Eintrag (der letzte).
+  - Ältere Einträge bleiben tolerant `{t, g?}`, damit fremde Altwerte keine Bewertung blockieren. Im Log (`schemas.ts`, `logSchema` ab Z. 444) ebenso optional. Kein bestehendes Feld wird Pflicht.
 - **Schreibweg:** ausschließlich über `writer.ts` wie heute (`persist.ts:140` `pushEntry(logEntry(a), a.day)`, Karten über `applyReview`). Kein neuer Schreibpfad.
 - **known-Einträge** (`src/domain/srs/vocabList.ts:165/179`, `{t, m:'known', g:3}`) bekommen keine Zeitfelder.
 

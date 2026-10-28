@@ -278,6 +278,37 @@ export const fsrsSchema = z.looseObject({
   src: str,
 });
 
+// S1-ZEIT (Relaunch Stufe 1 P4): Messwerte je Versuch in `hist` (Vokabeln, Wendungen) und im Tagesprotokoll. Nur gespeichert, nie ausgewertet.
+// `fk` ms bis zum ersten Kontakt, `ms` Antwortzeit (in `hist` beim Senden, ohne Wartezeit auf Claude; beide auf 10 ms gerundet, ≤ 600.000),
+// `in` Eingabeart (`t` getippt, `d` diktiert, `c` gewählt), `mx` gemischt, `pl` Zeichen des sichtbaren Prompts, `n` zweiter Versuch,
+// `bg` Seite war verborgen, `st` Lernstufe vor der Antwort. Streng nur für den NEUEN Verlaufseintrag (`applyReview.ts`); gelesen wird tolerant.
+export const ATTEMPT_MS_MAX = 600_000;
+export const ATTEMPT_PL_MAX = 9_999;
+export const attemptTimingFields = {
+  fk: z.number().int().min(0).max(ATTEMPT_MS_MAX).optional(),
+  ms: z.number().int().min(0).max(ATTEMPT_MS_MAX).optional(),
+  in: z.enum(['t', 'd', 'c']).optional(),
+  mx: z.literal(1).optional(),
+  pl: z.number().int().min(0).max(ATTEMPT_PL_MAX).optional(),
+  n: z.literal(2).optional(),
+  bg: z.literal(1).optional(),
+  st: z.number().int().min(0).max(5).optional(),
+};
+/** Lese-Schema der Messwerte in `hist` und im Protokoll: tolerant (Altbestand und fremde Werte blockieren nie eine Karte). */
+export const attemptReadFields = { fk: num, ms: num, in: str, mx: num, sm: num, pl: num, n: num, bg: num, st: num };
+/** Versuchszeit für die Speicherung: auf 10 ms gerundet, 0 … 600.000 ms (ein Ausreißer sprengt nie Karte oder Log). */
+export function attemptMs(v: number): number {
+  return Math.min(ATTEMPT_MS_MAX, Math.max(0, Math.round(v / 10) * 10));
+}
+/** Prompt-Zeichen: ganze Zahl 0 … 9.999, sonst `undefined`. */
+export function attemptPl(v: unknown): number | undefined {
+  return typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.min(ATTEMPT_PL_MAX, Math.round(v)) : undefined;
+}
+/** Lernstufe vor der Antwort: ganze Zahl 0 … 5, sonst `undefined`. */
+export function attemptSt(v: unknown): number | undefined {
+  return typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 5 ? v : undefined;
+}
+
 const schedulingFields = {
   S: num,
   D: num,
@@ -287,7 +318,7 @@ const schedulingFields = {
   lapses: num,
   state: str,
   stage: num,
-  hist: z.array(z.looseObject({ g: num, m: str, t: num })).nullish(),
+  hist: z.array(z.looseObject({ g: num, m: str, t: num, ...attemptReadFields })).nullish(),
   modes: z.record(z.string(), z.looseObject({ c: num, w: num }).nullish()).nullish(),
   intro: str,
   /** Erster Fest-Tag (Lernplattform 3.0 P22, `JJJJ-MM-TT`), rein ergänzend, einmal gesetzt. */
@@ -441,20 +472,6 @@ export const lessonSchema = z.looseObject({
   lx: loose,
 });
 
-// S1-ZEIT (Relaunch Stufe 1 P4): Zeitfelder je Versuch, streng für den Schreibweg (`applyReview.ts`).
-// `fk` ms bis zum ersten Kontakt, `ms` Antwortzeit (beide auf 10 ms gerundet, gedeckelt bei 600.000),
-// `in` Eingabeart: `t` getippt, `d` diktiert/eingesetzt, `c` gewählt. Alle optional.
-export const ATTEMPT_MS_MAX = 600_000;
-export const attemptTimingFields = {
-  fk: z.number().int().min(0).max(ATTEMPT_MS_MAX).optional(),
-  ms: z.number().int().min(0).max(ATTEMPT_MS_MAX).optional(),
-  in: z.enum(['t', 'd', 'c']).optional(),
-};
-/** Versuchszeit für die Speicherung: auf 10 ms gerundet, 0 … 600.000 ms (ein Ausreißer sprengt nie Karte oder Log). */
-export function attemptMs(v: number): number {
-  return Math.min(ATTEMPT_MS_MAX, Math.max(0, Math.round(v / 10) * 10));
-}
-
 export const logSchema = z.looseObject({
   date: str,
   // `given`/`ans` sind je nach Übungsart Text oder Liste (z. B. Satzbau) – tolerant lesen.
@@ -480,10 +497,16 @@ export const logSchema = z.looseObject({
         lesson: str,
         // Neu (Phase 2, M4): Einspruch „Ich lag richtig".
         override: bool,
-        // S1-ZEIT (Relaunch Stufe 1 P4): Zeit bis zum ersten Kontakt und Eingabeart (t/d/c).
+        // S1-ZEIT (Relaunch Stufe 1 P4): Messwerte je Versuch (fk, in, mx, sm, pl, n, bg, st; `ms` steht schon oben).
         // Nur gespeichert, nie ausgewertet; Altbestand ohne die Felder bleibt gültig.
         fk: num,
         in: str,
+        mx: num,
+        sm: num,
+        pl: num,
+        n: num,
+        bg: num,
+        st: num,
       }),
     )
     .nullish(),

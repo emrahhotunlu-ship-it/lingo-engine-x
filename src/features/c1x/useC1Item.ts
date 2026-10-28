@@ -16,10 +16,10 @@ import type { InputProfile } from '../../domain/grammar/tasks';
 import type { HelpLevel } from '../../domain/grade';
 import type { Ctx, GrammarAnswer } from '../../domain/learn/types';
 import type { AttemptTiming } from '../../domain/progress/logPatch';
-import type { AttemptInput } from '../../domain/srs/types';
+import type { AttemptInput, AttemptMeta } from '../../domain/srs/types';
 import { patsOf, patternState } from '../../domain/metrics/pattern';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { bindInputKind, createAttemptTracker } from '../../engine/inputKind';
+import { bindInputKind, createAttemptTracker, pickAttempt, promptChars } from '../../engine/inputKind';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
@@ -62,6 +62,12 @@ type Fb = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; fehlen ohne Kontakt. Nur gespeichert, nie für Note oder Tempo (`tm` bleibt). */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4-Nacharbeit): gemischt, Senden vor Claude, Prompt-Länge, zweiter Versuch, verborgene Seite (siehe `AttemptMeta`). */
+  mx?: AttemptMeta['mx'];
+  sm?: number;
+  pl?: number;
+  n?: AttemptMeta['n'];
+  bg?: AttemptMeta['bg'];
   help: HelpLevel;
   /** „Auch richtig“ (Claude, `grammar-fit@1`): zählt nie als Fehler und nicht als Beleg fürs Muster. */
   alt?: boolean;
@@ -100,8 +106,6 @@ export type C1ItemProps = {
 const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().length > 0;
 
 const tick = (): number => performance.now();
-/** S1-ZEIT (P4): Zeitfelder der Rückmeldung für die Buchung (nur gespeichert, `grammarLogEntry`). */
-const timingOf = (fb: AttemptTiming): AttemptTiming => ({ ...(fb.fk !== undefined ? { fk: fb.fk } : {}), ...(fb.in ? { in: fb.in } : {}) });
 
 export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObject<HTMLDivElement | null>): ExerciseShellProps {
   const { task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, noAuto = false } = props;
@@ -152,7 +156,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, [root]);
   // S1-ZEIT (P4): Tasten und Einfügungen in der versteckten Eingabe (außerhalb der Aufgabe) oder in einem Feld der Aufgabe.
-  useEffect(() => bindInputKind(document, (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), attempt, tick, () => lookupOpenMs() - lookupAt.current), [api, attempt, root]);
+  useEffect(() => bindInputKind(document, { accept: (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), tracker: attempt, now: tick, paused: () => lookupOpenMs() - lookupAt.current }), [api, attempt, root]);
 
   const elapsed = (): number => Math.max(0, Math.round(tick() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
   const help: HelpLevel = tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0;
@@ -176,12 +180,10 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     lookupAt.current = lookupOpenMs();
     attempt.reset();
   }, [attempt]);
-  /** S1-ZEIT (P4): `fk`/`in` zum Zeitpunkt der Wertung (wie `ms`); getippte Formen `t`, Auswahl, Bausteine, Antippen `c`. Ohne Kontakt leer. */
+  /** S1-ZEIT (P4): Messwerte zum Zeitpunkt der Wertung (wie `ms`); getippte Formen `t`, Auswahl, Bausteine, Antippen `c`. Ohne Kontakt fehlen `fk`/`in`/`mx`. */
   const timing = (score: C1Score | null, meta: ResponseMeta | undefined, given: string): AttemptTiming => {
-    const fk = attempt.fk(shownAt.current);
-    if (fk === undefined) return {};
     const typed = !!score?.free || meta?.form === 'typed' || meta?.form === 'tapfix' || meta?.form === 'part';
-    return { fk, in: attempt.kind(given, typed ? 't' : 'c') };
+    return attempt.meta({ start: shownAt.current, answer: given, base: typed ? 't' : 'c', second: !!retry, pl: promptChars(root.current) });
   };
 
   const finish = (score: C1Score, response: C1Response, meta: ResponseMeta, extra: Partial<Fb> = {}): void => {
@@ -194,6 +196,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const submit = (): void => {
     if (fb || fit.ctl.current) return;
+    // S1-ZEIT: ein früheres Senden (erster Versuch vor dem Hinweis) gilt nicht für diesen Versuch.
+    attempt.unsend();
     const cur = respRef.current;
     if (!cur) return;
     const score = scoreC1(item, cur.r);
@@ -214,6 +218,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
         return;
       }
       if (j.askAi === 'auto') {
+        // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
+        attempt.send(elapsed());
         runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVarsFor(given)), (out) => finish(full, cur.r, cur.meta, aiYes(out, given)), (res) => settle(score, cur, { ...jx, ...aiNotYes(res, true) }));
         return;
       }
@@ -340,7 +346,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       const full: C1Score = { ...fb.score, got: fb.score.max, verdict: 'correct', parts: fb.score.parts.map((x) => ({ ...x, ok: true })) };
       const runT: C1Run = { form: fb.meta.form, inp, timeMs: fb.ms, firstKeyMs: fb.firstKeyMs, help: 1, ...(seenBefore ? { again: true } : {}), day, t: nextT(), lang, ctx, given: fb.target.given };
       const aT = bookAnswer(task, full, response, runT);
-      const kindT = onDone({ ...aT, tj: { v: 'c' }, ...(fb.fit ? { fit: fb.fit } : {}), ...timingOf(fb) });
+      // S1-ZEIT: die Zielform ist ein zweiter Versuch.
+      const secondTry: AttemptTiming = { ...pickAttempt(fb), n: 2 };
+      const kindT = onDone({ ...aT, tj: { v: 'c' }, ...(fb.fit ? { fit: fb.fit } : {}), ...secondTry });
       if (kindT === 'typed') api.focusNow();
       else api.blur();
       return;
@@ -374,7 +382,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       ...(fb.alt && !fb.override ? { alt: true } : {}),
       tj,
       ...(fb.fit && !fb.dontKnow ? { fit: fb.fit } : {}),
-      ...timingOf(fb),
+      ...pickAttempt(fb),
     };
     const kind = onDone(booked);
     if (kind === 'typed') api.focusNow();

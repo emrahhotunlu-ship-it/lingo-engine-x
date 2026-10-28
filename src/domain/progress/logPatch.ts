@@ -1,7 +1,7 @@
 import { answerRight } from '../learn/right';
 import type { DrillAnswer, GrammarAnswer } from '../learn/types';
-import { attemptMs } from '../../data/schemas';
-import type { AnswerEvent, AttemptInput } from '../srs/types';
+import { ATTEMPT_MS_MAX, attemptMs, attemptPl, attemptSt } from '../../data/schemas';
+import type { AnswerEvent, AttemptInput, AttemptMeta } from '../srs/types';
 import type { ChannelLogEntry } from './channelLog';
 
 // Tagesprotokoll `log/<tag>` im Format der alten App (Daten-Entwurf §4): ein Dokument je
@@ -33,6 +33,13 @@ export type LogEntry = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /**
@@ -57,6 +64,13 @@ export type ChunkLogEntry = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /**
@@ -111,6 +125,13 @@ export type GrammarLogEntry = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; `tm` bleibt daneben unverändert. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -131,6 +152,13 @@ export type DrillLogEntry = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt (10-ms-Raster, ≤ 600.000) und Eingabeart. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 /**
@@ -153,26 +181,44 @@ export type RepairLogEntry = {
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart. Nur gespeichert. */
   fk?: number;
   in?: AttemptInput;
+  /** S1-ZEIT (P4): gemischt, Senden ohne Claude-Wartezeit (nur wenn ≠ `ms`), Prompt-Zeichen, zweiter Versuch, verborgen, Stufe vorher. */
+  mx?: 1;
+  sm?: number;
+  pl?: number;
+  n?: 2;
+  bg?: 1;
+  st?: number;
 };
 
 export function repairLogEntry(i: Omit<RepairLogEntry, 'type' | 'm'>): RepairLogEntry {
-  const { fk, in: kind, ...rest } = i;
-  return { ...rest, type: 'repair', m: 'repair', q: clip(i.q), given: clip(i.given), ans: clip(i.ans), ...timingOf({ fk, in: kind }) };
+  const { fk, in: kind, mx, sm, pl, n, bg, st, ...rest } = i;
+  return { ...rest, type: 'repair', m: 'repair', q: clip(i.q), given: clip(i.given), ans: clip(i.ans), ...timingOf({ fk, in: kind, mx, sm, pl, n, bg, st, ms: i.ms }) };
 }
 
 // ------------------------------------------------------------------ S1-ZEIT (Relaunch Stufe 1 P4)
 
-/** Zeitfelder eines Versuchs, wie sie eine Übung übergibt (beide optional, nie ausgewertet). */
-export type AttemptTiming = { fk?: number; in?: AttemptInput };
+/** Messwerte eines Versuchs, wie sie eine Übung übergibt (alle optional, nie ausgewertet; Bedeutung in `AnswerEvent`). */
+export type AttemptTiming = AttemptMeta;
 
 /**
- * `fk` (gerundet auf 10 ms, ≤ 600.000) und `in` für einen Protokolleintrag; fehlt ein Wert oder ist er
- * ungültig, bleibt das Feld weg (Altbestand und Antworten ohne Kontakt). `ms` bleibt wie bisher.
+ * Messwerte für einen Protokolleintrag; fehlt ein Wert oder ist er ungültig, bleibt das Feld weg (Altbestand, Antworten ohne Kontakt).
+ * `fk` gerundet auf 10 ms (≤ 600.000); `ms` bleibt roh wie bisher (Note und Lernzeit lesen es), `sm` (Senden ohne Claude-Wartezeit) nur, wenn es von `ms` abweicht.
  */
-export function timingOf(a: AttemptTiming): AttemptTiming {
+export function timingOf(a: AttemptTiming & { ms?: number }): AttemptTiming {
   const out: AttemptTiming = {};
   if (typeof a.fk === 'number' && Number.isFinite(a.fk) && a.fk >= 0) out.fk = attemptMs(a.fk);
   if (a.in === 't' || a.in === 'd' || a.in === 'c') out.in = a.in;
+  if (a.mx === 1) out.mx = 1;
+  if (typeof a.sm === 'number' && Number.isFinite(a.sm) && a.sm >= 0) {
+    const sm = Math.min(ATTEMPT_MS_MAX, Math.round(a.sm));
+    if (typeof a.ms !== 'number' || sm !== Math.round(a.ms)) out.sm = sm;
+  }
+  const pl = attemptPl(a.pl);
+  if (pl !== undefined) out.pl = pl;
+  if (a.n === 2) out.n = 2;
+  if (a.bg === 1) out.bg = 1;
+  const st = attemptSt(a.st);
+  if (st !== undefined) out.st = st;
   return out;
 }
 
