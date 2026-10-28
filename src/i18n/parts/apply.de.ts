@@ -1,13 +1,13 @@
 // Texte des Reiters „Anwenden“ (Deutsch). Wird in de.ts per Spread eingebunden.
 
 export const applyDe = {
-  apTitle: 'Anwenden',
+  apTitle: 'Praxis',
   apLead: 'Benutze Wörter und Grammatik zusammen. Freiwillig, zählt nie als Pflicht.',
   apListenWrite: 'Hören und aufschreiben',
   apBuild: 'Sätze bauen',
   apSpeak: 'Sprechen',
   apRoleplay: 'Rollenspiel und Einwände',
-  lrBackToApply: 'Zurück zu Anwenden',
+  lrBackToApply: 'Zurück zu Praxis',
   apCombo: 'Wort und Regel kombinieren',
   apComboLead: 'Wortverbindungen, Umformen und Wortbildung: ein Wort, eine Regel, ein Satz.',
   apRepair: 'Fehler korrigieren',

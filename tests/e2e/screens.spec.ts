@@ -183,7 +183,7 @@ for (const lang of LANGS) {
     const page = await context.newPage();
     const { errors } = await boot(page, { lang, migrated: true });
     await screen(page, 'today');
-    const boxes = await page.getByTestId('tabbar').locator('button').evaluateAll((els) =>
+    const boxes = await page.getByTestId('tabbar').locator('button[data-tab]').evaluateAll((els) =>
       els.map((el) => {
         // Beschriftung unter dem Symbol (UX-Beratung Nr. 2: Symbol + Wort).
         const label = [...el.querySelectorAll('span')].find((sp) => [...sp.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) && !sp.closest('[data-testid="tab-badge"]'));

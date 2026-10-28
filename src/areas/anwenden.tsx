@@ -24,20 +24,16 @@ declare module '../app/router/types' {
   }
 }
 
-/** Reiter-Wurzel: der Hub, darunter die Abschnitte des Platzes `apply`. */
+/** Reiter-Wurzel: der Hub; die Abschnitte des Platzes `apply` (Lesen und Sprechen) stehen oben unter dem Titel (P2, Vorschau H13). */
 function ApplyRoot() {
-  return (
-    <>
-      <ApplyHub />
-      <HubSections places={placesOf('apply')} />
-    </>
-  );
+  return <ApplyHub lead={<HubSections places={placesOf('apply')} />} />;
 }
 
 export const anwenden = defineArea({
   id: 'anwenden',
   screens: {
-    apply: { kind: 'tab', component: ApplyRoot, title: 'apTitle', keepScroll: true },
+    // P2 S1-SHELL: der Reiter heißt „Praxis“ – so lautet auch „‹ Praxis“ auf Lesen/Sprechen und „sieht gerade: Praxis“.
+    apply: { kind: 'tab', component: ApplyRoot, title: 'shTabPractice', keepScroll: true },
     repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
     tempoRound: { kind: 'exercise', component: TempoRoundScreen, title: 'cxTempoTitle' },
     listenQ: { kind: 'exercise', component: ListenQuestionScreen, title: 'apListenQ' },

@@ -10,7 +10,7 @@ import { openCompanion } from '../companion/store';
 // - Reiter-Wurzel: Kopf des Rahmens (`app/shell/TopBar`) mit Profil links, Übersetzen und Claude
 //   rechts. Die Titelzeile der Seite zeigt nur noch den Titel (und eigene Knöpfe) – `TitleActions`
 //   zeichnet in der Ebene `tab` kein zweites Übersetzen/Claude.
-// - Seite: rechts Übersetzen, Claude und das Zahnrad.
+// - Seite: rechts nur „Fragen“ (Relaunch P2 S1-SHELL; Übersetzer und Einstellungen in der Navigation bzw. auf „Fortschritt“).
 // - Übung: die gemeinsame Übungsleiste mit Übersetzen, Claude und Zahnrad.
 // Emrahs feste Vorgabe (CLAUDE.md A7, Paket 2; Fehlermeldung am iPhone 28.09.): Übersetzer, Claude
 // und Einstellungen auf jeder Seite und in jeder Übung mit einem Tipp. Die Einstellungen sind ein
@@ -48,8 +48,21 @@ export function SettingsButton() {
 }
 
 /**
- * Rechte Seite einer Titelzeile: eigene Knöpfe, dann Übersetzer, Claude und Zahnrad. Auf einer
- * Reiter-Wurzel stehen Übersetzer und Claude schon im Kopf des Rahmens – dort nur die eigenen Knöpfe.
+ * „Fragen“: das eine Claude-Symbol in Kopf und Seitenköpfen (Relaunch P2 S1-SHELL, stufe1-plan.md §6.3; Test-ID `open-companion`
+ * bleibt). Sprechblase mit Fragezeichen (Vorschau `ic('ask')`). Ohne KI unsichtbar. Liegt hier, damit `app/shell/TopBar` und die
+ * Seiten es ohne Kreis-Import teilen.
+ */
+export function AskButton() {
+  const { t } = useT();
+  const ai = useAiAvailable();
+  if (!ai) return null;
+  return <IconButton icon="ask" label={t('shAsk')} onClick={() => openCompanion()} className="text-accent-text hover:text-accent-text" data-testid="open-companion" data-ai="" />;
+}
+
+/**
+ * Rechte Seite einer Titelzeile: eigene Knöpfe, dann EIN „Fragen“ (Relaunch P2: Seitenköpfe ohne Übersetzer und Zahnrad –
+ * die stehen auf „Fortschritt“, in der Übungsleiste und ab 600 px in der Navigation). Auf einer Reiter-Wurzel steht „Fragen“
+ * schon im Kopf des Rahmens – dort nur die eigenen Knöpfe.
  */
 export function TitleActions({ children }: { children?: ReactNode }) {
   const { kind } = useLayer();
@@ -57,9 +70,7 @@ export function TitleActions({ children }: { children?: ReactNode }) {
   return (
     <div className="flex flex-none items-center gap-1">
       {children}
-      <TranslateButton />
-      <ClaudeButton />
-      <SettingsButton />
+      <AskButton />
     </div>
   );
 }

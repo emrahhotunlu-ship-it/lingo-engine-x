@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openTab, screen, type Theme } from './fixtures';
+import { boot, openSettings, openTab, screen, type Theme } from './fixtures';
 
 // Bildschirmfotos für den Design-Vergleich (R5 „Dein Lehrer“, Spur A: P46 Satz-Klinik und P47 Schreibwerkstatt) nach `docs/umbau/design-vergleich/r5-a-*.png`.
 // Handy 390 px (dunkel und hell), Laptop 1440 px (dunkel und hell). Läuft nur auf Zuruf (`LX_SHOTS=1`), sonst übersprungen: Bilder sind Belege für Emrah
@@ -45,7 +45,7 @@ test.describe('Fotos R5 Spur A', () => {
         await page.screenshot({ path: `${OUT}/r5-a-03-klinik-ergebnis-handy-${theme === 'dark' ? 'dunkel' : 'hell'}.png` });
         if (theme === 'dark') {
           await page.getByTestId('cl-done').click();
-          await page.getByTestId('open-settings').first().click();
+          await openSettings(page);
           await expect(page.getByTestId('settings-work-profile')).toBeVisible();
           await page.getByTestId('settings-work-profile').scrollIntoViewIfNeeded();
           await page.waitForTimeout(600);

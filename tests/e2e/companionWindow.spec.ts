@@ -40,8 +40,10 @@ async function grip(page: Page) {
 }
 const inView = (b: Box, w: number, h: number) => b.x >= -1 && b.y >= -1 && b.x + b.width <= w + 1 && b.y + b.height <= h + 1;
 
-test.describe('Schwebefenster · Desktop 1440', () => {
-  test.use({ viewport: { width: 1440, height: 900 } });
+// Relaunch P2 S1-SHELL: ab 1024 px dockt Claude in die Kontextspalte (rahmen.spec.ts). Das frei bewegliche Schwebefenster gibt es am
+// Laptop darunter (Schiene, 600–1023 px); deshalb läuft dieser Block bei 1000 px (vorher 1440 px).
+test.describe('Schwebefenster · Desktop 1000', () => {
+  test.use({ viewport: { width: 1000, height: 900 } });
 
   test('öffnet unten rechts ohne Scrim; die Aufgabe dahinter bleibt bedienbar; Seite wird nicht gesperrt', async ({ page }) => {
     const { errors, external } = await start(page);
@@ -58,7 +60,7 @@ test.describe('Schwebefenster · Desktop 1440', () => {
     await expect(win(page)).toBeVisible();
     // Das Fenster liegt nicht mittig über der Aufgabe.
     const b = await box(page);
-    expect(b.x + b.width / 2).toBeGreaterThan(1440 * 0.6);
+    expect(b.x + b.width / 2).toBeGreaterThan(1000 * 0.6);
     expect(await layoutProblems(page)).toEqual([]);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
@@ -115,7 +117,7 @@ test.describe('Schwebefenster · Desktop 1440', () => {
     // Sehr groß ziehen: höchstens der Bildschirm.
     await drag(page, { x: b3.x + b3.width - 4, y: b3.y + b3.height - 12 }, 3000, 3000);
     const b4 = await box(page);
-    expect(inView(b4, 1440, 900)).toBe(true);
+    expect(inView(b4, 1000, 900)).toBe(true);
     expect(await layoutProblems(page)).toEqual([]);
   });
 
@@ -187,8 +189,8 @@ test.describe('Schwebefenster · Desktop 1440', () => {
     await page.getByTestId('open-companion').click();
     await page.setViewportSize({ width: 700, height: 520 });
     await expect.poll(async () => inView(await box(page), 700, 520)).toBe(true);
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await expect.poll(async () => inView(await box(page), 1440, 900)).toBe(true);
+    await page.setViewportSize({ width: 1000, height: 900 });
+    await expect.poll(async () => inView(await box(page), 1000, 900)).toBe(true);
   });
 
   test('reduzierte Bewegung: Umschalten geschieht sofort, ohne Übergang', async ({ page }) => {
