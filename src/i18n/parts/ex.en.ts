@@ -16,7 +16,7 @@ export const exEn = {
   exLineYours: 'Your answer',
   exLineWhy: 'Correct because',
   exLineMistake: 'Typical mistake',
-  exLineContrast: "Don't mix up",
+  exLineContrast: 'Don’t mix up',
   exLineNote: 'Note',
   exLineWhyNot: 'Why is that?',
   exBlockWhy: 'Why',

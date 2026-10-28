@@ -20,5 +20,5 @@ export const shellEn: Record<keyof typeof shellDe, string> = {
   shContextEmptyNoAi: 'Word details and explanations appear here when you open them.',
   shPracticeMore: 'Reading and speaking',
   shReadSub: 'Today’s article and courses',
-  shSpeakSub: 'Role-play and objection practice',
+  shSpeakSub: 'Role-play and objection training',
 };

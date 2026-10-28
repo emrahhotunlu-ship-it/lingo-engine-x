@@ -3,7 +3,7 @@
 import type { startDe } from './start.de';
 
 export const startEn: Record<keyof typeof startDe, string> = {
-  stSlow: 'Connecting to your data is taking longer',
+  stSlow: 'Connecting to your data is taking longer than usual',
   stSlowRetry: 'Try again',
   stWaiting: 'Getting your first task ready',
   stWaitingCancel: 'Cancel',
@@ -11,7 +11,7 @@ export const startEn: Record<keyof typeof startDe, string> = {
   stDiagSec: '{n} s',
   stDiagNone: '–',
   stDiagLabel: 'Start',
-  stChapter: 'Chapter status',
+  stChapter: 'Grammar chapter',
   stWords: 'Words locked in',
   stEnter: 'Enter starts',
 };
