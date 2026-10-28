@@ -107,6 +107,13 @@ describe('Sperrklinke (evaluate)', () => {
     b.grenzen.entry.zuwachs = { 'P2 S1-SHELL': { bytes: 1500, freigabe: 'Hauptsitzung 28.10.2026: Kontextspalte größer' } };
     expect(evaluate(big(), b).problems).toEqual([]);
   });
+  it('eine Freigabe ohne Wer, Datum und Grund zählt nicht (platform-guard S4)', () => {
+    const b = structuredClone(BUDGET);
+    for (const freigabe of ['ok', 'ja', 'Hauptsitzung', '28.10.2026', 'Hauptsitzung 28.10.2026:', 'Hauptsitzung: weil größer']) {
+      b.grenzen.entry.zuwachs = { 'P2 S1-SHELL': { bytes: 1500, freigabe } };
+      expect(evaluate(big(), b).problems.join(), freigabe).toContain('Zustimmung der Hauptsitzung');
+    }
+  });
   it('Zuwachs eines Pakets ohne vorab genannten Betrag ist ein Befund', () => {
     const b = structuredClone(BUDGET);
     b.grenzen.entry.zuwachs = { 'P9 S1-INHALT': 10 };
@@ -127,5 +134,16 @@ describe('scripts/budget.json', () => {
     const m = { entry: 0, entryFiles: [], css: 0, html: 0, lazy: {}, bin: {}, files: 1, total: 1 };
     expect(evaluate(m, budget).problems).toEqual([]);
     expect(Object.keys(budget.vorab ?? {})).toEqual(['P1 S1-TOK', 'P2 S1-SHELL', 'P3 S1-BAND', 'P4 S1-ZEIT', 'P5 S1-ZAHL', 'P6 S1-START', 'P7 S1-DIKTAT']);
+  });
+  it('vorab-Beträge sind die aus dem Bauplan (stufe1-plan.md, P0 Nr. 4) und werden nicht still erhöht (platform-guard S4)', () => {
+    expect(loadBudget().vorab).toEqual({
+      'P1 S1-TOK': { css: 4000 },
+      'P2 S1-SHELL': { entry: 18000, css: 4000 },
+      'P3 S1-BAND': { entry: 14000, css: 3000 },
+      'P4 S1-ZEIT': { entry: 3000 },
+      'P5 S1-ZAHL': { entry: 2000 },
+      'P6 S1-START': { entry: 8000 },
+      'P7 S1-DIKTAT': { entry: 6000 },
+    });
   });
 });

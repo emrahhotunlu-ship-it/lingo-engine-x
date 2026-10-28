@@ -77,6 +77,9 @@ export function measure(dir) {
 const zuwachsBytes = (z) => (typeof z === 'number' ? z : z && typeof z === 'object' && typeof z.bytes === 'number' ? z.bytes : NaN);
 
 /** Grenze einer Größe: `basis` + eingetragene Zuwächse; prüft jeden Zuwachs gegen `vorab`. */
+/** Form einer Freigabe: Wer, Datum (TT.MM.JJJJ oder JJJJ-MM-TT), Doppelpunkt, Grund. */
+export const FREIGABE = /^\S.*\b(\d{2}\.\d{2}\.\d{4}|\d{4}-\d{2}-\d{2})\s*:\s*\S.{4,}$/;
+
 function limitOf(name, spec, vorab, problems) {
   if (!spec || typeof spec.basis !== 'number') {
     problems.push(`budget.json: \`${name}\` ohne Zahl \`basis\``);
@@ -90,7 +93,8 @@ function limitOf(name, spec, vorab, problems) {
       continue;
     }
     const allowed = vorab?.[paket]?.[name] ?? 0;
-    const freigabe = typeof z === 'object' && typeof z.freigabe === 'string' && z.freigabe.trim().length > 0;
+    // Freigabe nur mit Verantwortlichem, Datum und Grund (platform-guard S4): „Hauptsitzung 28.10.2026: Grund“.
+    const freigabe = typeof z === 'object' && typeof z.freigabe === 'string' && FREIGABE.test(z.freigabe.trim());
     if (bytes > allowed && !freigabe) problems.push(`budget.json: ${paket} erhöht \`${name}\` um ${bytes} B, vorab genannt sind ${allowed} B – mehr braucht die Zustimmung der Hauptsitzung (\`freigabe\`)`);
     sum += bytes;
   }

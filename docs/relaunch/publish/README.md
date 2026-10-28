@@ -9,9 +9,15 @@ Hier liegt für jeden Link das Manifest der **zuletzt veröffentlichten** Fassun
 | `AXHkh6.json` | Test-Link `AXHkh6…` | Test mit Emrahs Datenkopie |
 | `JLL8.json` | Live `JLL8…` | laufende App, nur nach Emrahs „Ja live nehmen“ |
 
-**Stand 27.10.2026: Es gibt noch keine der beiden Dateien.** Bisher wurde auf beide Links nur die Einzeldatei
-(`dist/index.html`, ohne weitere Dateien) veröffentlicht. Ein Manifest dieser Fassungen wurde nie geschrieben, und eines im
-Nachhinein zu erfinden wäre falsch. Das erste echte Manifest entsteht bei der nächsten Veröffentlichung (Schritt „Erstes Mal“).
+**Stand 28.10.2026: Es gibt noch keine der beiden Dateien.** Ein Manifest der bisherigen Fassungen wurde nie geschrieben,
+und eines im Nachhinein zu erfinden wäre falsch. Das erste echte Manifest entsteht bei der nächsten Veröffentlichung
+(Schritt „Erstes Mal“).
+
+**Achtung (platform-guard S1, 28.10.2026):** Ob auf einem Link noch Zusatzdateien liegen, ist nicht belegt. Auf den Test-Link
+`AXHkh6…` wurde am 07.10.2026 schon einmal ein Mehr-Datei-Bau veröffentlicht (Test 6, Version `1791393276-ae06`, CLAUDE.md A4).
+Deshalb vor der **ersten** Veröffentlichung auf einen Link, die nach diesem Weg läuft, immer zuerst die tatsächlich
+veröffentlichten Dateien auflisten (Artifact `list` mit `scope: "files"` und der Link-Adresse). Jede dort gefundene Datei,
+die der neue Bau nicht mehr hat, kommt mit `null` in die `removeMap`. Erst danach gilt das Manifest hier als Vorgänger.
 
 ## Ablauf je Veröffentlichung
 

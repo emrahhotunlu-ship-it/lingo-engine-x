@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { checkMulti, MULTI_MAX_FILE, MULTI_WARN_TOTAL } from '../../scripts/check-platform.mjs';
+import { deflateRawSync } from 'node:zlib';
+import { checkHtml, checkMulti, MULTI_MAX_FILE, MULTI_WARN_TOTAL, packedBlocks, unpack } from '../../scripts/check-platform.mjs';
 import { MAX_FILE_BYTES, MAX_FILES_PER_PUBLISH, MAX_PUBLISH_BYTES, TARGET_MAX_FILES, WARN_TOTAL_BYTES, mb } from '../../scripts/limits.mjs';
 import { buildManifest } from '../../scripts/publish-manifest.mjs';
 
@@ -54,6 +55,26 @@ describe('checkMulti', () => {
     expect(withJs('new XMLHttpRequest()')).toContain('XMLHttpRequest');
     expect(withJs('new WebSocket("wss://x")')).toContain('WebSocket');
     expect(withJs('window.__LINGO_FAKE__=1')).toContain('Entwicklungs-Adapter');
+  });
+});
+
+describe('gepackte Inhalte (platform-guard S2/S3)', () => {
+  // Füllung mit wenig Wiederholung, damit der Base64-Block die Mindestlänge von 512 Zeichen erreicht.
+  const fill = Array.from({ length: 400 }, (_, i) => ((i * 7919) % 10007).toString(36)).join(',');
+  const pack = (t: string) => deflateRawSync(Buffer.from(`${t}${fill}`));
+  it('findet Entwicklungs-Spuren in .bin-Bündeln und meldet nicht entpackbare', () => {
+    const bin = (packed: string | null) => checkMulti([...base(), { name: 'content-x.bin', size: 10, packed }]).problems.join('|');
+    expect(bin(unpack(pack('{"a":"ok"}')) ?? null)).toBe('');
+    expect(bin(unpack(pack('{"a":"__LINGO_FAKE__"}')) ?? null)).toContain('__LINGO_FAKE__');
+    expect(bin(null)).toContain('nicht entpacken');
+  });
+  it('entpackt Base64-Blöcke im Bündel statt sie nur auszublenden', () => {
+    const block = pack('{"t":"Feste Beispielantwort"}').toString('base64');
+    expect(packedBlocks(`x="${block}"`).join()).toContain('Feste Beispielantwort');
+    const withJs = (text: string) => checkMulti(base().map((f) => (f.name === 'index-a1.js' ? { ...f, text } : f))).problems.join('|');
+    expect(withJs(`const c="${block}";`)).toContain('Feste Beispielantwort');
+    expect(withJs(`const c="${pack('{"t":"ok"}').toString('base64')}";`)).toBe('');
+    expect(checkHtml(`<html lang="de"><head><meta name="viewport" content="viewport-fit=cover"><title>x</title></head><body>data:font/woff2 "${block}"</body></html>`, 100).problems.join()).toContain('Feste Beispielantwort');
   });
 });
 

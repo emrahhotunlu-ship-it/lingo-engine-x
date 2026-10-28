@@ -14,6 +14,7 @@
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname } from 'node:path';
+import { gunzipSync, inflateRawSync, inflateSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import { MAX_FILE_BYTES, MAX_FILES_PER_PUBLISH, MAX_PUBLISH_BYTES, SINGLE_FAIL_BYTES, SINGLE_WARN_BYTES, TARGET_MAX_FILES, WARN_TOTAL_BYTES, mb } from './limits.mjs';
 
@@ -59,6 +60,39 @@ export const removedTemplates = ['listening-text@', 'reading-text@', 'reading-ch
 /** Base64-Blöcke (gepackte Inhalte, Schriften) werden vor den Marker-Prüfungen ausgeblendet: kurze Marker träfen sonst zufällig. */
 const BASE64_BLOCK = /[A-Za-z0-9+/=]{512,}/g;
 
+/** Entpackt Daten (raw deflate, zlib, gzip); `undefined`, wenn es keine gepackten Daten sind. */
+export function unpack(buf) {
+  for (const fn of [inflateRawSync, inflateSync, gunzipSync]) {
+    try {
+      return fn(buf).toString('utf8');
+    } catch {
+      // kein Treffer mit diesem Verfahren: nächstes versuchen
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Entwicklungs-Spuren in gepackten Inhalten (Base64-Blöcke im Bündel, `.bin`-Dateien): sie werden vor den Marker-Prüfungen
+ * entpackt statt nur ausgeblendet (platform-guard S2/S3, 28.10.2026). Rein: `texts` = entpackte Texte.
+ * @returns {string[]} gefundene Marker
+ */
+export function markersInPacked(texts) {
+  const found = [];
+  for (const t of texts) for (const m of [...devMarkers, ...removedTemplates]) if (t.includes(m) && !found.includes(m)) found.push(m);
+  return found;
+}
+
+/** Entpackte Texte aller Base64-Blöcke eines Textes (Schriften und Bilder entpacken sich nicht und fallen weg). */
+export function packedBlocks(text) {
+  const out = [];
+  for (const m of text.matchAll(BASE64_BLOCK)) {
+    const t = unpack(Buffer.from(m[0], 'base64'));
+    if (t !== undefined) out.push(t);
+  }
+  return out;
+}
+
 /**
  * Prüft den Text einer dist/index.html. Rein: `size` ist die Dateigröße in Byte.
  * @returns {{ problems: string[], notes: string[] }}
@@ -74,6 +108,7 @@ export function checkHtml(html, size) {
   for (const [re, label] of loaders) if (re.test(text)) problems.push(`Ladeziel gefunden: ${label}`);
   for (const m of removedTemplates) if (text.includes(m)) problems.push(`Kennung einer entfernten Vorlage im Build: "${m}"`);
   for (const m of devMarkers) if (text.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
+  for (const m of markersInPacked(packedBlocks(html))) problems.push(`Entwicklungs-Spur in gepackten Inhalten: "${m}"`);
 
   // Kopf
   if (!/<meta[^>]+name="viewport"[^>]+viewport-fit=cover/i.test(html)) problems.push('Viewport ohne viewport-fit=cover');
@@ -96,7 +131,8 @@ const HTML_REF_LABELS = new Set(['externes <script src>', '<link href> (Styleshe
 const flatRel = (u) => /^[A-Za-z0-9._-]+(\?[^#]*)?(#.*)?$/.test(u.replace(/^\.\//, ''));
 
 /**
- * Prüft einen Mehr-Datei-Build. Rein: `files` = Liste `{ name, size, text? }` (text nur für Textdateien), `name` relativ zu dist/.
+ * Prüft einen Mehr-Datei-Build. Rein: `files` = Liste `{ name, size, text?, packed? }` (text nur für Textdateien,
+ * packed = entpackter Inhalt einer `.bin`-Datei, `null` = nicht entpackbar), `name` relativ zu dist/.
  * @returns {{ problems: string[], notes: string[] }}
  */
 export function checkMulti(files) {
@@ -130,7 +166,12 @@ export function checkMulti(files) {
 
   // Ladeziele wie im Einzeldatei-Modus in JEDER Textdatei; `fetch(` nur in der Datei mit dem Marker (Inhalts-Bündel, relativ).
   for (const f of files) {
+    if (f.name.endsWith('.bin')) {
+      if (f.packed === null) problems.push(`${f.name}: Inhalts-Bündel lässt sich nicht entpacken`);
+      else if (f.packed !== undefined) for (const m of markersInPacked([f.packed])) problems.push(`${f.name}: Entwicklungs-Spur in gepackten Inhalten: "${m}"`);
+    }
     if (!f.text) continue;
+    for (const m of markersInPacked(packedBlocks(f.text))) problems.push(`${f.name}: Entwicklungs-Spur in gepackten Inhalten: "${m}"`);
     const text = f.text.replace(BASE64_BLOCK, '');
     for (const [re, label] of loaders) {
       if (HTML_REF_LABELS.has(label)) continue;
@@ -156,7 +197,8 @@ function main() {
       if (e.isDirectory()) return { name: `${e.name}/`, size: 0 };
       const size = statSync(new URL(e.name, dir)).size;
       const text = TEXT_EXT.has(extname(e.name).toLowerCase()) || e.name === 'index.html' ? readFileSync(new URL(e.name, dir), 'utf8') : undefined;
-      return { name: e.name, size, text };
+      const packed = extname(e.name).toLowerCase() === '.bin' ? (unpack(readFileSync(new URL(e.name, dir))) ?? null) : undefined;
+      return { name: e.name, size, text, packed };
     });
     const res = checkMulti(files);
     const total = files.reduce((a, f) => a + f.size, 0);

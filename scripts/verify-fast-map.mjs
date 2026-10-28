@@ -46,7 +46,7 @@ export const RULES = [
   // Bau- und Veröffentlichungs-Tor (Stufe 1, P0 S1-TOR): Grenzen, Plattform-Prüfung, Budget, Rückweg auf v86.
   { prefix: 'scripts/limits', specs: ['platform.spec.ts', 'perf.spec.ts'] },
   { prefix: 'scripts/check-platform', specs: ['platform.spec.ts'] },
-  { prefix: 'scripts/check-budget', specs: ['perf.spec.ts'] },
+  { prefix: 'scripts/check-budget', specs: ['platform.spec.ts', 'perf.spec.ts'] },
   { prefix: 'scripts/budget.json', specs: ['perf.spec.ts'] },
   { prefix: 'scripts/v86-checkout', specs: ['rueckweg.spec.ts'] },
   { prefix: 'tests/fixtures/s1-seed.json', specs: ['rueckweg.spec.ts'] },

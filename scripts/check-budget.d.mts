@@ -11,3 +11,4 @@ export function gz(buf: Uint8Array): number;
 export function measure(dir: string): Measurement;
 export function evaluate(m: Measurement, budget: Budget): { problems: string[]; notes: string[]; rows: Array<{ name: string; gz: number; limit: number; ok: boolean }> };
 export function loadBudget(path?: string): Budget;
+export const FREIGABE: RegExp;
