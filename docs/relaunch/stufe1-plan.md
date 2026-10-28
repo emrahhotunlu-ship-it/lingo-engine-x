@@ -389,9 +389,73 @@ Kleinteile unter 8 KB (`legacy/context.json`, `legacy/vtest.json`, `vtest-en.jso
 
 ### 3.4 Inhaltsliste Plan-/Heute-Pfad (füllt P8 aus, Voraussetzung für P9)
 
-| Funktion (Aufruf aus `ensureDay`/`buildTodayPlan`) | Fundstelle | benötigte Inhaltsdateien |
+**Erhoben von P8 (28.10.2026, Stand `claude/umbau-fokus` `6b9de01`) per Skript, nicht von Hand:**
+- **Statischer Importgraph:** aus dem Vite-Build über `getModuleInfo`. Je Import von `store.ts` die transitiv erreichbaren Inhaltsdateien.
+- **Laufzeit-Spur:** Vitest mit Seed, 8 Lerntage, jeweils 10 und 21 Uhr, DE und EN.
+  - Ablauf je Durchgang: `ensureDay`, dann der Live-Stand aus der Speicher-Datenbank wie ein Snapshot, dann `ensureDay` noch zweimal, dann `healToday`/`healDay`.
+  - Jede von `store.ts` importierte Funktion ist umwickelt und setzt eine Marke; die äußerste Marke gewinnt.
+  - Inhalte (direkt importiertes JSON und Ergebnisse von `JSON.parse` auf `?raw`) sind tiefe Proxies. **Jeder Lesezugriff** zählt, auch nach dem Zwischenspeichern.
+  - Die Lader-Fundstelle stammt aus dem Aufrufstapel.
+- **Grenzen der Spur:**
+  - Zweige, die der Seed nicht auslöst (Neustart-Woche, Check-Tag, Reparatur-Tor), sind nur statisch abgedeckt.
+  - Abgeleitete Zwischenspeicher aus Plain-Daten zeigen nur die erste Funktion. Beispiel: Die Muster-Tabelle aus Nr. 3 wird in Nr. 5 über `INTRO_PLAN_OF` (`store.ts:75`) wiederverwendet.
+- **Für P9 Nr. 3 ist deshalb die Gesamtmenge unten bindend, nicht die Zuordnung je Zeile.**
+
+| Funktion (Aufruf aus `ensureDay`/`buildTodayPlan`) | Fundstelle | benötigte Inhaltsdateien (Lader `datei:zeile`) |
 |---|---|---|
-| *von P8 auszufüllen; Startpunkt sind die Importe in `src/features/today/store.ts:1–30`* | | |
+| 0 · Modul-Auswertung beim Import von `store.ts` (vor jedem Aufruf) | `store.ts:16` → `domain/metrics/index.ts:23`; Sammelmodule | `legacy/course`, `legacy/grammar`, `legacy/vocab`, `c1/toolkit` (JSON) (`src/domain/content.ts:38–49`); `col/charge1` (`src/content/col/index.ts:14–17`); `c1/pack` (`src/domain/c1pack/pack.ts:42–46`, beim Laden geparst) |
+| 1 · `buildTodayPlan` → `buildTrainCards` | `store.ts:213` (auch `:392` `ensureHistory`, `:412` `afterPlan`) | `legacy/vocab` (`content.ts:66–75`); `c1/pack`, `col/charge1`, `lexicon/units`, `nb/collocations` (`src/domain/lexicon/unitKnown.ts:21–45`) |
+| 2 · `buildTodayPlan` → `buildChunkCards`, `unitDraft`, `unitReviewGoal`, `newQuotaLeft`, `cardStats`, `comebackMode`, `restartActive`, `focusFor`, `step3Format`, `checkPlanned`, `nextGoal`, `buildUnitStored` | `store.ts:207–251` | in der Spur keine eigenen Lesezugriffe (statisch nur über Sammelmodule erreichbar) |
+| 3 · `buildTodayPlan` → `fehlersaetzeDue` | `store.ts:236` | `grammar/tasks-v2`, `grammar/pattern-map`, `grammar/retired`, `grammar/patterns/*` (alle 47) (`src/domain/grammar/patterns.ts:89–136, 356, 365`); `grammar-bank`, `grammar-extra` (`src/domain/grammar/tasks.ts:63–100, 168–170`); `legacy/rules`, `legacy/grammar` (`?raw`), `c1/toolkit` (`?raw`) (`src/domain/grammar/raw.ts:16`); `legacy/dict`, `lexicon/sense-extra` (`src/domain/lexicon/dict.ts:37–46`); `irregular` (`src/domain/text/lemma.ts:31–33`); **bedingt** `fk/b1` (`src/domain/repair/fehlersaetze.ts:62` `hasFk` → `src/domain/repair/fk.ts:75`, nur wenn ein fälliger Fehlersatz ausgeblendet wird; im Seed nicht ausgelöst, Fundstelle per Quelltext) |
+| 4 · `buildTodayPlan` → `chapterPlanInput` (nur mit `chapterRun`) | `store.ts:240` | `c1/program` (`src/domain/c1/chapters.ts:16`); `c1/toolkit`, `legacy/grammar` (`chapters.ts:39`, `src/domain/grammar/bkt.ts:37`) |
+| 5 · `buildTodayPlan` → `freezeGrammarDay` (mit `patternsOf` über `INTRO_PLAN_OF`, `store.ts:75`) | `store.ts:243` | `c1/toolkit`, `legacy/grammar` (`src/domain/grammar/path.ts:89–91`, `tasks.ts:274`); Muster aus dem Zwischenspeicher von Nr. 3 |
+| 6 · `ensureDay` → `readPlan`, `storePlan` (`validateDoc`), `viewPlan` | `store.ts:319, 336, 282` | keine |
+| 7 · `followUp` → `intake` → `mergedVocab`, `runDailyIntake` | `store.ts:176–177` (aus `:353`) | `legacy/vocab` (`content.ts:66–75`); `legacy/grammar` (`content.ts:52`) |
+| 8 · `followUp` → `packTopUp` | `store.ts:359` | `c1/pack` (`src/domain/c1pack/packFields.ts:49–51`) |
+| 9 · `followUp` → `loadLearnInputs` | `store.ts:363` | `legacy/grammar` (`content.ts:52`) |
+| 10 · `afterPlan` → `feasibleData` → `clozeCandidates`, `orderPoolSize`, `buildSprintDeck`, `quizzable` | `store.ts:413` (→ `:162–166`) | `c1/order` (`src/domain/drills/orderPool.ts:108–114`); `c1/toolkit`, `legacy/grammar` (`content.ts:52`, `bkt.ts:37`); Lücke und Abfragbarkeit: keine |
+| 11 · `afterPlan` → `ensurePflichtSince`; `healToday`/`healDay` → `healPflicht`, `computeDayWith` | `store.ts:414, 425, 436, 448, 141` | in der Spur keine |
+| 12 · `ensureHistory` → `vocabGoal`, `recordProfileFields(historySnapshot, festUnits, docTotal)` | `store.ts:394–395` | `c1/toolkit`, `legacy/grammar` (`src/domain/progress/history.ts:49`, `bkt.ts:37`, `content.ts:52`) |
+| 13 · `syncTodayDocForDay` (Startbild `app/today`) | `store.ts:312, 367` | `legacy/grammar` (`content.ts:52`, über `src/features/grammar/topicUi.tsx:8`) |
+
+**Gesamtmenge Plan-/Heute-Pfad (bindend für P9 Nr. 3):**
+- **67 Dateien, 4,33 MB roh, 1,01 MB gzip.**
+- Die Dateien:
+  - die 47 Dateien `grammar/patterns/*` (0,69 MB roh),
+  - `grammar/tasks-v2` (1,33 MB),
+  - `grammar/pattern-map` (0,63 MB),
+  - `c1/order` (0,39 MB),
+  - `legacy/dict` (0,29 MB),
+  - `c1/pack` (0,28 MB),
+  - `c1/toolkit` (0,25 MB, JSON **und** `?raw`),
+  - `grammar-bank` (119 KB),
+  - `legacy/rules` (57 KB),
+  - `legacy/grammar` (JSON und `?raw`),
+  - `legacy/vocab`,
+  - `col/charge1`,
+  - `nb/collocations`,
+  - `legacy/course`,
+  - `irregular`,
+  - `c1/program`,
+  - `lexicon/units`,
+  - `lexicon/sense-extra`,
+  - `grammar-extra`,
+  - `grammar/retired`,
+  - bedingt `fk/b1` (86 KB).
+- `grammar/tasks-v2` und `grammar/pattern-map` liegen allein über 500 KB roh. Für die Grenze „≤ 500 KB je `.bin`“ muss P9 festlegen, ob sie gepackt oder roh gilt.
+
+**Statisch erreichbar, aber zur Laufzeit nicht gelesen** (1,81 MB roh, 0,62 MB gzip; gehören **nicht** in das Plan-Stück und dürfen den Plan nicht blockieren):
+
+| Datei | Größe roh | statisch erreichbar über |
+|---|---|---|
+| `atlas/atlas` | 1,42 MB | `src/domain/lexicon/unitKnown.ts:7`, nur in `atlasInfo` (Z. 81) gebraucht |
+| `pron/us-ipa` | 0,33 MB | `src/domain/lookup/resolve.ts:2` |
+| `fk/b2` | 16 KB | `src/domain/repair/fk.ts:3` (über `fehlersaetze.ts:5`; der Plan braucht nur `b1`) |
+| `tutor/l1` | 38 KB | `src/domain/repair/gate.ts:5` |
+| `atlas/meta` | 29 B | `src/domain/metrics/today.ts:1` |
+| `grammar/path` | 2 KB | `src/domain/grammar/patterns.ts:2` |
+
+Sammelmodule, die die statische Reichweite aufblähen: `domain/metrics/index.ts` (74 Inhaltsdateien), `data/index.ts` und `data/live.ts` (je 13), `lexicon/unitKnown.ts`.
 
 ## 4. Daten (Tarek)
 

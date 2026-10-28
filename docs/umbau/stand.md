@@ -534,3 +534,145 @@ Englischlehrer Soll 6 („({n} letters)“ im Anfangs-Hinweis) wieder zurückgen
 **28.10.2026 – Test-Link 1a veröffentlicht:** `AXHkh6…` Version 74 `1793226310-7a2a` (Commit `ed3a36b`, 19 Dateien, 6,28 MB, Fähigkeiten db/sample/downloads übernommen; alle 19 Dateien laut Dateiliste ausgeliefert, `.txt` als text/plain). Rückweg: v73 `1793078154-eb7e` (Einzeldatei; Teil-Dateien dann mit `null` entfernen). Liste: `docs/relaunch/publish/AXHkh6.json`. Rückweg-Probe noch nicht gemacht (vor dem Live-Gang einmal üben). Live (`JLL8…` v86) unverändert.
 
 Rückstand aus den Prüfungen zu 1a (nicht blockierend): Nora S1–S6, K1–K10 (`docs/relaunch/pruefung/nora-1a.md`), dazu „Langsam-Hinweis“-Knöpfe am 390er-Handy hinter der Leiste (scrollen nötig); english-teacher Kann 20–22, 24; data-guard Soll Log-Felder `loose`; platform-guard S2/S3/S4/H4; Tarek S1–S5, H7 (`index.html:61` catch nur mit Kommentar); WebKit in der Umgebung nicht verfügbar (iPhone-Schritt im Test-Link-Text).
+
+**28.10.2026 – P8 Ladeprobe (S1-LADEN-0): Messung, Hochrechnung, Inhaltsliste 3.4.**
+Die Ladeprobe lief auf dem Wegwerf-Zweig `claude/umbau-s1-ladeprobe`. Er ist nur lokal vorhanden und wurde nicht gepusht.
+
+- **Probe-Aufbau:**
+  - Der Einstieg enthält nur noch das Heute-Startbild aus `app/today` (`StartCard`), das Datum und eine einfache Reiterleiste.
+  - Die volle App (`App`, Bereiche, Rail/Desk, `buildTodayPlan` mit Inhalten) lädt per dynamischem Import nach dem ersten Bild.
+  - `requestStart` lädt beim Antippen, der c1x-Vorlauf ebenfalls per dynamischem Import.
+  - `ensureDay`, `healToday` und `healDay` sind abgeschaltet (H8).
+- **Messweg:** Mess-Plugin im Vite-Build (`generateBundle`: je Modul `renderedLength`, gzip einzeln, gzip anteilig am Chunk) und Importgraph aus `getModuleInfo`.
+
+**Einstieg heute** (`claude/umbau-fokus` `6b9de01`): `index-*.js` mit **5.711.286 B roh / 2.756.581 B gzip**.
+- Dazu CSS 145 KB (29 KB gzip) und Inter 73 KB.
+- Größte Gruppen (gzip anteilig):
+
+| Gruppe | gzip anteilig |
+|---|---|
+| Inhalts-JSON (91 Module) | 924 KB |
+| react-dom | 185 KB |
+| i18n | 141 KB |
+| features/vocab | 112 KB |
+| src/modules | 83 KB |
+| domain/srs | 77 KB |
+| motion-dom | 75 KB |
+| ui | 69 KB |
+| prompts | 68 KB |
+| zod | 61 KB |
+
+- Größte Module (gzip einzeln):
+
+| Modul | gzip einzeln |
+|---|---|
+| `atlas.json?raw` | 518 KB |
+| `tasks-v2?raw` | 212 KB |
+| `pattern-map?raw` | 122 KB |
+| `dict?raw` | 99 KB |
+| react-dom-client | 99 KB |
+| `c1/order?raw` | 93 KB |
+| `c1/pack?raw` | 85 KB |
+| `us-ipa?raw` | 85 KB |
+
+**Probe-Einstieg (lauffähig):** **872.263 B roh / 282.467 B gzip**. Statisch nachgezogen: 881.811 / 286.051 B (2 Dateien).
+
+Größte Gruppen im Probe-Einstieg (gzip anteilig, in Klammern einzeln):
+
+| Gruppe | gzip anteilig | gzip einzeln |
+|---|---|---|
+| react-dom | 100 KB | 101 KB |
+| i18n | 76 KB | 180 KB |
+| motion-dom | 38 KB | 79 KB |
+| zod | 33 KB | 41 KB |
+| framer-motion | 11 KB | 24 KB |
+| src/data | 4 KB | |
+| react | 3 KB | |
+| ui | 3 KB | |
+| src/modules | 3 KB | |
+| features/today | 2 KB | |
+
+Top-Module (gzip einzeln):
+
+| Modul | gzip einzeln |
+|---|---|
+| react-dom-client | 99,1 KB |
+| zod v4 core/schemas | 10,0 KB |
+| motion-dom create-projection-node | 8,3 KB |
+| i18n/de.ts | 5,8 KB |
+| i18n/en.ts | 5,3 KB |
+| zod classic/schemas | 4,8 KB |
+| zod json-schema-processors | 4,5 KB |
+| zod util | 4,4 KB |
+| zod to-json-schema | 4,4 KB |
+| react.production | 4,2 KB |
+| data/schemas.ts | 4,1 KB |
+| framer VisualElementDragControls | 3,4 KB |
+
+Nachgeladene Stücke (gzip): `startRun` (Plan und alle Inhalte) 1,41 MB, c1x-`ready` 0,55 MB, `App` 0,52 MB.
+
+**Fund während der Probe:** Im ersten Probe-Build war der Einstieg noch 1,12 MB gzip.
+- Ursache: `src/i18n/de.ts`/`en.ts` importieren `readMessages` aus `src/modules/read/registry`. Darüber hingen über `read/prompt` → `shared` → `lexicon/unitKnown` der Atlas, das Wörterbuch, `c1/pack`, die Lautschrift und mehr im Einstieg, zusammen rund 840 KB gzip.
+- Lösung in der Probe: `rd.de`/`rd.en` direkt importieren.
+- Weitere Ketten:
+  - framer-motion kommt über `DayCard` → `ui/Button.tsx`.
+  - zod kommt über `data/todayDoc.ts` → `data/schemas.ts`.
+  - `DayCard` zog `learn/ui` (wegen `dutyLabel`), `metrics` (wegen `ringFills`) und `startRun` statisch nach.
+
+**Knopf-Zeit** (`lx:button`, Wanduhr ab Ende der Test-Hülle, Median aus 5 Läufen):
+- Bedingungen: Großdatensatz mit 1.500 Wörtern, gültiges `app/today`, Fake-Laufzeit mit 30 ms Verzögerung.
+
+| Build | CPU 4× | CPU 1× |
+|---|---|---|
+| Probe | **1.138 ms** (1.095–1.235); Rechenzeit Haupt-Thread 4,2 s inkl. Nachladen der App | 303 ms |
+| heute | **4.198 ms** (3.775–4.360); Rechenzeit 7,6 s | 1.268 ms |
+
+- Seitenfehler: in keinem Lauf.
+- **Schreibvorgänge:**
+  - Probe: keine (H8 erfüllt; erlaubt wäre nur `app/today`).
+  - Heute im selben Szenario: `app/pool`, `chunk/*`, `app/profile`, `app/schema`, `app/today`.
+
+**Hochrechnung nach P9/P10:** Größen-Probe v3, nur gemessen, nicht lauffähig verdrahtet. Darin drei Schnitte aus P10 nachgebildet:
+- Start-Wörterbuch mit 120 Schlüsseln (3,9 KB gzip),
+- `Button` ohne framer-motion,
+- `app/today`-Prüfung ohne `data/schemas`/zod.
+
+Ergebnis:
+- Einstieg **268.775 B roh / 86.186 B gzip**, statisch nachgezogen 89.770 B gzip.
+- Rest im Einstieg: react-dom ≈ 73 KB anteilig (101 KB einzeln), react 3 KB, ui 2 KB, Start-Wörterbuch 1,8 KB, today 1,6 KB, Kleinkram.
+- framer-motion, zod und `data/schemas` sind nicht mehr statisch erreichbar.
+
+**Urteil zum Abbruchkriterium: nicht erfüllt, kein Neuschnitt von P9/P10.**
+- Schon der lauffähige Probe-Einstieg liegt mit 286 KB gzip unter 300 KB. Mit den P10-Schnitten sind es rund 90 KB.
+- Der Knopf steht bei 4× nach 1,14 s, also unter 2,5 s.
+- Größter Posten danach ist react-dom (≈ 100 KB), das bleibt.
+
+**Zusätzlich für P10 (aus der Probe, ohne Neuschnitt):**
+1. `i18n/de.ts`/`en.ts` von `modules/read/registry` lösen (Lese-Texte direkt aus `rd.de`/`rd.en`). Ohne das bleiben rund 840 KB gzip Inhalt im Einstieg.
+2. `DayCard`:
+   - `ringFills` aus `domain/metrics/ring`,
+   - `dutyLabel` als eigene Datei aus `learn/ui`,
+   - `requestStart` beim Antippen dynamisch.
+3. `Button` im Startbild ohne framer-motion.
+4. `app/today` ohne das ganze `data/schemas`/zod prüfen (eigenes kleines Schema).
+5. c1x-Vorlauf als dynamischer Import.
+6. Startbild-Wörterbuch wie in P10 Nr. 4.
+
+**Für P9:**
+- Die nachgeladenen Stücke `startRun` (1,41 MB gzip) und c1x-`ready` (0,55 MB gzip) tragen weiter alle Inhalte als Text. Sie gehören in `.txt`-Bündel.
+- Beim Laden ausgewertet werden heute:
+  - `c1/pack` (`src/domain/c1pack/pack.ts:42–46`),
+  - `legacy/*` und `c1/toolkit` (`src/domain/content.ts:38–49`),
+  - `col/charge1` (`src/content/col/index.ts:14–17`).
+
+  Sie müssen Lade-Aufrufe werden.
+- Inhaltsliste 3.4 (in `docs/relaunch/stufe1-plan.md`, per Importgraph und Laufzeit-Spur):
+  - Der Plan-/Heute-Pfad braucht **67 Dateien, 4,33 MB roh / 1,01 MB gzip**:
+    - Grammatik-Muster und Aufgaben,
+    - Wörterbuch,
+    - `c1/pack`, `c1/order`, `c1/toolkit`, `c1/program`,
+    - Wortschatz-Grundlagen,
+    - bedingt `fk/b1`.
+  - **Nicht gebraucht**, aber über Sammelmodule (`domain/metrics/index.ts`, `lexicon/unitKnown.ts:7`) statisch erreichbar: Atlas (1,42 MB), Lautschrift (0,33 MB), `fk/b2`, `tutor/l1`, `atlas/meta`, `grammar/path`. Diese Dateien dürfen das Plan-Stück nicht blockieren.
+
+**Offen:** iPhone-Probe (P8 Nr. 4) übernimmt die Hauptsitzung.
