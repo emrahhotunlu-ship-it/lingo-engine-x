@@ -2,6 +2,7 @@ import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen, openTab } from './fixtures';
 import { DAY, RECALLED, answerCurrent, dump, planPatch, produceFor } from './trainerHelpers';
 import { TYPE_MODE } from './trainerHelpers';
+import { nextItem, openBandMore } from './learnHelpers';
 
 // Neue Abfragearten (phase1-plan §4.2) und Wendungen in der täglichen Wiederholung (Kap. 5, M15):
 // jede neue Art einmal am Handy (390 px, Touch), eine Runde mit fälliger Wendung, Wortschatzliste
@@ -100,10 +101,12 @@ for (const m of MODES) {
       await expect(page.getByTestId('explanation')).toBeVisible();
       await expect(page.getByTestId('ai-note')).toBeVisible();
     } else await expect(page.getByTestId('explanation')).toBeVisible();
+    // Band am Handy (Relaunch P3): Merke und Beispiel stehen im Mehr-Blatt – dort sind die englischen Wörter antippbar.
+    if ((await page.getByTestId('result').locator('button.lx-word').count()) === 0) await openBandMore(page);
     expect(await page.getByTestId('result').locator('button.lx-word').count()).toBeGreaterThan(0);
     expect(await layoutProblems(page)).toEqual([]);
     const step = (await page.locator('[data-step]').getAttribute('data-step')) ?? '';
-    await page.getByTestId('next').click();
+    await nextItem(page);
     // Karte in Lernschritten: sie kommt in der Runde noch einmal (F10) – dann ebenfalls lösen.
     await expect(page.locator(`[data-step="${step}"]`)).toHaveCount(0);
     await expect(page.locator('[data-step]')).toHaveCount(1);

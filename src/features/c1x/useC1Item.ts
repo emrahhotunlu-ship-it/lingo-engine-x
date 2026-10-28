@@ -31,6 +31,7 @@ import { TutorButton } from '../../ui/exercise/TutorButton';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
 import { bookLex } from './lexWrite';
+import { registerLeaveBook } from '../../ui/exercise/leaveBook';
 import { errFixed, errRange } from '../../domain/c1x/kinds/err';
 import { shortWhy } from '../../domain/grammar/alsoRight';
 import { abandonFit, fitAiState, runFit, useFitJudge, type FitResult } from '../grammar/fit';
@@ -101,6 +102,8 @@ export type C1ItemProps = {
   topicRound?: boolean;
   /** Kein automatisches Weiter nach einer richtigen Antwort (Tempo-Runde, P24). */
   noAuto?: boolean;
+  /** Nachtrag LS3: geprüft, aber nicht bestätigt → beim Verlassen buchen (`stay`: verborgen, Aufgabe bleibt; `go`: weiterrechnen). Wie `GrammarItem`. */
+  onLeave?: ((a: GrammarAnswer, mode: 'stay' | 'go') => void) | null;
 };
 
 const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().length > 0;
@@ -108,7 +111,7 @@ const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().
 const tick = (): number => performance.now();
 
 export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObject<HTMLDivElement | null>): ExerciseShellProps {
-  const { task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, noAuto = false } = props;
+  const { task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, noAuto = false, onLeave = null } = props;
   const item = task.c1;
   const { t, lang } = useT();
   const api = useHiddenInput();
@@ -328,63 +331,124 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     setFb({ ...fb, override: true, alt: false, ask: false, ...(fix ? { tv: 'correct' as const, by: 'me' as const, aiMsg: 'byMe' as const, fit: { by: 'me' as const, pv: GRAMMAR_FIT_PV, a: fix } } : {}) });
   };
 
-  const next = (): void => {
-    if (!fb) return;
-    if (fit.ctl.current) {
-      abandonFit(fit.ctl);
-      fit.cancel();
-    }
-    const tv: TutorVerdict = fb.tv ?? (fb.override || fb.score.verdict === 'correct' ? (fb.alt ? 'alt_ok' : 'correct') : fb.score.verdict);
+  /** Die bewertete Antwort, wie „Weiter“ sie bucht (auch beim Verlassen, Nachtrag LS3); `lex`: Wortkarten der Lexik-Aufgaben (einmal je Antwort). */
+  const answerOf = (f: Fb): { a: GrammarAnswer & AttemptTiming; lex: (() => void) | null } => {
+    const tv: TutorVerdict = f.tv ?? (f.override || f.score.verdict === 'correct' ? (f.alt ? 'alt_ok' : 'correct') : f.score.verdict);
     const tj: NonNullable<GrammarAnswer['tj']> = {
-      v: fb.override ? 'c' : TJ_V[tv],
-      ...(fb.dx && fb.dx.cause !== 'unknown' ? { h: fb.dx.cause.slice(0, 12) } : {}),
-      ...(fb.dx?.known && tv === 'wrong' && fb.dx.vs ? { vs: fb.dx.vs.slice(0, 40) } : {}),
+      v: f.override ? 'c' : TJ_V[tv],
+      ...(f.dx && f.dx.cause !== 'unknown' ? { h: f.dx.cause.slice(0, 12) } : {}),
+      ...(f.dx?.known && tv === 'wrong' && f.dx.vs ? { vs: f.dx.vs.slice(0, 40) } : {}),
     };
     // Zielform-Zweitversuch richtig: halbes Gewicht (Hilfe 1), ohne `firstWrong`; die erste Antwort bleibt als gemerkte Antwort (`fit`).
-    if (fb.target?.ok && fb.response.kind === 'err') {
-      const response: C1Response = { ...fb.response, fix: fb.target.given };
-      const full: C1Score = { ...fb.score, got: fb.score.max, verdict: 'correct', parts: fb.score.parts.map((x) => ({ ...x, ok: true })) };
-      const runT: C1Run = { form: fb.meta.form, inp, timeMs: fb.ms, firstKeyMs: fb.firstKeyMs, help: 1, ...(seenBefore ? { again: true } : {}), day, t: nextT(), lang, ctx, given: fb.target.given };
+    if (f.target?.ok && f.response.kind === 'err') {
+      const response: C1Response = { ...f.response, fix: f.target.given };
+      const full: C1Score = { ...f.score, got: f.score.max, verdict: 'correct', parts: f.score.parts.map((x) => ({ ...x, ok: true })) };
+      const runT: C1Run = { form: f.meta.form, inp, timeMs: f.ms, firstKeyMs: f.firstKeyMs, help: 1, ...(seenBefore ? { again: true } : {}), day, t: nextT(), lang, ctx, given: f.target.given };
       const aT = bookAnswer(task, full, response, runT);
       // S1-ZEIT: die Zielform ist ein zweiter Versuch.
-      const secondTry: AttemptTiming = { ...pickAttempt(fb), n: 2 };
-      const kindT = onDone({ ...aT, tj: { v: 'c' }, ...(fb.fit ? { fit: fb.fit } : {}), ...secondTry });
-      if (kindT === 'typed') api.focusNow();
-      else api.blur();
-      return;
+      const secondTry: AttemptTiming = { ...pickAttempt(f), n: 2 };
+      return { a: { ...aT, tj: { v: 'c' }, ...(f.fit ? { fit: f.fit } : {}), ...secondTry }, lex: null };
     }
     const run: C1Run = {
-      form: fb.meta.form,
+      form: f.meta.form,
       inp,
-      timeMs: fb.ms,
-      firstKeyMs: fb.firstKeyMs,
-      help: fb.dontKnow ? 3 : fb.help,
-      ...(fb.meta.deletions !== undefined ? { deletions: fb.meta.deletions } : {}),
-      ...(fb.meta.chars !== undefined ? { chars: fb.meta.chars } : {}),
-      ...(fb.meta.units !== undefined ? { units: fb.meta.units } : {}),
+      timeMs: f.ms,
+      firstKeyMs: f.firstKeyMs,
+      help: f.dontKnow ? 3 : f.help,
+      ...(f.meta.deletions !== undefined ? { deletions: f.meta.deletions } : {}),
+      ...(f.meta.chars !== undefined ? { chars: f.meta.chars } : {}),
+      ...(f.meta.units !== undefined ? { units: f.meta.units } : {}),
       ...(seenBefore ? { again: true } : {}),
-      ...(fb.dontKnow ? { dontKnow: true } : {}),
-      ...(fb.override ? { override: true } : {}),
+      ...(f.dontKnow ? { dontKnow: true } : {}),
+      ...(f.override ? { override: true } : {}),
       day,
       t: nextT(),
       lang,
       ctx,
-      given: fb.given,
+      given: f.given,
     };
-    const a = bookAnswer(task, fb.score, fb.response, run);
+    const a = bookAnswer(task, f.score, f.response, run);
     // Wortkarten und Verlauf der Lexik-Aufgaben (P20): höchstens eine Wiederholung je Karte und Lerntag, nie eine neue Karte, nie im Messmodus.
-    if (item.lex?.length || item.area === 'lex') {
-      const score = fb.override ? { ...fb.score, verdict: 'correct' as const } : fb.score;
-      void bookLex({ item, score, grade: a.grade, day, lang, ms: fb.ms, given: fb.given, dev: inp === 'touch' ? 't' : 'k', ...(seenBefore ? { again: true } : {}), ...(noHelp ? { measure: true } : {}) });
-    }
+    const lex =
+      item.lex?.length || item.area === 'lex'
+        ? () => {
+            const score = f.override ? { ...f.score, verdict: 'correct' as const } : f.score;
+            void bookLex({ item, score, grade: a.grade, day, lang, ms: f.ms, given: f.given, dev: inp === 'touch' ? 't' : 'k', ...(seenBefore ? { again: true } : {}), ...(noHelp ? { measure: true } : {}) });
+          }
+        : null;
     const booked: GrammarAnswer & AttemptTiming = {
       ...(retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a),
-      ...(fb.alt && !fb.override ? { alt: true } : {}),
+      ...(f.alt && !f.override ? { alt: true } : {}),
       tj,
-      ...(fb.fit && !fb.dontKnow ? { fit: fb.fit } : {}),
-      ...pickAttempt(fb),
+      ...(f.fit && !f.dontKnow ? { fit: f.fit } : {}),
+      ...pickAttempt(f),
     };
-    const kind = onDone(booked);
+    return { a: booked, lex };
+  };
+
+  // Nachtrag LS3 (wie `GrammarItem`): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen. `booked`: beim Verbergen gebucht
+  // (dieselbe Antwort geht später mit „Weiter“ weiter, ohne zweites Speichern); `done`: endgültig weitergegeben. Nie während Claude prüft.
+  const leftBooked = useRef<(GrammarAnswer & AttemptTiming) | null>(null);
+  const done = useRef(false);
+  const leaveNow = (mode: 'stay' | 'go'): void => {
+    if (!onLeave || !fb || done.current) return;
+    // Claude prüft die Antwort gerade nach („Claude fragen“): offen lassen, nichts buchen.
+    const aiOpen = fit.busy;
+    if (mode === 'stay') {
+      if (leftBooked.current || aiOpen) return;
+      const r = answerOf(fb);
+      leftBooked.current = r.a;
+      r.lex?.();
+      onLeave(r.a, 'stay');
+      return;
+    }
+    if (!leftBooked.current && aiOpen) return;
+    done.current = true;
+    if (leftBooked.current) {
+      onLeave(leftBooked.current, 'go');
+      return;
+    }
+    const r = answerOf(fb);
+    r.lex?.();
+    onLeave({ ...r.a, left: true }, 'go');
+  };
+  const leaveRef = useRef(leaveNow);
+  useEffect(() => {
+    leaveRef.current = leaveNow;
+  });
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === 'hidden') leaveRef.current('stay');
+    };
+    const onHide = () => leaveRef.current('stay');
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('pagehide', onHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('pagehide', onHide);
+      leaveRef.current('go');
+    };
+  }, []);
+  const hasFb = fb !== null;
+  useEffect(() => {
+    if (!hasFb || !onLeave) return;
+    return registerLeaveBook(() => leaveRef.current('go'));
+  }, [hasFb, onLeave]);
+
+  const next = (): void => {
+    if (!fb || done.current) return;
+    if (fit.ctl.current) {
+      abandonFit(fit.ctl);
+      fit.cancel();
+    }
+    done.current = true;
+    let a = leftBooked.current;
+    if (!a) {
+      const r = answerOf(fb);
+      r.lex?.();
+      a = r.a;
+    }
+    const kind = onDone(a);
     if (kind === 'typed') api.focusNow();
     else api.blur();
   };

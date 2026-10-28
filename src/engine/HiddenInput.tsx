@@ -137,6 +137,7 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
         ref={input}
         type="text"
         inputMode="text"
+        lang="en"
         enterKeyHint="go"
         autoCapitalize="off"
         autoComplete="off"

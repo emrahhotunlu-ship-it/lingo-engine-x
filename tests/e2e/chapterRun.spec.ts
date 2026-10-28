@@ -56,7 +56,8 @@ test.describe('Handy 390', () => {
     const c1 = (await dump(page))['app/c1'] as { ch: { n: number; d: string }; chh: unknown[] };
     expect(c1.ch).toEqual({ n: 4, d: TODAY });
     expect(c1.chh).toEqual([[4, TODAY]]);
-    await page.keyboard.press('Escape');
+    // Relaunch P3 S1-BAND: Esc verlässt eine Übung nie; raus mit ✕.
+    await page.getByTestId('round-close').click();
     await openTab(page, 'learn');
     await expect(page.locator('[data-testid="program-chapter"][data-here="true"]')).toHaveAttribute('data-chapter', 'k4');
     await expect(page.getByTestId('hub-next-topic')).toHaveAttribute('data-chapter', '4');
@@ -128,7 +129,7 @@ test.describe('Handy 390', () => {
     await page.getByTestId('session-end-next').click();
     await expect(page.getByTestId('summary')).toHaveCount(0);
     await expect(page.getByTestId('grammar-session')).toBeVisible();
-    await page.keyboard.press('Escape');
+    await page.getByTestId('round-close').click();
     await openTab(page, 'learn');
     await expect(page.getByTestId('hub-next-topic')).toHaveAttribute('data-topic', 'passive-plus');
     expect(errors).toEqual([]);

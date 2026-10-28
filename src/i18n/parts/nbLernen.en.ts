@@ -73,7 +73,7 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenWeg4: '④ Free',
   nbLernenWeg5: '⑤ Correction loop',
   nbLernenPoints: '{n} of 5 points',
-  nbLernenDontKnow: "I don't know",
+  nbLernenDontKnow: 'I don’t know',
   nbLernenMiniEyebrow: 'Quick explanation · about a minute',
   nbLernenMiniExamples: 'Examples',
   nbLernenMiniTask: 'Read the rule briefly: {topic}',

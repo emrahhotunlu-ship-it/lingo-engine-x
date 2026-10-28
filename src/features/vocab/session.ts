@@ -45,6 +45,7 @@ import { pickAttempt } from '../../engine/inputKind';
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, saveContrastMiss, saveKnown, saveNoteOnly, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
+import { flushLeaveBook } from '../../ui/exercise/leaveBook';
 import { contrastReady, noteConfusion, requestWordCtx } from './wordCtx';
 import { requestWordBank } from './sentenceBank';
 import { werkstattDue, werkstattRoom } from '../../domain/srs/werkstatt';
@@ -756,6 +757,8 @@ export type Answer = {
   noteOnly?: true;
   /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
   t?: number;
+  /** Nachtrag LS3: beim Verlassen gebucht über einen eigenen Schreibweg (`onCommit`, Wochen-Check) – im Protokoll `left: true`. */
+  left?: true;
   /** Aktivierung: Satz und Urteil für die Sammelakte `act/<Monat>` (nur „Eigener Satz“ und A2–A5). */
   rec?: ActRecord;
   /** S1-ZEIT (P4): ms bis zum ersten Kontakt und Eingabeart; nur gespeichert (`hist`, Log), nie ausgewertet. */
@@ -767,7 +770,35 @@ export type Answer = {
   pl?: number;
   n?: AttemptMeta['n'];
   bg?: AttemptMeta['bg'];
+  /** Hinweisrunde (LS10): der erste, falsche Versuch – zählt als getippter Fehler (`hist[].v`, Verwechslung), auch wenn der zweite stimmt. */
+  firstWrong?: string;
 };
+
+/**
+ * Korrekturrunde P3 (Punkt 4, LS3): Antwort beim Verlassen buchen. `stay` (Seite verborgen): speichern, aber NICHT weitergehen – die Karte
+ * bleibt mit ihrem Ergebnis stehen, „Weiter“ geht später ohne zweites Speichern weiter (`releaseLeft`). `go` (Runde, Reiter oder Bildschirm
+ * verlassen): speichern und weiterrechnen wie „Weiter“. Beide tragen `left: true` ins Protokoll.
+ */
+export type LeaveMode = 'stay' | 'go';
+
+/** Beim Verbergen gebucht, Weitergehen steht noch aus: der fertig gerechnete nächste Stand (nur gültig, solange dieselbe Aufgabe steht). */
+let leftHeld: { exercise: Exercise; next: SessionState } | null = null;
+
+/**
+ * Nach einer `stay`-Buchung weitergehen (Weiter, Verlassen, Rückkehr): genau einmal, ohne zweites Speichern. `undefined`, wenn nichts
+ * aussteht; `null`, wenn inzwischen eine andere Aufgabe steht (dann bleibt es bei der Buchung).
+ */
+export function releaseLeft(): FirstKind | undefined {
+  const h = leftHeld;
+  if (!h) return undefined;
+  leftHeld = null;
+  const cur = useSession.getState();
+  if (!cur.active || cur.exercise !== h.exercise) return null;
+  return applyAdvance({ ...h.next, activeMs: cur.activeMs, lastInteract: cur.lastInteract });
+}
+
+/** Für Tests und die Anzeige: steht eine beim Verbergen gebuchte Antwort noch vor dem Weitergehen? */
+export const hasLeftHeld = (): boolean => leftHeld !== null;
 
 /** Was die Oberfläche von einer Aktivierung festhält; `commitAnswer` ergänzt Karte, Schritt, Format und Code zum Eintrag der Sammelakte. */
 export type ActRecord = { s: string; b?: string; w?: string; v: ActVerdict; k: 0 | 1; r?: boolean; /** Mit Hilfe der Vorprüfung (Hinweis): zählt nicht für den Fahrplan. */ hp?: true; ts?: Array<[string, TargetVerdict]>; et?: string };
@@ -830,16 +861,26 @@ export function answerDueIn(e: Exercise, ans: Pick<Answer, 'grade' | 'ok' | 'ove
   return Math.max(0, after.due - t);
 }
 
-/** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
-export function commitAnswer(ans: Answer): FirstKind {
-  touch();
-  cardGo();
+/**
+ * Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. `left` (Punkt 4): beim Verlassen gebucht –
+ * sofort gespeichert, mit `left: true` im Protokoll; bei `stay` ohne Weitergehen (siehe `LeaveMode`).
+ */
+export function commitAnswer(ans: Answer, left?: LeaveMode): FirstKind {
+  if (!left) touch();
+  if (!left) cardGo();
   // B4: eine zurückgehaltene Aufdeck-Bewertung gilt, sobald die nächste Antwort kommt.
   commitHeld();
+  // Eine schon beim Verbergen gebuchte Antwort geht zuerst weiter (nie zweimal speichern).
+  if (leftHeld) releaseLeft();
   const s = useSession.getState();
   const e = s.exercise;
   const item = s.queue[s.pos];
   if (!e || !item) return null;
+  const advance = (next: SessionState): FirstKind => {
+    if (left !== 'stay') return applyAdvance(next);
+    leftHeld = { exercise: e, next };
+    return null;
+  };
   const card = e.card;
   const a: AnswerEvent = {
     t: ans.t ?? nextT(),
@@ -875,20 +916,24 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (ans.unverified) a.unverified = true;
   // Wort-Werkstatt: falsch Getipptes für die Diagnose (`hist[].v`, gekürzt) und der Abruf am Ende der Werkstatt (Ruhe danach, `wk`).
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) a.wrong = ans.given;
+  // Hinweisrunde (LS10): der erste, falsche Versuch zählt als getippter Fehler, auch wenn der zweite stimmt.
+  else if (e.input === 'typed' && ans.firstWrong?.trim()) a.wrong = ans.firstWrong;
   if (e.wk) a.wk = true;
+  if (left) a.left = true;
   if (e.check === 'control' || e.check === 'probe') a.check = e.check;
   const knownPass = isKnownPass(e, ans);
   if (e.ex === 'flip' && flipCatchUp(s, card)) a.catchUp = true;
   if (isFreeSentence(e)) a.free = true;
   // P52: getippte falsche Antwort = Wort einer anderen eigenen Karte → Verwechslung für den Wörter-Tutor merken.
   if (!ans.ok && e.input === 'typed' && ans.given.trim()) noteConfusion(card, ans.given, s.pool);
+  else if (e.input === 'typed' && ans.firstWrong?.trim()) noteConfusion(card, ans.firstWrong, s.pool);
 
   // P52 „Welches Wort passt?“: ein zusätzlicher Schritt, der NUR protokolliert. Die Planung (FSRS, S, D, due, lapses, stage) bleibt, wie die reguläre
   // Abfrage sie gesetzt hat; die Karte wird nie als „Nochmal“ eingereiht. Kartenwort gewählt → zusätzlich ein reiner Verlaufseintrag
   // `{x: 'contrast', g: 1}`, der für „schwach“ (Fehler der letzten 14 Tage) zählt.
   if (e.ex === 'contrast') {
     if (!ans.ok) a.grade = 1;
-    recordAnswer(a, s.results.length === 0);
+    recordAnswer(a, s.results.length === 0 || !!left);
     const missOp = ans.ok ? null : contrastMissOp(card.path, card.doc, a);
     let cards = s.cards;
     if (missOp) {
@@ -898,7 +943,7 @@ export function commitAnswer(ans: Answer): FirstKind {
       cards.set(card.key, upd);
     }
     if (!ans.ok) void saveContrastMiss(card.path, a);
-    return applyAdvance(
+    return advance(
       advanceState({
         ...s,
         cards,
@@ -919,8 +964,8 @@ export function commitAnswer(ans: Answer): FirstKind {
       cards.set(card.key, (card.kind === 'chunk' ? toChunkCard(card.id, noteDoc, a.t) : toTrainCard(card.id, noteDoc, card.inDb, a.t)) ?? card);
     }
     if (card.inDb || card.kind === 'chunk') void saveNoteOnly(card.path, a);
-    recordAnswer(a, s.results.length === 0);
-    return applyAdvance(
+    recordAnswer(a, s.results.length === 0 || !!left);
+    return advance(
       advanceState({
         ...s,
         cards,
@@ -939,7 +984,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   const cards = new Map(s.cards);
   cards.set(card.key, updated);
   const seed = card.inDb || card.kind === 'chunk' ? null : { ...card.doc };
-  const immediate = s.results.length === 0;
+  const immediate = s.results.length === 0 || !!left;
 
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };
   const queue = [...s.queue];
@@ -975,7 +1020,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
   // weiterläuft. Die letzte Antwort einer Runde gilt sofort: Rundenende, Pflicht, act/Serie und der
   // Einheits-Ablauf bleiben so unverändert (keine zurückgenommenen Zähler, die nie sinken dürfen).
-  if (e.ex === 'flip' && next.status !== 'summary') {
+  if (e.ex === 'flip' && next.status !== 'summary' && !left) {
     holdAnswer({ a, seed, immediate, before: s, step: next.step, word: card.word });
     return applyAdvance(next);
   }
@@ -1008,7 +1053,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     };
     void saveActEntry(entry);
   }
-  return applyAdvance(next);
+  return advance(next);
 }
 
 // ------------------------------------------------------------------ Rückgängig (B4, markt AN2)
@@ -1097,6 +1142,9 @@ export function undoLast(): FirstKind | false {
 
 /** Runde verlassen (alles Beantwortete ist gespeichert bzw. vorgemerkt). */
 export function leaveSession(): void {
+  // Punkt 4 (LS3): ein geprüftes, noch nicht mit „Weiter“ bestätigtes Ergebnis wird gebucht – genau einmal.
+  flushLeaveBook();
+  releaseLeft();
   commitHeld();
   const s = useSession.getState();
   if (!s.active) return;

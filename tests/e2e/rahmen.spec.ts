@@ -1,5 +1,6 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, crashOnce, layoutProblems, openProfile, openTab, screen, type Lang, type Theme } from './fixtures';
+import { barAction } from './learnHelpers';
 import { openProfileRow } from './profilHelpers';
 import { forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
@@ -74,8 +75,11 @@ test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur 
   // Übung (aus dem Profil-Blatt auf „Fortschritt“): keine Reiterleiste, ✕ führt zurück zur Herkunft.
   await openVtest(page);
   await expect(page.getByTestId('tabbar')).toHaveCount(0);
-  // Einstellungen auch in der Übung (A7 Paket 2): das Zahnrad steht in der Übungsleiste.
-  await expect(page.getByTestId('exercise-bar').getByTestId('open-settings')).toBeVisible();
+  // Einstellungen auch in der Übung (A7 Paket 2): am Handy im Menü „…“ der Übungsleiste (Relaunch P3, Band).
+  await page.getByTestId('exercise-bar').getByTestId('exercise-menu').click();
+  await expect(page.getByTestId('exercise-menu-list').getByTestId('open-settings')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('exercise-menu-list')).toHaveCount(0);
   await page.getByTestId('vt-close').click();
   await screen(page, 'overview');
   await openTab(page, 'today');
@@ -329,7 +333,8 @@ test('Fragen am Handy (390 px) in der Übung: keine Leiste, Claude als Blatt unt
   await screen(page, 'today');
   await startTrainer(page);
   await expect(page.getByTestId('tabbar')).toHaveCount(0);
-  await page.getByTestId('open-companion').click();
+  // Am Handy steht Claude in der Übung hinter „…“ (Relaunch P3: oben nur ✕ und Balken).
+  await barAction(page, 'open-companion');
   const sheet = await companionSettled(page);
   const task = await boxOf(page, 'task');
   expect(task.y + task.height).toBeLessThanOrEqual(sheet.y + 1);
@@ -355,7 +360,7 @@ for (const [width, height] of [
     // Ab 1024 px bleiben Schiene/Seitenleiste auch in Übungen stehen („keine Leiste“ gilt nur für die Handy-Leiste unten).
     await expect(page.getByTestId('tabbar')).toBeVisible();
     expect(meets(await boxOf(page, 'tabbar'), await boxOf(page, 'stage'))).toBe(false);
-    await page.getByTestId('open-companion').click();
+    await barAction(page, 'open-companion');
     await expect(page.getByTestId('frame')).toHaveAttribute('data-ctx', '');
     await expect(page.getByTestId('context-column')).toHaveAttribute('data-kind', 'claude');
     const win = await companionSettled(page);

@@ -276,6 +276,7 @@ Alle Felder sind optional. Sie werden in Stufe 1 nur gesammelt und von keiner No
 | `n` | `hist[]`, Log | zweiter Versuch (nach Hinweis, Vorprüfung oder Zielform) oder zweites Senden an Claude | `2` |
 | `bg` | `hist[]`, Log | Die Seite war zwischen Zeigen und Senden verborgen. `ms` bleibt unverändert | `1` |
 | `st` | `hist[]`, Log (Wörter, Wendungen) | Lernstufe der Karte vor der Antwort | 0…5 |
+| `left` | Log (Wörter, Wendungen, Grammatik) | Korrekturrunde P3: Die Antwort war geprüft, wurde aber nicht mit „Weiter“ bestätigt und beim Verlassen gebucht (Seite verborgen, Runde/Reiter verlassen). Genau einmal gebucht | `true` |
 
 **Größe im schlimmsten Fall** (Tests `histTiming`/`logTiming`):
 - je `hist`-Eintrag +70 Byte; eine Karte mit 12 Einträgen hat 2.133 Byte (Grenze 64 KiB)

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen, openSpeak, openTab } from './fixtures';
-import { skipMiniLesson } from './learnHelpers';
+import { barAction, skipMiniLesson } from './learnHelpers';
 import { dump, forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
 
@@ -23,7 +23,7 @@ async function start(page: Page, fake: InstallOptions = {}) {
 }
 
 async function openAndSend(page: Page, text: string) {
-  await page.getByTestId('open-companion').click();
+  await barAction(page, 'open-companion');
   await expect(page.getByTestId('companion')).toBeVisible();
   await page.getByTestId('chat-input').fill(text);
   await page.getByTestId('chat-send').click();
@@ -106,7 +106,7 @@ test.describe('Desktop 1440', () => {
     await page.getByTestId('start').click();
     await screen(page, 'trainer');
     await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'cloze_hint');
-    await page.getByTestId('open-companion').click();
+    await barAction(page, 'open-companion');
     await expect(page.getByTestId('seeing')).toHaveAttribute('data-area', 'trainer');
     await page.getByTestId('chat-suggestion').first().click();
     const reply = page.locator('[data-testid="chat-msg"][data-role="assistant"]').last();
@@ -338,7 +338,7 @@ test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht 
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
   const seeing = async (page: Page) => {
-    await page.getByTestId('open-companion').click();
+    await barAction(page, 'open-companion');
     await expect(page.getByTestId('companion')).toBeVisible();
     const s = page.getByTestId('seeing');
     const out = { area: await s.getAttribute('data-area'), text: await s.innerText() };

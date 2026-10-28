@@ -193,14 +193,21 @@ export async function openOverview(page: Page): Promise<void> {
 export async function openSettings(page: Page): Promise<void> {
   // Das Zahnrad des Lade-Bilds verschwindet mit dem Laden; erst danach entscheiden, welcher Weg gilt.
   await page.locator('[data-screen="loading"]').waitFor({ state: 'detached' });
-  const gear = page.getByTestId('open-settings').first();
-  if (await gear.isVisible()) {
+  const gear = page.locator('[data-testid="open-settings"]:visible').first();
+  if (await gear.isVisible().catch(() => false)) {
     await gear.click();
     return;
   }
   const side = page.getByTestId('side-settings');
-  if (await side.isVisible()) {
+  if (await side.isVisible().catch(() => false)) {
     await side.click();
+    return;
+  }
+  // In Übungen steht das Zahnrad nicht in der Leiste (Relaunch P3): „Einstellungen“ ist ein Punkt im Menü „…“.
+  const menu = page.getByTestId('exercise-menu').first();
+  if (await menu.isVisible().catch(() => false)) {
+    await menu.click();
+    await page.getByTestId('exercise-menu-list').getByTestId('open-settings').click();
     return;
   }
   await openProfile(page);

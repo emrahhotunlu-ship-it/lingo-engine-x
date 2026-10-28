@@ -33,6 +33,7 @@
       "zuwachs": {
         "P5 S1-ZAHL": 2000,
         "P4 S1-ZEIT": 3000,
+        "P3 S1-BAND": 14000,
         "P2 S1-SHELL": 18000
       }
     },
@@ -40,6 +41,7 @@
       "basis": 25000,
       "zuwachs": {
         "P1 S1-TOK": 4000,
+        "P3 S1-BAND": 3000,
         "P2 S1-SHELL": 4000
       }
     },

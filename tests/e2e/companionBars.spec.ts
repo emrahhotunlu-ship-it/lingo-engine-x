@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openTab, screen } from './fixtures';
 import { planPatch } from './trainerHelpers';
+import { barAction } from './learnHelpers';
 import { ankiPatch } from './wortschatzHelpers';
 
 // Schwebefenster und Pille verdecken nie die Aktionsleiste oder die untere Reiterleiste; Mindestbreite;
@@ -48,7 +49,7 @@ for (const vp of [
     test.use({ viewport: vp });
     test('Fenster und Pille verdecken die Aktionsleiste nicht', async ({ page }) => {
       await trainer(page);
-      await page.getByTestId('open-companion').click();
+      await barAction(page, 'open-companion');
       await settled(page);
       expect(await overlap(page)).toEqual([]);
       await page.getByTestId('companion-min').click();
@@ -63,7 +64,7 @@ test.describe('Handy 390', () => {
 
   test('Fenster über der Leiste, Pille oben rechts unter den Kopf-Symbolen, eigenes Symbol zum Wiederherstellen', async ({ page }) => {
     await trainer(page);
-    await page.getByTestId('open-companion').tap();
+    await barAction(page, 'open-companion', 'tap');
     await settled(page);
     expect(await overlap(page)).toEqual([]);
     // Kopfzeile: nichts bricht ab, Schließen ganz sichtbar.

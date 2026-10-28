@@ -1268,19 +1268,30 @@ html[data-actionbar] #main {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--lx-gap-section);
   }
+  /* Raster nach Plan Tabelle 6.2 (Nachprüfung P3, B): Bühne bis 720 px, Ergebnisspalte fest daneben. 1024–1279 (Schiene 76 px):
+     Spalte 300 px, Bühne der Rest (≈ 600 px); ab 1280: Spalte 360 px, Bühne ≈ 640 px; ab 1440: Spalte 400 px, Bühne bis 720 px. */
   @media (min-width: 1024px) {
     .lx-split[data-split] {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
+      --lx-res-w: 300px;
+      grid-template-columns: minmax(0, 720px) var(--lx-res-w);
+      justify-content: center;
+      column-gap: 1rem;
       align-items: start;
     }
-    .lx-split[data-split] > [data-col='main'] {
-      grid-column: span 7 / span 7;
-      max-width: 640px;
-    }
     .lx-split[data-split] > [data-col='side'] {
-      grid-column: span 5 / span 5;
       position: sticky;
       top: 1rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .lx-split[data-split] {
+      --lx-res-w: 360px;
+    }
+  }
+  @media (min-width: 1440px) {
+    .lx-split[data-split] {
+      --lx-res-w: 400px;
+      column-gap: 1.5rem;
     }
   }
 }

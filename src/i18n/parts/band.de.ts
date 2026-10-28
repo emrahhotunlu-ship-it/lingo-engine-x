@@ -1,0 +1,30 @@
+// Oberflächentexte des Übungsrahmens mit Band (Relaunch Stufe 1, P3 S1-BAND, docs/relaunch/stufe1-plan.md §6.4), Deutsch.
+
+export const bandDe = {
+  bandLabel: 'Rückmeldung',
+  bandWhy: 'Warum',
+  bandAi: 'von Claude',
+  bandMore: 'Mehr',
+  bandMoreTitle: 'Mehr zu dieser Aufgabe',
+  bandMoreClose: 'Schließen',
+  bandVerdictShown: 'Lösung gezeigt',
+  bandMenu: 'Menü',
+  bandMenuWhy: 'Warum diese Aufgabe?',
+  bandMenuPause: 'Pause, später weiter',
+  bandMenuClose: 'Menü schließen',
+  bandKeys: 'Tastenkürzel',
+  bandKeysClose: 'Tastenkürzel schließen',
+  bandKeyEnter: 'Prüfen bzw. weiter',
+  bandKeyHint: 'Tipp',
+  bandKeyDontKnow: 'Weiß ich nicht',
+  bandKeyChoice: 'Antwort wählen',
+  bandKeyEsc: 'Blatt, Menü oder Spalte schließen (nie die Übung)',
+  bandKeyHelp: 'Diese Übersicht',
+  // Korrekturrunde P3: Lösungszeile im Band, Hilfe-Untertitel, Tastenzeile.
+  bandYou: 'Du',
+  bandRightHelped: 'Mit Hinweis geschafft – zählt als ‚Schwer‘',
+  bandRightStart: 'Mit Anfangsbuchstaben – kommt bald wieder',
+  bandKeysAll: '? alle Kürzel',
+  bandWhyMore: 'Nicht verwechseln',
+  bandBar: 'Fortschritt: Abschnitt {n} von {total}',
+};

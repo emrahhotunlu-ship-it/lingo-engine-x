@@ -161,7 +161,7 @@ function Block({ name, title, items, body, before, after }: { name: 'why' | 'rem
 }
 
 /** Blöcke „Warum“ und „Merke“. `before`: eigener Inhalt der Übung oben im Warum-Block (Wörter: „overcame = Vergangenheit von overcome“). */
-export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai = false }: { plan: ResultPlan; area?: WordTapArea; before?: ReactNode; source?: string; depth?: string; ai?: boolean }) {
+export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai = false, testId = 'explanation', whyTitle }: { plan: ResultPlan; area?: WordTapArea; before?: ReactNode; source?: string; depth?: string; ai?: boolean; /** Band (P3): der Merke-Teil im Mehr-Blatt trägt eine eigene Kennung. */ testId?: string; /** Korrekturrunde P3 (Punkt 6): weitere Begründungen im Mehr-Blatt heißen „Nicht verwechseln“, nicht ein zweites „Warum“. */ whyTitle?: string }) {
   const { t } = useT();
   const body = useItemBody(area);
   // Text von Claude ohne eigene Kennzeichnung an der Zeile: die Kennzeichnung steht einmal am Ende des Warum-Blocks.
@@ -172,7 +172,7 @@ export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai
       </p>
     ) : null;
   const whyShown = plan.why.length > 0 || !!before;
-  const why = <Block name="why" title={t('exBlockWhy')} items={plan.why} body={body} before={before} after={whyShown ? aiNote : null} />;
+  const why = <Block name="why" title={whyTitle ?? t('exBlockWhy')} items={plan.why} body={body} before={before} after={whyShown ? aiNote : null} />;
   // Ohne eigenes Merke-Stück: der Beispielsatz (antippbar) ist das, was bleibt.
   const example = plan.example ? (
     <ul className="m-0 flex list-none flex-col gap-2 p-0 lx-t-support" data-testid="examples">
@@ -197,7 +197,7 @@ export function ResultBlocks({ plan, area = 'trainer', before, source, depth, ai
   );
   if (!whyShown && !plan.remember.length && !example) return null;
   return (
-    <div className="flex flex-col gap-4" data-testid="explanation" data-slot="explanation" data-source={source} data-depth={depth}>
+    <div className="flex flex-col gap-4" data-testid={testId} data-slot="explanation" data-source={source} data-depth={depth}>
       {why}
       {remember}
     </div>

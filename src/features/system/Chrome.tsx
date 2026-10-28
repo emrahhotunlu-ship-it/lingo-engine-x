@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react';
 import { useAiAvailable } from '../../ai/scope';
+import { useContextPresentation } from '../../app/shell/contextColumn';
 import { useLayer } from '../../app/shell/layer';
 import { openSettings } from '../../app/sheets';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
+import { TopMenu, type MenuEntry } from '../../ui/exercise/ExerciseMenu';
+import { useMediaQuery } from '../../platform/input';
 import { openCompanion } from '../companion/store';
 
 // Rahmen-Bausteine (Neubau WP0b, docs/neubau/architektur.md §2.5, Prototyp v1):
@@ -92,13 +95,37 @@ export function TabTitle({ title, sub, actions, testId }: { title: ReactNode; su
   );
 }
 
-/** Rechte Seite der Übungsleiste: Übersetzer, Claude und Zahnrad (plan.md §1.2, A7 Paket 2). */
-export function ExerciseActions() {
+/**
+ * Rechte Seite der Übungsleiste (plan.md §1.2, A7 Paket 2; seit dem Band Relaunch Stufe 1 P3, stufe1-plan §6.4): Menü „…“.
+ * Handy (< 768 px): oben nur ✕ und Balken – Übersetzer, Claude und „Pause, später weiter“ stehen hinter „…“ (gleiche Kennungen).
+ * Ab 768 px stehen Übersetzer und Claude daneben, ab 1024 px (Seitenleiste sichtbar) nur noch Claude. Das Zahnrad steht nie in der Übungsleiste (Hauptsitzung 28.10.2026);
+ * die Einstellungen bleiben als Punkt im Menü erreichbar (Emrahs Vorgabe „überall“). `onPause` = dasselbe wie ✕.
+ */
+export function ExerciseActions({ onPause }: { onPause: () => void }) {
+  const { t } = useT();
+  const ai = useAiAvailable();
+  const wide = useMediaQuery('(min-width: 768px)');
+  const lead: MenuEntry[] =
+    !wide && ai
+      ? [
+          { id: 'companion', label: t('openCompanion'), onClick: () => openCompanion(), testId: 'open-companion' },
+          { id: 'translate', label: t('cmpTabTranslate'), onClick: () => openCompanion({ tab: 'translate' }), testId: 'open-translate' },
+        ]
+      : [];
+  // Ab 1024 px steht die Seitenleiste auch in Übungen (Shell `showNav`) mit Claude, Übersetzer und Einstellungen. Die Leiste zeigt
+  // dann nur, was die Navigation nicht hat (ux N1): kein Übersetzer, kein Einstellungs-Punkt und – Korrekturrunde P3, Punkt 13 – kein
+  // eigenes Claude-Symbol: „Claude“ in der Seitenleiste öffnet denselben Begleiter mit demselben Aufgaben-Kontext (`useSeeing`).
+  const nav = useContextPresentation() === 'column';
+  const tail: MenuEntry[] = nav ? [] : [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
   return (
     <div className="flex flex-none items-center gap-0.5" data-testid="exercise-actions">
-      <TranslateButton />
-      <ClaudeButton />
-      <SettingsButton />
+      {wide && !nav && (
+        <>
+          <TranslateButton />
+          <ClaudeButton />
+        </>
+      )}
+      <TopMenu lead={lead} tail={tail} onPause={onPause} />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useT, type MessageKey } from '../../i18n';
 import { Choices } from '../../engine/Choices';
-import { choiceKeyRange } from '../../engine/choiceKeys';
+import { CHOICE_LETTERS, choiceKeyRange } from '../../engine/choiceKeys';
 import { Tiles } from '../../engine/Tiles';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -58,7 +58,8 @@ import { useCompanionSee } from '../companion/seeing';
 import { companionOpenedSince, companionOpenMs } from '../companion/store';
 import { saveRepairs } from '../repair/store';
 import { requestExamples, useExamples } from './examples';
-import { answerDueIn, commitAnswer, prepareNext, useSession, type ActRecord, type Answer, type FirstKind } from './session';
+import { answerDueIn, commitAnswer, prepareNext, releaseLeft, useSession, type ActRecord, type Answer, type FirstKind, type LeaveMode } from './session';
+import { leaveAction, registerLeaveBook, type LeaveCause } from '../../ui/exercise/leaveBook';
 import { nextT } from './persist';
 import { WordExtras } from './WordExtras';
 import { reportWordCtx } from './wordCtx';
@@ -224,6 +225,15 @@ export function ExerciseView({
   // S1-ZEIT (P4): erster Kontakt und Eingabeart, getrennt von `firstKeyAt` (das bleibt allein für die Note). Pausen wie `measure()`.
   const [attempt] = useState(createAttemptTracker);
   const extras = extra?.items ?? NO_EXAMPLES;
+  // Korrekturrunde P3 (Punkt 4, LS3): Buchung beim Verlassen. `done`: schon gebucht – `go` (Weiter oder Verlassen) bzw. `stay` (beim Verbergen
+  // gespeichert, Weitergehen steht aus). Nie zweimal. Solange Claude „War das auch richtig?“ prüft, wird nichts gebucht.
+  const done = useRef<false | LeaveMode>(false);
+  const synBusy = useRef(false);
+  const [onSynBusy] = useState(() => (b: boolean) => {
+    synBusy.current = b;
+  });
+  /** Hinweisrunde (LS10): der erste, falsche Versuch. */
+  const firstTry = useRef<string | null>(null);
 
   // n+1 vorberechnen, sobald das Ergebnis steht (nur Trainer-Runde, im Leerlauf).
   const hasResult = fb !== null;
@@ -359,6 +369,7 @@ export function ExerciseView({
     if (retry || noHelp || !RETRY_EX.has(e.ex) || e.check === 'known') return false;
     const h = retryHint(given, e.accepted, e.ex === 'situation' ? typedForm(card.word) : card.lemma, result);
     if (!h) return false;
+    firstTry.current = given;
     setRetry(h);
     api.focusNow();
     return true;
@@ -621,12 +632,71 @@ export function ExerciseView({
 
   // ------------------------------------------------------------------ Weiter, Tipp, Weiß ich nicht
 
+  /** Die bewertete Antwort, wie „Weiter“ sie speichert (auch beim Verlassen, Punkt 4). */
+  const answerOf = (f: Feedback): Answer => {
+    const rec = actRecordOf(f, e);
+    const timing = pickAttempt(f);
+    // Hinweisrunde (LS10): der erste, falsche Versuch geht als Fehler mit (nur wenn er sich vom gewerteten unterscheidet).
+    const first = retry && firstTry.current?.trim() && normalize(firstTry.current) !== normalize(f.given) ? { firstWrong: firstTry.current } : {};
+    return f.override ? { grade: 3, given: f.given, ms: f.ms, ok: true, override: true, t: f.t, ...timing } : { grade: f.grade, given: f.given, ms: f.ms, ok: f.grade > 1, hint: f.hint, t: f.t, ...(f.interrupted ? { interrupted: true as const } : {}), ...(f.sentence && !f.sentence.out && !f.override && f.sentence.sayIt?.verified !== true ? { unverified: true as const } : {}), ...(f.sentence?.sayIt?.noteOnly && !f.override ? { noteOnly: true as const } : {}), ...(rec ? { rec } : {}), ...first, ...timing };
+  };
+
+  /**
+   * Punkt 4 (LS3): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen (`left: true`), nie während Claude noch prüft.
+   * Trainer-Runde: verborgen speichern und stehen lassen (`stay`), beim Gehen weiterrechnen. Eigener Schreibweg (`onCommit`, Wochen-Check,
+   * Nachtrag LS3): beim Gehen (✕, Aushängen) und `pagehide` über diesen Weg buchen; verborgen nichts (er kann nicht halten).
+   */
+  const leave = (cause: LeaveCause): void => {
+    if (!onCommit && useSession.getState().exercise !== exercise) return;
+    const act = leaveAction(cause, { result: !!fb, done: done.current, busy: synBusy.current, own: !!onCommit });
+    if (act === 'none' || !fb) return;
+    if (act === 'release') {
+      done.current = 'go';
+      releaseLeft();
+      return;
+    }
+    done.current = act;
+    if (onCommit) onCommit({ ...answerOf(fb), left: true });
+    else commitAnswer(answerOf(fb), act);
+  };
+  const leaveRef = useRef(leave);
+  useEffect(() => {
+    leaveRef.current = leave;
+  });
+  // Seite verborgen (App gewechselt, Bildschirm aus) bzw. verlassen: speichern, die Karte bleibt mit ihrem Ergebnis stehen.
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === 'hidden') leaveRef.current('hidden');
+    };
+    const onHide = () => leaveRef.current('pagehide');
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('pagehide', onHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('pagehide', onHide);
+      // Aushängen ohne „Weiter“ (Reiter gewechselt, Runde verlassen): buchen und weiterrechnen.
+      leaveRef.current('go');
+    };
+  }, []);
+  // ✕, Pause, Esc: `leaveSession` bzw. `leaveCheck` bucht über diese Anmeldung, BEVOR es die Aufgabe abräumt.
+  const hasFb = !!fb;
+  useEffect(() => {
+    if (!hasFb) return;
+    return registerLeaveBook(() => leaveRef.current('go'));
+  }, [hasFb]);
+
   const next = () => {
     if (!fb) return;
-    const rec = actRecordOf(fb, e);
-    const timing = pickAttempt(fb);
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true, t: fb.t, ...timing } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint, t: fb.t, ...(fb.interrupted ? { interrupted: true as const } : {}), ...(fb.sentence && !fb.sentence.out && !fb.override && fb.sentence.sayIt?.verified !== true ? { unverified: true as const } : {}), ...(fb.sentence?.sayIt?.noteOnly && !fb.override ? { noteOnly: true as const } : {}), ...(rec ? { rec } : {}), ...timing };
-    const kind = (onCommit ?? commitAnswer)(ans);
+    let kind: FirstKind;
+    if (done.current === 'stay') {
+      // Beim Verbergen schon gespeichert: nur noch weitergehen.
+      done.current = 'go';
+      kind = releaseLeft() ?? null;
+    } else if (done.current === 'go') return;
+    else {
+      done.current = 'go';
+      kind = (onCommit ?? commitAnswer)(answerOf(fb));
+    }
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
     else api.blur();
@@ -1087,6 +1157,9 @@ export function ExerciseView({
   let feedback: ShellFeedback | null = null;
   if (fb && model) {
     const c = fb.result;
+    // Punkt 9: mit Hilfe (Hinweisrunde, Anfangsbuchstaben, Tipp) geschafft – der Untertitel sagt, was das zählt; die Combo wächst nicht.
+    const helped = !fb.override && !fb.sentence && (!!retry || fb.hint > 0);
+    const helpedRight = helped && c.verdict === 'correct' && (retry?.kind === 'start' || fb.grade === 2);
     const sub: string | null = fb.dontKnow
       ? null
       : fb.sentence?.sayIt
@@ -1115,6 +1188,10 @@ export function ExerciseView({
               : t('trProduceLocalNote')
           : fb.sentence?.out && fb.sentence.out.errType && fb.sentence.out.errType !== 'other' && fb.sentence.out.verdict !== 'correct'
             ? t('trProduceErrMain', { type: t(`trErr_${fb.sentence.out.errType}` as MessageKey) })
+          : helpedRight
+            ? retry?.kind === 'start'
+              ? t('bandRightStart')
+              : t('bandRightHelped')
           : alsoRight
             ? t('trSubAlsoRight', { form: solution })
           : c.variant === 'uk' && c.us
@@ -1158,6 +1235,14 @@ export function ExerciseView({
     // (UX-Prüfung 19.10.2026, Kap. 15: jede Aussage einmal).
     const shownUnder = isChoice && fb.result.verdict === 'wrong' && chosen !== null && model.lines.some((l) => l.k === 'yours');
     if (!comparison && wrongWord && !shownUnder && solution && normalize(solution) !== normalize(fb.given)) comparison = { given: fb.dontKnow ? '' : fb.given, ops: alignWords(fb.dontKnow ? '' : fb.given, solution) };
+    // Band (Punkt 1b): „fast richtig“ getippt – EINE Lösungszeile „Du: … → Richtig: …“ (am Laptop zeigt die Lücke die Lösung schon).
+    if (!comparison && fb.result.verdict === 'near' && !fb.override && isTyped && solution && normalize(solution) !== normalize(fb.given)) comparison = { given: fb.given, ops: alignWords(fb.given, solution), bandOnly: true };
+    // Auswahl (LS6): „Du: B · Richtig: C …“ im Band statt des Wortvergleichs.
+    const rightIdx = isChoice ? visibleOptions.findIndex((o) => o.correct) : -1;
+    const choiceLine =
+      isChoice && rightIdx >= 0 && !fb.override && (fb.result.verdict === 'wrong' || fb.dontKnow)
+        ? { you: !fb.dontKnow && chosen !== null ? (CHOICE_LETTERS[chosen] ?? null) : null, right: CHOICE_LETTERS[rightIdx] ?? '', text: visibleOptions[rightIdx]?.label ?? solution }
+        : null;
     // Wortpartner (colloc/colloc_gap): gesucht ist der Partner, nicht eine Form des Kartenworts – „raised = Vergangenheit von concern“ wäre falsch (UX-Prüfung 19.10.2026).
     const partnerEx = e.ex === 'colloc' || e.ex === 'colloc_gap';
     const fk = solution && !fb.override && fb.result.verdict !== 'correct' && !partnerEx ? formKind(solution, card.word, card.pos ?? null) : null;
@@ -1195,6 +1280,8 @@ export function ExerciseView({
       ...(e.ex === 'say_it' && !fb.override && !fb.dontKnow && fb.sentence?.sayIt?.verified && fb.sentence.sayIt.found ? { title: t('pxWwSayItTitle') } : {}),
       sub,
       comparison,
+      ...(choiceLine ? { choice: choiceLine } : {}),
+      ...(helped ? { helped: true } : {}),
       ...(right ? { right } : {}),
       why: formWhy ?? undefined,
       tutor,
@@ -1210,7 +1297,8 @@ export function ExerciseView({
       // R5: im Kontrast-Schritt heißt der Kopf „avoid ≠ convince“ (richtiges Wort zuerst, beide mit Aussprache).
       head: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="head" other={e.ex === 'contrast' ? (contrastOtherOf(e)?.word ?? null) : null} phrase={collocPhrase} meaning={fb.sentence ? null : headMeaning} pos={posKey(card.pos)} />,
       // „War das auch richtig?“ als ruhige Zeile im Ergebnis-Block (Design-Lead), nicht mehr lose über der Karte.
-      parts: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} /> : undefined,
+      // Punkt 1d: im Band neben „Mehr“ (zweiter und letzter Zweitknopf); Ergebnis und Annehmen wachsen darunter.
+      act: !fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' ? <SynonymAsk card={card} given={fb.given} onOk={override} onBusy={onSynBusy} /> : undefined,
       foot: <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} part="body" />,
       moreOpen,
       auto: fb.hint === 0 && !fb.override && !fb.sentence && !fb.dontKnow,
@@ -1286,7 +1374,7 @@ export function ExerciseView({
         sideNote={t('exSideWord')}
         keysHint={(() => {
           const range = isChoice ? choiceKeyRange(e.options.length) : null;
-          return range ? t('exKeysHintWordN', range) : t('exKeysHintWord');
+          return fb ? t('exKeysHintNext') : range ? t('exKeysHintWordN', range) : t('exKeysHintWord');
         })()}
         {...(isChoice ? { choiceCount: e.options.length } : {})}
       />
@@ -1406,8 +1494,8 @@ function CopyOnceField({ solution }: { solution: string }) {
 }
 
 /** „War das auch richtig?“ (nur auf Antippen): Ohne Antippen gibt es keine Claude-Anfrage. */
-function SynonymAsk({ card, given, onOk }: { card: Exercise['card']; given: string; onOk: () => void }) {
-  return <SynonymCheck card={card} given={given} onOk={onOk} />;
+function SynonymAsk({ card, given, onOk, onBusy }: { card: Exercise['card']; given: string; onOk: () => void; onBusy: (busy: boolean) => void }) {
+  return <SynonymCheck card={card} given={given} onOk={onOk} onBusy={onBusy} />;
 }
 
 import { SynonymCheck } from './SynonymCheck';

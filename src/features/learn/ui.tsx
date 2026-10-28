@@ -22,6 +22,7 @@ import { holdResume } from '../../app/resume';
 import { usePlayer } from '../../app/shell/playerContext';
 import { BackLink } from '../../app/shell/TopBar';
 import { ExerciseActions, TitleActions } from '../system/Chrome';
+import { SegBar } from '../../ui/exercise/SegBar';
 import { firstOpenDuty, useToday } from '../today/state';
 import { startDuty } from './flow';
 
@@ -147,17 +148,21 @@ export function ExerciseTop({
     onClose();
     if (kept) toast(t('nbShSaved'));
   };
+  // Relaunch Stufe 1 P3 (Band): Balken mit Abschnitten, einer je Block des Tages (nur in der Pflicht mit mindestens zwei Blöcken).
+  const today = useToday();
+  const segments = ctx === 'duty' && today.duties.total >= 2 ? { count: today.duties.total, current: dutyStep(today.duties, duty) - 1 } : null;
+  const label = has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined;
   return (
     <ExerciseBar
       onClose={close}
       closeLabel={closeLabel ?? t('trClose')}
       closeTestId={closeTestId ?? 'round-close'}
       progress={progress}
-      progressLabel={has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined}
+      progressLabel={label}
       progressTestId={progressTestId ?? 'round-progress'}
       note={note}
-      end={<ExerciseActions />}
-      middleOverlay={middleOverlay}
+      end={<ExerciseActions onPause={close} />}
+      middleOverlay={middleOverlay ?? (has ? <SegBar progress={progress} segments={segments} label={label} testId={progressTestId ?? 'round-progress'} /> : null)}
     />
   );
 }

@@ -48,6 +48,7 @@ import { allTrainCards } from '../vocab/session';
 import { wordsToday } from '../../domain/metrics';
 import { factOf, roundMove, type Move, type WhyCode } from '../../domain/tutor/policy';
 import { learnerNow } from '../tutor/learnerLive';
+import { flushLeaveBook } from '../../ui/exercise/leaveBook';
 import { markTask, plantedOf, tutorRecord, tutorRoundStart, useTutorSession } from '../tutor/sessionStore';
 
 // Eine Grammatikrunde (phase2-plan §5.2): die Aufgaben werden synchron im Klick zusammengestellt
@@ -417,8 +418,22 @@ const VT_MS = 20_000;
 const cleanAnswer = (a: GrammarAnswer): boolean => isOk(a) && a.help.level === 0 && a.ms <= VT_MS;
 
 /** Antwort übernehmen und weiter. Rückgabe: Eingabeart der nächsten Aufgabe. */
+/**
+ * Korrekturrunde P3 (Punkt 4, LS3): beim Verbergen der Seite gebuchte Antworten (Zeitstempel). Gespeichert ist schon; das spätere
+ * „Weiter“ bzw. Verlassen rechnet die Runde weiter, ohne ein zweites Mal zu speichern.
+ */
+const bookedT = new Set<number>();
+
+/** Beim Verbergen: die Antwort speichern (mit `left: true`), die Aufgabe bleibt mit ihrem Ergebnis stehen. Genau einmal je Antwort. */
+export function bookGrammarLeft(a: GrammarAnswer): void {
+  const s = useGrammarSession.getState();
+  if (!s.active || bookedT.has(a.t)) return;
+  bookedT.add(a.t);
+  if (!inRepeat(s)) void learnRecorder.grammar({ ...a, left: true });
+}
+
 export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
-  touchGrammar();
+  if (!a0.left) touchGrammar();
   const s = useGrammarSession.getState();
   let a = a0;
   // N47: Die Wiederholung am Rundenende wird nicht noch einmal gespeichert oder gezählt.
@@ -448,7 +463,9 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     a = { ...a, tt: { c, n: test.n, ...(w.length ? { w } : {}) } };
     test = { ...test, result: { c, n: test.n, ok: ttPassed(c, test.n) } };
   }
-  if (!repeating) void learnRecorder.grammar(a);
+  // Schon beim Verbergen gespeichert (Punkt 4): nicht noch einmal.
+  const booked = bookedT.delete(a.t);
+  if (!repeating && !booked) void learnRecorder.grammar(a);
   const row: GrammarRow = {
     key: a.task.key,
     topic: a.task.topic,
@@ -569,6 +586,8 @@ export function startAfterIntro(): 'typed' | 'choice' | null {
 }
 
 export function leaveGrammar(): void {
+  // Punkt 4 (LS3): ein geprüftes, noch nicht mit „Weiter“ bestätigtes Ergebnis wird gebucht – genau einmal, vor dem Abräumen.
+  flushLeaveBook();
   const s = useGrammarSession.getState();
   if (!s.active) return;
   if (s.status === 'running') finish(s, true);

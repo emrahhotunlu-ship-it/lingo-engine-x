@@ -1,3 +1,4 @@
+import type { GrammarAnswer } from '../../domain/learn/types';
 import { CardStack } from '../../ui/CardStack';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { leaveBack, useNav } from '../../app/nav';
@@ -29,7 +30,7 @@ import { useLive } from '../../data/live';
 import { useWhyReason, useWinOn } from '../tutor/WhyLine';
 import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
-import { cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
+import { bookGrammarLeft, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt. Vorn steht bei einem neuen Muster der Vortest und die Einführung
@@ -103,7 +104,7 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest || inTest} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">
@@ -113,6 +114,17 @@ export function GrammarSessionScreen() {
       </CardStack>
     </div>
   );
+}
+
+/**
+ * Korrekturrunde P3 (Punkt 4, LS3): Antwort beim Verlassen buchen. `stay` (Seite verborgen): speichern, die Aufgabe bleibt stehen;
+ * `go` (Runde, Reiter, Bildschirm verlassen): buchen und weiterrechnen – nur, solange genau diese Aufgabe in der Runde steht.
+ */
+function leaveBook(a: GrammarAnswer, mode: 'stay' | 'go'): void {
+  const s = useGrammarSession.getState();
+  if (!s.active || s.status !== 'running' || s.tasks[s.pos]?.key !== a.task.key) return;
+  if (mode === 'stay') bookGrammarLeft(a);
+  else commitGrammar(a);
 }
 
 const dots = (st: PatternState): number => STATE_DOTS[st];
