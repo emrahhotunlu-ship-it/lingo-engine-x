@@ -12,7 +12,7 @@ import { useNav, type Route } from './nav';
 import { bootAreas, screenOf } from './registry';
 import { routeFromHash } from './router/deeplink';
 import type { RouteName } from './router/types';
-import { applyDocumentSettings, isLang, isPalette, isThemeMode, resolveTheme, useSettings } from './settings';
+import { applyDocumentSettings, isAccent, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { useDocTotal } from '../features/capacity/docTotal';
 import { useC1xReady } from '../features/c1x/ready';
@@ -68,9 +68,9 @@ export function useBoot(): void {
     if (isLang(profile.lang) && profile.lang !== s.lang) s.setLangLocal(profile.lang);
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
-    // Farbthema (M21): `theme.p` der alten App; fehlt es, bleibt die lokale Wahl (Standard Salbei).
-    const palette = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { p?: unknown }).p : undefined;
-    if (isPalette(palette) && palette !== s.palette) s.setPaletteLocal(palette);
+    // Akzent (Relaunch P1): `theme.a`; fehlt es, bleibt die lokale Wahl (Standard Iris). Das alte `theme.p` wird nur noch mitgetragen.
+    const accent = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { a?: unknown }).a : undefined;
+    if (isAccent(accent) && accent !== s.accent) s.setAccentLocal(accent);
   }, [profile]);
 
   // Töne (Kap. 4.7): Einstellung aus dem Profil, Standard aus.
@@ -95,15 +95,15 @@ export function useBoot(): void {
   // Sprache und Modus auf <html> anwenden; „Automatisch" folgt dem System.
   const lang = useSettings((s) => s.lang);
   const theme = useSettings((s) => s.theme);
-  const palette = useSettings((s) => s.palette);
+  const accent = useSettings((s) => s.accent);
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: light)');
-    const apply = () => applyDocumentSettings(lang, resolveTheme(theme, mq.matches), palette);
+    const apply = () => applyDocumentSettings(lang, resolveTheme(theme, mq.matches), accent);
     apply();
     if (theme !== 'auto') return;
     mq.addEventListener('change', apply);
     return () => mq.removeEventListener('change', apply);
-  }, [lang, theme, palette]);
+  }, [lang, theme, accent]);
 }
 
 export type SystemScreen = 'loading' | 'nodb' | 'offline' | 'migration';

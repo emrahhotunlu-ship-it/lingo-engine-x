@@ -216,7 +216,7 @@
   border-radius: 999px;
   border: 0;
   background: var(--lx-btn-grammar, var(--lx-ch-grammar));
-  color: #fff;
+  color: var(--act-fg);
   cursor: pointer;
   box-shadow: 0 8px 22px -12px color-mix(in srgb, var(--lx-ch-grammar) 80%, transparent);
   transition: transform 120ms ease;
@@ -599,9 +599,9 @@
 }
 .lx-jr-summit-label {
   font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--lx-gold-text);
 }
 

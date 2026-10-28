@@ -2,7 +2,13 @@ import { motion } from 'framer-motion';
 import { useId, useRef, type KeyboardEvent } from 'react';
 import { spring } from './motion';
 
-type Option<T extends string> = { value: T; label: string; testId?: string };
+type Option<T extends string> = {
+  value: T;
+  label: string;
+  testId?: string;
+  /** Farbpunkt vor dem Text (CSS-Variable, z. B. `--swatch-iris`), nur Schmuck (aria-hidden). */
+  dot?: string;
+};
 
 type Props<T extends string> = {
   label: string;
@@ -55,20 +61,23 @@ export function Segmented<T extends string>({ label, value, options, onChange, c
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(o.value)}
             data-testid={o.testId}
-            className={`relative min-h-11 min-w-0 rounded-[calc(var(--radius-control)-4px)] px-2 text-sm leading-tight transition-colors ${active ? 'font-semibold text-bg' : 'font-medium text-muted hover:text-fg'}`}
+            className={`relative min-h-11 min-w-0 rounded-[calc(var(--radius-control)-4px)] px-2 text-sm leading-tight transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {active && (
-              // Gewählte Fläche: fest, mit Kante in Text-Grau (≥ 3:1 in allen Modi, WCAG 1.4.11).
+              // UX-Prüfung W11 (Relaunch P1, Nora 28.10.2026): Gewählt = deckende Fläche über der Spur, Ring in line-2, Fettung und
+              // Schrift fg statt fg-2 – nicht mehr die Schriftfarbe als Fläche.
               <motion.span
                 layoutId={`seg-${id}`}
                 transition={spring}
-                // UX-Prüfung W11: der gewählte Wert ist gefüllt (Schriftfarbe als Fläche), nicht nur umrandet.
-                className="absolute inset-0 rounded-[inherit] bg-fg shadow-sm"
+                className="absolute inset-0 rounded-[inherit] bg-surface-solid shadow-sm ring-1 ring-inset ring-line-strong"
                 aria-hidden="true"
               />
             )}
             {/* Wörter bleiben ganz (kein globales overflow-wrap mitten im Wort); nur echte Silbentrennung. */}
-            <span className="relative [overflow-wrap:normal] [hyphens:auto]">{o.label}</span>
+            <span className={`relative [overflow-wrap:normal] [hyphens:auto] ${o.dot ? 'inline-flex items-center justify-center gap-2' : ''}`}>
+              {o.dot && <span aria-hidden="true" className="size-2.5 flex-none rounded-full" style={{ background: `var(${o.dot})` }} />}
+              {o.label}
+            </span>
           </button>
         );
       })}

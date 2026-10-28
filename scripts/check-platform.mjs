@@ -189,7 +189,24 @@ export function distEntries(dir) {
   return readdirSync(dir, { withFileTypes: true }).filter((e) => !(e.isDirectory() && e.name === BUILD_META_DIR));
 }
 
+/**
+ * Relaunch P1 S1-TOK: Umfang der Brücke alte Namen → neue Tokens (src/styles/bridge.css). Nur ein Hinweis, kein Tor:
+ * die Pakete der Stufe 1 bauen die Bausteine um und streichen Verweise, die Zahl soll sinken.
+ * @param {string} css Inhalt von bridge.css
+ * @returns {string} Hinweiszeile
+ */
+export function bridgeNote(css) {
+  const lx = (css.match(/^\s*--lx-[\w-]+\s*:/gm) ?? []).length;
+  const tw = (css.match(/^\s*--color-[\w-]+\s*:/gm) ?? []).length;
+  return `Hinweis: Brücke src/styles/bridge.css hält ${lx + tw} alte Namen (${lx} --lx-*, ${tw} --color-*) – Ziel ist 0`;
+}
+
 function main() {
+  try {
+    console.log(bridgeNote(readFileSync(new URL('../src/styles/bridge.css', import.meta.url), 'utf8')));
+  } catch (err) {
+    console.log(`Hinweis: Brücke src/styles/bridge.css nicht lesbar (${err instanceof Error ? err.message : String(err)})`);
+  }
   const dir = new URL('../dist/', import.meta.url);
   const entries = distEntries(dir);
   if (entries.length > 1 || process.env.LX_BUILD === 'multi') {

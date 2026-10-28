@@ -14,8 +14,9 @@ import { CARD_WARN } from '../../domain/atlas/capacity';
 import { docCount as docCountOf, DOC_COUNT_WARN, profileSize } from '../../domain/capacity/profileSize';
 import { useClock } from '../../app/clock';
 import { COMPACT_ENABLED, compactPreview, runCompact } from './compactRun';
-import { useSettings, type Lang, type Palette, type ThemeMode } from '../../app/settings';
-import { changeAutoNext, changeLang, changePalette, changeTheme } from '../../app/actions';
+import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
+import { changeAutoNext, changeLang, changeTheme } from '../../app/actions';
+import { AccentPicker } from './AccentSection';
 import { WorkContextSection } from './WorkContextSection';
 import { WorkProfile } from '../tutor/WorkProfile';
 import { exportMessage } from '../migration/MigrationScreen';
@@ -34,7 +35,7 @@ import { Slot } from '../../app/slots';
 //   2 Wortschatz      nur angemeldete Abschnitte (P3: Modus, Richtung, 4 oder 2 Knöpfe)
 //   3 Stimme & Ton    Stimme, Tempo, Probehören, Vorlesen im Rollenspiel, Töne, Vibration
 //   4 Mein Kontext    beruflicher Kontext
-//   5 Darstellung     Sprache, Modus, Farbthema
+//   5 Darstellung     Sprache, Modus, Akzentfarbe
 //   6 Daten           Sicherung, Diagnose mit Messwerten, Profilgröße (aus), Quellen
 // Abschnitte anderer Bereiche (`SettingsDef.group`) erscheinen am Ende ihrer Gruppe; eine Gruppe
 // ohne Inhalt entfällt.
@@ -127,10 +128,11 @@ function Group({ title, testId, children }: { title: string; testId: string; chi
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+/** Abschnitt einer Gruppe; ohne `title` keine Überschrift (z. B. „Daten“ unter der gleichnamigen Gruppe, Nora 28.10.2026). */
+function Section({ title, children }: { title?: string; children: ReactNode }) {
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="lx-eyebrow">{title}</h3>
+      {title && <h3 className="lx-eyebrow">{title}</h3>}
       {children}
     </section>
   );
@@ -150,23 +152,16 @@ function Appearance() {
     { value: 'light', label: t('themeLight') },
     { value: 'auto', label: t('themeAuto') },
   ];
-  // Farbthema (M21): Salbei · Ozean · Pflaume · Graphit, gespeichert in `app/profile.theme.p`.
-  const palette = useSettings((s) => s.palette);
-  const palettes: ReadonlyArray<{ value: Palette; label: string }> = [
-    { value: 'sage', label: t('palette_sage') },
-    { value: 'ocean', label: t('palette_ocean') },
-    { value: 'plum', label: t('palette_plum') },
-    { value: 'graphite', label: t('palette_graphite') },
-  ];
   return (
     <>
       <Section title={t('settingsLanguage')}>
         <Segmented label={t('settingsLanguage')} value={lang} options={langs} onChange={(v) => void changeLang(v)} />
       </Section>
-      <Section title={t('settingsAppearance')}>
-        <Segmented label={t('settingsAppearance')} value={theme} options={themes} onChange={(v) => void changeTheme(v)} />
-        <p className="mt-2 text-sm font-medium">{t('setPalette')}</p>
-        <Segmented label={t('setPalette')} value={palette} options={palettes} columns={4} testId="set-palette" onChange={(v) => void changePalette(v)} />
+      <Section title={t('themeMode')}>
+        <Segmented label={t('themeMode')} value={theme} options={themes} onChange={(v) => void changeTheme(v)} />
+      </Section>
+      <Section title={t('themeAccent')}>
+        <AccentPicker />
       </Section>
     </>
   );
@@ -217,7 +212,7 @@ function DataSection() {
     toast(t(exportMessage[outcome]), outcome === 'saved' || outcome === 'declined' ? 'info' : 'error');
   };
   return (
-    <Section title={t('settingsData')}>
+    <Section>
       <Button icon="download" onClick={() => void run()} busy={busy} busyLabel={t('exportRunning')} className="w-full">
         {t('exportButton')}
       </Button>

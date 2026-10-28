@@ -24,6 +24,7 @@ Stand: Phase 0. Grundlage sind die bestehende Datenbank (`docs/datenstruktur.jso
 | `vocab/<id>.fsrs`, `chunk/<id>.fsrs` | FSRS-Startwerte (siehe `docs/fsrs-umrechnung.md`) | Umstellung v1, ab Phase 1 der Trainer |
 | `app/profile.lang` | Oberflächensprache `de`/`en`. Das Feld ist bestehend und wird weiter genutzt. | Einstellungen |
 | `app/profile.theme.m` | `dark`/`dim`/`light`/`auto`. Das Feld ist bestehend, `theme.p` bleibt erhalten. | Einstellungen |
+| `app/profile.theme.a` | Akzentfarbe `iris` (Standard) / `amber`, seit Relaunch Stufe 1 P1 (28.10.2026). Fehlt das Feld, gilt Iris; lokal gespiegelt in `lx:accent` (nur Bequemlichkeit). | Einstellungen |
 
 ## Umstellung (Version 1)
 

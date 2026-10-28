@@ -130,8 +130,8 @@ for (const theme of THEMES) {
 }
 
 // Lücken aus dem Abgleich: Heute mit „Was ist neu", Nachtragen-Hinweis und Check-Angebot, der
-// Wochen-Check (Aufgabe, Ergebnis) und die Einstellungen (Farbthema, beruflicher Kontext) – je Modus
-// und Farbthema der Testdaten (Ozean) sowie einmal je Modus mit Pflaume und Graphit.
+// Wochen-Check (Aufgabe, Ergebnis) und die Einstellungen (Akzent, beruflicher Kontext) – je Modus
+// mit beiden Akzenten (Relaunch P1: Bernstein, dann zurück auf Iris).
 for (const theme of THEMES) {
   for (const width of [390, 1440]) {
     test(`axe · Wochen-Check, Hinweise, Einstellungen · ${theme} · ${width}px`, async ({ page }) => {
@@ -171,13 +171,13 @@ for (const theme of THEMES) {
       await screen(page, 'checks');
       await openSettings(page);
       await expect(page.getByTestId('work-ctx')).toBeVisible();
-      for (const p of ['Pflaume', 'Graphit', 'Salbei'] as const) {
+      for (const p of ['Bernstein', 'Iris'] as const) {
         await page.getByRole('radio', { name: p }).click();
         await page.waitForTimeout(150);
         await scan(`einstellungen-${p}`);
       }
       await page.keyboard.press('Escape');
-      await scan('stand-salbei');
+      await scan('stand-iris');
       expect(found).toEqual([]);
     });
   }

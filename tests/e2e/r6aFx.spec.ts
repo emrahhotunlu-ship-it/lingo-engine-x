@@ -187,18 +187,17 @@ test.describe('Handy · Karten (P54)', () => {
 test.describe('Handy · Lichtfeld (P57)', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  test('ersetzt den festen Verlauf; 12 s nach dem Wechsel kein einziger rAF mehr', async ({ page }) => {
+  // Relaunch P1 (Nora, 28.10.2026): Lichtfeld aus (--lx-field-strength 0 % in allen Modi) – kein Bild, kein rAF, auch nicht in den ersten 12 s.
+  test('ersetzt den festen Verlauf; Lichtfeld aus: kein Bild und kein rAF', async ({ page }) => {
     test.setTimeout(60_000);
     const { errors } = await bootAt(page, { name: 'apply' }, { localStorage: { 'lx:fx': 'full' } });
     await installRafCounter(page);
     await expect(page.locator('html')).toHaveAttribute('data-ambient', '');
     await expect(page.getByTestId('ambient')).toHaveCount(1);
     expect(await page.evaluate(() => getComputedStyle(document.body, '::before').backgroundImage)).toBe('none');
-    // In Bewegung: rAF läuft.
-    const a = await rafCount(page);
-    await page.waitForTimeout(500);
-    expect(await rafCount(page)).toBeGreaterThan(a);
-    await page.waitForTimeout(12_600);
+    expect(await page.getByTestId('ambient').evaluate((el) => getComputedStyle(el).backgroundImage)).toBe('none');
+    // Nach dem Einblenden des Bildschirms (< 2 s) läuft kein einziger rAF mehr, obwohl die 12-s-Bewegung sonst noch liefe.
+    await page.waitForTimeout(2000);
     const b = await rafCount(page);
     await page.waitForTimeout(1500);
     expect(await rafCount(page)).toBe(b);

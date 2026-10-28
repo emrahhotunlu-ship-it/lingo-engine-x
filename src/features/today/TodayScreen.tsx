@@ -134,7 +134,7 @@ function BlockDot({ state, kind }: { state: CardRow['state']; kind?: string }) {
   const tc = kind === 'review' ? 'var(--lx-ch-cards)' : 'var(--lx-ch-grammar)';
   if (state === 'done')
     return (
-      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok" style={{ color: 'var(--lx-accent-fg)' }} aria-hidden="true">
+      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok" style={{ color: 'var(--fg-on)' }} aria-hidden="true">
         <Icon name="check" size={14} />
       </span>
     );

@@ -156,7 +156,7 @@ export const profileSchema = z.looseObject({
   n: z.record(z.string(), z.number().nullish()).nullish(),
   mix: z.looseObject({ work: num, life: num }).nullish(),
   gen: z.looseObject({ lp: str, wp: str, ar: str }).nullish(),
-  theme: z.looseObject({ m: str, p: str }).nullish(),
+  theme: z.looseObject({ m: str, p: str, a: str }).nullish(), // a: Akzent iris|amber (Relaunch P1 S1-TOK)
   plan: z
     .looseObject({
       d: str,

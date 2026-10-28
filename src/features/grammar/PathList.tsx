@@ -67,7 +67,7 @@ export function PathList({ onOpen, highlight = null, program = false }: { onOpen
                   {t('hxPathChapter', { n: ci + 1, name: lang === 'en' ? c.name.en : c.name.de })}
                   {/* Mit Programm zeigt nur die C1-Reise „Du bist hier“ (UX-Prüfung B2). */}
                   {here && !program && (
-                    <span className="dz-here ml-2 inline-flex h-[1.375rem] items-center rounded-full px-2.5 align-middle text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: '#fff' }} data-testid="chapter-here">
+                    <span className="dz-here ml-2 inline-flex h-[1.375rem] items-center rounded-full px-2.5 align-middle text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: 'var(--lx-btn-nf)' }} data-testid="chapter-here">
                       {t('hxPathHere')}
                     </span>
                   )}

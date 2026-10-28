@@ -140,6 +140,12 @@ export const RULES = [
   { prefix: 'src/features/grammar/GrammarItem', specs: ['zeit.spec.ts'] },
   { prefix: 'src/features/vocab/ExerciseView', specs: ['zeit.spec.ts'] },
   { prefix: 'tests/e2e/zeit', specs: ['zeit.spec.ts'] },
+  // Relaunch P1 S1-TOK: Tokens und Akzent (Einstellungen, M21), OKLCH-Umrechnung für Lichtfeld und Wörterhimmel, Theme-Skript im Start-Bild.
+  { prefix: 'src/styles/', specs: ['stand-gaps.spec.ts', 'settings.spec.ts'] },
+  { prefix: 'src/features/settings/AccentSection', specs: ['stand-gaps.spec.ts'] },
+  { prefix: 'src/engine/fx/rgb', specs: ['wordSky.spec.ts', 'fxStage1.spec.ts'] },
+  { prefix: 'index.html', specs: ['settings.spec.ts', 'rueckweg.spec.ts'] },
+  { prefix: 'src/engine/fx/AmbientLight', specs: ['r6aFx.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

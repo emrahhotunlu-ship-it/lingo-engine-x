@@ -4,7 +4,7 @@ import { useLive } from '../data/live';
 import { logError } from '../platform/diagnostics';
 import { toast } from '../ui/Toast';
 import { translate } from '../i18n';
-import { useSettings, type Lang, type Palette, type ThemeMode } from './settings';
+import { useSettings, type Lang, type Accent, type ThemeMode } from './settings';
 import { WORK_MAX } from '../prompts/work';
 
 // Einstellungen ändern: optimistisch sofort anzeigen, in `app/profile` speichern,
@@ -47,13 +47,13 @@ export async function changeTheme(theme: ThemeMode): Promise<void> {
   await persist({ theme: { m: theme } }, () => useSettings.getState().setThemeLocal(prev));
 }
 
-/** Farbthema (M21): `app/profile.theme.p` wie in der alten App; `theme.m` bleibt unberührt (verschmolzen). */
-export async function changePalette(palette: Palette): Promise<void> {
+/** Akzent (Relaunch P1): `app/profile.theme.a`; `theme.m` und das alte `theme.p` bleiben unberührt (verschmolzen). */
+export async function changeAccent(accent: Accent): Promise<void> {
   const s = useSettings.getState();
-  const prev = s.palette;
-  if (prev === palette) return;
-  s.setPaletteLocal(palette);
-  await persist({ theme: { p: palette } }, () => useSettings.getState().setPaletteLocal(prev));
+  const prev = s.accent;
+  if (prev === accent) return;
+  s.setAccentLocal(accent);
+  await persist({ theme: { a: accent } }, () => useSettings.getState().setAccentLocal(prev));
 }
 
 /** Beruflicher Kontext (M22): Freitext, Leerraum zusammengefasst, höchstens 400 Zeichen. */

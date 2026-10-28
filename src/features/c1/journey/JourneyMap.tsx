@@ -92,7 +92,7 @@ export function StatusChip({ status }: { status: ChapterProgress['status'] }) {
       {t('pxMapDone')}
     </span>
   ) : (
-    <span className="inline-flex h-[1.375rem] flex-none items-center rounded-full px-2.5 text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: '#fff' }} data-testid="program-here">
+    <span className="inline-flex h-[1.375rem] flex-none items-center rounded-full px-2.5 text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: 'var(--lx-btn-nf)' }} data-testid="program-here">
       {t('pxMapHere')}
     </span>
   );

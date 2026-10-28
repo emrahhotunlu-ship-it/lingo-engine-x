@@ -18,7 +18,7 @@ const s = useSettings.getState();
 if (isLang(lang)) s.setLangLocal(lang);
 if (isThemeMode(theme)) s.setThemeLocal(theme);
 const now = useSettings.getState();
-applyDocumentSettings(now.lang, resolveTheme(now.theme, false), now.palette);
+applyDocumentSettings(now.lang, resolveTheme(now.theme, false), now.accent);
 initCapabilities();
 initSpeech({ voice: null, rate: 1 });
 

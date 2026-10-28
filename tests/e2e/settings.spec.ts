@@ -5,6 +5,30 @@ type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page) =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Dump } } }).__LINGO_FAKE__.db.dump());
 
+// Token gegen Sollwert als Pixel (r, g, b) über ein 1×1-Canvas, ±1: der Build schreibt oklch() als lab() um,
+// deshalb werden nie Farbtexte verglichen. Liefert die größte Kanal-Abweichung.
+const tokenDelta = (page: Page, token: string, want: string): Promise<number> =>
+  page.evaluate(
+    ([t, w]) => {
+      const probe = document.createElement('i');
+      probe.style.color = `var(${t})`;
+      document.body.append(probe);
+      const got = getComputedStyle(probe).color;
+      probe.remove();
+      const x = document.createElement('canvas').getContext('2d')!;
+      const rgb = (c: string): number[] => {
+        x.clearRect(0, 0, 1, 1);
+        x.fillStyle = c;
+        x.fillRect(0, 0, 1, 1);
+        return [...x.getImageData(0, 0, 1, 1).data].slice(0, 3);
+      };
+      const a = rgb(got);
+      const b = rgb(w);
+      return Math.max(...a.map((v, i) => Math.abs(v - (b[i] ?? 999))));
+    },
+    [token, want] as const,
+  );
+
 test.use({ viewport: { width: 1440, height: 900 } });
 
 test('Sprache und Darstellung werden sofort angewendet und in app/profile gespeichert', async ({ page }) => {
@@ -31,6 +55,33 @@ test('Sprache und Darstellung werden sofort angewendet und in app/profile gespei
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByTestId('open-settings')).toBeFocused();
 
+  expect(errors).toEqual([]);
+});
+
+// Relaunch P1 S1-TOK: Akzent Iris (Standard) oder Bernstein, gespeichert in app/profile.theme.a (theme.m und das alte theme.p bleiben) und lokal lx:accent.
+test('Akzentfarbe: Standard Iris, Bernstein wählen, nach Neuladen bleibt die Wahl', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
+  await openOverview(page);
+  const html = page.locator('html');
+  await expect(html).toHaveAttribute('data-theme', 'dark');
+  await expect(html).toHaveAttribute('data-accent', 'iris');
+  expect(await tokenDelta(page, '--act', 'oklch(0.56 0.18 275)')).toBeLessThanOrEqual(1);
+
+  await openSettings(page);
+  const group = page.getByRole('dialog', { name: 'Einstellungen' }).getByTestId('set-accent');
+  await expect(group.getByRole('radio', { name: 'Iris' })).toHaveAttribute('aria-checked', 'true');
+  await group.getByRole('radio', { name: 'Bernstein' }).click();
+  await expect(html).toHaveAttribute('data-accent', 'amber');
+  expect(await tokenDelta(page, '--act', 'oklch(0.74 0.16 55)')).toBeLessThanOrEqual(1);
+  await expect.poll(async () => (await dump(page))['app/profile']?.theme).toEqual({ m: 'dark', p: 'ocean', a: 'amber' });
+  expect(await page.evaluate(() => window.localStorage.getItem('lx:accent'))).toBe('amber');
+
+  await page.reload();
+  await openOverview(page);
+  await expect(html).toHaveAttribute('data-accent', 'amber');
+  await expect.poll(async () => (await dump(page))['app/profile']?.theme).toEqual({ m: 'dark', p: 'ocean', a: 'amber' });
+  await openSettings(page);
+  await expect(page.getByRole('dialog').getByTestId('set-accent').getByRole('radio', { name: 'Bernstein' })).toHaveAttribute('aria-checked', 'true');
   expect(errors).toEqual([]);
 });
 
