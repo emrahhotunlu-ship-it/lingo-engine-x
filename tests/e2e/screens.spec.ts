@@ -18,7 +18,8 @@ const VIEWPORTS = [
 ] as const;
 const THEMES: Theme[] = ['dark', 'dim', 'light'];
 const LANGS: Lang[] = ['de', 'en'];
-const BG: Record<Theme, string> = { dark: 'rgb(13, 16, 22)', dim: 'rgb(26, 32, 48)', light: 'rgb(245, 246, 250)' };
+// Seit Relaunch P1 S1-TOK stehen die Flächen in OKLCH (src/styles/index.css, --bg je Modus).
+const BG: Record<Theme, string> = { dark: 'oklch(0.165 0.012 268)', dim: 'oklch(0.285 0.01 268)', light: 'oklch(0.975 0.004 268)' };
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 
@@ -50,7 +51,18 @@ for (const vp of VIEWPORTS) {
 
           await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
           await expect(page.locator('html')).toHaveAttribute('lang', lang);
-          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor)).toBe(BG[theme]);
+          // Der Browser schreibt dieselbe Farbe je nach Weg als oklch(…) oder lab(…): verglichen wird der gemalte Bildpunkt.
+          const [bgNow, bgWant] = await page.evaluate((want) => {
+            const px = (c: string) => {
+              const ctx = document.createElement('canvas').getContext('2d');
+              if (!ctx) return '';
+              ctx.fillStyle = c;
+              ctx.fillRect(0, 0, 1, 1);
+              return Array.from(ctx.getImageData(0, 0, 1, 1).data).join(',');
+            };
+            return [px(getComputedStyle(document.documentElement).backgroundColor), px(want)];
+          }, BG[theme]);
+          expect(bgNow).toBe(bgWant);
 
           expect(await layoutProblems(page)).toEqual([]);
           const text = await page.locator('body').innerText();
