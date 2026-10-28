@@ -44,12 +44,21 @@
       "zuwachs": {
         "P1 S1-TOK": 4000,
         "P3 S1-BAND": 3000,
-        "P2 S1-SHELL": 4000
+        "P2 S1-SHELL": 4000,
+        "P6 S1-START": {
+          "bytes": 300,
+          "freigabe": "Hauptsitzung 28.10.2026: Klassen lx-nav-sk/lx-today-card und L1 (Tarek M1)"
+        }
       }
     },
     "html": {
       "basis": 2000,
-      "zuwachs": {}
+      "zuwachs": {
+        "P6 S1-START": {
+          "bytes": 300,
+          "freigabe": "Hauptsitzung 28.10.2026: Startbild gleicht P2-Hülle und Laptop-Raster L1, sonst Sprung beim ersten Bild (Tarek M1)"
+        }
+      }
     },
     "lazy": {
       "src/engine/fx/particles.ts": {

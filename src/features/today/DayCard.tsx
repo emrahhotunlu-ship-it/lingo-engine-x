@@ -21,7 +21,7 @@ import { requestStart } from './startRun';
 // Änderungen an diesen Klassen immer auch in `system/HomeSkeleton.tsx` und index.html nachziehen (Test: perf.spec „Start-Bild“).
 
 export const DAY_CARD_CLS =
-  'lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6 lg:grid lg:grid-cols-[13em_minmax(0,1fr)] lg:grid-rows-[auto_auto_1fr_auto_auto] lg:gap-x-[2.2em] lg:px-[2.2em] lg:py-8';
+  'lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6';
 export const DAY_HEAD_CLS = 'flex items-center gap-3.5 lg:contents';
 export const DAY_TITLE_CLS = 'flex min-w-0 flex-1 flex-col gap-0.5 lg:col-start-2 lg:row-start-1';
 export const DAY_LIST_CLS = 'flex flex-col gap-4 lg:col-start-2 lg:row-start-2';
@@ -126,11 +126,16 @@ export function useEnterStart(enabled: boolean, start: () => void): void {
 
 // ------------------------------------------------------------------ Startbild aus `app/today`
 
-/** Zeilenname aus dem Startbild: Block der Einheit (`blockName`), alter Plan: Pflichtpunkt (`dutyLabel`). */
-function docRowName(b: TodayDocBlock, t: T): string {
-  if (b.bl > 0) return blockName(b.k as UnitBlockKind, b.bl, t, b.f as Step3Fmt | undefined);
-  return dutyLabel(b.id as DutyId, t);
+/**
+ * Der EINE Zeilenname der Tageskarte (Tarek S2): Block der Einheit (`block` > 0 → `blockName`), alter Plan ohne Block → Pflichtpunkt
+ * (`dutyLabel`). Echte Karte (`TodayScreen`) und Startbild nutzen dieselbe Funktion, damit Zeilen, Titel und Knopf nie auseinanderlaufen.
+ */
+export function dayRowName(r: { kind: string; block: number; id: string; fmt?: string | undefined }, t: T): string {
+  if (r.block > 0) return blockName(r.kind as UnitBlockKind, r.block, t, r.fmt as Step3Fmt | undefined);
+  return dutyLabel(r.id as DutyId, t);
 }
+
+const docRowName = (b: TodayDocBlock, t: T): string => dayRowName({ kind: b.k, block: b.bl, id: b.id, fmt: b.f }, t);
 
 /** Titel wie `nextTitle` der echten Karte, aber aus `th` und `go` des Startbilds. */
 function docTitle(doc: TodayDoc, now: TodayDocBlock | null, t: T, lang: 'de' | 'en'): string {

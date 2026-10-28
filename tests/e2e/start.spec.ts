@@ -27,24 +27,38 @@ async function expectSkeletonOnly(page: Page): Promise<void> {
   await expect(page.getByTestId('start-min')).toHaveCount(0);
 }
 
+/** Wartender Start mit Fokus im Tippen (`tap`: Berührung wie am Handy, sonst Mausklick). */
+async function focusStart(page: Page, tap: boolean): Promise<void> {
+  const { errors } = await boot(page, { migrated: true, fake: { subscribeDelayMs: 2500, patch: { 'app/profile': planPatch(3), 'app/today': startDoc() } } });
+  const card = page.getByTestId('start-card');
+  await expect(card).toBeVisible();
+  await expect(page.getByTestId('start-min')).toHaveText('12');
+  await expect(page.getByTestId('start-status')).toHaveAttribute('data-done', '1');
+  await expect(page.getByTestId('start-go')).toHaveAttribute('data-duty', 'ch:gram');
+  if (tap) await page.getByTestId('start-go').tap();
+  else await page.getByTestId('start-go').click();
+  // Sofort: Rahmen-Skelett, und das (versteckte) Eingabefeld hat im Tippen den Fokus bekommen (iPhone-Tastatur).
+  await expect(page.getByTestId('start-waiting')).toBeVisible();
+  const focused = await page.evaluate(() => document.activeElement?.tagName ?? '');
+  expect(['INPUT', 'TEXTAREA']).toContain(focused);
+  // Danach beginnt die erste Aufgabe von selbst – nach dem BERECHNETEN Plan (Wiederholen), nicht nach `go` (Grammatik).
+  await screen(page, 'trainer');
+  await expect(page.getByTestId('start-waiting')).toHaveCount(0);
+  // Die Messpunkte prüft perf.spec.ts ohne Testuhr (`page.clock` ersetzt `performance`).
+  expect(errors).toEqual([]);
+}
+
+// Tarek S4: WebKit gibt es in dieser Umgebung nicht; derselbe Fokus-Test läuft zusätzlich als Handy (Chromium mit isMobile/hasTouch, Tippen).
+test.describe('P6 Startbild am Handy (Berührung)', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  test('wartender Start per Tippen: Übungsrahmen und Fokus sofort, dann die Aufgabe nach dem berechneten Plan', async ({ page }) => {
+    await focusStart(page, true);
+  });
+});
+
 test.describe('P6 Startbild', () => {
   test('wartender Start: Knopf aus app/today, Tippen zeigt den Übungsrahmen und fokussiert sofort; der berechnete Plan entscheidet', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true, fake: { subscribeDelayMs: 2500, patch: { 'app/profile': planPatch(3), 'app/today': startDoc() } } });
-    const card = page.getByTestId('start-card');
-    await expect(card).toBeVisible();
-    await expect(page.getByTestId('start-min')).toHaveText('12');
-    await expect(page.getByTestId('start-status')).toHaveAttribute('data-done', '1');
-    await expect(page.getByTestId('start-go')).toHaveAttribute('data-duty', 'ch:gram');
-    await page.getByTestId('start-go').click();
-    // Sofort: Rahmen-Skelett, und das (versteckte) Eingabefeld hat im Tippen den Fokus bekommen (iPhone-Tastatur).
-    await expect(page.getByTestId('start-waiting')).toBeVisible();
-    const focused = await page.evaluate(() => document.activeElement?.tagName ?? '');
-    expect(['INPUT', 'TEXTAREA']).toContain(focused);
-    // Danach beginnt die erste Aufgabe von selbst – nach dem BERECHNETEN Plan (Wiederholen), nicht nach `go` (Grammatik).
-    await screen(page, 'trainer');
-    await expect(page.getByTestId('start-waiting')).toHaveCount(0);
-    // Die Messpunkte prüft perf.spec.ts ohne Testuhr (`page.clock` ersetzt `performance`).
-    expect(errors).toEqual([]);
+    await focusStart(page, false);
   });
 
   test('wartender Start lässt sich mit ✕ abbrechen: zurück zu Heute, keine Aufgabe startet', async ({ page }) => {

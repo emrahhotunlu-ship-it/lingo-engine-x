@@ -313,7 +313,7 @@ h2,
   }
 
   /* Relaunch P6, Auflage 3 (Vorschau L1, desk.js 79–137): ab 1.024 px liegt die Tageskarte quer – Ring 13em links über alle Zeilen, rechts
-     Titel, Schritte und Knopf (Raster per Klassen in `features/today/DayCard.tsx`). Gilt gleich für Start-Bild (index.html), Skelett,
+     Titel, Schritte und Knopf (Raster: `.lx-today-card` in parts/shell.css, Zellen per Klassen in `features/today/DayCard.tsx`). Gilt gleich für Start-Bild (index.html), Skelett,
      Startbild aus `app/today` und echte Karte. Der Ring setzt seine Größe inline; hier wird sie für die Querlage überschrieben. */
   @media (width >= 64rem) {
     .lx-td-ring {

@@ -363,7 +363,8 @@ async function followUp(today: string, nowMs: number, toStore: StoredPlan | null
   await loadLearnInputs();
   await afterPlan(today, nowMs);
   // Startbild (P6, stufe1-plan §4.3): einmal je neuem Lerntag, sobald der Plan gespeichert und das Tagesprotokoll geladen ist.
-  await syncTodayDocForDay(today);
+  // Nicht abwarten: der Anlass kann auf den gespeicherten Plan warten (höchstens ein Wartender je Lerntag, startDoc.ts).
+  void syncTodayDocForDay(today);
 }
 
 /**

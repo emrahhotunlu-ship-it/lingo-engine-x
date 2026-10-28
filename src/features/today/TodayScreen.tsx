@@ -28,12 +28,11 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { DoneCard3, StreakFoot } from './DoneCard3';
 import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { DAY_CARD_CLS, DAY_FOOT_CLS, DAY_GO_CLS, DAY_HEAD_CLS, DAY_LIST_CLS, DAY_TITLE_CLS, DayRows, GoLabel, StartCard, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
+import { DAY_CARD_CLS, DAY_FOOT_CLS, DAY_GO_CLS, DAY_HEAD_CLS, DAY_LIST_CLS, DAY_TITLE_CLS, DayRows, dayRowName, GoLabel, StartCard, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
 import { flush, usePending } from '../progress/persist';
-import { dutyLabel } from '../learn/ui';
 import { useToday, type TodayView } from './state';
 import { healToday, retryPlan } from './store';
 import { TabTitle } from '../system/Chrome';
@@ -42,7 +41,7 @@ import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
 import { buildTrainCards, legacyDutyMinutes, overdueUnits, todaySummary, type TodaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
-import { blockName, blockWhy } from '../unit/labels';
+import { blockWhy } from '../unit/labels';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
@@ -117,7 +116,7 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
     const min = legacyDutyMinutes(d.id);
     return {
       id: d.id,
-      name: dutyLabel(d.id, t),
+      name: dayRowName({ kind: d.id === 'review' ? 'review' : 'legacy', block: 0, id: d.id }, t),
       why,
       whyKey,
       min,
@@ -323,7 +322,7 @@ export function TodayScreen() {
       const b: UnitBlock | undefined = up.blocks.find((x) => x.channel === r.id);
       return {
         id: r.id,
-        name: blockName(r.kind, r.block, t, r.fmt),
+        name: dayRowName({ kind: r.kind, block: r.block, id: r.id, fmt: r.fmt }, t),
         why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,

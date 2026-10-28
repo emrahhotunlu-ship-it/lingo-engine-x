@@ -113,7 +113,8 @@ export async function writeTodayDoc(writer: Writer, next: TodayDoc): Promise<'cr
     return 'unchanged';
   }
   const out = await writer.transform(TODAY_PATH, (cur) => (sameIgnoringAt(cur, data) ? null : { replace: data }));
-  useTodayDoc.setState({ doc: data });
+  // Den Store nur bei echter Änderung anfassen (data-guard Hinweis 5): sonst zeichnete jeder Anlass die Startseite ohne Grund neu.
+  if (!sameIgnoringAt(useTodayDoc.getState().doc, data)) useTodayDoc.setState({ doc: data });
   return out;
 }
 

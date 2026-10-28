@@ -203,6 +203,74 @@ describe('Schreiben (W1, N1, N2)', () => {
     expect(h.writes().length - before).toBe(0);
   });
 
+  it('Tarek S1: 3× ensureDay vor dem Laden → EIN Wartender, genau 1 Schreibung; danach 2 fremde log-Snapshots → 0', async () => {
+    const p = unitPlan(D);
+    setup({ 'app/profile': profile(p) });
+    ready(D, p);
+    useLive.setState({ day: { key: D, doc: undefined, invalid: false } });
+    for (const hh of [9, 10, 11]) await store.ensureDay(berlin(D, hh));
+    // Ein vierter Aufruf hängt sich an denselben Wartenden (gleiches Promise), statt einen neuen anzulegen.
+    const w = startDoc.syncTodayDocForDay(D);
+    expect(startDoc.syncTodayDocForDay(D)).toBe(w);
+    await new Promise((r) => setTimeout(r, 10));
+    expect(todayWrites()).toHaveLength(0);
+    useLive.setState({ day: { key: D, doc: null, invalid: false } });
+    expect(await w).toBe('created');
+    expect(todayWrites()).toHaveLength(1);
+    // Fremde Snapshots des Tagesprotokolls (anderes Gerät): der Wartende ist abgemeldet → 0 Schreibungen.
+    useLive.setState({ day: { key: D, doc: { entries: [{ t: 1, k: 'v', id: 'w0', ok: true, ctx: 'rev' }] }, invalid: false } });
+    useLive.setState({ day: { key: D, doc: { entries: [{ t: 1, k: 'v', id: 'w0', ok: true, ctx: 'rev' }, { t: 2, k: 'v', id: 'w1', ok: true, ctx: 'rev' }] }, invalid: false } });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(todayWrites()).toHaveLength(1);
+  });
+
+  it('Tarek S1: Lerntag wechselt, während gewartet wird → der alte Wartende endet sicher ohne Schreibung', async () => {
+    const p = unitPlan(D);
+    setup({ 'app/profile': profile(p) });
+    ready(D, p);
+    useLive.setState({ day: { key: D, doc: undefined, invalid: false } });
+    const w = startDoc.syncTodayDocForDay(D);
+    store.useTodayPlan.setState({ day: D2, plan: unitPlan(D2), status: 'building' });
+    expect(await w).toBe('skipped');
+    useLive.setState({ day: { key: D, doc: null, invalid: false } });
+    await new Promise((r) => setTimeout(r, 10));
+    expect(todayWrites()).toHaveLength(0);
+  });
+
+  it('data-guard Soll 3: Plan steht (noch) nicht so in app/profile → skipped; kommt er gespeichert zurück, schreibt der Wartende einmal', async () => {
+    const p = unitPlan(D);
+    setup({ 'app/profile': profile(p) });
+    ready(D, p);
+    // Live-Store kennt nur einen anderen (älteren) Plan desselben Tages.
+    useLive.setState({ docs: { 'app/profile': profile({ ...p, goal: { review: 99 } }) } });
+    expect(await startDoc.syncTodayDoc(D, 'day')).toBe('skipped');
+    const w = startDoc.syncTodayDocForDay(D);
+    useLive.setState({ docs: { 'app/profile': profile(p) } });
+    expect(await w).toBe('created');
+    expect(todayWrites()).toHaveLength(1);
+  });
+
+  it('Tarek S5: Sammel-Puffer mit fehlgeschlagenem Speichern → skipped (kein optimistischer Stand)', async () => {
+    const p = unitPlan(D);
+    setup({ 'app/profile': profile(p) });
+    ready(D, p);
+    persist.usePending.setState({ failed: true });
+    expect(await startDoc.syncTodayDoc(D, 'round')).toBe('skipped');
+    expect(todayWrites()).toHaveLength(0);
+  });
+
+  it('data-guard Hinweis 5: gleicher Inhalt → der Store wird nicht neu gesetzt', async () => {
+    const p = unitPlan(D);
+    setup({ 'app/profile': profile(p) });
+    ready(D, p);
+    await startDoc.syncTodayDoc(D, 'day');
+    const seen = vi.fn();
+    const off = todayDoc.useTodayDoc.subscribe(seen);
+    for (let k = 0; k < 3; k++) await startDoc.syncTodayDoc(D, 'block');
+    off();
+    expect(seen).not.toHaveBeenCalled();
+  });
+
   it('ohne geladenes Tagesprotokoll oder ohne gespeicherten Plan: nichts geschrieben', async () => {
     const p = unitPlan(D);
     setup({ 'app/profile': profile(p) });
