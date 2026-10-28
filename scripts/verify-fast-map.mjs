@@ -162,6 +162,15 @@ export const RULES = [
   { prefix: 'tests/e2e/rahmen', specs: ['rahmen.spec.ts'] },
   { prefix: 'tests/e2e/breiten', specs: ['breiten.spec.ts'] },
   { prefix: 'tests/e2e/erreichbar', specs: ['erreichbar.spec.ts'] },
+  // Relaunch P6 S1-START: Startbild aus `app/today`, Boot ohne Warten, wartender Start, Messpunkte.
+  { prefix: 'src/app/boot', specs: ['start.spec.ts', 'perf.spec.ts'], smoke: true },
+  { prefix: 'src/main', specs: ['start.spec.ts', 'perf.spec.ts'], smoke: true },
+  { prefix: 'src/data/todayDoc', specs: ['start.spec.ts', ...TODAY, 'rueckweg.spec.ts'] },
+  { prefix: 'src/features/today/start', specs: ['start.spec.ts', 'perf.spec.ts'] },
+  { prefix: 'src/features/today/StartWaiting', specs: ['start.spec.ts'] },
+  { prefix: 'src/features/today/DayCard', specs: ['start.spec.ts', 'perf.spec.ts', 'breiten.spec.ts'] },
+  { prefix: 'src/features/system/HomeSkeleton', specs: ['start.spec.ts', 'perf.spec.ts', 'platform.spec.ts'] },
+  { prefix: 'tests/e2e/start', specs: ['start.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

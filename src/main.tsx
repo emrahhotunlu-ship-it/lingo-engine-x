@@ -13,8 +13,6 @@ async function boot(): Promise<void> {
   // Messpunkt (P7-1): Skript geladen und ausgewertet, erstes Zeichnen folgt.
   performance.mark('lx:boot');
   initDiagnostics();
-  // Gepackte c1x-Inhalte laden; der Start wartet darauf nur, wenn eine Aufgabenart eingeschaltet ist (`useScreen`).
-  startC1xPreload();
   // Entwicklungs-Adapter nur im Dev-Server; im Produktions-Build ist dieser Zweig
   // entfernt (import.meta.env.DEV === false) – scripts/check-platform.mjs prüft das.
   if (import.meta.env.DEV) {
@@ -36,6 +34,11 @@ async function boot(): Promise<void> {
       <App />
     </StrictMode>,
   );
+  // Relaunch P6 (stufe1-plan §4.3 Nr. 6): Gepackte c1x-Inhalte erst NACH dem ersten Bild laden – Rahmen und Startbild warten nie darauf.
+  // Gewartet wird nur, wo Aufgaben gebaut werden (Übungen, wartender Start).
+  // In einem Hintergrund-Tab gibt es kein Bild: dann spätestens nach 1 s (einmalig, `startC1xPreload` lädt nur einmal).
+  requestAnimationFrame(() => setTimeout(startC1xPreload, 0));
+  setTimeout(startC1xPreload, 1000);
 }
 
 boot().catch((err: unknown) => logError('boot', err));

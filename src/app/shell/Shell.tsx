@@ -37,6 +37,7 @@ import { GateHost } from '../../features/c1/gate/GateHost';
 import { CheckHost } from '../../features/c1/check/CheckScreen';
 import { ClinicHost } from '../../features/tutor/ClinicHost';
 import { LevelUpHost } from '../../ui/moments/LevelUp';
+import { PendingStartRunner } from '../../features/today/StartWaiting';
 
 // App-Rahmen (docs/neubau/architektur.md §2.2): Kopf · Ebenen · Reiterleiste · Blätter · Hinweise,
 // dazu die Wurzel-Fehlergrenze, das Fortsetzen nach Neuladen und der Diagnose-Kontext.
@@ -167,6 +168,8 @@ function Frame() {
       <CheckHost />
       <ClinicHost />
       <LevelUpHost />
+      {/* Relaunch P6: wartender Start (Tipp vor fertigem Plan → Übungsrahmen als Skelett, Aufgabe beginnt von selbst). */}
+      <PendingStartRunner active={!system} blocked={system && screen !== 'loading'} exercise={exercise} />
     </>
   );
 }

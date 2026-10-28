@@ -29,6 +29,7 @@ import { diagText } from './diagText';
 import { FxFramesLine } from './EffectsSection';
 import { perfText, readPerfMarks, type PerfName } from './perfMarks';
 import { Slot } from '../../app/slots';
+import { StartDiagLine } from '../today/StartDiagLine';
 
 // Einstellungen (Kap. 6.14, Neubau plan.md §1.2, N94, markt.md UI 24) in sechs Gruppen:
 //   1 Lernen          Tagesziel, Neue Wörter/Tag, Automatisch weiter
@@ -339,6 +340,7 @@ function Diagnostics({ open }: { open: boolean }) {
             ))}
           </dl>
           <h4 className="mt-2 text-sm font-semibold">{t('nbProfilPerfTitle')}</h4>
+          <StartDiagLine />
           <dl className="flex flex-col" data-testid="diag-perf">
             {perf.map((r) => (
               <div key={r.name} className="flex items-baseline justify-between gap-4 border-b border-line py-2" data-testid="diag-perf-row" data-name={r.name} data-ms={r.ms ?? ''}>

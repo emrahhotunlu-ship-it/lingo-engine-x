@@ -9,7 +9,8 @@ import { normHaptic } from '../domain/progress/settings';
 import { logWarn } from '../platform/diagnostics';
 import { useClock, useClockTicker } from './clock';
 import { useNav, type Route } from './nav';
-import { bootAreas, screenOf } from './registry';
+import { bootAreas, kindOf, screenOf } from './registry';
+import { loadTodayDoc } from '../data/todayDoc';
 import { routeFromHash } from './router/deeplink';
 import type { RouteName } from './router/types';
 import { applyDocumentSettings, isAccent, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
@@ -35,6 +36,9 @@ export function useBoot(): void {
     if (dbStatus !== 'ready') return;
     const db = getDb();
     if (!db) return;
+    // Relaunch P6 (stufe1-plan §4.3 Nr. 3): ZUERST das kleine Startbild `app/today` mit einem einzelnen `get` – Heute zeichnet daraus Ring und
+    // Knopf, während die großen Abos noch laden. Nie abonniert.
+    loadTodayDoc(db);
     return startLive(db);
   }, [dbStatus]);
 
@@ -118,11 +122,15 @@ export function useScreen(): Screen {
   const status = useLive((s) => s.status);
   const schema = useLive((s) => s.docs['app/schema']);
   const schemaInvalid = useLive((s) => 'app/schema' in s.invalid);
+  const overlay = useNav((s) => s.overlay !== null);
   // Gepackte c1x-Inhalte (nur wenn eine Aufgabenart eingeschaltet ist): der Rundenbau ist synchron und liest nur, was geladen ist.
   const c1xReady = useC1xReady();
   if (db === 'absent') return 'nodb';
   if (status === 'error') return 'offline';
-  if (db === 'pending' || status !== 'ready' || !c1xReady) return 'loading';
+  // Relaunch P6 (Nr. 6): kein globales Warten mehr auf alles. „Rahmen bereit“ = Datenbank und Abos; die Reiter (Heute zuerst) erscheinen
+  // ohne die gepackten c1x-Inhalte. „Bereich bereit“: Nur Übungen und Unterseiten (dort werden Aufgaben gebaut) warten auf sie.
+  if (db === 'pending' || status !== 'ready') return 'loading';
+  if (!c1xReady && (overlay || kindOf(route.name) !== 'tab')) return 'loading';
   const migrated = !!schema && !schemaInvalid && typeof schema.version === 'number' && schema.version >= 1;
   return migrated ? route.name : 'migration';
 }

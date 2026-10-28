@@ -142,8 +142,9 @@ async function trackLayout(page: Page): Promise<void> {
     w.__lay = [];
     const tick = () => {
       const q = (s: string) => document.querySelector(s)?.getBoundingClientRect() ?? null;
-      const card = q('[data-testid="today-card"]') ?? q('[data-testid="today-skeleton"]') ?? q('#lx-boot .lx-today-card');
-      const start = q('[data-testid="start"]');
+      // Relaunch P6: dazu das Startbild aus `app/today` (`start-card`, Knopf `start-go`) an derselben Stelle.
+      const card = q('[data-testid="today-card"]') ?? q('[data-testid="start-card"]') ?? q('[data-testid="today-skeleton"]') ?? q('#lx-boot .lx-today-card');
+      const start = q('[data-testid="start"]') ?? q('[data-testid="start-go"]');
       w.__lay.push({ t: performance.now(), boot: !!document.getElementById('lx-boot'), card: card ? card.y : null, h: card ? card.height : null, start: start ? start.y : null, date: document.querySelector('h1')?.textContent?.trim() ?? '' });
       if (performance.now() < 30_000) requestAnimationFrame(tick);
     };
@@ -206,6 +207,28 @@ for (const width of [390, 1280] as const) {
     });
   }
 }
+
+// Relaunch P6 (stufe1-plan §8 Tempo): Messpunkte `lx:skeleton` → `lx:button` → `lx:first-task` in dieser Reihenfolge, je einmal; die
+// Diagnosezeile „Knopf nach … · erste Aufgabe nach …“ zeigt sie, und der Start liegt im Browser unter `lx:perf` (höchstens 5).
+test('P6 Start-Messpunkte: Skelett → Knopf → erste Aufgabe, Diagnosezeile und lx:perf', async ({ page }) => {
+  // Ohne Testuhr (`page.clock` ersetzt `performance` und damit die Marken); Plan des echten Tages aus dem großen Datensatz.
+  const errors = await bootReal(page);
+  await page.getByTestId('start').click();
+  await page.waitForFunction(() => performance.getEntriesByName('lx:first-task', 'mark').length > 0);
+  const r = await page.evaluate(() => ({
+    marks: ['lx:skeleton', 'lx:button', 'lx:first-task'].map((n) => performance.getEntriesByName(n, 'mark').map((e) => e.startTime)),
+    stored: window.localStorage.getItem('lx:perf'),
+  }));
+  for (const m of r.marks) expect(m).toHaveLength(1);
+  const [sk = -1, bt = -1, ft = -1] = r.marks.map((m) => m[0] ?? -1);
+  expect(sk).toBeLessThanOrEqual(bt);
+  expect(bt).toBeLessThanOrEqual(ft);
+  const stored = JSON.parse(r.stored ?? '[]') as { b: number | null; f: number }[];
+  expect(stored).toHaveLength(1);
+  expect(stored[0]?.f).toBe(Math.round(ft));
+  test.info().annotations.push({ type: 'Knopf / erste Aufgabe', description: `${Math.round(bt)} ms / ${Math.round(ft)} ms` });
+  expect(errors).toEqual([]);
+});
 
 test('Tippen in die Lücke: keine Blockade > 100 ms bei 20 Anschlägen (CPU 4×)', async ({ page }) => {
   await boot(page, {

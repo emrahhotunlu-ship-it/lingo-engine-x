@@ -7,7 +7,7 @@ import { CountUp } from '../../ui/CountUp';
 import { chapterNodes } from '../grammar/chapters';
 import { useVocabMetrics } from '../progress/WordsSegment';
 
-// Laptop-Spalte neben Heute (Design-Lead 07.10.2026, Vorschau „Dein Stand“): nur aus vorhandenen Selektoren zusammengesetzt –
+// Laptop-Stand unter Heute (Design-Lead 07.10.2026; Relaunch P6: als `l1mid` der Vorschau L1): nur aus vorhandenen Selektoren zusammengesetzt –
 // Wörter fest (`useVocabMetrics` → `festCount`, Ziel `FEST_GOAL` wie auf „Fortschritt“), Grammatik-Kapitel (`chapterNodes` wie im Lernweg).
 // Keine neue Zahlenquelle, nichts wird geschrieben. Am Handy wird sie nicht gezeigt (der Aufrufer rendert sie nur breit).
 
@@ -22,7 +22,12 @@ function Mini({ value, tone }: { value: number; tone: 'words' | 'grammar' }) {
   );
 }
 
-export function StandSide() {
+/**
+ * Laptop-Mitte unter der Tageskarte (Relaunch P6, Auflage 3, Vorschau L1 `l1mid`): zwei ruhige Karten nebeneinander – Wörter fest und Kapitelstand (Reihenfolge der Zahlen wie bisher).
+ * „Dein nächster Termin“ der Vorschau gibt es in der App noch nicht (keine Termin-Daten); an seiner Stelle steht der Wortstand wie bisher.
+ * Die Woche und „Wenn du mehr willst“ gehören in die Kontextspalte (eingefroren, `contextColumn.ts`).
+ */
+export function StandMid() {
   const { t, tn, num, lang } = useT();
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
@@ -31,10 +36,9 @@ export function StandSide() {
   const path = useMemo(() => chapterNodes({ docs, nowMs: now, today, dueByTopic: errorsDueByTopic(docs, now) }), [docs, now, today]);
   const cur = path.chapters[path.current];
   return (
-    <aside className="lx-card flex flex-col gap-5 p-6" aria-label={t('ovTitle')} data-testid="today-stand">
-      <h2 className="lx-eyebrow m-0">{t('ovTitle')}</h2>
-      <div className="flex flex-col gap-1.5">
-        <span className="lx-t-meta text-muted">{t('hxStandWords')}</span>
+    <section className="l1mid" aria-label={t('ovTitle')} data-testid="today-stand">
+      <div className="lx-card flex flex-col gap-1.5 p-5" data-testid="today-stand-words">
+        <span className="lx-eyebrow">{t('stWords')}</span>
         {fest === 0 ? (
           // UX-Audit U1: keine nackte Null als Kopfzahl, sondern ein ruhiges Urteil (wie auf „Fortschritt“).
           <span className="flex flex-col gap-0.5" data-fest="0">
@@ -52,13 +56,13 @@ export function StandSide() {
         <Mini value={fest / FEST_GOAL} tone="words" />
       </div>
       {cur && (
-        <div className="flex flex-col gap-1.5 border-t border-line pt-5">
-          <span className="lx-t-meta text-muted">{t('hxStandGrammar')}</span>
+        <div className="lx-card flex flex-col gap-1.5 p-5" data-testid="today-stand-chapter">
+          <span className="lx-eyebrow">{t('stChapter')}</span>
           <span className="lx-t-answer">{t('hxPathChapter', { n: path.current + 1, name: lang === 'en' ? cur.name.en : cur.name.de })}</span>
           <span className="lx-tnum text-sm text-muted">{t('hxPathSafe', { a: cur.safe, b: cur.topics.length })}</span>
           <Mini value={cur.topics.length ? cur.safe / cur.topics.length : 0} tone="grammar" />
         </div>
       )}
-    </aside>
+    </section>
   );
 }

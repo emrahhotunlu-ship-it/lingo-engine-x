@@ -18,6 +18,7 @@ import { saveLocalPlan, useTodayPlan } from '../today/store';
 import { unitNow } from '../unit/run';
 import { useUnitRun } from '../unit/runStore';
 import { c1Raw, chosenNow, useChapterPick } from './chosen';
+import { syncTodayDoc } from '../today/startDoc';
 
 // Kapitel-Arbeit (K2/K5, `docs/umbau/kapitel-plan.md`): „Kapitel starten/weiterarbeiten“. Der Klick ist synchron (Tastatur am iPhone):
 // Wahl sofort im Speicher (optimistisch), Cursor rechnen, die passende Runde starten (Einführung, Übung oder Themen-Test), dann erst speichern
@@ -166,6 +167,8 @@ async function refreezeToday(n: number, choseToday: boolean, today: string): Pro
   if (!done || useTodayPlan.getState().day !== today) return;
   useTodayPlan.setState({ plan: done });
   saveLocalPlan(done);
+  // Startbild (P6): Plan angepasst (Kapitelwahl, Nutzeraktion) → neues Thema im Startbild.
+  void syncTodayDoc(today, 'plan');
 }
 
 export { skipTopicTest } from './skipTest';

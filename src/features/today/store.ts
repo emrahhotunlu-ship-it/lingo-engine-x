@@ -35,6 +35,7 @@ import { setPflichtResolver, tabId, usePending } from '../progress/persist';
 import { loadLearnInputs, setDailyOpen, useLearnInputs } from '../learn/inputs';
 import { viewPlan } from './device';
 import { computeDayWith } from './state';
+import { syncTodayDocForDay } from './startDoc';
 import type { DayEntry } from '../../domain/plan/buildPlan';
 import { normGoalMin } from '../../domain/progress/settings';
 import { historyPatch, historySnapshot } from '../../domain/progress/history';
@@ -307,6 +308,8 @@ export async function ensureDay(nowMs: number): Promise<void> {
   if (cur.day === today && cur.status !== 'idle') {
     // Plan steht: nur Selbstheilung (z. B. beim Sichtbarwerden der Seite).
     if (cur.status === 'ready' || cur.status === 'local') void afterPlan(today, nowMs);
+    // Startbild (P6): nur bei echter Änderung ohne `at` (z. B. ein anderes Gerät hat weitergelernt); gleich → 0 Schreibungen.
+    if (cur.status === 'ready') void syncTodayDocForDay(today);
     lateIntake(today, nowMs);
     return;
   }
@@ -359,6 +362,8 @@ async function followUp(today: string, nowMs: number, toStore: StoredPlan | null
   }
   await loadLearnInputs();
   await afterPlan(today, nowMs);
+  // Startbild (P6, stufe1-plan §4.3): einmal je neuem Lerntag, sobald der Plan gespeichert und das Tagesprotokoll geladen ist.
+  await syncTodayDocForDay(today);
 }
 
 /**

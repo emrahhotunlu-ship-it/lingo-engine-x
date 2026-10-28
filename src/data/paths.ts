@@ -41,6 +41,7 @@ import {
   c1Schema,
   teacherSchema,
   actSchema,
+  todaySchema,
 } from './schemas';
 // Lesen-Modul (docs/umbau/lesen-plan.md §4/§5): einzige Tür für das Schema der Sammlung `read`.
 import { READ_LAZY_COLLECTION, readSchema } from '../modules/read/registry';
@@ -72,6 +73,8 @@ export const APP_DOCS = {
   'app/compare': compareSchema,
   // Lernplattform 3.0 (P31): C1-Programm (Einstufung, Checks, Kapitelprüfungen, Produktion, gemeldete Aufgaben).
   'app/c1': c1Schema,
+  // Relaunch Stufe 1 (P6): Startbild des Tages (abgeleitet, ersetzbar, nie live abonniert; stufe1-plan §4.3).
+  'app/today': todaySchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {

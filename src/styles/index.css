@@ -312,6 +312,31 @@ h2,
     min-height: var(--lx-today-card-h);
   }
 
+  /* Relaunch P6, Auflage 3 (Vorschau L1, desk.js 79–137): ab 1.024 px liegt die Tageskarte quer – Ring 13em links über alle Zeilen, rechts
+     Titel, Schritte und Knopf (Raster per Klassen in `features/today/DayCard.tsx`). Gilt gleich für Start-Bild (index.html), Skelett,
+     Startbild aus `app/today` und echte Karte. Der Ring setzt seine Größe inline; hier wird sie für die Querlage überschrieben. */
+  @media (width >= 64rem) {
+    .lx-td-ring {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      align-self: center;
+    }
+    .lx-td-ring.lx-skeleton,
+    .lx-td-ring .lx-dayring,
+    .lx-td-ring .lx-dayring > svg {
+      width: 13em !important;
+      height: 13em !important;
+    }
+  }
+  /* Ruhige Mitte unter der Tageskarte (nur Laptop gezeichnet): Wörter fest und Kapitelstand nebeneinander. */
+  .l1mid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1em;
+    padding-top: 1.6em;
+    max-width: 45em;
+  }
+
   /* U2: Platzhalter der Reiterleiste im Start-Bild (gleiche Höhe wie die Knöpfe der echten Leiste). */
   .lx-boot-tabs {
     display: block;
@@ -1035,6 +1060,12 @@ h2,
 @media (min-width: 40rem) {
   :root {
     --lx-today-card-h: 33.125rem;
+  }
+}
+/* Relaunch P6: Querlage ab 1.024 px (Ring links, Schritte rechts in der schmaleren Spalte, Gründe teils zweizeilig): 35rem = 560 px. */
+@media (min-width: 64rem) {
+  :root {
+    --lx-today-card-h: 35rem;
   }
 }
 /* U2: Das Kartenskelett und die Tageskarte, die es ersetzt, steigen nicht auf (sonst rutschen Karte und Start-Knopf 8 px). */

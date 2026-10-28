@@ -35,6 +35,8 @@ type Props = {
   closed?: boolean;
   /** Tagesmoment: letzter Bogen füllt sich (120–580 ms), dann schließen sich die Lücken (580–900 ms). Nur beim Übergang offen → fertig. */
   play?: boolean;
+  /** Prüfkennung (Startbild aus `app/today`: `start-ring`, Relaunch P6). */
+  testId?: string;
   children?: ReactNode;
 };
 
@@ -44,7 +46,7 @@ const pt = (c: number, r: number, deg: number): [number, number] => {
   return [c + r * Math.cos(a), c + r * Math.sin(a)];
 };
 
-export function DayRing({ fills, size = 56, stroke = 7, label, closed = false, play = false, children }: Props) {
+export function DayRing({ fills, size = 56, stroke = 7, label, closed = false, play = false, testId = 'today-ring', children }: Props) {
   const level = useFxLevel();
   const uid = useId().replace(/:/g, '');
   const n = Math.max(1, fills.length);
@@ -70,7 +72,7 @@ export function DayRing({ fills, size = 56, stroke = 7, label, closed = false, p
     <span
       className="lx-dayring relative inline-flex flex-none items-center justify-center"
       style={{ width: size, height: size }}
-      data-testid="today-ring"
+      data-testid={testId}
       data-segments={n}
       data-filled={filled}
       data-fills={fills.map((f) => Math.round(f * 100) / 100).join(',')}

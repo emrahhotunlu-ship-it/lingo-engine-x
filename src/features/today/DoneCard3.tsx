@@ -7,7 +7,7 @@ import { levelUpFor } from '../../domain/moments/detect';
 import { offerLevelUp } from '../../ui/moments/store';
 import { useT } from '../../i18n';
 import { useLive } from '../../data/live';
-import { streakWeek, weekGoal } from '../../domain/metrics';
+import { streakWeek, weekGoal, type TodaySummary } from '../../domain/metrics';
 import { comebackGap } from '../../domain/plan/comeback';
 import type { WeekDay } from '../../domain/streak';
 import { logWarn } from '../../platform/diagnostics';
@@ -122,13 +122,14 @@ export function splitHero(text: string): [string, string] | null {
   return m && m[1] && m[2] ? [m[1], m[2]] : null;
 }
 
-export function DoneCard3({ view, tomorrow, tomorrowTopic = '', today }: { view: TodayView; tomorrow: string; tomorrowTopic?: string; today: string }) {
+export function DoneCard3({ view, sum, tomorrow, tomorrowTopic = '', today }: { view: TodayView; sum: TodaySummary; tomorrow: string; tomorrowTopic?: string; today: string }) {
   const { t, tn, lang } = useT();
   const facts = useDoneFacts(view, true);
   const grammar = useLive((s) => s.collections.grammar);
   const profile = useLive((s) => s.docs['app/profile']);
   const { week, foot } = useStreakWeek();
-  const blocks = view.duties.total;
+  // Relaunch P6, Auflage 1: Zahlen aus DEMSELBEN `todaySummary` wie Tageskarte und Startbild (nie ein zweiter Zähler).
+  const blocks = sum.total;
   const gains = useMemo(() => patternGains({ ps: view.plan?.u?.ps, grammarDocs: grammar ?? new Map(), today, lang }), [view.plan, grammar, today, lang]);
   const big = bigGain({ wordsSure: facts.sure, patterns: gains.count });
   const gap = useMemo(() => comebackGap(profile ?? null, today), [profile, today]);
@@ -164,7 +165,7 @@ export function DoneCard3({ view, tomorrow, tomorrowTopic = '', today }: { view:
       <div className="flex flex-col items-center gap-4 text-center">
         <p className="lx-eyebrow text-ok-text">
           <span aria-hidden="true">✓ </span>
-          <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
+          <span data-testid="today-status" data-status={view.status} data-done={sum.done} data-total={sum.total}>
             {back ? t('moBackTitle') : t('nbHeuteDoneTitle')}
           </span>
         </p>
