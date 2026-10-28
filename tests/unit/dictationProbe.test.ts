@@ -136,7 +136,18 @@ describe('app/profile.dk', () => {
     expect(dkStep({ name: 'x' }, 'win', { ...entry, sig: 'windows-edge' })).toEqual({ update: { dk: { v: 1, win: { ...entry, sig: 'windows-edge' } } } });
   });
 
-  it('liest tolerant: ein kaputtes dk sperrt nie das Profil', () => {
+  it('Erfolg bleibt Erfolg: ein gespeichertes ok mit gleicher Signatur wird nie durch einen Fehlversuch ersetzt', () => {
+    const okMac = { v: 1, mac: { ok: true, t: 1, sig: 'macos-chrome' }, win: { ok: false, t: 1, sig: 'windows-edge' } };
+    expect(dkStep({ dk: okMac }, 'mac', { ok: false, t: 9, sig: 'macos-chrome' })).toBeNull();
+    // Anderer Browser = andere Signatur: dessen Ergebnis zählt (die Probe gilt je Betriebssystem und Browser).
+    expect(dkStep({ dk: okMac }, 'mac', { ok: false, t: 9, sig: 'macos-safari' })).toEqual({ update: { dk: { v: 1, mac: { ok: false, t: 9, sig: 'macos-safari' } } } });
+    // Fehlversuch nach Fehlversuch schreibt nichts; Erfolg nach Fehlversuch schon.
+    expect(dkStep({ dk: okMac }, 'win', { ok: false, t: 9, sig: 'windows-edge' })).toBeNull();
+    expect(dkStep({ dk: okMac }, 'win', { ok: true, t: 9, sig: 'windows-edge' })).toEqual({ update: { dk: { v: 1, win: { ok: true, t: 9, sig: 'windows-edge' } } } });
+  });
+
+  it('liest tolerant: ein kaputtes dk sperrt nie das Profil, fremde Felder je Eintrag stören nicht', () => {
+    expect(readDk({ v: 1, mac: { ok: true, t: 1, sig: 'macos-chrome', x: 1 } })).toEqual({ v: 1, mac: { ok: true, t: 1, sig: 'macos-chrome' } });
     expect(profileSchema.safeParse({ dk: 'kaputt' }).success).toBe(true);
     expect(readDk('kaputt')).toBeNull();
     expect(dkOk({ v: 1, mac: { ok: true, t: 1, sig: 'macos-safari' } }, 'mac')).toBe(true);

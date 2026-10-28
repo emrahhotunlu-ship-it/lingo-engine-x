@@ -122,7 +122,7 @@ export const archiveSchema = z.looseObject({
 // S1-DIKTAT (Relaunch Stufe 1 P7, docs/relaunch/stufe1-plan.md §7.2): Ergebnis der Laptop-Diktat-Probe je Betriebssystem.
 // `app/profile.dk = { v: 1, mac?: { ok, t, sig }, win?: { ok, t, sig } }`, kleiner als 200 Byte; `sig` = Betriebssystem und Browser
 // („macos-chrome“), nie eine Gerätekennung. Im Profil tolerant gelesen (ein kaputtes `dk` sperrt nie das Profil), streng über `dkSchema`.
-const dkOsSchema = z.object({ ok: z.boolean(), t: z.number(), sig: z.string().regex(/^[a-z-]{1,24}$/) });
+const dkOsSchema = z.looseObject({ ok: z.boolean(), t: z.number(), sig: z.string().regex(/^[a-z-]{1,24}$/) });
 export const dkSchema = z.looseObject({ v: z.literal(1), mac: dkOsSchema.optional(), win: dkOsSchema.optional() });
 
 export const profileSchema = z.looseObject({

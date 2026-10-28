@@ -51,7 +51,7 @@ import { dayLabel } from '../../domain/activation/actDoc';
 import { ActPanel } from './ActPanel';
 import { ownTextsOf, reusableSentencesOf } from './actStore';
 import { TutorButton } from '../../ui/exercise/TutorButton';
-import { DictationHint } from '../../ui/exercise/DictationHint';
+import { useDictationDesk } from '../../ui/exercise/DictationHint';
 import { ExerciseShell, SentenceInput, explainDepth, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { Button } from '../../ui/Button';
@@ -175,6 +175,8 @@ export function ExerciseView({
   onPause?: () => void;
 }) {
   const { t, tn, lang, dateShort } = useT();
+  // P7 S1-DIKTAT: „Sag es“ am Laptop – eine Diktat-Aussage in der Tastenzeile, „Später am Handy sprechen“ als Nebenknopf (`null` = Handy).
+  const desk = useDictationDesk();
   const api = useHiddenInput();
   const ai = useAiAvailable();
   const tts = useSpeech((s) => s.status === 'ready');
@@ -822,7 +824,9 @@ export function ExerciseView({
         ? t(`act_${e.act.fmt}_${e.act.wording + 1}` as MessageKey, { type: e.act.type !== '-' ? t(`actTypeIn_${e.act.type}` as MessageKey) : '' })
         : e.ex === 'produce' && e.brief
           ? t(`task_produce_${e.brief.wording + 1}` as MessageKey)
-          : t(`task_${exTextKey(e)}` as MessageKey);
+          : e.ex === 'say_it' && desk
+            ? t('task_say_it_desk')
+            : t(`task_${exTextKey(e)}` as MessageKey);
   const seeDetail =
     e.ex === 'mc_en' || e.ex === 'ctx_mc' || e.ex === 'fits'
       ? `${taskText}\n${e.sentence?.sentence ?? card.word}`
@@ -1014,7 +1018,7 @@ export function ExerciseView({
             {e.sayIt.de}
           </p>
         ) : null}
-        {!fb && (
+        {!fb && !desk && (
           <p className="lx-t-meta text-subtle" data-testid="say-it-tip">
             {t('pxWwSayItTip')}
           </p>
@@ -1044,7 +1048,6 @@ export function ExerciseView({
     );
     answer = (
       <div className="flex flex-col gap-2">
-        {e.ex === 'say_it' && !fb && <DictationHint onPhone={onPause} />}
         <SentenceInput
           mode="free"
           value={sentenceText}
@@ -1144,12 +1147,20 @@ export function ExerciseView({
 
   // ------------------------------------------------------------------ Rückmeldung
 
-  const secondary: ShellSecondary[] = [];
+  // P7 S1-DIKTAT (Nora G2 Muss 2): am Laptop steht bei „Sag es“ zuerst „Später am Handy sprechen“ als reiner Textknopf, nie stärker als „Prüfen“.
+  // Höchstens zwei Nebenknöpfe (P3): „Weiß ich nicht“ bleibt sichtbar; ein Tipp-Knopf fiele weg, die Taste T wirkt weiter.
+  const deskSay = e.ex === 'say_it' && !!desk && !!onPause && !fb;
   const canTip = !noHelp && !fb && !retry && tipAvailable && tip < maxTip;
-  if (canTip) secondary.push({ id: 'hint', label: t('exHint'), onClick: showTip, testId: 'hint' });
-  if (isTiles && !fb && placed.length > 0) secondary.push({ id: 'reset', label: t('drReset'), onClick: () => setPlaced([]), testId: 'tiles-reset' });
+  const helpBtns: ShellSecondary[] = [];
+  if (canTip) helpBtns.push({ id: 'hint', label: t('exHint'), onClick: showTip, testId: 'hint' });
+  if (isTiles && !fb && placed.length > 0) helpBtns.push({ id: 'reset', label: t('drReset'), onClick: () => setPlaced([]), testId: 'tiles-reset' });
   // Bei A4 (Wort nicht gezeigt) gibt es „Weiß ich nicht“: die Lösung wird gezeigt, die Karte bekommt „Nochmal“ und kommt bald wieder.
-  if (!fb && (!isSentence || e.ex === 'say_it' || (e.act && !e.act.showTarget)) && e.check !== 'known') secondary.push({ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' });
+  const showDontKnow = !fb && (!isSentence || e.ex === 'say_it' || (e.act && !e.act.showTarget)) && e.check !== 'known';
+  const dontKnowBtns: ShellSecondary[] = showDontKnow ? [{ id: 'dontKnow', label: t('exDontKnow'), onClick: dontKnow, testId: 'dont-know' }] : [];
+  const secondary: ShellSecondary[] =
+    deskSay && onPause
+      ? [{ id: 'phone', label: t('dkPhone'), onClick: onPause, testId: 'speak-on-phone', variant: 'ghost' }, ...dontKnowBtns, ...helpBtns]
+      : [...helpBtns, ...dontKnowBtns];
 
   const tipText = ((): string | null => {
     if (fb || tip < 1) return null;
@@ -1388,7 +1399,7 @@ export function ExerciseView({
         sideNote={t('exSideWord')}
         keysHint={(() => {
           const range = isChoice ? choiceKeyRange(e.options.length) : null;
-          return fb ? t('exKeysHintNext') : range ? t('exKeysHintWordN', range) : t('exKeysHintWord');
+          return fb ? t('exKeysHintNext') : range ? t('exKeysHintWordN', range) : e.ex === 'say_it' && desk ? desk.keys : t('exKeysHintWord');
         })()}
         {...(isChoice ? { choiceCount: e.options.length } : {})}
       />

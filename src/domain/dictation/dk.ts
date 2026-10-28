@@ -60,8 +60,9 @@ export function readDk(raw: unknown): Dk | null {
   const r = dkSchema.safeParse(raw);
   if (!r.success) return null;
   const out: Dk = { v: 1 };
-  if (r.data.mac) out.mac = r.data.mac;
-  if (r.data.win) out.win = r.data.win;
+  const pick = (e: DkEntry): DkEntry => ({ ok: e.ok, t: e.t, sig: e.sig });
+  if (r.data.mac) out.mac = pick(r.data.mac);
+  if (r.data.win) out.win = pick(r.data.win);
   return out;
 }
 
@@ -74,11 +75,12 @@ export function dkOk(raw: unknown, os: DkOs | null): boolean {
 /**
  * Schreibschritt für `writer.transform('app/profile', …)`: nur bei Änderung (Ergebnis oder Signatur anders), sonst `null`.
  * Fehlt das Profil, wird nichts angelegt. `update` verschmilzt `dk` mit dem gespeicherten Stand (das andere Betriebssystem bleibt).
+ * Erfolg bleibt Erfolg: Ein gespeichertes `ok: true` mit gleicher Signatur wird nie durch einen Fehlversuch ersetzt.
  */
 export function dkStep(current: Record<string, unknown> | undefined, os: DkOs, entry: DkEntry): TransformOp | null {
   if (!current) return null;
   const prev = readDk(current.dk)?.[os];
-  if (prev && prev.ok === entry.ok && prev.sig === entry.sig) return null;
+  if (prev && prev.sig === entry.sig && (prev.ok || !entry.ok)) return null;
   return { update: { dk: { v: 1, [os]: entry } } };
 }
 
