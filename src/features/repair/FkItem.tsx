@@ -218,9 +218,9 @@ export function FkB2Item({ task, area, source, status = null, onNext, onUnclear,
     prompt = (
       <p className="lx-t-prompt" lang="en" data-testid="fk-b2-sentence">
         {pre}
-        <strong className={step === 'gap1' ? 'text-accent' : ''}>{step === 'gap1' ? '___' : fill(0)}</strong>
+        <strong className={step === 'gap1' ? 'text-accent-text' : ''}>{step === 'gap1' ? '___' : fill(0)}</strong>
         {mid}
-        <strong className={step === 'gap2' ? 'text-accent' : ''}>{fill(1)}</strong>
+        <strong className={step === 'gap2' ? 'text-accent-text' : ''}>{fill(1)}</strong>
         {post}
       </p>
     );

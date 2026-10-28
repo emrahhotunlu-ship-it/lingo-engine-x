@@ -1,5 +1,5 @@
 import { mkdirSync } from 'node:fs';
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, type Lang, type Theme } from './fixtures';
 import { TABS } from '../../src/app/shell/tabs';
 import { learnTour } from './learnHelpers';
@@ -20,6 +20,21 @@ const THEMES: Theme[] = ['dark', 'dim', 'light'];
 const LANGS: Lang[] = ['de', 'en'];
 // Seit Relaunch P1 S1-TOK stehen die Flächen in OKLCH (src/styles/index.css, --bg je Modus).
 const BG: Record<Theme, string> = { dark: 'oklch(0.165 0.012 268)', dim: 'oklch(0.285 0.01 268)', light: 'oklch(0.975 0.004 268)' };
+
+// Der Browser schreibt dieselbe Farbe je nach Weg als oklch(…) oder lab(…): verglichen wird der gemalte Bildpunkt.
+async function expectBg(page: Page, theme: Theme, name?: string): Promise<void> {
+  const [now, want] = await page.evaluate((w) => {
+    const px = (c: string) => {
+      const ctx = document.createElement('canvas').getContext('2d');
+      if (!ctx) return '';
+      ctx.fillStyle = c;
+      ctx.fillRect(0, 0, 1, 1);
+      return Array.from(ctx.getImageData(0, 0, 1, 1).data).join(',');
+    };
+    return [px(getComputedStyle(document.documentElement).backgroundColor), px(w)];
+  }, BG[theme]);
+  expect(now, name).toBe(want);
+}
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 
@@ -51,18 +66,7 @@ for (const vp of VIEWPORTS) {
 
           await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
           await expect(page.locator('html')).toHaveAttribute('lang', lang);
-          // Der Browser schreibt dieselbe Farbe je nach Weg als oklch(…) oder lab(…): verglichen wird der gemalte Bildpunkt.
-          const [bgNow, bgWant] = await page.evaluate((want) => {
-            const px = (c: string) => {
-              const ctx = document.createElement('canvas').getContext('2d');
-              if (!ctx) return '';
-              ctx.fillStyle = c;
-              ctx.fillRect(0, 0, 1, 1);
-              return Array.from(ctx.getImageData(0, 0, 1, 1).data).join(',');
-            };
-            return [px(getComputedStyle(document.documentElement).backgroundColor), px(want)];
-          }, BG[theme]);
-          expect(bgNow).toBe(bgWant);
+          await expectBg(page, theme);
 
           expect(await layoutProblems(page)).toEqual([]);
           const text = await page.locator('body').innerText();
@@ -97,7 +101,7 @@ for (const vp of VIEWPORTS) {
         const { errors, external } = await boot(page, { theme, lang, migrated: true });
         await screen(page, 'today');
         await learnTour(page, async (name) => {
-          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          await expectBg(page, theme, name);
           expect(await layoutProblems(page), name).toEqual([]);
           // Zitierte Wörter („würde") gehören zur Erklärung, nicht zur Oberfläche. Deutsches Übungsmaterial
           // (Satzbau: „Du willst sagen“ mit der deutschen Bedeutung) ist als lang="de" ausgezeichnet und gehört dazu.
@@ -140,7 +144,7 @@ for (const vp of VIEWPORTS) {
         const { errors, external } = await boot(page, { theme, lang, migrated: true, fake: { patch: tourPatch(vp.mobile) } });
         await screen(page, 'today');
         await trainerTour(page, async (name) => {
-          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          await expectBg(page, theme, name);
           expect(await layoutProblems(page), name).toEqual([]);
           // Englische Inhalte (lang="en") und Zitate gehören nicht zur Oberfläche.
           const text = await page.evaluate(() => {
@@ -228,7 +232,7 @@ for (const vp of VIEWPORTS) {
         const page = await context.newPage();
         const { errors, external } = await boot(page, { theme, lang, migrated: true });
         await progressTour(page, async (name) => {
-          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          await expectBg(page, theme, name);
           expect(await layoutProblems(page), name).toEqual([]);
           const text = await page.evaluate(() => {
             const clone = document.querySelector('main')?.cloneNode(true) as HTMLElement | undefined;
@@ -280,7 +284,7 @@ for (const vp of VIEWPORTS) {
           },
         });
         const check = async (name: string) => {
-          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          await expectBg(page, theme, name);
           expect(await layoutProblems(page), name).toEqual([]);
           const text = await page.evaluate(() => {
             const clone = document.body.cloneNode(true) as HTMLElement;
