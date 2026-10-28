@@ -678,3 +678,5 @@ Ergebnis:
 **Offen:** iPhone-Probe (P8 Nr. 4) übernimmt die Hauptsitzung.
 
 **28.10.2026 – Hauptsitzung zu P8:** Abbruchkriterium nicht erfüllt, P9/P10 bleiben wie geschnitten. Festlegung für P9: Die Grenze „≤ 500 KB je Bündel“ gilt für die **ausgelieferte Datei** (`.txt`, Base64 des Deflate), nicht für den Rohinhalt; `tasks-v2`/`pattern-map` dürfen also je ein Bündel bleiben, solange die `.txt` ≤ 500 KB ist. iPhone-Probe (P8 Nr. 4): erledigt sich mit Test-Link 1a, der die c1x-Inhalte schon nachlädt (Emrahs Schritt „C1-Übung öffnen“); keine eigene Probe-Version auf dem Test-Link, damit Emrahs Test nicht gestört wird. Reihenfolge 1b wegen „ein Helfer gleichzeitig“: P9a → P9b → P10 Nr. 1–6 → Nr. 7.
+
+**28.10.2026 – Emrahs Rückmeldung zu Test-Link 1a und Entscheidung „Aussehen zuerst“:** siehe `docs/entscheidungen.md` (28.10.2026). Nächster Schritt: Plan Teil 1c (`docs/relaunch/stufe1c-plan.md`), dann Bau Bildschirm für Bildschirm, ein Helfer gleichzeitig. 1b (P9a angehalten, unfertig im Worktree `claude/umbau-s1-inhalt-a`) folgt danach.
