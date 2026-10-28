@@ -18,7 +18,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
   it('Tippen ist t', () => {
     const r = createInputRecorder();
     type(r, 'recommend');
-    expect(r.tally()).toEqual(tally({ keyChars: 9 }));
+    expect(r.tally()).toMatchObject(tally({ keyChars: 9 }));
     expect(inputKindOf(r.tally(), 'recommend', 't')).toBe('t');
     expect(mixedOf(r.tally())).toBe(false);
   });
@@ -34,7 +34,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     const r = createInputRecorder();
     r.beforeInput('insertText', 'recommend', 1000);
     r.beforeInput('insertText', ' ', 1300);
-    expect(r.tally()).toEqual(tally({ keyChars: 10 }));
+    expect(r.tally()).toMatchObject(tally({ keyChars: 10 }));
     expect(inputKindOf(r.tally(), 'recommend', 't')).toBe('t');
   });
 
@@ -54,7 +54,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     const c = createInputRecorder();
     c.compositionStart(1000);
     c.compositionEnd('account', 1400);
-    expect(c.tally()).toEqual(tally({ keyChars: 7 }));
+    expect(c.tally()).toMatchObject(tally({ keyChars: 7 }));
   });
 
   it('Android (keydown „Unidentified“/„Process“, keyCode 229): Kontakt, aber keine Taste davor – je Wort komponiert bleibt es t', () => {
@@ -65,7 +65,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
       r.beforeInput('insertCompositionText', ch, 1005);
     }
     r.compositionEnd('account', 1010);
-    expect(r.tally()).toEqual(tally({ keyChars: 7 }));
+    expect(r.tally()).toMatchObject(tally({ keyChars: 7 }));
     expect(inputKindOf(r.tally(), 'account', 't')).toBe('t');
     // Gboard-Diktat sendet ebenfalls 229-Tasten: mehrere Wörter in einer Komposition sind d.
     const d = createInputRecorder();
@@ -90,7 +90,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     const c = createInputRecorder();
     c.key('a', 1000);
     c.beforeInput('insertText', 'take it into account', 1000 + ARM_MS);
-    expect(c.tally()).toEqual(tally({ keyChars: 20 }));
+    expect(c.tally()).toMatchObject(tally({ keyChars: 20 }));
     // Cmd+V setzt keine Taste davor (Einfügen zählt ohnehin nie als d).
     const d = createInputRecorder();
     expect(d.key('v', 1000, { meta: true })).toBe(true);
@@ -101,7 +101,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     e.key('x', 1000);
     e.beforeInput('insertText', 'x', 1001);
     e.beforeInput('insertText', 'take it into account', 1050);
-    expect(e.tally()).toEqual(tally({ keyChars: 1, freeChars: 20 }));
+    expect(e.tally()).toMatchObject(tally({ keyChars: 1, freeChars: 20 }));
   });
 
   it('iOS-Wortvorschlag nach angetipptem Wortanfang bleibt t', () => {
@@ -123,7 +123,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     r.key('v', 1000, { ctrl: true });
     r.beforeInput('insertFromPaste', 'take it into account', 1001);
     r.beforeInput('insertFromDrop', 'more', 2000);
-    expect(r.tally()).toEqual(tally({ pasteChars: 24 }));
+    expect(r.tally()).toMatchObject(tally({ pasteChars: 24 }));
     expect(inputKindOf(r.tally(), 'take it into account', 't')).toBe('t');
     expect(mixedOf(r.tally())).toBe(true);
   });
@@ -148,6 +148,29 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     expect(mixedOf(c.tally())).toBe(false);
   });
 
+  it('ein Wort ganz ohne Taste ist t, aber gemischt; mit angetipptem Wortanfang und Vorschlag nicht', () => {
+    const a = createInputRecorder();
+    a.beforeInput('insertText', 'recommend', 1000);
+    expect(inputKindOf(a.tally(), 'recommend', 't')).toBe('t');
+    expect(mixedOf(a.tally())).toBe(true);
+    const tr = createAttemptTracker();
+    tr.contact(1000, 0);
+    tr.rec.beforeInput('insertText', 'recommend', 1000);
+    expect(tr.meta({ start: 0, answer: 'recommend', base: 't' })).toMatchObject({ in: 't', mx: 1 });
+    // Android: „Unidentified“ ist ein Tastenanschlag (Kontakt), also nicht gemischt.
+    const u = createInputRecorder();
+    u.key('Unidentified', 900);
+    u.compositionEnd('recommend', 2000);
+    expect(mixedOf(u.tally())).toBe(false);
+    // QuickType nach angetipptem Wortanfang.
+    const b = createInputRecorder();
+    type(b, 're');
+    b.beforeInput('insertReplacementText', 'recommend', 5000);
+    expect(inputKindOf(b.tally(), 'recommend', 't')).toBe('t');
+    expect(mixedOf(b.tally())).toBe(false);
+    expect(b.tally().keyPresses).toBe(2);
+  });
+
   it('Auswahl, Bausteine und Antippen sind c – auch mit Tastenkürzel', () => {
     const r = createInputRecorder();
     r.key('2', 1000);
@@ -168,7 +191,7 @@ describe('inputKindOf: getippt, diktiert, gewählt', () => {
     r.beforeInput('insertText', 'dictated words', 1000);
     r.beforeInput('deleteContentBackward', null, 1100);
     r.reset();
-    expect(r.tally()).toEqual(tally({}));
+    expect(r.tally()).toMatchObject(tally({}));
   });
 });
 
@@ -212,6 +235,11 @@ describe('erster Kontakt und Messwerte des Versuchs', () => {
     tr.reset();
     tr.send(100);
     expect(tr.meta({ start: 0, answer: '', base: 't' })).toEqual({ sm: 100 });
+    // pl beim Senden gilt (ohne „Denkt nach …“), sonst der Wert der Wertung.
+    tr.reset();
+    tr.send(100, 40);
+    expect(tr.meta({ start: 0, answer: '', base: 't', pl: 55 })).toEqual({ sm: 100, pl: 40 });
+    expect(tr.meta({ start: 0, answer: '', base: 't', pl: 55 })).toEqual({ pl: 55 });
   });
 
   it('bg: verborgene Seite vor dem Senden zählt, danach nicht mehr', () => {
@@ -260,7 +288,7 @@ describe('bindInputKind an Ereignissen', () => {
     now = 2500;
     ev('keydown', { key: 'x' }, input);
     ev('beforeinput', { inputType: 'insertText', data: 'x' }, input);
-    expect(tr.rec.tally()).toEqual(tally({ keyChars: 1, freeChars: 20 }));
+    expect(tr.rec.tally()).toMatchObject(tally({ keyChars: 1, freeChars: 20 }));
     expect(tr.kind('take it into accountx', 't')).toBe('d');
     offInput();
     offOther();
@@ -285,7 +313,17 @@ describe('bindInputKind an Ereignissen', () => {
     const dt = (s: string) => ({ getData: (f: string) => (f === 'text/plain' ? s : '') });
     ev('beforeinput', { inputType: 'insertReplacementText', data: null, dataTransfer: dt('take it into account') }, input);
     ev('beforeinput', { inputType: 'insertFromPaste', data: null, dataTransfer: dt('abc') }, input);
-    expect(tr.rec.tally()).toEqual(tally({ freeChars: 20, pasteChars: 3 }));
+    expect(tr.rec.tally()).toMatchObject(tally({ freeChars: 20, pasteChars: 3 }));
+    off();
+  });
+
+  it('Safari: insertFromDrop mit data null liest den Text aus dataTransfer', () => {
+    const input = new EventTarget();
+    const tr = createAttemptTracker();
+    const off = bindInputKind(input, { accept: () => true, tracker: tr, now: () => 1000, paused: () => 0, isHidden: () => false });
+    ev('beforeinput', { inputType: 'insertFromDrop', data: null, dataTransfer: { getData: (f: string) => (f === 'text/plain' ? 'into account' : '') } }, input);
+    expect(tr.rec.tally()).toMatchObject(tally({ pasteChars: 12 }));
+    expect(tr.hasContact()).toBe(true);
     off();
   });
 

@@ -543,7 +543,7 @@ export function ExerciseView({
       return;
     }
     // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
-    attempt.send(measure().ms);
+    attempt.send(measure().ms, promptChars(root.current));
     const out = await askAct.run(activateVars(pre.hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil auf Wunsch, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
     if (!out) {
@@ -602,7 +602,7 @@ export function ExerciseView({
       return;
     }
     // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
-    attempt.send(measure().ms);
+    attempt.send(measure().ms, promptChars(root.current));
     const out = await askProduce.run(sentenceVars(hints));
     // Fehler (not_granted, rate_limited, …): lokales Urteil, ohne automatischen Neuversuch (A6.3); „Erneut versuchen“ bleibt beim Nutzer.
     if (!out) {

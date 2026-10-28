@@ -219,7 +219,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       }
       if (j.askAi === 'auto') {
         // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
-        attempt.send(elapsed());
+        attempt.send(elapsed(), promptChars(root.current));
         runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVarsFor(given)), (out) => finish(full, cur.r, cur.meta, aiYes(out, given)), (res) => settle(score, cur, { ...jx, ...aiNotYes(res, true) }));
         return;
       }

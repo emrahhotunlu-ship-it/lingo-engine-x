@@ -372,7 +372,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const local = (r: FitResult | null): void => finishCheck('near', res, given, { ...jx, ...at, judged: 'noai', unsure: true, ...aiNotYes(r, j.askAi !== 'no') });
       if (j.askAi === 'auto') {
         // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
-        attempt.send(elapsed());
+        attempt.send(elapsed(), promptChars(root.current));
         runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVars(given)), (out) => finishCheck('correct', asAlsoRight(res), given, { ...jx, ...at, ...aiYes(out, given) }), local);
         return;
       }

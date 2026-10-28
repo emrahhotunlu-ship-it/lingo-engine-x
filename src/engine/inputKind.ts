@@ -27,6 +27,10 @@ export type InputTally = {
   pasteChars: number;
   /** Gelöscht nach einer Einfügung ohne Taste (Diktat korrigiert). */
   delAfterFree: boolean;
+  /** Tastenanschläge mit Kontakt (auch `Unidentified`/`Process`). */
+  keyPresses?: number;
+  /** Ein einzelnes Wort kam ohne Taste. */
+  soloWord?: boolean;
 };
 
 export type KeyMods = { ctrl?: boolean; meta?: boolean; alt?: boolean };
@@ -55,6 +59,8 @@ export function createInputRecorder(): InputRecorder {
   let freeChars = 0;
   let pasteChars = 0;
   let delAfterFree = false;
+  let keyPresses = 0;
+  let soloWord = false;
   /** Zeitpunkt der letzten druckbaren Taste ohne Strg/Cmd/Alt (`null` = keine offen). */
   let armedAt: number | null = null;
   /** Die letzte Einfügung kam ohne Taste (mehr als ein Zeichen). */
@@ -65,13 +71,17 @@ export function createInputRecorder(): InputRecorder {
   /** Eine Einfügung ohne Taste: mindestens zwei Wörter = diktiert, sonst (ein Wort, ein Zeichen) getippt. */
   const unkeyed = (text: string) => {
     if (multiWord(text)) freeChars += charLen(text);
-    else keyChars += charLen(text);
+    else {
+      keyChars += charLen(text);
+      if (/\S/u.test(text)) soloWord = true;
+    }
     lastUnkeyed = charLen(text) > 1;
   };
 
   return {
     key(key, at, mods = {}) {
       if (!key || SILENT_KEYS.has(key) || key.startsWith('Arrow') || /^F\d{1,2}$/.test(key)) return false;
+      keyPresses += 1;
       if (charLen(key) === 1 && !mods.ctrl && !mods.meta && !mods.alt) {
         armedAt = at;
         compKeyed = true;
@@ -113,12 +123,14 @@ export function createInputRecorder(): InputRecorder {
       compKeyed = false;
       armedAt = null;
     },
-    tally: () => ({ keyChars, freeChars, pasteChars, delAfterFree }),
+    tally: () => ({ keyChars, freeChars, pasteChars, delAfterFree, keyPresses, soloWord }),
     reset() {
       keyChars = 0;
       freeChars = 0;
       pasteChars = 0;
       delAfterFree = false;
+      keyPresses = 0;
+      soloWord = false;
       armedAt = null;
       lastUnkeyed = false;
       compKeyed = false;
@@ -136,9 +148,12 @@ export function inputKindOf(tally: InputTally, answer: string, base: 't' | 'c'):
   return n > 0 && tally.freeChars > 0 && tally.freeChars * 2 >= n ? 'd' : 't';
 }
 
-/** Gemischt (`mx`): Tasten und Diktat, Einfügen aus Zwischenablage/Ziehen oder Löschen nach einer Einfügung ohne Taste. `in` bleibt davon unberührt. */
+/**
+ * Gemischt (`mx`): Tasten und Diktat, Einfügen aus Zwischenablage/Ziehen, Löschen nach einer Einfügung ohne Taste – oder ein
+ * einzelnes Wort ohne Taste bei keinem einzigen Tastenanschlag (kurzes Diktat oder Vorschlag ohne Tippen; `in` bleibt `t`).
+ */
 export function mixedOf(tally: InputTally): boolean {
-  return (tally.keyChars > 0 && tally.freeChars > 0) || tally.pasteChars > 0 || tally.delAfterFree;
+  return (tally.keyChars > 0 && tally.freeChars > 0) || tally.pasteChars > 0 || tally.delAfterFree || (!!tally.soloWord && !tally.keyPresses);
 }
 
 /** ms vom Zeigen (bzw. Tonende) bis zum ersten Kontakt, ohne die bis dahin offenen Pausen; ohne Kontakt `undefined`. */
@@ -170,8 +185,8 @@ export type AttemptTracker = {
   hasContact(): boolean;
   /** Die Seite war verborgen (zählt bis zum Senden). */
   hidden(): void;
-  /** „Prüfen“ getippt, VOR dem Warten auf Claude: Antwortzeit `ms` zu diesem Zeitpunkt (das letzte Senden gilt). */
-  send(ms: number): void;
+  /** „Prüfen“ getippt, VOR dem Warten auf Claude: Antwortzeit `ms` und Prompt-Zeichen `pl` zu diesem Zeitpunkt (das letzte Senden gilt). */
+  send(ms: number, pl?: number): void;
   /** Senden verwerfen (neue Prüfung ohne Claude, Fehler beim Aufruf). */
   unsend(): void;
   /** Neue Uhr (z. B. „Fehler finden“ nach dem Fund der Stelle): alles von vorn. */
@@ -187,7 +202,7 @@ export function createAttemptTracker(): AttemptTracker {
   let at: number | null = null;
   let paused = 0;
   let bg = false;
-  let sent: { ms: number; bg: boolean } | null = null;
+  let sent: { ms: number; bg: boolean; pl: number | undefined } | null = null;
   /** Wie oft „Prüfen“ an Claude ging (ein erneutes Senden nach einem Fehler ist ein zweites Senden). */
   let sends = 0;
   const tracker: AttemptTracker = {
@@ -201,8 +216,8 @@ export function createAttemptTracker(): AttemptTracker {
     hidden() {
       bg = true;
     },
-    send(ms) {
-      sent = { ms: Math.max(0, Math.round(ms)), bg };
+    send(ms, pl) {
+      sent = { ms: Math.max(0, Math.round(ms)), bg, pl };
       sends += 1;
     },
     unsend() {
@@ -227,7 +242,8 @@ export function createAttemptTracker(): AttemptTracker {
         if (mixedOf(rec.tally())) out.mx = 1;
       }
       if (sent) out.sm = sent.ms;
-      if (typeof o.pl === 'number' && Number.isFinite(o.pl) && o.pl >= 0) out.pl = Math.round(o.pl);
+      const pl = sent?.pl ?? o.pl;
+      if (typeof pl === 'number' && Number.isFinite(pl) && pl >= 0) out.pl = Math.round(pl);
       if (o.second || sends > 1) out.n = 2;
       if (sent ? sent.bg : bg) out.bg = 1;
       sent = null;
@@ -261,10 +277,11 @@ export function promptChars(root: ParentNode | null | undefined): number | undef
   return els.reduce((n, el) => n + (el.textContent ?? '').replace(/\s+/g, ' ').trim().length, 0);
 }
 
-/** Text einer Einfügung; Safari liefert bei `insertReplacementText`/`insertFromPaste` `data === null` und den Text nur in `dataTransfer`. */
+/** Text einer Einfügung; Safari liefert bei `insertReplacementText`/`insertFromPaste`/`insertFromDrop` `data === null` und den Text nur in `dataTransfer`. */
+const DT_TYPES = new Set(['insertReplacementText', 'insertFromPaste', 'insertFromDrop']);
 function insertedText(ev: { inputType?: unknown; data?: unknown; dataTransfer?: unknown }): string | null {
   if (typeof ev.data === 'string') return ev.data;
-  if (ev.inputType !== 'insertReplacementText' && ev.inputType !== 'insertFromPaste') return null;
+  if (typeof ev.inputType !== 'string' || !DT_TYPES.has(ev.inputType)) return null;
   const dt = ev.dataTransfer as { getData?: (f: string) => string } | null | undefined;
   return typeof dt?.getData === 'function' ? dt.getData('text/plain') : null;
 }

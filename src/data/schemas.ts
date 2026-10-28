@@ -295,7 +295,7 @@ export const attemptTimingFields = {
   st: z.number().int().min(0).max(5).optional(),
 };
 /** Lese-Schema der Messwerte in `hist` und im Protokoll: tolerant (Altbestand und fremde Werte blockieren nie eine Karte). */
-export const attemptReadFields = { fk: num, ms: num, in: str, mx: num, sm: num, pl: num, n: num, bg: num, st: num };
+export const attemptReadFields = { fk: loose, ms: loose, in: loose, mx: loose, sm: loose, pl: loose, n: loose, bg: loose, st: loose };
 /** Versuchszeit für die Speicherung: auf 10 ms gerundet, 0 … 600.000 ms (ein Ausreißer sprengt nie Karte oder Log). */
 export function attemptMs(v: number): number {
   return Math.min(ATTEMPT_MS_MAX, Math.max(0, Math.round(v / 10) * 10));
