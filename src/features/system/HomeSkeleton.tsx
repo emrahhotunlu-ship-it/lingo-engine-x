@@ -3,7 +3,7 @@ import { useClock } from '../../app/clock';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { TabTitle } from './Chrome';
+import { SettingsButton, TabTitle } from './Chrome';
 import { dateLabelOf } from '../today/dateLabel';
 import { StartCard, TodaySkeletonCard } from '../today/DayCard';
 import { markStart } from '../today/startPerf';
@@ -45,9 +45,13 @@ export function HomeSkeleton() {
         {slow && (
           <div className="lx-glass flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-card)] px-4 py-3" data-testid="start-slow">
             <p className="text-sm text-muted">{t('stSlow')}</p>
-            <Button icon="refresh" onClick={() => window.location.reload()} data-testid="start-slow-retry">
-              {t('stSlowRetry')}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button icon="refresh" onClick={() => window.location.reload()} data-testid="start-slow-retry">
+                {t('stSlowRetry')}
+              </Button>
+              {/* Diagnose und Sicherung bleiben erreichbar (das Zahnrad steht beim Laden nicht mehr oben, G2 Nora M1). */}
+              <SettingsButton />
+            </div>
           </div>
         )}
       </div>

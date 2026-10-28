@@ -56,7 +56,7 @@ async function longest(page: Page, choice: 'has signed off' | 'will sign off') {
 /** overcome: Stufe 4, schwächste Art „cloze“ (freie Lücke), Tag 1 mit Ursprungssatz (wie hint.spec). */
 const OVERCOME = { 'vocab/overcome': { na: 9, hist: [], state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } } };
 
-type WordCase = 'wrong' | 'shown' | 'near';
+type WordCase = 'wrong' | 'shown' | 'near' | 'right';
 async function word(page: Page, kind: WordCase, lang: Lang) {
   const booted = await boot(page, { migrated: true, lang, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...OVERCOME } } });
   await screen(page, 'today');
@@ -66,7 +66,7 @@ async function word(page: Page, kind: WordCase, lang: Lang) {
   const answer = expected('cloze', 'overcome', null, 'vocab', lang);
   if (kind === 'shown') await page.getByTestId('dont-know').click();
   else {
-    await typeInGap(page, kind === 'near' ? answer.slice(0, -1) : 'zzzz');
+    await typeInGap(page, kind === 'right' ? answer : kind === 'near' ? answer.slice(0, -1) : 'zzzz');
     await page.keyboard.press('Enter');
     // Falsch: erst die Hinweisrunde, dann unverändert noch einmal prüfen → Ergebnis.
     if (kind === 'wrong') {
@@ -277,6 +277,15 @@ test.describe('Handy 390×844: Verhalten', () => {
     await expect(list.getByTestId('menu-whyTask')).toBeVisible();
     await list.getByTestId('menu-pause').click();
     await screen(page, 'today');
+  });
+
+  // G2 Nora M2 (Kap. 2 Nr. 4, §6.4): das Warum steht auch bei richtiger Antwort in Zeile 3 – nicht nur ein Merke-Satz.
+  test('richtig: Zeile 3 zeigt das Warum (Form des Kartenworts)', async ({ page }) => {
+    const { errors } = await word(page, 'right', 'de');
+    const why = page.getByTestId('result').locator('.lx-band-why');
+    await expect(why.getByTestId('word-form-why')).toBeVisible();
+    await expect(why.getByTestId('word-form-why')).toContainText('overcome');
+    expect(errors).toEqual([]);
   });
 
   test('Tipp-Runde: eine ruhige Zeile, nie rot', async ({ page }) => {

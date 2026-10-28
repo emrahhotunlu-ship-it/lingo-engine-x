@@ -144,10 +144,12 @@ function Frame() {
         <div className="lx-dmain">
           <div className="lx-stage" data-testid="stage">
             {tabRoot && <TopBar />}
-            {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts (gleiche Höhe wie der Kopf, U2). */}
+            {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts (gleiche Höhe wie der Kopf, U2).
+                Beim Laden nur die leere Stelle wie `#lx-boot` (G2 Nora M1, §6.6: Zahnrad nur auf Fortschritt); dauert es länger, bietet der
+                ruhige Hinweis im Skelett die Einstellungen an. */}
             {system && (
               <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="system-actions">
-                <SettingsButton />
+                {screen === 'loading' ? <span className="size-11" aria-hidden="true" /> : <SettingsButton />}
               </div>
             )}
             <main id="main" className={`flex-1 ${showNav && !exercise ? 'lx-main-nav' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>

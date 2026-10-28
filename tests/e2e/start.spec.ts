@@ -123,6 +123,9 @@ test.describe('P6 Startbild', () => {
     const y0 = (await sk.boundingBox())?.y ?? -1;
     await expect(page.getByTestId('start-slow')).toBeVisible({ timeout: 12_000 });
     await expect(page.getByTestId('start-slow-retry')).toBeVisible();
+    // G2 Nora M1: beim Laden kein Zahnrad oben; Einstellungen (Diagnose, Sicherung) erst im ruhigen Hinweis.
+    await expect(page.getByTestId('system-actions').getByTestId('open-settings')).toHaveCount(0);
+    await expect(page.getByTestId('start-slow').getByTestId('open-settings')).toBeVisible();
     expect((await sk.boundingBox())?.y).toBe(y0);
     await screen(page, 'today');
     await expect(page.getByTestId('start-slow')).toHaveCount(0);

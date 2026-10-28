@@ -1270,7 +1270,8 @@ export function ExerciseView({
         : null;
     // Wortpartner (colloc/colloc_gap): gesucht ist der Partner, nicht eine Form des Kartenworts – „raised = Vergangenheit von concern“ wäre falsch (UX-Prüfung 19.10.2026).
     const partnerEx = e.ex === 'colloc' || e.ex === 'colloc_gap';
-    const fk = solution && !fb.override && fb.result.verdict !== 'correct' && !partnerEx ? formKind(solution, card.word, card.pos ?? null) : null;
+    // Warum auch bei richtiger Antwort (Kap. 2 Nr. 4, stufe1-plan §6.4: Band Zeile 3; G2 Nora M2).
+    const fk = solution && !fb.override && !partnerEx ? formKind(solution, card.word, card.pos ?? null) : null;
     const formWhy =
       fk && fk !== 'misc' ? (
         // U3: steht im Block „Warum“ – keine zweite Überschrift „Warum:“ davor.
