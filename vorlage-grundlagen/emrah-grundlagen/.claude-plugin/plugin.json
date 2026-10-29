@@ -1,0 +1,9 @@
+{
+  "name": "emrah-grundlagen",
+  "version": "0.1.0",
+  "description": "Emrahs Grundpaket für alle Apps: Arbeitsweise (in jeder Sitzung geladen), Produkt-Kern, Design-Richtung, Erlebnis-Check, Projekt einrichten und vier allgemeine Helfer.",
+  "author": {
+    "name": "Emrah"
+  },
+  "keywords": ["arbeitsweise", "produkt", "design", "ux", "qualitaet"]
+}

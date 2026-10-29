@@ -1,0 +1,11 @@
+{
+  "name": "emrah",
+  "owner": { "name": "Emrah" },
+  "plugins": [
+    {
+      "name": "emrah-grundlagen",
+      "source": "./emrah-grundlagen",
+      "description": "Emrahs Grundpaket für alle Apps: Arbeitsweise, Produkt-Kern, Design-Richtung, Erlebnis-Check, Projekt einrichten, vier Helfer."
+    }
+  ]
+}
