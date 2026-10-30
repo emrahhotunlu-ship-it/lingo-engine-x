@@ -1,6 +1,6 @@
 # Emrahs Grundpaket für alle Apps
 
-Ein Paket, das du **einmal** in deinem claude.ai-Konto einrichtest. Danach kennt Claude in jeder neuen Sitzung, in jeder App, deine Arbeitsweise und hat dieselben Werkzeuge dabei.
+Ein Paket, das du **einmal** in deinem claude.ai-Konto einrichtest. Danach kennt Claude in jeder neuen Sitzung – am iPhone, am Laptop und am MacBook, in jeder App – deine Arbeitsweise und hat dieselben Werkzeuge dabei.
 
 ## Was drin ist
 

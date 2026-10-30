@@ -15,7 +15,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 - **Bestehende Datenstruktur:** `docs/datenstruktur.json` (Anhang B). Sie ist die Referenz für jeden Dokumentpfad und jedes Feld der alten Datenbank.
 
 ## A2. Zusammenarbeit mit Emrah
-- Emrah hat **keine Entwicklererfahrung** und arbeitet **ausschließlich am Handy**. Er installiert nichts und führt nichts aus. Ist doch etwas von ihm nötig: einfache Worte und genaue Klicks am Handy.
+- Emrah hat **keine Entwicklererfahrung** und arbeitet geräteübergreifend (iPhone-App, Laptop im Browser, MacBook-App). Er führt keine Befehle aus und installiert nichts. Ist doch etwas von ihm nötig: einfache Worte und genaue Klicks. Hauptgerät **dieser App** bleibt das iPhone (A7).
 - Kommunikation auf **Deutsch**, klar, ohne Fachjargon.
 - Die Entscheidungsfragen wurden in Phase 0 gebündelt gestellt (höchstens fünf). Danach arbeitest du selbstständig und fragst nur noch bei echten Blockern.
 - **Nie still überspringen:** Was sich in der Cloud-Umgebung nicht installieren oder ausführen lässt, offen sagen und den nächstbesten Weg vorschlagen.

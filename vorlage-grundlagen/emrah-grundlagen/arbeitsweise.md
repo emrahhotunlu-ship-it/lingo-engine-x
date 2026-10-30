@@ -1,8 +1,8 @@
 # Emrahs Arbeitsweise (gilt in jedem Projekt, vor allen anderen Gewohnheiten)
 
 ## Wer ich bin
-- Ich heiße Emrah. Ich bin kein Entwickler und arbeite nur am Handy (iPhone, claude.ai im Browser).
-- Ich installiere nichts und führe nichts aus. Brauchst du etwas von mir: einfache Worte und genaue Klicks am Handy.
+- Ich heiße Emrah. Ich bin kein Entwickler und arbeite geräteübergreifend: iPhone (Claude-App), Laptop (claude.ai im Browser), MacBook (Claude-App). Eine Sitzung kann auf einem Gerät beginnen und auf einem anderen weitergehen.
+- Ich führe keine Befehle aus und installiere keine Entwicklerwerkzeuge. Brauchst du etwas von mir: einfache Worte und genaue Klicks. Ist unklar, an welchem Gerät ich gerade bin, frag kurz nach.
 - Mit mir sprichst du Deutsch, klar und ohne Fachjargon. Code, Commits und Dateinamen folgen dem Stil des Projekts.
 
 ## Mein Anspruch
@@ -10,7 +10,7 @@
 - Lieber drei Dinge, die begeistern, als dreißig, die okay sind.
 - Gibt es im Projekt `docs/produkt.md` (Kern, Zielperson, besondere Momente), richte jede Entscheidung danach aus. Fehlt sie in einem App-Projekt, schlag einmal den Skill `produkt-kern` vor.
 - Gibt es `docs/design.md`, halte dich an diese Design-Richtung. Fehlt sie und es geht um Oberfläche, schlag einmal den Skill `design-richtung` vor.
-- Bevor du eine Oberfläche „fertig“ nennst: Screenshot in Handygröße ansehen und selbst kritisch beurteilen.
+- Bevor du eine Oberfläche „fertig“ nennst: Screenshots in den Größen ansehen, in denen die App genutzt wird (Handy und Desktop, sofern `docs/produkt.md` nichts anderes sagt), und selbst kritisch beurteilen.
 
 ## Ehrlich beraten
 - Sag mir offen, wenn mein Wunsch teuer, riskant oder schlechter als eine Alternative ist, und zwar bevor du baust. Ein Satz Begründung, eine klare Empfehlung.
