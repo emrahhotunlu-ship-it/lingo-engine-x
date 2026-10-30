@@ -617,3 +617,11 @@ Anlass: Emrahs Fotos zu `pc-rc-k1` (LATELY: Begründung widerspricht der akzepti
 
 ## 30.10.2026 – Überchat und Unterchats
 Emrah: „Du bist ab jetzt der Überchat. Orchestriere die Aufgaben wie angewiesen in Unterchats.“ Ersetzt die Regel vom 07.10.2026 („keine neuen Kontextfenster/Cloud-Sitzungen“). Jedes Paket läuft in einem eigenen Unterchat (Cloud-Sitzung, für Emrah sichtbar) auf eigenem Zweig; nur der Überchat führt zusammen, veröffentlicht und berichtet. Ein Unterchat gleichzeitig (Kontingent), Pause bis Limit-Reset gilt weiter. Regeln: `docs/umbau/unterchats.md`; erster Auftrag nach dem Reset: `docs/umbau/auftraege/q0.md`.
+
+## 30.10.2026 – Vokabeln zuerst, Bereiche als eigene Module
+Emrah schickt einen ausführlichen Vokabel-Auftrag (`docs/umbau/auftraege/vokabel-umbau-emrah.md`): „Das Allerwichtigste ist der Vokabelbereich … Wörter werden nicht wirklich gut gelernt.“ Beobachtung: Wiederholungen willkürlich (mehrmals am Tag, dann wochenlang nicht), fast nur passives Üben mit Auswahl, kein Weg zum aktiven Benutzen. Dazu sein Vorschlag: „alle Disziplinen wie Vokabeln, Grammatik, Practice … als einzelne Apps betrachten, die in der Plattform zusammengeführt werden“; Inhalte abgestimmt und aufeinander aufbauend, aber entkoppelt.
+Festlegung (Überchat):
+- **Vokabeln werden ein eigenes Modul** mit eigenem Planer, eigenen Daten, Tests und eigener Simulation. Andere Bereiche lesen nur Lexem-IDs und melden Belege über eine Schnittstelle; sie planen nie selbst. Für Grammatik, Praxis und Lesen gilt dasselbe Prinzip, sobald sie umgebaut werden.
+- **Emrahs Vokabel-Auftrag ist Maßstab.** Wo ältere Pläne widersprechen (Wort-Lernen 2, Konzept §3, Vokabeltrainer-Nachtrag, F1), gilt der neue Auftrag; V0 listet jeden Widerspruch.
+- **Reihenfolge:** Q0 (Aufgaben-Qualität) → **V0** (Diagnose, 60-Tage-Ausgangsmessung, Marktvergleich, Plan) → Emrah bestätigt den Plan → V1–V5 haben Vorrang vor den restlichen Optik-Paketen. Während Emrah den Plan liest, läuft D1. D4 (Wörter-Bildschirm) und F1 gehen in V1–V5 auf.
+- **Übertragung auf die Plattform:** KI über `claude.use("sample")` statt Cloudflare Worker, keine PWA, Verlauf in `docs/umbau/stand.md` statt `docs/verlauf.md`. Bildschirmfotos fremder Apps kommen nicht ins öffentliche Repository; Emrah sieht den Vergleich als private Seite.
