@@ -26,6 +26,7 @@ Gilt ab 07.10.2026 für jede Sitzung. Bei Widerspruch gehen A2 (begrenzte Prüfr
 | Bericht und Test-Anleitung an Emrah | Masterchat | – | schreibt er selbst (Pflichtpunkte aus A2) |
 
 ## 3. Orchestrierung
+- **Seit 30.10.2026: Überchat und Unterchats** (`docs/umbau/unterchats.md`). Der Masterchat (Überchat) gibt jedes Paket an einen eigenen Unterchat (Cloud-Sitzung); der Unterchat nutzt intern die Rollen und Prüftore dieses Dokuments. Der folgende Satz zu Cloud-Fenstern gilt nicht mehr.
 - **Der Masterchat orchestriert selbst.** Es gibt keinen eigenen Orchestrator-Agenten: Er wäre ein zweiter Kontext, der Emrahs Vorgaben nur aus zweiter Hand kennt. Neue Cloud-Fenster gibt es nicht, weil sie nicht steuerbar sind.
 - Der Masterchat baut und prüft nicht selbst. Er liest nur Schema-Ergebnisse (`ok`, `befunde[]`, `zahlen`, `nicht_gelaufen[]`, `commit`), nie Rohlogs.
 - **Höchstens 2–3 Agenten gleichzeitig** (Emrahs Vorgabe vom 07.10.: keine Wellen von 5–6). Das gilt auch innerhalb von Workflows, außer bei reinen Haiku-Mechanik-Schritten.
