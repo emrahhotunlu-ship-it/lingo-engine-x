@@ -701,3 +701,5 @@ Ergebnis:
 - Verlauf nur 12 Antworten je Wort.
 
 Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
+
+**30.10.2026 – V0a fertig und zusammengeführt** (`c1dd446`): 19 Steckbriefe, 108 geprüfte Bildlinks, Synthese mit 81 Methoden (38 übernehmen, 33 anpassen, 10 verwerfen), 5 offene Fragen an Emrah (W1, W4, W2, Stufe 7, Kontingent). Emrah hat das Ende selbst bemerkt; Ursache: fertige Cloud-Sitzungen melden sich nicht von selbst. Abhilfe: Weck-Auftrag `trig_01VxUJ8U7LxouTgnEJEsN9EZ`, den jeder Unterchat am Ende auslöst (`docs/umbau/unterchats.md` Nr. 6), plus Blick alle 45 Minuten. Nächster Schritt: Vergleichsseite für Emrah.

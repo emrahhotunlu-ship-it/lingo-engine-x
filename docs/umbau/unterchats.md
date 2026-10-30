@@ -12,7 +12,8 @@ Emrah: „Du bist ab jetzt der Überchat. Orchestriere die Aufgaben wie angewies
 3. Nicht `docs/umbau/stand.md`, `CLAUDE.md` oder `docs/entscheidungen.md` ändern. Ergebnis kommt in `docs/umbau/berichte/<paket>.md` mit den Feldern: `ok` (ja/nein), `commit`, `befunde[]`, `zahlen`, `nicht_gelaufen[]` (Pflicht), `offene_fragen[]`, und einer Kurzfassung in einfachem Deutsch für Emrah.
 4. Fragen an Emrah stellt er nicht selbst im eigenen Chat, sondern schreibt sie in `offene_fragen` und hält an; der Überchat fragt Emrah.
 5. Kein Gesamtlauf `npm run verify` je Paket (§10 `arbeitsweise.md`): `verify:fast`, betroffene Specs, G1/G2 je Paket; der Gesamtlauf G4 einmal je Test-Link durch den Überchat.
-6. Ist das Paket fertig oder blockiert: Bericht committen und pushen, dann aufhören.
+6. Ist das Paket fertig oder blockiert: Bericht committen und pushen. **Danach den Überchat wecken:** das Werkzeug `fire_trigger` (Claude-Code-Remote) mit `trigger_id` `trig_01VxUJ8U7LxouTgnEJEsN9EZ` aufrufen, `text`: „<Paket> fertig|blockiert, Zweig <zweig>, Commit <kennung>“. Ist das Werkzeug nicht da (auch nicht per ToolSearch „fire_trigger“), steht das im Bericht unter `nicht_gelaufen`. Dann aufhören.
+   *Grund (30.10.2026):* Eine fertige Cloud-Sitzung meldet sich nicht von selbst beim Überchat; V0a war fertig, ohne dass der Überchat es erfuhr. Der Überchat plant zusätzlich als Absicherung alle 45 Minuten einen Blick auf laufende Unterchats ein.
 
 ## Takt
 - **Ein Unterchat gleichzeitig** (Emrahs Vorgabe zum Kontingent), solange Emrah nichts anderes sagt.
