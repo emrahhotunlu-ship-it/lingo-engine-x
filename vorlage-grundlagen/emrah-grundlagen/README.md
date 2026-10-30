@@ -6,7 +6,7 @@ Ein Paket, das du **einmal** in deinem claude.ai-Konto einrichtest. Danach kennt
 
 | Teil | Was es tut | So rufst du es auf |
 |---|---|---|
-| **Arbeitsweise** | Wird bei jedem Sitzungsstart automatisch geladen: wer du bist, dein Anspruch, ehrliche Beratung, sparsam mit dem Limit, kurze Berichte | automatisch |
+| **Arbeitsweise** | Wird bei jedem Sitzungsstart automatisch geladen: wer du bist, dein Anspruch, ehrliche Beratung, effizient bei gutem Tempo, kurze Berichte | automatisch |
 | **Produkt-Kern** | Findet mit dir heraus, was die App einzigartig macht, und schreibt `docs/produkt.md` | „Lass uns den Produkt-Kern machen“ |
 | **Design-Richtung** | Vorbilder → Musterseite zum Abnicken → `docs/design.md` | „Wir brauchen eine Design-Richtung“ |
 | **Erlebnis-Check** | Prüft die App am Handy in allen Facetten, nennt die drei wichtigsten Verbesserungen | „Mach einen Erlebnis-Check“ |
@@ -80,7 +80,7 @@ Die meisten bauen in die Breite (viele Funktionen, alle mittelmäßig). Herausra
 ## Sparsam mit dem Limit
 
 - **Ein Thema, eine Sitzung.** Neue Sitzung, wenn ein Thema fertig ist. Lange Sitzungen werden mit jeder Nachricht teurer.
-- **Wenige Helfer.** Jeder Helfer ist ein zusätzlicher Kopf. Zwei gezielte sind besser als sechs parallele.
+- **Helfer gezielt.** Parallel, wenn es Zeit spart – nie dieselbe Sache doppelt.
 - **Kurze CLAUDE.md.** Sie wird bei jeder Nachricht mitgelesen.
 - **Wenige Plugins.** Jedes installierte Plugin steht in jeder Sitzung im Kopf.
-- **Tests gezielt.** Die volle Testrunde einmal vor dem Veröffentlichen, nicht bei jeder Kleinigkeit.
+- **Tests nach Größe.** Kleine Änderung, kleiner Test; die volle Runde einmal vor dem Veröffentlichen.

@@ -19,16 +19,17 @@
 - Nichts als erledigt melden ohne Beleg (Testergebnis, Screenshot, Commit). Was nicht ging, sagst du offen.
 - Ist etwas unklar, frag einmal kurz nach, statt zu raten.
 
-## Sparsam mit meinem Wochenlimit
-Jede Nachricht liest den ganzen Verlauf neu, jeder Helfer (Subagent) ist ein zusätzlicher Kopf. Deshalb:
-- Ein Thema je Sitzung. Ist ein Thema fertig, schlag mir eine neue Sitzung vor.
-- Helfer nur, wenn sie wirklich parallel arbeiten oder ein unabhängiger Blick nötig ist. Höchstens zwei gleichzeitig; mehr nur nach meinem OK.
-- Ein Plan je Vorhaben, keine mehrfachen Entwürfe derselben Sache.
-- Prüfungen: eine Runde, nach den Korrekturen eine gezielte Nachprüfung der betroffenen Stellen. Bleibt dann etwas offen, entscheide ich.
-- Tests: während der Arbeit nur die betroffenen, die volle Runde einmal vor dem Ausliefern. Nichts wiederholen, was sich nicht geändert hat.
-- Roter Test: höchstens zwei Behebungsversuche je Ursache, dann Befund und Ursache melden.
-- Große Dateien gezielt lesen (suchen, Ausschnitte), nicht komplett.
-- `CLAUDE.md` bleibt kurz (Ziel: unter 150 Zeilen). Verlauf, Versionen und alte Entscheidungen gehören nach `docs/verlauf.md`.
+## Effizient bei gutem Tempo
+Ziel: zügig vorankommen, ohne Arbeit doppelt zu machen. Nicht bremsen, sondern Leerlauf vermeiden.
+- **Tests nach Größe der Änderung:** Bei kleinen Änderungen (Text, Farbe, Abstand, eine einzelne Funktion) nur die direkt betroffenen Tests oder ein Screenshot. Die volle Testrunde einmal vor dem Ausliefern oder Zusammenführen, nicht nach jeder Änderung.
+- **Prüfer nach Risiko:** Kleinigkeiten ohne Prüfer. Prüfer bei Daten, Sicherheit, großen Umbauten und vor Veröffentlichungen: eine Runde, danach eine gezielte Nachprüfung. Bleibt dann etwas offen, entscheide ich.
+- **Helfer, wenn sie Zeit sparen:** Unabhängige Teilaufgaben dürfen parallel laufen. Keine Helfer für Dinge, die in wenigen Schritten selbst erledigt sind, und nie dieselbe Sache von mehreren Helfern doppelt erarbeiten lassen.
+- **Bündeln:** Mehrere kleine Wünsche in einem Durchgang umsetzen, mit einem Build und einem Testlauf.
+- **Ein Plan je Vorhaben**, keine mehrfachen Entwürfe derselben Sache.
+- **Nichts wiederholen**, was sich seit dem letzten Lauf nicht geändert hat.
+- **Roter Test:** höchstens zwei Behebungsversuche je Ursache, dann Befund und Ursache melden.
+- **Ein Thema je Sitzung.** Lange Verläufe machen jede Antwort langsamer und teurer. Ist ein Thema fertig, schlag mir eine neue Sitzung vor.
+- Große Dateien gezielt lesen. `CLAUDE.md` bleibt kurz (Ziel: unter 150 Zeilen); Verlauf und alte Entscheidungen gehören nach `docs/verlauf.md`.
 
 ## Sicher arbeiten
 - Keine Geheimnisse und keine echten persönlichen Daten ins Repository. Testdaten sind erfunden.
