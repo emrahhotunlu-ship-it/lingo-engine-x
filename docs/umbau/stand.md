@@ -707,3 +707,5 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 **30.10.2026 – Vergleichsseite für Emrah veröffentlicht** (privat, nicht im Repository, weil die Bilder den Anbietern gehören): https://claude.ai/artifact/786X8ctWrDoi5U7vc469Fy (Version `1793363737-1662`). Inhalt: Emrahs Kennzahlen, die fünf stärksten Methoden mit 16 Bildern (Anki, Lingvist, Clozemaster, Readlang, Quizlet, Vocabulary.com, Busuu, Memrise, RemNote), was wir nicht übernehmen, die 5 Fragen mit Empfehlung. Korrektur: Tageslast 0–98 (nicht 4–98). Beschreibung Anki-Bild 3 in `bildquellen.md` berichtigt. Neue Regel „Lerntag-Durchlauf vor jedem Test-Link“ in `unterchats.md`. Weiter: Q0 und V0 nach dem Limit-Reset (Erinnerung `trig_0116QapYmnSqPPeFvZLeiWn2`, Sonntag 00:05), vorher Emrahs Antworten auf die 5 Fragen.
 
 **30.10.2026 – Emrah: „alle 5 Fragen ja wie Empfehlung“.** Eingetragen in `docs/entscheidungen.md` (30.10.2026 – Vokabeln: Emrahs Antworten). V0 baut darauf auf.
+
+**30.10.2026 – Reihenfolge geändert (Emrah):** Vokabel-App zuerst. Nach dem Limit-Reset: V0 → Plan an Emrah → nach OK V1–V5 → erst dann Q0, D1 ff. (`docs/entscheidungen.md`, 30.10.2026 – Reihenfolge).
