@@ -28,8 +28,18 @@ Ziel: zügig vorankommen, ohne Arbeit doppelt zu machen. Nicht bremsen, sondern 
 - **Ein Plan je Vorhaben**, keine mehrfachen Entwürfe derselben Sache.
 - **Nichts wiederholen**, was sich seit dem letzten Lauf nicht geändert hat.
 - **Roter Test:** höchstens zwei Behebungsversuche je Ursache, dann Befund und Ursache melden.
-- **Ein Thema je Sitzung.** Lange Verläufe machen jede Antwort langsamer und teurer. Ist ein Thema fertig, schlag mir eine neue Sitzung vor.
+- **Kurze Chats.** Lange Verläufe machen jede Antwort langsamer und teurer (siehe „Chats und Arbeitspakete“).
 - Große Dateien gezielt lesen. `CLAUDE.md` bleibt kurz (Ziel: unter 150 Zeilen); Verlauf und alte Entscheidungen gehören nach `docs/verlauf.md`.
+
+## Chats und Arbeitspakete
+Das Wissen steckt in den Dateien des Projekts (`CLAUDE.md`, Entscheidungen, `docs/status.md`), nicht im Chatverlauf. Deshalb sind Chats kurz und haben eine feste Rolle:
+- **Hauptchat je App (Kommandozentrale):** plant, zerlegt Vorhaben in Arbeitspakete, startet die Unterchats, prüft deren Ergebnisse und pflegt `docs/status.md`. Er baut selbst keinen Code. Wird er lang, schreibt er den Stand in `docs/status.md`, und ich starte einen neuen Hauptchat.
+- **Unterchat je Arbeitspaket:** bekommt einen klaren Auftrag (Ziel, betroffene Bereiche, woran man „fertig“ erkennt) und den Titel „<App> · <Paket>“. Er liest zuerst `CLAUDE.md` und `docs/status.md`, arbeitet das Paket ab, sichert (Commit und Push), trägt das Ergebnis in `docs/status.md` ein und endet. Danach wird er nicht für Neues weiterbenutzt.
+- **Unterchats starten:** Wo das Werkzeug dafür da ist, startet der Hauptchat die Unterchats selbst. Sonst gibt er mir den fertigen Auftragstext zum Einfügen und sagt mir, wo ich klicke.
+- **Parallel oder nacheinander:** Unabhängige Pakete laufen parallel, abhängige nacheinander. Zwei Pakete ändern nie gleichzeitig dieselben Dateien.
+- **Nachsehen statt nachfragen:** Der Hauptchat prüft den Stand der Unterchats selbst (Status, Verlauf, `docs/status.md`), wenn ich ihn frage oder ein Paket fertig sein sollte. Er wartet nicht stundenlang im Leerlauf; ist nichts zu tun, hört er auf.
+- **Neuer Chat, wenn:** ein neues Paket beginnt, ein Paket fertig und gesichert ist, oder ein Chat älter als etwa einen Tag ist bzw. merklich langsam wird. Rückfragen und Korrekturen zum laufenden Paket bleiben im selben Chat.
+- Beginne ich ein neues Thema in einem alten Chat, schlag mir einmal einen neuen Chat vor.
 
 ## Sicher arbeiten
 - Keine Geheimnisse und keine echten persönlichen Daten ins Repository. Testdaten sind erfunden.

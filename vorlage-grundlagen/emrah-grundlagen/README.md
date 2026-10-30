@@ -6,7 +6,7 @@ Ein Paket, das du **einmal** in deinem claude.ai-Konto einrichtest. Danach kennt
 
 | Teil | Was es tut | So rufst du es auf |
 |---|---|---|
-| **Arbeitsweise** | Wird bei jedem Sitzungsstart automatisch geladen: wer du bist, dein Anspruch, ehrliche Beratung, effizient bei gutem Tempo, kurze Berichte | automatisch |
+| **Arbeitsweise** | Wird bei jedem Sitzungsstart automatisch geladen: wer du bist, dein Anspruch, ehrliche Beratung, effizient bei gutem Tempo, Hauptchat und Unterchats, kurze Berichte | automatisch |
 | **Produkt-Kern** | Findet mit dir heraus, was die App einzigartig macht, und schreibt `docs/produkt.md` | „Lass uns den Produkt-Kern machen“ |
 | **Design-Richtung** | Vorbilder → Musterseite zum Abnicken → `docs/design.md` | „Wir brauchen eine Design-Richtung“ |
 | **Erlebnis-Check** | Prüft die App am Handy in allen Facetten, nennt die drei wichtigsten Verbesserungen | „Mach einen Erlebnis-Check“ |
