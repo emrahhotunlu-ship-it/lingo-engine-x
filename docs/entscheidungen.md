@@ -626,3 +626,12 @@ Festlegung (Überchat):
 - **Reihenfolge:** Q0 (Aufgaben-Qualität) → **V0** (Diagnose, 60-Tage-Ausgangsmessung, Marktvergleich, Plan) → Emrah bestätigt den Plan → V1–V5 haben Vorrang vor den restlichen Optik-Paketen. Während Emrah den Plan liest, läuft D1. D4 (Wörter-Bildschirm) und F1 gehen in V1–V5 auf.
 - **Übertragung auf die Plattform:** KI über `claude.use("sample")` statt Cloudflare Worker, keine PWA, Verlauf in `docs/umbau/stand.md` statt `docs/verlauf.md`. Bildschirmfotos fremder Apps kommen nicht ins öffentliche Repository; Emrah sieht den Vergleich als private Seite.
 - **Ergänzung 30.10.2026 (Emrah):** „Ja, kannst du [meinen Lernverlauf lesen] … aber du sollst bitte andere Anbieter richtig tiefgründig screenen und eine Synthese der besten Methoden verwirklichen und umsetzen.“ Deshalb vor V0 ein eigenes Paket **V0a Tiefen-Screening** (`docs/umbau/auftraege/v0a.md`): mindestens 14 Anbieter, je ein belegter Steckbrief (Planung, Abfrage-Leiter, Bewertung, Rückmeldung, Kontext, aktive Nutzung, Transparenz, Bildschirmablauf, Nutzerstimmen, Wirkungsbelege), Methoden-Tabelle mit Urteil, Umsetzungsliste mit Prüfung je Methode. Emrahs echter Lernverlauf wird nur lesend ausgewertet; ins Repository kommen nur Kennzahlen. Reihenfolge: Q0 → V0a → V0 → Emrahs OK → V1–V5.
+
+## 30.10.2026 – Vokabeln: Emrahs Antworten auf die 5 Fragen aus V0a
+Emrah: „alle 5 fragen ja wie empfehlung“ (Fragen und Empfehlungen in `docs/umbau/vokabeln/synthese.md` und auf seiner privaten Vergleichsseite). Festgelegt:
+1. **W1 „benutzt“:** Das Wort selbst in die Lücke tippen zählt ab dem ersten Tag als aktives Benutzen. Die 3-Tage-Schwelle aus Emrahs Auftrag gilt erst für die schweren Formen ab Stufe 4.
+2. **W4 „Das wusste ich eigentlich“:** Der Knopf ändert die Wertung nicht. Das Wort kommt kurz darauf in einem neuen Satz noch einmal; nur diese Antwort zählt. Damit bleibt es bei „keine Selbstbewertung außer Anki-Modus“.
+3. **W2 Stufenanzeige:** 7 Stufen intern, sichtbar sind 3 Gruppen („erkennst du“, „auf dem Weg“, „bildest du selbst“) und ein Balken mit 7 Teilen.
+4. **Stufe 7 „gefestigt“:** 2 eigene, geprüfte Sätze; bei Kernwörtern muss einer davon gesprochen sein (Diktat).
+5. **Neue Wörter:** mindestens 2 an jedem Lerntag, auch bei viel Fälligem; darüber hinaus nach Lernzeit bis zur Einstellung (0, 2, 5, 10; Standard 5). Nur bei Einstellung 0 keine neuen Wörter.
+V0 übernimmt diese Antworten in den Plan; keine erneute Frage dazu.
