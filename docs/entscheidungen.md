@@ -638,3 +638,9 @@ V0 übernimmt diese Antworten in den Plan; keine erneute Frage dazu.
 
 ## 30.10.2026 – Reihenfolge: Vokabel-App zuerst, Q0 danach (ersetzt Q0 → V0)
 Emrah: „Was heißt hier, dass du erst einmal die Fehler korrigierst … das ist nicht mein Hauptziel, sondern eine komplette neue Logik / Bereich / App in der Webapp für Vokabeln.“ Festlegung: Nach dem Limit-Reset startet **V0** sofort, danach ohne Umweg **V1–V5** (neues Vokabel-Modul). D1 läuft nicht parallel zum Plan-Lesen. **Q0** (Aufgaben-Qualität) und die Optik-Pakete D1 ff. folgen erst danach. Hinweis: Die Q0-Fehler (`pc-rc-k1`, `art-snd-k2`) liegen in Grammatik-/C1-Aufgaben, nicht im Wörter-Bereich; sie bleiben deshalb als Paket erhalten, aber hinter der Vokabel-App.
+
+## 30.10.2026 – Vorschau als Untergrenze, alle Funktionen bleiben und wachsen
+Emrah: „Halte dich auch 1:1 [an das neue Design] … oder mach es sogar noch deutlich besser … nicht nur Design, sondern auch die UI und die UX und die Features! Es sollen alle Features übernommen werden und sogar ausgebaut werden und neue sinnvolle Features mit eingebaut werden, ab dem Limit-Reset.“ Festlegung (ergänzt „Vorschau 1:1“ vom 28.10.2026):
+- Die Vorschau `WBft3EEx7jYYv4QHdepuNm` v2 ist die **Untergrenze**. Verbesserungen an Aussehen, Bedienung und Abläufen sind erwünscht, bleiben im Stil der Vorschau und werden Emrah vor dem Bau als Bild gezeigt (Zwischenbilder).
+- **Keine Funktion fällt weg.** Jedes Paket führt eine Bestandsliste der Funktionen seines Bereichs (Datei:Zeile) und sagt je Funktion: übernehmen, ausbauen oder in eine neue überführen. Neue sinnvolle Funktionen kommen dazu, belegt (Synthese, Lehrer, Lernforschung).
+- Gilt ab dem Limit-Reset für jedes Paket, zuerst für die Vokabel-App (V0–V5), danach für alle anderen Bereiche. Reihenfolge bleibt: Vokabel-App zuerst.

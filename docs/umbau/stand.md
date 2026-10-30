@@ -709,3 +709,5 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 **30.10.2026 – Emrah: „alle 5 Fragen ja wie Empfehlung“.** Eingetragen in `docs/entscheidungen.md` (30.10.2026 – Vokabeln: Emrahs Antworten). V0 baut darauf auf.
 
 **30.10.2026 – Reihenfolge geändert (Emrah):** Vokabel-App zuerst. Nach dem Limit-Reset: V0 → Plan an Emrah → nach OK V1–V5 → erst dann Q0, D1 ff. (`docs/entscheidungen.md`, 30.10.2026 – Reihenfolge).
+
+**30.10.2026 – Emrah: Vorschau mindestens 1:1, gern besser; alle Funktionen übernehmen, ausbauen, neue dazu.** Eingetragen in `docs/entscheidungen.md`; `auftraege/v0.md` um Funktions-Bestandsliste und Aussehen ergänzt.
