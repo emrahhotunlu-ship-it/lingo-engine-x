@@ -12,7 +12,7 @@ Stand 30.10.2026 · Grundlage für Emrahs private Vergleichsseite (baut der Übe
 |---|---|---|---|
 | 1 | https://mintcdn.com/anki/4yLyWj6_UVW-sSDI/media/decks_screen.png | Handbuch: Deckliste mit Neu/Lernen/Fällig je Deck | 200 image/png, 30.10.2026 |
 | 2 | https://mintcdn.com/anki/4yLyWj6_UVW-sSDI/media/study_overview.png | Handbuch: Deck-Übersicht vor dem Lernen mit „Study Now“ | 200 image/png, 30.10.2026 |
-| 3 | https://us1.discourse-cdn.com/flex002/uploads/anki2/original/3X/7/3/73bbc4a5365c1a57eccc4ac44601a4ad8d869cbc.png | Forum-Screenshot eines Nutzers: Antwortseite mit Knöpfen und Intervallen (FSRS) | 200 image/png, 30.10.2026 |
+| 3 | https://us1.discourse-cdn.com/flex002/uploads/anki2/original/3X/7/3/73bbc4a5365c1a57eccc4ac44601a4ad8d869cbc.png | Forum-Screenshot eines Nutzers: Karteninfo mit Stability/Difficulty und Liste aller Antworten mit Datum (Beschreibung am 30.10.2026 nach Ansicht korrigiert) | 200 image/png, 30.10.2026 |
 | 4 | https://mintcdn.com/anki/4yLyWj6_UVW-sSDI/media/FSRS_retention.png | Handbuch: Last-Kurve, steigt steil, wenn die Ziel-Behaltensquote gegen 100 % geht | 200 image/png, 30.10.2026 |
 | 5 | https://mintcdn.com/anki/4yLyWj6_UVW-sSDI/media/Statistics.png | Handbuch: Statistik-Bildschirm (Future Due, Kalender, Kartenzahlen u. a.) | 200 image/png, 30.10.2026 |
 | 6 | https://mintcdn.com/anki/4yLyWj6_UVW-sSDI/media/card_info.png | Handbuch: Karteninfo mit Verlauf je Wiederholung | 200 image/png, 30.10.2026 |

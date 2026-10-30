@@ -20,3 +20,6 @@ Emrah: „Du bist ab jetzt der Überchat. Orchestriere die Aufgaben wie angewies
 - Pause bei etwa 95 % des Limits; „Stopp“ von Emrah → laufenden Unterchat anhalten (interrupt), Stand sichern.
 - Der Überchat prüft den Stand über den Sitzungsstatus und den gepushten Zweig, nicht über Abfragen in Schleife.
 - Aufträge liegen in `docs/umbau/auftraege/<paket>.md`, damit jeder Auftrag nachlesbar ist.
+
+## Lerntag-Durchlauf vor jedem Test-Link (Überchat, seit 30.10.2026)
+Vor jedem Test-Link spielt der Überchat einen ganzen Lerntag so durch, wie Emrah ihn erlebt: Heute öffnen, Pflicht bis zum Abschluss, Wörter-Block, eine Grammatik- und eine C1-Aufgabe, je einmal richtig, falsch, mit Tippfehler und mit Hilfe; Handy 390 px, Dunkel und Hell. Bildschirmfotos und jede Stelle, die stört oder sich widerspricht, kommen in den Bericht an Emrah. *Grund:* Emrah fragte am 30.10.2026, ob ich die Schmerzen der App überhaupt kenne; Tests allein zeigen nicht, wie sich ein Lerntag anfühlt.
