@@ -692,3 +692,12 @@ Ergebnis:
 **30.10.2026 – Emrahs Vokabel-Auftrag:** abgelegt als `docs/umbau/auftraege/vokabel-umbau-emrah.md`, Entscheidung „Vokabeln zuerst, Bereiche als eigene Module“ in `docs/entscheidungen.md`. Auftrag für den Unterchat: `docs/umbau/auftraege/v0.md` (Diagnose mit Klumpen-Ursache, 60-Tage-Ausgangsmessung mit dem echten Planer, Marktvergleich Lingvist/Clozemaster/Quizlet/Anki, Plan V1–V5 zur Bestätigung). Reihenfolge nach dem Limit-Reset: Q0 → V0 → (D1, während Emrah den Plan liest) → nach Emrahs OK V1–V5 vor D2 ff.
 
 **30.10.2026 – Emrah:** Lernverlauf darf gelesen werden (nur lesend, nur Kennzahlen ins Repository); Anbieter sollen „richtig tiefgründig“ gescreent und die besten Methoden umgesetzt werden. Neues Paket V0a (`docs/umbau/auftraege/v0a.md`) vor V0; V0 baut auf der Synthese und Emrahs echten Kennzahlen auf. Reihenfolge: Q0 → V0a → V0 → Emrahs OK → V1–V5.
+
+**30.10.2026 – Emrah: „Fange jetzt an mit dem Schritt“ (Pause für Vokabeln aufgehoben).** Unterchat **V0a** gestartet: Cloud-Sitzung `session_01JA41d7rAPdugrz4VbF3XDm`, Zweig `claude/umbau-v0a`. Echten Lernverlauf nur lesend ausgewertet: `docs/umbau/vokabeln/kennzahlen-echt.md`.
+- 33 % der Wort-Tage mehrfach, bis 6× am Tag.
+- 44 % der Wörter überfällig, die 14-Tage-Vorschau dagegen fast leer.
+- Tageslast 0–98, VK 0,52.
+- Bilden aus dem Deutschen 1 %.
+- Verlauf nur 12 Antworten je Wort.
+
+Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
