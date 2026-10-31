@@ -1,0 +1,207 @@
+/* Relaunch Teil 1c, D1 V-BAU (docs/relaunch/stufe1c-plan.md §3.1): Bausteine 1:1 aus der Vorschau `WBft3EEx7jYYv4QHdepuNm` v2.
+   Quelle der Maße: docs/relaunch/vorschau/src/style.css (Zeilenangaben je Block). Nur Tokens aus index.css, keine Farbwerte,
+   kein Weichzeichner, ein Radius (--r), eine Schattenstufe (--shadow). Präfix `lx-v-`, Komponenten in src/ui/v/.
+   Handy in px wie die Vorschau; ab 600 px gelten die Laptop-Maße der Vorschau (`.desk …`, dort in em bei 16 px Grundschrift,
+   hier in rem, damit sie mit der Grundschrift ab 1920 px mitwachsen wie in der Vorschau).
+   Zielgröße: jedes bedienbare Element ≥ 44 px (sichtbar kleinere Chips bekommen eine unsichtbare Trefferfläche).
+   Bewegung: jede Animation hat unten einen Rückfall für `prefers-reduced-motion` und für Effekte „Aus“ (`[data-fx='off']`). */
+
+/* Zeilenhöhe der Vorschau (body 1.45, style.css:107; die App erbt sonst 1.5 aus Tailwind). Gilt in jedem Baustein. */
+.lx-v-phead, .lx-v-btn, .lx-v-card, .lx-v-row, .lx-v-chip, .lx-v-tile, .lx-v-ringwrap, .lx-v-week, .lx-v-statelist, .lx-v-sheet, .lx-v-reload { line-height: 1.45; }
+
+/* Schriftschnitt für große Zahlen und Titel (style.css:119–120). */
+.lx-v-disp { font-variation-settings: 'opsz' 32; letter-spacing: -0.022em; }
+.lx-v-num { font-variant-numeric: tabular-nums; }
+
+/* Kanalpunkt (style.css:124–125). */
+.lx-v-dot { display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--fg-3); }
+.lx-v-dot[data-ch='w'] { background: var(--ch-words); }
+.lx-v-dot[data-ch='g'] { background: var(--ch-gram); }
+.lx-v-dot[data-ch='l'] { background: var(--ch-listen); }
+.lx-v-dot[data-ch='s'] { background: var(--ch-speak); }
+
+/* Seitenkopf (style.css:148–151). */
+.lx-v-phead { display: flex; align-items: center; justify-content: space-between; min-height: 60px; padding-top: 8px; }
+.lx-v-phead h1 { margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; color: var(--fg); }
+.lx-v-phead-right { display: flex; align-items: center; gap: 4px; }
+
+/* Symbolknopf (style.css:151–152). */
+.lx-v-iconbtn { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--r); color: var(--fg-2); }
+.lx-v-phead .lx-v-iconbtn { margin-right: -10px; }
+.lx-v-iconbtn:active { background: var(--surface-2); }
+.lx-v-iconbtn svg { width: 24px; height: 24px; }
+
+/* Knöpfe (style.css:161–170). */
+.lx-v-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 0 20px; border-radius: var(--r);
+  font-size: 17px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.2;
+  transition: transform 140ms var(--ease-soft), background-color 140ms, opacity 140ms;
+}
+.lx-v-btn:active { transform: scale(0.98); }
+.lx-v-btn[data-variant='pri'] { background: var(--act); color: var(--act-fg); }
+.lx-v-btn[data-variant='sec'] { background: var(--surface-2); color: var(--fg); }
+.lx-v-btn[data-variant='ghost'] { color: var(--fg-2); min-height: 44px; font-size: 15px; font-weight: 550; }
+.lx-v-btn[data-full] { width: 100%; }
+.lx-v-btn[data-size='sm'] { min-height: 44px; font-size: 15px; padding: 0 14px; }
+.lx-v-btn:disabled, .lx-v-btn[aria-disabled='true'] { opacity: 0.4; pointer-events: none; }
+.lx-v-btn svg { width: 18px; height: 18px; }
+
+/* Karte (style.css:312) und Tageskarte (style.css:173). */
+.lx-v-card { background: var(--surface); border-radius: var(--r); padding: 18px; color: var(--fg); }
+.lx-v-card[data-raised] { box-shadow: var(--shadow); }
+
+/* Zeile (style.css:194–200). */
+.lx-v-row {
+  display: flex; align-items: center; gap: 14px; width: 100%; min-height: 60px; padding: 8px 0;
+  border-bottom: 1px solid var(--line); text-align: left; color: var(--fg);
+}
+.lx-v-row:last-child { border-bottom: 0; }
+.lx-v-row-ic { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); color: var(--fg-2); }
+.lx-v-row-ic svg { width: 18px; height: 18px; }
+.lx-v-row-t { display: flex; flex: 1; flex-direction: column; gap: 1px; min-width: 0; }
+.lx-v-row-t b { font-size: 16px; font-weight: 600; }
+.lx-v-row-t span { font-size: 13px; color: var(--fg-2); }
+.lx-v-row-chev { color: var(--fg-3); }
+.lx-v-row-chev svg { width: 18px; height: 18px; }
+
+/* Chip (style.css:336). Bedienbar: sichtbar 34 px wie die Filterchips der Vorschau (screens.js:856), Trefferfläche 44 px. */
+.lx-v-chip {
+  position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px;
+  border-radius: 8px; background: var(--surface-2); color: var(--fg-2); font-size: 13px; font-weight: 600;
+}
+.lx-v-chip svg { width: 14px; height: 14px; }
+button.lx-v-chip { flex: none; min-height: 34px; }
+button.lx-v-chip::before { content: ''; position: absolute; inset: -5px 0; }
+.lx-v-chip[aria-pressed='true'] { background: var(--act-soft); color: var(--act-text); }
+/* Vorschau: Zahl mit opacity .7 (screens.js:856); das fällt unter 4,5:1 (axe). Abweichung: gleiche Farbe, leichteres Gewicht. */
+.lx-v-chip-n { font-weight: 500; }
+
+/* Kacheln (style.css:403–414). */
+.lx-v-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lx-v-tile {
+  display: flex; flex-direction: column; min-width: 0; min-height: 176px; padding: 16px;
+  border-radius: var(--r); background: var(--surface); color: var(--fg); text-align: left;
+}
+.lx-v-tile-h { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; line-height: 18px; color: var(--fg-2); }
+.lx-v-tile-tr { margin-left: auto; color: var(--fg-2); }
+.lx-v-tile-big { display: block; margin-top: 10px; font-size: 32px; line-height: 38px; font-weight: 600; }
+.lx-v-tile-big small { margin-left: 3px; font-size: 17px; font-weight: 500; letter-spacing: 0; color: var(--fg-2); }
+.lx-v-tile-way { display: block; margin-top: 4px; white-space: nowrap; font-size: 17px; line-height: 22px; font-weight: 500; color: var(--fg-2); }
+.lx-v-tile-bar { position: relative; display: block; height: 8px; margin-top: 12px; overflow: hidden; border-radius: 4px; box-shadow: 0 0 0 1px var(--line-2) inset; }
+.lx-v-tile-bar i { position: absolute; top: 0; bottom: 0; background: var(--fg); }
+.lx-v-tile-bar i[data-kind='half'] { opacity: 0.4; }
+.lx-v-tile-one { display: block; margin-top: auto; padding-top: 10px; font-size: 13px; line-height: 18px; color: var(--fg-2); }
+
+/* Hinweis (style.css:380–381). Zustand nie nur über Farbe: immer mit Symbol und Text. */
+.lx-v-notice {
+  display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: var(--r);
+  background: var(--surface-2); color: var(--fg); font-size: 15px; line-height: 21px;
+}
+.lx-v-notice > svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--fg-2); }
+.lx-v-notice-body { display: flex; flex: 1; flex-direction: column; gap: 10px; min-width: 0; }
+.lx-v-notice-body b { font-weight: 600; }
+
+/* Ring mit Segmenten (style.css:174–182, Zeichnen style.css:539–540). */
+.lx-v-ringwrap { position: relative; display: flex; justify-content: center; }
+.lx-v-ring { display: block; width: 188px; height: 188px; border-radius: 50%; }
+button.lx-v-ring { cursor: pointer; }
+.lx-v-ring svg { display: block; width: 100%; height: 100%; }
+.lx-v-ring-seg { fill: none; stroke-width: 11; stroke-linecap: round; }
+.lx-v-ring-trk { stroke: var(--surface-3); }
+.lx-v-ring-on { stroke: var(--act); }
+.lx-v-ring[data-draw] .lx-v-ring-on:not([data-part]) { stroke-dasharray: 100 100; animation: lx-v-ring-draw 700ms var(--ease-soft) both; animation-delay: var(--d, 0ms); }
+@keyframes lx-v-ring-draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+.lx-v-ringc { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.lx-v-ringc b { font-size: 46px; line-height: 50px; font-weight: 650; }
+.lx-v-ringc span { font-size: 13px; font-weight: 500; color: var(--fg-2); }
+
+/* Wochenstreifen (style.css:186–193). */
+.lx-v-week { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 18px 2px 4px; list-style: none; margin: 0; }
+.lx-v-week-days { display: contents; }
+.lx-v-wd { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 32px; font-size: 11px; font-weight: 550; color: var(--fg-3); }
+.lx-v-wd i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--surface-2); color: var(--fg-2); }
+.lx-v-wd i svg { width: 14px; height: 14px; }
+.lx-v-wd[data-done] i { background: var(--act-soft); color: var(--act-text); }
+.lx-v-wd[data-today] i { background: transparent; box-shadow: 0 0 0 2px var(--act) inset; }
+.lx-v-wd[data-today][data-done] i { box-shadow: 0 0 0 2px var(--act) inset; }
+.lx-v-wd[data-rest] i { background: transparent; box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+.lx-v-streak { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: 4px; font-size: 11px; font-weight: 550; color: var(--fg-3); }
+.lx-v-streak b { font-size: 20px; line-height: 22px; font-weight: 650; color: var(--fg); }
+
+/* Zustandsliste der Blöcke (style.css:201–210): ohne Knöpfe, Zustand über Zeichen + Text. */
+.lx-v-statelist { display: flex; flex-direction: column; gap: 0; margin: -4px 0; padding: 0; list-style: none; }
+.lx-v-st { display: flex; align-items: center; gap: 12px; min-height: 44px; border-bottom: 1px solid var(--line); font-size: 16px; color: var(--fg); }
+.lx-v-st:last-child { border-bottom: 0; }
+.lx-v-st-nm { min-width: 0; }
+.lx-v-st-sm { margin-left: auto; font-size: 13px; color: var(--fg-2); }
+.lx-v-st-mk { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%; }
+.lx-v-st-mk svg { width: 14px; height: 14px; }
+.lx-v-st[data-state='done'] .lx-v-st-mk { background: var(--act-soft); color: var(--act-text); }
+.lx-v-st[data-state='run'] .lx-v-st-mk { box-shadow: 0 0 0 2px var(--act) inset; }
+.lx-v-st[data-state='run'] .lx-v-st-mk::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--act); }
+.lx-v-st[data-state='open'] .lx-v-st-mk { box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+.lx-v-st[data-state='done'] .lx-v-st-nm { color: var(--fg-2); }
+.lx-v-springopen { animation: lx-v-spring-open 420ms var(--ease-spring) both; transform-origin: top center; }
+@keyframes lx-v-spring-open { from { opacity: 0.4; transform: scale(0.94) translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* Blatt (style.css:299–304). Unten angedockt, Hintergrund abgedunkelt, kein Weichzeichner. */
+.lx-v-scrim { position: fixed; inset: 0; z-index: 60; background: var(--scrim); animation: lx-v-fade 260ms ease both; }
+.lx-v-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 61; display: flex; flex-direction: column; max-height: 85%;
+  border-radius: 22px 22px 0 0; background: var(--surface); color: var(--fg);
+  box-shadow: var(--shadow);
+  padding-bottom: env(safe-area-inset-bottom);
+  animation: lx-v-sheet-up 500ms var(--ease-spring) both;
+}
+.lx-v-sheet:focus { outline: none; }
+.lx-v-grab { flex: none; width: 40px; height: 5px; margin: 8px auto 4px; border-radius: 3px; background: var(--surface-3); }
+.lx-v-sheet h2 { margin: 6px 0 0; font-size: 22px; line-height: 28px; font-weight: 650; }
+.lx-v-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lx-v-sheet-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding-top: 8px; padding-bottom: 12px; }
+.lx-v-sheet-x { position: absolute; top: 8px; right: 8px; }
+.lx-v-sheet-x:not(:focus-visible) { clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; }
+.lx-v-sheet-foot { flex: none; padding-top: 10px; padding-bottom: 14px; border-top: 1px solid var(--line); }
+.lx-v-gx { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+@keyframes lx-v-sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes lx-v-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Skelett (style.css:213–214) und „Erneut laden“. */
+.lx-v-sk {
+  display: block; border-radius: 10px;
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%; animation: lx-v-shimmer 1.2s linear infinite;
+}
+.lx-v-sk[data-round] { border-radius: 50%; }
+@keyframes lx-v-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+.lx-v-reload { display: flex; flex-direction: column; gap: 12px; }
+
+/* Laptop-Maße der Vorschau (style.css:502–518, `.desk …`; Ring L1 desk.js:87 13em). */
+@media (min-width: 600px) {
+  .lx-v-card { padding: 1.25rem; }
+  .lx-v-btn,
+  .lx-v-btn[data-variant='ghost'],
+  .lx-v-btn[data-size='sm'] { font-size: 1rem; min-height: 3.1rem; }
+  .lx-v-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+  .lx-v-tile { padding: 1.25rem; min-height: 13rem; }
+  .lx-v-tile-h { font-size: 0.95rem; }
+  .lx-v-tile-big { font-size: 2.5rem; line-height: 1.15; }
+  .lx-v-tile-way { font-size: 1.25rem; line-height: 1.3; }
+  .lx-v-tile-one { font-size: 0.95rem; }
+  .lx-v-tile-bar { height: 0.55rem; }
+  .lx-v-ring { width: 13rem; height: 13rem; }
+  /* Am Laptop ist das Blatt ein Paneel mit begrenzter Breite (kein Vollbild über die ganze Bühne). */
+  .lx-v-sheet { left: 50%; right: auto; width: min(36rem, 100%); transform: translateX(-50%); animation-name: lx-v-sheet-up-desk; }
+}
+@keyframes lx-v-sheet-up-desk { from { transform: translate(-50%, 100%); } to { transform: translateX(-50%); } }
+
+/* Bewegung aus: wie die Vorschau (style.css:445–452) nur Einblenden, Skelett steht still. */
+@media (prefers-reduced-motion: reduce) {
+  .lx-v-btn, .lx-v-ring-on, .lx-v-springopen, .lx-v-scrim, .lx-v-sheet { animation-name: lx-v-fade !important; animation-duration: 120ms !important; animation-delay: 0ms !important; transition-property: opacity !important; transition-duration: 120ms !important; }
+  .lx-v-ring[data-draw] .lx-v-ring-on:not([data-part]) { stroke-dasharray: none; }
+  .lx-v-btn:active { transform: none; }
+  .lx-v-sk { animation: none; }
+}
+[data-fx='off'] .lx-v-btn, [data-fx='off'] .lx-v-ring-on, [data-fx='off'] .lx-v-springopen, [data-fx='off'] .lx-v-scrim, [data-fx='off'] .lx-v-sheet { animation-name: lx-v-fade !important; animation-duration: 120ms !important; animation-delay: 0ms !important; transition-property: opacity !important; transition-duration: 120ms !important; }
+[data-fx='off'] .lx-v-ring[data-draw] .lx-v-ring-on:not([data-part]) { stroke-dasharray: none; }
+[data-fx='off'] .lx-v-sk { animation: none; }

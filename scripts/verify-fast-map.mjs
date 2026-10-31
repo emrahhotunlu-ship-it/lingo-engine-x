@@ -179,6 +179,11 @@ export const RULES = [
   { prefix: 'src/i18n/parts/diktat', specs: ['diktat.spec.ts'] },
   { prefix: 'src/features/vocab/TrainerScreen', specs: ['diktat.spec.ts'] },
   { prefix: 'tests/e2e/diktat', specs: ['diktat.spec.ts'] },
+  // Relaunch Teil 1c, D1 V-BAU: Design-Bausteine (src/ui/v, v.css) und Vergleichsgerüst gegen die Vorschau.
+  { prefix: 'src/ui/v/', specs: ['vorschau.spec.ts'] },
+  { prefix: 'src/styles/parts/v.css', specs: ['vorschau.spec.ts'] },
+  { prefix: 'src/i18n/parts/v.', specs: ['vorschau.spec.ts'] },
+  { prefix: 'tests/e2e/vorschau', specs: ['vorschau.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */
