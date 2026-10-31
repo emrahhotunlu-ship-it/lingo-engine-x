@@ -97,7 +97,7 @@ export function keepEdits(xs: readonly unknown[], text: string, patIds: Readonly
     if (!span) continue;
     const kind = editKind(x.kind) as EditKind;
     // Q0: eine Inhaltsänderung (andere Aussage, Empfehlung) ist nie ein Fehler, sondern eine Verbesserung (nie ein Fehlersatz, zählt nicht für K7).
-    const sev = kind === 'register' || isContentChange({ wrong: from, right: to, why }) ? 'upgrade' : editSev(x.sev, opts.sevDefault ?? 'upgrade');
+    const sev = kind === 'register' || isContentChange({ wrong: from, right: to, why, kind }) ? 'upgrade' : editSev(x.sev, opts.sevDefault ?? 'upgrade');
     const pat = typeof x.pat === 'string' && ids.has(x.pat.trim()) ? x.pat.trim() : null;
     taken.push(span);
     found.push({ e: { from, to: clip(to, EDIT_FROM_MAX), kind, sev, pat, why }, at: span[0] });

@@ -45,8 +45,7 @@ const wordsOf = (s: string): string[] =>
     .filter(Boolean);
 
 /** Begründungen, die eine Empfehlung oder Inhaltsänderung ausdrücken, keinen Fehler („klingt natürlicher“, „gemeint ist wohl“, „clearer“). */
-const SUGGESTION_WHY =
-  /\b(?:natürlicher|klarer|eleganter|idiomatischer|präziser|flüssiger|inhaltlich|more natural|clearer|more precise|more idiomatic|smoother|(?:you )?probably mean)\b/i;
+const SUGGESTION_WHY = /\b(?:natürlicher|idiomatischer|eleganter|more natural|more idiomatic|(?:you )?probably mean)\b/i;
 
 /**
  * Inhalts- statt Fehlerkorrektur (Paket Q0, Emrahs Foto 31.10.2026: „We have to cope with each other …“ → „… with the challenges …“): Ein grammatisch
@@ -55,10 +54,12 @@ const SUGGESTION_WHY =
  * nie Fehlersätze; in der Schreibkorrektur zählen sie als Verbesserung („So klingt es natürlicher“). Die Begründungs-Regel gilt überall
  * (`repairsFromText`), die Wortgruppen-Regel nur in der Schreibkorrektur (`keepEdits`), wo Emrahs Fall entstand.
  */
-export function isContentChange(f: { wrong: string; right: string; why?: string | null }, opts: { phrase?: boolean } = {}): boolean {
+export function isContentChange(f: { wrong: string; right: string; why?: string | null; kind?: string | null }, opts: { phrase?: boolean } = {}): boolean {
   if (f.why && SUGGESTION_WHY.test(f.why)) return true;
   // Die Wortgruppen-Regel gilt nur für die Schreibkorrektur (`keepEdits`, `phrase: true`); das Rollenspiel liefert eigene Kategorien.
   if (opts.phrase === false) return false;
+  // Nur bei Wortwahl/Wendungen: ein Grammatikfehler („has went“ → „had gone“) bleibt immer ein Fehler (Prüfung learning-scientist Q0).
+  if (f.kind !== undefined && f.kind !== null && f.kind !== 'word' && f.kind !== 'collocation') return false;
   const w = wordsOf(f.wrong);
   const r = wordsOf(f.right);
   if (w.length < 2 || r.length < 2) return false;

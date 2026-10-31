@@ -146,5 +146,5 @@ export const kwtRange = (item: Kwt): [number, number] => item.words ?? [3, 6];
 export function kwtLayout(item: Kwt, inp: 'touch' | 'desk', p: number): { mode: KwtMode; task: [number, number]; counters: Array<[number, number]>; parts: boolean } {
   const mode = kwtModeFor(item, inp, p);
   const range = kwtRange(item);
-  return { mode, task: range, counters: [range], parts: !kwtShort(item) };
+  return { mode, task: range, counters: [range], parts: !kwtShort(item) && mode !== 'desk' };
 }

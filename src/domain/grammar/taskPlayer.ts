@@ -357,7 +357,7 @@ export function learnerSheet(x: { v2?: V2Task; c1?: C1Item; seed?: GrammarTask }
       const v = legacyView(task, given, opts);
       const m = grammarExplanation({ task, verdict: v.verdict === 'correct' ? 'ok' : v.verdict === 'near' ? 'near' : 'wrong', given, variant: v.title === 'alsoRight', lang, learning: false });
       const yours = m.lines.find((l) => l.k === 'yours');
-      const extra = [v.title === 'alsoRight' ? (lang === 'de' ? `Deine Form passt. Musterlösung: ${task.answer}` : `Your version works. Model answer: ${task.answer}`) : null, v.caseFixed && caseKey ? (lang === 'de' ? `${caseKey} schreibt man groß (Abkürzung)` : `Write ${caseKey} in capital letters (abbreviation)`) : null].filter(Boolean).join(' · ') || null;
+      const extra = [v.title === 'alsoRight' ? (lang === 'de' ? `Deine Form passt. Musterlösung: ${task.answer}` : `Your version works. Model answer: ${task.answer}`) : null, v.caseFixed && caseKey ? (lang === 'de' ? `${caseKey} schreibt man groß (Abkürzung)` : `${caseKey} is written in capitals (abbreviation)`) : null].filter(Boolean).join(' · ') || null;
       line(given, verdictWord(v.verdict, v.title), extra, v.why, yours && yours.k === 'yours' ? yours.text : null);
     }
   }

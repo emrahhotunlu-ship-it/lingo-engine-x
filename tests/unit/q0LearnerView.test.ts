@@ -64,6 +64,10 @@ describe('Fehlersatz aus eigenem Text (Emrahs Foto 31.10.2026)', () => {
     expect(isContentChange({ wrong: 'make a photo', right: 'take a photo' })).toBe(false);
     expect(isContentChange({ wrong: 'informations', right: 'information' })).toBe(false);
     expect(isContentChange({ wrong: 'a lot', right: 'many', why: 'Klingt natürlicher.' })).toBe(true);
+    // Echte Grammatikfehler bleiben Fehler, auch ohne gemeinsames Wort.
+    expect(isContentChange({ wrong: 'has went', right: 'had gone', kind: 'grammar' })).toBe(false);
+    expect(isContentChange({ wrong: 'each other', right: 'the challenges', kind: 'word' })).toBe(true);
+    expect(isContentChange({ wrong: 'on Monday', right: 'by Monday', why: 'Die Präposition by ist hier präziser.' })).toBe(false);
     const text = 'We have to cope with each other in the project team.';
     // Schreibkorrektur: `keepEdits` stuft die Stelle zur Verbesserung herab (kein Fehler, kein Fehlersatz).
     const kept = keepEdits([{ from: 'each other', to: 'the challenges', kind: 'word', sev: 'error', why: 'Gemeint sind die Herausforderungen.' }], text, []);

@@ -25,7 +25,11 @@ async function answer(page: Page, text: string) {
   await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toBeVisible();
 }
-const shot = (page: Page, name: string, w: number, theme: Theme) => page.screenshot({ path: `test-results/q0/${name}-${w}-${theme}.png`, fullPage: false });
+const shot = async (page: Page, name: string, w: number, theme: Theme) => {
+  // Erst fotografieren, wenn die Buchstaben gelandet sind (UX-Prüfung: Fotos mitten in der Animation).
+  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== 'running' || a.effect?.getTiming().iterations === Infinity));
+  await page.screenshot({ path: `test-results/q0/${name}-${w}-${theme}.png`, fullPage: false });
+};
 
 for (const vp of [{ w: 390, h: 844, touch: true }, { w: 1440, h: 900, touch: false }]) {
   test.describe(`${vp.w} px`, () => {
@@ -65,6 +69,8 @@ for (const vp of [{ w: 390, h: 844, touch: true }, { w: 1440, h: 900, touch: fal
       await expect(page.getByTestId('verdict')).toContainText('Auch richtig');
       await expect(page.getByTestId('verdict-sub')).toContainText('Musterlösung: have been getting longer lately');
       await expect(page.getByTestId('gr-item')).not.toContainText('Richtig: have been getting');
+      // In eine einzige Lücke getippt: keine Teilpunkte, keine Teile.
+      await expect(page.getByTestId('verdict-sub')).not.toContainText('von 2');
       await shot(page, 'lately-also', vp.w, 'dark');
       expect(errors).toEqual([]);
     });
