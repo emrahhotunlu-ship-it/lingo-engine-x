@@ -819,10 +819,19 @@ h2,
     text-decoration: underline dotted var(--lx-fg-subtle);
     text-underline-offset: 0.22em;
   }
-  /* Handy: Tippziel mindestens 44 px breit (auch kurze Wörter wie „a“). */
+  /* Handy: Tippziel mindestens 44 px breit (auch kurze Wörter wie „a“). Q0: nur die unsichtbare Tippfläche ist breit (::after), das Wort selbst
+     behält seine Breite – sonst standen kurze Wörter in breiten Kästen und die Wortabstände im Satz wirkten ungleich (Emrahs Foto 31.10.2026). */
   .lx-spot-wide {
-    min-width: 2.75rem;
-    justify-content: center;
+    position: relative;
+  }
+  .lx-spot-wide::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: max(100%, 2.75rem);
+    transform: translateX(-50%);
   }
   /* Angetippte Stelle (vor dem Prüfen): neutral, nie Richtig-Grün. */
   .lx-spot[data-selected] {

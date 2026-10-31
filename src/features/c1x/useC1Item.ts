@@ -34,6 +34,7 @@ import { bookLex } from './lexWrite';
 import { registerLeaveBook } from '../../ui/exercise/leaveBook';
 import { errFixed, errRange } from '../../domain/c1x/kinds/err';
 import { shortWhy } from '../../domain/grammar/alsoRight';
+import { c1CaseFix, c1Model, c1VariantModel, kwtShort } from '../../domain/grammar/learnerView';
 import { abandonFit, fitAiState, runFit, useFitJudge, type FitResult } from '../grammar/fit';
 import { FitSlow } from '../grammar/FitSlow';
 import { JudgeFoot, type AiMsg, type TargetState } from '../grammar/JudgeFoot';
@@ -507,7 +508,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const rr = fb.response.kind === 'err' ? fb.response : null;
     const rg = item.kind === 'err' ? errRange(item) : null;
     const spotHit = !!rr && typeof rr.tap === 'number' && !!rg && rr.tap >= rg[0] && rr.tap <= rg[1];
-    const m = grammarExplanation({ task, verdict: rv, given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined && !spotHit ? { tapped: fb.meta.tapped } : {}), lang, learning });
+    // Q0: eine andere gültige Fassung als die Musterlösung → „Auch richtig“ ohne den Vorspann „Richtig: <Musterlösung>.“.
+    const variant = rv === 'ok' && !fb.override && !fb.alt && c1VariantModel(item, fb.response) !== null;
+    const m = grammarExplanation({ task, verdict: rv, given: fb.given, variant, ...(variant ? { model: c1Model(item) ?? '' } : {}), ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined && !spotHit ? { tapped: fb.meta.tapped } : {}), lang, learning });
     // „Auch richtig“: die Begründung des geübten Musters steht in der Zeile „Gesucht war …“; hier nur Muster, Gegenüberstellung und der Hinweis, dass es nicht zählt.
     return fb.alt && !fb.override
       ? { ...m, ai: !!fb.aiWhy, lines: [...m.lines.filter((l) => l.k === 'pattern'), ...(fb.aiWhy ? [{ k: 'why' as const, text: fb.aiWhy }] : []), ...m.lines.filter((l) => l.k === 'contrast'), { k: 'note' as const, text: t('grAltNoCount') }] }
@@ -531,7 +534,12 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     return findHead({ verdict: rv === 'near' ? 'wrong' : rv, errWord: item.bad?.span ?? null, tapped, found, ...(fix ? { fix } : {}), ...(item.bad?.fix[0] ? { answer: item.bad.fix[0] } : {}) }, lang, t('cxNoError'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, rv, item, lang]);
-  const sub = [pointsSub, head?.sub].filter((x): x is string => !!x).join(' · ') || null;
+  // Q0: Musterlösung bei einer Variante, Schreibung einer Abkürzung, keine Teilpunkte bei kurzen Umformungen (bis 3 Wörter).
+  const variantModel = fb && rv === 'ok' && !fb.override && !fb.alt ? c1VariantModel(item, fb.response) : null;
+  const fixedCase = fb && !fb.dontKnow && rv === 'ok' ? c1CaseFix(item, fb.response) : null;
+  const caseLine = fixedCase && item.kind === 'kwt' ? t('grCaseHint', { key: item.key }) : null;
+  const noParts = item.kind === 'kwt' && kwtShort(item);
+  const sub = [noParts ? null : pointsSub, head?.sub, variantModel ? t('grVariantSub', { model: variantModel }) : null, caseLine].filter((x): x is string => !!x).join(' · ') || null;
   const matched = fb && !fb.dontKnow ? whyFor(task, { given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}) }).rule : null;
 
   // ------------------------------------------------------------------ Hinweise
@@ -605,7 +613,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       );
     feedback = {
       verdict: rv,
-      ...(fb.alt && !fb.override ? { title: t('exAlsoRight') } : head?.title ? { title: head.title } : {}),
+      ...((fb.alt && !fb.override) || variantModel ? { title: t('exAlsoRight') } : head?.title ? { title: head.title } : {}),
       sub: fb.alt && !fb.override ? altSub : sub,
       // Fehler finden: die Muster-Fachsprache steht unter „Mehr“, das Kontrastbeispiel (z. B. -ing gegen -ed) offen (Rückmeldung 7).
       ...(item.kind === 'err' ? { fold: ['pattern'] as const, unfold: fb.alt && !fb.override ? (['contrast', 'note'] as const) : (['contrast'] as const) } : fb.alt && !fb.override ? { unfold: ['note'] as const } : {}),
@@ -613,7 +621,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       depth,
       menu,
       tutor,
-      parts: createElement(ResultParts, { score: fb.score }),
+      parts: noParts ? null : createElement(ResultParts, { score: fb.score }),
       right: item.kind === 'err' ? null : (ui.right ?? null),
       after: createElement(ResultAfter, { item, matched, day }),
       act: createElement(JudgeFoot, {
@@ -630,7 +638,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
         target: fb.target ?? null,
         onTarget: tryTarget,
       }),
-      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt && rawAction === 'next' && !fb.aiMsg,
+      auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free && !fb.alt && !variantModel && !caseLine && rawAction === 'next' && !fb.aiMsg,
     };
   }
 

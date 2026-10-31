@@ -73,11 +73,10 @@ test.describe('Handy', () => {
     await tile(page, 'SAID').click();
     await page.getByTestId('gap-input').focus();
     await page.keyboard.type('to be then now', { delay: 10 });
-    // Vier Wörter in Teil B: nicht prüfbar.
-    await expect(item.getByTestId('word-counter-b')).toHaveAttribute('data-ok', 'false');
+    // Vier Wörter in Teil B: nicht prüfbar. Q0: es gibt genau EINEN Wortzähler (den der Aufgabenzeile), keinen eigenen für Teil B.
+    await expect(item.getByTestId('word-counter-b')).toHaveCount(0);
     await expect(page.getByTestId('check')).toBeDisabled();
     for (let i = 0; i < ' then now'.length; i++) await page.keyboard.press('Backspace');
-    await expect(item.getByTestId('word-counter-b')).toHaveAttribute('data-ok', 'true');
     await expect(page.getByTestId('check')).toBeEnabled();
     await page.getByTestId('check').click();
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');

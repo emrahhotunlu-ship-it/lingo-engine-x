@@ -9,6 +9,7 @@ import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain
 import { topicP } from '../../domain/grammar/bkt';
 import { asAlsoRight, checkFind, checkGrammar, checkMeaning } from '../../domain/grammar/check';
 import { shortWhy } from '../../domain/grammar/alsoRight';
+import { caseFix, isVariant } from '../../domain/grammar/learnerView';
 import { grammarExplanation } from '../../domain/grammar/explain';
 import { patternOf } from '../../domain/grammar/patterns';
 import { topicState } from '../../domain/grammar/path';
@@ -244,6 +245,15 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const errSpan: [number, number] | null = activeErr ?? err;
   const errAltHere = findTask && activeErr && err && (activeErr[0] !== err[0] || activeErr[1] !== err[1]) ? ((task.x?.kind === 'find' ? task.x.errAlt : undefined)?.find((a) => a.err[0] === activeErr[0] && a.err[1] === activeErr[1]) ?? null) : null;
   const spotAnswer = errAltHere ? errAltHere.answer : solution;
+  // Q0: richtig mit einer weiteren gültigen Fassung (`accepted`), nicht der Musterlösung → „Auch richtig“ + „Musterlösung: …“, ohne den
+  // Vorspann „Richtig: <Musterlösung>.“ der Begründung (pc-rc-k1). Nicht bei Auswahl, Familien (`alt`), `other`, Einspruch und `errAlt`.
+  const kwtKey = type === 'kwt' && task.x?.kind === 'kwt' ? task.x.key : null;
+  const variantModel =
+    fb && !fb.dontKnow && !fb.override && fb.verdict === 'correct' && !choiceType && !errAltHere && (!findTask || stage === 'replace') && (fb.check?.kind === undefined || fb.check.kind === 'contraction' || fb.check.kind === 'uk') && isVariant(fb.given, spotAnswer, kwtKey ? { kwtKey } : {})
+      ? spotAnswer
+      : null;
+  // Q0: Abkürzung als Schlüsselwort klein getippt (mba): angenommen, die Lücke zeigt die richtige Schreibung, die Rückmeldung sagt es.
+  const fixedCase = fb && kwtKey && !fb.dontKnow && fb.verdict === 'correct' ? caseFix(fb.given, kwtKey, solution) : null;
   const typedKind = !choiceType && !findTask;
   const gapKind = typedKind && !whole && (type === 'gap' || type === 'transform' || type === 'kwt');
   const scaff = type === 'gap' && scaffolded(pStart) && !noHelp;
@@ -684,7 +694,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const composed: { model: ExplanationModel; action: FeedbackAction; lesson: boolean } | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
-    const m0 = tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined && !(findTask && stage === 'replace') ? { tapped: fb.tapped } : {}), lang, learning }));
+    const m0 = tighten(grammarExplanation({ task, verdict, given: fb.given, variant: variantModel !== null, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined && !(findTask && stage === 'replace') ? { tapped: fb.tapped } : {}), lang, learning }));
     // „Auch richtig“ zählt nur bei Art `other` als solches; eine lokale Familie (`alt`) und `errAlt` sind richtig (voll gebucht).
     const v: TutorVerdict = fb.override ? 'correct' : fb.tv === 'alt_ok' && fb.check?.kind !== 'other' ? 'correct' : fb.tv;
     const out = composeFeedback({
@@ -781,7 +791,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       maxLength={Math.max(40, solution.length + 16)}
       state={gapState}
       mask={mask}
-      shown={fb ? fb.given : null}
+      shown={fb ? (fixedCase ?? fb.given) : null}
       reveal={gapReveal}
       silent
       busy={fit.busy}
@@ -947,6 +957,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         ? t('bandRightHelped')
         : fb.check?.kind === 'other'
           ? altLine
+          : variantModel
+          ? [t('grVariantSub', { model: variantModel }), fixedCase && kwtKey ? t('grCaseHint', { key: kwtKey }) : null].filter(Boolean).join(' · ')
+          : fixedCase && kwtKey
+          ? t('grCaseHint', { key: kwtKey })
           : fb.unsure
           ? t('ttJgUnsureSub')
           : fb.altWhy
@@ -1045,7 +1059,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       };
     }
     // „Auch richtig“ (Art `other`): eigener Kopf, nie rot; bleibt stehen (kein Weiter von allein), damit „Gesucht war …“ gelesen wird.
-    const alsoRight = c?.kind === 'other' && !fb.override;
+    const alsoRight = (c?.kind === 'other' && !fb.override) || variantModel !== null;
     // Zielform ohne Formel im Text (die steht schon an der Muster-Zeile); nach einem falschen Zweitversuch eine konkrete Form (die Lösung).
     const want = pattern ? null : solution;
     const foot = (
@@ -1093,9 +1107,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       tutor,
       act: foot,
       ...(foldWhy ? { fold: ['why' as const] } : {}),
-      auto: fb.help.level === 0 && !fb.override && !alsoRight && rawAction === 'next' && !fb.aiMsg && !lesson,
+      auto: fb.help.level === 0 && !fb.override && !alsoRight && !fixedCase && rawAction === 'next' && !fb.aiMsg && !lesson,
       ...find,
-      ...(alsoRight ? { unfold: [...(find.unfold ?? []), 'note' as const] } : {}),
+      ...(variantModel ? { title: t('exAlsoRight') } : {}),
+      ...(alsoRight && !variantModel ? { unfold: [...(find.unfold ?? []), 'note' as const] } : {}),
     };
   }
 

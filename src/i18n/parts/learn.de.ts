@@ -101,6 +101,8 @@ export const learnDe = {
   grUnsure: 'Nicht sicher prüfbar – zählt nicht gegen dich',
   grVerdictDontKnow: 'Kein Problem – so\u00a0geht’s:',
   grVerdictContraction: 'Richtig – Kurzform',
+  grVariantSub: 'Deine Form passt. Musterlösung: {model}',
+  grCaseHint: '{key} schreibt man groß (Abkürzung)',
   exAlsoRight: 'Auch richtig',
   grAltWanted: 'Geübt wird hier: {want}. {why}.',
   grAltWantedBare: 'Geübt wird hier: {want}.',

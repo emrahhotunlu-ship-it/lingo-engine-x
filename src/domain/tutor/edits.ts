@@ -1,7 +1,7 @@
 import { clip } from '../../prompts/common';
 import { holdBackRepair } from '../quality/gate';
 import { repairNorm, type NewRepair, type RepairSrc } from '../repair/repair';
-import { repairsFromText } from '../repair/sources';
+import { isContentChange, repairsFromText } from '../repair/sources';
 import { wordCount } from '../text/textStats';
 
 // Korrekturstellen von Claude prüfen und verwerten (Lernplattform 3.0 P46/P47, KI-Tutor T-R3/T-R12). Rein.
@@ -96,7 +96,8 @@ export function keepEdits(xs: readonly unknown[], text: string, patIds: Readonly
     const span = findSpan(hay, from, taken);
     if (!span) continue;
     const kind = editKind(x.kind) as EditKind;
-    const sev = kind === 'register' ? 'upgrade' : editSev(x.sev, opts.sevDefault ?? 'upgrade');
+    // Q0: eine Inhaltsänderung (andere Aussage, Empfehlung) ist nie ein Fehler, sondern eine Verbesserung (nie ein Fehlersatz, zählt nicht für K7).
+    const sev = kind === 'register' || isContentChange({ wrong: from, right: to, why }) ? 'upgrade' : editSev(x.sev, opts.sevDefault ?? 'upgrade');
     const pat = typeof x.pat === 'string' && ids.has(x.pat.trim()) ? x.pat.trim() : null;
     taken.push(span);
     found.push({ e: { from, to: clip(to, EDIT_FROM_MAX), kind, sev, pat, why }, at: span[0] });

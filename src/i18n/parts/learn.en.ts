@@ -99,6 +99,8 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   grUnsure: 'Can’t check this for sure – it won’t count against you',
   grVerdictDontKnow: 'No problem – here’s how it\u00a0goes:',
   grVerdictContraction: 'Correct – contracted form',
+  grVariantSub: 'Your version works. Model answer: {model}',
+  grCaseHint: 'Write {key} in capital letters (abbreviation)',
   exAlsoRight: 'Also correct',
   grAltWanted: 'Practiced here: {want}. {why}.',
   grAltWantedBare: 'Practiced here: {want}.',

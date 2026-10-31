@@ -87,11 +87,8 @@
   font-weight: 500;
 }
 
-/* Wort antippen („Fehler finden“, TapSentence): jedes Wort mindestens 44 × 44 px, damit am Handy jedes einzeln trifft. */
-.lx-spot-wide {
-  min-width: 2.75rem;
-  justify-content: center;
-}
+/* Wort antippen („Fehler finden“, TapSentence): jedes Wort mindestens 44 × 44 px Tippfläche, damit am Handy jedes einzeln trifft.
+   Die Breite kommt aus der unsichtbaren Fläche `::after` (index.css), nicht aus dem Wort: gleichmäßige Wortabstände (Q0). */
 
 /* Tempo-Runde (P24): ruhiger Zielzeit-Balken. Er füllt sich über die Zielzeit (nur transform, 60 fps) und wird danach neutral grau.
    Keine Zahl, kein Ton, kein Rot, keine Sperre. */

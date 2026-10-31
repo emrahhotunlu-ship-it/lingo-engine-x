@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { alignWords } from '../../domain/answer/align';
+import { mergeOps } from '../../domain/answer/mergeOps';
 import { useT } from '../../i18n';
 
 // Der korrigierte Satz bei „Fehler finden“ (Emrahs Rückmeldung 7): „Richtig: ~~Used~~ Using the new scanner, …“.
@@ -7,7 +8,7 @@ import { useT } from '../../i18n';
 
 export function FixedSentence({ from, to, testId }: { from: string; to: string; testId: string }) {
   const { t } = useT();
-  const ops = alignWords(from, to);
+  const ops = mergeOps(alignWords(from, to));
   const old = (w: string | undefined): ReactNode => (
     <span className="lx-diff-off" data-testid="fix-old">
       {w}

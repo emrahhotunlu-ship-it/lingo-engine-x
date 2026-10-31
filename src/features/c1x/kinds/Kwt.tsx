@@ -8,12 +8,15 @@ import type { Tile } from '../../../domain/drills/order';
 import type { Kwt } from '../../../domain/c1x/types';
 import { hash32, mulberry32, shuffle } from '../../../domain/random';
 import { useT } from '../../../i18n';
+import { caseFix, kwtModeFor, kwtRange } from '../../../domain/grammar/learnerView';
 import type { C1Ctrl, C1Ui } from '../types';
 
 // `kwt` (Umformen, Cambridge Teil 4), P16. Drei Eingabeformen (Lernplattform 3.0 §2.10, §3.4):
 //  · Laptop (`desk`): in die Lücke tippen, Wortzähler, das Schlüsselwort leuchtet, sobald es unverändert getippt ist.
 //  · Handy, p ≤ 0,7 (`tiles`): Bausteine in eine wachsende Antwortzeile legen (Plätze = gelegte + 1, die Wortzahl bleibt verborgen).
 //  · Handy, p > 0,7 (`part`): Teil A aus Bausteinen, Teil B höchstens 3 Wörter getippt (Produktion; zählt als freier Abruf).
+//    Bei Lösungen bis 3 Wörter (an MBA) gibt es keine Teile: die ganze Antwort wird getippt (`kwtModeFor`, Paket Q0).
+// Genau ein Wortzähler (Bereich der Aufgabenzeile, Q0: art-snd-k2 zeigte zwei widersprüchliche Zähler).
 // „Prüfen“ wird erst frei, wenn die Antwort 3–6 Wörter hat und das Schlüsselwort enthält.
 
 export type KwtMode = 'desk' | 'tiles' | 'part';
@@ -46,12 +49,12 @@ export function kwtTiles(item: Kwt, only: 'all' | 'a' = 'all'): Tile[] {
 export function useKwtUi(ctrl: C1Ctrl): C1Ui {
   const item = ctrl.item as Kwt;
   const { t } = useT();
-  const mode = kwtMode(ctrl.inp, ctrl.p);
+  const mode = kwtModeFor(item, ctrl.inp, ctrl.p);
   const [value, setValue] = useState('');
   const [placed, setPlaced] = useState<number[]>([]);
   // UX-Prüfung W3: am Handy (Bausteine) liegt der Vorrat in einer festen Leiste über „Prüfen“; die Antwortzeile steht in der Lücke im Satz.
   const [poolEl, setPoolEl] = useState<HTMLDivElement | null>(null);
-  const [lo, hi] = item.words ?? [3, 6];
+  const [lo, hi] = kwtRange(item);
   const verdict = ctrl.score?.verdict;
   const state: GapState = !ctrl.locked ? 'input' : verdict === 'correct' ? 'correct' : verdict === 'near' ? 'near' : 'wrong';
   const solution = `${item.keys[0]?.a[0] ?? ''} ${item.keys[0]?.b[0] ?? ''}`.trim();
@@ -76,7 +79,8 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
       label={t('grGapLabel')}
       maxLength={mode === 'part' ? 30 : 80}
       state={state}
-      shown={ctrl.locked ? (mode === 'part' ? value : value) : null}
+      // Abkürzung klein getippt (mba): angenommen, die Lücke zeigt die richtige Schreibung (Hinweis in der Rückmeldung, Q0).
+      shown={ctrl.locked ? (caseFix(value, item.key, solution) ?? value) : null}
       reveal={ctrl.locked && verdict !== 'correct' && mode !== 'tiles' ? { solution: mode === 'part' ? (item.keys[0]?.b[0] ?? solution) : solution, given: value.trim() ? value : null } : null}
       silent
       onChange={(v, info) => {
@@ -129,7 +133,6 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
         {tilesNode}
         <p className="lx-t-meta text-muted">{t('cxKwtPartB', { max: partMax })}</p>
         <div data-testid="kwt-part-b">{gapInput}</div>
-        <WordCounter n={kwtCount(value)} min={1} max={partMax} testId="word-counter-b" />
         <WordCounter n={counterN} min={lo} max={hi} />
       </div>
     );

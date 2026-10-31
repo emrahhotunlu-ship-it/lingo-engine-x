@@ -36,8 +36,53 @@ function locate(hay: string, needle: string): number {
   return n ? h.indexOf(n) : -1;
 }
 
+const wordsOf = (s: string): string[] =>
+  s
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[^a-z0-9' -]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean);
+
+/** Begründungen, die eine Empfehlung oder Inhaltsänderung ausdrücken, keinen Fehler („klingt natürlicher“, „gemeint ist wohl“, „clearer“). */
+const SUGGESTION_WHY =
+  /\b(?:natürlicher|klarer|eleganter|idiomatischer|präziser|flüssiger|inhaltlich|more natural|clearer|more precise|more idiomatic|smoother|(?:you )?probably mean)\b/i;
+
+/**
+ * Inhalts- statt Fehlerkorrektur (Paket Q0, Emrahs Foto 31.10.2026: „We have to cope with each other …“ → „… with the challenges …“): Ein grammatisch
+ * richtiger Satz wurde zur Fehlersatz-Aufgabe. Als Vorschlag gilt eine Korrektur, deren Begründung eine Empfehlung ist, oder bei der eine
+ * Wortgruppe (≥ 2 Wörter) durch eine andere ohne gemeinsames Wort ersetzt wird (andere Aussage, kein Fehler im Original). Solche Stellen werden
+ * nie Fehlersätze; in der Schreibkorrektur zählen sie als Verbesserung („So klingt es natürlicher“). Die Begründungs-Regel gilt überall
+ * (`repairsFromText`), die Wortgruppen-Regel nur in der Schreibkorrektur (`keepEdits`), wo Emrahs Fall entstand.
+ */
+export function isContentChange(f: { wrong: string; right: string; why?: string | null }, opts: { phrase?: boolean } = {}): boolean {
+  if (f.why && SUGGESTION_WHY.test(f.why)) return true;
+  // Die Wortgruppen-Regel gilt nur für die Schreibkorrektur (`keepEdits`, `phrase: true`); das Rollenspiel liefert eigene Kategorien.
+  if (opts.phrase === false) return false;
+  const w = wordsOf(f.wrong);
+  const r = wordsOf(f.right);
+  if (w.length < 2 || r.length < 2) return false;
+  const rs = new Set(r);
+  return !w.some((x) => rs.has(x));
+}
+
+/**
+ * Gespeicherte Begründung, die beim Speichern mitten im Wort gekürzt wurde („… miteinand…“): bis zum letzten ganzen Satz zeigen; gibt es keinen,
+ * bis zum letzten ganzen Wort mit „…“. Eine vollständige Begründung bleibt unverändert. Rein.
+ */
+export function tidyWhy(why: string): string {
+  const t = why.trim();
+  if (!/\p{L}…$/u.test(t)) return t;
+  const body = t.slice(0, -1);
+  const end = Math.max(body.lastIndexOf('. '), body.lastIndexOf('! '), body.lastIndexOf('? '));
+  if (end > 0) return body.slice(0, end + 1);
+  const sp = body.lastIndexOf(' ');
+  return sp > 0 ? `${body.slice(0, sp).replace(/[,;:–-]+$/, '')} …` : t;
+}
+
 const isReal = (f: Fix): boolean => {
   if (f.cat && STYLE_CATS.has(f.cat)) return false;
+  if (isContentChange(f, { phrase: false })) return false;
   const w = f.wrong.trim();
   const r = f.right.trim();
   return !!w && !!r && repairNorm(w) !== repairNorm(r);
