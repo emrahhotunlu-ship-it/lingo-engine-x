@@ -35,6 +35,18 @@ export function SegBar({ progress, segments = null, label, testId = 'round-progr
     const id = window.setTimeout(() => setPulse(false), 320);
     return () => window.clearTimeout(id);
   }, [pulse]);
+  // D3 V-UEBUNG (Vorschau H3 `blockline.flash`): beim Blockwechsel leuchtet auch die Blockzeile der Übung kurz auf (900 ms, `v-uebung.css`).
+  const [flash] = useState(pulse);
+  useEffect(() => {
+    if (!flash) return;
+    const root = document.documentElement;
+    root.setAttribute('data-lx-blockflash', '');
+    const id = window.setTimeout(() => root.removeAttribute('data-lx-blockflash'), 900);
+    return () => {
+      window.clearTimeout(id);
+      root.removeAttribute('data-lx-blockflash');
+    };
+  }, [flash]);
   const frac = Math.round((n / total) * 100);
   return (
     <div className="flex items-center gap-3" data-testid="seg-bar" data-segs={count} data-cur={cur}>
@@ -52,7 +64,8 @@ export function SegBar({ progress, segments = null, label, testId = 'round-progr
           </i>
         ))}
       </div>
-      <span className="lx-tnum flex-none text-xs text-muted" data-testid={testId}>
+      {/* D3 V-UEBUNG: ein Zähler je Bildschirm (UX-Audit U1) – der geteilte Balken zählt schon, „n von total“ nur für Vorleseprogramme. */}
+      <span className="sr-only" data-testid={testId}>
         {t('nvProgress', { n, total: progress.total })}
       </span>
       {!!progress.extra && (

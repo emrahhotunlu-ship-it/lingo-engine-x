@@ -14,6 +14,7 @@ import { grammarExplanation } from '../../domain/grammar/explain';
 import { patternOf } from '../../domain/grammar/patterns';
 import { topicState } from '../../domain/grammar/path';
 import { formHint } from '../../domain/grammar/rules';
+import { RuleSide, hasRule } from './RuleSide';
 import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/retryHint';
 import { scaffolded, splitTransform, wholeSentence, type InputProfile } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
@@ -1159,7 +1160,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         secondary={secondary}
         primary={primary}
         feedback={feedback}
-        side={null}
+        // D3 V-UEBUNG (Vorschau L3): nach dem Prüfen steht am Laptop die Karte „Regel“ in der Spalte (vorher nie, s. o.).
+        side={fb && hasRule(task.topic, lang) ? <RuleSide topic={task.topic} onWhole={() => setSheet(true)} /> : null}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
       {film && <FilmSheet film={film} open={filmOpen} onClose={() => setFilmOpen(false)} />}

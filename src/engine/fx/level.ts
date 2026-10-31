@@ -6,7 +6,7 @@ import { local } from '../../platform/storage';
 //   calm = Standard: die ruhigen Antwort-Momente der Stufe 1 (Farbe, gezeichnetes ✓/✕, Füllung der Lücke)
 //   full = wie calm; die Stufen 2 bis 4 (Punkte, Runde, Tag, Aufstieg) kommen mit späteren Paketen
 // Reduzierte Bewegung am Gerät erzwingt `off`. Läuft die Bildrate nach der ersten Geste knapp (Stromsparmodus, 30 fps), gilt `full` als `calm`.
-// Das Ergebnis steht als `data-fx` am Wurzelelement; die Stile (`styles/parts/ee.css`) und die Tests lesen nur dieses Attribut.
+// Das Ergebnis steht als `data-fx` am Wurzelelement; die Stile (`styles/parts/v-uebung.css`) und die Tests lesen nur dieses Attribut.
 
 export type FxLevel = 'full' | 'calm' | 'off';
 export const FX_KEY = 'lx:fx';

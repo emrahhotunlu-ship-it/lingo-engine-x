@@ -1,0 +1,566 @@
+/* Relaunch Teil 1c, D3 V-UEBUNG (docs/relaunch/stufe1c-plan.md §3.1, Auftrag docs/umbau/auftraege/d3.md): gemeinsame Übungsteile im Aussehen
+   der Vorschau `WBft3EEx7jYYv4QHdepuNm` v2. Quelle der Maße: docs/relaunch/vorschau/src/style.css (Zeilen je Block) und desk.js (L2/L3).
+   Gilt für jede Übung im Gerüst `ExerciseShell` (Wörter und Grammatik) und für die Einführung `IntroFlow` (H5).
+   Nur Tokens aus index.css, kein Weichzeichner, keine Farbwerte. Präfix `lx-vu-`. Jede Bewegung hat einen Rückfall (reduced-motion, `data-fx='off'`).
+   Übernommen aus den alten Dateien (dort entfernt): das aufgezogene Urteilszeichen (`ee-mark`, ee.css), die 120-ms-Farbwechsel und die
+   Füllung der Lücke (ee.css), der Tastaturhinweis je Art (`dz-kh-*`, dz2.css), die durchgestrichene eigene Eingabe (dz2.css). */
+
+/* ------------------------------------------------------------------ Kopf (style.css:222–229) */
+/* Ein Zähler je Bildschirm (UX-Audit U1): „n von total“ steht nur für Vorleseprogramme da (SegBar.tsx, `sr-only`).
+   Kopf wie die Vorschau (`ex-top`): 56 px ab Oberkante, die Blockzeile 8 px darunter (G2 ux-reviewer 6: kein Leerraum über der Aufgabe). */
+html:is([data-lx-area], :has([data-testid='intro-flow'])) .lx-exbar {
+  min-height: 56px;
+  margin-top: -16px;
+  padding-top: 6px;
+}
+/* Die Übung steht flach auf dem Grund (Vorschau `ex-body gx`): kein Polster der früheren Karte über der Blockzeile, Rand wie die Seite. */
+.lx-glass.lx-exercise[data-area],
+.lx-glass.lx-exercise[data-testid='intro-flow'] {
+  margin-top: -16px;
+  padding-top: 0;
+  /* Rand 20 px wie die Vorschau (`.gx`): 16 px Seite + 1 px Rahmen + 3 px. */
+  padding-inline: 3px;
+}
+
+/* ------------------------------------------------------------------ Blockzeile (style.css:238–240) */
+.lx-vu-blockline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  min-height: 24px;
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 550;
+  color: var(--fg-2);
+}
+.lx-vu-sep::before {
+  content: '·';
+  margin-right: 8px;
+  color: var(--fg-3);
+}
+.lx-vu-badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--fg);
+}
+.lx-vu-badge[data-tone='near'] {
+  background: color-mix(in oklch, var(--surface) 80%, var(--near));
+}
+.lx-vu-blockline .lx-dots {
+  transform: scale(0.85);
+}
+/* Blockwechsel (Vorschau H3 `blockline.flash`): die Blockzeile leuchtet beim ersten Bild eines neuen Blocks kurz auf. */
+@keyframes lx-vu-flash {
+  0% {
+    color: var(--act-text);
+  }
+  100% {
+    color: var(--fg-2);
+  }
+}
+html[data-lx-blockflash] .lx-vu-blockline {
+  animation: lx-vu-flash 900ms var(--ease-soft) both;
+}
+
+/* ------------------------------------------------------------------ Aufgabe und „Wozu?“ (style.css:241–243) */
+.lx-vu-instr {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 2px;
+}
+.lx-vu-task {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 550;
+  letter-spacing: normal;
+  color: var(--fg);
+}
+.lx-vu-why {
+  flex: none;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -10px -4px -10px 0;
+  padding: 0 4px;
+  background: transparent;
+}
+/* Sichtbar 32 px wie die Vorschau (`.why`), die Trefferfläche des Knopfs ist 44 px hoch. */
+.lx-vu-why-face {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--fg-2);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.lx-vu-why[aria-expanded='true'] .lx-vu-why-face {
+  background: var(--act-soft);
+  color: var(--act-text);
+}
+
+/* ------------------------------------------------------------------ Bühne: Satz und Lücke (style.css:244–262) */
+[data-testid='exercise'] [data-slot='prompt'].lx-t-prompt {
+  font-size: 22px;
+  line-height: 34px;
+  font-weight: 500;
+  text-wrap: pretty;
+}
+/* Lücke als Unterstrich (Vorschau `.gap`): eine Linie in Iris beim Tippen, nach dem Prüfen in der Zustandsfarbe; keine Fläche, kein Kasten. */
+/* Die Zustandsflächen (Richtig grün getönt usw., shellColors.spec/fxStage1) bleiben; nur die Kante wird zur Linie. */
+.lx-gap {
+  border-radius: 0;
+}
+.lx-gap[data-state='input']:not([data-masked]),
+.lx-gap[data-state='input'][data-focused]:not([data-masked]) {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: inset 0 -2px 0 0 var(--act);
+}
+.lx-gap[data-state='correct'] {
+  color: var(--ok);
+  box-shadow: inset 0 -2px 0 0 var(--ok);
+}
+.lx-gap[data-state='near'] {
+  color: var(--near);
+  box-shadow: inset 0 -2px 0 0 var(--near);
+}
+.lx-gap[data-state='wrong'] {
+  color: var(--bad);
+  box-shadow: inset 0 -2px 0 0 var(--bad);
+}
+/* Falsch mit aufgedeckter Lösung (Vorschau `st-idk`/`st-bad`): neutrale Linie ohne Fläche, nie grün (G2 ux-reviewer 5: kein Kasten). */
+.lx-gap[data-state='reveal'],
+.lx-gap[data-state='wrong'] {
+  background: transparent;
+}
+.lx-gap[data-state='reveal'] {
+  box-shadow: inset 0 -2px 0 0 var(--fg-3);
+}
+/* Durchgestrichene eigene Eingabe über der Lösung: rot und durchgestrichen (UX-Audit U1), aus dz2.css hierher. */
+.lx-gap-given {
+  color: var(--bad);
+  text-decoration-color: var(--bad);
+}
+/* ---- aus ee.css (Erlebnis-Engine Stufe 1 „Antwort“, P30; fxStage1.spec): unverändert übernommen, ee.css entfällt. */
+/* Farbwechsel der Lücke und der Optionen in 120 ms (vorher 150 bis 220 ms); bei `off` ohne Übergang. */
+:root[data-fx] .lx-gap,
+:root[data-fx] .lx-choice {
+  transition-duration: 120ms;
+}
+:root[data-fx='off'] .lx-gap,
+:root[data-fx='off'] .lx-gap *,
+:root[data-fx='off'] .lx-choice,
+:root[data-fx='off'] .lx-choice * {
+  transition: none;
+}
+
+/* Richtig, Lücke: kein Lichtimpuls mehr (der 300-ms-Schatten `lx-pulse` entfällt), stattdessen füllt sich die Lücke von links nach rechts.
+   Die Endfarbe bleibt `--lx-ok-soft` mit grünem Strich (LP2 §7); die Füllung liegt hinter den Buchstaben. */
+:root[data-fx] .lx-gap[data-state='correct'] {
+  animation: none;
+}
+:root[data-fx='full'] .lx-gap[data-state='correct'],
+:root[data-fx='calm'] .lx-gap[data-state='correct'] {
+  isolation: isolate;
+  background: var(--lx-surface);
+}
+:root[data-fx='full'] .lx-gap[data-state='correct']::before,
+:root[data-fx='calm'] .lx-gap[data-state='correct']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--lx-ok-soft);
+  clip-path: inset(0 100% 0 0);
+  animation: ee-fill 200ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes ee-fill {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Das Zeichen im Urteil (✓, ≈, ✕) wird in 180 ms von links nach rechts aufgezogen (`clip-path`, nur die Zeichenfläche, nicht der Kreis dahinter).
+   Der Text bleibt im DOM (Vorlesen, Tests). Bei `off` steht es sofort da. */
+.ee-mark {
+  display: inline-block;
+  animation: ee-draw 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+:root[data-fx='off'] .ee-mark {
+  animation: none;
+}
+@keyframes ee-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ------------------------------------------------------------------ Knopfzeile über der Tastatur (style.css:264–266, `.btn` 161–163) */
+html:is([data-lx-area], :has([data-testid='intro-flow'])) .lx-actionbar {
+  border-top-color: transparent;
+  padding-top: 10px;
+  padding-inline: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right));
+}
+html:has([data-testid='intro-flow']) .lx-actionbar-main {
+  min-height: 52px;
+  border-radius: var(--r);
+  font-size: 17px;
+  font-weight: 600;
+}
+html[data-lx-area] .lx-actionbar .lx-actionbar-inner {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+html[data-lx-area] .lx-actionbar-inner > .lx-actionbar-main {
+  flex: 1 1 5.5rem;
+  width: auto;
+}
+html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secondary'] button) {
+  min-height: 52px;
+  border-radius: var(--r);
+  font-size: 17px;
+  font-weight: 600;
+}
+.lx-actionbar-inner > [data-slot='secondary'] {
+  display: contents;
+}
+.lx-actionbar-inner [data-slot='secondary'] button {
+  flex: 0 1 auto;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--surface-2);
+  color: var(--fg);
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------ Hinweis-Runde (style.css:293–294) */
+/* Am Handy liegt der Hinweis wie in der Vorschau als Band direkt über der Knopfzeile (fest, folgt der Bildschirmtastatur). */
+@media (max-width: 1023.98px) {
+  .lx-hintband[data-tone='near'] {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + var(--lx-kb-inset, 0px) + 6px);
+    z-index: 29;
+    min-height: 48px;
+    padding: 10px max(1rem, env(safe-area-inset-right)) 10px max(1rem, env(safe-area-inset-left));
+    border-radius: 16px 16px 0 0;
+    font-size: 16px;
+    animation: lx-band-up 220ms var(--ease-spring) backwards;
+  }
+  html:has(.lx-hintband[data-tone='near']) #main {
+    padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 4.5rem);
+  }
+}
+.lx-hintband > [data-testid='hint-line'] {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+/* ------------------------------------------------------------------ Band (style.css:275–292) */
+.lx-band {
+  padding-top: 18px;
+  padding-inline: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right));
+}
+/* Blatt „Mehr“ (style.css:299–304): Titel 650, „Weiter“ 52 px. */
+.lx-band-sheet-head h2 {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 650;
+}
+.lx-band-sheet-foot .lx-btn-primary {
+  min-height: 52px;
+  border-radius: var(--r);
+  font-size: 17px;
+}
+.lx-band-inner {
+  gap: 10px;
+}
+/* Eine Warum-Zeile (Vorschau `.whyl`, 15/21 in --fg-2). Der Vorspann „Warum“/„Merke“ bleibt als leises Wort am Zeilenanfang sichtbar
+   (G1 learning-scientist B1: die dritte Pflichtfrage ist sonst nicht als Begründung erkennbar) – Abweichung von der Vorschau, im Bericht. */
+.lx-band-why {
+  max-height: 63px;
+}
+.lx-band-why :is([data-block='why'], [data-block='remember']) > h3 {
+  font-size: 13px;
+  color: var(--fg-3);
+}
+.lx-band-why :is([data-block='why'], [data-block='remember']) .lx-t-support,
+.lx-band-why [data-slot='why'] {
+  line-height: 21px;
+}
+.lx-band .lx-band-btns button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--surface-2);
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ Laptop: Rückmeldung auf der Bühne, Spalte Wozu?/Regel/Heute (desk.js L2/L3) */
+.lx-vu-dverdict {
+  padding: 1rem 1.2rem;
+  border-radius: var(--r);
+  background: var(--surface);
+  animation: lx-band-fade 220ms var(--ease-soft) backwards;
+}
+.lx-vu-dverdict[data-verdict='ok'] {
+  background: color-mix(in oklch, var(--surface) 88%, var(--ok));
+}
+.lx-vu-dverdict[data-verdict='near'] {
+  background: color-mix(in oklch, var(--surface) 88%, var(--near));
+}
+.lx-vu-dverdict[data-verdict='wrong'] {
+  background: color-mix(in oklch, var(--surface) 90%, var(--bad));
+}
+.lx-vu-dverdict [data-testid='verdict'] {
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+.lx-vu-dverdict :is([data-block='why'], [data-block='remember']) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.lx-vu-dverdict .lx-t-support {
+  color: var(--fg-2);
+}
+.lx-vu-dmore {
+  border-top: 1px solid var(--line);
+  padding-top: 2px;
+}
+/* Breiten wie bisher bis 1439 px (Bühne ≥ 585 px bei 1024, band.spec); ab 1440 die Vorschau-Maße (Bühne 45rem, Spalte 24rem). */
+@media (min-width: 1440px) {
+  .lx-split[data-split] {
+    --lx-res-w: 24rem;
+    grid-template-columns: minmax(0, 45rem) var(--lx-res-w);
+    column-gap: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .lx-split[data-split] > [data-col='side'].lx-vu-side {
+    max-width: none;
+    gap: 1.5rem;
+    padding: 0.5rem 0 1.5rem 2rem;
+    border-left: 1px solid var(--line);
+  }
+  .lx-split[data-split] .lx-actionbar-column {
+    padding: 1rem 0 1.5rem;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .lx-split[data-split] .lx-actionbar-column .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secondary'] button) {
+    min-height: 3rem;
+    font-size: 1rem;
+    padding: 0 1.1rem;
+  }
+  .lx-split[data-split] .lx-actionbar-column .lx-actionbar-inner {
+    max-width: none;
+  }
+  .lx-split[data-split] .lx-actionbar-column .lx-actionbar-inner > .lx-actionbar-main {
+    flex: 0 0 auto;
+    min-width: 11rem;
+    margin-left: auto;
+  }
+  [data-testid='exercise'] [data-slot='prompt'].lx-t-prompt {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+}
+.lx-vu-ctx {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.lx-vu-ctx-h {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  font-weight: 650;
+  color: var(--fg);
+}
+.lx-vu-ctx .lx-t-support {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Tastaturhinweis je Art (aus dz2.css): mit Optionen „A–D oder 1–4 wählen“, sonst nur Enter und Tipp. */
+.lx-vu-kh-choice {
+  display: none;
+}
+[data-testid='exercise']:has([data-testid='choice']) .lx-vu-kh-choice {
+  display: inline;
+}
+[data-testid='exercise']:has([data-testid='choice']) .lx-vu-kh-typed {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ Grammatik-Erklärung (H5, screens.js:375–427; style.css:270–272, 312, 323–335) */
+.lx-vu-h5-q {
+  margin: 6px 0 0;
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.lx-vu-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border-radius: var(--r);
+  background: var(--surface);
+}
+.lx-vu-lbl {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 550;
+  color: var(--fg-2);
+}
+.lx-vu-contrast {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  align-items: baseline;
+  font-size: 16px;
+  line-height: 22px;
+}
+.lx-vu-contrast-k {
+  width: 22px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--fg-3);
+}
+.lx-vu-contrast-k[data-k='ok'] {
+  color: var(--ok);
+}
+.lx-vu-contrast-k[data-k='bad'] {
+  color: var(--bad);
+}
+.lx-vu-contrast-no {
+  color: var(--fg-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--bad);
+}
+.lx-vu-formula {
+  align-self: flex-start;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: var(--act-soft);
+  color: var(--act-text);
+  font-weight: 600;
+}
+.lx-vu-pagedots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 2px 0 10px;
+}
+.lx-vu-pagedots > i {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-3);
+  transition: width 220ms;
+}
+.lx-vu-pagedots > i[data-on] {
+  width: 18px;
+  background: var(--fg-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-lx-blockflash] .lx-vu-blockline,
+  .lx-hintband,
+  .lx-vu-dverdict {
+    animation: none;
+  }
+  .lx-vu-pagedots > i {
+    transition: none;
+  }
+}
+:root[data-fx='off'] :is(.lx-vu-blockline, .lx-hintband, .lx-vu-dverdict) {
+  animation: none;
+}
+
+/* ---- aus fxl.css (P8 Hören): Hörübung, Antwortphase – am Handy ist die Leiste ausgeblendet, die Optionen sind die Handlung (§5.9). fxl.css entfällt. */
+@media (max-width: 767px) {
+  .lx-actionbar:has([data-fxl-nobar]),
+  .lx-actionbar-column:has([data-fxl-nobar]) {
+    display: none;
+  }
+}
+[data-fxl-nobar] {
+  display: none;
+}
+
+/* ---- aus dz2.css: Übungskopf bleibt beim Bildlauf oben, deckend (UX-Audit U1); Rückmeldekarte ohne leere Plätze, Urteil vor „Wieder in …“ (UX-Prüfung W2). */
+.lx-exbar {
+  background: var(--lx-bg);
+}
+[data-slot='verdict']:not(.lx-band-vline) {
+  display: flex;
+  flex-direction: column;
+}
+[data-slot='verdict']:not(.lx-band-vline) > [data-testid='verdict-block'] {
+  order: -2;
+}
+[data-slot='verdict']:not(.lx-band-vline) > [data-testid='next-in'] {
+  order: -1;
+}
+[data-testid='result'] > [data-slot]:empty {
+  display: none;
+}
+[data-slot='right'],
+[data-slot='comparison'] {
+  padding-top: 0.25rem;
+}
+/* Laptop-Einführung: zwei Spalten in EINER Karte. */
+.lx-vu-card[data-kind='split'] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+/* Laptop: die Tastenzeile steht wie in der Vorschau (`.keys`) unten an der Bühne, das Warum ohne sichtbaren Vorspann (wie im Band). */
+@media (min-width: 1024px) {
+  .lx-split[data-split] > [data-col='main'] {
+    min-height: calc(100dvh - 6rem);
+  }
+  .lx-split[data-split] > [data-col='main'] > .lx-actionbar-column {
+    margin-top: auto;
+  }
+}
+
+
+/* Textknopf „Ganze Erklärung“ (Vorschau `.link`), Trefferfläche 44 px. */
+.lx-vu-link {
+  align-self: flex-start;
+  min-height: 44px;
+  margin: -8px 0 -10px;
+  color: var(--act-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+}

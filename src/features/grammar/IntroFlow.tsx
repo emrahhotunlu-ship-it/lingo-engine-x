@@ -6,7 +6,6 @@ import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { useSplitLayout } from '../../platform/input';
 import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
-import { Eyebrow } from '../../ui/Eyebrow';
 import { useSwipeLeft } from '../../engine/swipe';
 import { topicName } from './topicUi';
 import { filmFor } from '../../domain/c1/anim';
@@ -16,6 +15,9 @@ import { FilmLauncher } from '../c1/film/FilmLauncher';
 // Karten mit höchstens 35 Wörtern – ① Alltag und Verständnisfrage (CCQ) zum Antippen, ② Formel und „So entscheidest du“, ③ typischer
 // Fehler mit deutscher Ursache. Laptop: eine zweispaltige Karte je Muster. Die Schrittleiste ①–⑤ entfällt. Schreibt nichts: Eingeführt ist
 // ein Muster ab der ersten Antwort (`pats[id].i`). Themen ohne Musterdatei zeigen wie bisher eine einzelne Regelkarte.
+// Relaunch Teil 1c, D3 V-UEBUNG (Vorschau H5 `explain`, screens.js:375–427): Blockzeile „Grammatik · …“, Thema als große Überschrift,
+// Karten mit Kleinüberschrift, typischer Fehler als Gegenüberstellung ✕/✓, Seitenpunkte (`pagedots`). Inhalte nur aus vorhandenen Feldern;
+// Kontrast Deutsch→Englisch und Mustertabelle kommen mit F2 (stufe1c-plan §1.4).
 
 type CardKind = 'context' | 'formula' | 'trap';
 type Card = { pat: Pattern; kind: CardKind; first: boolean };
@@ -50,11 +52,11 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
   return (
     <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="intro-flow" data-topic={topic} data-card={idx}>
       <header className="flex flex-col gap-2">
-        <Eyebrow tone="accent">{eyebrow}</Eyebrow>
-        <h2 className="lx-t-task" data-testid="task">
+        <IntroLine label={eyebrow} />
+        <h2 className="lx-vu-h5-q" data-testid="task">
           {topicName(topic, lang)}
         </h2>
-        <p className="lx-t-support text-muted">{t('gxIntroTask')}</p>
+        <p className="lx-t-support m-0 text-muted">{t('gxIntroTask')}</p>
         {kurzMiss && (
           <p className="lx-t-support" data-testid="intro-kurz-miss">
             {t('pxPlSkipMiss')}
@@ -62,12 +64,10 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
         )}
       </header>
       {split ? <SplitCard pat={card.pat} tp={tp} first={card.first} pick={pick} /> : <OneCard card={card} tp={tp} pick={pick} />}
-      <div className="flex items-center justify-center gap-3">
-        <span className="lx-dots" role="img" aria-label={t('gxIntroCardOf', { n: idx + 1, total })} data-testid="intro-dots">
-          {cards.map((_, i) => (
-            <span key={i} className="lx-dot" data-on={i === idx || undefined} />
-          ))}
-        </span>
+      <div className="lx-vu-pagedots" role="img" aria-label={t('gxIntroCardOf', { n: idx + 1, total })} data-testid="intro-dots">
+        {cards.map((_, i) => (
+          <i key={i} data-on={i === idx || undefined} />
+        ))}
       </div>
       <ActionBar stateKey={`intro-${idx}`}>
         <PrimaryAction iconAfter="arrowRight" onClick={go} testId={last ? 'mini-go' : 'intro-next'}>
@@ -79,6 +79,18 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
 }
 
 const src = (topic: string) => ({ area: 'trainer' as const, source: `grammar/${topic}` });
+
+/** Blockzeile der Einführung (Vorschau `blockline`: „● Grammatik · Erklärung“). */
+function IntroLine({ label }: { label: string }) {
+  const { t } = useT();
+  return (
+    <p className="lx-vu-blockline" data-testid="intro-line">
+      <span className="lx-v-dot" data-ch="g" aria-hidden="true" />
+      <span>{t('vuAreaGrammar')}</span>
+      <span className="lx-vu-sep">{label}</span>
+    </p>
+  );
+}
 
 /** Verständnisfrage (CCQ): die Antwort bleibt verdeckt, bis Emrah „Ja“ oder „Nein“ antippt. */
 function Ccq({ q, s, a, topic }: { q: { de: string; en: string }; s: string; a: boolean; topic: string }) {
@@ -119,7 +131,7 @@ function ContextBlock({ pat, tp, pick }: { pat: Pattern; tp: TopicPatterns; pick
   const ex = pat.ex.find((e) => e.ctx === 'mail' || e.ctx === 'meeting') ?? pat.ex[0];
   return (
     <div className="flex flex-col gap-3" data-testid="intro-context">
-      <p className="lx-t-meta text-muted">{t('gxIntroContext')}</p>
+      <p className="lx-vu-lbl">{t('gxIntroContext')}</p>
       <p className="lx-t-prompt">
         <span className="font-semibold">{pick(pat.name)}</span>
       </p>
@@ -158,18 +170,16 @@ function FormulaBlock({ pat, tp, first, pick }: { pat: Pattern; tp: TopicPattern
   const decide = lang === 'de' ? tp.decide.de : tp.decide.en;
   return (
     <div className="flex flex-col gap-3" data-testid="intro-formula">
-      <p className="lx-t-meta text-muted">{t('gxIntroFormula')}</p>
-      <p>
-        <span className="rounded-[var(--radius-inline)] bg-hint-soft px-2 py-1 lx-t-prompt text-hint-text" lang="en" data-testid="pattern-formula">
-          {pick(pat.form)}
-        </span>
-      </p>
+      <p className="lx-vu-lbl">{t('gxIntroFormula')}</p>
+      <span className="lx-vu-formula lx-t-prompt" lang="en" data-testid="pattern-formula">
+        {pick(pat.form)}
+      </span>
       <p className="lx-t-support" lang={lang}>
         {pick(pat.use)}
       </p>
       {first && decide.length > 0 && (
         <div className="flex flex-col gap-1" data-testid="intro-decide">
-          <p className="lx-t-meta text-muted">{t('gxIntroDecide')}</p>
+          <p className="lx-vu-lbl">{t('gxIntroDecide')}</p>
           <ul className="m-0 flex list-none flex-col gap-1 p-0 lx-t-support" lang={lang}>
             {decide.slice(0, 2).map((d) => (
               <li key={d}>{d}</li>
@@ -185,11 +195,23 @@ function TrapBlock({ pat, tp, pick }: { pat: Pattern; tp: TopicPatterns; pick: (
   const { t, lang } = useT();
   return (
     <div className="flex flex-col gap-3" data-testid="intro-trap">
-      <p className="lx-t-meta text-muted">{t('gxIntroTrap')}</p>
-      <p className="lx-t-prompt flex flex-col gap-1" lang="en">
-        <span className="lx-diff-off">✕ {pat.trap.bad}</span>
-        <EnglishText as="span" className="font-semibold text-ok-text" text={`✓ ${pat.trap.good}`} {...src(tp.topic)} />
-      </p>
+      <p className="lx-vu-lbl">{t('gxIntroTrap')}</p>
+      <div className="lx-vu-contrast" lang="en">
+        <span className="lx-vu-contrast-k" data-k="bad" aria-hidden="true">
+          ✕
+        </span>
+        <span className="lx-vu-contrast-no lx-diff-off">
+          <span className="sr-only">{t('exVerdictWrong')}: </span>
+          {pat.trap.bad}
+        </span>
+        <span className="lx-vu-contrast-k" data-k="ok" aria-hidden="true">
+          ✓
+        </span>
+        <span className="font-semibold">
+          <span className="sr-only">{t('exCmpExpected')}: </span>
+          <EnglishText as="span" text={pat.trap.good} {...src(tp.topic)} />
+        </span>
+      </div>
       <p className="lx-t-support text-muted" lang={lang}>
         {pick(pat.trap.cause)}
       </p>
@@ -200,7 +222,7 @@ function TrapBlock({ pat, tp, pick }: { pat: Pattern; tp: TopicPatterns; pick: (
 function OneCard({ card, tp, pick }: { card: Card; tp: TopicPatterns; pick: (b: { de: string; en: string }) => string }) {
   const body: ReactNode = card.kind === 'context' ? <ContextBlock pat={card.pat} tp={tp} pick={pick} /> : card.kind === 'formula' ? <FormulaBlock pat={card.pat} tp={tp} first={card.first} pick={pick} /> : <TrapBlock pat={card.pat} tp={tp} pick={pick} />;
   return (
-    <section className="lx-inset flex flex-col gap-3" data-testid="intro-card" data-kind={card.kind}>
+    <section className="lx-vu-card" data-testid="intro-card" data-kind={card.kind}>
       {body}
     </section>
   );
@@ -208,7 +230,7 @@ function OneCard({ card, tp, pick }: { card: Card; tp: TopicPatterns; pick: (b: 
 
 function SplitCard({ pat, tp, first, pick }: { pat: Pattern; tp: TopicPatterns; first: boolean; pick: (b: { de: string; en: string }) => string }) {
   return (
-    <section className="lx-inset grid grid-cols-2 gap-6" data-testid="intro-card" data-kind="split">
+    <section className="lx-vu-card grid grid-cols-2 gap-6" data-testid="intro-card" data-kind="split">
       <div className="flex flex-col gap-4">
         <ContextBlock pat={pat} tp={tp} pick={pick} />
         <FormulaBlock pat={pat} tp={tp} first={first} pick={pick} />
@@ -228,13 +250,13 @@ function LegacyCard({ topic, onGo }: { topic: string; onGo: () => void }) {
   return (
     <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="intro-flow" data-topic={topic} data-legacy="">
       <header className="flex flex-col gap-2">
-        <Eyebrow tone="accent">{t('nbLernenMiniEyebrow')}</Eyebrow>
-        <h2 className="lx-t-task" data-testid="task">
+        <IntroLine label={t('nbLernenMiniEyebrow')} />
+        <h2 className="lx-vu-h5-q" data-testid="task">
           {topicName(topic, lang)}
         </h2>
         <p className="lx-t-support text-muted">{t('gxIntroTask')}</p>
       </header>
-      <section className="lx-inset flex flex-col gap-3" data-testid="intro-card">
+      <section className="lx-vu-card" data-testid="intro-card">
         {rule?.core && (
           <p className="lx-t-prompt" lang={lang}>
             {rule.core}

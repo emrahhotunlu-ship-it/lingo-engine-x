@@ -7,7 +7,7 @@ import { emit } from '../../engine/fx';
 // Ton und Vibration laufen als Lernereignis über den Dirigenten (`engine/fx`, P30), nicht mehr hier. Farbe nie allein: Zeichen (✓ ≈ ✕) und Wort stehen immer dabei.
 // Relaunch Stufe 1 P3 (Band, Nora 2): das Zeichen steht in einem weichen Kreis (Zustandsfarbe 20 %, Zeichen in der Zustandsfarbe, `band.css`),
 // „Weiß ich nicht“ als neutraler Ring mit dem Wort „Lösung gezeigt“ – kein Rot, keine Wertung.
-// Stufe 1 (P30, Erlebnis-Engine §4 M1–M3, Lernplattform 3.0 §6.1): Das Zeichen wird in 180 ms von links nach rechts aufgezogen (`ee.css`, `clip-path`); bei Stufe `off` steht es sofort da.
+// Stufe 1 (P30, Erlebnis-Engine §4 M1–M3, Lernplattform 3.0 §6.1): Das Zeichen wird in 180 ms von links nach rechts aufgezogen (`v-uebung.css`, `clip-path`); bei Stufe `off` steht es sofort da.
 
 const WORD: Record<ResultVerdict, MessageKey> = {
   ok: 'exVerdictOk',
