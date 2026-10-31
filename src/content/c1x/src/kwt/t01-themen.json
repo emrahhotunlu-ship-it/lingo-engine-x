@@ -200,7 +200,7 @@
      }
     ]
    },
-   "lead": "If you need further details, simply reply to this email.",
+   "lead": "If further details are required, simply reply to this email.",
    "key": "SHOULD",
    "before": "",
    "after": "further details, simply reply to this email.",
@@ -210,7 +210,9 @@
       "Should"
      ],
      "b": [
-      "you need"
+      "you need",
+      "you require",
+      "you want"
      ]
     }
    ],
@@ -739,7 +741,7 @@
      }
     ]
    },
-   "lead": "Even though it sounds unexpected, the old tool is faster.",
+   "lead": "The old tool is faster, despite how unexpected that may seem.",
    "key": "SURPRISING",
    "before": "",
    "after": "sounds, the old tool is faster.",
@@ -1103,7 +1105,7 @@
      }
     ]
    },
-   "lead": "I hope they will never renew the contract.",
+   "lead": "I would be happy if they let the contract expire.",
    "key": "NOT",
    "before": "Will they renew the contract?",
    "after": ".",
@@ -1263,7 +1265,7 @@
      }
     ]
    },
-   "lead": "The old printer is broken, so we bought a new printer.",
+   "lead": "The old printer is broken, so we had to buy a replacement.",
    "key": "ONE",
    "before": "The old printer is broken, so we bought",
    "after": ".",
@@ -1430,8 +1432,8 @@
    "pat": "el.so-not",
    "why": {
     "ok": {
-     "de": "I suppose so. So steht direkt hinter dem Verb und ersetzt den Gedanken.",
-     "en": "I suppose so. So follows the verb directly and replaces the thought."
+     "de": "I suppose so. So steht direkt hinter dem Verb (auch I think so, I guess so, I expect so) und ersetzt den Gedanken.",
+     "en": "I suppose so. So follows the verb directly (also I think so, I guess so, I expect so) and replaces the thought."
     },
     "wrong": [
      {
@@ -1444,7 +1446,7 @@
      }
     ]
    },
-   "lead": "Is Tom coming to the party? I suppose he is coming.",
+   "lead": "Is Tom coming to the party? He will probably come, in my opinion.",
    "key": "SO",
    "before": "Is Tom coming to the party?",
    "after": ".",
@@ -1452,6 +1454,30 @@
     {
      "a": [
       "I suppose"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I think"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I guess"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I expect"
      ],
      "b": [
       "so"
@@ -1628,7 +1654,7 @@
      }
     ]
    },
-   "lead": "That was the most useful training that I have ever joined.",
+   "lead": "No other training so far has been as useful as that one.",
    "key": "ATTENDED",
    "before": "That was the most useful training",
    "after": ".",
@@ -2159,7 +2185,7 @@
      }
     ]
    },
-   "lead": "Everyone who received an invitation to the wedding must reply by Friday.",
+   "lead": "Everyone on the wedding guest list must reply by Friday.",
    "key": "INVITED",
    "before": "Everyone",
    "after": "must reply by Friday.",

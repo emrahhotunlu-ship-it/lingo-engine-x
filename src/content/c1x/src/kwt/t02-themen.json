@@ -675,7 +675,7 @@
      }
     ]
    },
-   "lead": "Houses in this area become more expensive every year.",
+   "lead": "Houses in this area cost more with every passing year.",
    "key": "GETTING",
    "before": "Houses in this area are",
    "after": "every year.",
@@ -685,7 +685,8 @@
       "getting"
      ],
      "b": [
-      "more expensive"
+      "more expensive",
+      "more costly"
      ]
     }
    ],

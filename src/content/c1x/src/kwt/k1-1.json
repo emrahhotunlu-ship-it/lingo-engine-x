@@ -794,7 +794,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "lead": "I have been feeling unwell over the past few days.",
+   "lead": "I was not feeling very well in the last few days.",
    "key": "LATELY",
    "before": "I",
    "after": ".",
@@ -1155,7 +1155,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "lead": "I will not forward the file before I get the final numbers.",
+   "lead": "I will forward the file only once the final numbers have arrived.",
    "key": "UNTIL",
    "before": "I will not forward the file",
    "after": "the final numbers.",
@@ -1178,7 +1178,7 @@
     }
    ],
    "tiles": [
-    "i",
+    "I",
     "get"
    ],
    "extra": [
@@ -1218,7 +1218,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "We can start the migration after the legal team has approved the contract.",
+   "lead": "Legal has to approve the contract first; then we can start the migration.",
    "key": "ONCE",
    "before": "We can start the migration",
    "after": "the contract.",
@@ -1392,7 +1392,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "It is possible that our competitor will lower its prices soon.",
+   "lead": "Perhaps our competitor will bring its prices down soon.",
    "key": "MIGHT",
    "before": "Our competitor",
    "after": "prices soon.",
@@ -1408,7 +1408,11 @@
       "reduce its",
       "lower their",
       "cut their",
-      "reduce their"
+      "reduce their",
+      "drop its",
+      "drop their",
+      "bring down its",
+      "bring down their"
      ]
     }
    ],

@@ -444,7 +444,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "My manager told me: “I will send the report tomorrow.”",
+   "lead": "My manager told me: “I will email you the report tomorrow.”",
    "key": "WOULD",
    "before": "My manager told me she",
    "after": "the next day.",
@@ -458,7 +458,10 @@
       "send it",
       "be sending the report",
       "send me the report",
-      "send over the report"
+      "send over the report",
+      "email me the report",
+      "email the report",
+      "email it"
      ]
     }
    ],
@@ -1095,7 +1098,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "lead": "Assuming the client approves the quote today, we will start next week.",
+   "lead": "Supposing the client gives the quote a green light today, we will start next week.",
    "key": "IF",
    "before": "",
    "after": "the quote today, we will start next week.",
@@ -1109,7 +1112,8 @@
       "the client has approved",
       "the client accepts",
       "the client signs off on",
-      "the client should approve"
+      "the client should approve",
+      "the client agrees to"
      ]
     }
    ],
@@ -1212,7 +1216,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "In your position, I would ask for a raise.",
+   "lead": "My advice to you is to ask for a raise.",
    "key": "WERE",
    "before": "If I",
    "after": ", I would ask for a raise.",
@@ -1339,7 +1343,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "We will agree to a discount if you order at least 500 units.",
+   "lead": "We will agree to a discount on one condition: a minimum order of 500 units.",
    "key": "PROVIDED",
    "before": "We will agree to a discount,",
    "after": "at least 500 units.",
@@ -1531,7 +1535,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "Please sign the contract today, or we cannot start the project.",
+   "lead": "Please sign the contract today. Only then can we start the project.",
    "key": "OTHERWISE",
    "before": "Please sign the contract today.",
    "after": "start the project.",
@@ -1685,7 +1689,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "lead": "If you have any questions, please call me.",
+   "lead": "Feel free to call me with any questions.",
    "key": "SHOULD",
    "before": "",
    "after": "any questions, please call me.",
