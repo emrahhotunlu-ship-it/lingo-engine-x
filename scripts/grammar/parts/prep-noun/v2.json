@@ -24,8 +24,8 @@
 "not": [
 "reason"
 ],
-"de": "Das Schlüsselwort reason muss unverändert in der Lücke stehen.",
-"en": "The key word reason must stay unchanged in the gap."
+"de": "Das Schlüsselwort REASON muss unverändert in der Lücke stehen.",
+"en": "The key word REASON must stay unchanged in the gap."
 },
 {
 "if": [
@@ -70,8 +70,8 @@
 "not": [
 "responsible"
 ],
-"de": "Das Schlüsselwort responsible muss unverändert in der Lücke stehen.",
-"en": "The key word responsible must stay unchanged in the gap."
+"de": "Das Schlüsselwort RESPONSIBLE muss unverändert in der Lücke stehen.",
+"en": "The key word RESPONSIBLE must stay unchanged in the gap."
 },
 {
 "if": [
@@ -228,8 +228,8 @@
 "not": [
 "increase"
 ],
-"de": "Das Schlüsselwort increase muss unverändert in der Lücke stehen.",
-"en": "The key word increase must stay unchanged in the gap."
+"de": "Das Schlüsselwort INCREASE muss unverändert in der Lücke stehen.",
+"en": "The key word INCREASE must stay unchanged in the gap."
 },
 {
 "if": [
@@ -274,8 +274,8 @@
 "not": [
 "interested"
 ],
-"de": "Das Schlüsselwort interested muss unverändert in der Lücke stehen.",
-"en": "The key word interested must stay unchanged in the gap."
+"de": "Das Schlüsselwort INTERESTED muss unverändert in der Lücke stehen.",
+"en": "The key word INTERESTED must stay unchanged in the gap."
 },
 {
 "if": [
@@ -412,8 +412,8 @@
 "not": [
 "proud"
 ],
-"de": "Das Schlüsselwort proud muss unverändert in der Lücke stehen.",
-"en": "The key word proud must stay unchanged in the gap."
+"de": "Das Schlüsselwort PROUD muss unverändert in der Lücke stehen.",
+"en": "The key word PROUD must stay unchanged in the gap."
 },
 {
 "if": [
@@ -458,8 +458,8 @@
 "not": [
 "aware"
 ],
-"de": "Das Schlüsselwort aware muss unverändert in der Lücke stehen.",
-"en": "The key word aware must stay unchanged in the gap."
+"de": "Das Schlüsselwort AWARE muss unverändert in der Lücke stehen.",
+"en": "The key word AWARE must stay unchanged in the gap."
 },
 {
 "if": [
@@ -622,8 +622,8 @@
 "not": [
 "discussion"
 ],
-"de": "Das Schlüsselwort discussion muss unverändert in der Lücke stehen.",
-"en": "The key word discussion must stay unchanged in the gap."
+"de": "Das Schlüsselwort DISCUSSION muss unverändert in der Lücke stehen.",
+"en": "The key word DISCUSSION must stay unchanged in the gap."
 },
 {
 "if": [
@@ -670,8 +670,8 @@
 "not": [
 "worried"
 ],
-"de": "Das Schlüsselwort worried muss unverändert in der Lücke stehen.",
-"en": "The key word worried must stay unchanged in the gap."
+"de": "Das Schlüsselwort WORRIED muss unverändert in der Lücke stehen.",
+"en": "The key word WORRIED must stay unchanged in the gap."
 },
 {
 "if": [
@@ -835,8 +835,8 @@
 "not": [
 "answer"
 ],
-"de": "Das Schlüsselwort answer muss unverändert in der Lücke stehen.",
-"en": "The key word answer must stay unchanged in the gap."
+"de": "Das Schlüsselwort ANSWER muss unverändert in der Lücke stehen.",
+"en": "The key word ANSWER must stay unchanged in the gap."
 },
 {
 "if": [
@@ -881,8 +881,8 @@
 "not": [
 "access"
 ],
-"de": "Das Schlüsselwort access muss unverändert in der Lücke stehen.",
-"en": "The key word access must stay unchanged in the gap."
+"de": "Das Schlüsselwort ACCESS muss unverändert in der Lücke stehen.",
+"en": "The key word ACCESS must stay unchanged in the gap."
 },
 {
 "if": [
@@ -1019,8 +1019,8 @@
 "not": [
 "good"
 ],
-"de": "Das Schlüsselwort good muss unverändert in der Lücke stehen.",
-"en": "The key word good must stay unchanged in the gap."
+"de": "Das Schlüsselwort GOOD muss unverändert in der Lücke stehen.",
+"en": "The key word GOOD must stay unchanged in the gap."
 },
 {
 "if": [
@@ -1065,8 +1065,8 @@
 "not": [
 "quick"
 ],
-"de": "Das Schlüsselwort quick muss unverändert in der Lücke stehen.",
-"en": "The key word quick must stay unchanged in the gap."
+"de": "Das Schlüsselwort QUICK muss unverändert in der Lücke stehen.",
+"en": "The key word QUICK must stay unchanged in the gap."
 },
 {
 "if": [

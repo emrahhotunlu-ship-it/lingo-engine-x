@@ -22,8 +22,8 @@
      "not": [
       "sent"
      ],
-     "de": "Das Schlüsselwort sent muss unverändert in der Lücke stehen.",
-     "en": "The key word sent must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SENT muss unverändert in der Lücke stehen.",
+     "en": "The key word SENT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -33,8 +33,8 @@
      "not": [
       "sent"
      ],
-     "de": "Das Schlüsselwort sent muss in der Lücke stehen.",
-     "en": "The key word sent must be in the gap."
+     "de": "Das Schlüsselwort SENT muss in der Lücke stehen.",
+     "en": "The key word SENT must be in the gap."
     }
    ]
   },
@@ -63,8 +63,8 @@
      "not": [
       "best"
      ],
-     "de": "Das Schlüsselwort best muss unverändert in der Lücke stehen.",
-     "en": "The key word best must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEST muss unverändert in der Lücke stehen.",
+     "en": "The key word BEST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -73,8 +73,8 @@
      "not": [
       "best"
      ],
-     "de": "Das Schlüsselwort best gehört vor offer.",
-     "en": "The key word best belongs before offer."
+     "de": "Das Schlüsselwort BEST gehört vor offer.",
+     "en": "The key word BEST belongs before offer."
     }
    ]
   },
@@ -103,8 +103,8 @@
      "not": [
       "working"
      ],
-     "de": "Das Schlüsselwort working muss unverändert in der Lücke stehen.",
-     "en": "The key word working must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WORKING muss unverändert in der Lücke stehen.",
+     "en": "The key word WORKING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -143,8 +143,8 @@
      "not": [
       "raised"
      ],
-     "de": "Das Schlüsselwort raised muss unverändert in der Lücke stehen.",
-     "en": "The key word raised must stay unchanged in the gap."
+     "de": "Das Schlüsselwort RAISED muss unverändert in der Lücke stehen.",
+     "en": "The key word RAISED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -183,8 +183,8 @@
      "not": [
       "of"
      ],
-     "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
-     "en": "The key word of must stay unchanged in the gap."
+     "de": "Das Schlüsselwort OF muss unverändert in der Lücke stehen.",
+     "en": "The key word OF must stay unchanged in the gap."
     },
     {
      "if": [
@@ -193,8 +193,8 @@
      "not": [
       "of"
      ],
-     "de": "Das Schlüsselwort of muss vor the manager stehen.",
-     "en": "The key word of must come before the manager."
+     "de": "Das Schlüsselwort OF muss vor the manager stehen.",
+     "en": "The key word OF must come before the manager."
     }
    ]
   }
@@ -222,8 +222,8 @@
      "not": [
       "of"
      ],
-     "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
-     "en": "The key word of must stay unchanged in the gap."
+     "de": "Das Schlüsselwort OF muss unverändert in der Lücke stehen.",
+     "en": "The key word OF must stay unchanged in the gap."
     },
     {
      "if": [
@@ -232,8 +232,8 @@
      "not": [
       "of"
      ],
-     "de": "Das Schlüsselwort of muss vor the company stehen.",
-     "en": "The key word of must come before the company."
+     "de": "Das Schlüsselwort OF muss vor the company stehen.",
+     "en": "The key word OF must come before the company."
     }
    ]
   }
@@ -261,8 +261,8 @@
      "not": [
       "first"
      ],
-     "de": "Das Schlüsselwort first muss unverändert in der Lücke stehen.",
-     "en": "The key word first must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FIRST muss unverändert in der Lücke stehen.",
+     "en": "The key word FIRST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -301,8 +301,8 @@
      "not": [
       "way"
      ],
-     "de": "Das Schlüsselwort way muss unverändert in der Lücke stehen.",
-     "en": "The key word way must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WAY muss unverändert in der Lücke stehen.",
+     "en": "The key word WAY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -688,8 +688,8 @@
      "not": [
       "extent"
      ],
-     "de": "Das Schlüsselwort extent muss unverändert in der Lücke stehen.",
-     "en": "The key word extent must stay unchanged in the gap."
+     "de": "Das Schlüsselwort EXTENT muss unverändert in der Lücke stehen.",
+     "en": "The key word EXTENT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -727,8 +727,8 @@
      "not": [
       "tailored"
      ],
-     "de": "Das Schlüsselwort tailored muss unverändert in der Lücke stehen.",
-     "en": "The key word tailored must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TAILORED muss unverändert in der Lücke stehen.",
+     "en": "The key word TAILORED must stay unchanged in the gap."
     },
     {
      "if": [

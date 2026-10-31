@@ -45,8 +45,8 @@
      "not": [
       "advice"
      ],
-     "de": "Das Schlüsselwort advice muss unverändert in der Lücke stehen.",
-     "en": "The key word advice must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ADVICE muss unverändert in der Lücke stehen.",
+     "en": "The key word ADVICE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -94,8 +94,8 @@
      "not": [
       "information"
      ],
-     "de": "Das Schlüsselwort information muss unverändert in der Lücke stehen.",
-     "en": "The key word information must stay unchanged in the gap."
+     "de": "Das Schlüsselwort INFORMATION muss unverändert in der Lücke stehen.",
+     "en": "The key word INFORMATION must stay unchanged in the gap."
     },
     {
      "if": [
@@ -263,8 +263,8 @@
      "not": [
       "traffic"
      ],
-     "de": "Das Schlüsselwort traffic muss unverändert in der Lücke stehen.",
-     "en": "The key word traffic must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TRAFFIC muss unverändert in der Lücke stehen.",
+     "en": "The key word TRAFFIC must stay unchanged in the gap."
     },
     {
      "if": [
@@ -310,8 +310,8 @@
      "not": [
       "equipment"
      ],
-     "de": "Das Schlüsselwort equipment muss unverändert in der Lücke stehen.",
-     "en": "The key word equipment must stay unchanged in the gap."
+     "de": "Das Schlüsselwort EQUIPMENT muss unverändert in der Lücke stehen.",
+     "en": "The key word EQUIPMENT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -469,8 +469,8 @@
      "not": [
       "many"
      ],
-     "de": "Das Schlüsselwort many muss unverändert in der Lücke stehen.",
-     "en": "The key word many must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MANY muss unverändert in der Lücke stehen.",
+     "en": "The key word MANY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -493,7 +493,7 @@
   "id": "cnt-qnt-k2",
   "type": "kwt",
   "pat": "cnt.quant",
-  "from": "We have hardly any time left before the deadline.",
+  "from": "The deadline is almost here, and we're nearly out of time.",
   "key": "LITTLE",
   "frame": "We have ___ before the deadline.",
   "answer": "very little time",
@@ -502,32 +502,37 @@
    "very little time left",
    "little time left",
    "so little time",
-   "so little time left"
+   "so little time left",
+   "only a little time",
+   "only a little time left"
   ],
   "words": [
    2,
-   4
+   5
   ],
   "why": {
    "ok": {
-    "de": "Richtig: very little time. Little heißt „kaum“ und passt zu unzählbarem time.",
-    "en": "Right: very little time. Little means “hardly any” and suits uncountable time."
+    "de": "Richtig: very little time oder only a little time. Little heißt „kaum“, passend zu unzählbarem time.",
+    "en": "Right: very little time or only a little time. Little means “hardly any” and suits uncountable time."
    },
    "wrong": [
     {
      "not": [
       "little"
      ],
-     "de": "Das Schlüsselwort little muss unverändert in der Lücke stehen.",
-     "en": "The key word little must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LITTLE muss unverändert in der Lücke stehen.",
+     "en": "The key word LITTLE must stay unchanged in the gap."
     },
     {
      "if": [
       "a",
       "little"
      ],
-     "de": "„A little“ klingt positiv („etwas“). Gemeint ist „kaum“: little.",
-     "en": "“A little” sounds positive (“some”). “Hardly any” is meant: little."
+     "de": "„A little“ allein klingt positiv („etwas“). Gemeint ist „kaum“: little.",
+     "en": "“A little” alone sounds positive (“some”). “Hardly any” is meant: little.",
+     "not": [
+      "only"
+     ]
     },
     {
      "if": [
@@ -660,8 +665,8 @@
      "not": [
       "piece"
      ],
-     "de": "Das Schlüsselwort piece muss unverändert in der Lücke stehen.",
-     "en": "The key word piece must stay unchanged in the gap."
+     "de": "Das Schlüsselwort PIECE muss unverändert in der Lücke stehen.",
+     "en": "The key word PIECE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -706,8 +711,8 @@
      "not": [
       "pieces"
      ],
-     "de": "Das Schlüsselwort pieces muss unverändert in der Lücke stehen.",
-     "en": "The key word pieces must stay unchanged in the gap."
+     "de": "Das Schlüsselwort PIECES muss unverändert in der Lücke stehen.",
+     "en": "The key word PIECES must stay unchanged in the gap."
     },
     {
      "if": [
@@ -859,8 +864,8 @@
      "not": [
       "experience"
      ],
-     "de": "Das Schlüsselwort experience muss unverändert in der Lücke stehen.",
-     "en": "The key word experience must stay unchanged in the gap."
+     "de": "Das Schlüsselwort EXPERIENCE muss unverändert in der Lücke stehen.",
+     "en": "The key word EXPERIENCE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -903,8 +908,8 @@
      "not": [
       "room"
      ],
-     "de": "Das Schlüsselwort room muss unverändert in der Lücke stehen.",
-     "en": "The key word room must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ROOM muss unverändert in der Lücke stehen.",
+     "en": "The key word ROOM must stay unchanged in the gap."
     },
     {
      "if": [

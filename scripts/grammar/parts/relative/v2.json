@@ -231,16 +231,14 @@
   "id": "rc-wh-k2",
   "type": "kwt",
   "pat": "rc.whose",
-  "from": "The vendor is a small firm. Its prices are 20 percent lower.",
+  "from": "The vendor is a small firm with prices 20 percent lower.",
   "key": "WHOSE",
   "frame": "The vendor is a small firm ___ 20 percent lower.",
   "answer": "whose prices are",
   "accepted": [
    "whose prices run",
    "whose prices come in",
-   "whose prices have been",
-   "whose prices were",
-   "whose prices will be"
+   "whose prices have been"
   ],
   "words": [
    3,
@@ -536,14 +534,16 @@
   "id": "rc-wy-k1",
   "type": "kwt",
   "pat": "rc.where-why",
-  "from": "That is the office. We signed the deal in it.",
+  "from": "That is the office. The deal was signed there.",
   "key": "WHERE",
   "frame": "That is the office ___ the deal.",
   "answer": "where we signed",
   "accepted": [
    "where we have signed",
-   "where we had signed",
-   "where we've signed"
+   "where we've signed",
+   "where they signed",
+   "where I signed",
+   "where we closed"
   ],
   "words": [
    3,
@@ -576,15 +576,14 @@
   "id": "rc-wy-k2",
   "type": "kwt",
   "pat": "rc.where-why",
-  "from": "We don't know the reason. The launch was delayed for it.",
+  "from": "We don't know the reason for the launch delay.",
   "key": "WHY",
   "frame": "We don't know the reason ___ delayed.",
   "answer": "why the launch was",
   "accepted": [
    "why the launch got",
    "why the launch has been",
-   "why the launch is",
-   "why the launch had been"
+   "why the launch is"
   ],
   "words": [
    4,
@@ -713,7 +712,7 @@
   "id": "rc-pp-k1",
   "type": "kwt",
   "pat": "rc.prep",
-  "from": "She is the lawyer. I spoke to her yesterday.",
+  "from": "She's the lawyer I had a word with yesterday.",
   "key": "WHOM",
   "frame": "She is the lawyer ___ yesterday.",
   "answer": "to whom I spoke",
@@ -721,10 +720,6 @@
    "whom I spoke to",
    "with whom I spoke",
    "whom I spoke with",
-   "to whom I had spoken",
-   "whom I had spoken to",
-   "with whom I had spoken",
-   "whom I had spoken with",
    "to whom I talked",
    "whom I talked to"
   ],
@@ -751,6 +746,13 @@
      ],
      "de": "Das Schlüsselwort WHOM muss unverändert in der Lücke stehen.",
      "en": "The key word WHOM must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Mit yesterday steht Past Simple: whom I spoke to.",
+     "en": "With yesterday, use the past simple: whom I spoke to."
     }
    ]
   }
@@ -942,14 +944,15 @@
   "id": "rc-tw-k2",
   "type": "kwt",
   "pat": "rc.that-what",
-  "from": "The thing I need most is a clear deadline.",
+  "from": "More than anything, I need a clear deadline.",
   "key": "WHAT",
   "frame": "___ is a clear deadline.",
   "answer": "what I need most",
   "accepted": [
    "what I need the most",
    "what I most need",
-   "what we need most"
+   "what we need most",
+   "What I need above all"
   ],
   "words": [
    4,

@@ -28,8 +28,8 @@
      "not": [
       "avoided"
      ],
-     "de": "Das Schlüsselwort avoided muss unverändert in der Lücke stehen.",
-     "en": "The key word avoided must stay unchanged in the gap."
+     "de": "Das Schlüsselwort AVOIDED muss unverändert in der Lücke stehen.",
+     "en": "The key word AVOIDED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -83,8 +83,8 @@
      "not": [
       "postpone"
      ],
-     "de": "Das Schlüsselwort postpone muss unverändert in der Lücke stehen.",
-     "en": "The key word postpone must stay unchanged in the gap."
+     "de": "Das Schlüsselwort POSTPONE muss unverändert in der Lücke stehen.",
+     "en": "The key word POSTPONE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -246,8 +246,8 @@
      "not": [
       "managed"
      ],
-     "de": "Das Schlüsselwort managed muss unverändert in der Lücke stehen.",
-     "en": "The key word managed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MANAGED muss unverändert in der Lücke stehen.",
+     "en": "The key word MANAGED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -305,8 +305,8 @@
      "not": [
       "afford"
      ],
-     "de": "Das Schlüsselwort afford muss unverändert in der Lücke stehen.",
-     "en": "The key word afford must stay unchanged in the gap."
+     "de": "Das Schlüsselwort AFFORD muss unverändert in der Lücke stehen.",
+     "en": "The key word AFFORD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -448,8 +448,8 @@
      "not": [
       "looking"
      ],
-     "de": "Das Schlüsselwort looking muss unverändert in der Lücke stehen.",
-     "en": "The key word looking must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LOOKING muss unverändert in der Lücke stehen.",
+     "en": "The key word LOOKING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -516,8 +516,8 @@
      "not": [
       "committed"
      ],
-     "de": "Das Schlüsselwort committed muss unverändert in der Lücke stehen.",
-     "en": "The key word committed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort COMMITTED muss unverändert in der Lücke stehen.",
+     "en": "The key word COMMITTED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -687,8 +687,8 @@
      "not": [
       "remember"
      ],
-     "de": "Das Schlüsselwort remember muss unverändert in der Lücke stehen.",
-     "en": "The key word remember must stay unchanged in the gap."
+     "de": "Das Schlüsselwort REMEMBER muss unverändert in der Lücke stehen.",
+     "en": "The key word REMEMBER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -719,7 +719,7 @@
   "id": "vp-rf-k2",
   "type": "kwt",
   "pat": "vp.remember-forget",
-  "from": "Don't forget that you have to call the supplier today.",
+  "from": "Don't let it slip your mind: the supplier needs a call today.",
   "key": "FORGET",
   "frame": "Don't ___ the supplier today.",
   "answer": "forget to call",
@@ -741,8 +741,8 @@
      "not": [
       "forget"
      ],
-     "de": "Das Schlüsselwort forget muss unverändert in der Lücke stehen.",
-     "en": "The key word forget must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FORGET muss unverändert in der Lücke stehen.",
+     "en": "The key word FORGET must stay unchanged in the gap."
     },
     {
      "if": [
@@ -893,8 +893,8 @@
      "not": [
       "stopped"
      ],
-     "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
-     "en": "The key word stopped must stay unchanged in the gap."
+     "de": "Das Schlüsselwort STOPPED muss unverändert in der Lücke stehen.",
+     "en": "The key word STOPPED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -925,14 +925,16 @@
   "id": "vp-st-k2",
   "type": "kwt",
   "pat": "vp.stop-try",
-  "from": "She paused her work to take a call.",
+  "from": "A call came in, so she interrupted her work.",
   "key": "STOPPED",
   "frame": "She ___ a call.",
   "answer": "stopped to take",
   "accepted": [
    "stopped to answer",
    "stopped working to take",
-   "stopped working to answer"
+   "stopped working to answer",
+   "stopped work to take",
+   "stopped work to answer"
   ],
   "words": [
    3,
@@ -948,8 +950,8 @@
      "not": [
       "stopped"
      ],
-     "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
-     "en": "The key word stopped must stay unchanged in the gap."
+     "de": "Das Schlüsselwort STOPPED muss unverändert in der Lücke stehen.",
+     "en": "The key word STOPPED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1093,7 +1095,7 @@
   "id": "vp-rg-k1",
   "type": "kwt",
   "pat": "vp.regret",
-  "from": "We are sorry to announce that the event has been canceled.",
+  "from": "Sadly, we have an announcement: the event has been canceled.",
   "key": "REGRET",
   "frame": "We ___ that the event has been canceled.",
   "answer": "regret to announce",
@@ -1120,8 +1122,8 @@
      "not": [
       "regret"
      ],
-     "de": "Das Schlüsselwort regret muss unverändert in der Lücke stehen.",
-     "en": "The key word regret must stay unchanged in the gap."
+     "de": "Das Schlüsselwort REGRET muss unverändert in der Lücke stehen.",
+     "en": "The key word REGRET must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1171,8 +1173,8 @@
      "not": [
       "regret"
      ],
-     "de": "Das Schlüsselwort regret muss unverändert in der Lücke stehen.",
-     "en": "The key word regret must stay unchanged in the gap."
+     "de": "Das Schlüsselwort REGRET muss unverändert in der Lücke stehen.",
+     "en": "The key word REGRET must stay unchanged in the gap."
     },
     {
      "if": [

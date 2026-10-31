@@ -22,8 +22,8 @@
      "not": [
       "tuesday"
      ],
-     "de": "Das Schlüsselwort Tuesday muss unverändert in der Lücke stehen.",
-     "en": "The key word Tuesday must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TUESDAY muss unverändert in der Lücke stehen.",
+     "en": "The key word TUESDAY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -75,8 +75,8 @@
      "not": [
       "early"
      ],
-     "de": "Das Schlüsselwort early muss unverändert in der Lücke stehen.",
-     "en": "The key word early must stay unchanged in the gap."
+     "de": "Das Schlüsselwort EARLY muss unverändert in der Lücke stehen.",
+     "en": "The key word EARLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -242,8 +242,8 @@
      "not": [
       "worked"
      ],
-     "de": "Das Schlüsselwort worked muss unverändert in der Lücke stehen.",
-     "en": "The key word worked must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WORKED muss unverändert in der Lücke stehen.",
+     "en": "The key word WORKED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -287,8 +287,8 @@
      "not": [
       "testing"
      ],
-     "de": "Das Schlüsselwort testing muss unverändert in der Lücke stehen.",
-     "en": "The key word testing must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TESTING muss unverändert in der Lücke stehen.",
+     "en": "The key word TESTING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -426,8 +426,8 @@
      "not": [
       "wednesday"
      ],
-     "de": "Das Schlüsselwort Wednesday muss unverändert in der Lücke stehen.",
-     "en": "The key word Wednesday must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WEDNESDAY muss unverändert in der Lücke stehen.",
+     "en": "The key word WEDNESDAY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -472,8 +472,8 @@
      "not": [
       "monday"
      ],
-     "de": "Das Schlüsselwort Monday muss unverändert in der Lücke stehen.",
-     "en": "The key word Monday must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MONDAY muss unverändert in der Lücke stehen.",
+     "en": "The key word MONDAY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -636,8 +636,8 @@
      "not": [
       "two"
      ],
-     "de": "Das Schlüsselwort two muss unverändert in der Lücke stehen.",
-     "en": "The key word two must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TWO muss unverändert in der Lücke stehen.",
+     "en": "The key word TWO must stay unchanged in the gap."
     },
     {
      "if": [
@@ -683,8 +683,8 @@
      "not": [
       "presentation"
      ],
-     "de": "Das Schlüsselwort presentation muss unverändert in der Lücke stehen.",
-     "en": "The key word presentation must stay unchanged in the gap."
+     "de": "Das Schlüsselwort PRESENTATION muss unverändert in der Lücke stehen.",
+     "en": "The key word PRESENTATION must stay unchanged in the gap."
     },
     {
      "if": [

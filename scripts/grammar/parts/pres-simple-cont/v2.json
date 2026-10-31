@@ -30,8 +30,8 @@
      "not": [
       "usually"
      ],
-     "de": "Das Schlüsselwort usually muss unverändert in der Lücke stehen.",
-     "en": "The key word usually must stay unchanged in the gap."
+     "de": "Das Schlüsselwort USUALLY muss unverändert in der Lücke stehen.",
+     "en": "The key word USUALLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -82,8 +82,8 @@
      "not": [
       "never"
      ],
-     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
-     "en": "The key word never must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEVER muss unverändert in der Lücke stehen.",
+     "en": "The key word NEVER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -228,7 +228,7 @@
   "id": "psc-now-k1",
   "type": "kwt",
   "pat": "psc.now",
-  "from": "Right now, we are building a prototype for the Berlin client.",
+  "from": "A prototype for the Berlin client is in the works right now.",
   "key": "CURRENTLY",
   "frame": "We ___ a prototype for the Berlin client.",
   "answer": "are currently building",
@@ -263,8 +263,8 @@
      "not": [
       "currently"
      ],
-     "de": "Das Schlüsselwort currently muss unverändert in der Lücke stehen.",
-     "en": "The key word currently must stay unchanged in the gap."
+     "de": "Das Schlüsselwort CURRENTLY muss unverändert in der Lücke stehen.",
+     "en": "The key word CURRENTLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -301,7 +301,7 @@
   "id": "psc-now-k2",
   "type": "kwt",
   "pat": "psc.now",
-  "from": "I can't join the call because I'm driving at this moment.",
+  "from": "I can't join the call because I'm behind the wheel right now.",
   "key": "MOMENT",
   "frame": "I can't join the call because I ___.",
   "answer": "am driving at the moment",
@@ -324,8 +324,8 @@
      "not": [
       "moment"
      ],
-     "de": "Das Schlüsselwort moment muss unverändert in der Lücke stehen.",
-     "en": "The key word moment must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MOMENT muss unverändert in der Lücke stehen.",
+     "en": "The key word MOMENT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -472,8 +472,8 @@
      "not": [
       "know"
      ],
-     "de": "Das Schlüsselwort know muss unverändert in der Lücke stehen.",
-     "en": "The key word know must stay unchanged in the gap."
+     "de": "Das Schlüsselwort KNOW muss unverändert in der Lücke stehen.",
+     "en": "The key word KNOW must stay unchanged in the gap."
     },
     {
      "if": [
@@ -534,8 +534,8 @@
      "not": [
       "understand"
      ],
-     "de": "Das Schlüsselwort understand muss unverändert in der Lücke stehen.",
-     "en": "The key word understand must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNDERSTAND muss unverändert in der Lücke stehen.",
+     "en": "The key word UNDERSTAND must stay unchanged in the gap."
     },
     {
      "if": [
@@ -706,8 +706,8 @@
      "not": [
       "think"
      ],
-     "de": "Das Schlüsselwort think muss unverändert in der Lücke stehen.",
-     "en": "The key word think must stay unchanged in the gap."
+     "de": "Das Schlüsselwort THINK muss unverändert in der Lücke stehen.",
+     "en": "The key word THINK must stay unchanged in the gap."
     },
     {
      "if": [
@@ -767,8 +767,8 @@
      "not": [
       "having"
      ],
-     "de": "Das Schlüsselwort having muss unverändert in der Lücke stehen.",
-     "en": "The key word having must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAVING muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -933,8 +933,8 @@
      "not": [
       "always"
      ],
-     "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
-     "en": "The key word always must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ALWAYS muss unverändert in der Lücke stehen.",
+     "en": "The key word ALWAYS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -984,8 +984,8 @@
      "not": [
       "always"
      ],
-     "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
-     "en": "The key word always must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ALWAYS muss unverändert in der Lücke stehen.",
+     "en": "The key word ALWAYS must stay unchanged in the gap."
     },
     {
      "if": [

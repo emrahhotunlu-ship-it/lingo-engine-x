@@ -404,16 +404,16 @@
   "pat": "pv.perfect",
   "why": {
    "ok": {
-    "de": "Nach „until“ steht das Present, und die Änderungen müssen vorher fertig sein: have been made (Passiv Present Perfect).",
-    "en": "After “until” the Present is used, and the changes must be done before: have been made (Passive Present Perfect)."
+    "de": "Nach until steht Present Perfect oder Present Simple, kein will: have been made (vorher fertig, Passiv). Auch are made geht.",
+    "en": "After until use the present perfect or present simple, not will: have been made (done before, passive). Are made also works."
    },
    "wrong": [
     {
      "if": [
       "will"
      ],
-     "de": "Nach until steht kein will: Present Perfect have been made.",
-     "en": "No will after until: use the present perfect have been made."
+     "de": "Nach until steht kein will: have been made.",
+     "en": "No will after until: use have been made."
     },
     {
      "if": [
@@ -437,8 +437,8 @@
      "if": [
       "make"
      ],
-     "de": "Nach been steht die 3. Form von make: made.",
-     "en": "After been use the past participle of make: made."
+     "de": "Hier braucht es das Passiv mit der 3. Form: have been made.",
+     "en": "You need the passive with the past participle: have been made."
     }
    ]
   }

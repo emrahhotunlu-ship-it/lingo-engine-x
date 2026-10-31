@@ -10,7 +10,9 @@ export default defineConfig({
   timeout: 45_000,
   expect: { timeout: 10_000 },
   reporter: [['list']],
-  use: { browserName: 'chromium', trace: 'retain-on-failure', timezoneId: 'Europe/Berlin', locale: 'de-DE' },
+  // `PW_CHROMIUM` (optional): fester Browser-Pfad, wenn die vorinstallierte Chromium-Version nicht zur festgelegten Playwright-Version passt
+  // (Cloud-Umgebung 31.10.2026: /opt/pw-browsers/chromium). Ohne die Variable bleibt alles wie bisher.
+  use: { browserName: 'chromium', trace: 'retain-on-failure', timezoneId: 'Europe/Berlin', locale: 'de-DE', ...(process.env.PW_CHROMIUM ? { launchOptions: { executablePath: process.env.PW_CHROMIUM } } : {}) },
   projects: [
     { name: 'main', testIgnore: /perf\.spec\.ts$/ },
     { name: 'perf', testMatch: /perf\.spec\.ts$/, workers: 1, dependencies: ['main'] },

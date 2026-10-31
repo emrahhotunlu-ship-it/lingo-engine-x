@@ -22,8 +22,8 @@
      "not": [
       "rarely"
      ],
-     "de": "Das Schlüsselwort rarely muss unverändert in der Lücke stehen.",
-     "en": "The key word rarely must stay unchanged in the gap."
+     "de": "Das Schlüsselwort RARELY muss unverändert in der Lücke stehen.",
+     "en": "The key word RARELY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -62,8 +62,8 @@
      "not": [
       "never"
      ],
-     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
-     "en": "The key word never must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEVER muss unverändert in der Lücke stehen.",
+     "en": "The key word NEVER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -102,8 +102,8 @@
      "not": [
       "only"
      ],
-     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
-     "en": "The key word only must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ONLY muss unverändert in der Lücke stehen.",
+     "en": "The key word ONLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -143,8 +143,8 @@
      "not": [
       "only"
      ],
-     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
-     "en": "The key word only must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ONLY muss unverändert in der Lücke stehen.",
+     "en": "The key word ONLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -153,8 +153,8 @@
      "not": [
       "only"
      ],
-     "de": "Das Schlüsselwort only gehört an den Anfang.",
-     "en": "The key word only belongs at the start."
+     "de": "Das Schlüsselwort ONLY gehört an den Anfang.",
+     "en": "The key word ONLY belongs at the start."
     }
    ]
   },
@@ -183,8 +183,8 @@
      "not": [
       "sooner"
      ],
-     "de": "Das Schlüsselwort sooner muss unverändert in der Lücke stehen.",
-     "en": "The key word sooner must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SOONER muss unverändert in der Lücke stehen.",
+     "en": "The key word SOONER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -223,8 +223,8 @@
      "not": [
       "hardly"
      ],
-     "de": "Das Schlüsselwort hardly muss unverändert in der Lücke stehen.",
-     "en": "The key word hardly must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HARDLY muss unverändert in der Lücke stehen.",
+     "en": "The key word HARDLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -233,8 +233,8 @@
      "not": [
       "hardly"
      ],
-     "de": "Das Schlüsselwort hardly muss vorn stehen.",
-     "en": "The key word hardly must come first."
+     "de": "Das Schlüsselwort HARDLY muss vorn stehen.",
+     "en": "The key word HARDLY must come first."
     }
    ]
   },
@@ -263,8 +263,8 @@
      "not": [
       "should"
      ],
-     "de": "Das Schlüsselwort should muss unverändert in der Lücke stehen.",
-     "en": "The key word should must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SHOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word SHOULD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -301,8 +301,8 @@
      "not": [
       "had"
      ],
-     "de": "Das Schlüsselwort had muss unverändert in der Lücke stehen.",
-     "en": "The key word had must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAD muss unverändert in der Lücke stehen.",
+     "en": "The key word HAD must stay unchanged in the gap."
     },
     {
      "if": [

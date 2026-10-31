@@ -3,7 +3,7 @@
   "id": "cn-z-k1",
   "type": "kwt",
   "pat": "cn.zero",
-  "from": "Every time a customer cancels within 14 days, we refund the full fee.",
+  "from": "We refund the full fee for every cancellation within 14 days.",
   "key": "WHENEVER",
   "frame": "We refund the full fee ___ within 14 days.",
   "answer": "whenever a customer cancels",
@@ -11,7 +11,11 @@
    "whenever customers cancel",
    "whenever a customer has canceled",
    "whenever the customer cancels",
-   "whenever someone cancels"
+   "whenever someone cancels",
+   "whenever a client cancels",
+   "whenever you cancel",
+   "whenever anyone cancels",
+   "whenever there is a cancellation"
   ],
   "words": [
    3,
@@ -53,7 +57,7 @@
   "id": "cn-z-k2",
   "type": "kwt",
   "pat": "cn.zero",
-  "from": "If the build fails, the pipeline stops automatically.",
+  "from": "A failed build stops the pipeline automatically.",
   "key": "WHEN",
   "frame": "The pipeline stops automatically ___.",
   "answer": "when the build fails",
@@ -296,7 +300,9 @@
   ],
   "answer": "rains",
   "fixed": "If it rains tomorrow, we'll move the team lunch indoors.",
-  "accepted": [],
+  "accepted": [
+   "should rain"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Nach if steht bei möglicher Zukunft das Präsens (rains), kein will.",
@@ -698,7 +704,8 @@
   "answer": "could",
   "fixed": "If our budget were not so tight, we could hire another analyst.",
   "accepted": [
-   "would"
+   "would",
+   "might"
   ],
   "why": {
    "ok": {
@@ -953,7 +960,7 @@
   "id": "cn-i-k1",
   "type": "kwt",
   "pat": "cn.if-words",
-  "from": "We'll extend the contract, but only if the price stays fixed.",
+  "from": "We're willing to extend the contract on one condition: a fixed price.",
   "key": "PROVIDED",
   "frame": "We'll extend the contract ___ stays fixed.",
   "answer": "provided that the price",

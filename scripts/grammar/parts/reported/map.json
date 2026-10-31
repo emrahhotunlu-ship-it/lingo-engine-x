@@ -245,8 +245,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "„haven't received“ wird nach „said“ zu hadn't received. Der Versand lag vor dem Sagen, deshalb Past Perfect.",
-    "en": "“Haven't received” becomes hadn't received after “said”. The sending happened before the saying, hence Past Perfect."
+    "de": "Direkte Rede: „I haven't received your email.“ Nach „said“ rückt das zurück: hadn't received. Auch didn't receive geht.",
+    "en": "Direct speech: “I haven't received your email.” After “said” it moves back: hadn't received. Didn't receive also works."
    },
    "wrong": [
     {
@@ -260,8 +260,12 @@
      "if": [
       "didn't"
      ],
-     "de": "„didn't receive“ ist möglich, aber hier üben wir den Rückschritt: hadn't received.",
-     "en": "“didn't receive” is possible, but here we practice the backshift: hadn't received."
+     "not": [
+      "receive",
+      "get"
+     ],
+     "de": "Mit didn’t braucht es hier receive oder get: didn’t receive (Musterlösung: hadn’t received).",
+     "en": "With didn’t you need receive or get here: didn’t receive (model answer: hadn’t received)."
     },
     {
      "not": [

@@ -26,8 +26,8 @@
           "not": [
             "test"
           ],
-          "de": "Das Schlüsselwort test muss unverändert in der Lücke stehen.",
-          "en": "The key word test must stay unchanged in the gap."
+          "de": "Das Schlüsselwort TEST muss unverändert in der Lücke stehen.",
+          "en": "The key word TEST must stay unchanged in the gap."
         },
         {
           "if": [
@@ -76,8 +76,8 @@
           "not": [
             "nervous"
           ],
-          "de": "Das Schlüsselwort nervous muss unverändert in der Lücke stehen.",
-          "en": "The key word nervous must stay unchanged in the gap."
+          "de": "Das Schlüsselwort NERVOUS muss unverändert in der Lücke stehen.",
+          "en": "The key word NERVOUS must stay unchanged in the gap."
         },
         {
           "if": [
@@ -243,8 +243,8 @@
           "not": [
             "slow"
           ],
-          "de": "Das Schlüsselwort slow muss unverändert in der Lücke stehen.",
-          "en": "The key word slow must stay unchanged in the gap."
+          "de": "Das Schlüsselwort SLOW muss unverändert in der Lücke stehen.",
+          "en": "The key word SLOW must stay unchanged in the gap."
         },
         {
           "if": [
@@ -290,8 +290,8 @@
           "not": [
             "experienced"
           ],
-          "de": "Das Schlüsselwort experienced muss unverändert in der Lücke stehen.",
-          "en": "The key word experienced must stay unchanged in the gap."
+          "de": "Das Schlüsselwort EXPERIENCED muss unverändert in der Lücke stehen.",
+          "en": "The key word EXPERIENCED must stay unchanged in the gap."
         },
         {
           "if": [
@@ -437,8 +437,8 @@
           "not": [
             "read"
           ],
-          "de": "Das Schlüsselwort read muss unverändert in der Lücke stehen.",
-          "en": "The key word read must stay unchanged in the gap."
+          "de": "Das Schlüsselwort READ muss unverändert in der Lücke stehen.",
+          "en": "The key word READ must stay unchanged in the gap."
         },
         {
           "if": [
@@ -495,8 +495,8 @@
           "not": [
             "flexible"
           ],
-          "de": "Das Schlüsselwort flexible muss unverändert in der Lücke stehen.",
-          "en": "The key word flexible must stay unchanged in the gap."
+          "de": "Das Schlüsselwort FLEXIBLE muss unverändert in der Lücke stehen.",
+          "en": "The key word FLEXIBLE must stay unchanged in the gap."
         },
         {
           "if": [
@@ -637,8 +637,8 @@
           "not": [
             "expected"
           ],
-          "de": "Das Schlüsselwort expected muss unverändert in der Lücke stehen.",
-          "en": "The key word expected must stay unchanged in the gap."
+          "de": "Das Schlüsselwort EXPECTED muss unverändert in der Lücke stehen.",
+          "en": "The key word EXPECTED must stay unchanged in the gap."
         },
         {
           "if": [
@@ -693,8 +693,8 @@
           "not": [
             "planned"
           ],
-          "de": "Das Schlüsselwort planned muss unverändert in der Lücke stehen.",
-          "en": "The key word planned must stay unchanged in the gap."
+          "de": "Das Schlüsselwort PLANNED muss unverändert in der Lücke stehen.",
+          "en": "The key word PLANNED must stay unchanged in the gap."
         },
         {
           "if": [
@@ -863,8 +863,8 @@
           "not": [
             "cheaper"
           ],
-          "de": "Das Schlüsselwort cheaper muss unverändert in der Lücke stehen.",
-          "en": "The key word cheaper must stay unchanged in the gap."
+          "de": "Das Schlüsselwort CHEAPER muss unverändert in der Lücke stehen.",
+          "en": "The key word CHEAPER must stay unchanged in the gap."
         },
         {
           "if": [
@@ -922,8 +922,8 @@
           "not": [
             "faster"
           ],
-          "de": "Das Schlüsselwort faster muss unverändert in der Lücke stehen.",
-          "en": "The key word faster must stay unchanged in the gap."
+          "de": "Das Schlüsselwort FASTER muss unverändert in der Lücke stehen.",
+          "en": "The key word FASTER must stay unchanged in the gap."
         },
         {
           "if": [

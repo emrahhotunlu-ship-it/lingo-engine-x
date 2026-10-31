@@ -503,7 +503,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "That was the first time our CEO has presented in Spanish to a client.",
+   "text": "That was the first time our CEO has presented to a client in Spanish.",
    "bad": {
     "span": "has presented",
     "fix": [
@@ -518,8 +518,8 @@
    },
    "why": {
     "ok": {
-     "de": "Nach „That was the first time“ in der Vergangenheit steht das Past Perfect: had presented (Past Simple geht im Alltag auch). Has wäre die Gegenwart.",
-     "en": "After “That was the first time” in the past comes the past perfect: had presented (the past simple also works in everyday use). Has would be the present."
+     "de": "„That was the first time …“ verlangt das Past Perfect: had presented. (Bei „This is the first time“ steht has presented.) Presented geht im US-Alltag auch.",
+     "en": "“That was the first time …” takes the past perfect: had presented. (“This is the first time” takes has presented.) Presented also works in everyday US English."
     },
     "wrong": [
      {
@@ -669,8 +669,8 @@
    },
    "why": {
     "ok": {
-     "de": "Was vor einem Moment in der Vergangenheit schon geschehen war, steht im Past Perfect: had already been sent. Has würde die Gegenwart betreffen.",
-     "en": "What had already happened before a past moment takes the past perfect: had already been sent. Has would refer to the present."
+     "de": "Was vor einem Moment in der Vergangenheit schon geschehen war: had already been sent. Auch was already sent geht. Has gehört zur Gegenwart.",
+     "en": "What had already happened before a past moment: had already been sent. Was already sent also works. Has belongs to the present."
     },
     "wrong": [
      {

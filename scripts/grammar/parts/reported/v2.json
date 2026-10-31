@@ -31,8 +31,8 @@
      "not": [
       "were"
      ],
-     "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
-     "en": "The key word were must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WERE muss unverändert in der Lücke stehen.",
+     "en": "The key word WERE must stay unchanged in the gap."
     }
    ]
   }
@@ -57,16 +57,16 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: he hadn't seen. Aus „I haven't seen“ wird nach „told“ hadn't seen (Present Perfect → Past Perfect).",
-    "en": "Right: he hadn't seen. After “told”, “I haven't seen” becomes hadn't seen (Present Perfect → Past Perfect)."
+    "de": "Nach „told“ rückt „I haven't seen“ zurück: he hadn't seen. Auch he had not seen geht.",
+    "en": "After “told”, “I haven't seen” moves back: he hadn't seen. He had not seen also works."
    },
    "wrong": [
     {
      "if": [
       "hasn't"
      ],
-     "de": "„hasn't seen“ bleibt in der Gegenwart. Nach told me rückt es zu hadn't seen.",
-     "en": "“hasn't seen” stays in the present. After told me it moves to hadn't seen."
+     "de": "hasn't seen geht im Gespräch, wenn es noch gilt. Hier üben wir das Zurückrücken nach told: hadn't seen.",
+     "en": "hasn't seen works in conversation if it is still true. Here we practice the backshift after told: hadn't seen."
     },
     {
      "if": [
@@ -79,8 +79,8 @@
      "not": [
       "seen"
      ],
-     "de": "Das Schlüsselwort seen muss unverändert in der Lücke stehen.",
-     "en": "The key word seen must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word SEEN must stay unchanged in the gap."
     }
    ]
   }
@@ -243,8 +243,8 @@
      "not": [
       "day"
      ],
-     "de": "Das Schlüsselwort day muss unverändert in der Lücke stehen.",
-     "en": "The key word day must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DAY muss unverändert in der Lücke stehen.",
+     "en": "The key word DAY must stay unchanged in the gap."
     }
    ]
   }
@@ -291,8 +291,8 @@
      "not": [
       "day"
      ],
-     "de": "Das Schlüsselwort day muss unverändert in der Lücke stehen.",
-     "en": "The key word day must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DAY muss unverändert in der Lücke stehen.",
+     "en": "The key word DAY must stay unchanged in the gap."
     }
    ]
   }
@@ -434,8 +434,8 @@
      "not": [
       "where"
      ],
-     "de": "Das Schlüsselwort where muss unverändert in der Lücke stehen.",
-     "en": "The key word where must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHERE muss unverändert in der Lücke stehen.",
+     "en": "The key word WHERE must stay unchanged in the gap."
     }
    ]
   }
@@ -480,8 +480,8 @@
      "not": [
       "whether"
      ],
-     "de": "Das Schlüsselwort whether muss unverändert in der Lücke stehen.",
-     "en": "The key word whether must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHETHER muss unverändert in der Lücke stehen.",
+     "en": "The key word WHETHER must stay unchanged in the gap."
     }
    ]
   }
@@ -589,7 +589,7 @@
   "id": "rs-tl-k1",
   "type": "kwt",
   "pat": "rs.tell-say",
-  "from": "“The invoice is overdue,” Maria told the client.",
+  "from": "“The invoice is overdue,” Maria said to a customer.",
   "key": "TOLD",
   "frame": "Maria ___ the invoice was overdue.",
   "answer": "told the client that",
@@ -599,7 +599,11 @@
    "told our client",
    "told them that",
    "told him that",
-   "told her that"
+   "told her that",
+   "told the customer that",
+   "told the customer",
+   "told a customer that",
+   "told a customer"
   ],
   "words": [
    3,
@@ -616,7 +620,11 @@
       "told"
      ],
      "not": [
-      "client"
+      "client",
+      "customer",
+      "them",
+      "him",
+      "her"
      ],
      "de": "Nach told steht die Person: told the client.",
      "en": "After told comes the person: told the client."
@@ -625,8 +633,8 @@
      "not": [
       "told"
      ],
-     "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
-     "en": "The key word told must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TOLD muss unverändert in der Lücke stehen.",
+     "en": "The key word TOLD must stay unchanged in the gap."
     }
    ]
   }
@@ -669,8 +677,8 @@
      "not": [
       "said"
      ],
-     "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
-     "en": "The key word said must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SAID muss unverändert in der Lücke stehen.",
+     "en": "The key word SAID must stay unchanged in the gap."
     }
    ]
   },
@@ -811,8 +819,8 @@
      "not": [
       "asked"
      ],
-     "de": "Das Schlüsselwort asked muss unverändert in der Lücke stehen.",
-     "en": "The key word asked must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ASKED muss unverändert in der Lücke stehen.",
+     "en": "The key word ASKED must stay unchanged in the gap."
     }
    ]
   }
@@ -849,8 +857,8 @@
      "not": [
       "not"
      ],
-     "de": "Das Schlüsselwort not muss unverändert in der Lücke stehen.",
-     "en": "The key word not must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NOT muss unverändert in der Lücke stehen.",
+     "en": "The key word NOT must stay unchanged in the gap."
     }
    ]
   }

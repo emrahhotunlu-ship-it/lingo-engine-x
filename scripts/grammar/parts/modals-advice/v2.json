@@ -371,13 +371,11 @@
   "id": "ma-pol-k1",
   "type": "kwt",
   "pat": "ma.polite",
-  "from": "Why not ask Lena for a short extension?",
+  "from": "What about getting a short extension from Lena?",
   "key": "COULD",
   "frame": "Perhaps you ___ for a short extension.",
   "answer": "could ask Lena",
-  "accepted": [
-   "could ask her"
-  ],
+  "accepted": [],
   "words": [
    3,
    3

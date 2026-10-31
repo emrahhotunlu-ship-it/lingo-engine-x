@@ -28,8 +28,8 @@
      "not": [
       "lost"
      ],
-     "de": "Das Schlüsselwort lost muss unverändert in der Lücke stehen.",
-     "en": "The key word lost must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LOST muss unverändert in der Lücke stehen.",
+     "en": "The key word LOST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -77,8 +77,8 @@
      "not": [
       "approved"
      ],
-     "de": "Das Schlüsselwort approved muss unverändert in der Lücke stehen.",
-     "en": "The key word approved must stay unchanged in the gap."
+     "de": "Das Schlüsselwort APPROVED muss unverändert in der Lücke stehen.",
+     "en": "The key word APPROVED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -130,8 +130,8 @@
      "not": [
       "delay"
      ],
-     "de": "Das Schlüsselwort delay muss unverändert in der Lücke stehen.",
-     "en": "The key word delay must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DELAY muss unverändert in der Lücke stehen.",
+     "en": "The key word DELAY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -194,8 +194,8 @@
      "not": [
       "nervousness"
      ],
-     "de": "Das Schlüsselwort nervousness muss unverändert in der Lücke stehen.",
-     "en": "The key word nervousness must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NERVOUSNESS muss unverändert in der Lücke stehen.",
+     "en": "The key word NERVOUSNESS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -233,7 +233,7 @@
   "id": "lk-whr-k1",
   "type": "kwt",
   "pat": "lk.whereas",
-  "from": "Anna prefers email, but Ben prefers calls.",
+  "from": "Email is Anna's favorite, but Ben would rather call.",
   "key": "WHEREAS",
   "frame": "___ email, Ben prefers calls.",
   "answer": "Whereas Anna prefers",
@@ -252,8 +252,8 @@
      "not": [
       "whereas"
      ],
-     "de": "Das Schlüsselwort whereas muss unverändert in der Lücke stehen.",
-     "en": "The key word whereas must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHEREAS muss unverändert in der Lücke stehen.",
+     "en": "The key word WHEREAS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -306,8 +306,8 @@
      "not": [
       "old"
      ],
-     "de": "Das Schlüsselwort old muss unverändert in der Lücke stehen.",
-     "en": "The key word old must stay unchanged in the gap."
+     "de": "Das Schlüsselwort OLD muss unverändert in der Lücke stehen.",
+     "en": "The key word OLD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -366,8 +366,8 @@
      "not": [
       "board"
      ],
-     "de": "Das Schlüsselwort board muss unverändert in der Lücke stehen.",
-     "en": "The key word board must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BOARD muss unverändert in der Lücke stehen.",
+     "en": "The key word BOARD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -427,8 +427,8 @@
      "not": [
       "team"
      ],
-     "de": "Das Schlüsselwort team muss unverändert in der Lücke stehen.",
-     "en": "The key word team must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TEAM muss unverändert in der Lücke stehen.",
+     "en": "The key word TEAM must stay unchanged in the gap."
     },
     {
      "if": [
@@ -488,8 +488,8 @@
      "not": [
       "hired"
      ],
-     "de": "Das Schlüsselwort hired muss unverändert in der Lücke stehen.",
-     "en": "The key word hired must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HIRED muss unverändert in der Lücke stehen.",
+     "en": "The key word HIRED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -540,8 +540,8 @@
      "not": [
       "need"
      ],
-     "de": "Das Schlüsselwort need muss unverändert in der Lücke stehen.",
-     "en": "The key word need must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEED muss unverändert in der Lücke stehen.",
+     "en": "The key word NEED must stay unchanged in the gap."
     },
     {
      "if": [

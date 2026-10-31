@@ -29,8 +29,8 @@
      "not": [
       "depend"
      ],
-     "de": "Das Schlüsselwort depend muss unverändert in der Lücke stehen.",
-     "en": "The key word depend must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DEPEND muss unverändert in der Lücke stehen.",
+     "en": "The key word DEPEND must stay unchanged in the gap."
     },
     {
      "if": [
@@ -90,8 +90,8 @@
      "not": [
       "insisted"
      ],
-     "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
-     "en": "The key word insisted must stay unchanged in the gap."
+     "de": "Das Schlüsselwort INSISTED muss unverändert in der Lücke stehen.",
+     "en": "The key word INSISTED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -292,8 +292,8 @@
      "not": [
       "familiar"
      ],
-     "de": "Das Schlüsselwort familiar muss unverändert in der Lücke stehen.",
-     "en": "The key word familiar must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FAMILIAR muss unverändert in der Lücke stehen.",
+     "en": "The key word FAMILIAR must stay unchanged in the gap."
     },
     {
      "if": [
@@ -349,8 +349,8 @@
      "not": [
       "interested"
      ],
-     "de": "Das Schlüsselwort interested muss unverändert in der Lücke stehen.",
-     "en": "The key word interested must stay unchanged in the gap."
+     "de": "Das Schlüsselwort INTERESTED muss unverändert in der Lücke stehen.",
+     "en": "The key word INTERESTED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -542,8 +542,8 @@
      "not": [
       "attend"
      ],
-     "de": "Das Schlüsselwort attend muss unverändert in der Lücke stehen.",
-     "en": "The key word attend must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ATTEND muss unverändert in der Lücke stehen.",
+     "en": "The key word ATTEND must stay unchanged in the gap."
     },
     {
      "if": [
@@ -599,8 +599,8 @@
      "not": [
       "mention"
      ],
-     "de": "Das Schlüsselwort mention muss unverändert in der Lücke stehen.",
-     "en": "The key word mention must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MENTION muss unverändert in der Lücke stehen.",
+     "en": "The key word MENTION must stay unchanged in the gap."
     },
     {
      "if": [
@@ -789,8 +789,8 @@
      "not": [
       "explain"
      ],
-     "de": "Das Schlüsselwort explain muss unverändert in der Lücke stehen.",
-     "en": "The key word explain must stay unchanged in the gap."
+     "de": "Das Schlüsselwort EXPLAIN muss unverändert in der Lücke stehen.",
+     "en": "The key word EXPLAIN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -847,8 +847,8 @@
      "not": [
       "announced"
      ],
-     "de": "Das Schlüsselwort announced muss unverändert in der Lücke stehen.",
-     "en": "The key word announced must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ANNOUNCED muss unverändert in der Lücke stehen.",
+     "en": "The key word ANNOUNCED must stay unchanged in the gap."
     },
     {
      "not": [
@@ -1005,8 +1005,8 @@
      "not": [
       "looking"
      ],
-     "de": "Das Schlüsselwort looking muss unverändert in der Lücke stehen.",
-     "en": "The key word looking must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LOOKING muss unverändert in der Lücke stehen.",
+     "en": "The key word LOOKING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1062,8 +1062,8 @@
      "not": [
       "without"
      ],
-     "de": "Das Schlüsselwort without muss unverändert in der Lücke stehen.",
-     "en": "The key word without must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WITHOUT muss unverändert in der Lücke stehen.",
+     "en": "The key word WITHOUT must stay unchanged in the gap."
     },
     {
      "if": [

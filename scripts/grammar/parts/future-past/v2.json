@@ -22,8 +22,8 @@
      "not": [
       "going"
      ],
-     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
-     "en": "The key word going must stay unchanged in the gap."
+     "de": "Das Schlüsselwort GOING muss unverändert in der Lücke stehen.",
+     "en": "The key word GOING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -61,8 +61,8 @@
      "not": [
       "going"
      ],
-     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
-     "en": "The key word going must stay unchanged in the gap."
+     "de": "Das Schlüsselwort GOING muss unverändert in der Lücke stehen.",
+     "en": "The key word GOING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -100,8 +100,8 @@
      "not": [
       "about"
      ],
-     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
-     "en": "The key word about must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ABOUT muss unverändert in der Lücke stehen.",
+     "en": "The key word ABOUT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -140,8 +140,8 @@
      "not": [
       "about"
      ],
-     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
-     "en": "The key word about must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ABOUT muss unverändert in der Lücke stehen.",
+     "en": "The key word ABOUT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -183,8 +183,8 @@
      "not": [
       "would"
      ],
-     "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
-     "en": "The key word would must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word WOULD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -225,8 +225,8 @@
      "not": [
       "would"
      ],
-     "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
-     "en": "The key word would must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word WOULD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -265,8 +265,8 @@
      "not": [
       "were"
      ],
-     "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
-     "en": "The key word were must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WERE muss unverändert in der Lücke stehen.",
+     "en": "The key word WERE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -305,8 +305,8 @@
      "not": [
       "open"
      ],
-     "de": "Das Schlüsselwort open muss unverändert in der Lücke stehen.",
-     "en": "The key word open must stay unchanged in the gap."
+     "de": "Das Schlüsselwort OPEN muss unverändert in der Lücke stehen.",
+     "en": "The key word OPEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -332,7 +332,10 @@
   ],
   "answer": "were going",
   "fixed": "We were going to launch in June, but the supplier delayed everything.",
-  "accepted": [],
+  "accepted": [
+   "were planning",
+   "had planned"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Der Plan liegt in der Vergangenheit. Richtig: were going to.",
@@ -436,7 +439,12 @@
   ],
   "answer": "would later become",
   "fixed": "He joined as a trainee in 2012 and would later become the head of sales.",
-  "accepted": [],
+  "accepted": [
+   "later became",
+   "went on to become",
+   "would go on to become",
+   "eventually became"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Aus der Vergangenheit auf Späteres braucht es would. Richtig: would later become.",
@@ -457,21 +465,24 @@
   }
  },
  {
-  "id": "fp-f6",
+  "id": "fp-f6b",
   "type": "find",
   "pat": "fp.would-narr",
-  "prompt": "She promised that she will review the draft by Monday.",
+  "prompt": "Last year our CEO promised that the new office will open the following spring.",
   "err": [
-   4,
-   5
+   9,
+   10
   ],
-  "answer": "would review",
-  "fixed": "She promised that she would review the draft by Monday.",
-  "accepted": [],
+  "answer": "would open",
+  "fixed": "Last year our CEO promised that the new office would open the following spring.",
+  "accepted": [
+   "was going to open",
+   "was to open"
+  ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach promised steht would statt will. Richtig: would review.",
-    "en": "The error: after promised, would replaces will. Correct: would review."
+    "de": "Der Fehler: Nach promised (Vergangenheit) und „the following spring“ steht would statt will. Richtig: would open.",
+    "en": "The error: after promised (past) and “the following spring”, would replaces will. Correct: would open."
    },
    "wrong": [
     {
@@ -498,7 +509,16 @@
   ],
   "answer": "was to open",
   "fixed": "The new warehouse was to open in March, but the permit was delayed.",
-  "accepted": [],
+  "accepted": [
+   "was supposed to open",
+   "was due to open",
+   "was scheduled to open",
+   "was meant to open",
+   "should have opened",
+   "was set to open",
+   "was slated to open",
+   "was expected to open"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Für einen Plan in der Vergangenheit gilt was to. Richtig: was to open.",

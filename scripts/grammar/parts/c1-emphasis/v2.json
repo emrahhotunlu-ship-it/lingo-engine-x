@@ -26,8 +26,8 @@
      "not": [
       "what"
      ],
-     "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
-     "en": "The key word what must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHAT muss unverändert in der Lücke stehen.",
+     "en": "The key word WHAT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -44,7 +44,7 @@
   "id": "em-wc-k2",
   "type": "kwt",
   "pat": "em.what-cleft",
-  "from": "I'd like to know whether the deal is still open.",
+  "from": "I'm wondering whether the deal is still open.",
   "key": "WHAT",
   "frame": "___ is whether the deal is still open.",
   "answer": "What I'd like to know",
@@ -65,8 +65,8 @@
      "not": [
       "what"
      ],
-     "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
-     "en": "The key word what must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHAT muss unverändert in der Lücke stehen.",
+     "en": "The key word WHAT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -222,8 +222,8 @@
      "not": [
       "was"
      ],
-     "de": "Das Schlüsselwort was muss unverändert in der Lücke stehen.",
-     "en": "The key word was must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WAS muss unverändert in der Lücke stehen.",
+     "en": "The key word WAS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -246,11 +246,14 @@
   "id": "em-ic-k2",
   "type": "kwt",
   "pat": "em.it-cleft",
-  "from": "We signed the contract in March, not in April.",
+  "from": "The contract was signed in March, not in April.",
   "key": "THAT",
   "frame": "It was in March ___ the contract, not in April.",
   "answer": "that we signed",
-  "accepted": [],
+  "accepted": [
+   "that they signed",
+   "that I signed"
+  ],
   "words": [
    3,
    3
@@ -265,8 +268,8 @@
      "not": [
       "that"
      ],
-     "de": "Das Schlüsselwort that muss unverändert in der Lücke stehen.",
-     "en": "The key word that must stay unchanged in the gap."
+     "de": "Das Schlüsselwort THAT muss unverändert in der Lücke stehen.",
+     "en": "The key word THAT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -397,8 +400,8 @@
      "not": [
       "never"
      ],
-     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
-     "en": "The key word never must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEVER muss unverändert in der Lücke stehen.",
+     "en": "The key word NEVER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -441,8 +444,8 @@
      "not": [
       "rarely"
      ],
-     "de": "Das Schlüsselwort rarely muss unverändert in der Lücke stehen.",
-     "en": "The key word rarely must stay unchanged in the gap."
+     "de": "Das Schlüsselwort RARELY muss unverändert in der Lücke stehen.",
+     "en": "The key word RARELY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -606,8 +609,8 @@
      "not": [
       "only"
      ],
-     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
-     "en": "The key word only must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ONLY muss unverändert in der Lücke stehen.",
+     "en": "The key word ONLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -650,8 +653,8 @@
      "not": [
       "sooner"
      ],
-     "de": "Das Schlüsselwort sooner muss unverändert in der Lücke stehen.",
-     "en": "The key word sooner must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SOONER muss unverändert in der Lücke stehen.",
+     "en": "The key word SOONER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -788,8 +791,8 @@
      "not": [
       "only"
      ],
-     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
-     "en": "The key word only must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ONLY muss unverändert in der Lücke stehen.",
+     "en": "The key word ONLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -833,8 +836,8 @@
      "not": [
       "until"
      ],
-     "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
-     "en": "The key word until must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNTIL muss unverändert in der Lücke stehen.",
+     "en": "The key word UNTIL must stay unchanged in the gap."
     },
     {
      "not": [

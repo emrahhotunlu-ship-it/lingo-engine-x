@@ -50,6 +50,12 @@ function playAll(opts: PlayOpts): { findings: Finding[]; total: Record<string, n
   return { findings, total };
 }
 
+// Vom english-teacher geprüfte Ausnahmen „Abschreiben“ (`copyOk` in scripts/grammar/q0-open.json), auch als c1x-Adapter-Aufgabe `kwt-v2-<n>`.
+const Q0_OPEN = JSON.parse(readFileSync('scripts/grammar/q0-open.json', 'utf8')) as { copyOk?: string[] };
+const copyOk = new Set<string>(Q0_OPEN.copyOk ?? []);
+v2Tasks().forEach((t, i) => {
+  if (copyOk.has(t.id)) copyOk.add(`kwt-v2-${i + 1}`);
+});
 const keyOf = (f: Finding): string => `${f.path}|${f.id}|${f.kind}|${f.input ?? f.note}`;
 const OPEN_FILE = 'tests/unit/taskPlayer.open.json';
 const open: Set<string> = new Set(existsSync(OPEN_FILE) ? (JSON.parse(readFileSync(OPEN_FILE, 'utf8')) as string[]) : []);
@@ -57,7 +63,7 @@ const open: Set<string> = new Set(existsSync(OPEN_FILE) ? (JSON.parse(readFileSy
 describe('Aufgaben-Spieler (Q0)', () => {
   const de = playAll({ lang: 'de' });
   const en = playAll({ lang: 'en' });
-  const after = [...de.findings, ...en.findings.filter((f) => f.kind === 'a' || f.kind === 'a2')];
+  const after = [...de.findings, ...en.findings.filter((f) => f.kind === 'a' || f.kind === 'a2')].filter((f) => !(f.kind === 'b' && copyOk.has(f.id)));
 
   if (process.env.PLAYER_REPORT) {
     const before = [...playAll({ lang: 'de', before: true }).findings, ...playAll({ lang: 'en', before: true }).findings.filter((f) => f.kind === 'a' || f.kind === 'a2')];

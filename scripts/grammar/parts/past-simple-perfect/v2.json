@@ -3,7 +3,7 @@
   "id": "psp.kwt1",
   "type": "kwt",
   "pat": "psp.finished-time",
-  "from": "The last time we talked to the supplier was on Wednesday.",
+  "from": "We haven't spoken to the supplier since Wednesday.",
   "key": "LAST",
   "frame": "We ___ the supplier on Wednesday.",
   "answer": "last talked to",
@@ -228,8 +228,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Nach dem Superlativ („the best“) zählt alles bis jetzt: I have ever seen. Ohne Zeitpunkt steht das Present Perfect.",
-    "en": "After a superlative (“the best”) everything up to now counts: I have ever seen. With no point in time, Present Perfect is used."
+    "de": "Nach dem Superlativ („the best“) zählt alles bis jetzt: I have ever seen. I ever saw geht im US-Englisch auch.",
+    "en": "After a superlative (“the best”) everything up to now counts: I have ever seen. I ever saw also works in US English."
    },
    "wrong": [
     {
@@ -240,8 +240,8 @@
      "not": [
       "have"
      ],
-     "de": "Nach dem Superlativ braucht seen ein have: I have ever seen.",
-     "en": "After the superlative, seen needs have: I have ever seen."
+     "de": "Es fehlen I und have: I have ever seen.",
+     "en": "I and have are missing: I have ever seen."
     },
     {
      "not": [
@@ -298,13 +298,16 @@
   "id": "psp.kwt8",
   "type": "kwt",
   "pat": "psp.result-now",
-  "from": "The client has not replied to our offer, and we are waiting for an answer.",
+  "from": "Our offer is on the table, and the client has yet to respond.",
   "key": "STILL",
   "frame": "The client ___ to our offer.",
   "answer": "still hasn't replied",
   "accepted": [
    "still has not replied",
-   "has still not replied"
+   "has still not replied",
+   "still hasn't responded",
+   "still has not responded",
+   "has still not responded"
   ],
   "words": [
    3,
@@ -312,8 +315,8 @@
   ],
   "why": {
    "ok": {
-    "de": "still hasn't replied: Die Antwort fehlt bis jetzt, und es zählt der Stand heute. Kein Zeitpunkt, also kein Past Simple.",
-    "en": "still hasn't replied: the answer is missing as of now, and the current state matters. No point in time, so no Past Simple."
+    "de": "still hasn't replied (oder responded): Die Antwort fehlt bis jetzt, es zählt der Stand heute. Kein Zeitpunkt, kein Past Simple.",
+    "en": "still hasn't replied (or responded): the answer is missing as of now; the current state matters. No point in time, no Past Simple."
    },
    "wrong": [
     {

@@ -27,8 +27,8 @@
      "not": [
       "having"
      ],
-     "de": "Das Schlüsselwort Having muss unverändert in der Lücke stehen.",
-     "en": "The key word Having must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAVING muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -77,8 +77,8 @@
      "not": [
       "having"
      ],
-     "de": "Das Schlüsselwort having muss unverändert in der Lücke stehen.",
-     "en": "The key word having must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAVING muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -237,8 +237,8 @@
      "not": [
       "working"
      ],
-     "de": "Das Schlüsselwort Working muss unverändert in der Lücke stehen.",
-     "en": "The key word Working must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WORKING muss unverändert in der Lücke stehen.",
+     "en": "The key word WORKING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -284,8 +284,8 @@
      "not": [
       "walking"
      ],
-     "de": "Das Schlüsselwort Walking muss unverändert in der Lücke stehen.",
-     "en": "The key word Walking must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WALKING muss unverändert in der Lücke stehen.",
+     "en": "The key word WALKING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -347,7 +347,12 @@
   ],
   "answer": "Opening",
   "fixed": "Opening the file, the analyst found three formatting errors.",
-  "accepted": [],
+  "accepted": [
+   "Having opened",
+   "After opening",
+   "Upon opening",
+   "When opening"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Am Satzanfang braucht das Partizip -ing: Opening, nicht Open.",
@@ -424,8 +429,8 @@
      "not": [
       "designed"
      ],
-     "de": "Das Schlüsselwort Designed muss unverändert in der Lücke stehen.",
-     "en": "The key word Designed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DESIGNED muss unverändert in der Lücke stehen.",
+     "en": "The key word DESIGNED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -473,8 +478,8 @@
      "not": [
       "based"
      ],
-     "de": "Das Schlüsselwort Based muss unverändert in der Lücke stehen.",
-     "en": "The key word Based must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BASED muss unverändert in der Lücke stehen.",
+     "en": "The key word BASED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -634,8 +639,8 @@
      "not": [
       "waiting"
      ],
-     "de": "Das Schlüsselwort Waiting muss unverändert in der Lücke stehen.",
-     "en": "The key word Waiting must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WAITING muss unverändert in der Lücke stehen.",
+     "en": "The key word WAITING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -680,8 +685,8 @@
      "not": [
       "having"
      ],
-     "de": "Das Schlüsselwort Having muss unverändert in der Lücke stehen.",
-     "en": "The key word Having must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAVING muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -719,7 +724,39 @@
    "When I was walking to work,",
    "When I walked to work,",
    "While I walked to work,",
-   "As I was walking to work,"
+   "As I was walking to work,",
+   "On my way to work,",
+   "On the way to work,",
+   "On my walk to work,",
+   "While I was on my way to work,",
+   "As I was on my way to work,",
+   "When I was on my way to work,"
+  ],
+  "errAlt": [
+   {
+    "err": [
+     3,
+     6
+    ],
+    "answer": "I heard my phone ring twice.",
+    "accepted": [
+     "I heard my phone ringing twice.",
+     "I heard my phone go off twice.",
+     "I got two calls.",
+     "I got two phone calls.",
+     "I received two calls.",
+     "I received two phone calls.",
+     "I got called twice.",
+     "I was called twice.",
+     "I had two calls.",
+     "I heard my cell phone ring twice.",
+     "I heard my phone ring two times."
+    ],
+    "why": {
+     "de": "Auch richtig: Jetzt ist „I“ das Subjekt. „Walking to work“ gehört zu dir, und du gehst ja zur Arbeit.",
+     "en": "Also correct: now “I” is the subject, so “Walking to work” refers to you, and you are the one walking."
+    }
+   }
   ],
   "why": {
    "ok": {
@@ -738,6 +775,10 @@
      "en": "The error is at the start: who walks to work? Not the phone."
     }
    ]
+  },
+  "hint": {
+   "de": "Das Partizip am Anfang passt nicht zum Subjekt.",
+   "en": "The participle at the start does not match the subject."
   }
  },
  {
@@ -753,7 +794,12 @@
   "fixed": "When I read the report, the figures seemed wrong to me.",
   "accepted": [
    "As I read the report,",
-   "While I was reading the report,"
+   "While I was reading the report,",
+   "As I was reading the report,",
+   "When I was reading the report,",
+   "While I read the report,",
+   "After I read the report,",
+   "After I had read the report,"
   ],
   "why": {
    "ok": {
@@ -772,6 +818,10 @@
      "en": "The error is at the start: who reads the report? Not the figures."
     }
    ]
+  },
+  "hint": {
+   "de": "Das Partizip am Anfang passt nicht zum Subjekt.",
+   "en": "The participle at the start does not match the subject."
   }
  },
  {

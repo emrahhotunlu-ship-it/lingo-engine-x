@@ -25,8 +25,8 @@
      "not": [
       "form"
      ],
-     "de": "Das Schlüsselwort form muss unverändert in der Lücke stehen.",
-     "en": "The key word form must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FORM muss unverändert in der Lücke stehen.",
+     "en": "The key word FORM must stay unchanged in the gap."
     },
     {
      "if": [
@@ -71,8 +71,8 @@
      "not": [
       "access"
      ],
-     "de": "Das Schlüsselwort access muss unverändert in der Lücke stehen.",
-     "en": "The key word access must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ACCESS muss unverändert in der Lücke stehen.",
+     "en": "The key word ACCESS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -120,8 +120,8 @@
      "not": [
       "reply"
      ],
-     "de": "Das Schlüsselwort reply muss unverändert in der Lücke stehen.",
-     "en": "The key word reply must stay unchanged in the gap."
+     "de": "Das Schlüsselwort REPLY muss unverändert in der Lücke stehen.",
+     "en": "The key word REPLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -166,8 +166,8 @@
      "not": [
       "finish"
      ],
-     "de": "Das Schlüsselwort finish muss unverändert in der Lücke stehen.",
-     "en": "The key word finish must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FINISH muss unverändert in der Lücke stehen.",
+     "en": "The key word FINISH must stay unchanged in the gap."
     },
     {
      "if": [
@@ -216,8 +216,8 @@
      "not": [
       "applies"
      ],
-     "de": "Das Schlüsselwort applies muss unverändert in der Lücke stehen.",
-     "en": "The key word applies must stay unchanged in the gap."
+     "de": "Das Schlüsselwort APPLIES muss unverändert in der Lücke stehen.",
+     "en": "The key word APPLIES must stay unchanged in the gap."
     },
     {
      "if": [
@@ -266,8 +266,8 @@
      "not": [
       "active"
      ],
-     "de": "Das Schlüsselwort active muss unverändert in der Lücke stehen.",
-     "en": "The key word active must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ACTIVE muss unverändert in der Lücke stehen.",
+     "en": "The key word ACTIVE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -312,8 +312,8 @@
      "not": [
       "costs"
      ],
-     "de": "Das Schlüsselwort costs muss unverändert in der Lücke stehen.",
-     "en": "The key word costs must stay unchanged in the gap."
+     "de": "Das Schlüsselwort COSTS muss unverändert in der Lücke stehen.",
+     "en": "The key word COSTS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -361,8 +361,8 @@
      "not": [
       "reached"
      ],
-     "de": "Das Schlüsselwort reached muss unverändert in der Lücke stehen.",
-     "en": "The key word reached must stay unchanged in the gap."
+     "de": "Das Schlüsselwort REACHED muss unverändert in der Lücke stehen.",
+     "en": "The key word REACHED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -412,8 +412,8 @@
      "not": [
       "fast"
      ],
-     "de": "Das Schlüsselwort fast muss unverändert in der Lücke stehen.",
-     "en": "The key word fast must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FAST muss unverändert in der Lücke stehen.",
+     "en": "The key word FAST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -458,8 +458,8 @@
      "not": [
       "many"
      ],
-     "de": "Das Schlüsselwort many muss unverändert in der Lücke stehen.",
-     "en": "The key word many must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MANY muss unverändert in der Lücke stehen.",
+     "en": "The key word MANY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -579,7 +579,8 @@
   "answer": "within",
   "fixed": "We will respond to your complaint within 48 hours.",
   "accepted": [
-   "in under"
+   "in under",
+   "in less than"
   ],
   "why": {
    "ok": {
