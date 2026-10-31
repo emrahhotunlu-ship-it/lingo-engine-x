@@ -647,3 +647,9 @@ Emrah: „Halte dich auch 1:1 [an das neue Design] … oder mach es sogar noch d
 
 ## 31.10.2026 – Ganze Roadmap jetzt, bis zu drei Unterchats parallel
 Emrah: „Starte die Arbeit jetzt schon mit dem ganzen Plan.“ / „Hast du nur einen Unterchat gestartet?! Und denkst du an die ganze Roadmap, inkl. Design, UI, UX und allem, was noch geplant war?“ Festlegung: Arbeit startet vor dem Limit-Reset. Bis zu drei Unterchats gleichzeitig, mit getrennten Dateien (ersetzt „ein Unterchat gleichzeitig“). Erste Welle: **V0** (Plan Wörter-App), **Q0** (Aufgaben-Qualität), **D1** (Design-Bausteine und Vergleichsgerüst; die neue Wörter-App baut darauf). Danach: V1–V5 (nach Emrahs OK zum Plan) parallel zu D2/D3/D5/D6a/D6b → Test-Link 7 → 1b (P9a neu, P9b, P10) → E1–E7 → F2–F5 (D4 und F1 gehen in V1–V5 auf). Gesamtübersicht: `docs/umbau/roadmap.md`.
+
+## 31.10.2026 – Wörter-Plan: Emrahs Antworten F1–F5 (V0, `vokabeln/plan.md` §13)
+Per Frage-Dialog, alle wie empfohlen: **F1** neuer Lernstand im bestehenden Wortdokument · **F2** Abend-Check, Wochen-Check, „Dieses Wort üben“ bleiben; ein heute schon geübtes Wort zählt dort nur als Übung (keine Planwirkung) · **F3** Anki-Modus wirkt nur auf die Spur „Verstehen“ · **F4** überfällige Wörter (≈ 112) beim Umstieg über 7 Lerntage verteilt · **F5** Standard-Zielzeit Wörter-Block 15 Minuten. Dazu: **V1 startet sofort** (unsichtbar: Modul, Daten, Planer, Umrechnung, Simulation); Bilder der Wörter-Bildschirme vor V3/V4 zum Absegnen.
+
+## 31.10.2026 – Fragen an Emrah immer im Frage-Dialog
+Emrah: „Bitte Fragen hier immer im Kontextfenster stellen.“ Entscheidungsfragen stellt der Überchat mit dem Frage-Dialog (antippbare Antworten, Empfehlung zuerst), nicht als Text im Bericht. Unterchats sammeln Fragen im Bericht; der Überchat stellt sie dann im Dialog.
