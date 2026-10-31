@@ -16,7 +16,7 @@ Emrah: „Du bist ab jetzt der Überchat. Orchestriere die Aufgaben wie angewies
    *Grund (30.10.2026):* Eine fertige Cloud-Sitzung meldet sich nicht von selbst beim Überchat; V0a war fertig, ohne dass der Überchat es erfuhr. Der Überchat plant zusätzlich als Absicherung alle 45 Minuten einen Blick auf laufende Unterchats ein.
 
 ## Takt
-- **Ein Unterchat gleichzeitig** (Emrahs Vorgabe zum Kontingent), solange Emrah nichts anderes sagt.
+- **Bis zu drei Unterchats gleichzeitig** (Emrah, 31.10.2026: „Hast du nur einen Unterchat gestartet?!“; ersetzt „ein Unterchat gleichzeitig“), nur wenn sie verschiedene Dateien besitzen. Jeder Auftrag nennt, was er nicht anfasst. Zusammengeführt wird nacheinander durch den Überchat.
 - Pause bei etwa 95 % des Limits; „Stopp“ von Emrah → laufenden Unterchat anhalten (interrupt), Stand sichern.
 - Der Überchat prüft den Stand über den Sitzungsstatus und den gepushten Zweig, nicht über Abfragen in Schleife.
 - Aufträge liegen in `docs/umbau/auftraege/<paket>.md`, damit jeder Auftrag nachlesbar ist.
