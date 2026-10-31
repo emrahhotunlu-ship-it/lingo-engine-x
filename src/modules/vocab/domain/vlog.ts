@@ -8,6 +8,8 @@ import { FORMS, OUTCOMES, type Form, type Outcome } from './types';
 
 export type VlogTuple = [number, string, 0 | 1 | 2, Form, number, Outcome, number, number, number, string, number, number];
 export const VLOG_SOFT_MAX = 200 * 1024;
+/** Höchstens so viele Teile je Halbmonat (`-a`, `-a2` … `-a9`). */
+export const VLOG_MAX_PARTS = 9;
 
 export function tuple(x: { t: number; path: string; track: 0 | 1 | 2; form: Form; note: number; outcome: Outcome; ms: number; fk: number; hint: number; sentence: string | null; lv: number; flags: number }): VlogTuple {
   const r10 = (v: number) => Math.min(600_000, Math.max(0, Math.round(v / 10) * 10));
@@ -15,13 +17,14 @@ export function tuple(x: { t: number; path: string; track: 0 | 1 | 2; form: Form
 }
 
 /** Gerätekennung: 4 Zeichen [a-z0-9]. */
-export function deviceTag(raw: string): string {
+export function deviceTag(raw: string, len = 4): string {
   const s = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
-  return (s + '0000').slice(0, 4);
+  return (s + '000000').slice(0, len);
 }
 
+/** Schlüssel `<t base36>-<Gerät 4>`; die Umrechnung nutzt 6 Zeichen (`m` + Pfad-Kennung), damit zwei Lexeme mit gleicher Zeit nie kollidieren. */
 export function vlogKey(t: number, device: string): string {
-  return `${t.toString(36)}-${deviceTag(device)}`;
+  return `${t.toString(36)}-${deviceTag(device, device.startsWith('m') && device.length === 6 ? 6 : 4)}`;
 }
 
 /** Halbmonatsdokument nach dem LERNTAG von `t` (Wechsel 04:00). `part` ≥ 2 = Fortsetzung. */

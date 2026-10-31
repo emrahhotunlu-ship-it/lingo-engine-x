@@ -109,7 +109,7 @@ export function dryRun(inp: MigrationInput): MigrationReport {
 }
 
 export type RunGuards = { confirmed: boolean; backupWritten: boolean; profileValid: boolean; possiblyTruncated: boolean; holder: string };
-export type RunOutcome = { state: 'blocked' | 'busy' | 'done' | 'already'; why?: string; written: number; skipped: number; vlogDocs: number };
+export type RunOutcome = { state: 'blocked' | 'busy' | 'done' | 'already' | 'partial'; why?: string; written: number; skipped: number; vlogDocs: number };
 
 /** Schreibt die Umrechnung. Idempotent: ein zweiter Lauf (auch aus einem zweiten Tab) ändert nichts. */
 export async function runMigration(writer: Writer, inp: MigrationInput, g: RunGuards): Promise<RunOutcome> {
@@ -160,9 +160,11 @@ export async function runMigration(writer: Writer, inp: MigrationInput, g: RunGu
   const tuples: VlogTuple[] = converted.flatMap((c) => c.log);
   let vlogDocs = 0;
   try {
-    vlogDocs = await writeVlog({ writer, device: 'migr' }, tuples, (tp) => `m${(hash32(tp[1]) % 46_656).toString(36).padStart(3, '0')}`);
+    vlogDocs = await writeVlog({ writer, device: 'migr' }, tuples, (tp) => `m${(hash32(tp[1]) % 60_466_176).toString(36).padStart(5, '0')}`);
   } catch (err) {
-    logWarn('vocab:migrate', err, 'vlog');
+    // Verlauf nicht vollständig übertragen: Marke bleibt „running“, ein neuer Lauf überträgt ihn (feste Schlüssel, nichts doppelt).
+    logError('vocab:migrate', err, 'vlog');
+    return { state: 'partial', why: 'vlog', written, skipped, vlogDocs };
   }
   await writer.transform('app/schema', (cur) => (cur ? { update: { vocabModule: { v: 1, t: inp.nowMs, state: 'done' } } } : null));
   logWarn('vocab:migrate', null, `umgerechnet ${written}, übersprungen ${skipped}, vlog ${vlogDocs} (${dayKey(inp.nowMs)})`);

@@ -1,9 +1,8 @@
 import { dayKey } from './shared';
 import type { Writer } from './shared';
-import { lexOf } from './data/store';
+import { lexOf } from './data/lex';
 import { headwordOf } from './domain/dupes';
 import { groupOf } from './domain/ladder';
-import { emptyLex } from './domain/planner';
 import type { SessionKind } from './domain/session';
 import type { DayPlan } from './domain/day';
 import { DEFAULT_CFG, type Lex, type VocabCfg } from './domain/types';
@@ -11,7 +10,7 @@ import { vcfgSchema } from './data/schemas';
 
 // Wörter-Modul, Tür nach außen (plan.md §2.2). Andere Bereiche nutzen NUR diese Funktionen; sie planen nie selbst.
 // V1: unsichtbar, hinter dem Schalter `app/profile.vcfg.mod` (Standard 0 = aus). Der alte Wörter-Bereich bleibt bis V5 aktiv und ist der Rückweg.
-// Schwere Teile (Planer, Runde, Umrechnung) kommen per dynamischem Import, damit `todayBlock` keinen Planer-Code in die Einstiegsdatei zieht.
+// Statisch nur leichte Teile (Erlaubnisliste in tests/unit/vocab/isolation.test.ts). Schwere Teile (Planer, Runde, Umrechnung) kommen per dynamischem Import, damit `todayBlock` keinen Planer-Code in die Einstiegsdatei zieht.
 
 type Doc = Record<string, unknown>;
 
@@ -87,6 +86,7 @@ export async function addLexeme(writer: Writer, i: AddLexemeInput): Promise<stri
   const id = slug(word) || `w-${i.nowMs.toString(36)}`;
   const path = `${kind}/${id}`;
   const k: Lex['k'] = kind === 'chunk' ? 'ch' : word.includes(' ') ? 'col' : 'w';
+  const { emptyLex } = await import('./domain/planner');
   const lex = emptyLex(k, i.core ? 'core' : 'edge', i.nowMs);
   const doc: Doc =
     kind === 'chunk'

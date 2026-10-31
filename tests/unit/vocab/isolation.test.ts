@@ -68,7 +68,7 @@ describe('Wörter-Modul: Isolation', () => {
     expect(bad).toEqual([]);
     const touching = appFiles.filter((f) => importsOf(f.text).some((s) => (resolveImport(f.rel, s) ?? '').startsWith(MODULE))).map((f) => f.rel);
     // V1: nur die Datenschicht (Schemas für COLLECTIONS). Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
-    expect(touching.sort()).toEqual(['src/data/paths.ts']);
+    expect(touching.sort()).toEqual(['src/data/paths.ts', 'src/data/writer.ts']);
   });
 
   it('Gegenprobe: die Regeln erkennen Verstöße', () => {
@@ -106,20 +106,45 @@ describe('Wörter-Modul: Isolation', () => {
   }, 60_000);
 
   it('Schreibgrenze: `vlog/` und `vmod/` kommen außerhalb des Moduls nicht als Pfad vor', () => {
-    // Ausnahme: der Name der Sammlung bzw. `vmod/day` als ersetzbarer Zwischenspeicher in der Datenschicht (Registrierung, kein Schreiben).
-    const bad = appFiles.filter((f) => /['"`]v(log|mod)\//.test(f.text) && f.rel !== 'src/data/writer.ts').map((f) => f.rel);
+    // Sicherung/Import über COLLECTIONS schreibt vlog/vmod dauerhaft zurück (gewollt, kein Literal); sonst schreibt nur das Modul.
+    const bad = appFiles.filter((f) => /['"`]v(log|mod)\//.test(f.text)).map((f) => f.rel);
     expect(bad).toEqual([]);
   });
 
-  it('Schreibgrenze: wer nach vocab/ bzw. chunk/ schreibt, steht auf der Erlaubnisliste (mit Ablaufpaket)', () => {
-    // Erlaubnisliste (plan.md §2.1): alter Bereich bis V5 (Rückweg), Umstellung dauerhaft, Import/Export dauerhaft, dazu die heutigen
-    // Neuanlage-Wege (Wort-Popup, Lehrer, Lesen, C1), die ab V3/V5 über addLexeme gehen. Neue Schreiber fallen hier auf.
+  it('Schreibgrenze: wer nach vocab/ bzw. chunk/ schreibt, steht einzeln auf der Erlaubnisliste (mit Ablaufpaket); die Liste schrumpft mit', () => {
+    // plan.md §2.1: alter Bereich bis V5 (Rückweg), Umstellung und Import/Export dauerhaft, Neuanlage-Wege ab V3/V5 über addLexeme.
+    // Erkennung: Schreibaufruf UND Pfad-Literal `vocab/`/`chunk/` in derselben Datei. Schreiben über Pfadhelfer erkennt dieser Suchtest
+    // nicht (Grenze, im Bericht V1 genannt); der Präfix-Wächter im Test-Writer kommt mit dem ersten Andocken (V3).
+    const ALLOW: Record<string, 'V5' | 'V3→addLexeme' | 'V5→addLexeme' | 'dauerhaft'> = {
+      'src/domain/activation/actDoc.ts': 'V5',
+      'src/domain/c1pack/pack.ts': 'V3→addLexeme',
+      'src/domain/migration/v1.ts': 'dauerhaft',
+      'src/domain/tutor/sentenceBank.ts': 'V5',
+      'src/features/lookup/store.ts': 'V3→addLexeme',
+      'src/features/progress/dayJobs.ts': 'V5',
+      'src/features/progress/persist.ts': 'dauerhaft',
+      'src/features/speak/persist.ts': 'V5',
+      'src/features/today/store.ts': 'V5',
+      'src/features/tutor/explainSave.ts': 'V5',
+      'src/features/vocab/atlas/add.ts': 'V5→addLexeme',
+      'src/features/vocab/colCharge.ts': 'V5',
+      'src/features/vocab/list/actions.ts': 'V5',
+      'src/features/vocab/mnemonic.tsx': 'V5',
+      'src/features/vocab/persist.ts': 'V5',
+      'src/features/vocab/sentenceBank.ts': 'V5',
+      'src/features/vocab/session.ts': 'V5',
+      'src/features/vocab/wordCtx.ts': 'V5',
+    };
     const writers = appFiles
       .filter((f) => /\b(saveCard|writer\.(set|patch|transform|createIfMissing|update)|getWriter\(\)\??\.(set|patch|transform|createIfMissing|update))\b/.test(f.text) && /[`'"](vocab|chunk)\//.test(f.text))
       .map((f) => f.rel)
       .sort();
-    // Stand 31.10.2026: alter Bereich und heutige Neuanlage-Wege (Ablauf: V5 bzw. Umstellung auf addLexeme), Umstellung und Export dauerhaft.
-    const ALLOW = /^src\/(features\/(vocab|lookup|teacher|c1x|c1|check|settings|today|learn|grammar|drills|speak|progress|tutor)|domain\/(srs|migration|vocab|activation|c1pack|tutor)|data|areas|app)\//;
-    expect(writers.filter((r) => !ALLOW.test(r))).toEqual([]);
+    expect(writers).toEqual(Object.keys(ALLOW).sort());
+  });
+
+  it('Ladezeit: api.ts importiert statisch nur leichte Teile (kein Planer, kein ts-fsrs)', () => {
+    const api = moduleFiles.find((f) => f.rel === `${MODULE}/api.ts`)!;
+    const statics = [...api.text.matchAll(/^import\s+(type\s+)?[^;]*?from\s*'([^']+)'/gm)].filter((m) => !m[1]).map((m) => m[2]);
+    expect(statics.sort()).toEqual(['./data/lex', './data/schemas', './domain/dupes', './domain/ladder', './domain/types', './shared'].sort());
   });
 });

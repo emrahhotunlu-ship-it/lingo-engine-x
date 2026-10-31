@@ -2,6 +2,7 @@ import type { Db, DbAcquireResult } from '../platform/types';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
 import { jsonEqual, patchIsNoop } from '../domain/equal';
 import { isReadOnlyPath } from './paths';
+import { VMOD_DAY_PATH } from '../modules/vocab/registry';
 
 // Der eine kontrollierte Schreibpfad (Kap. 3.4, Kap. 9):
 // - schreibt nur, wenn sich das Dokument wirklich ändert,
@@ -81,8 +82,8 @@ const KNOWN_CODES = new Set([
   'read_only',
 ]);
 
-/** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher (`vmod/day`: eingefrorener Wörter-Tagesplan, ableitbar). */
-const REPLACEABLE = new Set(['app/lookup', 'app/today', 'vmod/day']);
+/** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher (VMOD_DAY_PATH: eingefrorener Wörter-Tagesplan, ableitbar). */
+const REPLACEABLE = new Set(['app/lookup', 'app/today', VMOD_DAY_PATH]);
 /** Dokumente, die `compact` ersetzen darf (Plan §12.3). */
 const COMPACTABLE = new Set(['app/profile']);
 

@@ -306,7 +306,12 @@ export default defineConfig(
   {
     // shared.ts ist die einzige Tür nach innen; die Erlaubnisliste prüft tests/unit/vocab/isolation.test.ts.
     files: ['src/modules/vocab/shared.ts'],
-    rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, { regex: '(^|/)domain/srs(/|$)', message: 'Wörter-Modul: kein Import aus domain/srs (plan.md §2.1).' }] }] },
+    rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN, { regex: '(^|/)domain/srs(/|$)', message: 'Wörter-Modul: kein Import aus domain/srs (plan.md §2.1).' }] }] },
+  },
+  {
+    // Tests und Simulation des Wörter-Moduls dürfen ins Modul hineinsehen (nicht ins Lesen-Modul, nicht in gelöschte Bereiche).
+    files: ['tests/unit/vocab/**/*.ts', 'scripts/vocab/**/*.ts'],
+    rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, READ_DOOR_PATTERN] }] },
   },
   {
     // Tests des Moduls dürfen ins Modul hineinsehen.
