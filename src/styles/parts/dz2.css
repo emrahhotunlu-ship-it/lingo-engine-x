@@ -97,37 +97,6 @@
   animation: dz-rise 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Urteilsband: Urteil, dann „Wieder in …“, danach Zusätze („War das auch richtig?“, Teilpunkte) – feste Reihenfolge. */
-[data-slot='verdict'] {
-  display: flex;
-  flex-direction: column;
-}
-[data-slot='verdict'] > [data-testid='verdict-block'] {
-  order: -2;
-}
-[data-slot='verdict'] > [data-testid='next-in'] {
-  order: -1;
-}
-
-/* Rückmeldekarte (UX-Prüfung W2): leere Plätze nehmen keinen Raum; die erste Zeile schließt ohne Lücke an das Urteilsband an. */
-[data-testid='result'] > [data-slot]:empty {
-  display: none;
-}
-[data-slot='verdict'] + [data-slot='yours']:not(:empty),
-[data-slot='verdict'] + [data-slot='yours']:empty + [data-slot='explanation'] {
-  margin-top: -0.75rem;
-}
-[data-slot='right'],
-[data-slot='comparison'] {
-  padding-top: 0.25rem;
-}
-/* Laptop: die Rückmeldekarte rechts ist 400–440 px breit (UX-Prüfung W9). */
-@media (min-width: 1024px) {
-  .lx-split[data-split] > [data-col='side'] {
-    max-width: 27.5rem;
-  }
-}
-
 /* kwt am Handy (UX-Prüfung W3): Antwortzeile in der Lücke des Satzes, Vorrat als feste Leiste über „Prüfen“ – alles ohne Scrollen bedienbar. */
 .dz-kwt-sentence {
   line-height: 1.7;
@@ -170,17 +139,6 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
   background: var(--lx-hint);
 }
 
-/* Tastaturhinweis je Art (UX-Prüfung W9): mit Optionen „A–D oder 1–4 wählen“, sonst nur Enter und Tipp. */
-.dz-kh-choice {
-  display: none;
-}
-[data-testid='exercise']:has([data-testid='choice']) .dz-kh-choice {
-  display: inline;
-}
-[data-testid='exercise']:has([data-testid='choice']) .dz-kh-typed {
-  display: none;
-}
-
 /* ── UX-Prüfung KLEIN ───────────────────────────────────────────────────────── */
 /* Anwenden als ruhige Liste: eine Fläche je Abschnitt, Trennlinien zwischen den Zeilen. */
 .dz-list > * + * {
@@ -189,12 +147,6 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
 /* Wochenstreifen: ein erledigter heutiger Tag trägt keinen zweiten Ring (der gefüllte Kreis und der fette Name genügen). */
 .lx-ring[data-today][data-state='done'] {
   box-shadow: none;
-}
-/* Durchgestrichene eigene Eingabe in der Lücke: rot und durchgestrichen (UX-Audit U1), die Lösung darunter neutral. */
-.lx-gap-given {
-  color: var(--lx-wrong-text);
-  text-decoration-color: var(--lx-wrong-text);
-  text-decoration-thickness: 2px;
 }
 /* Antippbare Wörter: Trefferfläche auch seitlich größer, kurze Wörter mindestens 2 rem breit (ohne Layoutänderung). */
 .lx-word::after {
@@ -208,9 +160,4 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
   .dz-tabbar {
     background: var(--lx-surface-solid);
   }
-}
-
-/* UX-Audit U1: Der Übungskopf (✕, Fortschritt, Claude) bleibt beim Bildlauf oben stehen. Deckend in der Hintergrundfarbe, damit der Text darunter nicht durchscheint. */
-.lx-exbar {
-  background: var(--lx-bg);
 }

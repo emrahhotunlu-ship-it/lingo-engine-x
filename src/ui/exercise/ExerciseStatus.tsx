@@ -2,9 +2,11 @@ import type { UnitState } from '../../domain/metrics';
 import { useT, type MessageKey } from '../../i18n';
 import type { ShellStatus } from './ExerciseShell';
 
-// Statuszeile (§4.3): Kante in der Bereichsfarbe (am Rahmen der Übung) · ●●○○ · Zustand · Übungsart ·
-// „Thema · Muster“. `state: null` = keine Punkte und kein Zustandswort (nie ein falsches „Neu“).
+// Blockzeile (Relaunch Teil 1c, D3 V-UEBUNG; Vorschau `blockline`, style.css:238): Kanalpunkt in der Bereichsfarbe · Bereich ·
+// Übungsart · ●●○○ Zustand · Plakette, 13 px in --fg-2. Ersetzt die frühere Statuszeile; Kennungen (`status`, `ex-kind`, `again-badge`,
+// `status-where`) bleiben. `state: null` = keine Punkte und kein Zustandswort (nie ein falsches „Neu“).
 
+const AREA: Record<ShellStatus['area'], MessageKey> = { words: 'vuAreaWords', grammar: 'vuAreaGrammar' };
 const WORD: Record<UnitState, MessageKey> = { new: 'exStateNew', learning: 'exStateLearning', wobbly: 'exStateWobbly', safe: 'exStateSafe', firm: 'exStateFirm' };
 /** Gefüllte Punkte von vier: Neu 1, Lernt 2, Sicher 3, Fest 4. */
 export const STATE_DOTS: Record<UnitState, number> = { new: 1, learning: 2, wobbly: 2, safe: 3, firm: 4 };
@@ -16,9 +18,15 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, 
   const word = state ? t(WORD[state]) : null;
   const where = [topic, pattern].filter((x): x is string => !!x).join(' · ');
   return (
-    <p className="lx-t-meta flex flex-wrap items-center gap-x-2 gap-y-1 font-medium text-muted" data-testid="status" data-area={area} data-state={state ?? undefined}>
+    <p className="lx-vu-blockline" data-testid="status" data-area={area} data-state={state ?? undefined}>
+      <span className="lx-v-dot" data-ch={area === 'words' ? 'w' : 'g'} aria-hidden="true" />
+      <span data-testid="ex-area">{t(AREA[area])}</span>
+      {/* Trennpunkt als ::before des folgenden Elements: bricht die Zeile, hängt nie ein Punkt am Zeilenende. */}
+      <span data-testid="ex-kind" className="lx-vu-sep">
+        {kindLabel}
+      </span>
       {state && word && (
-        <span className="inline-flex items-center gap-2" role="img" aria-label={t('exStateLabel', { state: word })}>
+        <span className="lx-vu-sep inline-flex items-center gap-1.5" role="img" aria-label={t('exStateLabel', { state: word })}>
           <span className="lx-dots" aria-hidden="true" data-unsure={isUnsure(state) || undefined} data-wobbly={state === 'wobbly' || undefined}>
             {[0, 1, 2, 3].map((i) => (
               <span key={i} className="lx-dot" data-on={i < STATE_DOTS[state] || undefined} />
@@ -27,17 +35,13 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, 
           <span aria-hidden="true">{word}</span>
         </span>
       )}
-      {/* Trennpunkt als ::before des folgenden Elements: bricht die Zeile, hängt nie ein Punkt am Zeilenende. */}
-      <span data-testid="ex-kind" className={state ? "before:mr-2 before:text-subtle before:content-['·']" : undefined}>
-        {kindLabel}
-      </span>
       {/* UX-Prüfung W1: „dein Fehler“ nie zusammen mit „Neu“ (ein neues Thema hat keinen alten Fehler). */}
       {badge && state !== 'new' && (
-        <span className={`rounded-full px-2 py-0.5 ${badgeTone === 'hint' ? 'bg-hint-soft text-hint-text' : badgeTone === 'neutral' ? 'bg-surface text-muted' : 'bg-near-soft text-near-text'}`} data-testid={badgeTestId} data-tone={badgeTone}>
+        <span className="lx-vu-badge" data-testid={badgeTestId} data-tone={badgeTone}>
           {badge}
         </span>
       )}
-      {/* UX-Prüfung W1: der Kopf ist EINE Zeile; Thema und Muster stehen hinter ⓘ (nur für Vorleseprogramme hier). */}
+      {/* Thema und Muster stehen hinter „Wozu?“ (nur für Vorleseprogramme hier). */}
       {where && (
         <span className="sr-only" data-testid="status-where">
           {where}

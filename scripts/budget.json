@@ -38,7 +38,8 @@
         "P2 S1-SHELL": 18000,
         "P6 S1-START": 8000,
         "D1 V-BAU": 6000,
-        "D2 V-HEUTE": 8000
+        "D2 V-HEUTE": 8000,
+        "D3 V-UEBUNG": 6000
       }
     },
     "css": {
@@ -52,7 +53,8 @@
           "freigabe": "Hauptsitzung 28.10.2026: Klassen lx-nav-sk/lx-today-card und L1 (Tarek M1)"
         },
         "D1 V-BAU": 3000,
-        "D2 V-HEUTE": 1500
+        "D2 V-HEUTE": 1500,
+        "D3 V-UEBUNG": 1500
       }
     },
     "html": {
@@ -112,6 +114,10 @@
     },
     "D2 V-HEUTE": {
       "entry": 8000,
+      "css": 1500
+    },
+    "D3 V-UEBUNG": {
+      "entry": 6000,
       "css": 1500
     }
   }

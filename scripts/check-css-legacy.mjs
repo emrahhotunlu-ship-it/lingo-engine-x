@@ -22,7 +22,7 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PARTS = 'src/styles/parts';
 
 /** Neue Schichten (Relaunch): keine Altlast. */
-export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css'];
+export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css', 'v-uebung.css'];
 
 /** Umgebaute Dateien/Ordner (Präfix relativ zum Repo). Nur anhängen, nie still entfernen. */
 export const UMGEBAUT = [
@@ -30,6 +30,13 @@ export const UMGEBAUT = [
   'src/ui/v/',
   // D2 V-HEUTE: Heute (Tageskarte, Woche, „Wenn du mehr willst“, Kopf, Laptop-Mitte, Kontextspalte).
   'src/features/today/',
+  // D3 V-UEBUNG: gemeinsame Übungsteile und Grammatik-Erklärung (Verdict.tsx nutzt noch `dz-badge` aus dz.css, Besitz D2/D4/D5 → nicht hier).
+  'src/ui/exercise/ExerciseShell.tsx',
+  'src/ui/exercise/ExerciseStatus.tsx',
+  'src/ui/exercise/SegBar.tsx',
+  'src/ui/exercise/TodayMini.tsx',
+  'src/features/grammar/IntroFlow.tsx',
+  'src/features/grammar/RuleSide.tsx',
 ];
 
 const stripCssComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '');

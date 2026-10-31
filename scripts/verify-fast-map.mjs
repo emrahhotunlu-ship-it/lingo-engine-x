@@ -191,6 +191,12 @@ export const RULES = [
   { prefix: 'src/features/today/TodayHead', specs: ['vorschau-heute.spec.ts', 'start.spec.ts', 'perf.spec.ts', 'rahmen.spec.ts'] },
   { prefix: 'src/app/shell/TopBar', specs: ['vorschau-heute.spec.ts', 'rahmen.spec.ts'] },
   { prefix: 'src/app/shell/ContextHost', specs: ['vorschau-heute.spec.ts', 'rahmen.spec.ts'] },
+  // Relaunch Teil 1c, D3 V-UEBUNG: Übungsseite im neuen Aussehen (gemeinsame Übungsteile, Grammatik, Einführung) gegen die Vorschau.
+  { prefix: 'src/ui/exercise/', specs: ['vorschau-uebung.spec.ts', 'q0Feedback.spec.ts', 'lernen.spec.ts'] },
+  { prefix: 'src/styles/parts/v-uebung.css', specs: ['vorschau-uebung.spec.ts', 'band.spec.ts', 'fxStage1.spec.ts', 'gapCue.spec.ts'] },
+  { prefix: 'src/features/grammar/IntroFlow', specs: ['vorschau-uebung.spec.ts', 'lernen.spec.ts'] },
+  { prefix: 'src/i18n/parts/vu.', specs: ['vorschau-uebung.spec.ts'] },
+  { prefix: 'tests/e2e/vorschau-uebung', specs: ['vorschau-uebung.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

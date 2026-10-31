@@ -23,6 +23,7 @@ import { usePlayer } from '../../app/shell/playerContext';
 import { BackLink } from '../../app/shell/TopBar';
 import { ExerciseActions, TitleActions } from '../system/Chrome';
 import { SegBar } from '../../ui/exercise/SegBar';
+import { useRunCtx } from '../../ui/exercise/runCtx';
 import { firstOpenDuty, useToday } from '../today/state';
 import { startDuty } from './flow';
 
@@ -150,6 +151,11 @@ export function ExerciseTop({
   };
   // Relaunch Stufe 1 P3 (Band): Balken mit Abschnitten, einer je Block des Tages (nur in der Pflicht mit mindestens zwei Blöcken).
   const today = useToday();
+  // D3: laufende Runde für die Laptop-Spalte „Heute“ melden (Extra-Runden markieren keinen Pflichtblock als „läuft“).
+  useEffect(() => {
+    useRunCtx.setState({ ctx, duty });
+    return () => useRunCtx.setState({ ctx: null, duty: null });
+  }, [ctx, duty]);
   const segments = ctx === 'duty' && today.duties.total >= 2 ? { count: today.duties.total, current: dutyStep(today.duties, duty) - 1 } : null;
   const label = has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined;
   return (

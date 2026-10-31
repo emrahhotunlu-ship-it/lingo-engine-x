@@ -2,7 +2,6 @@
 @source not '../../dist';
 @import './parts/fx.css';
 @import './parts/cx.css';
-@import './parts/ee.css';
 @import './parts/dz.css';
 @import './parts/dz2.css';
 @import './parts/r6a.css';
@@ -12,6 +11,7 @@
 @import './parts/band.css';
 @import './parts/v.css';
 @import './parts/v-heute.css';
+@import './parts/v-uebung.css';
 @import './bridge.css';
 
 /* ==========================================================================

@@ -51,7 +51,12 @@ export function ActionBar({ children, stateKey = 'main', aside, testId = 'action
     const root = document.documentElement;
     if (inset > 0) root.setAttribute('data-kb', '');
     else root.removeAttribute('data-kb');
-    return () => root.removeAttribute('data-kb');
+    // D3 V-UEBUNG: der Hinweis der Tipp-Runde liegt fest über der Leiste und folgt ihr über die Tastatur (`v-uebung.css`).
+    root.style.setProperty('--lx-kb-inset', `${inset}px`);
+    return () => {
+      root.removeAttribute('data-kb');
+      root.style.removeProperty('--lx-kb-inset');
+    };
   }, [fixed, inset]);
   if (!fixed) {
     return (
