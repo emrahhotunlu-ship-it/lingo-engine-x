@@ -11,6 +11,7 @@
 @import './parts/shell.css';
 @import './parts/band.css';
 @import './parts/v.css';
+@import './parts/v-heute.css';
 @import './bridge.css';
 
 /* ==========================================================================
@@ -298,38 +299,6 @@ h2,
     background: var(--lx-surface-solid);
     border: 1px solid var(--lx-border);
     border-radius: var(--radius-card);
-  }
-
-  /* U2: feste Mindesthöhe der Tageskarte („Heute“). Start-Bild (index.html), Ladeskelett und echte Karte sind gleich hoch;
-     der Start-Knopf steht unten (`mt-auto`) – so springt er beim Laden nicht (Test: perf.spec „Start-Bild“). Wert = Karte mit
-     vier Schritten (Werte bei --lx-today-card-h). */
-  .lx-today-card {
-    min-height: var(--lx-today-card-h);
-  }
-
-  /* Relaunch P6, Auflage 3 (Vorschau L1, desk.js 79–137): ab 1.024 px liegt die Tageskarte quer – Ring 13em links über alle Zeilen, rechts
-     Titel, Schritte und Knopf (Raster: `.lx-today-card` in parts/shell.css, Zellen per Klassen in `features/today/DayCard.tsx`). Gilt gleich für Start-Bild (index.html), Skelett,
-     Startbild aus `app/today` und echte Karte. Der Ring setzt seine Größe inline; hier wird sie für die Querlage überschrieben. */
-  @media (width >= 64rem) {
-    .lx-td-ring {
-      grid-column: 1;
-      grid-row: 1 / -1;
-      align-self: center;
-    }
-    .lx-td-ring.lx-skeleton,
-    .lx-td-ring .lx-dayring,
-    .lx-td-ring .lx-dayring > svg {
-      width: 13em !important;
-      height: 13em !important;
-    }
-  }
-  /* Ruhige Mitte unter der Tageskarte (nur Laptop gezeichnet): Wörter fest und Kapitelstand nebeneinander. */
-  .l1mid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1em;
-    padding-top: 1.6em;
-    max-width: 45em;
   }
 
   /* U2: Platzhalter der Reiterleiste im Start-Bild (gleiche Höhe wie die Knöpfe der echten Leiste). */
@@ -1058,19 +1027,6 @@ h2,
    steht, bekommt der Inhalt Polster in Leistenhöhe, damit nichts darunter verschwindet. */
 :root {
   --lx-bar-h: 72px;
-  /* U2: Mindesthöhe der Tageskarte (.lx-today-card) = echte Karte mit vier Schritten (Gründe zweizeilig): 360–430 px breit 596 px, ab 640 px 530 px (gemessen 27.10.2026). */
-  --lx-today-card-h: 37.25rem;
-}
-@media (min-width: 40rem) {
-  :root {
-    --lx-today-card-h: 33.125rem;
-  }
-}
-/* Relaunch P6: Querlage ab 1.024 px (Ring links, Schritte rechts in der schmaleren Spalte, Gründe teils zweizeilig): 35rem = 560 px. */
-@media (min-width: 64rem) {
-  :root {
-    --lx-today-card-h: 35rem;
-  }
 }
 /* U2: Das Kartenskelett und die Tageskarte, die es ersetzt, steigen nicht auf (sonst rutschen Karte und Start-Knopf 8 px). */
 :root[data-fx] [data-layer='tab'] .lx-card[data-settled] {

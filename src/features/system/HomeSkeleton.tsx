@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useClock } from '../../app/clock';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { SettingsButton, TabTitle } from './Chrome';
-import { dateLabelOf } from '../today/dateLabel';
+import { SettingsButton } from './Chrome';
 import { StartCard, TodaySkeletonCard } from '../today/DayCard';
 import { markStart } from '../today/startPerf';
 
 export { TodaySkeletonCard } from '../today/DayCard';
 
 // U2: Ladeskelett von „Heute“. Gleicher Aufbau und gleiche Klassen wie das Start-Bild in index.html (#lx-boot) und wie die echte
-// Tageskarte (`.lx-today-card`, feste Mindesthöhe, Knopf unten): Start-Bild → Ladeskelett → Tageskarte ohne Sprung.
+// Tageskarte (D2 V-HEUTE: `.lx-vh-day`, Kopf „Heute“ vom Rahmen): Start-Bild → Ladeskelett → Tageskarte ohne Sprung.
 // Änderungen hier immer auch in index.html nachziehen (Test: tests/e2e/perf.spec.ts „Start-Bild“).
 // Relaunch P6 (stufe1-plan §4.3): Steht ein gültiges Startbild `app/today` für den JETZT berechneten Lerntag, zeigt der Rahmen schon Ring, Zahlen
 // und den Knopf daraus (wartender Start); sonst das Skelett. Dauert die Verbindung zur Datenbank länger als 10 s, ein ruhiger Hinweis.
@@ -31,15 +29,13 @@ function useSlow(ms: number): boolean {
 
 /** Ladezustand der App (Rahmen „loading“): Datumstitel und Startbild bzw. Tageskarten-Skelett an genau der Stelle der späteren Heute-Ansicht. */
 export function HomeSkeleton() {
-  const { t, lang } = useT();
-  const today = useClock((s) => s.today);
+  const { t } = useT();
   const doc = useValidTodayDoc();
   const slow = useSlow(SLOW_HINT_MS);
   useEffect(() => markStart('lx:skeleton'), []);
   return (
-    <div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 pt-4 pb-10 sm:pt-8 lg:max-w-[70rem]" role="status" aria-label={t('loadingData')}>
-      <TabTitle title={dateLabelOf(today, lang)} />
-      <div className="flex flex-col gap-5">
+    <div className="lx-vh" role="status" aria-label={t('loadingData')}>
+      <div className="lx-vh-stack">
         {doc ? <StartCard doc={doc} /> : <TodaySkeletonCard />}
         {/* Unter der Karte: der Hinweis schiebt Karte und Knopf nie. „Erneut versuchen“ lädt die Seite neu (die Fähigkeit wird je Seite nur einmal erfragt). */}
         {slow && (

@@ -32,6 +32,7 @@ import { ContextColumn, ContextSheet, SentenceGuard } from './ContextHost';
 import { useContextColumn, useContextPresentation } from './contextColumn';
 import { tabOfPlace, type Place } from './tabs';
 import { TopBar } from './TopBar';
+import { TodayHead } from '../../features/today/TodayHead';
 import { AmbientLight } from '../../engine/fx/AmbientLight';
 import { GateHost } from '../../features/c1/gate/GateHost';
 import { CheckHost } from '../../features/c1/check/CheckScreen';
@@ -147,9 +148,11 @@ function Frame() {
             {/* System-Bildschirme haben keine Reiter: Einstellungen mit Diagnose und Sicherung oben rechts (gleiche Höhe wie der Kopf, U2).
                 Beim Laden nur die leere Stelle wie `#lx-boot` (G2 Nora M1, §6.6: Zahnrad nur auf Fortschritt); dauert es länger, bietet der
                 ruhige Hinweis im Skelett die Einstellungen an. */}
-            {system && (
+            {/* D2: Beim Laden steht der Kopf von Heute (gleiche Höhe wie die fertige Ansicht, ohne „Fragen“), sonst die Einstellungen. */}
+            {system && screen === 'loading' && <TodayHead loading />}
+            {system && screen !== 'loading' && (
               <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="system-actions">
-                {screen === 'loading' ? <span className="size-11" aria-hidden="true" /> : <SettingsButton />}
+                <SettingsButton />
               </div>
             )}
             <main id="main" className={`flex-1 ${showNav && !exercise ? 'lx-main-nav' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>

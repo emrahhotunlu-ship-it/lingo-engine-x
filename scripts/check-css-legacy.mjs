@@ -22,12 +22,14 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PARTS = 'src/styles/parts';
 
 /** Neue Schichten (Relaunch): keine Altlast. */
-export const NEU = ['shell.css', 'band.css', 'v.css'];
+export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css'];
 
 /** Umgebaute Dateien/Ordner (Präfix relativ zum Repo). Nur anhängen, nie still entfernen. */
 export const UMGEBAUT = [
   // D1 V-BAU: die Bausteine selbst.
   'src/ui/v/',
+  // D2 V-HEUTE: Heute (Tageskarte, Woche, „Wenn du mehr willst“, Kopf, Laptop-Mitte, Kontextspalte).
+  'src/features/today/',
 ];
 
 const stripCssComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '');

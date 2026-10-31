@@ -1,7 +1,10 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { closeCompanion, useCompanion } from '../../features/companion/store';
+import { TodayContext } from '../../features/today/TodayScreen';
 import { useT } from '../../i18n';
+import { useNav } from '../nav';
+import { useMediaQuery } from '../../platform/input';
 import { IconButton } from '../../ui/Button';
 import { Sheet } from '../../ui/Sheet';
 import { CONTEXT_PORTAL_ID, closeContext, openContext, useContextColumn, useContextPresentation } from './contextColumn';
@@ -76,7 +79,10 @@ export function ContextColumn() {
   // Ohne KI nennt der Platzhalter Claude nicht (es gibt ihn dann nicht).
   const ai = useAiAvailable();
   useDockMetrics(ref, docked);
+  const wideCtx = useMediaQuery('(min-width: 1280px)');
   const show = presentation === 'column' && current !== null && current.kind !== 'claude';
+  // Nur ab 1.280 px (Spalte immer da); darunter stehen Woche und „Wenn du mehr willst“ auf Heute selbst.
+  const onToday = useNav((s) => s.route.name === 'today' && !s.overlay) && wideCtx;
   return (
     <aside ref={ref} id={CONTEXT_PORTAL_ID} className="lx-ctx" aria-label={t('shContext')} data-testid="context-column" data-kind={current?.kind}>
       {show ? (
@@ -87,6 +93,9 @@ export function ContextColumn() {
           </div>
           {current.node}
         </div>
+      ) : current === null && onToday ? (
+        // D2 V-HEUTE (Vorschau L1 `l1Ctx`): auf Heute zeigt die leere Spalte „Diese Woche“ und „Wenn du mehr willst“.
+        <TodayContext />
       ) : current === null ? (
         <p className="lx-ctx-empty text-sm text-subtle" data-testid="context-empty">
           {t(ai ? 'shContextEmpty' : 'shContextEmptyNoAi')}

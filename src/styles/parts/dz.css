@@ -64,33 +64,23 @@ button.lx-btn-primary:not(:disabled) {
 
 /* ------------------------------------------------------------------ Gestaffelte Eintritte auf Reiter-Wurzeln (Vorschau `.stag`): ab Deckkraft .6, nie aus 0 (EE I4) */
 :root[data-fx='full'] [data-layer='tab'] .lx-card,
-:root[data-fx='calm'] [data-layer='tab'] .lx-card,
-:root[data-fx='full'] [data-layer='tab'] [data-testid='duty'],
-:root[data-fx='calm'] [data-layer='tab'] [data-testid='duty'] {
+:root[data-fx='calm'] [data-layer='tab'] .lx-card {
   animation: dz-rise 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-[data-layer='tab'] .lx-card:nth-child(2),
-[data-layer='tab'] [data-testid='duty']:nth-child(2) {
+[data-layer='tab'] .lx-card:nth-child(2) {
   animation-delay: 50ms;
 }
-[data-layer='tab'] .lx-card:nth-child(3),
-[data-layer='tab'] [data-testid='duty']:nth-child(3) {
+[data-layer='tab'] .lx-card:nth-child(3) {
   animation-delay: 100ms;
 }
-[data-layer='tab'] .lx-card:nth-child(4),
-[data-layer='tab'] [data-testid='duty']:nth-child(4) {
+[data-layer='tab'] .lx-card:nth-child(4) {
   animation-delay: 150ms;
 }
-[data-layer='tab'] .lx-card:nth-child(n + 5),
-[data-layer='tab'] [data-testid='duty']:nth-child(n + 5) {
+[data-layer='tab'] .lx-card:nth-child(n + 5) {
   animation-delay: 200ms;
 }
 
 /* ------------------------------------------------------------------ Heute: Tagesring und Abschluss (EE M7, als CSS) */
-/* Spur des Rings deutlicher (Vorschau `--line2`). */
-[data-testid='today-ring'] circle[stroke='var(--lx-track)'] {
-  stroke: var(--lx-line-strong);
-}
 .dz-done-ring {
   position: relative;
   display: inline-flex;
@@ -194,8 +184,7 @@ button.lx-btn-primary:not(:disabled) {
 :root[data-fx='calm'] .dz-hero[data-play] .dz-hero-l {
   animation: dz-rise 320ms ease-out 980ms both;
 }
-:root[data-fx='full'] [data-play] ~ * .lx-ring[data-today][data-state='done'],
-:root[data-fx='full'] .dz-done-card[data-play] .lx-ring[data-today][data-state='done'] {
+:root[data-fx='full'] [data-play] ~ * .lx-ring[data-today][data-state='done'] {
   animation: dz-pop 420ms cubic-bezier(0.3, 1.6, 0.5, 1) 1100ms both;
 }
 

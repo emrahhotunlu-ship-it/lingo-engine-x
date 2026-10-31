@@ -64,7 +64,7 @@ export const RULES = [
   { prefix: 'src/areas/', specs: ['rahmen.spec.ts'] },
 
   // Bildschirme und ihre Logik.
-  { prefix: 'src/features/today/', specs: TODAY },
+  { prefix: 'src/features/today/', specs: [...TODAY, 'vorschau-heute.spec.ts'] },
   { prefix: 'src/domain/plan/', specs: [...TODAY, 'perf.spec.ts'] },
   { prefix: 'src/domain/unit/', specs: [...TODAY, 'fk.spec.ts'] },
   { prefix: 'src/domain/streak.ts', specs: ['today.spec.ts', 'heute.spec.ts'] },
@@ -184,6 +184,13 @@ export const RULES = [
   { prefix: 'src/styles/parts/v.css', specs: ['vorschau.spec.ts'] },
   { prefix: 'src/i18n/parts/v.', specs: ['vorschau.spec.ts'] },
   { prefix: 'tests/e2e/vorschau', specs: ['vorschau.spec.ts'] },
+  // D2 V-HEUTE: Heute im Design der Vorschau (H1/L1), eigene Vorschau-Paare.
+  { prefix: 'src/styles/parts/v-heute.css', specs: ['vorschau-heute.spec.ts', ...TODAY] },
+  { prefix: 'src/i18n/parts/vh.', specs: ['vorschau-heute.spec.ts'] },
+  { prefix: 'tests/e2e/vorschau-heute', specs: ['vorschau-heute.spec.ts'] },
+  { prefix: 'src/features/today/TodayHead', specs: ['vorschau-heute.spec.ts', 'start.spec.ts', 'perf.spec.ts', 'rahmen.spec.ts'] },
+  { prefix: 'src/app/shell/TopBar', specs: ['vorschau-heute.spec.ts', 'rahmen.spec.ts'] },
+  { prefix: 'src/app/shell/ContextHost', specs: ['vorschau-heute.spec.ts', 'rahmen.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

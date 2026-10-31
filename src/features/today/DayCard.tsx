@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useId, type ComponentProps, type ReactNode } from 'react';
 import { useNav } from '../../app/nav';
 import { useSheets } from '../../app/sheets';
 import { todayDocBlocks, type TodayDoc, type TodayDocBlock } from '../../data/todayDoc';
@@ -7,85 +7,168 @@ import type { DutyId, Step3Fmt } from '../../domain/plan/types';
 import type { UnitBlockKind } from '../../domain/unit/types';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
-import { Button } from '../../ui/Button';
-import { DayRing } from '../../ui/DayRing';
 import { Icon } from '../../ui/Icon';
+import { VButton, VDot, ringSegments, type VChannel } from '../../ui/v';
 import { dutyLabel } from '../learn/ui';
 import { blockName } from '../unit/labels';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
 
-// Die Tageskarte als Ansicht (Relaunch Stufe 1 P6): EIN Aufbau für die echte Karte (`UnitCard`), das Startbild aus `app/today` (`StartCard`),
-// das Skelett und das Start-Bild in index.html (#lx-boot). Am Handy wie bisher (Ring neben dem Titel, Schritte, Knopf unten); ab 1.024 px quer wie
-// die Vorschau L1 (desk.js 79–137): Ring 13em links, rechts Titel, Schritte und Knopf (min. 12em, ⏎). Gleiche Klassen → kein Sprung beim Wechsel.
-// Änderungen an diesen Klassen immer auch in `system/HomeSkeleton.tsx` und index.html nachziehen (Test: perf.spec „Start-Bild“).
-
-export const DAY_CARD_CLS =
-  'lx-card lx-today-card flex flex-col gap-4 p-[1.125rem] sm:p-6';
-export const DAY_HEAD_CLS = 'flex items-center gap-3.5 lg:contents';
-export const DAY_TITLE_CLS = 'flex min-w-0 flex-1 flex-col gap-0.5 lg:col-start-2 lg:row-start-1';
-export const DAY_LIST_CLS = 'flex flex-col gap-4 lg:col-start-2 lg:row-start-2';
-export const DAY_GO_CLS = 'mt-auto w-full lg:col-start-2 lg:row-start-4 lg:w-auto lg:min-w-[12em] lg:justify-self-start';
-export const DAY_FOOT_CLS = 'min-h-4 lg:col-start-2 lg:row-start-5';
+// Die Tageskarte im Design der Vorschau (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1 screens.js:117–176, L1 desk.js:79–106).
+// EIN Aufbau für die echte Karte (`TodayScreen`), das Startbild aus `app/today` (`StartCard`), das Skelett und das Start-Bild in index.html (#lx-boot):
+// großer Segmentring mittig (am Laptop links), darunter Thema, „Als Nächstes“ und EIN Knopf. Antippen des Rings zeigt die Blöcke von heute
+// (ohne Knöpfe: erledigt ist Zustand, Kap. 2 Nr. 2) an der Stelle von Thema und „Als Nächstes“. Die Blockliste steht immer im Dokument
+// (für Screenreader über `aria-controls`), sichtbar nur auf Antippen.
+// Änderungen am Aufbau immer auch in `system/HomeSkeleton.tsx` und index.html nachziehen (Test: perf.spec „Start-Bild“).
 
 type T = (k: MessageKey, v?: Record<string, string | number>) => string;
 
 export type DayRowState = 'done' | 'now' | 'open';
 
-/** Eine Zeile der Karte, fertig zum Zeichnen. `why: null` = Grund noch unbekannt (Startbild) → Platzhalter gleicher Höhe. */
+/** Eine Zeile der Karte, fertig zum Zeichnen. `why: null` = Grund noch unbekannt (Startbild). */
 export type DayRow = { id: string; name: string; why: string | null; whyKey: string; min: number; kind: string; state: DayRowState };
 
-export function BlockDot({ state, kind }: { state: DayRowState; kind?: string }) {
-  // Design-Lead: der nächste Schritt trägt seine Bereichsfarbe (Wörter violett, sonst Grammatik blau), wie in der Vorschau.
-  const tc = kind === 'review' ? 'var(--lx-ch-cards)' : 'var(--lx-ch-grammar)';
-  if (state === 'done')
-    return (
-      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok" style={{ color: 'var(--fg-on)' }} aria-hidden="true">
-        <Icon name="check" size={14} />
-      </span>
-    );
+/** Kanal eines Blocks für den Punkt der Vorschau (Wörter, Grammatik, Hören, Sprechen). Rein schmückend, der Name steht daneben. */
+export function channelOf(kind: string): VChannel {
+  if (kind === 'review') return 'w';
+  if (kind === 'input.listen') return 'l';
+  if (kind === 'pron.shadow' || kind === 'task.say' || kind === 'task.fluency' || kind === 'task.tones' || kind === 'task.objection' || kind === 'task.meeting' || kind === 'task.roleplay') return 's';
+  return 'g';
+}
+
+/**
+ * Der Tagesring (Vorschau `.ring`): ein Segment je Pflichtschritt, Bogenlänge nach Minuten, Füllung je Segment aus `fills`
+ * (`todaySummary().fills` bzw. Startbild; nie neu gerechnet). Gleiche Geometrie und Klassen wie `VRing` (D1), aber mit Füllung je Segment,
+ * weil Pflichtschritte nicht immer von vorn erledigt werden. `onToggle` macht den Ring zum Knopf für die Blockliste.
+ */
+export function TodayRing({
+  fills,
+  minutes,
+  label,
+  open,
+  onToggle,
+  controls,
+  closed,
+  draw,
+  play,
+  testId,
+  children,
+}: {
+  fills: readonly number[];
+  minutes: readonly number[];
+  label: string;
+  open?: boolean;
+  onToggle?: () => void;
+  controls?: string;
+  closed?: boolean;
+  draw?: boolean;
+  play?: boolean;
+  testId: string;
+  children?: ReactNode;
+}) {
+  const segs = ringSegments(minutes.map((m) => ({ minutes: Math.max(1, m) })));
+  const filled = fills.filter((f) => f >= 1).length;
+  const svg = (
+    <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+      {segs.map((d, i) => {
+        const f = Math.max(0, Math.min(1, fills[i] ?? 0));
+        return (
+          <g key={i}>
+            <path className="lx-v-ring-seg lx-v-ring-trk" d={d} />
+            {f >= 1 && <path className="lx-v-ring-seg lx-v-ring-on" pathLength={100} style={{ ['--d' as string]: `${i * 90}ms` }} d={d} />}
+            {f > 0 && f < 1 && <path className="lx-v-ring-seg lx-v-ring-on" data-part="" pathLength={100} strokeDasharray={`${(f * 100).toFixed(1)} 100`} d={d} />}
+          </g>
+        );
+      })}
+    </svg>
+  );
   return (
-    <span className="inline-flex size-6 flex-none items-center justify-center rounded-full border-2" style={{ borderColor: state === 'now' ? tc : 'var(--lx-line-strong)' }} aria-hidden="true">
-      {state === 'now' && <span className="size-2.5 rounded-full" style={{ background: tc }} />}
-    </span>
+    <div
+      className="lx-v-ringwrap"
+      data-testid={testId}
+      data-segments={segs.length}
+      data-filled={filled}
+      data-fills={fills.map((f) => Math.round(f * 100) / 100).join(',')}
+      data-closed={closed ? 'true' : 'false'}
+      data-play={play ? '' : undefined}
+    >
+      {onToggle ? (
+        <button type="button" className="lx-v-ring" aria-label={label} aria-expanded={open ?? false} aria-controls={controls} onClick={onToggle} data-draw={draw ? '' : undefined}>
+          {svg}
+        </button>
+      ) : (
+        <div className="lx-v-ring" role="img" aria-label={label} data-draw={draw ? '' : undefined}>
+          {svg}
+        </div>
+      )}
+      {children != null && <div className="lx-v-ringc">{children}</div>}
+    </div>
   );
 }
 
-/** Schrittliste der Karte (echte Karte: `duties`/`duty`/`reason`; Startbild: `start-…`). */
-export function DayRows({ rows, prefix }: { rows: readonly DayRow[]; prefix: 'today' | 'start' }) {
+/**
+ * Blöcke von heute (Vorschau `.statelist`, nur auf Antippen des Rings): Zeichen, Kanalpunkt, Name, Minuten bzw. „läuft“. Kein Knopf.
+ * Test-Kennungen wie bisher (`duties`/`duty`/`reason`; Startbild `start-…`): `data-state` done/open, der laufende mit `data-now`.
+ */
+export function DayBlocks({ rows, prefix, id, open }: { rows: readonly DayRow[]; prefix: 'today' | 'start'; id: string; open: boolean }) {
   const { t } = useT();
   const real = prefix === 'today';
   return (
-    <ol className="flex flex-col gap-1.5" aria-label={t('tdPflicht')} data-testid={real ? 'duties' : 'start-duties'}>
-      {rows.map((r) => (
-        <li
-          key={r.id}
-          data-testid={real ? 'duty' : 'start-duty'}
-          data-duty={r.id}
-          data-state={r.state === 'done' ? 'done' : 'open'}
-          data-now={r.state === 'now' ? 'true' : undefined}
-          className={`flex min-h-[3.25rem] items-center gap-3 rounded-[0.875rem] px-3 py-1.5 ${r.state === 'now' ? 'bg-surface-strong' : ''}`}
-        >
-          <BlockDot state={r.state} kind={r.kind} />
-          <span className="flex min-w-0 flex-1 flex-col">
-            <span className={`text-base font-medium ${r.state === 'now' ? 'text-fg' : 'text-muted'}`}>{r.name}</span>
-            {r.why === null ? (
-              <span className="flex h-4 items-center" aria-hidden="true">
-                <span className="lx-skeleton h-2.5 w-2/3" />
+    <ul
+      id={id}
+      className="lx-v-statelist lx-v-springopen lx-vh-blocks"
+      aria-label={t('vRingBlocks')}
+      data-testid={real ? 'duties' : 'start-duties'}
+      hidden={!open}
+    >
+      {rows.map((r) => {
+        const st = r.state === 'done' ? 'done' : r.state === 'now' ? 'run' : 'open';
+        return (
+          <li key={r.id} data-testid={real ? 'duty' : 'start-duty'} data-duty={r.id} data-state={r.state === 'done' ? 'done' : 'open'} data-now={r.state === 'now' ? 'true' : undefined}>
+            <span className="lx-v-st" data-state={st} aria-current={st === 'run' ? 'step' : undefined}>
+              <span className="lx-v-st-mk" aria-hidden="true">
+                {st === 'done' && <Icon name="check" size={14} />}
               </span>
-            ) : (
-              <span className="text-xs text-muted" data-testid={real ? 'reason' : undefined} data-why={r.whyKey}>
-                {r.why}
+              <VDot ch={channelOf(r.kind)} />
+              <span className="lx-v-st-nm">{r.name}</span>
+              <span className="sr-only">
+                {' · '}
+                {t(st === 'done' ? 'vStepDone' : st === 'run' ? 'vStepRun' : 'vStepOpen')}
+                {r.why ? ' · ' : ''}
+                {r.why && (
+                  <span data-testid={real ? 'reason' : undefined} data-why={r.whyKey}>
+                    {r.why}
+                  </span>
+                )}
               </span>
-            )}
-          </span>
-          <span className="lx-tnum flex-none text-xs text-muted">
-            {r.state === 'done' ? t('nbHeuteBlockDone') : t('nbHeuteMin', { min: r.min })}
-            <span className="sr-only"> · {r.state === 'done' ? t('nbHeuteBlockDone') : r.state === 'now' ? t('nbHeuteBlockNow') : t('nbHeuteBlockOpen')}</span>
-          </span>
-        </li>
-      ))}
-    </ol>
+              <span className="lx-v-st-sm lx-v-num" aria-hidden="true">
+                {st === 'run' ? t('vStepRunMeta') : st === 'done' ? t('nbHeuteBlockDone') : t('nbHeuteMin', { min: r.min })}
+              </span>
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** „Als Nächstes: Grammatik · <em>Thema</em>“ mit Kanalpunkt (Vorschau `.nextl`). */
+export function NextLine({ now, testId }: { now: DayRow | null; testId?: string }) {
+  const { t } = useT();
+  if (!now) return null;
+  return (
+    <p className="lx-vh-next" data-testid={testId}>
+      <VDot ch={channelOf(now.kind)} />
+      <span>
+        {t('vhNext', { what: now.name })}
+        {now.why ? (
+          <>
+            {' · '}
+            <em>{now.why}</em>
+          </>
+        ) : null}
+      </span>
+    </p>
   );
 }
 
@@ -95,7 +178,7 @@ export function GoLabel({ label }: { label: string }) {
   return (
     <>
       {label}
-      <kbd className="ml-2 hidden rounded-md border border-current px-1.5 text-xs font-medium opacity-70 lg:inline" aria-hidden="true" title={t('stEnter')}>
+      <kbd className="lx-vh-kb" aria-hidden="true" title={t('stEnter')}>
         ⏎
       </kbd>
     </>
@@ -124,8 +207,6 @@ export function useEnterStart(enabled: boolean, start: () => void): void {
   }, [enabled, start]);
 }
 
-// ------------------------------------------------------------------ Startbild aus `app/today`
-
 /**
  * Der EINE Zeilenname der Tageskarte (Tarek S2): Block der Einheit (`block` > 0 → `blockName`), alter Plan ohne Block → Pflichtpunkt
  * (`dutyLabel`). Echte Karte (`TodayScreen`) und Startbild nutzen dieselbe Funktion, damit Zeilen, Titel und Knopf nie auseinanderlaufen.
@@ -135,86 +216,93 @@ export function dayRowName(r: { kind: string; block: number; id: string; fmt?: s
   return dutyLabel(r.id as DutyId, t);
 }
 
+/** Rahmen der Tageskarte (Vorschau `.daycard`): Ring, rechts bzw. darunter der Inhalt. Gleiche Klassen für Start-Bild, Skelett und Karte. */
+export function DayCardFrame({ ring, children, className, ...rest }: { ring: ReactNode; children: ReactNode } & Omit<ComponentProps<'section'>, 'children'>) {
+  return (
+    <section className={`lx-v-card lx-vh-day${className ? ` ${className}` : ''}`} data-raised="" {...rest}>
+      <div className="lx-vh-day-ring">{ring}</div>
+      <div className="lx-vh-day-main">{children}</div>
+    </section>
+  );
+}
+
+// ------------------------------------------------------------------ Startbild aus `app/today`
+
 const docRowName = (b: TodayDocBlock, t: T): string => dayRowName({ kind: b.k, block: b.bl, id: b.id, fmt: b.f }, t);
 
-/** Titel wie `nextTitle` der echten Karte, aber aus `th` und `go` des Startbilds. */
-function docTitle(doc: TodayDoc, now: TodayDocBlock | null, t: T, lang: 'de' | 'en'): string {
-  if (!now) return t('hxTodayNext', { what: t('nbHeuteBlock_review') });
+/** Thema der Karte aus `th` des Startbilds (wie `dayTitle` der echten Karte). */
+function docTopic(doc: TodayDoc, t: T, lang: 'de' | 'en'): string {
   const th = doc.th;
   const topic = (lang === 'en' ? th?.nm?.en : th?.nm?.de) ?? null;
-  if (now.k === 'grammar' && th?.k === 'ch' && th.ch && topic) return t('hxTodayNext', { what: t('pxKNext', { n: th.ch, topic }) });
-  if (now.k === 'grammar' && th?.k === 'intro' && topic) return t('hxTodayNextGrammarNew', { topic });
-  return t('hxTodayNext', { what: docRowName(now, t) });
+  if (th?.k === 'ch' && th.ch && topic) return t('pxKNext', { n: th.ch, topic });
+  if (th?.k === 'intro' && topic) return t('vhNewTopic', { topic });
+  if (topic) return topic;
+  return t('vhDayTitle');
 }
 
 /**
- * Startbild (Relaunch P6, stufe1-plan §4.3): Ring, Restminuten, „x von N“, Schritte und der Knopf aus dem gültigen `app/today`, solange der Plan
- * noch berechnet wird. Gründe erscheinen erst mit der echten Karte (Platzhalter gleicher Höhe). Der Knopf startet nach dem BERECHNETEN Plan
- * (`requestStart` → wartender Start); `go` ist nur die Beschriftung.
+ * Startbild (Relaunch P6, stufe1-plan §4.3): Ring, Restminuten, Thema, „Als Nächstes“ und der Knopf aus dem gültigen `app/today`, solange der Plan
+ * noch berechnet wird. Gründe erscheinen erst mit der echten Karte. Der Knopf startet nach dem BERECHNETEN Plan (`requestStart` → wartender Start).
  */
 export function StartCard({ doc }: { doc: TodayDoc }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
+  const listId = useId();
   const blocks = todayDocBlocks(doc);
   const now = blocks.find((b) => b.id === doc.go?.id) ?? null;
   const total = blocks.length;
   const done = blocks.filter((b) => b.st === 'done').length;
   const fills = ringFills(blocks.map((b) => ({ state: b.st === 'done' ? ('done' as const) : ('open' as const), progress: b.of > 0 ? { done: b.n, total: b.of } : null })));
   const rows: DayRow[] = blocks.map((b) => ({ id: b.id, name: docRowName(b, t), why: null, whyKey: b.k, min: b.m, kind: b.k, state: b.id === now?.id ? 'now' : b.st === 'done' ? 'done' : 'open' }));
-  const name = now ? docRowName(now, t) : '';
+  const nowRow = rows.find((r) => r.state === 'now') ?? null;
+  const started = done > 0 || fills.some((f) => f > 0);
   const start = () => requestStart(api, false);
   useEffect(() => markStart('lx:button'), []);
   return (
-    <section className={DAY_CARD_CLS} data-settled="" aria-labelledby="td-start-title" data-testid="start-card" data-source="doc" data-day={doc.d}>
-      <div className={DAY_HEAD_CLS}>
-        <span className="lx-td-ring flex flex-none">
-          <DayRing fills={fills} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })} testId="start-ring">
-            <span className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl leading-none font-semibold tracking-tight lg:text-5xl" data-testid="start-min">
-                {doc.rest ?? 0}
-              </span>
-              <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
-            </span>
-          </DayRing>
+    <DayCardFrame
+      data-testid="start-card"
+      data-source="doc"
+      data-day={doc.d}
+      aria-labelledby="td-start-title"
+      ring={
+        <TodayRing fills={fills} minutes={rows.map((r) => r.min)} label={t('nbHeuteRingLabel', { done, total })} testId="start-ring">
+          <b className="lx-v-disp lx-v-num" data-testid="start-min">
+            {doc.rest ?? 0}
+          </b>
+          <span>{t(started ? 'vhMinLeft' : 'vhMinToday')}</span>
+        </TodayRing>
+      }
+    >
+      <DayBlocks rows={rows} prefix="start" id={listId} open={false} />
+      <div className="lx-vh-topic">
+        <h2 id="td-start-title" className="lx-vh-t lx-v-disp" data-testid="start-title">
+          {docTopic(doc, t, lang)}
+        </h2>
+        <span data-testid="start-status" data-done={done} data-total={total} className="sr-only">
+          {t('nbHeuteRing', { done, total })}
         </span>
-        <div className={DAY_TITLE_CLS}>
-          <h2 id="td-start-title" className="text-lg leading-7 font-semibold tracking-tight text-balance lg:text-2xl lg:leading-8" data-testid="start-title">
-            {docTitle(doc, now, t, lang)}
-          </h2>
-          <span data-testid="start-status" data-done={done} data-total={total} className="lx-tnum text-xs text-muted">
-            {t('nbHeuteRing', { done, total })}
-          </span>
-        </div>
       </div>
-      <div className={DAY_LIST_CLS}>
-        <DayRows rows={rows} prefix="start" />
+      <NextLine now={nowRow} testId="start-next" />
+      <div className="lx-vh-go">
+        <VButton variant="pri" full onClick={start} data-testid="start-go" data-duty={doc.go?.id}>
+          <GoLabel label={started ? t('vhContinue') : t('vhGo')} />
+        </VButton>
       </div>
-      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start-go" data-duty={doc.go?.id} className={DAY_GO_CLS}>
-        <GoLabel label={done > 0 && now ? t('nbHeuteContinue', { block: name }) : t('nbHeuteStart')} />
-      </Button>
-      <div className={DAY_FOOT_CLS} />
-    </section>
+    </DayCardFrame>
   );
 }
 
-/** Platzhalter der Tageskarte: Ring, Titel, drei Schritte, Knopf unten, Fußzeile – derselbe Aufbau wie die Karte (auch quer ab 1.024 px). */
+/** Platzhalter der Tageskarte (Vorschau H1 `skeleton`): Ring, Thema, Zeile, Knopf – derselbe Aufbau wie die Karte. */
 export function TodaySkeletonCard() {
   return (
-    <div className={DAY_CARD_CLS} aria-hidden="true" data-testid="today-skeleton" data-settled="true">
-      <div className={DAY_HEAD_CLS}>
-        <div className="lx-td-ring lx-skeleton size-28 flex-none rounded-full" />
-        <div className="flex min-w-0 flex-1 flex-col gap-2 lg:col-start-2 lg:row-start-1">
-          <div className="lx-skeleton h-5 w-4/5" />
-          <div className="lx-skeleton h-3 w-24" />
-        </div>
+    <DayCardFrame aria-hidden="true" data-testid="today-skeleton" data-settled="true" ring={<div className="lx-v-sk lx-vh-sk-ring" data-round="" />}>
+      <div className="lx-vh-topic">
+        <div className="lx-v-sk lx-vh-sk-t" />
       </div>
-      <div className="flex flex-col gap-1.5 lg:col-start-2 lg:row-start-2">
-        <div className="lx-skeleton h-[3.25rem] rounded-[0.875rem]" />
-        <div className="lx-skeleton h-[3.25rem] rounded-[0.875rem]" />
-        <div className="lx-skeleton h-[3.25rem] rounded-[0.875rem]" />
+      <div className="lx-v-sk lx-vh-sk-next" />
+      <div className="lx-vh-go">
+        <div className="lx-v-sk lx-vh-sk-go" />
       </div>
-      <div className={`lx-skeleton min-h-14 rounded-full ${DAY_GO_CLS}`} />
-      <div className={DAY_FOOT_CLS} />
-    </div>
+    </DayCardFrame>
   );
 }

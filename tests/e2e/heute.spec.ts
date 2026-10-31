@@ -32,7 +32,8 @@ test('Morgen-Journey: Tageskarte mit 4 Blöcken (Wortschatz · Grammatik · Satz
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
   await expect(page.getByTestId('today-theme')).toHaveCount(0);
   await expect(page.getByTestId('start')).toBeInViewport();
-  await expect(page.locator('main button.bg-accent')).toHaveCount(1);
+  // D2 V-HEUTE: der eine Hauptknopf ist der volle Knopf der Vorschau (`.btn.pri`).
+  await expect(page.locator('main .lx-v-btn[data-variant="pri"]')).toHaveCount(1);
   expect(await layoutProblems(page)).toEqual([]);
   // Plan einmal je Lerntag gespeichert, mit Pflicht der Einheit.
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as Doc | undefined)?.d).toBe('2026-09-22');
@@ -263,8 +264,9 @@ test('Wiedereinstieg: nach 3–6 Tagen Pause ein ruhiges Band, nach 7+ ein läng
   expect(errors).toEqual([]);
 });
 
-// Lernplattform 2.0 P7 (§2.2): Datum als Titel, Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, nichts unter der Karte, danach „Extra ›“.
-test('P7 Heute offen: Datum als Titel, Ring mit 4 Segmenten, „Als Nächstes“, keine Zeilen unter der Karte', async ({ page }) => {
+// Lernplattform 2.0 P7 (§2.2), seit D2 V-HEUTE (Vorschau H1): Kopf „Heute“ (das Datum steht für Screenreader in der Überschrift), Ring mit einem
+// Segment je Pflichtschritt, „Als Nächstes“; unter der Karte nur Wochenstreifen und „Wenn du mehr willst“ (höchstens drei Zeilen, nie Pflicht).
+test('P7/D2 Heute offen: Kopf „Heute“ mit Datum, Ring mit 4 Segmenten, „Als Nächstes“, darunter höchstens drei freiwillige Zeilen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39 } } });
   await screen(page, 'today');
@@ -276,7 +278,11 @@ test('P7 Heute offen: Datum als Titel, Ring mit 4 Segmenten, „Als Nächstes“
   // „Heute“ steht im Inhalt höchstens einmal (die Reiterleiste zählt nicht).
   const heute = await page.locator('main').evaluate((m) => ((m as HTMLElement).innerText.match(/\bHeute\b/g) ?? []).length);
   expect(heute).toBeLessThanOrEqual(1);
-  for (const id of ['today-speak', 'check-missed', 'today-extra', 'today-weekly', 'offer']) await expect(page.getByTestId(id)).toHaveCount(0);
+  for (const id of ['today-speak', 'check-missed', 'today-weekly', 'offer']) await expect(page.getByTestId(id)).toHaveCount(0);
+  // Freiwilliges steht getrennt unter „Wenn du mehr willst“, höchstens drei Zeilen, und zählt nicht zur Pflicht (Ring weiter leer).
+  await expect(page.getByTestId('today-extra')).toHaveText('Alles anzeigen');
+  expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
+  await expect(page.locator('[data-testid="duties"] [data-testid="more-row"]')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
@@ -292,10 +298,11 @@ test('P7 Heute fertig: eine Zeile „Extra ›“ mit Blatt, Sprechen ist erreic
   await expect(page.getByTestId('today-ring')).toHaveAttribute('data-filled', /^[1-9]$/);
   await expect(page.getByTestId('today-extra')).toHaveCount(1);
   await expect(page.getByTestId('offer')).toHaveCount(0);
+  // Auf Heute höchstens drei Zeilen (Vorschau `moreRows`), „Alles anzeigen“ öffnet das Blatt mit allen Angeboten.
+  expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
   await page.getByTestId('today-extra').click();
-  const lines = page.getByTestId('extra-line');
-  expect(await lines.count()).toBeLessThanOrEqual(3);
-  await page.locator('[data-testid="extra-line"][data-line="speak"]').click();
+  await expect(page.getByTestId('today-extra-sheet')).toBeVisible();
+  await page.locator('[data-testid="today-extra-sheet"] #extra-speak').click();
   await screen(page, 'speak');
   expect(errors).toEqual([]);
 });
