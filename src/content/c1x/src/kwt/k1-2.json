@@ -461,7 +461,12 @@
       "send over the report",
       "email me the report",
       "email the report",
-      "email it"
+      "email it",
+      "send it to me",
+      "send the report to me",
+      "email it to me",
+      "email the report to me",
+      "be emailing me the report"
      ]
     }
    ],
@@ -1098,7 +1103,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "lead": "Supposing the client gives the quote a green light today, we will start next week.",
+   "lead": "The client needs to approve the quote today for us to start next week.",
    "key": "IF",
    "before": "",
    "after": "the quote today, we will start next week.",
@@ -1113,7 +1118,9 @@
       "the client accepts",
       "the client signs off on",
       "the client should approve",
-      "the client agrees to"
+      "the client agrees to",
+      "the client OKs",
+      "the client okays"
      ]
     }
    ],
@@ -1248,8 +1255,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: were, nach if steht bei I formal were, nicht was. Teil 2: in your position, der Vergleich mit der anderen Person.",
-     "en": "Part 1: were, after if with I the formal form is were, not was. Part 2: in your position, the comparison with the other person."
+     "de": "Teil 1: were, nach if steht bei I formal were, nicht was. Teil 2: in your position = „an deiner Stelle“ (ebenso in your shoes / in your place).",
+     "en": "Part 1: were, after if with I the formal form is were, not was. Part 2: in your position = “if I were you” (also in your shoes / in your place)."
     },
     "wrong": [
      {
@@ -1261,6 +1268,14 @@
       ],
       "de": "At your place hieße „bei dir zu Hause“. Für die Lage heißt es in your place/position („an deiner Stelle“).",
       "en": "At your place means “at your home”. For the situation it is in your place/position."
+     },
+     {
+      "if": [
+       "were",
+       "you"
+      ],
+      "de": "Inhaltlich richtig, aber nur 2 Wörter. Hier brauchst du 3–6: were in your position / in your shoes.",
+      "en": "Right meaning, but only 2 words. You need 3–6 here: were in your position / in your shoes."
      }
     ]
    }
@@ -1358,7 +1373,8 @@
       "that you buy",
       "you buy",
       "that you purchase",
-      "you purchase"
+      "you purchase",
+      "you place an order for"
      ]
     }
    ],
@@ -1555,8 +1571,7 @@
       "we're unable to",
       "we are not able to",
       "we aren't able to",
-      "we can't",
-      "we couldn't"
+      "we can't"
      ]
     }
    ],
@@ -1703,6 +1718,14 @@
       "ever have",
       "happen to have"
      ]
+    },
+    {
+     "a": [
+      "Should there"
+     ],
+     "b": [
+      "be"
+     ]
     }
    ],
    "tiles": [
@@ -1719,8 +1742,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: Should you, die Inversion ersetzt if (förmlich). Teil 2: have, nach should die Grundform.",
-     "en": "Part 1: Should you, inversion replaces if (formal). Part 2: have, the base form follows should."
+     "de": "Teil 1: Should you (oder Should there be), die Inversion ersetzt if (förmlich). Teil 2: have, nach should die Grundform.",
+     "en": "Part 1: Should you (or Should there be), inversion replaces if (formal). Part 2: have, the base form follows should."
     },
     "wrong": [
      {

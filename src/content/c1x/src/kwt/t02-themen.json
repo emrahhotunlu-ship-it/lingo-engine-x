@@ -588,8 +588,8 @@
    "pat": "sa.no-ing",
    "why": {
     "ok": {
-     "de": "urgently need a decision. Need ist ein Zustandsverb und bleibt einfach.",
-     "en": "urgently need a decision. Need is a stative verb and stays simple."
+     "de": "Aus dem Passiv is required wird aktiv we need. Need ist ein Zustandsverb, also keine -ing-Form.",
+     "en": "The passive is required becomes active we need. Need is a stative verb, so no -ing form."
     },
     "wrong": [
      {
@@ -620,6 +620,14 @@
      ],
      "b": [
       "a decision"
+     ]
+    },
+    {
+     "a": [
+      "urgently need to"
+     ],
+     "b": [
+      "make a decision"
      ]
     }
    ],
@@ -686,7 +694,9 @@
      ],
      "b": [
       "more expensive",
-      "more costly"
+      "more costly",
+      "more and more expensive",
+      "more and more costly"
      ]
     }
    ],

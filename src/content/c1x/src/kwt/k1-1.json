@@ -794,7 +794,7 @@
    "level": "B2",
    "dom": "life",
    "src": "seed",
-   "lead": "I was not feeling very well in the last few days.",
+   "lead": "I started feeling ill a few days ago, and I still don't feel great.",
    "key": "LATELY",
    "before": "I",
    "after": ".",
@@ -805,7 +805,8 @@
       "haven't felt"
      ],
      "b": [
-      "well lately"
+      "well lately",
+      "very well lately"
      ]
     },
     {
@@ -822,7 +823,9 @@
       "have felt"
      ],
      "b": [
-      "unwell lately"
+      "unwell lately",
+      "ill lately",
+      "sick lately"
      ]
     },
     {
@@ -830,7 +833,9 @@
       "have been"
      ],
      "b": [
-      "feeling unwell lately"
+      "feeling unwell lately",
+      "feeling ill lately",
+      "feeling sick lately"
      ]
     }
    ],
@@ -843,15 +848,15 @@
    "extra": [
     "recently",
     "feel",
-    "sick"
+    "since"
    ],
    "traps": [
     "do not feel well lately"
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: have not felt / have not been feeling, weil die Zeit bis jetzt reicht. Teil 2: well lately, lately passt meist zum Present Perfect.",
-     "en": "Part 1: have not felt / have not been feeling, since the period runs up to now. Part 2: well lately, lately mostly goes with the present perfect."
+     "de": "Teil 1: have not felt / have not been feeling (oder have felt ill), weil die Zeit bis jetzt reicht. Teil 2: well lately, lately passt meist zum Present Perfect.",
+     "en": "Part 1: have not felt / have not been feeling (or have felt ill), since the period runs up to now. Part 2: well lately, lately mostly goes with the present perfect."
     },
     "wrong": [
      {
@@ -1231,7 +1236,9 @@
       "the legal team has approved",
       "legal has approved",
       "the legal team approves",
-      "legal approves"
+      "legal approves",
+      "legal signs off on",
+      "legal has signed off on"
      ]
     }
    ],

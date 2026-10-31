@@ -212,7 +212,10 @@
      "b": [
       "you need",
       "you require",
-      "you want"
+      "you want",
+      "you need any",
+      "you require any",
+      "you want any"
      ]
     }
    ],
@@ -722,8 +725,11 @@
       "if": [
        "that"
       ],
-      "de": "Nach Surprising as folgt direkt das Subjekt, ohne that: Surprising as it sounds.",
-      "en": "After Surprising as the subject follows directly, without that: Surprising as it sounds."
+      "not": [
+       "as"
+      ],
+      "de": "Nach dem Adjektiv steht as, nicht that: Surprising as it sounds.",
+      "en": "After the adjective comes as, not that: Surprising as it sounds."
      },
      {
       "if": [
@@ -741,7 +747,7 @@
      }
     ]
    },
-   "lead": "The old tool is faster, despite how unexpected that may seem.",
+   "lead": "It may sound hard to believe, but the old tool is faster.",
    "key": "SURPRISING",
    "before": "",
    "after": "sounds, the old tool is faster.",
@@ -755,6 +761,24 @@
      "b": [
       "it"
      ]
+    },
+    {
+     "a": [
+      "Surprising as",
+      "As surprising as"
+     ],
+     "b": [
+      "that",
+      "this"
+     ]
+    },
+    {
+     "a": [
+      "However surprising"
+     ],
+     "b": [
+      "it"
+     ]
     }
    ],
    "tiles": [
@@ -763,7 +787,7 @@
    ],
    "extra": [
     "is",
-    "that",
+    "than",
     "so"
    ],
    "traps": []
@@ -1117,6 +1141,15 @@
      "b": [
       "not"
      ]
+    },
+    {
+     "a": [
+      "I really hope",
+      "I certainly hope"
+     ],
+     "b": [
+      "not"
+     ]
     }
    ],
    "tiles": [
@@ -1272,7 +1305,8 @@
    "keys": [
     {
      "a": [
-      "a new"
+      "a new",
+      "a brand new"
      ],
      "b": [
       "one"
@@ -1432,8 +1466,8 @@
    "pat": "el.so-not",
    "why": {
     "ok": {
-     "de": "I suppose so. So steht direkt hinter dem Verb (auch I think so, I guess so, I expect so) und ersetzt den Gedanken.",
-     "en": "I suppose so. So follows the verb directly (also I think so, I guess so, I expect so) and replaces the thought."
+     "de": "I suppose so. So steht direkt hinter dem Verb (auch I think / guess / expect / believe so, I'd say so) und ersetzt den Gedanken.",
+     "en": "I suppose so. So follows the verb directly (also I think / guess / expect / believe so, I'd say so) and replaces the thought."
     },
     "wrong": [
      {
@@ -1446,7 +1480,7 @@
      }
     ]
    },
-   "lead": "Is Tom coming to the party? He will probably come, in my opinion.",
+   "lead": "Is Tom coming to the party? Probably, yes.",
    "key": "SO",
    "before": "Is Tom coming to the party?",
    "after": ".",
@@ -1478,6 +1512,38 @@
     {
      "a": [
       "I expect"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I believe"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I imagine"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I'd say"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I would think"
      ],
      "b": [
       "so"
@@ -1627,16 +1693,16 @@
    "pat": "np.contact",
    "why": {
     "ok": {
-     "de": "the most useful training I have attended. Das Pronomen that darf fehlen.",
-     "en": "the most useful training I have attended. The pronoun that may be dropped."
+     "de": "the most useful training session I have attended. Das Pronomen that darf fehlen.",
+     "en": "the most useful training session I have attended. The pronoun that may be dropped."
     },
     "wrong": [
      {
       "if": [
        "what"
       ],
-      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach training steht that oder nichts.",
-      "en": "What does not start a relative clause after a noun. After training use that or nothing."
+      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach dem Nomen steht that oder nichts.",
+      "en": "What does not start a relative clause after a noun. After the noun use that or nothing."
      },
      {
       "if": [
@@ -1654,9 +1720,9 @@
      }
     ]
    },
-   "lead": "No other training so far has been as useful as that one.",
+   "lead": "No other training session so far has been as useful as that one.",
    "key": "ATTENDED",
-   "before": "That was the most useful training",
+   "before": "That was the most useful training session",
    "after": ".",
    "keys": [
     {
@@ -2158,20 +2224,29 @@
    "pat": "np.participle",
    "why": {
     "ok": {
-     "de": "everyone invited to the wedding. Das passive Partizip ersetzt who is invited.",
-     "en": "everyone invited to the wedding. The passive participle replaces who is invited."
+     "de": "everyone invited to the wedding: Das Partizip ersetzt who is invited. Der volle Relativsatz ist auch richtig.",
+     "en": "everyone invited to the wedding: the participle replaces who is invited. The full relative clause is also correct."
     },
     "wrong": [
      {
       "if": [
        "who"
       ],
-      "de": "Mit INVITED fällt who is weg: everyone invited to the wedding.",
-      "en": "With INVITED, who is is dropped: everyone invited to the wedding."
+      "not": [
+       "is",
+       "was",
+       "has",
+       "been"
+      ],
+      "de": "Das Partizip steht allein, ohne who: everyone invited to the wedding. Mit who bräuchte es is invited.",
+      "en": "The participle stands alone, without who: everyone invited to the wedding. With who it would need is invited."
      },
      {
       "if": [
        "is"
+      ],
+      "not": [
+       "who"
       ],
       "de": "Is ist zu viel. Das Partizip steht allein: everyone invited to.",
       "en": "Is is too much. The participle stands alone: everyone invited to."
@@ -2197,6 +2272,15 @@
      "b": [
       "to the wedding"
      ]
+    },
+    {
+     "a": [
+      "who is invited",
+      "who was invited"
+     ],
+     "b": [
+      "to the wedding"
+     ]
     }
    ],
    "tiles": [
@@ -2205,9 +2289,9 @@
     "wedding"
    ],
    "extra": [
-    "who",
-    "is",
-    "inviting"
+    "inviting",
+    "for",
+    "at"
    ],
    "traps": []
   },
