@@ -731,3 +731,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Emrah: Gedämpft-Knopf weiße Schrift (→ D5), Erledigt bleibt Indigo.
 
 **31.10.2026 (Nacht) – D3 Übungsseite zusammengeführt** (Merge `b4803961`, Konflikte in `index.css`, `budget.json`, `check-css-legacy.mjs`, `verify-fast-map.mjs`, `de.ts`/`en.ts` durch Behalten beider Seiten gelöst). Bericht `docs/umbau/berichte/d3.md` mit Bildern. Emrah: Regel-Karte erst nach dem Prüfen, „Warum“ bleibt sichtbar. verify:fast gegen `b4803961^1` läuft.
+- verify:fast gegen `b4803961^1` (37 Dateien): Typprüfung, Lint, Unit, Build, perf, Plattform, Budget grün; e2e 279 grün, 4 rot nur durch volle Platte (ENOSPC, Browser-Absturz). Die beiden betroffenen Dateien (`trainerFeedback`, `vorschau-uebung`) danach einzeln: 72/72 grün. **D3 abgeschlossen.**
