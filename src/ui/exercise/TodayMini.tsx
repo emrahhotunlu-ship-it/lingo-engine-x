@@ -2,6 +2,7 @@ import { dutyLabel } from '../../features/learn/ui';
 import { firstOpenDuty, useToday } from '../../features/today/state';
 import { useT } from '../../i18n';
 import { VStateList, type VStep } from '../v';
+import { useRunCtx } from './runCtx';
 
 // Kontextspalte der Übung am Laptop, Block „Heute“ (Relaunch Teil 1c, D3 V-UEBUNG; Vorschau desk.js `dayMini`, L2/L3):
 // die Blöcke des Tages ohne Knöpfe – erledigt ✓, der laufende Block „läuft“, der Rest offen. Nur lesen, nie planen (stufe1c-plan §5).
@@ -10,8 +11,10 @@ import { VStateList, type VStep } from '../v';
 export function TodayMini() {
   const { t } = useT();
   const duties = useToday((s) => s.duties);
+  const run = useRunCtx();
   if (duties.total < 2) return null;
-  const now = firstOpenDuty({ duties });
+  // „läuft“ nur in einer Pflicht-Runde: am gemeldeten Block, sonst am ersten offenen. In einer Extra-Runde läuft kein Pflichtblock.
+  const now = run.ctx === 'duty' ? (run.duty ?? firstOpenDuty({ duties })) : null;
   const steps: VStep[] = duties.items.map((d) => ({
     id: d.id,
     name: dutyLabel(d.id, t),

@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { closeContext, contextPortalTarget, openContext, useContextPresentation } from '../../app/shell/contextColumn';
 import { useLive } from '../../data/live';
 import { useSharedTarget } from '../../engine/shared';
@@ -177,8 +177,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
   // Ab 1024 px mit Kontextspalte des Rahmens steht „Wozu?“ in der Spalte statt über der Aufgabe (Hauptsitzung 28.10.2026, Vorschau L2/L3);
   // ohne Spalte (Handy, Tablet, Rahmen ohne `#lx-context`) klappt es wie bisher über der Aufgabe auf.
   const [infoCtx, setInfoCtx] = useState(false);
-  const purposeBody = (r: { text: string; code: string } | null): ReactNode => (
-    <p className="lx-t-support m-0 text-muted" data-testid="purpose">
+  const purposeBody = (r: { text: string; code: string } | null, testId = 'purpose'): ReactNode => (
+    <p className="lx-t-support m-0 text-muted" data-testid={testId}>
       {[status.topic, status.pattern].filter(Boolean).length > 0 && <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>}
       {status.state && status.detail && (
         <span className="block" data-testid="status-detail">
@@ -211,6 +211,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
     setInfo(true);
     if (!toggle) window.requestAnimationFrame(() => (split ? sideRef.current : taskRef.current)?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' }));
   };
+  // D3 (Prüfung learning-scientist): am Laptop steht in der Spalte gleich der Grund für genau diese Aufgabe, nicht nur der allgemeine Zweck.
+  const taskReason = task.reason;
+  const sideReason = useMemo(() => (split && taskReason ? taskReason() : null), [split, taskReason]);
   const showWhyRef = useRef(showWhy);
   useEffect(() => {
     showWhyRef.current = showWhy;
@@ -719,13 +722,12 @@ export function ExerciseShell(props: ExerciseShellProps) {
             <button
               type="button"
               className="lx-vu-why"
-              aria-label={t('exInfo')}
               aria-expanded={info || infoCtx}
               aria-controls={info ? infoId : undefined}
               onClick={() => showWhy(true)}
               data-testid="purpose-info"
             >
-              <span aria-hidden="true" className="lx-vu-why-face">
+              <span className="lx-vu-why-face">
                 {t('vuWhy')}
               </span>
             </button>
@@ -837,7 +839,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
               !task.open && (
                 <section className="lx-vu-ctx" data-testid="side-placeholder">
                   <h3 className="lx-vu-ctx-h">{t('vuSideWhy')}</h3>
-                  <p className="lx-t-support m-0 text-muted">{task.purpose || (sideNote ?? t('exSidePlaceholder'))}</p>
+                  {task.purpose || sideReason ? purposeBody(sideReason, 'side-purpose') : <p className="lx-t-support m-0 text-muted">{sideNote ?? t('exSidePlaceholder')}</p>}
                 </section>
               )
             )}
