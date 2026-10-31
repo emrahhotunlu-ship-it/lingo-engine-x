@@ -21,7 +21,7 @@ export function RuleSide({ topic, onWhole }: { topic: string; onWhole: () => voi
   return (
     <div className="lx-vu-card" data-testid="rule-side">
       {rule.core && (
-        <p className="m-0 font-semibold" lang={lang}>
+        <p className="lx-t-support m-0" lang={lang}>
           {rule.core}
         </p>
       )}
