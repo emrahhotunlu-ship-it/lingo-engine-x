@@ -76,12 +76,15 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
     await expect(page.getByTestId('start')).toHaveCount(1);
     await expect(page.getByTestId('start')).toHaveAttribute('data-duty', open[0] ?? '');
     await expect(page.getByTestId('tab-badge')).toHaveText(String(open.length));
-    await expect(page.getByTestId('today-extra')).toHaveCount(0);
+    // D2 V-HEUTE (Vorschau H1): Freiwilliges steht schon während der Pflicht getrennt unter „Wenn du mehr willst“ (höchstens drei Zeilen),
+    // nie in der Blockliste und nie im Zähler.
+    expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
+    await expect(page.locator('[data-testid="duties"] [data-testid="more-row"]')).toHaveCount(0);
   } else {
     await expect(page.getByTestId('hero')).toHaveCount(0);
     await expect(page.getByTestId('start')).toHaveCount(0);
     await expect(page.getByTestId('tab-badge')).toHaveCount(0);
-    // Nach der Pflicht genau eine Zeile „Extra ›“ (Lernplattform 2.0 §2.2).
+    // Nach der Pflicht: „Wenn du mehr willst“ mit „Alles anzeigen“ (Lernplattform 2.0 §2.2, Vorschau H1 `done`).
     await expect(page.getByTestId('today-extra')).toBeVisible();
     await expect(page.getByTestId('offer')).toHaveCount(0);
   }

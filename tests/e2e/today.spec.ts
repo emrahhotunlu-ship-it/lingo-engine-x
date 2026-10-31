@@ -42,7 +42,7 @@ for (const s of SAMPLES) {
     expect(near(bg, BG[s.theme]), `Grund ${bg.join(',')}`).toBe(true);
     // Genau ein Primärknopf, ohne Scrollen sichtbar (Kap. 2.1).
     await expect(page.getByTestId('start')).toBeInViewport();
-    await expect(page.locator('main button.bg-accent')).toHaveCount(1);
+    await expect(page.locator('main .lx-v-btn[data-variant="pri"]')).toHaveCount(1);
     expect(await layoutProblems(page)).toEqual([]);
     const text = await page.locator('body').innerText();
     if (s.lang === 'en') expect(GERMAN_IN_EN.exec(text)?.[0] ?? null).toBeNull();

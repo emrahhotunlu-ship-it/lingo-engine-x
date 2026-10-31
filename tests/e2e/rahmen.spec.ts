@@ -294,7 +294,8 @@ test('Seitenleiste ab 1280 px: Wortmarke, Praxis aufklappbar (Sprechen, Hören, 
   await expect(page.getByTestId('tab-apply')).toHaveText('Praxis');
   await expect(page.getByTestId('side-settings')).toBeVisible();
   await expect(page.getByTestId('side-translate')).toBeVisible();
-  await expect(page.getByTestId('context-empty')).toBeVisible();
+  // D2 V-HEUTE (Vorschau L1): auf Heute zeigt die leere Spalte „Diese Woche“ und „Wenn du mehr willst“.
+  await expect(page.getByTestId('today-context')).toBeVisible();
   // Bühne und Spalte nebeneinander, ohne Überlappung.
   expect(meets(await boxOf(page, 'stage'), await boxOf(page, 'context-column'))).toBe(false);
   // Praxis zu → aufklappen → Unterpunkte.
@@ -382,6 +383,8 @@ for (const [width, height] of [
 
 test('Ohne KI (1440 px): der Platzhalter der Kontextspalte nennt Claude nicht, die Bühne ist bei 1280 px mindestens 640 px breit', async ({ browser }) => {
   const { page, errors, close } = await at(browser, 1440, 900, { capabilities: { sample: false } });
+  // Auf Heute steht die Woche in der Spalte (D2); der Platzhalter erscheint auf einem anderen Reiter.
+  await openTab(page, 'vocab');
   await expect(page.getByTestId('context-empty')).toBeVisible();
   await expect(page.getByTestId('context-empty')).not.toContainText('Claude');
   await page.setViewportSize({ width: 1280, height: 800 });

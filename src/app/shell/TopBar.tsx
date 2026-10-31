@@ -1,6 +1,7 @@
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { AskButton, SettingsButton } from '../../features/system/Chrome';
+import { TodayHead } from '../../features/today/TodayHead';
 import { useNav } from '../nav';
 import { screenOf } from '../registry';
 import { openSheet } from '../sheets';
@@ -34,6 +35,8 @@ export function ProfileButton() {
 /** Kopf auf jeder Reiter-Wurzel (einmal im Rahmen, nicht je Bildschirm – eindeutige Test-IDs). */
 export function TopBar() {
   const tab = useNav((s) => s.tab);
+  // D2 V-HEUTE: Auf „Heute“ ist der Kopf die Titelzeile der Vorschau (`phead`: „Heute“ links, „Fragen“ rechts).
+  if (tab === 'today') return <TodayHead />;
   if (tab === 'progress') {
     return (
       <div className="flex min-h-11 items-center justify-between gap-3 pt-3" data-testid="topbar">

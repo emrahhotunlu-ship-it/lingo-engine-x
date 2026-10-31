@@ -46,6 +46,7 @@ import { shellDe } from './parts/shell.de';
 import { startDe } from './parts/start.de';
 import { diktatDe } from './parts/diktat.de';
 import { vDe } from './parts/v.de';
+import { vhDe } from './parts/vh.de';
 
 export const de = {
   ...aiDe,
@@ -115,6 +116,7 @@ export const de = {
   ...diktatDe,
   // Relaunch Teil 1c, D1: Standardtexte der Design-Bausteine (src/ui/v)
   ...vDe,
+  ...vhDe,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3De,
   appName: 'Lingo-Engine X',

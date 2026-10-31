@@ -159,7 +159,7 @@ describe('Architektur: Anzeige-Zahlen nur aus domain/metrics (P5 S1-ZAHL)', () =
   it('Anzeige-Dateien (auch Heute, Grammatik-Lernweg, Lern-Bausteine) holen keine rohen Zählfunktionen', () => {
     const display = all.filter((f) => isDisplay(f.rel));
     expect(display.length).toBeGreaterThan(10);
-    for (const rel of ['features/today/TodayScreen.tsx', 'features/today/StandSide.tsx', 'features/today/doneFacts.ts', 'features/today/ExtraRow.tsx', 'features/grammar/PathList.tsx', 'features/learn/ui.tsx']) expect(display.map((f) => f.rel), rel).toContain(rel);
+    for (const rel of ['features/today/TodayScreen.tsx', 'features/today/TodayMid.tsx', 'features/today/doneFacts.ts', 'features/today/ExtraRow.tsx', 'features/grammar/PathList.tsx', 'features/learn/ui.tsx']) expect(display.map((f) => f.rel), rel).toContain(rel);
     const bad = display.flatMap((f) => reachedNames(f.text, f.rel, DISPLAY_RAW_NAMES, byRel).map((n) => `${f.rel}: ${n}`));
     expect(bad).toEqual([]);
   });

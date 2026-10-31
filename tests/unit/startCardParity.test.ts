@@ -89,8 +89,9 @@ function rows(html: string, id: 'duty' | 'start-duty'): string[] {
   const out: string[] = [];
   for (const m of html.matchAll(new RegExp(`<li[^>]*data-testid="${id}"[^>]*>([\\s\\S]*?)</li>`, 'g'))) {
     const head = m[0].slice(0, m[0].indexOf('>') + 1);
-    const name = /<span class="text-base[^"]*">([^<]*)<\/span>/.exec(m[1]!)?.[1] ?? '?';
-    const right = /<span class="lx-tnum[^"]*">([\s\S]*?)<\/span>\s*$/.exec(m[1]!)?.[1] ?? '';
+    // D2 V-HEUTE: Blockliste der Vorschau (`lx-v-st`): Name, rechts Minuten bzw. „läuft“/„erledigt“.
+    const name = /<span class="lx-v-st-nm">([^<]*)<\/span>/.exec(m[1]!)?.[1] ?? '?';
+    const right = /<span class="lx-v-st-sm[^"]*"[^>]*>([\s\S]*?)<\/span>/.exec(m[1]!)?.[1] ?? '';
     const st = / data-state="([^"]*)"/.exec(head)?.[1];
     const now = / data-now="true"/.test(head) ? ' now' : '';
     out.push(`${/ data-duty="([^"]*)"/.exec(head)?.[1]} | ${name} | ${text(right)} | ${st}${now}`);
@@ -98,12 +99,15 @@ function rows(html: string, id: 'duty' | 'start-duty'): string[] {
   return out;
 }
 
-type Face = { min: string | null; status: string | null; title: string | null; go: string | null; rows: string[] };
+type Face = { min: string | null; status: string | null; title: string | null; next: string | null; go: string | null; rows: string[] };
+/** „Als Nächstes: Block“ ohne den Grund (den kennt das Startbild noch nicht; er kommt mit der echten Karte). */
+const nextOf = (s: string): string => s.split(' · ')[0] ?? s;
 
 const realFace = (html: string): Face => ({
   min: text(inner(html, 'today-min') ?? ''),
   status: text(inner(html, 'today-status') ?? ''),
-  title: text(inner(html, 'today-title') ?? ''),
+  title: text(inner(html, 'today-topic') ?? ''),
+  next: nextOf(text(inner(html, 'today-title') ?? '')),
   go: text(inner(html, 'start') ?? ''),
   rows: rows(html, 'duty'),
 });
@@ -111,6 +115,7 @@ const startFace = (html: string): Face => ({
   min: text(inner(html, 'start-min') ?? ''),
   status: text(inner(html, 'start-status') ?? ''),
   title: text(inner(html, 'start-title') ?? ''),
+  next: nextOf(text(inner(html, 'start-next') ?? '')),
   go: text(inner(html, 'start-go') ?? ''),
   rows: rows(html, 'start-duty'),
 });
@@ -128,7 +133,7 @@ function both(plan: StoredPlan, lang: 'de' | 'en', reviews: number): { real: Fac
   expect(valid).not.toBeNull();
   const out = { real: realFace(real), start: startFace(render(StartCard as ComponentType<never>, { doc: valid })) };
   // Die echte Karte steht wirklich da (sonst verglichen wir zwei leere Bilder).
-  for (const k of ['min', 'status', 'title', 'go'] as const) expect(out.real[k], k).toBeTruthy();
+  for (const k of ['min', 'status', 'title', 'next', 'go'] as const) expect(out.real[k], k).toBeTruthy();
   for (const r of out.real.rows) expect(r).toMatch(/^\S+ \| \S.* \| \S.* \| (done|open)/);
   return out;
 }

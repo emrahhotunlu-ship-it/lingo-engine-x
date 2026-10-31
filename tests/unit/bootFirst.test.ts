@@ -24,7 +24,7 @@ describe('moveInlineModuleToBody', () => {
   it('index.html enthält das Start-Bild vor dem Skript, mit derselben Kartenhöhe wie die App', () => {
     const src = readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
     expect(src.indexOf('id="lx-boot"')).toBeLessThan(src.indexOf('<script type="module"'));
-    expect(src).toContain('lx-card lx-today-card');
+    expect(src).toContain('lx-v-card lx-vh-day');
     // Nichts extern laden (Kap. 3.1, A6 Nr. 8).
     expect(src).not.toMatch(/(?:src|href)="https?:/);
   });

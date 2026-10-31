@@ -1,41 +1,37 @@
 import { motion } from 'framer-motion';
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { comebackBand, comebackGap, lastReturn, RESTART_DAYS, RESTART_GAP } from '../../domain/plan/comeback';
 import { dowOf, unitPlanFor } from '../../domain/unit/planFor';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { armShared } from '../../engine/shared';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useT, type MessageKey } from '../../i18n';
-import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
-import { DayRing } from '../../ui/DayRing';
+import { VButton, VRow } from '../../ui/v';
 import { noteDayOpen } from './dayMoment';
 import { topicName } from '../grammar/topicUi';
 import type { GrammarDay } from '../../domain/plan/types';
-import { ExtraRow } from './ExtraRow';
+import { ExtraRow, MoreRows } from './ExtraRow';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { invalidIdsOf, useLive } from '../../data/live';
-import { addDays } from '../../domain/date';
-import { dateLabelOf } from './dateLabel';
+import { addDays, isoWeek } from '../../domain/date';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
 import { actionLabel } from '../progress/actionRoute';
 import { maybeAutoAssess } from '../progress/assessRun';
 import { logWarn } from '../../platform/diagnostics';
-import { isoWeek } from '../../domain/date';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { DoneCard3, StreakFoot } from './DoneCard3';
+import { DoneCard3 } from './DoneCard3';
 import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { DAY_CARD_CLS, DAY_FOOT_CLS, DAY_GO_CLS, DAY_HEAD_CLS, DAY_LIST_CLS, DAY_TITLE_CLS, DayRows, dayRowName, GoLabel, StartCard, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
+import { DayBlocks, DayCardFrame, dayRowName, GoLabel, NextLine, StartCard, TodayRing, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
 import { flush, usePending } from '../progress/persist';
 import { useToday, type TodayView } from './state';
 import { healToday, retryPlan } from './store';
-import { TabTitle } from '../system/Chrome';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
@@ -45,13 +41,15 @@ import { blockWhy } from '../unit/labels';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
-import { StandMid } from './StandSide';
+import { TodayMid } from './TodayMid';
+import { TodayWeekStrip, WeekList, useStreakWeek } from './TodayWeek';
 
-// „Heute" (plan.md §1.3): die rote Linie. Unterzeile mit Datum und Serie, darunter EINE
-// Tageskarte – „Deine Tageseinheit“ mit Ring „2 von 5 · noch ca. 18 Min.“, Kernaufgabe der Woche,
-// Blockliste (Name, Grund, Minuten, Zustand) und EIN Knopf. Erledigtes ist Zustand (Kap. 2.2).
-// Nach der Pflicht: Fertig-Karte mit Bilanz (Zustand, kein Knopf), EINE Zeile „Lohnt sich jetzt“
-// und ein leiser Verweis „Mehr üben ›“. Alles andere lebt in den Reitern.
+// „Heute“ im Design der Vorschau (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1 screens.js:117–176, L1 desk.js:79–150): die rote Linie.
+// Kopf „Heute“ (Rahmen, `TodayHead`), EINE Tageskarte mit großem Segmentring (Restminuten), Thema, Unterzeile, „Als Nächstes“ und EIN Knopf;
+// Antippen des Rings zeigt die Blöcke von heute (Zustand, kein Knopf; Kap. 2 Nr. 2). Darunter am Handy der Wochenstreifen mit Serie und
+// „Wenn du mehr willst“ (höchstens drei Zeilen, zählt nie zur Pflicht); ab 1.280 px stehen beide rechts in der Kontextspalte (`TodayContext`),
+// am Laptop darunter Kapitelstand und Wörter fest (`TodayMid`). Nach der Pflicht: Abschlusskarte (Zustand, kein Knopf).
+// Die Logik (Plan, Zahlen, Serie, Tageswechsel 04:00, Wiedereinstieg) ist unverändert: Alle Zahlen kommen aus EINEM `todaySummary`.
 
 let statusMarked = false;
 /** U2: Die erste Heute-Ansicht nach dem Seitenstart ersetzt das Start-Bild/Ladeskelett an derselben Stelle – ohne Ein-Animation (kein Rutschen). */
@@ -137,27 +135,31 @@ function useStartUnit(): () => void {
   return () => requestStart(api, true);
 }
 
-/** Titel der Tageskarte: der nächste Schritt. Das Grammatikthema kommt nur aus dem eingefrorenen `u.gt` (§2.3), nie aus einer Neuberechnung. */
-function nextTitle(now: CardRow | null, gt: GrammarDay | null, t: T, lang: Lang): string {
-  if (!now) return t('hxTodayNext', { what: t('nbHeuteBlock_review') });
+/**
+ * Thema der Tageskarte (Vorschau `.dtopic .t`): das Grammatikthema des Tages aus dem eingefrorenen `u.gt` (§2.3, nie neu berechnet) –
+ * „Kapitel n · Thema“ (K5), sonst „Neues Thema: …“ bzw. das erste Thema; ohne Grammatik „Dein Plan für heute“. Ein Wochenthema steht nicht auf Heute.
+ */
+function dayTitle(gt: GrammarDay | null, t: T, lang: Lang): string {
   const intro = gt?.intro ?? null;
-  // Kapitel-Arbeit (K5): Folgt der Grammatikschritt einem Kapitel (`u.gt.ch`), heißt er „Kapitel n · Thema“ wie im Lernen-Reiter.
   const head = intro ?? gt?.topics[0] ?? null;
-  if (now.kind === 'grammar' && gt?.ch && head) return t('hxTodayNext', { what: t('pxKNext', { n: gt.ch, topic: topicName(head, lang) }) });
-  if (now.kind === 'grammar' && intro) return t('hxTodayNextGrammarNew', { topic: topicName(intro, lang) });
-  return t('hxTodayNext', { what: now.name });
+  if (gt?.ch && head) return t('pxKNext', { n: gt.ch, topic: topicName(head, lang) });
+  if (intro) return t('vhNewTopic', { topic: topicName(intro, lang) });
+  if (head) return topicName(head, lang);
+  return t('vhDayTitle');
 }
 
-/**
- * Die Tageskarte (offen): Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, Pflichtschritte als Zustand und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist.
- * Alle Zahlen (Ring, „x von N“, Restminuten) kommen aus EINEM `todaySummary` (P5 S1-ZAHL).
- */
-function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean }) {
+/** Minuten je Segment des Rings: die Minuten der Zeilen (Bogenlänge wie in der Vorschau). */
+const minutesOf = (rows: readonly CardRow[]): number[] => rows.map((r) => r.min);
+
+/** Tageskarte offen (Vorschau H1 `start`/`mid`/`ring`, L1 `main`/`start`): Ring mit Restminuten, Thema, Unterzeile, „Als Nächstes“, EIN Knopf. */
+function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean; sub: ReactNode }) {
   const { t, lang } = useT();
   const { done, total } = sum;
+  const [list, setList] = useState(false);
+  const listId = useId();
   const now = rows.find((r) => r.state === 'now') ?? null;
   const start = useStartUnit();
-  const title = nextTitle(now, view.plan?.u?.gt ?? null, t, lang);
+  const started = done > 0 || sum.fills.some((f) => f > 0);
   const shown: DayRow[] = rows.map((r) => ({
     id: r.id,
     name: r.name,
@@ -167,61 +169,80 @@ function UnitCard({ view, rows, sum, fixNone, settled }: { view: TodayView; rows
     kind: r.kind,
     state: r.state,
   }));
+  const nowRow = shown.find((r) => r.state === 'now') ?? null;
+  // Zeichnen des Rings nur einmal je Laden (Vorschau `S.drawOnce`) und nie, wenn die Karte ein Skelett/Startbild ersetzt (kein Sprung).
+  const [draw] = useState(() => !settled && takeDraw());
   useEffect(() => markStart('lx:button'), []);
   useEnterStart(true, start);
   return (
-    <section
-      className={DAY_CARD_CLS}
+    <DayCardFrame
       data-settled={settled ? '' : undefined}
       aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
+      data-list={list ? '' : undefined}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
+      ring={
+        <TodayRing
+          fills={sum.fills}
+          minutes={minutesOf(rows)}
+          label={`${t('vRingShowBlocks')} · ${t('nbHeuteRingLabel', { done, total })}`}
+          open={list}
+          onToggle={() => setList((v) => !v)}
+          controls={listId}
+          draw={draw}
+          testId="today-ring"
+        >
+          <b className="lx-v-disp lx-v-num" data-testid="today-min">
+            {sum.rest}
+          </b>
+          <span>{t(started ? 'vhMinLeft' : 'vhMinToday')}</span>
+        </TodayRing>
+      }
     >
-      <div className={DAY_HEAD_CLS}>
-        <span className="lx-td-ring flex flex-none">
-          <DayRing fills={sum.fills} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
-            <span className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl leading-none font-semibold tracking-tight lg:text-5xl" data-testid="today-min">
-                {sum.rest}
-              </span>
-              <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
-            </span>
-          </DayRing>
-        </span>
-        <div className={DAY_TITLE_CLS}>
-          <h2 id="td-unit-title" className="text-lg leading-7 font-semibold tracking-tight text-balance lg:text-2xl lg:leading-8" data-testid="today-title">
-            {title}
-          </h2>
-          <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="lx-tnum text-xs text-muted">
-            {t('nbHeuteRing', { done, total })}
+      <DayBlocks rows={shown} prefix="today" id={listId} open={list} />
+      {fixNone && (
+        <p className="lx-vh-fixnone" data-testid="fix-none" hidden={!list}>
+          <span className="lx-v-st-mk" aria-hidden="true">
+            <Icon name="check" size={14} />
           </span>
-        </div>
+          {t('nbHeuteFixNone')}
+        </p>
+      )}
+      <div className="lx-vh-topic" data-testid="hero" data-duty={now?.id} hidden={list}>
+        <h2 id="td-unit-title" className="lx-vh-t lx-v-disp" data-testid="today-topic">
+          {dayTitle(view.plan?.u?.gt ?? null, t, lang)}
+        </h2>
+        <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="sr-only">
+          {t('nbHeuteRing', { done, total })}
+        </span>
+        {sub}
       </div>
-      <div className={DAY_LIST_CLS} data-testid="hero" data-duty={now?.id}>
-        <DayRows rows={shown} prefix="today" />
-        {fixNone && (
-          <p className="flex min-h-9 items-center gap-3 border-t border-line pt-2 text-xs text-muted" data-testid="fix-none">
-            <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok-soft text-ok-text" aria-hidden="true">
-              <Icon name="check" size={14} />
-            </span>
-            {t('nbHeuteFixNone')}
-          </p>
-        )}
+      <div hidden={list}>
+        <NextLine now={nowRow} testId="today-title" />
       </div>
-      {/* U2: Knopf unten in der Karte mit fester Mindesthöhe (.lx-today-card), Fußzeile hat immer ihre Zeile – der Knopf steht dort, wo das Skelett ihn zeigte. */}
-      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start" data-duty={now?.id} className={DAY_GO_CLS}>
-        <GoLabel label={done > 0 && now ? t('nbHeuteContinue', { block: now.name }) : t('nbHeuteStart')} />
-      </Button>
-      <div className={DAY_FOOT_CLS}>
-        <StreakFoot />
+      <div className="lx-vh-go">
+        <VButton variant="pri" full onClick={start} data-testid="start" data-duty={now?.id}>
+          <GoLabel label={started && now ? t('vhContinue') : t('vhGo')} />
+        </VButton>
       </div>
-    </section>
+    </DayCardFrame>
   );
 }
 
-/** Willkommens-Karte der Neustart-Woche (Pause ≥ 14 Lerntage): steht statt der Tageskarte, solange heute noch nichts gestartet wurde. */
-function RestartCard({ view, gap, overdue, minutes }: { view: Pick<TodayView, 'day'>; gap: number; overdue: number; minutes: number }) {
+/** Ein Laden der Seite zeichnet den Ring höchstens einmal (Vorschau `S.drawOnce`). */
+let drawn = false;
+function takeDraw(): boolean {
+  if (drawn) return false;
+  drawn = true;
+  return true;
+}
+
+/**
+ * Willkommens-Karte der Neustart-Woche (Pause ≥ 14 Lerntage; Vorschau H1 `pause`): dieselbe Tageskarte mit Ring, „Willkommen zurück.“, der Pause
+ * ohne Vorwurf, „Das ist noch da“ und dem Knopf „Neustart-Woche beginnen“. Steht statt der Tageskarte, solange heute noch nichts gestartet wurde.
+ */
+function RestartCard({ view, rows, sum, gap, overdue }: { view: Pick<TodayView, 'day'>; rows: CardRow[]; sum: TodaySummary; gap: number; overdue: number }) {
   const { t } = useT();
   const start = useStartUnit();
   useEffect(() => markStart('lx:button'), []);
@@ -229,24 +250,45 @@ function RestartCard({ view, gap, overdue, minutes }: { view: Pick<TodayView, 'd
     local.set(`${KEY_PREFIX}restart:${view.day}`, '1');
     start();
   };
+  const now = rows.find((r) => r.state === 'now') ?? null;
+  const nowRow: DayRow | null = now ? { ...now } : null;
   return (
-    <section className="lx-card flex flex-col gap-3.5 p-[1.125rem]" aria-labelledby="td-restart-title" data-testid="restart-card">
-      <h2 id="td-restart-title" className="text-lg leading-snug font-semibold tracking-tight text-balance">
-        {t('nbHeuteRestartTitle')}
-      </h2>
-      <p className="text-sm text-muted">
-        {t('nbHeuteRestartPause', { gap })} {overdue > 0 ? t('nbHeuteRestartWords', { n: overdue }) : t('nbHeuteRestartNoWords')}
-      </p>
-      <StillThere gap={gap} className="text-sm text-muted" />
-      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={go} data-testid="restart-start" className="w-full">
-        {t('nbHeuteRestartStart', { min: minutes })}
-      </Button>
-    </section>
+    <DayCardFrame
+      aria-labelledby="td-restart-title"
+      data-testid="restart-card"
+      ring={
+        <TodayRing fills={sum.fills} minutes={minutesOf(rows)} label={t('nbHeuteRingLabel', { done: sum.done, total: sum.total })} testId="restart-ring">
+          <b className="lx-v-disp lx-v-num" data-testid="restart-min">
+            {sum.rest}
+          </b>
+          <span>{t('vhMinToday')}</span>
+        </TodayRing>
+      }
+    >
+      <div className="lx-vh-topic">
+        <h2 id="td-restart-title" className="lx-vh-t lx-v-disp">
+          {t('nbHeuteRestartTitle')}
+        </h2>
+        <p className="lx-vh-sub">
+          {t('nbHeuteRestartPause', { gap })} {overdue > 0 ? t('nbHeuteRestartWords', { n: overdue }) : t('nbHeuteRestartNoWords')}
+        </p>
+        <StillThere gap={gap} className="lx-vh-sub" />
+      </div>
+      <NextLine now={nowRow} />
+      <div className="lx-vh-go">
+        <VButton variant="pri" full onClick={go} data-testid="restart-start">
+          {t('nbHeuteRestartStart', { min: sum.rest })}
+        </VButton>
+      </div>
+    </DayCardFrame>
   );
 }
 
-/** Wochenrückblick-Band (Gesamtkonzept 3.5f): montags einmal je Woche, führt zur Seite „Wochenrückblick“. Gemerkt nur in diesem Browser (nichts wird geschrieben). */
-function WeeklyBand({ today }: { today: string }) {
+/**
+ * Wochenrückblick (Gesamtkonzept 3.5f): montags einmal je Woche eine Zeile bei „Diese Woche“ (Handy unter dem Wochenstreifen, Laptop in der
+ * Kontextspalte), führt zur Seite „Wochenrückblick“. Gemerkt nur in diesem Browser (nichts wird geschrieben).
+ */
+export function WeeklyBand({ today }: { today: string }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
   const profile = useLive((s) => s.docs['app/profile']);
@@ -259,12 +301,9 @@ function WeeklyBand({ today }: { today: string }) {
     go({ name: 'weekly' });
   };
   return (
-    <p className="lx-glass flex flex-wrap items-center justify-between gap-x-3 rounded-[var(--radius-card)] px-4 py-2 text-sm text-muted" data-testid="weekly-band">
-      <span>{t('nbHeuteRecapBand')}</span>
-      <button type="button" onClick={open} className="inline-flex min-h-11 items-center font-medium text-accent-text hover:underline" data-testid="weekly-band-open">
-        {t('nbHeuteRecapOpen')}
-      </button>
-    </p>
+    <div className="lx-vh-weekly" data-testid="weekly-band">
+      <VRow icon="chart" title={t('vhWeekRecap')} sub={t('nbHeuteRecapBand')} onClick={open} data-testid="weekly-band-open" />
+    </div>
   );
 }
 
@@ -358,6 +397,8 @@ export function TodayScreen() {
   }, []);
   const settled = boot || sawSkeleton;
   const wide = useMediaQuery('(min-width: 1024px)');
+  const ctxWide = useMediaQuery('(min-width: 1280px)');
+  const sw = useStreakWeek();
   const gap = useMemo(() => comebackGap(obj(profile), today), [profile, today]);
   const comeback = comebackBand(gap);
   const ret = useMemo(() => lastReturn(obj(profile), today), [profile, today]);
@@ -380,20 +421,33 @@ export function TodayScreen() {
   const fixNone = !!unit && unit.u.shape !== 'sun' && !unit.u.b.some(([, kind]) => kind === 'again');
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
 
-  return (
-    <motion.div className="mx-auto flex w-full max-w-[46rem] flex-col gap-5 pt-4 pb-10 sm:pt-8 lg:max-w-[70rem]" initial={boot ? false : 'hidden'} animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
-      <motion.div variants={item}>
-        <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
-      </motion.div>
-      {/* Laptop (≥ 1.024 px, Vorschau L1): Tageskarte quer über die Bühne, darunter die ruhige Mitte (`l1mid`); am Handy eine Spalte wie bisher. */}
-      <div className="flex flex-col gap-5">
+  // Unterzeile der Tageskarte (Vorschau `.sub`): die früheren Bänder „Wiedereinstieg“ und „Neustart-Woche · Tag n“ (stufe1c-plan §3.1 D2).
+  const bandSub =
+    ok && !done && !welcome ? (
+      <>
+        {comeback !== 'none' && comeback !== 'restart' && (
+          <p className="lx-vh-sub" role="status" data-testid="comeback-band" data-band={comeback}>
+            {t(comeback === 'short' ? 'nbHeuteComebackShort' : 'nbHeuteComebackLong')}
+            <StillThere gap={gap} />
+          </p>
+        )}
+        {restartDay !== null && (
+          <p className="lx-vh-sub" role="status" data-testid="comeback-band" data-band="restart" data-day={restartDay}>
+            {t('nbHeuteRestartDay', { n: restartDay, total: RESTART_DAYS })}
+          </p>
+        )}
+      </>
+    ) : null;
+  const weekly = ok && comeback === 'none' && restartDay === null ? <WeeklyBand today={today} /> : null;
 
+  return (
+    <motion.div className="lx-vh" initial={boot ? false : 'hidden'} animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
       {planStatus === 'error' && (
-        <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">
-          <p className="text-base text-muted">{t('tdPlanError')}</p>
-          <Button onClick={() => retryPlan(Date.now())} icon="refresh">
+        <div role="alert" className="lx-vh-alert" data-testid="plan-error">
+          <p>{t('tdPlanError')}</p>
+          <VButton variant="sec" icon="refresh" onClick={() => retryPlan(Date.now())}>
             {t('tdPlanRetry')}
-          </Button>
+          </VButton>
         </div>
       )}
 
@@ -405,65 +459,84 @@ export function TodayScreen() {
 
       {welcome && (
         <motion.div variants={item}>
-          <RestartCard view={view} gap={gap ?? 0} overdue={overdueNow} minutes={sum.rest} />
+          <RestartCard view={view} rows={rows} sum={sum} gap={gap ?? 0} overdue={overdueNow} />
         </motion.div>
       )}
 
       {ok && !done && !welcome && sum.total > 0 && (
         <motion.div variants={item} initial={settled ? false : undefined}>
-          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} />
+          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} sub={bandSub} />
         </motion.div>
       )}
-
-      {/* U2: Hinweis-Bänder (Wiedereinstieg, Wochenrückblick) stehen UNTER der Tageskarte: Sie erscheinen erst mit den Daten und
-          dürfen die Karte und ihren Knopf nicht nach unten schieben (Audit 26.10.: Knopf rutschte ~14 px). */}
-      {ok && !done && !welcome && comeback !== 'none' && comeback !== 'restart' && (
-        <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
-          {t(comeback === 'short' ? 'nbHeuteComebackShort' : 'nbHeuteComebackLong')}
-          <StillThere gap={gap} />
-        </motion.p>
-      )}
-
-      {ok && !done && !welcome && restartDay !== null && (
-        <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band="restart" data-day={restartDay}>
-          {t('nbHeuteRestartDay', { n: restartDay, total: RESTART_DAYS })}
-        </motion.p>
-      )}
-
-      {ok && comeback === 'none' && restartDay === null && <WeeklyBand today={today} />}
-
 
       {ok && done && (
-        <motion.div variants={item} className="flex flex-col gap-5">
-          <DoneCard3 view={view} sum={sum} tomorrow={tomorrow.line} tomorrowTopic={tomorrow.topic} today={today} />
+        <motion.div variants={item} className="lx-vh-stack">
+          <DoneCard3 view={view} sum={sum} mins={rows.map((r) => r.min)} tomorrow={tomorrow.line} tomorrowTopic={tomorrow.topic} today={today} />
           <Slot name="today.done" />
-          <ExtraRow today={today} />
-          <Slot name="today.extra" />
         </motion.div>
       )}
 
+      {/* Woche und „Wenn du mehr willst“: am Handy unter der Karte (Vorschau H1), ab 1.280 px nur rechts in der Kontextspalte (L1). */}
+      {ok && !ctxWide && (
+        <motion.div variants={item}>
+          <TodayWeekStrip sw={sw} />
+          {weekly}
+        </motion.div>
+      )}
+      {ok && !ctxWide && (
+        <motion.div variants={item}>
+          <ExtraRow today={today} done={done} />
+        </motion.div>
+      )}
+      {ok && done && <Slot name="today.extra" />}
+
       {ok && !unit && plan && !done && (
-        <p className="text-xs text-subtle" data-testid="today-legacy">
+        <p className="lx-vh-note" data-testid="today-legacy">
           {t('nbHeuteLegacy')}
         </p>
       )}
 
-      {/* Während der Pflicht steht unter der Tageskarte nichts außer Speicher- und Planfehlern (§2.2 Nr. 4). */}
       {saveFailed && (
-        <div className="flex flex-wrap items-center gap-3 text-sm text-danger-text" role="alert" data-testid="save-failed">
-          <span>{t('tdNotSaved')}</span>
-          <Button onClick={() => void flush()} icon="refresh">
+        <div className="lx-vh-alert" role="alert" data-testid="save-failed">
+          <p>{t('tdNotSaved')}</p>
+          <VButton variant="sec" icon="refresh" onClick={() => void flush()}>
             {t('tdRetrySave')}
-          </Button>
+          </VButton>
         </div>
       )}
-      {planStatus === 'local' && <p className="text-xs text-subtle">{t('nbHeuteLocal')}</p>}
+      {planStatus === 'local' && <p className="lx-vh-note">{t('nbHeuteLocal')}</p>}
       {wide && ok && (
         <motion.div variants={item}>
-          <StandMid />
+          <TodayMid />
         </motion.div>
       )}
-      </div>
     </motion.div>
+  );
+}
+
+/** Kontextspalte auf Heute ab 1.280 px (Vorschau L1 `l1Ctx`): „Diese Woche“ und „Wenn du mehr willst“. Gerendert vom Rahmen (`ContextHost`). */
+export function TodayContext() {
+  const { t } = useT();
+  const today = useClock((s) => s.today);
+  const view = useToday((s) => s);
+  const profile = useLive((s) => s.docs['app/profile']);
+  const sw = useStreakWeek();
+  const ok = view.ready && view.dayLoaded;
+  const done = view.status === 'allDone' || view.status === 'nothing';
+  const gap = useMemo(() => comebackGap(obj(profile), today), [profile, today]);
+  const ret = useMemo(() => lastReturn(obj(profile), today), [profile, today]);
+  const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
+  if (!ok) return null;
+  return (
+    <div className="lx-vh-ctx" data-testid="today-context">
+      <section aria-labelledby="td-ctx-week">
+        <h3 id="td-ctx-week">{t('vWeek')}</h3>
+        <WeekList sw={sw} extra={comebackBand(gap) === 'none' && restartDay === null ? <WeeklyBand today={today} /> : null} />
+      </section>
+      <section aria-labelledby="td-ctx-more">
+        <h3 id="td-ctx-more">{t('vhMore')}</h3>
+        <MoreRows today={today} done={done} idp="ctx-" />
+      </section>
+    </div>
   );
 }

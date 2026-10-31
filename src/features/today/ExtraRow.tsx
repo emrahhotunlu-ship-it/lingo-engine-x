@@ -3,43 +3,37 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { addDays } from '../../domain/date';
-import { laptopDeepen, wrongToday } from '../../domain/metrics';
+import { counts, laptopDeepen, wrongToday } from '../../domain/metrics';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
+import type { IconName } from '../../ui/Icon';
 import { useInputProfile } from '../../platform/input';
 import { unlockSpeech } from '../../platform/speech';
-import { Icon } from '../../ui/Icon';
-import { Sheet } from '../../ui/Sheet';
 import { toast } from '../../ui/Toast';
+import { VRow, VSheet } from '../../ui/v';
 import { checkAvailable, startCheck } from '../check/session';
 import { startExtra } from '../vocab/start';
 import { useVocabCards } from '../vocab/hub/data';
 import { useDocsOnce } from '../progress/useOnce';
 import { dowOf } from '../../domain/unit/planFor';
 
-// „Extra ›“ nach der Pflicht (Lernplattform 2.0 §2.2): genau EINE Zeile auf Heute, dahinter ein Blatt mit höchstens drei Einträgen in
-// fester Reihenfolge. Nichts davon zählt für Ring oder Serie. Die Wörter für „Am Laptop vertiefen“ kommen aus der Datenbank
-// (`laptopDeepen`, `log/<tag>`), also auch die vom iPhone am Morgen; `localStorage` spielt keine Rolle.
+// „Wenn du mehr willst“ (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1/L1 `moreRows`, screens.js:91–104): Trennzeile, höchstens DREI Zeilen,
+// dann „Alles anzeigen“ (Blatt mit allen Angeboten). Nichts davon zählt für Ring oder Serie (Kap. 2 Nr. 6, Kap. 15); die Unterzeilen sagen es.
+// Angebote wie bisher (Lernplattform 2.0 §2.2): „Am Laptop vertiefen“ bzw. „Heute falsch – noch einmal“, „Sprechen“, montags der Wochen-Check.
+// Neu nach der Pflicht und an erster Stelle (Vorschau, Vokabeltrainer §1): „Wörter üben“ mit der Zahl der fälligen Karten.
+// Die Wörter für „Am Laptop vertiefen“ kommen aus der Datenbank (`laptopDeepen`, `log/<tag>`); `localStorage` spielt keine Rolle.
 
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
-type Line = { id: string; label: string; sub: string; run: () => void };
+/** Größe der Extra-Runde „Wörter üben“ (wie „Noch eine Runde“ im Trainer). */
+const PRACTICE_SIZE = 10;
+/** Sichtbare Zeilen auf Heute (Vorschau: höchstens drei). */
+export const MORE_MAX = 3;
 
-export function ExtraRow({ today }: { today: string }) {
-  const { t } = useT();
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <button type="button" onClick={() => setOpen(true)} data-testid="today-extra" className="inline-flex min-h-11 items-center gap-1 self-start text-sm font-medium text-accent-text hover:underline">
-        {t('hxExtraRow')}
-        <Icon name="arrowRight" size={16} />
-      </button>
-      {open && <ExtraSheet today={today} onClose={() => setOpen(false)} />}
-    </>
-  );
-}
+export type ExtraLine = { id: string; icon: IconName; label: string; sub: string; run: () => void };
 
-function ExtraSheet({ today, onClose }: { today: string; onClose: () => void }) {
+/** Die Angebote von heute in fester Reihenfolge. `done`: Pflicht erledigt („Wörter üben“ steht dann vorn). */
+export function useExtraLines(today: string, done: boolean, before: () => void = () => undefined): ExtraLine[] {
   const { t } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -51,16 +45,32 @@ function ExtraSheet({ today, onClose }: { today: string; onClose: () => void }) 
   const appProfile = useLive((s) => s.docs['app/profile']);
   const now = useClock((s) => s.now);
 
-  const lines = useMemo((): Line[] => {
-    const out: Line[] = [];
+  return useMemo((): ExtraLine[] => {
+    const out: ExtraLine[] = [];
+    if (done) {
+      const due = counts(cards, now).due;
+      if (due > 0) {
+        out.push({
+          id: 'words',
+          icon: 'cards',
+          label: t('vhWordsPractice'),
+          sub: t('vhWordsPracticeSub', { n: due }),
+          run: () => {
+            before();
+            startExtra(api, { deck: 'all', size: PRACTICE_SIZE, label: t('vhWordsPractice') });
+          },
+        });
+      }
+    }
     if (profile === 'keys') {
       const words = laptopDeepen({ log, cards, today, max: 3 });
       out.push({
         id: 'laptop',
+        icon: 'sparkle',
         label: t('hxExtraLaptop'),
         sub: words.length ? t('hxExtraLaptopWords', { words: words.join(', ') }) : t('hxExtraLaptopSub'),
         run: () => {
-          onClose();
+          before();
           go({ name: 'comboSentence' });
         },
       });
@@ -70,10 +80,11 @@ function ExtraSheet({ today, onClose }: { today: string; onClose: () => void }) 
         const keys = new Set(wrong.map((c) => c.key));
         out.push({
           id: 'wrong',
+          icon: 'refresh',
           label: t('hxExtraWrong'),
           sub: t('hxExtraWrongSub', { n: wrong.length }),
           run: () => {
-            onClose();
+            before();
             startExtra(api, { deck: 'all', pick: (c) => keys.has(c.key), allowNew: false, size: Math.min(10, keys.size), label: t('hxExtraWrong') });
           },
         });
@@ -81,21 +92,23 @@ function ExtraSheet({ today, onClose }: { today: string; onClose: () => void }) 
     }
     out.push({
       id: 'speak',
+      icon: 'mic',
       label: t('hxExtraSpeak'),
       sub: t('hxExtraSpeakSub'),
       run: () => {
-        onClose();
+        before();
         go({ name: 'speak' });
       },
     });
     if (dowOf(today) === 1 && checkAvailable(appProfile, addDays(today, -1)) && Number(obj(appProfile).answers ?? 0) >= 40) {
       out.push({
         id: 'check',
+        icon: 'check',
         label: t('hxExtraCheck'),
         sub: t('hxExtraCheckSub'),
         run: () => {
           unlockSpeech();
-          onClose();
+          before();
           const first = startCheck();
           if (first === 'empty') {
             toast(t('ckEmpty'));
@@ -108,26 +121,58 @@ function ExtraSheet({ today, onClose }: { today: string; onClose: () => void }) 
     }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, cards, log, today, appProfile, now, t]);
+  }, [done, profile, cards, log, today, appProfile, now, t]);
+}
 
+/** Blatt „Alles anzeigen“: alle Angebote von heute (Kennungen wie das frühere Blatt „Extra“). */
+function ExtraSheet({ today, done, onClose }: { today: string; done: boolean; onClose: () => void }) {
+  const { t } = useT();
+  const lines = useExtraLines(today, done, onClose);
   return (
-    <Sheet open onClose={onClose} title={t('hxExtraTitle')} closeLabel={t('close')}>
-      <div className="flex flex-col gap-4" data-testid="today-extra-sheet">
-        <ul className="m-0 flex list-none flex-col divide-y divide-line overflow-hidden rounded-2xl bg-surface p-0">
+    <VSheet open onClose={onClose} title={t('vhMore')} closeLabel={t('close')}>
+      <div className="lx-vh-sheet" data-testid="today-extra-sheet">
+        <div>
           {lines.map((l) => (
-            <li key={l.id}>
-              <button type="button" onClick={l.run} className="flex min-h-14 w-full items-center gap-3 px-4 py-2.5 text-left" data-testid="extra-line" data-line={l.id}>
-                <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="font-medium">{l.label}</span>
-                  <span className="text-sm text-muted">{l.sub}</span>
-                </span>
-                <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-              </button>
-            </li>
+            <VRow key={l.id} icon={l.icon} title={l.label} sub={l.sub} onClick={l.run} data-testid="extra-line" id={`extra-${l.id}`} />
           ))}
-        </ul>
-        <p className="text-sm text-muted">{t('hxExtraNote')}</p>
+        </div>
+        <p className="lx-vh-note">{t('hxExtraNote')}</p>
       </div>
-    </Sheet>
+    </VSheet>
+  );
+}
+
+/** Zeilen und „Alles anzeigen“ (ohne Trennzeile; die setzt der Aufrufer: Handy Trennzeile, Laptop Abschnitt in der Kontextspalte). */
+export function MoreRows({ today, done, idp = '' }: { today: string; done: boolean; idp?: string }) {
+  const { t } = useT();
+  const [open, setOpen] = useState(false);
+  const lines = useExtraLines(today, done);
+  return (
+    <div className="lx-vh-more" data-testid={`${idp}more-rows`}>
+      <div>
+        {lines.slice(0, MORE_MAX).map((l) => (
+          <VRow key={l.id} icon={l.icon} title={l.label} sub={l.sub} onClick={l.run} data-testid="more-row" id={`${idp}more-${l.id}`} />
+        ))}
+      </div>
+      <div className="lx-vh-more-all">
+        <button type="button" className="lx-vh-link" onClick={() => setOpen(true)} data-testid="today-extra">
+          {t('vhMoreAll')}
+        </button>
+      </div>
+      {open && <ExtraSheet today={today} done={done} onClose={() => setOpen(false)} />}
+    </div>
+  );
+}
+
+/** Handy und schmale Laptops: Trennzeile „Wenn du mehr willst“ und die Zeilen (Vorschau `more-div`). */
+export function ExtraRow({ today, done }: { today: string; done: boolean }) {
+  const { t } = useT();
+  return (
+    <section className="lx-vh-moresec" aria-labelledby="td-more-title">
+      <h2 id="td-more-title" className="lx-vh-more-div">
+        {t('vhMore')}
+      </h2>
+      <MoreRows today={today} done={done} />
+    </section>
   );
 }

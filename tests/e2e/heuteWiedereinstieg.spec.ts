@@ -73,7 +73,9 @@ test('Serie: im Kopf nie, auf Heute nur im Kartenfuß ab 1 Tag, nach einer Pause
   await screen(page, 'today');
   await expect(page.getByTestId('profile-streak')).toHaveCount(0);
   await expect(page.getByTestId('today-streak')).toHaveText('Serie 12');
-  await expect(page.getByTestId('today-card').getByTestId('today-streak')).toHaveCount(1);
+  // D2 V-HEUTE (Vorschau H1/L1): die Serie steht bei der Woche (Handy: Wochenstreifen, ab 1.280 px: „Diese Woche“ rechts), nicht im Kartenfuß.
+  await expect(page.getByTestId('today-streak')).toHaveCount(1);
+  await expect(page.getByTestId('today-card').getByTestId('today-streak')).toHaveCount(0);
   // Profil-Blatt zeigt sie auch.
   await openProfile(page);
   await expect(page.getByTestId('profile-sheet-streak')).toHaveText('Serie: 12 Tage');
