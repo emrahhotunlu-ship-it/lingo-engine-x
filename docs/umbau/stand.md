@@ -729,3 +729,5 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Nach Reset (22:00 UTC): V1 gestartet (session_01JA41d8hnPFN9hBkXnAqN7c, `claude/umbau-v1`), D3 neu gestartet (session_01JA41d4MthE9a5X2uHqfozF, `claude/umbau-d3`); beide sollen früh und oft pushen.
 - D2 vom Überchat abgeschlossen: Merge `f091dad6`, Bericht `docs/umbau/berichte/d2.md`, ux-reviewer 0 Blocker, sechs Befunde behoben (heute-Häkchen folgt der Tageskarte, „Alles anzeigen“ nur bei mehr, Arbeitsalltag-Abstand/Kontextspalte, Symbol, „jetzt“). verify:fast grün bis auf zwei Abbrüche durch volle Platte bzw. Browser-Absturz; diese einzeln grün.
 - Emrah: Gedämpft-Knopf weiße Schrift (→ D5), Erledigt bleibt Indigo.
+
+**31.10.2026 (Nacht) – D3 Übungsseite zusammengeführt** (Merge `b4803961`, Konflikte in `index.css`, `budget.json`, `check-css-legacy.mjs`, `verify-fast-map.mjs`, `de.ts`/`en.ts` durch Behalten beider Seiten gelöst). Bericht `docs/umbau/berichte/d3.md` mit Bildern. Emrah: Regel-Karte erst nach dem Prüfen, „Warum“ bleibt sichtbar. verify:fast gegen `b4803961^1` läuft.

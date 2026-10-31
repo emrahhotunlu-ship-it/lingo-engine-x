@@ -660,3 +660,7 @@ Emrah: „Bitte Fragen hier immer im Kontextfenster stellen.“ Entscheidungsfra
 
 ## 31.10.2026 – Fragen nur im Hauptchat (Emrah)
 Unterchats stellen Emrah keine Fragen, auch nicht in der Schlussnachricht und nie per Frage-Dialog. Offene Entscheidungen gehen mit Empfehlung in den Bericht (`offene_fragen`); der Überchat stellt sie im Hauptchat im Frage-Dialog (Pop-up). Regel 4 in `docs/umbau/unterchats.md`, außerdem in jedem Startauftrag eines Unterchats.
+
+## 31.10.2026 – Übungsseite (D3): Regel-Karte und „Warum“ (Emrah, Frage-Dialog)
+- Regel-Karte am Laptop (rechte Spalte): erscheint **erst nach dem Prüfen**, nicht schon vor der Antwort (so wie gebaut).
+- Im Leitband der Übung bleibt das Wort **„Warum“** sichtbar (vierte Pflichtfrage aus Kap. 2, so wie gebaut).
