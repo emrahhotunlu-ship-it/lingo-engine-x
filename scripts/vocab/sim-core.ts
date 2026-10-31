@@ -9,7 +9,7 @@ export type InputKind = 'choice' | 'typed' | 'hint' | 'sentence' | 'meaning' | '
 export type Verdict = 'correct' | 'near' | 'wrong';
 
 /** Eine Aufgabe, die der Planer stellt. `step` = Lernschritt (Tag 0 oder Wiedervorlage nach Fehler am selben Tag). */
-export type Task = { lexeme: string; ex: string; input: InputKind; stage: number; step: boolean; intro?: boolean; sentence?: string; group?: string[] };
+export type Task = { lexeme: string; ex: string; input: InputKind; stage: number; step: boolean; intro?: boolean; sentence?: string; group?: string[]; due?: boolean };
 /** Seit V1: Arten der Runde. `extra` = freiwillige Runde, `evening` = Abend-Check, `week` = Wochen-Check, `word` = „Dieses Wort üben“. */
 export type SimKind = 'pflicht' | 'extra' | 'evening' | 'week' | 'word';
 /** Beleg aus einem anderen Bereich (C1-Aufgabe), V1: `reportEvidence`. */
@@ -202,7 +202,7 @@ export const SCENARIOS: readonly Scenario[] = [
   { key: 'D', name: 'wie B, Start mit Altbestand (250 Wörter, ≈ 112 überfällig)', extraProb: 0.5, pause: null, side: SIDE, legacy: true },
 ];
 
-type Q = { day: number; lexeme: string; input: InputKind; stage: number; step: boolean; ok: boolean; firstOfDay: boolean; dueTruth: number; planned: boolean; noSentence: boolean; kind: SimKind };
+type Q = { day: number; lexeme: string; input: InputKind; stage: number; step: boolean; ok: boolean; firstOfDay: boolean; dueTruth: number; planned: boolean; noSentence: boolean; kind: SimKind; due: boolean };
 export type DayRow = {
   day: number;
   studied: boolean;
@@ -237,6 +237,7 @@ export type ScenarioResult = {
     yield60: number;
     yield90: number;
     yieldPerHour: number;
+    durablePerHour: number;
     forecastPeak: number;
     forecastPeakMin: number;
     wordDays: number;
@@ -347,7 +348,7 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
         const o = learner.attempt(id === t.lexeme ? t : { ...t, lexeme: id }, now);
         outs.push(o);
         const step = introducedDay.get(id) === d || errToday.has(id);
-        dayQs.push({ day: d, lexeme: id, input: t.input, stage: t.stage, step, ok: o.verdict !== 'wrong', firstOfDay: !seenToday.has(id), dueTruth: truth, planned: true, noSentence: t.input !== 'choice' && !t.sentence, kind });
+        dayQs.push({ day: d, lexeme: id, input: t.input, stage: t.stage, step, ok: o.verdict !== 'wrong', firstOfDay: !seenToday.has(id), dueTruth: truth, planned: true, noSentence: t.input !== 'choice' && !t.sentence, kind, due: t.due !== false && id === t.lexeme });
         seenToday.add(id);
         if (o.verdict === 'wrong') errToday.add(id);
       }
@@ -463,7 +464,8 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
   const st3 = qs.filter((q) => q.stage >= 3);
   // Abrufe EINES Lexems (Anwenden mit mehreren Lexemen ist eine eigene Aufgabe und zählt hier nicht, M27).
   const st4 = qs.filter((q) => q.stage >= 4 && q.input !== 'choice' && q.input !== 'meaning' && q.input !== 'transfer' && !q.step);
-  const reviewsFirst = qs.filter((q) => q.firstOfDay && !q.step && q.kind !== 'evening');
+  // Echte Behaltensrate (learning-scientist V1, Befund 4): nur erste Abfrage des Tages, kein Lernschritt, FÄLLIG und planwirksam.
+  const reviewsFirst = qs.filter((q) => q.firstOfDay && !q.step && q.due && q.planned && (q.kind === 'pflicht' || q.kind === 'extra'));
   const studyRows = rows.filter((r) => r.studied);
   const fc = adapter.forecast(end, 14);
   const minPerQ = qs.length ? rows.reduce((a, r) => a + r.minutes, 0) / qs.length : 0;
@@ -499,6 +501,7 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
       yield60: learner.countAbove(end, 0.9),
       yield90: learner.countAbove(end + 30 * DAY, 0.7),
       yieldPerHour: Math.round((learner.countAbove(end, 0.9) / Math.max(1, rows.reduce((a, r) => a + r.minutes, 0) / 60)) * 10) / 10,
+      durablePerHour: Math.round((learner.countAbove(end + 30 * DAY, 0.7) / Math.max(1, rows.reduce((a, r) => a + r.minutes, 0) / 60)) * 10) / 10,
       forecastPeak: peak,
       forecastPeakMin: peakMin,
       wordDays,
@@ -580,10 +583,11 @@ export function toMarkdown(r: RunResult): string {
   row('fällig in den nächsten 14 Tagen (Lexeme)', (s) => s.forecast14.join(' · '));
   row('… in Minuten', (s) => s.forecast14Min.join(' · '));
   row('14-Tage-Vorschau: größter Tag ÷ Mittel (Lexeme / **Minuten**)', (s) => `${s.forecastPeak} / ${s.forecastPeakMin}`);
-  row('simulierte Trefferquote (erste Abfrage des Tages, kein Lernschritt)', (s) => `${s.retention} %`);
+  row('echte Behaltensrate (erste fällige, planwirksame Abfrage des Tages)', (s) => `${s.retention} %`);
   row('Ertrag: Lexeme mit wahrem R(produktiv) ≥ 0,9 an Tag 60', (s) => s.yield60);
   row('Haltbarkeit: davon R ≥ 0,7 nach 30 Tagen ohne Üben', (s) => s.yield90);
   row('Ertrag je Lernstunde', (s) => s.yieldPerHour);
+  row('Haltbarkeit je Lernstunde', (s) => s.durablePerHour);
   out.push('', `**Über ${r.seeds.length} Startwerte** (${r.seeds.join(', ')}): kleinster – größter Wert`, '');
   out.push('| Kennzahl | ' + r.results.map((x) => x.scenario.key).join(' | ') + ' |');
   out.push('|---|' + r.results.map(() => '---').join('|') + '|');
@@ -603,10 +607,11 @@ export function toMarkdown(r: RunResult): string {
   span('ohne Satz ab Stufe 4 (%)', (s) => s.noSentenceStage4);
   span('Lerntage mit Anwenden (%)', (s) => s.transferDays);
   span('Lerntage mit < 2 neuen', (s) => s.newDaysBelow2);
-  span('Trefferquote erste Abfrage (%)', (s) => s.retention);
+  span('echte Behaltensrate (%)', (s) => s.retention);
   span('Ertrag Tag 60', (s) => s.yield60);
   span('Haltbarkeit +30 Tage', (s) => s.yield90);
   span('Ertrag je Lernstunde', (s) => s.yieldPerHour);
+  span('Haltbarkeit je Lernstunde', (s) => s.durablePerHour);
   out.push('', '**Je Tag** (Abfragen · mehrfach · Auswahl · überfällig · Minuten):', '');
   for (const x of r.results) {
     out.push(`<details><summary>${x.scenario.key}: ${x.scenario.name}</summary>`, '', '| Tag | Abfragen | Wörter | mehrfach | durch Planer | eigener Start | Auswahl | getippt | überfällig | Min. | Pflicht-Min. | Anwenden |', '|---|---|---|---|---|---|---|---|---|---|---|---|');

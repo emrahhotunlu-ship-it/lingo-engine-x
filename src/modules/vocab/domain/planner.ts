@@ -70,7 +70,7 @@ export function placeDue(lex: Lex, track: Track, ivl: number, which: TrackKey, c
   const cap = capDays(lex);
   const [lo, hi] = corridor(ivl, cap);
   const sib = extraSib === undefined ? ctx.siblings : new Set([...ctx.siblings, extraSib]);
-  const off = pickDay({ lo, hi, load: ctx.load, siblings: sib, rest: ctx.rest, seed: `${ctx.path}|${which}|${track.reps}` });
+  const off = pickDay({ lo, hi, load: ctx.load, siblings: sib, rest: ctx.rest, seed: `${ctx.path}|${which}|${track.reps}`, capped: cap !== null && ivl >= cap });
   return dayStartOf(addDays(dayKey(nowMs), off));
 }
 
@@ -127,7 +127,8 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
         uIvl = ru.ivl;
         booked.push('u');
       }
-      if (isFreeGood(a.form, a.outcome, a.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
+      // Beleg-Tag nur bei einer FÄLLIGEN Antwort (vorgezogene heben Deckel und Stufe nicht; learning-scientist V1, Befund 2).
+      if (dueBefore && isFreeGood(a.form, a.outcome, a.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
       lex.b.due = placeDue(lex, lex.b, r.ivl, 'b', ctx, a.t, booked.includes('u') ? undefined : offsetOf(lex.u.due, a.t));
       lex.b.sd = offsetOf(lex.b.due, a.t);
       if (booked.includes('u')) {
@@ -146,6 +147,8 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (wrong && !a.second && !(a.flags && a.flags & FLAG.override)) {
       lex.lv = descend(lex.lv);
       lex.lc += 1;
+      // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).
+      lex.ev.f = lex.ev.f.slice(-Math.max(0, lex.lv - 2));
     } else if (g >= 3 || (g === 2 && a.outcome === 'typo')) {
       if (a.hint === 0 && dueBefore && target === 'b' && canAscend(lex)) lex.lv += 1;
     }
@@ -182,6 +185,17 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const note = booked.length ? (g ?? 0) : 0;
   const track: 0 | 1 | 2 = booked.length === 2 ? 2 : booked[0] === 'b' ? 1 : 0;
   return { lex, grade: g, booked, note, track };
+}
+
+/**
+ * Planwirkung einer Antwort außerhalb der Pflicht (Wochen-Check, „Dieses Wort“, Fehlwörter, Anwenden-Rückfall): nur, wenn eine Spur heute
+ * fällig ist oder die Abrufwahrscheinlichkeit unter 0,95 liegt (dieselbe Regel wie für Belege, learning-scientist V1, Befund 5).
+ */
+export function mayPlan(lex: Lex, nowMs: number): boolean {
+  if (lex.intro === null || lex.day === dayKey(nowMs)) return false;
+  const end = dayStartOf(addDays(dayKey(nowMs), 1));
+  if (lex.u.due < end || (lex.b && lex.b.due < end)) return true;
+  return retr(lex.b ?? lex.u, nowMs) < 0.95;
 }
 
 /** Darf ein Beleg aus einem anderen Bereich den Plan verändern? (plan.md §2.2, `reportEvidence`) */

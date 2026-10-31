@@ -41,7 +41,7 @@ const MAX_SHOWN = 3; // session.ts:116
 const MAINTENANCE_S = 21; // session.ts:118
 const MAINTENANCE_EVERY = 3; // session.ts:119
 const EXTRA_SIZE = 20; // „Alle fälligen“ → startExtra({ deck: 'all', size: 20 }), features/vocab/start.ts:26
-const NEW_PER_DAY = 5; // Standard (domain/progress/settings.ts)
+const NEW_PER_DAY = Number(process.env.VOCAB_NEW ?? 5); // Standard 5 (domain/progress/settings.ts); `VOCAB_NEW` für Vergleichsläufe
 const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze', 'cloze_part', 'situation']);
 const env = makeEnv(true, true, true); // Handy mit Sprachausgabe und KI (Emrahs Normalfall)
 
@@ -167,7 +167,7 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
         }
         current = { item, ...picked };
         const step = item.reason === 'again' || picked.recall === 'day0a' || picked.recall === 'day0b';
-        return { lexeme: id, ex: picked.ex, input: inputOf(picked.ex), stage: card.stage, step, ...(NO_SENTENCE.has(picked.ex) ? {} : { sentence: `${id}#0` }) };
+        return { lexeme: id, ex: picked.ex, input: inputOf(picked.ex), stage: card.stage, step, due: card.fsrs.due < learningDayEnd(now), ...(NO_SENTENCE.has(picked.ex) ? {} : { sentence: `${id}#0` }) };
       }
     },
     answer(task: Task, o: Outcome | null, now: number): { planned: boolean } | void {

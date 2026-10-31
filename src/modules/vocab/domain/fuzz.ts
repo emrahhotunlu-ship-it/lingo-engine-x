@@ -34,8 +34,8 @@ export function corridor(ivl: number, cap: number | null): [number, number] {
   if (cap === null) return fuzzRange(ivl);
   if (cap <= 1) return [1, 1];
   if (ivl >= cap) {
-    // Breite = volle Breite des Fuzz-Korridors am Deckel (2 × halbe Breite), z. B. 21 → [15, 21], 7 → [4, 7], 3 → [1, 3].
-    const w = Math.max(1, Math.round(2 * fuzzDelta(cap)));
+    // Breite = halbe Breite des Fuzz-Korridors am Deckel (learning-scientist V1, Befund 1): 3 → [2, 3], 7 → [5, 7], 21 → [18, 21].
+    const w = Math.max(1, Math.round(fuzzDelta(cap)));
     return [Math.max(1, cap - w), cap];
   }
   const [lo, hi] = fuzzRange(ivl);

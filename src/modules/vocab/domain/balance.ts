@@ -24,10 +24,12 @@ export type BalanceInput = {
   rest?: (offset: number) => boolean;
   /** Startwert: Lexem-Pfad und Wiederholungszahl. */
   seed: string;
+  /** Korridor am Deckel: ohne das Gewicht 1/Intervall, nur die Last zählt (sonst landen Termine systematisch unter dem Deckel). */
+  capped?: boolean;
 };
 
 export function dayWeight(i: number, x: BalanceInput): number {
-  let w = i <= BALANCE_MAX_DAYS ? (1 / (x.load(i) + 1)) ** 2 * (1 / i) : 1;
+  let w = i <= BALANCE_MAX_DAYS ? (1 / (x.load(i) + 1)) ** 2 * (x.capped ? 1 : 1 / i) : 1;
   if (x.siblings.has(i)) w *= SIBLING_SAME;
   else {
     for (const [dist, f] of Object.entries(SIBLING_NEAR)) {

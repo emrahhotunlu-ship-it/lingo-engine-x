@@ -19,6 +19,8 @@ export const AHEAD_DAYS = 2;
 export const AHEAD_FILL = 0.9;
 /** Nur Lexeme mit einem Abstand von mindestens so vielen Tagen werden vorgezogen (ein 1-Tages-Abstand früher geprüft bringt nichts). */
 export const AHEAD_MIN_IVL = 7;
+/** Vorlauf höchstens 15 % des Abstands (learning-scientist V1, Befund 2): 7–13 Tage → 1 Tag, ab 14 Tagen 2 Tage. */
+export const aheadDays = (sd: number): number => Math.min(AHEAD_DAYS, Math.max(1, Math.floor(0.15 * sd)));
 const startOfOffset = (day: string, n: number): number => dayStartOf(addDays(day, n));
 
 /** Ein Eintrag im eingefrorenen Plan: Pfad, Spur (`n` = neu), Form. */
@@ -95,8 +97,8 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
     const cands = cat
       .items()
       .filter((it) => !isNewLex(it.lex) && it.lex.day !== day && !dueOn(it.lex, day) && !(it.lex.step && dayKey(it.lex.step.at) === day) && (it.lex.b ?? it.lex.u).sd >= AHEAD_MIN_IVL)
-      .map((it) => ({ it, at: Math.min(it.lex.u.due, it.lex.b?.due ?? Infinity) }))
-      .filter((x) => x.at < limit)
+      .map((it) => ({ it, at: Math.min(it.lex.u.due, it.lex.b?.due ?? Infinity), lead: aheadDays((it.lex.b ?? it.lex.u).sd) }))
+      .filter((x) => x.at < startOfOffset(day, x.lead + 1) && x.at < limit)
       .sort((a, b) => a.at - b.at || a.it.path.localeCompare(b.it.path));
     for (const { it } of cands) {
       const track: TrackKey = it.lex.b ? 'b' : 'u';

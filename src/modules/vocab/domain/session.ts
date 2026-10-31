@@ -1,7 +1,7 @@
 import { dayKey, learningDayEnd } from '../shared';
 import { type Catalog, danger, dueOn, isNewLex } from './catalog';
 import type { DayPlan } from './day';
-import { RETRY_GAP, STEP_A_GAP, STEP_B_GAP, STEP_B_MS } from './planner';
+import { mayPlan, RETRY_GAP, STEP_A_GAP, STEP_B_GAP, STEP_B_MS } from './planner';
 import { hash32 } from './rand';
 import type { Form, Lex, VocabCfg } from './types';
 
@@ -117,8 +117,9 @@ export class SessionRun {
       const group = cands.slice(0, n).map((it) => it.path);
       return [{ path: group[0] as string, form: 'transfer', step: 0, why: 'transfer', group }];
     }
-    if (!band.length) return [];
-    const group = [...band]
+    const rest = band.filter((it) => !inPlan.has(it.path) && it.lex.day !== this.day);
+    if (!rest.length) return [];
+    const group = [...rest]
       .sort((a, b) => a.lex.b!.due - b.lex.b!.due || a.path.localeCompare(b.path))
       .slice(0, TRANSFER_MIN)
       .map((it) => it.path);
@@ -133,9 +134,11 @@ export class SessionRun {
     return { path, form: st.n % 2 === 0 ? 'nosent' : 'gap', step: 3, why: 'retry', afterCard: carried ? 0 : base + RETRY_GAP };
   }
 
-  private toTask(s: Slot): Task {
+  private toTask(s: Slot, nowMs: number): Task {
     const l = this.lex(s.path);
-    const planned = !!l && !s.evidence && (s.intro || s.step > 0 || l.day !== this.day);
+    // Pflicht, „Noch 5“ und freie Runde nehmen nur Fälliges/Geplantes; die anderen Wege buchen nur Fälliges oder Gefährdetes (mayPlan).
+    const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes' || s.why === 'evidence';
+    const planned = !!l && !s.evidence && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
     return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned ? s.why : 'practice', ...(s.group ? { group: s.group } : {}) };
   }
 
@@ -144,11 +147,13 @@ export class SessionRun {
     const ready = this.pending.findIndex((s) => (s.afterCard ?? 0) <= this.cards && (s.afterMs ?? 0) <= nowMs);
     if (ready >= 0) {
       const [s] = this.pending.splice(ready, 1);
-      return this.toTask(s as Slot);
+      return this.toTask(s as Slot, nowMs);
     }
     const s = this.queue.shift();
-    if (s) return this.toTask(s);
-    // Schlange leer: Schritte, deren Kartenzahl erreicht ist, dürfen noch kommen, wenn nur die Zeit fehlt UND die Runde ≥ 8 Karten hatte.
+    if (s) return this.toTask(s, nowMs);
+    // Schlange leer: ein Schritt, dessen Kartenzahl erreicht ist, kommt noch, wenn nur die Zeit fehlt (Schritt B am Einführungstag nicht verlieren).
+    const late = this.pending.findIndex((p) => (p.afterCard ?? 0) <= this.cards);
+    if (late >= 0) return this.toTask(this.pending.splice(late, 1)[0] as Slot, nowMs);
     return null;
   }
 

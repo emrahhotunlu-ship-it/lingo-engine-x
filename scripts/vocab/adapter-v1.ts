@@ -7,7 +7,7 @@
 // Gezeigter Satz: der Ursprungssatz (`<id>#0`; die Kunstwörter haben nur einen), ohne Satz bei `nosent`, `meaning` und `transfer` (Lage auf Deutsch).
 
 import { dayKey, dayStartOf } from '../../src/domain/date';
-import { Catalog, forecastMinutes, isNewLex, loadByDay } from '../../src/modules/vocab/domain/catalog';
+import { Catalog, dueOn, forecastMinutes, isNewLex, loadByDay } from '../../src/modules/vocab/domain/catalog';
 import { applyMove, buildDayPlan, type DayPlan } from '../../src/modules/vocab/domain/day';
 import { applyAnswer, emptyLex, evidencePlans, introduce, type PlanCtx } from '../../src/modules/vocab/domain/planner';
 import { SessionRun, type SessionKind, type Task as VTask } from '../../src/modules/vocab/domain/session';
@@ -17,7 +17,8 @@ import { addDays, daysBetween } from '../../src/domain/date';
 import type { InputKind, LegacyDoc, Outcome, PlannerAdapter, PlannerSession, SimEvidence, SimKind, SimWord, Task } from './sim-core';
 
 // Zielzeit für Vergleichsläufe: `VOCAB_MIN=10 node scripts/vocab/simulate.mjs --adapter v1` (Standard 15, F5).
-const cfg = { ...DEFAULT_CFG, min: Number(process.env.VOCAB_MIN ?? DEFAULT_CFG.min) };
+// Vergleich bei gleicher Zahl neuer Wörter: `VOCAB_NEW=3` (Kontingent je Tag; Standard 5).
+const cfg = { ...DEFAULT_CFG, min: Number(process.env.VOCAB_MIN ?? DEFAULT_CFG.min), newPerDay: Number(process.env.VOCAB_NEW ?? DEFAULT_CFG.newPerDay) };
 let cat = new Catalog([]);
 const plans = new Map<string, DayPlan>();
 const samples = new Map<Form, number[]>();
@@ -87,6 +88,7 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
         input: INPUT[t.form],
         stage: lex.lv,
         step: t.step > 0 || t.intro,
+        due: !!dueOn(lex, dayKey(now)),
         ...(t.intro ? { intro: true } : {}),
         ...(sentence ? { sentence } : {}),
         ...(t.group ? { group: t.group.map(ID) } : {}),
