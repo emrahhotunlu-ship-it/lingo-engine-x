@@ -206,6 +206,16 @@ describe('Lernschritte (M9, Regel)', () => {
   });
 });
 
+describe('Abstieg kürzt die Belege (learning-scientist V1, Befund 7)', () => {
+  it('Stufe 3 mit 3 Beleg-Tagen, Fehler → Stufe 2, ev.f leer, Deckel 1', () => {
+    const l = { ...learned(T0 - 20 * D), lv: 3, ev: { f: ['2026-10-20', '2026-10-24', '2026-10-28'], o: 0, s: 0 } };
+    const r = applyAnswer(l, ans(T0, { outcome: 'wrong' }), ctx());
+    expect(r.lex.lv).toBe(2);
+    expect(r.lex.ev.f).toEqual([]);
+    expect(capDays(r.lex)).toBe(1);
+  });
+});
+
 describe('Tagesplan (M12, M13, M21)', () => {
   const mk = (n: number, dueOffset: number, pri: Lex['pri'] = 'edge') =>
     Array.from({ length: n }, (_, i) => {

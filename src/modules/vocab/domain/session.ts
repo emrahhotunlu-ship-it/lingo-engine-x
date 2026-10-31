@@ -137,7 +137,7 @@ export class SessionRun {
   private toTask(s: Slot, nowMs: number): Task {
     const l = this.lex(s.path);
     // Pflicht, „Noch 5“ und freie Runde nehmen nur Fälliges/Geplantes; die anderen Wege buchen nur Fälliges oder Gefährdetes (mayPlan).
-    const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes' || s.why === 'evidence';
+    const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes';
     const planned = !!l && !s.evidence && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
     return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned ? s.why : 'practice', ...(s.group ? { group: s.group } : {}) };
   }
@@ -152,6 +152,7 @@ export class SessionRun {
     const s = this.queue.shift();
     if (s) return this.toTask(s, nowMs);
     // Schlange leer: ein Schritt, dessen Kartenzahl erreicht ist, kommt noch, wenn nur die Zeit fehlt (Schritt B am Einführungstag nicht verlieren).
+    // Bewusste Ausnahme von plan.md §4.3 („≥ 8 Karten UND ≥ 3 Min.“): ein etwas früherer zweiter Abruf ist besser als keiner (learning-scientist V1).
     const late = this.pending.findIndex((p) => (p.afterCard ?? 0) <= this.cards);
     if (late >= 0) return this.toTask(this.pending.splice(late, 1)[0] as Slot, nowMs);
     return null;

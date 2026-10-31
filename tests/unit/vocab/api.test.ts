@@ -67,6 +67,16 @@ describe('api.ts', () => {
     expect(again).toBe(false);
     const e = (h.dump()[vlogDocId(NOW)] as { e: Record<string, unknown[]> }).e;
     expect(Object.values(e).map((x) => x[4])).toEqual([0, 3, 0]);
+    // Später: falsch, frei getippt, nicht vorgegeben → Again mit Planwirkung, Stabilität sinkt, Termin kurz.
+    const before = (h.dump()['vocab/streamline'] as { lex: { b: { s: number } } }).lex.b.s;
+    const t2 = NOW + 40 * D; // lange überfällig: Abrufwahrscheinlichkeit sicher < 0,95
+    const wrong = await reportEvidence({ lexeme: 'vocab/streamline', kind: 'recalled', src: 'c1x', ok: false, typed: true, cued: false, t: t2 }, { writer: w, device: 'phone', docs: docs(), profile: null });
+    expect(wrong).toBe(true);
+    const e2 = (h.dump()[vlogDocId(t2)] as { e: Record<string, unknown[]> }).e;
+    expect(Object.values(e2).at(-1)![4]).toBe(1);
+    const lex = (h.dump()['vocab/streamline'] as { lex: { b: { due: number; s: number } } }).lex;
+    expect(lex.b.s).toBeLessThan(before);
+    expect(lex.b.due).toBeLessThanOrEqual(t2 + 3 * D);
   });
   it('startSession lädt Planer und Runde nach und baut die Runde nur im Modul', async () => {
     const docs: [string, Doc][] = [['vocab/streamline', learnedDoc('streamline')]];

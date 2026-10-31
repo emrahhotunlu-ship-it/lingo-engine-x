@@ -148,7 +148,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
       lex.lv = descend(lex.lv);
       lex.lc += 1;
       // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).
-      lex.ev.f = lex.ev.f.slice(-Math.max(0, lex.lv - 2));
+      lex.ev.f = lex.lv <= 2 ? [] : lex.ev.f.slice(-(lex.lv - 2));
     } else if (g >= 3 || (g === 2 && a.outcome === 'typo')) {
       if (a.hint === 0 && dueBefore && target === 'b' && canAscend(lex)) lex.lv += 1;
     }

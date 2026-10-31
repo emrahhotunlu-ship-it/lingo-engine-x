@@ -146,5 +146,26 @@ describe('Wörter-Modul: Isolation', () => {
     const api = moduleFiles.find((f) => f.rel === `${MODULE}/api.ts`)!;
     const statics = [...api.text.matchAll(/^import\s+(type\s+)?[^;]*?from\s*'([^']+)'/gm)].filter((m) => !m[1]).map((m) => m[2]);
     expect(statics.sort()).toEqual(['./data/lex', './data/schemas', './domain/dupes', './domain/ladder', './domain/types', './shared'].sort());
+    // Auch nachgezogen (statische Importe und `export … from`, ohne `import type`): kein Planer, keine Runde, kein ts-fsrs.
+    const byRel = new Map(moduleFiles.map((f) => [f.rel.replace(/\.tsx?$/, ''), f.text]));
+    const seen = new Set<string>();
+    const stack = [`${MODULE}/api`];
+    while (stack.length) {
+      const cur = stack.pop()!;
+      if (seen.has(cur)) continue;
+      seen.add(cur);
+      const text = byRel.get(cur);
+      if (!text) continue;
+      for (const m of text.matchAll(/^(?:import|export)\s+(type\s+)?[^;]*?from\s*'([^']+)'/gm)) {
+        if (m[1]) continue;
+        const spec = m[2]!;
+        if (!spec.startsWith('.')) {
+          expect(spec, `${cur} zieht ${spec}`).not.toBe('ts-fsrs');
+          continue;
+        }
+        stack.push(resolveImport(`${cur}.ts`, spec)!);
+      }
+    }
+    for (const heavy of ['domain/planner', 'domain/tracks', 'domain/session', 'domain/day', 'data/store', 'data/migrate']) expect(seen.has(`${MODULE}/${heavy}`), heavy).toBe(false);
   });
 });

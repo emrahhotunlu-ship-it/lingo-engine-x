@@ -98,15 +98,27 @@ export async function writeVlog(deps: VocabDeps, tuples: readonly ReturnType<typ
         touched.add(id);
         rest = {};
       }
-      if (Object.keys(rest).length) logError('vocab:vlog', new Error('vlog: alle Fortsetzungen voll'), String(Object.keys(rest).length));
+      // Alle Fortsetzungen voll: werfen, damit der Aufrufer es sieht (Umrechnung → 'partial', wiederholbar).
+      if (Object.keys(rest).length) throw new Error(`vlog: alle Fortsetzungen voll (${Object.keys(rest).length} Einträge nicht geschrieben)`);
     }
   }
   return touched.size;
 }
 
-/** „Rückgängig“: Verlaufsschlüssel auf `null` (plan.md §3.4, Bestand Nr. 39). */
-export async function undoVlog(deps: VocabDeps, t: number): Promise<void> {
-  await deps.writer.update(vlogDocId(t), { e: { [vlogKey(t, deps.device)]: null } });
+/** „Rückgängig“: Verlaufsschlüssel auf `null` (plan.md §3.4, Bestand Nr. 39) – in dem Teil, in dem er steht (`-a`, `-a2` … `-a9`). */
+export async function undoVlog(deps: VocabDeps, t: number): Promise<boolean> {
+  const key = vlogKey(t, deps.device);
+  const half = vlogDocId(t);
+  for (let p = 1; p <= VLOG_MAX_PARTS; p++) {
+    let hit = false;
+    await deps.writer.transform(p > 1 ? `${half}${p}` : half, (cur) => {
+      if (!cur || !isObj(cur.e) || !(key in cur.e) || cur.e[key] === null) return null;
+      hit = true;
+      return { update: { e: { [key]: null } } };
+    });
+    if (hit) return true;
+  }
+  return false;
 }
 
 /**
