@@ -221,3 +221,46 @@ export function spreadBacklog(cat: Catalog, nowMs: number, med: FormStats): [str
   }
   return out;
 }
+
+/**
+ * Rückweg (plan.md §9.4): War das Modul aus und hat der alte Bereich geantwortet (`doc.last > lex.sync`), spielt das Modul NUR die Antworten
+ * mit `t > lex.sync` aus `hist` und `log/<Tag>` nach, mit denselben Regeln wie die Umrechnung (je Tag und Spur die erste, Auswahl ohne Wirkung),
+ * entdoppelt über `t`. Ist die Lücke unvollständig (`hist` voll und der älteste Eintrag liegt nach `sync`), wird nichts geraten: `incomplete`.
+ */
+export function catchUp(lex0: Lex, doc: Record<string, unknown>, path: string, logs: ReadonlyMap<string, readonly LogEntry[]> | null = null): { lex: Lex; applied: number; incomplete: boolean } {
+  const last = num(doc.last) ?? 0;
+  if (last <= lex0.sync) return { lex: lex0, applied: 0, incomplete: false };
+  const rows = collectRows(path, doc, logs).filter((r) => r.t > lex0.sync);
+  const hist = Array.isArray(doc.hist) ? doc.hist.filter((h) => isObj(h) && typeof h.t === 'number') : [];
+  const oldest = hist.length ? Math.min(...hist.map((h) => (h as { t: number }).t)) : Infinity;
+  const incomplete = hist.length >= 12 && oldest > lex0.sync;
+  const lex: Lex = { ...lex0, u: { ...lex0.u }, b: lex0.b ? { ...lex0.b } : null, ev: { ...lex0.ev, f: [...lex0.ev.f] } };
+  const doneDay = { u: new Set<string>(lex.day ? [lex.day] : []), b: new Set<string>(lex.day ? [lex.day] : []) };
+  let applied = 0;
+  for (const r of rows) {
+    const day = dayKey(r.t);
+    const spec = FORM_SPEC[r.form];
+    if (r.ov || !spec.track || r.form === 'flip') continue;
+    const g = Math.min(r.g, spec.max) as Grade;
+    if (spec.track === 'b' && spec.free) {
+      lex.b ??= newTrack(r.t);
+      if (doneDay.b.has(day)) continue;
+      lex.b = book(lex.b, g, r.t, 0.9).track;
+      doneDay.b.add(day);
+      if (g >= 2 && !doneDay.u.has(day)) {
+        lex.u = book(lex.u, g, r.t, 0.9).track;
+        doneDay.u.add(day);
+      }
+      if (isFreeGood(r.form, outcomeOf(g), r.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
+      lex.day = day;
+      applied++;
+    } else if (!doneDay.u.has(day)) {
+      lex.u = book(lex.u, g, r.t, 0.9).track;
+      doneDay.u.add(day);
+      lex.day = day;
+      applied++;
+    }
+  }
+  lex.sync = Math.max(lex.sync, last);
+  return { lex, applied, incomplete };
+}
