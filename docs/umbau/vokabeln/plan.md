@@ -199,7 +199,7 @@ Wie `synthese.md` §2.3, mit Emrahs Antworten 3 und 4.
 **`vlog/<JJJJ-MM>-a`** (Lerntage 1.–15.) und **`-b`** (16.–Monatsende). Monat, Hälfte und Zeit richten sich nach `dayKey(t)`, also nach dem Lerntag mit Wechsel um 04:00.
 
 - **Form: Objekt-Map, kein Array** (architect, Befund 1). `{v: 1, e: {"<t base36>-<geräteKennung 4>": Tupel}}`.
-  - Geschrieben wird mit `writer.update({e: {[key]: Tupel}})`. Laut `db.d.ts` werden verschachtelte Objekte zusammengeführt. Schreiben Handy und Laptop gleichzeitig, verliert keiner, und doppelte Schlüssel heben sich auf. Das macht auch die Übertragung in der Umrechnung idempotent.
+  - Ein neues Halbmonatsdokument wird zuerst angelegt, wenn es fehlt (`createIfMissing`, denn `update` verlangt ein vorhandenes Dokument). Danach wird mit `writer.update({e: {[key]: Tupel}})` geschrieben. Laut `db.d.ts` werden verschachtelte Objekte zusammengeführt. Schreiben Handy und Laptop gleichzeitig, verliert keiner, und doppelte Schlüssel heben sich auf. Das macht auch die Übertragung in der Umrechnung idempotent.
   - „Rückgängig“ setzt den Schlüssel auf `null`.
   - Antworten werden gebündelt und je Pause einmal je Dokument geschrieben, nie aus Render oder Zeitgeber.
 - **Tupel:** `[t, "lexemPfad", spur 0|1|2 (u|b|beides), "art", note 0–4 (0 = ohne Planwirkung), ausgang, ms, fk, hilfe 0–3, "satzKey", stufe 1–7, flags]`.
@@ -449,7 +449,7 @@ Ablauf nach Emrah §5: fällig → neu eingestreut → Anwenden → Abschluss.
 - **Schreiben** nur über `writer.transform` auf dem frischen Stand. Ein Dokument mit unerwartetem Aufbau wird nie angefasst (`db_invalid`).
 - **Ausgeblendete Karten** (`hidden`) werden nicht umgerechnet, sondern beim Einblenden nachgeholt (über `sync`, 9.4). Im Bericht stehen sie als „übersprungen: ausgeblendet“.
 - **Sperren statt raten:** Ist eine Abfrage vielleicht gekappt oder `app/profile` ungültig, ist die Umrechnung gesperrt (A6 Nr. 15).
-- **Formeln** für Startwerte und die Verteilung des Rückstands werden in `docs/fsrs-umrechnung.md` ergänzt (Kap. 9 Regel 5).
+- **Formeln** für Startwerte und die Verteilung des Rückstands werden in V1 in `docs/fsrs-umrechnung.md` ergänzt (Kap. 9 Regel 5); data-guard prüft das vor dem V1-Test-Link.
 
 ### 9.2 Schritte
 1. **Lexeme bilden:** je gültigem, nicht ausgeblendetem `vocab/<id>` und `chunk/<id>` ein Lexem.
