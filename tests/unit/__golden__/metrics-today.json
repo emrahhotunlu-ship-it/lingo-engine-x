@@ -26,7 +26,7 @@
    "today-status status=open done=0 total=4",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -63,7 +63,7 @@
    "today-status status=open done=0 total=4",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -99,7 +99,7 @@
    "today-status status=open done=2 total=4",
    "ch=g",
    "variant=pri full= start duty=ch:u-task",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -128,7 +128,7 @@
    "today-status status=open done=1 total=2",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -165,7 +165,7 @@
    "ch=w",
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -202,7 +202,7 @@
    "ch=w",
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -238,7 +238,7 @@
    "ch=g",
    "variant=pri full= start duty=ch:u-task",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -267,7 +267,7 @@
    "ch=w",
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -304,7 +304,7 @@
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -341,7 +341,7 @@
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -377,7 +377,7 @@
    "variant=pri full= start duty=ch:u-task",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -406,7 +406,7 @@
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -443,7 +443,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -480,7 +480,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -516,7 +516,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -545,7 +545,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -582,7 +582,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -619,7 +619,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -655,7 +655,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -684,7 +684,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -721,7 +721,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -758,7 +758,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -794,7 +794,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -823,7 +823,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -856,7 +856,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "seed 2026-09-20 halb": {
@@ -889,7 +889,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "seed 2026-09-20 zwei": {
@@ -921,7 +921,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "seed 2026-09-20 alt": {
@@ -950,7 +950,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "seed 2026-09-21 leer": {
@@ -3806,7 +3806,7 @@
    "today-status status=open done=0 total=4",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -3843,7 +3843,7 @@
    "today-status status=open done=0 total=4",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -3879,7 +3879,7 @@
    "today-status status=open done=2 total=4",
    "ch=g",
    "variant=pri full= start duty=ch:u-task",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -3908,7 +3908,7 @@
    "today-status status=open done=1 total=2",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -3945,7 +3945,7 @@
    "ch=w",
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -3982,7 +3982,7 @@
    "ch=w",
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -4018,7 +4018,7 @@
    "ch=g",
    "variant=pri full= start duty=ch:u-task",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -4047,7 +4047,7 @@
    "ch=w",
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
-   "week-day day=2026-09-15 state=done done= today=",
+   "week-day day=2026-09-15 state=open today=",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
@@ -4084,7 +4084,7 @@
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -4121,7 +4121,7 @@
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -4157,7 +4157,7 @@
    "variant=pri full= start duty=ch:u-task",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -4186,7 +4186,7 @@
    "variant=pri full= start duty=review",
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
-   "week-day day=2026-09-16 state=done done= today=",
+   "week-day day=2026-09-16 state=open today=",
    "week-day day=2026-09-17 state=future",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
@@ -4223,7 +4223,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -4260,7 +4260,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -4296,7 +4296,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -4325,7 +4325,7 @@
    "week-day day=2026-09-14 state=done done=",
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
-   "week-day day=2026-09-17 state=done done= today=",
+   "week-day day=2026-09-17 state=open today=",
    "week-day day=2026-09-18 state=future",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
@@ -4362,7 +4362,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -4399,7 +4399,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -4435,7 +4435,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -4464,7 +4464,7 @@
    "week-day day=2026-09-15 state=done done=",
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
-   "week-day day=2026-09-18 state=done done= today=",
+   "week-day day=2026-09-18 state=open today=",
    "week-day day=2026-09-19 state=future",
    "week-day day=2026-09-20 state=future"
   ]
@@ -4501,7 +4501,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -4538,7 +4538,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -4574,7 +4574,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -4603,7 +4603,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },
@@ -4636,7 +4636,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "gross 2026-09-20 halb": {
@@ -4669,7 +4669,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "gross 2026-09-20 zwei": {
@@ -4701,7 +4701,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "gross 2026-09-20 alt": {
@@ -4730,7 +4730,7 @@
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
    "week-day day=2026-09-19 state=done done=",
-   "week-day day=2026-09-20 state=done done= today="
+   "week-day day=2026-09-20 state=open today="
   ]
  },
  "gross 2026-09-21 leer": {
@@ -11226,7 +11226,7 @@
    "today-status status=open done=0 total=4",
    "ch=w",
    "variant=pri full= start duty=review",
-   "week-day day=2026-09-14 state=done done= today=",
+   "week-day day=2026-09-14 state=open today=",
    "week-day day=2026-09-15 state=future",
    "week-day day=2026-09-16 state=future",
    "week-day day=2026-09-17 state=future",
@@ -11267,7 +11267,7 @@
    "week-day day=2026-09-16 state=done done=",
    "week-day day=2026-09-17 state=done done=",
    "week-day day=2026-09-18 state=done done=",
-   "week-day day=2026-09-19 state=done done= today=",
+   "week-day day=2026-09-19 state=open today=",
    "week-day day=2026-09-20 state=future"
   ]
  },

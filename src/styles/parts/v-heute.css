@@ -134,3 +134,8 @@
 .lx-vh-mid-first { order: -1; }
 /* Abschluss: kein Knopf, also keine feste Höhe (die Karte ersetzt kein Skelett mit Knopf). */
 .lx-vh-day.lx-vh-done.lx-v-card { min-height: 0; }
+
+/* ux-reviewer D2 (Befund 5): Zustand nie nur über Farbe. Kommende Tage mit feinem Rand (auch in Hell sichtbar), Tage ohne Lerntag gefüllt,
+   Ruhetag gestrichelt. Gilt nur für den Wochenstreifen auf Heute. */
+.lx-vh-week .lx-v-wd[data-state='future'] i { background: transparent; box-shadow: 0 0 0 1.5px var(--fg-3) inset; }
+.lx-vh-week .lx-v-wd[data-rest] i { box-shadow: none; border: 1.5px dashed var(--fg-3); }

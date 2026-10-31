@@ -19,10 +19,8 @@ export const vhEn: Record<keyof typeof vhDe, string> = {
   vhWordsPracticeSub: '{n} due, counts as extra',
   vhWeekDone: 'done',
   vhWeekRest: 'Rest day',
-  vhWeekOpen: 'open',
   vhWeekToday: 'today',
   vhWeekTodayDone: 'today · done',
   vhWeekNoStudy: 'no study day',
   vhWeekRecap: 'Weekly review',
-  vhRestartWeek: 'Restart week',
 };

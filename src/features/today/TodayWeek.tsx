@@ -57,18 +57,28 @@ function dayWord(d: WeekDay, t: ReturnType<typeof useT>['t']): string {
   if (d.state === 'done') return t('vhWeekDone');
   if (d.state === 'rest') return t('vhWeekRest');
   if (d.state === 'open') return t('vhWeekNoStudy');
-  return t('vhWeekOpen');
+  // Kommende Tage: ohne Wort (kein „offen“, das klänge nach Rückstand); Tagesarten kommen mit F3.
+  return '';
+}
+
+/**
+ * Was der Streifen für einen Tag zeigt (Kap. 2 Nr. 2, ux-reviewer D2 Befund 1): Heute gilt erst als erledigt, wenn die Pflicht von heute
+ * erledigt ist – so sagen Ring, Zähler und Häkchen dasselbe. Die Serienzahl selbst bleibt nach der Serienregel (`streakWeek`).
+ */
+function shown(d: WeekDay, todayDone: boolean): WeekDay {
+  return d.today && d.state === 'done' && !todayDone ? { ...d, state: 'open' } : d;
 }
 
 /** Sieben Tageskreise und die Serie (Handy, Laptop unter 1.280 px). Gleiche Klassen wie `VWeekStrip` (D1), mit Tageskennungen für Tests. */
-export function TodayWeekStrip({ sw }: { sw: StreakWeek }) {
+export function TodayWeekStrip({ sw, todayDone }: { sw: StreakWeek; todayDone: boolean }) {
   const { t, tn } = useT();
   const fmt = useFmt();
   if (sw.week.length === 0) return null;
   return (
     <div className="lx-v-week lx-vh-week" data-testid="week-strip">
       <ul className="lx-v-week-days" aria-label={t('vWeek')}>
-        {sw.week.map((d) => {
+        {sw.week.map((raw) => {
+          const d = shown(raw, todayDone);
           const done = d.state === 'done';
           const label = `${fmt.long(d.day)}: ${dayWord(d, t)}`;
           return (
@@ -107,15 +117,17 @@ export function TodayWeekStrip({ sw }: { sw: StreakWeek }) {
 }
 
 /** „Diese Woche“ in der Kontextspalte (Vorschau L1 `l1Ctx`): Mo–So mit Zustand; darunter optional eine Zeile (Wochenrückblick). */
-export function WeekList({ sw, extra }: { sw: StreakWeek; extra?: ReactNode }) {
+export function WeekList({ sw, todayDone, extra }: { sw: StreakWeek; todayDone: boolean; extra?: ReactNode }) {
   const { t } = useT();
   const fmt = useFmt();
   if (sw.week.length === 0) return null;
   return (
     <div className="lx-v-card lx-vh-weeklist" data-testid="week-list">
       <ul className="lx-v-statelist" aria-label={t('vWeek')}>
-        {sw.week.map((d) => {
-          const st = d.today ? 'run' : d.state === 'done' ? 'done' : 'open';
+        {sw.week.map((raw) => {
+          const d = shown(raw, todayDone);
+          // Ein Zustand je Tag: erledigt (Häkchen) oder heute offen (Laufpunkt), nie beides.
+          const st = d.state === 'done' ? 'done' : d.today ? 'run' : 'open';
           return (
             <li key={d.day} className="lx-v-st" data-state={st} data-day={d.day} title={fmt.long(d.day)}>
               <span className="lx-v-st-mk" aria-hidden="true">

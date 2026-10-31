@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
@@ -165,13 +165,14 @@ export function MoreRows({ today, done, idp = '' }: { today: string; done: boole
 }
 
 /** Handy und schmale Laptops: Trennzeile „Wenn du mehr willst“ und die Zeilen (Vorschau `more-div`). */
-export function ExtraRow({ today, done }: { today: string; done: boolean }) {
+export function ExtraRow({ today, done, lead }: { today: string; done: boolean; lead?: ReactNode }) {
   const { t } = useT();
   return (
     <section className="lx-vh-moresec" aria-labelledby="td-more-title">
       <h2 id="td-more-title" className="lx-vh-more-div">
         {t('vhMore')}
       </h2>
+      {lead}
       <MoreRows today={today} done={done} />
     </section>
   );

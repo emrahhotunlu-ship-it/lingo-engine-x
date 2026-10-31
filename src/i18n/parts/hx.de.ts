@@ -16,7 +16,7 @@ export const hxDe = {
   hxExtraTitle: 'Extra',
   hxExtraNote: 'Freiwillig. Zählt nicht für Ring oder Serie.',
   hxExtraLaptop: 'Am Laptop vertiefen',
-  hxExtraLaptopSub: '3 eigene Sätze mit Wörtern von heute · ca. 5 Min.',
+  hxExtraLaptopSub: '3 eigene Sätze mit Wörtern von heute · ca.\u00a05 Min.',
   hxExtraLaptopWords: 'Wörter von heute: {words}',
   hxExtraWrong: 'Fehlwörter von heute',
   hxExtraWrongSub: '{n} Wörter · 2 Min.',

@@ -18,10 +18,8 @@ export const vhDe = {
   vhWordsPracticeSub: '{n} fällig, zählt als Extra',
   vhWeekDone: 'erledigt',
   vhWeekRest: 'Ruhetag',
-  vhWeekOpen: 'offen',
   vhWeekToday: 'heute',
   vhWeekTodayDone: 'heute · erledigt',
   vhWeekNoStudy: 'kein Lerntag',
   vhWeekRecap: 'Wochenrückblick',
-  vhRestartWeek: 'Neustart-Woche',
 };

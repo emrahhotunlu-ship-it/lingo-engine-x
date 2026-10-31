@@ -129,7 +129,8 @@ async function openApp(page: Page, state: AppState, mode: Mode, lang: Lang): Pro
   else if (state === 'done')
     r = await boot(page, { ...base, now: MON_9, fake: { patch: { ...profileWith(MON, vgPlan(), ['u-task', 'u-focus', 'u-again']), ...reviewedLog(MON), ...NO_GRAMMAR_ERRORS } } });
   else if (state === 'pause') r = await boot(page, { ...base, now: '2026-10-05T09:00:00+02:00' });
-  else r = await boot(page, { ...base, fake: { useDelayMsBy: { db: 60_000 } } });
+  // Lade-Bild: Modus und Sprache liest das Start-Skript aus dem Browser-Speicher (index.html), bevor Daten da sind.
+  else r = await boot(page, { ...base, localStorage: { 'lx:theme': mode, 'lx:lang': lang }, fake: { useDelayMsBy: { db: 60_000 } } });
   if (state === 'skeleton') {
     await page.getByTestId('today-skeleton').waitFor();
   } else {
