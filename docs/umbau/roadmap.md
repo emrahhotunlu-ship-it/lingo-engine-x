@@ -1,5 +1,7 @@
 # Roadmap (Stand 31.10.2026, pflegt der Überchat)
 
+Grundlage der Wörter-App: Analyse von 18 Lern-Apps (`vokabeln/anbieter/*.md`), Synthese `vokabeln/synthese.md` (jede übernommene Methode landet in genau einem Paket V1–V5, mit Prüfung), Bildvergleich für Emrah (private Seite `786X8ctWrDoi5U7vc469Fy`), Forschung `relaunch/recherche/`. Den Plan zeigt der Überchat Emrah als Bilder neben den Vorbild-Apps.
+
 Grundsätze: Vokabel-App zuerst; Vorschau `WBft3EEx7jYYv4QHdepuNm` v2 ist Untergrenze, besser erwünscht; keine Funktion fällt weg; bis zu drei Unterchats parallel; live nur nach „Ja live nehmen“.
 
 | Welle | Paket | Inhalt | Plan/Auftrag | Stand |
