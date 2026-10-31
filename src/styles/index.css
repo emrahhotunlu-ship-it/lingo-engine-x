@@ -1,13 +1,7 @@
 @import 'tailwindcss';
 @source not '../../dist';
-@import './parts/gx.css';
-@import './parts/wx.css';
-@import './parts/hx.css';
 @import './parts/fx.css';
 @import './parts/cx.css';
-@import './parts/px.css';
-@import './parts/tt.css';
-@import './parts/mo.css';
 @import './parts/ee.css';
 @import './parts/dz.css';
 @import './parts/dz2.css';
@@ -16,6 +10,7 @@
 @import './parts/u3.css';
 @import './parts/shell.css';
 @import './parts/band.css';
+@import './parts/v.css';
 @import './bridge.css';
 
 /* ==========================================================================

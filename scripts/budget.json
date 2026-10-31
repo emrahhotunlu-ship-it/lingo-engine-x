@@ -36,7 +36,8 @@
         "P4 S1-ZEIT": 3000,
         "P3 S1-BAND": 14000,
         "P2 S1-SHELL": 18000,
-        "P6 S1-START": 8000
+        "P6 S1-START": 8000,
+        "D1 V-BAU": 6000
       }
     },
     "css": {
@@ -48,7 +49,8 @@
         "P6 S1-START": {
           "bytes": 300,
           "freigabe": "Hauptsitzung 28.10.2026: Klassen lx-nav-sk/lx-today-card und L1 (Tarek M1)"
-        }
+        },
+        "D1 V-BAU": 3000
       }
     },
     "html": {
@@ -101,6 +103,10 @@
     },
     "P7 S1-DIKTAT": {
       "entry": 6000
+    },
+    "D1 V-BAU": {
+      "entry": 6000,
+      "css": 3000
     }
   }
 }
