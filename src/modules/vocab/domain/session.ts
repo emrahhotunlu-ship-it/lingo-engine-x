@@ -21,7 +21,7 @@ export const TRANSFER_MAX = 5;
 /** `step`: 0 kein Lernschritt · 1 Schritt A · 2 Schritt B · 3 Wiederkehr nach Fehler. */
 export type Task = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro: boolean; planned: boolean; why: string; group?: string[] };
 
-type Slot = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro?: boolean; why: string; group?: string[]; afterCard?: number; afterMs?: number };
+type Slot = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro?: boolean; why: string; group?: string[]; afterCard?: number; afterMs?: number; evidence?: boolean };
 
 export type SessionOpts = { cfg: VocabCfg; paths?: string[]; seenToday?: ReadonlySet<string> };
 
@@ -100,18 +100,29 @@ export class SessionRun {
     }
   }
 
-  /** Anwenden (V4 baut Textsorten und Prüfung): 3 Lexeme der Stufen 4–6 ohne heutige Tagesmarke, Benutzen fällig in 1–3 Tagen; bis 5, wenn ≥ 6 in Frage kommen. */
+  /**
+   * Anwenden (V4 baut Textsorten und Prüfung): 3 Lexeme der Stufen 4–6 ohne heutige Tagesmarke, bevorzugt mit Benutzen-Termin in 1–3 Tagen
+   * (die Buchung zählt als deren Wiederholung); bis 5, wenn ≥ 6 in Frage kommen. Gibt es keine solchen, ist die Aufgabe „nur Beleg“
+   * (ohne Planwirkung) mit den Lexemen der Stufen 4–6, deren Termin am nächsten liegt (plan.md §7).
+   */
   private transferSlot(nowMs: number): Slot[] {
     const end = learningDayEnd(nowMs);
     const inPlan = new Set((this.plan?.plan ?? []).map((e) => e[0]));
-    const cands = this.cat
-      .items()
-      .filter((it) => it.lex.lv >= 4 && it.lex.lv <= 6 && it.lex.b && it.lex.day !== this.day && !inPlan.has(it.path) && it.lex.b.due >= end && it.lex.b.due < end + 3 * 86_400_000)
+    const band = this.cat.items().filter((it) => it.lex.lv >= 4 && it.lex.lv <= 6 && it.lex.b);
+    const cands = band
+      .filter((it) => it.lex.day !== this.day && !inPlan.has(it.path) && it.lex.b!.due >= end && it.lex.b!.due < end + 3 * 86_400_000)
       .sort((a, b) => a.lex.b!.due - b.lex.b!.due || a.path.localeCompare(b.path));
-    if (cands.length < 1) return [];
-    const n = cands.length >= 6 ? TRANSFER_MAX : Math.min(TRANSFER_MIN, cands.length);
-    const group = cands.slice(0, n).map((it) => it.path);
-    return [{ path: group[0] as string, form: 'transfer', step: 0, why: 'transfer', group }];
+    if (cands.length) {
+      const n = cands.length >= 6 ? TRANSFER_MAX : Math.min(TRANSFER_MIN, cands.length);
+      const group = cands.slice(0, n).map((it) => it.path);
+      return [{ path: group[0] as string, form: 'transfer', step: 0, why: 'transfer', group }];
+    }
+    if (!band.length) return [];
+    const group = [...band]
+      .sort((a, b) => a.lex.b!.due - b.lex.b!.due || a.path.localeCompare(b.path))
+      .slice(0, TRANSFER_MIN)
+      .map((it) => it.path);
+    return [{ path: group[0] as string, form: 'transfer', step: 0, why: 'evidence', evidence: true, group }];
   }
 
   private stepSlot(path: string, l: Lex, base: number, nowMs: number, carried = false): Slot {
@@ -124,7 +135,7 @@ export class SessionRun {
 
   private toTask(s: Slot): Task {
     const l = this.lex(s.path);
-    const planned = !!l && (s.intro || s.step > 0 || l.day !== this.day);
+    const planned = !!l && !s.evidence && (s.intro || s.step > 0 || l.day !== this.day);
     return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned ? s.why : 'practice', ...(s.group ? { group: s.group } : {}) };
   }
 

@@ -108,7 +108,7 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
         const oc = (group ? group[i] : o) ?? o;
         const it = cat.get(p);
         if (!it) return;
-        const r = applyAnswer(it.lex, { t: now, form: t.form, outcome: toOutcome(oc), hint: 0, ms: oc.submitMs, fk: oc.firstKeyMs, sentence: task.sentence ?? null }, ctxFor(p, now, true));
+        const r = applyAnswer(it.lex, { t: now, form: t.form, outcome: toOutcome(oc), hint: 0, ms: oc.submitMs, fk: oc.firstKeyMs, sentence: task.sentence ?? null }, ctxFor(p, now, t.planned || t.step > 0));
         cat.set(p, r.lex);
         if (r.booked.length) planned = true;
       });
