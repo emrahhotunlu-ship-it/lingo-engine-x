@@ -44,7 +44,7 @@ for (const vp of [{ w: 390, h: 844, touch: true }, { w: 1440, h: 900, touch: fal
       await answer(page, 'an mba');
       await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
       await expect(page.getByTestId('verdict-sub')).toContainText('MBA schreibt man groß');
-      await expect(page.getByTestId('verdict-sub')).not.toContainText('von 2');
+      await expect(page.locator('[data-testid="verdict-sub"]', { hasText: 'von 2' })).toHaveCount(0);
       await expect(item.getByTestId('c1x-kwt')).toContainText('an MBA');
       await shot(page, 'mba-case', vp.w, 'dark');
       expect(errors).toEqual([]);
@@ -70,7 +70,7 @@ for (const vp of [{ w: 390, h: 844, touch: true }, { w: 1440, h: 900, touch: fal
       await expect(page.getByTestId('verdict-sub')).toContainText('Musterlösung: have been getting longer lately');
       await expect(page.getByTestId('gr-item')).not.toContainText('Richtig: have been getting');
       // In eine einzige Lücke getippt: keine Teilpunkte, keine Teile.
-      await expect(page.getByTestId('verdict-sub')).not.toContainText('von 2');
+      await expect(page.locator('[data-testid="verdict-sub"]', { hasText: 'von 2' })).toHaveCount(0);
       await shot(page, 'lately-also', vp.w, 'dark');
       expect(errors).toEqual([]);
     });

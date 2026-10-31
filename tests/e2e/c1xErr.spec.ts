@@ -32,7 +32,10 @@ test.describe('Handy', () => {
     for (let i = 0; i < n; i++) {
       const box = await words.nth(i).boundingBox();
       expect(box?.height ?? 0, `Wort ${i} Höhe`).toBeGreaterThanOrEqual(43.5);
-      expect(box?.width ?? 0, `Wort ${i} Breite`).toBeGreaterThanOrEqual(43.5);
+      // Q0: Die Tippfläche ist mindestens 44 px breit (unsichtbare Fläche `::after`); das Wort selbst behält seine Breite,
+      // damit die Wortabstände im Satz gleich bleiben (Emrahs Foto 31.10.2026). Gemessen wird die breitere der beiden Flächen.
+      const hit = await words.nth(i).evaluate((el) => Math.max(el.getBoundingClientRect().width, parseFloat(getComputedStyle(el, '::after').width) || 0));
+      expect(hit, `Wort ${i} Breite`).toBeGreaterThanOrEqual(43.5);
     }
     // Ein Tipp wählt, öffnet aber nie das Nachschlagen.
     await words.nth(5).click();

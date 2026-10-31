@@ -40744,8 +40744,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: Nach suggest steht -ing oder ein that-Satz, nie to + Verb: suggested moving.",
-     "en": "Right: after suggest, use -ing or a that-clause, never to + verb: suggested moving."
+     "de": "Richtig: Nach suggest steht -ing oder ein that-Satz, kein to + Verb: suggested moving.",
+     "en": "Right: after suggest, use -ing or a that-clause, not to + verb: suggested moving."
     },
     "wrong": [
      {
@@ -40768,8 +40768,8 @@
        "suggested",
        "to"
       ],
-      "de": "Nach suggest steht -ing oder ein that-Satz, nie to + Verb.",
-      "en": "After suggest, use -ing or a that-clause, never to + verb."
+      "de": "Nach suggest steht -ing oder ein that-Satz, kein to + Verb.",
+      "en": "After suggest, use -ing or a that-clause, not to + verb."
      }
     ]
    },

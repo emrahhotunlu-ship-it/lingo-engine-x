@@ -539,7 +539,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const fixedCase = fb && !fb.dontKnow && rv === 'ok' ? c1CaseFix(item, fb.response) : null;
   const caseLine = fixedCase && item.kind === 'kwt' ? t('grCaseHint', { key: item.key }) : null;
   // Teile und Teilpunkte nur, wo auch in Teilen geantwortet wurde (Handy: Bausteine bzw. Teil A/B); eine einzige getippte Lücke zeigt keine (UX-Prüfung Q0).
-  const noParts = item.kind === 'kwt' && (kwtShort(item) || kwtModeFor(item, inp, p) === 'desk');
+  // Ausnahme „Fast“: dann sagen die Teile, WAS gefehlt hat (Pflichtfrage „Was hatte ich?“, learning-scientist Q0).
+  const noParts = item.kind === 'kwt' && rv !== 'near' && (kwtShort(item) || kwtModeFor(item, inp, p) === 'desk');
   const sub = [noParts ? null : pointsSub, head?.sub, variantModel ? t('grVariantSub', { model: variantModel }) : null, caseLine].filter((x): x is string => !!x).join(' · ') || null;
   const matched = fb && !fb.dontKnow ? whyFor(task, { given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}) }).rule : null;
 

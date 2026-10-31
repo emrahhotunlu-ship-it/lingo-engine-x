@@ -43,7 +43,7 @@ const entryOf = async (page: Page, cid: string): Promise<Doc> => {
 test.describe('Laptop', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test('kwt: richtig → Teilpunkte 2 von 2, Erklär-Karte mit Muster und Warum, Buchung mit pts, Fehlersatz rückt eine Box vor', async ({ page }) => {
+  test('kwt: richtig → keine Teilpunkte bei einer Lücke, Erklär-Karte mit Muster und Warum, Buchung mit pts, Fehlersatz rückt eine Box vor', async ({ page }) => {
     const { errors } = await start(page, [KWT_ERROR], 'passive-plus', flags('kwt,err'));
     const item = page.getByTestId('gr-item');
     await expect(item).toHaveAttribute('data-c1x', 'kwt');
@@ -59,9 +59,9 @@ test.describe('Laptop', () => {
     await page.getByTestId('check').click();
     const verdict = item.getByTestId('verdict');
     await expect(verdict).toHaveAttribute('data-verdict', 'ok');
-    await expect(item.getByTestId('verdict-sub')).toContainText('2 von 2');
-    await expect(item.getByTestId('part-bar').locator('li')).toHaveCount(2);
-    await expect(item.getByTestId('part-bar').locator('[data-ok="true"]')).toHaveCount(2);
+    // Q0 (UX-Prüfung): in EINE Lücke getippt und ganz richtig → keine Teilpunkte und keine Teile (gebucht wird weiter pts [2, 2]).
+    await expect(item.locator('[data-testid="verdict-sub"]', { hasText: 'von 2' })).toHaveCount(0);
+    await expect(item.getByTestId('part-bar')).toHaveCount(0);
     await expect(item.getByTestId('explanation')).toBeVisible();
     // UX-Prüfung W2: die Zählweise steht unter „Mehr“.
     await item.locator('[data-testid="examples-more"], [data-testid="explanation-more"]').first().click();
