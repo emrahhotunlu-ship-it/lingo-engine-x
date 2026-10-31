@@ -653,3 +653,7 @@ Per Frage-Dialog, alle wie empfohlen: **F1** neuer Lernstand im bestehenden Wort
 
 ## 31.10.2026 – Fragen an Emrah immer im Frage-Dialog
 Emrah: „Bitte Fragen hier immer im Kontextfenster stellen.“ Entscheidungsfragen stellt der Überchat mit dem Frage-Dialog (antippbare Antworten, Empfehlung zuerst), nicht als Text im Bericht. Unterchats sammeln Fragen im Bericht; der Überchat stellt sie dann im Dialog.
+
+## 31.10.2026 – Knopf-Schrift „Gedämpft“ und Erledigt-Farbe (Emrah, Frage-Dialog)
+- Hauptknopf im Modus „Gedämpft“: **weiße Schrift**, Knopf dafür etwas dunkler (D1-Frage 1; Iris ca. 0,52–0,54). Umsetzung im nächsten Design-Paket (D5), Kontrast ≥ 4,5:1 prüfen.
+- Erledigt (Ring, Häkchen der Woche) bleibt **Indigo wie die Vorschau**; Smaragd bleibt „richtig beantwortet“ in den Übungen.

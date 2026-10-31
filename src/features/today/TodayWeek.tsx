@@ -51,9 +51,15 @@ function useFmt(): Fmt {
   }, [lang]);
 }
 
+/** Ist der Tag als erledigt zu zeigen? Heute zählt nur der Pflichtstand der Tageskarte (`todayDone`), damit Häkchen, Ring und Knopf
+ *  dasselbe sagen (Kap. 2 Nr. 2). Die Serie selbst rechnet weiter nach ihrer Regel (A6.13), nur die Anzeige für heute folgt der Karte. */
+function shownDone(d: WeekDay, todayDone: boolean): boolean {
+  return d.today ? todayDone : d.state === 'done';
+}
+
 /** Zustand eines Tags als Wort (Liste rechts, Screenreader). */
-function dayWord(d: WeekDay, t: ReturnType<typeof useT>['t']): string {
-  if (d.today) return d.state === 'done' ? t('vhWeekTodayDone') : t('vhWeekToday');
+function dayWord(d: WeekDay, todayDone: boolean, t: ReturnType<typeof useT>['t']): string {
+  if (d.today) return todayDone ? t('vhWeekTodayDone') : t('vhWeekToday');
   if (d.state === 'done') return t('vhWeekDone');
   if (d.state === 'rest') return t('vhWeekRest');
   if (d.state === 'open') return t('vhWeekNoStudy');
@@ -61,7 +67,7 @@ function dayWord(d: WeekDay, t: ReturnType<typeof useT>['t']): string {
 }
 
 /** Sieben Tageskreise und die Serie (Handy, Laptop unter 1.280 px). Gleiche Klassen wie `VWeekStrip` (D1), mit Tageskennungen für Tests. */
-export function TodayWeekStrip({ sw }: { sw: StreakWeek }) {
+export function TodayWeekStrip({ sw, todayDone }: { sw: StreakWeek; todayDone: boolean }) {
   const { t, tn } = useT();
   const fmt = useFmt();
   if (sw.week.length === 0) return null;
@@ -69,8 +75,8 @@ export function TodayWeekStrip({ sw }: { sw: StreakWeek }) {
     <div className="lx-v-week lx-vh-week" data-testid="week-strip">
       <ul className="lx-v-week-days" aria-label={t('vWeek')}>
         {sw.week.map((d) => {
-          const done = d.state === 'done';
-          const label = `${fmt.long(d.day)}: ${dayWord(d, t)}`;
+          const done = shownDone(d, todayDone);
+          const label = `${fmt.long(d.day)}: ${dayWord(d, todayDone, t)}`;
           return (
             <li
               key={d.day}
@@ -107,7 +113,7 @@ export function TodayWeekStrip({ sw }: { sw: StreakWeek }) {
 }
 
 /** „Diese Woche“ in der Kontextspalte (Vorschau L1 `l1Ctx`): Mo–So mit Zustand; darunter optional eine Zeile (Wochenrückblick). */
-export function WeekList({ sw, extra }: { sw: StreakWeek; extra?: ReactNode }) {
+export function WeekList({ sw, todayDone, extra }: { sw: StreakWeek; todayDone: boolean; extra?: ReactNode }) {
   const { t } = useT();
   const fmt = useFmt();
   if (sw.week.length === 0) return null;
@@ -115,14 +121,23 @@ export function WeekList({ sw, extra }: { sw: StreakWeek; extra?: ReactNode }) {
     <div className="lx-v-card lx-vh-weeklist" data-testid="week-list">
       <ul className="lx-v-statelist" aria-label={t('vWeek')}>
         {sw.week.map((d) => {
-          const st = d.today ? 'run' : d.state === 'done' ? 'done' : 'open';
+          const done = shownDone(d, todayDone);
+          // Heute erledigt: nur das Häkchen, kein Laufpunkt darüber; „heute“ sagt dann der Text und `aria-current`.
+          const st = done ? 'done' : d.today ? 'run' : 'open';
           return (
-            <li key={d.day} className="lx-v-st" data-state={st} data-day={d.day} title={fmt.long(d.day)}>
+            <li
+              key={d.day}
+              className="lx-v-st"
+              data-state={st}
+              data-day={d.day}
+              aria-current={d.today ? 'date' : undefined}
+              title={fmt.long(d.day)}
+            >
               <span className="lx-v-st-mk" aria-hidden="true">
-                {d.state === 'done' && <Icon name="check" size={14} />}
+                {done && <Icon name="check" size={14} />}
               </span>
               <span className="lx-vh-wl-d">{fmt.short(d.day)}</span>
-              <span className="lx-v-st-nm">{dayWord(d, t)}</span>
+              <span className="lx-v-st-nm">{dayWord(d, todayDone, t)}</span>
             </li>
           );
         })}

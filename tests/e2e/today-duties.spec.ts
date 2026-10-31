@@ -84,8 +84,8 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
     await expect(page.getByTestId('hero')).toHaveCount(0);
     await expect(page.getByTestId('start')).toHaveCount(0);
     await expect(page.getByTestId('tab-badge')).toHaveCount(0);
-    // Nach der Pflicht: „Wenn du mehr willst“ mit „Alles anzeigen“ (Lernplattform 2.0 §2.2, Vorschau H1 `done`).
-    await expect(page.getByTestId('today-extra')).toBeVisible();
+    // Nach der Pflicht: „Wenn du mehr willst“ (Lernplattform 2.0 §2.2, Vorschau H1 `done`); „Alles anzeigen“ nur bei mehr als drei Angeboten.
+    await expect(page.locator('[data-testid="more-rows"], [data-testid="ctx-more-rows"]')).toBeVisible();
     await expect(page.getByTestId('offer')).toHaveCount(0);
   }
 }

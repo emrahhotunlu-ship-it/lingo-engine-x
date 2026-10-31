@@ -81,7 +81,7 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   await expect(doneCard.locator('button')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
   // Heute nach der Pflicht (P7): genau eine Zeile „Extra ›“ statt Angebotskarten.
-  await expect(page.getByTestId('today-extra')).toBeVisible();
+  await expect(page.locator('[data-testid="more-rows"], [data-testid="ctx-more-rows"]')).toBeVisible();
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

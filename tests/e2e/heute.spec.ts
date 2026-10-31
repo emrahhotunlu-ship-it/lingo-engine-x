@@ -280,7 +280,7 @@ test('P7/D2 Heute offen: Kopf „Heute“ mit Datum, Ring mit 4 Segmenten, „Al
   expect(heute).toBeLessThanOrEqual(1);
   for (const id of ['today-speak', 'check-missed', 'today-weekly', 'offer']) await expect(page.getByTestId(id)).toHaveCount(0);
   // Freiwilliges steht getrennt unter „Wenn du mehr willst“, höchstens drei Zeilen, und zählt nicht zur Pflicht (Ring weiter leer).
-  await expect(page.getByTestId('today-extra')).toHaveText('Alles anzeigen');
+  await expect(page.locator('[data-testid="more-rows"], [data-testid="ctx-more-rows"]')).toBeVisible();
   expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
   await expect(page.locator('[data-testid="duties"] [data-testid="more-row"]')).toHaveCount(0);
   expect(errors).toEqual([]);

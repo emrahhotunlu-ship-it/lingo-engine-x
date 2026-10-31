@@ -723,3 +723,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 **31.10.2026 – Q0 fertig und zusammengeführt** (`64ad31d`; Typprüfung, Lint, Spieler-/D1-Unit grün nach Merge). Befunde vorher → nachher: Begründung widerspricht 826 → 0, Abschreiben 97 → 0, Abkürzung 2 → 0, Wortzahl 601 → 0, Schlüsselwort-Schreibung 806 → 0; 12 Hinweise (meaning) offen. Neuer Inhaltsweg `scripts/grammar/q0-patch.mjs` (grammar:build bleibt verboten). Q0-verify:fast: rot nur durch fehlende `.cache/v86` in der Unterchat-Sitzung und einen Wackler `c1xErr.spec.ts:128` (einzeln grün). Umgebung: `PW_CHROMIUM=/opt/pw-browsers/chromium` für Playwright setzen. Welle 1 damit komplett; wartet auf Emrahs Antworten F1–F5 (V0-Plan), dann V1 + D2/D3.
 
 **31.10.2026 – Emrahs Antworten F1–F5 (alle wie empfohlen, per Frage-Dialog), V1 gestartet.** Neue Regel: Fragen an Emrah immer im Frage-Dialog (CLAUDE.md A2, entscheidungen.md). Auftrag `auftraege/v1.md`. Parallel: D2, D3, V1.
+
+## 31.10.2026 (spät) – Limit-Stopp, D2 zusammengeführt, V1 + D3 laufen
+- Um 18:04 stoppte das Wochenlimit D2 und D3. D2 hatte gepusht (`f850654`), D3 nicht (Arbeit verloren).
+- Nach Reset (22:00 UTC): V1 gestartet (session_01JA41d8hnPFN9hBkXnAqN7c, `claude/umbau-v1`), D3 neu gestartet (session_01JA41d4MthE9a5X2uHqfozF, `claude/umbau-d3`); beide sollen früh und oft pushen.
+- D2 vom Überchat abgeschlossen: Merge `f091dad6`, Bericht `docs/umbau/berichte/d2.md`, ux-reviewer 0 Blocker, sechs Befunde behoben (heute-Häkchen folgt der Tageskarte, „Alles anzeigen“ nur bei mehr, Arbeitsalltag-Abstand/Kontextspalte, Symbol, „jetzt“). verify:fast grün bis auf zwei Abbrüche durch volle Platte bzw. Browser-Absturz; diese einzeln grün.
+- Emrah: Gedämpft-Knopf weiße Schrift (→ D5), Erledigt bleibt Indigo.

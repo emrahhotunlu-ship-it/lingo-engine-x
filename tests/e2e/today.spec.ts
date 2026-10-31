@@ -99,7 +99,7 @@ test('erledigt ist Zustand, kein Knopf; Extra zählt nie zur Pflicht', async ({ 
   await expect(page.getByTestId('balance')).toHaveText(/^(\+\d+ (Wörter|Muster) sicher|\d+ Schritte? geschafft)$/);
   await expect(page.getByTestId('today-truth')).toHaveCount(0);
   // Nach der Pflicht genau EINE Zeile „Extra ›“ (Lernplattform 2.0 §2.2), kein eigener Vorschlag mehr.
-  await expect(page.getByTestId('today-extra')).toBeVisible();
+  await expect(page.locator('[data-testid="more-rows"], [data-testid="ctx-more-rows"]')).toBeVisible();
   await expect(page.getByTestId('offer')).toHaveCount(0);
   expect(errors).toEqual([]);
 });

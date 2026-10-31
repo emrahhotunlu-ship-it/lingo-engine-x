@@ -479,7 +479,7 @@ export function TodayScreen() {
       {/* Woche und „Wenn du mehr willst“: am Handy unter der Karte (Vorschau H1), ab 1.280 px nur rechts in der Kontextspalte (L1). */}
       {ok && !ctxWide && (
         <motion.div variants={item}>
-          <TodayWeekStrip sw={sw} />
+          <TodayWeekStrip sw={sw} todayDone={view.status === 'allDone'} />
           {weekly}
         </motion.div>
       )}
@@ -488,7 +488,12 @@ export function TodayScreen() {
           <ExtraRow today={today} done={done} />
         </motion.div>
       )}
-      {ok && done && <Slot name="today.extra" />}
+      {/* „Mein Arbeitsalltag“ & Co.: am Handy unter den Extras mit Abstand, ab 1.280 px in der Kontextspalte bei „Wenn du mehr willst“. */}
+      {ok && done && !ctxWide && (
+        <div className="lx-vh-slot">
+          <Slot name="today.extra" />
+        </div>
+      )}
 
       {ok && !unit && plan && !done && (
         <p className="lx-vh-note" data-testid="today-legacy">
@@ -531,11 +536,16 @@ export function TodayContext() {
     <div className="lx-vh-ctx" data-testid="today-context">
       <section aria-labelledby="td-ctx-week">
         <h3 id="td-ctx-week">{t('vWeek')}</h3>
-        <WeekList sw={sw} extra={comebackBand(gap) === 'none' && restartDay === null ? <WeeklyBand today={today} /> : null} />
+        <WeekList sw={sw} todayDone={view.status === 'allDone'} extra={comebackBand(gap) === 'none' && restartDay === null ? <WeeklyBand today={today} /> : null} />
       </section>
       <section aria-labelledby="td-ctx-more">
         <h3 id="td-ctx-more">{t('vhMore')}</h3>
         <MoreRows today={today} done={done} idp="ctx-" />
+        {done && (
+          <div className="lx-vh-slot">
+            <Slot name="today.extra" />
+          </div>
+        )}
       </section>
     </div>
   );

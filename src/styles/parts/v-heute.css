@@ -6,6 +6,9 @@
 /* ------------------------------------------------------------------ Seite */
 .lx-vh { display: flex; flex-direction: column; padding-bottom: 20px; }
 .lx-vh-stack { display: flex; flex-direction: column; gap: 18px; }
+/* Erweiterungsplatz `today.extra` (z. B. „Mein Arbeitsalltag“): eigener Abstand im 8-px-Raster, leer ohne Höhe. */
+.lx-vh-slot { margin-top: 18px; }
+.lx-vh-slot:empty { display: none; }
 /* Seitenrand 20 px wie `.gx` der Vorschau: der Rahmen gibt am Handy 1rem, hier kommt der Rest dazu. */
 @media (max-width: 599.98px) {
   .lx-vh { padding-inline: calc(20px - var(--lx-dmain-pad, 1rem)); }

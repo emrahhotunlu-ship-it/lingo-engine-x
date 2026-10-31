@@ -8,7 +8,7 @@ export const vDe = {
   vStepDone: 'erledigt',
   vStepRun: 'läuft gerade',
   vStepOpen: 'noch offen',
-  vStepRunMeta: 'läuft',
+  vStepRunMeta: 'jetzt',
   vStepMinutes: '{n} Min.',
   vWeek: 'Diese Woche',
   vDayDone: 'erledigt',

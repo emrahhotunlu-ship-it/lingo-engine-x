@@ -103,7 +103,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
     if (dowOf(today) === 1 && checkAvailable(appProfile, addDays(today, -1)) && Number(obj(appProfile).answers ?? 0) >= 40) {
       out.push({
         id: 'check',
-        icon: 'check',
+        icon: 'target',
         label: t('hxExtraCheck'),
         sub: t('hxExtraCheckSub'),
         run: () => {
@@ -154,11 +154,14 @@ export function MoreRows({ today, done, idp = '' }: { today: string; done: boole
           <VRow key={l.id} icon={l.icon} title={l.label} sub={l.sub} onClick={l.run} data-testid="more-row" id={`${idp}more-${l.id}`} />
         ))}
       </div>
-      <div className="lx-vh-more-all">
-        <button type="button" className="lx-vh-link" onClick={() => setOpen(true)} data-testid="today-extra">
-          {t('vhMoreAll')}
-        </button>
-      </div>
+      {/* „Alles anzeigen“ nur, wenn das Blatt wirklich mehr zeigt als die Zeilen hier (sonst stünde dasselbe zweimal da, Kap. 15). */}
+      {lines.length > MORE_MAX && (
+        <div className="lx-vh-more-all">
+          <button type="button" className="lx-vh-link" onClick={() => setOpen(true)} data-testid="today-extra">
+            {t('vhMoreAll')}
+          </button>
+        </div>
+      )}
       {open && <ExtraSheet today={today} done={done} onClose={() => setOpen(false)} />}
     </div>
   );
