@@ -25,6 +25,7 @@
     "yield60": 115,
     "yield90": 96,
     "yieldPerHour": 21.3,
+    "durablePerHour": 17.8,
     "forecastPeak": 2.07,
     "forecastPeakMin": 2.08,
     "wordDays": 1111,
@@ -96,6 +97,7 @@
     "yield60": 116,
     "yield90": 91,
     "yieldPerHour": 21.5,
+    "durablePerHour": 16.9,
     "forecastPeak": 2.83,
     "forecastPeakMin": 2.83,
     "wordDays": 1114,
@@ -167,6 +169,7 @@
     "yield60": 128,
     "yield90": 100,
     "yieldPerHour": 24.6,
+    "durablePerHour": 19.2,
     "forecastPeak": 2.23,
     "forecastPeakMin": 2.22,
     "wordDays": 1103,
@@ -238,6 +241,7 @@
     "yield60": 117,
     "yield90": 91,
     "yieldPerHour": 22.1,
+    "durablePerHour": 17.2,
     "forecastPeak": 2.39,
     "forecastPeakMin": 2.41,
     "wordDays": 1086,
@@ -309,6 +313,7 @@
     "yield60": 103,
     "yield90": 81,
     "yieldPerHour": 18.4,
+    "durablePerHour": 14.5,
     "forecastPeak": 3.19,
     "forecastPeakMin": 3.18,
     "wordDays": 1136,
@@ -382,6 +387,7 @@
     "yield60": 161,
     "yield90": 116,
     "yieldPerHour": 20.2,
+    "durablePerHour": 14.6,
     "forecastPeak": 2.07,
     "forecastPeakMin": 2.06,
     "wordDays": 1667,
@@ -436,7 +442,7 @@
      1.7,
      0.9
     ],
-    "retention": 91.8,
+    "retention": 90.7,
     "newDaysBelow2": 0
    },
    {
@@ -453,6 +459,7 @@
     "yield60": 153,
     "yield90": 121,
     "yieldPerHour": 20.4,
+    "durablePerHour": 16.2,
     "forecastPeak": 1.81,
     "forecastPeakMin": 1.82,
     "wordDays": 1556,
@@ -507,7 +514,7 @@
      0.9,
      0.4
     ],
-    "retention": 93.2,
+    "retention": 91.6,
     "newDaysBelow2": 0
    },
    {
@@ -524,6 +531,7 @@
     "yield60": 181,
     "yield90": 129,
     "yieldPerHour": 22.5,
+    "durablePerHour": 16.1,
     "forecastPeak": 2.12,
     "forecastPeakMin": 2.11,
     "wordDays": 1686,
@@ -578,7 +586,7 @@
      3.5,
      2.4
     ],
-    "retention": 89.9,
+    "retention": 87,
     "newDaysBelow2": 0
    },
    {
@@ -595,6 +603,7 @@
     "yield60": 164,
     "yield90": 122,
     "yieldPerHour": 20.7,
+    "durablePerHour": 15.4,
     "forecastPeak": 1.98,
     "forecastPeakMin": 1.97,
     "wordDays": 1632,
@@ -649,7 +658,7 @@
      0.7,
      1.5
     ],
-    "retention": 90.9,
+    "retention": 90.2,
     "newDaysBelow2": 0
    },
    {
@@ -666,6 +675,7 @@
     "yield60": 147,
     "yield90": 103,
     "yieldPerHour": 18.9,
+    "durablePerHour": 13.2,
     "forecastPeak": 2.59,
     "forecastPeakMin": 2.59,
     "wordDays": 1583,
@@ -720,7 +730,7 @@
      2.4,
      0.4
     ],
-    "retention": 88.5,
+    "retention": 86.5,
     "newDaysBelow2": 0
    }
   ],
@@ -739,6 +749,7 @@
     "yield60": 158,
     "yield90": 118,
     "yieldPerHour": 21.6,
+    "durablePerHour": 16.2,
     "forecastPeak": 2.16,
     "forecastPeakMin": 2.17,
     "wordDays": 1517,
@@ -793,7 +804,7 @@
      2.4,
      0.2
     ],
-    "retention": 90.6,
+    "retention": 87.5,
     "newDaysBelow2": 0
    },
    {
@@ -810,6 +821,7 @@
     "yield60": 127,
     "yield90": 102,
     "yieldPerHour": 19.6,
+    "durablePerHour": 15.8,
     "forecastPeak": 2.22,
     "forecastPeakMin": 2.21,
     "wordDays": 1344,
@@ -864,7 +876,7 @@
      2.4,
      0
     ],
-    "retention": 92.3,
+    "retention": 90.5,
     "newDaysBelow2": 0
    },
    {
@@ -881,6 +893,7 @@
     "yield60": 173,
     "yield90": 111,
     "yieldPerHour": 24.1,
+    "durablePerHour": 15.5,
     "forecastPeak": 1.97,
     "forecastPeakMin": 1.97,
     "wordDays": 1513,
@@ -935,7 +948,7 @@
      2.6,
      2.8
     ],
-    "retention": 88.9,
+    "retention": 86.8,
     "newDaysBelow2": 0
    },
    {
@@ -952,6 +965,7 @@
     "yield60": 154,
     "yield90": 127,
     "yieldPerHour": 22.1,
+    "durablePerHour": 18.2,
     "forecastPeak": 3.32,
     "forecastPeakMin": 3.34,
     "wordDays": 1450,
@@ -1006,7 +1020,7 @@
      0,
      2.4
     ],
-    "retention": 92.5,
+    "retention": 92.3,
     "newDaysBelow2": 0
    },
    {
@@ -1023,6 +1037,7 @@
     "yield60": 142,
     "yield90": 101,
     "yieldPerHour": 20.1,
+    "durablePerHour": 14.3,
     "forecastPeak": 2.93,
     "forecastPeakMin": 2.91,
     "wordDays": 1439,
@@ -1077,7 +1092,7 @@
      2.4,
      0.2
     ],
-    "retention": 89.1,
+    "retention": 86.5,
     "newDaysBelow2": 0
    }
   ],
@@ -1096,6 +1111,7 @@
     "yield60": 293,
     "yield90": 301,
     "yieldPerHour": 27.5,
+    "durablePerHour": 28.3,
     "forecastPeak": 1.97,
     "forecastPeakMin": 1.99,
     "wordDays": 2473,
@@ -1150,7 +1166,7 @@
      1.4,
      1.2
     ],
-    "retention": 87.3,
+    "retention": 86.8,
     "newDaysBelow2": 0
    },
    {
@@ -1167,6 +1183,7 @@
     "yield60": 273,
     "yield90": 298,
     "yieldPerHour": 28.4,
+    "durablePerHour": 31,
     "forecastPeak": 2.15,
     "forecastPeakMin": 2.15,
     "wordDays": 2275,
@@ -1221,7 +1238,7 @@
      0.8,
      1
     ],
-    "retention": 87.6,
+    "retention": 87.4,
     "newDaysBelow2": 0
    },
    {
@@ -1238,6 +1255,7 @@
     "yield60": 309,
     "yield90": 316,
     "yieldPerHour": 29.8,
+    "durablePerHour": 30.5,
     "forecastPeak": 2.06,
     "forecastPeakMin": 2.06,
     "wordDays": 2431,
@@ -1292,7 +1310,7 @@
      2.9,
      2.7
     ],
-    "retention": 87.6,
+    "retention": 87.3,
     "newDaysBelow2": 0
    },
    {
@@ -1309,6 +1327,7 @@
     "yield60": 293,
     "yield90": 322,
     "yieldPerHour": 29.9,
+    "durablePerHour": 32.9,
     "forecastPeak": 2.65,
     "forecastPeakMin": 2.68,
     "wordDays": 2306,
@@ -1363,7 +1382,7 @@
      0.4,
      2
     ],
-    "retention": 89.1,
+    "retention": 88.8,
     "newDaysBelow2": 0
    },
    {
@@ -1380,6 +1399,7 @@
     "yield60": 296,
     "yield90": 318,
     "yieldPerHour": 31,
+    "durablePerHour": 33.4,
     "forecastPeak": 2.84,
     "forecastPeakMin": 2.85,
     "wordDays": 2253,
@@ -1434,7 +1454,7 @@
      1,
      0.6
     ],
-    "retention": 89.7,
+    "retention": 89.5,
     "newDaysBelow2": 0
    }
   ]
@@ -1461,6 +1481,7 @@
     "yield60": 115,
     "yield90": 96,
     "yieldPerHour": 21.3,
+    "durablePerHour": 17.8,
     "forecastPeak": 2.07,
     "forecastPeakMin": 2.08,
     "wordDays": 1111,
@@ -2568,6 +2589,7 @@
     "yield60": 161,
     "yield90": 116,
     "yieldPerHour": 20.2,
+    "durablePerHour": 14.6,
     "forecastPeak": 2.07,
     "forecastPeakMin": 2.06,
     "wordDays": 1667,
@@ -2622,7 +2644,7 @@
      1.7,
      0.9
     ],
-    "retention": 91.8,
+    "retention": 90.7,
     "newDaysBelow2": 0
    },
    "rows": [
@@ -3678,6 +3700,7 @@
     "yield60": 158,
     "yield90": 118,
     "yieldPerHour": 21.6,
+    "durablePerHour": 16.2,
     "forecastPeak": 2.16,
     "forecastPeakMin": 2.17,
     "wordDays": 1517,
@@ -3732,7 +3755,7 @@
      2.4,
      0.2
     ],
-    "retention": 90.6,
+    "retention": 87.5,
     "newDaysBelow2": 0
    },
    "rows": [
@@ -4786,6 +4809,7 @@
     "yield60": 293,
     "yield90": 301,
     "yieldPerHour": 27.5,
+    "durablePerHour": 28.3,
     "forecastPeak": 1.97,
     "forecastPeakMin": 1.99,
     "wordDays": 2473,
@@ -4840,7 +4864,7 @@
      1.4,
      1.2
     ],
-    "retention": 87.3,
+    "retention": 86.8,
     "newDaysBelow2": 0
    },
    "rows": [

@@ -31,10 +31,11 @@ Planer: **heute (claude/umbau-fokus, 31.10.2026)** · 60 Tage · Startwert 20261
 | fällig in den nächsten 14 Tagen (Lexeme) | 9 · 10 · 11 · 12 · 4 · 9 · 5 · 3 · 2 · 3 · 3 · 3 · 4 · 3 | 21 · 15 · 12 · 14 · 17 · 9 · 6 · 2 · 10 · 11 · 12 · 1 · 8 · 4 | 10 · 15 · 11 · 8 · 17 · 10 · 2 · 6 · 8 · 7 · 3 · 1 · 11 · 1 | 22 · 22 · 18 · 18 · 8 · 4 · 9 · 6 · 11 · 10 · 10 · 5 · 7 · 6 |
 | … in Minuten | 2 · 2.2 · 2.5 · 2.7 · 0.9 · 2 · 1.1 · 0.7 · 0.4 · 0.7 · 0.7 · 0.7 · 0.9 · 0.7 | 4.5 · 3.2 · 2.6 · 3 · 3.7 · 1.9 · 1.3 · 0.4 · 2.2 · 2.4 · 2.6 · 0.2 · 1.7 · 0.9 | 2.2 · 3.3 · 2.4 · 1.7 · 3.7 · 2.2 · 0.4 · 1.3 · 1.7 · 1.5 · 0.7 · 0.2 · 2.4 · 0.2 | 4.5 · 4.5 · 3.7 · 3.7 · 1.6 · 0.8 · 1.8 · 1.2 · 2.2 · 2 · 2 · 1 · 1.4 · 1.2 |
 | 14-Tage-Vorschau: größter Tag ÷ Mittel (Lexeme / **Minuten**) | 2.07 / 2.08 | 2.07 / 2.06 | 2.16 / 2.17 | 1.97 / 1.99 |
-| simulierte Trefferquote (erste Abfrage des Tages, kein Lernschritt) | 87.9 % | 91.8 % | 90.6 % | 87.3 % |
+| echte Behaltensrate (erste fällige, planwirksame Abfrage des Tages) | 87.9 % | 90.7 % | 87.5 % | 86.8 % |
 | Ertrag: Lexeme mit wahrem R(produktiv) ≥ 0,9 an Tag 60 | 115 | 161 | 158 | 293 |
 | Haltbarkeit: davon R ≥ 0,7 nach 30 Tagen ohne Üben | 96 | 116 | 118 | 301 |
 | Ertrag je Lernstunde | 21.3 | 20.2 | 21.6 | 27.5 |
+| Haltbarkeit je Lernstunde | 17.8 | 14.6 | 16.2 | 28.3 |
 
 **Über 5 Startwerte** (20261031, 20261032, 20261033, 20261034, 20261035): kleinster – größter Wert
 
@@ -54,10 +55,11 @@ Planer: **heute (claude/umbau-fokus, 31.10.2026)** · 60 Tage · Startwert 20261
 | ohne Satz ab Stufe 4 (%) | 36.8 – 39.7 | 28.9 – 34.4 | 30.1 – 32.2 | 31.7 – 33.5 |
 | Lerntage mit Anwenden (%) | 0 – 0 | 0 – 0 | 0 – 0 | 0 – 0 |
 | Lerntage mit < 2 neuen | 0 – 0 | 0 – 0 | 0 – 0 | 0 – 0 |
-| Trefferquote erste Abfrage (%) | 84.7 – 90.8 | 88.5 – 93.2 | 88.9 – 92.5 | 87.3 – 89.7 |
+| echte Behaltensrate (%) | 84.7 – 90.8 | 86.5 – 91.6 | 86.5 – 92.3 | 86.8 – 89.5 |
 | Ertrag Tag 60 | 103 – 128 | 147 – 181 | 127 – 173 | 273 – 309 |
 | Haltbarkeit +30 Tage | 81 – 100 | 103 – 129 | 101 – 127 | 298 – 322 |
 | Ertrag je Lernstunde | 18.4 – 24.6 | 18.9 – 22.5 | 19.6 – 24.1 | 27.5 – 31 |
+| Haltbarkeit je Lernstunde | 14.5 – 19.2 | 13.2 – 16.2 | 14.3 – 18.2 | 28.3 – 33.4 |
 
 **Je Tag** (Abfragen · mehrfach · Auswahl · überfällig · Minuten):
 
