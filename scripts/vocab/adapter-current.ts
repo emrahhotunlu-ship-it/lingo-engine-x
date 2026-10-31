@@ -8,8 +8,13 @@
 // Nachgebildet (weil `features/vocab/session.ts` an den Zustand der Oberfläche gebunden ist) sind nur die Verdrahtung der Runde:
 // Einführung → Abruf nach 3 Karten (`continueIntro`), „Nochmal“ bei Lernzustand und Fälligkeit ≤ 20 Min., höchstens 3× je Runde
 // (`session.ts:115-116, 995-999`), `lighterExercise` (`session.ts:338-357`) und der Ersatz für „Eigener Satz“ (`session.ts:276-285`).
-// NICHT simuliert: Wort-Werkstatt, Fahrplan-Aktivierungen, Kontrast-Schritt, Anki/Aufdecken, Abend-Check, Wochen-Check, „Dieses Wort üben“,
-// c1x-Wortbelege, Wendungen (`chunk/`). Diese Wege erzeugen in echt zusätzliche Abfragen; die Simulation unterschätzt deshalb Mehrfachabfragen.
+// Seit V1 (faire Neumessung, plan.md §10): auch die Nebenwege, so wie die App sie heute bucht (jede Antwort mit `cardPatch`, also mit Planwirkung):
+//  - Abend-Check: `eveningCheckKeys` (heute eingeführte, höchstens 8), Modus Tippen frei (`VocabHub.tsx:273`).
+//  - „Dieses Wort üben“: `startExtra({ only: [Wort] })`, Abfrage nach `exerciseFor` (`WordSheet.tsx`).
+//  - Wochen-Check: 10 Karten ab Stufe 3, benotet wie jede Antwort (`features/check/session.ts:187`).
+//  - C1-Wortbeleg: `bookLex` (`c1x/lexWrite.ts:56-80`) bucht die Karte; hier zugunsten des heutigen Planers nur, wenn sie heute fällig ist.
+//  - Gezeigter Satz: der Ursprungssatz (die Kunstwörter haben nur einen), bei „Tippen aus dem Deutschen“ kein Satz.
+// NICHT simuliert: Wort-Werkstatt, Fahrplan-Aktivierungen, Kontrast-Schritt, Anki/Aufdecken, Wendungen (`chunk/`).
 
 import { applyUpdate, cardPatch } from '../../src/domain/srs/applyReview';
 import { toTrainCard } from '../../src/domain/srs/cards';
@@ -23,9 +28,11 @@ import { normGoalMin } from '../../src/domain/progress/settings';
 import { isLearningState } from '../../src/domain/srs/scheduler';
 import { recallStep, wantsFreeRecall } from '../../src/domain/srs/spacing';
 import type { AnswerEvent, ExerciseId, QueueItem, TrainCard } from '../../src/domain/srs/types';
-import { dayKey, learningDayStart } from '../../src/domain/date';
+import { dayKey, learningDayEnd, learningDayStart } from '../../src/domain/date';
+import { eveningCheckKeys } from '../../src/domain/srs/offers';
+import { hash32 } from '../../src/domain/random';
 import { isOverdue } from '../../src/domain/metrics/definitions';
-import type { InputKind, Outcome, PlannerAdapter, PlannerSession, SimWord, Task } from './sim-core';
+import type { InputKind, LegacyDoc, Outcome, PlannerAdapter, PlannerSession, SimEvidence, SimKind, SimWord, Task } from './sim-core';
 
 type Doc = Record<string, unknown>;
 const DAY = 86_400_000;
@@ -98,7 +105,9 @@ function exerciseFor(card: TrainCard, item: QueueItem, day: string, pool: number
   return { ex, recall: null };
 }
 
-function makeSession(kind: 'pflicht' | 'extra', now0: number): PlannerSession {
+const NO_SENTENCE: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'produce', 'situation', 'mc_de', 'mc_en', 'listen_mc', 'dictation', 'wordfam']);
+
+function makeSession(kind: SimKind, now0: number, target?: string): PlannerSession {
   const day = dayKey(now0);
   const cards = cardsAt(now0);
   const today = entries.get(day) ?? [];
@@ -115,10 +124,19 @@ function makeSession(kind: 'pflicht' | 'extra', now0: number): PlannerSession {
     plan = { review: review.goal, new: review.fresh };
     plans.set(day, plan);
   }
-  const target = kind === 'pflicht' ? Math.max(0, plan.review - reviewed.size) : EXTRA_SIZE;
+  const size = kind === 'pflicht' ? Math.max(0, plan.review - reviewed.size) : EXTRA_SIZE;
   const nq = kind === 'pflicht' ? Math.min(quota, Math.max(0, plan.new - introducedToday)) : quota;
   const mix = { introduced: mixIntroducedToday(cards, day), longToday: longIntroducedToday(cards, day), ...introducedKindsToday(cards, day) };
-  const queue: QueueItem[] = buildQueue({ cards, nowMs: now0, target, newQuotaLeft: nq, exclude: kind === 'pflicht' ? reviewed : answeredToday, lang: 'de', mix });
+  let queue: QueueItem[];
+  if (kind === 'evening') queue = eveningCheckKeys(cards, day, 'de').map((key) => ({ key, reason: 'due', phase: 'quiz' }));
+  else if (kind === 'word') queue = target ? [{ key: `vocab/${target}`, reason: 'due', phase: 'quiz' }] : [];
+  else if (kind === 'week')
+    queue = cards
+      .filter((c) => !c.isNew && !c.hidden && c.stage >= 3)
+      .sort((a, b) => hash32(`${a.key}|${day}|week`) - hash32(`${b.key}|${day}|week`))
+      .slice(0, 10)
+      .map((c) => ({ key: c.key, reason: 'due', phase: 'quiz' }));
+  else queue = buildQueue({ cards, nowMs: now0, target: size, newQuotaLeft: nq, exclude: kind === 'pflicht' ? reviewed : answeredToday, lang: 'de', mix });
   let pos = 0;
   const shown: Record<string, number> = {};
   const recent: ExerciseId[] = [];
@@ -141,17 +159,18 @@ function makeSession(kind: 'pflicht' | 'extra', now0: number): PlannerSession {
           current = { item, ex: 'mc_en', recall: null };
           return { lexeme: id, ex: 'intro', input: 'choice', stage: card.stage, step: true, intro: true };
         }
-        const picked = exerciseFor(card, item, day, pool, recent);
+        const picked: { ex: ExerciseId; recall: string | null } | null =
+          kind === 'evening' ? { ex: supports(card, 'cloze', 'de', pool, env) ? 'cloze' : 'type', recall: null } : exerciseFor(card, item, day, pool, recent);
         if (!picked) {
           pos++;
           continue;
         }
         current = { item, ...picked };
         const step = item.reason === 'again' || picked.recall === 'day0a' || picked.recall === 'day0b';
-        return { lexeme: id, ex: picked.ex, input: inputOf(picked.ex), stage: card.stage, step };
+        return { lexeme: id, ex: picked.ex, input: inputOf(picked.ex), stage: card.stage, step, ...(NO_SENTENCE.has(picked.ex) ? {} : { sentence: `${id}#0` }) };
       }
     },
-    answer(task: Task, o: Outcome | null, now: number): void {
+    answer(task: Task, o: Outcome | null, now: number): { planned: boolean } | void {
       const cur = current;
       if (!cur) return;
       current = null;
@@ -181,20 +200,33 @@ function makeSession(kind: 'pflicht' | 'extra', now0: number): PlannerSession {
       const day0Passed = cur.recall === 'day0a' && grade >= 3;
       if (again) queue.splice(againPos(pos, queue.length, false, grade >= 3, day0Passed ? DAY0_SECOND_GAP : 0), 0, { key: cur.item.key, reason: 'again', phase: 'quiz' });
       pos++;
+      return { planned: true };
     },
   };
 }
 
 const adapter: PlannerAdapter = {
   name: 'heute (claude/umbau-fokus, 31.10.2026)',
-  init(words: readonly SimWord[]): void {
+  init(words: readonly SimWord[], _now: number, legacy?: readonly LegacyDoc[]): void {
     docs.clear();
     entries.clear();
     plans.clear();
     tick = 0;
     for (const w of words) docs.set(w.id, { id: w.id, word: w.word, pos: w.pos, de: w.de, def: w.def, ex: w.ex, level: 'C1', src: w.src, order: w.order, col: [], added: w.added, state: 'new' });
+    for (const d of legacy ?? []) docs.set(d.id as string, { ...d });
   },
   session: makeSession,
+  evidence(e: SimEvidence): { planned: boolean } {
+    const doc = docs.get(e.lexeme);
+    if (!doc) return { planned: false };
+    const card = toTrainCard(e.lexeme, doc, true, e.t);
+    if (!card || card.isNew || card.fsrs.due >= learningDayEnd(e.t)) return { planned: false };
+    const t = Math.max(e.t, tick + 1);
+    tick = t;
+    const a: AnswerEvent = { t, day: dayKey(t), kind: 'v', id: e.lexeme, ex: 'cloze', grade: e.ok ? 3 : 1, given: '', ans: '', ms: 20_000, lang: 'de', ctx: 'xtra', fk: 3000 };
+    docs.set(e.lexeme, applyUpdate({ ...doc }, cardPatch({ ...doc }, a)));
+    return { planned: true };
+  },
   overdue(now: number): number {
     return cardsAt(now).filter((c) => isOverdue(c, now)).length;
   },
