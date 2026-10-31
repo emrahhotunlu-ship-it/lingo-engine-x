@@ -27,8 +27,8 @@
      "not": [
       "know"
      ],
-     "de": "Das Schlüsselwort know muss unverändert in der Lücke stehen.",
-     "en": "The key word know must stay unchanged in the gap."
+     "de": "Das Schlüsselwort KNOW muss unverändert in der Lücke stehen.",
+     "en": "The key word KNOW must stay unchanged in the gap."
     },
     {
      "if": [
@@ -86,8 +86,8 @@
      "not": [
       "tell"
      ],
-     "de": "Das Schlüsselwort tell muss unverändert in der Lücke stehen.",
-     "en": "The key word tell must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TELL muss unverändert in der Lücke stehen.",
+     "en": "The key word TELL must stay unchanged in the gap."
     },
     {
      "if": [
@@ -257,8 +257,8 @@
      "not": [
       "wonder"
      ],
-     "de": "Das Schlüsselwort wonder muss unverändert in der Lücke stehen.",
-     "en": "The key word wonder must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WONDER muss unverändert in der Lücke stehen.",
+     "en": "The key word WONDER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -312,8 +312,8 @@
      "not": [
       "asked"
      ],
-     "de": "Das Schlüsselwort asked muss unverändert in der Lücke stehen.",
-     "en": "The key word asked must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ASKED muss unverändert in der Lücke stehen.",
+     "en": "The key word ASKED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -461,7 +461,7 @@
   "id": "qu-sub-k1",
   "type": "kwt",
   "pat": "qu.subject",
-  "from": "I'd like to know the person who signed off on the budget last week.",
+  "from": "I'd like to know the person responsible for last week's budget approval.",
   "key": "WHO",
   "frame": "___ the budget last week?",
   "answer": "Who signed off on",
@@ -473,7 +473,8 @@
    "Who finally approved",
    "Who ultimately approved",
    "Who ended up approving",
-   "Who actually signed off on"
+   "Who actually signed off on",
+   "Who was responsible for approving"
   ],
   "words": [
    2,
@@ -489,8 +490,8 @@
      "not": [
       "who"
      ],
-     "de": "Das Schlüsselwort who muss unverändert in der Lücke stehen.",
-     "en": "The key word who must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHO muss unverändert in der Lücke stehen.",
+     "en": "The key word WHO must stay unchanged in the gap."
     },
     {
      "if": [
@@ -540,8 +541,8 @@
      "not": [
       "what"
      ],
-     "de": "Das Schlüsselwort what muss unverändert in der Lücke stehen.",
-     "en": "The key word what must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHAT muss unverändert in der Lücke stehen.",
+     "en": "The key word WHAT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -703,8 +704,8 @@
      "not": [
       "when"
      ],
-     "de": "Das Schlüsselwort when muss unverändert in der Lücke stehen.",
-     "en": "The key word when must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WHEN muss unverändert in der Lücke stehen.",
+     "en": "The key word WHEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -756,8 +757,8 @@
      "not": [
       "with"
      ],
-     "de": "Das Schlüsselwort with muss unverändert in der Lücke stehen.",
-     "en": "The key word with must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WITH muss unverändert in der Lücke stehen.",
+     "en": "The key word WITH must stay unchanged in the gap."
     },
     {
      "if": [
@@ -922,8 +923,8 @@
      "not": [
       "does"
      ],
-     "de": "Das Schlüsselwort does muss unverändert in der Lücke stehen.",
-     "en": "The key word does must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DOES muss unverändert in der Lücke stehen.",
+     "en": "The key word DOES must stay unchanged in the gap."
     },
     {
      "if": [
@@ -970,8 +971,8 @@
      "not": [
       "did"
      ],
-     "de": "Das Schlüsselwort did muss unverändert in der Lücke stehen.",
-     "en": "The key word did must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DID muss unverändert in der Lücke stehen.",
+     "en": "The key word DID must stay unchanged in the gap."
     },
     {
      "if": [

@@ -25,8 +25,8 @@
           "not": [
             "switch"
           ],
-          "de": "Das Schlüsselwort switch muss unverändert in der Lücke stehen.",
-          "en": "The key word switch must stay unchanged in the gap."
+          "de": "Das Schlüsselwort SWITCH muss unverändert in der Lücke stehen.",
+          "en": "The key word SWITCH must stay unchanged in the gap."
         },
         {
           "if": [
@@ -75,8 +75,8 @@
           "not": [
             "kickoff"
           ],
-          "de": "Das Schlüsselwort kickoff muss unverändert in der Lücke stehen.",
-          "en": "The key word kickoff must stay unchanged in the gap."
+          "de": "Das Schlüsselwort KICKOFF muss unverändert in der Lücke stehen.",
+          "en": "The key word KICKOFF must stay unchanged in the gap."
         },
         {
           "if": [
@@ -238,8 +238,8 @@
           "not": [
             "team"
           ],
-          "de": "Das Schlüsselwort team muss unverändert in der Lücke stehen.",
-          "en": "The key word team must stay unchanged in the gap."
+          "de": "Das Schlüsselwort TEAM muss unverändert in der Lücke stehen.",
+          "en": "The key word TEAM must stay unchanged in the gap."
         },
         {
           "if": [
@@ -283,8 +283,8 @@
           "not": [
             "fell"
           ],
-          "de": "Das Schlüsselwort fell muss unverändert in der Lücke stehen.",
-          "en": "The key word fell must stay unchanged in the gap."
+          "de": "Das Schlüsselwort FELL muss unverändert in der Lücke stehen.",
+          "en": "The key word FELL must stay unchanged in the gap."
         },
         {
           "if": [
@@ -446,8 +446,8 @@
           "not": [
             "parts"
           ],
-          "de": "Das Schlüsselwort parts muss unverändert in der Lücke stehen.",
-          "en": "The key word parts must stay unchanged in the gap."
+          "de": "Das Schlüsselwort PARTS muss unverändert in der Lücke stehen.",
+          "en": "The key word PARTS must stay unchanged in the gap."
         },
         {
           "if": [
@@ -494,8 +494,8 @@
           "not": [
             "you"
           ],
-          "de": "Das Schlüsselwort you muss unverändert in der Lücke stehen.",
-          "en": "The key word you must stay unchanged in the gap."
+          "de": "Das Schlüsselwort YOU muss unverändert in der Lücke stehen.",
+          "en": "The key word YOU must stay unchanged in the gap."
         },
         {
           "if": [
@@ -665,8 +665,8 @@
           "not": [
             "launch"
           ],
-          "de": "Das Schlüsselwort launch muss unverändert in der Lücke stehen.",
-          "en": "The key word launch must stay unchanged in the gap."
+          "de": "Das Schlüsselwort LAUNCH muss unverändert in der Lücke stehen.",
+          "en": "The key word LAUNCH must stay unchanged in the gap."
         },
         {
           "if": [
@@ -711,8 +711,8 @@
           "not": [
             "music"
           ],
-          "de": "Das Schlüsselwort music muss unverändert in der Lücke stehen.",
-          "en": "The key word music must stay unchanged in the gap."
+          "de": "Das Schlüsselwort MUSIC muss unverändert in der Lücke stehen.",
+          "en": "The key word MUSIC must stay unchanged in the gap."
         },
         {
           "if": [

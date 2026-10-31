@@ -24,8 +24,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -67,24 +67,24 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: have been waiting since Monday. since nennt den Startpunkt, das Warten dauert an: Perfect Continuous.",
-    "en": "Right: have been waiting since Monday. Since names the starting point and the waiting continues: perfect continuous."
+    "de": "since nennt den Startpunkt, das Warten dauert an: have been waiting. Auch have waited since Monday geht.",
+    "en": "Since names the starting point and the waiting goes on: have been waiting. Have waited since Monday also works."
    },
    "wrong": [
     {
      "not": [
       "since"
      ],
-     "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
-     "en": "The key word since must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SINCE muss unverändert in der Lücke stehen.",
+     "en": "The key word SINCE must stay unchanged in the gap."
     },
     {
      "if": [
       "since",
       "am"
      ],
-     "de": "Nach since steht kein Present Continuous, sondern have been waiting.",
-     "en": "After since use have been waiting, not the Present Continuous."
+     "de": "Mit since geht kein am waiting (deutsch „ich warte seit“). Dauer bis jetzt: have been waiting.",
+     "en": "Since does not go with am waiting (German “ich warte seit”). Duration up to now: have been waiting."
     },
     {
      "if": [
@@ -253,8 +253,8 @@
      "not": [
       "for"
      ],
-     "de": "Das Schlüsselwort for muss unverändert in der Lücke stehen.",
-     "en": "The key word for must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FOR muss unverändert in der Lücke stehen.",
+     "en": "The key word FOR must stay unchanged in the gap."
     },
     {
      "if": [
@@ -303,8 +303,8 @@
      "not": [
       "since"
      ],
-     "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
-     "en": "The key word since must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SINCE muss unverändert in der Lücke stehen.",
+     "en": "The key word SINCE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -443,8 +443,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -490,8 +490,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -610,7 +610,7 @@
   "id": "pc-rc-k1",
   "type": "kwt",
   "pat": "pc.recent",
-  "from": "Our response times have gotten longer over the past few weeks.",
+  "from": "A few weeks ago, our team started answering customers more slowly, and this is still happening.",
   "key": "LATELY",
   "frame": "Our response times ___.",
   "answer": "have been getting longer lately",
@@ -618,40 +618,51 @@
    "'ve been getting longer lately",
    "have gotten longer lately",
    "'ve gotten longer lately",
-   "have lately been getting longer",
    "have been increasing lately",
    "'ve been increasing lately",
+   "have been going up lately",
+   "'ve been going up lately",
+   "have increased lately",
+   "'ve increased lately",
+   "have gone up lately",
+   "'ve gone up lately",
    "have been rising lately",
    "'ve been rising lately",
-   "have been growing longer lately",
-   "'ve been growing longer lately",
-   "have been getting slower lately",
-   "'ve been getting slower lately"
+   "have risen lately",
+   "'ve risen lately",
+   "have lately been getting longer"
   ],
   "words": [
-   4,
+   3,
    5
   ],
   "why": {
    "ok": {
-    "de": "Richtig: have been getting longer lately. lately zeigt eine Entwicklung bis jetzt, also Perfect Continuous.",
-    "en": "Right: have been getting longer lately. Lately shows a development up to now, so the perfect continuous."
+    "de": "Das Schlüsselwort LATELY zeigt eine Entwicklung bis jetzt: have been getting passt am besten, have gotten geht auch.",
+    "en": "The key word LATELY shows a development up to now: have been getting fits best, have gotten works too."
    },
    "wrong": [
     {
      "not": [
       "lately"
      ],
-     "de": "Das Schlüsselwort lately muss unverändert in der Lücke stehen.",
-     "en": "The key word lately must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LATELY muss unverändert in der Lücke stehen.",
+     "en": "The key word LATELY must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "slower"
+     ],
+     "de": "Zeiten werden länger, nicht langsamer: have been getting longer lately.",
+     "en": "Times get longer, not slower: have been getting longer lately."
     },
     {
      "if": [
       "are",
       "getting"
      ],
-     "de": "Present Continuous passt nicht zu lately: gemeint ist die Zeit bis jetzt.",
-     "en": "Present Continuous does not go with lately: the time up to now is meant."
+     "de": "Mit lately steht hier das Present Perfect: have been getting longer lately.",
+     "en": "With lately, use the present perfect here: have been getting longer lately."
     },
     {
      "if": [
@@ -703,8 +714,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -862,8 +873,8 @@
      "not": [
       "known"
      ],
-     "de": "Das Schlüsselwort known muss unverändert in der Lücke stehen.",
-     "en": "The key word known must stay unchanged in the gap."
+     "de": "Das Schlüsselwort KNOWN muss unverändert in der Lücke stehen.",
+     "en": "The key word KNOWN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -917,8 +928,8 @@
      "not": [
       "had"
      ],
-     "de": "Das Schlüsselwort had muss unverändert in der Lücke stehen.",
-     "en": "The key word had must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAD muss unverändert in der Lücke stehen.",
+     "en": "The key word HAD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1081,8 +1092,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1135,8 +1146,8 @@
      "not": [
       "three"
      ],
-     "de": "Das Schlüsselwort three muss unverändert in der Lücke stehen.",
-     "en": "The key word three must stay unchanged in the gap."
+     "de": "Das Schlüsselwort THREE muss unverändert in der Lücke stehen.",
+     "en": "The key word THREE must stay unchanged in the gap."
     },
     {
      "if": [

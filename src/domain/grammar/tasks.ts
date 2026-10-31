@@ -2,6 +2,7 @@ import bankJson from '../../content/grammar-bank.json';
 import extraJson from '../../content/grammar-extra.json';
 import { TOPICS, topicById } from '../content';
 import { splitWords } from '../answer/align';
+import { kwtWords } from '../c1x/kwtNorm';
 import type { GrammarTask, GrammarTaskType, TaskSlot, TaskSrc } from '../learn/types';
 import { formsOfPat, patsOf } from '../metrics/pattern';
 import { dayKey } from '../date';
@@ -107,11 +108,20 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
   };
 }
 
+/**
+ * Wortbereich einer LP2-Umformung, wie ihn auch der c1x-Adapter zeigt (`legacyV2.ts`): der genannte Bereich, erweitert um die Wortzahl jeder
+ * gültigen Lösung (Cambridge-Zählung). Sonst stünde „2–4 Wörter“ über einer angenommenen Lösung mit 5 Wörtern (Aufgaben-Spieler Q0, Befund d).
+ */
+export function kwtSpan(t: { words: readonly [number, number] | readonly number[]; answer: string; accepted: readonly string[]; key: string }): [number, number] {
+  const counts = [t.answer, ...t.accepted].map((v) => kwtWords(v, [t.key]).length);
+  return [Math.min(t.words[0] ?? 3, ...counts), Math.max(t.words[1] ?? 6, ...counts)];
+}
+
 /** Neue Aufgabe (`tasks-v2.json`) als Aufgabe der Runde. `prompt` trägt den Rahmensatz (kwt), den Satz (find) bzw. Satz a (meaning). */
 export function fromV2(t: V2Task): GrammarTask | null {
   const base = { topic: t.topic, accepted: [] as string[], options: null, hint: null, expl: { de: t.why.ok.de, en: t.why.ok.en }, src: 'seed' as const, ref: 'content/grammar/tasks-v2', errorT: null, pat: t.pat, why: t.why };
   if (!topicById(t.topic)) return null;
-  if (t.type === 'kwt') return { ...base, key: legacyTaskKey(t.frame), type: 'kwt', prompt: t.frame, answer: t.answer, accepted: [...t.accepted], x: { kind: 'kwt', from: t.from, key: t.key, words: [t.words[0], t.words[1]] } };
+  if (t.type === 'kwt') return { ...base, key: legacyTaskKey(t.frame), type: 'kwt', prompt: t.frame, answer: t.answer, accepted: [...t.accepted], x: { kind: 'kwt', from: t.from, key: t.key, words: kwtSpan(t) } };
   if (t.type === 'find') return { ...base, key: legacyTaskKey(t.prompt), type: 'find', prompt: t.prompt, answer: t.answer ?? '', accepted: [...t.accepted], ...(t.hint ? { goal: { de: t.hint.de, en: t.hint.en } } : {}), x: { kind: 'find', err: t.err ? [t.err[0], t.err[1]] : null, fixed: t.fixed ?? null, ...(t.errAlt?.length ? { errAlt: t.errAlt.map((a) => ({ err: [a.err[0], a.err[1]] as [number, number], answer: a.answer, accepted: [...a.accepted], why: { de: a.why.de, en: a.why.en } })) } : {}) } };
   return { ...base, key: legacyTaskKey(t.a), type: 'meaning', prompt: t.a, answer: t.answer, x: { kind: 'meaning', a: t.a, b: t.b, q: { de: t.q.de, en: t.q.en } } };
 }

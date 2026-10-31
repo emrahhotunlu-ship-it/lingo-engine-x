@@ -25,8 +25,8 @@
           "not": [
             "of"
           ],
-          "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
-          "en": "The key word of must stay unchanged in the gap."
+          "de": "Das Schlüsselwort OF muss unverändert in der Lücke stehen.",
+          "en": "The key word OF must stay unchanged in the gap."
         },
         {
           "not": [
@@ -65,8 +65,8 @@
           "not": [
             "of"
           ],
-          "de": "Das Schlüsselwort of muss unverändert in der Lücke stehen.",
-          "en": "The key word of must stay unchanged in the gap."
+          "de": "Das Schlüsselwort OF muss unverändert in der Lücke stehen.",
+          "en": "The key word OF must stay unchanged in the gap."
         },
         {
           "not": [
@@ -218,8 +218,8 @@
           "not": [
             "review"
           ],
-          "de": "Das Schlüsselwort review muss unverändert in der Lücke stehen.",
-          "en": "The key word review must stay unchanged in the gap."
+          "de": "Das Schlüsselwort REVIEW muss unverändert in der Lücke stehen.",
+          "en": "The key word REVIEW must stay unchanged in the gap."
         },
         {
           "if": [
@@ -264,8 +264,8 @@
           "not": [
             "approval"
           ],
-          "de": "Das Schlüsselwort approval muss unverändert in der Lücke stehen.",
-          "en": "The key word approval must stay unchanged in the gap."
+          "de": "Das Schlüsselwort APPROVAL muss unverändert in der Lücke stehen.",
+          "en": "The key word APPROVAL must stay unchanged in the gap."
         },
         {
           "if": [
@@ -418,8 +418,8 @@
           "not": [
             "following"
           ],
-          "de": "Das Schlüsselwort following muss unverändert in der Lücke stehen.",
-          "en": "The key word following must stay unchanged in the gap."
+          "de": "Das Schlüsselwort FOLLOWING muss unverändert in der Lücke stehen.",
+          "en": "The key word FOLLOWING must stay unchanged in the gap."
         },
         {
           "if": [
@@ -466,8 +466,8 @@
           "not": [
             "upon"
           ],
-          "de": "Das Schlüsselwort upon muss unverändert in der Lücke stehen.",
-          "en": "The key word upon must stay unchanged in the gap."
+          "de": "Das Schlüsselwort UPON muss unverändert in der Lücke stehen.",
+          "en": "The key word UPON must stay unchanged in the gap."
         },
         {
           "if": [
@@ -626,8 +626,8 @@
           "not": [
             "increase"
           ],
-          "de": "Das Schlüsselwort increase muss unverändert in der Lücke stehen.",
-          "en": "The key word increase must stay unchanged in the gap."
+          "de": "Das Schlüsselwort INCREASE muss unverändert in der Lücke stehen.",
+          "en": "The key word INCREASE must stay unchanged in the gap."
         },
         {
           "if": [
@@ -677,8 +677,8 @@
           "not": [
             "decision"
           ],
-          "de": "Das Schlüsselwort decision muss unverändert in der Lücke stehen.",
-          "en": "The key word decision must stay unchanged in the gap."
+          "de": "Das Schlüsselwort DECISION muss unverändert in der Lücke stehen.",
+          "en": "The key word DECISION must stay unchanged in the gap."
         },
         {
           "if": [

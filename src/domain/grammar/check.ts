@@ -2,6 +2,7 @@ import { alignWords, splitWords } from '../answer/align';
 import { typoBudget } from '../answer/check';
 import { editDistance } from '../answer/diff';
 import { toUS } from '../answer/spelling';
+import { hasKey as kwtHasKey, kwtWords } from '../c1x/kwtNorm';
 import type { GrammarCheck, GrammarTask } from '../learn/types';
 import { lemmaCandidates } from '../text/lemma';
 import { legacyNorm } from './key';
@@ -241,7 +242,9 @@ export function checkKwt(task: GrammarTask, given: string): GrammarCheck {
   const raw = given.trim();
   if (!raw) return base;
   const w = splitWords(raw);
-  const hasKey = !x || splitWords(legacyNorm(raw)).includes(x.key.toLowerCase());
+  // Wie c1x (`kwtNorm.hasKey`): ein Bindestrich-Wort enthält das Schlüsselwort als Teil (two-day mit DAY). Vorher wurde hier sogar
+  // die Musterlösung „a two-day“ abgelehnt (Aufgaben-Spieler Q0).
+  const hasKey = !x || kwtHasKey(kwtWords(raw, [x.key]), x.key.toLowerCase());
   if (!hasKey) return { ...base, verdict: 'wrong', kind: 'key', needsJudge: false };
   if (base.verdict === 'wrong' && x && (w.length < x.words[0] || w.length > x.words[1])) return { ...base, kind: 'words', needsJudge: false };
   return base.verdict === 'wrong' ? { ...base, needsJudge: w.length >= 3 } : base;

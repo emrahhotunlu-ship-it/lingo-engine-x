@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { mergeOps } from '../../domain/answer/mergeOps';
 import type { WordOp } from '../../domain/learn/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
@@ -10,8 +11,10 @@ import { useT } from '../../i18n';
 /** `compact`: die Lücke im Satz zeigt deine Antwort schon (durchgestrichen, Lösung darin) – hier steht nur noch „Richtig: …“ (Design-Lead, Vorschau ref-s5). */
 /** `hideCorrect`: die richtige Fassung steht schon als Satz über dem Ergebnis (z. B. `repair-right` in „Fehler korrigieren“) – keine zweite „Richtig:“-Zeile. */
 /** `inline` (Band am Handy, Korrekturrunde P3 Punkt 1b): EINE Lösungszeile „Du: … → Richtig: …“ statt zweier Zeilen. */
-export function Comparison({ given, ops, compact = false, label, correct: solution, hideCorrect = false, inline = false }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string; /** Musterlösung direkt (statt aus dem Vergleich rekonstruiert). */ correct?: string; hideCorrect?: boolean; inline?: boolean }) {
+export function Comparison({ given, ops: rawOps, compact = false, label, correct: solution, hideCorrect = false, inline = false }: { given: string; ops: readonly WordOp[]; compact?: boolean; label?: string; /** Musterlösung direkt (statt aus dem Vergleich rekonstruiert). */ correct?: string; hideCorrect?: boolean; inline?: boolean }) {
   const { t } = useT();
+  // Q0: eine ersetzte Wortgruppe steht als EIN Block da („~~each other~~ → the challenges“), nicht Wort für Wort.
+  const ops = mergeOps(rawOps);
   const empty = !given.trim();
   const correct = solution?.trim() ? solution.trim() : ops
     .filter((o) => o.op === 'eq' || o.op === 'typo' || o.op === 'sub' || o.op === 'del')

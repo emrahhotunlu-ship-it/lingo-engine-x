@@ -226,7 +226,8 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
           ) : (
             // Wörter bleiben zusammen; lange Antworten (ganze Satzteile) brechen zwischen Wörtern um,
             // statt über den Rand hinauszulaufen (Befund 27.09.: Feld zu klein).
-            wordGroups(value).map((g) => (
+            // Nach dem Prüfen darf der Rahmen eine bereinigte Fassung zeigen (`shown`, Q0: Abkürzung „mba“ → „MBA“); gleiche Länge, nur andere Zeichen.
+            wordGroups(locked && shown && shown.length === value.length ? shown : value).map((g) => (
               <span key={g.start} className="lx-gap-word">
                 <AnimatePresence initial={false}>
                   {[...g.text].map((ch, k) => {

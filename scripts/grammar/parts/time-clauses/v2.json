@@ -36,8 +36,8 @@
      "not": [
       "until"
      ],
-     "de": "Das Schlüsselwort „until“ muss unverändert in der Lücke stehen.",
-     "en": "The key word “until” must appear unchanged in the gap."
+     "de": "Das Schlüsselwort „UNTIL“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “UNTIL” must appear unchanged in the gap."
     },
     {
      "if": [
@@ -64,7 +64,7 @@
   "id": "tc.pff-kwt2",
   "type": "kwt",
   "pat": "tc.present-for-future",
-  "from": "I'll update you after the vendor has replied.",
+  "from": "I'll update you after the vendor's reply.",
   "key": "WHEN",
   "frame": "I'll update you ___.",
   "answer": "when the vendor replies",
@@ -94,8 +94,8 @@
      "not": [
       "when"
      ],
-     "de": "Das Schlüsselwort „when“ muss unverändert in der Lücke stehen.",
-     "en": "The key word “when” must appear unchanged in the gap."
+     "de": "Das Schlüsselwort „WHEN“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “WHEN” must appear unchanged in the gap."
     },
     {
      "if": [
@@ -247,7 +247,7 @@
   "id": "tc.pp-kwt1",
   "type": "kwt",
   "pat": "tc.present-perfect",
-  "from": "We'll finalize the budget after the board has approved the plan.",
+  "from": "We'll finalize the budget after the board's approval of the plan.",
   "key": "ONCE",
   "frame": "We'll finalize the budget ___ the plan.",
   "answer": "once the board has approved",
@@ -270,8 +270,8 @@
      "not": [
       "once"
      ],
-     "de": "Das Schlüsselwort „once“ muss unverändert in der Lücke stehen.",
-     "en": "The key word “once” must appear unchanged in the gap."
+     "de": "Das Schlüsselwort „ONCE“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “ONCE” must appear unchanged in the gap."
     },
     {
      "if": [
@@ -326,8 +326,8 @@
      "not": [
       "until"
      ],
-     "de": "Das Schlüsselwort „until“ muss unverändert in der Lücke stehen.",
-     "en": "The key word “until” must appear unchanged in the gap."
+     "de": "Das Schlüsselwort „UNTIL“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “UNTIL” must appear unchanged in the gap."
     },
     {
      "if": [
@@ -500,8 +500,8 @@
      "not": [
       "time"
      ],
-     "de": "Das Schlüsselwort „time“ muss unverändert in „by the time“ stehen.",
-     "en": "The key word “time” must appear unchanged in “by the time”."
+     "de": "Das Schlüsselwort „TIME“ muss unverändert in „by the time“ stehen.",
+     "en": "The key word “TIME” must appear unchanged in “by the time”."
     }
    ]
   }
@@ -548,8 +548,8 @@
      "not": [
       "time"
      ],
-     "de": "Das Schlüsselwort „time“ muss unverändert in „by the time“ stehen.",
-     "en": "The key word “time” must appear unchanged in “by the time”."
+     "de": "Das Schlüsselwort „TIME“ muss unverändert in „by the time“ stehen.",
+     "en": "The key word “TIME” must appear unchanged in “by the time”."
     }
    ]
   }
@@ -661,7 +661,7 @@
   "id": "tc.nc-kwt1",
   "type": "kwt",
   "pat": "tc.noun-clause",
-  "from": "I have no idea what time the update will be ready.",
+  "from": "I have no idea what time the update is due.",
   "key": "WHEN",
   "frame": "I don't know ___ ready.",
   "answer": "when the update will be",
@@ -683,8 +683,8 @@
      "not": [
       "when"
      ],
-     "de": "Das Schlüsselwort „when“ muss unverändert in der Lücke stehen.",
-     "en": "The key word “when” must appear unchanged in the gap."
+     "de": "Das Schlüsselwort „WHEN“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “WHEN” must appear unchanged in the gap."
     },
     {
      "if": [
@@ -693,8 +693,8 @@
      "not": [
       "will"
      ],
-     "de": "Mit „is“ liest man when eher als „sobald“. Für „wann wird es fertig sein?“ nimm will.",
-     "en": "With “is”, when reads more like “as soon as”. For “when will it be ready?” use will."
+     "de": "Nach know ist when ein Fragewort (wann), und es geht um die Zukunft: when the update will be.",
+     "en": "After know, when is a question word, and it's about the future: when the update will be."
     },
     {
      "not": [
@@ -734,8 +734,8 @@
      "not": [
       "whether"
      ],
-     "de": "Das Schlüsselwort „whether“ muss unverändert in der Lücke stehen.",
-     "en": "The key word “whether” must appear unchanged in the gap."
+     "de": "Das Schlüsselwort „WHETHER“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “WHETHER” must appear unchanged in the gap."
     },
     {
      "if": [

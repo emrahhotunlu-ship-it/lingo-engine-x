@@ -25,8 +25,8 @@
      "not": [
       "well"
      ],
-     "de": "Das Schlüsselwort well muss unverändert in der Lücke stehen.",
-     "en": "The key word well must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WELL muss unverändert in der Lücke stehen.",
+     "en": "The key word WELL must stay unchanged in the gap."
     },
     {
      "if": [
@@ -68,8 +68,8 @@
      "not": [
       "well"
      ],
-     "de": "Das Schlüsselwort well muss unverändert in der Lücke stehen.",
-     "en": "The key word well must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WELL muss unverändert in der Lücke stehen.",
+     "en": "The key word WELL must stay unchanged in the gap."
     },
     {
      "if": [
@@ -108,8 +108,8 @@
      "not": [
       "bound"
      ],
-     "de": "Das Schlüsselwort bound muss unverändert in der Lücke stehen.",
-     "en": "The key word bound must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BOUND muss unverändert in der Lücke stehen.",
+     "en": "The key word BOUND must stay unchanged in the gap."
     },
     {
      "if": [
@@ -148,8 +148,8 @@
      "not": [
       "sure"
      ],
-     "de": "Das Schlüsselwort sure muss unverändert in der Lücke stehen.",
-     "en": "The key word sure must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SURE muss unverändert in der Lücke stehen.",
+     "en": "The key word SURE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -169,7 +169,7 @@
   "id": "mp-k5",
   "type": "kwt",
   "pat": "mp.likely",
-  "from": "I expect the update to be ready on Friday.",
+  "from": "I expect that the update will be ready on Friday.",
   "key": "LIKELY",
   "frame": "The update is ___ ready on Friday.",
   "answer": "likely to be",
@@ -188,8 +188,8 @@
      "not": [
       "likely"
      ],
-     "de": "Das Schlüsselwort likely muss unverändert in der Lücke stehen.",
-     "en": "The key word likely must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LIKELY muss unverändert in der Lücke stehen.",
+     "en": "The key word LIKELY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -228,8 +228,8 @@
      "not": [
       "unlikely"
      ],
-     "de": "Das Schlüsselwort unlikely muss unverändert in der Lücke stehen.",
-     "en": "The key word unlikely must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNLIKELY muss unverändert in der Lücke stehen.",
+     "en": "The key word UNLIKELY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -268,8 +268,8 @@
      "not": [
       "chance"
      ],
-     "de": "Das Schlüsselwort chance muss unverändert in der Lücke stehen.",
-     "en": "The key word chance must stay unchanged in the gap."
+     "de": "Das Schlüsselwort CHANCE muss unverändert in der Lücke stehen.",
+     "en": "The key word CHANCE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -308,8 +308,8 @@
      "not": [
       "highly"
      ],
-     "de": "Das Schlüsselwort highly muss unverändert in der Lücke stehen.",
-     "en": "The key word highly must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HIGHLY muss unverändert in der Lücke stehen.",
+     "en": "The key word HIGHLY must stay unchanged in the gap."
     },
     {
      "if": [

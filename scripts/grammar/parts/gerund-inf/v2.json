@@ -31,8 +31,8 @@
      "not": [
       "avoided"
      ],
-     "de": "Das Schlüsselwort avoided muss unverändert in der Lücke stehen.",
-     "en": "The key word avoided must stay unchanged in the gap."
+     "de": "Das Schlüsselwort AVOIDED muss unverändert in der Lücke stehen.",
+     "en": "The key word AVOIDED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -73,8 +73,8 @@
      "not": [
       "mind"
      ],
-     "de": "Das Schlüsselwort mind muss unverändert in der Lücke stehen.",
-     "en": "The key word mind must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MIND muss unverändert in der Lücke stehen.",
+     "en": "The key word MIND must stay unchanged in the gap."
     },
     {
      "if": [
@@ -235,8 +235,8 @@
      "not": [
       "decided"
      ],
-     "de": "Das Schlüsselwort decided muss unverändert in der Lücke stehen.",
-     "en": "The key word decided must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DECIDED muss unverändert in der Lücke stehen.",
+     "en": "The key word DECIDED must stay unchanged in the gap."
     },
     {
      "not": [
@@ -283,8 +283,8 @@
      "not": [
       "managed"
      ],
-     "de": "Das Schlüsselwort managed muss unverändert in der Lücke stehen.",
-     "en": "The key word managed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MANAGED muss unverändert in der Lücke stehen.",
+     "en": "The key word MANAGED must stay unchanged in the gap."
     },
     {
      "not": [
@@ -445,8 +445,8 @@
      "not": [
       "instead"
      ],
-     "de": "Das Schlüsselwort instead muss unverändert in der Lücke stehen.",
-     "en": "The key word instead must stay unchanged in the gap."
+     "de": "Das Schlüsselwort INSTEAD muss unverändert in der Lücke stehen.",
+     "en": "The key word INSTEAD must stay unchanged in the gap."
     },
     {
      "not": [
@@ -492,8 +492,8 @@
      "not": [
       "without"
      ],
-     "de": "Das Schlüsselwort without muss unverändert in der Lücke stehen.",
-     "en": "The key word without must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WITHOUT muss unverändert in der Lücke stehen.",
+     "en": "The key word WITHOUT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -652,8 +652,8 @@
      "not": [
       "stopped"
      ],
-     "de": "Das Schlüsselwort stopped muss unverändert in der Lücke stehen.",
-     "en": "The key word stopped must stay unchanged in the gap."
+     "de": "Das Schlüsselwort STOPPED muss unverändert in der Lücke stehen.",
+     "en": "The key word STOPPED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -675,7 +675,7 @@
   "id": "gi-mean-k2",
   "type": "kwt",
   "pat": "gi.meaning",
-  "from": "Sarah didn't remember that she had to send the invoice.",
+  "from": "The invoice never went out – it slipped Sarah's mind.",
   "key": "FORGOT",
   "frame": "Sarah ___ the invoice.",
   "answer": "forgot to send",
@@ -701,12 +701,13 @@
      "not": [
       "forgot"
      ],
-     "de": "Das Schlüsselwort forgot muss unverändert in der Lücke stehen.",
-     "en": "The key word forgot must stay unchanged in the gap."
+     "de": "Das Schlüsselwort FORGOT muss unverändert in der Lücke stehen.",
+     "en": "The key word FORGOT must stay unchanged in the gap."
     },
     {
      "not": [
-      "to"
+      "to",
+      "about"
      ],
      "de": "Forgot + -ing meint die Erinnerung an Geschehenes. Hier blieb etwas ungetan: forgot to.",
      "en": "Forgot + -ing is the memory of what happened. Here something stayed undone: forgot to."
@@ -868,8 +869,8 @@
      "not": [
       "made"
      ],
-     "de": "Das Schlüsselwort made muss unverändert in der Lücke stehen.",
-     "en": "The key word made must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MADE muss unverändert in der Lücke stehen.",
+     "en": "The key word MADE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -921,8 +922,8 @@
      "not": [
       "let"
      ],
-     "de": "Das Schlüsselwort let muss unverändert in der Lücke stehen.",
-     "en": "The key word let must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LET muss unverändert in der Lücke stehen.",
+     "en": "The key word LET must stay unchanged in the gap."
     },
     {
      "if": [

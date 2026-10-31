@@ -22,8 +22,8 @@
      "not": [
       "as"
      ],
-     "de": "Das Schlüsselwort as muss unverändert in der Lücke stehen.",
-     "en": "The key word as must stay unchanged in the gap."
+     "de": "Das Schlüsselwort AS muss unverändert in der Lücke stehen.",
+     "en": "The key word AS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -75,8 +75,8 @@
      "not": [
       "such"
      ],
-     "de": "Das Schlüsselwort such muss unverändert in der Lücke stehen.",
-     "en": "The key word such must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SUCH muss unverändert in der Lücke stehen.",
+     "en": "The key word SUCH must stay unchanged in the gap."
     },
     {
      "if": [
@@ -233,8 +233,8 @@
      "not": [
       "hour"
      ],
-     "de": "Das Schlüsselwort hour muss unverändert in der Lücke stehen.",
-     "en": "The key word hour must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HOUR muss unverändert in der Lücke stehen.",
+     "en": "The key word HOUR must stay unchanged in the gap."
     },
     {
      "if": [
@@ -260,17 +260,14 @@
   "id": "art-snd-k2",
   "type": "kwt",
   "pat": "art.sound",
-  "from": "She has completed a Master of Business Administration.",
+  "from": "Last spring, Maria earned a graduate degree in business: a Master of Business Administration.",
   "key": "MBA",
-  "frame": "She has completed ___.",
+  "frame": "Last spring, Maria earned ___.",
   "answer": "an MBA",
   "accepted": [
    "her MBA",
    "an MBA degree",
-   "an MBA program",
-   "an MBA course",
-   "her MBA degree",
-   "her MBA program"
+   "her MBA degree"
   ],
   "words": [
    2,
@@ -278,16 +275,16 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: an MBA. MBA beginnt mit dem Vokallaut /e/ (em), nicht mit b.",
-    "en": "Right: an MBA. MBA starts with the vowel sound /e/ (em), not with b."
+    "de": "MBA beginnt mit dem Vokallaut /e/ (em), deshalb an MBA. Mit her MBA steht kein Artikel.",
+    "en": "MBA starts with the vowel sound /e/ (em), so an MBA. With her MBA there is no article."
    },
    "wrong": [
     {
      "not": [
       "mba"
      ],
-     "de": "Das Schlüsselwort mba muss unverändert in der Lücke stehen.",
-     "en": "The key word mba must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MBA muss unverändert in der Lücke stehen.",
+     "en": "The key word MBA must stay unchanged in the gap."
     },
     {
      "if": [
@@ -295,7 +292,7 @@
       "mba"
      ],
      "de": "„a MBA“ geht nicht: MBA wird „em-bee-ay“ gesprochen, also an.",
-     "en": "“a MBA” fails: MBA is said “em-bee-ay”, so an."
+     "en": "“a MBA” doesn’t work: MBA is said “em-bee-ay”, so an."
     },
     {
      "not": [
@@ -395,7 +392,7 @@
   "id": "art-def-k1",
   "type": "kwt",
   "pat": "art.definite",
-  "from": "Can you forward me the agenda that we agreed on yesterday?",
+  "from": "Please send me the agenda. Yesterday we settled on it.",
   "key": "AGREED",
   "frame": "Can you forward me ___ on yesterday?",
   "answer": "the agenda we agreed",
@@ -419,8 +416,8 @@
      "not": [
       "agreed"
      ],
-     "de": "Das Schlüsselwort agreed muss unverändert in der Lücke stehen.",
-     "en": "The key word agreed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort AGREED muss unverändert in der Lücke stehen.",
+     "en": "The key word AGREED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -475,8 +472,8 @@
      "not": [
       "mentioned"
      ],
-     "de": "Das Schlüsselwort mentioned muss unverändert in der Lücke stehen.",
-     "en": "The key word mentioned must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MENTIONED muss unverändert in der Lücke stehen.",
+     "en": "The key word MENTIONED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -624,8 +621,8 @@
      "not": [
       "best"
      ],
-     "de": "Das Schlüsselwort best muss unverändert in der Lücke stehen.",
-     "en": "The key word best must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEST muss unverändert in der Lücke stehen.",
+     "en": "The key word BEST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -669,8 +666,8 @@
      "not": [
       "only"
      ],
-     "de": "Das Schlüsselwort only muss unverändert in der Lücke stehen.",
-     "en": "The key word only must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ONLY muss unverändert in der Lücke stehen.",
+     "en": "The key word ONLY must stay unchanged in the gap."
     },
     {
      "not": [
@@ -731,7 +728,7 @@
     {
      "tap": "*",
      "de": "Kein Fehler: Nach only passt the, und the pension plan ist bekannt.",
-     "en": "No error: the fits after only, and the pension plan is a known one."
+     "en": "No error: after only, “the” fits, and the pension plan is a known one."
     }
    ]
   }
@@ -791,8 +788,8 @@
      "not": [
       "piece"
      ],
-     "de": "Das Schlüsselwort piece muss unverändert in der Lücke stehen.",
-     "en": "The key word piece must stay unchanged in the gap."
+     "de": "Das Schlüsselwort PIECE muss unverändert in der Lücke stehen.",
+     "en": "The key word PIECE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -842,8 +839,8 @@
      "not": [
       "more"
      ],
-     "de": "Das Schlüsselwort more muss unverändert in der Lücke stehen.",
-     "en": "The key word more must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MORE muss unverändert in der Lücke stehen.",
+     "en": "The key word MORE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -985,8 +982,8 @@
      "not": [
       "work"
      ],
-     "de": "Das Schlüsselwort work muss unverändert in der Lücke stehen.",
-     "en": "The key word work must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WORK muss unverändert in der Lücke stehen.",
+     "en": "The key word WORK must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1034,8 +1031,8 @@
      "not": [
       "school"
      ],
-     "de": "Das Schlüsselwort school muss unverändert in der Lücke stehen.",
-     "en": "The key word school must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SCHOOL muss unverändert in der Lücke stehen.",
+     "en": "The key word SCHOOL must stay unchanged in the gap."
     },
     {
      "if": [

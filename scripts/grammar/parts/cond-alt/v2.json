@@ -28,8 +28,8 @@
      "not": [
       "unless"
      ],
-     "de": "Das Schlüsselwort unless muss unverändert in der Lücke stehen.",
-     "en": "The key word unless must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNLESS muss unverändert in der Lücke stehen.",
+     "en": "The key word UNLESS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -78,8 +78,8 @@
      "not": [
       "unless"
      ],
-     "de": "Das Schlüsselwort unless muss unverändert in der Lücke stehen.",
-     "en": "The key word unless must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNLESS muss unverändert in der Lücke stehen.",
+     "en": "The key word UNLESS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -221,8 +221,8 @@
      "not": [
       "long"
      ],
-     "de": "Das Schlüsselwort long muss stehen: as long as = solange, nur wenn.",
-     "en": "The key word long must appear: as long as = provided that."
+     "de": "Das Schlüsselwort LONG muss stehen: as long as = solange, nur wenn.",
+     "en": "The key word LONG must appear: as long as = provided that."
     },
     {
      "if": [
@@ -261,8 +261,8 @@
      "not": [
       "condition"
      ],
-     "de": "Das Schlüsselwort condition muss stehen: on condition that + Satz.",
-     "en": "The key word condition must appear: on condition that + clause."
+     "de": "Das Schlüsselwort CONDITION muss stehen: on condition that + Satz.",
+     "en": "The key word CONDITION must appear: on condition that + clause."
     },
     {
      "if": [
@@ -401,7 +401,7 @@
   "id": "ca-oth-k1",
   "type": "kwt",
   "pat": "ca.otherwise",
-  "from": "Please sign the form today, or we can't process your request.",
+  "from": "Please sign the form today – we need your signature to process your request.",
   "key": "OTHERWISE",
   "frame": "Please sign the form today. ___ process your request.",
   "answer": "Otherwise, we can't",
@@ -428,8 +428,8 @@
      "not": [
       "otherwise"
      ],
-     "de": "Das Schlüsselwort otherwise muss stehen: Es beginnt den neuen Satz.",
-     "en": "The key word otherwise must appear: it starts the new sentence."
+     "de": "Das Schlüsselwort OTHERWISE muss stehen: Es beginnt den neuen Satz.",
+     "en": "The key word OTHERWISE must appear: it starts the new sentence."
     },
     {
      "if": [
@@ -446,7 +446,7 @@
   "id": "ca-oth-k2",
   "type": "kwt",
   "pat": "ca.otherwise",
-  "from": "We have to agree on an owner, or the project will stall.",
+  "from": "Unless we agree on an owner, this project is going to stall.",
   "key": "OTHERWISE",
   "frame": "We have to agree on an owner. ___ stall.",
   "answer": "Otherwise, the project will",
@@ -457,7 +457,13 @@
    "Otherwise, the project could",
    "Otherwise the project could",
    "Otherwise, the project may",
-   "Otherwise the project may"
+   "Otherwise the project may",
+   "Otherwise, this project will",
+   "Otherwise this project will",
+   "Otherwise, the project might",
+   "Otherwise the project might",
+   "Otherwise, this project might",
+   "Otherwise this project might"
   ],
   "words": [
    4,
@@ -473,8 +479,8 @@
      "not": [
       "otherwise"
      ],
-     "de": "Das Schlüsselwort otherwise muss stehen: „sonst“ im neuen Satz.",
-     "en": "The key word otherwise must appear: “or else” in the new sentence."
+     "de": "Das Schlüsselwort OTHERWISE muss stehen: „sonst“ im neuen Satz.",
+     "en": "The key word OTHERWISE must appear: “or else” in the new sentence."
     }
    ]
   }
@@ -610,8 +616,8 @@
      "not": [
       "but"
      ],
-     "de": "Das Schlüsselwort but muss stehen: but for + Nomen.",
-     "en": "The key word but must appear: but for + noun."
+     "de": "Das Schlüsselwort BUT muss stehen: but for + Nomen.",
+     "en": "The key word BUT must appear: but for + noun."
     }
    ]
   },
@@ -640,8 +646,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss stehen: if it hadn't been for + Nomen.",
-     "en": "The key word been must appear: if it hadn't been for + noun."
+     "de": "Das Schlüsselwort BEEN muss stehen: if it hadn't been for + Nomen.",
+     "en": "The key word BEEN must appear: if it hadn't been for + noun."
     },
     {
      "if": [
@@ -806,8 +812,8 @@
      "not": [
       "should"
      ],
-     "de": "Das Schlüsselwort should muss stehen: Should you + Grundform.",
-     "en": "The key word should must appear: Should you + base verb."
+     "de": "Das Schlüsselwort SHOULD muss stehen: Should you + Grundform.",
+     "en": "The key word SHOULD must appear: Should you + base verb."
     },
     {
      "if": [
@@ -851,8 +857,8 @@
      "not": [
       "had"
      ],
-     "de": "Das Schlüsselwort had muss stehen: Had we + Partizip.",
-     "en": "The key word had must appear: Had we + participle."
+     "de": "Das Schlüsselwort HAD muss stehen: Had we + Partizip.",
+     "en": "The key word HAD must appear: Had we + participle."
     },
     {
      "if": [
@@ -1020,8 +1026,8 @@
      "not": [
       "case"
      ],
-     "de": "Das Schlüsselwort case muss stehen: in case + Satz.",
-     "en": "The key word case must appear: in case + clause."
+     "de": "Das Schlüsselwort CASE muss stehen: in case + Satz.",
+     "en": "The key word CASE must appear: in case + clause."
     }
    ]
   }
@@ -1058,8 +1064,8 @@
      "not": [
       "case"
      ],
-     "de": "Das Schlüsselwort case muss stehen: in case + Satz.",
-     "en": "The key word case must appear: in case + clause."
+     "de": "Das Schlüsselwort CASE muss stehen: in case + Satz.",
+     "en": "The key word CASE must appear: in case + clause."
     }
    ]
   }

@@ -522,19 +522,19 @@
    },
    "why": {
     "ok": {
-     "de": "Nach until steht für etwas, das vorher fertig sein muss, das Present Perfect: has signed off. Auch das Present Simple (signs off) geht. Past Simple („signed off“) blickt auf einen Zeitpunkt in der Vergangenheit.",
-     "en": "After until, something that must be finished first takes the present perfect: has signed off. The present simple (signs off) also works. The past simple points to a past moment."
+     "de": "Hier geht es um die Zukunft (Please don’t deploy …). Nach until steht dann kein Past Simple, sondern signs off oder has signed off (vorher fertig).",
+     "en": "This is about the future (Please don’t deploy …). After until use signs off or has signed off (finished first), not the past simple."
     },
     "wrong": [
      {
       "opt": "will sign off",
       "de": "Nach until steht nie will.",
-      "en": "Never will after until."
+      "en": "No will after until."
      },
      {
       "opt": "signing off",
-      "de": "„signing off“ allein ist kein Prädikat.",
-      "en": "“signing off” alone is no predicate."
+      "de": "„signing off“ allein ist keine vollständige Verbform: signs off oder has signed off.",
+      "en": "“signing off” alone is not a full verb form: use signs off or has signed off."
      },
      {
       "tap": "*",

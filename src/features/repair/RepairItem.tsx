@@ -1,3 +1,4 @@
+import { tidyWhy } from '../../domain/repair/sources';
 import { useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
@@ -162,7 +163,8 @@ export function RepairItem({ item, mode, area, source, status = null, profile: p
           ...(patName ? [{ k: 'pattern' as const, name: lang === 'de' ? patName.de : patName.en, formula: null }] : []),
           // Sprachtreue: Die gespeicherte Begründung gibt es meist nur auf Deutsch. In der englischen Oberfläche steht sie dann ehrlich
           // gekennzeichnet da (UX-Prüfung 19.10.2026), statt still Deutsch als englische Erklärung auszugeben.
-          ...(item.why ? [{ k: 'why' as const, text: item.why, ...(lang === 'en' && detectLang(item.why) === 'de' ? { head: t('fxRWhyDeOnly') } : {}) }] : []),
+          // Q0: beim Speichern mitten im Wort gekürzte Begründungen („miteinand…“) enden am letzten ganzen Satz.
+          ...(item.why ? [{ k: 'why' as const, text: tidyWhy(item.why), ...(lang === 'en' && detectLang(item.why) === 'de' ? { head: t('fxRWhyDeOnly') } : {}) }] : []),
         ],
         examples: [],
         mark: [],

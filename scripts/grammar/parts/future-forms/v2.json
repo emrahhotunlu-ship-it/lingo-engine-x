@@ -31,8 +31,8 @@
      "not": [
       "will"
      ],
-     "de": "Das Schlüsselwort will muss unverändert in der Lücke stehen.",
-     "en": "The key word will must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WILL muss unverändert in der Lücke stehen.",
+     "en": "The key word WILL must stay unchanged in the gap."
     },
     {
      "if": [
@@ -91,8 +91,8 @@
      "not": [
       "will"
      ],
-     "de": "Das Schlüsselwort will muss unverändert in der Lücke stehen.",
-     "en": "The key word will must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WILL muss unverändert in der Lücke stehen.",
+     "en": "The key word WILL must stay unchanged in the gap."
     },
     {
      "if": [
@@ -267,8 +267,8 @@
      "not": [
       "going"
      ],
-     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
-     "en": "The key word going must stay unchanged in the gap."
+     "de": "Das Schlüsselwort GOING muss unverändert in der Lücke stehen.",
+     "en": "The key word GOING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -324,8 +324,8 @@
      "not": [
       "going"
      ],
-     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
-     "en": "The key word going must stay unchanged in the gap."
+     "de": "Das Schlüsselwort GOING muss unverändert in der Lücke stehen.",
+     "en": "The key word GOING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -507,8 +507,8 @@
      "not": [
       "were"
      ],
-     "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
-     "en": "The key word were must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WERE muss unverändert in der Lücke stehen.",
+     "en": "The key word WERE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -566,8 +566,8 @@
      "not": [
       "was"
      ],
-     "de": "Das Schlüsselwort was muss unverändert in der Lücke stehen.",
-     "en": "The key word was must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WAS muss unverändert in der Lücke stehen.",
+     "en": "The key word WAS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -737,8 +737,8 @@
      "not": [
       "meeting"
      ],
-     "de": "Das Schlüsselwort meeting muss unverändert in der Lücke stehen.",
-     "en": "The key word meeting must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MEETING muss unverändert in der Lücke stehen.",
+     "en": "The key word MEETING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -794,8 +794,8 @@
      "not": [
       "does"
      ],
-     "de": "Das Schlüsselwort does muss unverändert in der Lücke stehen.",
-     "en": "The key word does must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DOES muss unverändert in der Lücke stehen.",
+     "en": "The key word DOES must stay unchanged in the gap."
     },
     {
      "if": [
@@ -968,8 +968,8 @@
      "not": [
       "about"
      ],
-     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
-     "en": "The key word about must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ABOUT muss unverändert in der Lücke stehen.",
+     "en": "The key word ABOUT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1021,8 +1021,8 @@
      "not": [
       "about"
      ],
-     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
-     "en": "The key word about must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ABOUT muss unverändert in der Lücke stehen.",
+     "en": "The key word ABOUT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1168,8 +1168,8 @@
      "not": [
       "until"
      ],
-     "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
-     "en": "The key word until must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNTIL muss unverändert in der Lücke stehen.",
+     "en": "The key word UNTIL must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1196,7 +1196,7 @@
   "id": "ff-nw-k2",
   "type": "kwt",
   "pat": "ff.no-will-after",
-  "from": "I'll forward the file after I get the final numbers.",
+  "from": "I'll forward the file as soon as the final numbers arrive.",
   "key": "ONCE",
   "frame": "I'll forward the file ___ the final numbers.",
   "answer": "once I get",
@@ -1230,8 +1230,8 @@
      "not": [
       "once"
      ],
-     "de": "Das Schlüsselwort once muss unverändert in der Lücke stehen.",
-     "en": "The key word once must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ONCE muss unverändert in der Lücke stehen.",
+     "en": "The key word ONCE must stay unchanged in the gap."
     },
     {
      "if": [

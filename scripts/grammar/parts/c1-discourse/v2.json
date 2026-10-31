@@ -41,8 +41,8 @@
      "not": [
       "said"
      ],
-     "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
-     "en": "The key word said must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SAID muss unverändert in der Lücke stehen.",
+     "en": "The key word SAID must stay unchanged in the gap."
     }
    ]
   },
@@ -71,8 +71,8 @@
      "not": [
       "even"
      ],
-     "de": "Das Schlüsselwort even muss unverändert in der Lücke stehen.",
-     "en": "The key word even must stay unchanged in the gap."
+     "de": "Das Schlüsselwort EVEN muss unverändert in der Lücke stehen.",
+     "en": "The key word EVEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -238,8 +238,8 @@
      "not": [
       "hand"
      ],
-     "de": "Das Schlüsselwort hand muss unverändert in der Lücke stehen.",
-     "en": "The key word hand must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAND muss unverändert in der Lücke stehen.",
+     "en": "The key word HAND must stay unchanged in the gap."
     },
     {
      "not": [
@@ -286,8 +286,8 @@
      "not": [
       "contrast"
      ],
-     "de": "Das Schlüsselwort contrast muss unverändert in der Lücke stehen.",
-     "en": "The key word contrast must stay unchanged in the gap."
+     "de": "Das Schlüsselwort CONTRAST muss unverändert in der Lücke stehen.",
+     "en": "The key word CONTRAST must stay unchanged in the gap."
     }
    ]
   },
@@ -442,8 +442,8 @@
      "not": [
       "build"
      ],
-     "de": "Das Schlüsselwort build muss unverändert in der Lücke stehen.",
-     "en": "The key word build must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BUILD muss unverändert in der Lücke stehen.",
+     "en": "The key word BUILD must stay unchanged in the gap."
     }
    ]
   }
@@ -473,8 +473,8 @@
      "not": [
       "add"
      ],
-     "de": "Das Schlüsselwort add muss unverändert in der Lücke stehen.",
-     "en": "The key word add must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ADD muss unverändert in der Lücke stehen.",
+     "en": "The key word ADD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -631,8 +631,8 @@
      "not": [
       "back"
      ],
-     "de": "Das Schlüsselwort back muss unverändert in der Lücke stehen.",
-     "en": "The key word back must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BACK muss unverändert in der Lücke stehen.",
+     "en": "The key word BACK must stay unchanged in the gap."
     },
     {
      "if": [
@@ -675,8 +675,8 @@
      "not": [
       "return"
      ],
-     "de": "Das Schlüsselwort return muss unverändert in der Lücke stehen.",
-     "en": "The key word return must stay unchanged in the gap."
+     "de": "Das Schlüsselwort RETURN muss unverändert in der Lücke stehen.",
+     "en": "The key word RETURN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -820,8 +820,8 @@
      "not": [
       "short"
      ],
-     "de": "Das Schlüsselwort short muss unverändert in der Lücke stehen.",
-     "en": "The key word short must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SHORT muss unverändert in der Lücke stehen.",
+     "en": "The key word SHORT must stay unchanged in the gap."
     }
    ]
   },
@@ -860,8 +860,8 @@
      "not": [
       "all"
      ],
-     "de": "Das Schlüsselwort all muss unverändert in der Lücke stehen.",
-     "en": "The key word all must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ALL muss unverändert in der Lücke stehen.",
+     "en": "The key word ALL must stay unchanged in the gap."
     }
    ]
   }

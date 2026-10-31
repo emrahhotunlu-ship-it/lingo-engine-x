@@ -18,7 +18,7 @@ const TODAY = ['today.spec.ts', 'heute.spec.ts', 'today-duties.spec.ts', 'heuteA
 const TRAINER = ['trainer.spec.ts', 'trainerModes.spec.ts', 'trainerReview.spec.ts', 'trainerFeedback.spec.ts', 'wortKern.spec.ts', 'gapCue.spec.ts', 'tilesFix.spec.ts', 'statusConsistency.spec.ts'];
 const VOCAB = ['wortschatz.spec.ts', 'anki.spec.ts', 'ankiUndo.spec.ts', 'wortWerkstatt.spec.ts', 'wordSky.spec.ts'];
 const GRAMMAR = ['grammar.spec.ts', 'grammarSlots.spec.ts', 'alsoRight.spec.ts', 'lernen.spec.ts'];
-const C1X = ['c1xErr.spec.ts', 'c1xFrame.spec.ts', 'c1xKwt.spec.ts', 'c1xOclMcc.spec.ts', 'c1xTempo.spec.ts', 'c1xWf.spec.ts'];
+const C1X = ['c1xErr.spec.ts', 'c1xFrame.spec.ts', 'c1xKwt.spec.ts', 'c1xOclMcc.spec.ts', 'c1xTempo.spec.ts', 'c1xWf.spec.ts', 'q0Feedback.spec.ts'];
 
 /** @type {Array<{ prefix: string, specs: string[], smoke?: boolean }>} */
 export const RULES = [

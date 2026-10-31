@@ -22,8 +22,8 @@
      "not": [
       "rising"
      ],
-     "de": "Das Schlüsselwort rising muss unverändert in der Lücke stehen.",
-     "en": "The key word rising must stay unchanged in the gap."
+     "de": "Das Schlüsselwort RISING muss unverändert in der Lücke stehen.",
+     "en": "The key word RISING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -62,8 +62,8 @@
      "not": [
       "increasingly"
      ],
-     "de": "Das Schlüsselwort increasingly muss unverändert in der Lücke stehen.",
-     "en": "The key word increasingly must stay unchanged in the gap."
+     "de": "Das Schlüsselwort INCREASINGLY muss unverändert in der Lücke stehen.",
+     "en": "The key word INCREASINGLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -104,8 +104,8 @@
      "not": [
       "wondering"
      ],
-     "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
-     "en": "The key word wondering must stay unchanged in the gap."
+     "de": "Das Schlüsselwort WONDERING muss unverändert in der Lücke stehen.",
+     "en": "The key word WONDERING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -145,8 +145,8 @@
      "not": [
       "hoping"
      ],
-     "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
-     "en": "The key word hoping must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HOPING muss unverändert in der Lücke stehen.",
+     "en": "The key word HOPING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -185,8 +185,8 @@
      "not": [
       "being"
      ],
-     "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
-     "en": "The key word being must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEING muss unverändert in der Lücke stehen.",
+     "en": "The key word BEING must stay unchanged in the gap."
     },
     {
      "if": [
@@ -225,8 +225,8 @@
      "not": [
       "always"
      ],
-     "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
-     "en": "The key word always must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ALWAYS muss unverändert in der Lücke stehen.",
+     "en": "The key word ALWAYS must stay unchanged in the gap."
     },
     {
      "if": [
@@ -268,8 +268,8 @@
      "not": [
       "need"
      ],
-     "de": "Das Schlüsselwort need muss unverändert in der Lücke stehen.",
-     "en": "The key word need must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEED muss unverändert in der Lücke stehen.",
+     "en": "The key word NEED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -308,8 +308,8 @@
      "not": [
       "understand"
      ],
-     "de": "Das Schlüsselwort understand muss unverändert in der Lücke stehen.",
-     "en": "The key word understand must stay unchanged in the gap."
+     "de": "Das Schlüsselwort UNDERSTAND muss unverändert in der Lücke stehen.",
+     "en": "The key word UNDERSTAND must stay unchanged in the gap."
     },
     {
      "if": [

@@ -34,8 +34,8 @@
      "not": [
       "already"
      ],
-     "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
-     "en": "The key word already must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ALREADY muss unverändert in der Lücke stehen.",
+     "en": "The key word ALREADY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -89,8 +89,8 @@
      "not": [
       "signed"
      ],
-     "de": "Das Schlüsselwort signed muss unverändert in der Lücke stehen.",
-     "en": "The key word signed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SIGNED muss unverändert in der Lücke stehen.",
+     "en": "The key word SIGNED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -255,8 +255,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -307,8 +307,8 @@
      "not": [
       "been"
      ],
-     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
-     "en": "The key word been must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BEEN muss unverändert in der Lücke stehen.",
+     "en": "The key word BEEN must stay unchanged in the gap."
     },
     {
      "if": [
@@ -441,8 +441,8 @@
      "not": [
       "time"
      ],
-     "de": "Das Schlüsselwort time muss unverändert in der Lücke stehen.",
-     "en": "The key word time must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TIME muss unverändert in der Lücke stehen.",
+     "en": "The key word TIME must stay unchanged in the gap."
     },
     {
      "if": [
@@ -500,8 +500,8 @@
      "not": [
       "never"
      ],
-     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
-     "en": "The key word never must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEVER muss unverändert in der Lücke stehen.",
+     "en": "The key word NEVER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -537,8 +537,8 @@
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won.",
-    "en": "The error: after “It was the first time” comes had + participle: had won."
+    "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won. Locker hört man auch „won“, im Business-Text: had won.",
+    "en": "The error: after “It was the first time” comes had + participle: had won. Casually you also hear “won”; in business writing: had won."
    },
    "wrong": [
     {
@@ -641,8 +641,8 @@
      "not": [
       "send"
      ],
-     "de": "Das Schlüsselwort send muss unverändert in der Lücke stehen.",
-     "en": "The key word send must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SEND muss unverändert in der Lücke stehen.",
+     "en": "The key word SEND must stay unchanged in the gap."
     },
     {
      "if": [
@@ -687,8 +687,8 @@
      "not": [
       "already"
      ],
-     "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
-     "en": "The key word already must stay unchanged in the gap."
+     "de": "Das Schlüsselwort ALREADY muss unverändert in der Lücke stehen.",
+     "en": "The key word ALREADY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -735,8 +735,8 @@
      "not": [
       "had"
      ],
-     "de": "Das Schlüsselwort had muss unverändert in der Lücke stehen.",
-     "en": "The key word had must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAD muss unverändert in der Lücke stehen.",
+     "en": "The key word HAD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -821,32 +821,32 @@
   }
  },
  {
-  "id": "pp-rep-f3",
+  "id": "pp-rep-f3b",
   "type": "find",
   "pat": "pp.reported",
-  "prompt": "The client said they signed the contract the day before.",
+  "prompt": "On Friday the client told us they have signed the contract two days earlier.",
   "err": [
-   4,
-   4
+   7,
+   8
   ],
   "answer": "had signed",
-  "fixed": "The client said they had signed the contract the day before.",
+  "fixed": "On Friday the client told us they had signed the contract two days earlier.",
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: Mit „the day before“ braucht das Berichtete had + Partizip.",
-    "en": "The error: with “the day before” the reported event needs had + participle."
+    "de": "Der Fehler: Berichtet wird aus der Vergangenheit, und „two days earlier“ liegt davor: had + Partizip.",
+    "en": "The error: this is reported from the past, and “two days earlier” came before that: had + participle."
    },
    "wrong": [
     {
      "tap": "none",
-     "de": "Doch, hier steckt ein Fehler: „signed“ passt nicht zu „the day before“.",
-     "en": "There is an error: “signed” does not fit “the day before”."
+     "de": "Doch, hier steckt ein Fehler: „have signed“ passt nicht zu „two days earlier“.",
+     "en": "There is an error: “have signed” does not fit “two days earlier”."
     },
     {
      "tap": "*",
-     "de": "Der Fehler liegt bei „signed“: Es braucht had signed.",
-     "en": "The error is at “signed”: it needs had signed."
+     "de": "Der Fehler liegt bei „have signed“: Es braucht had signed.",
+     "en": "The error is at “have signed”: it needs had signed."
     }
    ]
   }
@@ -906,8 +906,8 @@
      "not": [
       "sooner"
      ],
-     "de": "Das Schlüsselwort sooner muss unverändert in der Lücke stehen.",
-     "en": "The key word sooner must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SOONER muss unverändert in der Lücke stehen.",
+     "en": "The key word SOONER must stay unchanged in the gap."
     },
     {
      "if": [
@@ -954,8 +954,8 @@
      "not": [
       "hardly"
      ],
-     "de": "Das Schlüsselwort hardly muss unverändert in der Lücke stehen.",
-     "en": "The key word hardly must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HARDLY muss unverändert in der Lücke stehen.",
+     "en": "The key word HARDLY must stay unchanged in the gap."
     },
     {
      "if": [

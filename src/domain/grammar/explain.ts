@@ -1,6 +1,7 @@
 import type { ExplainExample, ExplainLine, ExplanationModel, ResultVerdict } from '../explain/types';
 import type { GrammarTask } from '../learn/types';
 import type { Lang } from '../srs/types';
+import { stripModelLead } from './learnerView';
 import { formHint } from './rules';
 import { hasSignal, patternById, patternOf, taskWhy, whyFor } from './patterns';
 import type { Pattern } from './patternTypes';
@@ -66,6 +67,10 @@ type Input = {
   learning: boolean;
   /** Antwort von Claude (`explain-answer@1`) ersetzt die „Deine Antwort“-Zeile. */
   ai?: { text: string } | null;
+  /** Die Antwort ist eine andere gültige Fassung als die Musterlösung (Q0): der Vorspann „Richtig: <Musterlösung>.“ der Begründung fällt weg. */
+  variant?: boolean;
+  /** Musterlösung, wie sie im Vorspann steht (Standard: `task.answer`; c1x: Teil A + Teil B bzw. die Korrektur). */
+  model?: string;
 };
 
 export function grammarExplanation(i: Input): ExplanationModel {
@@ -95,7 +100,13 @@ export function grammarExplanation(i: Input): ExplanationModel {
 
   // 3. Warum (auch bei richtiger Antwort, dann mindestens diese Zeile)
   let whyText = why ? stripFindLead(pick(why.ok, lang)) : '';
-  if (!whyText) {
+  // Variante: Bleibt nach dem Vorspann nichts übrig, nie auf die Aufgabenerklärung (= dieselbe Begründung mit Musterlösung) zurückfallen.
+  const model = i.model ?? task.answer;
+  const variantEmpty = !!whyText && !!i.variant && !stripModelLead(whyText, model);
+  if (whyText && i.variant) whyText = stripModelLead(whyText, model);
+  if (variantEmpty) {
+    whyText = formHint({ topic: task.topic, expl: { de: null, en: null }, prompt: task.prompt, pat: task.pat }, lang);
+  } else if (!whyText) {
     // Ohne aufgabengenaue Begründung: die Erklärung der Aufgabe; nie der ganze Kernsatz, wenn ein Muster bekannt ist.
     whyText = formHint({ topic: task.topic, expl: task.expl, prompt: task.prompt, pat: task.pat }, lang);
     if (whyText && source !== 'pattern') source = 'task';

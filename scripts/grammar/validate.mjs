@@ -45,6 +45,54 @@ const segmentOk = (sentence, chunks) => {
 };
 export { segmentOk };
 
+// ------------------------------------------------------------------ Paket Q0 (Aufgaben-Spieler, docs/umbau/auftraege/q0.md)
+// (b) Abschreiben: eine Lösung ohne Schlüsselwort (≥ 2 Wörter) steht wörtlich im Ausgangssatz. Offene Altfälle stehen in q0-open.json und
+//     werden chargenweise abgebaut; neue Aufgaben dürfen das nie.
+// (c) Abkürzung als Schlüsselwort (MBA): jede Lösung schreibt sie genau so (groß).
+// (e) Begründungen schreiben das Schlüsselwort wie `key` (Abkürzung überall, sonst nach „Schlüsselwort“/„key word“).
+const Q0_OPEN = existsSync(join(ROOT, 'scripts/grammar/q0-open.json')) ? read(join(ROOT, 'scripts/grammar/q0-open.json')) : { copy: [] };
+const q0Words = (s) =>
+  ` ${s} `
+    .toLowerCase()
+    .replace(/[’‘`´]/g, "'")
+    .replace(/\bcan't\b/g, 'cannot')
+    .replace(/\bwon't\b/g, 'will not')
+    .replace(/n't\b/g, ' not')
+    .replace(/'ll\b/g, ' will')
+    .replace(/'ve\b/g, ' have')
+    .replace(/'re\b/g, ' are')
+    .replace(/\bi'm\b/g, 'i am')
+    .replace(/[^a-z0-9'\- ]+/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean);
+const q0Contains = (hay, seq) => {
+  for (let i = 0; i + seq.length <= hay.length; i++) if (seq.every((w, j) => hay[i + j] === w)) return true;
+  return false;
+};
+export const isAbbrevKey = (key, model) => /^[A-Z][A-Z0-9]{1,5}$/.test(key) && new RegExp(`(^|[^A-Za-z])${key}([^A-Za-z]|$)`).test(model);
+/** Befunde (b), (c), (e) einer Umformung `{ id, from, key, answer, accepted, why }`. */
+export function kwtQ0Problems(x, open = Q0_OPEN) {
+  const out = [];
+  const k = x.key.toLowerCase();
+  const from = q0Words(x.from);
+  // `copyOk`: vom english-teacher geprüft, der Lernschritt liegt woanders (z. B. Satzverknüpfung baut die Struktur um).
+  if (!open.copy.includes(x.id) && !(open.copyOk ?? []).includes(x.id)) {
+    for (const a of [x.answer, ...x.accepted]) {
+      const rest = q0Words(a).filter((w) => w !== k);
+      if (rest.length >= 2 && q0Contains(from, rest)) out.push(`Abschreiben: „${a}“ steht ohne ${x.key} schon im Ausgangssatz (Q0 b)`);
+    }
+  }
+  const abbrev = isAbbrevKey(x.key, x.answer);
+  if (abbrev) for (const a of x.accepted) if (!new RegExp(`(^|[^A-Za-z])${x.key}([^A-Za-z]|$)`).test(a)) out.push(`Abkürzung ${x.key} in „${a}“ nicht groß (Q0 c)`);
+  const esc = x.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const texts = [x.why.ok.de, x.why.ok.en, ...x.why.wrong.flatMap((r) => [r.de, r.en])];
+  for (const t of texts) {
+    const re = abbrev ? new RegExp(`(?<![A-Za-z])${esc}(?![A-Za-z])`, 'gi') : new RegExp(`(?:schlüsselwort|key word|keyword)\\s+[„“"]?(${esc})(?![A-Za-z])`, 'gi');
+    for (const m of t.matchAll(re)) if ((abbrev ? m[0] : m[1]) !== x.key) out.push(`Begründung schreibt das Schlüsselwort „${abbrev ? m[0] : m[1]}“ statt ${x.key} (Q0 e)`);
+  }
+  return out;
+}
+
 export const patternFiles = () => (existsSync(PATTERNS) ? readdirSync(PATTERNS).filter((f) => f.endsWith('.json')).map((f) => f.replace(/\.json$/, '')).sort() : []);
 export const partTopics = () => (existsSync(PARTS) ? readdirSync(PARTS).filter((d) => existsSync(join(PARTS, d, 'map.json'))).sort() : []);
 
@@ -200,6 +248,7 @@ export function validateTopic(topic) {
       }
       if (x.words[0] > x.words[1] || x.words[1] > 5) bad(`v2 ${x.id}: Wortzahl ${x.words.join('–')} (Cambridge: 2–5)`);
       if (x.from.trim().toLowerCase() === x.frame.replace('___', x.answer).trim().toLowerCase()) bad(`v2 ${x.id}: Lösung = Ausgangssatz`);
+      for (const p of kwtQ0Problems(x)) bad(`v2 ${x.id}: ${p}`);
     }
     if (x.type === 'find') {
       finds++;

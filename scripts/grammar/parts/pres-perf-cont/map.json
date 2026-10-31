@@ -619,8 +619,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since Monday“ verlangt Perfect, nicht Present Continuous: have been waiting.",
-    "en": "“since Monday” needs the Perfect, not the Present Continuous: have been waiting."
+    "de": "„since Monday“ verlangt have been waiting (Dauer bis jetzt), nicht am waiting. Auch have waited geht.",
+    "en": "“since Monday” needs have been waiting (duration up to now), not am waiting. Have waited also works."
    },
    "wrong": [
     {

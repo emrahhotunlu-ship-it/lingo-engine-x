@@ -200,7 +200,7 @@
      }
     ]
    },
-   "lead": "If you need further details, simply reply to this email.",
+   "lead": "If further details are required, simply reply to this email.",
    "key": "SHOULD",
    "before": "",
    "after": "further details, simply reply to this email.",
@@ -210,7 +210,12 @@
       "Should"
      ],
      "b": [
-      "you need"
+      "you need",
+      "you require",
+      "you want",
+      "you need any",
+      "you require any",
+      "you want any"
      ]
     }
    ],
@@ -720,8 +725,11 @@
       "if": [
        "that"
       ],
-      "de": "Nach Surprising as folgt direkt das Subjekt, ohne that: Surprising as it sounds.",
-      "en": "After Surprising as the subject follows directly, without that: Surprising as it sounds."
+      "not": [
+       "as"
+      ],
+      "de": "Nach dem Adjektiv steht as, nicht that: Surprising as it sounds.",
+      "en": "After the adjective comes as, not that: Surprising as it sounds."
      },
      {
       "if": [
@@ -739,7 +747,7 @@
      }
     ]
    },
-   "lead": "Even though it sounds unexpected, the old tool is faster.",
+   "lead": "It may sound hard to believe, but the old tool is faster.",
    "key": "SURPRISING",
    "before": "",
    "after": "sounds, the old tool is faster.",
@@ -753,6 +761,24 @@
      "b": [
       "it"
      ]
+    },
+    {
+     "a": [
+      "Surprising as",
+      "As surprising as"
+     ],
+     "b": [
+      "that",
+      "this"
+     ]
+    },
+    {
+     "a": [
+      "However surprising"
+     ],
+     "b": [
+      "it"
+     ]
     }
    ],
    "tiles": [
@@ -761,7 +787,7 @@
    ],
    "extra": [
     "is",
-    "that",
+    "than",
     "so"
    ],
    "traps": []
@@ -1103,7 +1129,7 @@
      }
     ]
    },
-   "lead": "I hope they will never renew the contract.",
+   "lead": "I would be happy if they let the contract expire.",
    "key": "NOT",
    "before": "Will they renew the contract?",
    "after": ".",
@@ -1111,6 +1137,15 @@
     {
      "a": [
       "I hope"
+     ],
+     "b": [
+      "not"
+     ]
+    },
+    {
+     "a": [
+      "I really hope",
+      "I certainly hope"
      ],
      "b": [
       "not"
@@ -1263,14 +1298,15 @@
      }
     ]
    },
-   "lead": "The old printer is broken, so we bought a new printer.",
+   "lead": "The old printer is broken, so we had to buy a replacement.",
    "key": "ONE",
    "before": "The old printer is broken, so we bought",
    "after": ".",
    "keys": [
     {
      "a": [
-      "a new"
+      "a new",
+      "a brand new"
      ],
      "b": [
       "one"
@@ -1430,8 +1466,8 @@
    "pat": "el.so-not",
    "why": {
     "ok": {
-     "de": "I suppose so. So steht direkt hinter dem Verb und ersetzt den Gedanken.",
-     "en": "I suppose so. So follows the verb directly and replaces the thought."
+     "de": "I suppose so. So steht direkt hinter dem Verb (auch I think / guess / expect / believe so, I'd say so) und ersetzt den Gedanken.",
+     "en": "I suppose so. So follows the verb directly (also I think / guess / expect / believe so, I'd say so) and replaces the thought."
     },
     "wrong": [
      {
@@ -1444,7 +1480,7 @@
      }
     ]
    },
-   "lead": "Is Tom coming to the party? I suppose he is coming.",
+   "lead": "Is Tom coming to the party? Probably, yes.",
    "key": "SO",
    "before": "Is Tom coming to the party?",
    "after": ".",
@@ -1452,6 +1488,62 @@
     {
      "a": [
       "I suppose"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I think"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I guess"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I expect"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I believe"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I imagine"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I'd say"
+     ],
+     "b": [
+      "so"
+     ]
+    },
+    {
+     "a": [
+      "I would think"
      ],
      "b": [
       "so"
@@ -1601,16 +1693,16 @@
    "pat": "np.contact",
    "why": {
     "ok": {
-     "de": "the most useful training I have attended. Das Pronomen that darf fehlen.",
-     "en": "the most useful training I have attended. The pronoun that may be dropped."
+     "de": "the most useful training session I have attended. Das Pronomen that darf fehlen.",
+     "en": "the most useful training session I have attended. The pronoun that may be dropped."
     },
     "wrong": [
      {
       "if": [
        "what"
       ],
-      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach training steht that oder nichts.",
-      "en": "What does not start a relative clause after a noun. After training use that or nothing."
+      "de": "What leitet keinen Relativsatz nach einem Nomen ein. Nach dem Nomen steht that oder nichts.",
+      "en": "What does not start a relative clause after a noun. After the noun use that or nothing."
      },
      {
       "if": [
@@ -1628,9 +1720,9 @@
      }
     ]
    },
-   "lead": "That was the most useful training that I have ever joined.",
+   "lead": "No other training session so far has been as useful as that one.",
    "key": "ATTENDED",
-   "before": "That was the most useful training",
+   "before": "That was the most useful training session",
    "after": ".",
    "keys": [
     {
@@ -2132,20 +2224,29 @@
    "pat": "np.participle",
    "why": {
     "ok": {
-     "de": "everyone invited to the wedding. Das passive Partizip ersetzt who is invited.",
-     "en": "everyone invited to the wedding. The passive participle replaces who is invited."
+     "de": "everyone invited to the wedding: Das Partizip ersetzt who is invited. Der volle Relativsatz ist auch richtig.",
+     "en": "everyone invited to the wedding: the participle replaces who is invited. The full relative clause is also correct."
     },
     "wrong": [
      {
       "if": [
        "who"
       ],
-      "de": "Mit INVITED fällt who is weg: everyone invited to the wedding.",
-      "en": "With INVITED, who is is dropped: everyone invited to the wedding."
+      "not": [
+       "is",
+       "was",
+       "has",
+       "been"
+      ],
+      "de": "Das Partizip steht allein, ohne who: everyone invited to the wedding. Mit who bräuchte es is invited.",
+      "en": "The participle stands alone, without who: everyone invited to the wedding. With who it would need is invited."
      },
      {
       "if": [
        "is"
+      ],
+      "not": [
+       "who"
       ],
       "de": "Is ist zu viel. Das Partizip steht allein: everyone invited to.",
       "en": "Is is too much. The participle stands alone: everyone invited to."
@@ -2159,7 +2260,7 @@
      }
     ]
    },
-   "lead": "Everyone who received an invitation to the wedding must reply by Friday.",
+   "lead": "Everyone on the wedding guest list must reply by Friday.",
    "key": "INVITED",
    "before": "Everyone",
    "after": "must reply by Friday.",
@@ -2167,6 +2268,15 @@
     {
      "a": [
       "invited"
+     ],
+     "b": [
+      "to the wedding"
+     ]
+    },
+    {
+     "a": [
+      "who is invited",
+      "who was invited"
      ],
      "b": [
       "to the wedding"
@@ -2179,9 +2289,9 @@
     "wedding"
    ],
    "extra": [
-    "who",
-    "is",
-    "inviting"
+    "inviting",
+    "for",
+    "at"
    ],
    "traps": []
   },

@@ -444,7 +444,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "My manager told me: “I will send the report tomorrow.”",
+   "lead": "My manager told me: “I will email you the report tomorrow.”",
    "key": "WOULD",
    "before": "My manager told me she",
    "after": "the next day.",
@@ -458,7 +458,15 @@
       "send it",
       "be sending the report",
       "send me the report",
-      "send over the report"
+      "send over the report",
+      "email me the report",
+      "email the report",
+      "email it",
+      "send it to me",
+      "send the report to me",
+      "email it to me",
+      "email the report to me",
+      "be emailing me the report"
      ]
     }
    ],
@@ -1095,7 +1103,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "lead": "Assuming the client approves the quote today, we will start next week.",
+   "lead": "The client needs to approve the quote today for us to start next week.",
    "key": "IF",
    "before": "",
    "after": "the quote today, we will start next week.",
@@ -1109,7 +1117,10 @@
       "the client has approved",
       "the client accepts",
       "the client signs off on",
-      "the client should approve"
+      "the client should approve",
+      "the client agrees to",
+      "the client OKs",
+      "the client okays"
      ]
     }
    ],
@@ -1212,7 +1223,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "In your position, I would ask for a raise.",
+   "lead": "My advice to you is to ask for a raise.",
    "key": "WERE",
    "before": "If I",
    "after": ", I would ask for a raise.",
@@ -1244,8 +1255,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: were, nach if steht bei I formal were, nicht was. Teil 2: in your position, der Vergleich mit der anderen Person.",
-     "en": "Part 1: were, after if with I the formal form is were, not was. Part 2: in your position, the comparison with the other person."
+     "de": "Teil 1: were, nach if steht bei I formal were, nicht was. Teil 2: in your position = „an deiner Stelle“ (ebenso in your shoes / in your place).",
+     "en": "Part 1: were, after if with I the formal form is were, not was. Part 2: in your position = “if I were you” (also in your shoes / in your place)."
     },
     "wrong": [
      {
@@ -1257,6 +1268,14 @@
       ],
       "de": "At your place hieße „bei dir zu Hause“. Für die Lage heißt es in your place/position („an deiner Stelle“).",
       "en": "At your place means “at your home”. For the situation it is in your place/position."
+     },
+     {
+      "if": [
+       "were",
+       "you"
+      ],
+      "de": "Inhaltlich richtig, aber das sind 2 Wörter. Hier brauchst du 3–6: were in your position / in your shoes.",
+      "en": "Right meaning, but that is 2 words. You need 3–6 here: were in your position / in your shoes."
      }
     ]
    }
@@ -1339,7 +1358,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "We will agree to a discount if you order at least 500 units.",
+   "lead": "We will agree to a discount on one condition: a minimum order of 500 units.",
    "key": "PROVIDED",
    "before": "We will agree to a discount,",
    "after": "at least 500 units.",
@@ -1354,7 +1373,8 @@
       "that you buy",
       "you buy",
       "that you purchase",
-      "you purchase"
+      "you purchase",
+      "you place an order for"
      ]
     }
    ],
@@ -1531,7 +1551,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "lead": "Please sign the contract today, or we cannot start the project.",
+   "lead": "Please sign the contract today. Only then can we start the project.",
    "key": "OTHERWISE",
    "before": "Please sign the contract today.",
    "after": "start the project.",
@@ -1551,8 +1571,7 @@
       "we're unable to",
       "we are not able to",
       "we aren't able to",
-      "we can't",
-      "we couldn't"
+      "we can't"
      ]
     }
    ],
@@ -1685,7 +1704,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "lead": "If you have any questions, please call me.",
+   "lead": "Feel free to call me with any questions.",
    "key": "SHOULD",
    "before": "",
    "after": "any questions, please call me.",
@@ -1698,6 +1717,14 @@
       "have",
       "ever have",
       "happen to have"
+     ]
+    },
+    {
+     "a": [
+      "Should there"
+     ],
+     "b": [
+      "be"
      ]
     }
    ],
@@ -1715,8 +1742,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Teil 1: Should you, die Inversion ersetzt if (förmlich). Teil 2: have, nach should die Grundform.",
-     "en": "Part 1: Should you, inversion replaces if (formal). Part 2: have, the base form follows should."
+     "de": "Teil 1: Should you (oder Should there be), die Inversion ersetzt if (förmlich). Teil 2: have, nach should die Grundform.",
+     "en": "Part 1: Should you (or Should there be), inversion replaces if (formal). Part 2: have, the base form follows should."
     },
     "wrong": [
      {

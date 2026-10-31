@@ -11358,16 +11358,16 @@
   "pat": "pv.perfect",
   "why": {
    "ok": {
-    "de": "Nach „until“ steht das Present, und die Änderungen müssen vorher fertig sein: have been made (Passiv Present Perfect).",
-    "en": "After “until” the Present is used, and the changes must be done before: have been made (Passive Present Perfect)."
+    "de": "Nach until steht Present Perfect oder Present Simple, kein will: have been made (vorher fertig, Passiv). Auch are made geht.",
+    "en": "After until use the present perfect or present simple, not will: have been made (done before, passive). Are made also works."
    },
    "wrong": [
     {
      "if": [
       "will"
      ],
-     "de": "Nach until steht kein will: Present Perfect have been made.",
-     "en": "No will after until: use the present perfect have been made."
+     "de": "Nach until steht kein will: have been made.",
+     "en": "No will after until: use have been made."
     },
     {
      "if": [
@@ -11391,8 +11391,8 @@
      "if": [
       "make"
      ],
-     "de": "Nach been steht die 3. Form von make: made.",
-     "en": "After been use the past participle of make: made."
+     "de": "Hier braucht es das Passiv mit der 3. Form: have been made.",
+     "en": "You need the passive with the past participle: have been made."
     }
    ]
   }
@@ -15688,8 +15688,8 @@
   "pat": "pc.duration",
   "why": {
    "ok": {
-    "de": "„since Monday“ verlangt Perfect, nicht Present Continuous: have been waiting.",
-    "en": "“since Monday” needs the Perfect, not the Present Continuous: have been waiting."
+    "de": "„since Monday“ verlangt have been waiting (Dauer bis jetzt), nicht am waiting. Auch have waited geht.",
+    "en": "“since Monday” needs have been waiting (duration up to now), not am waiting. Have waited also works."
    },
    "wrong": [
     {
@@ -18356,8 +18356,8 @@
   "pat": "rs.backshift",
   "why": {
    "ok": {
-    "de": "„haven't received“ wird nach „said“ zu hadn't received. Der Versand lag vor dem Sagen, deshalb Past Perfect.",
-    "en": "“Haven't received” becomes hadn't received after “said”. The sending happened before the saying, hence Past Perfect."
+    "de": "Direkte Rede: „I haven't received your email.“ Nach „said“ rückt das zurück: hadn't received. Auch didn't receive geht.",
+    "en": "Direct speech: “I haven't received your email.” After “said” it moves back: hadn't received. Didn't receive also works."
    },
    "wrong": [
     {
@@ -18371,8 +18371,12 @@
      "if": [
       "didn't"
      ],
-     "de": "„didn't receive“ ist möglich, aber hier üben wir den Rückschritt: hadn't received.",
-     "en": "“didn't receive” is possible, but here we practice the backshift: hadn't received."
+     "not": [
+      "receive",
+      "get"
+     ],
+     "de": "Mit didn’t braucht es hier receive oder get: didn’t receive (Musterlösung: hadn’t received).",
+     "en": "With didn’t you need receive or get here: didn’t receive (model answer: hadn’t received)."
     },
     {
      "not": [

@@ -406,8 +406,8 @@
      "not": [
       "modern"
      ],
-     "de": "Das Schlüsselwort modern muss unverändert in der Lücke stehen.",
-     "en": "The key word modern must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MODERN muss unverändert in der Lücke stehen.",
+     "en": "The key word MODERN must stay unchanged in the gap."
     },
     {
      "pat": "cm.order",
@@ -441,8 +441,8 @@
      "not": [
       "new"
      ],
-     "de": "Das Schlüsselwort new muss unverändert in der Lücke stehen.",
-     "en": "The key word new must stay unchanged in the gap."
+     "de": "Das Schlüsselwort NEW muss unverändert in der Lücke stehen.",
+     "en": "The key word NEW must stay unchanged in the gap."
     },
     {
      "pat": "cm.order",

@@ -25,8 +25,8 @@
      "not": [
       "must"
      ],
-     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
-     "en": "The key word must must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MUST muss unverändert in der Lücke stehen.",
+     "en": "The key word MUST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -71,8 +71,8 @@
      "not": [
       "must"
      ],
-     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
-     "en": "The key word must must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MUST muss unverändert in der Lücke stehen.",
+     "en": "The key word MUST must stay unchanged in the gap."
     },
     {
      "if": [
@@ -202,8 +202,8 @@
      "not": [
       "possibly"
      ],
-     "de": "Das Schlüsselwort possibly muss unverändert in der Lücke stehen.",
-     "en": "The key word possibly must stay unchanged in the gap."
+     "de": "Das Schlüsselwort POSSIBLY muss unverändert in der Lücke stehen.",
+     "en": "The key word POSSIBLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -255,8 +255,8 @@
      "not": [
       "be"
      ],
-     "de": "Das Schlüsselwort be muss unverändert in der Lücke stehen.",
-     "en": "The key word be must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BE muss unverändert in der Lücke stehen.",
+     "en": "The key word BE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -401,8 +401,8 @@
      "not": [
       "might"
      ],
-     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
-     "en": "The key word might must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MIGHT muss unverändert in der Lücke stehen.",
+     "en": "The key word MIGHT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -451,8 +451,8 @@
      "not": [
       "might"
      ],
-     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
-     "en": "The key word might must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MIGHT muss unverändert in der Lücke stehen.",
+     "en": "The key word MIGHT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -582,8 +582,8 @@
      "not": [
       "must"
      ],
-     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
-     "en": "The key word must must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MUST muss unverändert in der Lücke stehen.",
+     "en": "The key word MUST must stay unchanged in the gap."
     },
     {
      "not": [
@@ -630,8 +630,8 @@
      "not": [
       "must"
      ],
-     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
-     "en": "The key word must must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MUST muss unverändert in der Lücke stehen.",
+     "en": "The key word MUST must stay unchanged in the gap."
     },
     {
      "not": [
@@ -663,7 +663,8 @@
   "answer": "must have crashed",
   "fixed": "The database must have crashed during the update – nothing was saved.",
   "accepted": [
-   "must've crashed"
+   "must've crashed",
+   "had to have crashed"
   ],
   "why": {
    "ok": {
@@ -772,8 +773,8 @@
      "not": [
       "possibly"
      ],
-     "de": "Das Schlüsselwort possibly muss unverändert in der Lücke stehen.",
-     "en": "The key word possibly must stay unchanged in the gap."
+     "de": "Das Schlüsselwort POSSIBLY muss unverändert in der Lücke stehen.",
+     "en": "The key word POSSIBLY must stay unchanged in the gap."
     },
     {
      "if": [
@@ -835,8 +836,8 @@
      "not": [
       "have"
      ],
-     "de": "Das Schlüsselwort have muss unverändert in der Lücke stehen.",
-     "en": "The key word have must stay unchanged in the gap."
+     "de": "Das Schlüsselwort HAVE muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVE must stay unchanged in the gap."
     },
     {
      "if": [
@@ -882,12 +883,14 @@
   "accepted": [
    "cannot have been",
    "couldn't have been",
-   "could not have been"
+   "could not have been",
+   "couldn't be",
+   "could not be"
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „last week“ meint früher, also can't have been sent, nicht can't be.",
-    "en": "The error: “last week” is earlier, so can't have been sent, not can't be."
+    "de": "Der Fehler: „last week“ meint früher, also can't have been sent. Auch richtig: „couldn't be sent“ – dann Tatsache, keine Vermutung.",
+    "en": "The error: “last week” is earlier, so can't have been sent. Also correct: “couldn't be sent” – a fact (it wasn't possible), not a guess."
    },
    "wrong": [
     {
@@ -980,8 +983,8 @@
      "not": [
       "might"
      ],
-     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
-     "en": "The key word might must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MIGHT muss unverändert in der Lücke stehen.",
+     "en": "The key word MIGHT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -1036,8 +1039,8 @@
      "not": [
       "might"
      ],
-     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
-     "en": "The key word might must stay unchanged in the gap."
+     "de": "Das Schlüsselwort MIGHT muss unverändert in der Lücke stehen.",
+     "en": "The key word MIGHT must stay unchanged in the gap."
     },
     {
      "not": [

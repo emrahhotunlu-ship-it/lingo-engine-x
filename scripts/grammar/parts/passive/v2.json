@@ -24,8 +24,8 @@
      "not": [
       "told"
      ],
-     "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
-     "en": "The key word told must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TOLD muss unverändert in der Lücke stehen.",
+     "en": "The key word TOLD must stay unchanged in the gap."
     },
     {
      "not": [
@@ -78,8 +78,8 @@
      "not": [
       "delivered"
      ],
-     "de": "Das Schlüsselwort delivered muss unverändert in der Lücke stehen.",
-     "en": "The key word delivered must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DELIVERED muss unverändert in der Lücke stehen.",
+     "en": "The key word DELIVERED must stay unchanged in the gap."
     },
     {
      "not": [
@@ -244,8 +244,8 @@
      "not": [
       "tested"
      ],
-     "de": "Das Schlüsselwort tested muss unverändert in der Lücke stehen.",
-     "en": "The key word tested must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TESTED muss unverändert in der Lücke stehen.",
+     "en": "The key word TESTED must stay unchanged in the gap."
     },
     {
      "not": [
@@ -299,8 +299,8 @@
      "not": [
       "reviewed"
      ],
-     "de": "Das Schlüsselwort reviewed muss unverändert in der Lücke stehen.",
-     "en": "The key word reviewed must stay unchanged in the gap."
+     "de": "Das Schlüsselwort REVIEWED muss unverändert in der Lücke stehen.",
+     "en": "The key word REVIEWED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -470,8 +470,8 @@
      "not": [
       "booked"
      ],
-     "de": "Das Schlüsselwort booked muss unverändert in der Lücke stehen.",
-     "en": "The key word booked must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BOOKED muss unverändert in der Lücke stehen.",
+     "en": "The key word BOOKED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -525,8 +525,8 @@
      "not": [
       "told"
      ],
-     "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
-     "en": "The key word told must stay unchanged in the gap."
+     "de": "Das Schlüsselwort TOLD muss unverändert in der Lücke stehen.",
+     "en": "The key word TOLD must stay unchanged in the gap."
     },
     {
      "if": [
@@ -679,8 +679,8 @@
      "not": [
       "sent"
      ],
-     "de": "Das Schlüsselwort sent muss unverändert in der Lücke stehen.",
-     "en": "The key word sent must stay unchanged in the gap."
+     "de": "Das Schlüsselwort SENT muss unverändert in der Lücke stehen.",
+     "en": "The key word SENT must stay unchanged in the gap."
     },
     {
      "if": [
@@ -743,8 +743,8 @@
      "not": [
       "booked"
      ],
-     "de": "Das Schlüsselwort booked muss unverändert in der Lücke stehen.",
-     "en": "The key word booked must stay unchanged in the gap."
+     "de": "Das Schlüsselwort BOOKED muss unverändert in der Lücke stehen.",
+     "en": "The key word BOOKED must stay unchanged in the gap."
     },
     {
      "if": [
@@ -790,7 +790,8 @@
   "answer": "will be sent",
   "fixed": "The agenda will be sent to all participants tomorrow morning.",
   "accepted": [
-   "'ll be sent"
+   "'ll be sent",
+   "is going to be sent"
   ],
   "why": {
    "ok": {
@@ -919,8 +920,8 @@
      "not": [
       "looked"
      ],
-     "de": "Das Schlüsselwort looked muss unverändert in der Lücke stehen.",
-     "en": "The key word looked must stay unchanged in the gap."
+     "de": "Das Schlüsselwort LOOKED muss unverändert in der Lücke stehen.",
+     "en": "The key word LOOKED must stay unchanged in the gap."
     },
     {
      "not": [
@@ -974,8 +975,8 @@
      "not": [
       "dealt"
      ],
-     "de": "Das Schlüsselwort dealt muss unverändert in der Lücke stehen.",
-     "en": "The key word dealt must stay unchanged in the gap."
+     "de": "Das Schlüsselwort DEALT muss unverändert in der Lücke stehen.",
+     "en": "The key word DEALT must stay unchanged in the gap."
     },
     {
      "not": [
