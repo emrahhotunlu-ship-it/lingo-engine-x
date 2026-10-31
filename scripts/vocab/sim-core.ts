@@ -461,7 +461,8 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
   const wordDays = rows.reduce((a, r) => a + r.distinct, 0);
   const multiDays = rows.reduce((a, r) => a + r.multi, 0);
   const st3 = qs.filter((q) => q.stage >= 3);
-  const st4 = qs.filter((q) => q.stage >= 4 && q.input !== 'choice' && q.input !== 'meaning' && !q.step);
+  // Abrufe EINES Lexems (Anwenden mit mehreren Lexemen ist eine eigene Aufgabe und zählt hier nicht, M27).
+  const st4 = qs.filter((q) => q.stage >= 4 && q.input !== 'choice' && q.input !== 'meaning' && q.input !== 'transfer' && !q.step);
   const reviewsFirst = qs.filter((q) => q.firstOfDay && !q.step && q.kind !== 'evening');
   const studyRows = rows.filter((r) => r.studied);
   const fc = adapter.forecast(end, 14);
