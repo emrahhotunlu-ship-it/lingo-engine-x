@@ -45,6 +45,8 @@ import {
 } from './schemas';
 // Lesen-Modul (docs/umbau/lesen-plan.md §4/§5): einzige Tür für das Schema der Sammlung `read`.
 import { READ_LAZY_COLLECTION, readSchema } from '../modules/read/registry';
+// Wörter-Modul (docs/umbau/vokabeln/plan.md §3.4–3.5): einzige Tür für die Schemas von `vlog` (Verlauf) und `vmod` (Tagesplan, Statistik).
+import { vlogSchema, vmodSchema } from '../modules/vocab/registry';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
 
@@ -112,6 +114,10 @@ export const COLLECTIONS = {
   act: actSchema,
   // Lesen (13.10.2026): `read/d-<Tag>` (Artikel), `read/m-<Monat>` (Index + Lesezustand), `read/p` (Einstellungen); ein tolerantes Schema für alle drei Arten.
   read: readSchema,
+  // Wörter-Modul V1: vollständiger Verlauf je Halbmonat (Sammlung vlog, Objekt-Map) und vmod (Tagesplan, Statistik, Sperre).
+  // Stehen hier, damit Sicherung, Export und Dokumentzählung sie kennen; nur das Modul schreibt sie.
+  vlog: vlogSchema,
+  vmod: vmodSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;

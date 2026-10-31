@@ -81,8 +81,8 @@ const KNOWN_CODES = new Set([
   'read_only',
 ]);
 
-/** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher. */
-const REPLACEABLE = new Set(['app/lookup', 'app/today']);
+/** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher (`vmod/day`: eingefrorener Wörter-Tagesplan, ableitbar). */
+const REPLACEABLE = new Set(['app/lookup', 'app/today', 'vmod/day']);
 /** Dokumente, die `compact` ersetzen darf (Plan §12.3). */
 const COMPACTABLE = new Set(['app/profile']);
 
