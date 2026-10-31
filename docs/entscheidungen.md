@@ -657,3 +657,6 @@ Emrah: „Bitte Fragen hier immer im Kontextfenster stellen.“ Entscheidungsfra
 ## 31.10.2026 – Knopf-Schrift „Gedämpft“ und Erledigt-Farbe (Emrah, Frage-Dialog)
 - Hauptknopf im Modus „Gedämpft“: **weiße Schrift**, Knopf dafür etwas dunkler (D1-Frage 1; Iris ca. 0,52–0,54). Umsetzung im nächsten Design-Paket (D5), Kontrast ≥ 4,5:1 prüfen.
 - Erledigt (Ring, Häkchen der Woche) bleibt **Indigo wie die Vorschau**; Smaragd bleibt „richtig beantwortet“ in den Übungen.
+
+## 31.10.2026 – Fragen nur im Hauptchat (Emrah)
+Unterchats stellen Emrah keine Fragen, auch nicht in der Schlussnachricht und nie per Frage-Dialog. Offene Entscheidungen gehen mit Empfehlung in den Bericht (`offene_fragen`); der Überchat stellt sie im Hauptchat im Frage-Dialog (Pop-up). Regel 4 in `docs/umbau/unterchats.md`, außerdem in jedem Startauftrag eines Unterchats.
