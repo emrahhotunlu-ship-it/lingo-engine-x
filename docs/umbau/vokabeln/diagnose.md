@@ -172,11 +172,11 @@ Quellen: `docs/umbau/wort-fest-plan.md` (Wort-Lernen 2, live seit 21.10.2026), `
 | P25 | „Als richtig werten“ (Override) bucht Note 3 | ja (`ExerciseView.tsx:650, 731`) | **ja**: Emrahs Antwort 2 → keine Note, Wiederkehr in neuem Satz. |
 | P26 | Verlauf 12 Einträge (`HIST_MAX`) | ja | **ja**: Emrah 7 verlangt den vollständigen Verlauf. → Monats-Verlauf `vlog/` (Plan §3.4). |
 | P27 | Transfer-Aufgabe am Ende | nein | neu (V4) |
-| P28 | Tageswechsel Ortszeit des Geräts | ja (`date.ts:12`) | **ja**, klein: Emrah sagt Europe/Berlin. → Der neue Planer rechnet den Lerntag mit `Intl` in Europe/Berlin. |
+| P28 | Tageswechsel Ortszeit des Geräts | ja (`date.ts:12`) | **ja**, klein: Emrah sagt Europe/Berlin. → V1 stellt `date.ts` **zentral** auf Europe/Berlin um, eine einzige Datumsquelle für Planer, Serie und Log (Plan §4.4). |
 
 ## 6. Was das für den Umbau heißt (Brücke zum Plan)
 1. **Ein Planer, ein Tor:** Jeder Weg, der ein Wort zeigt, fragt den Planer. Nur der Planer entscheidet, ob eine Antwort **Planwirkung** hat. Das schließt die vier Umgehungen aus §2.7.
-2. **Zwei Spuren je Lexem** statt einer Spur je Karte. Doppelte Karten desselben Worts werden zu einem Lexem zusammengeführt.
+2. **Zwei Spuren je Lexem** statt einer Spur je Karte. Doppelte Karten desselben Worts werden nach Bestätigung zu einem Lexem zusammengeführt (strenge Regeln, Plan §9.2).
 3. **Auswahl und Selbsturteil ohne FSRS-Wirkung**, außer im Anki-Modus auf der Spur Verstehen (F3).
 4. **Lastausgleich in Minuten** zusätzlich zu Fuzz und Deckel. Die gemessene 14-Tage-Vorschau wird gleichmäßig.
 5. **Vollständiger Verlauf** in Monatsdokumenten. Die Umrechnung nutzt `hist` und `log/<Tag>`.

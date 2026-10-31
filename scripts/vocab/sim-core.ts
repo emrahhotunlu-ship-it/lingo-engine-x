@@ -4,11 +4,12 @@
 // `adapter-current.ts` ruft die heutige Logik der App auf (importiert), Paket V1 schreibt `adapter-v1.ts` für den neuen Planer.
 // So läuft dieselbe Messung vorher und nachher (Emrahs Abnahmekriterium 1).
 
-export type InputKind = 'choice' | 'typed' | 'hint' | 'sentence';
+/** `meaning` = Bedeutung frei nennen (rezeptiv), `transfer` = Schreibaufgabe mit mehreren Lexemen (2–4 Min.). */
+export type InputKind = 'choice' | 'typed' | 'hint' | 'sentence' | 'meaning' | 'transfer';
 export type Verdict = 'correct' | 'near' | 'wrong';
 
 /** Eine Aufgabe, die der Planer stellt. `step` = Lernschritt (Tag 0 oder Wiedervorlage nach Fehler am selben Tag). */
-export type Task = { lexeme: string; ex: string; input: InputKind; stage: number; step: boolean; intro?: boolean };
+export type Task = { lexeme: string; ex: string; input: InputKind; stage: number; step: boolean; intro?: boolean; sentence?: string };
 export type Outcome = { verdict: Verdict; submitMs: number; firstKeyMs: number; chars: number };
 
 export type SimWord = { id: string; word: string; pos: 'noun' | 'verb' | 'adjective'; de: string; def: string; ex: string; src: string; added: string; order: number };
@@ -65,11 +66,20 @@ export function makeWords(n: number, seed: number): SimWord[] {
 }
 
 // ------------------------------------------------------------------ Erfundener Lerner
-// Wahres Gedächtnis je Lexem, unabhängig vom Planer: Potenzkurve R = (1 + t / (9·S))^-1 (bei t = S ist R = 0,9).
-// Freier Abruf stärkt mehr als Auswahl (Testeffekt), Abruf bei hohem R stärkt wenig (Abstandseffekt). Startwerte sind Annahmen.
-type Mem = { S: number; d: number; t: number; seen: boolean };
+// Wahres Gedächtnis je Lexem, unabhängig vom Planer, mit ZWEI Spuren (Prüfung learning-scientist V0, Befund 11):
+//  - rezeptiv (Bedeutung erkennen/nennen) und produktiv (Form selbst bilden); die produktive startet niedriger.
+//  - Potenzkurve R = (1 + t / (9·S))^-1 (bei t = S ist R = 0,9).
+//  - Freier Abruf der Form stärkt beide Spuren, Bedeutungsabruf und Auswahl nur die rezeptive (Testeffekt; rezeptiv ≠ produktiv).
+//  - Zuwachs steigt mit sinkendem R bis R = 0,7 (erwünschte Erschwernis), über 0,9 gedämpft (Abruf, der zu leicht war, bringt wenig).
+//  - Satzbindung: Im Ankersatz (erster gesehener Satz) gelingt der Abruf leichter, in neuen Sätzen schwerer; die Bindung sinkt mit der
+//    Zahl verschiedener Sätze. Wirkt nur, wenn der Adapter den Satz meldet (`Task.sentence`); sonst neutral.
+//  - Zeit je Form: Auswahl 3–7 s, Tippen 6–12 s, Bedeutung 6–10 s, Satz 45–90 s, Transfer 120–240 s.
+// Alle Zahlen sind Annahmen (keine Messwerte); sie gelten für heutigen und neuen Planer gleich.
+type Trace = { S: number; t: number };
+type Mem = { r: Trace; p: Trace; d: number; seen: boolean; anchor: string | null; sentences: Set<string> };
 const DAY = 86_400_000;
-const recallP = (m: Mem, now: number): number => (m.seen ? 1 / (1 + (Math.max(0, now - m.t) / DAY) / (9 * m.S)) : 0);
+const recall = (tr: Trace, now: number): number => 1 / (1 + Math.max(0, now - tr.t) / DAY / (9 * tr.S));
+const BIND = 0.12;
 
 export class Learner {
   private mem = new Map<string, Mem>();
@@ -77,7 +87,7 @@ export class Learner {
   private get(id: string): Mem {
     let m = this.mem.get(id);
     if (!m) {
-      m = { S: 0.3, d: 0.15 + 0.7 * this.r(), t: 0, seen: false };
+      m = { r: { S: 0.05, t: 0 }, p: { S: 0.03, t: 0 }, d: 0.15 + 0.7 * this.r(), seen: false, anchor: null, sentences: new Set() };
       this.mem.set(id, m);
     }
     return m;
@@ -85,30 +95,70 @@ export class Learner {
   intro(id: string, now: number): void {
     const m = this.get(id);
     m.seen = true;
-    m.S = Math.max(m.S, 0.25 * (1.2 - 0.5 * m.d));
-    m.t = now;
+    m.r = { S: Math.max(m.r.S, 0.3 * (1.2 - 0.5 * m.d)), t: now };
+    m.p = { S: Math.max(m.p.S, 0.12 * (1.2 - 0.5 * m.d)), t: now };
+  }
+  private grow(tr: Trace, R: number, w: number, d: number, now: number, floor: number): Trace {
+    const f = Math.min(1, (1 - R) / 0.3) * (R > 0.9 ? 0.5 : 1);
+    return { S: Math.max(tr.S * (1 + w * 2.6 * (1 - 0.5 * d) * f + 0.03), floor), t: now };
   }
   attempt(task: Task, now: number): Outcome {
     const m = this.get(task.lexeme);
     if (!m.seen) this.intro(task.lexeme, now);
-    const R = recallP(m, now);
-    const p = task.input === 'choice' ? R + (1 - R) * 0.4 : task.input === 'hint' ? Math.min(1, R * 0.97 + 0.12) : task.input === 'sentence' ? R * 0.9 : R * 0.97;
+    const receptive = task.input === 'choice' || task.input === 'meaning';
+    const Rr = recall(m.r, now);
+    const Rp = recall(m.p, now);
+    let R = receptive ? Rr : Rp;
+    if (task.sentence) {
+      if (!m.anchor) m.anchor = task.sentence;
+      const bind = BIND / Math.max(1, m.sentences.size);
+      R = Math.max(0, Math.min(1, R + (task.sentence === m.anchor ? bind : -bind)));
+      m.sentences.add(task.sentence);
+    }
+    const p =
+      task.input === 'choice' ? R + (1 - R) * 0.4 : task.input === 'hint' ? Math.min(1, R * 0.97 + 0.12) : task.input === 'sentence' || task.input === 'transfer' ? R * 0.9 : R * 0.97;
     const ok = this.r() < p;
     const near = ok && (task.input === 'typed' || task.input === 'hint') && this.r() < 0.05;
-    // Gedächtnis ändert sich durch den Versuch (und die gezeigte Lösung bei einem Fehler).
-    const gain = 2.4 * (1 - 0.5 * m.d) * Math.min(1, (1 - R) / 0.1);
-    const w = task.input === 'choice' ? 0.35 : task.input === 'hint' ? 0.7 : 1;
-    if (ok) m.S = Math.max(m.S * (1 + w * gain + 0.05), w >= 1 ? 0.8 * (1.2 - 0.5 * m.d) : m.S);
-    else m.S = Math.max(0.15, m.S * 0.4);
-    m.t = now;
+    const base = 0.8 * (1.2 - 0.5 * m.d);
+    if (ok) {
+      if (receptive) m.r = this.grow(m.r, Rr, task.input === 'choice' ? 0.35 : 1, m.d, now, task.input === 'choice' ? m.r.S : base);
+      else {
+        const w = task.input === 'hint' ? 0.7 : 1;
+        m.p = this.grow(m.p, Rp, w, m.d, now, w >= 1 ? base * 0.8 : m.p.S);
+        m.r = this.grow(m.r, Rr, 0.6 * w, m.d, now, m.r.S);
+      }
+    } else {
+      // Fehler: die gezeigte Lösung frischt auf, die Stabilität sinkt.
+      if (receptive) m.r = { S: Math.max(0.12, m.r.S * 0.4), t: now };
+      else {
+        m.p = { S: Math.max(0.08, m.p.S * 0.4), t: now };
+        m.r = { S: Math.max(0.12, m.r.S * 0.8), t: now };
+      }
+    }
     const fk = 1500 + 4000 * (1 - R) + 1500 * this.r();
     const chars = 9;
-    const submitMs = task.input === 'choice' ? 2500 + 3000 * (1 - R) + 1500 * this.r() : fk + 250 * chars + 2000 * this.r();
+    const submitMs =
+      task.input === 'choice'
+        ? 2500 + 3000 * (1 - R) + 1500 * this.r()
+        : task.input === 'meaning'
+          ? 4000 + 4000 * (1 - R) + 2000 * this.r()
+          : task.input === 'sentence'
+            ? 45_000 + 45_000 * this.r()
+            : task.input === 'transfer'
+              ? 120_000 + 120_000 * this.r()
+              : fk + 250 * chars + 2000 * this.r();
     return { verdict: ok ? (near ? 'near' : 'correct') : 'wrong', submitMs: Math.round(submitMs), firstKeyMs: Math.round(fk), chars };
   }
-  /** Wahre Abrufwahrscheinlichkeit (für die Behaltensquote der Simulation). */
+  /** Wahre Abrufwahrscheinlichkeit der produktiven Spur (für Behaltensquote und Ertrag). */
   truth(id: string, now: number): number {
-    return recallP(this.get(id), now);
+    const m = this.get(id);
+    return m.seen ? recall(m.p, now) : 0;
+  }
+  /** Lexeme mit wahrer produktiver Abrufwahrscheinlichkeit ≥ `min` zum Zeitpunkt `at` (ohne weiteres Üben). */
+  countAbove(at: number, min: number): number {
+    let n = 0;
+    for (const m of this.mem.values()) if (m.seen && recall(m.p, at) >= min) n++;
+    return n;
   }
 }
 
@@ -121,7 +171,7 @@ export const SCENARIOS: readonly Scenario[] = [
 ];
 
 type Q = { day: number; lexeme: string; input: InputKind; stage: number; step: boolean; ok: boolean; firstOfDay: boolean; dueTruth: number };
-export type DayRow = { day: number; studied: boolean; queries: number; distinct: number; multi: number; multiNoStep: number; choice: number; typed: number; overdue: number; minutes: number };
+export type DayRow = { day: number; studied: boolean; queries: number; distinct: number; multi: number; multiNoStep: number; choice: number; typed: number; overdue: number; minutes: number; dutyMinutes: number };
 export type ScenarioResult = {
   scenario: Scenario;
   rows: DayRow[];
@@ -131,6 +181,10 @@ export type ScenarioResult = {
     cvAll: number;
     cvStudy: number;
     cvMinutesStudy: number;
+    cvDutyStudy: number;
+    yield60: number;
+    yield90: number;
+    yieldPerHour: number;
     forecastPeak: number;
     wordDays: number;
     multiDays: number;
@@ -178,11 +232,13 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
     const studied = !(sc.pause && d >= sc.pause[0] && d <= sc.pause[1]);
     let now = dayStart;
     let ms = 0;
+    let dutyMs = 0;
     const seenToday = new Set<string>();
     const errToday = new Set<string>();
     const dayQs: Q[] = [];
     const run = (kind: 'pflicht' | 'extra') => {
       const s = adapter.session(kind, now);
+      const before = ms;
       for (let guard = 0; guard < 400; guard++) {
         const t = s.next(now);
         if (!t) break;
@@ -197,8 +253,9 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
         if (!introducedDay.has(t.lexeme)) introducedDay.set(t.lexeme, d);
         const truth = learner.truth(t.lexeme, now);
         const o = learner.attempt(t, now);
-        // Lernschritt laut Emrahs Auftrag: am Einführungstag oder nach einem Fehler am selben Tag (Neulernen).
-        const step = t.step || introducedDay.get(t.lexeme) === d || errToday.has(t.lexeme);
+        // Lernschritt laut Emrahs Auftrag: am Einführungstag oder nach einem Fehler am selben Tag (Neulernen). Allein der Kern entscheidet;
+        // das Flag des Adapters (`t.step`) zählt nicht, sonst könnte ein Planer seine Mehrfachabfragen selbst zu Lernschritten erklären.
+        const step = introducedDay.get(t.lexeme) === d || errToday.has(t.lexeme);
         const q: Q = { day: d, lexeme: t.lexeme, input: t.input, stage: t.stage, step, ok: o.verdict !== 'wrong', firstOfDay: !seenToday.has(t.lexeme), dueTruth: truth };
         seenToday.add(t.lexeme);
         if (o.verdict === 'wrong') errToday.add(t.lexeme);
@@ -208,6 +265,7 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
         now += dur;
         ms += dur;
       }
+      if (kind === 'pflicht') dutyMs += ms - before;
     };
     if (studied) {
       run('pflicht');
@@ -231,6 +289,7 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
       typed: dayQs.filter((q) => q.input !== 'choice').length,
       overdue: adapter.overdue(dayStart + 20 * 3_600_000),
       minutes: Math.round(ms / 60_000),
+      dutyMinutes: Math.round(dutyMs / 6_000) / 10,
     });
   }
   // Lücken zwischen zwei Abfragetagen je Lexem
@@ -272,6 +331,10 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
       cvAll: Math.round(cv(rows.map((r) => r.queries)) * 100) / 100,
       cvStudy: Math.round(cv(studyRows.map((r) => r.queries)) * 100) / 100,
       cvMinutesStudy: Math.round(cv(studyRows.map((r) => r.minutes)) * 100) / 100,
+      cvDutyStudy: Math.round(cv(studyRows.map((r) => r.dutyMinutes)) * 100) / 100,
+      yield60: learner.countAbove(end, 0.9),
+      yield90: learner.countAbove(end + 30 * DAY, 0.7),
+      yieldPerHour: Math.round((learner.countAbove(end, 0.9) / Math.max(1, rows.reduce((a, r) => a + r.minutes, 0) / 60)) * 10) / 10,
       forecastPeak: peak,
       wordDays,
       multiDays,
@@ -294,14 +357,19 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
   };
 }
 
-export type RunResult = { adapter: string; days: number; seed: number; results: ScenarioResult[] };
+export type RunResult = { adapter: string; days: number; seed: number; results: ScenarioResult[]; seeds: number[]; spread: Record<string, ScenarioResult['summary'][]> };
 
-export function runAll(adapter: PlannerAdapter, o: { days: number; seed: number }): RunResult {
-  return { adapter: adapter.name, days: o.days, seed: o.seed, results: SCENARIOS.map((sc) => runScenario(adapter, sc, o.days, o.seed)) };
+export function runAll(adapter: PlannerAdapter, o: { days: number; seed: number; seeds?: number }): RunResult {
+  // Abgenommen wird der SCHLECHTESTE Wert über 5 Startwerte (Prüfung learning-scientist V0, Befund 9); die Haupttabelle zeigt den ersten.
+  const seeds = Array.from({ length: Math.max(1, o.seeds ?? 5) }, (_, i) => o.seed + i);
+  const results = SCENARIOS.map((sc) => runScenario(adapter, sc, o.days, o.seed));
+  const spread: Record<string, ScenarioResult['summary'][]> = {};
+  for (const sc of SCENARIOS) spread[sc.key] = [results.find((r) => r.scenario.key === sc.key)!.summary, ...seeds.slice(1).map((sd) => runScenario(adapter, sc, o.days, sd).summary)];
+  return { adapter: adapter.name, days: o.days, seed: o.seed, results, seeds, spread };
 }
 
 export function toJson(r: RunResult) {
-  return { adapter: r.adapter, days: r.days, seed: r.seed, results: r.results.map((x) => ({ scenario: x.scenario, summary: x.summary, rows: x.rows })) };
+  return { adapter: r.adapter, days: r.days, seed: r.seed, seeds: r.seeds, spread: r.spread, results: r.results.map((x) => ({ scenario: x.scenario, summary: x.summary, rows: x.rows })) };
 }
 
 export function toMarkdown(r: RunResult): string {
@@ -315,6 +383,7 @@ export function toMarkdown(r: RunResult): string {
   row('Variationskoeffizient Tageslast, alle Tage', (s) => s.cvAll);
   row('Variationskoeffizient Tageslast, nur Lerntage', (s) => s.cvStudy);
   row('Variationskoeffizient Tagesminuten, nur Lerntage', (s) => s.cvMinutesStudy);
+  row('Variationskoeffizient **Pflicht**minuten, nur Lerntage', (s) => s.cvDutyStudy);
   row('Wort-Tage (Wort mit ≥ 1 Abfrage an einem Tag)', (s) => s.wordDays);
   row('davon Wort mehrfach am selben Tag', (s) => `${s.multiDays} (${s.multiShare} %)`);
   row('davon mehrfach **außerhalb** der Lernschritte', (s) => s.multiNoStep);
@@ -330,10 +399,28 @@ export function toMarkdown(r: RunResult): string {
   row('fällig in den nächsten 14 Tagen', (s) => s.forecast14.join(' · '));
   row('14-Tage-Vorschau: größter Tag ÷ Mittel', (s) => s.forecastPeak);
   row('simulierte Trefferquote (erste Abfrage des Tages, kein Lernschritt)', (s) => `${s.retention} %`);
+  row('Ertrag: Lexeme mit wahrem R(produktiv) ≥ 0,9 an Tag 60', (s) => s.yield60);
+  row('Haltbarkeit: davon R ≥ 0,7 nach 30 Tagen ohne Üben', (s) => s.yield90);
+  row('Ertrag je Lernstunde', (s) => s.yieldPerHour);
+  out.push('', `**Über ${r.seeds.length} Startwerte** (${r.seeds.join(', ')}): kleinster – größter Wert`, '');
+  out.push('| Kennzahl | ' + r.results.map((x) => x.scenario.key).join(' | ') + ' |');
+  out.push('|---|' + r.results.map(() => '---').join('|') + '|');
+  const span = (label: string, f: (s: ScenarioResult['summary']) => number) =>
+    out.push(`| ${label} | ` + r.results.map((x) => { const v = (r.spread[x.scenario.key] ?? []).map(f); return `${Math.min(...v)} – ${Math.max(...v)}`; }).join(' | ') + ' |');
+  span('mehrfach außerhalb der Lernschritte', (s) => s.multiNoStep);
+  span('Variationskoeffizient Pflichtminuten', (s) => s.cvDutyStudy);
+  span('Variationskoeffizient Tagesminuten', (s) => s.cvMinutesStudy);
+  span('14-Tage-Vorschau größter Tag ÷ Mittel', (s) => s.forecastPeak);
+  span('überfällig am Ende', (s) => s.overdueEnd);
+  span('Anteil Auswahl (%)', (s) => s.choiceShare);
+  span('Trefferquote erste Abfrage (%)', (s) => s.retention);
+  span('Ertrag Tag 60', (s) => s.yield60);
+  span('Haltbarkeit +30 Tage', (s) => s.yield90);
+  span('Ertrag je Lernstunde', (s) => s.yieldPerHour);
   out.push('', '**Je Tag** (Abfragen · davon mehrfach · Auswahl · überfällig · Minuten):', '');
   for (const x of r.results) {
-    out.push(`<details><summary>${x.scenario.key}: ${x.scenario.name}</summary>`, '', '| Tag | Abfragen | Wörter | mehrfach | mehrfach ohne Lernschritt | Auswahl | getippt | überfällig | Min. |', '|---|---|---|---|---|---|---|---|---|');
-    for (const d of x.rows) out.push(`| ${d.day}${d.studied ? '' : ' (Pause)'} | ${d.queries} | ${d.distinct} | ${d.multi} | ${d.multiNoStep} | ${d.choice} | ${d.typed} | ${d.overdue} | ${d.minutes} |`);
+    out.push(`<details><summary>${x.scenario.key}: ${x.scenario.name}</summary>`, '', '| Tag | Abfragen | Wörter | mehrfach | mehrfach ohne Lernschritt | Auswahl | getippt | überfällig | Min. | Pflicht-Min. |', '|---|---|---|---|---|---|---|---|---|---|');
+    for (const d of x.rows) out.push(`| ${d.day}${d.studied ? '' : ' (Pause)'} | ${d.queries} | ${d.distinct} | ${d.multi} | ${d.multiNoStep} | ${d.choice} | ${d.typed} | ${d.overdue} | ${d.minutes} | ${d.dutyMinutes} |`);
     out.push('', '</details>', '');
   }
   return out.join('\n');

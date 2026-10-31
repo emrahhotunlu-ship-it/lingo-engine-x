@@ -8,7 +8,7 @@
 //   node scripts/vocab/simulate.mjs                 # heutiger Planer, alle Szenarien, Tabelle auf stdout
 //   node scripts/vocab/simulate.mjs --write         # dazu docs/umbau/vokabeln/ausgangsmessung.md und .json neu schreiben
 //   node scripts/vocab/simulate.mjs --adapter v1    # später: neuer Planer (Datei adapter-v1.ts)
-//   node scripts/vocab/simulate.mjs --days 60 --seed 20261031
+//   node scripts/vocab/simulate.mjs --days 60 --seed 20261031 --seeds 5   # Abnahme: schlechtester Wert über 5 Startwerte
 //
 // Der simulierte Lerner ist erfunden und deterministisch (fester Startwert). Keine echten Daten.
 
@@ -30,6 +30,7 @@ const write = args.includes('--write');
 const adapterName = opt('adapter', 'current');
 const days = Number(opt('days', '60'));
 const seed = Number(opt('seed', '20261031'));
+const seeds = Number(opt('seeds', '5'));
 
 const { createServer } = await import(resolve(root, 'node_modules/vite/dist/node/index.js'));
 const server = await createServer({
@@ -45,7 +46,7 @@ let code = 0;
 try {
   const core = await server.ssrLoadModule('/scripts/vocab/sim-core.ts');
   const adapter = await server.ssrLoadModule(`/scripts/vocab/adapter-${adapterName}.ts`);
-  const result = core.runAll(adapter.default, { days, seed });
+  const result = core.runAll(adapter.default, { days, seed, seeds });
   const md = core.toMarkdown(result);
   process.stdout.write(md + '\n');
   const failed = core.selfCheck(result);
