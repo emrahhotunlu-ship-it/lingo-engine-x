@@ -226,6 +226,7 @@ export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; freeGo
       xf = 0;
     }
   }
-  const ew = x.evadeHit && !fq.ew.includes(x.evadeHit) ? [...fq.ew, x.evadeHit].slice(-8) : fq.ew;
+  const hit = x.evadeHit ? x.evadeHit.slice(0, 60) : null; // Schema: ≤ 60 Zeichen (data-guard V2)
+  const ew = hit && !fq.ew.includes(hit) ? [...fq.ew, hit].slice(-8) : fq.ew;
   return { l: x.form, c, h, nb, ak, ew, ...(xf ? { xf } : {}) };
 }
