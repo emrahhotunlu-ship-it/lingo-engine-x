@@ -45,9 +45,11 @@ for (const vp of [
       const total = Number(await page.getByTestId('vo-total').getAttribute('data-n'));
       expect(total).toBeGreaterThan(0);
       expect(Number(await page.getByTestId('vo-onway').getAttribute('data-n'))).toBeGreaterThan(0);
-      const parts = await Promise.all(['vo-produce', 'vo-onway', 'vo-recognize'].map(async (id) => Number(await page.getByTestId(id).getAttribute('data-n'))));
-      const fresh = (await page.getByTestId('vo-fresh').count()) ? Number(await page.getByTestId('vo-fresh').getAttribute('data-n')) : 0;
-      expect(parts.reduce((a, b) => a + b, 0) + fresh).toBe(total);
+      // Alle Zahlen aus demselben Bild lesen: Die Wörter laden nach und nach, einzeln gelesen könnten Summe und Gesamtzahl aus zwei Ständen stammen.
+      await expect.poll(() => page.evaluate(() => {
+        const n = (id: string) => Number(document.querySelector(`[data-testid="${id}"]`)?.getAttribute('data-n') ?? 0);
+        return n('vo-produce') + n('vo-onway') + n('vo-recognize') + n('vo-fresh') - n('vo-total');
+      })).toBe(0);
       await expect(page.getByTestId('vo-day')).toHaveCount(14);
       await expect(page.getByTestId('vo-outlook-note')).not.toBeEmpty();
       await expect(page.getByTestId('vo-ret')).toHaveAttribute('data-status', /^(few|ok)$/);
