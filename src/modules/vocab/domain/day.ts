@@ -1,6 +1,7 @@
 import { addDays, dayKey, dayStartOf, daysBetween } from '../shared';
 import { pickDay } from './balance';
 import { type Catalog, danger, dueOn, formFor as formForLex, formMs, isNewLex, loadByDay } from './catalog';
+import { nextSrc, type Src, weightsOf } from './sources';
 import type { Form, FormStats, Lex, TrackKey, VocabCfg } from './types';
 
 // Wörter-Modul V1: Tagesplan, eingefroren je Lerntag (`vmod/day`, Kap. 15; plan.md §4.4; M12, M13, M21).
@@ -81,15 +82,32 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   const fresh: string[] = [];
   const blocked = new Set<string>();
   for (const it of cat.items()) if (it.lex.intro === day) for (const s of cat.siblingsOf(it.path)) blocked.add(s);
-  const cands = cat
+  // Großpaket A S7: neue Kandidaten je Quelle (eigene Funde, Wortpartner, Beruf, Häufigkeitsliste), gleichmäßig nach Gewicht gemischt;
+  // innerhalb einer Quelle nach `order`. Ist eine Quelle erschöpft (oder nur noch Geschwister), füllen die übrigen.
+  const bySrc = new Map<Src, string[]>();
+  for (const it of cat
     .items()
     .filter((it) => isNewLex(it.lex))
-    .sort((a, b) => a.order - b.order || a.path.localeCompare(b.path));
-  for (const it of cands) {
-    if (fresh.length >= nFresh) break;
-    if (blocked.has(it.path)) continue;
-    fresh.push(it.path);
-    for (const s of cat.siblingsOf(it.path)) blocked.add(s);
+    .sort((a, b) => a.order - b.order || a.path.localeCompare(b.path))) {
+    const s = it.src ?? 'own';
+    (bySrc.get(s) ?? bySrc.set(s, []).get(s)!).push(it.path);
+  }
+  const w = weightsOf(cfg.w);
+  const bySrcN: Record<Src, number> = { col: 0, job: 0, own: 0, band: 0 };
+  const open = new Set<Src>([...bySrc.keys()]);
+  while (fresh.length < nFresh) {
+    const s = nextSrc(bySrcN, open, w);
+    if (!s) break;
+    const list = bySrc.get(s)!;
+    let p: string | undefined;
+    while ((p = list.shift()) !== undefined && blocked.has(p));
+    if (p === undefined) {
+      open.delete(s);
+      continue;
+    }
+    fresh.push(p);
+    bySrcN[s]++;
+    for (const x of cat.siblingsOf(p)) blocked.add(x);
   }
   // Vorgezogen gleitend (M15): Bleibt das Budget unter der Zielzeit, kommen Lexeme dazu, die in den nächsten AHEAD_DAYS Lerntagen fällig
   // werden (früheste zuerst). FSRS rechnet die frühere Abfrage mit kleinerem Zuwachs (Abrufwahrscheinlichkeit), der Folgetag wird leichter.

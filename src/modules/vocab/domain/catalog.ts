@@ -1,3 +1,4 @@
+import type { Src } from './sources';
 import { addDays, dayKey, dayStartOf, daysBetween } from '../shared';
 import { type Avail, pickForm } from './forms';
 import { retr } from './tracks';
@@ -16,6 +17,8 @@ export type Item = {
   av?: Avail;
   /** V2: Paar-Art aus Lehrer-Charge 1 (`pair` echtes englisches Paar → Paar-Regel; `ff` falscher Freund → Kontrastkarte statt Pause). */
   trap?: 'pair' | 'ff' | null;
+  /** Großpaket A S7: Quelle eines neuen Lexems (domain/sources.ts); fehlt = eigener Fund. */
+  src?: Src;
 };
 
 /** Grundformen, wenn nichts über den Inhalt bekannt ist (jedes Lexem hat Ursprungssatz und deutschen Chunk). */

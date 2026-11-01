@@ -9,7 +9,10 @@ import { openWhys, answerOfUse, type UseModel, modelOfUse } from '../domain/use'
 import { type FirstVerdict, milder } from '../prompts/common';
 import { type ExtraFix, isEvade, type WordJudgement } from '../prompts/judge';
 import type { Band } from '../domain/band';
-import { Catalog } from '../domain/catalog';
+import { Catalog, type Item } from '../domain/catalog';
+import { srcOf, weightsOf } from '../domain/sources';
+import type { SourceData } from '../data/refill';
+import { VMOD_PLACE_PATH } from '../registry';
 import type { Check, CheckDict } from '../domain/check';
 import { buildDayPlan, type DayPlan } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
@@ -138,6 +141,8 @@ export type LearnEnv = {
   readUse?: () => Promise<Doc | null>;
   /** Ein Dokument frisch lesen (Verlauf `vmod/ix`, `vlog/…` für „Junge Wörter früher“); fehlt = kein Nachsteuern. */
   read?: ReadDoc;
+  /** Quellen neuer Wörter (S7; die App lädt sie per dynamischem Import). Fehlt = kein Nachfüllen. */
+  loadSources?: () => Promise<SourceData>;
 };
 
 export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, Doc]>; profile: Doc | null; schema: Doc | null; paths?: string[] };
@@ -315,13 +320,22 @@ export class LearnRun {
       this.docs.set(path, doc);
       // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
       const tc = teachOf(headOf(path, doc));
-      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null, av: { de: true, ai, anki: !!cfg.anki } });
+      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null, av: { de: true, ai, anki: !!cfg.anki }, src: srcOf(doc.src) });
+    }
+    // Großpaket A S7: Vor dem ersten Pflicht-Plan des Lerntags fehlende neue Wörter aus den Quellen anlegen (Wortpartner, Beruf, Häufigkeitsliste).
+    const dayNow = this.env.now();
+    const cur = await this.env.readDay();
+    if (s.kind === 'pflicht' && this.env.loadSources && !(cur && cur.d === dayKey(dayNow))) {
+      for (const [path, doc] of await this.refill(s.docs, items, cfg, dayNow)) {
+        const lex = lexOf(doc);
+        if (!lex) continue;
+        this.docs.set(path, doc);
+        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki }, src: srcOf(doc.src) });
+      }
     }
     const cat = new Catalog(items);
     this.cat = cat;
     // „Junge Wörter früher“ (Großpaket A S6): steht fest im heutigen Plan; nur ein neuer Pflicht-Plan rechnet es aus dem Verlauf.
-    const dayNow = this.env.now();
-    const cur = await this.env.readDay();
     if (cur && cur.d === dayKey(dayNow)) cfg.retY = typeof cur.ry === 'number' ? cur.ry : null;
     else if (s.kind === 'pflicht') cfg.retY = await this.youngTarget(cfg, dayNow);
     await this.replay();
@@ -332,6 +346,20 @@ export class LearnRun {
     const plan = s.kind === 'pflicht' ? await freezeDay(this.env.deps, cat, nowMs, cfg, this.med, cur) : null;
     if (plan) cfg.retY = plan.ry ?? null;
     return { cat, cfg, plan, nowMs };
+  }
+
+  /** Nachfüllen (S7): Quellen per dynamischem Import, Einstufung aus `vmod/place`; jeder Fehler lässt den Tag mit dem Bestand laufen. */
+  private async refill(docs: Iterable<readonly [string, Doc]>, items: Item[], cfg: VocabCfg, nowMs: number): Promise<[string, Doc][]> {
+    const load = this.env.loadSources;
+    if (!load) return [];
+    try {
+      const { refillFresh, readPlace } = await import('../data/refill');
+      const place = this.env.read ? readPlace(await this.env.read(VMOD_PLACE_PATH)) : null;
+      return await refillFresh(this.env.deps.writer, { docs: new Map(docs), items, quota: cfg.newPerDay, nowMs, place, w: weightsOf(cfg.w), load });
+    } catch (err) {
+      logError('vocab:refill', err);
+      return [];
+    }
   }
 
   /** Ziel für junge Wörter aus der echten Rate der letzten 30 Tage (`null` = nicht nachsteuern; ein Lesefehler steuert nie nach). */

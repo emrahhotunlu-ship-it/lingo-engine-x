@@ -10,3 +10,5 @@ export const VOCAB_LOCK_PATH = 'vmod/lock';
 export const VMOD_USE_PATH = 'vmod/use';
 // V3 Schritt 1: `vlog` ist träge; Verzeichnis `vmod/ix`, Zählung und Suchliste für die Sicherung.
 export { VLOG_INDEX_PATH, vlogIdsOf, vlogDocCountOf, vlogProbeIds, nextVlogPart, vlogPath, vlogIdOfPath } from './domain/vlogIndex';
+/** Großpaket A S7c: Einstufung (Grenze in der Häufigkeitsliste, gekonnte Stichwörter). */
+export const VMOD_PLACE_PATH = 'vmod/place';

@@ -56,6 +56,8 @@ function createRun(ai?: VocabAi): LearnRun | null {
     readDay: () => readOr(VMOD_DAY_PATH),
     readUse: () => readOr(VMOD_USE_PATH),
     read: readOr,
+    // Großpaket A S7: neue Wörter aus den Quellen (eigene Teil-Datei, erst beim ersten Pflicht-Plan des Lerntags geladen).
+    loadSources: () => import('../data/refill').then((m) => m.loadSources()),
     ai: ai
       ? makeUseAi(
           ai,

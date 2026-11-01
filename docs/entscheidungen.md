@@ -700,3 +700,7 @@ Frage-Dialog, beide wie empfohlen:
 - **Spur heißt „Selbst schreiben“** (nicht „Benutzen“/„Aktiv“).
 - **Anwenden ohne Claude:** „Später prüfen lassen“ – Text wird gespeichert, Prüfung sobald Claude verfügbar ist, bis dahin keine Planwirkung.
 - **Behaltensrate deutlich unter Ziel:** junge Wörter früher planen, mit Hinweis auf die zusätzlichen Minuten je Tag.
+
+## 01.11.2026 – Einstufung und Wörter-Mischung (Emrah, Frage-Dialog, wie empfohlen)
+- **Einstufung und Mischung so bauen** wie auf den Bildern `docs/umbau/vokabeln/bilder/s3-*` (Bauplan `vokabeln/s7-bau.md`): einmaliger, freiwilliger Test (≈ 4 Min.) über Fortschritt › Wörter und Einstellungen; neue Wörter zu 30 % Wortpartner, 30 % Beruf und Business-Wendungen, 25 % eigene Funde, 15 % Häufigkeitsliste ab der Grenze. Damit ist die V5-Abnahme „Einstufung als Bild abgenickt“ erfüllt.
+- **Technische Abweichung (Hauptchat):** keine `vlex`-Bündel vorerst (`plan.md` §3.6); neue Lexeme bleiben einzelne Dokumente. Grund: 196 Dokumente auf der Test-Kopie, bei 5 neuen am Tag ≈ 2,5 Jahre bis 5.000; Warnschwellen 4.000/4.500 bleiben, wird es eng, entscheidet Emrah.
