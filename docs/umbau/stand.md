@@ -754,3 +754,10 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - `claude/umbau-d5` → `claude/umbau-fokus` (Merge `0cabc693`; Konflikte nur `scripts/budget.json` und `tests/unit/checkBudget.test.ts`, beide Seiten behalten): Grammatik-Reiter neu (Kopf, Hier-weiter-Karte, Kapitel-Liste, Kapitel-Seite, Weg-Seite), Gedämpft-Hauptknopf mit weißer Schrift. Bericht `docs/umbau/berichte/d5.md`; 3 offene Fragen an Emrah (Schloss sperrt nicht, Gedämpft-Knopffläche 2,6:1 bei Schrift 5,36:1, „Lehrerin“/„Lehrkraft“).
 - Nachbesserungen `34d4a5d4`: Wochen-Check-Hilfe der E2E-Tests klickt „Weiß ich nicht“ in der Knopfleiste (seit D3); Zustandsflächen mischen `in oklab` statt `in oklch` (VB-Befund 1: Hell-Modus „fast“ war rosa); Lint-Stufe von verify:fast mit mehr Speicher.
 - verify:fast (Basis vor D5): nach Wiederholen der Plattenabstürze nur `fxStage1.spec.ts:55` rot (Buchstaben der Lücke blenden nach dem Prüfen erneut ein). Schon vor D5 rot (`7d5f50bd`), vermutlich seit D3. Fehlersucher beauftragt; danach Test-Link Stand bis D5.
+
+### 01.11.2026 – Test-Link Stand bis D5
+- Fehlersuche fxStage1:55 behoben (`77f608d5`: keine nachfliegenden Buchstaben nach dem Prüfen). Lerntag-Durchlauf (Dunkel und Hell, Heute 0/4 → 4/4, keine JS-Fehler) fand einen echten Fehler: Abschlusskarte zeigte immer „0 neu“ → behoben (`fd6e0353`). Manifest-Skript erkennt alte Dateien jetzt auch in der gespeicherten Listen-Form (`9801e6ce`).
+- Prüfungen: Typprüfung, Lint, Unit, betroffene E2E 72/72, `check:platform` FREIGABE (19 Dateien, 6,33 MB), Budget OK, platform-guard und data-guard ohne Blocker. fxStage1 einmal unter Volllast wackelig (`:100`, feste 350-ms-Wartezeit), allein 8/8 grün → Testorganisation (Backlog).
+- **Test-Link `AXHkh6…` v76 `1793511636-3a76`** (Rückweg v75 `1793445403-7f22` = Inhalt v74). Manifest `docs/relaunch/publish/AXHkh6.json`. Nicht live.
+- Beobachtungen (nicht behoben, für später): Heute-Endkarte „überfällig −48“ liest sich seltsam; Mustername `pp.inversion` „No sooner had … than“ deckt auch Seldom/Hardly/Never ab.
+- Offen an Emrah im Frage-Dialog: V2 (4 Fragen), D5 (3 Fragen); danach V3-Kurzplan mit VB-Bildern und 6 VB-Fragen.
