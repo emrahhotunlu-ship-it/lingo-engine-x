@@ -288,6 +288,22 @@ describe('Kontrastkarte lex.ct (M14, V3 Schritt 3)', () => {
     expect(r.lex.ct).toBeUndefined();
     expect([r.lex.u, r.lex.b, r.lex.lv, r.lex.lc, r.lex.day]).toEqual([l.u, l.b, l.lv, l.lc, l.day]);
   });
+  it('Kontrastkarte falsch: Termin höchstens morgen (Verwechslung besteht weiter); richtig: Termin unverändert', () => {
+    const l = { ...learned(T0 - 5 * D), ct: { at: T0 - D, w: 'become' } };
+    const far = { ...l, u: { ...l.u, due: T0 + 9 * D }, b: { ...l.b!, due: T0 + 9 * D } };
+    const bad = applyAnswer(far, ans(T0, { form: 'contrast', outcome: 'wrong' }), ctx()).lex;
+    expect(bad.b!.due).toBeLessThanOrEqual(dayStartOf(addDays(dayKey(T0), 1)));
+    expect(bad.u.due).toBeLessThanOrEqual(dayStartOf(addDays(dayKey(T0), 1)));
+    const good = applyAnswer(far, ans(T0, { form: 'contrast', outcome: 'ok' }), ctx()).lex;
+    expect([good.u.due, good.b!.due]).toEqual([far.u.due, far.b.due]);
+  });
+  it('fällige Abfrage richtig schließt einen Kontrast von einem früheren Tag; am Tag der Verwechslung nicht; gemeldete Kontrastkarte schließt ihn', () => {
+    const l = learned(T0 - 5 * D);
+    const t = l.b!.due + 3600_000;
+    expect(applyAnswer({ ...l, ct: { at: t - 2 * D, w: 'become' } }, ans(t), ctx()).lex.ct).toBeUndefined();
+    expect(applyAnswer({ ...l, ct: { at: t - 60_000, w: 'become' } }, ans(t), ctx()).lex.ct).toEqual({ at: t - 60_000, w: 'become' });
+    expect(applyAnswer({ ...l, ct: { at: t - 2 * D, w: 'become' } }, ans(t, { form: 'contrast', outcome: 'unfair' }), ctx()).lex.ct).toBeUndefined();
+  });
   it('Leech bei einer Lehrer-Falle (ff/Paar) öffnet eine Kontrastkarte ohne Verwechslungswort; ohne Falle nicht', () => {
     let a = learned(T0 - 40 * D);
     let b = a;

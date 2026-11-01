@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   Button,
+  dictLookup,
   EnglishText,
   ExerciseShell,
   KineticGap,
@@ -236,7 +237,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
       status={{ area: 'words', state: null, kindLabel: kindLabel(t, view) }}
-      task={{ text: t(tk), purpose: t(wozuKey(tk)), open: true, reason: () => reasonLine(t, run.reason(), dateShort) }}
+      task={{ text: t(tk), purpose: t(view.card.form === 'contrast' && view.card.contrast?.ff ? 'vmWozu_contrastFf' : wozuKey(tk)), open: true, reason: () => reasonLine(t, run.reason(), dateShort) }}
       prompt={prompt}
       answer={answer}
       secondary={secondary}
@@ -366,6 +367,9 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
   // Kontrastkarte: die Falle ausdrücklich benennen (deutsche Falle, Paar, zuletzt verwechselt), englische Wörter mit `lang="en"`.
   const ct = v.card.contrast;
   const mixed = ct?.w && ct.w.toLowerCase() !== (ct.pair ?? '').toLowerCase() ? ct.w : null;
+  // Das Unterscheidungsmerkmal auch ohne Lehrersatz: was das verwechselte Wort heißt (learning-scientist V3 S3, Sollte 3).
+  const other = mixed ?? ct?.pair ?? null;
+  const otherDe = other && other.toLowerCase() !== v.card.answer.toLowerCase() ? (dictLookup(other)?.senses[0]?.de ?? null) : null;
   const contrast = ct ? (
     <div className="flex flex-col gap-0.5" data-testid="vm-contrast">
       {ct.ff ? (
@@ -381,6 +385,11 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
       {mixed ? (
         <p className="lx-t-support text-muted">
           {t('vmCtMixed')} <span lang="en">{mixed}</span>.
+        </p>
+      ) : null}
+      {other && otherDe ? (
+        <p className="lx-t-support text-muted" data-testid="vm-contrast-means">
+          <span lang="en">„{other}“</span> {t('vmCtMeans')} <span lang="de">{otherDe}</span>.
         </p>
       ) : null}
     </div>
@@ -416,7 +425,8 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
     menu: run.canUnfair()
       ? {
           report: () => {
-            if (run.unfair()) toast(t('vmUnfairDone'));
+            const r = run.unfair();
+            if (r) toast(t(r === 'again' ? 'vmUnfairAgain' : r === 'counts' ? 'vmUnfairCounts' : 'vmUnfairDone'));
           },
         }
       : undefined,

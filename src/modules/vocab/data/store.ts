@@ -21,7 +21,7 @@ const isObj = (v: unknown): v is Doc => !!v && typeof v === 'object' && !Array.i
 export type VocabDeps = { writer: Writer; device: string };
 
 export { lexOf, isFutureLex } from './lex';
-import { lexOf, isFutureLex } from './lex';
+import { lexOf, isFutureLex, lexPatch } from './lex';
 
 type Compute = (lex: Lex) => AnswerResult | null;
 
@@ -44,7 +44,7 @@ async function commit(deps: VocabDeps, path: string, a: Answer, cat: Catalog, co
       return null;
     }
     result = r;
-    const patch: Doc = { lex: parsed.data };
+    const patch: Doc = { lex: lexPatch(cur.lex, parsed.data) };
     const futureFsrs = isObj(cur.fsrs) && typeof cur.fsrs.v === 'number' && cur.fsrs.v > 1;
     if (r.booked.length && r.grade !== null && !futureFsrs) Object.assign(patch, mirrorLegacy(r.lex, cur, { t: a.t, grade: r.grade, form: a.form, ms: a.ms, fk: a.fk }, chunk));
     return { update: patch };
@@ -248,7 +248,7 @@ export async function freezeDay(deps: VocabDeps, cat: Catalog, nowMs: number, cf
             return null;
           }
           cat.set(m.path, next.data as typeof lex);
-          return { update: { lex: next.data } };
+          return { update: { lex: lexPatch(cur.lex, next.data) } };
         }),
       ),
     );

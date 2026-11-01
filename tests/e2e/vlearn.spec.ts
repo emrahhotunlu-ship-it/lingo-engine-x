@@ -72,7 +72,7 @@ test.describe('Handy 390', () => {
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
-  test('Menü „…“: „Warum diese Aufgabe?“ nennt den Grund; „Aufgabe melden“ nach einer Abfrage zählt nicht und wird vermerkt', async ({ page }) => {
+  test('Menü „…“: „Warum diese Aufgabe?“ nennt den Grund; „Aufgabe melden“ nach einer falschen Abfrage löscht den Fehler nicht und wird vermerkt', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
     await screen(page, 'vlearn');
     // Einführung: der Grund steht im Menü („Neues Wort für heute.“); melden gibt es dort nicht (keine Abfrage).
@@ -94,8 +94,16 @@ test.describe('Handy 390', () => {
     await expect(page.getByTestId('vm-next')).toBeVisible();
     await page.getByTestId('exercise-menu').click();
     await page.getByTestId('exercise-menu-list').getByTestId('menu-report').click();
-    await expect(page.getByText('Danke, gemeldet. Diese Antwort zählt nicht.')).toBeVisible();
-    await expect.poll(async () => JSON.stringify(Object.entries(await dump(page)).filter(([p]) => /^vlog\/\d/.test(p)))).toContain('"unfair"');
+    // Falsch am Einführungstag (Lernschritt A): Melden löscht den Fehler nicht, die Antwort zählt; der Verlauf trägt das Kennzeichen „unfair“ (4).
+    await expect(page.getByText('Danke, gemeldet. Die Antwort zählt trotzdem, die Aufgabe wird geprüft.')).toBeVisible();
+    await expect
+      .poll(async () =>
+        Object.entries(await dump(page))
+          .filter(([p]) => /^vlog\/\d/.test(p))
+          .flatMap(([, d]) => Object.values((d as { e: Record<string, unknown[] | null> }).e))
+          .some((e) => Array.isArray(e) && typeof e[11] === 'number' && (e[11] & 4) === 4),
+      )
+      .toBe(true);
     expect(errors).toEqual([]);
   });
 });

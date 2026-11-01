@@ -110,9 +110,12 @@ export class SessionRun {
     }
     // Offene Kontrastkarten (M14) kommen in der nächsten Runde zuerst, höchstens zwei, die jüngste Verwechslung vorn; ohne Planwirkung.
     // Nicht in „Dieses Wort“ (dort übt man genau ein Wort) und nie für ausgeblendete oder ruhende Lexeme.
+    // Steht das Wort in dieser Runde als fällige Abfrage an, entfällt die Kontrastkarte: erst ehrlich messen (die Abfrage zeigt den Kontrast im
+    // Band, richtig beantwortet schließt sie ihn), sonst gäbe die Kontrastkarte die Antwort kurz vorher vor (learning-scientist V3 S3, B1).
     if (this.kind !== 'word') {
+      const asked = new Set(this.queue.filter((s) => s.why === 'due').map((s) => s.path));
       const open = items
-        .filter((it) => it.lex.ct && !it.hidden && !this.cat.rests(it.path))
+        .filter((it) => it.lex.ct && !asked.has(it.path) && !it.hidden && !this.cat.rests(it.path))
         .sort((a, b) => b.lex.ct!.at - a.lex.ct!.at || a.path.localeCompare(b.path))
         .slice(0, CONTRAST_MAX)
         .map((it): Slot => ({ path: it.path, form: 'contrast', step: 0, why: 'contrast' }));
@@ -151,7 +154,7 @@ export class SessionRun {
     if (st.n === 1) return { path, form: 'gap_hint', step: 1, why: 'step', afterCard: carried ? 0 : base + STEP_A_GAP };
     if (st.n === 2) return { path, form: 'gap', step: 2, why: 'step', afterCard: carried ? 0 : base + STEP_B_GAP, afterMs: carried ? 0 : nowMs + STEP_B_MS };
     // V3: Wiederkehr nach Einspruch (20/21) in einem neuen Satz (die Karte wählt einen anderen als den gezeigten).
-    if (st.n >= 20) return { path, form: 'gap', step: 3, why: 'retry', afterCard: carried ? 0 : base + RETRY_GAP };
+    if (st.n >= 20) return { path, form: 'gap', step: 3, why: 'again', afterCard: carried ? 0 : base + RETRY_GAP };
     // Wiederkehr nach Fehler: frei, abwechselnd im Satz und ohne Satz (M49, M53).
     return { path, form: st.n % 2 === 0 ? 'nosent' : 'gap', step: 3, why: 'retry', afterCard: carried ? 0 : base + RETRY_GAP };
   }

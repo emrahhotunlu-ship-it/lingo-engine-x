@@ -25,6 +25,8 @@ type Doc = Record<string, unknown>;
 export type AnswerKind = Draft['kind'];
 /** „Das wusste ich eigentlich“ oder „Später prüfen lassen“ gewählt (bis zum Weiter rückgängig zu machen). */
 export type Choice = 'knewIt' | 'later' | null;
+/** Ergebnis von „Aufgabe melden“ (Hinweistext): zählt nicht · kommt gleich in neuem Satz · zählt trotzdem. */
+export type UnfairResult = 'void' | 'again' | 'counts';
 
 export type LearnView =
   | { k: 'loading' }
@@ -303,33 +305,44 @@ export class LearnRun {
   }
 
   /**
-   * „Aufgabe war unfair“ (M43), vor oder nach dem Prüfen: die Abfrage zählt nicht (keine Note, kein Termin, kein Lernschritt), der
-   * Verlaufseintrag (`unfair`, Kennzeichen FLAG.unfair, Satzschlüssel) und die Diagnose gehen in die Inhaltsprüfung. Danach weiter.
+   * „Aufgabe war unfair“ (M43). Vor dem Prüfen oder nach richtiger Antwort: die Abfrage zählt nicht (keine Note, kein Termin, kein Lernschritt;
+   * `void`). Nach falscher Antwort darf Melden den Fehler nicht folgenlos löschen (learning-scientist V3 S3, B2): derselbe Weg wie „Später
+   * prüfen lassen“ (Wiederkehr nach 4 Karten in einem neuen Satz, dort höchstens „Schwer“; `again`); ist dieser Weg heute schon verbraucht,
+   * zählt die Antwort normal (`counts`). Immer: Verlaufseintrag mit FLAG.unfair und Diagnose für die Inhaltsprüfung. Danach weiter.
    */
-  unfair(): boolean {
+  unfair(): UnfairResult | null {
     const v = this.view;
     const cat = this.cat;
-    if (!cat || !this.canUnfair() || (v.k !== 'card' && v.k !== 'band')) return false;
+    if (!cat || !this.canUnfair() || (v.k !== 'card' && v.k !== 'band')) return null;
     const c: Check = { outcome: 'unfair' };
     let p = this.pending;
+    let res: UnfairResult = 'void';
     if (v.k === 'card') {
       const before = cat.get(v.task.path)?.lex;
-      if (!before) return false;
+      if (!before) return null;
       const f: Frozen = { t: this.env.now(), ms: 0, fk: 0, hint: v.tip ? 1 : 0 };
       const a = answerOf(v.card, c, f, { step: v.task.step > 0 });
       p = { task: v.task, card: v.card, kind: v.kind, before, given: '', check: c, f, choice: null, a, result: this.compute(v.kind, v.card, v.task, before, a), committed: false };
       this.pending = p;
       if (v.card.sentence) this.lastSent.set(v.task.path, v.card.sentence.sent.key);
     } else {
-      if (!p) return false;
-      p.check = c;
+      if (!p) return null;
       p.choice = null;
-      p.a = answerOf(p.card, c, p.f, { step: p.task.step > 0 });
-      p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
+      const plain = answerOf(p.card, p.check, p.f, { step: p.task.step > 0 });
+      const wrong = this.compute(p.kind, p.card, p.task, p.before, plain).grade === 1;
+      if (wrong) {
+        p.a = answerOf(p.card, p.check, p.f, { later: true, unfair: true, step: p.task.step > 0 });
+        p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
+        res = p.result.grade === null ? 'again' : 'counts';
+      } else {
+        p.check = c;
+        p.a = answerOf(p.card, c, p.f, { step: p.task.step > 0 });
+        p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
+      }
     }
-    logWarn('vocab:unfair', 'Aufgabe als unfair gemeldet (Inhaltsprüfung)', `${p.card.path} · ${p.card.form} · ${p.card.sentence?.sent.key ?? '-'}`);
+    logWarn('vocab:unfair', 'Aufgabe als unfair gemeldet (Inhaltsprüfung)', `${p.card.path} · ${p.card.form} · ${p.card.sentence?.sent.key ?? '-'} · ${res}`);
     this.next();
-    return true;
+    return res;
   }
 
   /** Weiter: buchen (einmal), Bestand und Runde nachführen, nächste Karte. */

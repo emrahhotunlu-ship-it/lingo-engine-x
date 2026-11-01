@@ -68,7 +68,9 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   const pos = posOf(doc.pos);
   const day = dayKey(x.nowMs);
   const { ok: usable } = usableSentences(sentencesOf(doc, x.nowMs, x.sbGate), head, lex.k === 'pv');
-  const base = { path: task.path, head, de, pos, teach, moreSentences: usable.length > 1, col: doc.col };
+  // Offener Kontrast bei einer fälligen Abfrage (die Kontrastkarte entfällt dann): das Band nennt die Falle trotzdem.
+  const open = lex.ct ? { contrast: { w: lex.ct.w ?? null, ff: teach.ff ?? null, pair: teach.pair ?? null } } : {};
+  const base = { path: task.path, head, de, pos, teach, moreSentences: usable.length > 1, col: doc.col, ...open };
   const spec = FORM_SPEC[task.form];
   const noSentence = (form: Form, mode: CardMode): CardModel => {
     const answer = baseAnswer(head);
@@ -174,10 +176,10 @@ export function evaluate(m: CardModel, given: string, dict: CheckDict, dunno = f
 export type Frozen = { t: number; ms: number; fk: number; hint: number };
 
 /** Antwort für den Planer. `override`: „Das wusste ich eigentlich“; `later`: „Später prüfen lassen“; `alsoRight`: Claude sagt „passt auch“. */
-export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: boolean; later?: boolean; alsoRight?: boolean; step?: boolean } = {}): Answer {
+export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: boolean; later?: boolean; alsoRight?: boolean; step?: boolean; unfair?: boolean } = {}): Answer {
   const outcome: Outcome = o.alsoRight ? 'syn' : c.outcome;
   // M43 „Aufgabe war unfair“: Ausgang `unfair` plus Kennzeichen für die Inhaltsprüfung im Verlauf.
-  const flags = (o.override ? FLAG.override : 0) | (o.later ? FLAG.later : 0) | (o.step ? FLAG.step : 0) | (c.outcome === 'unfair' ? FLAG.unfair : 0);
+  const flags = (o.override ? FLAG.override : 0) | (o.later ? FLAG.later : 0) | (o.step ? FLAG.step : 0) | (c.outcome === 'unfair' || o.unfair ? FLAG.unfair : 0);
   return {
     t: f.t,
     form: m.form,

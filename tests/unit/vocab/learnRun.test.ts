@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createWriter, type Writer } from '../../../src/data/writer';
 import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { type CheckDict } from '../../../src/modules/vocab/domain/check';
-import { applyAnswer, emptyLex, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
+import { applyAnswer, emptyLex, introduce, FLAG, type PlanCtx, STEP_LATER } from '../../../src/modules/vocab/domain/planner';
 import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
 import type { Draft } from '../../../src/modules/vocab/domain/flow';
 import { type DraftStore, LearnRun, type LearnStart, readDrafts, writeGate } from '../../../src/modules/vocab/ui/learnRun';
@@ -121,23 +121,51 @@ describe('LearnRun', () => {
     expect(keys.some((k) => k.startsWith('vmRsStage'))).toBe(true);
   });
 
-  it('„Aufgabe war unfair“ nach dem Prüfen: Lernstand unverändert, Verlauf vermerkt `unfair` mit Kennzeichen, zählt nicht im Abschluss', async () => {
+  const unfairEntries = (s: ReturnType<typeof setup>) =>
+    Object.entries(s.h.dump())
+      .filter(([p]) => /^vlog\/\d/.test(p))
+      .flatMap(([, d]) => Object.values(d.e as Doc).filter(Boolean));
+
+  it('„Aufgabe melden“ nach FALSCHER Antwort löscht den Fehler nicht: Weg „Später prüfen lassen“ (Wiederkehr in neuem Satz), Verlauf mit `unfair`', async () => {
+    const lex = learned(T0 - 10 * D);
+    const s = setup(lex);
+    await s.start();
+    if (s.run.get().k !== 'card') throw new Error('Karte erwartet');
+    s.run.check('qqqq', { ms: 5000, fk: 1500 });
+    expect(s.run.canUnfair()).toBe(true);
+    expect(s.run.unfair()).toBe('again');
+    await s.run.settled();
+    const after = s.lexIn();
+    // Keine Note, kein Termin, keine Stufe – aber ein Lernschritt: das Wort kommt in dieser Runde in einem anderen Satz wieder.
+    expect(after.step?.n).toBe(STEP_LATER);
+    expect(after.u).toEqual(lex.u);
+    expect(after.b).toEqual(lex.b);
+    expect(after.lv).toBe(lex.lv);
+    const entries = unfairEntries(s);
+    expect(entries).toHaveLength(1);
+    // Ergebnis der Prüfung bleibt stehen (ehrlicher Verlauf); Kennzeichen „unfair“ + „später“ für Inhaltsprüfung und Auswertung.
+    expect((entries[0] as unknown[])[11]).toBe(FLAG.unfair | FLAG.later);
+  });
+
+  it('„Aufgabe melden“ nach richtiger Antwort und vor dem Prüfen: zählt nicht (keine Note, kein Termin), Satz gemerkt, zählt nicht im Abschluss', async () => {
     const lex = learned(T0 - 10 * D);
     const s = setup(lex);
     await s.start();
     const v = s.run.get();
     if (v.k !== 'card') throw new Error('Karte erwartet');
-    s.run.check('qqqq', { ms: 5000, fk: 1500 });
-    expect(s.run.canUnfair()).toBe(true);
-    expect(s.run.unfair()).toBe(true);
+    s.run.check(v.card.answer, { ms: 5000, fk: 1500 });
+    expect(s.run.unfair()).toBe('void');
     await s.run.settled();
-    expect(s.lexIn()).toEqual(lex);
-    const entries = Object.entries(s.h.dump())
-      .filter(([p]) => /^vlog\/\d/.test(p))
-      .flatMap(([, d]) => Object.values(d.e as Doc).filter(Boolean));
-    expect(entries).toHaveLength(1);
-    expect(JSON.stringify(entries[0])).toContain('unfair');
+    const after = s.lexIn();
+    expect({ ...after, sn: lex.sn, sync: lex.sync }).toEqual(lex);
+    expect(unfairEntries(s)).toHaveLength(1);
     expect(s.run.get()).toEqual({ k: 'done', n: 1, fresh: 0, review: 0, extra: 0 });
+
+    const s2 = setup(learned(T0 - 10 * D));
+    await s2.start();
+    expect(s2.run.unfair()).toBe('void');
+    await s2.run.settled();
+    expect(s2.lexIn().u).toEqual(lex.u);
   });
 
   it('Verlassen bucht die offene Antwort genau einmal (auch zweimal Verlassen und danach Weiter)', async () => {

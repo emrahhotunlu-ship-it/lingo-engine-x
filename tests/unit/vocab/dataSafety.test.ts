@@ -12,6 +12,7 @@ import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
 import { vlogDocId } from '../../../src/modules/vocab/domain/vlog';
 import { nextVlogPart, VLOG_INDEX_PATH, vlogIdsOf, vlogProbeIds } from '../../../src/modules/vocab/domain/vlogIndex';
 import { freezeDay, writeAnswer, writeVlog } from '../../../src/modules/vocab/data/store';
+import { dropTombs, lexOf, lexPatch } from '../../../src/modules/vocab/data/lex';
 import { tuple } from '../../../src/modules/vocab/domain/vlog';
 import { VMOD_DAY_PATH } from '../../../src/modules/vocab/registry';
 
@@ -194,5 +195,31 @@ describe('Writer.update auf fehlendem Dokument', () => {
     const w = createWriter(h.db);
     await expect(w.update('vmod/stats', { v: 1 })).rejects.toBeTruthy();
     expect(h.dump()['vmod/stats']).toBeUndefined();
+  });
+});
+
+describe('Löschmarken in lex (data-guard V3 Schritt 3, B1): `update` mischt rekursiv, ein weggefallenes Feld wird `null`', () => {
+  it('Kontrastkarte beantwortet: `ct` steht danach als null in der Datenbank, wird als „nicht vorhanden“ gelesen und kommt nicht wieder', async () => {
+    const lex: Lex = { ...learned(T0 - 5 * D), ct: { at: T0 - D, w: 'become' } };
+    const h = createMemoryDb({ seed: { 'vocab/scope': { word: 'scope', ex: 'Define the scope.', lex } } });
+    const w = createWriter(h.db);
+    const cat = new Catalog([{ path: 'vocab/scope', lex, order: 0 }]);
+    const a = { t: T0, form: 'contrast' as const, outcome: 'ok' as const, hint: 0, ms: 9000, fk: 2000, sentence: 'x#1' };
+    const r = await writeAnswer({ writer: w, device: 'phone' }, 'vocab/scope', a, { cfg: DEFAULT_CFG, cat, med: {}, planned: false });
+    expect(r).not.toBeNull();
+    const stored = (h.dump()['vocab/scope'] as Doc).lex as Doc;
+    expect(stored.ct).toBeNull();
+    const read = lexOf(h.dump()['vocab/scope']);
+    expect(read).not.toBeNull();
+    expect(read!.ct).toBeUndefined();
+    // Zweite Antwort auf dasselbe Lexem: die Löschmarke bleibt, nichts scheitert am strengen Schema.
+    const r2 = await writeAnswer({ writer: w, device: 'phone' }, 'vocab/scope', { ...a, form: 'gap', t: T0 + D }, { cfg: DEFAULT_CFG, cat, med: {}, planned: true });
+    expect(r2).not.toBeNull();
+    expect(lexOf(h.dump()['vocab/scope'] as Doc)).not.toBeNull();
+  });
+
+  it('lexPatch: null nur für weggefallene Felder, rekursiv in Objekten; dropTombs entfernt sie an den optionalen Stellen', () => {
+    expect(lexPatch({ a: 1, ct: { at: 1, w: 'x' }, fq: { c: 1, xf: 2, h: { gap: [1, 1] } } }, { a: 2, fq: { c: 1, h: {} } })).toEqual({ a: 2, ct: null, fq: { c: 1, xf: null, h: { gap: null } } });
+    expect(dropTombs({ ct: null, step: null, fq: { xf: null, e: null, h: { gap: null, nosent: [1, 1] } }, gr: { pat: null, cnt: 'u' } })).toEqual({ step: null, fq: { h: { nosent: [1, 1] } }, gr: { cnt: 'u' } });
   });
 });

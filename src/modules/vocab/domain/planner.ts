@@ -146,6 +146,8 @@ export function probeKnown(lex0: Lex, t: number, ctx: PlanCtx): AnswerResult {
 }
 /** Kontrolle nach bestandener Probe: fest nach so vielen Tagen. */
 export const PROBE_CHECK_DAYS = 7;
+/** Kontrastkarte gilt als gelöst (kleiner Tippfehler eingeschlossen). */
+const CONTRAST_OK = new Set<string>(['ok', 'typo']);
 
 function offsetOf(due: number, nowMs: number): number {
   return daysBetween(dayKey(nowMs), dayKey(due));
@@ -158,13 +160,28 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const events: AnswerEvent[] = [];
   // M43 „Aufgabe war unfair“ und M31 abgelehnte Erkennung: die Abfrage hat nicht stattgefunden (keine Note, kein Lernschritt, kein Satz).
   if (isVoid(a.outcome)) {
-    if (a.outcome === 'unfair') events.push('unfair');
+    if (a.outcome === 'unfair') {
+      events.push('unfair');
+      // Gemeldeter Satz: gemerkt, damit die nächste Abfrage einen anderen wählt; eine gemeldete Kontrastkarte ist erledigt (keine Schleife).
+      // Ohne Satz und ohne Kontrast bleibt das Lexem unverändert (kein Schreiben).
+      if (a.sentence || (a.form === 'contrast' && lex.ct)) {
+        if (a.sentence) lex.sn = [[a.sentence, day] as [string, string], ...lex.sn.filter((x) => x[0] !== a.sentence)].slice(0, SN_MAX);
+        if (a.form === 'contrast') delete lex.ct;
+        lex.sync = Math.max(lex.sync, a.t);
+      }
+    }
     return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
   }
-  // V3: Kontrastkarte (M14): Übung ohne Planwirkung; die Antwort schließt sie (Satz gemerkt, damit die nächste Abfrage einen anderen nimmt).
+  // V3: Kontrastkarte (M14): Übung ohne Note; die Antwort schließt sie (Satz gemerkt, damit die nächste Abfrage einen anderen nimmt).
+  // Falsch beantwortet: die Verwechslung besteht weiter, der Termin rückt höchstens auf morgen (learning-scientist V3 S3, Sollte 4).
   if (a.form === 'contrast') {
     if (a.sentence) lex.sn = [[a.sentence, day] as [string, string], ...lex.sn.filter((x) => x[0] !== a.sentence)].slice(0, SN_MAX);
     delete lex.ct;
+    if (!CONTRAST_OK.has(a.outcome)) {
+      const tomorrow = dayStartOf(addDays(day, 1));
+      if (lex.b) lex.b.due = Math.min(lex.b.due, tomorrow);
+      lex.u.due = Math.min(lex.u.due, tomorrow);
+    }
     lex.sync = Math.max(lex.sync, a.t);
     return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
   }
@@ -193,6 +210,9 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   if (a.outcome === 'colloc' && lex.k !== 'col') events.push('partner');
   // V3, M14: Verwechslung (anderes echtes Wort der Paar-Liste/Deutsch-Falle, falscher Wortpartner) → Kontrastkarte in der nächsten Runde.
   if ((a.outcome === 'other' || a.outcome === 'colloc') && a.hit && !(a.flags && a.flags & FLAG.override)) lex.ct = { at: a.t, w: a.hit.slice(0, 60) };
+  // Offener Kontrast von einem früheren Tag, das Wort kam als fällige Abfrage (die Kontrastkarte entfällt dann, session.ts): richtig
+  // beantwortet schließt ihn. Am Tag der Verwechslung nicht (die Wiederkehr in derselben Runde ersetzt die Kontrastkarte nicht).
+  else if (lex.ct && g !== null && g >= 2 && ctx.planned && dayKey(lex.ct.at) !== day) delete lex.ct;
   const fqBefore = lex.fq;
 
   if (a.sentence) {

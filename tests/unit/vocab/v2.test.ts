@@ -349,7 +349,8 @@ describe('Planer mit V2-Regeln', () => {
     const t = l.b!.due + 3600_000;
     const r = applyAnswer(l, ans(t, { outcome: 'unfair' }), ctx());
     expect(r.booked).toEqual([]);
-    expect(r.lex).toEqual(l);
+    // Nur der gemeldete Satz wird gemerkt (die nächste Abfrage nimmt einen anderen); Termine, Stufe und Lernschritt bleiben.
+    expect({ ...r.lex, sn: l.sn, sync: l.sync }).toEqual(l);
     expect(r.events).toContain('unfair');
   });
   it('abgelehnte Spracherkennung ist nie ein Fehler (M31)', () => {

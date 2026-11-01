@@ -137,6 +137,24 @@ describe('Kontrastkarten (M14)', () => {
   });
 });
 
+describe('Kontrastkarte entfällt, wenn das Wort heute fällig abgefragt wird (learning-scientist V3 S3, B1)', () => {
+  it('fällig und offener Kontrast: nur die fällige Abfrage, keine Kontrastkarte davor', () => {
+    const due = learned(3, 0);
+    const it3 = { ...due, lex: { ...due.lex, ct: { at: T0 - 2 * D, w: 'other' } } };
+    const cat = new Catalog([...Array.from({ length: 3 }, (_, i) => learned(i)), it3]);
+    const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 0 }, {});
+    expect(plan.plan.map((e) => e[0])).toContain('vocab/r3');
+    const run = new SessionRun('pflicht', cat, plan, T0, { cfg: DEFAULT_CFG });
+    const forms: string[] = [];
+    for (let t = run.next(T0); t; t = run.next(T0)) {
+      forms.push(`${t.path}:${t.form}`);
+      run.done(t, T0);
+    }
+    expect(forms.filter((f) => f.endsWith(':contrast'))).toEqual([]);
+    expect(forms.some((f) => f.startsWith('vocab/r3:'))).toBe(true);
+  });
+});
+
 describe('Nebenwege laufen durch dieselbe Tagesmarke (F2, N2)', () => {
   it('„Dieses Wort üben“ und Wochen-Check: ein heute gebuchtes Lexem zählt nur als Übung', () => {
     const cat = new Catalog(Array.from({ length: 6 }, (_, i) => learned(i)));
