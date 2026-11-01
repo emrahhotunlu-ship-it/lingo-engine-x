@@ -2,6 +2,8 @@ import { useEffect, useRef, type RefObject } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { closeCompanion, useCompanion } from '../../features/companion/store';
 import { TodayContext } from '../../features/today/TodayScreen';
+import { LearnContext } from '../../features/learn/LearnContext';
+import { flags } from '../flags';
 import { useT } from '../../i18n';
 import { useNav } from '../nav';
 import { useMediaQuery } from '../../platform/input';
@@ -83,6 +85,8 @@ export function ContextColumn() {
   const show = presentation === 'column' && current !== null && current.kind !== 'claude';
   // Nur ab 1.280 px (Spalte immer da); darunter stehen Woche und „Wenn du mehr willst“ auf Heute selbst.
   const onToday = useNav((s) => s.route.name === 'today' && !s.overlay) && wideCtx;
+  // D5 V-GRAMMATIK (Vorschau L4): auf der Wurzel „Grammatik“ zeigt die leere Spalte das Kapitel-Detail.
+  const onLearn = useNav((s) => s.route.name === 'learn' && !s.overlay) && wideCtx && flags.program;
   return (
     <aside ref={ref} id={CONTEXT_PORTAL_ID} className="lx-ctx" aria-label={t('shContext')} data-testid="context-column" data-kind={current?.kind}>
       {show ? (
@@ -96,6 +100,8 @@ export function ContextColumn() {
       ) : current === null && onToday ? (
         // D2 V-HEUTE (Vorschau L1 `l1Ctx`): auf Heute zeigt die leere Spalte „Diese Woche“ und „Wenn du mehr willst“.
         <TodayContext />
+      ) : current === null && onLearn ? (
+        <LearnContext />
       ) : current === null ? (
         <p className="lx-ctx-empty text-sm text-subtle" data-testid="context-empty">
           {t(ai ? 'shContextEmpty' : 'shContextEmptyNoAi')}

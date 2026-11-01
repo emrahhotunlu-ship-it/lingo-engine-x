@@ -76,7 +76,7 @@ describe('Hub-Dateien', () => {
       'progress.words': 'features/progress/ProgressScreen.tsx',
       'progress.grammar': 'features/progress/ProgressScreen.tsx',
       'progress.review': 'features/progress/ProgressScreen.tsx',
-      'grammar.head': 'features/learn/LearnHub.tsx',
+      'grammar.head': 'features/learn/JourneyPage.tsx',
       'apply.tiles': 'features/apply/ApplyHub.tsx',
       'vocab.hub': 'features/vocab/hub/VocabHub.tsx',
       'settings.sections': 'features/settings/SettingsSheet.tsx',

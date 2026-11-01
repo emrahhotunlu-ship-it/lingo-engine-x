@@ -39,7 +39,8 @@
         "P6 S1-START": 8000,
         "D1 V-BAU": 6000,
         "D2 V-HEUTE": 8000,
-        "D3 V-UEBUNG": 6000
+        "D3 V-UEBUNG": 6000,
+        "D5 V-GRAMMATIK": 3000
       }
     },
     "css": {
@@ -54,7 +55,8 @@
         },
         "D1 V-BAU": 3000,
         "D2 V-HEUTE": 1500,
-        "D3 V-UEBUNG": 1500
+        "D3 V-UEBUNG": 1500,
+        "D5 V-GRAMMATIK": 500
       }
     },
     "html": {
@@ -125,6 +127,10 @@
     },
     "V2 V-STUFEN": {
       "entry": 500
+    },
+    "D5 V-GRAMMATIK": {
+      "entry": 3000,
+      "css": 500
     }
   }
 }

@@ -1,0 +1,33 @@
+// Texte des Grammatik-Reiters im neuen Aussehen (Relaunch Teil 1c, D5 V-GRAMMATIK). Wortlaut aus der Vorschau `WBft3EEx7jYYv4QHdepuNm` v2
+// (H6 `path`/`chapter`, L4); Beispielzahlen der Vorschau sind Platzhalter mit echten Werten.
+
+export const vgDe = {
+  vgHere: 'Du bist hier',
+  vgHereChapter: 'Du bist hier · Kapitel {n}',
+  vgHereSteps: '{n} von {total} Schritten im Lernweg',
+  vgPath: 'Dein Weg zu C1 · {n} Kapitel, je etwa {a} bis {b} Wochen',
+  vgChRun: 'in Arbeit · Thema {i} von {n}',
+  vgChDone: 'abgeschlossen · {n} Themen',
+  vgChLater: 'noch nicht dran · etwa {w} Wochen',
+  vgChLockAria: 'noch nicht dran, du kannst es trotzdem ansehen und vorziehen',
+  vgChEyeNow: 'Kapitel {n} · jetzt dran',
+  vgChEyeDone: 'Kapitel {n} · geschafft',
+  vgChEyeLater: 'Kapitel {n} · noch nicht dran',
+  vgChEyeOpen: 'Kapitel {n}',
+  vgChEyeSoon: 'Kapitel {n} · in Vorbereitung',
+  vgChLaterNote: 'Dieses Kapitel ist noch nicht dran. Du kannst es ansehen und, wenn du willst, vorziehen.',
+  vgErrors: 'Deine Fehler',
+  vgErrorsCh_one: '{n} offen in diesem Kapitel',
+  vgErrorsCh_other: '{n} offen in diesem Kapitel',
+  vgErrorsChNone: 'in diesem Kapitel gerade nichts fällig',
+  vgTeacher: 'Lehrerin',
+  vgTeacherSub: 'Korrekturen aus der Stunde einfügen',
+  vgJourney: 'C1-Reise ansehen',
+  vgJourneySub: 'Alle Kapitel als Route, mit deinem Stand',
+  vgMore: 'Extra-Übungen, freiwillig',
+  vgErrorsAll: 'Alle Fehlersätze',
+  vgChPull: 'Kapitel vorziehen',
+  vgExplain: 'Erklärung',
+  vgTopicOpen: 'Thema ansehen: {name}',
+  vgAllTopics: 'Alle Themen',
+};

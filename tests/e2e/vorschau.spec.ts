@@ -143,7 +143,11 @@ test.describe('Baustein-Galerie: Bedienung, Kontrast, Bewegung', () => {
       // Ring (erledigte Segmente), laufender Block und gewählter Chip-Rand gegen ihre Fläche.
       expect(await nonTextContrast(page, '.lx-v-ring-on', 'stroke', '[data-galerie="heute"] .lx-v-card')).toBeGreaterThanOrEqual(3);
       expect(await nonTextContrast(page, '.lx-v-st[data-state="run"] .lx-v-st-mk', 'color', '[data-galerie="heute"] .lx-v-card')).toBeGreaterThanOrEqual(3);
-      expect(await nonTextContrast(page, '.lx-v-btn[data-variant="pri"]', 'background-color', 'body')).toBeGreaterThanOrEqual(3);
+      // Hauptknopf-Fläche gegen den Grund: ≥ 3:1 in Dunkel und Hell. In Gedämpft hat Emrah (31.10.2026, Frage-Dialog) weiße Schrift auf etwas
+      // dunklerer Iris gewählt (D5, --act-btn 0,53): die Schrift hält 5,36:1 (tests/unit/contrast.test.ts), die Fläche gegen den gedämpften Grund
+      // nur ~2,6:1 – beides zugleich geht nicht (3:1 bräuchte Iris ≥ 0,62, dort hält Weiß nur 3,67:1). Der Knopf ist über seine Schrift erkennbar
+      // (WCAG 1.4.11 verlangt die Fläche nicht, wenn die Beschriftung das Bedienelement kennzeichnet); hier gilt deshalb die Untergrenze 2,5:1.
+      expect(await nonTextContrast(page, '.lx-v-btn[data-variant="pri"]', 'background-color', 'body')).toBeGreaterThanOrEqual(mode === 'dim' ? 2.5 : 3);
       expect(await axeFindings(page)).toEqual([]);
       expect(o.external).toEqual([]);
       expect(o.errors).toEqual([]);

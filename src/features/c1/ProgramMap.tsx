@@ -12,6 +12,10 @@ import { ChapterSheet, TONE_KEY, topicTone } from './ChapterSheet';
 import { JourneyMap, StatusChip } from './journey/JourneyMap';
 import { useChosenChapter } from './chosen';
 import { chapterRunOn } from '../../app/flags';
+import { chapterPhases, type TopicPhase } from '../../domain/c1/cursor';
+import type { MessageKey } from '../../i18n';
+
+const PHASE_KEY: Record<TopicPhase, MessageKey> = { intro: 'pxKPhaseIntro', practice: 'pxKPhasePractice', test: 'pxKPhaseTest', done: 'pxKPhaseDone' };
 
 // Programmkarte „Dein Weg zu C1“ (Lernplattform 3.0 P32), im Grammatik-Reiter unter dem Titel (Slot `grammar.head`).
 // Darstellung seit R6 (P58): die C1-Reise (`journey/JourneyMap.tsx`). Handy: senkrechte Route mit 7 Stationen, darunter das Ziel des aktuellen
@@ -94,6 +98,10 @@ function Detail({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpe
   const { t, lang } = useT();
   // Kapitel-Modus: „Geschafft“ wie im Kapitelblatt (sicher oder Themen-Test bestanden).
   const run = chapterRunOn() && p.ready;
+  // D5 (ux-reviewer M1): im Kapitel-Modus dieselbe Angabe je Thema wie das Kapitel-Detail (Phase aus `chapterPhases`), nicht ein zweiter Zustand.
+  const today = useClock((s) => s.today);
+  const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
+  const phases = useMemo(() => (run ? chapterPhases({ chapter: p, docs, today }) : null), [run, p, docs, today]);
   return (
     <div className="flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-4" data-testid="program-detail" data-chapter={c.id}>
       <div className="flex flex-wrap items-center gap-2">
@@ -115,7 +123,7 @@ function Detail({ c, p, onOpen }: { c: ProgramChapter; p: ChapterProgress; onOpe
               className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-line px-3 text-sm"
             >
               <span>{name}</span>
-              <span className="text-muted">{r.exists ? t(TONE_KEY[topicTone(r, run)]) : t('pxChTopicSoon')}</span>
+              <span className="text-muted">{!r.exists ? t('pxChTopicSoon') : phases?.get(r.id) ? t(PHASE_KEY[phases.get(r.id)!]) : t(TONE_KEY[topicTone(r, run)])}</span>
             </li>
           );
         })}

@@ -22,7 +22,7 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PARTS = 'src/styles/parts';
 
 /** Neue Schichten (Relaunch): keine Altlast. */
-export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css', 'v-uebung.css'];
+export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css', 'v-uebung.css', 'v-grammatik.css'];
 
 /** Umgebaute Dateien/Ordner (Präfix relativ zum Repo). Nur anhängen, nie still entfernen. */
 export const UMGEBAUT = [
@@ -37,6 +37,10 @@ export const UMGEBAUT = [
   'src/ui/exercise/TodayMini.tsx',
   'src/features/grammar/IntroFlow.tsx',
   'src/features/grammar/RuleSide.tsx',
+  // D5 V-GRAMMATIK: Reiter Grammatik (Wurzel, Kopf, „Du bist hier“, Kapitelliste, Kapitel-Seite, Spalte), Lernpfad, Kapitel-Detail.
+  'src/features/learn/',
+  'src/features/grammar/PathList.tsx',
+  'src/features/c1/ChapterSheet.tsx',
 ];
 
 const stripCssComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '');

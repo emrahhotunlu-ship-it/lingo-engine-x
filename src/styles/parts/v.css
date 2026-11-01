@@ -39,7 +39,7 @@
   transition: transform 140ms var(--ease-soft), background-color 140ms, opacity 140ms;
 }
 .lx-v-btn:active { transform: scale(0.98); }
-.lx-v-btn[data-variant='pri'] { background: var(--act); color: var(--act-fg); }
+.lx-v-btn[data-variant='pri'] { background: var(--act-btn); color: var(--act-btn-fg); }
 .lx-v-btn[data-variant='sec'] { background: var(--surface-2); color: var(--fg); }
 .lx-v-btn[data-variant='ghost'] { color: var(--fg-2); min-height: 44px; font-size: 15px; font-weight: 550; }
 .lx-v-btn[data-full] { width: 100%; }
@@ -126,6 +126,8 @@ button.lx-v-ring { cursor: pointer; }
 .lx-v-wd[data-today] i { background: transparent; box-shadow: 0 0 0 2px var(--act) inset; }
 .lx-v-wd[data-today][data-done] i { box-shadow: 0 0 0 2px var(--act) inset; }
 .lx-v-wd[data-rest] i { background: transparent; box-shadow: 0 0 0 1.5px var(--line-2) inset; }
+/* D5 (ux-reviewer D2, kann 7): im Hellmodus heben sich offene Tage auf surface-2 kaum vom Grund ab – feiner Rand wie die Ruhetage. */
+:root[data-theme='light'] .lx-v-wd:not([data-done]):not([data-today]):not([data-rest]) i { box-shadow: 0 0 0 1px var(--line-2) inset; }
 .lx-v-streak { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: 4px; font-size: 11px; font-weight: 550; color: var(--fg-3); }
 .lx-v-streak b { font-size: 20px; line-height: 22px; font-weight: 650; color: var(--fg); }
 

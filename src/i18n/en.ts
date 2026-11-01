@@ -46,6 +46,7 @@ import { diktatEn } from './parts/diktat.en';
 import { vEn } from './parts/v.en';
 import { vhEn } from './parts/vh.en';
 import { vuEn } from './parts/vu.en';
+import { vgEn } from './parts/vg.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -116,6 +117,7 @@ export const en: Record<MessageKey, string> = {
   ...vEn,
   ...vhEn,
   ...vuEn,
+  ...vgEn,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3En,
   appName: 'Lingo-Engine X',

@@ -33,7 +33,7 @@ for (const s of sizes) {
     test('Grammatik-Reiter mit der Reise', async ({ page }) => {
       await start(page, s.theme, chapterOnePatch());
       await openTab(page, 'learn');
-      await page.getByTestId('program-map').scrollIntoViewIfNeeded();
+      await page.getByTestId('path-chapters').scrollIntoViewIfNeeded();
       await page.waitForTimeout(1500);
       await page.screenshot({ path: `${OUT}/r4-kp-01-grammatik-reiter-${s.name}.png` });
     });

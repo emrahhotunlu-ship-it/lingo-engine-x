@@ -26,9 +26,9 @@
   --lx-accent-fg: var(--act-fg);
   --lx-accent-text: var(--act-text);
   --lx-accent-soft: var(--act-soft);
-  --lx-btn-n: var(--act);
-  --lx-btn-nf: var(--act-fg);
-  --lx-btn-grammar: var(--act);
+  --lx-btn-n: var(--act-btn);
+  --lx-btn-nf: var(--act-btn-fg);
+  --lx-btn-grammar: var(--act-btn);
 
   /* Bedeutung: richtig · fast · falsch · Hinweis */
   --lx-ok: var(--ok);

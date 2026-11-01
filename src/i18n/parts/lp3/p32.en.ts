@@ -1,7 +1,7 @@
 // Learning platform 3.0 · P32 (program map + chapter sheet): texts with prefix `px`, English (US).
 
 export const pxP32En = {
-  pxMapTitle: 'Your way to C1',
+  pxMapTitle: 'Your path to C1',
   pxMapSub: 'Seven chapters. You see where you are and what comes next.',
   pxMapRoute: 'The seven chapters of the program',
   pxMapChapter: 'Chapter {n} · {name}',

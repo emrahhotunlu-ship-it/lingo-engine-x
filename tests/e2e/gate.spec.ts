@@ -246,9 +246,8 @@ test.describe('Laptop 1280', () => {
 
   test('Kapitelblatt und Prüfung am Laptop: Blatt öffnet, Intro, erste Aufgabe, Esc schließt ohne zu schreiben', async ({ page }) => {
     const { errors } = await start(page, chapterOnePatch());
-    await page.locator('[data-testid="program-chapter"][data-chapter="k1"] [data-testid="program-chapter-open"]').first().click();
-    await page.getByTestId('program-more').click();
-    await expect(page.getByTestId('chapter-sheet')).toBeVisible();
+    // Seit D5: ab 1.280 px steht das Kapitel-Detail in der Kontextspalte.
+    await openChapterOne(page);
     const w0 = await mark(page);
     await page.getByTestId('gate-start-sheet').click();
     await expect(page.getByTestId('gate-intro')).toBeVisible();

@@ -23,7 +23,9 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   await screen(page, 'today');
   await openTab(page, 'learn');
   const hub = page.getByTestId('learn-hub');
-  await expect(hub.getByRole('heading', { name: 'Grammatik', level: 1 })).toBeVisible();
+  // Seit D5 zeichnet der Rahmen den Titelkopf (wie Heute), die Seite selbst beginnt mit „Du bist hier“.
+  await expect(hub).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Grammatik', level: 1 })).toBeVisible();
   await expect(page.getByTestId('hub-next-topic')).toBeVisible();
   await expect(page.getByTestId('hub-next-start')).toBeVisible();
   // Der Pfad: alle 47 Themen in Lehrreihenfolge, je Thema ein Zustand.
@@ -32,7 +34,7 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   await expect(page.getByTestId('chapter')).toHaveCount(7);
   // Mit Programm zeigt nur die C1-Reise „Du bist hier“ (UX-Prüfung B2); der Pfad markiert das aktuelle Kapitel nur als Zustand.
   await expect(page.locator('[data-testid="chapter"][data-here="true"]')).toHaveCount(1);
-  await expect(page.getByTestId('program-here')).toHaveCount(1);
+  await expect(page.locator('[data-testid="path-chapter"][data-status="current"]')).toHaveCount(1);
   await expect(page.getByTestId('chapter-here')).toHaveCount(0);
   await openAllChapters(page);
   await expect(page.locator('[data-testid="topic"]')).toHaveCount(47);
