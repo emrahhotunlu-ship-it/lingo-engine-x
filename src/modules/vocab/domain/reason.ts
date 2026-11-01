@@ -55,7 +55,9 @@ export function reasonOf(task: Task, lex: Lex | null, nowMs: number): Reason {
   if (task.planned && (task.why === 'week' || task.why === 'mistakes' || task.why === 'word')) parts.push(part('vmRsCounts'));
   if (lex && lex.intro !== null) {
     const last = lex.ev.f[lex.ev.f.length - 1];
-    parts.push(last ? part('vmRsLastFree', { date: last }) : part('vmRsNeverFree'));
+    // Ohne gemerkten freien Abruf: nach einem Fehler „seit dem letzten Fehler noch nicht“, sonst schlicht „noch nicht“ (learning-scientist V3 R1).
+    const lapsed = (lex.b?.lapses ?? 0) + lex.u.lapses > 0;
+    parts.push(last ? part('vmRsLastFree', { date: last }) : part(lapsed ? 'vmRsNeverFree' : 'vmRsNotYetFree'));
     const track = FORM_SPEC[task.form].track;
     parts.push(track ? part('vmRsStage', { lv: String(lex.lv), track: track === 'b' ? 'use' : 'know' }) : part('vmRsStageOnly', { lv: String(lex.lv) }));
   }

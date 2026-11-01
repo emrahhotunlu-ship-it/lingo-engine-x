@@ -329,8 +329,14 @@ export class LearnRun {
       if (!p) return null;
       p.choice = null;
       const plain = answerOf(p.card, p.check, p.f, { step: p.task.step > 0 });
-      const wrong = this.compute(p.kind, p.card, p.task, p.before, plain).grade === 1;
-      if (wrong) {
+      // Kontrastkarte ohne Note: falsch beantwortet zählt sie trotzdem (Termin höchstens morgen), der Kontrast ist danach erledigt (R2).
+      const wrongContrast = p.card.form === 'contrast' && p.check.outcome !== 'ok' && p.check.outcome !== 'typo';
+      const wrong = !wrongContrast && this.compute(p.kind, p.card, p.task, p.before, plain).grade === 1;
+      if (wrongContrast) {
+        p.a = answerOf(p.card, p.check, p.f, { unfair: true, step: p.task.step > 0 });
+        p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
+        res = 'counts';
+      } else if (wrong) {
         p.a = answerOf(p.card, p.check, p.f, { later: true, unfair: true, step: p.task.step > 0 });
         p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
         res = p.result.grade === null ? 'again' : 'counts';

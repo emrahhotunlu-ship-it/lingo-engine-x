@@ -166,6 +166,7 @@ export const vmDe = {
   vmRsPractice: 'Freie Übung: nicht fällig, verschiebt keinen Termin.',
   vmRsLastFree: 'Zuletzt ohne Hilfe richtig, als es fällig war: {date}.',
   vmRsNeverFree: 'Seit dem letzten Fehler noch nicht ohne Hilfe richtig, als es fällig war.',
+  vmRsNotYetFree: 'Noch nicht ohne Hilfe richtig, als es fällig war.',
   vmRsStage: 'Stufe {lv} von 7 · {track}.',
   vmRsStageOnly: 'Stufe {lv} von 7.',
   vmRsTrack_use: 'Benutzen',

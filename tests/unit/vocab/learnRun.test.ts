@@ -116,9 +116,17 @@ describe('LearnRun', () => {
     expect(r?.code).toBe('due');
     const keys = r?.parts.map((p) => p.key) ?? [];
     expect(keys[0]).toMatch(/^vmRsDue/);
-    // Lernschritte am Einführungstag sind kein freier Abruf (ev.f bleibt leer).
-    expect(keys).toContain('vmRsNeverFree');
+    // Lernschritte am Einführungstag sind kein freier Abruf (ev.f bleibt leer); ohne Fehler heißt es schlicht „noch nicht“.
+    expect(keys).toContain('vmRsNotYetFree');
     expect(keys.some((k) => k.startsWith('vmRsStage'))).toBe(true);
+  });
+
+  it('„Warum heute?“ nach einem Fehler: „seit dem letzten Fehler noch nicht“', async () => {
+    const lex = learned(T0 - 10 * D);
+    lex.b!.lapses = 1;
+    const s = setup(lex);
+    await s.start('pflicht');
+    expect(s.run.reason()?.parts.map((p) => p.key)).toContain('vmRsNeverFree');
   });
 
   const unfairEntries = (s: ReturnType<typeof setup>) =>

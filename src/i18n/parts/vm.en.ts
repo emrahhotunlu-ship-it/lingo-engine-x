@@ -166,6 +166,7 @@ export const vmEn = {
   vmRsPractice: 'Free practice: not due, does not move any date.',
   vmRsLastFree: 'Last right without help when it was due: {date}.',
   vmRsNeverFree: 'Not right without help when due since the last mistake.',
+  vmRsNotYetFree: 'Not yet right without help when due.',
   vmRsStage: 'Level {lv} of 7 · {track}.',
   vmRsStageOnly: 'Level {lv} of 7.',
   vmRsTrack_use: 'Use',
