@@ -38,6 +38,7 @@ Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Gr
 
 ## 5. Technik-Stolpersteine (Cloud-Umgebung)
 - Playwright: `PW_CHROMIUM=/opt/pw-browsers/chromium`; nie `playwright install`. Nie `npm run grammar:build`.
+- Platte voll (alte Vitest-Reste in /tmp, nicht löschen ohne Emrahs OK): `TMPDIR=/dev/shm/lx` (vorher `mkdir -p`) für Playwright und Vitest, dann startet der Browser wieder.
 - Nach jedem Build/E2E: `git checkout -q -- dist && git clean -fdq dist` und `rm -rf test-results` (Platte knapp, ENOSPC → Browser-Abstürze; dann betroffene Specs einzeln wiederholen). `dist/` nur beim Test-Link aktualisieren.
 - `verify:fast` nach einem Merge immer mit `-- --base <Stand vor dem Merge>`, sonst prüft er nichts.
 - Golden-Kennzahlen: `metrics-kennzahlen.json` (Teil A) nie neu schreiben; `metrics-today*.json` (Teil B) nach Diff-Prüfung mit `vitest -u`.
