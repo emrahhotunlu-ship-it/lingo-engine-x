@@ -432,3 +432,67 @@ function vbSettings() {
     '<div class="card" style="padding:4px 16px">' + sw('Anki-Modus', 'Aufdecken und selbst bewerten · wirkt nur auf Verstehen', false) + sw('Satz vor dem Prüfen anhören', 'Lücke als kurzer Ton', true) + '</div></div>' + tabbar('h14');
 }
 reg('vbe', { code: 'VBE', name: 'Einstellungen Wörter (Entwurf)', kind: 'phone', variants: [['main', 'B9']], render: vbSettings });
+
+/* ================= Satz 3: Einstufung, Mischung der neuen Wörter, Hinzufügen (V5) ================= */
+VB.bands = [['2.500–4.000', 'ok'], ['4.000–6.000', 'ok'], ['6.000–8.000', 'bad'], ['8.000–10.000', 'skip'], ['10.000–12.000', 'skip']];
+VB.srcMix = (n) => '<div class="vb-mix"><span style="flex:30" class="vb-s1"></span><span style="flex:30" class="vb-s2"></span><span style="flex:25" class="vb-s3"></span><span style="flex:15" class="vb-s4"></span></div>' +
+  '<div class="vb-srcl">' + [['vb-s1', 'Wortpartner deiner Wörter', '30 %'], ['vb-s2', 'Beruf und Business-Wendungen', '30 %'], ['vb-s3', 'Deine Funde (antippen, Lehrkraft, Lesen)', '25 %'], ['vb-s4', 'Häufigkeitsliste ab deiner Grenze', '15 %']]
+    .map(x => '<div><i class="' + x[0] + '"></i><span>' + x[1] + '</span><b class="num">' + (n ? x[2] : '') + '</b></div>').join('') + '</div>';
+function vbPlace(v) {
+  const head = t => '<header class="phead gx"><div class="tw-hl"><button class="iconbtn" aria-label="Zurück" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button><h1 class="disp">' + t + '</h1></div></header>';
+  if (v === 'intro') {
+    return head('Wörter einstufen') + '<div class="scroll gx stack s16" style="padding-bottom:24px">' +
+      '<div class="card stack s16"><div class="lbl">Einmalig · ca. 4 Min.</div><div class="disp" style="font-size:26px;line-height:32px;font-weight:700">Wo fangen neue Wörter für dich an?</div>' +
+      '<p class="p" style="margin:0">Je Häufigkeitsstufe: <b>6 Wörter erkennen</b>, dann <b>2 selbst bilden</b> (der Anfangsbuchstabe steht da). Wird es schwer, hören wir auf.</p>' +
+      '<div class="vb-bands">' + VB.bands.map(b => '<div><i></i><span class="num">' + b[0] + '</span></div>').join('') + '</div>' +
+      '<p class="p2" style="margin:0">Damit kommen aus der Häufigkeitsliste keine Wörter, die du längst kannst. Deine Wörter und dein Plan ändern sich durch den Test nicht.</p>' +
+      '<button class="btn pri full" id="pl-go">Einstufung starten</button><button class="btn sec full" id="pl-later">Später</button></div></div>' + tabbar('h12');
+  }
+  const top = (frac, line) => exTop(VB.blocks(), 1, frac) + '<div class="ex-body gx">' + blockLine('w', line);
+  if (v === 'recognize') {
+    const opts = ['Haftung', 'Lieferung', 'Abteilung', 'Vorrat'];
+    return top(0.35, 'Einstufung · <b>4.000–6.000</b> · Erkennen 3 von 6') + instr('Was heißt das markierte Wort hier?') +
+      '<div class="stagec" style="gap:18px"><div class="sent en">The contract limits our <mark class="lx-mark">liability</mark> to the fee.</div>' +
+      '<div class="stack s8">' + opts.map((o, i) => '<button class="choice' + (i === 0 ? ' sel' : '') + '"><span class="n num">' + (i + 1) + '</span>' + o + '</button>').join('') + '</div>' +
+      '<p class="hintline">Keine Rückmeldung je Wort. Am Ende siehst du alles.</p></div></div>' +
+      exFoot(btnSec('pl-idk', 'Weiß ich nicht') + btnPri('pl-next', 'Weiter'));
+  }
+  if (v === 'produce') {
+    return top(0.45, 'Einstufung · <b>4.000–6.000</b> · Selbst bilden 1 von 2') + instr('Schreib das englische Wort in die Lücke. Der Anfangsbuchstabe steht da.') +
+      '<div class="stagec"><div class="prompt disp">Zulieferer</div>' +
+      '<div class="sent en">Last year we switched to a cheaper ' + gapHtml('s', { caret: true, input: true }) + '.</div>' +
+      '<div class="hintline">1 Wort</div></div></div>' +
+      exFoot(btnSec('pl-idk', 'Weiß ich nicht') + btnPri('pl-next', 'Weiter'), true) + drawnKbd({ go: 'go' });
+  }
+  if (v === 'result') {
+    const st = { ok: ['check', 'Sicher', 's-ok'], bad: ['cross', 'schwer', 's-bad'], skip: ['ring', 'nicht getestet', 's-idk'] };
+    return head('Einstufung') + '<div class="scroll gx stack s16" style="padding-bottom:24px">' +
+      '<div class="card stack s16"><div class="lbl">Ergebnis</div><div class="disp" style="font-size:26px;line-height:32px;font-weight:700">Deine Grenze: etwa die 6.000 häufigsten Wörter</div>' +
+      '<div class="vb-bres">' + VB.bands.map(b => '<div class="' + st[b[1]][2] + '"><span class="vi">' + ic(st[b[1]][0], 'xs') + '</span><span class="num">' + b[0] + '</span><span class="r">' + st[b[1]][1] + (b[1] === 'ok' ? ' · 6/6 · 2/2' : b[1] === 'bad' ? ' · 3/6 · 0/2' : '') + '</span></div>').join('') + '</div>' +
+      '<p class="p" style="margin:0">Neue Wörter aus der Häufigkeitsliste beginnen ab Rang 6.000. <b>11 Wörter</b>, die du im Test erkannt und selbst gebildet hast, kommen nicht als neu.</p>' +
+      '<p class="p2" style="margin:0"><b>Warum so?</b> Erkennen allein reicht nicht für C1. Eine Stufe gilt als sicher, wenn du fast alles erkennst und mindestens eins selbst bildest.</p></div>' +
+      '<div class="card stack s12"><div class="lbl">Woher deine neuen Wörter kommen</div>' + VB.srcMix(true) +
+      '<p class="p2" style="margin:0">Ist eine Quelle leer, füllen die anderen auf. Ändern kannst du das unter Einstellungen › Wörter.</p></div>' +
+      '<button class="btn pri full" id="pl-done">Fertig</button><button class="link" id="pl-list" style="align-self:center">Getestete Wörter ansehen</button></div>' + tabbar('h12');
+  }
+  if (v === 'why') {
+    return head('Wörter') + '<div class="scroll gx stack s16" style="padding-bottom:24px">' +
+      '<div class="card stack s16 vb-start"><div class="lbl">Heute</div><div class="disp" style="font-size:28px;line-height:34px;font-weight:700">Wörter · ca. 14 Min.</div>' +
+      '<p class="p" style="margin:0"><b>Warum diese?</b> 11 fällig, die du am ehesten vergisst, zuerst · 4 neue, eingestreut · am Ende 3 Min. Anwenden.</p>' +
+      '<div class="stack s8"><div class="lbl">Die 4 neuen</div>' +
+      [['vb-s1', 'meet a deadline', 'Wortpartner von <span class="en">deadline</span>'], ['vb-s2', 'I’d argue that', 'Business-Wendung: vorsichtig widersprechen'], ['vb-s3', 'leverage', 'dein Fund im Lesen, 12.10.'], ['vb-s4', 'bottleneck', 'Häufigkeitsliste, Rang 6.214']]
+        .map(x => '<div class="vb-newrow"><i class="' + x[0] + '"></i><b class="en">' + x[1] + '</b><span>' + x[2] + '</span></div>').join('') + '</div>' +
+      '<button class="btn pri full" id="vb-go">Los geht’s</button></div>' +
+      '<p class="vb-quiet">' + ic('lock', 'xs') + '<span>Der Plan steht für heute fest. Er ändert sich nicht, wenn du die App neu öffnest.</span></p></div>' + tabbar('h12');
+  }
+  if (v === 'add') {
+    const body = '<div class="stack s16"><div style="display:flex;align-items:center;gap:10px"><span class="p2 en">/ˈlevərɪdʒ/ · Verb</span><button class="iconbtn" aria-label="Anhören" style="margin:0">' + ic('speaker', 'sm') + '</button></div>' +
+      '<div class="disp" style="font-size:24px;line-height:30px;font-weight:600">nutzen, einsetzen (Vorhandenes)</div>' +
+      '<p class="p2" style="margin:0">Satz: <span class="en">We can leverage our existing templates.</span></p>' +
+      '<p class="vb-quiet">' + ic('info', 'xs') + '<span>Nur angetippt zählt als Begegnung und ändert deinen Plan nicht. „Aufnehmen“ legt es als deinen Fund zu den neuen Wörtern, mit diesem Satz.</span></p></div>';
+    return phead('Lesen') + '<div class="scroll gx stack s16"><p class="p en" style="font-size:18px;line-height:28px">Smaller vendors can <mark class="lx-mark">leverage</mark> our existing templates, so onboarding takes days, not weeks.</p></div>' + tabbar('h13') +
+      sheet('vb-add', 'leverage', body, '<div style="display:flex;gap:8px"><button class="btn sec" style="flex:1">Schließen</button><button class="btn pri" style="flex:1">Aufnehmen</button></div>');
+  }
+  return '';
+}
+reg('vbp', { code: 'VBP', name: 'Einstufung und neue Wörter (Entwurf)', kind: 'phone', variants: [['intro', 'Start'], ['recognize', 'Erkennen'], ['produce', 'Selbst bilden'], ['result', 'Ergebnis'], ['why', 'Warum diese neuen?'], ['add', 'Hinzufügen']], render: vbPlace });

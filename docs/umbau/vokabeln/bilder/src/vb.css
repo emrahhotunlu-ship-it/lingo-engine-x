@@ -121,3 +121,20 @@
 [data-mode="light"] .band.s-near, [data-mode="light"] .dverdict.s-near { background: color-mix(in srgb, var(--surface) 86%, var(--near)); }
 [data-mode="light"] .band.s-bad, [data-mode="light"] .dverdict.s-bad { background: color-mix(in srgb, var(--surface) 91%, var(--bad)); }
 .vb-field { height: 128px; min-height: 0; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent); mask-image: linear-gradient(to bottom, #000 78%, transparent); }
+/* Satz 3 */
+.vb-s1 { background: var(--act); } .vb-s2 { background: color-mix(in srgb, var(--act) 55%, var(--surface-3)); }
+.vb-s3 { background: color-mix(in srgb, var(--fg) 55%, var(--surface-3)); } .vb-s4 { background: var(--surface-3); }
+.vb-srcl { display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: var(--fg-2); }
+.vb-srcl div { display: flex; align-items: center; gap: 10px; } .vb-srcl span { flex: 1; } .vb-srcl i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.vb-bands { display: flex; flex-direction: column; gap: 6px; }
+.vb-bands div { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--fg-2); }
+.vb-bands i { width: 8px; height: 8px; border-radius: 50%; background: var(--surface-3); box-shadow: 0 0 0 1px var(--line) inset; }
+.vb-bres { display: flex; flex-direction: column; gap: 8px; }
+.vb-bres div { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.vb-bres .r { color: var(--fg-3); margin-left: auto; font-size: 13px; }
+.vb-bres .vi { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); }
+.vb-bres .s-ok .vi { background: color-mix(in srgb, var(--ok) 22%, transparent); color: var(--ok); }
+.vb-bres .s-bad .vi { background: color-mix(in srgb, var(--bad) 22%, transparent); color: var(--bad); }
+.vb-bres .s-idk { color: var(--fg-3); }
+.vb-newrow { display: grid; grid-template-columns: 10px auto 1fr; align-items: baseline; gap: 4px 10px; font-size: 14px; }
+.vb-newrow i { width: 10px; height: 10px; border-radius: 3px; align-self: center; } .vb-newrow span { color: var(--fg-3); font-size: 13px; }

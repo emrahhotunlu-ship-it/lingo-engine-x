@@ -166,5 +166,36 @@
 {
 "name": "s2-13-b9-einstellungen-390-dunkel",
 "screen": "vbe-main"
+},
+{
+"name": "s3-01-einstufung-start-390-dunkel",
+"screen": "vbp-intro"
+},
+{
+"name": "s3-02-einstufung-erkennen-390-dunkel",
+"screen": "vbp-recognize"
+},
+{
+"name": "s3-03-einstufung-bilden-390-dunkel",
+"screen": "vbp-produce"
+},
+{
+"name": "s3-04-einstufung-ergebnis-390-dunkel",
+"screen": "vbp-result",
+"full": true
+},
+{
+"name": "s3-05-warum-diese-neuen-390-dunkel",
+"screen": "vbp-why"
+},
+{
+"name": "s3-06-hinzufuegen-390-dunkel",
+"screen": "vbp-add"
+},
+{
+"name": "s3-07-einstufung-ergebnis-390-hell",
+"screen": "vbp-result",
+"mode": "light",
+"full": true
 }
 ]

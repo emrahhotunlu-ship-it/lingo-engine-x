@@ -49,6 +49,17 @@ Dateinamen: `s<Satz>-<Nr>-<Bild>-<Breite>-<Modus>.jpg`. `vergleich-*.jpg` = link
 | `s2-12` B6 ohne Claude | Hinweis, „So benutzt man es“, zählt nicht für Stufe 7 | B6, W6 | – |
 | `s2-13` B9 Einstellungen | Zielzeit 10/15/20/30 Min. (Standard 15), neue Wörter 0/2/5/10 (mind. 2), Sicherheit 85/90/95 % **mit Minuten**, Anki-Modus (nur Verstehen), Satz vor dem Prüfen anhören | B9, M17, Emrah F3/F5 | – |
 
+## Satz 3 (vor V5: Einstufung und neue Wörter)
+
+| Bild | Was es zeigt | Methode / Plan | Was Emrah entscheidet |
+|---|---|---|---|
+| `s3-01` Einstufung Start | einmalig, ca. 4 Min.; je Häufigkeitsstufe 6 Wörter erkennen, dann 2 selbst bilden (Anfangsbuchstabe); Stopp, sobald es schwer wird; ändert weder Wörter noch Plan | V5, `plan.md` §3.5, M1 | Einstufung so (5 Stufen von 2.500 bis 12.000)? |
+| `s3-02` Erkennen | markiertes Wort im Satz, 4 deutsche Bedeutungen (gleiche Wortart), „Weiß ich nicht“; keine Rückmeldung je Wort | M1 (Erkennen) | – |
+| `s3-03` Selbst bilden | deutsches Wort groß, Satz mit Lücke und Anfangsbuchstabe | M1 (Bilden), Kap. 15 (Eingabe in der Lücke) | – |
+| `s3-04` Ergebnis (Dunkel), `s3-07` (Hell) | Grenze in Worten, Stufen sicher/schwer/nicht getestet mit 6/6 · 2/2; im Test gekonnte Wörter kommen nicht als neu; „Warum so?“; darunter **Woher deine neuen Wörter kommen**: Wortpartner 30 %, Beruf und Business-Wendungen 30 %, deine Funde 25 %, Häufigkeitsliste ab der Grenze 15 % | V5, Emrah 30.10. (C1-Auswahl) | Mischung 30/30/25/15 so? |
+| `s3-05` Warum diese neuen | Start-Karte eines anderen Tages mit 4 neuen (je Quelle eins, Farbe wie im Mix) und Grund je Wort | B8, N1 | – |
+| `s3-06` Aufnehmen | Wort im Lesen angetippt: nur Begegnung, ändert den Plan nicht; „Aufnehmen“ legt es mit dem Satz als Fund zu den neuen Wörtern | `plan.md` §3.5 (Begegnung ohne FSRS) | – |
+
 ## Regeln, die in mehreren Bildern gleich gelten
 - **Farbe des Urteils:** grün = richtig, gelb = fast richtig oder nur ein Teil fehlt (Tippfehler, fehlende oder falsche Präposition: Note „Hard“), rot = falsch oder falscher Wortpartner (*hold* statt *give a presentation*: Note nach M56). Deshalb ist *postpone on* in `s2-08` gelb und *hold a presentation* in `s1-15` rot.
 - **Nach einem Fehler:** immer „Mehr“ und „War das auch richtig?“, darunter leise „Das wusste ich eigentlich“; ein Hauptknopf „Weiter“.
