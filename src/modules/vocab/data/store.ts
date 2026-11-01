@@ -2,8 +2,9 @@ import { addDays, dayKey, dayStartOf, logError, type Writer } from '../shared';
 import { type Catalog, loadByDay } from '../domain/catalog';
 import { applyMove, buildDayPlan, type DayPlan } from '../domain/day';
 import { LEGACY_EX, mirrorLegacy } from '../domain/mirror';
-import { type Answer, type AnswerResult, applyAnswer } from '../domain/planner';
-import type { FormStats, VocabCfg } from '../domain/types';
+import { type Draft, draftOpen } from '../domain/flow';
+import { type Answer, type AnswerResult, applyAnswer, introduce, type PlanCtx, probeKnown } from '../domain/planner';
+import type { FormStats, Lex, VocabCfg } from '../domain/types';
 import { tuple, VLOG_MAX_PARTS, VLOG_SOFT_MAX, vlogDocId, vlogKey } from '../domain/vlog';
 import { VMOD_DAY_PATH } from '../registry';
 import { VLOG_INDEX_PATH } from '../domain/vlogIndex';
@@ -21,21 +22,21 @@ export type VocabDeps = { writer: Writer; device: string };
 export { lexOf, isFutureLex } from './lex';
 import { lexOf, isFutureLex } from './lex';
 
+type Compute = (lex: Lex) => AnswerResult | null;
+
 /**
- * Eine Antwort buchen. `cat` liefert Last und Geschwister (Stand im Speicher); gerechnet wird auf dem FRISCHEN Dokument.
- * Gibt das Ergebnis zurück oder `null`, wenn das Dokument fehlt, ungültig ist oder aus einer künftigen Version stammt.
+ * Gemeinsamer Buchungsweg: `compute` auf dem FRISCHEN Kartendokument, Lernstand prüfen und schreiben, alte Felder spiegeln (nur bei Note),
+ * danach ein Verlaufseintrag. `null`, wenn das Dokument fehlt, ungültig ist, aus einer künftigen Version stammt oder `compute` ablehnt.
  */
-export async function writeAnswer(deps: VocabDeps, path: string, a: Answer, o: { cfg: VocabCfg; cat: Catalog; med: FormStats; planned: boolean }): Promise<AnswerResult | null> {
-  const day = dayKey(a.t);
-  const load = loadByDay(o.cat, o.med, path);
-  const siblings = o.cat.siblingOffsets(path, day);
+async function commit(deps: VocabDeps, path: string, a: Answer, cat: Catalog, compute: Compute): Promise<AnswerResult | null> {
   let result: AnswerResult | null = null;
   const chunk = path.startsWith('chunk/');
   await deps.writer.transform(path, (cur) => {
     if (!cur || isFutureLex(cur)) return null;
     const lex = lexOf(cur);
     if (!lex) return null;
-    const r = applyAnswer(lex, a, { cfg: o.cfg, path, planned: o.planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings });
+    const r = compute(lex);
+    if (!r) return null;
     const parsed = lexWriteSchema.safeParse(r.lex);
     if (!parsed.success) {
       logError('vocab:answer', parsed.error, path);
@@ -49,10 +50,60 @@ export async function writeAnswer(deps: VocabDeps, path: string, a: Answer, o: {
   });
   const res = result as AnswerResult | null;
   if (res) {
-    o.cat.set(path, res.lex);
-    await writeVlog(deps, [tuple({ t: a.t, path, track: res.track, form: a.form, note: res.note, outcome: a.outcome, ms: a.ms, fk: a.fk, hint: a.hint, sentence: a.sentence, lv: res.lex.lv, flags: a.flags ?? 0 })], deps.device);
+    cat.set(path, res.lex);
+    await logAnswer(deps, path, a, res);
   }
   return res;
+}
+
+const logAnswer = (deps: VocabDeps, path: string, a: Answer, r: Pick<AnswerResult, 'track' | 'note' | 'lex'>) =>
+  writeVlog(deps, [tuple({ t: a.t, path, track: r.track, form: a.form, note: r.note, outcome: a.outcome, ms: a.ms, fk: a.fk, hint: a.hint, sentence: a.sentence, lv: r.lex.lv, flags: a.flags ?? 0 })], deps.device);
+
+type BookOpts = { cfg: VocabCfg; cat: Catalog; med: FormStats; planned: boolean };
+
+function ctxOf(path: string, t: number, o: BookOpts): PlanCtx {
+  const day = dayKey(t);
+  const load = loadByDay(o.cat, o.med, path);
+  return { cfg: o.cfg, path, planned: o.planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: o.cat.siblingOffsets(path, day) };
+}
+
+/**
+ * Eine Antwort buchen. `cat` liefert Last und Geschwister (Stand im Speicher); gerechnet wird auf dem FRISCHEN Dokument.
+ * Gibt das Ergebnis zurück oder `null`, wenn das Dokument fehlt, ungültig ist oder aus einer künftigen Version stammt.
+ * Ist genau diese Antwort schon gebucht (`sync === t`: Weiter und Verlassen zugleich), wird nichts mehr geschrieben.
+ */
+export async function writeAnswer(deps: VocabDeps, path: string, a: Answer, o: BookOpts): Promise<AnswerResult | null> {
+  const ctx = ctxOf(path, a.t, o);
+  return commit(deps, path, a, o.cat, (lex) => (lex.sync === a.t ? null : applyAnswer(lex, a, ctx)));
+}
+
+/** Neues Wort eingeführt (V3 §3): Lernschritt A beginnt, keine Note; Verlaufseintrag mit dem Versuch (Form `intro`). Schon eingeführt → nichts. */
+export async function writeIntro(deps: VocabDeps, path: string, a: Answer, cat: Catalog): Promise<AnswerResult | null> {
+  return commit(deps, path, a, cat, (lex) => (lex.intro !== null ? null : { lex: introduce(lex, a.t), grade: null, booked: [], note: 0, track: 0, events: [], speed: null }));
+}
+
+/**
+ * „Kenne ich schon“ (V3 §3): richtig ohne Hilfe → Stufe 3, Kontrolle in 7 Tagen (`probeKnown`); sonst nur der Verlaufseintrag, das Wort wird
+ * danach normal eingeführt (eigene Buchung `writeIntro`).
+ */
+export async function writeProbe(deps: VocabDeps, path: string, a: Answer, o: BookOpts): Promise<AnswerResult | null> {
+  if (a.outcome !== 'ok') {
+    const lex = o.cat.get(path)?.lex;
+    if (lex) await logAnswer(deps, path, a, { track: 0, note: 0, lex });
+    return null;
+  }
+  const ctx = ctxOf(path, a.t, o);
+  return commit(deps, path, a, o.cat, (lex) => (lex.intro !== null ? null : probeKnown(lex, a.t, ctx)));
+}
+
+/** Offenen Entwurf aus dem Browser nachbuchen (nur wenn das Lexem ihn noch nicht kennt, `draftOpen`). */
+export async function replayDraft(deps: VocabDeps, d: Draft, o: Omit<BookOpts, 'planned'>): Promise<AnswerResult | null> {
+  const lex = o.cat.get(d.path)?.lex ?? null;
+  if (!draftOpen(d, lex)) return null;
+  const opts = { ...o, planned: d.planned };
+  if (d.kind === 'intro') return writeIntro(deps, d.path, d.a, o.cat);
+  if (d.kind === 'probe') return writeProbe(deps, d.path, d.a, opts);
+  return writeAnswer(deps, d.path, d.a, opts);
 }
 
 /** Bereits im Verzeichnis `vmod/ix` eingetragene Verlaufsdokumente, je Schreiber (spart einen Lesezugriff je Antwort). */

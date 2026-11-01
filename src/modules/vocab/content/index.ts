@@ -2,6 +2,7 @@ import { z } from 'zod';
 import c1 from './charge1-traps.json';
 import c2 from './charge2-business.json';
 import c3 from './charge3-gr.json';
+import type { Teach } from '../domain/card';
 
 // Wörter-Modul V2: Lehrer-Chargen 1–3 (README.md). Daten, kein Code; mit zod geprüft. Benutzt wird nur, was der english-teacher
 // vollständig geprüft hat (`review.passes` deckt alle Einträge). Erst wenn Charge 3 ganz geprüft ist, gibt es die Formen M78–M81 (`GR_FORMS_ON`).
@@ -127,4 +128,33 @@ export const LEX_INFO: ReadonlyMap<string, { k: GrEntry['k']; reg: GrEntry['reg'
 /** Wörterbuch für die Auswertung (`check.ts`): Listen aus Charge 1, britisch → US aus der App. `isWord` liefert der Aufrufer. */
 export function checkDict(isWord: (w: string) => boolean, toUS: (s: string) => string): { isWord: (w: string) => boolean; misspell: ReadonlyMap<string, string>; confusable: ReadonlyMap<string, readonly string[]>; toUS: (s: string) => string } {
   return { isWord, misspell: MISSPELL, confusable: CONFUSABLE, toUS };
+}
+
+/**
+ * V3: Lehrer-Angaben je Stichwort für die Lernkarte (`Teach`, domain/card.ts): Warum-Zeile, Auch richtig, britisch, Ausweichwörter, falsche
+ * Verbindungen/Muster (aus `wrong` der Fallen-Art), nicht zählbar, falscher Freund, Verwechslungspartner. Nur geprüfte Chargen.
+ */
+export function teachOf(head: string): Teach {
+  const key = norm(head);
+  const out: { -readonly [K in keyof Teach]: Teach[K] } = {};
+  const t = traps.find((x) => norm(x.en) === key);
+  const b = CHARGE2.reviewed ? CHARGE2.items.find((x) => norm(x.en) === key) : undefined;
+  const src = t ?? b;
+  if (src) {
+    out.why = src.why;
+    if (src.syn?.length) out.syn = src.syn;
+    if (src.uk?.length) out.uk = src.uk;
+    if (src.evade?.length) out.evade = src.evade;
+    if (src.gr?.cnt === 'u') out.uncount = true;
+  }
+  if (t) {
+    if (t.type === 'colloc' && t.wrong?.length) out.colloc = t.wrong;
+    if (t.type === 'prep' && t.wrong?.length) out.prep = t.wrong;
+    if (t.type === 'uncount') out.uncount = true;
+    if (t.type === 'ff' && t.trap) out.ff = t.trap;
+    if (t.type === 'pair' && t.pair) out.pair = t.pair;
+  }
+  const info = LEX_INFO.get(key);
+  if (!out.evade && info?.evade?.length) out.evade = info.evade;
+  return out;
 }
