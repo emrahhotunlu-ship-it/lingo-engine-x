@@ -228,6 +228,10 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   // Anki-Modus (S6b-3): Aufdecken, dann Selbsturteil 1–4; gebucht wird sofort, ohne Band.
   const isFlip = card.mode === 'flip';
   const flip = view.k === 'card' ? (view.flip ?? null) : null;
+  // Abstands-Deckel: Schwer/Gut/Leicht können denselben Termin ergeben; dann ehrlich sagen, warum (ux-reviewer S6c).
+  const sameDay = flip ? new Set(flip.opts.filter((o) => o.g >= 2).map((o) => (o.when.k === 'day' ? o.when.day : o.when.k))).size === 1 && flip.opts.some((o) => o.g >= 2 && o.when.k === 'day') : false;
+  const flipMeaningRule = !!flip?.why && flip.why.kind === 'rule' && (flip.why.key === 'vmWhyMeaning' || flip.why.key === 'vmWhyMeaningNoPos');
+  const flipPos = flip?.why && flip.why.kind === 'rule' ? (flip.why.vars.pos ?? null) : null;
   const flipOpen = () => {
     if (view.k === 'card' && isFlip && !view.flip) run.flipOpen(measure());
   };
@@ -322,17 +326,27 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     );
     answer = flip ? (
       <div className="lx-reveal-in flex flex-col gap-2" data-testid="vm-flip-back">
-        <p className="lx-t-meta m-0 text-subtle">{t('vmFlipMeaning')}</p>
+        <p className="lx-t-meta m-0 text-subtle">
+          {t('vmFlipMeaning')}
+          {flipPos ? ` · ${flipPos}` : ''}
+        </p>
         <p className="lx-t-title m-0" lang="de" data-testid="vm-flip-de">
           {card.de}
         </p>
-        {/* Die reine Bedeutungs-Zeile stünde doppelt unter „Bedeutung“ (learning-scientist S6b-3 Sollte 2): nur Lehrer-Zeile oder Regel zeigen. */}
-        {flip.why && !(flip.why.kind === 'rule' && flip.why.key === 'vmWhyMeaning') ? (
+        {/* Die reine Bedeutungs-Zeile stünde doppelt unter „Bedeutung“ (learning-scientist S6b-3 Sollte 2, Nachprüfung): nur Lehrer-Zeile oder
+            andere Regel zeigen; die Wortart steht dafür am Label. */}
+        {flip.why && !flipMeaningRule ? (
           <p className="lx-t-support" data-testid="vm-why">
             {whyText(t, flip.why)}
           </p>
         ) : null}
         {partnersNode(t, flip.partners)}
+        {/* Abstands-Deckel: eigene Zeile im Inhalt, nicht unter der festen Notenleiste (ux-reviewer S6c Nachprüfung Punkt 4). */}
+        {sameDay ? (
+          <p className="lx-t-support m-0 text-muted" data-testid="vm-grades-same">
+            {t('vmGradesSame')}
+          </p>
+        ) : null}
       </div>
     ) : null;
   } else if (card.mode === 'meaning') {
@@ -394,8 +408,6 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     : band
       ? { label: t('vmBtnNext'), onClick: next, testId: 'vm-next', arrow: true }
       : { label: t(introEmpty ? 'vmBtnReveal' : 'vmBtnCheck'), onClick: () => check(introEmpty), testId: 'vm-check' };
-  // Abstands-Deckel: Schwer/Gut/Leicht können denselben Termin ergeben; dann ehrlich sagen, warum (ux-reviewer S6c).
-  const sameDay = flip ? new Set(flip.opts.filter((o) => o.g >= 2).map((o) => (o.when.k === 'day' ? o.when.day : o.when.k))).size === 1 && flip.opts.some((o) => o.g >= 2 && o.when.k === 'day') : false;
   const grades = flip ? (
     <GradeButtons
       options={flip.opts.map((o) => {
@@ -404,7 +416,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       })}
       onGrade={flipGrade}
       label={t('vmGradesLabel')}
-      note={sameDay ? `${t('vmGradesNote')} · ${t('vmGradesSame')}` : t('vmGradesNote')}
+      note={t('vmGradesNote')}
       testId="vm-grades"
     />
   ) : undefined;

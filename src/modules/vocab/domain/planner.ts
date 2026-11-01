@@ -3,7 +3,7 @@ import { pickDay } from './balance';
 import { capDays, EV_F_MAX } from './cap';
 import { corridor } from './fuzz';
 import { easyAllowed, FORM_SPEC, gradeOf, isFreeGood, isVoid, speedOf } from './grade';
-import { formLevel, updateFq } from './forms';
+import { formLevel, fqOf, updateFq } from './forms';
 import { isLeechCount } from './leech';
 import { canAscend, descend } from './ladder';
 import { book, newTrack, retr } from './tracks';
@@ -326,6 +326,9 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     const error = a.outcome === 'prep' ? 'prep' : a.outcome === 'plural' ? 'plural' : a.outcome === 'order' ? 'order' : null;
     lex.fq = updateFq({ ...lex, fq: fqBefore }, { form: a.form, track: spec.track, correct: (a.outcome === 'ok' || a.outcome === 'typo') && a.hint === 0 && !second, anchor: a.anchor ?? null, wrong, evadeHit: a.outcome === 'evade' ? (a.hit ?? null) : null, counted: booked.includes('b'), error });
     if ((lex.fq.nb ?? 0) > (fqBefore?.nb ?? 0)) events.push('bound');
+    } else if (a.form === 'flip') {
+    // Aufdecken zählt keine Treffer, schreibt aber die letzte Form fort, sonst sperrt „nicht zweimal dieselbe Form“ die vorige Hörform (learning-scientist Nachprüfung).
+    lex.fq = { ...fqOf({ ...lex, fq: fqBefore }), l: 'meaning' };
   }
 
   lex.sync = Math.max(lex.sync, a.t);

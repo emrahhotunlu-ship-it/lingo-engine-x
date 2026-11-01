@@ -175,6 +175,12 @@ describe('Zwei Spuren, Kopplung nur nach oben (M7)', () => {
     expect(bad.lex.lv).toBe(a.lex.lv);
     expect(bad.lex.lc).toBe(a.lex.lc);
   });
+  it('Aufdecken schreibt die letzte Form fort (meaning), zählt aber keine Treffer', () => {
+    const base = { ...learned(T0 - 5 * D), fq: { l: 'listen' as const, c: 0, h: { meaning: [2, 3] as [number, number] }, nb: 0, ak: null, ew: [] } };
+    const a = applyAnswer(base, ans(T0, { form: 'flip', self: 3 }), ctx());
+    expect(a.lex.fq?.l).toBe('meaning');
+    expect(a.lex.fq?.h).toEqual(base.fq.h);
+  });
   it('3 Sätze eines Lexems ergeben genau 1 Plan-Eintrag je Spur (M6)', () => {
     const l = learned(T0 - 3 * D);
     const cat = new Catalog([{ path: 'vocab/x', lex: { ...l, sn: [['x#0', '2026-10-30'], ['x#1', '2026-10-31'], ['x#2', '2026-11-01']] }, order: 1 }]);
