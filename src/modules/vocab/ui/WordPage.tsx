@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Button, getDb, useClock, getWriter, Icon, ipaOf, readDoc, Skeleton, speak, toast, useLive, useSpeech, useT, type MessageKey } from '../sharedUi';
+import { Button, EnglishText, getDb, useClock, getWriter, Icon, ipaOf, readDoc, Skeleton, speak, toast, useLive, useSpeech, useT, type MessageKey } from '../sharedUi';
 import { addDays, dayKey, logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { writeManage } from '../data/store';
@@ -180,13 +180,13 @@ function SpeakRow({ text, testId }: { text: string; testId: string }) {
   const status = useSpeech((s) => s.status);
   if (status === 'unsupported' || status === 'novoice' || !text) return null;
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
       <Button variant="quiet" icon="speaker" onClick={() => void speak(text)} data-testid={`${testId}-normal`}>
         {t('vmWpListen')}
       </Button>
-      <Button variant="quiet" onClick={() => void speak(text, { rate: 0.8 })} data-testid={`${testId}-slow`}>
-        {t('vmWpListenSlow')}
-      </Button>
+      <button type="button" className="min-h-11 rounded-full border border-line px-3 text-xs font-semibold text-muted" onClick={() => void speak(text, { rate: 0.8 })} aria-label={t('vmWpListenSlow')} data-testid={`${testId}-slow`}>
+        0,8×
+      </button>
     </div>
   );
 }
@@ -251,6 +251,13 @@ function WordBody({ path, doc, lex, onPractice, onAsk }: { path: string; doc: Do
   const hidden = doc.hidden === true;
   const now = useClock((s) => s.now);
   const origin = str(doc.ex).replace(/\[([^\]]*)\]/g, '$1');
+  // Markiertes Wort im Ursprungssatz („[…]“ in `ex`) als Hervorhebung (ux-reviewer S6c).
+  const mark = ((): [number, number] | null => {
+    const m = /\[([^\]]*)\]/.exec(str(doc.ex));
+    if (!m) return null;
+    const start = str(doc.ex).slice(0, m.index).replace(/\[([^\]]*)\]/g, '$1').length;
+    return [start, start + m[1]!.length];
+  })();
   const added = str(isChunk ? doc.created : doc.added);
   const srcKey = SRC_KEYS[str(doc.src)];
   const partners = partnersOf(doc.col, 4);
@@ -316,6 +323,7 @@ function WordBody({ path, doc, lex, onPractice, onAsk }: { path: string; doc: Do
         {hist.status === 'loading' && <Skeleton className="h-12 w-full" />}
         {hist.status === 'error' && <p className="lx-t-support text-muted">{t('vmWpHistoryError')}</p>}
         {hist.status === 'ready' && <Timeline cells={cells} start={timelineStart(now)} />}
+        {hist.status === 'ready' && own.length === 0 && !hist.more && <p className="lx-t-support m-0 text-muted" data-testid="vw-history-empty">{t('vmWpHistoryEmpty')}</p>}
         {hist.status === 'ready' && (own.length > 0 || hist.more) && (
           <button type="button" className="lx-link self-start" onClick={() => setAll((v) => !v)} aria-expanded={all} data-testid="vw-history-all">
             {all ? t('vmWpHistoryLess') : t('vmWpHistoryAll')}
@@ -323,7 +331,6 @@ function WordBody({ path, doc, lex, onPractice, onAsk }: { path: string; doc: Do
         )}
         {all && (
           <div className="flex flex-col" data-testid="vw-attempts">
-            {own.length === 0 && <p className="lx-t-support text-muted">{t('vmWpHistoryEmpty')}</p>}
             {[...own].reverse().map((a, i) => (
               <AttemptRow key={`${a.t}-${a.form}-${i}`} a={a} t={t} lang={lang} first={i === 0} />
             ))}
@@ -340,9 +347,7 @@ function WordBody({ path, doc, lex, onPractice, onAsk }: { path: string; doc: Do
       {origin && (
         <section className="flex flex-col gap-1.5" data-testid="vw-origin">
           <Label>{srcKey && added ? t('vmWpOriginFrom', { src: t(srcKey), date: /^\d{4}-\d{2}-\d{2}$/.test(added) ? dayDate(lang, dayMs(added)) : added }) : t('vmWpOrigin')}</Label>
-          <p className="lx-t-body text-lg" lang="en">
-            {origin}
-          </p>
+          <EnglishText as="p" className="lx-t-body m-0 text-lg" testId="vw-origin-text" text={origin} area="lookup" source={path} title={head} highlight={mark} />
           <SpeakRow text={origin} testId="vw-origin-listen" />
         </section>
       )}

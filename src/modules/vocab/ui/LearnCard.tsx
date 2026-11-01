@@ -15,6 +15,7 @@ import {
   useHiddenInput,
   useHotkeys,
   useSpeech,
+  useClock,
   useT,
   type GapState,
   type MessageKey,
@@ -87,7 +88,8 @@ function gapParts(card: CardModel): string[] | null {
 const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 
 /** Satz vorlesen (S6b-3, Bild s2-13). `parts` mit mehr als einem Teil: zwischen den Teilen ein kurzer Ton statt des Lösungsworts. Ohne Stimme kein Knopf. */
-function ListenButton({ parts, testId }: { parts: readonly string[]; testId: string }) {
+/** `onSpent`: Vorlesezeit in ms; sie zählt nicht als Antwortzeit (learning-scientist S6b-3 Befund 2). */
+function ListenButton({ parts, testId, onSpent }: { parts: readonly string[]; testId: string; onSpent?: (ms: number) => void }) {
   const { t } = useT();
   const status = useSpeech((x) => x.status);
   const run = useRef(0);
@@ -104,18 +106,23 @@ function ListenButton({ parts, testId }: { parts: readonly string[]; testId: str
     primeGapTone();
     const id = ++run.current;
     mine.current = true;
-    for (let i = 0; i < parts.length; i++) {
-      if (i > 0) {
-        playGapTone();
-        await wait(450);
-        if (run.current !== id) return;
+    const start = performance.now();
+    try {
+      for (let i = 0; i < parts.length; i++) {
+        if (i > 0) {
+          playGapTone();
+          await wait(450);
+          if (run.current !== id) return;
+        }
+        const p = (parts[i] ?? '').trim();
+        if (!p) continue;
+        const r = await speak(p);
+        if (r !== 'done' || run.current !== id) break;
       }
-      const p = (parts[i] ?? '').trim();
-      if (!p) continue;
-      const r = await speak(p);
-      if (r !== 'done' || run.current !== id) break;
+    } finally {
+      onSpent?.(performance.now() - start);
+      if (run.current === id) mine.current = false;
     }
-    if (run.current === id) mine.current = false;
   };
   return (
     <div>
@@ -126,10 +133,9 @@ function ListenButton({ parts, testId }: { parts: readonly string[]; testId: str
   );
 }
 
-function whenText(t: T, w: FlipWhen): string | undefined {
+function whenText(t: T, w: FlipWhen, today: string): string | undefined {
   if (w.k === 'soon') return t('vmIvlSoon');
   if (w.k === 'none') return undefined;
-  const today = dayKey(Date.now());
   if (w.day <= today) return t('vmIvlToday');
   if (w.day === addDays(today, 1)) return t('vmIvlTomorrow');
   const n = Math.round((Date.parse(`${w.day}T12:00:00Z`) - Date.parse(`${today}T12:00:00Z`)) / 86_400_000);
@@ -182,6 +188,7 @@ export function LearnCard({ view, run }: { view: CardView | BandView; run: Learn
 function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) {
   const { t, lang, dateShort } = useT();
   const api = useHiddenInput();
+  const today = useClock((s) => s.today);
   const card = view.card;
   const band = view.k === 'band' ? view : null;
   const typed = useRef('');
@@ -189,6 +196,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   const lookupAtStart = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
   const firstKeyLookup = useRef(0);
+  const listenMs = useRef(0);
+  const firstKeyListen = useRef(0);
   const [hasInput, setHasInput] = useState(false);
   useEffect(() => {
     shownAt.current = performance.now();
@@ -204,8 +213,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
 
   const measure = () => {
     const now = performance.now();
-    const ms = Math.max(0, Math.round(now - shownAt.current - (lookupOpenMs() - lookupAtStart.current)));
-    const fk = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current - firstKeyLookup.current));
+    const ms = Math.max(0, Math.round(now - shownAt.current - (lookupOpenMs() - lookupAtStart.current) - listenMs.current));
+    const fk = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current - firstKeyLookup.current - firstKeyListen.current));
     return { ms, fk };
   };
   const check = (dunno = false) => {
@@ -270,6 +279,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         if (info.firstKey && firstKeyAt.current === null) {
           firstKeyAt.current = performance.now();
           firstKeyLookup.current = lookupOpenMs() - lookupAtStart.current;
+          firstKeyListen.current = listenMs.current;
         }
         // Einführung: „Aufdecken“ ohne Eingabe, „Prüfen“ mit Eingabe.
         setHasInput(v.trim().length > 0);
@@ -299,7 +309,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   const whole = fullText(card);
   // Vorlesen: nach dem Prüfen und bei sichtbarem Wort der ganze Satz; vor dem Prüfen einer Lücke nur mit der Einstellung (Lücke als Ton).
   const parts = band || (card.mode !== 'gap' && card.mode !== 'intro') ? (whole ? [whole.text] : null) : run.listenFirst() ? gapParts(card) : null;
-  const listen = parts ? <ListenButton key={band ? 'full' : 'pre'} parts={parts} testId="vm-listen" /> : null;
+  const listen = parts ? <ListenButton key={band ? 'full' : 'pre'} parts={parts} testId="vm-listen" onSpent={band ? undefined : (ms) => (listenMs.current += ms)} /> : null;
   if (isFlip) {
     prompt = (
       <div className="flex flex-col gap-3">
@@ -311,12 +321,13 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       </div>
     );
     answer = flip ? (
-      <div className="flex flex-col gap-2" data-testid="vm-flip-back">
+      <div className="lx-reveal-in flex flex-col gap-2" data-testid="vm-flip-back">
         <p className="lx-t-meta m-0 text-subtle">{t('vmFlipMeaning')}</p>
         <p className="lx-t-title m-0" lang="de" data-testid="vm-flip-de">
           {card.de}
         </p>
-        {flip.why ? (
+        {/* Die reine Bedeutungs-Zeile stünde doppelt unter „Bedeutung“ (learning-scientist S6b-3 Sollte 2): nur Lehrer-Zeile oder Regel zeigen. */}
+        {flip.why && !(flip.why.kind === 'rule' && flip.why.key === 'vmWhyMeaning') ? (
           <p className="lx-t-support" data-testid="vm-why">
             {whyText(t, flip.why)}
           </p>
@@ -383,15 +394,17 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     : band
       ? { label: t('vmBtnNext'), onClick: next, testId: 'vm-next', arrow: true }
       : { label: t(introEmpty ? 'vmBtnReveal' : 'vmBtnCheck'), onClick: () => check(introEmpty), testId: 'vm-check' };
+  // Abstands-Deckel: Schwer/Gut/Leicht können denselben Termin ergeben; dann ehrlich sagen, warum (ux-reviewer S6c).
+  const sameDay = flip ? new Set(flip.opts.filter((o) => o.g >= 2).map((o) => (o.when.k === 'day' ? o.when.day : o.when.k))).size === 1 && flip.opts.some((o) => o.g >= 2 && o.when.k === 'day') : false;
   const grades = flip ? (
     <GradeButtons
       options={flip.opts.map((o) => {
-        const iv = whenText(t, o.when);
+        const iv = whenText(t, o.when, today);
         return { grade: o.g, label: t(`vmGrade${o.g}` as MessageKey), ...(iv ? { interval: iv } : {}) };
       })}
       onGrade={flipGrade}
       label={t('vmGradesLabel')}
-      note={t('vmGradesNote')}
+      note={sameDay ? `${t('vmGradesNote')} · ${t('vmGradesSame')}` : t('vmGradesNote')}
       testId="vm-grades"
     />
   ) : undefined;

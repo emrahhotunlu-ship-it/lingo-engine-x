@@ -235,7 +235,9 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     else target = 'u';
   }
   const ankiBlocked = a.form === 'flip' && (lex.dayU === day || lex.day === day);
-  const bookedToday = lex.day === day || ankiBlocked;
+  // Wiederholung nach „Nochmal“ im Anki-Modus (Lernschritt ≥ 10 von heute): Übung ohne zweite Buchung (learning-scientist S6b-3 Befund 1).
+  const ankiRetry = a.form !== 'flip' && lex.dayU === day && !!lex.step && lex.step.n >= 10 && dayKey(lex.step.at) === day;
+  const bookedToday = lex.day === day || ankiBlocked || ankiRetry;
   const wasDue = (t: Track | null) => !!t && t.due < endOfDay;
   const dueBefore = target ? wasDue(target === 'b' ? lex.b : lex.u) : false;
 

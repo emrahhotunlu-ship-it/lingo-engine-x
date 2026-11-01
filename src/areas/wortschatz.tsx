@@ -212,7 +212,7 @@ export const wortschatz = defineArea({
     teacherFeedback: { kind: 'page', component: TeacherFeedbackScreen, title: 'tfTitle' },
     // Neue Wörter-App (Großpaket A, V3): Lernrunde des Moduls; Einstieg von Heute kommt mit Schritt 4.
     vlearn: { kind: 'exercise', component: VlearnPage, title: 'vmScreenTitle', params: vlearnParams },
-    vword: { kind: 'page', component: VwordPage, title: 'vmWpTitle', params: vwordParams },
+    vword: { kind: 'page', chrome: 'shell', component: VwordPage, title: 'vmWpTitle', params: vwordParams },
   },
   entries: [
     // Zeile unter Üben (place 'learn'): Lehrer-Feedback einfügen.

@@ -164,7 +164,12 @@ export function needsNoSentence(l: Lex): boolean {
 
 /** Form für eine fällige Abfrage der Spur `track` (M22). */
 export function pickForm(l: Lex, track: TrackKey, av: Avail): FormPick {
-  if (track === 'u' && av.anki) return { form: 'flip', sent: 'n', cue: false, swap: false };
+  const p = pickLadder(l, track, av);
+  // Anki-Modus (S6b-3): das Aufdecken ersetzt nur „Bedeutung“; Hör-Formen bleiben objektive Kontrollen (learning-scientist Befund 3, Kap. 15).
+  return track === 'u' && av.anki && p.form === 'meaning' ? { form: 'flip', sent: 'n', cue: false, swap: false } : p;
+}
+
+function pickLadder(l: Lex, track: TrackKey, av: Avail): FormPick {
   const lv = formLevel(l);
   const fq = fqOf(l);
   const ladder = (track === 'u' ? LADDER_U : LADDER_B)[lv] ?? [];

@@ -109,7 +109,7 @@ export function Overview({ onOpenList }: OverviewProps) {
           <span className="text-lg text-muted">{t('vmOvProduceBig')}</span>
         </h3>
         <ul className="m-0 flex list-none flex-col p-0 [&>li+li]:border-t [&>li+li]:border-line">
-          <CountRow mark="bg-text" label={t('vmOvProduce')} range="S6–S7" n={g.produce} testId="vo-produce" />
+          <CountRow mark="bg-fg" label={t('vmOvProduce')} range="S6–S7" n={g.produce} testId="vo-produce" />
           <CountRow mark="bg-subtle" label={t('vmOvOnway')} range="S3–S5" n={g.onway} testId="vo-onway" />
           <CountRow mark="border border-subtle" label={t('vmOvRecognize')} range="S1–S2" n={g.recognize} testId="vo-recognize" />
           {g.fresh > 0 && <CountRow mark="" label={t('vmOvFresh')} n={g.fresh} testId="vo-fresh" />}
@@ -160,11 +160,11 @@ function OutlookCard({ out, goal, t }: { out: Outlook; goal: number; t: T }) {
           const n = totals[i]!;
           return (
             <li key={d.d} className="flex min-w-0 flex-col items-center gap-1" data-testid="vo-day" data-d={d.d} data-min={n} aria-label={t('vmOvBarAria', { day: date.format(at(d.d)), n })}>
-              <span className={`lx-tnum lx-t-meta ${i === 0 ? 'font-semibold' : 'text-muted'}`} aria-hidden="true">
+              <span className={`lx-tnum lx-t-meta text-muted`} aria-hidden="true">
                 {n || '–'}
               </span>
               <span className="flex h-16 w-full items-end" aria-hidden="true">
-                <span className={`block w-full rounded-sm ${i === 0 ? 'bg-accent' : 'bg-surface-strong'}`} style={{ height: `${Math.max(4, Math.round((n / top) * 100))}%` }} />
+                <span className={`block w-full rounded-sm bg-surface-strong`} style={{ height: `${Math.max(4, Math.round((n / top) * 100))}%` }} />
               </span>
               <span className="lx-t-meta text-subtle" aria-hidden="true">
                 {wd.format(at(d.d)).replace('.', '').slice(0, 2)}
@@ -242,7 +242,7 @@ function RateChip({ label, v, testId }: { label: string; v: number | null; testI
 export function WordSettings() {
   const { t } = useT();
   const now = useClock((s) => s.now);
-  const { items, lexes, cfg, ready } = useWords();
+  const { items, cfg, ready } = useWords();
   const [pending, setPending] = useState<SettingsPatch>({});
   const cat = useMemo(() => new Catalog(items), [items]);
   const out = useMemo(() => outlook(cat, {}, now, cfg, 14), [cat, now, cfg]);
@@ -266,7 +266,6 @@ export function WordSettings() {
       if (!ok) toast(t('vmWpSaveError'));
     });
   };
-  const counted = lexes.filter((l) => l.intro !== null).length;
   return (
     <section className="flex flex-col gap-5" data-testid="vs">
       <h3 className="lx-eyebrow m-0">{t('vmSetTitle')}</h3>
@@ -306,12 +305,12 @@ export function WordSettings() {
                 data-min={mins[String(r)]}
               >
                 <span className="lx-tnum text-lg font-semibold">{pct(r)} %</span>
-                <span className="lx-tnum text-xs text-muted">{t('vmSetRetMin', { n: mins[String(r)] ?? 0 })}</span>
+                <span className="lx-tnum text-xs text-muted">{(mins[String(r)] ?? 0) < 1 ? t('vmSetRetMinLess') : t('vmSetRetMin', { n: mins[String(r)] ?? 0 })}</span>
               </button>
             );
           })}
         </div>
-        <p className="m-0 text-sm text-muted">{t('vmSetRetHint', { n: counted })}</p>
+        <p className="m-0 text-sm text-muted">{t('vmSetRetHint')}</p>
       </div>
       <p className="m-0 text-xs text-subtle" data-testid="vs-when">
         {t('vmSetFromTomorrow')}

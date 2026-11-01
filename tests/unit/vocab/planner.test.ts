@@ -162,6 +162,19 @@ describe('Zwei Spuren, Kopplung nur nach oben (M7)', () => {
     const b = applyAnswer(a.lex, ans(T0 + 60_000), ctx());
     expect(b.booked).toEqual(['b']); // Verstehen heute schon gebucht (dayU)
   });
+  it('Anki „Nochmal“: die Wiederholung kurz danach bucht Benutzen nicht und senkt die Stufe nicht ein zweites Mal', () => {
+    const base = learned(T0 - 5 * D);
+    const a = applyAnswer(base, ans(T0, { form: 'flip', self: 1 }), ctx());
+    expect(a.booked).toEqual(['u']);
+    expect(a.lex.step?.n).toBeGreaterThanOrEqual(10);
+    const ok = applyAnswer(a.lex, ans(T0 + 120_000), ctx());
+    expect(ok.booked).toEqual([]);
+    expect(ok.lex.b).toEqual(a.lex.b);
+    const bad = applyAnswer(a.lex, ans(T0 + 120_000, { outcome: 'wrong' }), ctx());
+    expect(bad.booked).toEqual([]);
+    expect(bad.lex.lv).toBe(a.lex.lv);
+    expect(bad.lex.lc).toBe(a.lex.lc);
+  });
   it('3 Sätze eines Lexems ergeben genau 1 Plan-Eintrag je Spur (M6)', () => {
     const l = learned(T0 - 3 * D);
     const cat = new Catalog([{ path: 'vocab/x', lex: { ...l, sn: [['x#0', '2026-10-30'], ['x#1', '2026-10-31'], ['x#2', '2026-11-01']] }, order: 1 }]);
