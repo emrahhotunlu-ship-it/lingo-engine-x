@@ -1,0 +1,61 @@
+/* Bild-Entwürfe VB: nur neue Klassen mit Präfix vb-, alles über die Tokens der Vorschau. */
+.vb-band { max-height: 64%; gap: 9px; }
+.vb-vrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.vb-tone { display: inline-flex; align-items: center; gap: 2px; }
+.vb-tone .iconbtn { margin: 0; width: 36px; height: 36px; }
+.vb-slow { height: 28px; padding: 0 8px; border-radius: 8px; background: var(--surface-2); color: var(--fg-2); font-size: 12px; font-weight: 650; }
+.vb-why { font-size: 12px; font-weight: 650; color: var(--fg-3); margin-right: 2px; }
+.vb-meta { display: flex; flex-direction: column; gap: 4px; padding: 8px 0 2px; border-top: 1px solid var(--line); }
+.vb-mrow { display: grid; grid-template-columns: 104px 1fr; gap: 8px; font-size: 14px; line-height: 20px; color: var(--fg); }
+.vb-mrow .lbl { font-size: 13px; }
+.vb-diff span { color: var(--fg); font-weight: 650; }
+.vb-diff ins { text-decoration: none; color: var(--near); font-weight: 750; border-bottom: 2px solid var(--near); padding: 0 1px; }
+.vb-diff del { color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1.5px; font-weight: 650; }
+.vb-no { color: var(--fg-3); text-decoration-color: var(--bad); }
+.vb-knew { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); font-size: 14px; line-height: 20px; }
+.vb-knew .ic { color: var(--act-text); margin-top: 3px; flex: none; }
+.vb-knew .link { flex: none; color: var(--act-text); font-weight: 600; font-size: 14px; }
+.vb-quiet { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 19px; color: var(--fg-3); margin: 0; }
+.vb-quiet .ic { margin-top: 2px; flex: none; }
+.vb-try { font-size: 15px; line-height: 21px; color: var(--fg-2); }
+.vb-try s { text-decoration-color: var(--fg-3); }
+.vb-tipline { display: flex; gap: 8px; align-items: center; font-size: 15px; color: var(--fg-2); padding: 8px 12px; border-radius: 10px; background: var(--surface); align-self: flex-start; }
+.vb-tipline .ic { color: var(--near); }
+.vb-gap2 { text-decoration: none !important; }
+.vb-gap2 s { text-decoration-thickness: 2px; }
+.vb-pair { display: flex; align-items: baseline; gap: 10px; font-size: 17px; line-height: 24px; }
+.vb-pair b { font-weight: 700; min-width: 96px; }
+.vb-pair span { color: var(--fg-2); font-size: 15px; }
+.vb-tag { margin-left: auto; font-size: 12px !important; font-weight: 650; color: var(--act-text) !important; background: var(--act-soft); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+.vb-tag.off { color: var(--fg-3) !important; background: var(--surface-2); }
+.vb-menu { width: 300px; }
+.vb-whytoday { padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 4px; }
+.vb-whytoday p { margin: 0; font-size: 15px; line-height: 21px; }
+.vb-whytoday span { font-size: 13px; color: var(--fg-3); }
+.vb-start { box-shadow: var(--shadow); }
+.vb-mix { display: flex; gap: 4px; height: 8px; }
+.vb-mix span { border-radius: 4px; }
+.vb-mix .d, .vb-mixl i.d { background: var(--ch-words); }
+.vb-mix .n, .vb-mixl i.n { background: var(--act); }
+.vb-mix .a, .vb-mixl i.a { background: var(--surface-3); }
+.vb-mixl { display: flex; gap: 16px; font-size: 13px; color: var(--fg-2); }
+.vb-mixl span { display: inline-flex; align-items: center; gap: 6px; }
+.vb-mixl i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.vb-spread { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: end; }
+.vb-spread div { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.vb-spread b { font-size: 14px; font-weight: 650; }
+.vb-spread i { width: 100%; border-radius: 6px; background: var(--surface-3); }
+.vb-spread div.on i { background: var(--act); }
+.vb-spread span { font-size: 12px; color: var(--fg-2); }
+.vb-dl { min-height: 64px !important; gap: 14px; align-items: center; }
+.vb-dli { color: var(--fg-2); flex: none; width: 22px; display: grid; place-items: center; }
+.vb-dlt { display: flex; flex-direction: column; gap: 1px; font-size: 16px; line-height: 22px; }
+.vb-dlt .lbl { font-size: 12px; }
+.vb-stages { display: flex; gap: 4px; }
+.vb-stages i { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-3); }
+.vb-stages i.on.g1 { background: color-mix(in oklch, var(--fg) 38%, var(--surface-3)); }
+.vb-stages i.on.g2 { background: color-mix(in oklch, var(--fg) 68%, var(--surface-3)); }
+.vb-stages i.on.g3 { background: var(--fg); }
+.vb-dband { gap: .5em; }
+.vb-dband .vb-mrow { grid-template-columns: 8em 1fr; }
+.vb-hrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }

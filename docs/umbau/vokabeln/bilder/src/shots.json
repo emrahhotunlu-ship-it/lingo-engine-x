@@ -1,0 +1,107 @@
+[
+{
+"name": "s1-01-b10-versuch-390-dunkel",
+"screen": "vb-intro-try"
+},
+{
+"name": "s1-02-b10-aufgedeckt-390-dunkel",
+"screen": "vb-intro-reveal"
+},
+{
+"name": "s1-03-b10-kenne-ich-schon-390-dunkel",
+"screen": "vb-intro-known"
+},
+{
+"name": "s1-04-lernkarte-390-dunkel",
+"screen": "vb-card"
+},
+{
+"name": "s1-05-lernkarte-tipp-390-dunkel",
+"screen": "vb-card-tip"
+},
+{
+"name": "s1-06-lernkarte-390-hell",
+"screen": "vb-card",
+"mode": "light"
+},
+{
+"name": "s1-07-lernkarte-1440-dunkel",
+"screen": "vbl-task",
+"w": 1440
+},
+{
+"name": "s1-08-band-richtig-390-dunkel",
+"screen": "vb-band-ok"
+},
+{
+"name": "s1-09-band-fast-390-dunkel",
+"screen": "vb-band-near"
+},
+{
+"name": "s1-10-band-falsch-390-dunkel",
+"screen": "vb-band-wrong"
+},
+{
+"name": "s1-11-band-fast-390-hell",
+"screen": "vb-band-near",
+"mode": "light"
+},
+{
+"name": "s1-12-band-falsch-390-hell",
+"screen": "vb-band-wrong",
+"mode": "light"
+},
+{
+"name": "s1-13-band-1440-dunkel",
+"screen": "vbl-band",
+"w": 1440
+},
+{
+"name": "s1-14-b4-wusste-ich-390-dunkel",
+"screen": "vb-knew"
+},
+{
+"name": "s1-15-b5-wortpartner-390-dunkel",
+"screen": "vb-colloc-band"
+},
+{
+"name": "s1-16-b12-falscher-freund-390-dunkel",
+"screen": "vb-false-friend"
+},
+{
+"name": "s1-17-b12-paar-390-dunkel",
+"screen": "vb-pair"
+},
+{
+"name": "s1-18-b13-muster-390-dunkel",
+"screen": "vb-pattern"
+},
+{
+"name": "s1-19-b13-muster-band-390-dunkel",
+"screen": "vb-pattern-band"
+},
+{
+"name": "s1-20-n1-warum-heute-390-dunkel",
+"screen": "vb-menu"
+},
+{
+"name": "s1-21-b8-heute-390-dunkel",
+"screen": "vbh-start"
+},
+{
+"name": "s1-21b-b8-heute-ring-390-dunkel",
+"screen": "vbh-ring"
+},
+{
+"name": "s1-22-b8-start-390-dunkel",
+"screen": "vbs-start"
+},
+{
+"name": "s1-23-b8-abschluss-390-dunkel",
+"screen": "vbs-done"
+},
+{
+"name": "s1-24-b11-wiederkehr-390-dunkel",
+"screen": "vbs-return"
+}
+]
