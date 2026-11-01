@@ -47,7 +47,7 @@ export const trapSchema = z
 export const businessSchema = z.object({ ...common, fn: z.enum(['hedge', 'discourse', 'negotiate', 'objection', 'email', 'meeting', 'dms']) }).strict();
 
 export const grEntrySchema = z
-  .object({ head: str(80), src: z.string().regex(/^(seed|pack):.+$/), k: kind, reg, gr: grSchema.optional(), wrong: list.optional() })
+  .object({ head: str(80), src: z.string().regex(/^(seed|pack):.+$/), k: kind, reg, gr: grSchema.optional(), wrong: list.optional(), evade: list.optional() })
   .strict()
   .superRefine((e, ctx) => {
     if (e.gr?.sep !== undefined && e.k !== 'pv') ctx.addIssue({ code: 'custom', message: `${e.src}: sep nur bei pv` });
@@ -95,9 +95,17 @@ export const MISSPELL: ReadonlyMap<string, string> = new Map(
 export const CONFUSABLE: ReadonlyMap<string, readonly string[]> = (() => {
   const m = new Map<string, string[]>();
   const add = (a: string, b: string) => m.set(a, [...new Set([...(m.get(a) ?? []), b])]);
-  for (const t of traps) if (t.type === 'pair' && t.pair) {
-    add(norm(t.en), norm(t.pair));
-    add(norm(t.pair), norm(t.en));
+  for (const t of traps) {
+    if (t.type === 'pair' && t.pair) {
+      add(norm(t.en), norm(t.pair));
+      add(norm(t.pair), norm(t.en));
+    }
+    // Falscher Freund: das gemeinte, aber falsche englische Wort (*sensitive* statt *sensible*) ist „anderes Wort“, keine Ableitung.
+    if (t.type === 'ff' && t.trapEn)
+      for (const w of t.trapEn.split(/\s*[/,]\s*/)) {
+        add(norm(t.en), norm(w));
+        add(norm(w), norm(t.en));
+      }
   }
   return m;
 })();
@@ -106,9 +114,9 @@ export const CONFUSABLE: ReadonlyMap<string, readonly string[]> = (() => {
 export const TRAP_KIND: ReadonlyMap<string, 'ff' | 'pair'> = new Map(traps.filter((t) => t.type === 'ff' || t.type === 'pair').map((t) => [norm(t.en), t.type as 'ff' | 'pair']));
 
 /** `k`, `reg`, `gr` und typische Fehlformen je Stichwort (Charge 3, dazu `gr` aus Charge 1 und 2). Nur geprüfte Einträge. */
-export const LEX_INFO: ReadonlyMap<string, { k: GrEntry['k']; reg: GrEntry['reg']; gr?: GrEntry['gr']; wrong?: string[] }> = (() => {
-  const m = new Map<string, { k: GrEntry['k']; reg: GrEntry['reg']; gr?: GrEntry['gr']; wrong?: string[] }>();
-  if (CHARGE3.reviewed) for (const e of CHARGE3.items) m.set(norm(e.head), { k: e.k, reg: e.reg, ...(e.gr ? { gr: e.gr } : {}), ...(e.wrong ? { wrong: e.wrong } : {}) });
+export const LEX_INFO: ReadonlyMap<string, { k: GrEntry['k']; reg: GrEntry['reg']; gr?: GrEntry['gr']; wrong?: string[]; evade?: string[] }> = (() => {
+  const m = new Map<string, { k: GrEntry['k']; reg: GrEntry['reg']; gr?: GrEntry['gr']; wrong?: string[]; evade?: string[] }>();
+  if (CHARGE3.reviewed) for (const e of CHARGE3.items) m.set(norm(e.head), { k: e.k, reg: e.reg, ...(e.gr ? { gr: e.gr } : {}), ...(e.wrong ? { wrong: e.wrong } : {}), ...(e.evade ? { evade: e.evade } : {}) });
   const add = (x: { en: string; k: GrEntry['k']; reg: GrEntry['reg']; gr?: GrEntry['gr']; wrong?: string[] }) =>
     m.has(norm(x.en)) || m.set(norm(x.en), { k: x.k, reg: x.reg, ...(x.gr ? { gr: x.gr } : {}), ...(x.wrong ? { wrong: x.wrong } : {}) });
   for (const t of traps) add(t);

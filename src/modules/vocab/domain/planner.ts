@@ -20,6 +20,8 @@ import type { Form, FormStats, Grade, Lex, LexKind, Outcome, Track, TrackKey, Vo
 // Rein: keine Uhr, kein Zufall ohne Startwert, kein Schreiben.
 
 export const SN_MAX = 12;
+/** Formfehler, nach denen die Form in der Runde noch einmal frei abgerufen wird. */
+export const FORM_ERRORS: ReadonlySet<Outcome> = new Set(['spell', 'infl', 'hyph', 'prep', 'plural', 'order', 'colloc']);
 export const RETRY_GAP = 4; // Wiederkehr nach Fehler: nach 3–5 Karten (M53), fest 4 (M73: kein Würfeln)
 export const RETRY_MAX = 4; // höchstens 4 Versuche je Lexem und Tag
 export const STEP_A_GAP = 3; // Schritt A nach ≥ 3 anderen Karten
@@ -164,7 +166,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
         booked.push('u');
       }
       // Beleg-Tag nur bei einer FÄLLIGEN Antwort (vorgezogene heben Deckel und Stufe nicht; learning-scientist V1, Befund 2).
-      if (dueBefore && isFreeGood(a.form, a.outcome, a.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
+      if (dueBefore && !second && isFreeGood(a.form, a.outcome, a.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
       lex.b.due = placeDue(lex, lex.b, r.ivl, 'b', ctx, a.t, booked.includes('u') ? undefined : offsetOf(lex.u.due, a.t));
       lex.b.sd = offsetOf(lex.b.due, a.t);
       if (booked.includes('u')) {
@@ -187,7 +189,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
       // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).
       lex.ev.f = lex.lv <= 2 ? [] : lex.ev.f.slice(-(lex.lv - 2));
     } else if (g >= 3 || (g === 2 && a.outcome === 'typo')) {
-      if (a.hint === 0 && dueBefore && target === 'b' && canAscend(lex)) lex.lv += 1;
+      if (a.hint === 0 && !second && dueBefore && target === 'b' && canAscend(lex)) lex.lv += 1;
     }
     lex.mv = 0;
   } else if (ctx.planned && wrong && target && lex.day === day) {
@@ -216,11 +218,16 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     } else lex.step = null;
   } else if (wrong || g === null) {
     lex.step = { n: g === null ? 10 : 11, at: a.t, gap: RETRY_GAP };
+  } else if (FORM_ERRORS.has(a.outcome)) {
+    // Formfehler mit Hard (Rechtschreibliste, Beugung, Bindestrich, Muster/Plural/Stellung, Partner am Einzelwort): die richtige Form nach
+    // 3–5 Karten selbst abrufen (M53), ohne zweite Buchung (learning-scientist V2 Befund 6).
+    lex.step = { n: 10, at: a.t, gap: RETRY_GAP };
   }
 
   // V2: Formen-Statistik (Formwahl, jeder 3. ohne Satz, Satzbindung, Ausweichwort). Gezählt wird für „jeder 3.“ nur ein Abruf mit Planwirkung.
   if (spec.track !== null && a.form !== 'flip') {
-    lex.fq = updateFq({ ...lex, fq: fqBefore }, { form: a.form, track: spec.track, freeGood: isFreeGood(a.form, a.outcome, a.hint), anchor: a.anchor ?? null, wrong, evadeHit: a.outcome === 'evade' ? (a.hit ?? null) : null, counted: booked.includes('b') });
+    const error = a.outcome === 'prep' ? 'prep' : a.outcome === 'plural' ? 'plural' : a.outcome === 'order' ? 'order' : null;
+    lex.fq = updateFq({ ...lex, fq: fqBefore }, { form: a.form, track: spec.track, correct: (a.outcome === 'ok' || a.outcome === 'typo') && a.hint === 0 && !second, anchor: a.anchor ?? null, wrong, evadeHit: a.outcome === 'evade' ? (a.hit ?? null) : null, counted: booked.includes('b'), error });
     if ((lex.fq.nb ?? 0) > (fqBefore?.nb ?? 0)) events.push('bound');
   }
 

@@ -92,7 +92,8 @@ type Trace = { S: number; t: number };
 type Mem = { r: Trace; p: Trace; d: number; seen: boolean; anchor: string | null; sentences: Set<string> };
 const DAY = 86_400_000;
 const recall = (tr: Trace, now: number): number => 1 / (1 + Math.max(0, now - tr.t) / DAY / (9 * tr.S));
-const BIND = 0.12;
+// V2: Empfindlichkeitslauf `VOCAB_BIND=0|0.06|0.12` (learning-scientist V2 Befund 12); Standard wie V0/V1.
+const BIND = Number(process.env.VOCAB_BIND ?? 0.12);
 
 export class Learner {
   private mem = new Map<string, Mem>();
@@ -262,6 +263,7 @@ export type ScenarioResult = {
     choiceShare: number;
     choiceOutsideSteps: number;
     activeShareStage3: number;
+    cappedShareStage3: number;
     noSentenceStage4: number;
     transferDays: number;
     introduced: number;
@@ -531,6 +533,8 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
       multiOwn: rows.reduce((a, r) => a + r.multiOwn, 0),
       choiceShare: qs.length ? Math.round((qs.filter((q) => q.input === 'choice').length / qs.length) * 1000) / 10 : 0,
       choiceOutsideSteps: qs.length ? Math.round((qs.filter((q) => q.input === 'choice' && !q.step).length / qs.length) * 1000) / 10 : 0,
+      // V2: Anteil der Abfragen mit Stütze („höchstens Hard“, Eingabe `hint`) ab Stufe 3 außerhalb der Lernschritte (Ziel ≤ 20 %).
+      cappedShareStage3: st3.filter((q) => !q.step).length ? Math.round((st3.filter((q) => !q.step && q.input === 'hint').length / st3.filter((q) => !q.step).length) * 1000) / 10 : 0,
       activeShareStage3: st3.length ? Math.round((st3.filter((q) => q.input !== 'choice').length / st3.length) * 1000) / 10 : 0,
       noSentenceStage4: st4.length ? Math.round((st4.filter((q) => q.noSentence).length / st4.length) * 1000) / 10 : 0,
       transferDays: days4.length ? Math.round((days4.filter((r) => r.transfer > 0).length / days4.length) * 1000) / 10 : 0,
@@ -639,6 +643,7 @@ export function toMarkdown(r: RunResult): string {
   span('Haltbarkeit im neuen Satz +30 Tage', (s) => s.yield90New);
   span('Lernzeit gesamt (Stunden)', (s) => s.learnHours);
   span('Anteil aktiv ab Stufe 3 (%)', (s) => s.activeShareStage3);
+  span('Anteil mit Stütze (höchstens Hard) ab Stufe 3 (%)', (s) => s.cappedShareStage3);
   out.push('', '**Je Tag** (Abfragen · mehrfach · Auswahl · überfällig · Minuten):', '');
   for (const x of r.results) {
     out.push(`<details><summary>${x.scenario.key}: ${x.scenario.name}</summary>`, '', '| Tag | Abfragen | Wörter | mehrfach | durch Planer | eigener Start | Auswahl | getippt | überfällig | Min. | Pflicht-Min. | Anwenden |', '|---|---|---|---|---|---|---|---|---|---|---|---|');

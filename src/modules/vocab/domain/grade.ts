@@ -73,8 +73,8 @@ export function baseGrade(outcome: Outcome, x: { k: LexKind; form: Form; evadeRe
     case 'wrong':
     case 'dunno':
       return 1;
-    case 'colloc': // M56: Lexem = Kollokation → Again; Einzelwort → Hard, Partner-Lexem markiert
-      return x.k === 'col' ? 1 : 2;
+    case 'colloc': // M56: Lexem ist selbst die Verbindung (col/pv/ch) → Again; Einzelwort → Hard, Partner-Lexem markiert
+      return x.k === 'w' ? 2 : 1;
     case 'prep': // M78: Muster ist Teil des Lexems (pv/col/ch) oder die Form fragt genau danach → Again; sonst Wort gewusst, Muster falsch → Hard
       return x.k !== 'w' || FOCUS.prep === x.form ? 1 : 2;
     case 'plural': // M79
@@ -124,7 +124,7 @@ export function gradeOf(x: GradeInput): Grade | null {
     // M38/M44/M39: Hinweis oder sehr langsam → Hard; schnell → Easy (nur, wo erlaubt).
     if (x.hint > 0 || x.speed === 'slow') g = 2;
     else if (x.speed === 'fast' && x.easyOk) g = 4;
-  } else if (g === 2 && x.hint > 0) g = 2;
+  }
   return Math.min(g, spec.max) as Grade;
 }
 

@@ -59,6 +59,7 @@ export const PREPOSITIONS = new Set(['about', 'at', 'by', 'for', 'from', 'in', '
 const CONTRACTIONS: readonly [RegExp, string][] = [
   [/\b(i|you|we|they)'re\b/g, '$1 are'],
   [/\bi'm\b/g, 'i am'],
+  [/\blet's\b/g, 'let us'],
   [/\b(it|that|what|there|here|he|she|who)'s\b/g, '$1 is'],
   [/\b(i|you|we|they|he|she|it|that|there)'d\b/g, '$1 would'],
   [/\b(i|you|we|they|he|she|it|that|there)'ll\b/g, '$1 will'],
@@ -187,13 +188,30 @@ function isPrepError(inp: string[], ans: string[]): boolean {
   return pi !== pa;
 }
 
+const DETS = new Set(['a', 'an', 'the']);
+/** Partikeln der Phrasal Verbs (M81): ein anderer Partikel ist ein anderes Verb (*set out* ≠ *set up*). */
+export const PARTICLES = new Set(['up', 'out', 'off', 'down', 'back', 'away', 'over', 'in', 'on', 'through', 'around', 'along', 'ahead', 'forward', 'aside']);
+
+const erOf = (a: string, b: string) => [`${a}er`, `${a}r`, `${a}est`, `${a}st`, `${a.slice(0, -1)}ier`, `${a.slice(0, -1)}iest`, `${a}${a.slice(-1)}er`, `${a}${a.slice(-1)}est`].includes(b);
+const ingOf = (a: string, b: string) => [`${a}ing`, `${a.slice(0, -1)}ing`, `${a}${a.slice(-1)}ing`].includes(b);
+/** (c) Beugung; -er/-est nur bei Adjektiven, -ing ↔ Stamm beim Nomen ist Ableitung (d): *manage/manager*, *meet/meeting* (english-teacher V2). */
+function isInfl(inp: string, ans: string, pos: Target['pos']): boolean {
+  if (!inflections(ans).has(inp)) return false;
+  if ((erOf(ans, inp) || erOf(inp, ans)) && pos !== 'adj') return false;
+  if ((ingOf(ans, inp) || ingOf(inp, ans)) && pos === 'noun') return false;
+  return true;
+}
+
 /** Antwort auswerten. `raw` = Eingabe, wie getippt. */
 export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   const answer = normalize(t.answer);
   let input = normalize(raw);
   if (!input) return { outcome: 'dunno' };
-  // (g) Artikel, Groß/klein, Apostrophe
-  const noArt = dropArticle(input, answer);
+  // (g) Kurzformen in beide Lesarten: *she's been* = *she has been*, *I'd sent* = *I had sent* (english-teacher V2)
+  const alt = normalize(normalizeRaw(raw).replace(/\b(it|that|what|there|here|he|she|who)'s\b/g, '$1 has').replace(/\b(i|you|we|they|he|she|it|that|there)'d\b/g, '$1 had'));
+  if (alt !== input && (alt === answer || dropArticle(alt, answer) === answer)) return { outcome: 'ok' };
+  // (g) Artikel, Groß/klein, Apostrophe. Bei nicht Zählbarem bleibt „a/an“ stehen: *a feedback* ist ein Zählbarkeitsfehler (M79).
+  const noArt = t.uncount && /^an? /.test(input) ? input : dropArticle(input, answer);
   if (noArt === answer) return { outcome: 'ok', ...(noArt !== input ? { note: 'article' } : {}) };
   input = noArt;
   // (h) britische Schreibweise ist richtig (A7)
@@ -214,16 +232,24 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   const it = tokens(input);
   const at = tokens(answer);
   if (t.uncount) {
+    if (/^an? /.test(input) && it.slice(1).join(' ') === answer) return { outcome: 'plural', note: 'plural', hit: input };
     const last = at.at(-1) as string;
     const il = it.at(-1) as string;
     if (it.length === at.length && it.slice(0, -1).join(' ') === at.slice(0, -1).join(' ') && (il === `${last}s` || il === `${last}es`)) return { outcome: 'plural', note: 'plural' };
   }
   if (isOrderError(it, at)) return { outcome: 'order', note: 'particle' };
-  if (at.length > 1 && isPrepError(it, at)) return { outcome: 'prep' };
+  // M78: Präposition ergänzt, weggelassen oder getauscht, auch bei einem Lösungswort (*discuss about*); nicht, wenn die Präposition selbst die Lösung ist (*by/until*).
+  if ((at.length > 1 || !PREPOSITIONS.has(at[0] as string)) && isPrepError(it, at)) return { outcome: 'prep' };
 
   // (c) Beugung: gleicher Stamm, nur die Endung (bei Mehrwort genau ein Wort)
   const tok = oneTokenDiff(it, at);
-  if (tok && inflections(tok[1]).has(tok[0])) return { outcome: 'infl', note: 'grammar' };
+  if (tok && isInfl(tok[0], tok[1], t.pos)) return { outcome: 'infl', note: 'grammar' };
+  // Artikel und Pronomen sind Grammatik, kein falsches Partnerwort (*raise a question* statt *raise the question*, *set them up*).
+  if (tok && DETS.has(tok[0]) && DETS.has(tok[1])) return /^an?$/.test(tok[0]) && /^an?$/.test(tok[1]) ? { outcome: 'typo', dist: 1 } : { outcome: 'infl', note: 'article' };
+  if (tok && PRONOUNS.has(tok[0]) && PRONOUNS.has(tok[1])) return { outcome: 'infl', note: 'grammar' };
+  if (at.length > 1 && it.join(' ') !== at.join(' ') && it.filter((w) => !DETS.has(w)).join(' ') === at.filter((w) => !DETS.has(w)).join(' ')) return { outcome: 'infl', note: 'article' };
+  // M81: anderer Partikel beim Phrasal Verb = anderes Verb (*set out* statt *set up*).
+  if (tok && t.k === 'pv' && PARTICLES.has(tok[0]) && PARTICLES.has(tok[1])) return { outcome: 'other', note: 'particle' };
 
   // (f) Bindestrich und Leerzeichen
   const flat = (s: string) => s.replace(/[\s-]+/g, '');

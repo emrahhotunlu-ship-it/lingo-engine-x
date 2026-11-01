@@ -1,5 +1,5 @@
 import { dayKey, learningDayEnd } from '../shared';
-import { type Catalog, danger, dueOn, isNewLex } from './catalog';
+import { type Catalog, danger, dueOn, formFor, isNewLex } from './catalog';
 import type { DayPlan } from './day';
 import { mayPlan, RETRY_GAP, STEP_A_GAP, STEP_B_GAP, STEP_B_MS } from './planner';
 import { hash32 } from './rand';
@@ -99,7 +99,11 @@ export class SessionRun {
           .slice(0, WEEK_MAX)
           .map((it) => it.path);
       else paths = (this.opts.paths ?? []).filter((p) => this.cat.get(p) && !isNewLex(this.cat.get(p)!.lex));
-      this.queue = paths.filter(notCarried).map((path) => ({ path, form: 'gap', step: 0, why: this.kind }));
+      // Nebenwege nehmen dieselbe Formwahl wie die Pflicht (Leiter, jeder 3. ohne Satz ab Stufe 4); Lexeme ohne Benutzen-Spur: Lücke.
+      this.queue = paths.filter(notCarried).map((path) => {
+        const it = this.cat.get(path);
+        return { path, form: it?.lex.b ? formFor(it.lex, it.av) : 'gap', step: 0, why: this.kind };
+      });
     }
   }
 

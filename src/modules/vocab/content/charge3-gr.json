@@ -84,7 +84,10 @@
    }
   ],
   "date": "2026-11-01",
-  "recheck": null
+  "recheck": {
+   "date": "2026-11-01",
+   "ok": "Befund 11 eingesetzt"
+  }
  },
  "items": [
   {
@@ -2274,6 +2277,9 @@
     "in my point of view",
     "from my opinion",
     "after my opinion"
+   ],
+   "evade": [
+    "in my opinion"
    ]
   },
   {

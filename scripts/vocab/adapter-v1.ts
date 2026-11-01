@@ -116,7 +116,7 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
       if (!t) return null;
       const lex = cat.get(t.path)!.lex;
       // Gezeigter Satz (M57): Ankersatz an Tag 0–1, danach wechselnd; ohne Satz bei Formen ohne englischen Satz (`sent: 'n'`).
-      const sentence = FORM_SPEC[t.form].sent === 's' ? (pickSentence(lex, keysOf(ID(t.path)), dayKey(now)) ?? undefined) : undefined;
+      const sentence = FORM_SPEC[t.form].sent === 's' ? (pickSentence(lex, keysOf(ID(t.path)), dayKey(now), { fresh: t.step >= 2 }) ?? undefined) : undefined;
       sentences.set(t.path, sentence ?? null);
       return {
         lexeme: ID(t.path),
@@ -174,7 +174,11 @@ const adapter: PlannerAdapter = {
     const items = words.map((w) => {
       const d = leg.get(w.id);
       const conv = d ? convertDoc(P(w.id), d, nowMs) : null;
-      const lex = conv && conv.lex ? conv.lex : emptyLex('w', w.src === 'lookup' ? 'core' : 'edge', nowMs);
+      // V2 (learning-scientist Befund 1d): 40 % Mehrwort-Lexeme (Kollokation, Phrasal Verb, Wendung), damit Formen wie „Teil einer Wendung“
+      // mitgemessen werden. Ohne `gr`-Daten (Kunstwörter), daher keine Formen M78–M81.
+      const k = (['col', 'w', 'pv', 'w', 'ch'] as const)[w.order % 5] as 'col' | 'w' | 'pv' | 'ch';
+      const base = conv && conv.lex ? conv.lex : emptyLex('w', w.src === 'lookup' ? 'core' : 'edge', nowMs);
+      const lex = { ...base, k };
       return { path: P(w.id), lex, order: w.order, av: AVAIL };
     });
     cat = new Catalog(items);

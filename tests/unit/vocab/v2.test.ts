@@ -23,6 +23,7 @@ function learned(t = T0, k: LexKind = 'w'): Lex {
   l = applyAnswer(l, ans(t + 300_000), ctx()).lex;
   return l;
 }
+const CAPPED_OK = (f: Form) => FORM_SPEC[f].max > 2;
 const at = (l: Lex, lv: number, us = 10, bs = 10): Lex => ({ ...l, lv, u: { ...l.u, s: us }, b: l.b ? { ...l.b, s: bs } : l.b });
 
 describe('Tabelle „Spur je Form“ (plan.md §5, english-teacher V0 Befund 2)', () => {
@@ -98,9 +99,19 @@ describe('Formen je Stufe (M22)', () => {
     expect(available('prep', { ...word, gr: { pat: 'discuss sth' } }, { grOn: true })).toBe(false);
     expect(available('count', { ...word, gr: { cnt: 'u' } }, { grOn: true })).toBe(true);
     expect(available('count', { ...word, gr: { cnt: 'uc' } }, { grOn: true })).toBe(false);
-    const swapOf = (sep: 0 | 1) => pickForm({ ...pv, gr: { sep }, fq: { ...emptyFq(), l: 'gap', h: { particle: [1, 0], gap: [9, 9], cloze_part: [9, 9], partner: [9, 9] } } }, 'b', { grOn: true, de: true });
+    const swapOf = (sep: 0 | 1) => pickForm({ ...pv, gr: { sep }, fq: { ...emptyFq(), l: 'gap', e: ['order'], h: { particle: [1, 0], gap: [9, 9], cloze_part: [9, 9], partner: [9, 9] } } }, 'b', { grOn: true, de: true });
+    // ohne Fehlerprofil keine gezielte Form (M78: „gezielt nach dem Fehlerprofil des Lexems“)
+    expect(pickForm({ ...pv, fq: { ...emptyFq(), l: 'gap' } }, 'b', { grOn: true, de: true }).form).not.toBe('particle');
     expect(swapOf(1)).toMatchObject({ form: 'particle', swap: true });
     expect(swapOf(0)).toMatchObject({ form: 'particle', swap: false });
+  });
+  it('Formen mit höchstens Hard nie zweimal hintereinander; Trefferquote zählt richtige Antworten auch dort (Blocker 1)', () => {
+    const l = { ...at(learned(T0, 'col'), 3), fq: { ...emptyFq(), l: 'cloze_part' as Form, h: { cloze_part: [5, 5] as [number, number], gap: [5, 5] as [number, number] } } };
+    expect(CAPPED_OK(pickForm(l, 'b', { de: true }).form)).toBe(true);
+  });
+  it('Satzbindung wirkt auch auf Stufe 2–3 (Befund 5)', () => {
+    const l = { ...at(learned(), 3), fq: { ...emptyFq(), nb: 2, l: 'gap' as Form } };
+    expect(FORM_SPEC[pickForm(l, 'b', { de: true }).form].sent).toBe('n');
   });
   it('„Gesucht: …“ bis Stufe 4, ab Stufe 5 ohne deutsche Bedeutung (M25)', () => {
     expect(pickForm(at(learned(), 4), 'b', { de: true }).cue).toBe(true);
@@ -121,6 +132,10 @@ describe('Satzwechsel und Leck-Prüfung (M57)', () => {
     const later = addDays(dayKey(T0), 10);
     const s = pickSentence({ ...l, sn: [['x#0', addDays(dayKey(T0), 1)], ['x#1', addDays(dayKey(T0), 5)]] }, keys, later);
     expect(s).toBe('x#2');
+  });
+  it('Schritt B und Wiederkehr an Tag 0–1 in einem neuen Satz (Befund 4)', () => {
+    const l = learned();
+    expect(pickSentence(l, ['x#0', 'x#1', 'x#2'], dayKey(T0), { fresh: true })).toBe('x#1');
   });
   it('Leck: das Ziel steht außerhalb der Lücke noch einmal', () => {
     expect(leaks('Our lead times are long, so we must cut the [lead time].', 'lead time')).toBe(true);
@@ -146,6 +161,7 @@ describe('Notentabelle (M38): alle Ausgänge × Stufen', () => {
     });
   it('Kollokationsfehler nach Art (M56): Lexem = Kollokation → Again, Einzelwort → Hard', () => {
     expect(baseGrade('colloc', { k: 'col', form: 'gap' })).toBe(1);
+    expect(baseGrade('colloc', { k: 'pv', form: 'gap' })).toBe(1);
     expect(baseGrade('colloc', { k: 'w', form: 'gap' })).toBe(2);
   });
   it('Muster, Plural, Stellung: Hard am Einzelwort, Again in der Form, die danach fragt (M78, M79, M81)', () => {
@@ -261,6 +277,36 @@ describe('Tippfehler-Regeln (a)–(h) in fester Reihenfolge (M40)', () => {
     const uk = checkAnswer('take a decision', T('make a decision', { k: 'col', uk: ['take a decision'] }), dict);
     expect(uk).toMatchObject({ outcome: 'syn', note: 'uk' });
   });
+  it('english-teacher V2: a/an vor nicht Zählbarem ist „Plural falsch“ (M79), nie richtig', () => {
+    expect(out('a feedback', T('feedback', { uncount: true }))).toBe('plural');
+    expect(out('an advice', T('advice', { uncount: true }))).toBe('plural');
+    expect(out('the feedback', T('feedback', { uncount: true }))).toBe('ok');
+  });
+  it('english-teacher V2: -er/-ing beim Nomen/Verb ist Ableitung (d), keine Beugung', () => {
+    expect(out('manager', T('manage', { pos: 'verb' }))).toBe('pos');
+    expect(out('meet', T('meeting', { pos: 'noun' }))).toBe('pos');
+    expect(out('cheaper', T('cheap', { pos: 'adj' }))).toBe('infl');
+  });
+  it('english-teacher V2: Artikel und Pronomen sind Grammatik, kein falsches Partnerwort', () => {
+    expect(out('raise a question', T('raise the question', { k: 'col' }))).toBe('infl');
+    expect(out('make a offer', T('make an offer', { k: 'col' }))).toBe('typo');
+    expect(out('make offer', T('make an offer', { k: 'col' }))).toBe('infl');
+  });
+  it('english-teacher V2: überflüssige Präposition auch beim Einzelwort (*discuss about*), nicht wenn die Präposition die Lösung ist', () => {
+    expect(out('discuss about', T('discuss'))).toBe('prep');
+    expect(out('until', T('by'))).not.toBe('prep');
+  });
+  it('english-teacher V2: Kurzformen in beiden Lesarten (*she\'s been*, *I\'d sent*, *let\'s*)', () => {
+    expect(out("she's been", T('she has been'))).toBe('ok');
+    expect(out("I'd already sent", T('I had already sent'))).toBe('ok');
+    expect(out("let's circle back", T('let us circle back'))).toBe('ok');
+    expect(out("I'm writing", T('I am writing'))).toBe('ok');
+  });
+  it('M81: anderer Partikel beim Phrasal Verb ist ein anderes Verb (Again)', () => {
+    expect(out('set out', T('set up', { k: 'pv' }))).toBe('other');
+    expect(baseGrade('colloc', { k: 'pv', form: 'gap' })).toBe(1);
+    expect(baseGrade('colloc', { k: 'ch', form: 'gap' })).toBe(1);
+  });
   it('M41: Synonym des Satzes → Auch richtig; Ausweichwort → evade', () => {
     expect(out('turnaround time', T('lead time', { syn: ['turnaround time'] }))).toBe('syn');
     expect(out('problem', T('bottleneck', { evade: ['problem'] }))).toBe('evade');
@@ -305,6 +351,19 @@ describe('Planer mit V2-Regeln', () => {
     const r = applyAnswer(l, ans(l.b!.due + 3600_000, { form: 'choice', outcome: 'ok' }), ctx());
     expect([r.lex.u, r.lex.b]).toEqual([l.u, l.b]);
     expect(r.booked).toEqual([]);
+  });
+  it('zweiter Versuch: kein Beleg-Tag, kein Aufstieg (learning-scientist V2 Befund 2)', () => {
+    const l = { ...learned(), lv: 3, ev: { f: [addDays(dayKey(T0), 1)], o: 0, s: 0 } };
+    const t = l.b!.due + 3600_000;
+    const r = applyAnswer(l, ans(t, { outcome: 'ok', first: 'wrong' }), ctx());
+    expect(r.lex.ev.f).toEqual(l.ev.f);
+    expect(r.lex.lv).toBe(3);
+  });
+  it('nach einem Formfehler mit Hard kommt die Form in der Runde noch einmal (M53, Befund 6)', () => {
+    const l = learned();
+    const r = applyAnswer(l, ans(l.b!.due + 3600_000, { outcome: 'spell' }), ctx());
+    expect(r.grade).toBe(2);
+    expect(r.lex.step?.gap).toBe(4);
   });
   it('zweiter Versuch kostet keine Stufe (M45)', () => {
     const l = { ...learned(), lv: 4 };

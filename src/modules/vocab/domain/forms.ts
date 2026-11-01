@@ -43,8 +43,8 @@ export type Avail = {
  */
 export const LADDER_B: Readonly<Record<number, readonly Form[]>> = {
   1: ['intro', 'probe'],
-  2: ['gap', 'nosent', 'cloze_part'],
-  3: ['gap', 'cloze_part', 'prep', 'particle', 'count', 'partner'],
+  2: ['gap', 'de_sent', 'nosent'],
+  3: ['gap', 'partner', 'cloze_part', 'prep', 'particle', 'count'],
   4: ['gap', 'de_sent', 'nosent'],
   5: ['family', 'partner', 'gap', 'de_sent', 'situation', 'nosent', 'diplomatic', 'own'],
   6: ['gap', 'partner', 'family', 'own', 'situation', 'say', 'nosent'],
@@ -141,7 +141,12 @@ export type FormPick = {
   swap: boolean;
 };
 
-/** Trefferquote einer Form beim Lexem (geglättet: unbekannte Formen 0,5). */
+/** Formen mit höchstens Hard (Teilabruf mit Stütze): nie zweimal hintereinander, M78/M79/M81 nur nach passendem Fehler (learning-scientist V2, Blocker 1). */
+export const CAPPED: ReadonlySet<Form> = new Set(['gap_hint', 'cloze_part', 'complete', 'prep', 'count', 'particle']);
+/** Fehlerprofil, das die gezielte Form freischaltet (synthese M78: „gezielt nach dem Fehlerprofil des Lexems“). */
+const PROFILE_FORM: Partial<Record<Form, 'prep' | 'plural' | 'order'>> = { prep: 'prep', count: 'plural', particle: 'order' };
+
+/** Trefferquote einer Form beim Lexem: richtig ohne Hilfe (auch bei Formen mit höchstens Hard), geglättet: unbekannte Formen 0,5. */
 export function hitRate(fq: Fq, f: Form): number {
   const [n, ok] = fq.h[f] ?? [0, 0];
   return (ok + 1) / (n + 2);
@@ -150,7 +155,9 @@ export function hitRate(fq: Fq, f: Form): number {
 /** Muss der nächste Benutzen-Abruf ohne Satz sein? (jeder 3. ab Stufe 4, oder Satzbindung) */
 export function needsNoSentence(l: Lex): boolean {
   const fq = fqOf(l);
-  return formLevel(l) >= NOSENT_FROM_LV && (fq.nb > 0 || fq.c % NOSENT_EVERY === NOSENT_EVERY - 1);
+  const lv = formLevel(l);
+  // Satzbindung wirkt ab Stufe 2 (sie senkt das Lexem oft unter Stufe 4, learning-scientist V2 Befund 5); jeder 3. ohne Satz ab Stufe 4.
+  return (lv >= 2 && fq.nb > 0) || (lv >= NOSENT_FROM_LV && fq.c % NOSENT_EVERY === NOSENT_EVERY - 1);
 }
 
 /** Form für eine fällige Abfrage der Spur `track` (M22). */
@@ -158,29 +165,39 @@ export function pickForm(l: Lex, track: TrackKey, av: Avail): FormPick {
   const lv = formLevel(l);
   const fq = fqOf(l);
   const ladder = (track === 'u' ? LADDER_U : LADDER_B)[lv] ?? [];
-  let cands = ladder.filter((f) => f !== 'intro' && f !== 'probe' && available(f, l, av));
-  if (track === 'b' && lv >= NOSENT_FROM_LV) {
-    const want = needsNoSentence(l) ? 'n' : 's';
-    const m = cands.filter((f) => FORM_SPEC[f].sent === want);
-    if (m.length) cands = m;
+  const prof = new Set(fq.e ?? []);
+  let cands = ladder.filter((f) => f !== 'intro' && f !== 'probe' && available(f, l, av) && (!PROFILE_FORM[f] || prof.has(PROFILE_FORM[f])));
+  // Stufe 2: „ohne Satz“ (die schwerste freie Form) nur direkt nach einer Lücke, sonst steigt am Boden der Leiter der Fehlerzähler.
+  if (track === 'b' && lv === 2 && fq.l !== 'gap' && !(fq.nb > 0)) cands = cands.filter((f) => f !== 'nosent');
+  // Formen mit höchstens Hard nie zweimal hintereinander.
+  if (fq.l && CAPPED.has(fq.l)) cands = cands.filter((f) => !CAPPED.has(f));
+  // Ab Stufe 2: höchstens eine stellbare Form → „ohne Satz“ als zweite, damit keine Stufe nur eine Abfrageart hat (Kap. 15).
+  if (track === 'b' && lv >= 2 && cands.length < 2 && !cands.includes('nosent') && available('nosent', l, av)) cands = [...cands, 'nosent'];
+  if (track === 'b' && lv >= 2) {
+    const nos = needsNoSentence(l);
+    if (nos || lv >= NOSENT_FROM_LV) {
+      const want = nos ? 'n' : 's';
+      const m = cands.filter((f) => FORM_SPEC[f].sent === want);
+      if (m.length) cands = m;
+    }
   }
-  // Stufe 3 ohne zweite Satz-Form (nur Grundinhalt): „ohne Satz“ als zweite Form, damit keine Stufe nur eine Abfrageart hat (Kap. 15).
-  if (track === 'b' && lv === 3 && cands.length < 2 && available('nosent', l, av)) cands = [...cands, 'nosent'];
   if (cands.length > 1 && fq.l) cands = cands.filter((f) => f !== fq.l);
   if (!cands.length) cands = [track === 'u' ? 'meaning' : 'gap'];
   let best = cands[0] as Form;
   for (const f of cands) if (hitRate(fq, f) < hitRate(fq, best)) best = f;
   const sent = FORM_SPEC[best].sent;
-  return { form: best, sent, cue: sent === 's' && l.lv <= CUE_MAX_LV && track === 'b', swap: best === 'particle' && l.gr?.sep === 1 && (fq.h.particle?.[0] ?? 0) % 2 === 1 };
+  return { form: best, sent, cue: sent === 's' && lv <= CUE_MAX_LV && track === 'b', swap: best === 'particle' && l.gr?.sep === 1 && (fq.h.particle?.[0] ?? 0) % 2 === 1 };
 }
 
 /**
  * Satz für eine Abfrage mit Satz (M57): Einführungstag und Folgetag der Ankersatz (`keys[0]`); danach ein Satz, der in den letzten 30 Tagen
  * nicht gezeigt wurde (der am längsten nicht gezeigte zuerst). Gibt es keinen, der am längsten nicht gezeigte. `null` = kein Satz vorhanden.
  */
-export function pickSentence(l: Lex, keys: readonly string[], day: string): string | null {
+export function pickSentence(l: Lex, keys: readonly string[], day: string, opts: { fresh?: boolean } = {}): string | null {
   if (!keys.length) return null;
   const anchor = keys[0] as string;
+  // Schritt B und Wiederkehr nach Fehler an Tag 0–1: in einem NEUEN Satz (synthese §2.3 Stufe 2, M49/M53; learning-scientist V2 Befund 4).
+  if (opts.fresh && keys.length > 1 && (!l.intro || daysBetween(l.intro, day) <= 1)) return keys[1] as string;
   if (!l.intro || daysBetween(l.intro, day) <= 1 || keys.length === 1) return anchor;
   const last = new Map(l.sn.map(([k, d]) => [k, d]));
   const rest = keys.filter((k) => k !== anchor || last.has(k));
@@ -201,14 +218,16 @@ export function leaks(sentence: string, target: string): boolean {
 }
 
 /** Formen-Statistik nach einer Antwort fortschreiben (rein). */
-export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; freeGood: boolean; anchor: boolean | null; wrong: boolean; evadeHit?: string | null; counted: boolean }): Fq {
+export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; correct: boolean; anchor: boolean | null; wrong: boolean; evadeHit?: string | null; counted: boolean; error?: 'prep' | 'plural' | 'order' | null }): Fq {
   const fq = fqOf(l);
   const h = { ...fq.h };
   const [n, ok] = h[x.form] ?? [0, 0];
-  h[x.form] = [n + 1, ok + (x.freeGood ? 1 : 0)];
+  h[x.form] = [n + 1, ok + (x.correct ? 1 : 0)];
+  const e = x.error && !(fq.e ?? []).includes(x.error) ? [...(fq.e ?? []), x.error] : fq.e;
   let { c, nb, ak } = fq;
   const noSent = FORM_SPEC[x.form].sent === 'n';
-  if (x.track === 'b' && x.counted && formLevel(l) >= NOSENT_FROM_LV) {
+  // „Jeder 3. ohne Satz“ zählt jeden Benutzen-Abruf ab Stufe 4, auch Übung ohne Planwirkung (sonst rutscht der Anteil unter 30 %, Simulation V2).
+  if (x.track === 'b' && formLevel(l) >= NOSENT_FROM_LV) {
     c += 1;
     if (noSent && nb > 0) nb -= 1;
   }
@@ -216,7 +235,8 @@ export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; freeGo
   if (x.anchor === true) {
     ak = x.wrong ? 0 : 1;
     xf = 0;
-  } else if (x.anchor === false && FORM_SPEC[x.form].sent === 's' && ak === 1) {
+  } else if (x.anchor === false && FORM_SPEC[x.form].sent === 's' && ak === 1 && x.counted) {
+    // nur Antworten mit Planwirkung zählen (eine Buchung je Lerntag): die Wiederkehr am selben Tag ist derselbe Gedächtniszustand.
     // Signal „satzgebunden“ (synthese §2.1): im Ankersatz zuletzt richtig, in neuen Sätzen BOUND_MISSES-mal in Folge falsch → 2 Termine
     // ohne Satz. Ein einzelner Fehler im neuen Satz ist noch kein Muster. Danach ist das Signal verbraucht, bis der Ankersatz wieder gelingt.
     xf = x.wrong ? xf + 1 : 0;
@@ -228,5 +248,5 @@ export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; freeGo
   }
   const hit = x.evadeHit ? x.evadeHit.slice(0, 60) : null; // Schema: ≤ 60 Zeichen (data-guard V2)
   const ew = hit && !fq.ew.includes(hit) ? [...fq.ew, hit].slice(-8) : fq.ew;
-  return { l: x.form, c, h, nb, ak, ew, ...(xf ? { xf } : {}) };
+  return { l: x.form, c, h, nb, ak, ew, ...(xf ? { xf } : {}), ...(e?.length ? { e } : {}) };
 }

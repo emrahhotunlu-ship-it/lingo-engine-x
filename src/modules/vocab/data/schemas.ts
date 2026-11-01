@@ -34,6 +34,7 @@ export const fqSchema = z
     ak: z.union([z.literal(0), z.literal(1)]).nullable(),
     ew: z.array(z.string().min(1).max(60)).max(8),
     xf: int.min(0).max(9).optional(),
+    e: z.array(z.enum(['prep', 'plural', 'order'])).max(3).optional(),
   })
   .strict()
   .refine((f) => Object.values(f.h).every((x) => !x || x[1] <= x[0]), { message: 'fq.h: richtig ≤ Versuche' });

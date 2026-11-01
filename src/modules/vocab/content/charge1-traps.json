@@ -15,10 +15,20 @@
     "items": "41-80",
     "ok": 25,
     "fixed": 24
+   },
+   {
+    "n": 3,
+    "items": "81-82",
+    "ok": 2,
+    "fixed": 0,
+    "note": "vom english-teacher in der Nachprüfung selbst formuliert"
    }
   ],
   "date": "2026-11-01",
-  "recheck": null
+  "recheck": {
+   "date": "2026-11-01",
+   "ok": "nach Befunden 7-9 eingesetzt"
+  }
  },
  "items": [
   {
@@ -916,6 +926,9 @@
    "why": "consist of (nicht „out of“), keine Verlaufsform: nie „is consisting of“.",
    "reg": "n",
    "wrong": [
+    "consists from",
+    "consists out of",
+    "is consisting of",
     "consist from",
     "consist out of"
    ],
@@ -1197,7 +1210,7 @@
     "rise a question",
     "lift a question"
    ],
-   "evade": [
+   "syn": [
     "pose the question"
    ]
   },
@@ -1214,6 +1227,28 @@
     "do an offer",
     "give an offer"
    ]
+  },
+  {
+   "id": "t-compliant",
+   "en": "compliant",
+   "k": "w",
+   "type": "pair",
+   "de": "regelkonform",
+   "ex": "The archive is fully [compliant] with GoBD.",
+   "why": "compliant = regelkonform (Adjektiv). Beschwerde: complaint.",
+   "reg": "n",
+   "pair": "complaint"
+  },
+  {
+   "id": "t-complaint",
+   "en": "complaint",
+   "k": "w",
+   "type": "pair",
+   "de": "die Beschwerde",
+   "ex": "We received a [complaint] about the slow search.",
+   "why": "complaint = Beschwerde (Nomen). Regelkonform: compliant.",
+   "reg": "n",
+   "pair": "compliant"
   }
  ]
 }

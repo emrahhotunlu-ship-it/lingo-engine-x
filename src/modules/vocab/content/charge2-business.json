@@ -36,7 +36,10 @@
    "b-table-a-proposal",
    "b-digital-archive"
   ],
-  "recheck": null
+  "recheck": {
+   "date": "2026-11-01",
+   "ok": "Befund 10 eingesetzt"
+  }
  },
  "items": [
   {
@@ -599,7 +602,10 @@
    "de": "nicht verhandelbar",
    "ex": "Data residency in Germany is [non-negotiable] for us.",
    "why": "Feste Absage mit Bindestrich; als Adjektiv nach „be“.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "not negotiable"
+   ]
   },
   {
    "id": "b-could-live-with",
@@ -690,7 +696,8 @@
    "why": "Zählbares Nomen; typisch: offer / grant / negotiate.",
    "reg": "n",
    "syn": [
-    "bulk discount"
+    "bulk discount",
+    "quantity discount"
    ],
    "gr": {
     "cnt": "c"
@@ -1300,7 +1307,9 @@
     "pat": "cc sb on sth"
    },
    "syn": [
-    "I'm copying"
+    "I'm copying",
+    "I'm ccing",
+    "I'm cc-ing"
    ],
    "uk": [
     "I'm copying in"
@@ -1745,7 +1754,10 @@
    "reg": "f",
    "gr": {
     "cnt": "uc"
-   }
+   },
+   "syn": [
+    "litigation hold"
+   ]
   },
   {
    "id": "b-check-out-document",
