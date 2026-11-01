@@ -1,0 +1,170 @@
+[
+{
+"name": "s1-01-b10-versuch-390-dunkel",
+"screen": "vb-intro-try"
+},
+{
+"name": "s1-02-b10-aufgedeckt-390-dunkel",
+"screen": "vb-intro-reveal"
+},
+{
+"name": "s1-03-b10-kenne-ich-schon-390-dunkel",
+"screen": "vb-intro-known"
+},
+{
+"name": "s1-04-lernkarte-390-dunkel",
+"screen": "vb-card"
+},
+{
+"name": "s1-05-lernkarte-tipp-390-dunkel",
+"screen": "vb-card-tip"
+},
+{
+"name": "s1-06-lernkarte-390-hell",
+"screen": "vb-card",
+"mode": "light"
+},
+{
+"name": "s1-07-lernkarte-1440-dunkel",
+"screen": "vbl-task",
+"w": 1440
+},
+{
+"name": "s1-08-band-richtig-390-dunkel",
+"screen": "vb-band-ok"
+},
+{
+"name": "s1-08b-band-richtig-390-hell",
+"screen": "vb-band-ok",
+"mode": "light"
+},
+{
+"name": "s1-09-band-fast-390-dunkel",
+"screen": "vb-band-near"
+},
+{
+"name": "s1-10-band-falsch-390-dunkel",
+"screen": "vb-band-wrong"
+},
+{
+"name": "s1-11-band-fast-390-hell",
+"screen": "vb-band-near",
+"mode": "light"
+},
+{
+"name": "s1-12-band-falsch-390-hell",
+"screen": "vb-band-wrong",
+"mode": "light"
+},
+{
+"name": "s1-13-band-1440-dunkel",
+"screen": "vbl-band",
+"w": 1440
+},
+{
+"name": "s1-14-b4-wusste-ich-390-dunkel",
+"screen": "vb-knew"
+},
+{
+"name": "s1-15-b5-wortpartner-390-dunkel",
+"screen": "vb-colloc-band"
+},
+{
+"name": "s1-16-b12-falscher-freund-390-dunkel",
+"screen": "vb-false-friend"
+},
+{
+"name": "s1-16b-b12-falscher-freund-band-390-dunkel",
+"screen": "vb-false-friend-band"
+},
+{
+"name": "s1-17-b12-paar-390-dunkel",
+"screen": "vb-pair"
+},
+{
+"name": "s1-18-b13-muster-390-dunkel",
+"screen": "vb-pattern"
+},
+{
+"name": "s1-19-b13-muster-band-390-dunkel",
+"screen": "vb-pattern-band"
+},
+{
+"name": "s1-20-n1-warum-heute-390-dunkel",
+"screen": "vb-menu"
+},
+{
+"name": "s1-21b-b8-heute-ring-390-dunkel",
+"screen": "vbh-ring"
+},
+{
+"name": "s1-22-b8-start-390-dunkel",
+"screen": "vbs-start"
+},
+{
+"name": "s1-23-b8-abschluss-390-dunkel",
+"screen": "vbs-done"
+},
+{
+"name": "s1-24-b11-wiederkehr-390-dunkel",
+"screen": "vbs-return"
+},
+{
+"name": "s2-01-b2-wort-detail-390-dunkel",
+"screen": "vbd-main",
+"h": 1760
+},
+{
+"name": "s2-02-b2-wort-detail-390-hell",
+"screen": "vbd-main",
+"h": 1760,
+"mode": "light"
+},
+{
+"name": "s2-03-n5-verlauf-390-dunkel",
+"screen": "vbd-history"
+},
+{
+"name": "s2-04-b2-wort-detail-1440-dunkel",
+"screen": "vbdl-main",
+"w": 1440
+},
+{
+"name": "s2-05-b1-dashboard-390-dunkel",
+"screen": "vbb-main",
+"h": 1900
+},
+{
+"name": "s2-06-n7-abweichung-390-dunkel",
+"screen": "vbb-off"
+},
+{
+"name": "s2-07-b7-anwenden-390-dunkel",
+"screen": "vba-task"
+},
+{
+"name": "s2-08-b7-anwenden-rueckmeldung-390-dunkel",
+"screen": "vba-feedback",
+"h": 1000
+},
+{
+"name": "s2-09-b7-anwenden-ohne-claude-390-dunkel",
+"screen": "vba-offline"
+},
+{
+"name": "s2-10-b6-eigener-satz-390-dunkel",
+"screen": "vbo-task"
+},
+{
+"name": "s2-11-b6-eigener-satz-rueckmeldung-390-dunkel",
+"screen": "vbo-feedback"
+},
+{
+"name": "s2-12-b6-ohne-claude-390-dunkel",
+"screen": "vbo-noai"
+},
+{
+"name": "s2-13-b9-einstellungen-390-dunkel",
+"screen": "vbe-main"
+}
+]
