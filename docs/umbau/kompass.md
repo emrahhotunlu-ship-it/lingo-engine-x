@@ -21,10 +21,9 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 ## 3. Roadmap (Paket-Reihenfolge, Stand 01.11.2026)
 | # | Paket | Inhalt | Stand |
 |---|---|---|---|
-| ✓ | V0, Q0, D1, D2, D3, V1 | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer (unsichtbar) | zusammengeführt in `claude/umbau-fokus` |
-| läuft | V2 · D5 · VB | Wörter-Bewertung/Formen/Lehrer-Chargen · Grammatik-Reiter + Gedämpft-Knopf · Bilder der Wörter-Bildschirme | letzte Unterchats; danach im Hauptchat zusammenführen |
-| 1 | **Test-Link** | Stand bis D5 (Heute, Übungsseite, Grammatik neu) zum Review | nach D5 |
-| 2 | V3 | Wörter: Lernkarte, Sitzung, Abschluss (Bilder Satz 1 vorher abgesegnet) | |
+| ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | zusammengeführt in `claude/umbau-fokus` (01.11.); alle Unterchats beendet |
+| 1 | **Test-Link** | Stand bis D5 (Heute, Übungsseite, Grammatik neu) zum Review; offene Fragen V2 (4) und D5 (3) im Frage-Dialog | läuft (roter Test fxStage1:55 wird behoben) |
+| 2 | V3 | Wörter: Lernkarte, Sitzung, Abschluss (Bilder Satz 1 vorher abgesegnet; 6 VB-Fragen mit dem Kurzplan) | |
 | 3 | V4 | Wörter: Anwenden, Wort-Detail, Übersicht (Bilder Satz 2 vorher) | |
 | 4 | V5 | Wörter: C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus | |
 | 5 | D6a, D6b | Praxis/Fortschritt; Fragen-Blatt/Ausfälle im neuen Design | |
