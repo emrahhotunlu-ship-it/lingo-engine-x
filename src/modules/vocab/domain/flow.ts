@@ -6,6 +6,7 @@ import { type Catalog, loadByDay } from './catalog';
 import { type Check, type CheckDict, checkAnswer, damerau, type Target } from './check';
 import { FORM_SPEC } from './grade';
 import { type Answer, type AnswerResult, applyAnswer, FLAG, type PlanCtx, probeKnown } from './planner';
+import type { UseInput } from './apply';
 import type { Task } from './session';
 import type { Form, FormStats, Lex, Outcome, VocabCfg } from './types';
 
@@ -44,7 +45,7 @@ export type CardModel = {
   contrast?: { w: string | null; ff: string | null; pair: string | null };
 };
 
-/** Formen, die erst mit späteren Schritten eine eigene Karte bekommen (Anwenden V4, Kontrast Schritt 3, mit Claude V4). */
+/** Formen ohne Lernkarte: Anwenden und eigener Satz haben eine eigene Karte (`use.ts`, S5c); die übrigen kommen mit späteren Schritten. */
 const LATER: ReadonlySet<Form> = new Set(['transfer', 'own', 'say', 'diplomatic', 'find_trap', 'situation']);
 
 const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
@@ -243,14 +244,24 @@ export const tipFor = (m: CardModel) => tipOf(m.answer);
 
 // ---------------------------------------------------------------- Entwurf (Browser), damit nichts verloren geht
 
-/** Offene Buchung, im Browser gemerkt, bis sie geschrieben ist. `kind`: Antwort, Einführung oder Probe. */
-export type Draft = { v: 1; kind: 'answer' | 'intro' | 'probe'; path: string; planned: boolean; a: Answer };
+/**
+ * Offene Buchung, im Browser gemerkt, bis sie geschrieben ist. `kind`: Antwort, Einführung, Probe oder Verwendung (Anwenden / eigener Satz,
+ * mit Claudes Urteil `u`; je Zielwort ein Entwurf).
+ */
+export type Draft = { v: 1; kind: 'answer' | 'intro' | 'probe' | 'use'; path: string; planned: boolean; a: Answer; u?: UseInput };
+
+const isUseInput = (v: unknown): v is UseInput => {
+  if (!v || typeof v !== 'object') return false;
+  const u = v as Record<string, unknown>;
+  return typeof u.t === 'number' && (u.form === 'transfer' || u.form === 'own') && typeof u.v === 'string' && typeof u.lvAt === 'number' && typeof u.evidenceOnly === 'boolean';
+};
 
 export function isDraft(v: unknown): v is Draft {
   if (!v || typeof v !== 'object') return false;
   const d = v as Record<string, unknown>;
   const a = d.a as Record<string, unknown> | undefined;
-  return d.v === 1 && (d.kind === 'answer' || d.kind === 'intro' || d.kind === 'probe') && typeof d.path === 'string' && /^(vocab|chunk)\//.test(d.path) && typeof d.planned === 'boolean' && !!a && typeof a.t === 'number' && typeof a.form === 'string' && typeof a.outcome === 'string';
+  const kindOk = d.kind === 'answer' || d.kind === 'intro' || d.kind === 'probe' || (d.kind === 'use' && isUseInput(d.u));
+  return d.v === 1 && kindOk && typeof d.path === 'string' && /^(vocab|chunk)\//.test(d.path) && typeof d.planned === 'boolean' && !!a && typeof a.t === 'number' && typeof a.form === 'string' && typeof a.outcome === 'string';
 }
 
 /** Muss der Entwurf noch gebucht werden? Antwort/Probe: das Lexem kennt diese Zeit noch nicht (`sync < t`); Einführung: noch nicht eingeführt. */

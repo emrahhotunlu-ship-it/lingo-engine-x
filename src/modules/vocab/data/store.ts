@@ -7,9 +7,10 @@ import { type Draft, draftOpen } from '../domain/flow';
 import { type Answer, type AnswerResult, applyAnswer, introduce, type PlanCtx, probeKnown } from '../domain/planner';
 import type { FormStats, Lex, VocabCfg } from '../domain/types';
 import { tuple, VLOG_MAX_PARTS, VLOG_SOFT_MAX, vlogDocId, vlogKey } from '../domain/vlog';
-import { VMOD_DAY_PATH } from '../registry';
+import { VMOD_DAY_PATH, VMOD_USE_PATH } from '../registry';
 import { VLOG_INDEX_PATH } from '../domain/vlogIndex';
-import { lexWriteSchema, vmodDayWriteSchema, vmodIxWriteSchema } from './schemas';
+import { lexWriteSchema, USE_LATER_MAX, type UseLater, useLaterSchema, vmodDayWriteSchema, vmodIxWriteSchema, vmodUseWriteSchema } from './schemas';
+import { applyUse, type UseInput, type UseResult } from '../domain/apply';
 
 // Wörter-Modul V1: Schreib-Operationen, alle über den EINEN Writer (src/data/writer.ts, Kap. 3.4). Kein Löschen, kein Ersetzen eines
 // Lernstands; `vmod/day` ist ein Zwischenspeicher (REPLACEABLE). Jede Antwort: `transform` auf dem frischen Kartendokument, danach ein
@@ -98,6 +99,24 @@ export async function writeProbe(deps: VocabDeps, path: string, a: Answer, o: Bo
   return commit(deps, path, a, o.cat, (lex) => (lex.intro !== null ? null : probeKnown(lex, a.t, ctx)));
 }
 
+/**
+ * Eine Verwendung buchen (Anwenden / eigener Satz, Großpaket A S5c): Claudes Urteil je Zielwort → Belege und (mit Planwirkung) Note über
+ * `applyUse`, gerechnet auf dem FRISCHEN Dokument. Schon gebucht (`sync ≥ t`) → nichts. Beim Anwenden hat jedes Wort eine eigene Zeit (`t + i`),
+ * damit die Verlaufsschlüssel (Zeit und Gerät) nicht zusammenfallen.
+ */
+export async function writeUse(deps: VocabDeps, path: string, a: Answer, u: UseInput, o: BookOpts): Promise<UseResult | null> {
+  const ctx = ctxOf(path, u.t, o);
+  let out: UseResult | null = null;
+  await commit(deps, path, a, o.cat, (lex) => {
+    if (lex.sync >= u.t) return null;
+    const r = applyUse(lex, u, ctx);
+    // Auch ohne Note und Beleg gilt die Verwendung als gebucht (der Entwurf ist damit erledigt, kein zweiter Verlaufseintrag).
+    out = r.lex.sync >= u.t ? r : { ...r, lex: { ...r.lex, sync: u.t } };
+    return out;
+  });
+  return out;
+}
+
 /** Offenen Entwurf aus dem Browser nachbuchen (nur wenn das Lexem ihn noch nicht kennt, `draftOpen`). */
 export async function replayDraft(deps: VocabDeps, d: Draft, o: Omit<BookOpts, 'planned'>): Promise<AnswerResult | null> {
   const lex = o.cat.get(d.path)?.lex ?? null;
@@ -105,7 +124,69 @@ export async function replayDraft(deps: VocabDeps, d: Draft, o: Omit<BookOpts, '
   const opts = { ...o, planned: d.planned };
   if (d.kind === 'intro') return writeIntro(deps, d.path, d.a, o.cat);
   if (d.kind === 'probe') return writeProbe(deps, d.path, d.a, opts);
+  if (d.kind === 'use') return d.u ? writeUse(deps, d.path, d.a, d.u, opts) : null;
   return writeAnswer(deps, d.path, d.a, opts);
+}
+
+// ---------------------------------------------------------------- `vmod/use`: Alltags-Lage und „Später prüfen lassen“ (S5c)
+
+/** Tage, die ein Text auf „Später prüfen lassen“ wartet; danach fällt er weg (die Belege wären zu alt). */
+export const USE_LATER_DAYS = 14;
+
+export type UseDoc = { life: string | null; later: UseLater[] };
+
+/** `vmod/use` tolerant lesen: ungültige Einträge fallen weg (gemeldet), ein ungültiges Dokument zählt als leer. */
+export function useDocOf(raw: unknown): UseDoc {
+  if (!isObj(raw)) return { life: null, later: [] };
+  const life = typeof raw.life === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.life) ? raw.life : null;
+  const list = Array.isArray(raw.later) ? raw.later : [];
+  const later: UseLater[] = [];
+  for (const it of list) {
+    const r = useLaterSchema.safeParse(it);
+    if (r.success) later.push(r.data);
+  }
+  if (later.length !== list.length) logError('vocab:use-doc', new Error('ungültige Einträge in later'), String(list.length - later.length));
+  return { life, later };
+}
+
+const EMPTY_USE = { v: 1 as const, life: null, later: [] };
+
+/** `vmod/use` frisch ändern: `fn` bekommt den gelesenen Stand und liefert den neuen (oder `null` = nichts zu tun). Geprüft vor dem Schreiben. */
+async function changeUse(deps: VocabDeps, fn: (cur: UseDoc) => UseDoc | null): Promise<UseDoc | null> {
+  await deps.writer.createIfMissing(VMOD_USE_PATH, EMPTY_USE);
+  let out: UseDoc | null = null;
+  await deps.writer.transform(VMOD_USE_PATH, (cur) => {
+    if (!cur) return null;
+    const next = fn(useDocOf(cur));
+    if (!next) return null;
+    const ok = vmodUseWriteSchema.safeParse({ v: 1, ...next });
+    if (!ok.success) {
+      logError('vocab:use-doc', ok.error, VMOD_USE_PATH);
+      return null;
+    }
+    out = next;
+    return { update: { v: 1, life: ok.data.life, later: ok.data.later } };
+  });
+  return out;
+}
+
+/** Alltags-Lage gezeigt: Tag merken (einmal pro Woche, `frameFor`). */
+export function markLife(deps: VocabDeps, day: string): Promise<UseDoc | null> {
+  return changeUse(deps, (cur) => (cur.life !== null && cur.life >= day ? null : { ...cur, life: day }));
+}
+
+/** Text für „Später prüfen lassen“ merken (doppelte Zeit → nichts; zu alte und überzählige fallen weg, die ältesten zuerst). */
+export function addLater(deps: VocabDeps, item: UseLater, nowMs: number): Promise<UseDoc | null> {
+  return changeUse(deps, (cur) => {
+    if (cur.later.some((x) => x.t === item.t)) return null;
+    const keep = cur.later.filter((x) => nowMs - x.t < USE_LATER_DAYS * 86_400_000);
+    return { ...cur, later: [...keep, item].sort((a, b) => a.t - b.t).slice(-USE_LATER_MAX) };
+  });
+}
+
+/** Geprüften oder verworfenen Text aus der Liste nehmen. */
+export function dropLater(deps: VocabDeps, t: number): Promise<UseDoc | null> {
+  return changeUse(deps, (cur) => (cur.later.some((x) => x.t === t) ? { ...cur, later: cur.later.filter((x) => x.t !== t) } : null));
 }
 
 /** Bereits im Verzeichnis `vmod/ix` eingetragene Verlaufsdokumente, je Schreiber (spart einen Lesezugriff je Antwort). */

@@ -117,6 +117,29 @@ export const vmodStatsWriteSchema = z
   })
   .strict();
 
+/** Großpaket A S5c: höchstens so viele Texte warten auf „Später prüfen lassen“ (die ältesten fallen weg). */
+export const USE_LATER_MAX = 6;
+const useFrame = z.enum(['mail', 'slack', 'call', 'pitch', 'life']);
+
+/** Ein Text, der ohne Claude geschrieben wurde und später geprüft wird (nur Belege, keine Planwirkung). `w` = [Pfad, Stufe beim Schreiben]. */
+export const useLaterSchema = z
+  .object({
+    t: int.positive(),
+    form: z.enum(['transfer', 'own']),
+    frame: useFrame,
+    sit: int.min(0).max(9),
+    text: z.string().min(1).max(1200),
+    spoken: z.boolean(),
+    w: z.array(z.tuple([z.string().regex(/^(vocab|chunk)\//), int.min(0).max(7)])).min(1).max(5),
+  })
+  .strict();
+export type UseLater = z.infer<typeof useLaterSchema>;
+
+/** `vmod/use` (Großpaket A S5c): letzter Tag mit Alltags-Lage (einmal pro Woche) und die Liste „Später prüfen lassen“. */
+export const vmodUseWriteSchema = z
+  .object({ v: z.literal(1), life: day.nullable(), later: z.array(useLaterSchema).max(USE_LATER_MAX) })
+  .strict();
+
 /** `app/profile.vcfg` (plan.md §3.5). `mod` = Rückweg-Schalter für alle Geräte (§9.4). */
 export const vcfgSchema = z
   .object({
