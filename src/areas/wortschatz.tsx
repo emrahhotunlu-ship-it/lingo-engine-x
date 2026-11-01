@@ -16,15 +16,16 @@ import { restoreTrainer, roundProgress, startSession, trainerSnapshot, TRAINER_R
 import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
-import type { ScreenProps } from '../app/registry';
-import { lazy, Suspense } from 'react';
-import { loadScreens, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
+import type { ScreenProps, SheetProps } from '../app/registry';
+import { lazy, Suspense, useEffect } from 'react';
+import { loadScreens, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
 import { useLive } from '../data/live';
 import { recordRoundEnd } from '../features/progress/persist';
 import { markExhausted } from '../features/today/store';
 import { useUnitRun } from '../features/unit/runStore';
 import { unitDone } from '../app/unit/done';
 import { useNav } from '../app/nav';
+import { openCompanion } from '../features/companion/store';
 import { Skeleton } from '../ui/Skeleton';
 import { ExerciseTop } from '../features/learn/ui';
 import { askJson } from '../ai/gate';
@@ -49,16 +50,21 @@ declare module '../app/router/types' {
     /** Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke). */
     teacherFeedback: NoParams;
     /** Neue Wörter-App (V3): Lernrunde, nur bei `vcfg.mod = 1` (sonst ruhiger Hinweis im Bildschirm). */
-    vlearn: { kind: VlearnKind };
+    vlearn: { kind: VlearnKind; path?: string };
+    /** Wort-Seite der neuen Wörter-App (Großpaket A S6): Stand, Verlauf, Sätze, Aktionen eines Lexems. */
+    vword: { path: string };
   }
 }
 
 const VLEARN_KINDS = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes'] as const;
 type VlearnKind = (typeof VLEARN_KINDS)[number];
-const vlearnParams = z.object({ kind: z.enum(VLEARN_KINDS) });
+const LEX_PATH = z.string().max(160).regex(/^(vocab|chunk)\/[^/]+$/);
+const vlearnParams = z.object({ kind: z.enum(VLEARN_KINDS), path: LEX_PATH.optional() });
+const vwordParams = z.object({ path: LEX_PATH });
 
 // Lernrunde des Wörter-Moduls: nachgeladen (eigene Teil-Datei), mit eigenem Lade-Skelett.
 const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScreen })));
+const WordPage = lazy(() => loadWordPage().then((m) => ({ default: m.WordPage })));
 
 /**
  * Rundenende der neuen Wörter-Runde (V3 Schritt 4b): Pflicht zählt als `act.review` (Heute „Wörter erledigt“, Serie), Extra als `cards`;
@@ -100,6 +106,7 @@ function VlearnPage({ route }: ScreenProps<'vlearn'>) {
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
       <LearnScreen
         kind={route.kind}
+        {...(route.kind === 'word' && route.path ? { paths: [route.path] } : {})}
         ai={vocabAi}
         onRoundEnd={onVlearnEnd}
         onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
@@ -107,6 +114,31 @@ function VlearnPage({ route }: ScreenProps<'vlearn'>) {
       />
     </Suspense>
   );
+}
+
+/** Wort-Seite: „Dieses Wort üben“ startet eine Runde nur mit diesem Lexem, „Claude fragen“ öffnet den Begleiter mit der Frage. */
+function VwordPage({ route }: ScreenProps<'vword'>) {
+  const go = useNav((s) => s.go);
+  return (
+    <Suspense fallback={<Skeleton className="m-4 h-40" />}>
+      <WordPage path={route.path} onPractice={(path) => go({ name: 'vlearn', kind: 'word', path })} onAsk={(text) => openCompanion({ tab: 'chat', text })} />
+    </Suspense>
+  );
+}
+
+/** Wortblatt: bei eingeschaltetem Wörter-Modul führt es zur neuen Wort-Seite, sonst das alte Blatt (Rückweg bis V5). */
+function WordSheetSwitch(props: SheetProps) {
+  const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
+  const p = props.params;
+  const key = p && typeof p === 'object' && typeof (p as { key?: unknown }).key === 'string' ? (p as { key: string }).key : null;
+  const target = on && key && LEX_PATH.safeParse(key).success ? key : null;
+  const { onClose } = props;
+  useEffect(() => {
+    if (!target) return;
+    onClose();
+    useNav.getState().go({ name: 'vword', path: target });
+  }, [target, onClose]);
+  return target ? null : <WordSheetHost {...props} />;
 }
 
 const trainerParams = z.object({ round: z.enum(['pflicht', 'extra']), mode: z.enum(['auto', 'type', 'flip', 'listen']).optional(), deck: z.string().max(64).optional() });
@@ -168,6 +200,7 @@ export const wortschatz = defineArea({
     teacherFeedback: { kind: 'page', component: TeacherFeedbackScreen, title: 'tfTitle' },
     // Neue Wörter-App (Großpaket A, V3): Lernrunde des Moduls; Einstieg von Heute kommt mit Schritt 4.
     vlearn: { kind: 'exercise', component: VlearnPage, title: 'vmScreenTitle', params: vlearnParams },
+    vword: { kind: 'page', component: VwordPage, title: 'vmWpTitle', params: vwordParams },
   },
   entries: [
     // Zeile unter Üben (place 'learn'): Lehrer-Feedback einfügen.
@@ -175,7 +208,7 @@ export const wortschatz = defineArea({
   ],
   sections: [{ id: 'ws-stats', place: 'stand', order: 50, component: VocabStatsSection }],
   sheets: [
-    { id: 'word', component: WordSheetHost },
+    { id: 'word', component: WordSheetSwitch },
     { id: 'add', component: AddSheetHost },
     { id: 'x:extra', component: ExtraSheet },
     { id: 'x:say-own', component: SayOwnSheet },

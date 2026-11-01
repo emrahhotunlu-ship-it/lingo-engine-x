@@ -140,6 +140,8 @@ export type Attempt = {
   /** Stufe vorher (nur bei Auf-/Abstieg). */
   from: number | null;
   mig: boolean;
+  /** Beleg aus einem anderen Bereich (Lesen, C1-Aufgabe; `FLAG.ext`): „Auch woanders gesehen“ (N6). */
+  ext: boolean;
 };
 
 function cellOf(note: number, hint: number): Cell {
@@ -166,13 +168,14 @@ export function attemptsOf(tuples: readonly VlogTuple[], path: string): Attempt[
   for (const tp of own) {
     const [t, , track, form, note, outcome, , , hint, , lv, flags] = tp;
     const mig = (flags & FLAG.mig) !== 0;
+    const ext = (flags & FLAG.ext) !== 0;
     let fx: Attempt['fx'] = note > 0 ? 'stay' : 'none';
     let from: number | null = null;
     if (!mig && lv > 0 && prev !== null && prev > 0 && lv !== prev) {
       fx = lv > prev ? 'up' : 'down';
       from = prev;
     }
-    out.push({ t, form, outcome, note, hint, track, lv, fx, from, mig });
+    out.push({ t, form, outcome, note, hint, track, lv, fx, from, mig, ext });
     if (lv > 0) prev = lv;
   }
   return out;

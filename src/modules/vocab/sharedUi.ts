@@ -33,6 +33,11 @@ export { maskOf } from '../../domain/answer/mask';
 
 // Wörterbuch (Auswertung „ist das ein Wort?“, Bedeutung des getippten Worts)
 export { dictLookup, isDictWord } from '../../domain/lexicon/dict';
+// Wort-Seite (Großpaket A S6): Lautschrift und Vorlesen (Wort und Satz, normal und langsam).
+export { ipaOf } from '../../domain/lexicon/pron';
+export { speak, useSpeech } from '../../platform/speech';
+// Uhr der App (alle 30 s, Tageswechsel 04:00): Zeit im Zeichnen nur über sie, nie `Date.now()`.
+export { useClock } from '../../app/clock';
 
 // Daten: Live-Ansicht, der eine Schreibpfad, Einzel-Lesen, Browser-Speicher (nur Entwurf und Gerätekennung)
 export { useLive } from '../../data/live';

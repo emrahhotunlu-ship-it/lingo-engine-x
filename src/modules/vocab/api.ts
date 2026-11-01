@@ -155,3 +155,8 @@ export async function prepareDay(): Promise<number | null> {
 export function loadScreens() {
   return import('./ui/LearnScreen');
 }
+
+/** Wort-Seite (Großpaket A S6): eigene Teil-Datei, erst beim Öffnen geladen. */
+export function loadWordPage() {
+  return import('./ui/WordPage');
+}

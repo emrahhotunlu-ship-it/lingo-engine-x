@@ -58,6 +58,28 @@ async function commit(deps: VocabDeps, path: string, a: Answer, cat: Catalog, co
   return res;
 }
 
+/**
+ * Großpaket A S6 „Verwalten“: Lernstand ohne Buchung ändern („Morgen wieder“, „Von vorn“; domain/manage.ts) auf dem FRISCHEN Dokument.
+ * Kein Verlaufseintrag (keine Antwort). `false`, wenn das Dokument fehlt, ungültig ist, aus einer künftigen Version stammt oder `fn` ablehnt.
+ */
+export async function writeManage(writer: Writer, path: string, fn: (lex: Lex) => Lex | null): Promise<boolean> {
+  let ok = false;
+  await writer.transform(path, (cur) => {
+    if (!cur || isFutureLex(cur)) return null;
+    const lex = lexOf(cur);
+    const next = lex ? fn(lex) : null;
+    if (!next) return null;
+    const parsed = lexWriteSchema.safeParse(next);
+    if (!parsed.success) {
+      logError('vocab:manage', parsed.error, path);
+      return null;
+    }
+    ok = true;
+    return { update: { lex: lexPatch(cur.lex, parsed.data) } };
+  });
+  return ok;
+}
+
 const logAnswer = (deps: VocabDeps, path: string, a: Answer, r: Pick<AnswerResult, 'track' | 'note' | 'lex'>) =>
   writeVlog(deps, [tuple({ t: a.t, path, track: r.track, form: a.form, note: r.note, outcome: a.outcome, ms: a.ms, fk: a.fk, hint: a.hint, sentence: a.sentence, lv: r.lex.lv, flags: a.flags ?? 0 })], deps.device);
 

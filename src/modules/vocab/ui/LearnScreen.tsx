@@ -100,12 +100,13 @@ export type LearnTop = (p: { onClose: () => void; progress: { n: number; total: 
 /** Rundenende und „Fertig“: kommen vom Bereich (Heute, Serie, Tageseinheit), weil das Modul `features/*` nicht kennt (Isolation). */
 export type LearnHooks = { onRoundEnd?: (r: RoundReport) => void; onFinish?: () => void };
 
-export function LearnScreen({ kind: routeKind, ai, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; ai?: VocabAi; renderTop?: LearnTop } & LearnHooks) {
+export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; paths?: string[]; ai?: VocabAi; renderTop?: LearnTop } & LearnHooks) {
   const { t, lang } = useT();
   // „Noch 5“ im Abschluss startet eine neue Runde (Extra) im selben Bildschirm; ein anderer Routen-Parameter beginnt von vorn.
   const [round, setRound] = useState({ base: routeKind, kind: routeKind, n: 0 });
   if (round.base !== routeKind) setRound({ base: routeKind, kind: routeKind, n: round.n + 1 });
   const kind = round.base === routeKind ? round.kind : routeKind;
+  const pathKey = paths?.join('|') ?? '';
   const status = useLive((s) => s.status);
   const back = useNav((s) => s.back);
   const switchTab = useNav((s) => s.switchTab);
@@ -121,8 +122,10 @@ export function LearnScreen({ kind: routeKind, ai, renderTop, onRoundEnd, onFini
   // Start mit einer Momentaufnahme der Live-Daten (die Runde führt ihren Bestand danach selbst nach).
   useEffect(() => {
     if (!run) return;
-    run.start({ kind, ...liveLexDocs() }).catch((err: unknown) => logError('vocab:learn-start', err));
-  }, [run, kind]);
+    // „Dieses Wort üben“ (Wort-Seite): nur die übergebenen Lexeme; die Liste kommt als Text, damit ein neues Array keinen Neustart auslöst.
+    const only = kind === 'word' && pathKey ? pathKey.split('|') : undefined;
+    run.start({ kind, ...liveLexDocs(), ...(only ? { paths: only } : {}) }).catch((err: unknown) => logError('vocab:learn-start', err));
+  }, [run, kind, pathKey]);
 
   // Beim Verlassen (Bildschirmwechsel, Tab im Hintergrund, Seite zu): offene Antwort sofort buchen.
   useEffect(() => {
