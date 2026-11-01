@@ -9,7 +9,8 @@ export type InputKind = 'choice' | 'typed' | 'hint' | 'sentence' | 'meaning' | '
 export type Verdict = 'correct' | 'near' | 'wrong';
 
 /** Eine Aufgabe, die der Planer stellt. `step` = Lernschritt (Tag 0 oder Wiedervorlage nach Fehler am selben Tag). */
-export type Task = { lexeme: string; ex: string; input: InputKind; stage: number; step: boolean; intro?: boolean; sentence?: string; group?: string[]; due?: boolean };
+/** V2: `cue` = an der Lücke steht die deutsche Bedeutung („Gesucht: …“, M25); nur gemeldet, der Lerner wertet es (noch) nicht. */
+export type Task = { lexeme: string; ex: string; input: InputKind; stage: number; step: boolean; intro?: boolean; sentence?: string; group?: string[]; due?: boolean; cue?: boolean };
 /** Seit V1: Arten der Runde. `extra` = freiwillige Runde, `evening` = Abend-Check, `week` = Wochen-Check, `word` = „Dieses Wort üben“. */
 export type SimKind = 'pflicht' | 'extra' | 'evening' | 'week' | 'word';
 /** Beleg aus einem anderen Bereich (C1-Aufgabe), V1: `reportEvidence`. */
@@ -179,6 +180,16 @@ export class Learner {
     for (const m of this.mem.values()) if (m.seen && recall(m.p, at) >= min) n++;
     return n;
   }
+  /**
+   * V2: wie `countAbove`, aber in einem NEUEN Satz (Emrahs Ziel: das Wort außerhalb des gewohnten Satzes benutzen). Die Satzbindung des
+   * Lerners (oben) gibt im Ankersatz einen Vorteil und in neuen Sätzen einen gleich großen Nachteil, der mit der Zahl verschiedener gesehener
+   * Sätze sinkt; hier wird der Nachteil abgezogen. Wörter ohne gesehenen Satz (nur ohne Satz geübt) haben keine Bindung.
+   */
+  countAboveNew(at: number, min: number): number {
+    let n = 0;
+    for (const m of this.mem.values()) if (m.seen && recall(m.p, at) - (m.anchor ? BIND / Math.max(1, m.sentences.size) : 0) >= min) n++;
+    return n;
+  }
 }
 
 // ------------------------------------------------------------------ Szenarien
@@ -238,6 +249,9 @@ export type ScenarioResult = {
     yield90: number;
     yieldPerHour: number;
     durablePerHour: number;
+    yield60New: number;
+    yield90New: number;
+    learnHours: number;
     forecastPeak: number;
     forecastPeakMin: number;
     wordDays: number;
@@ -310,7 +324,8 @@ export function makeLegacy(words: readonly SimWord[], seed: number, now: number)
   return { docs, truth };
 }
 
-export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number, seed: number): ScenarioResult {
+export type RunOpts = { dutyCapMin?: number };
+export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number, seed: number, opts: RunOpts = {}): ScenarioResult {
   // D braucht neben dem Altbestand (250) genug neue Wörter für 60 Tage.
   const words = makeWords(sc.legacy ? 650 : 400, seed);
   const learner = new Learner(rng(seed + 1));
@@ -358,6 +373,8 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
       const s = adapter.session(kind, now, target);
       const before = ms;
       for (let guard = 0; guard < 400; guard++) {
+        // V2: Vergleich bei gleicher Pflichtzeit (Emrahs Lesart 01.11.2026): Pflicht endet nach `dutyCapMin` Minuten, für jeden Planer gleich.
+        if (kind === 'pflicht' && opts.dutyCapMin && ms - before >= opts.dutyCapMin * 60_000) break;
         const t = s.next(now);
         if (!t) break;
         if (t.intro) {
@@ -502,6 +519,9 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
       yield90: learner.countAbove(end + 30 * DAY, 0.7),
       yieldPerHour: Math.round((learner.countAbove(end, 0.9) / Math.max(1, rows.reduce((a, r) => a + r.minutes, 0) / 60)) * 10) / 10,
       durablePerHour: Math.round((learner.countAbove(end + 30 * DAY, 0.7) / Math.max(1, rows.reduce((a, r) => a + r.minutes, 0) / 60)) * 10) / 10,
+      yield60New: learner.countAboveNew(end, 0.9),
+      yield90New: learner.countAboveNew(end + 30 * DAY, 0.7),
+      learnHours: Math.round((rows.reduce((a, r) => a + r.minutes, 0) / 60) * 10) / 10,
       forecastPeak: peak,
       forecastPeakMin: peakMin,
       wordDays,
@@ -534,13 +554,14 @@ export function runScenario(adapter: PlannerAdapter, sc: Scenario, days: number,
 
 export type RunResult = { adapter: string; days: number; seed: number; results: ScenarioResult[]; seeds: number[]; spread: Record<string, ScenarioResult['summary'][]> };
 
-export function runAll(adapter: PlannerAdapter, o: { days: number; seed: number; seeds?: number; only?: string[] }): RunResult {
+export function runAll(adapter: PlannerAdapter, o: { days: number; seed: number; seeds?: number; only?: string[]; dutyCapMin?: number }): RunResult {
   // Abgenommen wird der SCHLECHTESTE Wert über 5 Startwerte (Prüfung learning-scientist V0, Befund 9); die Haupttabelle zeigt den ersten.
   const seeds = Array.from({ length: Math.max(1, o.seeds ?? 5) }, (_, i) => o.seed + i);
   const scs = SCENARIOS.filter((x) => !o.only || o.only.includes(x.key));
-  const results = scs.map((sc) => runScenario(adapter, sc, o.days, o.seed));
+  const ro: RunOpts = o.dutyCapMin ? { dutyCapMin: o.dutyCapMin } : {};
+  const results = scs.map((sc) => runScenario(adapter, sc, o.days, o.seed, ro));
   const spread: Record<string, ScenarioResult['summary'][]> = {};
-  for (const sc of scs) spread[sc.key] = [results.find((r) => r.scenario.key === sc.key)!.summary, ...seeds.slice(1).map((sd) => runScenario(adapter, sc, o.days, sd).summary)];
+  for (const sc of scs) spread[sc.key] = [results.find((r) => r.scenario.key === sc.key)!.summary, ...seeds.slice(1).map((sd) => runScenario(adapter, sc, o.days, sd, ro).summary)];
   return { adapter: adapter.name, days: o.days, seed: o.seed, results, seeds, spread };
 }
 
@@ -588,6 +609,9 @@ export function toMarkdown(r: RunResult): string {
   row('Haltbarkeit: davon R ≥ 0,7 nach 30 Tagen ohne Üben', (s) => s.yield90);
   row('Ertrag je Lernstunde', (s) => s.yieldPerHour);
   row('Haltbarkeit je Lernstunde', (s) => s.durablePerHour);
+  row('V2: Ertrag im NEUEN Satz (R − Satzbindung ≥ 0,9) an Tag 60', (s) => s.yield60New);
+  row('V2: Haltbarkeit im NEUEN Satz (+30 Tage, ≥ 0,7)', (s) => s.yield90New);
+  row('Lernzeit gesamt (Stunden)', (s) => s.learnHours);
   out.push('', `**Über ${r.seeds.length} Startwerte** (${r.seeds.join(', ')}): kleinster – größter Wert`, '');
   out.push('| Kennzahl | ' + r.results.map((x) => x.scenario.key).join(' | ') + ' |');
   out.push('|---|' + r.results.map(() => '---').join('|') + '|');
@@ -612,6 +636,9 @@ export function toMarkdown(r: RunResult): string {
   span('Haltbarkeit +30 Tage', (s) => s.yield90);
   span('Ertrag je Lernstunde', (s) => s.yieldPerHour);
   span('Haltbarkeit je Lernstunde', (s) => s.durablePerHour);
+  span('Haltbarkeit im neuen Satz +30 Tage', (s) => s.yield90New);
+  span('Lernzeit gesamt (Stunden)', (s) => s.learnHours);
+  span('Anteil aktiv ab Stufe 3 (%)', (s) => s.activeShareStage3);
   out.push('', '**Je Tag** (Abfragen · mehrfach · Auswahl · überfällig · Minuten):', '');
   for (const x of r.results) {
     out.push(`<details><summary>${x.scenario.key}: ${x.scenario.name}</summary>`, '', '| Tag | Abfragen | Wörter | mehrfach | durch Planer | eigener Start | Auswahl | getippt | überfällig | Min. | Pflicht-Min. | Anwenden |', '|---|---|---|---|---|---|---|---|---|---|---|---|');

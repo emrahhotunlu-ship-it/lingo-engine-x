@@ -40,9 +40,10 @@ export type Lex = {
 /**
  * Formen-Statistik je Lexem (V2): `l` zuletzt gestellte Form · `c` Zähler der Benutzen-Abrufe ab Stufe 4 (jeder 3. ohne Satz, M27) ·
  * `h` je Form [Versuche, frei richtig] · `nb` noch so viele Termine ohne Satz (Signal „satzgebunden“, M57) · `ak` letzte Antwort im
- * Ankersatz richtig (1) / falsch (0) / unbekannt (null) · `ew` schon benutzte Ausweichwörter (M41: das zweite gleiche gibt Hard).
+ * Ankersatz richtig (1) / falsch (0) / unbekannt (null) · `ew` schon benutzte Ausweichwörter (M41: das zweite gleiche gibt Hard) ·
+ * `xf` Fehler in neuen Sätzen in Folge seit dem letzten richtigen Abruf im Ankersatz.
  */
-export type Fq = { l: Form | null; c: number; h: Partial<Record<Form, [number, number]>>; nb: number; ak: 0 | 1 | null; ew: string[] };
+export type Fq = { l: Form | null; c: number; h: Partial<Record<Form, [number, number]>>; nb: number; ak: 0 | 1 | null; ew: string[]; xf?: number };
 
 export type TrackKey = 'u' | 'b';
 

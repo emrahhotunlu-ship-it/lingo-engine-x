@@ -122,6 +122,9 @@
     },
     "V1 V-MODUL": {
       "entry": 2000
+    },
+    "V2 V-STUFEN": {
+      "entry": 500
     }
   }
 }

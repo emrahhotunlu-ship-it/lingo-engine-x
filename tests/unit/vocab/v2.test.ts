@@ -54,8 +54,14 @@ describe('Formen je Stufe (M22)', () => {
       expect(LADDER_B[lv]!.length, `B${lv}`).toBeGreaterThanOrEqual(2);
       expect(LADDER_U[lv]!.length, `U${lv}`).toBeGreaterThanOrEqual(2);
       // Ohne jeden Zusatzinhalt (nur Satz und deutscher Chunk) hat jede Stufe ab 2 mindestens 2 stellbare Benutzen-Formen.
-      if (lv >= 2) expect(LADDER_B[lv]!.filter((f) => f !== 'intro' && f !== 'probe' && available(f, { ...l, lv }, { de: true })).length, `B${lv}`).toBeGreaterThanOrEqual(2);
+      // Stufe 3 bekommt „ohne Satz“ als zweite Form, wenn sonst nur eine stellbar ist (pickForm).
+      const extra = lv === 3 ? 1 : 0;
+      if (lv >= 2) expect(LADDER_B[lv]!.filter((f) => f !== 'intro' && f !== 'probe' && available(f, { ...l, lv }, { de: true })).length + extra, `B${lv}`).toBeGreaterThanOrEqual(2);
     }
+  });
+  it('Stufe 3 nur mit Grundinhalt: Lücke und „ohne Satz“ wechseln sich ab (≥ 2 Abfragearten)', () => {
+    const l = { ...at(learned(), 3), fq: { ...emptyFq(), l: 'gap' as Form } };
+    expect(pickForm(l, 'b', { de: true }).form).toBe('nosent');
   });
   it('schwächste Form zuerst, nie zweimal in Folge', () => {
     const l = at(learned(), 3);
@@ -315,14 +321,18 @@ describe('Planer mit V2-Regeln', () => {
     const c = applyAnswer({ ...learned(T0, 'col') }, ans(l.b!.due + 3600_000, { outcome: 'colloc' }), ctx());
     expect(c.grade).toBe(1);
   });
-  it('Formen-Statistik und Satzbindung: richtig im Ankersatz, falsch im neuen Satz → 2 Termine ohne Satz', () => {
+  it('Satzbindung: richtig im Ankersatz, zweimal in Folge falsch in neuen Sätzen → 2 Termine ohne Satz (M57)', () => {
     let l = { ...learned(), lv: 4, u: { ...learned().u, s: 10 } };
-    let t = l.b!.due + 3600_000;
-    l = applyAnswer(l, ans(t, { anchor: true, sentence: 'x#0' }), ctx()).lex;
-    t = l.b!.due + 3600_000;
-    const r = applyAnswer(l, ans(t, { outcome: 'wrong', anchor: false, sentence: 'x#2' }), ctx());
-    expect(r.lex.fq?.nb).toBe(2);
-    expect(r.events).toContain('bound');
+    const next = (x: Lex, over: Partial<Answer>) => applyAnswer({ ...x, day: null }, ans(x.b!.due + 3600_000, over), ctx());
+    l = next(l, { anchor: true, sentence: 'x#0' }).lex;
+    const r1 = next(l, { outcome: 'wrong', anchor: false, sentence: 'x#2' });
+    expect(r1.lex.fq?.nb).toBe(0);
+    const r2 = next(r1.lex, { outcome: 'wrong', anchor: false, sentence: 'x#3' });
+    expect(r2.lex.fq?.nb).toBe(2);
+    expect(r2.events).toContain('bound');
+    // dazwischen ein Treffer im neuen Satz setzt die Folge zurück
+    const ok = next(next(r1.lex, { anchor: false, sentence: 'x#4' }).lex, { outcome: 'wrong', anchor: false, sentence: 'x#5' });
+    expect(ok.lex.fq?.nb).toBe(0);
   });
   it('lex mit fq besteht das strenge Schreib-Schema', () => {
     const l = learned();

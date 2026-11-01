@@ -33,6 +33,8 @@ const days = Number(opt('days', '60'));
 const seed = Number(opt('seed', '20261031'));
 const seeds = Number(opt('seeds', '5'));
 const only = opt('only', '') ? opt('only', '').split(',') : undefined; // z. B. --only C,D
+// V2: Vergleich bei gleicher Pflichtzeit: `--duty-cap 6` beendet die Pflichtrunde jedes Planers nach 6 Minuten.
+const dutyCapMin = Number(opt('duty-cap', '0')) || undefined;
 
 const { createServer } = await import(resolve(root, 'node_modules/vite/dist/node/index.js'));
 const server = await createServer({
@@ -48,7 +50,7 @@ let code = 0;
 try {
   const core = await server.ssrLoadModule('/scripts/vocab/sim-core.ts');
   const adapter = await server.ssrLoadModule(`/scripts/vocab/adapter-${adapterName}.ts`);
-  const result = core.runAll(adapter.default, { days, seed, seeds, only });
+  const result = core.runAll(adapter.default, { days, seed, seeds, only, dutyCapMin });
   const md = core.toMarkdown(result);
   process.stdout.write(md + '\n');
   const failed = core.selfCheck(result);

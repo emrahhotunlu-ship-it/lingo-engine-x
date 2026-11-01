@@ -35,11 +35,16 @@ export type Avail = {
   grOn?: boolean;
 };
 
-/** Formen-Leiter je Stufe (Benutzen). `n` = ohne englischen Satz. Reihenfolge = Vorrang bei Gleichstand. */
+/**
+ * Formen-Leiter je Stufe (Benutzen) für planwirksame Abfragen außerhalb der Lernschritte. Reihenfolge = Vorrang bei Gleichstand.
+ * Stufe 2 außerhalb von Tag 0 (nach Abstieg oder wenn Schritt B nicht gelang) fragt FREI ab (synthese §2.3: „B frei richtig“); die Stützen
+ * (Anfangsbuchstabe = Schritt A, Satz vervollständigen) bleiben den Lernschritten und dem freien Üben, sonst kommt das Wort mit „höchstens
+ * Hard“ nie über Stufe 2 (Simulation V2).
+ */
 export const LADDER_B: Readonly<Record<number, readonly Form[]>> = {
   1: ['intro', 'probe'],
-  2: ['gap_hint', 'gap', 'cloze_part'],
-  3: ['gap', 'cloze_part', 'prep', 'particle', 'count', 'partner', 'complete', 'nosent'],
+  2: ['gap', 'nosent', 'cloze_part'],
+  3: ['gap', 'cloze_part', 'prep', 'particle', 'count', 'partner'],
   4: ['gap', 'de_sent', 'nosent'],
   5: ['family', 'partner', 'gap', 'de_sent', 'situation', 'nosent', 'diplomatic', 'own'],
   6: ['gap', 'partner', 'family', 'own', 'situation', 'say', 'nosent'],
@@ -64,6 +69,8 @@ export const NOSENT_FROM_LV = 4;
 export const NOSENT_EVERY = 3;
 /** Satzbindung (M57): so viele Termine ohne Satz nach dem Signal „satzgebunden“. */
 export const BOUND_TERMS = 2;
+/** … ausgelöst nach so vielen Fehlern in Folge in neuen Sätzen. */
+export const BOUND_MISSES = 2;
 /** Derselbe Satz kommt für den Formabruf frühestens nach so vielen Tagen wieder (M57). */
 export const SENTENCE_REST_DAYS = 30;
 /** „Gesucht: …“ (deutsche Bedeutung an der Lücke) bis einschließlich dieser Stufe (M25). */
@@ -157,6 +164,8 @@ export function pickForm(l: Lex, track: TrackKey, av: Avail): FormPick {
     const m = cands.filter((f) => FORM_SPEC[f].sent === want);
     if (m.length) cands = m;
   }
+  // Stufe 3 ohne zweite Satz-Form (nur Grundinhalt): „ohne Satz“ als zweite Form, damit keine Stufe nur eine Abfrageart hat (Kap. 15).
+  if (track === 'b' && lv === 3 && cands.length < 2 && available('nosent', l, av)) cands = [...cands, 'nosent'];
   if (cands.length > 1 && fq.l) cands = cands.filter((f) => f !== fq.l);
   if (!cands.length) cands = [track === 'u' ? 'meaning' : 'gap'];
   let best = cands[0] as Form;
@@ -203,9 +212,20 @@ export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; freeGo
     c += 1;
     if (noSent && nb > 0) nb -= 1;
   }
-  if (x.anchor === true) ak = x.wrong ? 0 : 1;
-  // Signal „satzgebunden“ (synthese §2.1): im Ankersatz zuletzt richtig, im neuen Satz falsch → 2 Termine ohne Satz.
-  else if (x.anchor === false && FORM_SPEC[x.form].sent === 's' && x.wrong && ak === 1) nb = BOUND_TERMS;
+  let xf = fq.xf ?? 0;
+  if (x.anchor === true) {
+    ak = x.wrong ? 0 : 1;
+    xf = 0;
+  } else if (x.anchor === false && FORM_SPEC[x.form].sent === 's' && ak === 1) {
+    // Signal „satzgebunden“ (synthese §2.1): im Ankersatz zuletzt richtig, in neuen Sätzen BOUND_MISSES-mal in Folge falsch → 2 Termine
+    // ohne Satz. Ein einzelner Fehler im neuen Satz ist noch kein Muster. Danach ist das Signal verbraucht, bis der Ankersatz wieder gelingt.
+    xf = x.wrong ? xf + 1 : 0;
+    if (xf >= BOUND_MISSES) {
+      nb = BOUND_TERMS;
+      ak = null;
+      xf = 0;
+    }
+  }
   const ew = x.evadeHit && !fq.ew.includes(x.evadeHit) ? [...fq.ew, x.evadeHit].slice(-8) : fq.ew;
-  return { l: x.form, c, h, nb, ak, ew };
+  return { l: x.form, c, h, nb, ak, ew, ...(xf ? { xf } : {}) };
 }

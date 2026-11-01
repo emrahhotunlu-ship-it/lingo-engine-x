@@ -133,7 +133,7 @@ describe('scripts/budget.json', () => {
     const budget = loadBudget();
     const m = { entry: 0, entryFiles: [], css: 0, html: 0, lazy: {}, bin: {}, files: 1, total: 1 };
     expect(evaluate(m, budget).problems).toEqual([]);
-    expect(Object.keys(budget.vorab ?? {})).toEqual(['P1 S1-TOK', 'P2 S1-SHELL', 'P3 S1-BAND', 'P4 S1-ZEIT', 'P5 S1-ZAHL', 'P6 S1-START', 'P7 S1-DIKTAT', 'D1 V-BAU', 'D2 V-HEUTE', 'D3 V-UEBUNG', 'V1 V-MODUL']);
+    expect(Object.keys(budget.vorab ?? {})).toEqual(['P1 S1-TOK', 'P2 S1-SHELL', 'P3 S1-BAND', 'P4 S1-ZEIT', 'P5 S1-ZAHL', 'P6 S1-START', 'P7 S1-DIKTAT', 'D1 V-BAU', 'D2 V-HEUTE', 'D3 V-UEBUNG', 'V1 V-MODUL', 'V2 V-STUFEN']);
   });
   it('vorab-Beträge sind die aus dem Bauplan (stufe1-plan.md, P0 Nr. 4) und werden nicht still erhöht (platform-guard S4)', () => {
     expect(loadBudget().vorab).toEqual({
@@ -150,6 +150,7 @@ describe('scripts/budget.json', () => {
       'D2 V-HEUTE': { entry: 8000, css: 1500 },
       'D3 V-UEBUNG': { entry: 6000, css: 1500 },
       'V1 V-MODUL': { entry: 2000 },
+      'V2 V-STUFEN': { entry: 500 },
     });
   });
 });

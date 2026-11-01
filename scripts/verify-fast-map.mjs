@@ -73,7 +73,8 @@ export const RULES = [
   { prefix: 'src/features/vocab/', specs: [...TRAINER, ...VOCAB] },
   { prefix: 'src/domain/srs/', specs: [...TRAINER, 'rueckstand.spec.ts'] },
   { prefix: 'src/domain/vocab/', specs: [...TRAINER, ...VOCAB] },
-  // Wörter-Modul V1 (unsichtbar, hinter dem Schalter): keine eigenen Bildschirme; die Registrierung in src/data prüfen Sicherung/Diagnose/Kapazität.
+  // Wörter-Modul V1/V2 (unsichtbar, hinter dem Schalter): keine eigenen Bildschirme; die Registrierung in src/data prüfen Sicherung/Diagnose/Kapazität.
+  // V2 (Formen, Notentabelle, Auswertung, Lehrer-Chargen in src/modules/vocab/content/) prüft tests/unit/vocab/ über den Importgraph (vitest related).
   { prefix: 'src/modules/vocab/', specs: ['platform.spec.ts', 'capacity.spec.ts', 'diagnose.spec.ts'] },
   { prefix: 'src/features/grammar/', specs: GRAMMAR },
   { prefix: 'src/domain/grammar/', specs: GRAMMAR },
