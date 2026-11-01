@@ -232,7 +232,7 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
                 <AnimatePresence initial={false}>
                   {[...g.text].map((ch, k) => {
                     const i = g.start + k;
-                    return <Letter key={`${i}-${ch}`} ch={ch} i={i} landed={!!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />;
+                    return <Letter key={`${i}-${ch}`} ch={ch} i={i} landed={locked || !!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />;
                   })}
                 </AnimatePresence>
               </span>
@@ -240,7 +240,8 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
           )}
         </span>
       </motion.span>
-      {flyers.length > 0 &&
+      {/* Nach dem Prüfen steht die Antwort fest: noch fliegende Buchstaben sind sofort gelandet (sonst blendet die Lücke sie bis 390 ms nach dem Prüfen erst ein und flackert). */}
+      {flyers.length > 0 && !locked &&
         createPortal(
           <div className="lx-flyer-layer" aria-hidden="true">
             {flyers.map((f) => (
