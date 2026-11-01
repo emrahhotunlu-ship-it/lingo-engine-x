@@ -152,7 +152,7 @@ function vbPhone(v) {
       '<div class="card stack s8"><div class="lbl">Deutsch-Falle</div>' +
       '<div class="vb-pair"><b class="en">eventually</b><span>≠ eventuell</span><span class="vb-tag">kommt als Kontrast</span></div>' +
       '<p class="p2" style="margin:0">Kam 2-mal falsch in 30 Tagen. Die Kontrastkarte kommt in deiner nächsten Wörter-Runde.</p></div>' +
-      '<button class="btn pri full" id="ws-go">Paar jetzt üben</button></div>' + tabbar('h12');
+      '<button class="btn pri full" id="ws-go">affect üben</button></div>' + tabbar('h12');
   }
   /* ---------- B13 Muster mit Präposition (M78) ---------- */
   if (v === 'pattern') {
@@ -176,7 +176,7 @@ function vbPhone(v) {
       '<div class="stagec">' + VB.procSent(gapHtml('', { caret: true, input: true })) +
       '<div class="hintline">Gesucht: Einkauf (die Abteilung)</div></div></div>' + VB.tipBtns() +
       '<div class="scrim" style="background:transparent"></div><div class="menu vb-menu" id="ex-menu" role="menu">' +
-      '<div class="vb-whytoday"><div class="lbl">Warum heute?</div><p>Fällig seit 2 Tagen. Zuletzt richtig am 20.10., seitdem sinkt die Chance, dass du es noch weißt.</p><span>Selbst schreiben · Stufe 4 von 7</span></div><hr>' +
+      '<div class="vb-whytoday"><div class="lbl">Warum heute?</div><p>Fällig seit 2 Tagen. Selbst geschrieben zuletzt frei richtig am 20.10.; seitdem sinkt die Chance, dass du es noch weißt.</p><span>Selbst schreiben · Stufe 4 von 7</span></div><hr>' +
       '<button role="menuitem">' + ic('claude', 'sm') + 'Claude fragen</button>' +
       '<button role="menuitem">' + ic('trans', 'sm') + 'Übersetzer</button>' +
       '<button role="menuitem">' + ic('up', 'sm') + 'Zu leicht · kenne ich längst</button>' +
@@ -240,12 +240,13 @@ reg('vbh', {
     if (v !== 'card') {
       S.ui = {};
       /* Wörter-Block mit geschätzter Zeit aus dem Planer (14 statt fest 7 Min.); Ring und Summe rechnen mit. */
-      const orig = dayBlocks;
+      const orig = dayBlocks, origW = weekStrip;
       dayBlocks = kind => orig(kind).map(x => x.n === 'Wörter' ? Object.assign({}, x, { m: 14 }) : x);
+      weekStrip = (done) => origW(done, 1); /* heute = Di, 3.11. */
       try {
         return SCREENS.h1.render(v === 'ring' ? 'ring' : 'start')
           .replace(/(<span class="nm">Wörter<\/span><span class="sm num">)14 Min\./, (m, a) => v === 'ring' ? m : a + 'ca. 14 Min.');
-      } finally { dayBlocks = orig; }
+      } finally { dayBlocks = orig; weekStrip = origW; }
     }
     const b = VB.blocks();
     const lines = [['w', 'Gestern-Check', '3 Min.', 'done'], ['w', 'Wörter', 'ca. 14 Min.', 'next', '11 fällig · 3 neu · Anwenden'], ['g', 'Grammatik', '5 Min.'], ['l', 'Hören', '4 Min.'], ['s', 'Sag es', '4 Min.']];
@@ -318,7 +319,7 @@ function vbDetail(v) {
     '<div class="stack s6"><div class="lbl">Deine Sätze</div><div class="vb-own"><span class="vb-ok">' + ic('check', 'xs') + '</span><p class="en">Public procurement rules mean we need three quotes before we can sign.</p><span class="vb-ownm">geprüft · 29.10. · getippt</span></div>' +
     '<p class="p2" style="margin:0">Für Stufe 7 brauchst du 2 eigene Sätze in verschiedenen Zusammenhängen, einer gern gesprochen. Sie zählen ab Stufe 5.</p></div>' +
     '<div class="stack s6"><div class="lbl">Auch woanders gesehen</div><p class="p" style="margin:0">im Lesen gesehen (19.10.) · in einer C1-Aufgabe richtig benutzt (27.10.)</p></div>' +
-    '<button class="btn pri full">Dieses Wort üben</button></div>' + tabbar('h12');
+    wordActions().replace(/lead time/g, 'procurement') + '</div>' + tabbar('h12');
 }
 reg('vbd', { code: 'VBD', name: 'Wort-Detail (Entwurf)', kind: 'phone', variants: [['main', 'B2 Detail'], ['history', 'N5 Verlauf']], render: vbDetail });
 reg('vbdl', {
@@ -340,16 +341,17 @@ reg('vbdl', {
 
 /* B1 Dashboard: H34 Wörter + Karte „Die nächsten 14 Tage“ + Behaltensrate (N7) */
 function vbDash() {
-  const days = [['Di', 15, 1], ['Mi', 14], ['Do', 15], ['Fr', 13], ['Sa', 14], ['So', 0, 0, 1], ['Mo', 15], ['Di', 14], ['Mi', 15], ['Do', 14], ['Fr', 13], ['Sa', 15], ['So', 0, 0, 1], ['Mo', 14]];
+  const days = [['Di', 14, 1], ['Mi', 12], ['Do', 15], ['Fr', 13], ['Sa', 14], ['So', 0, 0, 1], ['Mo', 15], ['Di', 14], ['Mi', 15], ['Do', 14], ['Fr', 13], ['Sa', 15], ['So', 0, 0, 1], ['Mo', 14]];
   const fc = '<div class="card stack s8"><div class="lbl">Die nächsten 14 Tage · Minuten Wörter</div>' +
     '<div class="vb-fc" role="img" aria-label="Lernzeit je Tag, gleichmäßig um 14 Minuten, sonntags Ruhetag">' + days.map(d => '<div class="' + (d[2] ? 'on' : '') + (d[3] ? ' rest' : '') + '"><b class="num">' + (d[3] ? '–' : d[1]) + '</b><i style="height:' + (d[3] ? 3 : d[1] * 4) + 'px"></i><span>' + d[0] + '</span></div>').join('') + '</div>' +
     '<p class="p2" style="margin:0">Gleichmäßig um 14 Min., deine Zielzeit ist 15. Sonntag ist Ruhetag.</p></div>';
   const ret = '<div class="card stack s8"><div class="lbl">Behaltensrate · letzte 30 Tage</div><div class="ts-bign"><b class="disp num">89 %</b><span>Ziel 90 %</span></div>' +
     '<div class="vb-rt"><div><span>gefestigt</span><b class="num">93 %</b></div><div><span>jung</span><b class="num">86 %</b></div></div>' +
-    '<p class="p2" style="margin:0">So oft wusstest du ein fälliges Wort beim ersten Versuch. Passt zum Ziel.</p></div>';
-  const counts = '<div class="card stack s16"><div class="vb-two"><div><b class="disp num">46</b><span>bildest du selbst</span></div><div><b class="disp num">491</b><span>in deinem Wortschatz</span></div></div>' +
-    '<div class="ts-leg"><div><span class="ts-sw f5"></span><span>Bildest du selbst <em>S6–S7</em></span><b class="num">46</b></div><div><span class="ts-sw f34"></span><span>Auf dem Weg <em>S3–S5</em></span><b class="num">58</b></div><div><span class="ts-sw out"></span><span>Erkennst du <em>S1–S2</em></span><b class="num">387</b></div><div class="tot"><span></span><span>Alle Wörter</span><b class="num">491</b></div></div></div>';
-  return tsPage('h14-main', gearBtn(), tsProgNav('words') + tsTitle('Wörter', 'Gezählt wird nur, was du frei abrufst. Auswählen zählt nicht.') + counts + fc + ret, 'h14');
+    '<p class="p2" style="margin:0">So oft wusstest du ein fälliges Wort beim ersten Versuch. Knapp am Ziel.</p></div>';
+  const counts = '<div class="card stack s16"><div class="ts-bign"><b class="disp num">38</b><span>bildest du selbst</span></div>' +
+    '<div class="ts-leg"><div><span class="ts-sw f5"></span><span>Bildest du selbst <em>S6–S7</em></span><b class="num">38</b></div><div><span class="ts-sw f34"></span><span>Auf dem Weg <em>S3–S5</em></span><b class="num">41</b></div><div><span class="ts-sw out"></span><span>Erkennst du <em>S1–S2</em></span><b class="num">412</b></div><div class="tot"><span></span><span>Alle Wörter</span><b class="num">491</b></div></div></div>';
+  const w = tsWords(), z = w.indexOf('<div class="card stack s8"><div class="lbl">Zuwachs');
+  return tsPage('h14-main', gearBtn(), tsProgNav('words') + tsTitle('Wörter', 'Gezählt wird nur, was du frei abrufst. Auswählen zählt nicht.') + counts + fc + ret + (z > 0 ? w.slice(z) : ''), 'h14');
 }
 function vbDashAlt() {
   /* N7 mit Hinweis bei mehr als 5 Punkten Abweichung */
@@ -367,12 +369,12 @@ function vbApply(v) {
   const lage = '<div class="card stack s8"><div class="lbl">Mail an einen Kunden · freundlich, klar</div><p class="p" style="margin:0">Sag Mark, dass sich der Rollout auf nächste Woche verschiebt, weil die neuen Scanner länger brauchen, und bitte ihn, die Bestellung bis Freitag freizugeben.</p></div>';
   if (v === 'task') {
     return top + '<div class="stack s16" style="padding-top:16px">' + lage + VB.chips() +
-      '<div class="field en" style="min-height:150px">' + VB.mail + '<span class="caret" style="display:inline-block;width:2px;height:1em;background:var(--act-text);vertical-align:-2px;margin-left:1px"></span></div></div></div>' +
+      '<div class="field en vb-field">' + VB.mail + '<span class="caret" style="display:inline-block;width:2px;height:1em;background:var(--act-text);vertical-align:-2px;margin-left:1px"></span></div></div></div>' +
       exFoot('<button class="btn sec" aria-label="Diktieren">' + ic('mic', 'sm') + '</button>' + btnPri('apply-check', 'Prüfen'), true) + drawnKbd({ go: 'return' });
   }
   if (v === 'feedback') {
     const rows = [['near', 'postpone', 'Wort richtig, Präposition nicht: verschieben <i>auf</i> = <b>postpone to</b> oder <b>until next week</b>, nicht <i>on</i>.'], ['ok', 'lead time', 'richtig: die Zeit bis zur Lieferung.'], ['ok', 'sign off on', 'richtig: freigeben. Im US-Englisch meist <b>sign off on the order</b>; ohne <i>on</i> ist es britisch üblich und auch richtig.']];
-    return exTop(VB.blocks(), 1, 0.95) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · geprüft von Claude') +
+    return exTop(VB.blocks(), 1, 0.95) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · geprüft von Claude') + instr('Schreib 2–4 Sätze und benutze die drei Wörter.') +
       '<div class="stack s16" style="padding-top:14px">' + VB.chips(['near', 'ok', 'ok']) +
       '<div class="card en" style="font-size:16px;line-height:24px">Hi Mark, we have to <u class="vb-unear">postpone</u> the rollout <u class="vb-unear">on</u> next week. The <u class="vb-uok">lead time</u> for the new scanners is longer than planned. Could your team <u class="vb-uok">sign off</u> the order by Friday?</div>' +
       '<div class="card" style="padding:4px 16px">' + rows.map(r => '<div class="st vb-fr"><span class="vb-fi ' + r[0] + '">' + ic({ ok: 'check', near: 'near' }[r[0]], 'xs') + '</span><span class="vb-hrt"><b class="en">' + r[1] + '</b><span>' + r[2] + '</span></span></div>').join('') + '</div>' +
@@ -381,8 +383,8 @@ function vbApply(v) {
       exFoot(btnSec('apply-again', 'Nochmal selbst schreiben') + btnPri('apply-next', 'Weiter'));
   }
   /* offline: ohne Claude */
-  return exTop(VB.blocks(), 1, 0.95) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · ohne Claude') +
-    '<div class="stack s16" style="padding-top:14px"><div class="notice">' + ic('offline', 'sm') + '<span><b>Claude ist gerade nicht erreichbar.</b> Vergleich selbst mit dem Muster. Das zählt nicht für den Plan, deine Termine bleiben.</span></div>' +
+  return exTop(VB.blocks(), 1, 0.95) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · ohne Claude') + instr('Schreib 2–4 Sätze und benutze die drei Wörter.') +
+    '<div class="stack s16" style="padding-top:14px"><div class="notice">' + ic('offline', 'sm') + '<span><b>Claude ist gerade nicht erreichbar.</b> Vergleich selbst mit dem Muster. Deine Pflicht zählt trotzdem, nur die Termine der Wörter bleiben, wie sie sind.</span></div>' +
     '<div class="stack s6"><div class="lbl">Dein Text</div><p class="p en" style="margin:0">' + VB.mail + '</p></div>' +
     '<div class="card stack s8"><div class="lbl">Muster</div><p class="p en" style="margin:0">Hi Mark, we need to <b>postpone</b> the rollout <b>until</b> next week. The <b>lead time</b> for the new scanners is longer than expected. Could your team <b>sign off on</b> the order by Friday?</p></div>' +
     '<p class="p2" style="margin:0">Achte auf die fett gedruckten Wörter: Steht bei dir dasselbe?</p></div></div>' +
@@ -396,17 +398,17 @@ function vbOwn(v) {
   const lage = '<div class="card stack s8"><div class="lbl">Lage · im Call mit einem Kunden</div><p class="p" style="margin:0">Der Kunde fragt, warum die Umstellung nur drei Monate dauert. Erkläre, was ihr nutzt.</p></div>';
   const txt = 'We can leverage our existing templates, so the migration only takes three months.';
   if (v === 'task') {
-    return top + '<div class="stack s16" style="padding-top:16px">' + lage + '<div class="field en" style="min-height:120px">' + txt + '<span class="caret" style="display:inline-block;width:2px;height:1em;background:var(--act-text);vertical-align:-2px;margin-left:1px"></span></div>' +
-      '<p class="vb-quiet">' + ic('info', 'xs') + '<span>Nicht zu nah am Beispielsatz und nicht zu allgemein, sonst zählt er nicht.</span></p></div></div>' +
+    return top + '<div class="stack s16" style="padding-top:16px">' + lage + '<p class="vb-quiet">' + ic('info', 'xs') + '<span>Nicht zu nah am Beispiel, nicht zu allgemein.</span></p><div class="field en" style="min-height:120px">' + txt + '<span class="caret" style="display:inline-block;width:2px;height:1em;background:var(--act-text);vertical-align:-2px;margin-left:1px"></span></div>' +
+      '</div></div>' +
       exFoot('<button class="btn sec" aria-label="Diktieren">' + ic('mic', 'sm') + '</button>' + btnPri('own-check', 'Prüfen'), true) + drawnKbd({ go: 'return' });
   }
   if (v === 'noai') {
-    return top + '<div class="stack s16" style="padding-top:16px"><div class="notice">' + ic('offline', 'sm') + '<span><b>Claude ist gerade nicht erreichbar.</b> Vergleich selbst. Zählt nicht für Stufe 7, deine Termine bleiben.</span></div>' +
+    return top + '<div class="stack s16" style="padding-top:16px"><div class="notice">' + ic('offline', 'sm') + '<span><b>Claude ist gerade nicht erreichbar.</b> Vergleich selbst. Deine Pflicht zählt trotzdem; für Stufe 7 zählt der Satz erst nach einer Prüfung.</span></div>' +
       '<div class="stack s6"><div class="lbl">Dein Satz</div><p class="p en" style="margin:0">' + txt + '</p></div>' +
       '<div class="card stack s8"><div class="lbl">So benutzt man es</div><p class="p en" style="margin:0"><b>leverage</b> + etwas, das man schon hat: <i>leverage our experience, our data, existing templates</i></p></div></div></div>' +
       exFoot(btnSec('own-later', 'Später prüfen lassen') + btnPri('own-next', 'Weiter'));
   }
-  return exTop(VB.blocks(), 1, 0.75) + '<div class="ex-body gx' + '">' + blockLine('w', 'Wörter · <b>Eigener Satz</b> · geprüft von Claude') +
+  return exTop(VB.blocks(), 1, 0.75) + '<div class="ex-body gx' + '">' + blockLine('w', 'Wörter · <b>Eigener Satz</b> · geprüft von Claude') + instr('Schreib oder sag einen eigenen Satz mit <span class="en">leverage</span>.') +
     '<div class="stack s16" style="padding-top:14px"><div class="card en" style="font-size:17px;line-height:25px">We can <u class="vb-uok">leverage</u> our existing templates, so the migration only takes three months.</div>' +
     '<div class="card" style="padding:4px 16px">' +
     [['ok', 'Richtiger Sinn', '<span class="en">leverage</span> = etwas Vorhandenes gezielt nutzen. Passt.'], ['ok', 'Natürlich', 'So sagt man es im Call.'], ['ok', 'Wortpartner', '<span class="en">leverage existing templates</span> ist eine typische Verbindung.']]
@@ -423,10 +425,10 @@ function vbSettings() {
   return '<header class="phead gx"><div class="tw-hl"><button class="iconbtn" aria-label="Zurück" style="margin-left:-10px;margin-right:0">' + ic('chevL') + '</button><h1 class="disp">Wörter</h1></div></header>' +
     '<div class="scroll gx stack s24" style="padding-bottom:24px">' +
     '<div class="stack s8"><div class="lbl">Zielzeit für den Wörter-Block</div>' + seg(['10', '15', '20', '30'], 1) + '<p class="p2" style="margin:0">Minuten am Tag. Die App verteilt Wiederholungen so, dass es jeden Tag ungefähr so viel ist.</p></div>' +
-    '<div class="stack s8"><div class="lbl">Neue Wörter pro Lerntag</div>' + seg(['0', '2', '5', '10'], 2) + '<p class="p2" style="margin:0">Mindestens 2 kommen an jedem Lerntag, auch wenn viel fällig ist. Nur bei 0 keine.</p></div>' +
+    '<div class="stack s8"><div class="lbl">Neue Wörter pro Lerntag</div>' + seg(['0', '2', '5', '10'], 2) + '<p class="p2" style="margin:0">Bis zu so viele, wie in deine Zielzeit passen. Mindestens 2 an jedem Lerntag, auch wenn viel fällig ist; nur bei 0 keine.</p></div>' +
     '<div class="stack s8"><div class="lbl">Wie sicher sollen die Wörter sitzen?</div>' +
     '<div class="vb-safe">' + [['85 %', 'ca. 11 Min.', 0], ['90 %', 'ca. 15 Min.', 1], ['95 %', 'ca. 24 Min.', 0]].map(x => '<button class="' + (x[2] ? 'on' : '') + '"><b class="num">' + x[0] + '</b><span>' + x[1] + '</span></button>').join('') + '</div>' +
-    '<p class="p2" style="margin:0">Mehr Sicherheit heißt öfter wiederholen. Die Minuten gelten für deine 491 Wörter.</p></div>' +
-    '<div class="card" style="padding:4px 16px">' + sw('Anki-Modus', 'Aufdecken und selbst bewerten · wirkt nur auf Verstehen', false) + sw('Satz vor dem Prüfen anhören', 'Lücke als kurzer Ton', true) + '</div></div>' + tabbar('h12');
+    '<p class="p2" style="margin:0">Mehr Sicherheit heißt öfter wiederholen; die Minuten gelten für deine 491 Wörter. Deine Zielzeit hat Vorrang: Reicht sie nicht, kommen weniger neue Wörter (mindestens 2).</p></div>' +
+    '<div class="card" style="padding:4px 16px">' + sw('Anki-Modus', 'Aufdecken und selbst bewerten · wirkt nur auf Verstehen', false) + sw('Satz vor dem Prüfen anhören', 'Lücke als kurzer Ton', true) + '</div></div>' + tabbar('h14');
 }
 reg('vbe', { code: 'VBE', name: 'Einstellungen Wörter (Entwurf)', kind: 'phone', variants: [['main', 'B9']], render: vbSettings });

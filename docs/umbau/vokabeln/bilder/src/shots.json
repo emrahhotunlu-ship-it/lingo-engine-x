@@ -112,12 +112,12 @@
 {
 "name": "s2-01-b2-wort-detail-390-dunkel",
 "screen": "vbd-main",
-"h": 1440
+"h": 1760
 },
 {
 "name": "s2-02-b2-wort-detail-390-hell",
 "screen": "vbd-main",
-"h": 1440,
+"h": 1760,
 "mode": "light"
 },
 {
@@ -132,7 +132,7 @@
 {
 "name": "s2-05-b1-dashboard-390-dunkel",
 "screen": "vbb-main",
-"h": 1180
+"h": 1900
 },
 {
 "name": "s2-06-n7-abweichung-390-dunkel",

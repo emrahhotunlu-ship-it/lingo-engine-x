@@ -36,11 +36,11 @@ Dateinamen: `s<Satz>-<Nr>-<Bild>-<Breite>-<Modus>.jpg`. `vergleich-*.jpg` = link
 
 | Bild | Was es zeigt | Methode / Plan | Was Emrah entscheidet |
 |---|---|---|---|
-| `s2-01` B2 Wort-Detail (Dunkel), `s2-02` (Hell) | Stufenbalken mit 7 Teilen in 3 Tönen (erkennst du · auf dem Weg · bildest du selbst), darunter **zwei Spuren**: „Verstehen · sicher · nächster Abruf Sa, 21.11.“ / „Selbst schreiben · auf dem Weg · nächster Abruf Fr, 6.11.“, nächster Schritt in Worten; Verlauf-Zeitleiste; Ursprungssatz; Wortpartner; Deine Sätze; auch woanders gesehen (N6) | B2, M66, M7, W2, N5, N6 · `vergleich-wort-detail.jpg` | Spur „Benutzen“ heißt für Emrah „Selbst schreiben“? |
+| `s2-01` B2 Wort-Detail (Dunkel), `s2-02` (Hell) | darunter alle Aktionen der Vorschau (Dieses Wort üben mit Hinweis, Anhören in Schleife, Sag es, Pausieren, Claude fragen, Verwalten); Stufenbalken mit 7 Teilen in 3 Tönen (erkennst du · auf dem Weg · bildest du selbst), darunter **zwei Spuren**: „Verstehen · sicher · nächster Abruf Sa, 21.11.“ / „Selbst schreiben · auf dem Weg · nächster Abruf Fr, 6.11.“, nächster Schritt in Worten; Verlauf-Zeitleiste; Ursprungssatz; Wortpartner; Deine Sätze; auch woanders gesehen (N6) | B2, M66, M7, W2, N5, N6 · `vergleich-wort-detail.jpg` | Spur „Benutzen“ heißt für Emrah „Selbst schreiben“? |
 | `s2-03` N5 Verlauf | Zeitleiste 6 Wochen (ein Feld je Tag: grün frei, gelb mit Hilfe, rot falsch, grau nur Übung) und Liste der Versuche mit Wirkung („keine Wirkung auf den Plan“, „Aufstieg auf Stufe 4“) | N5, `vlog` | Zeitleiste mit Feldern statt Punkten? |
 | `s2-04` Laptop 1440 | Wort-Detail auf der Bühne, rechts Üben, Wortpartner, Deine Sätze, Belege | B2 | – |
-| `s2-05` B1 Dashboard | zwei Zahlen aktiv/passiv, Gruppen S1–S7, **Die nächsten 14 Tage in Minuten** (Sonntag flach), **Behaltensrate 89 % (Ziel 90 %) · gefestigt 93 % · jung 86 %** | B1, M63, M18, N7 · `vergleich-dashboard.jpg` | – |
-| `s2-06` N7 Abweichung | Mehr als 5 Punkte unter dem Ziel: Hinweis in Worten mit Folge („ca. 2 Min. mehr am Tag“) | N7 | Darf die App bei Abweichung selbst nachsteuern (mit Hinweis)? |
+| `s2-05` B1 Dashboard | eine große Zahl wie die Vorschau (38 bildest du selbst), Gruppen S1–S7, **Die nächsten 14 Tage in Minuten** (Sonntag flach), **Behaltensrate 89 % (Ziel 90 %) · gefestigt 93 % · jung 86 %**; darunter unverändert Zuwachs, Vorher-Nachher und die Wege der Vorschau | B1, M63, M18, N7 · `vergleich-dashboard.jpg` | – |
+| `s2-06` N7 Abweichung | Zweiter, gedachter Fall (83 % statt 89 %): mehr als 5 Punkte unter dem Ziel: Hinweis in Worten mit Folge („ca. 2 Min. mehr am Tag“) | N7 | Darf die App bei Abweichung selbst nachsteuern (mit Hinweis)? |
 | `s2-07` B7 Anwenden | Lage auf Deutsch (Mail an Kunden), 3 Zielwörter als Chips in der Grundform, Textfeld, Diktat, „Prüfen“ | B7, Emrah 4.5, `plan.md` §7 | – |
 | `s2-08` B7 Rückmeldung | je Zielwort ✓/~ mit einem Satz, Markierung im Text, „So ginge es natürlicher“ (nur 1 Korrektur), Wirkung auf den Plan in Worten; „War das auch richtig?“ | B7, M32, `synthese.md` §2.5 | – |
 | `s2-09` B7 ohne Claude | Hinweis, Muster zum Selbstvergleich, **zählt nicht für den Plan**; „Später prüfen lassen“ | B7, W6 | „Später prüfen lassen“ anbieten (Text wird gespeichert und nachgeprüft)? |
@@ -48,3 +48,10 @@ Dateinamen: `s<Satz>-<Nr>-<Bild>-<Breite>-<Modus>.jpg`. `vergleich-*.jpg` = link
 | `s2-11` B6 Rückmeldung | Sinn · natürlich · Wortpartner je mit ✓ und Begründung; „1 von 2 eigenen Sätzen für Stufe 7“; „Nochmal selbst schreiben“ | B6, Stufe 7 (Emrah 30.10. Nr. 4) | – |
 | `s2-12` B6 ohne Claude | Hinweis, „So benutzt man es“, zählt nicht für Stufe 7 | B6, W6 | – |
 | `s2-13` B9 Einstellungen | Zielzeit 10/15/20/30 Min. (Standard 15), neue Wörter 0/2/5/10 (mind. 2), Sicherheit 85/90/95 % **mit Minuten**, Anki-Modus (nur Verstehen), Satz vor dem Prüfen anhören | B9, M17, Emrah F3/F5 | – |
+
+## Regeln, die in mehreren Bildern gleich gelten
+- **Farbe des Urteils:** grün = richtig, gelb = fast richtig oder nur ein Teil fehlt (Tippfehler, fehlende oder falsche Präposition: Note „Hard“), rot = falsch oder falscher Wortpartner (*hold* statt *give a presentation*: Note nach M56). Deshalb ist *postpone on* in `s2-08` gelb und *hold a presentation* in `s1-15` rot.
+- **Nach einem Fehler:** immer „Mehr“ und „War das auch richtig?“, darunter leise „Das wusste ich eigentlich“; ein Hauptknopf „Weiter“.
+- **Nichts vor dem Prüfen verraten:** Kontraste und Regeln erst im Band (wie D3).
+- **Zahlen über alle Bilder:** heute Di, 3.11.; Wörter heute ca. 14 Min. (11 fällig, 3 neue, Anwenden), morgen ca. 12 Min.; Einstellung „bis zu 5 neue“, heute 3, weil viel fällig ist; mindestens 2 an jedem Lerntag.
+- **Hell-Modus:** Zustandsflächen werden in sRGB gemischt; mit der Mischung der Vorschau (`oklch`) wird „fast richtig“ in Hell rosa statt gelb (siehe Bericht).
