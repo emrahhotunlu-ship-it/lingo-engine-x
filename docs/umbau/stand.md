@@ -743,3 +743,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - 6 offene Fragen (Bericht §offene_fragen) gehen mit dem Kurzplan V3 im Frage-Dialog an Emrah (Bilder dazu senden).
 - Befund 1 für den Test-Link nach D5: Hell-Modus „fast richtig“ rosa statt gelb (`color-mix(in oklch, var(--surface) 90%, var(--near))` mischt mit Weiß, Farbton 0). Nach D5-Merge in `src/styles/parts/v-uebung.css`/`band.css` auf `in srgb` prüfen und beheben.
 - V2 (zweite Prüfrunde) und D5 (ux-Nachprüfung, dann verify:fast) laufen noch.
+
+### 01.11.2026, 02:00 – V2 zusammengeführt
+- `claude/umbau-v2` → `claude/umbau-fokus` (Merge `1501cf3b`, ohne Konflikt): Formen je Stufe, Notentabelle, Auswertung (a)–(h), Problemwörter, Lehrer-Chargen 1–3 (82 + 142 + 483), Simulation/Messung. Bericht `docs/umbau/berichte/v2.md`. Weiter unsichtbar hinter `vcfg.mod`.
+- `verify:fast --base d05fabf2`: alles grün (typecheck+lint, unit, build, e2e, e2e-perf, platform, budget). Der lazy-Test (im V2-Bericht rot gemeldet) war schon vorher im Hauptstand behoben.
+- Zielverfehlungen (Behaltensrate 80–84 %, Vorschau 1,8–2,1, „ohne Satz“ D 27–29 %, gleiche Lernzeit nur im neuen Satz besser) → 4 offene Fragen an Emrah (Bericht §offene_fragen), Empfehlung jeweils „Ja“.
+- Für V3 (aus Bericht): Lernkarte zeigt `cue`/`swap`/Ereignisse; `vmod/stats.fk/fkn` per transform; **vor dem ersten echten Schreiben Rückweg V1↔V2 klären** (V1 liest `lex` mit `fq` als ungültig → tolerant lesen oder `LEX_VERSION` 2). Inhaltsfehler Paket: `bring forward` (US *move up*), `economy of scale` → *economies of scale*; Fallen-Karte „Angebot → quote/proposal“.
