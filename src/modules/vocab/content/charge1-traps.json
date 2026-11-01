@@ -27,8 +27,8 @@
     "n": 4,
     "items": "83-84",
     "ok": 0,
-    "fixed": 0,
-    "note": "S8: Fallenpaar Angebot → quote/offer, Prüfung offen"
+    "fixed": 2,
+    "note": "S8: Fallenpaar Angebot → quote/offer, Lehrer-Prüfung: Beispielsatz quote (proposal ausgeschlossen), Bedeutungen und Begründungen geschärft"
    }
   ],
   "date": "2026-11-01",
@@ -1262,9 +1262,9 @@
    "en": "quote",
    "k": "w",
    "type": "pair",
-   "de": "Angebot (schriftlich, mit Preisen)",
-   "ex": "Could you send us a [quote] for 500 licenses by Friday?",
-   "why": "Schriftliches Preisangebot: a quote (mit Konzept und Plan: a proposal). An offer ist allgemeiner.",
+   "de": "Preisangebot, Kostenvoranschlag",
+   "ex": "Before the full proposal, could you send us a quick [quote] for 500 licenses?",
+   "why": "Konkreter Preis für eine Leistung: a quote. Mit Lösung, Plan und Preis: a proposal. An offer ist allgemeiner.",
    "reg": "n",
    "pair": "offer",
    "syn": [
@@ -1276,9 +1276,9 @@
    "en": "offer",
    "k": "w",
    "type": "pair",
-   "de": "Angebot (allgemein), Entgegenkommen",
+   "de": "Angebot (allgemein), Sonderangebot",
    "ex": "They made us a generous [offer]: two months free if we sign this week.",
-   "why": "Ein Angebot im Allgemeinen ist an offer. Ein schriftliches Preisangebot ist a quote.",
+   "why": "Allgemein etwas anbieten: an offer (auch Sonderangebot, Jobangebot). Konkretes Preisangebot: a quote.",
    "reg": "n",
    "pair": "quote"
   }

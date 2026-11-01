@@ -356,16 +356,16 @@
   {
    "id": "pp.inversion",
    "name": {
-    "de": "No sooner/Hardly/Never had … · betont",
-    "en": "No sooner/Hardly/Never had … · emphatic"
+    "de": "No sooner/Hardly/Never had … · Inversion",
+    "en": "No sooner/Hardly/Never had … · inversion"
    },
    "form": {
-    "de": "No sooner had + Subjekt + 3. Form … than",
-    "en": "No sooner had + subject + past participle … than"
+    "de": "No sooner had + Subjekt + 3. Form … than · Hardly/Scarcely had … when · Never had + Subjekt + 3. Form",
+    "en": "No sooner had + subject + past participle … than · Hardly/Scarcely had … when · Never had + subject + past participle"
    },
    "use": {
-    "de": "Betont, wie schnell oder selten etwas war: No sooner, Hardly, Never stehen vorn. Danach steht had vor dem Subjekt, dann das Partizip. Das klingt förmlich und passt in Reden und Mails.",
-    "en": "Stresses how quickly or rarely something happened: No sooner, Hardly, Never come first. Then had goes before the subject, followed by the participle. It sounds formal and suits speeches and emails."
+    "de": "Betont, wie schnell oder selten etwas war: No sooner, Hardly, Never stehen vorn. Danach steht had vor dem Subjekt, dann das Partizip. Das klingt förmlich und passt in Reden, Präsentationen und förmliche Texte, in Alltags-Mails eher nicht.",
+    "en": "Stresses how quickly or rarely something happened: No sooner, Hardly, Never come first. Then had goes before the subject, followed by the participle. It sounds formal and suits speeches, presentations and formal writing, less so everyday emails."
    },
    "signals": [
     "No sooner",
