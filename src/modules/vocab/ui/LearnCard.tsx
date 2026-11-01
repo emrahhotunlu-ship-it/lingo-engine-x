@@ -364,7 +364,13 @@ function feedbackOf(v: BandView, t: T, lang: 'de' | 'en', dateShort: (ms: number
         {partners}
       </div>
     ),
-    nextIn: `${t('vmNextTitle')}: ${nextText(t, b.next, dateShort)}`,
+    // „Kommt wieder“ kann lang sein (neuer Satz, dann morgen): volle Breite unter dem Urteil statt der schmalen Ecke rechts.
+    parts: (
+      <p className="lx-t-meta mt-1 text-muted" data-testid="next-in">
+        {t('vmNextTitle')}: {nextText(t, b.next, dateShort)}
+      </p>
+    ),
+    nextIn: null,
     act,
     depth: 'min',
     explanation: null,
