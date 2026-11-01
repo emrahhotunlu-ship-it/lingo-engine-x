@@ -96,6 +96,13 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     shownAt.current = performance.now();
     lookupAtStart.current = lookupOpenMs();
   }, []);
+  // Mit Tastatur (Laptop) steht der Cursor sofort in der Lücke; am Handy öffnet erst ein Tippen die Tastatur (iOS). Einmal je Karte.
+  const focused = useRef(false);
+  useEffect(() => {
+    if (focused.current) return;
+    focused.current = true;
+    if (typeof window.matchMedia === 'function' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) api.focusNow();
+  }, [api]);
 
   const measure = () => {
     const now = performance.now();
@@ -120,7 +127,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   const gapState: GapState = band ? GAP[band.band.tone] : 'input';
   const intro = view.kind === 'intro';
   const shown = band ? (band.given.trim() ? band.given : null) : null;
-  const reveal = band && band.band.tone !== 'ok' ? { solution: card.answer, given: shown } : null;
+  // Bedeutung abfragen: die Lösung in der Lücke ist die deutsche Bedeutung.
+  const reveal = band && band.band.tone !== 'ok' ? { solution: card.mode === 'meaning' ? card.de : card.answer, given: shown } : null;
 
   const gapLabel = (() => {
     const g = gapText(card);
@@ -189,7 +197,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         {tipLine}
       </div>
     );
-    answer = gap;
+    // Ohne Satz steht die Lücke allein: so breit wie die Lücke im Satz, damit sie als Eingabeort erkennbar ist (UX-Prüfung V3 Nr. 10).
+    answer = <div className="[&_.lx-gap]:min-w-32">{gap}</div>;
   }
 
   const card0 = view.k === 'card' ? view : null;
@@ -222,14 +231,14 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   return (
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
-      status={{ area: 'words', state: null, kindLabel: kindLabel(t, view), detail: t('vmLeft', { n: view.left }) }}
+      status={{ area: 'words', state: null, kindLabel: kindLabel(t, view) }}
       task={{ text: t(tk), purpose: t(wozuKey(tk)), open: true }}
       prompt={prompt}
       answer={answer}
       secondary={secondary}
       primary={primary}
       keysHint={null}
-      feedback={band ? feedbackOf(band, t, lang, dateShort, run) : null}
+      feedback={band ? feedbackOf(band, t, dateShort, run) : null}
     />
   );
 }
@@ -314,7 +323,7 @@ function nextText(t: T, next: Next, dateShort: (ms: number) => string): string {
   }
 }
 
-function feedbackOf(v: BandView, t: T, lang: 'de' | 'en', dateShort: (ms: number) => string, run: LearnRun): ShellFeedback {
+function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: LearnRun): ShellFeedback {
   const b = v.band;
   // Einführung: ein misslungener Versuch ist kein Fehler, das Band zeigt die Lösung.
   const soft = v.kind === 'intro' && b.tone !== 'ok';
@@ -327,7 +336,12 @@ function feedbackOf(v: BandView, t: T, lang: 'de' | 'en', dateShort: (ms: number
         <span key={p.p}>
           {i > 0 ? ' · ' : ''}
           <span lang="en">{p.p}</span>
-          {lang === 'de' && p.de ? <span className="text-subtle"> ({p.de})</span> : null}
+          {p.de ? (
+            <span className="text-subtle" lang="de">
+              {' '}
+              ({p.de})
+            </span>
+          ) : null}
         </span>
       ))}
     </p>
@@ -352,23 +366,25 @@ function feedbackOf(v: BandView, t: T, lang: 'de' | 'en', dateShort: (ms: number
         {t('vmBtnLater')}
       </Button>
     ) : null);
+  // Die Lösung steht nur einmal: zeigt die Lücke sie schon (Lösung, anderes Wort), entfällt die Zeile „Richtig: …“ (Kap. 15, UX-Prüfung V3 Nr. 5).
+  const inGap = b.line.kind === 'answer' || b.line.kind === 'swap';
   return {
     verdict,
     title,
-    right: lineNode(t, b.line),
+    right: inGap ? null : lineNode(t, b.line),
     why: (
-      <div className="flex flex-col gap-1.5">
-        <p className="lx-t-support" data-testid="vm-why">
-          {whyText(t, b.why)}
-        </p>
-        {partners}
-      </div>
-    ),
-    // „Kommt wieder“ kann lang sein (neuer Satz, dann morgen): volle Breite unter dem Urteil statt der schmalen Ecke rechts.
-    parts: (
-      <p className="lx-t-meta mt-1 text-muted" data-testid="next-in">
-        {t('vmNextTitle')}: {nextText(t, b.next, dateShort)}
+      <p className="lx-t-support" data-testid="vm-why">
+        {whyText(t, b.why)}
       </p>
+    ),
+    // Feste Reihenfolge: Urteil · Lösung · Warum · Wortpartner · Kommt wieder (volle Breite, nie abgeschnitten).
+    tail: (
+      <>
+        {partners}
+        <p className="lx-t-meta text-muted" data-testid="next-in">
+          {t('vmNextTitle')}: {nextText(t, b.next, dateShort)}
+        </p>
+      </>
     ),
     nextIn: null,
     act,

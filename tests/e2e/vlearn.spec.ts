@@ -47,6 +47,9 @@ test.describe('Handy 390', () => {
     await screen(page, 'vlearn');
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('vm-knowit')).toBeVisible();
+    // Die eine Übungsleiste: ✕, Fortschritt, „Extra“ (UX-Prüfung V3 Nr. 1).
+    await expect(page.getByTestId('vm-close')).toBeVisible();
+    await expect(page.getByTestId('vm-progress').first()).toBeVisible();
     expect(await layoutProblems(page)).toEqual([]);
     // Einführung ohne Eingabe: Aufdecken zeigt die Lösung im Band.
     await expect(page.getByTestId('vm-check')).toHaveText('Aufdecken');
@@ -62,6 +65,10 @@ test.describe('Handy 390', () => {
     }).toBe(1);
     // Nächste Karte steht (Einführung des nächsten Worts oder Lernschritt).
     await expect(page.getByTestId('vm-check')).toBeVisible();
+    // ✕ verlässt die Runde ohne Nachfrage; nichts zusätzlich gebucht.
+    await page.getByTestId('vm-close').click();
+    await expect(page.locator('[data-screen="vlearn"]')).toHaveCount(0);
+    expect(vlogEntries(await dump(page))).toBe(1);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });

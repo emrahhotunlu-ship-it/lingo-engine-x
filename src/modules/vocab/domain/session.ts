@@ -32,6 +32,7 @@ export class SessionRun {
   private queue: Slot[] = [];
   private pending: Slot[] = [];
   private cards = 0;
+  private last: string | null = null;
   private readonly day: string;
   private readonly seen = new Set<string>();
   constructor(
@@ -166,12 +167,21 @@ export class SessionRun {
     // Bewusste Ausnahme von plan.md §4.3 („≥ 8 Karten UND ≥ 3 Min.“): ein etwas früherer zweiter Abruf ist besser als keiner (learning-scientist V1).
     const late = this.pending.findIndex((p) => (p.afterCard ?? 0) <= this.cards);
     if (late >= 0) return this.toTask(this.pending.splice(late, 1)[0] as Slot, nowMs);
+    // Kurze Runde (z. B. nur drei neue Wörter): Schritt A und die Wiederkehr nach Fehler kommen noch in DIESER Runde, auch wenn weniger Karten
+    // dazwischen lagen – das Band hat „gleich noch einmal“ versprochen (Kap. 2 Nr. 2, UX-Prüfung V3 Nr. 3). Zuerst ein anderes Wort als das
+    // gerade gezeigte. Schritt B (Abstand ≥ 3 Min.) bleibt für die nächste Runde des Lerntags; das Band sagt dort „heute später“.
+    const soon = this.pending
+      .map((p, i) => ({ p, i }))
+      .filter(({ p }) => p.step !== 2)
+      .sort((a, b) => Number(a.p.path === this.last) - Number(b.p.path === this.last) || (a.p.afterCard ?? 0) - (b.p.afterCard ?? 0));
+    if (soon.length) return this.toTask(this.pending.splice(soon[0]!.i, 1)[0] as Slot, nowMs);
     return null;
   }
 
   /** Nach der Antwort (der Aufrufer hat `applyAnswer` bzw. `introduce` angewandt und den Bestand aktualisiert). */
   done(task: Task, nowMs: number): void {
     this.cards += 1;
+    this.last = task.path;
     const paths = task.group ?? [task.path];
     for (const p of paths) {
       this.seen.add(p);

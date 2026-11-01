@@ -101,6 +101,8 @@ export type ShellFeedback = {
    * sichtbaren Inhalt – nie ganz unten, wo sie am Handy unter dem Weiter-Balken verschwindet (UX-Prüfung 19.10.2026).
    */
   act?: ReactNode;
+  /** Zeilen nach dem Warum (Wörter: Wortpartner, „Kommt wieder“): im Band unter dem Warum, am Laptop unter der Erklärung; nie abgeschnitten. */
+  tail?: ReactNode;
   nextIn?: string | null;
   /** Warum die Stufe noch nicht steigt (Wörter: so viele freie Antworten an anderen Tagen fehlen noch), eigene ruhige Zeile unter „Wieder in …“. */
   stageNote?: string | null;
@@ -563,6 +565,11 @@ export function ExerciseShell(props: ExerciseShellProps) {
           <div ref={whyBoxRef} className="lx-band-why" data-clipped={clip.why ? '' : undefined}>
             <ResultBlocks plan={whyOnly} area="trainer" ai={!!feedback.explanation?.ai} {...blocksSource} depth={feedback.depth} {...whyBefore} />
           </div>
+          {feedback.tail && (
+            <div className="flex flex-none flex-col gap-1.5" data-slot="tail">
+              {feedback.tail}
+            </div>
+          )}
           {(sheetHas || feedback.act) && (
             <div className="lx-band-btns" data-slot="more">
               {sheetHas && (
@@ -639,6 +646,11 @@ export function ExerciseShell(props: ExerciseShellProps) {
           {comparisonNode}
         </div>
         <ResultBlocks plan={plan} area="trainer" ai={!!feedback.explanation?.ai} {...blocksSource} depth={feedback.depth} {...whyBefore} />
+        {feedback.tail && (
+          <div className="flex flex-col gap-1.5" data-slot="tail">
+            {feedback.tail}
+          </div>
+        )}
         {(feedback.act || feedback.tutor) && (
           <div className="flex flex-col gap-2" data-block="act">
             {feedback.act && <div data-slot="act">{feedback.act}</div>}

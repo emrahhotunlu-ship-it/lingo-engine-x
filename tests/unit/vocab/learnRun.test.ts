@@ -106,7 +106,7 @@ describe('LearnRun', () => {
     await s.run.settled();
     expect(s.vlog()).toBe(1);
     expect(s.drafts.value).toBeNull();
-    expect(s.run.get()).toEqual({ k: 'done', n: 1 });
+    expect(s.run.get()).toEqual({ k: 'done', n: 1, fresh: 0, review: 1, extra: 0 });
   });
 
   it('Verlassen bucht die offene Antwort genau einmal (auch zweimal Verlassen und danach Weiter)', async () => {

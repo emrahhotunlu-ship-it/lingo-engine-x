@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useSyncExternalStore } from 'react';
+import { useEffect, useMemo, useSyncExternalStore, type ReactNode } from 'react';
 import { Button, dictLookup, getDb, getWriter, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT } from '../sharedUi';
 import { logError, toUSText } from '../shared';
 import { checkDict } from '../content';
@@ -56,10 +56,14 @@ function meaningOf(w: string): string | null {
   return dictLookup(w)?.senses[0]?.de ?? null;
 }
 
-export function LearnScreen({ kind }: { kind: SessionKind }) {
+/** Obere Übungsleiste (✕, Fortschritt, Pflicht/Extra): kommt vom Bereich, weil das Modul `features/learn` nicht kennt (Isolation). */
+export type LearnTop = (p: { onClose: () => void; progress: { n: number; total: number } | null; ctx: 'duty' | 'extra' }) => ReactNode;
+
+export function LearnScreen({ kind, renderTop }: { kind: SessionKind; renderTop?: LearnTop }) {
   const { t, lang } = useT();
   const status = useLive((s) => s.status);
   const back = useNav((s) => s.back);
+  const switchTab = useNav((s) => s.switchTab);
   useEffect(() => {
     uiLang = lang;
   }, [lang]);
@@ -97,6 +101,18 @@ export function LearnScreen({ kind }: { kind: SessionKind }) {
 
   const view = useSyncExternalStore(run?.subscribe ?? noSub, run?.get ?? loadingView);
 
+  const ctx = kind === 'pflicht' ? 'duty' : 'extra';
+  const close = () => {
+    void run?.leave();
+    back();
+  };
+  const frame = (progress: { n: number; total: number } | null, body: ReactNode) => (
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="vlearn">
+      {renderTop?.({ onClose: close, progress, ctx })}
+      {body}
+    </div>
+  );
+
   if (status === 'error') return <Notice title={t('vmClosedErrorTitle')} body={t('vmClosedError')} onBack={back} back={t('vmBack')} />;
   switch (view.k) {
     case 'loading':
@@ -117,16 +133,46 @@ export function LearnScreen({ kind }: { kind: SessionKind }) {
         />
       );
     case 'done':
-      return <Notice title={t(view.n > 0 ? 'vmDoneTitle' : 'vmEmptyTitle')} body={view.n > 0 ? t('vmDoneSub', { n: view.n }) : t('vmEmpty')} onBack={back} back={t('vmBack')} testId="vm-done" />;
+      if (view.n === 0) return frame(null, <Notice title={t('vmEmptyTitle')} body={t('vmEmpty')} onBack={back} back={t('vmBack')} testId="vm-done" />);
+      return frame(null, <Done fresh={view.fresh} review={view.review} extra={view.extra} onToday={() => switchTab('today')} />);
     case 'card':
     case 'band':
-      return run ? <LearnCard view={view} run={run} /> : null;
+      return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
   }
 }
 
 const noSub = () => () => undefined;
 const LOADING = { k: 'loading' } as const;
 const loadingView = () => LOADING;
+
+/** Abschluss der Runde (UX-Prüfung V3 Nr. 7): getrennte Zahlen statt einer Summe, ein Knopf zurück zu Heute. Alles ist schon gebucht. */
+function Done({ fresh, review, extra, onToday }: { fresh: number; review: number; extra: number; onToday: () => void }) {
+  const { t } = useT();
+  const rows = [
+    { n: fresh, label: t('vmDoneFresh'), id: 'fresh' },
+    { n: review, label: t('vmDoneReview'), id: 'review' },
+    { n: extra, label: t('vmDoneExtra'), id: 'extra' },
+  ].filter((r) => r.n > 0);
+  return (
+    <section className="lx-card mx-auto flex w-full max-w-xl flex-col gap-4 p-5" data-testid="vm-done">
+      <div className="flex flex-col gap-1">
+        <h2 className="lx-t-title">{t('vmDoneTitle')}</h2>
+        <p className="lx-t-support text-muted">{t('vmDoneSaved')}</p>
+      </div>
+      <dl className="flex flex-col gap-2">
+        {rows.map((r) => (
+          <div key={r.id} className="flex items-baseline justify-between gap-3" data-testid={`vm-done-${r.id}`}>
+            <dt className="lx-t-support">{r.label}</dt>
+            <dd className="lx-t-title tabular-nums">{r.n}</dd>
+          </div>
+        ))}
+      </dl>
+      <Button variant="primary" onClick={onToday} data-testid="vm-back">
+        {t('vmToToday')}
+      </Button>
+    </section>
+  );
+}
 
 function Notice({ title, body, onBack, back, testId = 'vm-notice' }: { title: string; body: string; onBack: () => void; back: string; testId?: string }) {
   return (

@@ -35,7 +35,14 @@ export type Lex = {
   intro: string | null;
   /** V2: Formen-Statistik des Lexems (Formwahl M22/M27, Satzbindung M57, Ausweichwort M41). Fehlt bei Lexemen aus V1. */
   fq?: Fq;
+  /**
+   * V3: offene Kontrastkarte (M14): seit `at` verwechselt mit `w` (getipptes Wort; `null` = Leech eines falschen Freundes). Kommt in der
+   * NÄCHSTEN Runde zuerst, ohne Planwirkung; gelöscht mit der Antwort auf die Kontrastkarte.
+   */
+  ct?: Ct;
 };
+
+export type Ct = { at: number; w: string | null };
 
 /**
  * Formen-Statistik je Lexem (V2): `l` zuletzt gestellte Form · `c` Zähler der Benutzen-Abrufe ab Stufe 4 (jeder 3. ohne Satz, M27) ·

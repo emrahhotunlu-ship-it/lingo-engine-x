@@ -68,6 +68,7 @@ export const lexWriteSchema = z
     mig: z.object({ t: int.positive(), from: z.literal('srs1'), h: int.min(0), full: z.union([z.literal(0), z.literal(1)]) }).strict().nullable(),
     intro: day.nullable(),
     fq: fqSchema.optional(),
+    ct: z.object({ at: int.positive(), w: z.string().min(1).max(60).nullable() }).strict().optional(),
   })
   .strict()
   .refine((l) => l.of === null || l.of !== l.core, { message: 'of und core verschieden' });

@@ -20,6 +20,7 @@ import type { ScreenProps } from '../app/registry';
 import { lazy, Suspense } from 'react';
 import { loadScreens } from '../modules/vocab/api';
 import { Skeleton } from '../ui/Skeleton';
+import { ExerciseTop } from '../features/learn/ui';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
 // Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
@@ -50,7 +51,10 @@ const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScre
 function VlearnPage({ route }: ScreenProps<'vlearn'>) {
   return (
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
-      <LearnScreen kind={route.kind} />
+      <LearnScreen
+        kind={route.kind}
+        renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} />}
+      />
     </Suspense>
   );
 }

@@ -60,7 +60,10 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
   const deOf = (en: string, own: unknown): string | null => str(own) || str(exDe[exDeKey(en)]) || null;
   const out: Sent[] = [];
   const seen = new Set<string>();
-  const push = (en: string, own: unknown, src: Sent['src'], anchor = false) => {
+  const push = (raw: string, own: unknown, src: Sent['src'], anchor = false) => {
+    // Inhalte markieren das Gesuchte mit eckigen Klammern („She [achieved] her goal“): gezeigt wird der Satz ohne sie (UX-Prüfung V3 Nr. 2).
+    // Die Schlüssel ändern sich dadurch nicht (`exampleKey` entfernt Klammern ohnehin).
+    const en = raw.replace(/\[([^\]]*)\]/g, '$1').replace(/\s+/g, ' ').trim();
     const k = exampleKey(en);
     if (!k || seen.has(k)) return;
     seen.add(k);

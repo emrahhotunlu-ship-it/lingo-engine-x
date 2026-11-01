@@ -24,7 +24,7 @@ export type Why = { kind: 'teach'; text: string } | { kind: 'rule'; key: string;
 
 export type Next =
   /** Lernschritt heute: gleich noch einmal (`mode`: im selben Satz, in einem neuen Satz, ohne Satz), `thenTomorrow` = Termin morgen. */
-  | { kind: 'step'; mode: 'same' | 'sentence' | 'nosent'; thenTomorrow: boolean }
+  | { kind: 'step'; mode: 'same' | 'sentence' | 'nosent' | 'later'; thenTomorrow: boolean }
   /** gebuchter Termin (`day` = dayKey des gespeicherten `due`), Zusatz knapp/neuer Satz. */
   | { kind: 'date'; day: string; extra: 'tight' | 'newSent' | null }
   /** Übung ohne Planwirkung, `day` = nächster Termin. */
@@ -208,7 +208,8 @@ export function nextOf(r: AnswerResult, planned: boolean, t: number, moreSentenc
   const nextDue = (): number => Math.min(...[l.u.due, l.b?.due ?? Infinity]);
   if (l.step && dayKey(l.step.at) === day) {
     const d = r.booked.length ? due(r.booked[0]!) : nextDue();
-    return { kind: 'step', mode: stepMode(l.step.n, moreSentences), thenTomorrow: d !== null && dayKey(d) === tomorrow };
+    // Schritt B kommt mit Abstand (≥ 8 Karten und 3 Min.), oft erst in der nächsten Runde des Lerntags: „heute später“, nicht „gleich“.
+    return { kind: 'step', mode: l.step.n === 2 ? 'later' : stepMode(l.step.n, moreSentences), thenTomorrow: d !== null && dayKey(d) === tomorrow };
   }
   if (!planned || !r.booked.length) return { kind: 'practice', day: l.intro === null ? null : dayKey(nextDue()) };
   const d = due(r.booked[0]!) ?? nextDue();

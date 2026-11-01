@@ -71,6 +71,18 @@ describe('Pflichtrunde', () => {
     for (const t of tasks) multi.set(t.path, [...(multi.get(t.path) ?? []), t]);
     for (const [p, l] of multi) if (l.length > 1) expect(l.slice(1).every((t) => t.step > 0), p).toBe(true);
   });
+  it('kurze Runde (nur neue Wörter): Schritt A kommt noch in derselben Runde, zuerst ein anderes Wort; Schritt B nicht verfrüht (UX V3 Nr. 3)', () => {
+    const cat = new Catalog([fresh(1), fresh(2)]);
+    const { plan } = buildDayPlan(cat, T0, DEFAULT_CFG, {});
+    const run = new SessionRun('pflicht', cat, plan, T0, { cfg: DEFAULT_CFG });
+    const tasks = play(run, cat);
+    for (const p of ['vocab/n1', 'vocab/n2']) {
+      expect(tasks.filter((t) => t.path === p && t.intro)).toHaveLength(1);
+      expect(tasks.filter((t) => t.path === p && t.step === 1)).toHaveLength(1);
+      expect(tasks.some((t) => t.path === p && t.step === 2)).toBe(false);
+    }
+    for (let i = 1; i < tasks.length; i++) if (tasks[i]!.path === tasks[i - 1]!.path) expect(tasks.slice(i).every((t) => t.path === tasks[i]!.path)).toBe(true);
+  });
   it('Fehler → Wiederkehr nach 3–5 Karten, frei', () => {
     const cat = new Catalog(Array.from({ length: 12 }, (_, i) => learned(i)));
     const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 0 }, {});

@@ -30,7 +30,8 @@ export type LearnView =
   | { k: 'closed'; why: 'off' | 'migrate' | 'error' }
   | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
-  | { k: 'done'; n: number };
+  /** `fresh` neue Wörter, `review` geplante Wiederholungen, `extra` Übung ohne Planwirkung (je Wort einmal gezählt). */
+  | { k: 'done'; n: number; fresh: number; review: number; extra: number };
 
 /** Kleiner Speicher für den Entwurf (im Browser `lx:vm-pending`; Tests geben eine Map hinein). */
 export type DraftStore = { get(): string | null; set(v: string): void; remove(): void };
@@ -111,6 +112,7 @@ export class LearnRun {
   private pending: Pending | null = null;
   private chain: Promise<void> = Promise.resolve();
   private n = 0;
+  private tally = { fresh: new Set<string>(), review: new Set<string>(), extra: new Set<string>() };
   private started = false;
 
   constructor(private readonly env: LearnEnv) {}
@@ -192,7 +194,7 @@ export class LearnRun {
       const nowMs = this.env.now();
       const task = run.next(nowMs);
       if (!task) {
-        this.set({ k: 'done', n: this.n });
+        this.set(this.doneView());
         return;
       }
       const card = this.cardFor(task);
@@ -203,7 +205,7 @@ export class LearnRun {
       run.done(task, nowMs);
     }
     logWarn('vocab:learn', 'zu viele Aufgaben ohne Karte', String(SKIP_MAX));
-    this.set({ k: 'done', n: this.n });
+    this.set(this.doneView());
   }
 
   private cardFor(task: Task): CardModel | null {
@@ -291,9 +293,12 @@ export class LearnRun {
     if (!p || !run || !cat) return;
     this.book(p);
     this.pending = null;
-    this.n += 1;
+    const failedProbe = p.kind === 'probe' && p.check.outcome !== 'ok';
+    // Nicht bestandene Probe und die folgende Einführung sind eine Karte (Zähler und Fortschritt zählen sie einmal; UX-Prüfung V3 Nr. 7).
+    if (!failedProbe) this.n += 1;
+    (p.kind !== 'answer' ? this.tally.fresh : p.task.planned ? this.tally.review : this.tally.extra).add(p.card.path);
     // Probe nicht bestanden: das Wort wird jetzt normal eingeführt (ohne zweite Probe).
-    if (p.kind === 'probe' && p.check.outcome !== 'ok') {
+    if (failedProbe) {
       const card = this.cardFor(p.task);
       if (card) {
         this.set({ k: 'card', card, task: p.task, kind: 'intro', n: this.n, left: run.remaining(), canProbe: false, tip: false });
@@ -302,6 +307,13 @@ export class LearnRun {
     }
     run.done(p.task, this.env.now());
     this.advance();
+  }
+
+  private doneView(): LearnView {
+    const { fresh, review, extra } = this.tally;
+    // Ein neues Wort zählt nur als neu, auch wenn es heute schon seine Lernschritte hatte; eine Wiederholung zählt nicht zusätzlich als Übung.
+    const rev = [...review].filter((x) => !fresh.has(x));
+    return { k: 'done', n: this.n, fresh: fresh.size, review: rev.length, extra: [...extra].filter((x) => !fresh.has(x) && !review.has(x)).length };
   }
 
   /** Beim Verlassen (Bildschirmwechsel, `pagehide`, `visibilitychange`): offene Antwort sofort buchen, ohne weiterzugehen. */

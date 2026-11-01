@@ -56,6 +56,13 @@ describe('Sätze je Lexem', () => {
     expect(s[0]).toMatchObject({ key: 'a', de: 'Wir haben die Frist vorverlegt.' });
     expect(s[1]!.key).toMatch(/^h[0-9a-z]{1,7}$/);
   });
+  it('eckige Klammern der Inhalte (Markierung des Gesuchten) erscheinen nie im gezeigten Satz; Schlüssel bleiben gleich (UX V3 Nr. 2)', () => {
+    const plain = sentencesOf({ ex: 'She achieved her goal.', wx: [{ en: 'They brought the date forward.' }] }, T0, null);
+    const marked = sentencesOf({ ex: 'She [achieved] her goal.', wx: [{ en: 'They [brought] the date [forward].' }] }, T0, null);
+    expect(marked.map((x) => x.en)).toEqual(['She achieved her goal.', 'They brought the date forward.']);
+    expect(marked.every((x) => !/[[\]]/.test(x.en))).toBe(true);
+    expect(marked.map((x) => x.key)).toEqual(plain.map((x) => x.key));
+  });
   it('Claude-Sätze der Satzbank nur bei wirksamer Freigabe und nach 4 Wochen', () => {
     const s = sentencesOf(doc, T0, gate);
     expect(s.map((x) => x.en)).toContain('Let us bring it forward.');

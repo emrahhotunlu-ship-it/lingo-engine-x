@@ -77,6 +77,8 @@ export type PlanCtx = {
   rest?: (offset: number) => boolean;
   /** V2: Zeitbasis je Form (M39). Fehlt sie, gibt es kein Zeit-Urteil. */
   fk?: FkStats;
+  /** V3: falscher Freund laut Lehrer-Charge (`trap = 'ff'`): beim Leech Kontrastkarte statt Werkstatt (M14). */
+  ff?: boolean;
 };
 
 /**
@@ -159,6 +161,13 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (a.outcome === 'unfair') events.push('unfair');
     return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
   }
+  // V3: Kontrastkarte (M14): Übung ohne Planwirkung; die Antwort schließt sie (Satz gemerkt, damit die nächste Abfrage einen anderen nimmt).
+  if (a.form === 'contrast') {
+    if (a.sentence) lex.sn = [[a.sentence, day] as [string, string], ...lex.sn.filter((x) => x[0] !== a.sentence)].slice(0, SN_MAX);
+    delete lex.ct;
+    lex.sync = Math.max(lex.sync, a.t);
+    return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
+  }
   // V3: Einspruch ohne Note (erste Antwort des Tages): Wiederkehr nach 4 Karten in einem neuen Satz, dort höchstens Hard.
   const voidKind = a.flags && a.flags & FLAG.override ? STEP_OVERRIDE : a.flags && a.flags & FLAG.later ? STEP_LATER : 0;
   if (voidKind && mayVoid(lex, a.t)) {
@@ -182,6 +191,8 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const booked: TrackKey[] = [];
   if (a.outcome === 'infl') events.push('grammar');
   if (a.outcome === 'colloc' && lex.k !== 'col') events.push('partner');
+  // V3, M14: Verwechslung (anderes echtes Wort der Paar-Liste/Deutsch-Falle, falscher Wortpartner) → Kontrastkarte in der nächsten Runde.
+  if ((a.outcome === 'other' || a.outcome === 'colloc') && a.hit && !(a.flags && a.flags & FLAG.override)) lex.ct = { at: a.t, w: a.hit.slice(0, 60) };
   const fqBefore = lex.fq;
 
   if (a.sentence) {
@@ -236,7 +247,11 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (wrong && !second && !(a.flags && a.flags & FLAG.override)) {
       lex.lv = descend(lex.lv);
       lex.lc += 1;
-      if (isLeechCount(lex.lc)) events.push('leech');
+      if (isLeechCount(lex.lc)) {
+        events.push('leech');
+        // Leech eines falschen Freundes: Kontrast statt Werkstatt (leech.ts `leechTreatment`).
+        if (ctx.ff && !lex.ct) lex.ct = { at: a.t, w: null };
+      }
       // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).
       lex.ev.f = lex.lv <= 2 ? [] : lex.ev.f.slice(-(lex.lv - 2));
     } else if (g >= 3 || (g === 2 && a.outcome === 'typo')) {
