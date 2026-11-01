@@ -107,7 +107,7 @@ export function LearnScreen({ kind, renderTop }: { kind: SessionKind; renderTop?
     back();
   };
   const frame = (progress: { n: number; total: number } | null, body: ReactNode) => (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="vlearn">
+    <div className="lx-vm-frame mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="vlearn">
       {renderTop?.({ onClose: close, progress, ctx })}
       {body}
     </div>

@@ -176,7 +176,8 @@ export type Frozen = { t: number; ms: number; fk: number; hint: number };
 /** Antwort für den Planer. `override`: „Das wusste ich eigentlich“; `later`: „Später prüfen lassen“; `alsoRight`: Claude sagt „passt auch“. */
 export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: boolean; later?: boolean; alsoRight?: boolean; step?: boolean } = {}): Answer {
   const outcome: Outcome = o.alsoRight ? 'syn' : c.outcome;
-  const flags = (o.override ? FLAG.override : 0) | (o.later ? FLAG.later : 0) | (o.step ? FLAG.step : 0);
+  // M43 „Aufgabe war unfair“: Ausgang `unfair` plus Kennzeichen für die Inhaltsprüfung im Verlauf.
+  const flags = (o.override ? FLAG.override : 0) | (o.later ? FLAG.later : 0) | (o.step ? FLAG.step : 0) | (c.outcome === 'unfair' ? FLAG.unfair : 0);
   return {
     t: f.t,
     form: m.form,

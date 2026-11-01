@@ -83,6 +83,28 @@ describe('Pflichtrunde', () => {
     }
     for (let i = 1; i < tasks.length; i++) if (tasks[i]!.path === tasks[i - 1]!.path) expect(tasks.slice(i).every((t) => t.path === tasks[i]!.path)).toBe(true);
   });
+  it('Fortschritt „x von y“: ohne Fehler bleibt die Gesamtzahl fest und endet genau an der letzten Karte (UX-Nachprüfung V3)', () => {
+    for (const items of [[fresh(1), fresh(2), fresh(3)], [...Array.from({ length: 10 }, (_, i) => learned(i)), fresh(1), fresh(2)]]) {
+      const cat = new Catalog(items);
+      const { plan } = buildDayPlan(cat, T0, DEFAULT_CFG, {});
+      const run = new SessionRun('pflicht', cat, plan, T0, { cfg: DEFAULT_CFG });
+      const totals: number[] = [];
+      let now = T0;
+      let n = 0;
+      for (let g = 0; g < 300; g++) {
+        const t = run.next(now);
+        if (!t) break;
+        // wie learnRun: Karten davor + diese + danach (ein neues Wort bringt seinen Schritt A mit)
+        totals.push(n + 1 + run.remaining() + (t.intro ? 1 : 0));
+        const it = cat.get(t.path)!;
+        cat.set(t.path, t.intro ? introduce(it.lex, now) : applyAnswer(it.lex, { t: now, form: t.form, outcome: 'ok', hint: 0, ms: 9000, fk: 1000, sentence: null }, { ...ctx, path: t.path, planned: t.planned }).lex);
+        run.done(t, now);
+        n += 1;
+        now += 25_000;
+      }
+      expect(new Set(totals)).toEqual(new Set([n]));
+    }
+  });
   it('Fehler → Wiederkehr nach 3–5 Karten, frei', () => {
     const cat = new Catalog(Array.from({ length: 12 }, (_, i) => learned(i)));
     const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 0 }, {});

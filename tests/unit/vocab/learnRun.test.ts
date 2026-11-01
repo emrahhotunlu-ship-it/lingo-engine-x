@@ -109,6 +109,37 @@ describe('LearnRun', () => {
     expect(s.run.get()).toEqual({ k: 'done', n: 1, fresh: 0, review: 1, extra: 0 });
   });
 
+  it('„Warum heute?“: fällige Karte nennt Fälligkeit, letzten freien Abruf und Stufe mit Spur', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    await s.start('pflicht');
+    const r = s.run.reason();
+    expect(r?.code).toBe('due');
+    const keys = r?.parts.map((p) => p.key) ?? [];
+    expect(keys[0]).toMatch(/^vmRsDue/);
+    // Lernschritte am Einführungstag sind kein freier Abruf (ev.f bleibt leer).
+    expect(keys).toContain('vmRsNeverFree');
+    expect(keys.some((k) => k.startsWith('vmRsStage'))).toBe(true);
+  });
+
+  it('„Aufgabe war unfair“ nach dem Prüfen: Lernstand unverändert, Verlauf vermerkt `unfair` mit Kennzeichen, zählt nicht im Abschluss', async () => {
+    const lex = learned(T0 - 10 * D);
+    const s = setup(lex);
+    await s.start();
+    const v = s.run.get();
+    if (v.k !== 'card') throw new Error('Karte erwartet');
+    s.run.check('qqqq', { ms: 5000, fk: 1500 });
+    expect(s.run.canUnfair()).toBe(true);
+    expect(s.run.unfair()).toBe(true);
+    await s.run.settled();
+    expect(s.lexIn()).toEqual(lex);
+    const entries = Object.entries(s.h.dump())
+      .filter(([p]) => /^vlog\/\d/.test(p))
+      .flatMap(([, d]) => Object.values(d.e as Doc).filter(Boolean));
+    expect(entries).toHaveLength(1);
+    expect(JSON.stringify(entries[0])).toContain('unfair');
+    expect(s.run.get()).toEqual({ k: 'done', n: 1, fresh: 0, review: 0, extra: 0 });
+  });
+
   it('Verlassen bucht die offene Antwort genau einmal (auch zweimal Verlassen und danach Weiter)', async () => {
     const s = setup(learned(T0 - 10 * D));
     await s.start();

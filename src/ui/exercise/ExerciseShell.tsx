@@ -700,6 +700,12 @@ export function ExerciseShell(props: ExerciseShellProps) {
           // UX-Prüfung WL2 K1: offener Zweck mit etwas Abstand zum Titel.
           <p className="lx-t-meta m-0 pb-1.5 text-muted" data-testid="purpose" data-open="">
             {task.purpose}
+            {/* Offener Zweck: „Warum diese Aufgabe?“ (Menü „…“) hängt den Grund für genau diese Karte an, statt ins Leere zu laufen. */}
+            {info && reason && (
+              <span className="mt-0.5 block text-fg" data-testid="why-line" data-code={reason.code}>
+                {reason.text}
+              </span>
+            )}
             {status.state && status.detail && (
               <span className="mt-0.5 block text-subtle" data-testid="status-detail">
                 {status.detail}

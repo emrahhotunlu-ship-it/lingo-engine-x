@@ -202,9 +202,17 @@ export class SessionRun {
     }
   }
 
-  /** Noch ausstehende Aufgaben (für Anzeige „noch X“). */
+  /**
+   * Karten, die in DIESER Runde noch kommen (Fortschritt „x von y“, Kap. 2 Nr. 2): die Schlange, je neues Wort darin sein Schritt A
+   * (kommt immer noch in dieser Runde), offene Schritte A und Wiederkehr nach Fehler. Schritt B zählt nur, wenn seine Kartenzahl bis zum
+   * Ende der Runde erreicht wird – sonst kommt er „heute später“ in der nächsten Runde und gehört nicht in diesen Zähler (UX-Nachprüfung V3).
+   */
   remaining(): number {
-    return this.queue.length + this.pending.length;
+    const intros = this.queue.filter((s) => s.intro).length;
+    const soon = this.pending.filter((s) => s.step !== 2).length;
+    const base = this.queue.length + intros + soon;
+    const lateB = this.pending.filter((s) => s.step === 2 && (s.afterCard ?? 0) <= this.cards + base).length;
+    return base + lateB;
   }
 }
 

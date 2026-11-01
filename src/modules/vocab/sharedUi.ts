@@ -17,6 +17,7 @@ export { ExerciseShell } from '../../ui/exercise';
 export type { ShellAction, ShellFeedback, ShellSecondary, ShellStatus } from '../../ui/exercise';
 export { Button } from '../../ui/Button';
 export { Skeleton } from '../../ui/Skeleton';
+export { toast } from '../../ui/Toast';
 
 // Lücke, antippbarer Text, Eingabe
 export { EnglishText } from '../../engine/EnglishText';

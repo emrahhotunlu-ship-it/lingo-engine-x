@@ -549,6 +549,11 @@ html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secon
   .lx-split[data-split] > [data-col='main'] {
     min-height: calc(100dvh - 6rem);
   }
+  /* Wörter-Lernrunde (V3): Übungsleiste, Abstände und Kartenrand stehen über und unter der Bühne (≈ 170 px) – die Seite rollt bei
+     900 px Höhe sonst um 74 px, und die klebende Leiste verdeckt Statuszeile und Wozu (UX-Nachprüfung V3). */
+  .lx-vm-frame .lx-split[data-split] > [data-col='main'] {
+    min-height: calc(100dvh - 11rem);
+  }
   .lx-split[data-split] > [data-col='main'] > .lx-actionbar-column {
     margin-top: auto;
   }

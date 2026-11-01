@@ -13,11 +13,13 @@ import {
   type MessageKey,
   type ShellFeedback,
   type ShellSecondary,
+  toast,
 } from '../sharedUi';
 import { addDays, dayKey } from '../shared';
 import type { Band, Line, Next, Why } from '../domain/band';
 import { tipOf } from '../domain/card';
 import type { CardModel } from '../domain/flow';
+import type { Reason } from '../domain/reason';
 import type { LearnRun, LearnView } from './learnRun';
 
 // Wörter-Modul V3 Schritt 2b-2: eine Lernkarte und ihr Band (v3-bau.md §1–§3, Bilder s1-*). Die Karte rechnet nichts selbst: Prüfen, Wahl und
@@ -234,7 +236,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
       status={{ area: 'words', state: null, kindLabel: kindLabel(t, view) }}
-      task={{ text: t(tk), purpose: t(wozuKey(tk)), open: true }}
+      task={{ text: t(tk), purpose: t(wozuKey(tk)), open: true, reason: () => reasonLine(t, run.reason(), dateShort) }}
       prompt={prompt}
       answer={answer}
       secondary={secondary}
@@ -243,6 +245,20 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       feedback={band ? feedbackOf(band, t, dateShort, run) : null}
     />
   );
+}
+
+/** „Warum heute?“ (Menü „…“ → „Warum diese Aufgabe?“): Teile aus reason.ts als ein Satz, Tag und Spur in Oberflächensprache. */
+function reasonLine(t: T, r: Reason | null, dateShort: (ms: number) => string): { text: string; code: string } | null {
+  if (!r) return null;
+  const text = r.parts
+    .map((p) => {
+      const vars: Record<string, string> = { ...p.vars };
+      if (vars.date) vars.date = dateShort(new Date(`${vars.date}T12:00:00`).getTime());
+      if (vars.track) vars.track = t(`vmRsTrack_${vars.track}` as MessageKey);
+      return t(p.key as MessageKey, vars);
+    })
+    .join(' ');
+  return { text, code: r.code };
 }
 
 function lineNode(t: T, line: Line): ReactNode {
@@ -286,8 +302,7 @@ function lineNode(t: T, line: Line): ReactNode {
                 </span>
               ),
             )}
-          </span>{' '}
-          → {right(line.answer)}
+          </span>
         </span>
       );
     case 'swap':
@@ -391,11 +406,20 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
       </Button>
     ) : null);
   // Die Lösung steht nur einmal: zeigt die Lücke sie schon (Lösung, anderes Wort), entfällt die Zeile „Richtig: …“ (Kap. 15, UX-Prüfung V3 Nr. 5).
+  // Beim Buchstabenvergleich (Fast richtig) steht nur der Vergleich, ohne „→ Richtig: …“: die Lücke zeigt die Lösung schon (UX-Nachprüfung V3).
   const inGap = b.line.kind === 'answer' || b.line.kind === 'swap';
   return {
     verdict,
     title,
     right: inGap ? null : lineNode(t, b.line),
+    // M43 „Aufgabe melden“ = war unfair: die Antwort zählt nicht und geht zur Inhaltsprüfung (nur solange nichts gebucht ist).
+    menu: run.canUnfair()
+      ? {
+          report: () => {
+            if (run.unfair()) toast(t('vmUnfairDone'));
+          },
+        }
+      : undefined,
     why: (
       <p className="lx-t-support" data-testid="vm-why">
         {whyText(t, b.why)}

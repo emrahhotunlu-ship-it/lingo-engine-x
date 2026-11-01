@@ -72,5 +72,31 @@ test.describe('Handy 390', () => {
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
+  test('Menü „…“: „Warum diese Aufgabe?“ nennt den Grund; „Aufgabe melden“ nach einer Abfrage zählt nicht und wird vermerkt', async ({ page }) => {
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
+    await screen(page, 'vlearn');
+    // Einführung: der Grund steht im Menü („Neues Wort für heute.“); melden gibt es dort nicht (keine Abfrage).
+    await page.getByTestId('exercise-menu').click();
+    const list = page.getByTestId('exercise-menu-list');
+    await expect(list.getByTestId('menu-report')).toHaveCount(0);
+    await list.getByTestId('menu-whyTask').click();
+    await expect(page.getByTestId('why-line').first()).toContainText('Neues Wort für heute.');
+    // Bis zur ersten echten Abfrage (Lernschritt A): Einführungen aufdecken und weiter.
+    for (let i = 0; i < 10 && (await page.getByTestId('vm-check').textContent()) === 'Aufdecken'; i++) {
+      await page.getByTestId('vm-check').click();
+      await page.getByTestId('vm-next').click();
+      await expect(page.getByTestId('vm-check')).toBeVisible();
+    }
+    await expect(page.getByTestId('vm-check')).toHaveText('Prüfen');
+    // Die Uhr steht in den E2E-Tests (setFixedTime); eine Minute weiter, damit der Verlaufseintrag einen eigenen Zeitschlüssel hat.
+    await page.clock.setFixedTime(new Date(NOW + 60_000));
+    await page.getByTestId('vm-check').click();
+    await expect(page.getByTestId('vm-next')).toBeVisible();
+    await page.getByTestId('exercise-menu').click();
+    await page.getByTestId('exercise-menu-list').getByTestId('menu-report').click();
+    await expect(page.getByText('Danke, gemeldet. Diese Antwort zählt nicht.')).toBeVisible();
+    await expect.poll(async () => JSON.stringify(Object.entries(await dump(page)).filter(([p]) => /^vlog\/\d/.test(p)))).toContain('"unfair"');
+    expect(errors).toEqual([]);
+  });
 });
 

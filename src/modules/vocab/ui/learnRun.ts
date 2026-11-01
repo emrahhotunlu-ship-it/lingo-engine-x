@@ -7,6 +7,7 @@ import type { Band } from '../domain/band';
 import { Catalog } from '../domain/catalog';
 import type { Check, CheckDict } from '../domain/check';
 import type { DayPlan } from '../domain/day';
+import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
 import { type SessionKind, SessionRun, type Task } from '../domain/session';
@@ -187,6 +188,7 @@ export class LearnRun {
     writeDrafts(this.env.drafts, left);
   }
 
+  // `left`: Karten nach dieser; ein neues Wort bringt seinen Schritt A mit (kommt in dieser Runde, session.ts `remaining`).
   /** Nächste Aufgabe mit Karte zeigen; Aufgaben ohne Karte (Formen späterer Schritte) laufen ohne Buchung durch. */
   private advance(): void {
     const run = this.run;
@@ -201,7 +203,7 @@ export class LearnRun {
       }
       const card = this.cardFor(task);
       if (card) {
-        this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining(), canProbe: task.intro, tip: false });
+        this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: task.intro, tip: false });
         return;
       }
       run.done(task, nowMs);
@@ -287,6 +289,49 @@ export class LearnRun {
     this.set({ ...v, choice, band: band ? { ...v.band, next: band.next } : v.band });
   }
 
+  /** „Warum heute?“ der gezeigten Karte (Menü „…“), aus dem Lexem vor der Antwort; erst beim Öffnen gerechnet. */
+  reason(): Reason | null {
+    const v = this.view;
+    if (v.k !== 'card' && v.k !== 'band') return null;
+    return reasonOf(v.task, this.cat?.get(v.task.path)?.lex ?? null, this.env.now());
+  }
+
+  /** „Aufgabe war unfair“ geht nur bei einer echten Abfrage (nicht bei Einführung und Probe) und solange nichts gebucht ist. */
+  canUnfair(): boolean {
+    const v = this.view;
+    return (v.k === 'card' || v.k === 'band') && v.kind === 'answer' && !(v.k === 'band' && this.pending?.committed);
+  }
+
+  /**
+   * „Aufgabe war unfair“ (M43), vor oder nach dem Prüfen: die Abfrage zählt nicht (keine Note, kein Termin, kein Lernschritt), der
+   * Verlaufseintrag (`unfair`, Kennzeichen FLAG.unfair, Satzschlüssel) und die Diagnose gehen in die Inhaltsprüfung. Danach weiter.
+   */
+  unfair(): boolean {
+    const v = this.view;
+    const cat = this.cat;
+    if (!cat || !this.canUnfair() || (v.k !== 'card' && v.k !== 'band')) return false;
+    const c: Check = { outcome: 'unfair' };
+    let p = this.pending;
+    if (v.k === 'card') {
+      const before = cat.get(v.task.path)?.lex;
+      if (!before) return false;
+      const f: Frozen = { t: this.env.now(), ms: 0, fk: 0, hint: v.tip ? 1 : 0 };
+      const a = answerOf(v.card, c, f, { step: v.task.step > 0 });
+      p = { task: v.task, card: v.card, kind: v.kind, before, given: '', check: c, f, choice: null, a, result: this.compute(v.kind, v.card, v.task, before, a), committed: false };
+      this.pending = p;
+      if (v.card.sentence) this.lastSent.set(v.task.path, v.card.sentence.sent.key);
+    } else {
+      if (!p) return false;
+      p.check = c;
+      p.choice = null;
+      p.a = answerOf(p.card, c, p.f, { step: p.task.step > 0 });
+      p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
+    }
+    logWarn('vocab:unfair', 'Aufgabe als unfair gemeldet (Inhaltsprüfung)', `${p.card.path} · ${p.card.form} · ${p.card.sentence?.sent.key ?? '-'}`);
+    this.next();
+    return true;
+  }
+
   /** Weiter: buchen (einmal), Bestand und Runde nachführen, nächste Karte. */
   next(): void {
     const p = this.pending;
@@ -298,12 +343,13 @@ export class LearnRun {
     const failedProbe = p.kind === 'probe' && p.check.outcome !== 'ok';
     // Nicht bestandene Probe und die folgende Einführung sind eine Karte (Zähler und Fortschritt zählen sie einmal; UX-Prüfung V3 Nr. 7).
     if (!failedProbe) this.n += 1;
-    (p.kind !== 'answer' ? this.tally.fresh : p.task.planned ? this.tally.review : this.tally.extra).add(p.card.path);
+    // Eine als unfair gemeldete Abfrage hat nicht stattgefunden: sie zählt im Abschluss weder als Wiederholung noch als Übung.
+    if (p.check.outcome !== 'unfair') (p.kind !== 'answer' ? this.tally.fresh : p.task.planned ? this.tally.review : this.tally.extra).add(p.card.path);
     // Probe nicht bestanden: das Wort wird jetzt normal eingeführt (ohne zweite Probe).
     if (failedProbe) {
       const card = this.cardFor(p.task);
       if (card) {
-        this.set({ k: 'card', card, task: p.task, kind: 'intro', n: this.n, left: run.remaining(), canProbe: false, tip: false });
+        this.set({ k: 'card', card, task: p.task, kind: 'intro', n: this.n, left: run.remaining() + 1, canProbe: false, tip: false });
         return;
       }
     }
