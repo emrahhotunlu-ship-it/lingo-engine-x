@@ -13,7 +13,8 @@ export { useT } from '../../i18n';
 export type { MessageKey } from '../../i18n';
 
 // Bausteine der Übungsseite
-export { ExerciseShell } from '../../ui/exercise';
+export { ExerciseShell, SentenceInput } from '../../ui/exercise';
+export { PrimaryAction } from '../../ui/ActionBar';
 export type { ShellAction, ShellFeedback, ShellSecondary, ShellStatus } from '../../ui/exercise';
 export { Button } from '../../ui/Button';
 export { Skeleton } from '../../ui/Skeleton';
@@ -26,6 +27,7 @@ export { KineticGap } from '../../engine/KineticGap';
 export type { GapState } from '../../engine/KineticGap';
 export { useHiddenInput } from '../../engine/HiddenInput';
 export { useHotkeys } from '../../engine/useHotkeys';
+export { MicButton } from '../../engine/MicButton';
 export { lookupOpenMs } from '../../engine/wordTap';
 export { maskOf } from '../../domain/answer/mask';
 

@@ -27,6 +27,11 @@ import { unitDone } from '../app/unit/done';
 import { useNav } from '../app/nav';
 import { Skeleton } from '../ui/Skeleton';
 import { ExerciseTop } from '../features/learn/ui';
+import { askJson } from '../ai/gate';
+import { selectAiAvailable } from '../ai/scope';
+import { isAiFailure } from '../ai/types';
+import { useCapabilities } from '../platform/capabilities';
+import type { VocabAi } from '../modules/vocab/api';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
 // Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
@@ -75,11 +80,27 @@ function onVlearnFinish(): void {
   else useNav.getState().switchTab('today');
 }
 
+/**
+ * Claude für Anwenden und eigenen Satz (Großpaket A S5c): das Wörter-Modul kennt das KI-Tor nicht (Isolation), es bekommt Fragen, Bereitschaft
+ * und die Einordnung der Fehler von hier. Claude fehlt, keine Anmeldung oder Ablehnung → Muster und Selbstvergleich; sonst „Erneut versuchen“.
+ */
+const vocabAi: VocabAi = {
+  ready: () => selectAiAvailable(useCapabilities.getState()),
+  ask: async (template, vars, signal) => (await askJson({ template, vars, signal, priority: 'user' })).data,
+  fail: (err) => {
+    if (!isAiFailure(err)) return { kind: 'retry', key: null };
+    if (err.kind === 'cancelled') return { kind: 'cancelled', key: null };
+    if (err.kind === 'unavailable' || err.kind === 'signin' || err.kind === 'refused') return { kind: 'noai', key: null };
+    return { kind: 'retry', key: err.messageKey };
+  },
+};
+
 function VlearnPage({ route }: ScreenProps<'vlearn'>) {
   return (
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
       <LearnScreen
         kind={route.kind}
+        ai={vocabAi}
         onRoundEnd={onVlearnEnd}
         onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
         renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} />}

@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT } from '../sharedUi';
+import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT, type MessageKey } from '../sharedUi';
 import { addDays, logError, toUSText } from '../shared';
 import { checkDict } from '../content';
 import type { RoundReport, SessionKind } from '../domain/session';
-import { VMOD_DAY_PATH } from '../registry';
+import type { VocabAi } from '../aiPort';
+import { VMOD_DAY_PATH, VMOD_USE_PATH } from '../registry';
+import { makeUseAi } from './aiCheck';
 import { LearnCard } from './LearnCard';
+import { sitKey, UseCard } from './UseCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
 
 // Wörter-Modul V3 Schritt 2b-2: Bildschirm der neuen Lernrunde (Route `vlearn`, nur bei `vcfg.mod = 1`). Liest die Live-Daten einmal beim
@@ -32,8 +35,17 @@ function deviceId(): string {
 
 /** Oberflächensprache für die Texte des Bands (zum Zeitpunkt des Prüfens). */
 let uiLang: 'de' | 'en' = 'de';
+/** Übersetzer der Oberfläche (für den Lage-Text, den Claude beim Prüfen mitbekommt). */
+let uiT: ((k: MessageKey) => string) | null = null;
 
-function createRun(): LearnRun | null {
+async function readOr(path: string): Promise<Record<string, unknown> | null> {
+  const db = getDb();
+  if (!db) return null;
+  const d = await readDoc(db, path);
+  return d.status === 'valid' ? d.doc : null;
+}
+
+function createRun(ai?: VocabAi): LearnRun | null {
   const writer = getWriter();
   if (!writer) return null;
   return new LearnRun({
@@ -41,12 +53,18 @@ function createRun(): LearnRun | null {
     dict: checkDict(isDictWord, toUSText),
     lang: () => uiLang,
     drafts,
-    readDay: async () => {
-      const db = getDb();
-      if (!db) return null;
-      const d = await readDoc(db, VMOD_DAY_PATH);
-      return d.status === 'valid' ? d.doc : null;
-    },
+    readDay: () => readOr(VMOD_DAY_PATH),
+    readUse: () => readOr(VMOD_USE_PATH),
+    ai: ai
+      ? makeUseAi(
+          ai,
+          (m) => {
+            const k = sitKey(m);
+            return k && uiT ? uiT(k) : null;
+          },
+          () => uiLang,
+        )
+      : undefined,
     now: () => Date.now(),
     meaningOf,
   });
@@ -81,7 +99,7 @@ export type LearnTop = (p: { onClose: () => void; progress: { n: number; total: 
 /** Rundenende und „Fertig“: kommen vom Bereich (Heute, Serie, Tageseinheit), weil das Modul `features/*` nicht kennt (Isolation). */
 export type LearnHooks = { onRoundEnd?: (r: RoundReport) => void; onFinish?: () => void };
 
-export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; renderTop?: LearnTop } & LearnHooks) {
+export function LearnScreen({ kind: routeKind, ai, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; ai?: VocabAi; renderTop?: LearnTop } & LearnHooks) {
   const { t, lang } = useT();
   // „Noch 5“ im Abschluss startet eine neue Runde (Extra) im selben Bildschirm; ein anderer Routen-Parameter beginnt von vorn.
   const [round, setRound] = useState({ base: routeKind, kind: routeKind, n: 0 });
@@ -92,11 +110,12 @@ export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }
   const switchTab = useNav((s) => s.switchTab);
   useEffect(() => {
     uiLang = lang;
-  }, [lang]);
+    uiT = (k) => t(k);
+  }, [lang, t]);
   const ready = status === 'ready' && getWriter() !== null;
   // Eine Runde je Bildschirm, sobald Live-Daten und Schreibpfad bereit sind.
   // eslint-disable-next-line react-hooks/exhaustive-deps -- `round.n` erzwingt bewusst eine neue Runde
-  const run = useMemo(() => (ready ? createRun() : null), [ready, round.n]);
+  const run = useMemo(() => (ready ? createRun(ai) : null), [ready, round.n]);
 
   // Start mit einer Momentaufnahme der Live-Daten (die Runde führt ihren Bestand danach selbst nach).
   useEffect(() => {
@@ -186,7 +205,7 @@ export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }
     case 'band':
       return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
     case 'use':
-      return null;
+      return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <UseCard view={view} run={run} />) : null;
   }
 }
 

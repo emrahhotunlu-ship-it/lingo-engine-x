@@ -8,6 +8,7 @@ import type { DayPlan } from './domain/day';
 import { DEFAULT_CFG, type Lex, type VocabCfg } from './domain/types';
 import { vcfgSchema } from './data/schemas';
 export type { RoundReport } from './domain/session';
+export type { VocabAi } from './aiPort';
 
 // Wörter-Modul, Tür nach außen (plan.md §2.2). Andere Bereiche nutzen NUR diese Funktionen; sie planen nie selbst.
 // V1: unsichtbar, hinter dem Schalter `app/profile.vcfg.mod` (Standard 0 = aus). Der alte Wörter-Bereich bleibt bis V5 aktiv und ist der Rückweg.
