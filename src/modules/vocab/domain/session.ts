@@ -137,6 +137,8 @@ export class SessionRun {
     const st = l.step!;
     if (st.n === 1) return { path, form: 'gap_hint', step: 1, why: 'step', afterCard: carried ? 0 : base + STEP_A_GAP };
     if (st.n === 2) return { path, form: 'gap', step: 2, why: 'step', afterCard: carried ? 0 : base + STEP_B_GAP, afterMs: carried ? 0 : nowMs + STEP_B_MS };
+    // V3: Wiederkehr nach Einspruch (20/21) in einem neuen Satz (die Karte wählt einen anderen als den gezeigten).
+    if (st.n >= 20) return { path, form: 'gap', step: 3, why: 'retry', afterCard: carried ? 0 : base + RETRY_GAP };
     // Wiederkehr nach Fehler: frei, abwechselnd im Satz und ohne Satz (M49, M53).
     return { path, form: st.n % 2 === 0 ? 'nosent' : 'gap', step: 3, why: 'retry', afterCard: carried ? 0 : base + RETRY_GAP };
   }

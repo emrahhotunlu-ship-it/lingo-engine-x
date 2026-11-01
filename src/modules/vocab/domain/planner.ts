@@ -29,7 +29,12 @@ export const STEP_B_GAP = 8; // Schritt B nach ≥ 8 Karten …
 export const STEP_B_MS = 3 * 60_000; // … und ≥ 3 Minuten
 
 /** Flags im Verlauf (Bitmaske, plan.md §3.4). */
-export const FLAG = { step: 1, override: 2, unfair: 4, anki: 8, ext: 16, noAi: 32, mig: 64 } as const;
+export const FLAG = { step: 1, override: 2, unfair: 4, anki: 8, ext: 16, noAi: 32, mig: 64, later: 128 } as const;
+/** V3: Wiederkehr nach „Das wusste ich eigentlich“ (20) bzw. „Später prüfen lassen“ (21): neuer Satz, höchstens Hard, kein Beleg, kein Aufstieg. */
+export const STEP_OVERRIDE = 20;
+export const STEP_LATER = 21;
+/** Gedeckelte Note der Wiederkehr nach Einspruch (learning-scientist V3 Befund 1/2). */
+export const VOID_RETRY_MAX: Grade = 2;
 
 export type Answer = {
   t: number;
@@ -105,6 +110,41 @@ export function introduce(lex: Lex, nowMs: number): Lex {
   return l;
 }
 
+/**
+ * Darf die Antwort per Einspruch („Das wusste ich eigentlich“, „Später prüfen lassen“) ohne Note bleiben? Nur bei der ersten Antwort des Lexems am
+ * Lerntag: eingeführt, heute noch keine Buchung und kein Lernschritt (damit höchstens einmal je Lexem und Tag, nie im Lernschritt).
+ */
+export function mayVoid(lex: Lex, t: number): boolean {
+  const day = dayKey(t);
+  return lex.intro !== null && lex.day !== day && !(lex.step && dayKey(lex.step.at) === day);
+}
+
+/**
+ * „Kenne ich schon“ mit bestandener Probe (V3, learning-scientist Befund 6): Benutzen bucht „Gut“, Termin fest in 7 Tagen (Kontrolle), Stufe 3,
+ * kein Beleg-Tag; Verstehen bucht „Gut“ mit normalem Termin. Nur für ein noch nicht eingeführtes Lexem.
+ */
+export function probeKnown(lex0: Lex, t: number, ctx: PlanCtx): AnswerResult {
+  const lex = clone(lex0);
+  if (lex.intro !== null) return { lex, grade: null, booked: [], note: 0, track: 0, events: [], speed: null };
+  const day = dayKey(t);
+  lex.intro = day;
+  lex.day = day;
+  lex.step = null;
+  lex.lv = Math.max(lex.lv, 3);
+  const rb = book(newTrack(t), 3, t, ctx.cfg.ret);
+  lex.b = rb.track;
+  lex.b.due = dayStartOf(addDays(day, PROBE_CHECK_DAYS));
+  lex.b.sd = PROBE_CHECK_DAYS;
+  const ru = book(lex.u, 3, t, ctx.cfg.ret);
+  lex.u = ru.track;
+  lex.u.due = placeDue(lex, lex.u, ru.ivl, 'u', ctx, t, PROBE_CHECK_DAYS);
+  lex.u.sd = offsetOf(lex.u.due, t);
+  lex.sync = Math.max(lex.sync, t);
+  return { lex, grade: 3, booked: ['b', 'u'], note: 3, track: 2, events: [], speed: null };
+}
+/** Kontrolle nach bestandener Probe: fest nach so vielen Tagen. */
+export const PROBE_CHECK_DAYS = 7;
+
 function offsetOf(due: number, nowMs: number): number {
   return daysBetween(dayKey(nowMs), dayKey(due));
 }
@@ -119,6 +159,16 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (a.outcome === 'unfair') events.push('unfair');
     return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
   }
+  // V3: Einspruch ohne Note (erste Antwort des Tages): Wiederkehr nach 4 Karten in einem neuen Satz, dort höchstens Hard.
+  const voidKind = a.flags && a.flags & FLAG.override ? STEP_OVERRIDE : a.flags && a.flags & FLAG.later ? STEP_LATER : 0;
+  if (voidKind && mayVoid(lex, a.t)) {
+    if (a.sentence) lex.sn = [[a.sentence, day] as [string, string], ...lex.sn.filter((x) => x[0] !== a.sentence)].slice(0, SN_MAX);
+    lex.step = { n: voidKind, at: a.t, gap: RETRY_GAP };
+    lex.sync = Math.max(lex.sync, a.t);
+    if (voidKind === STEP_LATER) events.push('unfair');
+    return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
+  }
+  const voidRetry = !!lex.step && lex.step.n >= STEP_OVERRIDE && dayKey(lex.step.at) === day;
   const second = !!a.second || (!!a.first && a.first !== 'ok');
   const endOfDay = dayStartOf(addDays(day, 1));
   const tgt0: Track | null = spec.track === 'b' ? lex.b : spec.track === 'u' ? lex.u : null;
@@ -126,7 +176,8 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const age = lex.intro ? daysBetween(lex.intro, day) : 0;
   const speed = a.speed !== undefined ? a.speed : ctx.fk ? speedOf(a.fk, ctx.fk.med[a.form], ctx.fk.n[a.form]) : null;
   const evadeRepeat = a.outcome === 'evade' && !!a.hit && !!lex.fq?.ew.includes(a.hit);
-  const g = gradeOf({ form: a.form, outcome: a.outcome, hint: a.hint, speed, self: a.self, k: lex.k, evadeRepeat, first: a.first, easyOk: easyAllowed(formLevel(lex), dueNow, age) });
+  const g0 = gradeOf({ form: a.form, outcome: a.outcome, hint: a.hint, speed, self: a.self, k: lex.k, evadeRepeat, first: a.first, easyOk: easyAllowed(formLevel(lex), dueNow, age) });
+  const g = voidRetry && g0 !== null ? (Math.min(g0, VOID_RETRY_MAX) as Grade) : g0;
   const wrong = g === 1;
   const booked: TrackKey[] = [];
   if (a.outcome === 'infl') events.push('grammar');
@@ -166,7 +217,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
         booked.push('u');
       }
       // Beleg-Tag nur bei einer FÄLLIGEN Antwort (vorgezogene heben Deckel und Stufe nicht; learning-scientist V1, Befund 2).
-      if (dueBefore && !second && isFreeGood(a.form, a.outcome, a.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
+      if (dueBefore && !second && !voidRetry && isFreeGood(a.form, a.outcome, a.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
       lex.b.due = placeDue(lex, lex.b, r.ivl, 'b', ctx, a.t, booked.includes('u') ? undefined : offsetOf(lex.u.due, a.t));
       lex.b.sd = offsetOf(lex.b.due, a.t);
       if (booked.includes('u')) {
@@ -189,7 +240,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
       // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).
       lex.ev.f = lex.lv <= 2 ? [] : lex.ev.f.slice(-(lex.lv - 2));
     } else if (g >= 3 || (g === 2 && a.outcome === 'typo')) {
-      if (a.hint === 0 && !second && dueBefore && target === 'b' && canAscend(lex)) lex.lv += 1;
+      if (a.hint === 0 && !second && !voidRetry && dueBefore && target === 'b' && canAscend(lex)) lex.lv += 1;
     }
     lex.mv = 0;
   } else if (ctx.planned && wrong && target && lex.day === day) {
@@ -207,7 +258,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (g === null) {
       lex.step = { n: st.n, at: a.t, gap: RETRY_GAP };
     } else if (wrong) {
-      const tries = st.n >= 10 ? st.n - 10 + 1 : 1;
+      const tries = st.n >= 10 && st.n < STEP_OVERRIDE ? st.n - 10 + 1 : 1;
       lex.step = tries >= RETRY_MAX ? null : { n: 10 + tries, at: a.t, gap: RETRY_GAP };
     } else if (st.n === 1) {
       lex.lv = Math.max(lex.lv, 2);

@@ -13,7 +13,7 @@ const ROOT = join(import.meta.dirname, '../../..');
 const MODULE = 'src/modules/vocab';
 const SHARED = `${MODULE}/shared.ts`;
 
-const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/];
+const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/];
 const ALLOWED_PACKAGES = new Set(['zod', 'ts-fsrs']);
 const IMPORT_RE = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
 

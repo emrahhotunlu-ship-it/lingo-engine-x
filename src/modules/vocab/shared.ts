@@ -6,3 +6,5 @@ export type { Writer, TransformOp } from '../../data/writer';
 export { logError, logWarn } from '../../platform/diagnostics';
 // V2: britische Schreibweise ist in Emrahs Eingaben richtig (A7, Tippfehler-Regel (h)); dieselbe Liste wie im Rest der App.
 export { toUSText } from '../../domain/text/british';
+// V3: Grundformen einer Wortform (*brought* → *bring*), um die Lücke im Satz zu finden (domain/card.ts). Rein, dieselbe Liste wie im Rest der App.
+export { lemmaCandidates } from '../../domain/text/lemma';

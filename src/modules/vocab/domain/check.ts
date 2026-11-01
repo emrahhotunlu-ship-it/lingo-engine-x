@@ -267,7 +267,7 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   const tok = oneTokenDiff(it, at);
   if (tok && isInfl(tok[0], tok[1], t.pos)) return { outcome: 'infl', note: 'grammar' };
   // Artikel und Pronomen sind Grammatik, kein falsches Partnerwort (*raise a question* statt *raise the question*, *set them up*).
-  if (tok && DETS.has(tok[0]) && DETS.has(tok[1])) return /^an?$/.test(tok[0]) && /^an?$/.test(tok[1]) ? { outcome: 'typo', dist: 1 } : { outcome: 'infl', note: 'article' };
+  if (tok && DETS.has(tok[0]) && DETS.has(tok[1])) return /^an?$/.test(tok[0]) && /^an?$/.test(tok[1]) ? { outcome: 'typo', dist: 1, note: 'an' } : { outcome: 'infl', note: 'article' };
   if (tok && PRONOUNS.has(tok[0]) && PRONOUNS.has(tok[1])) return { outcome: 'infl', note: 'grammar' };
   if (at.length > 1 && it.join(' ') !== at.join(' ') && it.filter((w) => !DETS.has(w)).join(' ') === at.filter((w) => !DETS.has(w)).join(' ')) return { outcome: 'infl', note: 'article' };
 
@@ -286,7 +286,7 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   // (e) anderes echtes Wort: nie Tippfehler (Verwechslungspaar oder Wort außerhalb der Familie)
   const a1 = tok ? tok[1] : answer;
   const i1 = tok ? tok[0] : input;
-  if (isConfusable(i1, a1, d)) return { outcome: 'other', note: t.ff ? 'ff' : 'pair' };
+  if (isConfusable(i1, a1, d)) return { outcome: 'other', note: t.ff ? 'ff' : 'pair', hit: i1 };
   if (d.isWord(i1) && !sameFamily(i1, a1, t.family)) return { outcome: 'other' };
 
   // (a) Tippfehler: 1 Fehler (Vertauschung = 1) ab 5 Buchstaben, ohne dass ein echtes Wort entsteht
