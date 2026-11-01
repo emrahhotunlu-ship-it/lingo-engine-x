@@ -18,7 +18,7 @@ import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps, SheetProps } from '../app/registry';
 import { lazy, Suspense, useEffect } from 'react';
-import { loadOverview, loadPlace, loadScreens, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
+import { loadOverview, loadPlace, loadScreens, loadSwitch, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
 import { useLive } from '../data/live';
 import { recordRoundEnd } from '../features/progress/persist';
 import { markExhausted } from '../features/today/store';
@@ -32,7 +32,9 @@ import { ExerciseTop } from '../features/learn/ui';
 import { askJson } from '../ai/gate';
 import { selectAiAvailable } from '../ai/scope';
 import { isAiFailure } from '../ai/types';
-import { useCapabilities } from '../platform/capabilities';
+import { getDb, useCapabilities } from '../platform/capabilities';
+import { loadSnapshot } from '../data/snapshot';
+import { exportAll } from '../features/settings/exportData';
 import type { VocabAi } from '../modules/vocab/api';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
@@ -71,20 +73,36 @@ const WordPage = lazy(() => loadWordPage().then((m) => ({ default: m.WordPage })
 const WordSettings = lazy(() => loadOverview().then((m) => ({ default: m.WordSettings })));
 const PlaceScreen = lazy(() => loadPlace().then((m) => ({ default: m.PlaceScreen })));
 
-/** Einstellungen › Wortschatz (Großpaket A S6, Bild s2-13): Zielzeit, neue Wörter, Sicherheit; nur bei eingeschalteter Wörter-App. */
+// „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Probelauf, Sicherung, Übernehmen, Rückweg. Eigene Teil-Datei, erst hier geladen.
+const SwitchPanel = lazy(() => loadSwitch().then((m) => ({ default: m.SwitchPanel })));
+// Volles Lesen und Sicherung für das Einschalten: dieselben Wege wie Einstellungen › Daten (Export), das Modul kennt sie nicht.
+const switchRead = async () => {
+  const db = getDb();
+  if (!db) throw new Error('db unavailable');
+  return loadSnapshot(db);
+};
+const switchBackup = () => exportAll();
+
+/**
+ * Einstellungen › Wortschatz (Großpaket A S6, Bild s2-13): Zielzeit, neue Wörter, Sicherheit bei eingeschalteter Wörter-App, darunter der Rückweg.
+ * Ausgeschaltet: der ruhige Abschnitt „Neue Wörter-App“ (einschalten bzw. wieder einschalten).
+ */
 function WordSettingsHost() {
   const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
+  const dbReady = useCapabilities((s) => s.db === 'ready');
   const go = useNav((s) => s.go);
-  if (!on) return null;
   return (
-    <Suspense fallback={<Skeleton className="h-48 w-full" />}>
-      <WordSettings
-        onPlace={() => {
-          // Einstellungen zu, sonst liegt das Blatt über dem Test (E2E vplace).
-          closeSettings();
-          go({ name: 'vplace' });
-        }}
-      />
+    <Suspense fallback={on ? <Skeleton className="h-48 w-full" /> : null}>
+      {on && (
+        <WordSettings
+          onPlace={() => {
+            // Einstellungen zu, sonst liegt das Blatt über dem Test (E2E vplace).
+            closeSettings();
+            go({ name: 'vplace' });
+          }}
+        />
+      )}
+      {dbReady && <SwitchPanel on={on} read={switchRead} backup={switchBackup} />}
     </Suspense>
   );
 }

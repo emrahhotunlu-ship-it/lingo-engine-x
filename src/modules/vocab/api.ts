@@ -170,3 +170,8 @@ export function loadOverview() {
 export function loadPlace() {
   return import('./ui/PlaceScreen');
 }
+
+/** „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Probelauf, Übernehmen, Rückweg. Eigene Teil-Datei, erst in Einstellungen › Wortschatz geladen. */
+export function loadSwitch() {
+  return import('./ui/SwitchPanel');
+}

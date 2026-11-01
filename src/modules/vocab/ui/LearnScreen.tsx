@@ -6,6 +6,7 @@ import type { RoundReport, SessionKind } from '../domain/session';
 import type { VocabAi } from '../aiPort';
 import { VMOD_DAY_PATH, VMOD_USE_PATH } from '../registry';
 import { makeUseAi } from './aiCheck';
+import { deviceId } from './device';
 import { LearnCard } from './LearnCard';
 import { sitKey, UseCard } from './UseCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
@@ -14,7 +15,6 @@ import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './l
 // Start (die Runde rechnet danach mit ihrem eigenen Bestand), bucht jede Antwort beim Weiter und beim Verlassen genau einmal.
 
 const PENDING_KEY = 'lx:vm-pending';
-const DEVICE_KEY = 'lx:vm-dev';
 
 const drafts: DraftStore = {
   get: () => local.get(PENDING_KEY),
@@ -23,15 +23,6 @@ const drafts: DraftStore = {
   },
   remove: () => local.remove(PENDING_KEY),
 };
-
-/** Gerätekennung für die Verlaufsschlüssel (zufällig, einmal je Browser). */
-function deviceId(): string {
-  const cur = local.get(DEVICE_KEY);
-  if (cur && /^[a-z0-9]{6,16}$/.test(cur)) return cur;
-  const id = `d${Math.random().toString(36).slice(2, 10)}`;
-  local.set(DEVICE_KEY, id);
-  return id;
-}
 
 /** Oberflächensprache für die Texte des Bands (zum Zeitpunkt des Prüfens). */
 let uiLang: 'de' | 'en' = 'de';

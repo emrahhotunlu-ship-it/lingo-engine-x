@@ -104,6 +104,10 @@
       "src/modules/vocab/data/refill.ts": {
         "basis": 2000,
         "zuwachs": {}
+      },
+      "src/modules/vocab/ui/SwitchPanel.tsx": {
+        "basis": 9000,
+        "zuwachs": {}
       }
     },
     "lazyNeu": 150000,
