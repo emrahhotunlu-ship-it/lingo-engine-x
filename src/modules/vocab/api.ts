@@ -141,6 +141,15 @@ export async function reportEvidence(e: Evidence, o: { writer: Writer; device: s
   return false;
 }
 
+/**
+ * Heute legt einen neuen Tagesplan an: Wörter-Tagesplan gleich mit einfrieren und seine Minuten liefern (Befund ux 4b Nr. 1), damit Block 1
+ * dieselbe Zahl nennt wie der Start der Runde. Nachgeladen wie die Bildschirme. `null` = nicht möglich, dann gilt die gewählte Wörter-Zeit.
+ */
+export async function prepareDay(): Promise<number | null> {
+  const { prepareDay: run } = await import('./ui/LearnScreen');
+  return run();
+}
+
 /** V3: Bildschirme der neuen Lernrunde, nur nachgeladen (nie statisch, Ladezeit-Test). Der Bereich Wörter hängt sie hinter `vcfg.mod = 1` ein. */
 export function loadScreens() {
   return import('./ui/LearnScreen');

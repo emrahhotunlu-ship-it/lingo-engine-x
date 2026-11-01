@@ -26,6 +26,7 @@ import { SegBar } from '../../ui/exercise/SegBar';
 import { useRunCtx } from '../../ui/exercise/runCtx';
 import { firstOpenDuty, useToday } from '../today/state';
 import { startDuty } from './flow';
+import { vocabModuleOn } from '../../modules/vocab/api';
 
 // Gemeinsame Bausteine der Phase-2-Bildschirme (CLAUDE.md A7 für alle Übungen): Statuszeile,
 // Rundenkopf mit Planleiste (M11), Ergebnisbereich an fester Stelle mit Vergleich, Form-Hinweis,
@@ -396,6 +397,8 @@ const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson
 };
 
 export function dutyLabel(id: DutyId, t: (k: MessageKey) => string): string {
+  // Neue Wörter-App: der Pflichtpunkt Wörter heißt wie Block 1 auf der Tageskarte (Befund ux 4b Nr. 2).
+  if (id === 'review' && vocabModuleOn(useLive.getState().docs['app/profile'])) return t('nbHeuteBlock_words');
   const k = DUTY_LABEL[id];
   return k ? t(k) : id;
 }

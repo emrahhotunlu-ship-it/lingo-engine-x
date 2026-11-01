@@ -163,6 +163,23 @@ describe('LearnRun', () => {
       .filter(([p]) => /^vlog\/\d/.test(p))
       .flatMap(([, d]) => Object.values(d.e as Doc).filter(Boolean));
 
+  it('Vorab-Einfrieren (Heute, Befund ux 4b Nr. 1): friert vmod/day ein und liefert dieselben Minuten wie danach der Start; gesperrt → null', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    const min = await s.run.prepare({ docs: [['vocab/scope', { ...base, lex: s.lexIn() }]], profile: PROFILE, schema: SCHEMA });
+    expect(min).toBeGreaterThanOrEqual(1);
+    expect((s.h.dump()['vmod/day'] as Doc | undefined)?.d).toBeTruthy();
+    // Zweite Runde auf derselben Datenbank: Start-Bildschirm mit derselben Minutenzahl (der gespeicherte Plan gilt).
+    let now = T0 + 5000;
+    const run2 = new LearnRun({ deps: { writer: createWriter(s.h.db), device: 'phone' }, dict, lang: () => 'de', drafts: memStore(), readDay: () => Promise.resolve(null), now: () => (now += 1000) });
+    await run2.start({ kind: 'pflicht', docs: [['vocab/scope', { ...base, lex: s.lexIn() }]], profile: PROFILE, schema: SCHEMA });
+    const v = run2.get();
+    expect(v.k).toBe('start');
+    if (v.k === 'start') expect(v.s.min).toBe(min);
+    const off = setup(learned(T0 - 10 * D));
+    expect(await off.run.prepare({ docs: [], profile: null, schema: SCHEMA })).toBeNull();
+    expect(off.h.dump()['vmod/day']).toBeUndefined();
+  });
+
   it('Start nur beim ersten Öffnen am Lerntag; Abschluss nennt Minuten, Pflicht, Gestolpertes mit nächstem Lerntag und morgen', async () => {
     const s = setup(learned(T0 - 10 * D));
     await s.start('pflicht');

@@ -24,7 +24,7 @@ import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
 import { buildUnitStored, unitDraft, withReviewMinutes, type ReviewGoal } from '../../domain/unit/plan';
-import { vocabCfg, vocabModuleOn } from '../../modules/vocab/api';
+import { prepareDay, vocabCfg, vocabModuleOn } from '../../modules/vocab/api';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
 import { getDb } from '../../platform/capabilities';
@@ -352,9 +352,26 @@ export async function ensureDay(nowMs: number): Promise<void> {
   afterPaint(() => void followUp(today, nowMs, built));
 }
 
+/**
+ * Neue Wörter-App (Befund ux 4b Nr. 1): bevor der neue Plan gespeichert wird, friert das Modul seinen Tagesplan ein; Block 1 bekommt dessen
+ * Minuten (höchstens die gewählte Wörter-Zeit), damit Heute, Start und Abschluss der Runde dieselbe Zahl nennen. Danach ändert sich der Plan
+ * nie mehr (Kap. 15); ein schon gespeicherter Plan eines anderen Geräts gilt weiter (`storePlan`).
+ */
+async function withVocabMinutes(plan: StoredPlan): Promise<StoredPlan> {
+  const profile = useLive.getState().docs['app/profile'];
+  if (!vocabModuleOn(profile)) return plan;
+  try {
+    const min = await prepareDay();
+    return min ? withReviewMinutes(plan, Math.min(vocabCfg(profile).min, min)) : plan;
+  } catch (err) {
+    logError('today:vocab-day', err);
+    return plan;
+  }
+}
+
 /** Nach dem ersten Bild: Plan speichern, Tagesauftrag, Lerninhalte, dann Schritte 3 bis 5. */
 async function followUp(today: string, nowMs: number, toStore: StoredPlan | null): Promise<void> {
-  if (toStore) await storePlan(today, toStore);
+  if (toStore) await storePlan(today, await withVocabMinutes(toStore));
   try {
     await intake(today, nowMs);
   } catch (err) {

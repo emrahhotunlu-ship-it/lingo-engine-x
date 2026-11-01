@@ -125,8 +125,8 @@ test.describe('Handy 390', () => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch(true) } });
     await screen(page, 'vlearn');
     await expect(page.getByTestId('vm-start')).toBeVisible();
-    await expect(page.getByTestId('vm-start-title')).toContainText(/Wörter · ca\. \d+ Min\./);
-    await expect(page.getByTestId('vm-start-why')).toContainText('neue, eingestreut');
+    await expect(page.getByTestId('vm-start-title')).toContainText(/Wörter\s·\sca\.\s\d+\sMin\./);
+    await expect(page.getByTestId('vm-start-why')).toContainText(/neue(, eingestreut| Wörter)/);
     await expect(page.getByTestId('vm-start-lock')).toContainText('Der Plan steht für heute fest');
     expect(await layoutProblems(page)).toEqual([]);
     await page.getByTestId('vm-start-go').click();
@@ -158,12 +158,20 @@ test.describe('Handy 390', () => {
     const { errors, external } = await boot(page, { migrated: false, now: TUE_9, fake: { capabilities: { sample: false }, patch: patch(true) } });
     await screen(page, 'today');
     await expect(page.getByTestId('start')).toHaveAttribute('data-duty', 'review');
-    await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toContainText('Fällige Wörter, neue eingestreut');
-    // Block 1 hat die Minuten der Wörter-Runde (Einstellung 15 Min.).
-    await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { u?: { b: [number, string, number][] } } | undefined)?.u?.b[0]?.slice(0, 3)).toEqual([1, 'review', 15]);
+    await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toContainText('Deine Wörter für heute, passend zu deiner Zeit');
+    // Block 1 hat die Minuten des eingefrorenen Wörter-Tagesplans (höchstens die Einstellung 15 Min.), dieselbe Zahl wie der Start der Runde.
+    const blockMin = async () => ((await dump(page))['app/profile']?.plan as { u?: { b: [number, string, number][] } } | undefined)?.u?.b[0];
+    await expect.poll(async () => (await blockMin())?.[1]).toBe('review');
+    const min = (await blockMin())![2];
+    expect(min).toBeGreaterThanOrEqual(1);
+    expect(min).toBeLessThanOrEqual(15);
+    expect((await dump(page))['vmod/day']).toBeTruthy();
+    // Block-Name „Wörter“ wie in der Runde (Befund ux 4b Nr. 2).
+    await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toContainText('Wörter');
     await page.getByTestId('start').click();
     await screen(page, 'vlearn');
     await expect(page.getByTestId('vm-start')).toBeVisible();
+    await expect(page.getByTestId('vm-start-title')).toContainText(new RegExp(`ca\\.\\s${min}\\sMin\\.`));
     await page.getByTestId('vm-start-go').click();
     await playRound(page, Date.parse(TUE_9));
     await expect(page.getByTestId('vm-done')).toContainText('Wörter erledigt');

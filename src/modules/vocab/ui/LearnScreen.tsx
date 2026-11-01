@@ -52,6 +52,25 @@ function createRun(): LearnRun | null {
   });
 }
 
+/** Bestand der Live-Daten als Liste (Wörter und Wendungen), wie Runde und Vorab-Einfrieren ihn lesen. */
+function liveLexDocs(): { docs: [string, Record<string, unknown>][]; profile: Record<string, unknown> | null; schema: Record<string, unknown> | null } {
+  const s = useLive.getState();
+  const docs: [string, Record<string, unknown>][] = [];
+  for (const [id, doc] of s.collections.vocab ?? []) docs.push([`vocab/${id}`, doc]);
+  for (const [id, doc] of s.collections.chunk ?? []) docs.push([`chunk/${id}`, doc]);
+  return { docs, profile: s.docs['app/profile'] ?? null, schema: s.docs['app/schema'] ?? null };
+}
+
+/**
+ * Tagesplan der Wörter vorab einfrieren, sobald Heute einen neuen Tagesplan anlegt (Befund ux 4b Nr. 1): Heute nennt dann dieselben Minuten
+ * wie der Start der Runde. `null` = nicht möglich (kein Schreibpfad, Schalter aus, Umrechnung offen, Fehler).
+ */
+export async function prepareDay(): Promise<number | null> {
+  if (useLive.getState().status !== 'ready') return null;
+  const run = createRun();
+  return run ? run.prepare(liveLexDocs()) : null;
+}
+
 function meaningOf(w: string): string | null {
   return dictLookup(w)?.senses[0]?.de ?? null;
 }
@@ -82,11 +101,7 @@ export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }
   // Start mit einer Momentaufnahme der Live-Daten (die Runde führt ihren Bestand danach selbst nach).
   useEffect(() => {
     if (!run) return;
-    const s = useLive.getState();
-    const docs: [string, Record<string, unknown>][] = [];
-    for (const [id, doc] of s.collections.vocab ?? []) docs.push([`vocab/${id}`, doc]);
-    for (const [id, doc] of s.collections.chunk ?? []) docs.push([`chunk/${id}`, doc]);
-    run.start({ kind, docs, profile: s.docs['app/profile'] ?? null, schema: s.docs['app/schema'] ?? null }).catch((err: unknown) => logError('vocab:learn-start', err));
+    run.start({ kind, ...liveLexDocs() }).catch((err: unknown) => logError('vocab:learn-start', err));
   }, [run, kind]);
 
   // Beim Verlassen (Bildschirmwechsel, Tab im Hintergrund, Seite zu): offene Antwort sofort buchen.
@@ -197,20 +212,54 @@ function WithWord({ text, w }: { text: string; w: string }) {
 }
 
 /**
+ * ⏎ wirkt wie der Hauptknopf (Befund ux 4b Nr. 4), auf Start und Abschluss der Runde: außer ein echtes Feld, ein Knopf oder ein Blatt hat
+ * den Fokus (dort wirkt ⏎ schon selbst). Das unsichtbare Eingabefeld der Karten (`gap-input`) zählt nicht als Feld.
+ */
+function useEnterGo(go: () => void): void {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Enter' || e.repeat || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.defaultPrevented) return;
+      const a = document.activeElement;
+      if (a && a !== document.body && a.getAttribute('data-testid') !== 'gap-input' && a.closest('input, textarea, select, button, a, [contenteditable], [role="dialog"]')) return;
+      e.preventDefault();
+      go();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [go]);
+}
+
+/** Tastenhinweis ⏎ im Hauptknopf (nur ab Laptop-Breite sichtbar, `lx-vh-kb`). */
+function EnterKey() {
+  const { t } = useT();
+  return (
+    <kbd className="lx-vh-kb" aria-hidden="true" title={t('vmEnterKey')}>
+      ⏎
+    </kbd>
+  );
+}
+
+/**
  * Start der Pflicht-Runde (Bild B8; nach einer Pause B11 „Willkommen zurück“): Minuten, warum diese Wörter, Mischung bzw. Verteilung des
  * Rückstands, ein Knopf. Alle Zahlen kommen aus dem eingefrorenen Tagesplan.
  */
 function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
   const { t, lang } = useT();
-  const freshText = s.fresh === 1 ? t('vmStartWhyFresh1') : t('vmStartWhyFresh', { n: s.fresh });
+  useEnterGo(onGo);
+  // Nur neue Wörter (nichts fällig): „3 neue Wörter“ statt „eingestreut“ (Befund ux 4b Nr. 5).
+  const only = s.due + s.ahead === 0;
+  const freshText = s.fresh === 1 ? t(only ? 'vmStartWhyFreshOnly1' : 'vmStartWhyFresh1') : t(only ? 'vmStartWhyFreshOnly' : 'vmStartWhyFresh', { n: s.fresh });
   const spread = s.sp ? [[s.today, s.due + s.ahead] as [string, number], ...s.sp] : null;
   const maxN = spread ? Math.max(...spread.map((x) => x[1]), 1) : 1;
   return (
     <section className="flex w-full flex-col gap-4 px-4 sm:px-0" data-testid="vm-start">
       <div className="lx-card mx-auto flex w-full max-w-xl flex-col gap-4 p-5">
-        <div className="lx-t-label text-muted" data-testid="vm-start-label">
-          {t(s.back ? 'vmStartBack' : 'vmStartToday')}
-        </div>
+        {/* „Heute“ steht schon in der Leiste darüber (Befund ux 4b Nr. 7): die Zeile nur nach einer Pause. */}
+        {s.back && (
+          <div className="lx-t-label text-muted" data-testid="vm-start-label">
+            {t('vmStartBack')}
+          </div>
+        )}
         <h2 className="lx-t-title" data-testid="vm-start-title">
           {t('vmStartTitle', { min: s.min })}
         </h2>
@@ -252,6 +301,7 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
         )}
         <Button variant="primary" onClick={onGo} data-testid="vm-start-go">
           {t('vmStartGo')}
+          <EnterKey />
         </Button>
       </div>
       <p className="lx-t-meta text-muted mx-auto flex max-w-xl items-start gap-2" data-testid="vm-start-lock">
@@ -266,8 +316,12 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
  * Abschluss der Runde (Bild B8): Minuten und Pflicht/Extra, dann je Zeile Gelerntes, Wiederholtes, Aufgestiegenes, Gestolpertes mit nächstem
  * Termin und die Vorschau auf morgen. „Noch 5“ als ruhiger zweiter Weg, „Fertig“ zurück zu Heute. Alles ist schon gebucht.
  */
+/** Namen je Tag-Gruppe im Abschluss (der Rest als „+n“). */
+const SLIP_NAMES = 2;
+
 function Done({ sum, review, onMore, onToday }: { sum: DoneSummary; review: number; onMore: () => void; onToday: () => void }) {
   const { t, lang } = useT();
+  useEnterGo(onToday);
   const W = '\u0000';
   const tomorrow = addDays(sum.today, 1);
   const rows: { id: string; icon: 'plus' | 'refresh' | 'sparkle' | 'close' | 'arrowRight'; label: string; body: ReactNode }[] = [];
@@ -296,24 +350,35 @@ function Done({ sum, review, onMore, onToday }: { sum: DoneSummary; review: numb
         </>
       ),
     });
-  if (sum.slips.n > 0)
+  if (sum.slips.n > 0) {
+    // Nach Tag gruppiert (Befund ux 4b Nr. 9): „3 kommen morgen wieder: access rights, to achieve, +1“ statt dreimal derselbe Satz.
+    const groups = new Map<string, string[]>();
+    for (const x of sum.slips.list) groups.set(x.day, [...(groups.get(x.day) ?? []), x.w]);
+    const rest = sum.slips.n - sum.slips.list.length;
+    const lines = [...groups].map(([day, ws]) => {
+      const n = ws.length;
+      const shown = ws.slice(0, SLIP_NAMES);
+      const more = n - shown.length;
+      const head = day === tomorrow ? (n === 1 ? t('vmDoneSlipTomorrow1') : t('vmDoneSlipTomorrowN', { n })) : t('vmDoneSlipOn', { n, date: dayDate(lang, day) });
+      return (
+        <span key={day} className="block">
+          <b>{head}</b> <span lang="en">{shown.join(', ')}</span>
+          {more > 0 && <>, +{more}</>}
+        </span>
+      );
+    });
     rows.push({
       id: 'slips',
       icon: 'close',
       label: t('vmDoneSlips'),
       body: (
         <>
-          <b>{sum.slips.n}:</b>{' '}
-          {sum.slips.list.map((x, i) => (
-            <span key={x.w}>
-              {i > 0 && ', '}
-              <WithWord w={x.w} text={x.day === tomorrow ? t('vmDoneSlipTomorrow', { w: W }) : t('vmDoneSlipOn', { w: W, date: dayDate(lang, x.day) })} />
-            </span>
-          ))}
-          {sum.slips.n > sum.slips.list.length && <>, {t('vmDoneMore', { n: sum.slips.n - sum.slips.list.length })}</>}
+          {lines}
+          {rest > 0 && <span className="block">{t('vmDoneMore', { n: rest })}</span>}
         </>
       ),
     });
+  }
   if (sum.tomorrow)
     rows.push({ id: 'tomorrow', icon: 'arrowRight', label: t('vmDoneTomorrow'), body: <b>{t('vmDoneTomorrowLine', { min: sum.tomorrow.min, due: sum.tomorrow.due, fresh: sum.tomorrow.fresh })}</b> });
   return (
@@ -342,10 +407,11 @@ function Done({ sum, review, onMore, onToday }: { sum: DoneSummary; review: numb
       </dl>
       <div className="flex gap-3">
         <Button variant="secondary" className="flex-1" onClick={onMore} data-testid="vm-more5">
-          {t('vmDoneMore5')}
+          {t('vmDoneMore5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
         </Button>
         <Button variant="primary" className="flex-1" onClick={onToday} data-testid="vm-back">
           {t('vmDoneFinish')}
+          <EnterKey />
         </Button>
       </div>
     </section>

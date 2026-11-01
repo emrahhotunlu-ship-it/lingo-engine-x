@@ -79,6 +79,8 @@ export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, D
 /** Eingabe beim Prüfen (von der Oberfläche gemessen): Dauer und Zeit bis zum ersten Zeichen ohne Nachschlage-Pausen. */
 export type Measured = { ms: number; fk: number };
 
+/** Gestolperte Wörter im Abschluss höchstens so viele mit Namen (gruppiert nach Tag, der Rest als „+n“). */
+const SLIP_MAX = 12;
 /** Schutz gegen eine endlose Folge von Aufgaben ohne Karte (spätere Formen werden übersprungen). */
 const SKIP_MAX = 500;
 /** Aktive Zeit je Karte höchstens so lange (Pause, Telefonat): für die Minuten im Abschluss. */
@@ -183,29 +185,7 @@ export class LearnRun {
       return;
     }
     try {
-      const cfg = vocabCfg(s.profile);
-      this.cfg = cfg;
-      this.sbGate = s.profile?.sbGate ?? null;
-      const items = [];
-      let i = 0;
-      for (const [path, doc] of s.docs) {
-        const lex = lexOf(doc);
-        if (!lex || doc.hidden === true) continue;
-        this.docs.set(path, doc);
-        // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
-        const tc = teachOf(headOf(path, doc));
-        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null });
-      }
-      const cat = new Catalog(items);
-      this.cat = cat;
-      await this.replay();
-      const nowMs = this.env.now();
-      this.day = dayKey(nowMs);
-      let plan: DayPlan | null = null;
-      if (s.kind === 'pflicht') {
-        // freezeDay nimmt den heutigen Plan unverändert, wenn er schon steht (auch von einem anderen Gerät).
-        plan = await freezeDay(this.env.deps, cat, nowMs, cfg, this.med, await this.env.readDay());
-      }
+      const { cat, cfg, plan, nowMs } = await this.setup(s);
       this.run = new SessionRun(s.kind, cat, plan, nowMs, { cfg, ...(s.paths ? { paths: s.paths } : {}) });
       this.kind = s.kind;
       const info = plan ? this.startInfo(cat, plan, cfg, nowMs) : null;
@@ -215,6 +195,48 @@ export class LearnRun {
       logError('vocab:learn-start', err);
       this.set({ k: 'closed', why: 'error' });
     }
+  }
+
+  /**
+   * Tagesplan der Wörter vorab einfrieren (Heute öffnet, Befund ux 4b Nr. 1): dieselben Schritte wie der Start einer Pflichtrunde (Bestand,
+   * Entwürfe nachbuchen, `freezeDay`), aber ohne Karte. Liefert die Minuten des Plans, damit Heute und die Runde dieselbe Zahl nennen;
+   * `null`, wenn nicht geschrieben werden darf oder etwas fehlschlägt (dann bleibt die gewählte Wörter-Zeit stehen).
+   */
+  async prepare(s: Omit<LearnStart, 'kind' | 'paths'>): Promise<number | null> {
+    if (this.started || writeGate(s.profile, s.schema) !== 'ok') return null;
+    this.started = true;
+    try {
+      const { plan } = await this.setup({ ...s, kind: 'pflicht' });
+      return plan && plan.plan.length ? Math.max(1, Math.round(plan.min)) : null;
+    } catch (err) {
+      logError('vocab:prepare-day', err);
+      return null;
+    }
+  }
+
+  /** Gemeinsamer Anfang von Start und Vorab-Einfrieren: Bestand im Speicher, Entwürfe nachbuchen, bei Pflicht den Tagesplan einfrieren. */
+  private async setup(s: LearnStart): Promise<{ cat: Catalog; cfg: VocabCfg; plan: DayPlan | null; nowMs: number }> {
+    const cfg = vocabCfg(s.profile);
+    this.cfg = cfg;
+    this.sbGate = s.profile?.sbGate ?? null;
+    const items = [];
+    let i = 0;
+    for (const [path, doc] of s.docs) {
+      const lex = lexOf(doc);
+      if (!lex || doc.hidden === true) continue;
+      this.docs.set(path, doc);
+      // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
+      const tc = teachOf(headOf(path, doc));
+      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null });
+    }
+    const cat = new Catalog(items);
+    this.cat = cat;
+    await this.replay();
+    const nowMs = this.env.now();
+    this.day = dayKey(nowMs);
+    // freezeDay nimmt den heutigen Plan unverändert, wenn er schon steht (auch von einem anderen Gerät).
+    const plan = s.kind === 'pflicht' ? await freezeDay(this.env.deps, cat, nowMs, cfg, this.med, await this.env.readDay()) : null;
+    return { cat, cfg, plan, nowMs };
   }
 
   /**
@@ -510,7 +532,7 @@ export class LearnRun {
       duty: this.kind === 'pflicht',
       learned: learned.slice(0, LIST_MAX),
       up: { n: upN, w: best?.w ?? null, lv: best?.lv ?? 0, produce: best?.produce ?? false },
-      slips: { n: slipList.length, list: slipList.slice(0, 2) },
+      slips: { n: slipList.length, list: slipList.slice(0, SLIP_MAX) },
       tomorrow,
       today,
     };

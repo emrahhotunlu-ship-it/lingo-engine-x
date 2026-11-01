@@ -6,7 +6,7 @@ export const nbHeuteDe = {
   nbHeuteUnit: 'Heute',
   // UX-Audit U1: die Minuten stehen nur im Ring, die Zeile darunter zählt nur Schritte.
   nbHeuteRing: 'Schritte: {done} von {total} erledigt',
-  nbHeuteBetweenHead: 'Schritt {done} von {total} geschafft · noch ca. {min} Min.',
+  nbHeuteBetweenHead: 'Schritt {done} von {total} geschafft\u00a0· noch ca. {min}\u00a0Min.',
   nbHeuteRingLabel: '{done} von {total} Blöcken erledigt',
   nbHeuteStart: 'Starten',
   nbHeuteContinue: 'Weiter: {block}',
@@ -17,6 +17,7 @@ export const nbHeuteDe = {
   nbHeuteComebackShort: 'Willkommen zurück. Heute zuerst das Fällige.',
   nbHeuteComebackLong: 'Willkommen zurück. Wir fangen ruhig an: erst das Fällige, der Rest kommt nach und nach.',
   nbHeuteBlock_review: 'Wiederholen',
+  nbHeuteBlock_words: 'Wörter',
   nbHeuteBlock_input: 'Input',
   nbHeuteBlock_task: 'Aufgabe',
   nbHeuteBlock_focus: 'Fokus',
@@ -30,7 +31,7 @@ export const nbHeuteDe = {
   // Nicht „überfällig“: von den geplanten Karten ist nur ein Teil überfällig (UX-Audit U1).
   nbHeuteWhy_reviewBehind: '{n} Karten · du holst auf',
   nbHeuteWhy_reviewBehindOne: '1 Karte · du holst auf',
-  nbHeuteWhy_vocabMod: 'Fällige Wörter, neue eingestreut',
+  nbHeuteWhy_vocabMod: 'Deine Wörter für heute, passend zu deiner Zeit',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',

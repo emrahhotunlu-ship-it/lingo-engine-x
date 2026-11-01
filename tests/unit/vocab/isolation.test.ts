@@ -14,7 +14,7 @@ const MODULE = 'src/modules/vocab';
 const SHARED = `${MODULE}/shared.ts`;
 const SHARED_UI = `${MODULE}/sharedUi.ts`;
 
-const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/];
+const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/];
 // V3 Schritt 2b-2: zweite Tür nur für die Oberfläche (Lernkarte, Band, Runde); nie von registry.ts/api.ts statisch erreichbar.
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav)$/,
@@ -111,16 +111,18 @@ describe('Wörter-Modul: Isolation', () => {
     // V1: nur die Datenschicht (Schemas für COLLECTIONS). V3 Schritt 1: Zählung (reads) und Sicherung (snapshot) der trägen Sammlung vlog über registry.
     // Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
     // V3 Schritt 2b-2: der Bereich Wortschatz bindet den Lernbildschirm über api.loadScreens() (nachgeladen) an.
-    // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab.
+    // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (unit/labels, learn/ui) fragen den Schalter.
     expect(touching.sort()).toEqual([
       'src/areas/wortschatz.tsx',
       'src/data/paths.ts',
       'src/data/reads.ts',
       'src/data/snapshot.ts',
       'src/data/writer.ts',
+      'src/features/learn/ui.tsx',
       'src/features/today/TodayScreen.tsx',
       'src/features/today/state.ts',
       'src/features/today/store.ts',
+      'src/features/unit/labels.ts',
     ]);
   });
 

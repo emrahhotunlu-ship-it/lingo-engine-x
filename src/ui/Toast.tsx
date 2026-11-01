@@ -11,6 +11,8 @@ const useToasts = create<ToastState>(() => ({ items: [] }));
 let nextId = 1;
 
 export function toast(text: string, tone: Toast['tone'] = 'info'): void {
+  // Derselbe Hinweis zweimal zugleich (z. B. ✕ der Übungsleiste und Rückkehr nach Heute melden beide „Gespeichert“, Befund ux 4b Nr. 3): nur einmal.
+  if (useToasts.getState().items.some((x) => x.text === text && x.tone === tone)) return;
   const id = nextId++;
   useToasts.setState((s) => ({ items: [...s.items.slice(-2), { id, text, tone }] }));
   window.setTimeout(() => useToasts.setState((s) => ({ items: s.items.filter((t) => t.id !== id) })), 5000);
