@@ -66,6 +66,7 @@ Planer: **heute (claude/umbau-fokus, 31.10.2026)** · 60 Tage · Startwert 20261
 | Haltbarkeit im neuen Satz +30 Tage | 26 – 35 | 47 – 63 | 147 – 173 |
 | Lernzeit gesamt (Stunden) | 5.3 – 5.5 | 7.6 – 8.1 | 9 – 9.8 |
 | Anteil aktiv ab Stufe 3 (%) | 100 – 100 | 100 – 100 | 100 – 100 |
+| Anteil mit Stütze (höchstens Hard) ab Stufe 3 (%) | 22.9 – 24.5 | 19.9 – 22.8 | 17.6 – 19.3 |
 
 **Je Tag** (Abfragen · mehrfach · Auswahl · überfällig · Minuten):
 

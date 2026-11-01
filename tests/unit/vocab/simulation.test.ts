@@ -14,14 +14,16 @@ describe('Simulation des neuen Planers (Kurzlauf)', () => {
     expect(a.multiNoStep).toBe(0);
     expect(b.multiNoStep).toBe(0);
   });
-  it('echte Behaltensrate: V2 mit Satzwechsel 79–83 % (Ziel 87–93 % offen, Bericht V2 offene_fragen 1)', () => {
-    // Messreihe V2 (5 Startwerte, docs/umbau/vokabeln/ausgangsmessung-v2.json): A 79,5–81 · B 80,4–82,5 · C 78,7–80,6 · D 79,9–81,9 %.
+  it('echte Behaltensrate: V2 mit Satzwechsel 80–84 % (Ziel 87–93 % offen, Bericht V2 offene_fragen 1; Modellbefund)', () => {
+    // Messreihe V2 (5 Startwerte, docs/umbau/vokabeln/ausgangsmessung-v2.json): A 80,4–83,5 · B 83–83,6 · C 80,7–83,1 · D 82,1–84 %.
+    // Ohne Satzbindung im Lerner (VOCAB_BIND=0): neu 82,8–85,5 %, heute 72,5–79,5 % – das Ziel verfehlen beide Planer (FSRS-Standardwerte).
     // Grund: V1 zeigte immer den Ankersatz; der simulierte Lerner bekommt dort eine Abrufhilfe von +12 Punkten (Satzbindung, V0 Befund 11).
     // V2 wechselt den Satz ab Tag 2 (M57); in neuen Sätzen fehlt die Hilfe, FSRS mit Standardwerten kennt das nicht (Anpassung erst M19).
     // Mit Ankersatz misst derselbe Planer 95 %. Die Grenze hält den gemessenen Stand, damit eine Verschlechterung auffällt.
-    expect(a.retention).toBeGreaterThanOrEqual(78);
+    // Grenze = Messwert dieses Startwerts (A 83,0 · B 83,6) − 2 (learning-scientist V2 Befund 10), damit ein Rückschritt auffällt.
+    expect(a.retention).toBeGreaterThanOrEqual(81);
     expect(a.retention).toBeLessThanOrEqual(93);
-    expect(b.retention).toBeGreaterThanOrEqual(78);
+    expect(b.retention).toBeGreaterThanOrEqual(81.5);
   });
   it('an jedem Lerntag ≥ 2 neue; Auswahl außerhalb der Lernschritte 0 %', () => {
     expect(a.newDaysBelow2).toBe(0);
@@ -31,10 +33,9 @@ describe('Simulation des neuen Planers (Kurzlauf)', () => {
   it('Last gleichmäßig: Pflicht nach dem Einlaufen VK ≤ 0,15; nach Extra-Runde nicht länger als im Mittel', () => {
     // Emrahs Lesart 01.11.2026: Gleichmäßigkeit ab Tag 15, die 14-Tage-Vorschau (≤ 1,5) nur beim Start mit Bestand (Szenario D, volle
     // Messung mit `simulate.mjs`); beim leeren Start wird sie hier nicht abgenommen.
-    // Messreihe V2 ab Tag 15 (5 Startwerte): A 0,13–0,15 · B 0,12–0,16 · D 0,06–0,07. Ziel ≤ 0,15 bei B knapp verfehlt (Bericht V2);
-    // die Grenze 0,16 hält den gemessenen Stand.
+    // Messreihe V2 ab Tag 15 (5 Startwerte): A 0,12–0,15 · B 0,11–0,14 · C 0,11–0,16 · D 0,05–0,08.
     expect(a.cvDutySteady).toBeLessThanOrEqual(0.15);
-    expect(b.cvDutySteady).toBeLessThanOrEqual(0.16);
+    expect(b.cvDutySteady).toBeLessThanOrEqual(0.15);
     expect(b.dutyAfterExtra).toBeLessThanOrEqual(b.dutyMean + 0.5);
   });
   it('Anwenden an jedem Lerntag, sobald es Lexeme ab Stufe 4 gibt; nichts bleibt unbegrenzt liegen', () => {
