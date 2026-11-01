@@ -107,12 +107,12 @@ export class Catalog {
   }
 }
 
-/** Erwartete Minuten je Lerntag aus den Terminen aller Lexeme (ohne `exclude`). */
-export function loadByDay(cat: Catalog, med: FormStats, exclude?: string): Map<string, number> {
+/** Erwartete Minuten je Lerntag aus den Terminen aller Lexeme (ohne `exclude`; mit `keep` nur diese, etwa die jungen Wörter). */
+export function loadByDay(cat: Catalog, med: FormStats, exclude?: string, keep?: (l: Lex) => boolean): Map<string, number> {
   const m = new Map<string, number>();
   const add = (d: string, ms: number) => m.set(d, (m.get(d) ?? 0) + ms / 60_000);
   for (const it of cat.byPath.values()) {
-    if (it.path === exclude || isNewLex(it.lex)) continue;
+    if (it.path === exclude || isNewLex(it.lex) || (keep && !keep(it.lex))) continue;
     const l = it.lex;
     const bd = l.b ? dayKey(l.b.due) : null;
     const ud = dayKey(l.u.due);
@@ -122,9 +122,9 @@ export function loadByDay(cat: Catalog, med: FormStats, exclude?: string): Map<s
   return m;
 }
 
-/** Vorschau: erwartete Minuten an den nächsten `n` Lerntagen (Index 0 = morgen), M63. */
-export function forecastMinutes(cat: Catalog, med: FormStats, nowMs: number, n: number): number[] {
+/** Vorschau: erwartete Minuten an den nächsten `n` Lerntagen (Index 0 = morgen), M63. Mit `keep` nur diese Lexeme. */
+export function forecastMinutes(cat: Catalog, med: FormStats, nowMs: number, n: number, keep?: (l: Lex) => boolean): number[] {
   const today = dayKey(nowMs);
-  const m = loadByDay(cat, med);
+  const m = loadByDay(cat, med, undefined, keep);
   return Array.from({ length: n }, (_, i) => Math.round((m.get(addDays(today, i + 1)) ?? 0) * 10) / 10);
 }

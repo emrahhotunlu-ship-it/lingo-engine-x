@@ -4,7 +4,7 @@ import { lexOf } from '../data/lex';
 import { vocabModuleMarkSchema } from '../data/schemas';
 import { addLater, dropLater, freezeDay, markLife, replayDraft, type UseDoc, readUseDoc, type VocabDeps, writeAnswer, writeIntro, writeProbe, writeUse } from '../data/store';
 import type { UseLater } from '../data/schemas';
-import { applyUse, EV_MIN_LV, type UseInput, type UseResult } from '../domain/apply';
+import { applyUse, EV_MIN_LV, sentenceWith, type UseInput, type UseResult } from '../domain/apply';
 import { openWhys, answerOfUse, type UseModel, modelOfUse } from '../domain/use';
 import { type FirstVerdict, milder } from '../prompts/common';
 import { type ExtraFix, isEvade, type WordJudgement } from '../prompts/judge';
@@ -17,8 +17,10 @@ import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Fr
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
 import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
-import type { FormStats, Lex, VocabCfg } from '../domain/types';
+import { type FormStats, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
+import { type ReadDoc, readVlogRecent } from '../data/history';
+import { retention, RET_WINDOW_DAYS, youngBoost } from '../domain/stats';
 
 // Wörter-Modul V3 Schritt 2b-2: Steuerung EINER Lernrunde, ohne React (testbar). Sie hält Runde, Bestand im Speicher und die gezeigte Karte,
 // rechnet jede Antwort rein (flow.ts) und bucht erst beim Weiter bzw. beim Verlassen, genau einmal (v3-bau.md §3). Bis die Buchung steht,
@@ -134,6 +136,8 @@ export type LearnEnv = {
   ai?: UseAi;
   /** `vmod/use` frisch lesen (Alltags-Lage, „Später prüfen lassen“); fehlt = leer. */
   readUse?: () => Promise<Doc | null>;
+  /** Ein Dokument frisch lesen (Verlauf `vmod/ix`, `vlog/…` für „Junge Wörter früher“); fehlt = kein Nachsteuern. */
+  read?: ReadDoc;
 };
 
 export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, Doc]>; profile: Doc | null; schema: Doc | null; paths?: string[] };
@@ -306,13 +310,31 @@ export class LearnRun {
     }
     const cat = new Catalog(items);
     this.cat = cat;
+    // „Junge Wörter früher“ (Großpaket A S6): steht fest im heutigen Plan; nur ein neuer Pflicht-Plan rechnet es aus dem Verlauf.
+    const dayNow = this.env.now();
+    const cur = await this.env.readDay();
+    if (cur && cur.d === dayKey(dayNow)) cfg.retY = typeof cur.ry === 'number' ? cur.ry : null;
+    else if (s.kind === 'pflicht') cfg.retY = await this.youngTarget(cfg, dayNow);
     await this.replay();
     await this.loadUse();
     const nowMs = this.env.now();
     this.day = dayKey(nowMs);
     // freezeDay nimmt den heutigen Plan unverändert, wenn er schon steht (auch von einem anderen Gerät).
-    const plan = s.kind === 'pflicht' ? await freezeDay(this.env.deps, cat, nowMs, cfg, this.med, await this.env.readDay()) : null;
+    const plan = s.kind === 'pflicht' ? await freezeDay(this.env.deps, cat, nowMs, cfg, this.med, cur) : null;
+    if (plan) cfg.retY = plan.ry ?? null;
     return { cat, cfg, plan, nowMs };
+  }
+
+  /** Ziel für junge Wörter aus der echten Rate der letzten 30 Tage (`null` = nicht nachsteuern; ein Lesefehler steuert nie nach). */
+  private async youngTarget(cfg: VocabCfg, nowMs: number): Promise<number | null> {
+    const read = this.env.read;
+    if (!read) return null;
+    try {
+      return youngBoost(cfg.ret, retention(await readVlogRecent(read, nowMs, RET_WINDOW_DAYS), nowMs));
+    } catch (err) {
+      logError('vocab:young-target', err);
+      return null;
+    }
   }
 
   /**
@@ -456,6 +478,13 @@ export class LearnRun {
     return kept ? kept[1] : (this.cat?.get(path)?.lex.lv ?? 0);
   }
 
+  /** „Deine Sätze“: beim eigenen Satz der ganze Text, beim Anwenden der Satz mit der Fundstelle (sonst nichts). */
+  private sentOf(v: Extract<LearnView, { k: 'use' }>, at: string): { sent?: string } {
+    const text = v.text.trim();
+    const sent = v.m.form === 'own' ? (text.length <= OS_TEXT_MAX ? text : null) : sentenceWith(text, at);
+    return sent ? { sent } : {};
+  }
+
   /** Verwendung je Ziel aus dem Urteil (Zeit `t + i`, damit jeder Verlaufseintrag eigen ist). */
   private inputs(v: Extract<LearnView, { k: 'use' }>, words: readonly WordJudgement[], t: number): { path: string; u: UseInput }[] {
     const out: { path: string; u: UseInput }[] = [];
@@ -464,7 +493,7 @@ export class LearnRun {
       if (!w) return;
       out.push({
         path: tg.path,
-        u: { t: t + i, form: v.m.form, v: w.v, err: w.err, at: w.at, evade: isEvade(w), spoken: v.spokenKeys ? v.spokenKeys.includes(tg.key) : v.spoken, lvAt: this.lvAt(v, tg.path), evidenceOnly: v.m.evidence || !!v.later, evDone: this.evToday.has(tg.path) },
+        u: { t: t + i, form: v.m.form, v: w.v, err: w.err, at: w.at, evade: isEvade(w), spoken: v.spokenKeys ? v.spokenKeys.includes(tg.key) : v.spoken, lvAt: this.lvAt(v, tg.path), evidenceOnly: v.m.evidence || !!v.later, evDone: this.evToday.has(tg.path), ...this.sentOf(v, w.at) },
       });
     });
     return out;

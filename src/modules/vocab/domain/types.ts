@@ -40,7 +40,15 @@ export type Lex = {
    * NÄCHSTEN Runde zuerst, ohne Planwirkung; gelöscht mit der Antwort auf die Kontrastkarte.
    */
   ct?: Ct;
+  /**
+   * Großpaket A S6: „Deine Sätze“ (Wort-Seite): eigene Sätze mit diesem Wort, die Claude als richtig beurteilt hat, neueste zuerst
+   * (`[Zeit, Satz, gesprochen 0|1]`, höchstens `OS_MAX`). Beim Anwenden nur der Satz des Texts, der das Wort enthält.
+   */
+  os?: [number, string, 0 | 1][];
 };
+
+export const OS_MAX = 5;
+export const OS_TEXT_MAX = 300;
 
 export type Ct = { at: number; w: string | null };
 
@@ -123,8 +131,11 @@ export const FORMS: readonly Form[] = [
 
 export type Grade = 1 | 2 | 3 | 4;
 
-/** Einstellungen (app/profile.vcfg + newPerDay). */
-export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null };
+/**
+ * Einstellungen (app/profile.vcfg + newPerDay). `retY` (Großpaket A S6, Emrahs Wahl „Junge Wörter früher“): Ziel-Behaltensrate für junge
+ * Wörter (Stufe ≤ 4), solange ihre echte Rate deutlich unter dem Ziel liegt; steht je Lerntag fest in `vmod/day.ry`. Fehlt sie: `ret`.
+ */
+export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null; retY?: number | null };
 export const DEFAULT_CFG: VocabCfg = { min: 15, ret: 0.9, newPerDay: 5, mod: 0, restDow: null };
 
 /** Median-Zeiten je Form in ms (vmod/stats.med); Startwerte, bis echte Antworten da sind. */

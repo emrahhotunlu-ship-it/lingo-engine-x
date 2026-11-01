@@ -26,7 +26,8 @@ const startOfOffset = (day: string, n: number): number => dayStartOf(addDays(day
 /** Ein Eintrag im eingefrorenen Plan: Pfad, Spur (`n` = neu), Form. */
 export type PlanEntry = [string, TrackKey | 'n', Form];
 /** `sp` (V3 Schritt 4): Rückstand, der heute nicht drankommt, je Lerntag (verschoben bzw. als Kernwort morgen zuerst); fehlt ohne Rückstand. */
-export type DayPlan = { d: string; plan: PlanEntry[]; min: number; due: number; fresh: number; ahead: number; moved: number; why: string; sp?: [string, number][] };
+/** `ry` (Großpaket A S6): Ziel-Behaltensrate junger Wörter für diesen Lerntag, wenn die App nachsteuert („Junge Wörter früher“). */
+export type DayPlan = { d: string; plan: PlanEntry[]; min: number; due: number; fresh: number; ahead: number; moved: number; why: string; sp?: [string, number][]; ry?: number };
 export type Move = { path: string; track: TrackKey; to: string };
 
 /** Minuten für ein neues Lexem: Einführung + Schritt A + Schritt B. */

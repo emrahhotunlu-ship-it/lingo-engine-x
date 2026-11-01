@@ -3,7 +3,7 @@ import type { UseErr, UseVerdict } from '../prompts/common';
 import type { TransferFrame } from '../prompts/transfer';
 import { applyAnswer, type AnswerResult, type PlanCtx } from './planner';
 import { hash32 } from './rand';
-import type { Lex, LexKind, Outcome } from './types';
+import { type Lex, type LexKind, OS_MAX, OS_TEXT_MAX, type Outcome } from './types';
 
 // Großpaket A Schritt 5b (plan.md §7 „Anwenden“, Synthese §2.5; Emrahs Antworten 01.11.): Claudes Urteil je Zielwort → Note und Belege.
 // Die Note rechnet immer die App, nie Claude:
@@ -65,7 +65,30 @@ export type UseInput = {
   evidenceOnly: boolean;
   /** Heute schon ein Beleg für dieses Wort gezählt (die Sitzung bzw. die Liste „später prüfen“ weiß es). */
   evDone?: boolean;
+  /** Großpaket A S6: der eigene Satz mit diesem Wort (für „Deine Sätze“; nur bei „richtig“ gespeichert). */
+  sent?: string;
 };
+
+/** „Deine Sätze“: richtiger eigener Satz vorne anfügen (gleicher Satz nur einmal), höchstens `OS_MAX`. */
+export function withOwnSentence(lex: Lex, u: UseInput): Lex {
+  const text = u.sent?.trim().slice(0, OS_TEXT_MAX);
+  if (u.v !== 'ok' || !text) return lex;
+  const prev = lex.os ?? [];
+  if (prev.some(([t, x]) => t === u.t || x === text)) return lex;
+  return { ...lex, os: [[u.t, text, u.spoken ? 1 : 0] as [number, string, 0 | 1], ...prev].slice(0, OS_MAX) };
+}
+
+/** Der Satz eines Texts, der `at` enthält (Groß-/Kleinschreibung egal); sonst der ganze Text, wenn er nur ein Satz ist. */
+export function sentenceWith(text: string, at: string): string | null {
+  const parts = text
+    .split(/(?<=[.!?])\s+|\n+/)
+    .map((x) => x.trim())
+    .filter(Boolean);
+  const needle = at.trim().toLowerCase();
+  const hit = needle ? parts.find((x) => x.toLowerCase().includes(needle)) : undefined;
+  const out = hit ?? (parts.length === 1 ? parts[0]! : null);
+  return out && out.length <= OS_TEXT_MAX ? out : null;
+}
 
 export type UseResult = AnswerResult & { ev: 'o' | 's' | null };
 
@@ -82,9 +105,9 @@ const noEffect = (lex: Lex, ev: UseResult['ev']): UseResult => ({ lex, grade: nu
 /** Urteil je Zielwort anwenden: Belege, dann (mit Planwirkung) die Buchung über den Planer. Rein. */
 export function applyUse(lex0: Lex, u: UseInput, ctx: PlanCtx): UseResult {
   const ev = evidenceOf(lex0, u);
-  let lex = lex0;
+  let lex = withOwnSentence(lex0, u);
   if (ev) {
-    lex = { ...lex0, ev: { f: [...lex0.ev.f], o: Math.max(lex0.ev.o, Math.min(EV_MAX, lex0.ev.o + 1)), s: ev === 's' ? Math.max(lex0.ev.s, Math.min(EV_MAX, lex0.ev.s + 1)) : lex0.ev.s }, sync: Math.max(lex0.sync, u.t) };
+    lex = { ...lex, ev: { f: [...lex0.ev.f], o: Math.max(lex0.ev.o, Math.min(EV_MAX, lex0.ev.o + 1)), s: ev === 's' ? Math.max(lex0.ev.s, Math.min(EV_MAX, lex0.ev.s + 1)) : lex0.ev.s }, sync: Math.max(lex0.sync, u.t) };
   }
   const outcome = u.evidenceOnly ? null : outcomeOfUse(u.v, u.err, lex.k, u.evade);
   if (outcome === null) return noEffect(lex, ev);

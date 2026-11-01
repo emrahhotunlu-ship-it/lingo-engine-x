@@ -64,6 +64,14 @@ export type FkStats = { med: FormStats; n: Partial<Record<Form, number>> };
 
 
 
+/** Junge Wörter (Stufe ≤ 4) gelten als jung, solange `retY` gesetzt ist (Großpaket A S6). */
+export const YOUNG_MAX_LV = 4;
+
+/** Ziel-Behaltensrate der Buchung: `retY` für junge Wörter (Stufe vor der Antwort), sonst `ret`. */
+export function retOf(lex: Lex, cfg: VocabCfg): number {
+  return cfg.retY && lex.lv <= YOUNG_MAX_LV ? cfg.retY : cfg.ret;
+}
+
 export type PlanCtx = {
   cfg: VocabCfg;
   /** Lexem-Pfad (Startwert für Fuzz und Lastausgleich). */
@@ -133,11 +141,11 @@ export function probeKnown(lex0: Lex, t: number, ctx: PlanCtx): AnswerResult {
   lex.day = day;
   lex.step = null;
   lex.lv = Math.max(lex.lv, 3);
-  const rb = book(newTrack(t), 3, t, ctx.cfg.ret);
+  const rb = book(newTrack(t), 3, t, retOf(lex0, ctx.cfg));
   lex.b = rb.track;
   lex.b.due = dayStartOf(addDays(day, PROBE_CHECK_DAYS));
   lex.b.sd = PROBE_CHECK_DAYS;
-  const ru = book(lex.u, 3, t, ctx.cfg.ret);
+  const ru = book(lex.u, 3, t, retOf(lex0, ctx.cfg));
   lex.u = ru.track;
   lex.u.due = placeDue(lex, lex.u, ru.ivl, 'u', ctx, t, PROBE_CHECK_DAYS);
   lex.u.sd = offsetOf(lex.u.due, t);
@@ -235,14 +243,14 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const stepA = lex.step?.n === 1 && dayKey(lex.step.at) === day;
   if (ctx.planned && target && g !== null && !bookedToday && lex.intro !== null && !stepA) {
     if (target === 'b' && lex.b) {
-      const r = book(lex.b, g, a.t, ctx.cfg.ret);
+      const r = book(lex.b, g, a.t, retOf(lex0, ctx.cfg));
       lex.b = r.track;
       booked.push('b');
       // Kopplung nur nach oben.
       const ug: Grade | null = g >= 2 ? g : a.outcome === 'other' ? 1 : null;
       let uIvl = 0;
       if (ug !== null && lex.dayU !== day) {
-        const ru = book(lex.u, ug, a.t, ctx.cfg.ret);
+        const ru = book(lex.u, ug, a.t, retOf(lex0, ctx.cfg));
         lex.u = ru.track;
         uIvl = ru.ivl;
         booked.push('u');
@@ -256,7 +264,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
         lex.u.sd = offsetOf(lex.u.due, a.t);
       }
     } else {
-      const r = book(lex.u, g, a.t, ctx.cfg.ret);
+      const r = book(lex.u, g, a.t, retOf(lex0, ctx.cfg));
       lex.u = r.track;
       booked.push('u');
       lex.u.due = placeDue(lex, lex.u, r.ivl, 'u', ctx, a.t, lex.b ? offsetOf(lex.b.due, a.t) : undefined);

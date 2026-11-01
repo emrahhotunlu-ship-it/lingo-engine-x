@@ -55,6 +55,7 @@ function createRun(ai?: VocabAi): LearnRun | null {
     drafts,
     readDay: () => readOr(VMOD_DAY_PATH),
     readUse: () => readOr(VMOD_USE_PATH),
+    read: readOr,
     ai: ai
       ? makeUseAi(
           ai,

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FORMS } from '../domain/types';
+import { FORMS, OS_MAX, OS_TEXT_MAX } from '../domain/types';
 
 // Wörter-Modul V1: Schemas (plan.md §3; data-guard V0 Befund 2). Gelesen wird tolerant (`looseObject`, eine höhere Version wird nie
 // zurückgeschrieben, wie `isFutureFsrs`), geschrieben wird streng (`lexWriteSchema`).
@@ -69,6 +69,8 @@ export const lexWriteSchema = z
     intro: day.nullable(),
     fq: fqSchema.optional(),
     ct: z.object({ at: int.positive(), w: z.string().min(1).max(60).nullable() }).strict().optional(),
+    /** Großpaket A S6: „Deine Sätze“ (`[Zeit, Satz, gesprochen]`, neueste zuerst). */
+    os: z.array(z.tuple([int.positive(), z.string().min(1).max(OS_TEXT_MAX), z.union([z.literal(0), z.literal(1)])])).max(OS_MAX).optional(),
   })
   .strict()
   .refine((l) => l.of === null || l.of !== l.core, { message: 'of und core verschieden' });
@@ -100,6 +102,8 @@ export const vmodDayWriteSchema = z
     why: z.string().max(200),
     /** V3 Schritt 4: Rückstand je Lerntag (höchstens SPREAD_DAYS Tage). Optional: ältere Pläne haben es nicht. */
     sp: z.array(z.tuple([day, int.min(1)])).max(8).optional(),
+    /** Großpaket A S6: Ziel-Behaltensrate junger Wörter an diesem Lerntag („Junge Wörter früher“). Fehlt, wenn die App nicht nachsteuert. */
+    ry: z.number().min(0.86).max(0.97).optional(),
   })
   .strict();
 

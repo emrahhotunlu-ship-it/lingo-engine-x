@@ -52,6 +52,15 @@ export function book(t: Track, g: Grade, nowMs: number, ret: number): { track: T
   return { track, ivl: Math.max(1, next.card.scheduled_days) };
 }
 
+/**
+ * Großpaket A S6: Faktor der Abstände beim Wechsel der Ziel-Behaltensrate `from` → `to` (FSRS-Intervall bei gleicher Stabilität).
+ * Kleiner als 1 heißt: kürzere Abstände, also mehr Wiederholungen (Wiederholungsminuten wachsen um 1/Faktor).
+ */
+export function ivlFactor(from: number, to: number): number {
+  const ref = 100;
+  return scheduler(to).next_interval(ref, 0) / scheduler(from).next_interval(ref, 0);
+}
+
 /** Abrufwahrscheinlichkeit der Spur zum Zeitpunkt `nowMs` (0 bei neuer Spur). */
 export function retr(t: Track | null, nowMs: number): number {
   if (!t || t.st === 0 || !(t.s > 0) || t.last === null) return 0;

@@ -304,7 +304,9 @@ export const MOVE_GROUP = 6;
 export async function freezeDay(deps: VocabDeps, cat: Catalog, nowMs: number, cfg: VocabCfg, med: FormStats, current: Doc | null): Promise<DayPlan> {
   const day = dayKey(nowMs);
   if (current && current.d === day && Array.isArray(current.plan)) return current as unknown as DayPlan;
-  const { plan, moves } = buildDayPlan(cat, nowMs, cfg, med);
+  const built = buildDayPlan(cat, nowMs, cfg, med);
+  const { moves } = built;
+  const plan: DayPlan = cfg.retY ? { ...built.plan, ry: cfg.retY } : built.plan;
   const doc = { v: 1 as const, ...plan };
   const ok = vmodDayWriteSchema.safeParse(doc);
   if (!ok.success) {

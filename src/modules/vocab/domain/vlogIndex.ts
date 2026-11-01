@@ -66,3 +66,23 @@ export function nextVlogPart(id: string): string | null {
 /** Pfad eines Verlaufsdokuments aus der Kennung (und zurück): die Datenschicht schreibt den Pfad nicht selbst (Isolation). */
 export const vlogPath = (id: string): string => `vlog/${id}`;
 export const vlogIdOfPath = (path: string): string => path.slice('vlog/'.length);
+
+/**
+ * Großpaket A S6: Kennungen (samt Fortsetzungen) aus dem Verzeichnis, deren Halbmonat den Zeitraum `from`–`to` (Lerntage, `JJJJ-MM-TT`)
+ * berührt. Dazu immer Teil 1 der berührten Halbmonate (falls ein Verzeichnis-Eintrag verloren ging); fehlende Dokumente lesen sich leer.
+ */
+export function vlogIdsInRange(listed: readonly string[], from: string, to: string): string[] {
+  const set = new Set<string>();
+  const touches = (base: string) => {
+    const mo = base.slice(0, 7);
+    const a = base.endsWith('-a');
+    const start = `${mo}-${a ? '01' : '16'}`;
+    const end = `${mo}-${a ? '15' : '31'}`;
+    return start <= to && end >= from;
+  };
+  for (const id of listed) if (touches(splitVlogId(id).base)) set.add(id);
+  for (let mo = to.slice(0, 7), i = 0; i < 24 && mo >= from.slice(0, 7); i++, mo = monthsBack(mo, 2)[1]!) {
+    for (const h of ['a', 'b']) if (touches(`${mo}-${h}`)) set.add(`${mo}-${h}`);
+  }
+  return [...set].sort();
+}
