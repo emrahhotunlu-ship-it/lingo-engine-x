@@ -136,7 +136,7 @@ export const USE_LATER_DAYS = 14;
 export type UseDoc = { life: string | null; later: UseLater[] };
 
 /** `vmod/use` tolerant lesen: ungültige Einträge fallen weg (gemeldet), ein ungültiges Dokument zählt als leer. */
-export function useDocOf(raw: unknown): UseDoc {
+export function readUseDoc(raw: unknown): UseDoc {
   if (!isObj(raw)) return { life: null, later: [] };
   const life = typeof raw.life === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.life) ? raw.life : null;
   const list = Array.isArray(raw.later) ? raw.later : [];
@@ -157,7 +157,7 @@ async function changeUse(deps: VocabDeps, fn: (cur: UseDoc) => UseDoc | null): P
   let out: UseDoc | null = null;
   await deps.writer.transform(VMOD_USE_PATH, (cur) => {
     if (!cur) return null;
-    const next = fn(useDocOf(cur));
+    const next = fn(readUseDoc(cur));
     if (!next) return null;
     const ok = vmodUseWriteSchema.safeParse({ v: 1, ...next });
     if (!ok.success) {

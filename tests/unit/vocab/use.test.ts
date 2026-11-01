@@ -7,8 +7,8 @@ import { type Draft, isDraft } from '../../../src/modules/vocab/domain/flow';
 import { applyAnswer, emptyLex, FLAG, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
 import type { Task } from '../../../src/modules/vocab/domain/session';
 import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
-import { OPEN_MAX, openWhys, ownFrame, promptTarget, useAnswer, useOf, useOutcome } from '../../../src/modules/vocab/domain/use';
-import { addLater, dropLater, markLife, replayDraft, USE_LATER_DAYS, useDocOf, writeUse } from '../../../src/modules/vocab/data/store';
+import { OPEN_MAX, openWhys, ownFrame, promptTarget, answerOfUse, modelOfUse, outcomeOfUseLog } from '../../../src/modules/vocab/domain/use';
+import { addLater, dropLater, markLife, replayDraft, USE_LATER_DAYS, readUseDoc, writeUse } from '../../../src/modules/vocab/data/store';
 import { USE_LATER_MAX, type UseLater } from '../../../src/modules/vocab/data/schemas';
 
 // Großpaket A Schritt 5c-1: Anwenden-Karte (Modell), Buchung einer Verwendung, Entwurf „use“, `vmod/use` (Alltag, später prüfen).
@@ -33,9 +33,9 @@ const docs: Record<string, Doc> = { 'vocab/scope': scope, 'vocab/rely': rely };
 const lookup = (p: string) => (docs[p] ? { doc: docs[p], lex: learned(5), teach: { colloc: ['scope of work'] } } : null);
 const use = (over: Partial<UseInput> = {}): UseInput => ({ t: T0, form: 'own', v: 'ok', err: null, at: '', evade: false, spoken: false, lvAt: 5, evidenceOnly: false, ...over });
 
-describe('useOf', () => {
+describe('modelOfUse', () => {
   it('Anwenden: Gruppe ohne fehlende Wörter, Kennungen w1…, Grundform, Partner aus Dokument und Lehrer', () => {
-    const m = useOf({ task: task(), lookup, nowMs: T0, sbGate: null, lastLife: null })!;
+    const m = modelOfUse({ task: task(), lookup, nowMs: T0, sbGate: null, lastLife: null })!;
     expect(m.form).toBe('transfer');
     expect(m.targets.map((t) => [t.key, t.path, t.word])).toEqual([
       ['w1', 'vocab/scope', 'scope'],
@@ -51,17 +51,17 @@ describe('useOf', () => {
   });
 
   it('eigener Satz: ein Wort, Arbeits-Lage je Wort und Tag; nur Beleg bei why=evidence; andere Formen → null', () => {
-    const m = useOf({ task: task({ form: 'own', why: 'evidence', group: undefined }), lookup, nowMs: T0, sbGate: null, lastLife: null })!;
+    const m = modelOfUse({ task: task({ form: 'own', why: 'evidence', group: undefined }), lookup, nowMs: T0, sbGate: null, lastLife: null })!;
     expect(m.targets).toHaveLength(1);
     expect(m.frame).toBe(ownFrame('vocab/scope', '2026-11-02'));
     expect(m.frame).not.toBe('life');
     expect(m.evidence).toBe(true);
-    expect(useOf({ task: task({ form: 'gap' }), lookup, nowMs: T0, sbGate: null, lastLife: null })).toBeNull();
-    expect(useOf({ task: task({ group: ['vocab/gone'] }), lookup, nowMs: T0, sbGate: null, lastLife: null })).toBeNull();
+    expect(modelOfUse({ task: task({ form: 'gap' }), lookup, nowMs: T0, sbGate: null, lastLife: null })).toBeNull();
+    expect(modelOfUse({ task: task({ group: ['vocab/gone'] }), lookup, nowMs: T0, sbGate: null, lastLife: null })).toBeNull();
   });
 });
 
-describe('openWhys / useOutcome / useAnswer', () => {
+describe('openWhys / outcomeOfUseLog / answerOfUse', () => {
   it('falsch vor fast richtig, höchstens zwei offen', () => {
     const open = openWhys([
       { key: 'w1', v: 'odd' },
@@ -74,13 +74,13 @@ describe('openWhys / useOutcome / useAnswer', () => {
   });
 
   it('Verlaufs-Ausgang ohne Note: dünn → odd, nicht benutzt → dunno; Fundstelle nur bei Verwechslung/Ausweichen; Kennzeichen später', () => {
-    expect(useOutcome(use({ v: 'thin' }), 'w')).toBe('odd');
-    expect(useOutcome(use({ v: 'unused' }), 'w')).toBe('dunno');
-    expect(useOutcome(use({ v: 'unused', evade: true }), 'w')).toBe('evade');
-    expect(useAnswer(use({ v: 'wrong', err: 'word', at: 'range' }), 'w', 12_345.6, false)).toMatchObject({ outcome: 'other', hit: 'range', ms: 12_346 });
-    expect(useAnswer(use({ v: 'wrong', err: 'sense', at: 'x' }), 'w', 1, false).hit).toBeNull();
-    expect(useAnswer(use(), 'w', -5, true)).toMatchObject({ ms: 0, flags: FLAG.later });
-    expect(useAnswer(use(), 'w', 1, false).flags).toBeUndefined();
+    expect(outcomeOfUseLog(use({ v: 'thin' }), 'w')).toBe('odd');
+    expect(outcomeOfUseLog(use({ v: 'unused' }), 'w')).toBe('dunno');
+    expect(outcomeOfUseLog(use({ v: 'unused', evade: true }), 'w')).toBe('evade');
+    expect(answerOfUse(use({ v: 'wrong', err: 'word', at: 'range' }), 'w', 12_345.6, false)).toMatchObject({ outcome: 'other', hit: 'range', ms: 12_346 });
+    expect(answerOfUse(use({ v: 'wrong', err: 'sense', at: 'x' }), 'w', 1, false).hit).toBeNull();
+    expect(answerOfUse(use(), 'w', -5, true)).toMatchObject({ ms: 0, flags: FLAG.later });
+    expect(answerOfUse(use(), 'w', 1, false).flags).toBeUndefined();
   });
 });
 
@@ -98,13 +98,13 @@ describe('writeUse', () => {
   it('bucht Note und Beleg genau einmal, Verlaufseintrag mit Ausgang', async () => {
     const s = setup(learned(5));
     const u = use();
-    const r = await writeUse(s.deps, 'vocab/scope', useAnswer(u, 'w', 30_000, false), u, s.opts);
+    const r = await writeUse(s.deps, 'vocab/scope', answerOfUse(u, 'w', 30_000, false), u, s.opts);
     expect(r?.ev).toBe('o');
     expect(r?.grade).not.toBeNull();
     expect(s.lexIn().ev.o).toBe(1);
     expect(s.lexIn().sync).toBe(T0);
     expect(s.vlog()).toHaveLength(1);
-    expect(await writeUse(s.deps, 'vocab/scope', useAnswer(u, 'w', 30_000, false), u, s.opts)).toBeNull();
+    expect(await writeUse(s.deps, 'vocab/scope', answerOfUse(u, 'w', 30_000, false), u, s.opts)).toBeNull();
     expect(s.lexIn().ev.o).toBe(1);
     expect(s.vlog()).toHaveLength(1);
   });
@@ -112,16 +112,16 @@ describe('writeUse', () => {
   it('ohne Note und Beleg (nicht benutzt) trotzdem als gebucht markiert', async () => {
     const s = setup(learned(5));
     const u = use({ v: 'unused' });
-    const r = await writeUse(s.deps, 'vocab/scope', useAnswer(u, 'w', 1000, false), u, s.opts);
+    const r = await writeUse(s.deps, 'vocab/scope', answerOfUse(u, 'w', 1000, false), u, s.opts);
     expect(r?.grade).toBeNull();
     expect(s.lexIn().sync).toBe(T0);
-    const d: Draft = { v: 1, kind: 'use', path: 'vocab/scope', planned: true, a: useAnswer(u, 'w', 1000, false), u };
+    const d: Draft = { v: 1, kind: 'use', path: 'vocab/scope', planned: true, a: answerOfUse(u, 'w', 1000, false), u };
     expect(await replayDraft(s.deps, d, { cfg: DEFAULT_CFG, cat: s.opts.cat, med: {} })).toBeNull();
   });
 
   it('Entwurf „use“: gültig nur mit Verwendung; Nachbuchen bucht', async () => {
     const u = use({ t: T0 + 5000 });
-    const d: Draft = { v: 1, kind: 'use', path: 'vocab/scope', planned: true, a: useAnswer(u, 'w', 1000, false), u };
+    const d: Draft = { v: 1, kind: 'use', path: 'vocab/scope', planned: true, a: answerOfUse(u, 'w', 1000, false), u };
     expect(isDraft(d)).toBe(true);
     expect(isDraft({ ...d, u: undefined })).toBe(false);
     expect(isDraft({ ...d, u: { ...u, form: 'gap' } })).toBe(false);
@@ -143,17 +143,17 @@ describe('vmod/use', () => {
     await addLater(deps, later(T0 - (USE_LATER_DAYS + 1) * D), T0);
     for (let i = 0; i < USE_LATER_MAX + 1; i++) await addLater(deps, later(T0 + i), T0 + i);
     expect(await addLater(deps, later(T0 + 1), T0 + 50)).toBeNull();
-    let doc = useDocOf(h.dump()['vmod/use']);
+    let doc = readUseDoc(h.dump()['vmod/use']);
     expect(doc.later.map((x) => x.t)).toEqual(Array.from({ length: USE_LATER_MAX }, (_, i) => T0 + 1 + i));
     expect(doc.life).toBe('2026-11-06');
     await dropLater(deps, T0 + 1);
     expect(await dropLater(deps, T0 + 1)).toBeNull();
-    doc = useDocOf(h.dump()['vmod/use']);
+    doc = readUseDoc(h.dump()['vmod/use']);
     expect(doc.later).toHaveLength(USE_LATER_MAX - 1);
   });
 
   it('tolerant lesen: kaputte Einträge fallen weg, fremder Aufbau zählt als leer', () => {
-    expect(useDocOf(null)).toEqual({ life: null, later: [] });
-    expect(useDocOf({ life: 'x', later: [later(T0), { t: 'bad' }] })).toEqual({ life: null, later: [later(T0)] });
+    expect(readUseDoc(null)).toEqual({ life: null, later: [] });
+    expect(readUseDoc({ life: 'x', later: [later(T0), { t: 'bad' }] })).toEqual({ life: null, later: [later(T0)] });
   });
 });

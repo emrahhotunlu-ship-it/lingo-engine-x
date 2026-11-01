@@ -107,7 +107,7 @@ export function ownFrame(path: string, day: string): TransferFrame {
  * Karte zu einer Anwenden- oder Eigener-Satz-Aufgabe. `null` = keine Karte (Form passt nicht, kein Wort mit Stichwort).
  * `lookup` liefert Dokument, Lexem und Lehrerdaten je Pfad; `lastLife` = letzter Tag mit Alltags-Lage (`vmod/use.life`).
  */
-export function useOf(x: {
+export function modelOfUse(x: {
   task: Task;
   lookup: (path: string) => { doc: Doc; lex: Lex; teach: Teach } | null;
   nowMs: number;
@@ -144,12 +144,12 @@ export function openWhys(words: readonly Pick<WordJudgement, 'key' | 'v'>[]): Se
 }
 
 /** Verlaufs-Ausgang einer Verwendung: die Note-Ausgänge aus `outcomeOfUse`; ohne Note `odd` (zu dünn) bzw. `dunno` (nicht benutzt). */
-export function useOutcome(u: Pick<UseInput, 'v' | 'err' | 'evade'>, k: LexKind): Outcome {
+export function outcomeOfUseLog(u: Pick<UseInput, 'v' | 'err' | 'evade'>, k: LexKind): Outcome {
   return outcomeOfUse(u.v, u.err, k, u.evade) ?? (u.v === 'thin' ? 'odd' : 'dunno');
 }
 
 /** Antwort für Verlauf und Spiegel der alten Felder (`ms` = Schreibzeit des Textes; Kennzeichen „später geprüft“ bei nachgeholter Prüfung). */
-export function useAnswer(u: UseInput, k: LexKind, ms: number, later: boolean): Answer {
+export function answerOfUse(u: UseInput, k: LexKind, ms: number, later: boolean): Answer {
   const hit = u.at && (u.evade || (u.v === 'wrong' && u.err === 'word')) ? u.at : null;
-  return { t: u.t, form: u.form, outcome: useOutcome(u, k), hint: 0, ms: Math.max(0, Math.round(ms)), fk: 0, sentence: null, anchor: null, hit, ...(later ? { flags: FLAG.later } : {}) };
+  return { t: u.t, form: u.form, outcome: outcomeOfUseLog(u, k), hint: 0, ms: Math.max(0, Math.round(ms)), fk: 0, sentence: null, anchor: null, hit, ...(later ? { flags: FLAG.later } : {}) };
 }

@@ -110,8 +110,9 @@ export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }
     const flush = () => {
       void run.leave();
     };
+    // Im Hintergrund (anderes Programm am Handy) läuft eine Prüfung durch Claude weiter; nur Seite zu und Bildschirmwechsel brechen sie ab.
     const onVis = () => {
-      if (document.visibilityState === 'hidden') flush();
+      if (document.visibilityState === 'hidden') void run.leave(false);
     };
     window.addEventListener('pagehide', flush);
     document.addEventListener('visibilitychange', onVis);
@@ -184,6 +185,8 @@ export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }
     case 'card':
     case 'band':
       return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
+    case 'use':
+      return null;
   }
 }
 

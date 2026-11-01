@@ -2,7 +2,12 @@ import { addDays, dayKey, dayStartOf, daysBetween, logError, logWarn } from '../
 import { teachOf } from '../content';
 import { lexOf } from '../data/lex';
 import { vocabModuleMarkSchema } from '../data/schemas';
-import { freezeDay, replayDraft, type VocabDeps, writeAnswer, writeIntro, writeProbe } from '../data/store';
+import { addLater, dropLater, freezeDay, markLife, replayDraft, type UseDoc, readUseDoc, type VocabDeps, writeAnswer, writeIntro, writeProbe, writeUse } from '../data/store';
+import type { UseLater } from '../data/schemas';
+import { applyUse, EV_MIN_LV, type UseInput, type UseResult } from '../domain/apply';
+import { openWhys, answerOfUse, type UseModel, modelOfUse } from '../domain/use';
+import { type FirstVerdict, milder } from '../prompts/common';
+import { type ExtraFix, isEvade, type WordJudgement } from '../prompts/judge';
 import type { Band } from '../domain/band';
 import { Catalog } from '../domain/catalog';
 import type { Check, CheckDict } from '../domain/check';
@@ -36,6 +41,8 @@ export type LearnView =
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
+  /** Anwenden oder eigener Satz (Großpaket A S5c, Bilder s2-07 … s2-12); `later` = Nachprüfung eines gemerkten Textes (nur Belege). */
+  | { k: 'use'; m: UseModel; task: Task; n: number; left: number; text: string; spoken: boolean; st: UseState; later: UseLater | null }
   /** `fresh` neue Wörter, `review` geplante Wiederholungen, `extra` Übung ohne Planwirkung (je Wort einmal gezählt); `sum` = Abschluss-Übersicht. */
   | { k: 'done'; n: number; fresh: number; review: number; extra: number; sum: DoneSummary | null };
 
@@ -59,6 +66,56 @@ export type DoneSummary = {
   today: string;
 };
 
+/**
+ * Wirkung je Wort in Worten (Bild s2-08 „Zählt als Wiederholung …“): `up` rückt weiter · `soon` kommt bald wieder · `none` ohne Planwirkung.
+ * `ev` = eigene, geprüfte Sätze für Stufe 7 nach dieser Buchung (nur ab Stufe 5, sonst `null`); `evNew` = dieser zählt dazu.
+ */
+export type UseRow = WordJudgement & { path: string; head: string; fx: 'up' | 'soon' | 'none'; ev: number | null; evNew: boolean };
+
+/**
+ * Zustand der Anwenden-Karte: schreiben (mit Fehlertext nach einem fehlgeschlagenen Prüfen, Knopf „Erneut versuchen“) → Claude prüft →
+ * Urteil je Wort (Erklärungen falsch vor fast richtig, höchstens zwei offen; „Nochmal selbst schreiben“ und dann erst die bessere Fassung;
+ * „War das auch richtig?“ einmal) · ohne Claude: Muster und Selbstvergleich (`later` = „Später prüfen lassen“ gewählt).
+ */
+export type UseState =
+  | { s: 'write'; fail: string | null }
+  | { s: 'checking' }
+  | {
+      s: 'judged';
+      rows: UseRow[];
+      open: string[];
+      extra: ExtraFix | null;
+      fixed: string;
+      fixedUnsure: boolean;
+      better: string;
+      reveal: boolean;
+      redo: string | null;
+      recheck: 'can' | 'busy' | 'done' | 'failed';
+    }
+  | { s: 'self'; later: boolean };
+
+/** Fehler beim Prüfen, schon eingeordnet (die Oberfläche übersetzt `AiFailure`): abgebrochen · Claude fehlt (Muster) · später erneut (Text). */
+/** Fehlschlag der Prüfung: abgebrochen, Claude nicht nutzbar (→ Selbstvergleich) oder „Erneut versuchen“ (mit Text-Schlüssel). */
+export class UseFail extends Error {
+  constructor(
+    readonly kind: 'cancelled' | 'noai' | 'retry',
+    readonly key: string | null = null,
+  ) {
+    super(`use-check: ${kind}`);
+    this.name = 'UseFail';
+  }
+}
+/** Urteil von Claude, je Zielwort in der Reihenfolge der Ziele (`key` w1 …). */
+export type UseVerdicts = { words: WordJudgement[]; extra: ExtraFix | null; fixed: string; fixedUnsure: boolean; better: string };
+export type UseQuery = { m: UseModel; text: string; spoken: boolean; first: FirstVerdict[] | null };
+/** KI-Tor für Anwenden, von außen (wortschatz.tsx): `ready` = Claude nutzbar; `check` wirft `UseFail`. */
+export type UseAi = { ready(): boolean; check(q: UseQuery, signal: AbortSignal): Promise<UseVerdicts> };
+
+const isUseFail = (e: unknown): e is UseFail => e instanceof UseFail;
+
+/** Gemerkte Texte („Später prüfen lassen“), die eine Runde am Anfang zeigt, höchstens so viele. */
+export const LATER_PER_ROUND = 2;
+
 /** Kleiner Speicher für den Entwurf (im Browser `lx:vm-pending`; Tests geben eine Map hinein). */
 export type DraftStore = { get(): string | null; set(v: string): void; remove(): void };
 
@@ -72,6 +129,10 @@ export type LearnEnv = {
   readDay: () => Promise<Doc | null>;
   now: () => number;
   meaningOf?: (w: string) => string | null;
+  /** Claude für Anwenden und eigenen Satz (fehlt = nie bereit: Muster und Selbstvergleich). */
+  ai?: UseAi;
+  /** `vmod/use` frisch lesen (Alltags-Lage, „Später prüfen lassen“); fehlt = leer. */
+  readUse?: () => Promise<Doc | null>;
 };
 
 export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, Doc]>; profile: Doc | null; schema: Doc | null; paths?: string[] };
@@ -159,6 +220,17 @@ export class LearnRun {
   private day: string | null = null;
   private reported = false;
   private endFn: ((r: RoundReport) => void) | null = null;
+  /** `vmod/use` beim Start (Alltag dieser Woche, gemerkte Texte). */
+  private useDoc: UseDoc = { life: null, later: [] };
+  /** Gemerkte Texte, die diese Runde zuerst prüft (nur mit Claude). */
+  private laterQ: UseLater[] = [];
+  /** Wörter mit heute gezähltem Beleg (je Wort höchstens einer am Tag, apply.ts). */
+  private readonly evToday = new Set<string>();
+  /** Laufende Prüfung (Abbruch beim Verlassen) und Schreibzeit des Textes. */
+  private useCtl: AbortController | null = null;
+  private useMs = 0;
+  /** Angezeigte Anwenden-Karte schon gebucht (Weiter und Verlassen zugleich). */
+  private useBooked = false;
 
   constructor(private readonly env: LearnEnv) {}
 
@@ -221,17 +293,20 @@ export class LearnRun {
     this.sbGate = s.profile?.sbGate ?? null;
     const items = [];
     let i = 0;
+    // Eigener Satz (Stufe 5/6) nur, wenn Claude ihn prüfen kann (forms.ts `available('own')`); sonst die Grundformen.
+    const ai = this.aiReady();
     for (const [path, doc] of s.docs) {
       const lex = lexOf(doc);
       if (!lex || doc.hidden === true) continue;
       this.docs.set(path, doc);
       // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
       const tc = teachOf(headOf(path, doc));
-      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null });
+      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null, av: { de: true, ai } });
     }
     const cat = new Catalog(items);
     this.cat = cat;
     await this.replay();
+    await this.loadUse();
     const nowMs = this.env.now();
     this.day = dayKey(nowMs);
     // freezeDay nimmt den heutigen Plan unverändert, wenn er schon steht (auch von einem anderen Gerät).
@@ -266,6 +341,26 @@ export class LearnRun {
     };
   }
 
+  private aiReady(): boolean {
+    try {
+      return !!this.env.ai?.ready();
+    } catch (err) {
+      logError('vocab:use-ai', err);
+      return false;
+    }
+  }
+
+  /** `vmod/use` lesen; gemerkte Texte kommen am Anfang der Runde dran, wenn Claude bereit ist (älteste zuerst). */
+  private async loadUse(): Promise<void> {
+    if (!this.env.readUse) return;
+    try {
+      this.useDoc = readUseDoc(await this.env.readUse());
+    } catch (err) {
+      logError('vocab:use-read', err);
+    }
+    this.laterQ = this.aiReady() ? this.useDoc.later.slice(0, LATER_PER_ROUND) : [];
+  }
+
   /** „Los geht's“ auf dem Start-Bildschirm: erste Karte. */
   begin(): void {
     if (this.view.k === 'start') this.advance();
@@ -294,12 +389,24 @@ export class LearnRun {
     const run = this.run;
     const cat = this.cat;
     if (!run || !cat) return;
+    while (this.laterQ.length) if (this.showLater(this.laterQ.shift()!)) return;
     for (let i = 0; i < SKIP_MAX; i++) {
       const nowMs = this.env.now();
       const task = run.next(nowMs);
       if (!task) {
         this.set(this.doneView());
         return;
+      }
+      if (task.form === 'transfer' || task.form === 'own') {
+        const m = this.useFor(task, nowMs);
+        if (m) {
+          this.shownAt = nowMs;
+          this.useBooked = false;
+          this.set({ k: 'use', m, task, n: this.n, left: run.remaining(), text: '', spoken: false, st: { s: 'write', fail: null }, later: null });
+          return;
+        }
+        run.done(task, nowMs);
+        continue;
       }
       const card = this.cardFor(task);
       if (card) {
@@ -319,6 +426,242 @@ export class LearnRun {
     if (!doc || !lex) return null;
     const head = task.path.startsWith('chunk/') ? doc.en : doc.word;
     return cardOf({ task, doc, lex, teach: teachOf(typeof head === 'string' ? head : ''), nowMs: this.env.now(), sbGate: this.sbGate, avoid: this.lastSent.get(task.path) ?? null });
+  }
+
+  private lookup = (path: string) => {
+    const doc = this.docs.get(path);
+    const lex = this.cat?.get(path)?.lex;
+    return doc && lex ? { doc, lex, teach: teachOf(headOf(path, doc)) } : null;
+  };
+
+  private useFor(task: Task, nowMs: number): UseModel | null {
+    return modelOfUse({ task, lookup: this.lookup, nowMs, sbGate: this.sbGate, lastLife: this.useDoc.life });
+  }
+
+  /** Gemerkten Text zur Prüfung zeigen (Rahmen und Lage wie beim Schreiben; Wörter, die es nicht mehr gibt, fallen weg). */
+  private showLater(it: UseLater): boolean {
+    const paths = it.w.map(([p]) => p);
+    const task: Task = { path: paths[0]!, form: it.form, step: 0, intro: false, planned: false, why: 'later', ...(it.form === 'transfer' ? { group: paths } : {}), sent: '-', cue: false };
+    const m = this.useFor(task, it.t);
+    if (!m) return false;
+    this.useBooked = false;
+    this.set({ k: 'use', m: { ...m, frame: it.frame, sit: it.sit, evidence: true }, task, n: this.n, left: this.run?.remaining() ?? 0, text: it.text, spoken: it.spoken, st: { s: 'write', fail: null }, later: it });
+    return true;
+  }
+
+  /** Stufe beim Schreiben: beim gemerkten Text die gemerkte, sonst die jetzige. */
+  private lvAt(v: Extract<LearnView, { k: 'use' }>, path: string): number {
+    const kept = v.later?.w.find(([p]) => p === path);
+    return kept ? kept[1] : (this.cat?.get(path)?.lex.lv ?? 0);
+  }
+
+  /** Verwendung je Ziel aus dem Urteil (Zeit `t + i`, damit jeder Verlaufseintrag eigen ist). */
+  private inputs(v: Extract<LearnView, { k: 'use' }>, words: readonly WordJudgement[], t: number): { path: string; u: UseInput }[] {
+    const out: { path: string; u: UseInput }[] = [];
+    v.m.targets.forEach((tg, i) => {
+      const w = words.find((x) => x.key === tg.key);
+      if (!w) return;
+      out.push({
+        path: tg.path,
+        u: { t: t + i, form: v.m.form, v: w.v, err: w.err, at: w.at, evade: isEvade(w), spoken: v.spoken, lvAt: this.lvAt(v, tg.path), evidenceOnly: v.m.evidence || !!v.later, evDone: this.evToday.has(tg.path) },
+      });
+    });
+    return out;
+  }
+
+  /** Rein gerechnete Wirkung je Wort (gebucht wird dasselbe beim Weiter auf dem frischen Dokument). */
+  private rowsOf(v: Extract<LearnView, { k: 'use' }>, words: readonly WordJudgement[], t: number): UseRow[] {
+    const rows: UseRow[] = [];
+    for (const { path, u } of this.inputs(v, words, t)) {
+      const lex = this.cat?.get(path)?.lex;
+      const w = words.find((x) => x.key === v.m.targets.find((tg) => tg.path === path)?.key)!;
+      const tg = v.m.targets.find((x) => x.path === path)!;
+      const r: UseResult | null = lex ? applyUse(lex, u, planCtxOf(this.cat!, this.med, path, u.t, this.cfg!, v.task.planned && !u.evidenceOnly)) : null;
+      const g = r?.grade ?? null;
+      rows.push({ ...w, path, head: tg.head, fx: g === null ? 'none' : g >= 3 ? 'up' : 'soon', ev: u.lvAt >= EV_MIN_LV && r ? r.lex.ev.o : null, evNew: !!r?.ev });
+    }
+    return rows;
+  }
+
+  private judged(v: Extract<LearnView, { k: 'use' }>, out: UseVerdicts, t: number): Extract<UseState, { s: 'judged' }> {
+    const rows = this.rowsOf(v, out.words, t);
+    return { s: 'judged', rows, open: [...openWhys(rows)], extra: out.extra, fixed: out.fixed, fixedUnsure: out.fixedUnsure, better: out.better, reveal: false, redo: null, recheck: 'can' };
+  }
+
+  /** Text prüfen lassen (Anwenden-Karte). Ohne Claude: Muster und Selbstvergleich; Fehler: Text bleibt, „Erneut versuchen“. */
+  useCheck(text: string, spoken: boolean, m: Measured): void {
+    const v = this.view;
+    if (v.k !== 'use' || (v.st.s !== 'write' && v.st.s !== 'self') || !text.trim()) return;
+    this.useMs = Math.max(0, Math.round(m.ms));
+    const base = { ...v, text: v.later ? v.later.text : text.trim(), spoken: v.later ? v.later.spoken : spoken };
+    const ai = this.env.ai;
+    if (!ai || !this.aiReady()) {
+      this.set({ ...base, st: { s: 'self', later: false } });
+      return;
+    }
+    this.set({ ...base, st: { s: 'checking' } });
+    void this.ask(base, null).then(
+      (out) => {
+        const cur = this.view;
+        if (cur.k !== 'use' || cur.task !== v.task || cur.st.s !== 'checking') return;
+        this.set({ ...cur, st: this.judged(cur, out, this.env.now()) });
+      },
+      (f: UseFail) => {
+        const cur = this.view;
+        if (cur.k !== 'use' || cur.task !== v.task || cur.st.s !== 'checking') return;
+        this.set({ ...cur, st: f.kind === 'noai' ? { s: 'self', later: false } : { s: 'write', fail: f.kind === 'retry' ? (f.key ?? 'aiFailed') : null } });
+      },
+    );
+  }
+
+  private async ask(v: Extract<LearnView, { k: 'use' }>, first: FirstVerdict[] | null): Promise<UseVerdicts> {
+    this.useCtl?.abort();
+    const ctl = new AbortController();
+    this.useCtl = ctl;
+    try {
+      return await this.env.ai!.check({ m: v.m, text: v.text, spoken: v.spoken, first }, ctl.signal);
+    } catch (err) {
+      if (isUseFail(err)) throw err;
+      logError('vocab:use-check', err);
+      throw new UseFail('retry');
+    } finally {
+      if (this.useCtl === ctl) this.useCtl = null;
+    }
+  }
+
+  /** „War das auch richtig?“ (einmal): zweite Prüfung, je Wort gilt nur ein milderes Urteil. */
+  useRecheck(): void {
+    const v = this.view;
+    if (v.k !== 'use' || v.st.s !== 'judged' || v.st.recheck !== 'can' || this.useBooked) return;
+    const st = v.st;
+    const first: FirstVerdict[] = st.rows.map((r) => ({ key: r.key, v: r.v, err: r.err, why: r.why }));
+    this.set({ ...v, st: { ...st, recheck: 'busy' } });
+    const done = (patch: Partial<Extract<UseState, { s: 'judged' }>>) => {
+      const cur = this.view;
+      if (cur.k !== 'use' || cur.task !== v.task || cur.st.s !== 'judged') return;
+      this.set({ ...cur, st: { ...cur.st, ...patch } });
+    };
+    void this.ask(v, first).then(
+      (out) => {
+        const words = st.rows.map((r) => {
+          const second = out.words.find((w) => w.key === r.key);
+          const keep: WordJudgement = { key: r.key, v: r.v, err: r.err, at: r.at, why: r.why };
+          return second ? milder(keep, second) : keep;
+        });
+        const rows = this.rowsOf(v, words, this.env.now());
+        done({ rows, open: [...openWhys(rows)], recheck: 'done' });
+      },
+      (f: UseFail) => done({ recheck: f.kind === 'cancelled' ? 'can' : 'failed' }),
+    );
+  }
+
+  /** „Nochmal selbst schreiben“: zweiter eigener Versuch (bucht nichts), danach die korrigierte und die bessere Fassung. */
+  useRedo(text: string): void {
+    const v = this.view;
+    if (v.k !== 'use' || v.st.s !== 'judged' || !text.trim()) return;
+    this.set({ ...v, st: { ...v.st, redo: text.trim(), reveal: true } });
+  }
+
+  /** „Bessere Fassung zeigen“ ohne zweiten Versuch. */
+  useReveal(): void {
+    const v = this.view;
+    if (v.k === 'use' && v.st.s === 'judged' && !v.st.reveal) this.set({ ...v, st: { ...v.st, reveal: true } });
+  }
+
+  /** Ohne Claude: „Später prüfen lassen“ an/aus (gemerkt wird beim Weiter; ein gemerkter Text bleibt ohnehin in der Liste). */
+  useLater(on: boolean): void {
+    const v = this.view;
+    if (v.k === 'use' && v.st.s === 'self' && !v.later) this.set({ ...v, st: { s: 'self', later: on } });
+  }
+
+  /** Gemerkten Text verwerfen (Nachprüfung): aus der Liste nehmen, weiter. */
+  useDrop(): void {
+    const v = this.view;
+    if (v.k !== 'use' || !v.later || v.st.s === 'checking') return;
+    const t = v.later.t;
+    this.useBooked = true;
+    this.chain = this.chain.then(async () => {
+      try {
+        await dropLater(this.env.deps, t);
+      } catch (err) {
+        logError('vocab:use-later', err);
+      }
+    });
+    this.advance();
+  }
+
+  /** Anwenden-Karte buchen (einmal): Urteil je Wort → Entwurf und Buchung; ohne Claude nichts außer „später prüfen“. */
+  private bookUse(v: Extract<LearnView, { k: 'use' }>): void {
+    if (this.useBooked) return;
+    this.useBooked = true;
+    this.useCtl?.abort();
+    const deps = this.env.deps;
+    const cat = this.cat!;
+    const cfg = this.cfg!;
+    const jobs: (() => Promise<unknown>)[] = [];
+    if (v.st.s === 'judged') {
+      const t0 = this.env.now();
+      const drafts: Draft[] = [];
+      for (const { path, u } of this.inputs(v, v.st.rows, t0)) {
+        const lex = cat.get(path)?.lex;
+        if (!lex) continue;
+        const planned = v.task.planned && !u.evidenceOnly;
+        const r = applyUse(lex, u, planCtxOf(cat, this.med, path, u.t, cfg, planned));
+        if (r.lex !== lex) cat.set(path, r.lex);
+        if (r.ev) this.evToday.add(path);
+        if (!this.lv0.has(path)) this.lv0.set(path, lex.lv);
+        if (r.grade === 1) this.slips.add(path);
+        const d: Draft = { v: 1, kind: 'use', path, planned, a: answerOfUse(u, lex.k, this.useMs, !!v.later), u };
+        drafts.push(d);
+        jobs.push(async () => {
+          await writeUse(deps, path, d.a, u, { cfg, cat, med: this.med, planned });
+          writeDrafts(this.env.drafts, readDrafts(this.env.drafts).filter((x) => !(x.path === d.path && x.a.t === d.a.t && x.kind === 'use')));
+        });
+      }
+      writeDrafts(this.env.drafts, [...readDrafts(this.env.drafts), ...drafts]);
+      if (v.later) {
+        const t = v.later.t;
+        jobs.push(() => dropLater(deps, t));
+      }
+    } else if (v.st.s === 'self' && v.st.later && !v.later) {
+      const item: UseLater = { t: this.env.now(), form: v.m.form, frame: v.m.frame, sit: v.m.sit, text: v.text.slice(0, 1200), spoken: v.spoken, w: v.m.targets.map((x) => [x.path, Math.max(0, Math.min(7, x.lv))] as [string, number]) };
+      jobs.push(() => addLater(deps, item, item.t));
+    }
+    if (!v.later && v.m.frame === 'life' && v.st.s !== 'write' && v.st.s !== 'checking') {
+      const day = dayKey(this.env.now());
+      this.useDoc = { ...this.useDoc, life: day };
+      jobs.push(() => markLife(deps, day));
+    }
+    for (const job of jobs)
+      this.chain = this.chain.then(async () => {
+        try {
+          await job();
+        } catch (err) {
+          // Entwürfe bleiben im Browser und werden beim nächsten Start nachgebucht.
+          logError('vocab:book-use', err);
+        }
+      });
+  }
+
+  /** Weiter auf der Anwenden-Karte: buchen, zählen, nächste Karte. Ohne Prüfung (noch beim Schreiben) geht es nicht weiter. */
+  private useNext(v: Extract<LearnView, { k: 'use' }>): void {
+    if (v.st.s === 'write' || v.st.s === 'checking') return;
+    this.bookUse(v);
+    const now = this.env.now();
+    if (this.shownAt !== null) this.activeMs += Math.min(CARD_MS_MAX * 2, Math.max(0, now - this.shownAt));
+    this.shownAt = now;
+    if (v.later) {
+      this.advance();
+      return;
+    }
+    // Die Pflicht zählt auch ohne Claude (Bild s2-09); die Wörter zählen nur mit geprüftem Urteil.
+    this.n += 1;
+    if (v.st.s === 'judged') {
+      for (const r of v.st.rows) (v.task.planned && !v.m.evidence ? this.tally.review : this.tally.extra).add(r.path);
+      if (v.st.rows.every((r) => r.v === 'ok')) this.right += 1;
+    }
+    this.run?.done(v.task, now);
+    this.advance();
   }
 
   /** Tipp (Anfang + Wortzahl): zählt als Hilfe. */
@@ -393,7 +736,7 @@ export class LearnRun {
   /** „Warum heute?“ der gezeigten Karte (Menü „…“), aus dem Lexem vor der Antwort; erst beim Öffnen gerechnet. */
   reason(): Reason | null {
     const v = this.view;
-    if (v.k !== 'card' && v.k !== 'band') return null;
+    if (v.k !== 'card' && v.k !== 'band' && v.k !== 'use') return null;
     return reasonOf(v.task, this.cat?.get(v.task.path)?.lex ?? null, this.env.now());
   }
 
@@ -452,6 +795,11 @@ export class LearnRun {
 
   /** Weiter: buchen (einmal), Bestand und Runde nachführen, nächste Karte. */
   next(): void {
+    const v = this.view;
+    if (v.k === 'use') {
+      this.useNext(v);
+      return;
+    }
     const p = this.pending;
     const run = this.run;
     const cat = this.cat;
@@ -565,8 +913,17 @@ export class LearnRun {
     }
   }
 
-  /** Beim Verlassen (Bildschirmwechsel, `pagehide`, `visibilitychange`): offene Antwort sofort buchen, ohne weiterzugehen. */
-  leave(): Promise<void> {
+  /**
+   * Beim Verlassen (Bildschirmwechsel, `pagehide`, `visibilitychange`): offene Antwort sofort buchen, ohne weiterzugehen. `abort = false`
+   * (nur im Hintergrund): eine laufende Prüfung durch Claude läuft weiter.
+   */
+  leave(abort = true): Promise<void> {
+    const v = this.view;
+    if (v.k === 'use') {
+      // Ein gezeigtes Urteil und „Später prüfen lassen“ werden gebucht; eine laufende Prüfung bricht beim Bildschirmwechsel ab (A6 Nr. 2).
+      if (v.st.s === 'judged' || (v.st.s === 'self' && v.st.later)) this.bookUse(v);
+      else if (abort) this.useCtl?.abort();
+    }
     if (this.pending) this.book(this.pending);
     return this.chain;
   }

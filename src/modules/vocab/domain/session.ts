@@ -166,7 +166,7 @@ export class SessionRun {
     const planned = !!l && !s.evidence && s.form !== 'contrast' && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
     const sent = FORM_SPEC[s.form].sent;
     const cue = sent === 's' && FORM_SPEC[s.form].track === 'b' && (l?.lv ?? 1) <= CUE_MAX_LV;
-    return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned || s.form === 'contrast' ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };
+    return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned || s.form === 'contrast' || s.evidence ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };
   }
 
   /** Nächste Aufgabe oder `null` (Runde zu Ende; offene Lernschritte bleiben in `lex.step` für die nächste Runde des Lerntags). */
