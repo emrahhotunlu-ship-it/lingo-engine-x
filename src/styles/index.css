@@ -46,8 +46,8 @@
    Iris ist 0,56/0,18 (Nora, 28.10.2026): weiße Knopfschrift wie in der freigegebenen Vorschau (≥ 4,5:1 in Dunkel und Hell). Nur Gedämpft
    nimmt Iris 0,62/0,16 mit dunkler Knopfschrift (Weiß hielte dort, aber Iris 0,56 nicht 3:1 auf dem gedämpften Grund). Bernstein liegt im
    Farbton ≥ 25° von „fast richtig“ (near) entfernt.
-   Hauptknopf (--act-btn/--act-btn-fg, D5 nach Emrahs Wahl vom 31.10.2026): überall gleich der Handlungsfarbe mit ihrer Knopfschrift, nur in
-   Gedämpft mit WEISSER Schrift auf etwas dunklerer Iris 0,53/0,16 (≥ 4,5:1, tests/unit/contrast.test.ts).
+   Hauptknopf (--act-btn/--act-btn-fg): überall gleich der Handlungsfarbe mit ihrer Knopfschrift, auch in Gedämpft (Emrah 01.11.2026:
+   kräftigere Fläche ≥ 3:1 mit dunkler Schrift statt weißer Schrift auf dunklerer Iris; tests/unit/contrast.test.ts).
    Weitere Abweichungen von der Vorschau nur, wo 4,5:1 (Text) bzw. 3:1 (Bedienelement) sonst nicht hält: Dunkel fg-3; Gedämpft
    line-2, fg-2, fg-3, act-text, ok, near, bad, ch-words und die weichen Füllungen; Hell fg-3, ok, near, bad, ch-words. Bernstein und Hell + Bernstein nach Nora (28.10.2026). */
 
@@ -107,8 +107,8 @@
   --fg-3: oklch(0.76 0.014 268);
   --act: oklch(0.62 0.16 275);
   --act-fg: oklch(0.16 0.03 275);
-  --act-btn: oklch(0.53 0.16 275);
-  --act-btn-fg: oklch(0.99 0.005 275);
+  --act-btn: oklch(0.62 0.16 275);
+  --act-btn-fg: oklch(0.16 0.03 275);
   --act-text: oklch(0.83 0.1 275);
   --act-soft: oklch(0.62 0.16 275 / 0.18);
   --ok: oklch(0.82 0.15 155);

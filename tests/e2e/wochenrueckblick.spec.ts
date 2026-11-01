@@ -105,12 +105,12 @@ test.describe('Handy 390: Verhalten', () => {
     expect(calls).toBe(0);
   });
 
-  test('Mit sample: Claudes Text einmal, in der Karte; „Für deinen Lehrer“ bleibt eine einzige Karte', async ({ page }) => {
+  test('Mit sample: Claudes Text einmal, in der Karte; „Für deine Lehrkraft“ bleibt eine einzige Karte', async ({ page }) => {
     await openReview(page);
     await expect(page.getByTestId('weekly-text')).toBeVisible();
     await expect(page.getByTestId('wk-claude')).toHaveCount(1);
     await expect(page.getByTestId('wk-teacher')).toHaveCount(1);
-    await expect(page.getByText('Für deinen Lehrer')).toHaveCount(1);
+    await expect(page.getByText('Für deine Lehrkraft')).toHaveCount(1);
     const n = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null }> } }).__LINGO_FAKE__.sampleCalls.filter((c) => c.id === 'weekly-report').length);
     expect(n).toBe(1);
   });

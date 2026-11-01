@@ -20,7 +20,7 @@ export const vgDe = {
   vgErrorsCh_one: '{n} offen in diesem Kapitel',
   vgErrorsCh_other: '{n} offen in diesem Kapitel',
   vgErrorsChNone: 'in diesem Kapitel gerade nichts fällig',
-  vgTeacher: 'Lehrerin',
+  vgTeacher: 'Lehrkraft',
   vgTeacherSub: 'Korrekturen aus der Stunde einfügen',
   vgJourney: 'C1-Reise ansehen',
   vgJourneySub: 'Alle Kapitel als Route, mit deinem Stand',

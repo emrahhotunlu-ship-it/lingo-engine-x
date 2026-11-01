@@ -23,7 +23,7 @@ export const patternsDe = {
   ptOpen: 'Ansehen',
   ptRuleOnly: 'Die Regel gibt es nur auf {lang}. „Neu erkennen“ schreibt sie in deiner Sprache.',
   ptFocusTitle: 'Wochenfokus',
-  ptFocusLead: 'Daran arbeitest du diese Woche mit der App und deinem Lehrer.',
+  ptFocusLead: 'Daran arbeitest du diese Woche mit der App und deiner Lehrkraft.',
   ptStandLine: 'Wochenfokus: {list}',
   ptClose: 'Zurück zu „Fortschritt“',
   ptDrillTitle: 'Kurzdrill',

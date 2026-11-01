@@ -675,3 +675,15 @@ Emrah: „Bitte wenn die Unterchats … fertig [sind], ab jetzt nur noch von hie
 - Die laufenden Unterchats V2, D5, VB laufen zu Ende; danach keine neuen. Der Hauptchat baut selbst und setzt nur gezielt Helfer/Prüfer ein (ersetzt die Unterchat-Regeln vom 30./31.10.).
 - Ablauf je Paket: verfeinern/planen → Kurzplan an Emrah (Bild, Fragen im Pop-up) → nach OK bauen → Prüftore → Test-Link mit Klick-Anleitung → Emrahs Review → nächstes Paket. „Test-Link 7“ als Sammel-Link entfällt zugunsten von Test-Links je Paket.
 - Ziel, Roadmap und Emrahs Vorgaben stehen dauerhaft in `docs/umbau/kompass.md` (nach jeder Komprimierung zuerst lesen).
+
+## 01.11.2026 – Offene Fragen V2 und D5 (Emrah, Frage-Dialog)
+- **V2 (alle wie empfohlen):** (1) wechselnde Beispielsätze bleiben, die Trefferquote wird erst nach 4 Wochen echter Antworten geprüft (getrennt nach neuem und gewohntem Satz) und dann nachgesteuert; (2) „haltbare Wörter bei gleicher Lernzeit ≥ heute“ wird **im neuen Satz** gemessen und gilt damit als erreicht; (3) die 14-Tage-Vorschau mit Bestand wird in V4 neu gemessen und ist bis dahin kein Hindernis; (4) „ohne Satz“ 27–29 % beim Start mit Bestand wird hingenommen.
+- **D5:** (1) das Schloss bei späteren Kapiteln sperrt nicht („noch nicht dran“, „Kapitel vorziehen“ bleibt, wie empfohlen); (2) **Gedämpft-Hauptknopf: Fläche kräftiger, dafür dunkle Schrift** (ersetzt die Wahl „Weiß“ vom 31.10.); (3) **überall „Lehrkraft“** statt „Lehrer“/„Lehrerin“ (deutsche Oberfläche).
+
+## 01.11.2026 – V3 freigegeben, VB-Fragen 1–3 (Emrah, Frage-Dialog, alle wie empfohlen)
+- **Plan V3** (Lernkarte, Band, Sitzung, Start/Abschluss; Helfer learning-scientist, english-teacher, data-guard, ux-reviewer, platform-guard, debugger nur bei Rot; `code-review` einmal vor dem Test-Link) **so bauen**. Reihenfolge: Daten absichern → Karte/Band → Sitzung → Start/Abschluss → Prüfen → Lerntag → Test-Link.
+- **Neues Wort:** erst kurz selbst versuchen, dann aufdecken; „Kenne ich schon“ mit kurzer Probe.
+- **Band:** mit Buchstaben-Vergleich, Warum, 2 Wortpartnern und „Kommt wieder: …“ (etwa zwei Zeilen höher als die Vorschau).
+- **Wörter-Zeit auf Heute:** Schätzung („ca. 14 Min.“), keine feste Zeit.
+- VB-Fragen 4–6 (Spur „Selbst schreiben“, „Später prüfen lassen“, früher planen bei niedriger Behaltensrate) kommen mit dem Kurzplan V4.
+- Emrah 01.11.: **vor jedem Paket ein Refinement** (wie, mit welchen Agenten und Skills, was es bringt, wie es aussieht) **vor** Bildern und Fragen.

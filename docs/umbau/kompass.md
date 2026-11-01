@@ -23,7 +23,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 |---|---|---|---|
 | ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | zusammengeführt in `claude/umbau-fokus` (01.11.); alle Unterchats beendet |
 | 1 | **Test-Link** | Stand bis D5 (Heute, Übungsseite, Grammatik neu) zum Review; offene Fragen V2 (4) und D5 (3) im Frage-Dialog | **Test-Link v76 `1793511636-3a76` (01.11.)**, wartet auf Emrahs Review |
-| 2 | V3 | Wörter: Lernkarte, Sitzung, Abschluss (Bilder Satz 1 vorher abgesegnet; 6 VB-Fragen mit dem Kurzplan) | |
+| 2 | V3 | Wörter: Lernkarte, Sitzung, Abschluss (Bilder Satz 1 vorher abgesegnet; 6 VB-Fragen mit dem Kurzplan) | **freigegeben 01.11.** (Plan + VB 1–3 wie empfohlen), Bau läuft |
 | 3 | V4 | Wörter: Anwenden, Wort-Detail, Übersicht (Bilder Satz 2 vorher) | |
 | 4 | V5 | Wörter: C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus | |
 | 5 | D6a, D6b | Praxis/Fortschritt; Fragen-Blatt/Ausfälle im neuen Design | |
@@ -34,7 +34,7 @@ Reihenfolge darf Emrah jederzeit ändern. Jedes Paket durchläuft §2 „Paket f
 
 ## 4. Ablauf je Paket (Hauptchat)
 1. **Verfeinern:** Plan-Abschnitt, Funktionsliste (Datei:Zeile), offene Punkte; Helfer nur zum Lesen/Prüfen.
-2. **Kurzplan an Emrah:** was, warum, wie es aussieht (Bild, wenn sichtbar), Fragen im Pop-up. Erst nach OK bauen.
+2. **Refinement an Emrah (Pflicht, Emrah 01.11.):** was, warum, was es bringt, wie es aussieht (Bild), **wie ich vorgehe, mit welchen Agenten und Skills**, was sich nicht ändert, offene Risiken – ZUERST als Text; erst danach Bilder und Fragen im Pop-up. Erst nach OK bauen.
 3. **Bauen** auf `claude/umbau-fokus`, kleine Commits, früh pushen.
 4. **Prüfen:** `verify:fast`, betroffene Specs, Prüfer (learning-scientist/english-teacher bei Übungen/Inhalten, ux-reviewer bei Bildschirmen, data-guard bei Daten, platform-guard vor Test-Link). Gesamtlauf `npm run verify` vor dem Test-Link.
 5. **Test-Link** (`AXHkh6…`, mit `db`, `sample`, `downloads`), Bericht in drei Teilen (A2), Lerntag-Durchlauf vorher.

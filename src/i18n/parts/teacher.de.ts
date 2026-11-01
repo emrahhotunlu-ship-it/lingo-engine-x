@@ -2,11 +2,11 @@
 
 export const teacherDe = {
   tfEyebrow: 'Nach der Stunde',
-  tfTitle: 'Lehrer-Feedback einfügen',
-  tfEntryLabel: 'Lehrer-Feedback einfügen',
-  tfEntrySub: 'Aus Notizen deines Lehrers werden Karten und eine Übung',
-  tfIntro: 'Füge ein, was dein Lehrer dir gesagt hat – Wörter, Korrekturen, Übungsideen. Die App macht daraus Karten und eine Übung.',
-  tfPlaceholder: 'Notizen, Chat-Nachrichten oder Korrekturen deines Lehrers einfügen …',
+  tfTitle: 'Feedback der Lehrkraft einfügen',
+  tfEntryLabel: 'Feedback der Lehrkraft einfügen',
+  tfEntrySub: 'Aus Notizen deiner Lehrkraft werden Karten und eine Übung',
+  tfIntro: 'Füge ein, was deine Lehrkraft dir gesagt hat – Wörter, Korrekturen, Übungsideen. Die App macht daraus Karten und eine Übung.',
+  tfPlaceholder: 'Notizen, Chat-Nachrichten oder Korrekturen deiner Lehrkraft einfügen …',
   tfProcess: 'Verarbeiten',
   tfNoAi: 'Zum Verarbeiten braucht es Claude. Ohne Claude erkennt die App nur einfache Zeilen „Wort – Bedeutung“.',
   tfFallbackTitle: 'Gefundene Wörter',
@@ -17,9 +17,9 @@ export const teacherDe = {
   tfCorrectionsTitle: 'Korrekturen',
   tfCorrectionsApply: 'Als Fehlersätze übernehmen',
   tfRepairSaved: 'Als Fehlersätze gespeichert.',
-  tfTasksTitle: 'Übungsideen vom Lehrer',
+  tfTasksTitle: 'Übungsideen der Lehrkraft',
   tfPractice: 'Jetzt üben',
   tfEmpty: 'In diesem Text war nichts zu finden.',
-  vcFromTeacher: 'Lehrer-Feedback',
+  vcFromTeacher: 'Feedback der Lehrkraft',
   vcFromTeacherGo: 'Feedback nach einer Stunde einfügen',
 };

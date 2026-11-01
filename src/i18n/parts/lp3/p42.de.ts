@@ -10,7 +10,7 @@ export const pxP42De = {
   pxGtStReady: 'Bereit. Etwa 12 Minuten, ohne Hilfen. Sie ist ein Extra und ändert weder deine Serie noch deine Pflicht.',
   pxGtStPassed: 'Bestanden am {d}.',
   pxGtStPause: 'Neuer Versuch ab {d}. Bis dahin kannst du die Themen weiter üben.',
-  pxGtStSpent: 'Alle Versuche sind verbraucht. Sprich mit deinem Lehrer über das Kapitel, dann schauen wir gemeinsam weiter.',
+  pxGtStSpent: 'Alle Versuche sind verbraucht. Sprich mit deiner Lehrkraft über das Kapitel, dann schauen wir gemeinsam weiter.',
   pxGtStSoon: 'Für dieses Kapitel gibt es noch keine Prüfung.',
   pxGtStTopics: 'Sie wird bereit, sobald du alle Themen des Kapitels kennengelernt hast.',
   pxGtStSettle: 'Sie wird bereit, wenn die letzte Einführung zwei Wochen zurückliegt: frühestens ab {d}.',

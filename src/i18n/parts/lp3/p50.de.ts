@@ -2,7 +2,7 @@
 
 export const moP50De = {
   moWkEntry: 'Wochenrückblick',
-  moWkEntrySub: 'Neu fest, Fokus und ein Text für deinen Lehrer',
+  moWkEntrySub: 'Neu fest, Fokus und ein Text für deine Lehrkraft',
   moWkEntryAria: 'Wochenrückblick öffnen',
   moWkRange: 'KW {w} · {from} bis {to}',
   moWkLoading: 'Der Rückblick wird zusammengestellt',
@@ -20,9 +20,9 @@ export const moP50De = {
   moWkFactPattern: 'Muster neu sicher: {name}',
   moWkEmpty: 'In dieser Woche ist noch nichts neu fest geworden. Das ist in Ordnung: Wiederholen hält, was schon sitzt.',
   moWkClaudeTitle: 'Zusammenfassung von Claude',
-  moWkTeachTitle: 'Für deinen Lehrer',
+  moWkTeachTitle: 'Für deine Lehrkraft',
   moWkTeachLead: 'Ein englischer Text zum Kopieren, zum Beispiel für die nächste Stunde. Er entsteht aus deinen Zahlen, ohne Claude.',
-  moWkTeachLabel: 'Text für deinen Lehrer (Englisch)',
+  moWkTeachLabel: 'Text für deine Lehrkraft (Englisch)',
   moWkFocusTitle: 'Fokus für diese Woche',
   moWkFocusLead: 'Du wählst, was in den nächsten Tagen öfter drankommt. Der Plan von heute bleibt, die Wahl gilt ab dem nächsten Plan.',
   moWkFocusAuto: 'Die App entscheidet',

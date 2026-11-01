@@ -65,7 +65,7 @@ export const companionDe = {
   sgWordRegister: 'Formell oder locker?',
   sgWordQuiz: 'Frag mich zu diesem Wort ab',
   sgEmail: 'Hilf mir bei einer E-Mail',
-  sgPreply: 'Was soll ich meinen Lehrer fragen?',
+  sgPreply: 'Was soll ich meine Lehrkraft fragen?',
   sgWeakest: 'Übe mit mir mein schwächstes Thema',
   sgSimpler: 'Einfacher erklären',
   sgQuizMe: 'Frag mich ab',

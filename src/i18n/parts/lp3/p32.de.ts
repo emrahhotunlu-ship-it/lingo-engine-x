@@ -25,7 +25,7 @@ export const pxP32De = {
   pxChTopicAria: '{name}: {a} von {b} Mustern sicher',
   pxChWeeks: 'Etwa {n} Wochen, wenn du jeden Lerntag übst. Das ist eine Schätzung, keine Messung.',
   pxChExam: 'Das übt das Kapitel für die Prüfung',
-  pxChTeacher: 'Für deinen Lehrer',
-  pxChTeacherHelp: 'Diesen englischen Satz kannst du deinem Lehrer schicken.',
+  pxChTeacher: 'Für deine Lehrkraft',
+  pxChTeacherHelp: 'Diesen englischen Satz kannst du deiner Lehrkraft schicken.',
   pxChTeacherCopy: 'Kopieren',
 };

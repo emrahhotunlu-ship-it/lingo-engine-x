@@ -36,7 +36,7 @@ export async function addTeacherWord(w: { word: string; de: string; pos?: string
 
 /** Ausgewählte Korrekturen als Reparatur-Sätze übernehmen (vorhandenes `app/repair`). */
 export async function applyTeacherCorrections(corrections: ReadonlyArray<{ wrong: string; right: string; why: string }>, sel: readonly number[], ctx: string): Promise<boolean> {
-  const repairs = repairsFromTeacher(corrections, sel, ctx || 'Lehrer-Feedback');
+  const repairs = repairsFromTeacher(corrections, sel, ctx || 'Feedback der Lehrkraft');
   if (!repairs.length) return true;
   return saveRepairs(repairs);
 }
