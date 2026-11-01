@@ -761,3 +761,10 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - **Test-Link `AXHkh6…` v76 `1793511636-3a76`** (Rückweg v75 `1793445403-7f22` = Inhalt v74). Manifest `docs/relaunch/publish/AXHkh6.json`. Nicht live.
 - Beobachtungen (nicht behoben, für später): Heute-Endkarte „überfällig −48“ liest sich seltsam; Mustername `pp.inversion` „No sooner had … than“ deckt auch Seldom/Hardly/Never ab.
 - Offen an Emrah im Frage-Dialog: V2 (4 Fragen), D5 (3 Fragen); danach V3-Kurzplan mit VB-Bildern und 6 VB-Fragen.
+
+### 01.11.2026 – D5-Nachtrag auf dem Test-Link
+- Emrahs Antworten (Frage-Dialog): Schloss sperrt nicht; Gedämpft-Hauptknopf kräftige Iris `oklch(0.62 0.16 275)` mit dunkler Schrift (≥ 3:1 Fläche, ≥ 4,5:1 Schrift); überall „Lehrkraft“ (Grammatik-Kapitelseite, Lehrer-Feedback, Begleiter, Wochenrückblick, Satzbank). Commit `9b45e47a`.
+- Golden `metricsGolden` Teil B neu geschrieben: nur `min=` an den Heute-Zeilen ergänzt (Attribut `data-min` seit `7f5e5ac8`), Diff geprüft, Teil A unverändert.
+- Prüfungen: verify:fast grün; volles `npm run verify`: Unit 7.219/7.219, E2E 1.218 grün, 46 rot unter Volllast (33 Browser-Abstürze) → Wiederholung mit 2 Läufern 270/274, die letzten 4 (vorschau-heute/-grammatik) allein 4/4 grün: Lastwackler, kein Befund. `check:platform` FREIGABE, Budget OK, `verify:single` 25/25.
+- **Test-Link `AXHkh6…` v77 `1793534318-5906`** (Rückweg v76 `1793511636-3a76`). Manifest aktualisiert. Nicht live.
+- Nächster Schritt: V3 Schritt 1 (Daten absichern): `vlog` träge mit Verzeichnis `vmod/ix` und eigener Sicherung, Tagesplan zuerst speichern und Verschiebungen in Gruppen, Tests für `update` auf fehlendem Dokument und künftige `lex`-Versionen.

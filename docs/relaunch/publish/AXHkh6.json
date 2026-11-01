@@ -1,20 +1,20 @@
 {
   "artifact": "AXHkh6xneA4xfjpHkmy1wE",
-  "version": 76,
-  "versionId": "1793511636-3a76",
-  "label": "Test-Link bis D5",
+  "version": 77,
+  "versionId": "1793534318-5906",
+  "label": "D5-Nachtrag Knopf + Lehrkraft",
   "publishedAt": "2026-11-01",
   "rollback": {
-    "version": 75,
-    "versionId": "1793445403-7f22",
-    "note": "Inhalt wie v74 (Test-Link 1a); beim Zurückgehen die Dateien von v74 neu veröffentlichen und die neuen dieser Liste mit null entfernen"
+    "version": 76,
+    "versionId": "1793511636-3a76",
+    "note": "Test-Link bis D5 (Heute, Übungsseite, Grammatik); beim Zurückgehen die Dateien von v76 (Liste in Commit 5d4d9fad) neu veröffentlichen und die neuen dieser Liste mit null entfernen"
   },
-  "commit": "fd6e0353",
+  "commit": "7437e7b6",
   "count": 19,
-  "totalBytes": 6332188,
+  "totalBytes": 6332287,
   "files": [
-    "FilmPlayer-88hFM0U0.js",
-    "WordSky-CkQ7KXgX.js",
+    "FilmPlayer-CGTsT37j.js",
+    "WordSky-CfLK1tW8.js",
     "content-c1x-check-58b161e7.txt",
     "content-c1x-cnet-d1c83457.txt",
     "content-c1x-err-5127d3f3.txt",
@@ -27,9 +27,9 @@
     "content-c1x-place-5c940991.txt",
     "content-c1x-reg-d1c83457.txt",
     "content-c1x-wf-2aa75d35.txt",
-    "index-ChloVe82.js",
+    "index-Bo9HPqd9.js",
     "inter-latin-standard-normal-BwkfbSeq.woff2",
     "particles-CsaVnRwx.js",
-    "style-DQVO4GtT.css"
+    "style-tUcJK4FP.css"
   ]
 }
