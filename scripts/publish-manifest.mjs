@@ -26,7 +26,9 @@ export function buildManifest(entries, dir, previous) {
   }
   const out = { page: resolve(dir, 'index.html'), files, count: entries.length, totalBytes: total, note: 'Nicht mehr referenzierte Dateien früherer Versionen bleiben im Artefakt stehen (mit `null` in `files` entfernbar).' };
   if (previous && typeof previous === 'object') {
-    out.stale = Object.keys(previous.files ?? {}).filter((n) => !(n in files));
+    // Die gespeicherten Manifeste (docs/relaunch/publish/*.json) führen `files` als Liste der Namen, frisch erzeugte als Objekt.
+    const prev = Array.isArray(previous.files) ? previous.files : Object.keys(previous.files ?? {});
+    out.stale = prev.filter((n) => typeof n === 'string' && n !== 'index.html' && !(n in files));
     out.removeMap = Object.fromEntries(out.stale.map((n) => [n, null]));
   }
   return out;

@@ -92,4 +92,9 @@ describe('buildManifest', () => {
     expect(m.stale).toEqual(['a.js']);
     expect(m.removeMap).toEqual({ 'a.js': null });
   });
+  it('liest auch die gespeicherte Listen-Form der Vorversion (Namen, nicht Listenplätze)', () => {
+    const m = buildManifest([{ name: 'index.html', size: 1 }, { name: 'b.js', size: 1 }], '/d', { files: ['a.js', 'b.js'] });
+    expect(m.stale).toEqual(['a.js']);
+    expect(m.removeMap).toEqual({ 'a.js': null });
+  });
 });
