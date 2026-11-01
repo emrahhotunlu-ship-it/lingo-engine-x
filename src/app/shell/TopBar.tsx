@@ -2,6 +2,7 @@ import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { AskButton, SettingsButton } from '../../features/system/Chrome';
 import { TodayHead } from '../../features/today/TodayHead';
+import { LearnHead } from '../../features/learn/LearnHead';
 import { useNav } from '../nav';
 import { screenOf } from '../registry';
 import { openSheet } from '../sheets';
@@ -37,6 +38,8 @@ export function TopBar() {
   const tab = useNav((s) => s.tab);
   // D2 V-HEUTE: Auf „Heute“ ist der Kopf die Titelzeile der Vorschau (`phead`: „Heute“ links, „Fragen“ rechts).
   if (tab === 'today') return <TodayHead />;
+  // D5 V-GRAMMATIK: Grammatik bekommt denselben Titelkopf (Vorschau H6 `phead`: „Grammatik“ links, „Fragen“ rechts).
+  if (tab === 'learn') return <LearnHead />;
   if (tab === 'progress') {
     return (
       <div className="flex min-h-11 items-center justify-between gap-3 pt-3" data-testid="topbar">

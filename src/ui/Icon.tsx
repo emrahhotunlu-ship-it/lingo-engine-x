@@ -35,6 +35,10 @@ const paths = {
   play: 'M8 5.5v13l10.5-6.5z',
   eyeOff: 'M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.1A9.8 9.8 0 0112 5c5 0 8.5 4.5 9.5 7a13 13 0 01-2.6 3.8M6.5 6.6C4.4 8 3 10 2.5 12c1 2.5 4.5 7 9.5 7a9.6 9.6 0 004.3-1',
   flag: 'M5 21V4h11l-1.5 4L16 12H5',
+  // D5 V-GRAMMATIK (Vorschau app.js `lock`, `pen`): Schloss für „noch nicht dran“, Stift für „Lehrerin“.
+  lock: 'M7 11h10a2 2 0 012 2v5a2 2 0 01-2 2H7a2 2 0 01-2-2v-5a2 2 0 012-2zM8 11V8a4 4 0 018 0v3',
+  pen: 'M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4',
+  map: 'M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14',
   bolt: 'M13 2L4 14h7l-1 8 9-12h-7z',
   headphones: 'M4 14v-2a8 8 0 0116 0v2M4 14h3v6H4zM17 14h3v6h-3z',
   grid: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',

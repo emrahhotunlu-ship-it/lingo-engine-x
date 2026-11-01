@@ -188,26 +188,6 @@ button.lx-btn-primary:not(:disabled) {
   animation: dz-pop 420ms cubic-bezier(0.3, 1.6, 0.5, 1) 1100ms both;
 }
 
-/* ------------------------------------------------------------------ Grammatik-Weg: „Du bist hier“ leuchtet dreimal, dann ruhig (Vorschau `.halo`) */
-.dz-here {
-  position: relative;
-  isolation: isolate;
-}
-.dz-here::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  z-index: -1;
-  border-radius: 999px;
-  background: var(--lx-btn-grammar);
-  opacity: 0;
-}
-:root[data-fx='full'] .dz-here::before,
-:root[data-fx='calm'] .dz-here::before {
-  animation: dz-halo 2.4s ease-in-out 3 both;
-  filter: blur(6px);
-}
-
 /* ------------------------------------------------------------------ Übung: Fortschritt, Urteil, Antwort (EE B13, M1, M3) */
 /* Der Fortschrittsbalken trägt die Bereichsfarbe (Vorschau `.track i` = `--tc`), sonst Smaragd. */
 html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {

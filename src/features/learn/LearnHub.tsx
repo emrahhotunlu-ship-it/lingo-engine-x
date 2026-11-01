@@ -1,68 +1,31 @@
-import { motion } from 'framer-motion';
-import { useMemo, useState, type ReactNode } from 'react';
-import { useClock } from '../../app/clock';
+import { useState } from 'react';
+import { flags } from '../../app/flags';
 import { useNav } from '../../app/nav';
 import { openSheet } from '../../app/sheets';
 import { entriesFor } from '../../app/registry';
-import { useLive } from '../../data/live';
-import { fehlersaetzeDue, fixAll, fixToday, grammarErrorsDue } from '../../domain/metrics';
-import { canIntroduce, INTRO_BLOCK_ERRORS, introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
-import { startUnitDuty } from '../unit/run';
-import { rankTopics } from '../../domain/grammar/tasks';
+import { Slot } from '../../app/slots';
+import { pathTopics } from '../../domain/grammar/path';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
-import { Button } from '../../ui/Button';
-import { ChannelIcon } from '../../ui/Card';
+import { Disclosure } from '../../ui/Disclosure';
 import { Icon } from '../../ui/Icon';
-import { DURATION, EASE_OUT } from '../../ui/motion';
+import { VRow } from '../../ui/v';
 import { useCompanionSee } from '../companion/seeing';
-import { useToday } from '../today/state';
-import { TabTitle } from '../system/Chrome';
 import { TopicSheet } from '../grammar/GrammarScreen';
 import { PathList } from '../grammar/PathList';
-import { startGrammar } from '../grammar/session';
-import { topicName } from '../grammar/topicUi';
-import { Slot } from '../../app/slots';
-import { chapterRunOn, flags } from '../../app/flags';
-import { programChapters } from '../../domain/c1/chapters';
-import type { ChapterCursor, TopicPhase } from '../../domain/c1/cursor';
-import type { MessageKey } from '../../i18n';
-import { chapterBtnKey, cursorPrep, startChapter, useChapterNow } from '../c1/chapterRun';
-import { Disclosure } from '../../ui/Disclosure';
+import { useChapterNow } from '../c1/chapterRun';
+import { ChapterList } from './ChapterList';
+import { useFix } from './fix';
+import { HereCard } from './HereCard';
 
-// Reiter „Grammatik“ (Gesamtkonzept 3.4, UX-Ziel Kap. 3.3): Weiter-Karte („Als Nächstes: Thema · n Min.“, ein Knopf),
-// der Pfad aller Themen in Lehrreihenfolge B2 → C1 mit Zustand je Thema, die Zeile „Fehler korrigieren · n fällig“
-// und die Zeile „Extra“. Nichts ist gesperrt. Pflicht steht auf „Heute“ (Kap. 2.6).
+// Reiter „Grammatik“ (Relaunch Teil 1c, D5 V-GRAMMATIK; Vorschau H6 `path` screens.js:468–480, L4 desk.js:238–248). Aufbau wie die Vorschau:
+// Kopf „Grammatik“ (vom Rahmen, `LearnHead`), Karte „Du bist hier“ mit dem EINEN Hauptknopf, die Kapitelliste „Dein Weg zu C1“ und leise
+// „Mehr üben, freiwillig“. Das Kapitel-Detail steht am Laptop ab 1.280 px in der Kontextspalte (`LearnContext`), sonst auf eigener Seite.
+// Sternbild/C1-Reise und Programmkarte fallen auf der Wurzel weg; die Reise ist über das Kapitel-Detail erreichbar (Seite `journey`).
+// Alle bisherigen Einstiege bleiben (Funktionsliste im Bericht D5): Einstufung (Slot `grammar.foot`), „Fehler korrigieren“, Nachschlagen
+// (Regeln, Deutsch-Fallen, Suche), die vollständige Themenliste (eingeklappt) mit Themenblatt, Extra und die Einstiege anderer Bereiche.
 
-const item = {
-  hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
-};
-
-type Doc = Record<string, unknown>;
-const EMPTY = new Map<string, Doc>();
-
-/** Eine Zeilenform für „öffnen“ (visuelle Regel 6): Symbol links, Titel + Nebenzeile, Pfeil rechts. */
-function Row({ icon, title, sub, onClick, testId, badge }: { icon: ReactNode; title: string; sub?: string; onClick: () => void; testId: string; badge?: string | null }) {
-  return (
-    <li>
-      <button type="button" onClick={onClick} data-testid={testId} className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong">
-        {icon}
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="font-medium">{title}</span>
-          {sub && <span className="text-sm text-muted">{sub}</span>}
-        </span>
-        {badge && <span className="flex-none rounded-full bg-gold-soft px-2.5 py-0.5 text-xs font-medium text-gold-text">{badge}</span>}
-        <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-      </button>
-    </li>
-  );
-}
-
-/** Einstiege anderer Bereiche auf dem Platz `learn` ohne eigene Gruppe (z. B. „Lehrer-Feedback einfügen“): nichts geht verloren. */
-// Kapitel-Arbeit (K5): Text und Knopf der Weiter-Karte je Phase des Kapitel-Cursors.
-const K_LINE: Record<TopicPhase, MessageKey> = { intro: 'pxKNextIntro', practice: 'pxKNextPractice', test: 'pxKNextTest', done: 'pxKNextDone' };
-
+/** Einstiege anderer Bereiche auf dem Platz `learn` (z. B. „Lehrer-Feedback einfügen“): nichts geht verloren. */
 function ForeignRows() {
   const { t } = useT();
   const api = useHiddenInput();
@@ -70,204 +33,85 @@ function ForeignRows() {
   const list = entriesFor('learn');
   if (!list.length) return null;
   return (
-    <motion.section variants={item} className="flex flex-col gap-3" aria-label={t('nbLernenHubTraining')}>
-      <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]">
-        {list.map((e) => (
-          <Row
-            key={e.id}
-            icon={<ChannelIcon channel="grammar"><Icon name={e.icon} /></ChannelIcon>}
-            title={t(e.label)}
-            sub={e.sub ? t(e.sub) : ''}
-            onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)}
-            testId={e.id}
-          />
-        ))}
-      </ul>
-    </motion.section>
+    <>
+      {list.map((e) => (
+        <VRow key={e.id} icon={e.icon} title={t(e.label)} sub={e.sub ? t(e.sub) : undefined} onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)} data-testid={e.id} />
+      ))}
+    </>
   );
 }
 
 export function LearnHub() {
-  const { t, lang } = useT();
+  const { t } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
-  const now = useClock((s) => s.now);
-  const today = useClock((s) => s.today);
-  const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
-  const repairDoc = useLive((s) => s.docs['app/repair']);
   const [open, setOpen] = useState<string | null>(null);
   const program = flags.program;
+  const fix = useFix();
+  const { cursor } = useChapterNow();
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
-
-  // „Als Nächstes“: das eine neue Thema des Tages (Pfadreihenfolge, wenn die Bremse es erlaubt), sonst das schwächste begonnene Thema.
-  const planGt = useToday((s) => s.plan?.u?.gt);
-  const next = useMemo(() => {
-    // Gibt es einen Plan von heute mit eingefrorenem Grammatikthema (`u.gt`), gilt nur dieser Wert, nie eine Neuberechnung (Lernplattform 2.0 §2.3).
-    const intro = planGt ? planGt.intro : introTopic(docs, today, now);
-    if (intro) return { id: intro, fresh: true };
-    const ranked = rankTopics({ grammarDocs: docs, nowMs: now, seed: today, introduce: null });
-    const id = ranked[0]?.topic ?? pathTopics()[0];
-    return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
-  }, [docs, now, today, planGt]);
-  // Eine Quelle je Zahl (`domain/metrics/today`): alle fälligen Fehlersätze, die Zahl auf dem Knopf (heute) und die Grammatikfehler der Bremse.
-  const plan = useToday((s) => s.plan);
-  const fixOpen = useToday((s) => s.duties.items.some((d) => d.id === 'ch:u-again' && d.state === 'open'));
-  const nDue = useMemo(() => fixAll(fehlersaetzeDue({ grammarDocs: docs, repairDoc, nowMs: now, today })), [docs, repairDoc, now, today]);
-  // Genau die Zahl der Sätze, die der Knopf „Fehlersätze korrigieren“ startet (Schritt 4 von heute oder die freiwillige Runde).
-  const nToday = fixToday({ plan, fixDue: nDue });
-
-  // Bremse wegen vieler fälliger Fehlersätze: ruhiger Hinweis mit Grund (kein Vorwurf).
-  const braked = useMemo(() => canIntroduce(docs, today, now), [docs, today, now]);
-  const nBrake = braked.ok ? 0 : braked.reason === 'errors' ? grammarErrorsDue({ grammarDocs: docs, nowMs: now, today }) : 0;
-  const brakeActive = !braked.ok && braked.reason === 'errors' && nDue > 0;
-
-  // Kapitel-Arbeit (K5): Mit gewähltem oder abgeleitetem Kapitel kommt „Als Nächstes“ aus demselben Cursor wie „Du bist hier“ (keine Bremse,
-  // nichts gesperrt). Der Knopf startet die Runde der Phase (Einführung, Übung oder Themen-Test).
-  const chapterNowRes = useChapterNow();
-  const cursor: ChapterCursor | null = chapterRunOn() && program ? chapterNowRes.cursor : null;
-  // Themen-Test in Vorbereitung (zu wenig Testaufgaben, dieselbe Auswahl wie beim Start): Der Knopf startet eine Übung, die Karte sagt das.
-  const prep = useMemo(() => cursorPrep(cursor, docs), [cursor, docs]);
-
-  const startNext = () => {
-    if (!next) return;
-    const first = startGrammar({ mode: 'topic', topic: next.id });
-    // Ein neues Thema beginnt mit der Mini-Lektion, dort gibt es noch keine Tastatur.
-    if (first === 'typed' && !next.fresh) api.focusNow();
-    go({ name: 'grammarSession', mode: 'topic', topic: next.id });
-  };
-
-  const startErrors = () => {
-    // Schritt 4 von heute noch offen: Pflicht starten; sonst die freiwillige Runde mit derselben Grenze.
-    if (fixOpen && startUnitDuty('ch:u-again', api)) return;
-    go({ name: 'repairRound' });
-  };
-
-  const chapterCard = cursor ? (
-    <section className="flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5" aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={cursor.topic ?? ''} data-chapter={cursor.n} data-phase={cursor.phase}>
-      <p id="lh-next" className="lx-eyebrow">
-        {t('nbLernenNextEyebrow')}
-      </p>
-      <p className="text-lg font-semibold tracking-tight">{t('pxKNext', { n: cursor.n, topic: cursor.topic ? topicName(cursor.topic, lang) : (programChapters()[cursor.chapter]?.name[lang] ?? '') })}</p>
-      <p className="text-sm text-muted" data-testid="hub-next-line">
-        {prep ? t('pxKTestPrep') : t(cursor.phase === 'test' && cursor.retry ? 'pxKNextRetry' : K_LINE[cursor.phase], { n: cursor.phase === 'intro' ? TOPIC_ROUND_MIN + 1 : TOPIC_ROUND_MIN })}
-      </p>
-      {(cursor.phase !== 'done' || cursor.chapter + 1 < programChapters().length) && (
-        <div>
-          <Button variant="primary" iconAfter="arrowRight" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase} data-prep={prep ? 'true' : undefined}>
-            {t(chapterBtnKey(cursor, prep))}
-          </Button>
-        </div>
-      )}
-    </section>
-  ) : null;
-
-  // In der C1-Reise ohne eigenen Auftritt: die Reise steht bei Effekt-Stufe „Aus“ still (keine Animation in `program-map`).
-  const nextCard = chapterCard ?? (next ? (
-    <motion.section variants={program ? undefined : item} className={program ? 'flex flex-col gap-3 rounded-[0.875rem] border border-line bg-surface-solid p-3.5' : 'lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5'} aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
-        <p id="lh-next" className="lx-eyebrow">
-          {t('nbLernenNextEyebrow')}
-        </p>
-        <p className="text-lg font-semibold tracking-tight">{topicName(next.id, lang)}</p>
-        <p className="text-sm text-muted">{next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}</p>
-        {brakeActive ? (
-          <>
-            <div>
-              <Button variant="primary" iconAfter="arrowRight" onClick={startErrors} data-testid="hub-next-start" data-action="fix" data-n={nToday}>
-                {t('hxLearnFixBtn', { n: nToday })}
-              </Button>
-            </div>
-            <p className="text-sm text-muted" data-testid="hub-intro-brake">
-              {t('hxLearnBrake', { limit: INTRO_BLOCK_ERRORS, n: nBrake })}
-            </p>
-            <div>
-              <button type="button" onClick={startNext} className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text hover:underline" data-testid="hub-next-anyway">
-                {t('hxLearnAnyway', { topic: topicName(next.id, lang) })}
-              </button>
-            </div>
-          </>
-        ) : (
-          <div>
-            <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start" data-action="topic">
-              {next.fresh ? t('hxLearnStartNew') : t('nbLernenNextStart')}
-            </Button>
-          </div>
-        )}
-      </motion.section>
-  ) : null);
-  const highlight = cursor ? cursor.topic : (next?.id ?? null);
+  const highlight = cursor?.topic ?? null;
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
-      <motion.div variants={item}>
-        <TabTitle title={t('lhTitle')} />
-      </motion.div>
-
-      {/* Mit Programm steht die Weiter-Karte in der C1-Reise unter „Du bist hier“ (UX-Prüfung B2: eine rote Linie, ein Hauptknopf). */}
-      <Slot name="grammar.head" props={{ next: nextCard }} />
-
-      {!program && nextCard}
-
-      <motion.div variants={item}>
-        {nDue > 0 ? (
-          <button type="button" onClick={startErrors} className="lx-glass flex min-h-14 w-full items-center gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left transition-colors hover:bg-surface-strong" data-testid="hub-errors" data-due={nDue} data-today={nToday}>
-            <ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>
-            <span className="lx-tnum min-w-0 flex-1 font-medium">{t('hxLearnFixLine', { n: nDue, today: nToday })}</span>
-            <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-          </button>
-        ) : (
-          <p className="lx-glass flex min-h-14 items-center gap-3 rounded-[var(--radius-card)] px-4 py-3" data-testid="hub-errors-none">
-            <ChannelIcon channel="grammar"><Icon name="check" /></ChannelIcon>
-            <span className="flex min-w-0 flex-1 flex-col">
-              <span className="font-medium">{t('nbLernenFixNone')}</span>
-              <span className="text-sm text-muted">{t('nbLernenFixNoneSub')}</span>
-            </span>
-          </p>
-        )}
-      </motion.div>
+    <div className="lx-vg" data-testid="learn-hub">
+      <HereCard />
 
       <Slot name="grammar.foot" />
 
+      {program && <ChapterList />}
+
+      <div className="lx-vg-rows" data-testid="hub-errors-list">
+        {fix.nDue > 0 ? (
+          <VRow icon="refresh" title={t('nbLernenFixRow', { n: fix.nDue })} sub={t('hxLearnFixLine', { n: fix.nDue, today: fix.nToday })} onClick={() => fix.start(api)} data-testid="hub-errors" />
+        ) : (
+          <VRow icon="check" title={t('nbLernenFixNone')} sub={t('nbLernenFixNoneSub')} data-testid="hub-errors-none" />
+        )}
+        <div className="lx-v-row lx-vg-lookup" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">
+          <span className="lx-v-row-ic" aria-hidden="true">
+            <Icon name="book" size={18} />
+          </span>
+          <span className="lx-v-row-t">
+            <b>{t('hxLearnLookup')}</b>
+            <span className="lx-vg-links">
+              <button type="button" onClick={() => go({ name: 'wissen' })} className="lx-vg-link" data-testid="hub-wissen">
+                {t('hxLearnRules')}
+              </button>
+              <button type="button" onClick={() => go({ name: 'patterns' })} className="lx-vg-link" data-testid="hub-traps">
+                {t('hxLearnTraps')}
+              </button>
+              <button type="button" onClick={() => go({ name: 'grammar' })} className="lx-vg-link" data-testid="hub-lookup">
+                {t('hxLearnSearch')}
+              </button>
+            </span>
+          </span>
+        </div>
+        <ForeignRows />
+      </div>
+
       {program ? (
-        // Mit Programm zeigt die Reise die Kapitel; die vollständige Themenliste steht eingeklappt (keine doppelten Kapitelköpfe, UX-Prüfung B2).
-        <motion.section variants={item} className="flex flex-col gap-3" aria-label={t('nbLernenPathAll', { n: pathTopics().length })}>
+        // Die vollständige Themenliste bleibt eingeklappt erreichbar (kein doppelter Kapitelkopf neben der Kapitelliste).
+        <section className="lx-vg-all" aria-label={t('nbLernenPathAll', { n: pathTopics().length })}>
           <Disclosure label={t('nbLernenPathAll', { n: pathTopics().length })} testId="hub-all-topics">
             <div className="pt-3">
               <PathList onOpen={setOpen} highlight={highlight} program />
             </div>
           </Disclosure>
-        </motion.section>
+        </section>
       ) : (
-        <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="lh-path">
-          <h2 id="lh-path" className="lx-eyebrow">
+        <section className="lx-vg-all" aria-labelledby="lh-path">
+          <h2 id="lh-path" className="lx-vg-lbl lx-vg-pathlbl">
             {t('nbLernenPathTitle', { n: pathTopics().length })}
           </h2>
           <PathList onOpen={setOpen} highlight={highlight} />
-        </motion.section>
+        </section>
       )}
 
-      <motion.div variants={item} className="flex flex-col gap-3">
-        <div className="lx-glass flex min-h-14 flex-wrap items-center gap-x-1 gap-y-0 rounded-[var(--radius-card)] px-4 py-1" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">
-          <span className="flex-none font-medium">{t('hxLearnLookup')}</span>
-          <span className="flex flex-wrap items-center">
-            <button type="button" onClick={() => go({ name: 'wissen' })} className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent-text hover:underline" data-testid="hub-wissen">
-              {t('hxLearnRules')}
-            </button>
-            <button type="button" onClick={() => go({ name: 'patterns' })} className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent-text hover:underline" data-testid="hub-traps">
-              {t('hxLearnTraps')}
-            </button>
-            <button type="button" onClick={() => go({ name: 'grammar' })} className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent-text hover:underline" data-testid="hub-lookup">
-              {t('hxLearnSearch')}
-            </button>
-          </span>
-        </div>
-        <ul className="lx-glass flex flex-col overflow-hidden rounded-[var(--radius-card)]" aria-label={t('nbLernenHubErrors')} data-testid="hub-errors-list">
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="layers" /></ChannelIcon>} title={t('nbLernenExtra')} sub={t('nbLernenExtraSub')} onClick={() => openSheet('x:extra', { scope: 'grammar' })} testId="hub-extra" />
-        </ul>
-      </motion.div>
-
-      <ForeignRows />
+      <button type="button" className="lx-vg-quiet" onClick={() => openSheet('x:extra', { scope: 'grammar' })} data-testid="hub-extra">
+        {t('vgMore')}
+      </button>
 
       <TopicSheet topic={open} onClose={() => setOpen(null)} />
-    </motion.div>
+    </div>
   );
 }
+

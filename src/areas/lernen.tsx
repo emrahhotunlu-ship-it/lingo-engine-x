@@ -7,6 +7,8 @@ import { GrammarScreen } from '../features/grammar/GrammarScreen';
 import { GrammarSessionScreen } from '../features/grammar/SessionScreen';
 import { WissenScreen } from '../features/grammar/WissenScreen';
 import { LearnHub } from '../features/learn/LearnHub';
+import { ChapterPage } from '../features/learn/ChapterPage';
+import { JourneyPage } from '../features/learn/JourneyPage';
 import { PatternsScreen } from '../features/patterns/PatternsScreen';
 import { FocusScreen } from '../features/grammar/focus/FocusScreen';
 import { ensureFocus, focusResume } from '../features/grammar/focus/resume';
@@ -28,6 +30,10 @@ declare module '../app/router/types' {
   interface RouteParams {
     learn: NoParams;
     grammar: { topic?: string };
+    /** Kapitel-Detail als Seite (D5, Vorschau H6 `chapter`); `id` = Kapitel-Kennung (`k1` …). */
+    chapter: { id: string };
+    /** C1-Reise als Seite (D5): von der Wurzel des Reiters ins Kapitel-Detail verlegt. */
+    journey: NoParams;
     wissen: NoParams;
     patterns: { id?: string };
     grammarSession: { mode: 'duty' | 'xtra' | 'errors' | 'topic'; topic?: string };
@@ -55,6 +61,8 @@ export const lernen = defineArea({
     learn: { kind: 'tab', component: LearnRoot, title: 'lhTitle', keepScroll: true },
     // `grammar?topic=c1-…`: Werkzeug der Woche, 1 Tipp von „Deine Woche“ (P2 Muss 7) – öffnet das Themenblatt.
     grammar: { kind: 'page', component: GrammarScreen, title: 'grTitle', keepScroll: true, params: z.object({ topic: z.string().optional() }) },
+    chapter: { kind: 'page', component: ChapterPage, title: 'lhTitle', params: z.object({ id: z.string() }) },
+    journey: { kind: 'page', component: JourneyPage, title: 'pxMapTitle' },
     wissen: { kind: 'page', component: WissenScreen, title: 'wsTraps', keepScroll: true },
     patterns: { kind: 'page', component: PatternsScreen, title: 'ptTitle', params: z.object({ id: z.string().optional() }) },
     grammarSession: {

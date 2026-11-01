@@ -48,6 +48,7 @@ import { diktatDe } from './parts/diktat.de';
 import { vDe } from './parts/v.de';
 import { vhDe } from './parts/vh.de';
 import { vuDe } from './parts/vu.de';
+import { vgDe } from './parts/vg.de';
 
 export const de = {
   ...aiDe,
@@ -119,6 +120,7 @@ export const de = {
   ...vDe,
   ...vhDe,
   ...vuDe,
+  ...vgDe,
   // Lernplattform 3.0: Teile unter `parts/lp3/` (Glob, Präfix je Bereich)
   ...lp3De,
   appName: 'Lingo-Engine X',
