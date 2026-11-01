@@ -737,3 +737,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 
 **01.11.2026 – Emrah: keine Unterchats mehr, Paket für Paket.** V2, D5, VB laufen zu Ende, danach arbeitet nur der Hauptchat. Ablauf je Paket: verfeinern/planen → Kurzplan an Emrah zum OK → bauen → prüfen → Test-Link je Paket → Review. Neu: `docs/umbau/kompass.md` (nach jeder Komprimierung zuerst lesen), CLAUDE.md A2, Startmeldung des Sitzungs-Hooks verweist darauf.
 - verify:fast nach V1-Merge (Basis `f815c0f3`, 52 Dateien): Typprüfung, Lint, Build, e2e, perf, Plattform, Budget grün; Unit 7.098/7.099 – rot nur `read/lazy.test.ts` (Test rechnete den UTC-Kalendermonat, der Code den Lerntag mit Wechsel 04:00; rot nur 00:00–04:00 am Monatsersten). Test korrigiert, 15/15 grün. **V1 abgeschlossen.**
+
+### 01.11.2026, 01:00 – VB zusammengeführt
+- `claude/umbau-vb` → `claude/umbau-fokus` (Merge `274ede4b`): 39 Bilder (Satz 1: 26, Satz 2: 13) + 6 Vergleiche unter `docs/umbau/vokabeln/bilder/`, Bericht `docs/umbau/berichte/vb.md`. Nur Doku/Bilder, kein App-Code.
+- 6 offene Fragen (Bericht §offene_fragen) gehen mit dem Kurzplan V3 im Frage-Dialog an Emrah (Bilder dazu senden).
+- Befund 1 für den Test-Link nach D5: Hell-Modus „fast richtig“ rosa statt gelb (`color-mix(in oklch, var(--surface) 90%, var(--near))` mischt mit Weiß, Farbton 0). Nach D5-Merge in `src/styles/parts/v-uebung.css`/`band.css` auf `in srgb` prüfen und beheben.
+- V2 (zweite Prüfrunde) und D5 (ux-Nachprüfung, dann verify:fast) laufen noch.
