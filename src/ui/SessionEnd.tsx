@@ -447,7 +447,7 @@ function TilesEnd({
   right,
   total,
   ms,
-  newItems = [],
+  newItems,
   takeaways,
   next,
   secondary,
@@ -455,7 +455,7 @@ function TilesEnd({
 }: SessionEndProps) {
   const { t } = useT();
   const min = Math.max(1, Math.round(ms / 60_000));
-  const shown = newItems.slice(0, 8);
+  const shown = (newItems ?? []).slice(0, 8);
   return (
     <section
       className="lx-card flex flex-col gap-4 p-[1.125rem]"
@@ -467,7 +467,8 @@ function TilesEnd({
       <p className="sr-only" data-testid="session-end-score">
         {t("nbShEndScore", { right, total })} · {t("nbShEndMinutes", { min })}
       </p>
-      <div className="grid grid-cols-3 gap-2" aria-hidden="true">
+      {/* Die Kachel „neu“ nur, wenn der Aufrufer die neuen Wörter wirklich kennt: sonst stand dort immer „0 neu“ (Kap. 2 Nr. 2, keine Widersprüche). */}
+      <div className={newItems ? "grid grid-cols-3 gap-2" : "grid grid-cols-2 gap-2"} aria-hidden="true">
         <Tile
           value={t("nvProgress", { n: right, total })}
           label={t("nbShEndRight")}
@@ -478,11 +479,13 @@ function TilesEnd({
           label={t("nbShEndTime")}
           testId="session-end-time"
         />
-        <Tile
-          value={newItems.length}
-          label={t("nbShEndNewShort")}
-          testId="session-end-newcount"
-        />
+        {newItems && (
+          <Tile
+            value={newItems.length}
+            label={t("nbShEndNewShort")}
+            testId="session-end-newcount"
+          />
+        )}
       </div>
       {shown.length > 0 && (
         <div className="flex flex-col gap-2" data-testid="session-end-new">
