@@ -27,7 +27,7 @@ import { buildUnitStored, unitDraft, withReviewMinutes, type ReviewGoal } from '
 import { prepareDay, vocabCfg, vocabModuleOn } from '../../modules/vocab/api';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
-import { getDb } from '../../platform/capabilities';
+import { getDb, useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
 import { mergedVocab } from '../../domain/overview';
@@ -361,7 +361,11 @@ async function withVocabMinutes(plan: StoredPlan): Promise<StoredPlan> {
   const profile = useLive.getState().docs['app/profile'];
   if (!vocabModuleOn(profile)) return plan;
   try {
-    const min = await prepareDay();
+    // Claude zählt als verfügbar, solange die Laufzeit noch antwortet (`pending`); die Runde wählt die Formen beim Zeigen ohnehin neu.
+    const min = await prepareDay(() => {
+      const c = useCapabilities.getState();
+      return c.sample !== 'absent' && !c.sampleRevoked;
+    });
     return min ? withReviewMinutes(plan, Math.min(vocabCfg(profile).min, min)) : plan;
   } catch (err) {
     logError('today:vocab-day', err);

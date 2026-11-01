@@ -129,14 +129,15 @@ export async function writeProbe(deps: VocabDeps, path: string, a: Answer, o: Bo
 export async function writeUse(deps: VocabDeps, path: string, a: Answer, u: UseInput, o: BookOpts): Promise<UseResult | null> {
   const ctx = ctxOf(path, u.t, o);
   let out: UseResult | null = null;
-  await commit(deps, path, a, o.cat, (lex) => {
+  // Nur ein tatsächlich geschriebenes Ergebnis zählt (commit prüft das Schema und kann verwerfen; Code-Prüfung S9).
+  const done = await commit(deps, path, a, o.cat, (lex) => {
     if (lex.sync >= u.t) return null;
     const r = applyUse(lex, u, ctx);
     // Auch ohne Note und Beleg gilt die Verwendung als gebucht (der Entwurf ist damit erledigt, kein zweiter Verlaufseintrag).
     out = r.lex.sync >= u.t ? r : { ...r, lex: { ...r.lex, sync: u.t } };
     return out;
   });
-  return out;
+  return done ? out : null;
 }
 
 /** Offenen Entwurf aus dem Browser nachbuchen (nur wenn das Lexem ihn noch nicht kennt, `draftOpen`). */

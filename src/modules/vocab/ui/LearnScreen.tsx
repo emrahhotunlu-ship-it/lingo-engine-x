@@ -86,9 +86,10 @@ function liveLexDocs(): { docs: [string, Record<string, unknown>][]; profile: Re
  * Tagesplan der Wörter vorab einfrieren, sobald Heute einen neuen Tagesplan anlegt (Befund ux 4b Nr. 1): Heute nennt dann dieselben Minuten
  * wie der Start der Runde. `null` = nicht möglich (kein Schreibpfad, Schalter aus, Umrechnung offen, Fehler).
  */
-export async function prepareDay(): Promise<number | null> {
+export async function prepareDay(aiReady?: () => boolean): Promise<number | null> {
   if (useLive.getState().status !== 'ready') return null;
-  const run = createRun();
+  // Code-Prüfung S9: der Plan rechnet Formen und Minuten mit Claude, wenn Claude in dieser Ansicht erwartbar ist (fragt hier nie).
+  const run = createRun(aiReady ? { ready: aiReady, ask: () => Promise.reject(new Error('prepare: no ask')), fail: () => ({ kind: 'noai', key: null }) } : undefined);
   return run ? run.prepare(liveLexDocs()) : null;
 }
 
