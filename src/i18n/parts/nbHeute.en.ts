@@ -27,6 +27,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteWhy_reviewOne: '1 card · due first',
   nbHeuteWhy_reviewBehind: '{n} cards · catching up',
   nbHeuteWhy_reviewBehindOne: '1 card · catching up',
+  nbHeuteWhy_vocabMod: 'Due words, with new ones mixed in',
   nbHeuteWhy_reviewNone: 'Due cards and new words',
   nbHeuteWhy_check: '12 items on the week',
   nbHeuteWhy_focus: 'Your corrections and typical mistakes',

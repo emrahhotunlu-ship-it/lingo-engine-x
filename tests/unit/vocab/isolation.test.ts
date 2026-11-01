@@ -111,7 +111,17 @@ describe('Wörter-Modul: Isolation', () => {
     // V1: nur die Datenschicht (Schemas für COLLECTIONS). V3 Schritt 1: Zählung (reads) und Sicherung (snapshot) der trägen Sammlung vlog über registry.
     // Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
     // V3 Schritt 2b-2: der Bereich Wortschatz bindet den Lernbildschirm über api.loadScreens() (nachgeladen) an.
-    expect(touching.sort()).toEqual(['src/areas/wortschatz.tsx', 'src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/data/writer.ts']);
+    // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab.
+    expect(touching.sort()).toEqual([
+      'src/areas/wortschatz.tsx',
+      'src/data/paths.ts',
+      'src/data/reads.ts',
+      'src/data/snapshot.ts',
+      'src/data/writer.ts',
+      'src/features/today/TodayScreen.tsx',
+      'src/features/today/state.ts',
+      'src/features/today/store.ts',
+    ]);
   });
 
   it('Gegenprobe: die Regeln erkennen Verstöße', () => {

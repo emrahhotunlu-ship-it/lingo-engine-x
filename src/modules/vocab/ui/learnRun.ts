@@ -10,7 +10,7 @@ import { buildDayPlan, type DayPlan } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
-import { type SessionKind, SessionRun, type Task } from '../domain/session';
+import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
 import type { FormStats, Lex, VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
@@ -153,6 +153,10 @@ export class LearnRun {
   private readonly slips = new Set<string>();
   private activeMs = 0;
   private shownAt: number | null = null;
+  private right = 0;
+  private day: string | null = null;
+  private reported = false;
+  private endFn: ((r: RoundReport) => void) | null = null;
 
   constructor(private readonly env: LearnEnv) {}
 
@@ -196,6 +200,7 @@ export class LearnRun {
       this.cat = cat;
       await this.replay();
       const nowMs = this.env.now();
+      this.day = dayKey(nowMs);
       let plan: DayPlan | null = null;
       if (s.kind === 'pflicht') {
         // freezeDay nimmt den heutigen Plan unverändert, wenn er schon steht (auch von einem anderen Gerät).
@@ -436,6 +441,7 @@ export class LearnRun {
     this.shownAt = now;
     if (!this.lv0.has(p.card.path)) this.lv0.set(p.card.path, p.before.lv);
     if (p.kind === 'answer' && p.result.grade === 1) this.slips.add(p.card.path);
+    if (p.kind === 'answer' && (p.result.grade ?? 0) > 1 && p.check.outcome !== 'unfair') this.right += 1;
     const failedProbe = p.kind === 'probe' && p.check.outcome !== 'ok';
     // Nicht bestandene Probe und die folgende Einführung sind eine Karte (Zähler und Fortschritt zählen sie einmal; UX-Prüfung V3 Nr. 7).
     if (!failedProbe) this.n += 1;
@@ -508,6 +514,33 @@ export class LearnRun {
       tomorrow,
       today,
     };
+  }
+
+  /**
+   * Rundenende einmal melden: beim Abschluss (`partial = false`) oder beim Verlassen mitten in der Runde (`partial = true`).
+   * `null`, wenn schon gemeldet, die Runde nie lief oder (beim Verlassen) noch keine Karte beantwortet ist.
+   */
+  report(partial: boolean): RoundReport | null {
+    if (this.reported || !this.day || !this.run) return null;
+    if (partial && this.n < 1) return null;
+    this.reported = true;
+    return { kind: this.kind, day: this.day, n: this.n, right: this.right, activeMs: this.activeMs, partial };
+  }
+
+  /** Empfänger des Rundenendes (Heute, Serie); die Oberfläche setzt ihn. */
+  onEnd(fn: ((r: RoundReport) => void) | null): void {
+    this.endFn = fn;
+  }
+
+  /** Rundenende melden (höchstens einmal, siehe `report`) und an den Empfänger geben. */
+  end(partial: boolean): void {
+    const r = this.report(partial);
+    if (!r || !this.endFn) return;
+    try {
+      this.endFn(r);
+    } catch (err) {
+      logError('vocab:round-end', err);
+    }
   }
 
   /** Beim Verlassen (Bildschirmwechsel, `pagehide`, `visibilitychange`): offene Antwort sofort buchen, ohne weiterzugehen. */

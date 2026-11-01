@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } fr
 import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT } from '../sharedUi';
 import { addDays, logError, toUSText } from '../shared';
 import { checkDict } from '../content';
-import type { SessionKind } from '../domain/session';
+import type { RoundReport, SessionKind } from '../domain/session';
 import { VMOD_DAY_PATH } from '../registry';
 import { LearnCard } from './LearnCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
@@ -59,7 +59,10 @@ function meaningOf(w: string): string | null {
 /** Obere Übungsleiste (✕, Fortschritt, Pflicht/Extra): kommt vom Bereich, weil das Modul `features/learn` nicht kennt (Isolation). */
 export type LearnTop = (p: { onClose: () => void; progress: { n: number; total: number } | null; ctx: 'duty' | 'extra' }) => ReactNode;
 
-export function LearnScreen({ kind: routeKind, renderTop }: { kind: SessionKind; renderTop?: LearnTop }) {
+/** Rundenende und „Fertig“: kommen vom Bereich (Heute, Serie, Tageseinheit), weil das Modul `features/*` nicht kennt (Isolation). */
+export type LearnHooks = { onRoundEnd?: (r: RoundReport) => void; onFinish?: () => void };
+
+export function LearnScreen({ kind: routeKind, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; renderTop?: LearnTop } & LearnHooks) {
   const { t, lang } = useT();
   // „Noch 5“ im Abschluss startet eine neue Runde (Extra) im selben Bildschirm; ein anderer Routen-Parameter beginnt von vorn.
   const [round, setRound] = useState({ base: routeKind, kind: routeKind, n: 0 });
@@ -106,9 +109,22 @@ export function LearnScreen({ kind: routeKind, renderTop }: { kind: SessionKind;
 
   const view = useSyncExternalStore(run?.subscribe ?? noSub, run?.get ?? loadingView);
 
+  // Rundenende genau einmal melden: beim Abschluss ganz, beim Verlassen des Bildschirms (✕, anderer Reiter) als Teilrunde.
+  useEffect(() => {
+    run?.onEnd(onRoundEnd ?? null);
+  }, [run, onRoundEnd]);
+  useEffect(() => {
+    if (view.k === 'done') run?.end(false);
+  }, [view, run]);
+  useEffect(() => {
+    if (!run) return;
+    return () => run.end(true);
+  }, [run]);
+
   const ctx = kind === 'pflicht' ? 'duty' : 'extra';
   const close = () => {
     void run?.leave();
+    run?.end(true);
     back();
   };
   const frame = (progress: { n: number; total: number } | null, body: ReactNode) => (
@@ -147,7 +163,7 @@ export function LearnScreen({ kind: routeKind, renderTop }: { kind: SessionKind;
           sum={view.sum}
           review={view.review + view.extra}
           onMore={() => setRound((r) => ({ ...r, kind: 'more5', n: r.n + 1 }))}
-          onToday={() => switchTab('today')}
+          onToday={() => (onFinish ? onFinish() : switchTab('today'))}
         />,
       );
     case 'card':

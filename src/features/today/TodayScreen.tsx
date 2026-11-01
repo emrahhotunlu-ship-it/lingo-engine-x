@@ -38,6 +38,7 @@ import type { UnitBlock } from '../../domain/unit/types';
 import { buildTrainCards, legacyDutyMinutes, overdueUnits, todaySummary, type TodaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { blockWhy } from '../unit/labels';
+import { vocabModuleOn } from '../../modules/vocab/api';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
@@ -353,6 +354,7 @@ export function TodayScreen() {
 
   const unit = isUnitPlan(plan) ? plan : null;
   const up = useMemo(() => (unit ? unitPlanOf(unit, null) : null), [unit]);
+  const vocabMod = vocabModuleOn(profile);
   const rows: CardRow[] = useMemo(() => {
     if (!plan) return [];
     const ur = unitRows(plan, view.duties.items);
@@ -362,7 +364,8 @@ export function TodayScreen() {
       return {
         id: r.id,
         name: dayRowName({ kind: r.kind, block: r.block, id: r.id, fmt: r.fmt }, t),
-        why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '',
+        // Neues Wörter-Modul: der Block ist eine Runde (fällige und neue Wörter), keine Kartenzahl.
+        why: b ? (b.kind === 'review' && vocabMod ? t('nbHeuteWhy_vocabMod') : blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec)) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,
         kind: r.kind,
@@ -370,7 +373,7 @@ export function TodayScreen() {
         progress: r.progress,
       };
     });
-  }, [plan, up, view.duties.items, t, lang]);
+  }, [plan, up, view.duties.items, t, lang, vocabMod]);
   // Alle Zahlen von Heute aus EINER Quelle (P5 S1-ZAHL, `metrics.todaySummary`): Ring (`fills`), „x von N“ (`done`, `total`), Restminuten (`rest`).
   const sum = useMemo(() => todaySummary({ plan, items: view.duties.items }), [plan, view.duties.items]);
 

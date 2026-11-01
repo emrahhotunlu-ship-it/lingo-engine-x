@@ -6,6 +6,7 @@ import { deriveToday, mergeEntries, type DayEntry } from '../../domain/plan/buil
 import type { DutyId, StoredPlan, TodayState } from '../../domain/plan/types';
 import type { Ctx, DutyChannel } from '../../domain/learn/types';
 import { pflichtMarked } from '../../domain/plan/pflicht';
+import { vocabModuleOn } from '../../modules/vocab/api';
 import { usePending } from '../progress/persist';
 import { useUnitRun } from '../unit/runStore';
 import { viewPlan } from './device';
@@ -54,6 +55,8 @@ function derive(s: Sources): TodayState {
     course: s.course ?? null,
     act: obj(s.profile).act,
     pending: { lessonDays: s.pending.lessonDays, rounds },
+    // Neue Wörter-App an: „Wörter“ zählt über das Rundenende des Moduls (V3 Schritt 4b), nicht über das Tagesprotokoll.
+    vocabMod: vocabModuleOn(s.profile),
   });
 }
 

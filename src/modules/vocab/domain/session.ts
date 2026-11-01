@@ -235,3 +235,9 @@ export function interleave(reviews: Slot[], fresh: Slot[]): Slot[] {
   while (f < fresh.length) out.push(fresh[f++] as Slot);
   return out;
 }
+
+/**
+ * Rundenende für Heute und die Serie (V3 Schritt 4b): einmal je Runde, beim Abschluss oder beim Verlassen (`partial`).
+ * `day` = Lerntag beim Start; `right` = Abfragen mit Note > 1; `activeMs` = aktive Zeit (je Karte gedeckelt).
+ */
+export type RoundReport = { kind: SessionKind; day: string; n: number; right: number; activeMs: number; partial: boolean };

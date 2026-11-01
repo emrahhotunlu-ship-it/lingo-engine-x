@@ -187,6 +187,11 @@ export type DeriveInput = {
   act?: unknown;
   /** Noch nicht bestätigt Gespeichertes (live ⊕ Puffer, Kap. 2.2). */
   pending?: { lessonDays: readonly string[]; rounds: ReadonlyArray<{ day: string; act: string; partial: boolean }> };
+  /**
+   * Neue Wörter-App an (`vcfg.mod = 1`, V3 Schritt 4b): „Wörter“ ist erledigt, sobald eine Pflichtrunde des Moduls ganz beendet ist
+   * (`act[tag].review ≥ 1`, live ⊕ Puffer). Das Modul schreibt kein Tagesprotokoll; die Kartenzahl des alten Plans gilt dann nicht.
+   */
+  vocabMod?: boolean;
 };
 
 /**
@@ -233,18 +238,21 @@ export function deriveToday(i: DeriveInput): TodayState {
   const reviewDone = Math.min(total, reviewed.size);
   const dayAct = obj(obj(i.act)[i.day]);
   const pendingRounds = i.pending?.rounds ?? [];
+  const actDone = (key: string): boolean => (typeof dayAct[key] === 'number' && (dayAct[key]) >= 1) || pendingRounds.some((r) => r.day === i.day && r.act === key && !r.partial);
   const items: DutyState[] = i.plan.duty.map((id): DutyState => {
     let done: boolean;
     let progress: DutyState['progress'] = null;
-    if (id === 'review') {
+    if (id === 'review' && i.vocabMod) {
+      done = actDone('review') || !!i.exhausted;
+      const n = Math.max(1, total);
+      progress = { done: done ? n : 0, total: n };
+    } else if (id === 'review') {
       done = reviewDone >= total || !!i.exhausted;
       progress = { done: reviewDone, total };
     } else if (id === 'lesson') {
       done = lessonDoneOn(i.course, i.day) || !!i.pending?.lessonDays.includes(i.day);
     } else {
-      const ch = id.slice(3);
-      const live = typeof dayAct[ch] === 'number' && (dayAct[ch]) >= 1;
-      done = live || pendingRounds.some((r) => r.day === i.day && r.act === ch && !r.partial);
+      done = actDone(id.slice(3));
     }
     if (i.pflichtMarked) done = true;
     return { id, state: done ? 'done' : 'open', progress };
@@ -252,5 +260,6 @@ export function deriveToday(i: DeriveInput): TodayState {
   const doneN = items.filter((x) => x.state === 'done').length;
   const duties = { done: doneN, total: items.length, missing: items.filter((x) => x.state === 'open').map((x) => x.id), items };
   const status: TodayState['status'] = items.length === 0 ? 'nothing' : doneN >= items.length ? 'allDone' : 'open';
-  return { day: i.day, status, duties, review: { done: reviewDone, total }, extra, balance };
+  const rv = i.vocabMod ? items.find((x) => x.id === 'review')?.progress : null;
+  return { day: i.day, status, duties, review: rv ?? { done: reviewDone, total }, extra, balance };
 }

@@ -30,6 +30,7 @@ export const nbHeuteDe = {
   // Nicht „überfällig“: von den geplanten Karten ist nur ein Teil überfällig (UX-Audit U1).
   nbHeuteWhy_reviewBehind: '{n} Karten · du holst auf',
   nbHeuteWhy_reviewBehindOne: '1 Karte · du holst auf',
+  nbHeuteWhy_vocabMod: 'Fällige Wörter, neue eingestreut',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',

@@ -18,7 +18,13 @@ import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps } from '../app/registry';
 import { lazy, Suspense } from 'react';
-import { loadScreens } from '../modules/vocab/api';
+import { loadScreens, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
+import { useLive } from '../data/live';
+import { recordRoundEnd } from '../features/progress/persist';
+import { markExhausted } from '../features/today/store';
+import { useUnitRun } from '../features/unit/runStore';
+import { unitDone } from '../app/unit/done';
+import { useNav } from '../app/nav';
 import { Skeleton } from '../ui/Skeleton';
 import { ExerciseTop } from '../features/learn/ui';
 
@@ -48,11 +54,34 @@ const vlearnParams = z.object({ kind: z.enum(VLEARN_KINDS) });
 
 // Lernrunde des Wörter-Moduls: nachgeladen (eigene Teil-Datei), mit eigenem Lade-Skelett.
 const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScreen })));
+
+/**
+ * Rundenende der neuen Wörter-Runde (V3 Schritt 4b): Pflicht zählt als `act.review` (Heute „Wörter erledigt“, Serie), Extra als `cards`;
+ * Minuten, XP und Antworten über die eine Sammel-Warteschlange. Pflicht ohne Inhalt (nichts fällig, nichts neu): für heute ausgeschöpft.
+ */
+function onVlearnEnd(r: RoundReport): void {
+  const duty = r.kind === 'pflicht';
+  if (r.n < 1) {
+    if (duty && !r.partial) markExhausted(r.day);
+    return;
+  }
+  void recordRoundEnd({ day: r.day, act: duty ? 'review' : 'cards', partial: r.partial, n: r.n, right: r.right, activeMs: r.activeMs, countAs: r.n });
+}
+
+/** „Fertig“: in der Tageseinheit weiter zur Zwischenkarte (Block 1 erledigt), sonst nach Heute. */
+function onVlearnFinish(): void {
+  const run = useUnitRun.getState();
+  if (run.block === 1 && run.duty === 'review') unitDone(1);
+  else useNav.getState().switchTab('today');
+}
+
 function VlearnPage({ route }: ScreenProps<'vlearn'>) {
   return (
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
       <LearnScreen
         kind={route.kind}
+        onRoundEnd={onVlearnEnd}
+        onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
         renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} />}
       />
     </Suspense>
@@ -92,6 +121,8 @@ const reviewBlock: UnitBlockProvider = {
   kind: 'review',
   feasible: () => true,
   start: () => {
+    // Neues Wörter-Modul eingeschaltet: Block 1 ist die Pflicht-Runde des Moduls (Start-Bild, Abschluss, „Fertig“ → Zwischenkarte).
+    if (vocabModuleOn(useLive.getState().docs['app/profile'])) return { name: 'vlearn', kind: 'pflicht' };
     startSession('pflicht', { mode: 'auto', unit: true });
     const s = useSession.getState();
     return s.active ? { name: 'trainer', round: 'pflicht' } : false;

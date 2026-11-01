@@ -23,7 +23,8 @@ import { patternsOf } from '../../domain/grammar/patterns';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
-import { buildUnitStored, unitDraft, type ReviewGoal } from '../../domain/unit/plan';
+import { buildUnitStored, unitDraft, withReviewMinutes, type ReviewGoal } from '../../domain/unit/plan';
+import { vocabCfg, vocabModuleOn } from '../../modules/vocab/api';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
 import { getDb } from '../../platform/capabilities';
@@ -203,6 +204,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const profile = live.docs['app/profile'];
   const lang = useSettings.getState().lang;
   const goalMin = normGoalMin(profile?.goalMin);
+  const vocabOn = vocabModuleOn(profile);
   // Wiedereinstieg: die Neustart-Woche steht schon vor dem Plan fest (nur die Pause zählt), der Kurz-Plan nach 7–13 Tagen erst mit dem Überfälligen.
   const restart = restartActive(profile, today);
   const draft = unitDraft({ day: today, week: null, goalMin, ...(restart ? { comeback: 'restart' as const } : {}) });
@@ -225,6 +227,8 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
       // Neustart-Woche: höchstens 2 neue Wörter (Gesamtkonzept 3.2, `03` §2).
       quotaLeft: restart ? Math.min(quota, 2) : quota,
     });
+    // Neue Wörter-App: die Runde plant selbst (immer mindestens 2 neue Wörter); Block 1 entfällt nie wegen leerer alter Kartenzahl (M2).
+    if (vocabOn && review.goal < 1) review = { ...review, goal: 1 };
     const st = cardStats(all, lang, nowMs);
     facts = { ov: st.overdue, sure: st.sure };
     fest = { units: festUnits(all, nowMs), vocab: festUnits(cards, nowMs) };
@@ -248,7 +252,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const c1doc = c1raw;
   const c1 = checkPlanned(today, draft.shape, { programStarted: programStartedOf(c1doc), lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check && nextDeskForm(readC1(c1doc).checks) !== null }) ? ('check' as const) : undefined;
   const goal = fest ? nextGoal({ festUnits: fest.units, vocabFest: fest.vocab, history: profile?.history, today }) : null;
-  return buildUnitStored({
+  const stored = buildUnitStored({
     day: today,
     nowMs,
     week: null,
@@ -263,6 +267,8 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     ...(c1 && !mode ? { c1 } : {}),
     ...(goal ? { nx: goal.id } : {}),
   });
+  // Neue Wörter-App an (V3 Schritt 4b): Block 1 = die gewählte Wörter-Zeit (F5), wie der Start der Runde sie nennt.
+  return vocabOn ? withReviewMinutes(stored, vocabCfg(profile).min) : stored;
 }
 
 /** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */

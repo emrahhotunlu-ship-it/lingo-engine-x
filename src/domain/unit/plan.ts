@@ -3,7 +3,7 @@ import { fixLimitFor, GRAMMAR_N, unitPlanFor } from './planFor';
 import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs } from './types';
 import { ERRORS_PER_ROUND } from '../grammar/tasks';
 import { AGAIN_OLD } from '../repair/unit';
-import type { DutyId, GrammarDay, PatState, Step3Fmt, Step3Mode, StoredPlan, UnitMeta } from '../plan/types';
+import type { DutyId, GrammarDay, PatState, Step3Fmt, Step3Mode, StoredPlan, UnitMeta, UnitMetaBlock } from '../plan/types';
 
 /**
  * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Seit dem Abschluss von Welle 2 `2` (§10.2).
@@ -90,6 +90,24 @@ export function buildUnitStored(i: UnitBuildInput): StoredPlan {
     at: i.nowMs,
     u: metaOf(up, { ov: i.ov, sure: i.sure, ...(i.gt ? { gt: i.gt } : {}), ...(i.ps ? { ps: i.ps } : {}), ...(i.c1 && up.shape === 'sat' && up.rv === 2 ? { c1: i.c1 } : {}), ...(i.nx && up.rv === 2 ? { nx: i.nx } : {}) }),
   };
+}
+
+/**
+ * Neue Wörter-App (V3 Schritt 4b, `vcfg.mod = 1`): Block 1 dauert so lange wie die gewählte Wörter-Zeit (F5, Standard 15 Min.), damit Heute,
+ * Ring und der Start der Runde dieselben Minuten nennen. Ändert nur die Minuten von Block 1 und die Summe; ohne Block 1 bleibt der Plan gleich.
+ */
+export function withReviewMinutes(plan: StoredPlan, min: number): StoredPlan {
+  const u = plan.u;
+  if (!u || !(min > 0)) return plan;
+  const at = u.b.findIndex(([, kind]) => kind === 'review');
+  if (at < 0) return plan;
+  const m = Math.round(min);
+  const b = u.b.map((x, k): UnitMetaBlock => {
+    if (k !== at) return x;
+    const [no, kind, , args] = x;
+    return args === undefined ? [no, kind, m] : [no, kind, m, args];
+  });
+  return { ...plan, u: { ...u, b, min: b.reduce((s, x) => s + x[2], 0) } };
 }
 
 /** Ist das ein Plan der Tageseinheit? */

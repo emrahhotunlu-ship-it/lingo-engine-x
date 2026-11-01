@@ -1,5 +1,6 @@
-import { expect, test } from '@playwright/test';
-import { bootAt, layoutProblems, MIGRATED, SEED_EVENING, screen } from './fixtures';
+import { expect, test, type Page } from '@playwright/test';
+import { boot, bootAt, layoutProblems, MIGRATED, SEED_EVENING, screen } from './fixtures';
+import { TUE_9 } from './heuteHelpers';
 import { dump } from './trainerHelpers';
 
 // Wörter-Modul V3 Schritt 2b-2: neue Lernrunde (Route `vlearn`) hinter dem Schalter `vcfg.mod = 1` und der fertigen Umrechnung.
@@ -23,6 +24,19 @@ function patch(on: boolean): Record<string, Doc> {
   };
   for (const path of PATHS) p[path] = { lex: newLex() };
   return p;
+}
+
+/** Die Pflicht-Runde durchklicken: Einführungen aufdecken, Abfragen mit „Weiß ich nicht“, bis der Abschluss steht. */
+async function playRound(page: Page, base: number): Promise<void> {
+  for (let i = 0; i < 60; i++) {
+    const check = page.getByTestId('vm-check');
+    await expect(check.or(page.getByTestId('vm-done'))).toBeVisible();
+    if (await page.getByTestId('vm-done').isVisible()) return;
+    await page.clock.setFixedTime(new Date(base + (i + 1) * 60_000));
+    if ((await check.textContent()) === 'Aufdecken') await check.click();
+    else await page.getByTestId('vm-dunno').click();
+    await page.getByTestId('vm-next').click();
+  }
 }
 
 const vlogEntries = (d: Record<string, Doc>): number =>
@@ -137,6 +151,29 @@ test.describe('Handy 390', () => {
     await expect(page.locator('[data-screen="vlearn"]')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
+
+  test('Heute (V3 Schritt 4b): Block „Wörter“ startet die neue Runde; Abschluss zählt für Heute und die Serie; „Fertig“ führt in die Einheit weiter', async ({ page }) => {
+    test.setTimeout(90_000);
+    const DAY = '2026-09-22';
+    const { errors, external } = await boot(page, { migrated: false, now: TUE_9, fake: { capabilities: { sample: false }, patch: patch(true) } });
+    await screen(page, 'today');
+    await expect(page.getByTestId('start')).toHaveAttribute('data-duty', 'review');
+    await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toContainText('Fällige Wörter, neue eingestreut');
+    // Block 1 hat die Minuten der Wörter-Runde (Einstellung 15 Min.).
+    await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { u?: { b: [number, string, number][] } } | undefined)?.u?.b[0]?.slice(0, 3)).toEqual([1, 'review', 15]);
+    await page.getByTestId('start').click();
+    await screen(page, 'vlearn');
+    await expect(page.getByTestId('vm-start')).toBeVisible();
+    await page.getByTestId('vm-start-go').click();
+    await playRound(page, Date.parse(TUE_9));
+    await expect(page.getByTestId('vm-done')).toContainText('Wörter erledigt');
+    // Rundenende gespeichert: act.review (Heute „erledigt“, geräteübergreifend) und Antworten in days (Serie).
+    await expect.poll(async () => (((await dump(page))['app/profile']?.act as Record<string, Doc> | undefined)?.[DAY] ?? {}).review).toBe(1);
+    expect((((await dump(page))['app/profile']?.days as Record<string, number> | undefined)?.[DAY] ?? 0) > 0).toBe(true);
+    await page.getByTestId('vm-back').click();
+    await page.locator('[data-screen="unitCard"]').waitFor();
+    await expect(page.getByTestId('unit-between')).toHaveAttribute('data-next', /^ch:u-/);
+    expect(errors).toEqual([]);
+    expect(external).toEqual([]);
+  });
 });
-
-

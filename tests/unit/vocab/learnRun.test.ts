@@ -109,6 +109,29 @@ describe('LearnRun', () => {
     expect(s.run.get()).toMatchObject({ k: 'done', n: 1, fresh: 0, review: 1, extra: 0 });
   });
 
+  it('Rundenende (V3 Schritt 4b): einmal gemeldet mit Lerntag, Anzahl, Richtigen und aktiver Zeit; Teilrunde nur mit Antwort', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    expect(s.run.report(true)).toBeNull();
+    await s.start('pflicht');
+    // Noch keine Antwort: Verlassen meldet nichts (zählt weder für Heute noch für die Serie).
+    expect(s.run.report(true)).toBeNull();
+    const v = s.run.get();
+    if (v.k === 'start') s.run.begin();
+    const c = s.run.get();
+    expect(c.k).toBe('card');
+    if (c.k !== 'card') return;
+    s.run.check(c.card.answer, { ms: 5000, fk: 1500 });
+    s.run.next();
+    await s.run.settled();
+    expect(s.run.get().k).toBe('done');
+    const r = s.run.report(false);
+    expect(r).toMatchObject({ kind: 'pflicht', day: '2026-11-02', n: 1, right: 1, partial: false });
+    expect(r!.activeMs).toBeGreaterThan(0);
+    // Genau einmal: ein späteres Verlassen meldet nichts mehr.
+    expect(s.run.report(true)).toBeNull();
+    expect(s.run.report(false)).toBeNull();
+  });
+
   it('„Warum heute?“: fällige Karte nennt Fälligkeit, letzten freien Abruf und Stufe mit Spur', async () => {
     const s = setup(learned(T0 - 10 * D));
     await s.start('pflicht');

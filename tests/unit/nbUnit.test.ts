@@ -4,7 +4,7 @@ import { deriveToday, readPlan } from '../../src/domain/plan/buildPlan';
 import { dutiesFeasible, pflichtFor, pflichtSinceGate, pflichtSinceValue, type PflichtInput } from '../../src/domain/plan/pflicht';
 import type { StoredPlan } from '../../src/domain/plan/types';
 import { applyUpdate } from '../../src/domain/srs/applyReview';
-import { buildUnitStored, unitDonePatch, unitPlanOf } from '../../src/domain/unit/plan';
+import { buildUnitStored, unitDonePatch, unitPlanOf, withReviewMinutes } from '../../src/domain/unit/plan';
 import { unitRows, minutesLeft } from '../../src/domain/unit/rows';
 import { unitPhrases } from '../../src/domain/unit/phrases';
 import { resolveBlock, unitPlanFor } from '../../src/domain/unit/planFor';
@@ -148,6 +148,36 @@ describe('Pflicht und Serie ohne Datenumbau (pflichtFor unverändert)', () => {
     expect(rows.map((r) => r.state)).toEqual(['done', 'done', 'now', 'open']);
     // Satzbau 5 + Fehler korrigieren 3
     expect(minutesLeft(rows)).toBe(5 + 3);
+  });
+});
+
+describe('Neues Wörter-Modul in der Tageseinheit (V3 Schritt 4b)', () => {
+  it('Block 1 „Wörter“ ist erledigt, sobald die Runde gemeldet ist (act.review oder Puffer ohne Teilrunde) – nicht über Kartenzahlen', () => {
+    const p = build(MON);
+    const open = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: {}, vocabMod: true });
+    expect(open.duties.items.find((x) => x.id === 'review')).toMatchObject({ state: 'open', progress: { done: 0, total: 12 } });
+    const live = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: { [MON]: { review: 1 } }, vocabMod: true });
+    expect(live.duties.items.find((x) => x.id === 'review')).toMatchObject({ state: 'done', progress: { done: 12, total: 12 } });
+    expect(live.review).toEqual({ done: 12, total: 12 });
+    const partial = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: {}, vocabMod: true, pending: { lessonDays: [], rounds: [{ day: MON, act: 'review', partial: true }] } });
+    expect(partial.duties.items.find((x) => x.id === 'review')?.state).toBe('open');
+    const buffered = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: {}, vocabMod: true, pending: { lessonDays: [], rounds: [{ day: MON, act: 'review', partial: false }] } });
+    expect(buffered.duties.items.find((x) => x.id === 'review')?.state).toBe('done');
+    // Ohne Inhalt (Runde endet sofort): für heute ausgeschöpft.
+    const empty = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: {}, vocabMod: true, exhausted: true });
+    expect(empty.duties.items.find((x) => x.id === 'review')?.state).toBe('done');
+  });
+
+  it('withReviewMinutes: nur Block 1 bekommt die Minuten der Wörter-Runde, die Summe folgt; ohne Block 1 unverändert', () => {
+    const p = build(MON);
+    const q = withReviewMinutes(p, 15);
+    const at = q.u!.b.findIndex(([, k]) => k === 'review');
+    expect(q.u!.b[at]![2]).toBe(15);
+    expect(q.u!.min).toBe(q.u!.b.reduce((s, x) => s + x[2], 0));
+    expect(q.u!.b.filter((_, k) => k !== at)).toEqual(p.u!.b.filter((_, k) => k !== at));
+    const none = build(MON, 25, { goal: 0, due: 0, fresh: 0, repairs: 0 });
+    expect(withReviewMinutes(none, 15)).toBe(none);
+    expect(withReviewMinutes(p, 0)).toBe(p);
   });
 });
 
