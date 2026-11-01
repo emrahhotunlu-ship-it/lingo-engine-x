@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openTab, screen, type BootOptions } from './fixtures';
-import { answerGrammar, grammarKey } from './learnHelpers';
+import { answerGrammar, grammarKey, openChapter, openJourney } from './learnHelpers';
 
 // Kapitel-Arbeit (Rückmeldung 5, `docs/umbau/kapitel-plan.md` K5): ein Hauptknopf je Kapitel, „Du bist hier“ = „Als Nächstes“, Themen-Test
 // mit „Nächstes Thema trotzdem beginnen“, nichts gesperrt. Schalter `chapterRun` (Standard an).
@@ -39,9 +39,8 @@ test.describe('Handy 390', () => {
 
   test('Kapitelblatt: ein Hauptknopf, Phase je Thema; Klick startet die Runde und speichert die Wahl; danach „Du bist hier“ = „Als Nächstes“', async ({ page }) => {
     const { errors } = await start(page);
-    await page.locator('[data-testid="program-chapter"][data-chapter="k4"] [data-testid="program-chapter-open"]').click();
-    const sheet = page.getByTestId('chapter-sheet');
-    await expect(sheet).toHaveAttribute('data-chapter', 'k4');
+    // Seit D5: die Zeile der Kapitelliste öffnet das Kapitel-Detail (Handy: eigene Seite).
+    const sheet = await openChapter(page, 'k4');
     await expect(sheet.getByTestId('chapter-start')).toHaveCount(1);
     // UX-Prüfung C: Kapitel 4 ist (noch) nicht das wirksame Kapitel → nur der Wenn-Satz, nicht „kommt aus diesem Kapitel“.
     await expect(sheet.getByTestId('chapter-daily')).toHaveAttribute('data-active', 'false');
@@ -59,12 +58,12 @@ test.describe('Handy 390', () => {
     // Relaunch P3 S1-BAND: Esc verlässt eine Übung nie; raus mit ✕.
     await page.getByTestId('round-close').click();
     await openTab(page, 'learn');
-    await expect(page.locator('[data-testid="program-chapter"][data-here="true"]')).toHaveAttribute('data-chapter', 'k4');
+    await expect(page.locator('[data-testid="path-chapter"][data-status="current"]')).toHaveAttribute('data-chapter', 'k4');
     await expect(page.getByTestId('hub-next-topic')).toHaveAttribute('data-chapter', '4');
     await expect(page.getByTestId('hub-next-topic')).toContainText('Kapitel 4 ·');
     // UX-Prüfung C/D: jetzt ist Kapitel 4 das wirksame Kapitel: Tagessatz und derselbe Knopftext wie die Weiter-Karte.
     const hubLabel = (await page.getByTestId('hub-next-start').innerText()).trim();
-    await page.locator('[data-testid="program-chapter"][data-chapter="k4"] [data-testid="program-chapter-open"]').click();
+    await openChapter(page, 'k4');
     await expect(sheet.getByTestId('chapter-daily')).toHaveAttribute('data-active', 'true');
     await expect(sheet.getByTestId('chapter-daily')).toContainText('Deine Grammatik von heute kommt aus diesem Kapitel.');
     await expect(sheet.getByTestId('chapter-start')).toHaveText(hubLabel);
@@ -73,7 +72,7 @@ test.describe('Handy 390', () => {
 
   test('Gespeicherte Wahl (app/c1.ch): Programmkarte, Weiter-Karte und markiertes Thema zeigen dasselbe Kapitel; keine Bremse', async ({ page }) => {
     const { errors } = await start(page, { fake: { patch: { 'app/c1': { v: 1, ch: { n: 3, d: '2026-09-19' }, chh: [[3, '2026-09-19']] } } } });
-    await expect(page.locator('[data-testid="program-chapter"][data-here="true"]')).toHaveAttribute('data-chapter', 'k3');
+    await expect(page.locator('[data-testid="path-chapter"][data-status="current"]')).toHaveAttribute('data-chapter', 'k3');
     const next = page.getByTestId('hub-next-topic');
     await expect(next).toHaveAttribute('data-chapter', '3');
     const topic = await next.getAttribute('data-topic');
@@ -173,9 +172,10 @@ test.describe('Handy 390', () => {
     await openTab(page, 'learn');
     await expect(page.getByTestId('hub-next-topic')).toHaveAttribute('data-topic', 'passive-plus');
     // UX-Prüfung A/B: das Thema mit bestandenem Test ist in Blatt (Zähler, Phase, Ring) und Reise „geschafft“ – dieselbe Zahl.
+    await openJourney(page);
     await expect(page.locator('[data-testid="program-chapter"][data-chapter="k4"] [data-testid="program-pats"]')).toHaveAttribute('data-done', '1');
-    await page.locator('[data-testid="program-chapter"][data-chapter="k4"] [data-testid="program-chapter-open"]').click();
-    const sheet = page.getByTestId('chapter-sheet');
+    await openTab(page, 'learn');
+    const sheet = await openChapter(page, 'k4');
     await expect(sheet.getByTestId('chapter-sheet-pats')).toHaveAttribute('data-safe', '1');
     const row = sheet.locator('[data-testid="chapter-topic"][data-topic="passive"]');
     await expect(row.getByTestId('chapter-topic-phase')).toHaveAttribute('data-phase', 'done');
@@ -186,11 +186,10 @@ test.describe('Handy 390', () => {
 
   test('Schalter aus (`chapterRun: false`): kein Kapitel-Knopf, alter Weg unverändert', async ({ page }) => {
     const { errors } = await start(page, { localStorage: { 'lx:flags': JSON.stringify({ chapterRun: false }) } });
-    await page.locator('[data-testid="program-chapter"][data-chapter="k4"] [data-testid="program-chapter-open"]').click();
-    await expect(page.getByTestId('chapter-sheet')).toBeVisible();
+    await openChapter(page, 'k4');
     await expect(page.getByTestId('chapter-start')).toHaveCount(0);
     await expect(page.getByTestId('chapter-topic-phase')).toHaveCount(0);
-    await page.keyboard.press('Escape');
+    await openTab(page, 'learn');
     await expect(page.getByTestId('hub-next-start')).toHaveAttribute('data-action', /^(topic|fix)$/);
     expect(errors).toEqual([]);
   });

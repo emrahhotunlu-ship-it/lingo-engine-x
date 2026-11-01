@@ -56,13 +56,25 @@ export function LearnHub() {
     <div className="lx-vg" data-testid="learn-hub">
       <HereCard />
 
-      <Slot name="grammar.foot" />
-
       {program && <ChapterList />}
+
+      <Slot name="grammar.foot" />
 
       <div className="lx-vg-rows" data-testid="hub-errors-list">
         {fix.nDue > 0 ? (
-          <VRow icon="refresh" title={t('nbLernenFixRow', { n: fix.nDue })} sub={t('hxLearnFixLine', { n: fix.nDue, today: fix.nToday })} onClick={() => fix.start(api)} data-testid="hub-errors" />
+          // Zeile wie `VRow`, mit den Zahlen als Attribute (Tests prüfen „n fällig · heute m“ gegen den Hauptknopf, P7).
+          <button type="button" className="lx-v-row" onClick={() => fix.start(api)} data-testid="hub-errors" data-due={fix.nDue} data-today={fix.nToday}>
+            <span className="lx-v-row-ic" aria-hidden="true">
+              <Icon name="refresh" size={18} />
+            </span>
+            <span className="lx-v-row-t">
+              <b>{t('vgErrors')}</b>
+              <span className="lx-v-num">{t('hxLearnFixLine', { n: fix.nDue, today: fix.nToday })}</span>
+            </span>
+            <span className="lx-v-row-chev" aria-hidden="true">
+              <Icon name="chevronRight" size={18} />
+            </span>
+          </button>
         ) : (
           <VRow icon="check" title={t('nbLernenFixNone')} sub={t('nbLernenFixNoneSub')} data-testid="hub-errors-none" />
         )}

@@ -3,6 +3,7 @@ import { expect, type Page } from '@playwright/test';
 import { findContext } from '../../src/domain/srs/context';
 import { boot, openTab, screen } from './fixtures';
 import { dump, writes } from './trainerHelpers';
+import { openChapter } from './learnHelpers';
 
 // Gemeinsame Helfer der Kapitelprüfung-Tests (gate.spec.ts, r4kpShots.spec.ts): Kapitel 1 bereit machen, die Prüfung mit Antworten aus dem Vorrat durchspielen.
 
@@ -48,8 +49,8 @@ export const mark = async (page: Page): Promise<number> => (await writes(page)).
 export const since = async (page: Page, n: number): Promise<string[]> => (await writes(page)).slice(n).map((w) => w.path);
 
 export async function openChapterOne(page: Page): Promise<void> {
-  await page.locator('[data-testid="program-chapter"][data-chapter="k1"] [data-testid="program-chapter-open"]').click();
-  await expect(page.getByTestId('chapter-sheet')).toBeVisible();
+  // Seit D5: Kapitel-Detail über die Kapitelliste (Handy: eigene Seite, ab 1.280 px Kontextspalte).
+  await openChapter(page, 'k1');
 }
 
 /** Eine Grammatikaufgabe der Prüfung richtig beantworten (Antwort aus dem Vorrat); `wrong` = „Weiß ich nicht“. */

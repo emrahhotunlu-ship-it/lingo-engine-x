@@ -1,4 +1,5 @@
 import { test, type Page } from '@playwright/test';
+import { openChapter, openJourney } from './learnHelpers';
 import { boot, openTab, screen, type Theme } from './fixtures';
 
 // Bildschirmfotos für den Design-Vergleich (R6 Spur B: C1-Reise, Wort-Himmel, Struktur-Film) nach `docs/umbau/design-vergleich/r6b-*.png`.
@@ -27,6 +28,7 @@ for (const s of sizes) {
     test('C1-Reise', async ({ page }) => {
       await start(page, s.theme);
       await openTab(page, 'learn');
+      await openJourney(page);
       const map = page.getByTestId('program-map');
       await map.scrollIntoViewIfNeeded();
       await page.waitForTimeout(8000); // Lichthof ausgeatmet
@@ -47,9 +49,7 @@ for (const s of sizes) {
     test('Struktur-Film (Bildfolge)', async ({ page }) => {
       await start(page, s.theme);
       await openTab(page, 'learn');
-      await page.locator('[data-testid="program-chapter"][data-chapter="k7"] [data-testid="program-chapter-open"]').click();
-      if (s.touch === false) await page.getByTestId('program-more').click();
-      const sheet = page.getByTestId('chapter-sheet');
+      const sheet = await openChapter(page, 'k7');
       await sheet.getByTestId('film-open').click();
       const film = page.getByTestId('film');
       await film.waitFor();

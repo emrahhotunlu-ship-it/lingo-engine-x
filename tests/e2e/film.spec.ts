@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
-import { openAllChapters } from './learnHelpers';
+import { openAllChapters, openChapter } from './learnHelpers';
 
 // Struktur-Film (Lernplattform 3.0 P61, Erlebnis-Engine §5.3): erst Vorhersage (Schritt 0), dann der Satz in Bewegung, am Ende „Nochmal“/„Fertig“.
 // Drei Einstiege: Kapitelblatt, Einführungskarte (IntroFlow), Menü ⋯ „Zeig es mir“. Raten kommt zuerst; nach dem Raten startet der Film nach ~1 s
@@ -15,8 +15,7 @@ async function chapterFilm(page: Page, fx: 'full' | 'off') {
   const booted = await boot(page, { migrated: true, localStorage: { 'lx:flags': 'program,film', 'lx:fx': fx } });
   await screen(page, 'today');
   await openTab(page, 'learn');
-  await page.locator('[data-testid="program-chapter"][data-chapter="k7"] [data-testid="program-chapter-open"]').click();
-  const sheet = page.getByTestId('chapter-sheet');
+  const sheet = await openChapter(page, 'k7');
   await expect(sheet.getByTestId('chapter-film')).toBeVisible();
   await sheet.getByTestId('film-open').click();
   const film = page.getByTestId('film');
@@ -158,8 +157,7 @@ test.describe('Handy 390', () => {
     const { errors } = await boot(page, { migrated: true, localStorage: { 'lx:flags': '{"program":true,"fx":{"film":false}}' } });
     await screen(page, 'today');
     await openTab(page, 'learn');
-    await page.locator('[data-testid="program-chapter"][data-chapter="k7"] [data-testid="program-chapter-open"]').click();
-    await expect(page.getByTestId('chapter-sheet')).toBeVisible();
+    await openChapter(page, 'k7');
     await expect(page.getByTestId('chapter-film')).toHaveCount(0);
     await expect(page.getByTestId('film-open')).toHaveCount(0);
     expect(errors).toEqual([]);

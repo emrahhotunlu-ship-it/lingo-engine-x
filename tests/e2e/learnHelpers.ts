@@ -407,3 +407,26 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
     await expect(page.getByTestId('drill')).toHaveCount(0);
   }
 }
+
+/**
+ * D5 V-GRAMMATIK: Kapitel-Detail eines Kapitels öffnen (Zeile der Kapitelliste „Dein Weg zu C1“). Am Handy und bis 1.279 px öffnet die Zeile die
+ * Seite `chapter`, ab 1.280 px wählt sie das Kapitel in der Kontextspalte. Gibt das Detail zurück (`chapter-sheet`, Kennungen wie das alte Blatt).
+ */
+export async function openChapter(page: Page, id: string) {
+  await page.locator(`[data-testid="path-chapter"][data-chapter="${id}"]`).click();
+  const detail = page.locator(`[data-testid="chapter-sheet"][data-chapter="${id}"]`);
+  await expect(detail).toBeVisible();
+  return detail;
+}
+
+/** D5: Die C1-Reise (Programmkarte P32/P58) ist eine eigene Seite, erreichbar über das Kapitel-Detail („C1-Reise ansehen“). */
+export async function openJourney(page: Page): Promise<void> {
+  const inColumn = page.locator('[data-testid="learn-context"] [data-testid="chapter-journey"]');
+  if (await inColumn.isVisible()) await inColumn.click();
+  else {
+    await page.locator('[data-testid="path-chapter"][data-status="current"]').click();
+    await page.getByTestId('chapter-journey').click();
+  }
+  await expect(page.getByTestId('journey-page')).toBeVisible();
+  await expect(page.getByTestId('program-map')).toBeVisible();
+}

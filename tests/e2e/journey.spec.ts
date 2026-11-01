@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openTab, screen } from './fixtures';
+import { openJourney } from './learnHelpers';
 
 // C1-Reise (Lernplattform 3.0 P58): die Programmkarte als Weg mit Gelände. Stationen bleiben echte Knöpfe in Programmreihenfolge (k1…k7),
 // der Weg verbindet sie (gegangen · Ankunft · vor dir). Bei Effekt-Stufe „Aus“ kein Kippen und keine Animation. Schalter `program`.
@@ -10,7 +11,8 @@ async function start(page: Page, fx: 'full' | 'off') {
   const booted = await boot(page, { migrated: true, localStorage: { 'lx:flags': 'program', 'lx:fx': fx, 'lx:journey-seen': '2026-09-20' } });
   await screen(page, 'today');
   await openTab(page, 'learn');
-  await expect(page.getByTestId('program-map')).toBeVisible();
+  // Seit D5: die C1-Reise ist eine eigene Seite, erreichbar über das Kapitel-Detail.
+  await openJourney(page);
   return booted;
 }
 

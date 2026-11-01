@@ -1,16 +1,19 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openTab, screen } from './fixtures';
-import { openAllChapters } from './learnHelpers';
+import { openAllChapters, openJourney } from './learnHelpers';
 
 // Programmkarte „Dein Weg zu C1“ und Kapitelblatt (Lernplattform 3.0 P32): 7 Stationen, aktuelles Kapitel mit Ziel, kein Querscrollen bei 360 px,
 // Zahlen gleich dem Lernpfad, „in Vorbereitung“ für Kapitel ohne Inhalte, axe 0. Schalter `program` per `lx:flags`.
+// Seit D5 (Grammatik-Reiter wie die Vorschau H6/L4) ist die Karte die Seite „C1-Reise“, erreichbar über das Kapitel-Detail (`openJourney`);
+// auf der Wurzel steht stattdessen die Kapitelliste (`path-chapters`).
 
 const start = async (page: Page, flags = 'program') => {
   // Seit 08.10.2026 ist `program` Standard; ein leerer Wert lässt den Standard gelten.
   const booted = await boot(page, { migrated: true, localStorage: { 'lx:flags': flags } });
   await screen(page, 'today');
   await openTab(page, 'learn');
+  if (flags !== '{"program":false}') await openJourney(page);
   return booted;
 };
 
@@ -60,25 +63,31 @@ test.describe('Handy 360', () => {
     await page.keyboard.press('Escape');
 
     // Invariante (UX-Prüfung B2: EINE Einheit): „Themen sicher“ je Kapitel in der Reise = Kapitelkopf des Lernpfads, Nenner = Themenzeilen.
-    await openAllChapters(page);
     // Weit vorausliegende Kapitel stehen in der Reise kompakt ohne Zahl (damit „Du bist hier“ bei 390 px sichtbar bleibt); geprüft wird jede gezeigte Zahl.
-    let checked = 0;
+    const shown: Record<string, { safe: string | null; total: string | null }> = {};
     for (const id of ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7']) {
       const prog = page.locator(`[data-testid="program-chapter"][data-chapter="${id}"] [data-testid="program-pats"]`);
       if ((await prog.count()) === 0) continue;
+      shown[id] = { safe: await prog.getAttribute('data-safe'), total: await prog.getAttribute('data-total') };
+    }
+    await openTab(page, 'learn');
+    await expect(page.getByTestId('learn-hub')).toBeVisible();
+    await openAllChapters(page);
+    let checked = 0;
+    for (const [id, prog] of Object.entries(shown)) {
       checked++;
       const path = page.locator(`[data-testid="chapter"][data-chapter="${id}"] [data-testid="chapter-safe"]`);
       const rows = await page.locator(`[data-testid="chapter"][data-chapter="${id}"] [data-testid="topic-pats"]`).count();
       expect(rows).toBeGreaterThan(0);
       await expect(path).toHaveAttribute('data-total', String(rows));
-      await expect(prog).toHaveAttribute('data-total', String(rows));
-      await expect(prog).toHaveAttribute('data-safe', (await path.getAttribute('data-safe')) ?? '');
+      expect(prog.total).toBe(String(rows));
+      expect(prog.safe).toBe(await path.getAttribute('data-safe'));
     }
     expect(checked).toBeGreaterThanOrEqual(2);
     expect(errors).toEqual([]);
   });
 
-  test('ist die Karte standardmäßig da und lässt sie sich mit {"program":false} abschalten', async ({ page }) => {
+  test('ist die Karte standardmäßig da (C1-Reise über das Kapitel-Detail) und lässt sie sich mit {"program":false} abschalten', async ({ page }) => {
     await start(page, '');
     await expect(page.getByTestId('program-map')).toHaveCount(1);
   });
@@ -87,6 +96,7 @@ test.describe('Handy 360', () => {
     await start(page, '{"program":false}');
     await expect(page.getByTestId('learn-hub')).toBeVisible();
     await expect(page.getByTestId('program-map')).toHaveCount(0);
+    await expect(page.getByTestId('path-chapters')).toHaveCount(0);
   });
 });
 

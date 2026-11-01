@@ -199,6 +199,17 @@ export const RULES = [
   { prefix: 'src/features/grammar/IntroFlow', specs: ['vorschau-uebung.spec.ts', 'lernen.spec.ts'] },
   { prefix: 'src/i18n/parts/vu.', specs: ['vorschau-uebung.spec.ts'] },
   { prefix: 'tests/e2e/vorschau-uebung', specs: ['vorschau-uebung.spec.ts'] },
+  // Relaunch Teil 1c, D5 V-GRAMMATIK: Reiter Grammatik (H6/L4), Kapitel-Detail, C1-Reise als Seite, Gedämpft-Hauptknopf.
+  { prefix: 'src/features/learn/LearnHub', specs: ['vorschau-grammatik.spec.ts', 'programMap.spec.ts', 'chapterRun.spec.ts'] },
+  { prefix: 'src/features/learn/HereCard', specs: ['vorschau-grammatik.spec.ts', 'chapterRun.spec.ts', 'lernen.spec.ts'] },
+  { prefix: 'src/features/learn/Chapter', specs: ['vorschau-grammatik.spec.ts', 'programMap.spec.ts', 'chapterRun.spec.ts'] },
+  { prefix: 'src/features/learn/LearnContext', specs: ['vorschau-grammatik.spec.ts', 'programMap.spec.ts'] },
+  { prefix: 'src/features/learn/JourneyPage', specs: ['journey.spec.ts', 'programMap.spec.ts'] },
+  { prefix: 'src/features/c1/ChapterSheet', specs: ['vorschau-grammatik.spec.ts', 'programMap.spec.ts', 'chapterRun.spec.ts', 'film.spec.ts', 'gate.spec.ts'] },
+  { prefix: 'src/features/grammar/PathList', specs: ['lernen.spec.ts', 'programMap.spec.ts'] },
+  { prefix: 'src/styles/parts/v-grammatik.css', specs: ['vorschau-grammatik.spec.ts', 'journey.spec.ts'] },
+  { prefix: 'src/i18n/parts/vg.', specs: ['vorschau-grammatik.spec.ts'] },
+  { prefix: 'tests/e2e/vorschau-grammatik', specs: ['vorschau-grammatik.spec.ts'] },
 ];
 
 /** Ändert sich nur so etwas, gibt es nichts zu testen (Texte, Pläne, Notizen). */

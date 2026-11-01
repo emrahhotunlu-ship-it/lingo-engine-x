@@ -61,8 +61,8 @@ export const lernen = defineArea({
     learn: { kind: 'tab', component: LearnRoot, title: 'lhTitle', keepScroll: true },
     // `grammar?topic=c1-…`: Werkzeug der Woche, 1 Tipp von „Deine Woche“ (P2 Muss 7) – öffnet das Themenblatt.
     grammar: { kind: 'page', component: GrammarScreen, title: 'grTitle', keepScroll: true, params: z.object({ topic: z.string().optional() }) },
-    chapter: { kind: 'page', component: ChapterPage, title: 'lhTitle', params: z.object({ id: z.string() }) },
-    journey: { kind: 'page', component: JourneyPage, title: 'pxMapTitle' },
+    chapter: { kind: 'page', chrome: 'shell', component: ChapterPage, title: 'lhTitle', params: z.object({ id: z.string() }) },
+    journey: { kind: 'page', chrome: 'shell', component: JourneyPage, title: 'pxMapTitle' },
     wissen: { kind: 'page', component: WissenScreen, title: 'wsTraps', keepScroll: true },
     patterns: { kind: 'page', component: PatternsScreen, title: 'ptTitle', params: z.object({ id: z.string().optional() }) },
     grammarSession: {
