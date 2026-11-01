@@ -22,7 +22,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 | # | Großpaket | Inhalt | Stand |
 |---|---|---|---|
 | ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB + D5-Nachtrag | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | in `claude/umbau-fokus`; Test-Link v77 `1793534318-5906` (01.11.), wartet auf Emrahs Review; nicht live |
-| A | **Wörter-App komplett** | V3 (Lernkarte, Sitzung, Abschluss; freigegeben 01.11. mit VB 1–3) + V4 (Anwenden, Wort-Detail, Übersicht; VB 4–6) + V5 (C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus erst nach Emrahs OK) + gesammelte Kleinkorrekturen | V3 Schritt 1 begonnen; Refinement V4+V5 an Emrah offen; **ein Test-Link am Ende** |
+| A | **Wörter-App komplett** | V3 (Lernkarte, Sitzung, Abschluss; freigegeben 01.11. mit VB 1–3) + V4 (Anwenden, Wort-Detail, Übersicht; VB 4–6) + V5 (C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus erst nach Emrahs OK) + gesammelte Kleinkorrekturen | Refinement `vokabeln/grosspaket-a.md` freigegeben (01.11., VB 4–6 wie empfohlen); Bau läuft ab V3 Schritt 1; **ein Test-Link am Ende** |
 | B | **Design komplett** | D6a, D6b (Praxis/Fortschritt, Fragen-Blatt/Ausfälle), E1–E7, F2–F5 (übrige Bildschirme, fehlende Vorschau-Funktionen) | Refinement nach A |
 | C | **Schneller Start** | 1b (P9a, P9b, P10: Inhalte nachladen) | Refinement nach B |
 | danach | Grammatik, Praxis, Lesen als eigene Module | gleiches Prinzip wie die Wörter-App | |

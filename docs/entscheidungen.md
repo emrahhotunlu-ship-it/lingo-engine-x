@@ -694,3 +694,9 @@ Frage-Dialog, beide wie empfohlen:
 - **Drei Großpakete:** A Wörter-App komplett (V3+V4+V5), B Design komplett (D6a, D6b, E1–E7, F2–F5), C schneller Start (1b). Je einmal gemeinsam planen, je ein Test-Link am Ende. Ersetzt „Test-Link je Paket“ vom 01.11.
 - **Zwischendurch nur bei Fragen:** Rückmeldung nur bei echten Entscheidungen (Pop-up mit Bildern), sonst durcharbeiten bis zum Test-Link.
 - Kleinkorrekturen werden gesammelt und mit dem nächsten Großpaket ausgeliefert, kein eigener Test-Link.
+
+## 01.11.2026 – Großpaket A freigegeben, VB-Fragen 4–6 (Emrah, Frage-Dialog, alle wie empfohlen)
+- **Plan Großpaket A** (`docs/umbau/vokabeln/grosspaket-a.md`: V3 + V4 + V5 + Kleinkorrekturen, ein Test-Link am Ende) **so bauen**, Teil 3 (Wortauswahl, Einstufung) gehört dazu.
+- **Spur heißt „Selbst schreiben“** (nicht „Benutzen“/„Aktiv“).
+- **Anwenden ohne Claude:** „Später prüfen lassen“ – Text wird gespeichert, Prüfung sobald Claude verfügbar ist, bis dahin keine Planwirkung.
+- **Behaltensrate deutlich unter Ziel:** junge Wörter früher planen, mit Hinweis auf die zusätzlichen Minuten je Tag.

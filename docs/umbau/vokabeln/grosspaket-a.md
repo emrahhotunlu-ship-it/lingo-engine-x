@@ -56,5 +56,5 @@ Heute (außer der Wörter-Zeile), Grammatik, Praxis, Lesen, Sprechen, Begleiter.
 - **Wortlisten-Lizenzen:** was nicht sicher offen ist, kommt nicht hinein.
 - **Nutzungsgrenze:** wenn das Kontingent knapp wird, halte ich an einem sauberen Zwischenstand an.
 
-## 7. Fragen (im Pop-up)
-VB 4–6 (Satz 2) und Grundsatz-Fragen zu Teil 3; Bilder Teil 3 vor dessen Bau.
+## 7. Fragen (beantwortet 01.11.)
+Plan so bauen (alle drei Teile) · Spur „Selbst schreiben“ · Anwenden ohne Claude: „Später prüfen lassen“ · niedrige Behaltensrate: junge Wörter früher mit Minuten-Hinweis. Bilder Teil 3 (Einstufung, Hinzufügen) entstehen vor dessen Bau; Fragen dazu nur bei echter Entscheidung.

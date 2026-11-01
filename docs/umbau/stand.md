@@ -768,3 +768,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Prüfungen: verify:fast grün; volles `npm run verify`: Unit 7.219/7.219, E2E 1.218 grün, 46 rot unter Volllast (33 Browser-Abstürze) → Wiederholung mit 2 Läufern 270/274, die letzten 4 (vorschau-heute/-grammatik) allein 4/4 grün: Lastwackler, kein Befund. `check:platform` FREIGABE, Budget OK, `verify:single` 25/25.
 - **Test-Link `AXHkh6…` v77 `1793534318-5906`** (Rückweg v76 `1793511636-3a76`). Manifest aktualisiert. Nicht live.
 - Nächster Schritt: V3 Schritt 1 (Daten absichern): `vlog` träge mit Verzeichnis `vmod/ix` und eigener Sicherung, Tagesplan zuerst speichern und Verschiebungen in Gruppen, Tests für `update` auf fehlendem Dokument und künftige `lex`-Versionen.
+
+### 01.11.2026 – Großpaket A: Refinement freigegeben
+- Refinement `docs/umbau/vokabeln/grosspaket-a.md` als Text an Emrah, danach Bilder s2-01/05/06/07/09 und Frage-Dialog. Antworten: Plan so bauen (alle drei Teile), „Selbst schreiben“, „Später prüfen lassen“, junge Wörter früher (Eintrag `entscheidungen.md`).
+- Nächster Schritt: V3 Schritt 1 (Daten absichern), dann Schritte 2–9 laut Refinement; kein Test-Link vor dem Ende von Großpaket A.
