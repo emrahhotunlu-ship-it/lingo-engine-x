@@ -92,7 +92,8 @@ export type Form =
  * `typo` (a) · `spell` (b) Liste deutscher Lerner · `infl` (c) Beugung · `pos` (d) Wortart/Ableitung · `other` (e) anderes echtes Wort ·
  * `hyph` (f) Bindestrich/Leerzeichen mit Wortartwechsel · `syn` Auch richtig (Synonym, `gr.var`, britischer Wortschatz) · `evade` Ausweichwort ·
  * `colloc` Kollokationsfehler (M56) · `prep` Präposition/Muster (M78) · `plural` Plural bei nicht Zählbarem (M79) · `order` Stellung des
- * Pronomens (M81) · `unfair` „Aufgabe war unfair“ (M43) · `asr` Erkennung abgelehnt (M31) · `wrong` · `dunno`.
+ * Pronomens (M81) · `unfair` „Aufgabe war unfair“ (M43) · `asr` Erkennung abgelehnt (M31) · `wrong` · `dunno` ·
+ * `odd` verständlich, aber unnatürlich (Ton, Wortwahl; nur aus der Claude-Prüfung beim Anwenden und beim eigenen Satz, Großpaket A S5).
  */
 export type Outcome =
   | 'ok'
@@ -111,9 +112,10 @@ export type Outcome =
   | 'unfair'
   | 'asr'
   | 'wrong'
-  | 'dunno';
+  | 'dunno'
+  | 'odd';
 
-export const OUTCOMES: readonly Outcome[] = ['ok', 'typo', 'spell', 'infl', 'pos', 'other', 'hyph', 'syn', 'evade', 'colloc', 'prep', 'plural', 'order', 'unfair', 'asr', 'wrong', 'dunno'];
+export const OUTCOMES: readonly Outcome[] = ['ok', 'typo', 'spell', 'infl', 'pos', 'other', 'hyph', 'syn', 'evade', 'colloc', 'prep', 'plural', 'order', 'unfair', 'asr', 'wrong', 'dunno', 'odd'];
 export const FORMS: readonly Form[] = [
   'intro', 'probe', 'gap', 'nosent', 'de_sent', 'gap_hint', 'cloze_part', 'complete', 'prep', 'count', 'particle', 'partner', 'family', 'situation',
   'diplomatic', 'own', 'say', 'transfer', 'listen', 'dictation', 'tiles', 'meaning', 'tone_mean', 'flip', 'choice', 'find_trap', 'contrast',

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { transfer, transferRecheck, TRANSFER_EXAMPLE, TRANSFER_TEXT_MAX, type TransferVars } from '../../../src/modules/vocab/prompts/transfer';
 import { ownSentence, ownSentenceRecheck, OWN_SENTENCE_EXAMPLE, type OwnSentenceVars } from '../../../src/modules/vocab/prompts/ownSentence';
-import { meaning, MEANING_EXAMPLE, type MeaningVars } from '../../../src/modules/vocab/prompts/meaning';
-import { RECHECK_LINE, SPOKEN_RULE, type VocabTarget } from '../../../src/modules/vocab/prompts/common';
+import { GAP_EXAMPLE, meaning, MEANING_EXAMPLE, type MeaningVars } from '../../../src/modules/vocab/prompts/meaning';
+import { milder, SPOKEN_RULE, type VocabTarget } from '../../../src/modules/vocab/prompts/common';
 import { meaningReply, ownSentenceReply, transferReply } from '../../../src/platform/dev/canned/vocab';
 import { PROMPT_MAX_BYTES, promptBytes } from '../../../src/prompts/common';
 import { TEMPLATES } from '../../../src/prompts/registry';
@@ -27,8 +27,10 @@ describe('vocab-transfer@1', () => {
     expect(transfer.build(vars()).split('\n')[0]).toBe('[vocab-transfer@1]');
     expect([transfer.tier, transfer.cache]).toEqual(['default', false]);
     expect([transferRecheck.tier, transferRecheck.cache, transferRecheck.id]).toEqual(['complex', false, 'vocab-transfer']);
-    expect(transfer.build(vars())).not.toContain(RECHECK_LINE);
-    expect(transfer.build(vars({ recheck: true }))).toContain(RECHECK_LINE);
+    expect(transfer.build(vars())).not.toContain('Independent second check');
+    const re = transfer.build(vars({ first: [{ key: 'w1', v: 'odd', err: 'prep', why: 'Hier passt „until“.' }] }));
+    expect(re).toContain('Independent second check');
+    expect(re).toContain('First check: w1: odd/prep – "Hier passt „until“."');
   });
 
   it('Prompt: Zielwörter mit Art und Bedeutung, Text als Daten, Sprechen nur bei Diktat, britisch ist richtig', () => {
@@ -40,7 +42,9 @@ describe('vocab-transfer@1', () => {
     expect(p).not.toContain(SPOKEN_RULE);
     expect(transfer.build(vars({ spoken: true }))).toContain(SPOKEN_RULE);
     expect(p).toMatch(/British spelling, British words and other valid alternatives count as correct/);
-    expect(p).toMatch(/Never more than two corrections/);
+    expect(p).toMatch(/Judge every target honestly, even if more than two have errors/);
+    expect(p).toMatch(/eventuell = /);
+    expect(p).toMatch(/use "unused", put the replacement in "at"/);
   });
 
   it('Größe: 5 Zielwörter und längster Text bleiben unter der Grenze', () => {
@@ -83,21 +87,64 @@ describe('vocab-transfer@1', () => {
     expect(lenient(o, vars({ text })).data!.words[0]).toMatchObject({ v: 'unused', at: '', why: '' });
   });
 
-  it('„falsch“ ohne jede Fundstelle → keine Strafnote („nicht benutzt“)', () => {
+  it('„falsch“ ohne jede Fundstelle → Neuversuch; im Neuversuch keine Strafnote („nicht benutzt“, ohne Begründung)', () => {
     const text = 'Hi Sarah, I will follow up on the budget, because the tight deadline worries me.';
-    const r = parse({ words: [{ key: 'w1', v: 'wrong', err: 'word', at: 'delay', why: 'Das ist ein anderes Wort.' }, allOk()[1], allOk()[2]], extra: null, fixed: '' }, vars({ text }));
-    expect(r.success).toBe(true);
-    expect(r.data!.words[0]).toMatchObject({ v: 'unused', err: null });
+    const o = { words: [{ key: 'w1', v: 'wrong', err: 'word', at: 'delay', why: 'Das ist ein anderes Wort.' }, allOk()[1], allOk()[2]], extra: null, fixed: '' };
+    expect(parse(o, vars({ text })).success).toBe(false);
+    expect(lenient(o, vars({ text })).data!.words[0]).toMatchObject({ v: 'unused', err: null, at: '', why: '' });
   });
 
-  it('„falsch“ mit Fundstelle (Verwechsler im Text) bleibt falsch', () => {
+  it('Ausweichwort (*delay* für *postpone*) ist kein Fehler: „nicht benutzt“ mit Fundstelle = ausgewichen; „falsch“ dafür → Neuversuch', () => {
     const text = 'Hi Sarah, we need to delay the review. I will follow up on the budget, because the tight deadline worries me.';
-    const r = parse(
-      { words: [{ key: 'w1', v: 'wrong', err: 'word', at: 'delay', why: 'Gesucht war „postpone“.' }, allOk()[1], allOk()[2]], extra: null, fixed: 'Hi Sarah, we need to postpone the review. I will follow up on the budget, because the tight deadline worries me.' },
-      vars({ text }),
-    );
+    const ev = { words: [{ key: 'w1', v: 'unused', err: null, at: 'delay', why: 'Hier stand „delay“ statt „postpone“.' }, allOk()[1], allOk()[2]], extra: null, fixed: '' };
+    expect(parse(ev, vars({ text })).data!.words[0]).toMatchObject({ v: 'unused', err: null, at: 'delay', why: 'Hier stand „delay“ statt „postpone“.' });
+    const wr = { ...ev, words: [{ ...ev.words[0], v: 'wrong', err: 'word' }, allOk()[1], allOk()[2]] };
+    expect(parse(wr, vars({ text })).success).toBe(false);
+    expect(lenient(wr, vars({ text })).data!.words[0]).toMatchObject({ v: 'unused', at: '', why: '' });
+  });
+
+  it('„nicht benutzt“, obwohl ein Versuch am Wort dasteht (*effect* für *affect*) → Neuversuch; im Neuversuch nie „ausgewichen“', () => {
+    const t: VocabTarget[] = [{ key: 'w1', word: 'affect', meaning: 'beeinflussen', kind: 'w' }];
+    const o = { words: [{ key: 'w1', v: 'unused', err: null, at: 'effect', why: 'Anderes Wort.' }], extra: null, fixed: '' };
+    const v = vars({ targets: t, text: 'The delay will effect our budget.' });
+    expect(parse(o, v).success).toBe(false);
+    expect(lenient(o, v).data!.words[0]).toMatchObject({ v: 'unused', at: '', why: '' });
+  });
+
+  it('echter Verwechsler am Zielwort (*effect* für *affect*) bleibt falsch', () => {
+    const t: VocabTarget[] = [{ key: 'w1', word: 'affect', meaning: 'beeinflussen', kind: 'w' }];
+    const text = 'The delay will effect our budget.';
+    const r = parse({ words: [{ key: 'w1', v: 'wrong', err: 'word', at: 'effect', why: '„effect“ ist das Nomen, gemeint ist „affect“.' }], extra: null, fixed: 'The delay will affect our budget.' }, vars({ targets: t, text }));
     expect(r.success).toBe(true);
-    expect(r.data!.words[0]).toMatchObject({ v: 'wrong', err: 'word', at: 'delay' });
+    expect(r.data!.words[0]).toMatchObject({ v: 'wrong', err: 'word', at: 'effect' });
+  });
+
+  it('Kollokation mit falschem Partner (*hold a presentation*) zählt als Versuch: ~ ohne Neuversuch', () => {
+    const t: VocabTarget[] = [{ key: 'w1', word: 'give a presentation', meaning: 'eine Präsentation halten', kind: 'col' }];
+    const text = 'Tomorrow I will hold a presentation for the board.';
+    const r = parse({ words: [{ key: 'w1', v: 'odd', err: 'colloc', at: 'hold a presentation', why: 'Man sagt „give a presentation“.' }], extra: null, fixed: 'Tomorrow I will give a presentation for the board.' }, vars({ targets: t, text }));
+    expect(r.success).toBe(true);
+    expect(r.data!.words[0]).toMatchObject({ v: 'odd', err: 'colloc' });
+  });
+
+  it('Urteil und Fehlerklasse müssen passen: Neuversuch; im Neuversuch angeglichen', () => {
+    const a = { words: [{ ...ok('w1', 'postpone'), v: 'odd', err: 'sense' }, allOk()[1], allOk()[2]], extra: null, fixed: TEXT.replace('postpone', 'postpone') };
+    expect(parse(a).success).toBe(false);
+    expect(lenient(a).data!.words[0]).toMatchObject({ v: 'wrong', err: 'sense' });
+    const b = { words: [{ ...ok('w1', 'postpone'), v: 'wrong', err: 'prep' }, allOk()[1], allOk()[2]], extra: null, fixed: TEXT };
+    expect(lenient(b).data!.words[0]).toMatchObject({ v: 'odd', err: 'prep' });
+  });
+
+  it('gesprochen: Vorkommen-Abweichung löst keinen Neuversuch aus, fällt aber sicher auf „keine Note“', () => {
+    const text = 'Hi Sarah I will follow up on the budget because the tight deadline worries me';
+    const r = parse({ words: allOk(), extra: null, fixed: '' }, vars({ text, spoken: true }));
+    expect(r.success).toBe(true);
+    expect(r.data!.words[0]).toMatchObject({ v: 'unused', at: '' });
+  });
+
+  it('im Neuversuch: Begründung in falscher Sprache wird geleert statt gezeigt', () => {
+    const o = { words: [{ ...ok('w1', 'postpone'), why: 'The word is used in the right sense and sounds natural here.' }, allOk()[1], allOk()[2]], extra: null, fixed: '' };
+    expect(lenient(o).data!.words[0]).toMatchObject({ v: 'ok', why: '' });
   });
 
   it('„nicht benutzt“, obwohl das Wort im Text steht → Neuversuch', () => {
@@ -110,6 +157,12 @@ describe('vocab-transfer@1', () => {
     expect(r.data!.words[0]).toMatchObject({ v: 'thin', at: '' });
   });
 
+  it('Beispielsatz nur leicht abgewandelt (Namen/Zahlen) → „zu dünn“', () => {
+    const text = 'We had to postpone the release by a month. I will follow up on the budget, because the tight deadline worries me.';
+    const r = parse({ words: allOk(), extra: null, fixed: '' }, vars({ text }));
+    expect(r.data!.words[0]).toMatchObject({ v: 'thin' });
+  });
+
   it('Fehlerklasse nur bei ~ und ✕ (fehlt sie dort: other)', () => {
     const r = parse({ words: [{ ...ok('w1', 'postpone'), err: 'form' }, { ...allOk()[1], v: 'odd', err: null }, allOk()[2]], extra: null, fixed: TEXT.replace('follow up on', 'follow up on') });
     expect(r.data!.words.map((w) => w.err)).toEqual([null, 'other', null]);
@@ -120,7 +173,7 @@ describe('vocab-transfer@1', () => {
     expect(parse({ words: [{ ...ok('w1', 'postpone'), why: 'The word is used in the right sense and sounds natural here.' }, allOk()[1], allOk()[2]], extra: null, fixed: '' }).success).toBe(false);
   });
 
-  it('Zusatzfehler: muss im Text stehen, fällt bei zwei Wortfehlern weg (nie mehr als 2 Korrekturen)', () => {
+  it('Zusatzfehler: muss im Text stehen, fällt schon bei einem Wortfehler weg (die Zielwörter gehen vor)', () => {
     const extra = { from: 'worries me', to: 'concerns me', why: 'Im Mail-Ton klingt „concerns“ sachlicher.' };
     const one = parse({ words: allOk(), extra, fixed: TEXT.replace('worries me', 'concerns me') });
     expect(one.data!.extra).toEqual(extra);
@@ -131,6 +184,15 @@ describe('vocab-transfer@1', () => {
       fixed: TEXT,
     });
     expect(two.data!.extra).toBeNull();
+    const oneErr = parse({ words: [{ ...allOk()[0], v: 'odd', err: 'prep' }, allOk()[1], allOk()[2]], extra, fixed: TEXT });
+    expect(oneErr.data!.extra).toBeNull();
+  });
+
+  it('Vergleichsfassung: bleibt nur mit allen Zielwörtern und anders als der eigene Text', () => {
+    const better = 'Hi Sarah, we need to postpone the review until Friday. I will follow up on the budget, as the tight deadline concerns me.';
+    expect(parse({ words: allOk(), extra: null, fixed: '', better }).data!.better).toBe(better);
+    expect(parse({ words: allOk(), extra: null, fixed: '', better: 'We need to delay the review and follow up on the tight deadline.' }).data!.better).toBe('');
+    expect(parse({ words: allOk(), extra: null, fixed: '', better: TEXT }).data!.better).toBe('');
   });
 
   it('korrigierte Fassung: leer, wenn nichts falsch ist; muss benutzte Zielwörter behalten; britisch → US', () => {
@@ -147,7 +209,20 @@ describe('vocab-transfer@1', () => {
   });
 
   it('Formatbeispiel ist gültiges JSON mit allen Feldern', () => {
-    expect(Object.keys(JSON.parse(TRANSFER_EXAMPLE) as object)).toEqual(['words', 'extra', 'fixed']);
+    expect(Object.keys(JSON.parse(TRANSFER_EXAMPLE) as object)).toEqual(['words', 'extra', 'fixed', 'better']);
+  });
+});
+
+describe('Einspruch: nur milder', () => {
+  it('ersetzt nur durch ein milderes Urteil', () => {
+    expect(milder({ v: 'wrong' as const }, { v: 'odd' as const }).v).toBe('odd');
+    expect(milder({ v: 'odd' as const }, { v: 'ok' as const }).v).toBe('ok');
+    expect(milder({ v: 'thin' as const }, { v: 'ok' as const }).v).toBe('ok');
+    expect(milder({ v: 'odd' as const }, { v: 'wrong' as const }).v).toBe('odd');
+    expect(milder({ v: 'ok' as const }, { v: 'thin' as const }).v).toBe('ok');
+    expect(milder({ v: 'thin' as const }, { v: 'unused' as const }).v).toBe('thin');
+    expect(milder({ v: 'wrong' as const }, { v: 'unused' as const }).v).toBe('wrong');
+    expect(milder({ v: 'odd' as const }, { v: 'thin' as const }).v).toBe('odd');
   });
 });
 
@@ -160,6 +235,8 @@ describe('vocab-own-sentence@1', () => {
     expect(p.split('\n')[0]).toBe('[vocab-own-sentence@1]');
     expect(p).toContain('Target: w1: leverage (word; meaning: nutzen, einsetzen)');
     expect(p).toContain('The learner chose the situation freely.');
+    expect(p).toMatch(/the learner's own idea, rewritten as a fluent American professional/);
+    expect(ownSentence.build({ ...OWN, first: { v: 'thin', err: null, why: 'Der Satz zeigt den Sinn nicht.' } })).toContain('First check: w1: thin – "Der Satz zeigt den Sinn nicht."');
     const g = ownSentence.build({ ...OWN, task: 'Sag dem Kunden, dass ihr die Daten nutzt.' });
     expect(g).toMatch(/Situation \(shown to the learner in German; the sentence should fit it\): Sag dem Kunden/);
     expect([ownSentence.tier, ownSentence.cache, ownSentenceRecheck.tier, ownSentenceRecheck.cache]).toEqual(['default', false, 'complex', false]);
@@ -170,6 +247,7 @@ describe('vocab-own-sentence@1', () => {
     expect(ownParse({ ...base, better: 'Small teams can leverage automation to save time.' }).data!.better).toBe('Small teams can leverage automation to save time.');
     expect(ownParse({ ...base, better: 'Small teams can use automation to save time.' }).data!.better).toBe('');
     expect(ownParse({ ...base, better: 'We can leverage our network.' }).data!.better).toBe('');
+    expect(ownParse({ ...base, better: 'we should leverage the new data to win the client.' }).data!.better).toBe('');
     expect(ownParse({ ...base, better: `We leverage ${'very '.repeat(30)}much.` }).data!.better).toBe('');
   });
 
@@ -200,10 +278,22 @@ describe('vocab-meaning@1', () => {
     expect(p).toMatch(/what the English word means in this sentence/);
     expect(meaning.build({ ...MV, mode: 'gap' })).toMatch(/typed a word in the gap/);
     expect(JSON.parse(MEANING_EXAMPLE)).toEqual({ ok: true, why: '…' });
+    expect(JSON.parse(GAP_EXAMPLE)).toEqual({ kind: 'synonym', why: '…' });
+    expect(meaning.build({ ...MV, mode: 'gap' })).toMatch(/fit the words around the gap/);
+    expect(p).toMatch(/accept every valid alternative/);
+  });
+
+  it('Lücke: Art der Abweichung (gleich, Synonym, einfacher, nein); Bedeutung: nur gleich/nein', () => {
+    const g = { ...MV, mode: 'gap' as const, sentence: 'We had to ___ the launch.' };
+    expect(meaning.schema(g).safeParse({ kind: 'Synonym', why: '„delay“ passt, betont aber die Verzögerung.' }).data).toEqual({ ok: false, kind: 'synonym', why: '„delay“ passt, betont aber die Verzögerung.' });
+    expect(meaning.schema(g).safeParse({ kind: 'same', why: '„postponed“ ist dieselbe Form im Plural.' }).data).toMatchObject({ ok: true, kind: 'same' });
+    expect(meaning.schema(g).safeParse({ kind: 'no', why: '„cancel“ heißt absagen, nicht verschieben.' }).data).toMatchObject({ ok: false, kind: 'no' });
+    expect(meaning.schema(g).safeParse({ ok: true, why: 'Passt.' }).success).toBe(false);
+    expect(meaning.schema(MV).safeParse({ ok: false, why: 'Das heißt hier verschieben.' }).data).toMatchObject({ ok: false, kind: 'no' });
   });
 
   it('tolerant gelesen, Sprachtreue geprüft', () => {
-    expect(meaning.schema(MV).safeParse({ ok: 'yes', why: 'Das trifft den Sinn in diesem Satz.' }).data).toEqual({ ok: true, why: 'Das trifft den Sinn in diesem Satz.' });
+    expect(meaning.schema(MV).safeParse({ ok: 'yes', why: 'Das trifft den Sinn in diesem Satz.' }).data).toEqual({ ok: true, kind: 'same', why: 'Das trifft den Sinn in diesem Satz.' });
     expect(meaning.schema(MV).safeParse({ ok: true, why: 'That captures the meaning in this sentence.' }).success).toBe(false);
   });
 });
@@ -222,7 +312,12 @@ describe('Registrierung und Entwicklungs-Adapter', () => {
       expect(ownSentence.schema(o).safeParse(JSON.parse(ownSentenceReply(ownSentence.build(o)))).data?.better).toMatch(/leverage/);
       const m = { ...MV, uiLang, given: 'verschieben' };
       expect(meaning.schema(m).safeParse(JSON.parse(meaningReply(meaning.build(m)))).data?.ok).toBe(true);
+      const g = { ...MV, uiLang, mode: 'gap' as const, sentence: 'We had to ___ the launch.', given: 'synonym' };
+      expect(meaning.schema(g).safeParse(JSON.parse(meaningReply(meaning.build(g)))).data?.kind).toBe('synonym');
+      expect(transfer.schema(v).safeParse(JSON.parse(transferReply(transfer.build(v)))).data?.better).not.toBe('');
     }
+    const ev = vars({ text: TEXT.replace('postpone', 'delay #evade') });
+    expect(transfer.schema(ev).safeParse(JSON.parse(transferReply(transfer.build(ev)))).data!.words[0]).toMatchObject({ v: 'unused', at: '#evade' });
     const odd = vars({ text: `${TEXT} #odd` });
     const r = transfer.schema(odd).safeParse(JSON.parse(transferReply(transfer.build(odd))));
     expect(r.data!.words[0]).toMatchObject({ v: 'odd', err: 'prep' });

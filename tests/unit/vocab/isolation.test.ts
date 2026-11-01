@@ -15,7 +15,7 @@ const SHARED = `${MODULE}/shared.ts`;
 const SHARED_UI = `${MODULE}/sharedUi.ts`;
 const PROMPT_REGISTRY = 'src/prompts/registry.ts';
 
-const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/];
+const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/, /^src\/content\/falseFriends$/];
 // V3 Schritt 2b-2: zweite Tür nur für die Oberfläche (Lernkarte, Band, Runde); nie von registry.ts/api.ts statisch erreichbar.
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav)$/,

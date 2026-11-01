@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { clip, clipped, correctionRules, header, langName, withFixedGate, type PromptTemplate, type UiLang } from '../shared';
-import { asRecheck, blank, hasTarget, RECHECK_LINE, sharedRules, SPOKEN_RULE, targetLine, type VocabTarget } from './common';
+import { asRecheck, blank, falseFriendRule, flat, hasTarget, recheckLines, sharedRules, SPOKEN_RULE, targetLine, verdictRules, type FirstVerdict, type VocabTarget } from './common';
 import { checkExtra, checkFixed, isError, judgeOne, rawExtra, rawJudgement, type ExtraFix, type WordJudgement } from './judge';
 
 // vocab-own-sentence@1 (Großpaket A Schritt 5; synthese.md M33 und §2.5): eigener Satz mit einem Zielwort. Stufe 5 gelenkt (eine Lage auf Deutsch:
@@ -19,7 +19,8 @@ export type OwnSentenceVars = {
   task: string | null;
   spoken: boolean;
   uiLang: UiLang;
-  recheck?: boolean;
+  /** Einspruch: das erste Urteil (zweite, unabhängige Prüfung; `sample` hat kein Gedächtnis). */
+  first?: Omit<FirstVerdict, 'key'>;
 };
 
 export type OwnSentenceOut = Omit<WordJudgement, 'key'> & {
@@ -27,7 +28,10 @@ export type OwnSentenceOut = Omit<WordJudgement, 'key'> & {
   /** Minimal korrigierte Fassung; "" wenn nichts zu korrigieren ist. */
   fixed: string;
   fixedUnsure?: boolean;
-  /** Verdeckte Vergleichsfassung: ein anderer natürlicher Satz mit dem Zielwort im selben Sinn (erst nach „Nochmal selbst schreiben“ aufgedeckt); "" ohne. */
+  /**
+   * Verdeckte Vergleichsfassung: die eigene Idee, so wie ein flüssiger amerikanischer Profi sie sagen würde, mit dem Zielwort im selben Sinn
+   * (english-teacher Befund 6; erst nach „Nochmal selbst schreiben“ aufgedeckt); "" ohne.
+   */
   better: string;
 };
 
@@ -42,7 +46,7 @@ const wordCount = (s: string): number => s.trim().split(/\s+/).filter(Boolean).l
 
 function schemaFor(v: OwnSentenceVars, lenient: boolean): z.ZodType<OwnSentenceOut> {
   const t: VocabTarget = { ...v.target, key: KEY };
-  const opts = (path: PropertyKey[]) => ({ text: v.sentence, lang: v.uiLang, lenient, path });
+  const opts = (path: PropertyKey[]) => ({ text: v.sentence, lang: v.uiLang, lenient, spoken: v.spoken, path });
   const inner = z
     .object({
       ...rawJudgement,
@@ -56,7 +60,7 @@ function schemaFor(v: OwnSentenceVars, lenient: boolean): z.ZodType<OwnSentenceO
       const fixed = checkFixed(raw.fixed, [t], [w], needsFix({ v: w.v, extra }), ctx, opts(['fixed']));
       // Vergleichsfassung: muss das Wort enthalten, kurz sein und darf weder der eigene Satz noch der Beispielsatz sein; sonst leer (kein Neuversuch nötig).
       const b = raw.better.trim();
-      const better = b && hasTarget(b, t) && wordCount(b) <= OWN_BETTER_MAX_WORDS && b !== v.sentence.trim() && b !== (t.example ?? '').trim() ? b : '';
+      const better = b && hasTarget(b, t) && wordCount(b) <= OWN_BETTER_MAX_WORDS && flat(b) !== flat(v.sentence) && flat(b) !== flat(t.example ?? '') ? b : '';
       return { v: w.v, err: w.err, at: w.at, why: w.why, extra, fixed, better };
     });
   return withFixedGate<OwnSentenceOut>(inner, { needs: needsFix, lenient });
@@ -78,22 +82,21 @@ export const ownSentence: PromptTemplate<OwnSentenceVars, OwnSentenceOut> = {
       `Target: ${targetLine(t)}`,
       `Learner sentence: ${clip(v.sentence, OWN_SENTENCE_MAX)}`,
       ...(v.spoken ? [SPOKEN_RULE] : []),
-      ...(v.recheck ? [RECHECK_LINE] : []),
+      ...(v.first ? recheckLines([{ key: KEY, ...v.first }]) : []),
       `Explanation language: ${langName(v.uiLang)}`,
       'Reply with only one JSON object in this format:',
       OWN_SENTENCE_EXAMPLE,
       'Rules:',
-      '- v: "ok" = used in the right sense, correct and natural here; "odd" = understandable but unnatural, or a small error at the word (wrong form, preposition, partner word or tone); "wrong" = wrong sense, or a different or confused word instead of the target; "thin" = correct but trivial, showing no real use ("I like leverage.", "This is a deadline."), or copied from the card example; "unused" = the target does not appear.',
-      '- Check the sense of the word in this sentence, not only that it appears. A correct use in a different but valid sense of the word is "ok".',
-      ...(v.task ? ['- If the sentence does not fit the situation at all, it is "thin" (the word was not used for the task).'] : []),
-      '- err: only for "odd" and "wrong", one of sense, word, form, prep, colloc, register, other; otherwise null.',
-      '- at: the exact words of the learner sentence where the target (or the attempt) stands, copied character by character; "" for unused.',
-      '- why: one short sentence (except for unused). If it is right, name what exactly works; if not, say what is wrong and why.',
-      '- extra: at most one other clear error in the sentence (not at the target word) as {"from": exact words from the sentence, "to": the correction, "why": one sentence}; null if there is none.',
+      ...verdictRules('sentence'),
+      ...(v.task
+        ? ['- The situation is only a frame: if the sentence does not address the situation at all, it is "thin" (the word was not used for the task). Never judge the opinion or the decision the learner chose.']
+        : []),
+      '- extra: at most one other clear error in the sentence (not at the target word) as {"from": exact words from the sentence, "to": the correction, "why": one sentence}; null if there is none or if v is "odd" or "wrong".',
       '- fixed: "" if v is not "odd" or "wrong" and extra is null. Otherwise the learner sentence with the errors fixed:',
       ...correctionRules(),
-      '  Keep the target word if the learner used it correctly. Do not rewrite the sentence in your own style and do not add new or rarer words.',
-      `- better: one different, natural example sentence that uses the target word in the same sense (at most ${OWN_BETTER_MAX_WORDS} words, only common words), for the learner to compare after writing again. Never the learner sentence or the card example.`,
+      '  Keep the target word if the learner used it correctly. Do not rewrite the sentence in your own style and do not add new or rarer words. Besides the errors you explain, fix only clear errors; never change style, and do not report these extra fixes anywhere.',
+      `- better: the learner's own idea, rewritten as a fluent American professional would say it in this situation, using the target word in the meaning given (at most ${OWN_BETTER_MAX_WORDS} words). Use only the learner's words, the target and very common words; never a word rarer than the target. Give it also when v is "ok".`,
+      falseFriendRule(),
       ...sharedRules(),
     ].join('\n');
   },
@@ -101,5 +104,5 @@ export const ownSentence: PromptTemplate<OwnSentenceVars, OwnSentenceOut> = {
   lenient: (v) => schemaFor(v, true),
 };
 
-/** Einspruch „War das auch richtig?“: einmal, nur auf Antippen, `complex`, ohne Zwischenspeicher. */
-export const ownSentenceRecheck = asRecheck(ownSentence);
+/** Einspruch „War das auch richtig?“: einmal, nur auf Antippen, `complex`, ohne Zwischenspeicher; das erste Urteil (`first`) ist Pflicht. */
+export const ownSentenceRecheck = asRecheck<OwnSentenceVars, OwnSentenceOut, Omit<FirstVerdict, 'key'>>(ownSentence);

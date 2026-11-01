@@ -77,6 +77,7 @@ export function verdictOf(o: Outcome, note: string | undefined, grade: number | 
       return 'syn';
     case 'typo':
     case 'hyph':
+    case 'odd':
       return 'almost';
     case 'infl':
       return note === 'article' ? 'almost' : 'infl';

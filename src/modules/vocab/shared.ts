@@ -15,3 +15,4 @@ export type { PromptTemplate, UiLang } from '../../prompts/types';
 export { clipped } from '../../prompts/tolerant';
 export { correctionRules, withFixedGate } from '../../prompts/fixedGate';
 export { isWrongLang } from '../../domain/lang/detect';
+export { FALSE_FRIEND_NOTE, falseFriendLines } from '../../content/falseFriends';

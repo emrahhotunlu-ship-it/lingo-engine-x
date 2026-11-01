@@ -792,3 +792,10 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Nachprüfung (zweite und letzte Runde): Befunde 1–5, 7, 9, 10, 11 behoben. Bilder unter `scratchpad/ux-4c/`.
 - **Offen für Emrah (nicht weiter iteriert, Regel A2):** Befund 8 „·“ am Zeilenrand. Auf 390 px bricht die Zeile nach dem Punkt um („Schritt 1 von 4 geschafft ·“ / „Words ·“). Ein geschütztes Leerzeichen löst das nicht. Vorschlag des Prüfers: Titel und Minuten als zwei Teile setzen; auf dem Handy zwei Zeilen ohne „·“, am Laptop eine Zeile mit „·“. Wird Emrah beim Test-Link als Frage mit Empfehlung vorgelegt.
 - Befund 6 (drei verschiedene Fortschrittsbalken) bleibt für Großpaket B.
+
+### 01.11.2026 – Großpaket A, Schritt 5a: Prüf-Vorlagen fertig geprüft
+- Vorlagen `vocab-transfer@1`, `vocab-own-sentence@1`, `vocab-meaning@1` (noch nicht veröffentlicht, Version bleibt 1) nach english-teacher und learning-scientist (je eine Prüfung + eine Nachprüfung, Runden ausgeschöpft). Neu: Urteil `odd` (fast richtig, Note Hard), eigene Wort-Suche `domain/used.ts` (Beugung, Einschübe, Kollokation im Passiv, britische Schreibung, Versuch am Wort, „fast abgeschrieben“ nur zusammenhängend), Ausweichen (`unused` + Fundstelle) statt Strafnote, Sprechregel, Einspruch mit erstem Urteil (Pflicht) und nur milderen Übergängen (wrong→odd/ok, odd→ok, thin→ok), Lücken-Zweitmeinung `same` nur für das erwartete Wort selbst (zählt), `synonym`/`simpler` ohne Note.
+- Festlegung: `odd` + Register zählt als richtig (Good), außer bei Wendungen (`ch`).
+- **Offen für Emrah (Schritt 8):** learning-scientist #6b – ab Stufe 5 ein deutscher Hinweis statt der Grundform; „Wort zeigen“ höchstens Hard.
+- Prüfungen: Unit `tests/unit/vocab` 327/327, Typprüfung (beide) und Lint sauber.
+- Nächster Schritt: 5b `domain/apply.ts` (Urteil → Note, Belege `ev.o`/`ev.s`, Rahmen/Situation, „später prüfen lassen“).

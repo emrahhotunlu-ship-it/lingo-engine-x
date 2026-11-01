@@ -149,7 +149,7 @@ describe('Satzwechsel und Leck-Prüfung (M57)', () => {
 
 describe('Notentabelle (M38): alle Ausgänge × Stufen', () => {
   // Erwartete Note in der Form `gap` (Benutzen, bis Easy) für ein Einzelwort, ohne Hinweis, normale Zeit.
-  const BASE: Record<Outcome, number | null> = { ok: 3, typo: 2, spell: 2, infl: 2, hyph: 2, pos: 1, other: 1, wrong: 1, dunno: 1, colloc: 2, prep: 2, plural: 2, order: 2, syn: null, evade: null, unfair: null, asr: null };
+  const BASE: Record<Outcome, number | null> = { ok: 3, typo: 2, spell: 2, infl: 2, hyph: 2, pos: 1, other: 1, wrong: 1, dunno: 1, colloc: 2, prep: 2, plural: 2, order: 2, syn: null, evade: null, unfair: null, asr: null, odd: 2 };
   for (let lv = 1; lv <= 7; lv++)
     it(`Stufe ${lv}`, () => {
       for (const o of OUTCOMES) {

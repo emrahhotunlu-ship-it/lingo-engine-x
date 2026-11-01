@@ -67,6 +67,7 @@ export function baseGrade(outcome: Outcome, x: { k: LexKind; form: Form; evadeRe
     case 'infl': // (c) Beugung, mit Grammatik-Hinweis
     case 'spell': // (b) Rechtschreibfehler aus der Liste: Formfehler mit eigener Erklärung, nie „fast richtig“, kein Aufstiegs-Tag
     case 'hyph': // (f) Bindestrich/Leerzeichen mit Wortartwechsel
+    case 'odd': // Claude: verständlich, aber unnatürlich (Ton, Wortwahl); Wort gewusst, Gebrauch noch nicht sicher
       return 2;
     case 'pos': // (d)
     case 'other': // (e)
