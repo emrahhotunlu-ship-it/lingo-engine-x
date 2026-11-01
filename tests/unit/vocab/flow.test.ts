@@ -17,7 +17,7 @@ type Doc = Record<string, unknown>;
 const T0 = Date.parse('2026-11-02T18:00:00Z');
 const D = 86_400_000;
 const ctx = (over: Partial<PlanCtx> = {}): PlanCtx => ({ cfg: DEFAULT_CFG, path: 'vocab/scope', planned: true, load: () => 0, siblings: new Set(), ...over });
-const dict: CheckDict = { isWord: () => false, misspell: () => false, confusable: () => null, toUS: (w) => w };
+const dict: CheckDict = { isWord: () => false, misspell: new Map(), confusable: new Map(), toUS: (w) => w };
 const task = (over: Partial<Task> = {}): Task => ({ path: 'vocab/scope', form: 'gap', step: 0, intro: false, planned: true, why: 'due', sent: 's', cue: false, ...over });
 const doc: Doc = { word: 'scope', de: 'Umfang, Rahmen', pos: 'noun', ex: 'We need to define the scope of the project.', wx: [{ en: 'The scope is too wide.', de: 'Der Umfang ist zu groß.' }] };
 
