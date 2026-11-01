@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getDb, getWriter, Icon, readDoc, Segmented, Skeleton, toast, useClock, useLive, useT, type MessageKey } from '../sharedUi';
+import { getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switch, toast, useClock, useLive, useT, type MessageKey } from '../sharedUi';
 import { logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { readVlogRecent } from '../data/history';
@@ -26,7 +26,7 @@ function cfgOf(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
   const npd = profile && typeof profile.newPerDay === 'number' && (NEW_OPTIONS as readonly number[]).includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
   if (!raw?.success) return { ...DEFAULT_CFG, newPerDay: npd };
-  return { min: raw.data.min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null };
+  return { min: raw.data.min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0 };
 }
 
 /** Alle sichtbaren Lexeme (pausierte zählen nicht), live. */
@@ -250,6 +250,8 @@ export function WordSettings() {
   const min = pending.min ?? cfg.min;
   const ret = pending.ret ?? cfg.ret;
   const npd = pending.newPerDay ?? cfg.newPerDay;
+  const anki = pending.anki !== undefined ? pending.anki === 1 : !!cfg.anki;
+  const pre = pending.pre !== undefined ? pending.pre === 1 : cfg.pre !== false;
   const mins = safetyMinutes(avg(out.days.map((d) => d.review)), avg(out.days.map((d) => d.fresh)), cfg.ret, RET_OPTIONS);
   const save = (p: SettingsPatch) => {
     const w = getWriter();
@@ -314,6 +316,14 @@ export function WordSettings() {
       <p className="m-0 text-xs text-subtle" data-testid="vs-when">
         {t('vmSetFromTomorrow')}
       </p>
+      <div className="flex flex-col gap-1">
+        <Switch checked={anki} onChange={(v) => save({ anki: v ? 1 : 0 })} label={t('vmSetAnki')} testId="vs-anki" />
+        <p className="m-0 text-sm text-muted">{t('vmSetAnkiHint')}</p>
+      </div>
+      <div className="flex flex-col gap-1">
+        <Switch checked={pre} onChange={(v) => save({ pre: v ? 1 : 0 })} label={t('vmSetPre')} testId="vs-pre" />
+        <p className="m-0 text-sm text-muted">{t('vmSetPreHint')}</p>
+      </div>
     </section>
   );
 }

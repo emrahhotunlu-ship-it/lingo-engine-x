@@ -152,6 +152,10 @@ export const vcfgSchema = z
     mod: z.union([z.literal(0), z.literal(1)]),
     w: z.object({ col: z.number().min(0).max(1), job: z.number().min(0).max(1), own: z.number().min(0).max(1), band: z.number().min(0).max(1) }).strict().optional(),
     rd: int.min(0).max(6).nullable().optional(),
+    /** Großpaket A S6b-3: Anki-Modus (Aufdecken, nur Verstehen; A7/F3). Fehlt = aus. */
+    anki: z.union([z.literal(0), z.literal(1)]).optional(),
+    /** Satz vor dem Prüfen anhören (Lücke als kurzer Ton, Bild s2-13). Fehlt = an. */
+    pre: z.union([z.literal(0), z.literal(1)]).optional(),
   })
   .strict();
 

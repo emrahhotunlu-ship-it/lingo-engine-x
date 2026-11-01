@@ -234,6 +234,28 @@ export function playFx(name: FxSound): boolean {
   }
 }
 
+/** Wörter „Satz vor dem Prüfen anhören“ (Bild s2-13): die Lücke als kurzer, leiser Ton. Gehört zum Inhalt, nicht zu den Effekten: spielt auch bei
+ *  ausgeschalteten Tönen, aber nie während der Sprachausgabe. `primeGapTone` in der Geste aufrufen (iOS weckt den Audio-Kontext nur dort). */
+export function primeGapTone(): void {
+  gestured = true;
+  const c = context();
+  if (c && c.state === 'suspended') c.resume().catch(report);
+}
+
+export function playGapTone(): boolean {
+  if (!gestured || speakingNow()) return false;
+  const c = context();
+  if (!c) return false;
+  try {
+    if (c.state === 'suspended') c.resume().catch(report);
+    tone(c, masterNode(c), c.currentTime, 587, 0.22, db(-22));
+    return true;
+  } catch (err) {
+    report(err);
+    return false;
+  }
+}
+
 function tone(c: AudioContext, out: AudioNode, start: number, f: number, dur: number, peak: number): void {
   const osc = c.createOscillator();
   const g = c.createGain();

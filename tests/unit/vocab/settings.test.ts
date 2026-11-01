@@ -38,4 +38,16 @@ describe('writeVocabSettings', () => {
     expect(await writeVocabSettings(createWriter(empty.db), { newPerDay: 2 })).toBe(false);
     expect(empty.dump()['app/profile']).toBeUndefined();
   });
+  it('Anki-Modus und „Satz vorher anhören“ (S6b-3): fehlend = aus bzw. an; geschrieben als 0/1 in vcfg, andere Werte bleiben', async () => {
+    const h = createMemoryDb({ seed: { 'app/profile': profile() } });
+    const w = createWriter(h.db);
+    expect(await writeVocabSettings(w, { anki: 1 })).toBe(true);
+    expect(await writeVocabSettings(w, { pre: 0 })).toBe(true);
+    expect((h.dump()['app/profile'] as Record<string, unknown>).vcfg).toEqual({ min: 15, ret: 0.9, mod: 1, anki: 1, pre: 0 });
+    const before = h.writes().length;
+    expect(await writeVocabSettings(w, { anki: 1, pre: 0 })).toBe(true);
+    expect(h.writes().length).toBe(before);
+    expect(await writeVocabSettings(w, { anki: 2 as 1 })).toBe(false);
+    expect(h.writes().length).toBe(before);
+  });
 });

@@ -22,6 +22,9 @@ export { Icon } from '../../ui/Icon';
 export { toast } from '../../ui/Toast';
 // Übersicht und Einstellungen Wörter (Großpaket A S6): Auswahl als Radiogruppe.
 export { Segmented } from '../../ui/Segmented';
+export { Switch } from '../../ui/Switch';
+// Anki-Modus (S6b-3): Nochmal · Schwer · Gut · Leicht in der Aktionsleiste.
+export { GradeButtons } from '../../ui/GradeButtons';
 
 // Lücke, antippbarer Text, Eingabe
 export { EnglishText } from '../../engine/EnglishText';
@@ -37,7 +40,9 @@ export { maskOf } from '../../domain/answer/mask';
 export { dictLookup, isDictWord } from '../../domain/lexicon/dict';
 // Wort-Seite (Großpaket A S6): Lautschrift und Vorlesen (Wort und Satz, normal und langsam).
 export { ipaOf } from '../../domain/lexicon/pron';
-export { speak, useSpeech } from '../../platform/speech';
+export { speak, stopSpeech, useSpeech } from '../../platform/speech';
+// „Satz vor dem Prüfen anhören“ (S6b-3): die Lücke als kurzer Ton.
+export { playGapTone, primeGapTone } from '../../platform/sound';
 // Uhr der App (alle 30 s, Tageswechsel 04:00): Zeit im Zeichnen nur über sie, nie `Date.now()`.
 export { useClock } from '../../app/clock';
 

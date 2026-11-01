@@ -188,6 +188,10 @@ describe('Buchungswege Einführung, „Kenne ich schon“, Entwurf', () => {
     expect(isDraft(d)).toBe(true);
     expect(isDraft({ ...d, path: 'app/profile' })).toBe(false);
     expect(isDraft({ ...d, a: null })).toBe(false);
+    // Anki-Entwurf (S6b-3): Aufdecken braucht ein Selbsturteil 1–4.
+    expect(isDraft({ ...d, a: { ...d.a, form: 'flip', self: 3, flags: 8 } })).toBe(true);
+    expect(isDraft({ ...d, a: { ...d.a, form: 'flip' } })).toBe(false);
+    expect(isDraft({ ...d, a: { ...d.a, form: 'flip', self: 5 } })).toBe(false);
     expect(draftOpen(d, lex)).toBe(true);
     expect(draftOpen(d, null)).toBe(false);
     const { h, cat, deps } = setup(lex);

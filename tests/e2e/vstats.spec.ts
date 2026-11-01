@@ -79,6 +79,15 @@ for (const vp of [
       await page.getByTestId('vs-ret-95').click();
       await expect.poll(async () => (await dump(page))['app/profile']?.vcfg).toEqual({ min: 20, ret: 0.95, mod: 1 });
       await expect(page.getByTestId('vs-ret-95')).toHaveAttribute('aria-checked', 'true');
+      // S6b-3: Anki-Modus (Standard aus) und „Satz vor dem Prüfen anhören“ (Standard an) als Schalter.
+      await expect(page.getByTestId('vs-anki')).toHaveAttribute('aria-checked', 'false');
+      await expect(page.getByTestId('vs-pre')).toHaveAttribute('aria-checked', 'true');
+      await page.getByTestId('vs-anki').click();
+      await expect.poll(async () => ((await dump(page))['app/profile']?.vcfg as Doc | undefined)?.anki).toBe(1);
+      await page.getByTestId('vs-pre').click();
+      await expect.poll(async () => ((await dump(page))['app/profile']?.vcfg as Doc | undefined)?.pre).toBe(0);
+      await expect(page.getByTestId('vs-anki')).toHaveAttribute('aria-checked', 'true');
+      await expect(page.getByTestId('vs-pre')).toHaveAttribute('aria-checked', 'false');
       expect(await layoutProblems(page)).toEqual([]);
       expect(errors).toEqual([]);
     });

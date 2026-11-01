@@ -4,11 +4,17 @@ import {
   dictLookup,
   EnglishText,
   ExerciseShell,
+  GradeButtons,
   KineticGap,
   lookupOpenMs,
   maskOf,
+  playGapTone,
+  primeGapTone,
+  speak,
+  stopSpeech,
   useHiddenInput,
   useHotkeys,
+  useSpeech,
   useT,
   type GapState,
   type MessageKey,
@@ -21,7 +27,8 @@ import type { Band, Line, Next, Why } from '../domain/band';
 import { tipOf } from '../domain/card';
 import type { CardModel } from '../domain/flow';
 import type { Reason } from '../domain/reason';
-import type { LearnRun, LearnView } from './learnRun';
+import type { Grade } from '../domain/types';
+import type { FlipWhen, LearnRun, LearnView } from './learnRun';
 
 // Wörter-Modul V3 Schritt 2b-2: eine Lernkarte und ihr Band (v3-bau.md §1–§3, Bilder s1-*). Die Karte rechnet nichts selbst: Prüfen, Wahl und
 // Weiter gehen an die Steuerung (`learnRun.ts`). Feste Reihenfolge im Band: Urteil · Lösungszeile · Warum · Wortpartner · Kommt wieder · Knöpfe.
@@ -65,7 +72,93 @@ function fullText(card: CardModel): { text: string; start: number; end: number }
   return start < 0 ? null : { text, start, end };
 }
 
+/** „Satz vor dem Prüfen anhören“: die Teile zwischen den Lücken; jede Lücke wird beim Abspielen ein kurzer Ton. */
+function gapParts(card: CardModel): string[] | null {
+  const s = card.sentence;
+  if (!s) return null;
+  const out = [''];
+  for (const seg of s.gap.segs) {
+    if (seg.t === 'gap') out.push('');
+    else out[out.length - 1] += seg.s;
+  }
+  return out.length > 1 ? out : null;
+}
+
+const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
+
+/** Satz vorlesen (S6b-3, Bild s2-13). `parts` mit mehr als einem Teil: zwischen den Teilen ein kurzer Ton statt des Lösungsworts. Ohne Stimme kein Knopf. */
+function ListenButton({ parts, testId }: { parts: readonly string[]; testId: string }) {
+  const { t } = useT();
+  const status = useSpeech((x) => x.status);
+  const run = useRef(0);
+  const mine = useRef(false);
+  useEffect(
+    () => () => {
+      run.current += 1;
+      if (mine.current) stopSpeech();
+    },
+    [],
+  );
+  if (status === 'unsupported' || status === 'novoice' || parts.every((p) => !p.trim())) return null;
+  const play = async () => {
+    primeGapTone();
+    const id = ++run.current;
+    mine.current = true;
+    for (let i = 0; i < parts.length; i++) {
+      if (i > 0) {
+        playGapTone();
+        await wait(450);
+        if (run.current !== id) return;
+      }
+      const p = (parts[i] ?? '').trim();
+      if (!p) continue;
+      const r = await speak(p);
+      if (r !== 'done' || run.current !== id) break;
+    }
+    if (run.current === id) mine.current = false;
+  };
+  return (
+    <div>
+      <Button variant="quiet" icon="speaker" onClick={() => void play()} data-testid={testId} data-parts={parts.length}>
+        {t('vmListen')}
+      </Button>
+    </div>
+  );
+}
+
+function whenText(t: T, w: FlipWhen): string | undefined {
+  if (w.k === 'soon') return t('vmIvlSoon');
+  if (w.k === 'none') return undefined;
+  const today = dayKey(Date.now());
+  if (w.day <= today) return t('vmIvlToday');
+  if (w.day === addDays(today, 1)) return t('vmIvlTomorrow');
+  const n = Math.round((Date.parse(`${w.day}T12:00:00Z`) - Date.parse(`${today}T12:00:00Z`)) / 86_400_000);
+  return t('vmIvlDays', { n: String(n) });
+}
+
+function partnersNode(t: T, partners: Band['partners']): ReactNode {
+  if (!partners.length) return null;
+  return (
+    <p className="lx-t-support text-muted" data-testid="vm-partners">
+      <span className="text-subtle">{t('vmPartners')}: </span>
+      {partners.map((p, i) => (
+        <span key={p.p}>
+          {i > 0 ? ' · ' : ''}
+          <span lang="en">{p.p}</span>
+          {p.de ? (
+            <span className="text-subtle" lang="de">
+              {' '}
+              ({p.de})
+            </span>
+          ) : null}
+        </span>
+      ))}
+    </p>
+  );
+}
+
 function taskKey(v: CardView | BandView): MessageKey {
+  if (v.card.mode === 'flip') return 'vmTask_flip';
   if (v.kind === 'intro') return 'vmTask_intro';
   if (v.kind === 'probe') return 'vmTask_probe';
   if (v.card.form === 'contrast') return 'vmTask_contrast';
@@ -123,11 +216,34 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     run.next();
     api.focusNow();
   };
-  const onEnter = () => (band ? next() : check());
-  useHotkeys({ enter: onEnter }, api.isInput);
+  // Anki-Modus (S6b-3): Aufdecken, dann Selbsturteil 1–4; gebucht wird sofort, ohne Band.
+  const isFlip = card.mode === 'flip';
+  const flip = view.k === 'card' ? (view.flip ?? null) : null;
+  const flipOpen = () => {
+    if (view.k === 'card' && isFlip && !view.flip) run.flipOpen(measure());
+  };
+  const flipGrade = (g: Grade) => {
+    if (!flip) return;
+    run.flipGrade(g);
+    api.focusNow();
+  };
+  const onEnter = () => (isFlip ? flipOpen() : band ? next() : check());
+  useHotkeys(
+    {
+      enter: onEnter,
+      ...(flip
+        ? {
+            digit: (n: number) => {
+              if (n >= 1 && n <= 4) flipGrade(n as Grade);
+            },
+          }
+        : {}),
+    },
+    api.isInput,
+  );
 
   const tip = view.k === 'card' && (view.tip || card.firstLetters);
-  const typedGap = card.mode !== 'meaning';
+  const typedGap = card.mode !== 'meaning' && !isFlip;
   const mask = typedGap && tip ? maskOf(card.answer, { firstLetter: true, perWord: true }) : null;
   const gapState: GapState = band ? GAP[band.band.tone] : 'input';
   const intro = view.kind === 'intro';
@@ -180,9 +296,42 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   let prompt: ReactNode;
   let answer: ReactNode = null;
   const g = gapText(card);
-  if (card.mode === 'meaning') {
-    const f = fullText(card);
-    prompt = f ? <EnglishText as="p" testId="vm-sentence" text={f.text} area="trainer" source={card.path} title={card.head} highlight={[f.start, f.end]} exclude={band ? null : [f.start, f.end]} /> : null;
+  const whole = fullText(card);
+  // Vorlesen: nach dem Prüfen und bei sichtbarem Wort der ganze Satz; vor dem Prüfen einer Lücke nur mit der Einstellung (Lücke als Ton).
+  const parts = band || (card.mode !== 'gap' && card.mode !== 'intro') ? (whole ? [whole.text] : null) : run.listenFirst() ? gapParts(card) : null;
+  const listen = parts ? <ListenButton key={band ? 'full' : 'pre'} parts={parts} testId="vm-listen" /> : null;
+  if (isFlip) {
+    prompt = (
+      <div className="flex flex-col gap-3">
+        <p className="lx-t-display min-w-0 break-words" lang="en" data-testid="vm-flip-head">
+          {card.head}
+        </p>
+        {whole ? <EnglishText as="p" testId="vm-sentence" text={whole.text} area="trainer" source={card.path} title={card.head} highlight={[whole.start, whole.end]} exclude={flip ? null : [whole.start, whole.end]} /> : null}
+        {listen}
+      </div>
+    );
+    answer = flip ? (
+      <div className="flex flex-col gap-2" data-testid="vm-flip-back">
+        <p className="lx-t-meta m-0 text-subtle">{t('vmFlipMeaning')}</p>
+        <p className="lx-t-title m-0" lang="de" data-testid="vm-flip-de">
+          {card.de}
+        </p>
+        {flip.why ? (
+          <p className="lx-t-support" data-testid="vm-why">
+            {whyText(t, flip.why)}
+          </p>
+        ) : null}
+        {partnersNode(t, flip.partners)}
+      </div>
+    ) : null;
+  } else if (card.mode === 'meaning') {
+    const f = whole;
+    prompt = f ? (
+      <div className="flex flex-col gap-3">
+        <EnglishText as="p" testId="vm-sentence" text={f.text} area="trainer" source={card.path} title={card.head} highlight={[f.start, f.end]} exclude={band ? null : [f.start, f.end]} />
+        {listen}
+      </div>
+    ) : null;
     answer = gap;
   } else if (g && (card.mode === 'gap' || card.mode === 'intro')) {
     prompt = (
@@ -190,6 +339,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         {cue}
         <EnglishText as="p" testId="vm-sentence" text={g.text} area={intro ? 'intro' : 'trainer'} source={card.path} title={card.head} slot={{ start: g.start, end: g.end, node: gap }} />
         {tipLine}
+        {listen}
       </div>
     );
   } else {
@@ -211,7 +361,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     ...(card0 && card0.kind === 'answer' && typedGap && !card0.tip && !card.firstLetters
       ? [{ id: 'hint', label: t('vmBtnTip'), onClick: () => run.tip(), testId: 'vm-tip-btn', variant: 'quiet' } as const]
       : []),
-    ...(card0 && card0.kind !== 'intro' ? [{ id: 'dontKnow', label: t('vmBtnDunno'), onClick: () => check(true), testId: 'vm-dunno', variant: 'quiet' } as const] : []),
+    ...(card0 && card0.kind !== 'intro' && !isFlip ? [{ id: 'dontKnow', label: t('vmBtnDunno'), onClick: () => check(true), testId: 'vm-dunno', variant: 'quiet' } as const] : []),
     ...(card0?.canProbe
       ? [
           {
@@ -228,9 +378,23 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       : []),
   ];
   const introEmpty = intro && view.k === 'card' && !hasInput;
-  const primary = band
-    ? { label: t('vmBtnNext'), onClick: next, testId: 'vm-next', arrow: true }
-    : { label: t(introEmpty ? 'vmBtnReveal' : 'vmBtnCheck'), onClick: () => check(introEmpty), testId: 'vm-check' };
+  const primary = isFlip
+    ? { label: t('vmBtnReveal'), onClick: flipOpen, testId: 'vm-flip-reveal' }
+    : band
+      ? { label: t('vmBtnNext'), onClick: next, testId: 'vm-next', arrow: true }
+      : { label: t(introEmpty ? 'vmBtnReveal' : 'vmBtnCheck'), onClick: () => check(introEmpty), testId: 'vm-check' };
+  const grades = flip ? (
+    <GradeButtons
+      options={flip.opts.map((o) => {
+        const iv = whenText(t, o.when);
+        return { grade: o.g, label: t(`vmGrade${o.g}` as MessageKey), ...(iv ? { interval: iv } : {}) };
+      })}
+      onGrade={flipGrade}
+      label={t('vmGradesLabel')}
+      note={t('vmGradesNote')}
+      testId="vm-grades"
+    />
+  ) : undefined;
 
   const tk = taskKey(view);
   return (
@@ -242,6 +406,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       answer={answer}
       secondary={secondary}
       primary={primary}
+      barOverride={grades}
       keysHint={null}
       feedback={band ? feedbackOf(band, t, dateShort, run) : null}
     />
@@ -347,23 +512,7 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
   const soft = v.kind === 'intro' && b.tone !== 'ok';
   const verdict = soft ? 'dontKnow' : TONE[b.tone];
   const title = soft ? t('vmVerdict_dunno') : t(`vmVerdict_${b.verdict}` as MessageKey, { answer: v.card.answer });
-  const partners = b.partners.length ? (
-    <p className="lx-t-support text-muted" data-testid="vm-partners">
-      <span className="text-subtle">{t('vmPartners')}: </span>
-      {b.partners.map((p, i) => (
-        <span key={p.p}>
-          {i > 0 ? ' · ' : ''}
-          <span lang="en">{p.p}</span>
-          {p.de ? (
-            <span className="text-subtle" lang="de">
-              {' '}
-              ({p.de})
-            </span>
-          ) : null}
-        </span>
-      ))}
-    </p>
-  ) : null;
+  const partners = partnersNode(t, b.partners);
   // Kontrastkarte: die Falle ausdrücklich benennen (deutsche Falle, Paar, zuletzt verwechselt), englische Wörter mit `lang="en"`.
   const ct = v.card.contrast;
   const mixed = ct?.w && ct.w.toLowerCase() !== (ct.pair ?? '').toLowerCase() ? ct.w : null;

@@ -10,7 +10,7 @@ export const MIN_OPTIONS = [10, 15, 20, 30] as const;
 export const NEW_OPTIONS = [0, 2, 5, 10] as const;
 export const RET_OPTIONS = [0.85, 0.9, 0.95] as const;
 
-export type SettingsPatch = { min?: (typeof MIN_OPTIONS)[number]; ret?: (typeof RET_OPTIONS)[number]; newPerDay?: (typeof NEW_OPTIONS)[number] };
+export type SettingsPatch = { min?: (typeof MIN_OPTIONS)[number]; ret?: (typeof RET_OPTIONS)[number]; newPerDay?: (typeof NEW_OPTIONS)[number]; anki?: 0 | 1; pre?: 0 | 1 };
 
 /** Liefert, ob der Wert jetzt gespeichert ist (auch: war schon so). `false` bei Fehler oder fehlendem/ungültigem Profil. */
 export async function writeVocabSettings(writer: Writer, patch: SettingsPatch): Promise<boolean> {
@@ -19,13 +19,14 @@ export async function writeVocabSettings(writer: Writer, patch: SettingsPatch): 
     await writer.transform(PROFILE_PATH, (cur) => {
       if (!cur) return null;
       const update: Record<string, unknown> = {};
-      if (patch.min !== undefined || patch.ret !== undefined) {
+      const keys = (['min', 'ret', 'anki', 'pre'] as const).filter((k) => patch[k] !== undefined);
+      if (keys.length) {
         const base = vcfgSchema.safeParse(cur.vcfg);
         // Ohne gültiges vcfg ist das Modul nie eingeschaltet worden: dann gibt es hier nichts einzustellen.
         if (!base.success) return null;
-        const next = vcfgSchema.safeParse({ ...base.data, ...(patch.min !== undefined ? { min: patch.min } : {}), ...(patch.ret !== undefined ? { ret: patch.ret } : {}) });
+        const next = vcfgSchema.safeParse({ ...base.data, ...Object.fromEntries(keys.map((k) => [k, patch[k]])) });
         if (!next.success) return null;
-        if (next.data.min !== base.data.min || next.data.ret !== base.data.ret) update.vcfg = next.data;
+        if (keys.some((k) => next.data[k] !== base.data[k])) update.vcfg = next.data;
       }
       if (patch.newPerDay !== undefined) {
         if (!(NEW_OPTIONS as readonly number[]).includes(patch.newPerDay)) return null;

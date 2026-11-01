@@ -25,6 +25,7 @@ Stand: Phase 0. Grundlage sind die bestehende Datenbank (`docs/datenstruktur.jso
 | `app/profile.lang` | Oberflächensprache `de`/`en`. Das Feld ist bestehend und wird weiter genutzt. | Einstellungen |
 | `app/profile.theme.m` | `dark`/`dim`/`light`/`auto`. Das Feld ist bestehend, `theme.p` bleibt erhalten. | Einstellungen |
 | `app/profile.theme.a` | Akzentfarbe `iris` (Standard) / `amber`, seit Relaunch Stufe 1 P1 (28.10.2026). Fehlt das Feld, gilt Iris; lokal gespiegelt in `lx:accent` (nur Bequemlichkeit). | Einstellungen |
+| `app/profile.vcfg` | Wörter-App (Großpaket A): `min` 10/15/20/30 Minuten, `ret` 0.85/0.9/0.95 Sicherheit, `mod` 0/1 Rückweg-Schalter für alle Geräte, `rd` Ruhetag 0–6 oder null, `w` Gewichte (`col`, `job`, `own`, `band`), `anki` 0/1 Anki-Modus (fehlt = aus, S6b-3), `pre` 0/1 Satz vor dem Prüfen anhören (fehlt = an, S6b-3). Streng geprüft (`vcfgSchema`); ältere App-Stände lehnen `anki`/`pre` ab und fallen dann auf `mod` 0 zurück (beim Rückweg beachten). | Einstellungen › Wörter (ein `transform` auf `app/profile`) |
 
 ## Umstellung (Version 1)
 

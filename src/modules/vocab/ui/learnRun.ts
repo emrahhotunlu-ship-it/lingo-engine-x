@@ -17,7 +17,7 @@ import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Fr
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
 import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
-import { type FormStats, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
+import { type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
 import { type ReadDoc, readVlogRecent } from '../data/history';
 import { retention, RET_WINDOW_DAYS, youngBoost } from '../domain/stats';
@@ -39,7 +39,7 @@ export type UnfairResult = 'void' | 'again' | 'counts';
 export type LearnView =
   | { k: 'loading' }
   | { k: 'closed'; why: 'off' | 'migrate' | 'error' }
-  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean }
+  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
@@ -145,6 +145,13 @@ export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, D
 /** Eingabe beim Prüfen (von der Oberfläche gemessen): Dauer und Zeit bis zum ersten Zeichen ohne Nachschlage-Pausen. */
 export type Measured = { ms: number; fk: number };
 
+/**
+ * Anki-Modus, Rückseite (S6b-3): je Note der nächste Termin, wie er gebucht würde (`soon` = heute noch einmal, `day` = Lerntag, `none` = ohne
+ * Planwirkung, z. B. Übung oder heute schon gebucht), dazu Warum und Wortpartner aus dem Band der Note „Gut“ (Kap. 2 Nr. 4: auch bei richtig).
+ */
+export type FlipWhen = { k: 'soon' } | { k: 'day'; day: string } | { k: 'none' };
+export type FlipBack = { opts: { g: Grade; when: FlipWhen }[]; why: Band['why'] | null; partners: Band['partners'] };
+
 /** Gestolperte Wörter im Abschluss höchstens so viele mit Namen (gruppiert nach Tag, der Rest als „+n“). */
 const SLIP_MAX = 12;
 /** Schutz gegen eine endlose Folge von Aufgaben ohne Karte (spätere Formen werden übersprungen). */
@@ -210,6 +217,8 @@ export class LearnRun {
   private sbGate: unknown = null;
   private readonly lastSent = new Map<string, string>();
   private pending: Pending | null = null;
+  /** Anki-Modus: eingefrorene Zeit beim Aufdecken (Antwortzeit = Zeit bis zum Aufdecken). */
+  private flipF: Frozen | null = null;
   private chain: Promise<void> = Promise.resolve();
   private n = 0;
   private tally = { fresh: new Set<string>(), review: new Set<string>(), extra: new Set<string>() };
@@ -306,7 +315,7 @@ export class LearnRun {
       this.docs.set(path, doc);
       // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
       const tc = teachOf(headOf(path, doc));
-      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null, av: { de: true, ai } });
+      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null, av: { de: true, ai, anki: !!cfg.anki } });
     }
     const cat = new Catalog(items);
     this.cat = cat;
@@ -714,6 +723,52 @@ export class LearnRun {
     if (v.k !== 'card' || !v.canProbe) return;
     const card = this.cardFor({ ...v.task, form: 'probe' });
     if (card) this.set({ ...v, card, kind: 'probe', canProbe: false, tip: false });
+  }
+
+  /** Satz vor dem Prüfen anhören (Einstellung, Standard an). */
+  listenFirst(): boolean {
+    return this.cfg?.pre !== false;
+  }
+
+  /** Anki-Modus: aufdecken. Die Zeit bis hier ist die Antwortzeit; je Note wird der nächste Termin rein gerechnet. */
+  flipOpen(m: Measured): void {
+    const v = this.view;
+    const cat = this.cat;
+    if (v.k !== 'card' || v.card.mode !== 'flip' || v.flip || !cat) return;
+    const before = cat.get(v.task.path)?.lex;
+    if (!before) return;
+    const t = this.env.now();
+    const f: Frozen = { t, ms: Math.max(0, Math.round(m.ms)), fk: Math.max(0, Math.round(m.fk)), hint: 0 };
+    this.flipF = f;
+    const day = dayKey(t);
+    const opts = ([1, 2, 3, 4] as const).map((g) => {
+      const r = this.compute('answer', v.card, v.task, before, this.flipAnswer(v.card, v.task, f, g));
+      const when: FlipWhen = r.lex.step && dayKey(r.lex.step.at) === day ? { k: 'soon' } : r.booked.includes('u') ? { k: 'day', day: dayKey(r.lex.u.due) } : { k: 'none' };
+      return { g, when };
+    });
+    const good = this.compute('answer', v.card, v.task, before, this.flipAnswer(v.card, v.task, f, 3));
+    const band = previewOf({ m: v.card, check: { outcome: 'ok' }, given: v.card.answer, lang: this.env.lang(), before, result: good, planned: v.task.planned, t, ...(this.env.meaningOf ? { meaningOf: this.env.meaningOf } : {}) });
+    this.set({ ...v, flip: { opts, why: band?.why ?? null, partners: band?.partners ?? [] } });
+  }
+
+  private flipAnswer(card: CardModel, task: Task, f: Frozen, g: Grade): Answer {
+    return answerOf(card, { outcome: g === 1 ? 'wrong' : 'ok' }, f, { self: g, step: task.step > 0 });
+  }
+
+  /** Anki-Modus: Selbsturteil 1–4 (A7). Wirkt nur auf Verstehen (Planer, F3); gebucht wird wie jede Antwort, dann sofort weiter. */
+  flipGrade(g: Grade): void {
+    const v = this.view;
+    const cat = this.cat;
+    const f = this.flipF;
+    if (v.k !== 'card' || v.card.mode !== 'flip' || !v.flip || !f || !cat) return;
+    const before = cat.get(v.task.path)?.lex;
+    if (!before) return;
+    const a = this.flipAnswer(v.card, v.task, f, g);
+    const check: Check = { outcome: a.outcome };
+    this.pending = { task: v.task, card: v.card, kind: 'answer', before, given: '', check, f, choice: null, a, result: this.compute('answer', v.card, v.task, before, a), committed: false };
+    if (v.card.sentence) this.lastSent.set(v.task.path, v.card.sentence.sent.key);
+    this.flipF = null;
+    this.next();
   }
 
   /** Prüfen (bzw. Aufdecken/„Weiß ich nicht“ mit `dunno`). */

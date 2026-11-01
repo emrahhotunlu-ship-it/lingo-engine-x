@@ -29,6 +29,8 @@ export type Avail = {
   situation?: boolean;
   /** Claude verfügbar (für `own`, `diplomatic`; V4). */
   ai?: boolean;
+  /** Anki-Modus an (Großpaket A S6b-3): jede Verstehen-Abfrage wird Aufdecken mit Selbsturteil; Benutzen bleibt getippt (A7, F3). */
+  anki?: boolean;
   /** Diktat/Erkennung verfügbar (für `say`). */
   speech?: boolean;
   /** Lehrer-Charge 3 geprüft: M78–M81 frei. */
@@ -162,6 +164,7 @@ export function needsNoSentence(l: Lex): boolean {
 
 /** Form für eine fällige Abfrage der Spur `track` (M22). */
 export function pickForm(l: Lex, track: TrackKey, av: Avail): FormPick {
+  if (track === 'u' && av.anki) return { form: 'flip', sent: 'n', cue: false, swap: false };
   const lv = formLevel(l);
   const fq = fqOf(l);
   const ladder = (track === 'u' ? LADDER_U : LADDER_B)[lv] ?? [];

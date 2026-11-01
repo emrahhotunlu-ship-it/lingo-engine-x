@@ -8,7 +8,7 @@ import { FORM_SPEC } from './grade';
 import { type Answer, type AnswerResult, applyAnswer, FLAG, type PlanCtx, probeKnown } from './planner';
 import type { UseInput } from './apply';
 import type { Task } from './session';
-import type { Form, FormStats, Lex, Outcome, VocabCfg } from './types';
+import type { Form, FormStats, Grade, Lex, Outcome, VocabCfg } from './types';
 
 // Wörter-Modul V3 Schritt 2b: Ablauf EINER Lernkarte, rein gerechnet (v3-bau.md §1–3). Was die Karte zeigt (`cardOf`), wie eine Antwort
 // gewertet wird (`evaluate`), welche Buchung daraus wird (`answerOf`) und das Band davor (`previewOf`). Geschrieben wird erst beim Weiter
@@ -18,9 +18,10 @@ type Doc = Record<string, unknown>;
 
 /**
  * Darstellung: `intro` neues Wort (Satz, kurz versuchen, aufdecken) · `probe` „Kenne ich schon“ frei ohne Satz · `gap` Lücke im Satz ·
- * `nosent` Deutsch → Englisch ohne Satz · `meaning` markiertes Wort im Satz → deutsche Bedeutung (Verstehen-Spur).
+ * `nosent` Deutsch → Englisch ohne Satz · `meaning` markiertes Wort im Satz → deutsche Bedeutung (Verstehen-Spur) ·
+ * `flip` Anki-Modus: Wort (im Satz) → Aufdecken → Selbsturteil (nur Verstehen, A7/F3).
  */
-export type CardMode = 'intro' | 'probe' | 'gap' | 'nosent' | 'meaning';
+export type CardMode = 'intro' | 'probe' | 'gap' | 'nosent' | 'meaning' | 'flip';
 
 export type CardModel = {
   path: string;
@@ -91,7 +92,13 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     if (!s) return { ...noSentence('intro', 'intro'), cue: cueOf({ ...lex, lv: 1 }, de, teach) };
     return { ...base, mode: 'intro', form: 'intro', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: cueOf({ ...lex, lv: 1 }, de, teach), firstLetters: false };
   }
-  // Verstehen-Spur: das Wort steht markiert im Satz, gesucht ist die Bedeutung (Hören, Bausteine und Aufdecken folgen mit eigenen Karten).
+  // Anki-Modus (S6b-3): Vorderseite das Wort, markiert im Satz (ohne nutzbaren Satz allein); Rückseite Bedeutung und Warum.
+  if (task.form === 'flip') {
+    const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null });
+    const answer = s ? s.gap.answer : baseAnswer(head);
+    return { ...base, mode: 'flip', form: 'flip', sentence: s, answer, target: targetOf(lex, answer, pos, teach, s ? s.gap : null), cue: null, firstLetters: false };
+  }
+  // Verstehen-Spur: das Wort steht markiert im Satz, gesucht ist die Bedeutung (Hören und Bausteine folgen mit eigenen Karten).
   if (spec.track === 'u') {
     const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null });
     if (s && de) return { ...base, mode: 'meaning', form: 'meaning', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
@@ -177,11 +184,13 @@ export function evaluate(m: CardModel, given: string, dict: CheckDict, dunno = f
 export type Frozen = { t: number; ms: number; fk: number; hint: number };
 
 /** Antwort für den Planer. `override`: „Das wusste ich eigentlich“; `later`: „Später prüfen lassen“; `alsoRight`: Claude sagt „passt auch“. */
-export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: boolean; later?: boolean; alsoRight?: boolean; step?: boolean; unfair?: boolean } = {}): Answer {
+export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: boolean; later?: boolean; alsoRight?: boolean; step?: boolean; unfair?: boolean; self?: Grade } = {}): Answer {
   const outcome: Outcome = o.alsoRight ? 'syn' : c.outcome;
-  // M43 „Aufgabe war unfair“: Ausgang `unfair` plus Kennzeichen für die Inhaltsprüfung im Verlauf.
-  const flags = (o.override ? FLAG.override : 0) | (o.later ? FLAG.later : 0) | (o.step ? FLAG.step : 0) | (c.outcome === 'unfair' || o.unfair ? FLAG.unfair : 0);
+  // M43 „Aufgabe war unfair“: Ausgang `unfair` plus Kennzeichen für die Inhaltsprüfung im Verlauf. Aufdecken: Selbsturteil mit FLAG.anki.
+  const anki = m.form === 'flip' && o.self !== undefined && c.outcome !== 'unfair';
+  const flags = (o.override ? FLAG.override : 0) | (o.later ? FLAG.later : 0) | (o.step ? FLAG.step : 0) | (c.outcome === 'unfair' || o.unfair ? FLAG.unfair : 0) | (anki ? FLAG.anki : 0);
   return {
+    ...(anki ? { self: o.self } : {}),
     t: f.t,
     form: m.form,
     outcome,
@@ -261,7 +270,9 @@ export function isDraft(v: unknown): v is Draft {
   const d = v as Record<string, unknown>;
   const a = d.a as Record<string, unknown> | undefined;
   const kindOk = d.kind === 'answer' || d.kind === 'intro' || d.kind === 'probe' || (d.kind === 'use' && isUseInput(d.u));
-  return d.v === 1 && kindOk && typeof d.path === 'string' && /^(vocab|chunk)\//.test(d.path) && typeof d.planned === 'boolean' && !!a && typeof a.t === 'number' && typeof a.form === 'string' && typeof a.outcome === 'string';
+  // Aufdecken bucht nur mit gültigem Selbsturteil 1–4 (sonst gäbe gradeOf eine beliebige Note weiter).
+  const selfOk = !a || a.form !== 'flip' || (typeof a.self === 'number' && [1, 2, 3, 4].includes(a.self));
+  return d.v === 1 && kindOk && selfOk && typeof d.path === 'string' && /^(vocab|chunk)\//.test(d.path) && typeof d.planned === 'boolean' && !!a && typeof a.t === 'number' && typeof a.form === 'string' && typeof a.outcome === 'string';
 }
 
 /** Muss der Entwurf noch gebucht werden? Antwort/Probe: das Lexem kennt diese Zeit noch nicht (`sync < t`); Einführung: noch nicht eingeführt. */
