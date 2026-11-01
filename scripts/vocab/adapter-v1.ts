@@ -11,6 +11,8 @@ import { Catalog, dueOn, forecastMinutes, isNewLex, loadByDay } from '../../src/
 import { applyMove, buildDayPlan, type DayPlan } from '../../src/modules/vocab/domain/day';
 import { applyAnswer, emptyLex, evidencePlans, introduce, type PlanCtx } from '../../src/modules/vocab/domain/planner';
 import { SessionRun, type SessionKind, type Task as VTask } from '../../src/modules/vocab/domain/session';
+import { type Avail, pickSentence } from '../../src/modules/vocab/domain/forms';
+import { FORM_SPEC, median } from '../../src/modules/vocab/domain/grade';
 import { convertDoc, spreadBacklog } from '../../src/modules/vocab/domain/migrate';
 import { DEFAULT_CFG, type Form, type FormStats, type Outcome as VOutcome } from '../../src/modules/vocab/domain/types';
 import { addDays, daysBetween } from '../../src/domain/date';
@@ -22,6 +24,9 @@ const cfg = { ...DEFAULT_CFG, min: Number(process.env.VOCAB_MIN ?? DEFAULT_CFG.m
 let cat = new Catalog([]);
 const plans = new Map<string, DayPlan>();
 const samples = new Map<Form, number[]>();
+/** V2: Zeitbasis je Form (Zeit bis zum ersten Zeichen), wie `vmod/stats.fk`/`fkn`. */
+const fkSamples = new Map<Form, number[]>();
+const fkCount = new Map<Form, number>();
 let maxMoved = 0;
 
 const P = (id: string) => `vocab/${id}`;
@@ -36,6 +41,28 @@ function med(): FormStats {
   }
   return out;
 }
+function fkStats(): { med: FormStats; n: Partial<Record<Form, number>> } {
+  const med: FormStats = {};
+  const n: Partial<Record<Form, number>> = {};
+  for (const [f, l] of fkSamples) med[f] = median(l);
+  for (const [f, c] of fkCount) n[f] = c;
+  return { med, n };
+}
+function sampleFk(f: Form, fk: number): void {
+  const l = fkSamples.get(f) ?? [];
+  l.push(Math.min(45_000, fk));
+  if (l.length > 200) l.shift();
+  fkSamples.set(f, l);
+  fkCount.set(f, (fkCount.get(f) ?? 0) + 1);
+}
+// V2: Inhalt der Kunstwörter wie nach den Lehrer-Chargen (Satzbank mit 6 Sätzen, deutscher Chunk und Satz, Ton, Wortpartner, Wortfamilie,
+// Situation, Satzanfänge). Ohne Claude (V4) und ohne Diktat; keine `gr`-Daten (Kunstwörter), daher keine Formen M78–M81.
+const AVAIL: Avail = process.env.VOCAB_AVAIL === 'base' ? { de: true } : { de: true, audio: true, deSent: true, starts: true, partner: true, family: true, situation: true };
+const SENTENCES = Number(process.env.VOCAB_SENT ?? 6);
+const keysOf = (id: string) => Array.from({ length: SENTENCES }, (_, i) => `${id}#${i}`);
+// Zeitbewertung abschaltbar für den Vergleich (VOCAB_SPEED=0).
+const SPEED = process.env.VOCAB_SPEED !== '0';
+
 function sample(f: Form, ms: number): void {
   const l = samples.get(f) ?? [];
   l.push(ms + 5000);
@@ -43,13 +70,20 @@ function sample(f: Form, ms: number): void {
   samples.set(f, l);
 }
 
-const INPUT: Record<Form, InputKind> = { intro: 'choice', gap: 'typed', nosent: 'typed', gap_hint: 'hint', meaning: 'meaning', listen: 'typed', choice: 'choice', flip: 'choice', transfer: 'transfer' };
+// Eingabeart des simulierten Lerners je Form: frei getippt, mit Stütze (`hint`), Bedeutung, Satz/Transfer, Auswahl.
+const INPUT: Record<Form, InputKind> = {
+  intro: 'choice', probe: 'typed', gap: 'typed', nosent: 'typed', de_sent: 'typed', gap_hint: 'hint', cloze_part: 'hint', complete: 'hint', prep: 'hint', count: 'hint', particle: 'hint',
+  partner: 'typed', family: 'typed', situation: 'typed', diplomatic: 'sentence', own: 'sentence', say: 'typed', transfer: 'transfer',
+  listen: 'hint', dictation: 'hint', tiles: 'hint', meaning: 'meaning', tone_mean: 'meaning', flip: 'choice', choice: 'choice', find_trap: 'choice', contrast: 'choice',
+};
 const toOutcome = (o: Outcome): VOutcome => (o.verdict === 'correct' ? 'ok' : o.verdict === 'near' ? 'typo' : 'wrong');
+const sentences = new Map<string, string | null>();
+export const DBG: Record<string, number> = {};
 
 function ctxFor(path: string, nowMs: number, planned: boolean): PlanCtx {
   const day = dayKey(nowMs);
   const load = loadByDay(cat, med(), path);
-  return { cfg, path, planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: cat.siblingOffsets(path, day) };
+  return { cfg, path, planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: cat.siblingOffsets(path, day), ...(SPEED ? { fk: fkStats() } : {}) };
 }
 
 function ensurePlan(nowMs: number): DayPlan {
@@ -81,7 +115,9 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
       cur = t;
       if (!t) return null;
       const lex = cat.get(t.path)!.lex;
-      const sentence = t.form === 'gap' || t.form === 'gap_hint' || t.form === 'listen' ? `${ID(t.path)}#0` : undefined;
+      // Gezeigter Satz (M57): Ankersatz an Tag 0–1, danach wechselnd; ohne Satz bei Formen ohne englischen Satz (`sent: 'n'`).
+      const sentence = FORM_SPEC[t.form].sent === 's' ? (pickSentence(lex, keysOf(ID(t.path)), dayKey(now), { fresh: t.step >= 2 }) ?? undefined) : undefined;
+      sentences.set(t.path, sentence ?? null);
       return {
         lexeme: ID(t.path),
         ex: t.form,
@@ -91,6 +127,7 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
         due: !!dueOn(lex, dayKey(now)),
         ...(t.intro ? { intro: true } : {}),
         ...(sentence ? { sentence } : {}),
+        ...(sentence && t.cue ? { cue: true } : {}),
         ...(t.group ? { group: t.group.map(ID) } : {}),
       };
     },
@@ -110,11 +147,14 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
         const oc = (group ? group[i] : o) ?? o;
         const it = cat.get(p);
         if (!it) return;
-        const r = applyAnswer(it.lex, { t: now, form: t.form, outcome: toOutcome(oc), hint: 0, ms: oc.submitMs, fk: oc.firstKeyMs, sentence: task.sentence ?? null }, ctxFor(p, now, t.planned || t.step > 0));
+        const sent = p === t.path ? (task.sentence ?? null) : null;
+        const r = applyAnswer(it.lex, { t: now, form: t.form, outcome: toOutcome(oc), hint: 0, ms: oc.submitMs, fk: oc.firstKeyMs, sentence: sent, anchor: sent ? sent.endsWith('#0') : null }, ctxFor(p, now, t.planned || t.step > 0));
         cat.set(p, r.lex);
+        if (process.env.VOCAB_DEBUG) DBG[`${t.form}:${r.speed ?? '-'}:${r.grade}`] = (DBG[`${t.form}:${r.speed ?? '-'}:${r.grade}`] ?? 0) + 1;
         if (r.booked.length) planned = true;
       });
       sample(t.form, o.submitMs);
+      sampleFk(t.form, o.firstKeyMs);
       run.done(t, now);
       return { planned };
     },
@@ -122,17 +162,24 @@ function makeSession(kind: SimKind, now0: number, target?: string): PlannerSessi
 }
 
 const adapter: PlannerAdapter = {
-  name: 'neu (src/modules/vocab, V1)',
+  name: 'neu (src/modules/vocab, V2)',
   init(words: readonly SimWord[], nowMs: number, legacy?: readonly LegacyDoc[]): void {
     plans.clear();
     samples.clear();
+    fkSamples.clear();
+    fkCount.clear();
+    sentences.clear();
     maxMoved = 0;
     const leg = new Map((legacy ?? []).map((d) => [d.id as string, d]));
     const items = words.map((w) => {
       const d = leg.get(w.id);
       const conv = d ? convertDoc(P(w.id), d, nowMs) : null;
-      const lex = conv && conv.lex ? conv.lex : emptyLex('w', w.src === 'lookup' ? 'core' : 'edge', nowMs);
-      return { path: P(w.id), lex, order: w.order };
+      // V2 (learning-scientist Befund 1d): 40 % Mehrwort-Lexeme (Kollokation, Phrasal Verb, Wendung), damit Formen wie „Teil einer Wendung“
+      // mitgemessen werden. Ohne `gr`-Daten (Kunstwörter), daher keine Formen M78–M81.
+      const k = (['col', 'w', 'pv', 'w', 'ch'] as const)[w.order % 5] as 'col' | 'w' | 'pv' | 'ch';
+      const base = conv && conv.lex ? conv.lex : emptyLex('w', w.src === 'lookup' ? 'core' : 'edge', nowMs);
+      const lex = { ...base, k };
+      return { path: P(w.id), lex, order: w.order, av: AVAIL };
     });
     cat = new Catalog(items);
     // F4: Rückstand des Altbestands über 7 Lerntage nach Gefährdung verteilen (Umrechnung Schritt 7).
@@ -173,6 +220,7 @@ const adapter: PlannerAdapter = {
     return forecastMinutes(cat, med(), now, n);
   },
   moved(): number {
+    if (process.env.VOCAB_DEBUG) process.stderr.write(JSON.stringify(DBG) + '\n');
     return maxMoved;
   },
 };

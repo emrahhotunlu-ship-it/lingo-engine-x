@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FORMS } from '../domain/types';
 
 // Wörter-Modul V1: Schemas (plan.md §3; data-guard V0 Befund 2). Gelesen wird tolerant (`looseObject`, eine höhere Version wird nie
 // zurückgeschrieben, wie `isFutureFsrs`), geschrieben wird streng (`lexWriteSchema`).
@@ -21,6 +22,22 @@ export const trackSchema = z
   .strict();
 
 export const LEX_VERSION = 1;
+
+const formEnum = z.enum(FORMS as unknown as [string, ...string[]]);
+/** V2: Formen-Statistik je Lexem (`lex.fq`, optional: Lexeme aus V1 haben sie nicht). Klein gehalten: ≤ 27 Formen × 2 Zahlen, ≤ 8 Ausweichwörter. */
+export const fqSchema = z
+  .object({
+    l: formEnum.nullable(),
+    c: int.min(0).max(100_000),
+    h: z.partialRecord(formEnum, z.tuple([int.min(0), int.min(0)])),
+    nb: int.min(0).max(9),
+    ak: z.union([z.literal(0), z.literal(1)]).nullable(),
+    ew: z.array(z.string().min(1).max(60)).max(8),
+    xf: int.min(0).max(9).optional(),
+    e: z.array(z.enum(['prep', 'plural', 'order'])).max(3).optional(),
+  })
+  .strict()
+  .refine((f) => Object.values(f.h).every((x) => !x || x[1] <= x[0]), { message: 'fq.h: richtig ≤ Versuche' });
 
 /** Streng, für jedes Schreiben von `lex`. */
 export const lexWriteSchema = z
@@ -50,6 +67,7 @@ export const lexWriteSchema = z
     sync: int.min(0),
     mig: z.object({ t: int.positive(), from: z.literal('srs1'), h: int.min(0), full: z.union([z.literal(0), z.literal(1)]) }).strict().nullable(),
     intro: day.nullable(),
+    fq: fqSchema.optional(),
   })
   .strict()
   .refine((l) => l.of === null || l.of !== l.core, { message: 'of und core verschieden' });
@@ -84,6 +102,9 @@ export const vmodStatsWriteSchema = z
     n: z.record(z.string(), int.min(0)),
     cur: z.string().regex(/^vlog\/\d{4}-\d{2}-[ab]\d*$/).nullable(),
     ret: z.object({ ok: int.min(0), all: int.min(0) }).strict(),
+    /** V2 (M39): Median der Zeit bis zum ersten Zeichen je Form (ms, gekappt bei 45 s) und Zahl der Antworten je Form. */
+    fk: z.partialRecord(formEnum, int.min(0).max(45_000)).optional(),
+    fkn: z.partialRecord(formEnum, int.min(0)).optional(),
     t: int.positive(),
   })
   .strict();

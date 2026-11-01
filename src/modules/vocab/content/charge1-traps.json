@@ -1,0 +1,1254 @@
+{
+ "v": 1,
+ "charge": 1,
+ "review": {
+  "by": "english-teacher",
+  "passes": [
+   {
+    "n": 1,
+    "items": "1-40",
+    "ok": 25,
+    "fixed": 20
+   },
+   {
+    "n": 2,
+    "items": "41-80",
+    "ok": 25,
+    "fixed": 24
+   },
+   {
+    "n": 3,
+    "items": "81-82",
+    "ok": 2,
+    "fixed": 0,
+    "note": "vom english-teacher in der Nachprüfung selbst formuliert"
+   }
+  ],
+  "date": "2026-11-01",
+  "recheck": {
+   "date": "2026-11-01",
+   "ok": "nach Befunden 7-9 eingesetzt"
+  }
+ },
+ "items": [
+  {
+   "id": "t-eventually",
+   "en": "eventually",
+   "k": "w",
+   "type": "ff",
+   "de": "am Ende doch noch",
+   "ex": "It took months of testing, but we [eventually] launched the platform.",
+   "why": "Adverb: schließlich, am Ende. „Eventuell“ heißt possibly oder perhaps.",
+   "reg": "n",
+   "trap": "eventuell",
+   "trapEn": "possibly",
+   "syn": [
+    "finally"
+   ]
+  },
+  {
+   "id": "t-actual",
+   "en": "actual",
+   "k": "w",
+   "type": "ff",
+   "de": "tatsächlich (Adjektiv, statt geplant)",
+   "ex": "The [actual] costs were 20 percent higher than planned.",
+   "why": "Adjektiv: tatsächlich, wirklich. „Aktuell“ heißt current.",
+   "reg": "n",
+   "trap": "aktuell",
+   "trapEn": "current"
+  },
+  {
+   "id": "t-become",
+   "en": "become",
+   "k": "w",
+   "type": "ff",
+   "de": "zu etwas werden",
+   "ex": "Digital archiving has [become] a core requirement for our clients.",
+   "why": "Verb: werden (zu etwas). „Bekommen“ heißt get oder receive.",
+   "reg": "n",
+   "trap": "bekommen",
+   "trapEn": "get"
+  },
+  {
+   "id": "t-sensible",
+   "en": "sensible",
+   "k": "w",
+   "type": "ff",
+   "de": "vernünftig, sinnvoll",
+   "ex": "Postponing the launch until the third quarter is a [sensible] decision.",
+   "why": "Adjektiv: vernünftig. „Sensibel“ heißt sensitive.",
+   "reg": "n",
+   "trap": "sensibel",
+   "trapEn": "sensitive",
+   "syn": [
+    "reasonable"
+   ]
+  },
+  {
+   "id": "t-control",
+   "en": "control",
+   "k": "w",
+   "type": "ff",
+   "de": "steuern, regulieren (nicht: überprüfen)",
+   "ex": "Only administrators can [control] access to the archive.",
+   "why": "Verb: steuern, beherrschen. „Kontrollieren“ im Sinn von prüfen heißt check.",
+   "reg": "n",
+   "trap": "kontrollieren",
+   "trapEn": "check",
+   "evade": [
+    "manage"
+   ]
+  },
+  {
+   "id": "t-chef",
+   "en": "chef",
+   "k": "w",
+   "type": "ff",
+   "de": "der Küchenchef, die Küchenchefin",
+   "ex": "The [chef] at the conference dinner prepared a vegetarian menu.",
+   "why": "Nomen: Küchenchef(in). Der „Chef“ im Büro ist the boss oder the manager.",
+   "reg": "n",
+   "trap": "Chef",
+   "trapEn": "boss",
+   "evade": [
+    "cook"
+   ]
+  },
+  {
+   "id": "t-gift",
+   "en": "gift",
+   "k": "w",
+   "type": "ff",
+   "de": "das Geschenk",
+   "ex": "The client sent us a small [gift] after the successful go-live.",
+   "why": "Nomen: Geschenk. „Gift“ (Substanz) heißt poison.",
+   "reg": "n",
+   "trap": "Gift",
+   "trapEn": "poison",
+   "syn": [
+    "present"
+   ]
+  },
+  {
+   "id": "t-handy",
+   "en": "handy",
+   "k": "w",
+   "type": "ff",
+   "de": "praktisch, nützlich (locker gesagt)",
+   "ex": "A short checklist is [handy] when you onboard new users.",
+   "why": "Adjektiv: praktisch, nützlich. Das „Handy“ heißt cell phone (UK: mobile).",
+   "reg": "n",
+   "trap": "Handy",
+   "trapEn": "cell phone",
+   "syn": [
+    "useful"
+   ]
+  },
+  {
+   "id": "t-billion",
+   "en": "billion",
+   "k": "w",
+   "type": "ff",
+   "de": "die Milliarde",
+   "ex": "The global market is worth several [billion] dollars.",
+   "why": "Nomen/Zahl: 1.000.000.000. Die deutsche „Billion“ heißt trillion.",
+   "reg": "n",
+   "trap": "Billion",
+   "trapEn": "trillion"
+  },
+  {
+   "id": "t-consequently",
+   "en": "consequently",
+   "k": "w",
+   "type": "ff",
+   "de": "folglich, als Ergebnis",
+   "ex": "The migration was delayed; [consequently], we missed the audit date.",
+   "why": "Adverb: folglich. „Konsequent“ (beharrlich) heißt consistent.",
+   "reg": "f",
+   "trap": "konsequent",
+   "trapEn": "consistent",
+   "syn": [
+    "therefore",
+    "as a result",
+    "as a consequence"
+   ]
+  },
+  {
+   "id": "t-meaning",
+   "en": "meaning",
+   "k": "w",
+   "type": "ff",
+   "de": "die Bedeutung (eines Wortes, einer Klausel)",
+   "ex": "I do not understand the [meaning] of this clause.",
+   "why": "Nomen: Bedeutung, Sinn. „Meinung“ heißt opinion.",
+   "reg": "n",
+   "trap": "Meinung",
+   "trapEn": "opinion"
+  },
+  {
+   "id": "t-irritated",
+   "en": "irritated",
+   "k": "w",
+   "type": "ff",
+   "de": "genervt, verärgert",
+   "ex": "I was [irritated] by the constant delays.",
+   "why": "Adjektiv: genervt. „Irritiert“ (verwirrt) heißt confused.",
+   "reg": "n",
+   "trap": "irritiert",
+   "trapEn": "confused",
+   "syn": [
+    "annoyed"
+   ]
+  },
+  {
+   "id": "t-sympathetic",
+   "en": "sympathetic",
+   "k": "w",
+   "type": "ff",
+   "de": "mitfühlend, verständnisvoll",
+   "ex": "The client was [sympathetic] when we explained the delay.",
+   "why": "Adjektiv: verständnisvoll. „Sympathisch“ heißt nice oder likeable.",
+   "reg": "n",
+   "trap": "sympathisch",
+   "trapEn": "likable",
+   "syn": [
+    "understanding"
+   ]
+  },
+  {
+   "id": "t-provision",
+   "en": "provision",
+   "k": "w",
+   "type": "ff",
+   "de": "eine Bestimmung im Vertrag",
+   "ex": "The contract contains a [provision] on early termination.",
+   "why": "Nomen: Bestimmung, Vorkehrung. Die „Provision“ heißt commission.",
+   "reg": "f",
+   "trap": "Provision",
+   "trapEn": "commission",
+   "syn": [
+    "clause"
+   ]
+  },
+  {
+   "id": "t-say",
+   "en": "say",
+   "k": "w",
+   "type": "pair",
+   "de": "sagen (ohne Person als Objekt)",
+   "ex": "She [said] that the contract would arrive on Monday.",
+   "why": "say + that-Satz oder say to sb. Mit Person direkt: tell.",
+   "reg": "n",
+   "pair": "tell"
+  },
+  {
+   "id": "t-tell",
+   "en": "tell",
+   "k": "w",
+   "type": "pair",
+   "de": "jemandem etwas sagen",
+   "ex": "Please [tell] me when the audit starts.",
+   "why": "tell + Person (+ Info). Ohne Person: say.",
+   "reg": "n",
+   "pair": "say"
+  },
+  {
+   "id": "t-borrow",
+   "en": "borrow",
+   "k": "w",
+   "type": "pair",
+   "de": "sich etwas ausleihen",
+   "ex": "Can I [borrow] your laptop charger for the meeting?",
+   "why": "borrow = sich leihen (nehmen). Geben heißt lend.",
+   "reg": "n",
+   "pair": "lend"
+  },
+  {
+   "id": "t-lend",
+   "en": "lend",
+   "k": "w",
+   "type": "pair",
+   "de": "jemandem etwas leihen",
+   "ex": "Could you [lend] me your laptop charger for the meeting?",
+   "why": "lend = verleihen (geben). Nehmen heißt borrow.",
+   "reg": "n",
+   "pair": "borrow"
+  },
+  {
+   "id": "t-by",
+   "en": "by",
+   "k": "w",
+   "type": "pair",
+   "de": "spätestens bis (Frist)",
+   "ex": "Please submit the report [by] Friday.",
+   "why": "by = bis spätestens (Frist, einmalig). Dauer: until.",
+   "reg": "n",
+   "pair": "until",
+   "syn": [
+    "no later than"
+   ]
+  },
+  {
+   "id": "t-until",
+   "en": "until",
+   "k": "w",
+   "type": "pair",
+   "de": "bis (Dauer)",
+   "ex": "The office will stay closed [until] Monday.",
+   "why": "until = bis (Zustand dauert an). Frist: by.",
+   "reg": "n",
+   "pair": "by"
+  },
+  {
+   "id": "t-possibility",
+   "en": "possibility",
+   "k": "w",
+   "type": "pair",
+   "de": "die Möglichkeit, dass etwas eintritt",
+   "ex": "There is a [possibility] that the audit will be postponed.",
+   "why": "possibility = Möglichkeit, Eventualität. Chance: opportunity.",
+   "reg": "n",
+   "pair": "opportunity",
+   "syn": [
+    "chance"
+   ]
+  },
+  {
+   "id": "t-opportunity",
+   "en": "opportunity",
+   "k": "w",
+   "type": "pair",
+   "de": "eine günstige Gelegenheit",
+   "ex": "This conference is a great [opportunity] to meet new clients.",
+   "why": "opportunity = Chance, Gelegenheit. Eventualität: possibility.",
+   "reg": "n",
+   "pair": "possibility",
+   "syn": [
+    "chance"
+   ]
+  },
+  {
+   "id": "t-affect",
+   "en": "affect",
+   "k": "w",
+   "type": "pair",
+   "de": "sich auf etwas auswirken",
+   "ex": "The delay will [affect] our rollout plan.",
+   "why": "affect = Verb, beeinflussen. Das Nomen „Auswirkung“: effect.",
+   "reg": "n",
+   "pair": "effect",
+   "syn": [
+    "impact"
+   ]
+  },
+  {
+   "id": "t-effect",
+   "en": "effect",
+   "k": "w",
+   "type": "pair",
+   "de": "die Auswirkung",
+   "ex": "The new policy had a positive [effect] on productivity.",
+   "why": "effect = Nomen (have an effect on). Das Verb: affect.",
+   "reg": "n",
+   "pair": "affect",
+   "syn": [
+    "impact"
+   ]
+  },
+  {
+   "id": "t-rise",
+   "en": "rise",
+   "k": "w",
+   "type": "pair",
+   "de": "steigen (von selbst)",
+   "ex": "Prices are expected to [rise] next quarter.",
+   "why": "rise, rose, risen: ohne Objekt. Mit Objekt: raise.",
+   "reg": "n",
+   "pair": "raise",
+   "syn": [
+    "increase",
+    "go up"
+   ]
+  },
+  {
+   "id": "t-raise",
+   "en": "raise",
+   "k": "w",
+   "type": "pair",
+   "de": "etwas erhöhen",
+   "ex": "We plan to [raise] our prices next quarter.",
+   "why": "raise, raised: braucht ein Objekt. Ohne Objekt: rise.",
+   "reg": "n",
+   "pair": "rise",
+   "syn": [
+    "increase"
+   ]
+  },
+  {
+   "id": "t-advice",
+   "en": "advice",
+   "k": "w",
+   "type": "pair",
+   "de": "der Rat (Nomen)",
+   "ex": "Thank you for your [advice] on the migration.",
+   "why": "advice = Nomen, nicht zählbar. Das Verb: advise.",
+   "reg": "n",
+   "pair": "advise",
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-advise",
+   "en": "advise",
+   "k": "w",
+   "type": "pair",
+   "de": "jemandem raten",
+   "ex": "I would [advise] you to back up the data first.",
+   "why": "advise = Verb (advise sb to do). Das Nomen: advice.",
+   "reg": "n",
+   "pair": "advice"
+  },
+  {
+   "id": "t-economic",
+   "en": "economic",
+   "k": "w",
+   "type": "pair",
+   "de": "wirtschaftlich (die Wirtschaft betreffend)",
+   "ex": "The [economic] outlook for the region remains uncertain.",
+   "why": "economic = die Wirtschaft betreffend. Sparsam: economical.",
+   "reg": "n",
+   "pair": "economical"
+  },
+  {
+   "id": "t-economical",
+   "en": "economical",
+   "k": "w",
+   "type": "pair",
+   "de": "sparsam im Verbrauch",
+   "ex": "This archive system is more [economical] than the old one.",
+   "why": "economical = sparsam, günstig im Betrieb. Volkswirtschaftlich: economic.",
+   "reg": "n",
+   "pair": "economic"
+  },
+  {
+   "id": "t-lose",
+   "en": "lose",
+   "k": "w",
+   "type": "pair",
+   "de": "verlieren",
+   "ex": "We could [lose] the contract if we miss the deadline.",
+   "why": "lose, lost, lost (Verb, ein o). Das Adjektiv „lose“: loose.",
+   "reg": "n",
+   "pair": "loose"
+  },
+  {
+   "id": "t-loose",
+   "en": "loose",
+   "k": "w",
+   "type": "pair",
+   "de": "lose, nicht befestigt",
+   "ex": "Please do not leave any [loose] pages in the folder.",
+   "why": "loose = Adjektiv, locker, lose (zwei o). Das Verb: lose.",
+   "reg": "n",
+   "pair": "lose"
+  },
+  {
+   "id": "t-ensure",
+   "en": "ensure",
+   "k": "w",
+   "type": "pair",
+   "de": "sicherstellen",
+   "ex": "Please [ensure] that all files are archived by Friday.",
+   "why": "ensure = dafür sorgen, dass. Versichern: insure.",
+   "reg": "f",
+   "pair": "insure",
+   "syn": [
+    "make sure"
+   ]
+  },
+  {
+   "id": "t-insure",
+   "en": "insure",
+   "k": "w",
+   "type": "pair",
+   "de": "gegen Schaden versichern",
+   "ex": "The company must [insure] the equipment against theft.",
+   "why": "insure = versichern (Versicherung). Sicherstellen: ensure.",
+   "reg": "n",
+   "pair": "ensure"
+  },
+  {
+   "id": "t-address",
+   "en": "address",
+   "k": "w",
+   "type": "spell",
+   "de": "die Anschrift",
+   "ex": "Please confirm your billing [address] before we ship.",
+   "why": "Nomen/Verb: zwei d, zwei s. Merke: add + ress.",
+   "reg": "n",
+   "wrong": [
+    "adress",
+    "adres"
+   ]
+  },
+  {
+   "id": "t-responsibility",
+   "en": "responsibility",
+   "k": "w",
+   "type": "spell",
+   "de": "die Verantwortung",
+   "ex": "Data protection is the [responsibility] of every employee.",
+   "why": "Nomen: endet auf -ibility, nicht -ability.",
+   "reg": "n",
+   "wrong": [
+    "responsability",
+    "responsibilty"
+   ]
+  },
+  {
+   "id": "t-committee",
+   "en": "committee",
+   "k": "w",
+   "type": "spell",
+   "de": "der Ausschuss",
+   "ex": "The steering [committee] meets every other Tuesday.",
+   "why": "Nomen: zwei m, zwei t, zwei e.",
+   "reg": "n",
+   "wrong": [
+    "comittee",
+    "commitee"
+   ]
+  },
+  {
+   "id": "t-receive",
+   "en": "receive",
+   "k": "w",
+   "type": "spell",
+   "de": "erhalten, empfangen",
+   "ex": "Please let us know when you [receive] the package.",
+   "why": "Verb: „i vor e, außer nach c“ (rec-ei-ve).",
+   "reg": "n",
+   "wrong": [
+    "recieve",
+    "recive"
+   ]
+  },
+  {
+   "id": "t-accommodate",
+   "en": "accommodate",
+   "k": "w",
+   "type": "spell",
+   "de": "Platz bieten für",
+   "ex": "The new hall can [accommodate] up to 300 guests.",
+   "why": "Verb: zwei c und zwei m.",
+   "reg": "n",
+   "wrong": [
+    "acommodate",
+    "accomodate"
+   ]
+  },
+  {
+   "id": "t-separate",
+   "en": "separate",
+   "k": "w",
+   "type": "spell",
+   "de": "getrennt, eigenständig",
+   "ex": "Please keep the invoices in a [separate] folder.",
+   "why": "Adjektiv: sep-a-rate, mit „a“ in der Mitte.",
+   "reg": "n",
+   "wrong": [
+    "seperate",
+    "separete"
+   ]
+  },
+  {
+   "id": "t-independent",
+   "en": "independent",
+   "k": "w",
+   "type": "spell",
+   "de": "unabhängig",
+   "ex": "We hired an [independent] auditor to review the process.",
+   "why": "Adjektiv: endet auf -ent, nicht -ant.",
+   "reg": "n",
+   "wrong": [
+    "independant",
+    "indipendent"
+   ]
+  },
+  {
+   "id": "t-business",
+   "en": "business",
+   "k": "w",
+   "type": "spell",
+   "de": "das Geschäft (als Branche)",
+   "ex": "Digital archiving is a growing [business] in Europe.",
+   "why": "Nomen: bus-i-ness, mit „i“ vor „n“.",
+   "reg": "n",
+   "wrong": [
+    "buisness",
+    "bussiness",
+    "busines"
+   ]
+  },
+  {
+   "id": "t-success",
+   "en": "success",
+   "k": "w",
+   "type": "spell",
+   "de": "der Erfolg",
+   "ex": "The pilot project was a great [success].",
+   "why": "Nomen: zwei c und zwei s.",
+   "reg": "n",
+   "wrong": [
+    "sucess",
+    "succes"
+   ]
+  },
+  {
+   "id": "t-occur",
+   "en": "occur",
+   "k": "w",
+   "type": "spell",
+   "de": "auftreten (Fehler, Problem; formeller als happen)",
+   "ex": "The error [occurred] after the last update.",
+   "why": "Verb: occur, aber occurred (r wird verdoppelt).",
+   "reg": "n",
+   "wrong": [
+    "occured",
+    "ocurred"
+   ],
+   "evade": [
+    "happened"
+   ]
+  },
+  {
+   "id": "t-refer",
+   "en": "refer",
+   "k": "w",
+   "type": "spell",
+   "de": "sich beziehen auf",
+   "ex": "I am [referring] to your email from Monday.",
+   "why": "Verb: refer, aber referring (r wird verdoppelt).",
+   "reg": "n",
+   "wrong": [
+    "refering",
+    "reffering"
+   ]
+  },
+  {
+   "id": "t-definitely",
+   "en": "definitely",
+   "k": "w",
+   "type": "spell",
+   "de": "auf jeden Fall",
+   "ex": "We will [definitely] meet the deadline.",
+   "why": "Adverb: defin-ite-ly, mit „i“, nicht „a“.",
+   "reg": "n",
+   "wrong": [
+    "definately",
+    "definitly"
+   ],
+   "syn": [
+    "certainly"
+   ]
+  },
+  {
+   "id": "t-argument",
+   "en": "argument",
+   "k": "w",
+   "type": "spell",
+   "de": "das Argument",
+   "ex": "Her [argument] for the cloud solution convinced the board.",
+   "why": "Nomen: ohne „e“ vor -ment.",
+   "reg": "n",
+   "wrong": [
+    "arguement",
+    "argumment"
+   ]
+  },
+  {
+   "id": "t-environment",
+   "en": "environment",
+   "k": "w",
+   "type": "spell",
+   "de": "die Umgebung",
+   "ex": "The test [environment] is separate from production.",
+   "why": "Nomen: envir-on-ment, mit „n“ vor „m“.",
+   "reg": "n",
+   "wrong": [
+    "enviroment",
+    "enviornment"
+   ]
+  },
+  {
+   "id": "t-existence",
+   "en": "existence",
+   "k": "w",
+   "type": "spell",
+   "de": "das Vorhandensein",
+   "ex": "Few customers knew about the [existence] of this feature.",
+   "why": "Nomen: endet auf -ence, nicht -ance.",
+   "reg": "n",
+   "wrong": [
+    "existance",
+    "existense"
+   ]
+  },
+  {
+   "id": "t-dependent",
+   "en": "dependent",
+   "k": "w",
+   "type": "spell",
+   "de": "abhängig (Adjektiv)",
+   "ex": "Our revenue is [dependent] on a few large customers.",
+   "why": "Adjektiv: -ent. „dependant“ ist nur britisch und nur Nomen (Angehöriger).",
+   "reg": "n",
+   "wrong": [
+    "dependant"
+   ]
+  },
+  {
+   "id": "t-information",
+   "en": "information",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Informationen (im Englischen Einzahl)",
+   "ex": "We need more [information] about the interface.",
+   "why": "Nomen, nicht zählbar: kein -s, kein „an“. Ein Stück: a piece of information.",
+   "reg": "n",
+   "wrong": [
+    "informations",
+    "an information"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-feedback",
+   "en": "feedback",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Rückmeldung",
+   "ex": "Thank you for your [feedback] on the draft.",
+   "why": "Nomen, nicht zählbar: kein -s. Ein Stück: a piece of feedback.",
+   "reg": "n",
+   "wrong": [
+    "feedbacks",
+    "a feedback"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-equipment",
+   "en": "equipment",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Ausrüstung",
+   "ex": "All office [equipment] must be returned on the last day.",
+   "why": "Nomen, nicht zählbar. Ein Stück: a piece of equipment.",
+   "reg": "n",
+   "wrong": [
+    "equipments",
+    "an equipment"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-software",
+   "en": "software",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Software",
+   "ex": "Our [software] integrates with most ERP systems.",
+   "why": "Nomen, nicht zählbar. Ein Stück: a piece of software.",
+   "reg": "n",
+   "wrong": [
+    "softwares",
+    "a software"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-furniture",
+   "en": "furniture",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Möbel",
+   "ex": "The office [furniture] will be delivered next week.",
+   "why": "Nomen, nicht zählbar (deutsch Plural). Ein Stück: a piece of furniture.",
+   "reg": "n",
+   "wrong": [
+    "furnitures",
+    "a furniture"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-knowledge",
+   "en": "knowledge",
+   "k": "w",
+   "type": "uncount",
+   "de": "das Wissen, die Kenntnisse",
+   "ex": "Her [knowledge] of records management is impressive.",
+   "why": "Nomen, nicht zählbar: kein Plural. Aber richtig: a good knowledge of sth.",
+   "reg": "n",
+   "wrong": [
+    "knowledges"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-evidence",
+   "en": "evidence",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Belege, die Beweise",
+   "ex": "We have no [evidence] that the data was lost.",
+   "why": "Nomen, nicht zählbar. Ein Stück: a piece of evidence.",
+   "reg": "n",
+   "wrong": [
+    "evidences",
+    "an evidence"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-research",
+   "en": "research",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Recherche, die Untersuchungen",
+   "ex": "The team did some [research] on competitor pricing.",
+   "why": "Nomen, nicht zählbar: kein -s im Alltag und im Business.",
+   "reg": "n",
+   "wrong": [
+    "researches",
+    "a research"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-news",
+   "en": "news",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Neuigkeiten",
+   "ex": "I have good [news] about the budget.",
+   "why": "Nomen, nicht zählbar, steht mit „is“. Ein Stück: a piece of news.",
+   "reg": "n",
+   "wrong": [
+    "a news",
+    "the news are"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-progress",
+   "en": "progress",
+   "k": "w",
+   "type": "uncount",
+   "de": "die Fortschritte",
+   "ex": "There was little [progress] on the migration this week.",
+   "why": "Nomen, nicht zählbar: kein Plural. Ein Stück: a step forward.",
+   "reg": "n",
+   "wrong": [
+    "progresses",
+    "a progress"
+   ],
+   "gr": {
+    "cnt": "u"
+   }
+  },
+  {
+   "id": "t-luggage",
+   "en": "luggage",
+   "k": "w",
+   "type": "uncount",
+   "de": "das Gepäck",
+   "ex": "Please keep your [luggage] with you at all times.",
+   "why": "Nomen, nicht zählbar. Ein Stück: a piece of luggage.",
+   "reg": "n",
+   "wrong": [
+    "luggages",
+    "a luggage"
+   ],
+   "gr": {
+    "cnt": "u"
+   },
+   "syn": [
+    "baggage"
+   ]
+  },
+  {
+   "id": "t-depend",
+   "en": "depend on",
+   "k": "col",
+   "type": "prep",
+   "de": "abhängen von",
+   "ex": "Our schedule will [depend on] the customer's approval.",
+   "why": "depend + on (nicht from/of). Adjektiv: dependent on.",
+   "reg": "n",
+   "wrong": [
+    "depend from",
+    "depend of",
+    "depend to"
+   ],
+   "gr": {
+    "pat": "depend on sth"
+   }
+  },
+  {
+   "id": "t-consist",
+   "en": "consist of",
+   "k": "col",
+   "type": "prep",
+   "de": "bestehen aus",
+   "ex": "The package [consists of] three modules.",
+   "why": "consist of (nicht „out of“), keine Verlaufsform: nie „is consisting of“.",
+   "reg": "n",
+   "wrong": [
+    "consists from",
+    "consists out of",
+    "is consisting of",
+    "consist from",
+    "consist out of"
+   ],
+   "gr": {
+    "pat": "consist of sth"
+   }
+  },
+  {
+   "id": "t-responsible-for",
+   "en": "responsible for",
+   "k": "col",
+   "type": "prep",
+   "de": "verantwortlich für",
+   "ex": "She is [responsible for] the archive migration.",
+   "why": "responsible + for (nicht of). Die Person: responsible to sb.",
+   "reg": "n",
+   "wrong": [
+    "responsible of",
+    "responsible about"
+   ],
+   "gr": {
+    "pat": "be responsible for sth"
+   }
+  },
+  {
+   "id": "t-apply-for",
+   "en": "apply for",
+   "k": "col",
+   "type": "prep",
+   "de": "sich bewerben um (eine Stelle)",
+   "ex": "I would like to [apply for] the position of sales manager.",
+   "why": "apply for + Stelle, apply to + Firma: apply to Siemens for a job. Nicht: apply on.",
+   "reg": "n",
+   "wrong": [
+    "apply on",
+    "apply at the position"
+   ],
+   "gr": {
+    "pat": "apply for sth"
+   }
+  },
+  {
+   "id": "t-discuss",
+   "en": "discuss",
+   "k": "w",
+   "type": "prep",
+   "de": "etwas besprechen",
+   "ex": "We need to [discuss] the pricing before Friday.",
+   "why": "discuss + Objekt, ohne Präposition. Aber: a discussion about.",
+   "reg": "n",
+   "wrong": [
+    "discuss about"
+   ],
+   "gr": {
+    "pat": "discuss sth"
+   }
+  },
+  {
+   "id": "t-attend",
+   "en": "attend",
+   "k": "w",
+   "type": "prep",
+   "de": "an einer Besprechung teilnehmen",
+   "ex": "All managers must [attend] the meeting.",
+   "why": "attend + Objekt, ohne at/to. Attend to = sich kümmern um.",
+   "reg": "n",
+   "wrong": [
+    "attend at",
+    "attend to the meeting"
+   ],
+   "gr": {
+    "pat": "attend sth"
+   }
+  },
+  {
+   "id": "t-contact",
+   "en": "contact",
+   "k": "w",
+   "type": "prep",
+   "de": "jemanden kontaktieren",
+   "ex": "Please [contact] our support team if the error continues.",
+   "why": "contact + Person, ohne with/to.",
+   "reg": "n",
+   "wrong": [
+    "contact with",
+    "contact to"
+   ],
+   "gr": {
+    "pat": "contact sb"
+   }
+  },
+  {
+   "id": "t-emphasize",
+   "en": "emphasize",
+   "k": "w",
+   "type": "prep",
+   "de": "etwas betonen",
+   "ex": "I would like to [emphasize] the importance of data security.",
+   "why": "emphasize + Objekt, ohne on. Nomen: emphasis on.",
+   "reg": "n",
+   "wrong": [
+    "emphasize on",
+    "emphasise on"
+   ],
+   "gr": {
+    "pat": "emphasize sth"
+   },
+   "syn": [
+    "stress",
+    "highlight"
+   ]
+  },
+  {
+   "id": "t-explain",
+   "en": "explain",
+   "k": "w",
+   "type": "prep",
+   "de": "jemandem etwas erklären",
+   "ex": "Could you [explain] the process to the new team members?",
+   "why": "explain sth to sb; nicht „explain sb sth“.",
+   "reg": "n",
+   "wrong": [
+    "explain me",
+    "explain him the process"
+   ],
+   "gr": {
+    "pat": "explain sth to sb"
+   }
+  },
+  {
+   "id": "t-enter",
+   "en": "enter",
+   "k": "w",
+   "type": "prep",
+   "de": "in einen Markt eintreten",
+   "ex": "We plan to [enter] the Asian market next year.",
+   "why": "enter + Objekt, ohne in/into. „enter into“ nur bei Verträgen und Gesprächen.",
+   "reg": "n",
+   "wrong": [
+    "enter into the market",
+    "enter in the market"
+   ],
+   "gr": {
+    "pat": "enter sth"
+   }
+  },
+  {
+   "id": "t-give-a-presentation",
+   "en": "give a presentation",
+   "k": "col",
+   "type": "colloc",
+   "de": "eine Präsentation halten",
+   "ex": "I will [give a presentation] on our new archive at the conference.",
+   "why": "give a presentation; „hold“ ist hier ein Germanismus.",
+   "reg": "n",
+   "wrong": [
+    "hold a presentation",
+    "keep a presentation"
+   ],
+   "syn": [
+    "make a presentation",
+    "deliver a presentation"
+   ]
+  },
+  {
+   "id": "t-make-a-decision",
+   "en": "make a decision",
+   "k": "col",
+   "type": "colloc",
+   "de": "eine Entscheidung treffen",
+   "ex": "The board will [make a decision] by the end of the month.",
+   "why": "make a decision (US). Brit.: take a decision.",
+   "reg": "n",
+   "wrong": [
+    "do a decision",
+    "meet a decision"
+   ],
+   "uk": [
+    "take a decision"
+   ],
+   "syn": [
+    "reach a decision"
+   ]
+  },
+  {
+   "id": "t-do-business",
+   "en": "do business",
+   "k": "col",
+   "type": "colloc",
+   "de": "Geschäfte machen",
+   "ex": "It is a pleasure to [do business] with Hanse Archiv GmbH.",
+   "why": "do business with sb; make = herstellen, do = tätigen.",
+   "reg": "n",
+   "wrong": [
+    "make business",
+    "make businesses"
+   ]
+  },
+  {
+   "id": "t-make-a-mistake",
+   "en": "make a mistake",
+   "k": "col",
+   "type": "colloc",
+   "de": "einen Fehler machen",
+   "ex": "Everyone can [make a mistake], so please report it early.",
+   "why": "make a mistake (nicht do). Gleich: make an error.",
+   "reg": "n",
+   "wrong": [
+    "do a mistake",
+    "make a fault"
+   ],
+   "syn": [
+    "make an error"
+   ]
+  },
+  {
+   "id": "t-take-measures",
+   "en": "take measures",
+   "k": "col",
+   "type": "colloc",
+   "de": "Maßnahmen ergreifen",
+   "ex": "We must [take measures] to prevent data loss.",
+   "why": "take measures/steps/action; meist im Plural.",
+   "reg": "n",
+   "wrong": [
+    "make measures",
+    "do measures"
+   ],
+   "syn": [
+    "take steps",
+    "take action"
+   ]
+  },
+  {
+   "id": "t-meet-a-deadline",
+   "en": "meet a deadline",
+   "k": "col",
+   "type": "colloc",
+   "de": "eine Frist einhalten",
+   "ex": "We need to [meet the deadline] on Friday.",
+   "why": "meet a deadline; Verwandt: miss a deadline.",
+   "reg": "n",
+   "wrong": [
+    "hold the deadline",
+    "keep the deadline",
+    "achieve the deadline"
+   ],
+   "syn": [
+    "make the deadline"
+   ]
+  },
+  {
+   "id": "t-draw-a-conclusion",
+   "en": "draw a conclusion",
+   "k": "col",
+   "type": "colloc",
+   "de": "einen Schluss ziehen",
+   "ex": "It is too early to [draw a conclusion] from these figures.",
+   "why": "draw a conclusion (from sth); nicht make/pull.",
+   "reg": "n",
+   "wrong": [
+    "pull a conclusion",
+    "make a conclusion"
+   ],
+   "syn": [
+    "draw conclusions"
+   ]
+  },
+  {
+   "id": "t-raise-a-question",
+   "en": "raise a question",
+   "k": "col",
+   "type": "colloc",
+   "de": "eine Frage aufwerfen",
+   "ex": "These figures [raise the question] of whether we need more staff.",
+   "why": "raise a question = ansprechen. Einfach fragen: ask a question.",
+   "reg": "n",
+   "wrong": [
+    "rise a question",
+    "lift a question"
+   ],
+   "syn": [
+    "pose the question"
+   ]
+  },
+  {
+   "id": "t-make-an-offer",
+   "en": "make an offer",
+   "k": "col",
+   "type": "colloc",
+   "de": "ein Angebot unterbreiten",
+   "ex": "Before we [make an offer], we need your final requirements.",
+   "why": "make an offer (nicht do/give). Schriftliches Angebot mit Preisen: quote oder proposal.",
+   "reg": "n",
+   "wrong": [
+    "do an offer",
+    "give an offer"
+   ]
+  },
+  {
+   "id": "t-compliant",
+   "en": "compliant",
+   "k": "w",
+   "type": "pair",
+   "de": "regelkonform",
+   "ex": "The archive is fully [compliant] with GoBD.",
+   "why": "compliant = regelkonform (Adjektiv). Beschwerde: complaint.",
+   "reg": "n",
+   "pair": "complaint"
+  },
+  {
+   "id": "t-complaint",
+   "en": "complaint",
+   "k": "w",
+   "type": "pair",
+   "de": "die Beschwerde",
+   "ex": "We received a [complaint] about the slow search.",
+   "why": "complaint = Beschwerde (Nomen). Regelkonform: compliant.",
+   "reg": "n",
+   "pair": "compliant"
+  }
+ ]
+}
