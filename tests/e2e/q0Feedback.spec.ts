@@ -20,7 +20,11 @@ async function start(page: Page, t: { topic: string; err: Doc }, p: number, them
   return bootAt(page, { name: 'grammarSession', mode: 'errors' }, { theme, localStorage: { 'lx:flags': 'kwt' }, fake: { patch: { [`grammar/${t.topic}`]: topicDoc(t.topic, p, t.err) } } });
 }
 async function answer(page: Page, text: string) {
-  await page.getByTestId('gap-input').focus();
+  // Das versteckte Feld ist immer im Bild; erst wenn die Lücke eingehängt und gebunden ist, landen Tasten in ihr (davor verwirft das Feld sie).
+  const input = page.getByTestId('gap-input');
+  await expect(page.getByTestId('gap')).toBeVisible();
+  await expect(input).not.toHaveAttribute('aria-hidden', 'true');
+  await input.focus();
   await page.keyboard.type(text, { delay: 5 });
   await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toBeVisible();
