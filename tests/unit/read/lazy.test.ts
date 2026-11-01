@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { loadLazyBackup } from '../../../src/data/snapshot';
+import { dayKey } from '../../../src/domain/date';
 import { createWriter } from '../../../src/data/writer';
 import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { docBytes, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan } from '../../../src/modules/read/domain/backup';
@@ -99,8 +100,8 @@ describe('Sicherung in begrenzter Größe', () => {
   });
 
   it('loadLazyBackup: fehlt read/p ganz, werden die letzten Monate nach Indizes abgesucht (nie still nichts sichern)', async () => {
-    const now = new Date();
-    const month = now.toISOString().slice(0, 7);
+    // Monat des Lerntags (Wechsel 04:00, Europe/Berlin) wie im Code – nicht der UTC-Kalendermonat, sonst rot zwischen 00:00 und 04:00 am Monatsersten.
+    const month = dayKey(Date.now()).slice(0, 7);
     const day = `${month}-03`;
     const seed: Record<string, Record<string, unknown>> = {
       [`read/m-${month}`]: { v: 1, items: [{ id: `a-${day}-1-aaaaaa`, day, title: 'A' }] },
