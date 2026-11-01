@@ -48,7 +48,7 @@ function vbPhone(v) {
     return VB.head(0.15, 'Wörter · <b>Neues Wort</b> · 1 von 3', 'Neues Wort. Hör es dir an und lies den Satz.') +
       '<div class="stack s16" style="padding-top:22px">' +
       '<div class="sent en">Their license expires in March, so they need to <span class="gap"><span class="lts">renew</span></span> it.</div>' +
-      '<div class="vb-try">Dein Versuch: <b class="en">extend</b> · auch richtig. <span class="en">extend</span> = Laufendes verlängern, <span class="en">renew</span> = nach Ablauf neu abschließen (Abo, Lizenz).</div>' +
+      '<div class="vb-try">Dein Versuch: <b class="en">extend</b> · auch richtig. <span class="en">extend</span> = die Laufzeit verlängern, oft kurz · <span class="en">renew</span> = für eine neue Laufzeit erneuern (Lizenz, Abo, Vertrag).</div>' +
       '<div class="card stack s8"><div style="display:flex;align-items:center;gap:10px"><div class="disp en" style="font-size:28px;line-height:34px;font-weight:700">renew</div>' + VB.tone('intro-tone') + '</div>' +
       '<div class="p2 en">/rɪˈnuː/ · Verb</div><div class="disp" style="font-size:20px;line-height:26px;font-weight:600">verlängern, erneuern</div>' +
       '<div class="hr"></div><div class="lbl">Wortpartner</div><div class="p en">renew a license · renew a subscription · renew a contract</div></div>' +
@@ -127,12 +127,12 @@ function vbPhone(v) {
   if (v === 'false-friend') {
     return VB.head(0.6, 'Wörter · <b>Kontrast</b> · Deutsch-Falle', 'Setz das fehlende Wort ein.') +
       '<div class="stagec"><div class="sent en">After three rounds of talks, they ' + gapHtml('eventua', { caret: true, input: true }) + ' signed the contract.</div>' +
-      '<div class="vb-hrow"><div class="hintline">Gesucht: schließlich, am Ende</div>' + VB.tone('ff-tone') + '</div></div></div>' + VB.tipBtns();
+      '<div class="vb-hrow"><div class="hintline">Gesucht: schließlich, nach einiger Zeit · sieht aus wie ein deutsches Wort</div>' + VB.tone('ff-tone') + '</div></div></div>' + VB.tipBtns();
   }
   if (v === 'false-friend-band') {
     return VB.head(0.64, 'Wörter · <b>Kontrast</b> · Deutsch-Falle', 'Setz das fehlende Wort ein.') +
       '<div class="stagec"><div class="sent en">After three rounds of talks, they <span class="gap st-ok"><span class="lts">eventually</span></span> signed the contract.</div>' +
-      '<div class="hintline">Gesucht: schließlich, am Ende</div></div></div>' +
+      '<div class="hintline">Gesucht: schließlich, nach einiger Zeit · sieht aus wie ein deutsches Wort</div></div></div>' +
       VB.band('ok', {
         verdict: 'Richtig', cmp: '<span class="you">Du:</span> <b class="en">eventually</b>',
         why: 'Sieht aus wie „eventuell“, heißt aber: schließlich, nach einiger Zeit. Es passiert sicher, nur später.',
@@ -166,7 +166,7 @@ function vbPhone(v) {
       '<div class="hintline">Muster: <span class="en">comply ___ something</span> · befolgen, einhalten</div></div></div>' +
       VB.band('bad', {
         verdict: 'Noch nicht', cmp: '<span class="you">Du:</span> <s class="en">comply to</s> <span class="you">→ Richtig:</span> <b class="en">comply with</b>',
-        why: 'Verb + <span class="en">with</span>: <span class="en">comply with a policy, a law</span>. Nicht <span class="en">to</span>, auch wenn man auf Deutsch „sich an etwas halten“ denkt.',
+        why: 'Verb + <span class="en">with</span>: <span class="en">comply with a policy, a law</span>. Nicht <span class="en">to</span>, auch wenn <span class="en">adhere to</span> und <span class="en">stick to</span> dasselbe heißen.',
         partners: 'comply with a policy · comply with regulations', back: 'gleich noch einmal ohne Satz · dann morgen', extra: VB.moreBtn + VB.alsoBtn, knew: true
       });
   }
@@ -203,7 +203,7 @@ function vbStart(v) {
       '<p class="p2" style="margin:0">Dazu 2 neue Wörter, wie an jedem Lerntag. Heute ohne Anwenden. Ab Fr wieder dein normaler Plan.</p>' +
       '<button class="btn pri full" id="vb-go">Los geht’s</button></div>'
     : '<div class="card stack s16 vb-start"><div class="lbl">Heute</div><div class="disp" style="font-size:28px;line-height:34px;font-weight:700">Wörter · ca. 14 Min.</div>' +
-      '<p class="p" style="margin:0"><b>Warum diese?</b> 11 fällig, die du am ehesten vergisst, zuerst · 3 neue, eingestreut · am Ende 3 Min. Anwenden.</p>' +
+      '<p class="p" style="margin:0"><b>Warum diese?</b> 11 fällig, die du am ehesten vergisst, zuerst · 3 neue, eingestreut (heute weniger, weil viel fällig ist) · am Ende 3 Min. Anwenden.</p>' +
       '<div class="vb-mix"><span style="flex:11" class="d"></span><span style="flex:3" class="n"></span><span style="flex:3" class="a"></span></div>' +
       '<div class="vb-mixl"><span>11 fällig</span><span>3 neu</span><span>Anwenden</span></div>' +
       '<button class="btn pri full" id="vb-go">Los geht’s</button></div>';
@@ -216,7 +216,7 @@ VB.spread = () => {
 };
 function vbDone() {
   const rows = [
-    ['plus', 'Heute gelernt', '<b>3 neue:</b> <span class="en">renew, lead time, leverage</span>'],
+    ['plus', 'Heute gelernt', '<b>3 neue:</b> <span class="en">renew, turnaround time, onboarding</span>'],
     ['up', 'Aufgestiegen', '<b>6 Wörter.</b> <span class="en">budget approval</span> bildest du jetzt selbst.'],
     ['cross', 'Gestolpert', '<b>2:</b> <span class="en">comply with</span> kommt morgen wieder, <span class="en">procurement</span> am Fr, 6.11.'],
     ['cal', 'Morgen', '<b>ca. 12 Min.</b> · 9 fällig, 2 neue']
@@ -306,7 +306,7 @@ function vbDetail(v) {
   const top = '<div class="stack s6"><div style="display:flex;align-items:center;gap:10px"><div class="prompt disp en" style="font-size:36px;line-height:42px">procurement</div>' + VB.tone('d-tone') + '</div><div class="p2 en">/prəˈkjʊrmənt/ · Nomen</div></div>' +
     '<div class="disp" style="font-size:22px;line-height:28px;font-weight:600">der Einkauf (Abteilung und Ablauf)</div>';
   if (v === 'history') {
-    const rows = [['Di, 3.11.', 'Lücke tippen', 'h', 'fast richtig: procurment', 'kommt wieder Fr, 6.11.'], ['Do, 29.10.', 'Anwenden (Mail)', 'h', 'Wortpartner knapp', 'zählt, aber kein Aufstieg'], ['Mo, 26.10.', 'Dieses Wort üben', 'g', 'nur Übung', 'keine Wirkung auf den Plan'], ['Fr, 23.10.', 'Hören → tippen', 'f', 'frei richtig', 'Verstehen: nächster Abruf 21.11.'], ['Di, 20.10.', 'Lücke tippen', 'f', 'frei richtig', 'Aufstieg auf Stufe 4'], ['Do, 15.10.', 'Lücke tippen', 'x', 'falsch: purchase', 'kam am selben Tag noch einmal']];
+    const rows = [['Di, 3.11.', 'Lücke tippen', 'h', 'fast richtig: procurment', 'kommt wieder Fr, 6.11.'], ['Do, 29.10.', 'Eigener Satz', 'f', 'frei richtig', 'zählt, noch kein Aufstieg'], ['Mo, 26.10.', 'Dieses Wort üben', 'g', 'nur Übung', 'keine Wirkung auf den Plan'], ['Fr, 23.10.', 'Hören → tippen', 'f', 'frei richtig', 'Verstehen: nächster Abruf 21.11.'], ['Di, 20.10.', 'Lücke tippen', 'f', 'frei richtig', 'Aufstieg auf Stufe 4'], ['Do, 15.10.', 'Lücke tippen', 'x', 'falsch: purchase', 'kam am selben Tag noch einmal']];
     return head + '<div class="scroll gx stack s16" style="padding-bottom:24px">' + top +
       '<div class="card stack s8"><div class="lbl">Verlauf · 6 Wochen</div>' + VB.timeline() + '</div>' +
       '<div class="card" style="padding:4px 16px">' + rows.map(r => '<div class="st vb-hr"><span class="vb-hd t' + r[2] + '"></span><span class="vb-hrt"><b>' + r[0] + ' · ' + r[1] + '</b><span>' + r[3] + ' · ' + r[4] + '</span></span></div>').join('') + '</div></div>' + tabbar('h12');
@@ -315,8 +315,8 @@ function vbDetail(v) {
     '<div class="card stack s8"><div class="lbl">Verlauf · 6 Wochen</div>' + VB.timeline() + '<button class="link" style="align-self:flex-start">Alle Versuche</button></div>' +
     '<div class="stack s6"><div class="lbl">Ursprungssatz · aus deinem Lesen, Di 22.9.</div><p class="p en" style="font-size:18px;line-height:26px;margin:0">The <b>procurement</b> process can take up to six months in the public sector.</p></div>' +
     '<div class="stack s6"><div class="lbl">Wortpartner</div><p class="p en" style="margin:0">procurement team · procurement process · public procurement</p></div>' +
-    '<div class="stack s6"><div class="lbl">Deine Sätze</div><div class="vb-own"><span class="vb-ok">' + ic('check', 'xs') + '</span><p class="en">Their procurement team needs two weeks to approve the order.</p><span class="vb-ownm">geprüft · 29.10. · getippt</span></div>' +
-    '<p class="p2" style="margin:0">Für Stufe 7 zählen eigene Sätze erst ab Stufe 5: dann 2 in verschiedenen Zusammenhängen, einer davon gern gesprochen.</p></div>' +
+    '<div class="stack s6"><div class="lbl">Deine Sätze</div><div class="vb-own"><span class="vb-ok">' + ic('check', 'xs') + '</span><p class="en">Public procurement rules mean we need three quotes before we can sign.</p><span class="vb-ownm">geprüft · 29.10. · getippt</span></div>' +
+    '<p class="p2" style="margin:0">Für Stufe 7 brauchst du 2 eigene Sätze in verschiedenen Zusammenhängen, einer gern gesprochen. Sie zählen ab Stufe 5.</p></div>' +
     '<div class="stack s6"><div class="lbl">Auch woanders gesehen</div><p class="p" style="margin:0">im Lesen gesehen (19.10.) · in einer C1-Aufgabe richtig benutzt (27.10.)</p></div>' +
     '<button class="btn pri full">Dieses Wort üben</button></div>' + tabbar('h12');
 }
@@ -332,7 +332,7 @@ reg('vbdl', {
       '<div class="stack s6"><div class="lbl">Ursprungssatz · aus deinem Lesen, Di 22.9.</div><p class="p en" style="margin:0;font-size:1.1em">The <b>procurement</b> process can take up to six months in the public sector.</p></div></div>';
     const ctx = ctxBlock('Üben', '<button class="btn pri full">Dieses Wort üben</button><p class="p2" style="margin:0;font-size:.85em">Nicht fällig: zählt als Übung, der Plan bleibt.</p>') +
       ctxBlock('Wortpartner', '<p class="p en" style="margin:0">procurement team · procurement process · public procurement</p>') +
-      ctxBlock('Deine Sätze', '<div class="vb-own"><span class="vb-ok">' + ic('check', 'xs') + '</span><p class="en">Their procurement team needs two weeks to approve the order.</p><span class="vb-ownm">geprüft · 29.10. · getippt</span></div>') +
+      ctxBlock('Deine Sätze', '<div class="vb-own"><span class="vb-ok">' + ic('check', 'xs') + '</span><p class="en">Public procurement rules mean we need three quotes before we can sign.</p><span class="vb-ownm">geprüft · 29.10. · getippt</span></div>') +
       ctxBlock('Auch woanders gesehen', '<p class="p2" style="margin:0">im Lesen (19.10.) · C1-Aufgabe richtig benutzt (27.10.)</p>');
     return { stage, ctx };
   }
@@ -347,7 +347,7 @@ function vbDash() {
   const ret = '<div class="card stack s8"><div class="lbl">Behaltensrate · letzte 30 Tage</div><div class="ts-bign"><b class="disp num">89 %</b><span>Ziel 90 %</span></div>' +
     '<div class="vb-rt"><div><span>gefestigt</span><b class="num">93 %</b></div><div><span>jung</span><b class="num">86 %</b></div></div>' +
     '<p class="p2" style="margin:0">So oft wusstest du ein fälliges Wort beim ersten Versuch. Passt zum Ziel.</p></div>';
-  const counts = '<div class="card stack s16"><div class="vb-two"><div><b class="disp num">46</b><span>bildest du selbst</span></div><div><b class="disp num">491</b><span>verstehst du beim Lesen und Hören</span></div></div>' +
+  const counts = '<div class="card stack s16"><div class="vb-two"><div><b class="disp num">46</b><span>bildest du selbst</span></div><div><b class="disp num">491</b><span>in deinem Wortschatz</span></div></div>' +
     '<div class="ts-leg"><div><span class="ts-sw f5"></span><span>Bildest du selbst <em>S6–S7</em></span><b class="num">46</b></div><div><span class="ts-sw f34"></span><span>Auf dem Weg <em>S3–S5</em></span><b class="num">58</b></div><div><span class="ts-sw out"></span><span>Erkennst du <em>S1–S2</em></span><b class="num">387</b></div><div class="tot"><span></span><span>Alle Wörter</span><b class="num">491</b></div></div></div>';
   return tsPage('h14-main', gearBtn(), tsProgNav('words') + tsTitle('Wörter', 'Gezählt wird nur, was du frei abrufst. Auswählen zählt nicht.') + counts + fc + ret, 'h14');
 }
@@ -361,30 +361,30 @@ reg('vbb', { code: 'VBB', name: 'Dashboard Wörter (Entwurf)', kind: 'phone', va
 
 /* B7 Anwenden (neu H38) */
 VB.chips = (st) => '<div class="vb-chips en">' + [['postpone', 0], ['lead time', 1], ['sign off on', 2]].map(c => '<span class="chip' + (st ? ' vb-c' + st[c[1]] : '') + '">' + (st ? ic({ ok: 'check', near: 'near', bad: 'cross' }[st[c[1]]], 'xs') : '') + c[0] + '</span>').join('') + '</div>';
-VB.mail = 'Hi Mark, we have to postpone the rollout by one week. The lead time for the new scanners is longer than planned. Could your team sign off the order by Friday?';
+VB.mail = 'Hi Mark, we have to postpone the rollout on next week. The lead time for the new scanners is longer than planned. Could your team sign off the order by Friday?';
 function vbApply(v) {
-  const top = exTop(VB.blocks(), 1, 0.9) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · ca. 3 Min.') + instr('Schreib 2–3 Sätze und benutze die drei Wörter.');
-  const lage = '<div class="card stack s8"><div class="lbl">Mail an einen Kunden · freundlich, klar</div><p class="p" style="margin:0">Sag Mark, dass sich der Rollout um eine Woche verschiebt, warum, und bitte ihn, die Bestellung bis Freitag freizugeben.</p></div>';
+  const top = exTop(VB.blocks(), 1, 0.9) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · ca. 3 Min.') + instr('Schreib 2–4 Sätze und benutze die drei Wörter.');
+  const lage = '<div class="card stack s8"><div class="lbl">Mail an einen Kunden · freundlich, klar</div><p class="p" style="margin:0">Sag Mark, dass sich der Rollout auf nächste Woche verschiebt, weil die neuen Scanner länger brauchen, und bitte ihn, die Bestellung bis Freitag freizugeben.</p></div>';
   if (v === 'task') {
     return top + '<div class="stack s16" style="padding-top:16px">' + lage + VB.chips() +
       '<div class="field en" style="min-height:150px">' + VB.mail + '<span class="caret" style="display:inline-block;width:2px;height:1em;background:var(--act-text);vertical-align:-2px;margin-left:1px"></span></div></div></div>' +
       exFoot('<button class="btn sec" aria-label="Diktieren">' + ic('mic', 'sm') + '</button>' + btnPri('apply-check', 'Prüfen'), true) + drawnKbd({ go: 'return' });
   }
   if (v === 'feedback') {
-    const rows = [['ok', 'postpone', 'richtig benutzt: einen Termin nach hinten schieben.'], ['ok', 'lead time', 'richtig: die Zeit bis zur Lieferung.'], ['near', 'sign off on', 'Wort richtig, Partner fehlt: <b>sign off on</b> the order. Ohne <i>on</i> klingt es unfertig.']];
+    const rows = [['near', 'postpone', 'Wort richtig, Präposition nicht: verschieben <i>auf</i> = <b>postpone to</b> oder <b>until next week</b>, nicht <i>on</i>.'], ['ok', 'lead time', 'richtig: die Zeit bis zur Lieferung.'], ['ok', 'sign off on', 'richtig: freigeben. Im US-Englisch meist <b>sign off on the order</b>; ohne <i>on</i> ist es britisch üblich und auch richtig.']];
     return exTop(VB.blocks(), 1, 0.95) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · geprüft von Claude') +
-      '<div class="stack s16" style="padding-top:14px">' + VB.chips(['ok', 'ok', 'near']) +
-      '<div class="card en" style="font-size:16px;line-height:24px">Hi Mark, we have to <u class="vb-uok">postpone</u> the rollout by one week. The <u class="vb-uok">lead time</u> for the new scanners is longer than planned. Could your team <u class="vb-unear">sign off</u> the order by Friday?</div>' +
+      '<div class="stack s16" style="padding-top:14px">' + VB.chips(['near', 'ok', 'ok']) +
+      '<div class="card en" style="font-size:16px;line-height:24px">Hi Mark, we have to <u class="vb-unear">postpone</u> the rollout <u class="vb-unear">on</u> next week. The <u class="vb-uok">lead time</u> for the new scanners is longer than planned. Could your team <u class="vb-uok">sign off</u> the order by Friday?</div>' +
       '<div class="card" style="padding:4px 16px">' + rows.map(r => '<div class="st vb-fr"><span class="vb-fi ' + r[0] + '">' + ic({ ok: 'check', near: 'near' }[r[0]], 'xs') + '</span><span class="vb-hrt"><b class="en">' + r[1] + '</b><span>' + r[2] + '</span></span></div>').join('') + '</div>' +
-      '<div class="stack s6"><div class="lbl">So ginge es natürlicher</div><p class="p en" style="margin:0">Could your team <b>sign off on</b> the order by Friday?</p></div>' +
-      '<p class="vb-quiet">' + ic('cal', 'xs') + '<span>Zählt als Wiederholung: <span class="en">postpone</span> und <span class="en">lead time</span> rücken weiter, <span class="en">sign off on</span> kommt morgen ohne Satz.</span></p></div></div>' +
-      exFoot(btnSec('apply-also', 'War das auch richtig?') + btnPri('apply-next', 'Weiter'));
+      '<div class="vb-hrow"><button class="link" id="apply-better">Bessere Fassung zeigen</button><button class="link" id="apply-also">War das auch richtig?</button></div>' +
+      '<p class="vb-quiet">' + ic('cal', 'xs') + '<span>Zählt als Wiederholung: <span class="en">lead time</span> und <span class="en">sign off on</span> rücken weiter, <span class="en">postpone</span> kommt bald wieder, weil die Präposition gefehlt hat.</span></p></div></div>' +
+      exFoot(btnSec('apply-again', 'Nochmal selbst schreiben') + btnPri('apply-next', 'Weiter'));
   }
   /* offline: ohne Claude */
   return exTop(VB.blocks(), 1, 0.95) + '<div class="ex-body gx">' + blockLine('w', 'Wörter · <b>Anwenden</b> · ohne Claude') +
     '<div class="stack s16" style="padding-top:14px"><div class="notice">' + ic('offline', 'sm') + '<span><b>Claude ist gerade nicht erreichbar.</b> Vergleich selbst mit dem Muster. Das zählt nicht für den Plan, deine Termine bleiben.</span></div>' +
     '<div class="stack s6"><div class="lbl">Dein Text</div><p class="p en" style="margin:0">' + VB.mail + '</p></div>' +
-    '<div class="card stack s8"><div class="lbl">Muster</div><p class="p en" style="margin:0">Hi Mark, we need to <b>postpone</b> the rollout by a week. The <b>lead time</b> for the new scanners is longer than expected. Could your team <b>sign off on</b> the order by Friday?</p></div>' +
+    '<div class="card stack s8"><div class="lbl">Muster</div><p class="p en" style="margin:0">Hi Mark, we need to <b>postpone</b> the rollout <b>until</b> next week. The <b>lead time</b> for the new scanners is longer than expected. Could your team <b>sign off on</b> the order by Friday?</p></div>' +
     '<p class="p2" style="margin:0">Achte auf die fett gedruckten Wörter: Steht bei dir dasselbe?</p></div></div>' +
     exFoot(btnSec('apply-retry', 'Später prüfen lassen') + btnPri('apply-next', 'Weiter'));
 }
