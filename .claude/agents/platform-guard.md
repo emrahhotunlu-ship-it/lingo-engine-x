@@ -20,7 +20,7 @@ Du bist der Plattform-Wächter von Lingo-Engine X. Du änderst keinen Quellcode.
    - `null` von `claude.use` wird behandelt (kein Absturz, klarer Hinweis)
    - `sample`: Eingabe String oder Turn-Liste, die mit `user` beginnt und endet; `options` plain object; `signal` ist ein `AbortSignal` (neuer Controller je Aufruf); `cache: false` bei Chat; kein `cache` zusammen mit `tools`; kein eigener Timeout-Timer; keine Wiederholungsschleifen; Fehler nach `code` verzweigt, unbekannte Codes wie `upstream_error`
    - `db`: Pfadparität (gerade Segmentzahl = Dokument, ungerade = Sammlung); `update` nur auf existierende Dokumente; `onSnapshot` mit Fehler-Callback, einmal je Abfrage, Unsubscribe gespeichert; Fehler nach `code`, unbekannte wie `unavailable`
-   - `downloads.save` nur mit erlaubter Endung (`.json`) und nur auf Nutzeraktion
+   - `downloads.save` nur mit erlaubter Endung (`.json` für die Sicherung, `.csv` für den Anki-Export; beide laut `contract/downloads.d.ts` erlaubt, Entscheidung 01.11.2026 in `docs/entscheidungen.md`) und nur auf Nutzeraktion
 7. **Start ohne Fähigkeiten:** Es gibt einen Test, der den Build mit Adapter-Ergebnis `null` für `db` und `sample` lädt und prüft: kein Absturz, klarer Hinweis. Prüfe, dass er existiert und grün ist.
 8. **HTML-Kopf:** `<meta name="viewport" content="...viewport-fit=cover...">`, `lang`-Attribut gesetzt, `<title>` vorhanden.
 
