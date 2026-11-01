@@ -24,7 +24,10 @@ export const vgDe = {
   vgTeacherSub: 'Korrekturen aus der Stunde einfügen',
   vgJourney: 'C1-Reise ansehen',
   vgJourneySub: 'Alle Kapitel als Route, mit deinem Stand',
-  vgMore: 'Mehr üben, freiwillig',
+  vgMore: 'Extra-Übungen, freiwillig',
+  vgErrorsAll: 'Alle Fehlersätze',
+  vgChPull: 'Kapitel vorziehen',
+  vgExplain: 'Erklärung',
   vgTopicOpen: 'Thema ansehen: {name}',
   vgAllTopics: 'Alle Themen',
 };

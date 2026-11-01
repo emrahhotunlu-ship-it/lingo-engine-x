@@ -23,7 +23,10 @@ export const vgEn = {
   vgTeacherSub: 'Paste corrections from your lesson',
   vgJourney: 'View the C1 journey',
   vgJourneySub: 'All chapters as a route, with your progress',
-  vgMore: 'More practice, optional',
+  vgMore: 'Extra practice, optional',
+  vgErrorsAll: 'All mistake sentences',
+  vgChPull: 'Move chapter forward',
+  vgExplain: 'Explanation',
   vgTopicOpen: 'View topic: {name}',
   vgAllTopics: 'All topics',
 };

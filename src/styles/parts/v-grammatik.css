@@ -32,6 +32,7 @@
 .lx-vg-path { display: flex; flex-direction: column; gap: 6px; }
 .lx-vg-pathlbl { padding: 6px 0 2px; }
 .lx-vg-chs { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.lx-vg-chs .lx-v-row { border-bottom: 1px solid var(--line); }
 .lx-vg-chs > li:last-child .lx-v-row { border-bottom: 0; }
 .lx-vg-num { font-size: 1rem; font-weight: 600; color: var(--fg-2); }
 .lx-vg-ch[data-kind='run'] .lx-vg-num { background: var(--act-soft); color: var(--act-text); font-weight: 700; animation: lx-vg-pulse 2.4s ease-in-out 3; }
@@ -61,6 +62,7 @@
 .lx-vg-topic.lx-v-st { min-height: 58px; }
 .lx-vg-tnm { display: flex; flex: 1; flex-direction: column; justify-content: center; min-width: 0; min-height: 44px; text-align: left; color: var(--fg); }
 .lx-vg-tname { font-weight: 600; }
+.lx-vg-explain { flex: none; margin: 0 0 0 auto; font-size: 14px; }
 .lx-vg-tsub { font-size: 13px; line-height: 1.45; color: var(--fg-2); }
 .lx-vg-topic[data-state='done'] .lx-vg-tname { color: var(--fg-2); }
 .lx-vg-sec { display: flex; flex-direction: column; gap: 6px; }

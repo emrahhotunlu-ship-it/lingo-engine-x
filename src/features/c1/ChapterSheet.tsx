@@ -79,8 +79,11 @@ export function ChapterDetail({ chapter, progress, view, later = false, onStarte
     const by = errorsDueByTopic(docs, now);
     return progress.topics.reduce((s, r) => s + (by.get(r.id) ?? 0), 0);
   }, [docs, now, progress]);
-  // Ein Hauptknopf je Bildschirm (§6.6): am Laptop trägt „Du bist hier“ auf der Bühne den Hauptknopf, die Spalte hat einen Zweitknopf.
-  const startVariant = view === 'column' ? 'sec' : 'pri';
+  // Ein Hauptknopf je Bildschirm (§6.6) und keine Widersprüche (Kap. 2 Nr. 2, ux-reviewer D5 M2/S3): voll nur auf der Kapitelseite des Kapitels,
+  // das jetzt dran ist. Ein anderes Kapitel bekommt einen Zweitknopf (noch nicht dran: „Kapitel vorziehen“). Am Laptop trägt „Du bist hier“ den
+  // Hauptknopf; für das aktuelle Kapitel steht er in der Spalte nicht noch einmal.
+  const startVariant = view !== 'column' && progress.status === 'current' ? 'pri' : 'sec';
+  const showStart = !(view === 'column' && active);
   // Laufendes Thema (Zeichen „läuft“): das Thema des Cursors, sonst das erste begonnene, noch nicht geschaffte.
   const curTopic = active?.topic ?? progress.topics.find((r) => r.exists && r.introduced && !(run ? r.done : r.safe))?.id ?? null;
 
@@ -132,9 +135,17 @@ export function ChapterDetail({ chapter, progress, view, later = false, onStarte
                 {full && <Icon name="check" size={14} />}
               </span>
               {r.exists ? (
+                <>
                 <button type="button" className="lx-vg-tnm" onClick={() => setTopic(r.id)} aria-label={`${t('vgTopicOpen', { name })} · ${subText}`} data-testid="chapter-topic-open">
                   {inner}
                 </button>
+                {/* Vorschau H6 `chapter`: am laufenden Thema der Link „Erklärung“ (Themenblatt mit Regel, Beispielen und Fallen). */}
+                {state === 'run' && (
+                  <button type="button" className="lx-vg-link lx-vg-explain" onClick={() => setTopic(r.id)} data-testid="chapter-topic-explain">
+                    {t('vgExplain')}
+                  </button>
+                )}
+                </>
               ) : (
                 <span className="lx-vg-tnm">{inner}</span>
               )}
@@ -148,6 +159,7 @@ export function ChapterDetail({ chapter, progress, view, later = false, onStarte
           <p className="lx-vg-p2" data-testid="chapter-daily" data-active={active ? 'true' : 'false'}>
             {t(active ? 'pxKDaily' : 'pxKDailyIf')}
           </p>
+          {showStart && (
           <VButton
             variant={startVariant}
             full
@@ -158,8 +170,9 @@ export function ChapterDetail({ chapter, progress, view, later = false, onStarte
               onStarted?.();
             }}
           >
-            {active ? t(chapterBtnKey(active, prep)) : progress.introduced > 0 ? t('pxKContinue') : t('pxKStart')}
+            {active ? t(chapterBtnKey(active, prep)) : later ? t('vgChPull') : progress.introduced > 0 ? t('pxKContinue') : t('pxKStart')}
           </VButton>
+          )}
         </section>
       )}
 

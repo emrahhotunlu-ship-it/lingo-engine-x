@@ -68,7 +68,7 @@ export function LearnHub() {
               <Icon name="refresh" size={18} />
             </span>
             <span className="lx-v-row-t">
-              <b>{t('vgErrors')}</b>
+              <b>{t('vgErrorsAll')}</b>
               <span className="lx-v-num">{t('hxLearnFixLine', { n: fix.nDue, today: fix.nToday })}</span>
             </span>
             <span className="lx-v-row-chev" aria-hidden="true">
