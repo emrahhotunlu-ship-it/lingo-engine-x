@@ -81,6 +81,11 @@ export const vlogSchema = z.looseObject({ v: z.number().optional(), e: z.record(
 /** `vmod/day` (eingefroren je Lerntag) und `vmod/stats` (Median-Zeiten, Behaltensrate, offenes vlog-Dokument). Tolerant gelesen. */
 export const vmodSchema = z.looseObject({});
 
+/** `vmod/ix`: Verzeichnis der Verlaufsdokumente (V3 Schritt 1). Kennung ohne `vlog/` → 1. */
+export const vmodIxWriteSchema = z
+  .object({ v: z.literal(1), docs: z.record(z.string().regex(/^\d{4}-(?:0[1-9]|1[0-2])-[ab][2-9]?$/), z.literal(1)) })
+  .strict();
+
 export const vmodDayWriteSchema = z
   .object({
     v: z.literal(1),

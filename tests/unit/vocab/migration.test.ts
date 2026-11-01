@@ -56,6 +56,7 @@ describe('Umrechnung: Trockenlauf und Schreiben (Kap. 9 Regel 7, plan.md §9.3)'
     const out = await runMigration(w, inputFrom(before), guards);
     expect(out.state).toBe('done');
     const after = h.dump() as Record<string, Doc>;
+    expect(after['vmod/ix'], 'Verlaufsverzeichnis unter der Sperre angelegt').toBeDefined();
     const count = (d: Record<string, unknown>) => {
       const m: Record<string, number> = {};
       for (const p of Object.keys(d)) m[p.split('/')[0]!] = (m[p.split('/')[0]!] ?? 0) + 1;

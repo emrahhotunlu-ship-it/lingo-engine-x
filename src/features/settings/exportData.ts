@@ -2,7 +2,7 @@ import { getDb } from '../../platform/capabilities';
 import { saveFile, type SaveOutcome } from '../../platform/downloads';
 import { logError } from '../../platform/diagnostics';
 import { readLegacyLocal } from '../../platform/legacyLocal';
-import { loadLazyBackup, loadSnapshot, type DataSnapshot, type LazyBackup } from '../../data/snapshot';
+import { loadLazyBackup, loadSnapshot, loadVlogBackup, type DataSnapshot, type LazyBackup } from '../../data/snapshot';
 import { dayKey } from '../../domain/date';
 import { useSettings } from '../../app/settings';
 import { translate } from '../../i18n';
@@ -37,6 +37,19 @@ export async function exportAll(snapshot?: DataSnapshot): Promise<SaveOutcome> {
   }
   Object.assign(documents, lazy.docs);
   const readOmitted = lazy.omitted;
+  // Träger Wörter-Verlauf `vlog`: vollständig; scheitert das Lesen, wird ohne ihn gesichert und das vermerkt (nie still).
+  let vlogBackupFailed = false;
+  let vlogNotes: Record<string, unknown> = {};
+  try {
+    const vb = await loadVlogBackup(db);
+    Object.assign(documents, vb.docs);
+    // Fehlte das Verzeichnis, obwohl Verlauf da ist, oder standen Dokumente nicht darin: im Kopf vermerken (Alarmzeichen, nie still).
+    if (vb.unlisted.length) vlogNotes = { vlogUnlisted: vb.unlisted };
+    else if (vb.indexMissing && Object.keys(vb.docs).length) vlogNotes = { vlogIndexMissing: true };
+  } catch (err) {
+    vlogBackupFailed = true;
+    logError('export:read', err, 'vlog');
+  }
   const schema = snap.raw.get('app/schema');
   const payload = {
     app: 'lingo-engine-x',
@@ -47,6 +60,8 @@ export async function exportAll(snapshot?: DataSnapshot): Promise<SaveOutcome> {
   };
   if (readOmitted.length) Object.assign(payload, { readTextsOmitted: readOmitted });
   if (readBackupFailed) Object.assign(payload, { readBackupFailed: true });
+  if (vlogBackupFailed) Object.assign(payload, { vlogBackupFailed: true });
+  Object.assign(payload, vlogNotes);
   // Noch nicht übertragene Kopien der alten App in diesem Browser gehören mit in die Sicherung.
   const browserCopies = readLegacyLocal();
   if (Object.keys(browserCopies.dirty).length) Object.assign(payload, { browserCopies });

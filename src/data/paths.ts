@@ -129,9 +129,10 @@ export const COLLECTION_NAMES = Object.keys(COLLECTIONS) as CollectionName[];
  * „Träge“ Sammlungen: Sie haben ein Schema (Prüfung beim Lesen und Schreiben), werden aber NIE als Ganzes gelesen – weder beim Start
  * noch für die Dokumentzählung, die Sicherung oder die Umstellung -, weil ihre Dokumente große Texte tragen (Lesen: Artikeltexte,
  * ≈ 1 MB je 33 Tage). Das besitzende Modul liest je Dokument bei Bedarf; Zählung und Sicherung gehen über eigene Wege
- * (`countDocuments`, `loadLazyBackup`). Plan `docs/umbau/lesen-plan.md` §11 Nachtrag L3.
+ * (`countDocuments`, `loadLazyBackup`, `loadVlogBackup`). Plan `docs/umbau/lesen-plan.md` §11 Nachtrag L3.
+ * Wörter-Verlauf `vlog` (V3 Schritt 1, data-guard V1 B2): ≈ 1,8 MB je Jahr; Zählung und Sicherung über das Verlaufsverzeichnis (VLOG_INDEX_PATH).
  */
-export const LAZY_COLLECTIONS: readonly CollectionName[] = [READ_LAZY_COLLECTION];
+export const LAZY_COLLECTIONS: readonly CollectionName[] = [READ_LAZY_COLLECTION, 'vlog'];
 /** Sammlungen, die Start, Zählung und Umstellung vollständig lesen. */
 export const EAGER_COLLECTION_NAMES: readonly CollectionName[] = COLLECTION_NAMES.filter((n) => !LAZY_COLLECTIONS.includes(n));
 export const APP_DOC_PATHS = Object.keys(APP_DOCS) as AppDocPath[];

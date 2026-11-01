@@ -2,6 +2,7 @@ import type { Db } from '../platform/types';
 import { logError, logWarn } from '../platform/diagnostics';
 import { dayKey } from '../domain/date';
 import { daysFromMonthDocs, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths, docBytes, READ_PROGRESS_PATH } from '../modules/read/registry';
+import { nextVlogPart, VLOG_INDEX_PATH, vlogIdOfPath, vlogIdsOf, vlogPath, vlogProbeIds } from '../modules/vocab/registry';
 import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES, collectionOf } from './paths';
 import { validateDoc } from './validate';
 
@@ -167,6 +168,40 @@ export async function loadLazyBackup(db: Db, textBudget: number = READ_BACKUP_TE
   const omitted = plan.texts.filter((path) => !done.has(path) && !missing.has(path));
   if (omitted.length > 0) logWarn('data:backup', { code: 'read_texts_omitted', message: `${omitted.length} Lesetage ohne Artikeltexte (Größenbudget)` }, 'read');
   return { docs, omitted, textBytes: used };
+}
+
+/**
+ * Sicherung der trägen Sammlung vlog (Wörter-Verlauf, V3 Schritt 1): VOLLSTÄNDIG, Dokument für Dokument (kein Größenbudget: der Verlauf ist
+ * nicht wiederherstellbar). Gesucht wird nach dem Verzeichnis (VLOG_INDEX_PATH), dazu immer die Halbmonate der letzten 24 Monate. Zu jedem
+ * gefundenen Dokument wird die nächste Fortsetzung gesucht. Was nicht im Verzeichnis stand oder ob es fehlte, steht im Ergebnis (der Export
+ * vermerkt es im Kopf, nie nur im Protokoll). Wirft bei Lesefehlern.
+ */
+export type VlogBackup = { docs: Record<string, Doc>; unlisted: string[]; indexMissing: boolean };
+export async function loadVlogBackup(db: Db, today: string = dayKey(Date.now())): Promise<VlogBackup> {
+  const docs: Record<string, Doc> = {};
+  const ix = await readOnce(VLOG_INDEX_PATH, () => db.doc(VLOG_INDEX_PATH).get());
+  const listed = vlogIdsOf(ix.exists ? ix.data() : undefined);
+  if (!ix.exists) logWarn('data:backup', { code: 'vlog_index_missing', message: 'Verlaufsverzeichnis fehlt, Verlauf über die letzten Monate gesucht' }, 'vlog');
+  const seen = new Set<string>();
+  let queue = vlogProbeIds(listed, today);
+  while (queue.length) {
+    const next: string[] = [];
+    await inBatches(queue, 4, async (id) => {
+      if (seen.has(id)) return;
+      seen.add(id);
+      const path = vlogPath(id);
+      const snap = await readOnce(path, () => db.doc(path).get());
+      const data = snap.exists ? snap.data() : undefined;
+      if (!data) return;
+      docs[path] = data;
+      const more = nextVlogPart(id);
+      if (more && !seen.has(more)) next.push(more);
+    });
+    queue = [...new Set(next)];
+  }
+  const unlisted = Object.keys(docs).filter((p) => !listed.includes(vlogIdOfPath(p)));
+  if (ix.exists && unlisted.length) logWarn('data:backup', { code: 'vlog_unlisted', message: `${unlisted.length} Verlaufsdokumente fehlten im Verzeichnis` }, 'vlog');
+  return { docs, unlisted: ix.exists ? unlisted : [], indexMissing: !ix.exists };
 }
 
 /** Alle Dokumente einer Sammlung (geprüft), Kennung → Inhalt. */

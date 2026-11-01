@@ -1,6 +1,7 @@
 import type { Db } from '../platform/types';
 import { logError } from '../platform/diagnostics';
 import { readDocCountOf } from '../modules/read/registry';
+import { VLOG_INDEX_PATH, vlogDocCountOf } from '../modules/vocab/registry';
 import { APP_DOC_PATHS, EAGER_COLLECTION_NAMES } from './paths';
 import { readOnce } from './snapshot';
 import { validateCached } from './validate';
@@ -91,6 +92,11 @@ export async function countDocuments(db: Db): Promise<DocCounts> {
       const snap = await readOnce('read/p', () => db.doc('read/p').get());
       const cp = await readOnce('read/cp', () => db.doc('read/cp').get());
       byCollection.read = readDocCountOf(snap.exists ? snap.data() : undefined, cp.exists ? cp.data() : undefined);
+    },
+    // Träge Sammlung vlog (Wörter-Verlauf): Zahl aus dem Verlaufsverzeichnis (VLOG_INDEX_PATH).
+    async () => {
+      const ix = await readOnce(VLOG_INDEX_PATH, () => db.doc(VLOG_INDEX_PATH).get());
+      byCollection.vlog = vlogDocCountOf(ix.exists ? ix.data() : undefined);
     },
   ];
   for (let i = 0; i < jobs.length; i += 4) await Promise.all(jobs.slice(i, i + 4).map((j) => j()));

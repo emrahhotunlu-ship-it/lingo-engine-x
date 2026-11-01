@@ -6,3 +6,5 @@
 export { vlogSchema, vmodSchema } from './data/schemas';
 export const VMOD_DAY_PATH = 'vmod/day';
 export const VOCAB_LOCK_PATH = 'vmod/lock';
+// V3 Schritt 1: `vlog` ist träge; Verzeichnis `vmod/ix`, Zählung und Suchliste für die Sicherung.
+export { VLOG_INDEX_PATH, vlogIdsOf, vlogDocCountOf, vlogProbeIds, nextVlogPart, vlogPath, vlogIdOfPath } from './domain/vlogIndex';

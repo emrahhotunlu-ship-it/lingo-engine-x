@@ -6,7 +6,8 @@ import { type Answer, type AnswerResult, applyAnswer } from '../domain/planner';
 import type { FormStats, VocabCfg } from '../domain/types';
 import { tuple, VLOG_MAX_PARTS, VLOG_SOFT_MAX, vlogDocId, vlogKey } from '../domain/vlog';
 import { VMOD_DAY_PATH } from '../registry';
-import { lexWriteSchema, vmodDayWriteSchema } from './schemas';
+import { VLOG_INDEX_PATH } from '../domain/vlogIndex';
+import { lexWriteSchema, vmodDayWriteSchema, vmodIxWriteSchema } from './schemas';
 
 // Wörter-Modul V1: Schreib-Operationen, alle über den EINEN Writer (src/data/writer.ts, Kap. 3.4). Kein Löschen, kein Ersetzen eines
 // Lernstands; `vmod/day` ist ein Zwischenspeicher (REPLACEABLE). Jede Antwort: `transform` auf dem frischen Kartendokument, danach ein
@@ -54,6 +55,27 @@ export async function writeAnswer(deps: VocabDeps, path: string, a: Answer, o: {
   return res;
 }
 
+/** Bereits im Verzeichnis `vmod/ix` eingetragene Verlaufsdokumente, je Schreiber (spart einen Lesezugriff je Antwort). */
+const listedIx = new WeakMap<Writer, Set<string>>();
+
+/**
+ * Verlaufsdokument im Verzeichnis `vmod/ix` eintragen, BEVOR es angelegt wird (V3 Schritt 1: `vlog` ist träge, Zählung und Sicherung lesen
+ * das Verzeichnis). Map-`update`: zwei Geräte verschmelzen. Ein Eintrag ohne Dokument (Absturz dazwischen) schadet nicht.
+ */
+export async function listVlogDoc(writer: Writer, path: string): Promise<void> {
+  const id = path.slice('vlog/'.length);
+  const known = listedIx.get(writer) ?? listedIx.set(writer, new Set()).get(writer)!;
+  if (known.has(id)) return;
+  const empty = vmodIxWriteSchema.parse({ v: 1, docs: {} });
+  await writer.createIfMissing(VLOG_INDEX_PATH, empty);
+  await writer.transform(VLOG_INDEX_PATH, (cur) => {
+    if (!cur) return null;
+    if (isObj(cur.docs) && cur.docs[id] === 1) return null;
+    return { update: { docs: { [id]: 1 } } };
+  });
+  known.add(id);
+}
+
 /** Höchstens so viele Einträge je Schreibvorgang (≈ 130 B je Eintrag → ≈ 100 KB). */
 export const VLOG_BATCH = 800;
 
@@ -77,7 +99,8 @@ export async function writeVlog(deps: VocabDeps, tuples: readonly ReturnType<typ
       for (let p = part; p <= VLOG_MAX_PARTS && Object.keys(rest).length; p++) {
         const id = p > 1 ? `${half}${p}` : half;
         let overflow = false;
-        // Erst anlegen (falls es fehlt), dann nur noch `update`: so verschmelzen gleichzeitige Schreiber zweier Geräte (db.d.ts).
+        // Erst ins Verzeichnis, dann anlegen (falls es fehlt), dann nur noch `update`: so verschmelzen gleichzeitige Schreiber zweier Geräte (db.d.ts).
+        await listVlogDoc(deps.writer, id);
         await deps.writer.createIfMissing(id, { v: 1, e: {} });
         await deps.writer.transform(id, (cur) => {
           const have = cur && isObj(cur.e) ? cur.e : {};
@@ -121,30 +144,65 @@ export async function undoVlog(deps: VocabDeps, t: number): Promise<boolean> {
   return false;
 }
 
+/** So viele Verschiebungen laufen gleichzeitig (verschiedene Dokumente; der Writer reiht je Pfad). */
+export const MOVE_GROUP = 6;
+
 /**
- * Tagesplan einfrieren (einmal je Lerntag, Kap. 15): steht in `vmod/day` schon der heutige Plan, bleibt er. Sonst neu rechnen, den Rückstand
- * verteilen (je Lexem ein `transform`, nur `lex.u.due`/`lex.b.due`/`lex.mv`) und den Plan ersetzen.
+ * Tagesplan einfrieren (einmal je Lerntag, Kap. 15): steht in `vmod/day` schon der heutige Plan, bleibt er. Sonst neu rechnen, ZUERST den
+ * Plan speichern (der Start wartet nicht auf die Verschiebungen; ein zweites Gerät sieht sofort denselben Plan), dann den Rückstand
+ * verteilen: je Lexem ein `transform` (nur `lex.u.due`/`lex.b.due`/`lex.mv`), in Gruppen zu `MOVE_GROUP`. Steht schon ein heutiger Plan eines
+ * anderen Geräts da, gilt dieser und es wird nicht verschoben. Bricht das ab, bleiben
+ * die übrigen Lexeme fällig und werden am nächsten Lerntag verteilt (nichts geht verloren).
  */
 export async function freezeDay(deps: VocabDeps, cat: Catalog, nowMs: number, cfg: VocabCfg, med: FormStats, current: Doc | null): Promise<DayPlan> {
   const day = dayKey(nowMs);
   if (current && current.d === day && Array.isArray(current.plan)) return current as unknown as DayPlan;
   const { plan, moves } = buildDayPlan(cat, nowMs, cfg, med);
-  for (const m of moves) {
-    await deps.writer.transform(m.path, (cur) => {
-      const lex = lexOf(cur);
-      if (!lex || lex.day === day) return null;
-      const next = applyMove(lex, m, dayStartOf);
-      cat.set(m.path, next);
-      return { update: { lex: next } };
-    });
-  }
   const doc = { v: 1 as const, ...plan };
   const ok = vmodDayWriteSchema.safeParse(doc);
   if (!ok.success) {
+    // Plan nicht speicherbar: nicht verschieben (sonst liefen Verschiebungen ohne gespeicherten Plan, Kap. 15 „würfelt neu“).
     logError('vocab:day', ok.error, VMOD_DAY_PATH);
     return plan;
   }
-  await deps.writer.transform(VMOD_DAY_PATH, (cur) => (cur && cur.d === day ? null : cur ? { replace: ok.data } : { set: ok.data }));
+  // Hat ein anderes Gerät den heutigen Plan schon gespeichert, gilt seiner, und dieses Gerät verschiebt nichts (sonst doppelt).
+  let stored: Doc | null = null;
+  await deps.writer.transform(VMOD_DAY_PATH, (cur) => {
+    // Gilt nur ein heutiger Plan mit Liste; ein beschädigter heutiger Plan wird ersetzt (sonst würde er bei jedem Start neu gerechnet).
+    if (cur && cur.d === day && Array.isArray(cur.plan)) {
+      stored = cur;
+      return null;
+    }
+    return cur ? { replace: ok.data } : { set: ok.data };
+  });
+  const other = stored as Doc | null;
+  if (other) return other as unknown as DayPlan;
+  for (let i = 0; i < moves.length; i += MOVE_GROUP) {
+    const group = moves.slice(i, i + MOVE_GROUP);
+    const res = await Promise.allSettled(
+      group.map((m) =>
+        deps.writer.transform(m.path, (cur) => {
+          if (!cur || isFutureLex(cur)) return null;
+          const lex = lexOf(cur);
+          if (!lex || lex.day === day) return null;
+          // Echte Idempotenz (zwei Geräte gleichzeitig): ist die Spur schon auf den Zieltag oder später gelegt, nicht noch einmal verschieben.
+          const at = dayStartOf(m.to);
+          const lane = m.track === 'b' && lex.b ? lex.b.due : lex.u.due;
+          if (lane >= at) return null;
+          const next = lexWriteSchema.safeParse(applyMove(lex, m, dayStartOf));
+          if (!next.success) {
+            logError('vocab:move', next.error, m.path);
+            return null;
+          }
+          cat.set(m.path, next.data as typeof lex);
+          return { update: { lex: next.data } };
+        }),
+      ),
+    );
+    res.forEach((r, k) => {
+      if (r.status === 'rejected') logError('vocab:move', r.reason, group[k]!.path);
+    });
+  }
   return plan;
 }
 

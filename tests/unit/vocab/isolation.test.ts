@@ -67,8 +67,9 @@ describe('Wörter-Modul: Isolation', () => {
     const bad = appFiles.flatMap((f) => importsOf(f.text).map((s) => outsideViolation(f.rel, s)).filter(Boolean).map((v) => `${f.rel}: ${v}`));
     expect(bad).toEqual([]);
     const touching = appFiles.filter((f) => importsOf(f.text).some((s) => (resolveImport(f.rel, s) ?? '').startsWith(MODULE))).map((f) => f.rel);
-    // V1: nur die Datenschicht (Schemas für COLLECTIONS). Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
-    expect(touching.sort()).toEqual(['src/data/paths.ts', 'src/data/writer.ts']);
+    // V1: nur die Datenschicht (Schemas für COLLECTIONS). V3 Schritt 1: Zählung (reads) und Sicherung (snapshot) der trägen Sammlung vlog über registry.
+    // Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
+    expect(touching.sort()).toEqual(['src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/data/writer.ts']);
   });
 
   it('Gegenprobe: die Regeln erkennen Verstöße', () => {

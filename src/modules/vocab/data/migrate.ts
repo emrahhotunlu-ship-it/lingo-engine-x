@@ -6,7 +6,8 @@ import { hash32 } from '../domain/rand';
 import type { Lex } from '../domain/types';
 import type { VlogTuple } from '../domain/vlog';
 import { VOCAB_LOCK_PATH } from '../registry';
-import { lexWriteSchema, vocabModuleMarkSchema } from './schemas';
+import { lexWriteSchema, vmodIxWriteSchema, vocabModuleMarkSchema } from './schemas';
+import { VLOG_INDEX_PATH } from '../domain/vlogIndex';
 import { writeVlog } from './store';
 
 // Wörter-Modul V1: Umrechnung der heutigen Daten (plan.md §9; Kap. 9; A6 Nr. 12, 15). Ablauf:
@@ -120,6 +121,9 @@ export async function runMigration(writer: Writer, inp: MigrationInput, g: RunGu
   if (!g.backupWritten) return none('blocked', 'no_backup');
   const lock = await writer.acquire(VOCAB_LOCK_PATH, { holder: g.holder, ttlMs: 120_000 });
   if (!lock.acquired) return none('busy');
+  // Verlaufsverzeichnis einmal hier unter der Sperre anlegen, bevor irgendein Verlauf geschrieben wird: so gibt es genau einen Ersteller
+  // (Anlegen ist get-dann-set; zwei Geräte gleichzeitig könnten sonst Einträge des anderen überschreiben).
+  await writer.createIfMissing(VLOG_INDEX_PATH, vmodIxWriteSchema.parse({ v: 1, docs: {} }));
   let done = false;
   await writer.transform('app/schema', (cur) => {
     const mark = cur && typeof cur.vocabModule === 'object' ? vocabModuleMarkSchema.safeParse(cur.vocabModule) : null;
