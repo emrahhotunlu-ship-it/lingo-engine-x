@@ -1,3 +1,4 @@
+import { leechTreatment } from '../domain/leech';
 import { addDays, dayKey, dayStartOf, logError, type Writer } from '../shared';
 import { type Catalog, loadByDay } from '../domain/catalog';
 import { applyMove, buildDayPlan, type DayPlan } from '../domain/day';
@@ -64,7 +65,8 @@ type BookOpts = { cfg: VocabCfg; cat: Catalog; med: FormStats; planned: boolean 
 function ctxOf(path: string, t: number, o: BookOpts): PlanCtx {
   const day = dayKey(t);
   const load = loadByDay(o.cat, o.med, path);
-  return { cfg: o.cfg, path, planned: o.planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: o.cat.siblingOffsets(path, day) };
+  // `ff`: Lehrer-Falle (falscher Freund oder Paar) → beim Leech eine offene Kontrastkarte (gleich wie flow.ts planCtxOf, sonst wiche das Band ab).
+  return { cfg: o.cfg, path, planned: o.planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: o.cat.siblingOffsets(path, day), ff: leechTreatment(o.cat.get(path)?.trap) === 'contrast' };
 }
 
 /**

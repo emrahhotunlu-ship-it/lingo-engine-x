@@ -272,3 +272,33 @@ describe('reportEvidence: Planwirkung nur unter vier Bedingungen (plan.md §2.2)
     expect(evidencePlans({ ...l, day: dayKey(T0) }, { kind: 'recalled', typed: true, cued: false, t: T0 })).toBe(false);
   });
 });
+
+describe('Kontrastkarte lex.ct (M14, V3 Schritt 3)', () => {
+  it('Verwechslung mit einem anderen Wort öffnet eine Kontrastkarte; „Das wusste ich eigentlich“ nicht', () => {
+    const r = applyAnswer(learned(T0 - 5 * D), ans(T0, { outcome: 'other', hit: 'become' }), ctx());
+    expect(r.lex.ct).toEqual({ at: T0, w: 'become' });
+    const o = applyAnswer(learned(T0 - 5 * D), ans(T0, { outcome: 'other', hit: 'become', flags: 2 }), ctx());
+    expect(o.lex.ct).toBeUndefined();
+  });
+  it('die Kontrastkarte selbst: keine Note, keine Buchung, Plan unverändert, Karte danach geschlossen', () => {
+    const l = { ...learned(T0 - 5 * D), ct: { at: T0 - D, w: 'become' } };
+    const r = applyAnswer(l, ans(T0, { form: 'contrast', outcome: 'wrong' }), ctx());
+    expect(r.grade).toBeNull();
+    expect(r.booked).toEqual([]);
+    expect(r.lex.ct).toBeUndefined();
+    expect([r.lex.u, r.lex.b, r.lex.lv, r.lex.lc, r.lex.day]).toEqual([l.u, l.b, l.lv, l.lc, l.day]);
+  });
+  it('Leech bei einer Lehrer-Falle (ff/Paar) öffnet eine Kontrastkarte ohne Verwechslungswort; ohne Falle nicht', () => {
+    let a = learned(T0 - 40 * D);
+    let b = a;
+    for (let i = 0; i < 6; i++) {
+      const t = T0 - (30 - i * 4) * D;
+      a = applyAnswer({ ...a, day: null }, ans(t, { outcome: 'wrong' }), ctx({ ff: true })).lex;
+      b = applyAnswer({ ...b, day: null }, ans(t, { outcome: 'wrong' }), ctx()).lex;
+    }
+    expect(a.lc).toBe(b.lc);
+    expect(a.lc).toBe(6);
+    expect(a.ct).toMatchObject({ w: null });
+    expect(b.ct).toBeUndefined();
+  });
+});

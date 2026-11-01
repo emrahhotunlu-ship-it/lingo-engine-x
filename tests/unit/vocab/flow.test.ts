@@ -59,8 +59,18 @@ describe('cardOf', () => {
     expect(m.mode).toBe('meaning');
     expect(m.form).toBe('meaning');
   });
+  it('Kontrastkarte: Lücke im frischen Satz, „Gesucht“ immer, Falle und Verwechslung mitgegeben; ohne Satz ohne Satz', () => {
+    const lex = { ...learned(T0 - 10 * D), lv: 6, ct: { at: T0 - D, w: 'become' } };
+    const m = cardOf({ task: task({ form: 'contrast' }), doc, lex, teach: { ff: 'bekommen' }, nowMs: T0, sbGate: null })!;
+    expect(m.form).toBe('contrast');
+    expect(m.mode).toBe('gap');
+    expect(m.cue).toMatchObject({ ff: true });
+    expect(m.contrast).toEqual({ w: 'become', ff: 'bekommen', pair: null });
+    const bare = cardOf({ task: task({ form: 'contrast' }), doc: { word: 'scope', de: 'Umfang' }, lex, teach: {}, nowMs: T0, sbGate: null })!;
+    expect([bare.mode, bare.form]).toEqual(['nosent', 'contrast']);
+  });
   it('Formen mit späterer eigener Karte → null', () => {
-    for (const form of ['transfer', 'contrast', 'own'] as const) expect(cardOf({ task: task({ form }), doc, lex: learned(T0 - 10 * D), teach: {}, nowMs: T0, sbGate: null })).toBeNull();
+    for (const form of ['transfer', 'own'] as const) expect(cardOf({ task: task({ form }), doc, lex: learned(T0 - 10 * D), teach: {}, nowMs: T0, sbGate: null })).toBeNull();
   });
 });
 

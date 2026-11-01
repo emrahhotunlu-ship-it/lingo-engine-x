@@ -65,6 +65,7 @@ function fullText(card: CardModel): { text: string; start: number; end: number }
 function taskKey(v: CardView | BandView): MessageKey {
   if (v.kind === 'intro') return 'vmTask_intro';
   if (v.kind === 'probe') return 'vmTask_probe';
+  if (v.card.form === 'contrast') return 'vmTask_contrast';
   return v.card.mode === 'meaning' ? 'vmTask_meaning' : v.card.mode === 'nosent' ? 'vmTask_nosent' : v.card.firstLetters ? 'vmTask_gap_hint' : 'vmTask_gap';
 }
 const wozuKey = (k: MessageKey): MessageKey => k.replace('vmTask_', 'vmWozu_') as MessageKey;
@@ -72,6 +73,7 @@ const wozuKey = (k: MessageKey): MessageKey => k.replace('vmTask_', 'vmWozu_') a
 function kindLabel(t: T, v: CardView | BandView): string {
   if (v.kind === 'intro') return t('vmKindNew');
   if (v.kind === 'probe') return t('vmKindProbe');
+  if (v.card.form === 'contrast') return t(v.card.contrast?.ff ? 'vmKindContrastFf' : 'vmKindContrast');
   return t(v.task.planned ? 'vmKindReview' : 'vmKindPractice');
 }
 
@@ -346,6 +348,28 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
       ))}
     </p>
   ) : null;
+  // Kontrastkarte: die Falle ausdrücklich benennen (deutsche Falle, Paar, zuletzt verwechselt), englische Wörter mit `lang="en"`.
+  const ct = v.card.contrast;
+  const mixed = ct?.w && ct.w.toLowerCase() !== (ct.pair ?? '').toLowerCase() ? ct.w : null;
+  const contrast = ct ? (
+    <div className="flex flex-col gap-0.5" data-testid="vm-contrast">
+      {ct.ff ? (
+        <p className="lx-t-support">
+          {t('vmCtFf1')} <span lang="de">„{ct.ff}“</span> {t('vmCtFf2')} <strong lang="en">{v.card.answer}</strong>.
+        </p>
+      ) : null}
+      {ct.pair ? (
+        <p className="lx-t-support">
+          {t('vmCtPair')} <strong lang="en">{ct.pair}</strong>.
+        </p>
+      ) : null}
+      {mixed ? (
+        <p className="lx-t-support text-muted">
+          {t('vmCtMixed')} <span lang="en">{mixed}</span>.
+        </p>
+      ) : null}
+    </div>
+  ) : null;
   const done = v.choice ? (
     <div className="flex flex-col items-start gap-2" data-testid="vm-choice-done">
       <p className="lx-t-support text-muted">{t(v.choice === 'knewIt' ? 'vmKnewItDone' : 'vmLaterDone')}</p>
@@ -380,6 +404,7 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
     // Feste Reihenfolge: Urteil · Lösung · Warum · Wortpartner · Kommt wieder (volle Breite, nie abgeschnitten).
     tail: (
       <>
+        {contrast}
         {partners}
         <p className="lx-t-meta text-muted" data-testid="next-in">
           {t('vmNextTitle')}: {nextText(t, b.next, dateShort)}

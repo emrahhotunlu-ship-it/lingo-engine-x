@@ -7,7 +7,7 @@ import type { Band } from '../domain/band';
 import { Catalog } from '../domain/catalog';
 import type { Check, CheckDict } from '../domain/check';
 import type { DayPlan } from '../domain/day';
-import { answerOf, type CardModel, cardOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
+import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
 import { type SessionKind, SessionRun, type Task } from '../domain/session';
 import type { FormStats, Lex, VocabCfg } from '../domain/types';
@@ -149,7 +149,9 @@ export class LearnRun {
         const lex = lexOf(doc);
         if (!lex || doc.hidden === true) continue;
         this.docs.set(path, doc);
-        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++ });
+        // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
+        const tc = teachOf(headOf(path, doc));
+        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null });
       }
       const cat = new Catalog(items);
       this.cat = cat;

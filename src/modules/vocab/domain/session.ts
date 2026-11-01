@@ -19,6 +19,8 @@ export const FREE_SIZE = 20;
 export const FIRST_NEW_AFTER = 4; // erstes neues Lexem nach 3–5 Wiederholungen (fest 4)
 export const TRANSFER_MIN = 3;
 export const TRANSFER_MAX = 5;
+/** Höchstens so viele offene Kontrastkarten je Runde (M14). */
+export const CONTRAST_MAX = 2;
 
 /** `step`: 0 kein Lernschritt · 1 Schritt A · 2 Schritt B · 3 Wiederkehr nach Fehler. */
 /** V2: `sent` mit/ohne englischen Satz, `cue` „Gesucht: …“ an der Lücke (M25, bis Stufe 4). */
@@ -106,6 +108,16 @@ export class SessionRun {
         return { path, form: it?.lex.b ? formFor(it.lex, it.av) : 'gap', step: 0, why: this.kind };
       });
     }
+    // Offene Kontrastkarten (M14) kommen in der nächsten Runde zuerst, höchstens zwei, die jüngste Verwechslung vorn; ohne Planwirkung.
+    // Nicht in „Dieses Wort“ (dort übt man genau ein Wort) und nie für ausgeblendete oder ruhende Lexeme.
+    if (this.kind !== 'word') {
+      const open = items
+        .filter((it) => it.lex.ct && !it.hidden && !this.cat.rests(it.path))
+        .sort((a, b) => b.lex.ct!.at - a.lex.ct!.at || a.path.localeCompare(b.path))
+        .slice(0, CONTRAST_MAX)
+        .map((it): Slot => ({ path: it.path, form: 'contrast', step: 0, why: 'contrast' }));
+      this.queue.unshift(...open);
+    }
   }
 
   /**
@@ -148,10 +160,10 @@ export class SessionRun {
     const l = this.lex(s.path);
     // Pflicht, „Noch 5“ und freie Runde nehmen nur Fälliges/Geplantes; die anderen Wege buchen nur Fälliges oder Gefährdetes (mayPlan).
     const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes';
-    const planned = !!l && !s.evidence && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
+    const planned = !!l && !s.evidence && s.form !== 'contrast' && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
     const sent = FORM_SPEC[s.form].sent;
     const cue = sent === 's' && FORM_SPEC[s.form].track === 'b' && (l?.lv ?? 1) <= CUE_MAX_LV;
-    return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };
+    return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned || s.form === 'contrast' ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };
   }
 
   /** Nächste Aufgabe oder `null` (Runde zu Ende; offene Lernschritte bleiben in `lex.step` für die nächste Runde des Lerntags). */

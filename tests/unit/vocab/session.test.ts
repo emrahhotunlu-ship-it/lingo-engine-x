@@ -96,6 +96,25 @@ describe('Pflichtrunde', () => {
   });
 });
 
+describe('Kontrastkarten (M14)', () => {
+  it('offene Kontrastkarten zuerst, höchstens zwei, jüngste vorn, ohne Planwirkung; nicht in „Dieses Wort“', () => {
+    const withCt = (i: number, at: number) => {
+      const it = learned(i, 5);
+      return { ...it, lex: { ...it.lex, ct: { at, w: 'other' } } };
+    };
+    const cat = new Catalog([...Array.from({ length: 8 }, (_, i) => learned(i)), withCt(20, T0 - 3 * D), withCt(21, T0 - D), withCt(22, T0 - 2 * D)]);
+    const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 0 }, {});
+    const run = new SessionRun('pflicht', cat, plan, T0, { cfg: DEFAULT_CFG });
+    const a = run.next(T0)!;
+    const b = run.next(T0)!;
+    expect([a.path, b.path]).toEqual(['vocab/r21', 'vocab/r22']);
+    for (const t of [a, b]) expect([t.form, t.planned, t.why]).toEqual(['contrast', false, 'contrast']);
+    expect(run.next(T0)!.form).not.toBe('contrast');
+    const word = new SessionRun('word', cat, null, T0, { cfg: DEFAULT_CFG, paths: ['vocab/r21'] });
+    expect(word.next(T0)!.form).not.toBe('contrast');
+  });
+});
+
 describe('Nebenwege laufen durch dieselbe Tagesmarke (F2, N2)', () => {
   it('„Dieses Wort üben“ und Wochen-Check: ein heute gebuchtes Lexem zählt nur als Übung', () => {
     const cat = new Catalog(Array.from({ length: 6 }, (_, i) => learned(i)));

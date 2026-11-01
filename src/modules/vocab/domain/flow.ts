@@ -1,3 +1,4 @@
+import { leechTreatment } from './leech';
 import { addDays, dayKey } from '../shared';
 import { type Band, bandOf } from './band';
 import { type CardSentence, chooseSentence, cueOf, headWords, type Pos, posOf, sentencesOf, targetOf, type Teach, tipOf, usableSentences } from './card';
@@ -39,10 +40,12 @@ export type CardModel = {
   firstLetters: boolean;
   moreSentences: boolean;
   col: unknown;
+  /** Kontrastkarte (M14, ohne Planwirkung): womit verwechselt (`w`, null = Leech) und die Lehrer-Falle (falscher Freund / Paar). */
+  contrast?: { w: string | null; ff: string | null; pair: string | null };
 };
 
 /** Formen, die erst mit späteren Schritten eine eigene Karte bekommen (Anwenden V4, Kontrast Schritt 3, mit Claude V4). */
-const LATER: ReadonlySet<Form> = new Set(['transfer', 'contrast', 'own', 'say', 'diplomatic', 'find_trap', 'situation']);
+const LATER: ReadonlySet<Form> = new Set(['transfer', 'own', 'say', 'diplomatic', 'find_trap', 'situation']);
 
 const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
 
@@ -72,6 +75,14 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     return { ...base, mode, form, sentence: null, answer, target: targetOf(lex, answer, pos, teach, null), cue: null, firstLetters: false };
   };
   if (task.form === 'probe') return noSentence('probe', 'probe');
+  // Kontrastkarte: frischer Satz (nie der zuletzt gezeigte), „Gesucht: …“ immer (auch auf hohen Stufen) – die Falle ist der Grund der Karte.
+  if (task.form === 'contrast') {
+    const contrast = { w: lex.ct?.w ?? null, ff: teach.ff ?? null, pair: teach.pair ?? null };
+    const cue = de ? { de, ff: !!teach.ff } : null;
+    const s = chooseSentence(lex, usable, day, { fresh: true, avoid: x.avoid ?? null });
+    if (!s) return { ...noSentence('contrast', 'nosent'), cue, contrast };
+    return { ...base, mode: 'gap', form: 'contrast', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue, firstLetters: false, contrast };
+  }
   if (task.intro) {
     const s = chooseSentence(lex, usable, day, { anchorOnly: true });
     if (!s) return { ...noSentence('intro', 'intro'), cue: cueOf({ ...lex, lv: 1 }, de, teach) };
@@ -184,7 +195,7 @@ export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: bool
 export function planCtxOf(cat: Catalog, med: FormStats, path: string, t: number, cfg: VocabCfg, planned: boolean): PlanCtx {
   const day = dayKey(t);
   const load = loadByDay(cat, med, path);
-  return { cfg, path, planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: cat.siblingOffsets(path, day) };
+  return { cfg, path, planned, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: cat.siblingOffsets(path, day), ff: leechTreatment(cat.get(path)?.trap) === 'contrast' };
 }
 
 /** Rein gerechnetes Ergebnis (für das Band; gebucht wird dasselbe beim Weiter auf dem frischen Dokument). */
