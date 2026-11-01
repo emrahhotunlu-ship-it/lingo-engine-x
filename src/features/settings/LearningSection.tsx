@@ -11,6 +11,7 @@ import { Button } from '../../ui/Button';
 import { Segmented } from '../../ui/Segmented';
 import { Switch } from '../../ui/Switch';
 import { InputProfileSection } from './InputProfileSection';
+import { vocabModuleOn } from '../../modules/vocab/api';
 
 // Einstellungen „Lernen" und „Ton" (Kap. 6.14, Plan §9): neue Wörter pro Tag (0/2/5/10),
 // Tagesziel in Minuten (10–40), Töne an/aus (Standard aus). Optimistisch mit Rückrollen.
@@ -27,10 +28,14 @@ export function LearningSection() {
   if (db !== 'ready') return null;
   const goal = normGoalMin(opt.goalMin ?? profile?.goalMin);
   const perDay = normNewPerDay(opt.newPerDay ?? profile?.newPerDay);
-  const lower = load.high ? lowerNewPerDay(perDay) : null;
+  // Großpaket A S6: Mit eingeschalteter Wörter-App stellt „Wortschatz › Wörter“ die neuen Wörter ein (dort auch 0); hier nur noch das Tagesziel.
+  const vmod = vocabModuleOn(profile);
+  const lower = load.high && !vmod ? lowerNewPerDay(perDay) : null;
   return (
     <section className="flex flex-col gap-3" data-testid="learning-section">
       {/* Die Gruppe „Lernen“ trägt schon die Überschrift (UX-Beratung Nr. 11). */}
+      {!vmod && (
+        <>
       <p className="text-sm font-medium">{t('setNewPerDay')}</p>
       <Segmented
         label={t('setNewPerDay')}
@@ -41,6 +46,8 @@ export function LearningSection() {
         onChange={(v) => void changeNewPerDay(Number(v))}
       />
       <p className="text-sm text-muted">{t('setNewPerDayHint')}</p>
+        </>
+      )}
       {lower !== null && (
         <div className="flex flex-col gap-2 rounded-lg border border-line p-3" data-testid="lapse-load-hint">
           <p className="m-0 text-sm">{t('awLoadHigh')}</p>
@@ -51,7 +58,7 @@ export function LearningSection() {
           </div>
         </div>
       )}
-      <p className="mt-2 text-sm font-medium">{t('setGoalMin')}</p>
+      <p className={vmod ? 'text-sm font-medium' : 'mt-2 text-sm font-medium'}>{t('setGoalMin')}</p>
       <Segmented
         label={t('setGoalMin')}
         value={String(goal)}

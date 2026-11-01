@@ -18,7 +18,7 @@ import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps, SheetProps } from '../app/registry';
 import { lazy, Suspense, useEffect } from 'react';
-import { loadScreens, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
+import { loadOverview, loadScreens, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
 import { useLive } from '../data/live';
 import { recordRoundEnd } from '../features/progress/persist';
 import { markExhausted } from '../features/today/store';
@@ -65,6 +65,18 @@ const vwordParams = z.object({ path: LEX_PATH });
 // Lernrunde des Wörter-Moduls: nachgeladen (eigene Teil-Datei), mit eigenem Lade-Skelett.
 const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScreen })));
 const WordPage = lazy(() => loadWordPage().then((m) => ({ default: m.WordPage })));
+const WordSettings = lazy(() => loadOverview().then((m) => ({ default: m.WordSettings })));
+
+/** Einstellungen › Wortschatz (Großpaket A S6, Bild s2-13): Zielzeit, neue Wörter, Sicherheit; nur bei eingeschalteter Wörter-App. */
+function WordSettingsHost() {
+  const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
+  if (!on) return null;
+  return (
+    <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+      <WordSettings />
+    </Suspense>
+  );
+}
 
 /**
  * Rundenende der neuen Wörter-Runde (V3 Schritt 4b): Pflicht zählt als `act.review` (Heute „Wörter erledigt“, Serie), Extra als `cards`;
@@ -215,7 +227,10 @@ export const wortschatz = defineArea({
     { id: 'x:decks', component: AllDecksSheet },
     { id: 'x:deck-new', component: NewDeckSheet },
   ],
-  settings: [{ id: 'ws-vocab', group: 'vocab', order: 10, component: VocabSettingsSection }],
+  settings: [
+    { id: 'ws-vmod', group: 'vocab', order: 0, component: WordSettingsHost },
+    { id: 'ws-vocab', group: 'vocab', order: 10, component: VocabSettingsSection },
+  ],
   resumables: [trainerResume],
   unitBlocks: [reviewBlock],
   boot: () => {

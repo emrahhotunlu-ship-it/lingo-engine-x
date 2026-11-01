@@ -20,7 +20,7 @@ const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/br
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav|clock)$/,
   /^src\/i18n$/,
-  /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon)$/,
+  /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented)$/,
   /^src\/engine\/(EnglishText|KineticGap|HiddenInput|MicButton|useHotkeys|wordTap)$/,
   /^src\/domain\/answer\/mask$/,
   /^src\/domain\/lexicon\/(dict|pron)$/,
@@ -117,6 +117,7 @@ describe('Wörter-Modul: Isolation', () => {
     // V3 Schritt 2b-2: der Bereich Wortschatz bindet den Lernbildschirm über api.loadScreens() (nachgeladen) an.
     // Großpaket A Schritt 5: die Vorlagen-Liste (src/prompts/registry.ts) über die dritte Tür modules/vocab/prompts.
     // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (unit/labels, learn/ui) fragen den Schalter.
+    // Großpaket A S6: Fortschritt › Wörter (Slot vmod mit api.loadOverview; alte Behaltens-Karte und alte Einstellung „neue Wörter“ fragen den Schalter).
     expect(touching.sort()).toEqual([
       'src/areas/wortschatz.tsx',
       'src/data/paths.ts',
@@ -124,10 +125,13 @@ describe('Wörter-Modul: Isolation', () => {
       'src/data/snapshot.ts',
       'src/data/writer.ts',
       'src/features/learn/ui.tsx',
+      'src/features/progress/WordsSegment.tsx',
+      'src/features/settings/LearningSection.tsx',
       'src/features/today/TodayScreen.tsx',
       'src/features/today/state.ts',
       'src/features/today/store.ts',
       'src/features/unit/labels.ts',
+      'src/features/vocab/vmod.slot.tsx',
       'src/prompts/registry.ts',
     ]);
   });

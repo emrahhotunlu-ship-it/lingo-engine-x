@@ -140,8 +140,9 @@ export function ProgressScreen() {
         <Tabs label={t('progTabs')} items={TABS.map((x) => ({ id: x.id, label: t(x.label), testId: `tab-${x.id}` }))} value={tab} onChange={choose} testId="progress-tabs">
           {tab === 'words' && (
             <>
-              <WordsSegment />
+              {/* Großpaket A S6: die Übersicht der Wörter-App (Slot) steht oben, der bisherige Teil darunter. */}
               <Slot name="progress.words" />
+              <WordsSegment />
             </>
           )}
           {tab === 'grammar' && (

@@ -11,6 +11,7 @@ import { useActs } from '../vocab/actStore';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { WK_MIN_N, WK_TARGETS, wordKernStats, type Rate } from '../../domain/metrics/wordKern';
 import type { MessageKey } from '../../i18n';
+import { vocabModuleOn } from '../../modules/vocab/api';
 import { PathTab } from './PathTab';
 import { StatsTab } from './StatsTab';
 
@@ -296,11 +297,14 @@ export function WordsSegment() {
   const { t } = useT();
   const { cards, fest, now } = useVocabMetrics();
   const kern = useWordKern(cards, now);
+  // Großpaket A S6: Mit eingeschalteter Wörter-App zeigt deren Übersicht die Behaltensrate (30 Tage); die alte Karte (28 Tage) entfällt dann,
+  // damit nicht zwei verschiedene Zahlen für dasselbe untereinander stehen.
+  const vmod = useLive((s) => vocabModuleOn(s.docs['app/profile']));
   return (
     <div className="flex flex-col gap-4" data-testid="seg-words">
       <FestCard fest={fest} />
       <PathTab part="goal" />
-      <QualityCard cards={cards} now={now} kern={kern} />
+      {!vmod && <QualityCard cards={cards} now={now} kern={kern} />}
       <Disclosure label={t('nbProfilMeasures')} testId="measures-words">
         {/* UX-Prüfung WL2 S5: Abschnitte mit Trennlinie, damit die Liste nicht als ein Block liest. */}
         <div className="flex flex-col gap-5 [&>*+*]:border-t [&>*+*]:border-line [&>*+*]:pt-5">

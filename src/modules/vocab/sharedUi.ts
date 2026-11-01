@@ -20,6 +20,8 @@ export { Button } from '../../ui/Button';
 export { Skeleton } from '../../ui/Skeleton';
 export { Icon } from '../../ui/Icon';
 export { toast } from '../../ui/Toast';
+// Übersicht und Einstellungen Wörter (Großpaket A S6): Auswahl als Radiogruppe.
+export { Segmented } from '../../ui/Segmented';
 
 // Lücke, antippbarer Text, Eingabe
 export { EnglishText } from '../../engine/EnglishText';

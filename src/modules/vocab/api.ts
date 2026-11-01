@@ -160,3 +160,8 @@ export function loadScreens() {
 export function loadWordPage() {
   return import('./ui/WordPage');
 }
+
+/** Übersicht und Einstellungen Wörter (Großpaket A S6): eigene Teil-Datei, erst beim Öffnen geladen. */
+export function loadOverview() {
+  return import('./ui/Overview');
+}
