@@ -209,16 +209,16 @@ export function migrationDone(schema: Doc | null | undefined): boolean {
 export type EnableResult = { state: RunOutcome['state'] | 'switch_failed'; why?: string; run?: RunOutcome; caught?: CatchUpResult };
 
 /**
- * „Übernehmen und einschalten“: Umrechnung mit echten Wächtern, danach der Schalter. `already` (anderer Tab oder Gerät war schneller):
- * erst nachholen, dann einschalten. `busy`/`blocked`/`partial`: nichts einschalten, kein automatisches Wiederholen (der Aufrufer zeigt den Grund;
+ * „Übernehmen und einschalten“: Umrechnung mit echten Wächtern, danach nachholen und der Schalter. Nachgeholt wird nach `done` und `already`
+ * (anderer Tab war schneller, oder ein früherer Lauf endete `partial` und der alte Bereich hat seitdem geantwortet); ohne Offenes ein Leerlauf. `busy`/`blocked`/`partial`: nichts einschalten, kein automatisches Wiederholen (der Aufrufer zeigt den Grund;
  * `partial` darf per Knopf erneut laufen, die Umrechnung ist idempotent).
  */
 export async function enableModule(writer: Writer, input: MigrationInput, g: RunGuards): Promise<EnableResult> {
   const run = await runMigration(writer, input, g);
   if (run.state !== 'done' && run.state !== 'already') return { state: run.state, ...(run.why ? { why: run.why } : {}), run };
-  const caught = run.state === 'already' ? await catchUpAll(writer, input.docs, input.logs, input.nowMs) : undefined;
+  const caught = await catchUpAll(writer, input.docs, input.logs, input.nowMs);
   const on = await setModuleSwitch(writer, 1);
-  return { state: on ? run.state : 'switch_failed', run, ...(caught ? { caught } : {}) };
+  return { state: on ? run.state : 'switch_failed', run, caught };
 }
 
 export type ReenableGuards = { schema: Doc | null; profileValid: boolean; possiblyTruncated: boolean };

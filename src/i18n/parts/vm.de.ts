@@ -623,5 +623,7 @@ export const vmDe = {
   vmSwReenable: 'Neue Wörter-App wieder einschalten',
   vmSwCaught_one: '{n} Wort mit neuen Antworten nachgetragen.',
   vmSwCaught_other: '{n} Wörter mit neuen Antworten nachgetragen.',
+  vmSwGap_one: 'Bei {n} Wort fehlt ein Teil der Antworten aus der Zwischenzeit; es wird ab jetzt normal weiter geplant.',
+  vmSwGap_other: 'Bei {n} Wörtern fehlt ein Teil der Antworten aus der Zwischenzeit; sie werden ab jetzt normal weiter geplant.',
   vmSwError: 'Das hat nicht geklappt. Versuch es gleich noch einmal; Einzelheiten stehen unter Einstellungen › Diagnose.',
 };

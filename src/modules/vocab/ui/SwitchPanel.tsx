@@ -106,6 +106,7 @@ export function SwitchPanel({ on, read, backup: saveBackup }: { on: boolean } & 
         setNote(null);
         toast(t('vmSwOnToast'));
         if (r.caught?.docs) toast(tn('vmSwCaught', r.caught.docs));
+        if (r.caught?.incomplete.length) toast(tn('vmSwGap', r.caught.incomplete.length));
         return;
       }
       logWarn('vocab:switch', { message: `Nicht eingeschaltet: ${r.state}` }, r.why ?? '');
@@ -133,6 +134,7 @@ export function SwitchPanel({ on, read, backup: saveBackup }: { on: boolean } & 
       if (r.state === 'done') {
         toast(t('vmSwOnToast'));
         if (r.caught?.docs) toast(tn('vmSwCaught', r.caught.docs));
+        if (r.caught?.incomplete.length) toast(tn('vmSwGap', r.caught.incomplete.length));
         return;
       }
       logWarn('vocab:switch', { message: `Nicht wieder eingeschaltet: ${r.state}` }, r.why ?? '');

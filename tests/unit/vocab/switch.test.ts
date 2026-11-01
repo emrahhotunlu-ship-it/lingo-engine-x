@@ -138,6 +138,8 @@ describe('Einschalten: Übernehmen, Schalter und Rückweg', () => {
     const w = createWriter(h.db);
     const r = await enableModule(w, stateOf(h.dump()).input, guards);
     expect(r.state).toBe('done');
+    // Nachholen läuft auch nach `done` (Befund data-guard: nach `partial` → „Weiter“ blieben sonst Antworten aus der Zwischenzeit liegen); hier Leerlauf.
+    expect(r.caught).toMatchObject({ docs: 0, applied: 0, incomplete: [] });
     const d = h.dump() as Record<string, Doc>;
     expect(migrationDone(d['app/schema'])).toBe(true);
     expect((d['app/profile']!.vcfg as Doc).mod).toBe(1);

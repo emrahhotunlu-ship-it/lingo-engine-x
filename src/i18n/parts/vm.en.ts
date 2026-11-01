@@ -623,5 +623,7 @@ export const vmEn = {
   vmSwReenable: 'Turn the new Words app back on',
   vmSwCaught_one: '{n} word updated with new answers.',
   vmSwCaught_other: '{n} words updated with new answers.',
+  vmSwGap_one: 'For {n} word, some answers from the meantime are missing; it will be scheduled normally from now on.',
+  vmSwGap_other: 'For {n} words, some answers from the meantime are missing; they will be scheduled normally from now on.',
   vmSwError: 'That did not work. Please try again in a moment; details are under Settings › Diagnostics.',
 };
