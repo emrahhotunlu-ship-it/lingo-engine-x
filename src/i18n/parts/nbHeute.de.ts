@@ -46,7 +46,7 @@ export const nbHeuteDe = {
   nbHeuteDoneSteps_other: '{n} Schritte geschafft',
   nbHeuteTruthSure: 'Heute neu sicher: {n}',
   nbHeuteTruthFixed: 'Fehler weg: {n}',
-  nbHeuteTruthOver: 'Rückstand abgebaut: {n}',
+  nbHeuteTruthOver: 'Überfällige abgebaut: {n}',
   nbHeuteMsFest: '{n} Wörter sind jetzt fest.',
   nbHeuteMsTopic: 'Dein erstes Grammatikthema ist jetzt fest.',
   nbHeuteMsFix: '{n} Fehlersätze sind jetzt fest.',

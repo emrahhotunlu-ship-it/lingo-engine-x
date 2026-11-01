@@ -24,10 +24,12 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   // „Weg zu C1“ (P45, Plan §4.4): der Pflichtsatz „Sprechen, Hören und Lesen misst die App nicht“ grenzt ab, er bietet nichts an.
   /^pxWayNotMeasured$/,
   // Lesen (13.10.2026, Emrahs Entscheidung „eigener Reiter Lesen“): Texte des neu gebauten Moduls src/modules/read (Präfix `rd`).
-  /^rd[A-Z]/,
+  /^(rd[A-Z]|vmPlSrcOwn$)/,
+  // Großpaket A (Wörter-App): die Übungsformen „Sag es“ und „Hören → tippen“ im Wort-Verlauf (vmF_) sind Wörter-Übungen wie exName_say_it;
+  // „Deine Funde (… Lesen)“ (vmPlSrcOwn) nennt den Reiter Lesen als Quelle neuer Wörter, kein Angebot.
   // Wort-Lernen 2, Teil 2 (Emrahs Auftrag 21.10.2026): Übung „Sag es“ (Diktiertaste), „Sag es einmal laut“, Angebot „Sag es selbst“ und die
   // Werkstatt-Diagnose „Beim Hören …“ gehören zum Wörter-Training (kein eigenes Sprech- oder Hörmodul).
-  /^(exName_say_it|pxWw)/,
+  /^(exName_say_it|pxWw|vmF_(say|listen)$)/,
   // Relaunch Stufe 1, P2 S1-SHELL (stufe1-plan.md §6.2/§6.3): die Navigation führt unter „Praxis“ Sprechen · Hören · Lesen (frühere Reiter/Seiten).
   /^sh(Speak|SpeakSub|Listen|Read|ReadSub|PracticeMore)$/,
   // Relaunch Stufe 1, P7 S1-DIKTAT: die Erfolgsmeldung der Laptop-Diktat-Probe nennt die Wörter-Übung „Sag es“ (s. o. exName_say_it).

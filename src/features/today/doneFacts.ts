@@ -11,7 +11,7 @@ import { goalLine, type TextRef } from './goalLine';
 import { claimMilestone } from './milestoneClaim';
 import type { TodayView } from './state';
 
-// Abschluss von „Heute“ (Gesamtkonzept 3.2): Die Wahrheitszeile „Heute neu sicher: n · Fehler weg: n · Rückstand abgebaut: n“ und der
+// Abschluss von „Heute“ (Gesamtkonzept 3.2): Die Wahrheitszeile „Heute neu sicher: n · Fehler weg: n · Überfällige abgebaut: n“ und der
 // Meilenstein-Satz. Alles wird aus dem Stand abgeleitet; die Morgenwerte (überfällig, sicher) stehen additiv im eingefrorenen
 // Plan (`plan.u.ov`, `plan.u.sure`). Fehlt ein Morgenwert (Plan von früher), entfällt der Teil – es wird nie etwas behauptet,
 // was nicht belegt ist. Der Meilenstein wird einmal gezeigt und in `app/profile.ms` gemerkt.

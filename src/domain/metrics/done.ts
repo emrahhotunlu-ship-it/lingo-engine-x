@@ -10,7 +10,7 @@ import { festUnits } from './vocab';
 type Doc = Readonly<Record<string, unknown>>;
 
 export type DoneDay = {
-  /** Wahrheitszeile „Heute neu sicher: n · Fehler weg: n · Rückstand abgebaut: n“ (`null` = Teil entfällt). */
+  /** Wahrheitszeile „Heute neu sicher: n · Fehler weg: n · Überfällige abgebaut: n“ (`null` = Teil entfällt). */
   parts: { sure: number | null; fixed: number | null; over: number | null };
   /** Erreichte, noch nicht gemerkte Meilensteine (wichtigster zuerst). */
   milestones: Milestone[];

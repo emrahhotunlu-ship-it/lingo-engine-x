@@ -306,7 +306,7 @@ export const vmEn = {
   vmWpGrpOnway: 'on the way',
   vmWpGrpProduce: 'you produce',
   vmWpTrackU: 'Understanding',
-  vmWpTrackB: 'Writing it yourself',
+  vmWpTrackB: 'Producing it yourself',
   vmWpStNew: 'new',
   vmWpStSure: 'solid',
   vmWpStLearning: 'learning',

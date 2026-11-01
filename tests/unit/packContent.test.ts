@@ -14,7 +14,8 @@ const rows = (JSON.parse(readFileSync('src/content/c1/pack.json', 'utf8')) as { 
 const base = JSON.parse(readFileSync('tests/fixtures/lp2-p3-base.json', 'utf8')) as { pack: Record<string, { all: string; nowhy: string }> };
 const h = (v: unknown) => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 12);
 // Vier sachlich falsche Begründungen (Betonung, Schreibung, on the other hand, to put it differently) wurden bewusst berichtigt.
-const CORRECTED_WHY = new Set(['frame-02', 'frame-18', 'family-14', 'family-18']);
+// phrasal-12: Lehrer-Nachprüfung Großpaket A S7c (bring forward eher britisch, US meist move up).
+const CORRECTED_WHY = new Set(['frame-02', 'frame-18', 'family-14', 'family-18', 'phrasal-12']);
 const toks = (s: string) => (s.toLowerCase().match(/[a-z][a-z'-]*/g) ?? []) as string[];
 
 describe('C1-Paket: Zusatzfelder', () => {
@@ -69,7 +70,7 @@ describe('C1-Paket: Zusatzfelder', () => {
     expect(english).not.toMatch(/\b(colour|(?:organis|realis)(?:e|ed|es|ing|ation)\b|programmes?\b|centre|licence|cheque|whilst|learnt|favour|behaviour|honour|analys(?:e|ed|es|ing)\b|catalogue)\w*/i);
   });
 
-  it('Kein vorhandenes Feld wurde geändert oder entfernt (außer die vier berichtigten Begründungen)', () => {
+  it('Kein vorhandenes Feld wurde geändert oder entfernt (außer den berichtigten Begründungen)', () => {
     expect(Object.keys(base.pack).length).toBe(rows.length);
     for (const r of rows) {
       const b = base.pack[r.id] as { all: string; nowhy: string };
