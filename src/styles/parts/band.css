@@ -1,3 +1,4 @@
+/* Zustandsflächen mischen in oklab: im Hellmodus ist --surface oklch(1 0 0) mit Farbton 0, eine oklch-Mischung zöge „fast“ (Gelb) Richtung Rosa (Befund VB 1). */
 /* Relaunch Stufe 1: Übungsrahmen mit Band (P3 S1-BAND, docs/relaunch/stufe1-plan.md §6.4, Vorschau `band`/`sheet`/`bar`/`kbdhelp`).
    Nur Tokens aus index.css (keine Farbwerte, kein Weichzeichner). Zustand nie nur über Farbe: Zeichen + Wort stehen im Urteil.
    Nora 1: Fortschritt in Iris (`--act`), Bereichsfarbe höchstens als dünne Linie. Nora 2: Urteilszeichen als weicher Kreis.
@@ -38,10 +39,10 @@
   flex-basis: 100%;
 }
 .lx-band[data-verdict='ok'] {
-  --lx-band-bg: color-mix(in oklch, var(--surface) 90%, var(--ok));
+  --lx-band-bg: color-mix(in oklab, var(--surface) 90%, var(--ok));
 }
 .lx-band[data-verdict='wrong'] {
-  --lx-band-bg: color-mix(in oklch, var(--surface) 91%, var(--bad));
+  --lx-band-bg: color-mix(in oklab, var(--surface) 91%, var(--bad));
 }
 .lx-band[data-verdict='near'] {
   box-shadow:
@@ -200,10 +201,10 @@ html[data-band] .lx-actionbar {
   border-top-color: transparent;
 }
 html[data-band='ok'] .lx-actionbar {
-  background: color-mix(in oklch, var(--surface) 90%, var(--ok));
+  background: color-mix(in oklab, var(--surface) 90%, var(--ok));
 }
 html[data-band='wrong'] .lx-actionbar {
-  background: color-mix(in oklch, var(--surface) 91%, var(--bad));
+  background: color-mix(in oklab, var(--surface) 91%, var(--bad));
 }
 html[data-band='near'] .lx-actionbar,
 html[data-band='dontKnow'] .lx-actionbar {
@@ -299,10 +300,10 @@ html[data-band][data-actionbar] #main {
   animation: lx-band-fade 220ms var(--ease-soft) backwards;
 }
 .lx-result[data-verdict='ok'] .lx-result-head {
-  background: color-mix(in oklch, var(--surface) 90%, var(--ok));
+  background: color-mix(in oklab, var(--surface) 90%, var(--ok));
 }
 .lx-result[data-verdict='wrong'] .lx-result-head {
-  background: color-mix(in oklch, var(--surface) 91%, var(--bad));
+  background: color-mix(in oklab, var(--surface) 91%, var(--bad));
 }
 .lx-result[data-verdict='near'] .lx-result-head {
   box-shadow: inset 0 2px 0 0 var(--near);

@@ -44,7 +44,8 @@ export async function answerCheckItem(page: Page, n: number, total: number): Pro
   await expect(item.getByTestId('hint')).toHaveCount(0);
   const kind = await item.getAttribute('data-kind');
   if (kind === 'g') {
-    await item.getByTestId('dont-know').click();
+    // „Weiß ich nicht“ steht seit der Übungsseite D3 in der Knopfleiste unten, nicht mehr in der Aufgabe.
+    await page.getByTestId('dont-know').click();
   } else if (await item.getByTestId('choice').count()) {
     await item.getByTestId('choice').first().click();
     // Auswahl, dann „Prüfen“ (Übungsgerüst, Lernplattform 2.0 §4.4).

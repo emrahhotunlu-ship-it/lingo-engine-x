@@ -190,7 +190,7 @@ async function main() {
     first.push([npx, ['tsc', '-p', 'tsconfig.json', '--noEmit', '--incremental', '--tsBuildInfoFile', join(CACHE, 'all.tsbuildinfo')], 'typecheck-all']);
   }
   if (lintAll || lintFiles.length) {
-    first.push([npx, ['eslint', '--cache', '--cache-strategy', 'content', '--cache-location', join(CACHE, 'eslintcache'), ...(lintAll ? ['.'] : lintFiles)], 'lint']);
+    first.push([npx, ['eslint', '--cache', '--cache-strategy', 'content', '--cache-location', join(CACHE, 'eslintcache'), ...(lintAll ? ['.'] : lintFiles)], 'lint', { NODE_OPTIONS: '--max-old-space-size=6144' }]);
   }
   if (first.length) ok = (await step('typecheck+lint', first)) && ok;
   else skip('typecheck+lint', 'kein Code geändert');

@@ -47,7 +47,7 @@ html:is([data-lx-area], :has([data-testid='intro-flow'])) .lx-exbar {
   color: var(--fg);
 }
 .lx-vu-badge[data-tone='near'] {
-  background: color-mix(in oklch, var(--surface) 80%, var(--near));
+  background: color-mix(in oklab, var(--surface) 80%, var(--near));
 }
 .lx-vu-blockline .lx-dots {
   transform: scale(0.85);
@@ -327,13 +327,13 @@ html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secon
   animation: lx-band-fade 220ms var(--ease-soft) backwards;
 }
 .lx-vu-dverdict[data-verdict='ok'] {
-  background: color-mix(in oklch, var(--surface) 88%, var(--ok));
+  background: color-mix(in oklab, var(--surface) 88%, var(--ok));
 }
 .lx-vu-dverdict[data-verdict='near'] {
-  background: color-mix(in oklch, var(--surface) 88%, var(--near));
+  background: color-mix(in oklab, var(--surface) 88%, var(--near));
 }
 .lx-vu-dverdict[data-verdict='wrong'] {
-  background: color-mix(in oklch, var(--surface) 90%, var(--bad));
+  background: color-mix(in oklab, var(--surface) 90%, var(--bad));
 }
 .lx-vu-dverdict [data-testid='verdict'] {
   font-size: 1.15rem;
