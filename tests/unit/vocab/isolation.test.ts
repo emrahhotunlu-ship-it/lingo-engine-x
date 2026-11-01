@@ -13,6 +13,7 @@ const ROOT = join(import.meta.dirname, '../../..');
 const MODULE = 'src/modules/vocab';
 const SHARED = `${MODULE}/shared.ts`;
 const SHARED_UI = `${MODULE}/sharedUi.ts`;
+const PROMPT_REGISTRY = 'src/prompts/registry.ts';
 
 const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/];
 // V3 Schritt 2b-2: zweite Tür nur für die Oberfläche (Lernkarte, Band, Runde); nie von registry.ts/api.ts statisch erreichbar.
@@ -48,7 +49,10 @@ export function moduleViolation(fileRel: string, spec: string): string | null {
 export function outsideViolation(fileRel: string, spec: string): string | null {
   const target = resolveImport(fileRel, spec);
   if (target === null || !(target === MODULE || target.startsWith(`${MODULE}/`))) return null;
-  return target === `${MODULE}/api` || target === `${MODULE}/registry` ? null : `"${spec}" greift an den Türen des Wörter-Moduls vorbei`;
+  if (target === `${MODULE}/api` || target === `${MODULE}/registry`) return null;
+  // Großpaket A Schritt 5: dritte Tür nur für die Vorlagen-Liste (src/prompts/registry.ts lädt die App nicht; registry.ts liegt in der Einstiegsdatei).
+  if (target === `${MODULE}/prompts` && fileRel === PROMPT_REGISTRY) return null;
+  return `"${spec}" greift an den Türen des Wörter-Moduls vorbei`;
 }
 
 function files(dir: string): string[] {
@@ -111,6 +115,7 @@ describe('Wörter-Modul: Isolation', () => {
     // V1: nur die Datenschicht (Schemas für COLLECTIONS). V3 Schritt 1: Zählung (reads) und Sicherung (snapshot) der trägen Sammlung vlog über registry.
     // Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
     // V3 Schritt 2b-2: der Bereich Wortschatz bindet den Lernbildschirm über api.loadScreens() (nachgeladen) an.
+    // Großpaket A Schritt 5: die Vorlagen-Liste (src/prompts/registry.ts) über die dritte Tür modules/vocab/prompts.
     // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (unit/labels, learn/ui) fragen den Schalter.
     expect(touching.sort()).toEqual([
       'src/areas/wortschatz.tsx',
@@ -123,6 +128,7 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/today/state.ts',
       'src/features/today/store.ts',
       'src/features/unit/labels.ts',
+      'src/prompts/registry.ts',
     ]);
   });
 
@@ -135,6 +141,8 @@ describe('Wörter-Modul: Isolation', () => {
     expect(moduleViolation(`${MODULE}/ui/LearnCard.tsx`, '../../../ui/Button')).toMatch(/verlässt/);
     expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/domain/planner')).toMatch(/vorbei/);
     expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/api')).toBeNull();
+    expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/prompts')).toMatch(/vorbei/);
+    expect(outsideViolation(PROMPT_REGISTRY, '../modules/vocab/prompts')).toBeNull();
   });
 
   it('ESLint-Konfiguration: die Sperren greifen für Modul-Dateien und Dateien außerhalb', async () => {

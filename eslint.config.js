@@ -26,8 +26,8 @@ const READ_DOOR_PATTERN = {
  * src/data/paths.ts). Wird in JEDEM `no-restricted-imports`-Block wiederholt, weil ESLint je Datei nur einen Block anwendet.
  */
 const VOCAB_DOOR_PATTERN = {
-  regex: '(^|/)modules/vocab/(?!api$|registry$)',
-  message: 'Wörter-Modul: von außen nur über modules/vocab/api oder modules/vocab/registry (docs/umbau/vokabeln/plan.md §2.1).',
+  regex: '(^|/)modules/vocab/(?!api$|registry$|prompts$)',
+  message: 'Wörter-Modul: von außen nur über modules/vocab/api oder modules/vocab/registry (docs/umbau/vokabeln/plan.md §2.1); modules/vocab/prompts nur aus src/prompts/registry.ts (Test).',
 };
 const PLATFORM_SYNTAX = [
   { selector: "MemberExpression[property.name='claude']", message: 'claude.use nur in src/platform (Kap. 3.3).' },

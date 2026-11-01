@@ -167,7 +167,7 @@ describe('LearnRun', () => {
     const s = setup(learned(T0 - 10 * D));
     const min = await s.run.prepare({ docs: [['vocab/scope', { ...base, lex: s.lexIn() }]], profile: PROFILE, schema: SCHEMA });
     expect(min).toBeGreaterThanOrEqual(1);
-    expect((s.h.dump()['vmod/day'] as Doc | undefined)?.d).toBeTruthy();
+    expect((s.h.dump()['vmod/day'])?.d).toBeTruthy();
     // Zweite Runde auf derselben Datenbank: Start-Bildschirm mit derselben Minutenzahl (der gespeicherte Plan gilt).
     let now = T0 + 5000;
     const run2 = new LearnRun({ deps: { writer: createWriter(s.h.db), device: 'phone' }, dict, lang: () => 'de', drafts: memStore(), readDay: () => Promise.resolve(null), now: () => (now += 1000) });

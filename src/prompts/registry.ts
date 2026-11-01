@@ -35,6 +35,8 @@ import { patternCheck } from './patternCheck';
 import { memoryExtract } from './memoryExtract';
 import { wordCtx } from './wordCtx';
 import { READ_TEMPLATES } from '../modules/read/registry';
+// Dritte Tür des Wörter-Moduls, nur für diese Datei (tests/unit/vocab/isolation.test.ts): die Vorlagen bleiben so aus der Einstiegsdatei (registry.ts lädt früh).
+import { VOCAB_TEMPLATES } from '../modules/vocab/prompts';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -99,6 +101,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   ...READ_TEMPLATES,
   // Kartenqualität (26.10.2026): feste Einheit? (nur auf „Als Karte“, wenn die reine Prüfung unsicher ist)
   lexicalUnitCheck,
+  // Großpaket A Schritt 5: Wörter-Modul (Anwenden, eigener Satz, Bedeutung), src/modules/vocab/prompts
+  ...VOCAB_TEMPLATES,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

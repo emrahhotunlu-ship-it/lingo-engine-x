@@ -10,7 +10,7 @@ export { toUSText } from '../../domain/text/british';
 export { lemmaCandidates } from '../../domain/text/lemma';
 // V4 (Großpaket A Schritt 5): Bausteine der drei Claude-Vorlagen (prompts/): Kopfzeile, Kürzen, Sprachtreue, tolerantes Lesen,
 // Nachprüfung der korrigierten Fassung (britisch → US, Selbstprüfung). Nur reine Funktionen und Typen; der Aufruf selbst (KI-Tor) kommt von außen.
-export { clip, header, langName } from '../../prompts/common';
+export { block, clip, fenced, header, langName } from '../../prompts/common';
 export type { PromptTemplate, UiLang } from '../../prompts/types';
 export { clipped } from '../../prompts/tolerant';
 export { correctionRules, withFixedGate } from '../../prompts/fixedGate';
