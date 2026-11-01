@@ -108,7 +108,7 @@ const STREAK_PATTERN = { regex: '(^|/)streak$', importNames: ['computeStreak'], 
 export default defineConfig(
   {
     // .cache/: Bau- und Testablagen (verify:fast, v86-Stand aus scripts/v86-checkout.mjs). docs/relaunch/vorschau/: eigenständige Design-Vorschau, kein App-Code.
-    ignores: ['dist/**', 'tests/.runtime/**', 'node_modules/**', 'contract/**', 'test-results/**', 'playwright-report/**', '.claude/worktrees/**', '.cache/**', 'docs/relaunch/vorschau/**'],
+    ignores: ['dist/**', 'tests/.runtime/**', 'node_modules/**', 'contract/**', 'test-results/**', 'playwright-report/**', '.claude/worktrees/**', '.cache/**', 'docs/relaunch/vorschau/**', 'docs/umbau/vokabeln/bilder/src/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
