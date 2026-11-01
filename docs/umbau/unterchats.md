@@ -1,5 +1,7 @@
 # Überchat und Unterchats (ab 30.10.2026, Emrahs Vorgabe)
 
+> **Ausgelaufen (Emrah, 01.11.2026):** Nach V2, D5 und VB werden keine Unterchats mehr gestartet; der Hauptchat arbeitet Paket für Paket selbst (`docs/umbau/kompass.md`, `docs/entscheidungen.md` 01.11.2026). Diese Regeln gelten nur noch für die drei laufenden Unterchats.
+
 Emrah: „Du bist ab jetzt der Überchat. Orchestriere die Aufgaben wie angewiesen in Unterchats.“ Das ersetzt die Regel vom 07.10.2026 „keine neuen Cloud-Sitzungen“ (CLAUDE.md A2). Alles andere aus `arbeitsweise.md` gilt weiter.
 
 ## Rollen

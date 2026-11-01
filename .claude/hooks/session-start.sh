@@ -10,4 +10,4 @@ cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}"
 if [ ! -d node_modules ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then
   npm ci --no-audit --no-fund >/dev/null 2>&1 || npm install --no-audit --no-fund >/dev/null 2>&1
 fi
-echo "lingo-engine-x: Abhängigkeiten bereit (npm run verify prüft alles)."
+echo "lingo-engine-x: Abhängigkeiten bereit (npm run verify prüft alles). Zuerst docs/umbau/kompass.md lesen (Ziel, Roadmap, Emrahs Vorgaben, Ablauf je Paket)."

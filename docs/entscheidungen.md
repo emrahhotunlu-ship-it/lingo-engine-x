@@ -669,3 +669,9 @@ Unterchats stellen Emrah keine Fragen, auch nicht in der Schlussnachricht und ni
 - **Lernzeit:** Ziel „Ertrag/Haltbarkeit je Lernstunde ≥ heute“ wird ersetzt durch **„haltbare Wörter bei gleicher Lernzeit ≥ heute“**. Gemessen in V2 (mit Zeitbewertung, Lauf bei gleicher Pflichtzeit).
 - **Gleichmäßigkeit:** VK der Pflichtminuten wird **ab Tag 15 bzw. beim Start mit Bestand** abgenommen (Emrah startet nie bei null).
 - **14-Tage-Vorschau:** Ziel ≤ 1,5 gilt für den **Start mit Bestand**; neue Messung mit geplanten neuen Wörtern in V4 (Dashboard).
+
+## 01.11.2026 – Keine Unterchats mehr; Paket für Paket mit Plan-OK und Test-Link (Emrah)
+Emrah: „Bitte wenn die Unterchats … fertig [sind], ab jetzt nur noch von hier aus weitermachen, ich mag es nicht mit den Unterchats. Aber so, dass es trotzdem effizient ist. Evtl. öfter mal komprimieren … damit nichts an Ziel, Roadmap, was mir wichtig ist etc. [verloren geht]. Außerdem ist mir wichtig, dass wir künftig Paket für Paket arbeiten und ein Paket erst genau refinen und planen, du dann umsetzt und ich reviewe!“ Dazu im Frage-Dialog: **kurzer Plan zum OK vor dem Bau** und **Test-Link je Paket**. Festlegung:
+- Die laufenden Unterchats V2, D5, VB laufen zu Ende; danach keine neuen. Der Hauptchat baut selbst und setzt nur gezielt Helfer/Prüfer ein (ersetzt die Unterchat-Regeln vom 30./31.10.).
+- Ablauf je Paket: verfeinern/planen → Kurzplan an Emrah (Bild, Fragen im Pop-up) → nach OK bauen → Prüftore → Test-Link mit Klick-Anleitung → Emrahs Review → nächstes Paket. „Test-Link 7“ als Sammel-Link entfällt zugunsten von Test-Links je Paket.
+- Ziel, Roadmap und Emrahs Vorgaben stehen dauerhaft in `docs/umbau/kompass.md` (nach jeder Komprimierung zuerst lesen).

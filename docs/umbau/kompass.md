@@ -1,0 +1,50 @@
+# Kompass (Ziel, Roadmap, was Emrah wichtig ist)
+
+**Zuerst lesen** in jeder neuen Sitzung und **nach jeder Komprimierung** des Gesprächs. Diese Datei hält fest, was nie verloren gehen darf. Sie wird vom Hauptchat gepflegt (ersetzen, nicht anhängen). Laufende Einzelheiten stehen in `docs/umbau/stand.md` (nur anhängen), Entscheidungen mit Wortlaut in `docs/entscheidungen.md`.
+
+## 1. Ziel
+Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt `JLL8…`, Test-Link `AXHkh6…`. **Hauptziel jetzt:** eine komplett neue Wörter-App (eigenes Modul, eigene Logik, eigene Bildschirme) und das neue Aussehen aller Bildschirme nach der Vorschau `WBft3EEx7jYYv4QHdepuNm` v2.
+
+## 2. Was Emrah wichtig ist (Wortlaut in `entscheidungen.md`)
+- **Wörter-App zuerst** (30.10.). Grundlage: Analyse von 18 Lern-Apps, `vokabeln/synthese.md`, Plan `vokabeln/plan.md`; jede übernommene Methode landet in genau einem Paket.
+- **Vorschau ist die Untergrenze**, besser ist erwünscht – Design, Bedienung, Abläufe und Funktionen (30.10.). **Keine Funktion fällt weg**, Funktionen werden ausgebaut, neue sinnvolle kommen dazu.
+- **Paket für Paket** (01.11.): erst genau verfeinern und planen → **kurzer Plan an Emrah zum OK** → bauen → Prüfer → **Test-Link je Paket** mit Klick-Anleitung → Emrahs Review → erst dann das nächste Paket.
+- **Keine Unterchats mehr** (01.11.): Nach V2, D5, VB arbeitet nur noch der Hauptchat, effizient (wenige Helfer gezielt, Prüfer aus `.claude/agents/`), öfter komprimieren.
+- **Fragen nur im Frage-Dialog** (Pop-up, antippbar, Empfehlung zuerst), nie als Fließtext (31.10.).
+- **Einfache Sprache** ohne Fachwörter; bei jedem Test-Link: was geändert, wie testen (genaue Klicks am Handy), woran erkennen, was schicken (CLAUDE.md A2).
+- **Live nur nach „Ja live nehmen“**; nie über die laufende App veröffentlichen, um etwas zu zeigen. Vor jedem Veröffentlichen aktuelle Version lesen und Rückweg notieren.
+- Design-Festlegungen: Erledigt = Indigo; Gedämpft-Hauptknopf weiße Schrift (≥ 4,5:1); Regel-Karte am Laptop erst nach dem Prüfen; „Warum“ im Übungsband sichtbar.
+- Wörter-Planer: F1–F5 (31.10.) und Lesart der Zielwerte (01.11.): Vergleich bei gleicher Lernzeit; Ruhe ab Tag 15/Start mit Bestand; 14-Tage-Vorschau mit Bestand, neu in V4.
+- Keine Schleifen: je Prüfer eine Prüfung + eine gezielte Nachprüfung; roter Test höchstens zwei Behebungsversuche je Ursache, dann offen melden.
+- „Stopp“ heißt sofort anhalten.
+
+## 3. Roadmap (Paket-Reihenfolge, Stand 01.11.2026)
+| # | Paket | Inhalt | Stand |
+|---|---|---|---|
+| ✓ | V0, Q0, D1, D2, D3, V1 | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer (unsichtbar) | zusammengeführt in `claude/umbau-fokus` |
+| läuft | V2 · D5 · VB | Wörter-Bewertung/Formen/Lehrer-Chargen · Grammatik-Reiter + Gedämpft-Knopf · Bilder der Wörter-Bildschirme | letzte Unterchats; danach im Hauptchat zusammenführen |
+| 1 | **Test-Link** | Stand bis D5 (Heute, Übungsseite, Grammatik neu) zum Review | nach D5 |
+| 2 | V3 | Wörter: Lernkarte, Sitzung, Abschluss (Bilder Satz 1 vorher abgesegnet) | |
+| 3 | V4 | Wörter: Anwenden, Wort-Detail, Übersicht (Bilder Satz 2 vorher) | |
+| 4 | V5 | Wörter: C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus | |
+| 5 | D6a, D6b | Praxis/Fortschritt; Fragen-Blatt/Ausfälle im neuen Design | |
+| 6 | 1b (P9a, P9b, P10) | schnellerer Start (Inhalte nachladen) | |
+| 7 | E1–E7, F2–F5 | übrige Bildschirme, fehlende Vorschau-Funktionen | |
+| danach | Grammatik, Praxis, Lesen als eigene Module | gleiches Prinzip wie die Wörter-App | |
+Reihenfolge darf Emrah jederzeit ändern. Jedes Paket durchläuft §2 „Paket für Paket“.
+
+## 4. Ablauf je Paket (Hauptchat)
+1. **Verfeinern:** Plan-Abschnitt, Funktionsliste (Datei:Zeile), offene Punkte; Helfer nur zum Lesen/Prüfen.
+2. **Kurzplan an Emrah:** was, warum, wie es aussieht (Bild, wenn sichtbar), Fragen im Pop-up. Erst nach OK bauen.
+3. **Bauen** auf `claude/umbau-fokus`, kleine Commits, früh pushen.
+4. **Prüfen:** `verify:fast`, betroffene Specs, Prüfer (learning-scientist/english-teacher bei Übungen/Inhalten, ux-reviewer bei Bildschirmen, data-guard bei Daten, platform-guard vor Test-Link). Gesamtlauf `npm run verify` vor dem Test-Link.
+5. **Test-Link** (`AXHkh6…`, mit `db`, `sample`, `downloads`), Bericht in drei Teilen (A2), Lerntag-Durchlauf vorher.
+6. **Review Emrah** → Korrekturen → Eintrag in `stand.md` und hier §3.
+
+## 5. Technik-Stolpersteine (Cloud-Umgebung)
+- Playwright: `PW_CHROMIUM=/opt/pw-browsers/chromium`; nie `playwright install`. Nie `npm run grammar:build`.
+- Nach jedem Build/E2E: `git checkout -q -- dist && git clean -fdq dist` und `rm -rf test-results` (Platte knapp, ENOSPC → Browser-Abstürze; dann betroffene Specs einzeln wiederholen). `dist/` nur beim Test-Link aktualisieren.
+- `verify:fast` nach einem Merge immer mit `-- --base <Stand vor dem Merge>`, sonst prüft er nichts.
+- Golden-Kennzahlen: `metrics-kennzahlen.json` (Teil A) nie neu schreiben; `metrics-today*.json` (Teil B) nach Diff-Prüfung mit `vitest -u`.
+- Neue Budget-Einträge in `scripts/budget.json` **und** `tests/unit/checkBudget.test.ts`.
+- Commits enden mit Co-Authored-By/Claude-Session (siehe System); Push `timeout 100 git push -u origin claude/umbau-fokus`.
