@@ -664,3 +664,8 @@ Unterchats stellen Emrah keine Fragen, auch nicht in der Schlussnachricht und ni
 ## 31.10.2026 – Übungsseite (D3): Regel-Karte und „Warum“ (Emrah, Frage-Dialog)
 - Regel-Karte am Laptop (rechte Spalte): erscheint **erst nach dem Prüfen**, nicht schon vor der Antwort (so wie gebaut).
 - Im Leitband der Übung bleibt das Wort **„Warum“** sichtbar (vierte Pflichtfrage aus Kap. 2, so wie gebaut).
+
+## 01.11.2026 – Wörter-Planer V1: Lesart der Zielwerte (Emrah, Frage-Dialog, alle wie empfohlen)
+- **Lernzeit:** Ziel „Ertrag/Haltbarkeit je Lernstunde ≥ heute“ wird ersetzt durch **„haltbare Wörter bei gleicher Lernzeit ≥ heute“**. Gemessen in V2 (mit Zeitbewertung, Lauf bei gleicher Pflichtzeit).
+- **Gleichmäßigkeit:** VK der Pflichtminuten wird **ab Tag 15 bzw. beim Start mit Bestand** abgenommen (Emrah startet nie bei null).
+- **14-Tage-Vorschau:** Ziel ≤ 1,5 gilt für den **Start mit Bestand**; neue Messung mit geplanten neuen Wörtern in V4 (Dashboard).
