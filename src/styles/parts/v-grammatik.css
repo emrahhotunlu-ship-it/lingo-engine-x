@@ -33,7 +33,7 @@
 .lx-vg-pathlbl { padding: 6px 0 2px; }
 .lx-vg-chs { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
 .lx-vg-chs > li:last-child .lx-v-row { border-bottom: 0; }
-.lx-vg-num { font-size: 16px; font-weight: 600; color: var(--fg-2); }
+.lx-vg-num { font-size: 1rem; font-weight: 600; color: var(--fg-2); }
 .lx-vg-ch[data-kind='run'] .lx-vg-num { background: var(--act-soft); color: var(--act-text); font-weight: 700; animation: lx-vg-pulse 2.4s ease-in-out 3; }
 @keyframes lx-vg-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--act-soft); } 50% { box-shadow: 0 0 0 10px transparent; } }
 /* Vorschau: gesperrte Zeilen mit opacity .62 – das fiele unter 4,5:1 (axe). Abweichung: Name in fg-2, Schloss statt Pfeil. */
@@ -46,7 +46,7 @@
 .lx-vg-lookup .lx-v-row-t > span.lx-vg-links { display: flex; flex-wrap: wrap; font-size: 15px; color: inherit; }
 .lx-vg-quiet {
   display: block; align-self: center; min-height: 44px; margin: 4px auto 0; padding: 0 16px; border-radius: var(--r);
-  font-size: 15px; font-weight: 550; color: var(--fg-2);
+  font-size: 0.94em; font-weight: 550; color: var(--fg-2);
 }
 .lx-vg-quiet:active { background: var(--surface-2); }
 .lx-vg-all { display: flex; flex-direction: column; gap: 6px; }

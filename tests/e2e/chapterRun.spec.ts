@@ -60,7 +60,8 @@ test.describe('Handy 390', () => {
     await openTab(page, 'learn');
     await expect(page.locator('[data-testid="path-chapter"][data-status="current"]')).toHaveAttribute('data-chapter', 'k4');
     await expect(page.getByTestId('hub-next-topic')).toHaveAttribute('data-chapter', '4');
-    await expect(page.getByTestId('hub-next-topic')).toContainText('Kapitel 4 ·');
+    // Seit D5: Kleinüberschrift „Du bist hier · Kapitel 4“, das Thema groß darunter.
+    await expect(page.getByTestId('hub-next-topic')).toContainText('Du bist hier · Kapitel 4');
     // UX-Prüfung C/D: jetzt ist Kapitel 4 das wirksame Kapitel: Tagessatz und derselbe Knopftext wie die Weiter-Karte.
     const hubLabel = (await page.getByTestId('hub-next-start').innerText()).trim();
     await openChapter(page, 'k4');
