@@ -172,7 +172,7 @@ export function pickForm(l: Lex, track: TrackKey, av: Avail): FormPick {
   // Formen mit höchstens Hard nie zweimal hintereinander.
   if (fq.l && CAPPED.has(fq.l)) cands = cands.filter((f) => !CAPPED.has(f));
   // Ab Stufe 2: höchstens eine stellbare Form → „ohne Satz“ als zweite, damit keine Stufe nur eine Abfrageart hat (Kap. 15).
-  if (track === 'b' && lv >= 2 && cands.length < 2 && !cands.includes('nosent') && available('nosent', l, av)) cands = [...cands, 'nosent'];
+  if (track === 'b' && lv >= 2 && (cands.length < 2 || fq.nb > 0) && !cands.includes('nosent') && available('nosent', l, av)) cands = [...cands, 'nosent'];
   if (track === 'b' && lv >= 2) {
     const nos = needsNoSentence(l);
     if (nos || lv >= NOSENT_FROM_LV) {
@@ -227,10 +227,9 @@ export function updateFq(l: Lex, x: { form: Form; track: TrackKey | null; correc
   let { c, nb, ak } = fq;
   const noSent = FORM_SPEC[x.form].sent === 'n';
   // „Jeder 3. ohne Satz“ zählt jeden Benutzen-Abruf ab Stufe 4, auch Übung ohne Planwirkung (sonst rutscht der Anteil unter 30 %, Simulation V2).
-  if (x.track === 'b' && formLevel(l) >= NOSENT_FROM_LV) {
-    c += 1;
-    if (noSent && nb > 0) nb -= 1;
-  }
+  if (x.track === 'b' && formLevel(l) >= NOSENT_FROM_LV) c += 1;
+  // Satzbindung baut sich ab Stufe 2 ab: nach BOUND_TERMS Abrufen ohne Satz wieder Formen mit Satz (learning-scientist V2, Nachprüfung 1).
+  if (x.track === 'b' && noSent && nb > 0 && formLevel(l) >= 2) nb -= 1;
   let xf = fq.xf ?? 0;
   if (x.anchor === true) {
     ak = x.wrong ? 0 : 1;

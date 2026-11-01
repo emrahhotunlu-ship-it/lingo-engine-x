@@ -214,7 +214,8 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
       lex.step = { n: 2, at: a.t, gap: STEP_B_GAP };
     } else if (st.n === 2) {
       if (isFreeGood(a.form, a.outcome, a.hint)) lex.lv = Math.max(lex.lv, 3);
-      lex.step = null;
+      // Formfehler mit Hard in Schritt B: die richtige Form am selben Tag noch einmal selbst abrufen (M53, Nachprüfung 2).
+      lex.step = FORM_ERRORS.has(a.outcome) ? { n: 10, at: a.t, gap: RETRY_GAP } : null;
     } else lex.step = null;
   } else if (wrong || g === null) {
     lex.step = { n: g === null ? 10 : 11, at: a.t, gap: RETRY_GAP };

@@ -28,6 +28,11 @@ export type Target = {
   uncount?: boolean;
   /** Wörter derselben Familie (M40d), zusätzlich zur Faustregel. */
   family?: readonly string[];
+  /** Wort direkt vor bzw. nach der Lücke: mitgetippt ist es kein Sprachfehler (english-teacher V2). */
+  before?: string;
+  after?: string;
+  /** Falscher Freund (für die Warum-Zeile: Hinweis `ff` statt `pair`). */
+  ff?: boolean;
 };
 
 export type CheckDict = {
@@ -194,10 +199,10 @@ export const PARTICLES = new Set(['up', 'out', 'off', 'down', 'back', 'away', 'o
 
 const erOf = (a: string, b: string) => [`${a}er`, `${a}r`, `${a}est`, `${a}st`, `${a.slice(0, -1)}ier`, `${a.slice(0, -1)}iest`, `${a}${a.slice(-1)}er`, `${a}${a.slice(-1)}est`].includes(b);
 const ingOf = (a: string, b: string) => [`${a}ing`, `${a.slice(0, -1)}ing`, `${a}${a.slice(-1)}ing`].includes(b);
-/** (c) Beugung; -er/-est nur bei Adjektiven, -ing ↔ Stamm beim Nomen ist Ableitung (d): *manage/manager*, *meet/meeting* (english-teacher V2). */
+/** (c) Beugung; -er/-est ist bei Nomen/Verb Ableitung (ohne Wortart: Beugung), -ing ↔ Stamm beim Nomen ist Ableitung (d): *manage/manager*, *meet/meeting* (english-teacher V2). */
 function isInfl(inp: string, ans: string, pos: Target['pos']): boolean {
   if (!inflections(ans).has(inp)) return false;
-  if ((erOf(ans, inp) || erOf(inp, ans)) && pos !== 'adj') return false;
+  if ((erOf(ans, inp) || erOf(inp, ans)) && (pos === 'noun' || pos === 'verb')) return false;
   if ((ingOf(ans, inp) || ingOf(inp, ans)) && pos === 'noun') return false;
   return true;
 }
@@ -208,8 +213,20 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   let input = normalize(raw);
   if (!input) return { outcome: 'dunno' };
   // (g) Kurzformen in beide Lesarten: *she's been* = *she has been*, *I'd sent* = *I had sent* (english-teacher V2)
-  const alt = normalize(normalizeRaw(raw).replace(/\b(it|that|what|there|here|he|she|who)'s\b/g, '$1 has').replace(/\b(i|you|we|they|he|she|it|that|there)'d\b/g, '$1 had'));
-  if (alt !== input && (alt === answer || dropArticle(alt, answer) === answer)) return { outcome: 'ok' };
+  const hadHas = (x: string) => normalize(normalizeRaw(x).replace(/\b(it|that|what|there|here|he|she|who)'s\b/g, '$1 has').replace(/\b(i|you|we|they|he|she|it|that|there)'d\b/g, '$1 had'));
+  const alt = hadHas(raw);
+  const altAns = hadHas(t.answer);
+  if ((alt !== input && (alt === answer || dropArticle(alt, answer) === answer)) || (altAns !== answer && (input === altAns || alt === altAns))) return { outcome: 'ok' };
+  // Mitgetipptes Nachbarwort aus dem Satz (*to discuss*, wenn „to“ vor der Lücke steht; *responsible for*, wenn „for“ folgt): kein Fehler.
+  {
+    const b = t.before ? normalize(t.before) : '';
+    const a = t.after ? normalize(t.after) : '';
+    let x = input;
+    if (b && x.startsWith(`${b} `)) x = x.slice(b.length + 1);
+    if (a && x.endsWith(` ${a}`)) x = x.slice(0, -(a.length + 1));
+    if (t.pos === 'verb' && !/^to /.test(answer)) x = x.replace(/^to /, '');
+    if (x !== input && (x === answer || dropArticle(x, answer) === answer)) return { outcome: 'ok', note: 'gap' };
+  }
   // (g) Artikel, Groß/klein, Apostrophe. Bei nicht Zählbarem bleibt „a/an“ stehen: *a feedback* ist ein Zählbarkeitsfehler (M79).
   const noArt = t.uncount && /^an? /.test(input) ? input : dropArticle(input, answer);
   if (noArt === answer) return { outcome: 'ok', ...(noArt !== input ? { note: 'article' } : {}) };
@@ -238,6 +255,11 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
     if (it.length === at.length && it.slice(0, -1).join(' ') === at.slice(0, -1).join(' ') && (il === `${last}s` || il === `${last}es`)) return { outcome: 'plural', note: 'plural' };
   }
   if (isOrderError(it, at)) return { outcome: 'order', note: 'particle' };
+  // M81: anderer Partikel beim Phrasal Verb = anderes Verb (*take on* statt *take over*), vor der Präpositions-Regel (english-teacher V2).
+  {
+    const d1 = oneTokenDiff(it, at);
+    if (d1 && t.k === 'pv' && PARTICLES.has(d1[0]) && PARTICLES.has(d1[1])) return { outcome: 'other', note: 'particle' };
+  }
   // M78: Präposition ergänzt, weggelassen oder getauscht, auch bei einem Lösungswort (*discuss about*); nicht, wenn die Präposition selbst die Lösung ist (*by/until*).
   if ((at.length > 1 || !PREPOSITIONS.has(at[0] as string)) && isPrepError(it, at)) return { outcome: 'prep' };
 
@@ -248,8 +270,6 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   if (tok && DETS.has(tok[0]) && DETS.has(tok[1])) return /^an?$/.test(tok[0]) && /^an?$/.test(tok[1]) ? { outcome: 'typo', dist: 1 } : { outcome: 'infl', note: 'article' };
   if (tok && PRONOUNS.has(tok[0]) && PRONOUNS.has(tok[1])) return { outcome: 'infl', note: 'grammar' };
   if (at.length > 1 && it.join(' ') !== at.join(' ') && it.filter((w) => !DETS.has(w)).join(' ') === at.filter((w) => !DETS.has(w)).join(' ')) return { outcome: 'infl', note: 'article' };
-  // M81: anderer Partikel beim Phrasal Verb = anderes Verb (*set out* statt *set up*).
-  if (tok && t.k === 'pv' && PARTICLES.has(tok[0]) && PARTICLES.has(tok[1])) return { outcome: 'other', note: 'particle' };
 
   // (f) Bindestrich und Leerzeichen
   const flat = (s: string) => s.replace(/[\s-]+/g, '');
@@ -266,7 +286,7 @@ export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
   // (e) anderes echtes Wort: nie Tippfehler (Verwechslungspaar oder Wort außerhalb der Familie)
   const a1 = tok ? tok[1] : answer;
   const i1 = tok ? tok[0] : input;
-  if (isConfusable(i1, a1, d)) return { outcome: 'other', note: 'pair' };
+  if (isConfusable(i1, a1, d)) return { outcome: 'other', note: t.ff ? 'ff' : 'pair' };
   if (d.isWord(i1) && !sameFamily(i1, a1, t.family)) return { outcome: 'other' };
 
   // (a) Tippfehler: 1 Fehler (Vertauschung = 1) ab 5 Buchstaben, ohne dass ein echtes Wort entsteht

@@ -3,7 +3,7 @@ import { addDays, dayKey, dayStartOf } from '../../../src/domain/date';
 import { toUSText } from '../../../src/domain/text/british';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
 import { type CheckDict, checkAnswer, damerau, type Target } from '../../../src/modules/vocab/domain/check';
-import { available, emptyFq, formLevel, LADDER_B, LADDER_U, leaks, pickForm, pickSentence } from '../../../src/modules/vocab/domain/forms';
+import { available, emptyFq, formLevel, LADDER_B, LADDER_U, leaks, pickForm, pickSentence, updateFq } from '../../../src/modules/vocab/domain/forms';
 import { baseGrade, easyAllowed, FORM_SPEC, gradeOf, isFreeGood, speedOf } from '../../../src/modules/vocab/domain/grade';
 import { isLeechCount, leechTreatment } from '../../../src/modules/vocab/domain/leech';
 import { type Answer, applyAnswer, emptyLex, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
@@ -109,9 +109,13 @@ describe('Formen je Stufe (M22)', () => {
     const l = { ...at(learned(T0, 'col'), 3), fq: { ...emptyFq(), l: 'cloze_part' as Form, h: { cloze_part: [5, 5] as [number, number], gap: [5, 5] as [number, number] } } };
     expect(CAPPED_OK(pickForm(l, 'b', { de: true }).form)).toBe(true);
   });
-  it('Satzbindung wirkt auch auf Stufe 2–3 (Befund 5)', () => {
+  it('Satzbindung wirkt auch auf Stufe 2–3 und baut sich nach 2 Abrufen ohne Satz ab (Befund 5, Nachprüfung 1)', () => {
     const l = { ...at(learned(), 3), fq: { ...emptyFq(), nb: 2, l: 'gap' as Form } };
     expect(FORM_SPEC[pickForm(l, 'b', { de: true }).form].sent).toBe('n');
+    const l2 = { ...at(learned(), 2), fq: { ...emptyFq(), nb: 2, l: 'gap' as Form } };
+    let fq = updateFq(l2, { form: 'nosent', track: 'b', correct: true, anchor: null, wrong: false, counted: true });
+    fq = updateFq({ ...l2, fq }, { form: 'nosent', track: 'b', correct: true, anchor: null, wrong: false, counted: true });
+    expect(fq.nb).toBe(0);
   });
   it('„Gesucht: …“ bis Stufe 4, ab Stufe 5 ohne deutsche Bedeutung (M25)', () => {
     expect(pickForm(at(learned(), 4), 'b', { de: true }).cue).toBe(true);
@@ -301,6 +305,13 @@ describe('Tippfehler-Regeln (a)–(h) in fester Reihenfolge (M40)', () => {
     expect(out("I'd already sent", T('I had already sent'))).toBe('ok');
     expect(out("let's circle back", T('let us circle back'))).toBe('ok');
     expect(out("I'm writing", T('I am writing'))).toBe('ok');
+  });
+  it('Nachprüfung: mitgetipptes Nachbarwort ist kein Fehler; Langform gegen Kurzform in der Lösung; Partikel vor Präposition; Komparativ ohne Wortart', () => {
+    expect(checkAnswer('to discuss', T('discuss', { before: 'to', pos: 'verb' }), dict)).toMatchObject({ outcome: 'ok', note: 'gap' });
+    expect(out('responsible for', T('responsible', { after: 'for' }))).toBe('ok');
+    expect(out('she has been', T("she's been"))).toBe('ok');
+    expect(checkAnswer('take on', T('take over', { k: 'pv' }), dict)).toMatchObject({ outcome: 'other', note: 'particle' });
+    expect(out('cheaper', T('cheap'))).toBe('infl');
   });
   it('M81: anderer Partikel beim Phrasal Verb ist ein anderes Verb (Again)', () => {
     expect(out('set out', T('set up', { k: 'pv' }))).toBe('other');
