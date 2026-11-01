@@ -772,3 +772,8 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ### 01.11.2026 – Großpaket A: Refinement freigegeben
 - Refinement `docs/umbau/vokabeln/grosspaket-a.md` als Text an Emrah, danach Bilder s2-01/05/06/07/09 und Frage-Dialog. Antworten: Plan so bauen (alle drei Teile), „Selbst schreiben“, „Später prüfen lassen“, junge Wörter früher (Eintrag `entscheidungen.md`).
 - Nächster Schritt: V3 Schritt 1 (Daten absichern), dann Schritte 2–9 laut Refinement; kein Test-Link vor dem Ende von Großpaket A.
+
+### 01.11.2026 – Großpaket A, V3 Schritt 1: Daten abgesichert
+- Commit `0a060400`: `vlog` träge (nicht beim Start geladen), Verzeichnis `vmod/ix` (unter der Umrechnungs-Sperre angelegt), Sicherung `loadVlogBackup` (Verzeichnis + immer 24 Monate + Teil 1 jeder Fortsetzung; Export-Kopf `vlogUnlisted`/`vlogIndexMissing`/`vlogBackupFailed`), `freezeDay` Plan zuerst, beschädigten heutigen Plan ersetzen, Verschiebungen idempotent und gebündelt (`MOVE_GROUP` 6).
+- Prüfungen: verify:fast grün (vor den data-guard-Korrekturen), danach Unit `tests/unit/vocab` + `read` 531/531, Typprüfung und Lint sauber. data-guard: OK mit W1–W4/H1, alle umgesetzt; Nachprüfung läuft.
+- Nächster Schritt: V3 Schritt 2 (Lernkarte + Band im Modul `src/modules/vocab/ui/`), vorher Entwurfsnotiz an learning-scientist und english-teacher.
