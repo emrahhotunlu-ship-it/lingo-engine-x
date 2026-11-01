@@ -64,11 +64,11 @@ test.describe('Stufe „Ruhig“ (Handy)', () => {
     expect(names).toContain('ee-fill');
     expect(names).not.toContain('lx-pulse');
     for (const a of anims) expect(a.end, a.name).toBeLessThanOrEqual(220);
-    // Das Zeichen ist nach der Zeichenzeit voll da, die Füllung hat die Endfarbe.
-    await page.waitForTimeout(350);
-    const clip = await page.locator('[data-testid="verdict"] .ee-mark').evaluate((el) => getComputedStyle(el).clipPath);
-    expect(clip).toMatch(/^inset\(0px 0(px|%) 0px 0px\)$/);
-    expect((await animsAround(page)).filter((a) => a.state === 'running')).toEqual([]);
+    // Das Zeichen ist nach der Zeichenzeit voll da, die Füllung hat die Endfarbe (warten auf das Ende statt fester Wartezeit: wackelte unter Last).
+    await expect.poll(async () => (await animsAround(page)).filter((a) => a.state === 'running').length, { timeout: 3000 }).toBe(0);
+    await expect
+      .poll(() => page.locator('[data-testid="verdict"] .ee-mark').evaluate((el) => getComputedStyle(el).clipPath), { timeout: 3000 })
+      .toMatch(/^inset\(0px 0(px|%) 0px 0px\)$/);
     expect(errors).toEqual([]);
   });
 
@@ -102,7 +102,7 @@ test.describe('Stufe „Ruhig“ (Handy)', () => {
     await typeInGap(page, OCL.accept?.[0] ?? '');
     await page.getByTestId('check').click();
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
-    await page.waitForTimeout(350);
+    await expect.poll(async () => (await animsAround(page)).filter((a) => a.state === 'running').length, { timeout: 3000 }).toBe(0);
     const fill = await page.getByTestId('gap').evaluate((el) => getComputedStyle(el, '::before').backgroundColor);
     // Gleiche Gap-Farbe, wenn die Stufe auf „Aus“ wechselt (dann färbt die Lücke selbst).
     await page.evaluate(() => {

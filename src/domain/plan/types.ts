@@ -64,7 +64,7 @@ export type UnitMeta = {
   pp?: string[];
   /** Wiedereinstieg, additiv (Gesamtkonzept 3.2): Form des Plans nach einer Pause. */
   cb?: 'reduced' | 'restart';
-  /** Überfällige Karten beim Planen (Morgenwert für „überfällig −n“ am Abschluss), additiv. */
+  /** Überfällige Karten beim Planen (Morgenwert für „Rückstand abgebaut: n“ am Abschluss), additiv. */
   ov?: number;
   /** Sichere Karten beim Planen (Morgenwert für „Heute neu sicher: n“), additiv. */
   sure?: number;

@@ -254,15 +254,15 @@ html[data-band][data-actionbar] #main {
   height: 28px;
 }
 .lx-vi[data-mark='ok'] {
-  background: color-mix(in oklch, var(--ok) 20%, transparent);
+  background: color-mix(in srgb, var(--ok) 20%, transparent);
   color: var(--ok);
 }
 .lx-vi[data-mark='near'] {
-  background: color-mix(in oklch, var(--near) 20%, transparent);
+  background: color-mix(in srgb, var(--near) 20%, transparent);
   color: var(--near);
 }
 .lx-vi[data-mark='wrong'] {
-  background: color-mix(in oklch, var(--bad) 20%, transparent);
+  background: color-mix(in srgb, var(--bad) 20%, transparent);
   color: var(--bad);
 }
 /* „Lösung gezeigt“: neutraler Ring, keine Zustandsfarbe. */
@@ -468,7 +468,7 @@ html[data-band][data-actionbar] #main {
 /* Am Iris-Hauptknopf (⏎): Zeichen und Rand in der Knopf-Schriftfarbe, Fläche nur leicht getönt (Punkt 7, N5) – kein graues Feld. */
 .lx-actionbar-column .lx-btn-primary[data-kbd]::after {
   border-color: currentColor;
-  background: color-mix(in oklch, currentColor 18%, transparent);
+  background: color-mix(in srgb, currentColor 18%, transparent);
   color: inherit;
 }
 /* Laptop: Tastenzeichen T/W/⏎ an den Knöpfen der Leiste (nur mit feinem Zeiger, nie am Handy). */
@@ -537,10 +537,10 @@ html[data-lx-area] [data-testid='exercise-bar'].lx-exbar [role='progressbar']:no
 }
 @keyframes lx-seg-pulse {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklch, var(--act) 60%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--act) 60%, transparent);
   }
   100% {
-    box-shadow: 0 0 0 6px color-mix(in oklch, var(--act) 0%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--act) 0%, transparent);
   }
 }
 

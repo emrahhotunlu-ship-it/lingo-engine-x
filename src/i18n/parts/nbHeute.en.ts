@@ -42,7 +42,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteDoneSteps_other: '{n} steps done',
   nbHeuteTruthSure: 'New and secure today: {n}',
   nbHeuteTruthFixed: 'Mistakes gone: {n}',
-  nbHeuteTruthOver: 'overdue −{n}',
+  nbHeuteTruthOver: 'Backlog cleared: {n}',
   nbHeuteMsFest: '{n} words are now solid.',
   nbHeuteMsTopic: 'Your first grammar topic is now solid.',
   nbHeuteMsFix: '{n} mistake sentences are now solid.',

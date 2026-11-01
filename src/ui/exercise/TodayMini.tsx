@@ -15,12 +15,12 @@ export function TodayMini() {
   if (duties.total < 2) return null;
   // „läuft“ nur in einer Pflicht-Runde: am gemeldeten Block, sonst am ersten offenen. In einer Extra-Runde läuft kein Pflichtblock.
   const now = run.ctx === 'duty' ? (run.duty ?? firstOpenDuty({ duties })) : null;
-  const steps: VStep[] = duties.items.map((d) => ({
-    id: d.id,
-    name: dutyLabel(d.id, t),
-    state: d.state === 'done' ? 'done' : d.id === now ? 'run' : 'open',
-    ...(d.id === now ? { meta: t('vStepRunMeta') } : {}),
-  }));
+  // Der gemeldete Block läuft, bis seine Runde endet, auch wenn sein Zähler schon voll ist (Wörter: „Anwenden“ nach der letzten Karte; ux S5c #12).
+  const live = run.ctx === 'duty' ? run.duty : null;
+  const steps: VStep[] = duties.items.map((d) => {
+    const state = d.id === live ? 'run' : d.state === 'done' ? 'done' : d.id === now ? 'run' : 'open';
+    return { id: d.id, name: dutyLabel(d.id, t), state, ...(state === 'run' ? { meta: t('vStepRunMeta') } : {}) };
+  });
   return (
     <section className="lx-vu-ctx" data-testid="ex-today">
       <h3 className="lx-vu-ctx-h">{t('vuSideToday')}</h3>

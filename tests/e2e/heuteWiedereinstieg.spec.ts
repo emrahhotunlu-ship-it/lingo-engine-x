@@ -109,7 +109,7 @@ test('Abschluss: eine Zahl, Wahrheitszeile nur mit belegten Teilen, Meilenstein 
   await expect(page.getByTestId('balance')).toHaveText(/^(\+\d+ (Wörter|Muster) sicher|\d+ Schritte? geschafft)$/);
   const truth = page.getByTestId('today-truth');
   await expect(truth).toContainText('Fehlersätze erledigt: 1');
-  await expect(truth).toContainText('überfällig −');
+  await expect(truth).toContainText('Rückstand abgebaut:');
   await expect(truth).not.toContainText('Heute neu sicher: 0');
   await expect(page.getByTestId('start')).toHaveCount(0);
   await expect(page.getByTestId('today-card').locator('button')).toHaveCount(0);

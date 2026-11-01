@@ -22,6 +22,13 @@
     "ok": 2,
     "fixed": 0,
     "note": "vom english-teacher in der Nachprüfung selbst formuliert"
+   },
+   {
+    "n": 4,
+    "items": "83-84",
+    "ok": 0,
+    "fixed": 0,
+    "note": "S8: Fallenpaar Angebot → quote/offer, Prüfung offen"
    }
   ],
   "date": "2026-11-01",
@@ -1249,6 +1256,31 @@
    "why": "complaint = Beschwerde (Nomen). Regelkonform: compliant.",
    "reg": "n",
    "pair": "compliant"
+  },
+  {
+   "id": "t-quote",
+   "en": "quote",
+   "k": "w",
+   "type": "pair",
+   "de": "Angebot (schriftlich, mit Preisen)",
+   "ex": "Could you send us a [quote] for 500 licenses by Friday?",
+   "why": "Schriftliches Preisangebot: a quote (mit Konzept und Plan: a proposal). An offer ist allgemeiner.",
+   "reg": "n",
+   "pair": "offer",
+   "syn": [
+    "quotation"
+   ]
+  },
+  {
+   "id": "t-offer",
+   "en": "offer",
+   "k": "w",
+   "type": "pair",
+   "de": "Angebot (allgemein), Entgegenkommen",
+   "ex": "They made us a generous [offer]: two months free if we sign this week.",
+   "why": "Ein Angebot im Allgemeinen ist an offer. Ein schriftliches Preisangebot ist a quote.",
+   "reg": "n",
+   "pair": "quote"
   }
  ]
 }
