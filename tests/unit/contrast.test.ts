@@ -80,7 +80,7 @@ describe.each(MODES.flatMap((m) => ACCENTS.map((a) => [m, a] as const)))('Modus 
   const controlSurfaces = textSurfaces.slice(0, 2);
 
   it('alle Tokens vorhanden und als feste OKLCH-Werte lesbar', () => {
-    for (const k of ['bg', 'bg-deep', 'surface', 'surface-2', 'surface-3', 'line', 'line-2', 'fg', 'fg-2', 'fg-3', 'fg-on', 'act', 'act-fg', 'act-text', 'act-soft', 'ok', 'ok-soft', 'near', 'near-soft', 'bad', 'bad-soft', 'ch-words', 'ch-gram', 'ch-listen', 'ch-speak', 'mark', 'words-soft', 'kb', 'kb-key', 'kb-key-2', 'kb-fg', 'scrim']) {
+    for (const k of ['bg', 'bg-deep', 'surface', 'surface-2', 'surface-3', 'line', 'line-2', 'fg', 'fg-2', 'fg-3', 'fg-on', 'act', 'act-fg', 'act-btn', 'act-btn-fg', 'act-text', 'act-soft', 'ok', 'ok-soft', 'near', 'near-soft', 'bad', 'bad-soft', 'ch-words', 'ch-gram', 'ch-listen', 'ch-speak', 'mark', 'words-soft', 'kb', 'kb-key', 'kb-key-2', 'kb-fg', 'scrim']) {
       expect(t[k], k).toBeTruthy();
       expect(() => parse(t[k] ?? ''), k).not.toThrow();
     }
@@ -97,6 +97,10 @@ describe.each(MODES.flatMap((m) => ACCENTS.map((a) => [m, a] as const)))('Modus 
 
   it('Knopfschrift auf der Handlungsfarbe ≥ 4,5:1', () => {
     expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('Hauptknopf: Schrift auf der Knopffläche (--act-btn-fg auf --act-btn) ≥ 4,5:1', () => {
+    expect(on(t['act-btn-fg'] ?? '', parse(t['act-btn'] ?? ''))).toBeGreaterThanOrEqual(4.5);
   });
 
   // Zustandsabzeichen (Verdict, Heute-Häkchen, erledigter Ring) tragen --fg-on auf ok · near · bad. Pflicht ≥ 3:1 (Symbol), Ziel und Stand ≥ 4,5:1.
@@ -161,7 +165,7 @@ describe('Grundregeln der Token-Blöcke', () => {
   });
 
   it('Akzent-Blöcke setzen nur Handlungsfarben, nie Bedeutungs- oder Grundfarben', () => {
-    for (const b of [AMBER, LIGHT_AMBER]) for (const k of Object.keys(b)) expect(k, k).toMatch(/^act(-fg|-text|-soft)?$/);
+    for (const b of [AMBER, LIGHT_AMBER]) for (const k of Object.keys(b)) expect(k, k).toMatch(/^act(-fg|-text|-soft|-btn|-btn-fg)?$/);
   });
 
   it('keine Relative-Color-Syntax (from …) in den Tokens', () => {
@@ -215,5 +219,34 @@ describe('Iris 0,56/0,18 mit weißer Knopfschrift, Ausnahme Gedämpft', () => {
       iris62AufGedaempft: r2(ratio(iris62, parse(tokens('dim', 'iris').bg ?? ''))),
     };
     expect(m).toEqual(MEASURED);
+  });
+});
+
+// D5 (Emrah, 31.10.2026, Frage-Dialog): Hauptknopf in Gedämpft mit WEISSER Schrift, Knopf dafür etwas dunkler (Iris 0,52–0,54).
+// Die Handlungsfarbe selbst (Ringe, Rahmen, Fokus) bleibt 0,62/0,16, weil sie auf dem gedämpften Grund 3:1 halten muss.
+describe('Hauptknopf Gedämpft: weiße Schrift auf Iris 0,53', () => {
+  const WHITE = 'oklch(0.99 0.005 275)';
+  const r2 = (n: number): number => Math.round(n * 100) / 100;
+
+  it('Gedämpft: Knopffläche Iris 0,52–0,54, Schrift weiß, ≥ 4,5:1', () => {
+    const t = tokens('dim', 'iris');
+    const L = Number(/^oklch\(\s*([\d.]+)/.exec(t['act-btn'] ?? '')?.[1]);
+    expect(L).toBeGreaterThanOrEqual(0.52);
+    expect(L).toBeLessThanOrEqual(0.54);
+    expect(t['act-btn-fg']).toBe(WHITE);
+    expect(on(WHITE, parse(t['act-btn'] ?? ''))).toBeGreaterThanOrEqual(4.5);
+    expect(r2(on(WHITE, parse(t['act-btn'] ?? '')))).toBe(5.36);
+  });
+
+  it.each(['dark', 'light'] as const)('%s: Hauptknopf = Handlungsfarbe mit ihrer Knopfschrift', (mode) => {
+    const t = tokens(mode, 'iris');
+    expect(t['act-btn']).toBe(t.act);
+    expect(t['act-btn-fg']).toBe(t['act-fg']);
+  });
+
+  it.each(MODES)('Bernstein (%s): Hauptknopf = Handlungsfarbe mit ihrer Knopfschrift', (mode) => {
+    const t = tokens(mode, 'amber');
+    expect(t['act-btn']).toBe(t.act);
+    expect(t['act-btn-fg']).toBe(t['act-fg']);
   });
 });

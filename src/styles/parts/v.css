@@ -39,7 +39,7 @@
   transition: transform 140ms var(--ease-soft), background-color 140ms, opacity 140ms;
 }
 .lx-v-btn:active { transform: scale(0.98); }
-.lx-v-btn[data-variant='pri'] { background: var(--act); color: var(--act-fg); }
+.lx-v-btn[data-variant='pri'] { background: var(--act-btn); color: var(--act-btn-fg); }
 .lx-v-btn[data-variant='sec'] { background: var(--surface-2); color: var(--fg); }
 .lx-v-btn[data-variant='ghost'] { color: var(--fg-2); min-height: 44px; font-size: 15px; font-weight: 550; }
 .lx-v-btn[data-full] { width: 100%; }
