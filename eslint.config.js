@@ -286,7 +286,7 @@ export default defineConfig(
     // Wörter-Modul, Tür nach innen (plan.md §2.1): Nur `shared.ts` importiert aus dem Rest der App. Modulebene ohne `../`, Unterordner höchstens
     // einen Schritt hoch (`../shared`). Vor allem kein Import aus src/domain/srs: das Modul ist neu, keine Reparatur am Alten.
     files: ['src/modules/vocab/*.ts'],
-    ignores: ['src/modules/vocab/shared.ts'],
+    ignores: ['src/modules/vocab/shared.ts', 'src/modules/vocab/sharedUi.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -304,8 +304,8 @@ export default defineConfig(
     },
   },
   {
-    // shared.ts ist die einzige Tür nach innen; die Erlaubnisliste prüft tests/unit/vocab/isolation.test.ts.
-    files: ['src/modules/vocab/shared.ts'],
+    // shared.ts und sharedUi.ts (nur Oberfläche, V3) sind die Türen nach innen; die Erlaubnislisten prüft tests/unit/vocab/isolation.test.ts.
+    files: ['src/modules/vocab/shared.ts', 'src/modules/vocab/sharedUi.ts'],
     rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN, { regex: '(^|/)domain/srs(/|$)', message: 'Wörter-Modul: kein Import aus domain/srs (plan.md §2.1).' }] }] },
   },
   {

@@ -17,6 +17,9 @@ import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps } from '../app/registry';
+import { lazy, Suspense } from 'react';
+import { loadScreens } from '../modules/vocab/api';
+import { Skeleton } from '../ui/Skeleton';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
 // Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
@@ -33,7 +36,23 @@ declare module '../app/router/types' {
     listenLoop: NoParams;
     /** Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke). */
     teacherFeedback: NoParams;
+    /** Neue Wörter-App (V3): Lernrunde, nur bei `vcfg.mod = 1` (sonst ruhiger Hinweis im Bildschirm). */
+    vlearn: { kind: VlearnKind };
   }
+}
+
+const VLEARN_KINDS = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes'] as const;
+type VlearnKind = (typeof VLEARN_KINDS)[number];
+const vlearnParams = z.object({ kind: z.enum(VLEARN_KINDS) });
+
+// Lernrunde des Wörter-Moduls: nachgeladen (eigene Teil-Datei), mit eigenem Lade-Skelett.
+const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScreen })));
+function VlearnPage({ route }: ScreenProps<'vlearn'>) {
+  return (
+    <Suspense fallback={<Skeleton className="m-4 h-40" />}>
+      <LearnScreen kind={route.kind} />
+    </Suspense>
+  );
 }
 
 const trainerParams = z.object({ round: z.enum(['pflicht', 'extra']), mode: z.enum(['auto', 'type', 'flip', 'listen']).optional(), deck: z.string().max(64).optional() });
@@ -91,6 +110,8 @@ export const wortschatz = defineArea({
     listenLoop: { kind: 'exercise', component: ListenLoop, title: 'nbWsLoopTitle' },
     // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke).
     teacherFeedback: { kind: 'page', component: TeacherFeedbackScreen, title: 'tfTitle' },
+    // Neue Wörter-App (Großpaket A, V3): Lernrunde des Moduls; Einstieg von Heute kommt mit Schritt 4.
+    vlearn: { kind: 'exercise', component: VlearnPage, title: 'vmScreenTitle', params: vlearnParams },
   },
   entries: [
     // Zeile unter Üben (place 'learn'): Lehrer-Feedback einfügen.

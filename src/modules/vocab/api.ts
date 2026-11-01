@@ -139,3 +139,8 @@ export async function reportEvidence(e: Evidence, o: { writer: Writer; device: s
   if (lex) await writeVlog(deps, [tuple({ t: e.t, path: e.lexeme, track: 0, form: e.typed ? 'gap' : 'choice', note: 0, outcome: e.ok ? 'ok' : 'wrong', ms: 0, fk: 0, hint: 0, sentence: null, lv: lex.lv, flags: FLAG.ext })], o.device);
   return false;
 }
+
+/** V3: Bildschirme der neuen Lernrunde, nur nachgeladen (nie statisch, Ladezeit-Test). Der Bereich Wörter hängt sie hinter `vcfg.mod = 1` ein. */
+export function loadScreens() {
+  return import('./ui/LearnScreen');
+}

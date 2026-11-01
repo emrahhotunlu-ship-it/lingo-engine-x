@@ -12,9 +12,21 @@ import { describe, expect, it } from 'vitest';
 const ROOT = join(import.meta.dirname, '../../..');
 const MODULE = 'src/modules/vocab';
 const SHARED = `${MODULE}/shared.ts`;
+const SHARED_UI = `${MODULE}/sharedUi.ts`;
 
 const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/];
-const ALLOWED_PACKAGES = new Set(['zod', 'ts-fsrs']);
+// V3 Schritt 2b-2: zweite Tür nur für die Oberfläche (Lernkarte, Band, Runde); nie von registry.ts/api.ts statisch erreichbar.
+const ALLOWED_SHARED_UI: RegExp[] = [
+  /^src\/app\/(registry|nav)$/,
+  /^src\/i18n$/,
+  /^src\/ui\/(exercise|Button|Skeleton)$/,
+  /^src\/engine\/(EnglishText|KineticGap|HiddenInput|useHotkeys|wordTap)$/,
+  /^src\/domain\/answer\/mask$/,
+  /^src\/domain\/lexicon\/dict$/,
+  /^src\/data(\/live|\/reads)?$/,
+  /^src\/platform\/(capabilities|storage)$/,
+];
+const ALLOWED_PACKAGES = new Set(['zod', 'ts-fsrs', 'react', 'react/jsx-runtime']);
 const IMPORT_RE = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
 
 const importsOf = (text: string): string[] => [...text.matchAll(IMPORT_RE)].map((m) => m[1] ?? m[2] ?? m[3] ?? '').filter(Boolean);
@@ -24,11 +36,12 @@ const resolveImport = (fromRel: string, spec: string): string | null =>
 export function moduleViolation(fileRel: string, spec: string): string | null {
   const target = resolveImport(fileRel, spec);
   if (target === null) return ALLOWED_PACKAGES.has(spec) ? null : `Paket "${spec}" ist im Modul nicht erlaubt`;
-  if (fileRel === SHARED) {
+  if (fileRel === SHARED || fileRel === SHARED_UI) {
     if (target.startsWith(`${MODULE}/`)) return null;
-    return ALLOWED_SHARED.some((re) => re.test(target)) ? null : `shared.ts importiert "${target}" (nicht in der Erlaubnisliste)`;
+    const list = fileRel === SHARED ? ALLOWED_SHARED : ALLOWED_SHARED_UI;
+    return list.some((re) => re.test(target)) ? null : `${posix.basename(fileRel)} importiert "${target}" (nicht in der Erlaubnisliste)`;
   }
-  if (!target.startsWith(`${MODULE}/`)) return `"${spec}" verlässt das Modul; Fremdes nur über shared.ts`;
+  if (!target.startsWith(`${MODULE}/`)) return `"${spec}" verlässt das Modul; Fremdes nur über shared.ts bzw. sharedUi.ts`;
   return null;
 }
 
@@ -53,8 +66,36 @@ const appFiles = files(join(ROOT, 'src'))
 describe('Wörter-Modul: Isolation', () => {
   it('Türen vorhanden, höchstens zwei Ebenen tief', () => {
     const names = moduleFiles.map((f) => f.rel.slice(MODULE.length + 1));
-    for (const must of ['api.ts', 'registry.ts', 'shared.ts']) expect(names).toContain(must);
+    for (const must of ['api.ts', 'registry.ts', 'shared.ts', 'sharedUi.ts']) expect(names).toContain(must);
     for (const n of names) expect(n.split('/').length, n).toBeLessThanOrEqual(2);
+  });
+
+  it('sharedUi.ts reicht nur durch (keine eigene Logik)', () => {
+    const text = moduleFiles.find((f) => f.rel === SHARED_UI)!.text;
+    const code = text.split('\n').filter((l) => l.trim() && !l.trim().startsWith('//'));
+    for (const l of code) expect(l, l).toMatch(/^export (type )?\{[^}]*\} from '[^']+';$/);
+  });
+
+  it('Importkreis: von registry.ts und api.ts ist die Oberfläche (sharedUi, ui/) statisch nie erreichbar', () => {
+    const byRel = new Map(moduleFiles.map((f) => [f.rel.replace(/\.tsx?$/, ''), f.text]));
+    for (const door of ['registry', 'api']) {
+      const seen = new Set<string>();
+      const stack = [`${MODULE}/${door}`];
+      while (stack.length) {
+        const cur = stack.pop()!;
+        if (seen.has(cur)) continue;
+        seen.add(cur);
+        const text = byRel.get(cur);
+        if (!text) continue;
+        // nur statische Importe (`import()` ist erlaubt und wird nicht verfolgt)
+        for (const m of text.matchAll(/^(?:import|export)\s+(?:type\s+)?[^;]*?from\s*'([^']+)'/gm)) {
+          const t = resolveImport(`${cur}.ts`, m[1]!);
+          if (t && t.startsWith(`${MODULE}/`)) stack.push(t);
+        }
+      }
+      const ui = [...seen].filter((r) => r === `${MODULE}/sharedUi` || r.startsWith(`${MODULE}/ui/`));
+      expect(ui, door).toEqual([]);
+    }
   });
 
   it('im Modul: Fremdes nur über shared.ts aus der Erlaubnisliste; kein domain/srs', () => {
@@ -69,13 +110,17 @@ describe('Wörter-Modul: Isolation', () => {
     const touching = appFiles.filter((f) => importsOf(f.text).some((s) => (resolveImport(f.rel, s) ?? '').startsWith(MODULE))).map((f) => f.rel);
     // V1: nur die Datenschicht (Schemas für COLLECTIONS). V3 Schritt 1: Zählung (reads) und Sicherung (snapshot) der trägen Sammlung vlog über registry.
     // Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
-    expect(touching.sort()).toEqual(['src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/data/writer.ts']);
+    // V3 Schritt 2b-2: der Bereich Wortschatz bindet den Lernbildschirm über api.loadScreens() (nachgeladen) an.
+    expect(touching.sort()).toEqual(['src/areas/wortschatz.tsx', 'src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/data/writer.ts']);
   });
 
   it('Gegenprobe: die Regeln erkennen Verstöße', () => {
     expect(moduleViolation(`${MODULE}/domain/planner.ts`, '../../../domain/srs/scheduler')).toMatch(/verlässt/);
     expect(moduleViolation(SHARED, '../../domain/srs/scheduler')).toMatch(/Erlaubnisliste/);
-    expect(moduleViolation(`${MODULE}/domain/planner.ts`, 'react')).toMatch(/Paket/);
+    expect(moduleViolation(`${MODULE}/domain/planner.ts`, 'framer-motion')).toMatch(/Paket/);
+    expect(moduleViolation(SHARED_UI, '../../features/vocab/session')).toMatch(/Erlaubnisliste/);
+    expect(moduleViolation(SHARED_UI, '../../ui/Button')).toBeNull();
+    expect(moduleViolation(`${MODULE}/ui/LearnCard.tsx`, '../../../ui/Button')).toMatch(/verlässt/);
     expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/domain/planner')).toMatch(/vorbei/);
     expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/api')).toBeNull();
   });

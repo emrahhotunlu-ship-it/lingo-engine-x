@@ -1,0 +1,204 @@
+import { describe, expect, it } from 'vitest';
+import { createWriter, type Writer } from '../../../src/data/writer';
+import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
+import { type CheckDict } from '../../../src/modules/vocab/domain/check';
+import { applyAnswer, emptyLex, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
+import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
+import type { Draft } from '../../../src/modules/vocab/domain/flow';
+import { type DraftStore, LearnRun, type LearnStart, readDrafts, writeGate } from '../../../src/modules/vocab/ui/learnRun';
+
+// Wörter-Modul V3 Schritt 2b-2: Steuerung einer Lernrunde (ohne React): Sperre, Karte → Prüfen → Band → Weiter, Buchung genau einmal,
+// Entwurf im Browser bis zur Buchung, Nachbuchen beim Start, Einführung/„Kenne ich schon“, Einspruch und Rücknahme.
+
+type Doc = Record<string, unknown>;
+const T0 = Date.parse('2026-11-02T18:00:00Z');
+const D = 86_400_000;
+const dict: CheckDict = { isWord: () => false, misspell: new Map(), confusable: new Map(), toUS: (w) => w };
+const ctx = (): PlanCtx => ({ cfg: DEFAULT_CFG, path: 'vocab/scope', planned: true, load: () => 0, siblings: new Set() });
+const base: Doc = { word: 'scope', de: 'Umfang, Rahmen', pos: 'noun', ex: 'We need to define the scope of the project.', wx: [{ en: 'The scope is too wide.', de: 'Der Umfang ist zu groß.' }] };
+const PROFILE: Doc = { vcfg: { min: 15, ret: 0.9, mod: 1 } };
+const SCHEMA: Doc = { vocabModule: { v: 1, t: 1, state: 'done' } };
+
+function learned(t: number): Lex {
+  let l = introduce(emptyLex('w', 'core', t), t);
+  l = applyAnswer(l, { t: t + 60_000, form: 'gap_hint', outcome: 'ok', hint: 0, ms: 9000, fk: 2000, sentence: 'a' }, ctx()).lex;
+  l = applyAnswer(l, { t: t + 300_000, form: 'gap', outcome: 'ok', hint: 0, ms: 9000, fk: 2000, sentence: 'a' }, ctx()).lex;
+  l.b!.due = T0 - D;
+  return l;
+}
+
+function memStore(init: string | null = null): DraftStore & { value: string | null } {
+  const s = {
+    value: init,
+    get: () => s.value,
+    set: (v: string) => {
+      s.value = v;
+    },
+    remove: () => {
+      s.value = null;
+    },
+  };
+  return s;
+}
+
+function setup(lex: Lex, o: { drafts?: DraftStore & { value: string | null }; writer?: Writer } = {}) {
+  const docOf = { ...base, lex };
+  const h = createMemoryDb({ seed: { 'vocab/scope': docOf } });
+  const drafts = o.drafts ?? memStore();
+  let now = T0;
+  const run = new LearnRun({ deps: { writer: o.writer ?? createWriter(h.db), device: 'phone' }, dict, lang: () => 'de', drafts, readDay: () => Promise.resolve(null), now: () => (now += 1000) });
+  const start = (kind: LearnStart['kind'] = 'word', profile: Doc | null = PROFILE, schema: Doc | null = SCHEMA) =>
+    run.start({ kind, docs: [['vocab/scope', docOf]], profile, schema, paths: ['vocab/scope'] });
+  const vlog = () => Object.entries(h.dump()).filter(([p]) => /^vlog\/\d/.test(p)).reduce((n, [, d]) => n + Object.values(d.e as Doc).filter(Boolean).length, 0);
+  const lexIn = () => (h.dump()['vocab/scope'] as Doc).lex as Lex;
+  return { h, run, drafts, start, vlog, lexIn };
+}
+
+describe('writeGate', () => {
+  it('aus ohne Schalter, Umrechnung offen ohne Marke „done“, sonst frei', () => {
+    expect(writeGate(null, SCHEMA)).toBe('off');
+    expect(writeGate({ vcfg: { min: 15, ret: 0.9, mod: 0 } }, SCHEMA)).toBe('off');
+    expect(writeGate(PROFILE, null)).toBe('migrate');
+    expect(writeGate(PROFILE, { vocabModule: { v: 1, t: 1, state: 'running' } })).toBe('migrate');
+    expect(writeGate(PROFILE, { vocabModule: 'done' })).toBe('migrate');
+    expect(writeGate(PROFILE, SCHEMA)).toBe('ok');
+  });
+});
+
+describe('readDrafts', () => {
+  it('Liste, Einzelentwurf, Kaputtes', () => {
+    const d: Draft = { v: 1, kind: 'answer', path: 'vocab/scope', planned: true, a: { t: T0, form: 'gap', outcome: 'ok', hint: 0, ms: 1, fk: 1, sentence: 'a' } };
+    expect(readDrafts(memStore(JSON.stringify([d])))).toEqual([d]);
+    expect(readDrafts(memStore(JSON.stringify(d)))).toEqual([d]);
+    expect(readDrafts(memStore(JSON.stringify([d, { v: 9 }])))).toEqual([d]);
+    expect(readDrafts(memStore('{kaputt'))).toEqual([]);
+    expect(readDrafts(memStore())).toEqual([]);
+  });
+});
+
+describe('LearnRun', () => {
+  it('Sperre: Schalter aus bzw. Umrechnung offen → ruhiger Hinweis, nichts geschrieben', async () => {
+    const a = setup(learned(T0 - 10 * D));
+    await a.start('word', { vcfg: { min: 15, ret: 0.9, mod: 0 } });
+    expect(a.run.get()).toEqual({ k: 'closed', why: 'off' });
+    const b = setup(learned(T0 - 10 * D));
+    await b.start('word', PROFILE, null);
+    expect(b.run.get()).toEqual({ k: 'closed', why: 'migrate' });
+    expect(a.vlog() + b.vlog()).toBe(0);
+  });
+
+  it('Karte → Prüfen → Band → Weiter: genau eine Buchung, Entwurf danach leer, Runde zu Ende', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    await s.start();
+    const v = s.run.get();
+    expect(v.k).toBe('card');
+    if (v.k !== 'card') return;
+    expect(v.kind).toBe('answer');
+    s.run.check(v.card.answer, { ms: 5000, fk: 1500 });
+    const b = s.run.get();
+    expect(b.k).toBe('band');
+    if (b.k !== 'band') return;
+    expect(b.check.outcome).toBe('ok');
+    expect(s.vlog()).toBe(0);
+    s.run.next();
+    // Entwurf liegt bis zur Buchung im Browser.
+    expect(readDrafts(s.drafts)).toHaveLength(1);
+    await s.run.settled();
+    expect(s.vlog()).toBe(1);
+    expect(s.drafts.value).toBeNull();
+    expect(s.run.get()).toEqual({ k: 'done', n: 1 });
+  });
+
+  it('Verlassen bucht die offene Antwort genau einmal (auch zweimal Verlassen und danach Weiter)', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    await s.start();
+    const v = s.run.get();
+    if (v.k !== 'card') throw new Error(v.k);
+    s.run.check(v.card.answer, { ms: 5000, fk: 1500 });
+    await Promise.all([s.run.leave(), s.run.leave()]);
+    s.run.next();
+    await s.run.settled();
+    expect(s.vlog()).toBe(1);
+    expect(s.drafts.value).toBeNull();
+  });
+
+  it('Buchung schlägt fehl → Entwurf bleibt; nächster Start bucht ihn nach (genau einmal)', async () => {
+    const lex = learned(T0 - 10 * D);
+    const drafts = memStore();
+    const broken = new Proxy({}, { get: () => () => Promise.reject(new Error('offline')) }) as Writer;
+    const s1 = setup(lex, { drafts, writer: broken });
+    await s1.start();
+    const v = s1.run.get();
+    if (v.k !== 'card') throw new Error(v.k);
+    s1.run.check(v.card.answer, { ms: 5000, fk: 1500 });
+    s1.run.next();
+    await s1.run.settled();
+    expect(readDrafts(drafts)).toHaveLength(1);
+    const kept = drafts.value;
+    const s2 = setup(lex, { drafts });
+    await s2.start();
+    expect(s2.vlog()).toBe(1);
+    expect(drafts.value).toBeNull();
+    // Die Runde rechnet mit dem nachgebuchten Stand: heute schon gebucht → keine zweite Buchung über den Entwurf.
+    const s3 = setup(s2.lexIn(), { drafts: memStore(kept) });
+    await s3.start();
+    expect(s3.vlog()).toBe(0);
+  });
+
+  it('Neues Wort: Einführung mit „Kenne ich schon“; Probe falsch → noch einmal als Einführung (ohne zweite Probe), dann Lernschritt A', async () => {
+    const s = setup(emptyLex('w', 'core', T0 - 5 * D));
+    await s.start('more5');
+    const v = s.run.get();
+    if (v.k !== 'card') throw new Error(v.k);
+    expect(v.kind).toBe('intro');
+    expect(v.canProbe).toBe(true);
+    s.run.probe();
+    const p = s.run.get();
+    if (p.k !== 'card') throw new Error(p.k);
+    expect(p.kind).toBe('probe');
+    expect(p.canProbe).toBe(false);
+    s.run.check('wrongword', { ms: 3000, fk: 1000 });
+    const pb = s.run.get();
+    if (pb.k !== 'band') throw new Error(pb.k);
+    expect(pb.band.knewIt).toBe(false);
+    expect(pb.band.next).toEqual({ kind: 'step', mode: 'same', thenTomorrow: false });
+    s.run.next();
+    const again = s.run.get();
+    if (again.k !== 'card') throw new Error(again.k);
+    expect(again.kind).toBe('intro');
+    expect(again.canProbe).toBe(false);
+    s.run.check(again.card.answer, { ms: 3000, fk: 1000 });
+    s.run.next();
+    await s.run.settled();
+    expect(s.lexIn().step?.n).toBe(1);
+    expect(s.lexIn().intro).not.toBeNull();
+    // Probe (nur Verlauf) + Einführung
+    expect(s.vlog()).toBe(2);
+  });
+
+  it('„Das wusste ich eigentlich“: wählen ändert nur „Kommt wieder“, Rücknahme stellt das Band wieder her; gebucht wird die gewählte Fassung', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    await s.start();
+    const v = s.run.get();
+    if (v.k !== 'card') throw new Error(v.k);
+    const ans = v.card.answer;
+    s.run.check(`${ans}xx`, { ms: 5000, fk: 1500 });
+    const b = s.run.get();
+    if (b.k !== 'band') throw new Error(b.k);
+    expect(b.band.knewIt).toBe(true);
+    s.run.choose('knewIt');
+    const k = s.run.get();
+    if (k.k !== 'band') throw new Error(k.k);
+    expect(k.choice).toBe('knewIt');
+    expect(k.band.verdict).toBe(b.band.verdict);
+    s.run.choose(null);
+    const u = s.run.get();
+    if (u.k !== 'band') throw new Error(u.k);
+    expect(u.choice).toBeNull();
+    expect(u.band.next).toEqual(b.band.next);
+    s.run.choose('knewIt');
+    s.run.next();
+    await s.run.settled();
+    expect(s.vlog()).toBe(1);
+  });
+});
