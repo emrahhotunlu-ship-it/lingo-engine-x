@@ -45,8 +45,8 @@ export type TransferOut = {
 };
 
 const FRAME_EN: Record<TransferFrame, string> = {
-  mail: 'an email to a client (polite, neutral to formal)',
-  slack: 'a Slack message to a colleague (short, friendly, casual)',
+  mail: 'an email to a client (friendly, professional)',
+  slack: 'a Slack message to the team (short, friendly, casual)',
   call: 'a spoken answer to an objection in a client call (polite, clear, spoken style)',
   pitch: 'two to four sentences for a presentation (clear, confident, neutral)',
   life: 'a message in everyday or family life (casual)',

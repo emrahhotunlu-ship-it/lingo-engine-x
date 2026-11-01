@@ -89,7 +89,7 @@ export const ownSentence: PromptTemplate<OwnSentenceVars, OwnSentenceOut> = {
       'Rules:',
       ...verdictRules('sentence'),
       ...(v.task
-        ? ['- The situation is only a frame: if the sentence does not address the situation at all, it is "thin" (the word was not used for the task). Never judge the opinion or the decision the learner chose.']
+        ? ['- The situation is only a frame: only if the sentence does not touch the situation at all is it "thin" (the word was not used for the task); a loose link to the situation is enough. Never judge the opinion or the decision the learner chose.']
         : []),
       '- extra: at most one other clear error in the sentence (not at the target word) as {"from": exact words from the sentence, "to": the correction, "why": one sentence}; null if there is none or if v is "odd" or "wrong".',
       '- fixed: "" if v is not "odd" or "wrong" and extra is null. Otherwise the learner sentence with the errors fixed:',

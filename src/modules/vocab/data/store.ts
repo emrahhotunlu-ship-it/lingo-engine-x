@@ -151,12 +151,25 @@ export function readUseDoc(raw: unknown): UseDoc {
 
 const EMPTY_USE = { v: 1 as const, life: null, later: [] };
 
+/** Nur ein Dokument in genau der bekannten Form darf geschrieben werden: `v` 1 (oder fehlt), `life` Tag oder leer, `later` lauter gültige Einträge. */
+function useDocIntact(raw: Record<string, unknown>): boolean {
+  if (raw.v !== undefined && raw.v !== 1) return false;
+  if (raw.life !== undefined && raw.life !== null && !(typeof raw.life === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.life))) return false;
+  if (raw.later === undefined) return true;
+  return Array.isArray(raw.later) && raw.later.every((x) => useLaterSchema.safeParse(x).success);
+}
+
 /** `vmod/use` frisch ändern: `fn` bekommt den gelesenen Stand und liefert den neuen (oder `null` = nichts zu tun). Geprüft vor dem Schreiben. */
 async function changeUse(deps: VocabDeps, fn: (cur: UseDoc) => UseDoc | null): Promise<UseDoc | null> {
   await deps.writer.createIfMissing(VMOD_USE_PATH, EMPTY_USE);
   let out: UseDoc | null = null;
   await deps.writer.transform(VMOD_USE_PATH, (cur) => {
     if (!cur) return null;
+    // Unerwarteter Aufbau (neuere Fassung, fremde Form, ungültige Einträge) wird nie angefasst (Kap. 9 Regel 6; data-guard S5c).
+    if (!useDocIntact(cur)) {
+      logError('vocab:use-doc', new Error('db_invalid'), VMOD_USE_PATH);
+      return null;
+    }
     const next = fn(readUseDoc(cur));
     if (!next) return null;
     const ok = vmodUseWriteSchema.safeParse({ v: 1, ...next });

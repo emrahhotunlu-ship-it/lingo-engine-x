@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Button, EnglishText, ExerciseShell, Icon, lookupOpenMs, MicButton, PrimaryAction, SentenceInput, useHotkeys, useT, type MessageKey } from '../sharedUi';
 import { hasTarget } from '../prompts/common';
 import type { UseVerdict } from '../prompts/common';
@@ -18,15 +18,15 @@ type T = ReturnType<typeof useT>['t'];
 const MIN: Record<UseModel['form'], number> = { transfer: 3, own: 1 };
 /** Ab dieser Stufe ist der eigene Satz frei (ohne Lage, plan.md §7). */
 const FREE_LV = 6;
-/** Gesprochen zählt der Text, wenn mindestens dieser Anteil diktiert wurde. */
+/** Gesprochen zählt der Text, wenn mindestens dieser Anteil aus diktierten Stücken besteht, die noch im Text stehen. */
 const SPOKEN_SHARE = 0.5;
 
-const TONE: Record<UseVerdict, { text: string; line: string; icon: 'check' | 'minus' | 'close' | 'info' }> = {
-  ok: { text: 'text-ok-text', line: 'decoration-ok', icon: 'check' },
-  odd: { text: 'text-near-text', line: 'decoration-near', icon: 'minus' },
-  wrong: { text: 'text-wrong-text', line: 'decoration-wrong', icon: 'close' },
-  thin: { text: 'text-muted', line: 'decoration-line-strong', icon: 'info' },
-  unused: { text: 'text-muted', line: 'decoration-line-strong', icon: 'info' },
+const TONE: Record<UseVerdict, { text: string; line: string; dot: string; icon: 'check' | 'minus' | 'close' | 'info' }> = {
+  ok: { text: 'text-ok-text', line: 'decoration-ok', dot: 'bg-ok-soft', icon: 'check' },
+  odd: { text: 'text-near-text', line: 'decoration-near', dot: 'bg-near-soft', icon: 'minus' },
+  wrong: { text: 'text-wrong-text', line: 'decoration-wrong', dot: 'bg-wrong-soft', icon: 'close' },
+  thin: { text: 'text-muted', line: 'decoration-line-strong', dot: 'bg-surface', icon: 'info' },
+  unused: { text: 'text-muted', line: 'decoration-line-strong', dot: 'bg-surface', icon: 'info' },
 };
 
 /** Lage-Text der Karte (`null` = freier eigener Satz ab Stufe 6). */
@@ -56,7 +56,10 @@ function Marked({ text, rows, targets, testId }: { text: string; rows: readonly 
   for (const r of rows) {
     if (r.v === 'unused') continue;
     const tg = targets.find((x) => x.key === r.key);
-    const needles = [r.at, tg?.word ?? ''].map((s) => s.trim().toLowerCase()).filter(Boolean);
+    const at = r.at.trim().toLowerCase();
+    const word = (tg?.word ?? '').trim().toLowerCase();
+    // „access rights“ statt nur „access“: enthält das Wort die Fundstelle, zählt das ganze Wort.
+    const needles = (at && word.includes(at) ? [word, at] : [at, word]).filter(Boolean);
     for (const n of needles) {
       const a = low.indexOf(n);
       if (a < 0) continue;
@@ -85,6 +88,8 @@ function Marked({ text, rows, targets, testId }: { text: string; rows: readonly 
   );
 }
 
+const reduceMotion = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
 const isField = (el: EventTarget | null) => el instanceof HTMLElement && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT' || el.isContentEditable);
 
 export function UseCard({ view, run }: { view: UseView; run: LearnRun }) {
@@ -99,7 +104,7 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
   const later = view.later;
   const [text, setText] = useState(view.text);
   const [redo, setRedo] = useState<string | null>(null);
-  const dictated = useRef(0);
+  const dictated = useRef<string[]>([]);
   const shownAt = useRef(0);
   const lookupAtStart = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
@@ -124,13 +129,26 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
   const onDictate = (said: string) => {
     const add = said.trim();
     if (!add) return;
-    dictated.current += add.length;
+    dictated.current = [...dictated.current, add];
     onType(text.trim() ? `${text.trimEnd()} ${add}` : add);
   };
-  const spoken = () => text.trim().length > 0 && dictated.current >= text.trim().length * SPOKEN_SHARE;
+  // Nur diktierte Stücke, die noch (unverändert) im Text stehen: gelöscht und selbst getippt zählt nicht als gesprochen.
+  const kept = () => {
+    const low = text.toLowerCase();
+    return dictated.current.filter((d) => low.includes(d.toLowerCase()));
+  };
+  const spoken = () => {
+    const len = text.trim().length;
+    return len > 0 && kept().reduce((a, d) => a + d.length, 0) >= len * SPOKEN_SHARE;
+  };
+  // Gesprochener Beleg je Wort: nur, wenn das Wort in einem diktierten Stück steht (ein diktierter Füllsatz macht kein Wort „gesprochen“).
+  const spokenKeys = () => {
+    const ds = kept();
+    return m.targets.filter((tg) => ds.some((d) => hasTarget(d, tg))).map((tg) => tg.key);
+  };
   // Enter = Weiter, sobald das Ergebnis steht (nie aus einem Eingabefeld heraus: dort prüft Enter).
   useHotkeys({ enter: st.s === 'judged' || st.s === 'self' ? () => run.next() : undefined }, isField);
-  const check = () => run.useCheck(later ? later.text : text, later ? later.spoken : spoken(), measure());
+  const check = () => (later ? run.useCheck(later.text, later.spoken, measure()) : run.useCheck(text, spoken(), measure(), spokenKeys()));
   const next = () => run.next();
 
   const sk = sitKey(m);
@@ -147,7 +165,8 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
     .join(' · ');
   const kindLabel = `${t(own ? 'vmKindOwn' : 'vmKindUse')} · ${detail}`;
   const taskText = later ? t('vmTask_later') : own ? t('vmTask_own', { w: m.targets[0]?.word ?? '' }) : t('vmTask_use', { n: t(numKey(m.targets.length)) });
-  const purpose = later ? t('vmWozu_later') : t(own ? 'vmWozu_own' : 'vmWozu_use');
+  // Ohne Claude sagt der Wozu-Text es schon vorher (nicht erst nach drei Minuten Schreiben).
+  const purpose = later ? t('vmWozu_later') : !run.canCheck() ? t('vmWozu_noAi') : t(own ? 'vmWozu_own' : 'vmWozu_use');
 
   const situation = (
     <div className="lx-card flex flex-col gap-1.5 p-4" data-testid="vm-use-sit">
@@ -156,6 +175,7 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
       </p>
       {sk ? <p className="lx-t-body">{t(sk)}</p> : null}
       {own ? <p className="lx-t-support text-muted">{t('vmUseOwnHint')}</p> : null}
+      {sk ? <p className="lx-t-support text-muted">{t('vmUseFreeHint')}</p> : null}
     </div>
   );
 
@@ -173,11 +193,21 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
               data-used={used ? '' : undefined}
               data-v={r?.v}
               data-testid="vm-use-chip"
-              title={tg.de}
             >
-              {r ? <Icon name={TONE[r.v].icon} size={14} aria-hidden="true" /> : used ? <Icon name="check" size={14} aria-hidden="true" /> : null}
-              <span lang="en">{tg.head}</span>
-              {r ? <span className="sr-only">{t(`vmUseV_${r.v}` as MessageKey)}</span> : null}
+              {/* Beim Schreiben nur „steht im Text“ (Punkt), nie das Häkchen des Urteils „passt“. */}
+              <span className="flex h-3.5 w-3.5 shrink-0 items-center justify-center" aria-hidden="true">
+                {r ? <Icon name={TONE[r.v].icon} size={14} /> : used ? <span className="lx-v-dot" data-ch="w" /> : null}
+              </span>
+              <span lang="en" title={tg.head}>
+                {tg.word}
+              </span>
+              {/* Gemeinte Bedeutung sichtbar (am Handy gibt es kein `title`): danach urteilt Claude. */}
+              {tg.de ? (
+                <span className="text-muted" lang="de">
+                  · {tg.de}
+                </span>
+              ) : null}
+              {r ? <span className="sr-only">{t(`vmUseV_${r.v}` as MessageKey)}</span> : used ? <span className="sr-only">{t('vmUseInText')}</span> : null}
             </li>
           );
         })}
@@ -228,11 +258,11 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
     const redoOpen = redo !== null && st.redo === null;
     bar = (
       <>
-        {st.redo === null ? (
+        {st.redo === null && st.rows.some((r) => r.v !== 'ok') ? (
           <Button
             variant="secondary"
             size="lg"
-            className="lx-actionbar-main"
+            className="lx-actionbar-main whitespace-nowrap"
             onClick={() => (redoOpen ? run.useRedo(redo) : setRedo(view.text))}
             disabled={redoOpen && !redo.trim()}
             data-testid="vm-use-redo"
@@ -246,13 +276,33 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
       </>
     );
   } else {
-    answer = <SelfBody t={t} view={view} later={st.later} run={run} />;
+    answer = <SelfBody t={t} view={view} later={st.later} />;
     bar = (
-      <PrimaryAction onClick={next} iconAfter="arrowRight" testId="vm-use-next">
-        {t('vmBtnNext')}
-      </PrimaryAction>
+      <>
+        {view.later ? null : (
+          <Button
+            variant="secondary"
+            size="lg"
+            className="lx-actionbar-main whitespace-nowrap"
+            onClick={() => run.useLater(!st.later)}
+            data-testid={st.later ? 'vm-use-later-undo' : 'vm-use-later'}
+          >
+            {t(st.later ? 'vmBtnUndo' : 'vmBtnLater')}
+          </Button>
+        )}
+        <PrimaryAction onClick={next} iconAfter="arrowRight" testId="vm-use-next">
+          {t('vmBtnNext')}
+        </PrimaryAction>
+      </>
     );
   }
+  // Nach dem Prüfen einmal zum Ergebnis (Handy: sonst steht es unter der Leiste); bei reduzierter Bewegung ohne Gleiten.
+  const resultShown = st.s === 'judged' || st.s === 'self';
+  useLayoutEffect(() => {
+    if (!resultShown) return;
+    const el = document.querySelector<HTMLElement>('[data-testid="vm-use-judged"], [data-testid="vm-use-self"]');
+    el?.scrollIntoView?.({ block: 'start', behavior: reduceMotion() ? 'auto' : 'smooth' });
+  }, [resultShown]);
 
   return (
     <ExerciseShell
@@ -261,7 +311,7 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
       task={{ text: taskText, purpose, open: true, reason: () => null }}
       prompt={
         <div className="flex flex-col gap-3">
-          {situation}
+          {st.s === 'write' || st.s === 'checking' ? situation : null}
           {chips}
         </div>
       }
@@ -280,13 +330,21 @@ function JudgedBody({ t, view, st, redo, setRedo, run }: { t: T; view: UseView; 
   const open = new Set(st.open);
   // Falsch vor fast richtig (offen), dann der Rest in Reihenfolge der Ziele.
   const rows = [...st.rows].sort((a, b) => (open.has(a.key) ? st.open.indexOf(a.key) : 99) - (open.has(b.key) ? st.open.indexOf(b.key) : 99));
-  const why = (r: UseRow) => r.why || t(r.v === 'thin' ? 'vmUseWhy_thin' : r.v === 'unused' ? 'vmUseWhy_unused' : 'vmUseWhy_ok');
+  const why = (r: UseRow) => r.why || t(r.v === 'thin' ? 'vmUseWhy_thin' : r.v === 'unused' ? 'vmUseWhy_unused' : 'vmUseWhy_ok', { w: r.head });
   const up = st.rows.filter((r) => r.fx === 'up').map((r) => r.head);
   const soon = st.rows.filter((r) => r.fx === 'soon').map((r) => r.head);
   const none = st.rows.filter((r) => r.fx === 'none').map((r) => r.head);
   const evidence = m.evidence || !!view.later;
   const ev = own ? (st.rows[0] ?? null) : null;
+  // Anwenden: Wörter, bei denen dieser Text als eigener Satz für Stufe 7 zählt (sonst zählte er unsichtbar mit).
+  const evWords = own ? [] : st.rows.filter((r) => r.evNew).map((r) => r.head);
   const redoOpen = redo !== null && st.redo === null;
+  useEffect(() => {
+    if (!redoOpen) return;
+    const el = document.querySelector<HTMLElement>('[data-testid="vm-use-redo-input"]');
+    el?.focus({ preventScroll: true });
+    el?.scrollIntoView?.({ block: 'center', behavior: reduceMotion() ? 'auto' : 'smooth' });
+  }, [redoOpen]);
   return (
     <div className="flex flex-col gap-4" data-testid="vm-use-judged">
       <div className="lx-card flex flex-col gap-1.5 p-4">
@@ -296,7 +354,7 @@ function JudgedBody({ t, view, st, redo, setRedo, run }: { t: T; view: UseView; 
       <ul className="m-0 flex list-none flex-col gap-3 p-0" data-testid="vm-use-rows">
         {rows.map((r) => (
           <li key={r.key} className="flex items-start gap-3" data-testid="vm-use-row" data-v={r.v}>
-            <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface ${TONE[r.v].text}`} aria-hidden="true">
+            <span className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${TONE[r.v].dot} ${TONE[r.v].text}`} aria-hidden="true">
               <Icon name={TONE[r.v].icon} size={14} />
             </span>
             <div className="flex min-w-0 flex-col gap-0.5">
@@ -380,6 +438,8 @@ function JudgedBody({ t, view, st, redo, setRedo, run }: { t: T; view: UseView; 
         <span>
           {evidence ? (
             t('vmUseFxEvidence')
+          ) : !up.length && !soon.length ? (
+            <>{fxPart(t, none, 'vmUseFxNoneAll')}.</>
           ) : (
             <>
               {t('vmUseFxHead')}{' '}
@@ -398,15 +458,28 @@ function JudgedBody({ t, view, st, redo, setRedo, run }: { t: T; view: UseView; 
               .
             </>
           )}
+          {evWords.length ? <> {fxPart(t, evWords, 'vmUseFxEv')}</> : null}
         </span>
       </p>
       {ev && ev.ev !== null ? (
         <p className="lx-t-meta text-muted" data-testid="vm-use-ev">
-          {ev.ev >= 2 ? t('vmUseEvDone') : `${t('vmUseEv', { n: ev.ev })} ${t('vmUseEvNext')}`}
+          {evLine(t, ev)}
         </p>
       ) : null}
     </div>
   );
+}
+
+/**
+ * Stufe-7-Zeile beim eigenen Satz, ohne Widerspruch zur Regel (ladder.ts): zwei geprüfte eigene Sätze, bei Kernwörtern einer gesprochen;
+ * sagt auch, wenn dieser Satz nicht gezählt hat (falsch, zählt noch nicht, oder heute zählte schon einer).
+ */
+function evLine(t: T, r: UseRow): string {
+  const n = r.ev ?? 0;
+  const needSpoken = r.core && r.evS < 1;
+  if (n >= 2) return t(needSpoken ? 'vmUseEvSpoken' : 'vmUseEvDone');
+  if (!r.evNew) return t(r.v === 'ok' ? 'vmUseEvToday' : 'vmUseEvNot', { n });
+  return `${t('vmUseEv', { n })} ${t(needSpoken ? 'vmUseEvNextCore' : 'vmUseEvNext')}`;
 }
 
 /** „lead time und sign off on rücken weiter“: Wörter an der Stelle `{w}`. */
@@ -422,14 +495,15 @@ function fxPart(t: T, ws: readonly string[], k: MessageKey): ReactNode {
 }
 
 /** Ohne Claude (Bild s2-12): dein Text, das Muster je Wort (Beispielsätze mit markiertem Wort, Wortpartner), „Später prüfen lassen“. */
-function SelfBody({ t, view, later, run }: { t: T; view: UseView; later: boolean; run: LearnRun }) {
+function SelfBody({ t, view, later }: { t: T; view: UseView; later: boolean }) {
   const { m } = view;
   const own = m.form === 'own';
   return (
     <div className="flex flex-col gap-4" data-testid="vm-use-self">
-      <p className="lx-t-support text-muted" role="status" data-testid="vm-use-noai">
-        {t(own ? 'vmUseNoAiOwn' : 'vmUseNoAi')}
-      </p>
+      <div className="lx-card flex items-start gap-3 p-4" role="status" data-testid="vm-use-noai">
+        <Icon name="info" size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-muted" />
+        <p className="lx-t-support">{t(own ? 'vmUseNoAiOwn' : 'vmUseNoAi')}</p>
+      </div>
       <div className="lx-card flex flex-col gap-1.5 p-4">
         <p className="lx-t-label text-muted">{t(own ? 'vmUseYourSentence' : 'vmUseYourText')}</p>
         <p className="lx-t-body whitespace-pre-wrap" lang="en" data-testid="vm-use-text">
@@ -441,7 +515,7 @@ function SelfBody({ t, view, later, run }: { t: T; view: UseView; later: boolean
         {m.targets.map((tg) => (
           <div key={tg.key} className="flex flex-col gap-1">
             <p className="lx-t-body">
-              <strong lang="en">{tg.head}</strong>
+              <strong lang="en">{tg.word}</strong>
               {tg.de ? (
                 <span className="text-muted" lang="de">
                   {' '}
@@ -458,21 +532,18 @@ function SelfBody({ t, view, later, run }: { t: T; view: UseView; later: boolean
                 <span lang="en">{tg.partners.join(' · ')}</span>
               </p>
             ) : null}
+            {/* Anstoß zum Selbstvergleich, ohne Knöpfe (keine Selbstbewertung). */}
+            <p className="lx-t-meta text-subtle" data-testid="vm-use-selfcheck">
+              {t(tg.partners.length ? 'vmUseSelfCheck' : 'vmUseSelfCheckNoPartner')}
+            </p>
           </div>
         ))}
       </div>
-      {view.later ? null : later ? (
-        <div className="flex flex-col items-start gap-2" data-testid="vm-use-later-on">
-          <p className="lx-t-support text-muted">{t('vmUseLaterOn')}</p>
-          <Button variant="ghost" onClick={() => run.useLater(false)} data-testid="vm-use-later-undo">
-            {t('vmBtnUndo')}
-          </Button>
-        </div>
-      ) : (
-        <Button variant="secondary" onClick={() => run.useLater(true)} data-testid="vm-use-later">
-          {t('vmBtnLater')}
-        </Button>
-      )}
+      {!view.later && later ? (
+        <p className="lx-t-support text-muted" role="status" data-testid="vm-use-later-on">
+          {t('vmUseLaterOn')}
+        </p>
+      ) : null}
     </div>
   );
 }

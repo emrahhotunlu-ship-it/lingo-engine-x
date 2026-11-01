@@ -81,7 +81,7 @@ test.describe('Handy 390', () => {
     expect(external).toEqual([]);
   });
 
-  test('fast richtig: Warum offen, Nochmal selbst schreiben zeigt danach Korrektur und bessere Fassung', async ({ page }) => {
+  test('fast richtig: Warum offen, Selbst verbessern zeigt danach Korrektur und bessere Fassung', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch() } });
     await toUse(page);
     await page.getByTestId('vm-use-input').fill(`${TEXT} #odd`);

@@ -104,6 +104,20 @@ function setup(o: { ai?: FakeAi | null; lv?: number; seed?: Record<string, Doc> 
 }
 
 describe('LearnRun Anwenden', () => {
+  it('gesprochen je Wort: nur Wörter aus diktierten Stücken zählen als gesprochener Beleg', async () => {
+    const s = setup();
+    await s.start();
+    const v = s.use();
+    const k0 = v.m.targets[0]!.key;
+    s.run.useCheck('We set the budget, the deadline and the scope today.', true, { ms: 40_000, fk: 0 }, [k0]);
+    await s.tick();
+    expect(s.use().st.s).toBe('judged');
+    s.run.next();
+    await s.run.settled();
+    expect(PATHS.map((p) => s.lexIn(p).ev.s)).toEqual([1, 0, 0]);
+    expect(PATHS.map((p) => s.lexIn(p).ev.o)).toEqual([1, 1, 1]);
+  });
+
   it('Schreiben → Prüfen → Urteil → Weiter: je Wort eine Buchung mit eigenem Zeitpunkt, Entwürfe danach leer, Runde zählt', async () => {
     const s = setup();
     await s.start();

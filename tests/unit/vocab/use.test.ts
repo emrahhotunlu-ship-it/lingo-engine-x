@@ -152,6 +152,16 @@ describe('vmod/use', () => {
     expect(doc.later).toHaveLength(USE_LATER_MAX - 1);
   });
 
+  it('unerwarteter Aufbau wird nie angefasst: neuere Fassung, fremdes Feld in einem Eintrag, falsche Form', async () => {
+    for (const bad of [{ v: 2, life: null, later: [] }, { v: 1, life: null, later: [{ ...later(T0), extra: 1 }] }, { v: 1, life: { x: 1 }, later: [] }, { v: 1, life: null, later: {} }]) {
+      const h = createMemoryDb({ seed: { 'vmod/use': bad } });
+      const deps = { writer: createWriter(h.db), device: 'phone' };
+      expect(await markLife(deps, '2026-11-06')).toBeNull();
+      expect(await addLater(deps, later(T0 + 9), T0 + 9)).toBeNull();
+      expect(h.dump()['vmod/use']).toEqual(bad);
+    }
+  });
+
   it('tolerant lesen: kaputte Einträge fallen weg, fremder Aufbau zählt als leer', () => {
     expect(readUseDoc(null)).toEqual({ life: null, later: [] });
     expect(readUseDoc({ life: 'x', later: [later(T0), { t: 'bad' }] })).toEqual({ life: null, later: [later(T0)] });

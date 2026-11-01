@@ -84,7 +84,7 @@ export function applyUse(lex0: Lex, u: UseInput, ctx: PlanCtx): UseResult {
   const ev = evidenceOf(lex0, u);
   let lex = lex0;
   if (ev) {
-    lex = { ...lex0, ev: { f: [...lex0.ev.f], o: Math.min(EV_MAX, lex0.ev.o + 1), s: ev === 's' ? Math.min(EV_MAX, lex0.ev.s + 1) : lex0.ev.s }, sync: Math.max(lex0.sync, u.t) };
+    lex = { ...lex0, ev: { f: [...lex0.ev.f], o: Math.max(lex0.ev.o, Math.min(EV_MAX, lex0.ev.o + 1)), s: ev === 's' ? Math.max(lex0.ev.s, Math.min(EV_MAX, lex0.ev.s + 1)) : lex0.ev.s }, sync: Math.max(lex0.sync, u.t) };
   }
   const outcome = u.evidenceOnly ? null : outcomeOfUse(u.v, u.err, lex.k, u.evade);
   if (outcome === null) return noEffect(lex, ev);

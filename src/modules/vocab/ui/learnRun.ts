@@ -42,7 +42,7 @@ export type LearnView =
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
   /** Anwenden oder eigener Satz (Großpaket A S5c, Bilder s2-07 … s2-12); `later` = Nachprüfung eines gemerkten Textes (nur Belege). */
-  | { k: 'use'; m: UseModel; task: Task; n: number; left: number; text: string; spoken: boolean; st: UseState; later: UseLater | null }
+  | { k: 'use'; m: UseModel; task: Task; n: number; left: number; text: string; spoken: boolean; spokenKeys: readonly string[] | null; st: UseState; later: UseLater | null }
   /** `fresh` neue Wörter, `review` geplante Wiederholungen, `extra` Übung ohne Planwirkung (je Wort einmal gezählt); `sum` = Abschluss-Übersicht. */
   | { k: 'done'; n: number; fresh: number; review: number; extra: number; sum: DoneSummary | null };
 
@@ -68,9 +68,10 @@ export type DoneSummary = {
 
 /**
  * Wirkung je Wort in Worten (Bild s2-08 „Zählt als Wiederholung …“): `up` rückt weiter · `soon` kommt bald wieder · `none` ohne Planwirkung.
- * `ev` = eigene, geprüfte Sätze für Stufe 7 nach dieser Buchung (nur ab Stufe 5, sonst `null`); `evNew` = dieser zählt dazu.
+ * `ev` = eigene, geprüfte Sätze für Stufe 7 nach dieser Buchung (nur ab Stufe 5, sonst `null`); `evNew` = dieser zählt dazu;
+ * `evS` = davon gesprochen; `core` = Kernwort (für Stufe 7 muss einer der Sätze gesprochen sein, ladder.ts).
  */
-export type UseRow = WordJudgement & { path: string; head: string; fx: 'up' | 'soon' | 'none'; ev: number | null; evNew: boolean };
+export type UseRow = WordJudgement & { path: string; head: string; fx: 'up' | 'soon' | 'none'; ev: number | null; evNew: boolean; evS: number; core: boolean };
 
 /**
  * Zustand der Anwenden-Karte: schreiben (mit Fehlertext nach einem fehlgeschlagenen Prüfen, Knopf „Erneut versuchen“) → Claude prüft →
@@ -402,7 +403,7 @@ export class LearnRun {
         if (m) {
           this.shownAt = nowMs;
           this.useBooked = false;
-          this.set({ k: 'use', m, task, n: this.n, left: run.remaining(), text: '', spoken: false, st: { s: 'write', fail: null }, later: null });
+          this.set({ k: 'use', m, task, n: this.n, left: run.remaining(), text: '', spoken: false, spokenKeys: null, st: { s: 'write', fail: null }, later: null });
           return;
         }
         run.done(task, nowMs);
@@ -445,7 +446,7 @@ export class LearnRun {
     const m = this.useFor(task, it.t);
     if (!m) return false;
     this.useBooked = false;
-    this.set({ k: 'use', m: { ...m, frame: it.frame, sit: it.sit, evidence: true }, task, n: this.n, left: this.run?.remaining() ?? 0, text: it.text, spoken: it.spoken, st: { s: 'write', fail: null }, later: it });
+    this.set({ k: 'use', m: { ...m, frame: it.frame, sit: it.sit, evidence: true }, task, n: this.n, left: this.run?.remaining() ?? 0, text: it.text, spoken: it.spoken, spokenKeys: null, st: { s: 'write', fail: null }, later: it });
     return true;
   }
 
@@ -463,7 +464,7 @@ export class LearnRun {
       if (!w) return;
       out.push({
         path: tg.path,
-        u: { t: t + i, form: v.m.form, v: w.v, err: w.err, at: w.at, evade: isEvade(w), spoken: v.spoken, lvAt: this.lvAt(v, tg.path), evidenceOnly: v.m.evidence || !!v.later, evDone: this.evToday.has(tg.path) },
+        u: { t: t + i, form: v.m.form, v: w.v, err: w.err, at: w.at, evade: isEvade(w), spoken: v.spokenKeys ? v.spokenKeys.includes(tg.key) : v.spoken, lvAt: this.lvAt(v, tg.path), evidenceOnly: v.m.evidence || !!v.later, evDone: this.evToday.has(tg.path) },
       });
     });
     return out;
@@ -478,7 +479,7 @@ export class LearnRun {
       const tg = v.m.targets.find((x) => x.path === path)!;
       const r: UseResult | null = lex ? applyUse(lex, u, planCtxOf(this.cat!, this.med, path, u.t, this.cfg!, v.task.planned && !u.evidenceOnly)) : null;
       const g = r?.grade ?? null;
-      rows.push({ ...w, path, head: tg.head, fx: g === null ? 'none' : g >= 3 ? 'up' : 'soon', ev: u.lvAt >= EV_MIN_LV && r ? r.lex.ev.o : null, evNew: !!r?.ev });
+      rows.push({ ...w, path, head: tg.word, fx: g === null ? 'none' : g >= 3 ? 'up' : 'soon', ev: u.lvAt >= EV_MIN_LV && r ? r.lex.ev.o : null, evNew: !!r?.ev, evS: r?.lex.ev.s ?? 0, core: lex?.pri === 'core' });
     }
     return rows;
   }
@@ -488,12 +489,20 @@ export class LearnRun {
     return { s: 'judged', rows, open: [...openWhys(rows)], extra: out.extra, fixed: out.fixed, fixedUnsure: out.fixedUnsure, better: out.better, reveal: false, redo: null, recheck: 'can' };
   }
 
-  /** Text prüfen lassen (Anwenden-Karte). Ohne Claude: Muster und Selbstvergleich; Fehler: Text bleibt, „Erneut versuchen“. */
-  useCheck(text: string, spoken: boolean, m: Measured): void {
+  /** Kann Claude gerade prüfen? (Wozu-Text der Anwenden-Karte sagt es vorher, Kap. 2 Nr. 2.) */
+  canCheck(): boolean {
+    return this.aiReady();
+  }
+
+  /**
+   * Text prüfen lassen (Anwenden-Karte). Ohne Claude: Muster und Selbstvergleich; Fehler: Text bleibt, „Erneut versuchen“.
+   * `spoken` = Text überwiegend diktiert (fürs Prompt); `spokenKeys` = Zielwörter, die in einem diktierten Stück stehen (gesprochener Beleg je Wort).
+   */
+  useCheck(text: string, spoken: boolean, m: Measured, spokenKeys?: readonly string[]): void {
     const v = this.view;
     if (v.k !== 'use' || (v.st.s !== 'write' && v.st.s !== 'self') || !text.trim()) return;
     this.useMs = Math.max(0, Math.round(m.ms));
-    const base = { ...v, text: v.later ? v.later.text : text.trim(), spoken: v.later ? v.later.spoken : spoken };
+    const base = { ...v, text: v.later ? v.later.text : text.trim(), spoken: v.later ? v.later.spoken : spoken, spokenKeys: v.later || !spokenKeys ? null : [...spokenKeys] };
     const ai = this.env.ai;
     if (!ai || !this.aiReady()) {
       this.set({ ...base, st: { s: 'self', later: false } });
