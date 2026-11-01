@@ -80,6 +80,30 @@
       "src/features/c1/film/FilmPlayer.tsx": {
         "basis": 5000,
         "zuwachs": {}
+      },
+      "src/modules/vocab/ui/LearnScreen.tsx": {
+        "basis": 33000,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/ui/Overview.tsx": {
+        "basis": 5500,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/ui/PlaceScreen.tsx": {
+        "basis": 5000,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/ui/WordPage.tsx": {
+        "basis": 6500,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/content/index.ts": {
+        "basis": 36000,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/data/refill.ts": {
+        "basis": 2000,
+        "zuwachs": {}
       }
     },
     "lazyNeu": 150000,
