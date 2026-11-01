@@ -1,4 +1,4 @@
-import { logError, logWarn } from '../shared';
+import { addDays, dayKey, dayStartOf, daysBetween, logError, logWarn } from '../shared';
 import { teachOf } from '../content';
 import { lexOf } from '../data/lex';
 import { vocabModuleMarkSchema } from '../data/schemas';
@@ -6,11 +6,12 @@ import { freezeDay, replayDraft, type VocabDeps, writeAnswer, writeIntro, writeP
 import type { Band } from '../domain/band';
 import { Catalog } from '../domain/catalog';
 import type { Check, CheckDict } from '../domain/check';
-import type { DayPlan } from '../domain/day';
+import { buildDayPlan, type DayPlan } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
 import { type SessionKind, SessionRun, type Task } from '../domain/session';
+import { groupOf } from '../domain/ladder';
 import type { FormStats, Lex, VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
 
@@ -33,8 +34,30 @@ export type LearnView =
   | { k: 'closed'; why: 'off' | 'migrate' | 'error' }
   | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
-  /** `fresh` neue Wörter, `review` geplante Wiederholungen, `extra` Übung ohne Planwirkung (je Wort einmal gezählt). */
-  | { k: 'done'; n: number; fresh: number; review: number; extra: number };
+  /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
+  | { k: 'start'; s: StartInfo }
+  /** `fresh` neue Wörter, `review` geplante Wiederholungen, `extra` Übung ohne Planwirkung (je Wort einmal gezählt); `sum` = Abschluss-Übersicht. */
+  | { k: 'done'; n: number; fresh: number; review: number; extra: number; sum: DoneSummary | null };
+
+/**
+ * Start-Bildschirm: Zahlen aus dem eingefrorenen Plan. `back` = letzter Lerntag liegt ≥ 2 Tage zurück („Willkommen zurück“);
+ * `sp` = Rückstand je Lerntag (fehlt ohne Rückstand); `fewer` = weniger neue als üblich, weil viel fällig ist.
+ */
+export type StartInfo = { min: number; due: number; ahead: number; fresh: number; fewer: boolean; back: boolean; today: string; sp: [string, number][] | null };
+
+/**
+ * Abschluss (Bild B8): Minuten (aktive Zeit), Pflicht oder Extra, neue Wörter (Stichwörter), aufgestiegene (ohne neue; `w` = Beispiel,
+ * `produce` = jetzt in „Selbst schreiben“), gestolperte mit nächstem Termin (Lerntag), morgen (Vorschau aus dem Planer, ohne Speichern).
+ */
+export type DoneSummary = {
+  min: number;
+  duty: boolean;
+  learned: string[];
+  up: { n: number; w: string | null; lv: number; produce: boolean };
+  slips: { n: number; list: { w: string; day: string }[] };
+  tomorrow: { min: number; due: number; fresh: number } | null;
+  today: string;
+};
 
 /** Kleiner Speicher für den Entwurf (im Browser `lx:vm-pending`; Tests geben eine Map hinein). */
 export type DraftStore = { get(): string | null; set(v: string): void; remove(): void };
@@ -58,6 +81,12 @@ export type Measured = { ms: number; fk: number };
 
 /** Schutz gegen eine endlose Folge von Aufgaben ohne Karte (spätere Formen werden übersprungen). */
 const SKIP_MAX = 500;
+/** Aktive Zeit je Karte höchstens so lange (Pause, Telefonat): für die Minuten im Abschluss. */
+const CARD_MS_MAX = 120_000;
+/** „Willkommen zurück“ ab so vielen Tagen seit dem letzten Lerntag. */
+const BACK_DAYS = 2;
+/** Im Abschluss höchstens so viele Stichwörter je Zeile. */
+const LIST_MAX = 3;
 
 type Pending = {
   task: Task;
@@ -117,6 +146,13 @@ export class LearnRun {
   private n = 0;
   private tally = { fresh: new Set<string>(), review: new Set<string>(), extra: new Set<string>() };
   private started = false;
+  private kind: SessionKind = 'pflicht';
+  /** Stufe je Wort beim ersten Kontakt in dieser Runde (für „Aufgestiegen“). */
+  private readonly lv0 = new Map<string, number>();
+  /** Falsch beantwortet in dieser Runde (für „Gestolpert“). */
+  private readonly slips = new Set<string>();
+  private activeMs = 0;
+  private shownAt: number | null = null;
 
   constructor(private readonly env: LearnEnv) {}
 
@@ -166,11 +202,46 @@ export class LearnRun {
         plan = await freezeDay(this.env.deps, cat, nowMs, cfg, this.med, await this.env.readDay());
       }
       this.run = new SessionRun(s.kind, cat, plan, nowMs, { cfg, ...(s.paths ? { paths: s.paths } : {}) });
-      this.advance();
+      this.kind = s.kind;
+      const info = plan ? this.startInfo(cat, plan, cfg, nowMs) : null;
+      if (info) this.set({ k: 'start', s: info });
+      else this.advance();
     } catch (err) {
       logError('vocab:learn-start', err);
       this.set({ k: 'closed', why: 'error' });
     }
+  }
+
+  /**
+   * Start-Bildschirm nur beim ersten Öffnen am Lerntag (noch nichts gebucht) und mit Inhalt; danach (Neuöffnen mitten in der Runde) direkt
+   * zur Karte. Zahlen aus dem eingefrorenen Plan, damit Start, Heute-Zeile und Runde dasselbe sagen (Kap. 2 Nr. 2).
+   */
+  private startInfo(cat: Catalog, plan: DayPlan, cfg: VocabCfg, nowMs: number): StartInfo | null {
+    const today = dayKey(nowMs);
+    if (!plan.plan.length || plan.d !== today) return null;
+    let last: string | null = null;
+    for (const it of cat.items()) {
+      for (const d of [it.lex.day, it.lex.dayU, it.lex.intro]) {
+        if (d === today) return null;
+        if (d && d < today && (!last || d > last)) last = d;
+      }
+    }
+    const sp = Array.isArray(plan.sp) && plan.sp.length ? plan.sp : null;
+    return {
+      min: Math.max(1, Math.round(plan.min)),
+      due: plan.due,
+      ahead: plan.ahead,
+      fresh: plan.fresh,
+      fewer: plan.fresh < cfg.newPerDay && plan.due > 0,
+      back: !!last && daysBetween(last, today) >= BACK_DAYS,
+      today,
+      sp,
+    };
+  }
+
+  /** „Los geht's“ auf dem Start-Bildschirm: erste Karte. */
+  begin(): void {
+    if (this.view.k === 'start') this.advance();
   }
 
   /** Offene Entwürfe aus dem Browser nachbuchen (nur, was das Lexem noch nicht kennt); Erfolgreiches verschwindet aus der Liste. */
@@ -205,6 +276,7 @@ export class LearnRun {
       }
       const card = this.cardFor(task);
       if (card) {
+        this.shownAt = nowMs;
         this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: task.intro, tip: false });
         return;
       }
@@ -359,6 +431,11 @@ export class LearnRun {
     if (!p || !run || !cat) return;
     this.book(p);
     this.pending = null;
+    const now = this.env.now();
+    if (this.shownAt !== null) this.activeMs += Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
+    this.shownAt = now;
+    if (!this.lv0.has(p.card.path)) this.lv0.set(p.card.path, p.before.lv);
+    if (p.kind === 'answer' && p.result.grade === 1) this.slips.add(p.card.path);
     const failedProbe = p.kind === 'probe' && p.check.outcome !== 'ok';
     // Nicht bestandene Probe und die folgende Einführung sind eine Karte (Zähler und Fortschritt zählen sie einmal; UX-Prüfung V3 Nr. 7).
     if (!failedProbe) this.n += 1;
@@ -380,7 +457,57 @@ export class LearnRun {
     const { fresh, review, extra } = this.tally;
     // Ein neues Wort zählt nur als neu, auch wenn es heute schon seine Lernschritte hatte; eine Wiederholung zählt nicht zusätzlich als Übung.
     const rev = [...review].filter((x) => !fresh.has(x));
-    return { k: 'done', n: this.n, fresh: fresh.size, review: rev.length, extra: [...extra].filter((x) => !fresh.has(x) && !review.has(x)).length };
+    return { k: 'done', n: this.n, fresh: fresh.size, review: rev.length, extra: [...extra].filter((x) => !fresh.has(x) && !review.has(x)).length, sum: this.summary() };
+  }
+
+  private head(path: string): string {
+    const doc = this.docs.get(path);
+    return doc ? headOf(path, doc) : '';
+  }
+
+  /** Abschluss-Übersicht aus dem Bestand im Speicher (schon nachgeführt); „Morgen“ rechnet der Planer, gespeichert wird nichts. */
+  private summary(): DoneSummary | null {
+    const cat = this.cat;
+    const cfg = this.cfg;
+    if (!cat || !cfg || this.n === 0) return null;
+    const nowMs = this.env.now();
+    const today = dayKey(nowMs);
+    const fresh = this.tally.fresh;
+    const learned = [...fresh].map((p) => this.head(p)).filter(Boolean);
+    let upN = 0;
+    let best: { w: string; lv: number; produce: boolean } | null = null;
+    for (const [path, lv0] of this.lv0) {
+      const lv = cat.get(path)?.lex.lv ?? lv0;
+      if (fresh.has(path) || lv <= lv0) continue;
+      upN++;
+      const produce = groupOf(lv) === 'produce' && groupOf(lv0) !== 'produce';
+      if (!best || (produce && !best.produce) || (produce === best.produce && lv > best.lv)) best = { w: this.head(path), lv, produce };
+    }
+    const slipList: { w: string; day: string }[] = [];
+    for (const path of this.slips) {
+      const lex = cat.get(path)?.lex;
+      if (!lex) continue;
+      const at = Math.min(lex.u.due, lex.b?.due ?? Infinity);
+      const d = dayKey(at);
+      slipList.push({ w: this.head(path), day: d <= today ? addDays(today, 1) : d });
+    }
+    slipList.sort((a, b) => a.day.localeCompare(b.day) || a.w.localeCompare(b.w));
+    let tomorrow: DoneSummary['tomorrow'] = null;
+    try {
+      const t = buildDayPlan(cat, dayStartOf(addDays(today, 1)) + 3_600_000, cfg, this.med).plan;
+      tomorrow = { min: Math.max(1, Math.round(t.min)), due: t.due + t.ahead, fresh: t.fresh };
+    } catch (err) {
+      logError('vocab:done-tomorrow', err);
+    }
+    return {
+      min: Math.max(1, Math.round(this.activeMs / 60_000)),
+      duty: this.kind === 'pflicht',
+      learned: learned.slice(0, LIST_MAX),
+      up: { n: upN, w: best?.w ?? null, lv: best?.lv ?? 0, produce: best?.produce ?? false },
+      slips: { n: slipList.length, list: slipList.slice(0, 2) },
+      tomorrow,
+      today,
+    };
   }
 
   /** Beim Verlassen (Bildschirmwechsel, `pagehide`, `visibilitychange`): offene Antwort sofort buchen, ohne weiterzugehen. */

@@ -106,12 +106,17 @@ describe('LearnRun', () => {
     await s.run.settled();
     expect(s.vlog()).toBe(1);
     expect(s.drafts.value).toBeNull();
-    expect(s.run.get()).toEqual({ k: 'done', n: 1, fresh: 0, review: 1, extra: 0 });
+    expect(s.run.get()).toMatchObject({ k: 'done', n: 1, fresh: 0, review: 1, extra: 0 });
   });
 
   it('„Warum heute?“: fällige Karte nennt Fälligkeit, letzten freien Abruf und Stufe mit Spur', async () => {
     const s = setup(learned(T0 - 10 * D));
     await s.start('pflicht');
+    // Erster Start am Lerntag: Start-Bildschirm (Bild B8) mit den Zahlen des eingefrorenen Plans, dann „Los geht's“.
+    const st = s.run.get();
+    expect(st.k).toBe('start');
+    if (st.k === 'start') expect(st.s).toMatchObject({ due: 1, fresh: 0, back: true, sp: null });
+    s.run.begin();
     const r = s.run.reason();
     expect(r?.code).toBe('due');
     const keys = r?.parts.map((p) => p.key) ?? [];
@@ -126,6 +131,7 @@ describe('LearnRun', () => {
     lex.b!.lapses = 1;
     const s = setup(lex);
     await s.start('pflicht');
+    s.run.begin();
     expect(s.run.reason()?.parts.map((p) => p.key)).toContain('vmRsNeverFree');
   });
 
@@ -133,6 +139,34 @@ describe('LearnRun', () => {
     Object.entries(s.h.dump())
       .filter(([p]) => /^vlog\/\d/.test(p))
       .flatMap(([, d]) => Object.values(d.e as Doc).filter(Boolean));
+
+  it('Start nur beim ersten Öffnen am Lerntag; Abschluss nennt Minuten, Pflicht, Gestolpertes mit nächstem Lerntag und morgen', async () => {
+    const s = setup(learned(T0 - 10 * D));
+    await s.start('pflicht');
+    expect(s.run.get().k).toBe('start');
+    s.run.begin();
+    // Erste Abfrage falsch, danach alles richtig bis zum Ende der Runde.
+    let first = true;
+    for (let i = 0; i < 20; i++) {
+      const v = s.run.get();
+      if (v.k !== 'card') break;
+      s.run.check(first ? 'zzzz' : v.card.answer, { ms: 5000, fk: 1500 });
+      first = false;
+      s.run.next();
+    }
+    await s.run.settled();
+    const d = s.run.get();
+    expect(d.k).toBe('done');
+    if (d.k !== 'done') return;
+    expect(d.sum).toMatchObject({ duty: true, learned: [], slips: { n: 1, list: [{ w: 'scope' }] } });
+    expect(d.sum!.min).toBeGreaterThanOrEqual(1);
+    expect(d.sum!.slips.list[0]!.day > d.sum!.today).toBe(true);
+    expect(d.sum!.tomorrow).not.toBeNull();
+    // Zweites Öffnen am selben Lerntag (es ist schon gebucht): direkt zur Karte bzw. zum Abschluss, kein Start-Bildschirm.
+    const again = setup(s.lexIn());
+    await again.start('pflicht');
+    expect(again.run.get().k).not.toBe('start');
+  });
 
   it('„Aufgabe melden“ nach FALSCHER Antwort löscht den Fehler nicht: Weg „Später prüfen lassen“ (Wiederkehr in neuem Satz), Verlauf mit `unfair`', async () => {
     const lex = learned(T0 - 10 * D);
@@ -167,7 +201,7 @@ describe('LearnRun', () => {
     const after = s.lexIn();
     expect({ ...after, sn: lex.sn, sync: lex.sync }).toEqual(lex);
     expect(unfairEntries(s)).toHaveLength(1);
-    expect(s.run.get()).toEqual({ k: 'done', n: 1, fresh: 0, review: 0, extra: 0 });
+    expect(s.run.get()).toMatchObject({ k: 'done', n: 1, fresh: 0, review: 0, extra: 0 });
 
     const s2 = setup(learned(T0 - 10 * D));
     await s2.start();

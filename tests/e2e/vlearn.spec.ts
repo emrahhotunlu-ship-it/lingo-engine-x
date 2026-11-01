@@ -106,5 +106,37 @@ test.describe('Handy 390', () => {
       .toBe(true);
     expect(errors).toEqual([]);
   });
+  test('Pflicht: Start „Wörter · ca. X Min.“ → Runde → Abschluss „Wörter erledigt“ mit morgen; „Fertig“ führt zu Heute', async ({ page }) => {
+    test.setTimeout(90_000);
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch(true) } });
+    await screen(page, 'vlearn');
+    await expect(page.getByTestId('vm-start')).toBeVisible();
+    await expect(page.getByTestId('vm-start-title')).toContainText(/Wörter · ca\. \d+ Min\./);
+    await expect(page.getByTestId('vm-start-why')).toContainText('neue, eingestreut');
+    await expect(page.getByTestId('vm-start-lock')).toContainText('Der Plan steht für heute fest');
+    expect(await layoutProblems(page)).toEqual([]);
+    await page.getByTestId('vm-start-go').click();
+    // Durch die Runde: Einführungen aufdecken, Abfragen mit „Weiß ich nicht“ (Lernschritte kommen wieder, die Runde endet trotzdem).
+    for (let i = 0; i < 60; i++) {
+      if (await page.getByTestId('vm-done').isVisible()) break;
+      const check = page.getByTestId('vm-check');
+      await expect(check.or(page.getByTestId('vm-done'))).toBeVisible();
+      if (await page.getByTestId('vm-done').isVisible()) break;
+      await page.clock.setFixedTime(new Date(NOW + (i + 1) * 60_000));
+      if ((await check.textContent()) === 'Aufdecken') await check.click();
+      else await page.getByTestId('vm-dunno').click();
+      await page.getByTestId('vm-next').click();
+    }
+    await expect(page.getByTestId('vm-done')).toBeVisible();
+    await expect(page.getByTestId('vm-done')).toContainText('Wörter erledigt');
+    await expect(page.getByTestId('vm-done-min')).toContainText('zählt zu deiner Pflicht');
+    await expect(page.getByTestId('vm-done-learned')).toBeVisible();
+    await expect(page.getByTestId('vm-done-tomorrow')).toContainText(/ca\. \d+ Min\./);
+    expect(await layoutProblems(page)).toEqual([]);
+    await page.getByTestId('vm-back').click();
+    await expect(page.locator('[data-screen="vlearn"]')).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
 });
+
 

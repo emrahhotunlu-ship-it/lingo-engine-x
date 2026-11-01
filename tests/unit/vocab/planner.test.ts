@@ -1,3 +1,4 @@
+import { vmodDayWriteSchema } from '../../../src/modules/vocab/data/schemas';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -242,6 +243,14 @@ describe('Tagesplan (M12, M13, M21)', () => {
     const corePlanned = plan.plan.filter((e) => e[0].includes('core')).length;
     expect(corePlanned).toBe(60);
     for (const m of moves) expect(m.to > dayKey(T0) && m.to <= addDays(dayKey(T0), 7)).toBe(true);
+    // Start-Bildschirm (V3 Schritt 4): `sp` zählt den ganzen Rückstand je Lerntag (Verschobene am Zieltag, nicht verschobene morgen).
+    const sp = plan.sp ?? [];
+    expect(sp.reduce((a, x) => a + x[1], 0)).toBe(200 - plan.due);
+    for (const [d] of sp) expect(d > dayKey(T0) && d <= addDays(dayKey(T0), 7)).toBe(true);
+    expect(vmodDayWriteSchema.safeParse({ v: 1, ...plan }).success).toBe(true);
+  });
+  it('ohne Rückstand kein `sp`', () => {
+    expect(buildDayPlan(new Catalog([...mk(5, -1), ...fresh(3)]), T0, DEFAULT_CFG, {}).plan.sp).toBeUndefined();
   });
   it('Neuzeichnen würfelt nicht: gleicher Stand → gleicher Plan (Kap. 15)', () => {
     const cat = new Catalog([...mk(30, -1), ...fresh(8)]);

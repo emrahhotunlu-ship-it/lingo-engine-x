@@ -19,7 +19,7 @@ const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/br
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav)$/,
   /^src\/i18n$/,
-  /^src\/ui\/(exercise|Button|Skeleton|Toast)$/,
+  /^src\/ui\/(exercise|Button|Skeleton|Toast|Icon)$/,
   /^src\/engine\/(EnglishText|KineticGap|HiddenInput|useHotkeys|wordTap)$/,
   /^src\/domain\/answer\/mask$/,
   /^src\/domain\/lexicon\/dict$/,

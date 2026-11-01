@@ -98,6 +98,8 @@ export const vmodDayWriteSchema = z
     ahead: int.min(0),
     moved: int.min(0),
     why: z.string().max(200),
+    /** V3 Schritt 4: Rückstand je Lerntag (höchstens SPREAD_DAYS Tage). Optional: ältere Pläne haben es nicht. */
+    sp: z.array(z.tuple([day, int.min(1)])).max(8).optional(),
   })
   .strict();
 

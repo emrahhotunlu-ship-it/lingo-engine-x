@@ -25,7 +25,8 @@ const startOfOffset = (day: string, n: number): number => dayStartOf(addDays(day
 
 /** Ein Eintrag im eingefrorenen Plan: Pfad, Spur (`n` = neu), Form. */
 export type PlanEntry = [string, TrackKey | 'n', Form];
-export type DayPlan = { d: string; plan: PlanEntry[]; min: number; due: number; fresh: number; ahead: number; moved: number; why: string };
+/** `sp` (V3 Schritt 4): Rückstand, der heute nicht drankommt, je Lerntag (verschoben bzw. als Kernwort morgen zuerst); fehlt ohne Rückstand. */
+export type DayPlan = { d: string; plan: PlanEntry[]; min: number; due: number; fresh: number; ahead: number; moved: number; why: string; sp?: [string, number][] };
 export type Move = { path: string; track: TrackKey; to: string };
 
 /** Minuten für ein neues Lexem: Einführung + Schritt A + Schritt B. */
@@ -113,7 +114,16 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   const plan: PlanEntry[] = [...taken.map((x): PlanEntry => [x.path, x.track, x.form]), ...ahead.map((x): PlanEntry => [x.path, x.track, x.form]), ...fresh.map((p): PlanEntry => [p, 'n', 'intro'])];
   const minutes = Math.round((total / 60_000) * 10) / 10;
   const why = `${taken.length} due, most at risk first · ${fresh.length} new${ahead.length ? ` · ${ahead.length} ahead` : ''}${moves.length ? ` · ${moves.length} spread` : ''}`;
-  return { plan: { d: day, plan, min: minutes, due: taken.length, fresh: fresh.length, ahead: ahead.length, moved: moves.length, why }, moves };
+  // Verteilung des Rückstands für den Start-Bildschirm (ruhige Rückkehr): Verschobene am Zieltag, Kernwörter bleiben fällig und kommen morgen.
+  const spread = new Map<string, number>();
+  const moved = new Map(moves.map((m) => [m.path, m.to]));
+  const tomorrow = addDays(day, 1);
+  for (const x of rest) {
+    const to = moved.get(x.path) ?? tomorrow;
+    spread.set(to, (spread.get(to) ?? 0) + 1);
+  }
+  const sp = [...spread.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  return { plan: { d: day, plan, min: minutes, due: taken.length, fresh: fresh.length, ahead: ahead.length, moved: moves.length, why, ...(sp.length ? { sp } : {}) }, moves };
 }
 
 /** Termin einer Spur auf einen anderen Lerntag legen (Rückstand verteilen), `mv` + 1. Ändert keine FSRS-Werte außer `due`. */

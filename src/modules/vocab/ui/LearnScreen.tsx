@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useSyncExternalStore, type ReactNode } from 'react';
-import { Button, dictLookup, getDb, getWriter, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT } from '../sharedUi';
-import { logError, toUSText } from '../shared';
+import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT } from '../sharedUi';
+import { addDays, logError, toUSText } from '../shared';
 import { checkDict } from '../content';
 import type { SessionKind } from '../domain/session';
 import { VMOD_DAY_PATH } from '../registry';
 import { LearnCard } from './LearnCard';
-import { LearnRun, type DraftStore } from './learnRun';
+import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
 
 // Wörter-Modul V3 Schritt 2b-2: Bildschirm der neuen Lernrunde (Route `vlearn`, nur bei `vcfg.mod = 1`). Liest die Live-Daten einmal beim
 // Start (die Runde rechnet danach mit ihrem eigenen Bestand), bucht jede Antwort beim Weiter und beim Verlassen genau einmal.
@@ -59,8 +59,12 @@ function meaningOf(w: string): string | null {
 /** Obere Übungsleiste (✕, Fortschritt, Pflicht/Extra): kommt vom Bereich, weil das Modul `features/learn` nicht kennt (Isolation). */
 export type LearnTop = (p: { onClose: () => void; progress: { n: number; total: number } | null; ctx: 'duty' | 'extra' }) => ReactNode;
 
-export function LearnScreen({ kind, renderTop }: { kind: SessionKind; renderTop?: LearnTop }) {
+export function LearnScreen({ kind: routeKind, renderTop }: { kind: SessionKind; renderTop?: LearnTop }) {
   const { t, lang } = useT();
+  // „Noch 5“ im Abschluss startet eine neue Runde (Extra) im selben Bildschirm; ein anderer Routen-Parameter beginnt von vorn.
+  const [round, setRound] = useState({ base: routeKind, kind: routeKind, n: 0 });
+  if (round.base !== routeKind) setRound({ base: routeKind, kind: routeKind, n: round.n + 1 });
+  const kind = round.base === routeKind ? round.kind : routeKind;
   const status = useLive((s) => s.status);
   const back = useNav((s) => s.back);
   const switchTab = useNav((s) => s.switchTab);
@@ -69,7 +73,8 @@ export function LearnScreen({ kind, renderTop }: { kind: SessionKind; renderTop?
   }, [lang]);
   const ready = status === 'ready' && getWriter() !== null;
   // Eine Runde je Bildschirm, sobald Live-Daten und Schreibpfad bereit sind.
-  const run = useMemo(() => (ready ? createRun() : null), [ready]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `round.n` erzwingt bewusst eine neue Runde
+  const run = useMemo(() => (ready ? createRun() : null), [ready, round.n]);
 
   // Start mit einer Momentaufnahme der Live-Daten (die Runde führt ihren Bestand danach selbst nach).
   useEffect(() => {
@@ -132,9 +137,19 @@ export function LearnScreen({ kind, renderTop }: { kind: SessionKind; renderTop?
           back={t('vmBack')}
         />
       );
+    case 'start':
+      return frame(null, <Start s={view.s} onGo={() => run?.begin()} />);
     case 'done':
-      if (view.n === 0) return frame(null, <Notice title={t('vmEmptyTitle')} body={t('vmEmpty')} onBack={back} back={t('vmBack')} testId="vm-done" />);
-      return frame(null, <Done fresh={view.fresh} review={view.review} extra={view.extra} onToday={() => switchTab('today')} />);
+      if (view.n === 0 || !view.sum) return frame(null, <Notice title={t('vmEmptyTitle')} body={t('vmEmpty')} onBack={back} back={t('vmBack')} testId="vm-done" />);
+      return frame(
+        null,
+        <Done
+          sum={view.sum}
+          review={view.review + view.extra}
+          onMore={() => setRound((r) => ({ ...r, kind: 'more5', n: r.n + 1 }))}
+          onToday={() => switchTab('today')}
+        />,
+      );
     case 'card':
     case 'band':
       return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
@@ -145,31 +160,178 @@ const noSub = () => () => undefined;
 const LOADING = { k: 'loading' } as const;
 const loadingView = () => LOADING;
 
-/** Abschluss der Runde (UX-Prüfung V3 Nr. 7): getrennte Zahlen statt einer Summe, ein Knopf zurück zu Heute. Alles ist schon gebucht. */
-function Done({ fresh, review, extra, onToday }: { fresh: number; review: number; extra: number; onToday: () => void }) {
-  const { t } = useT();
-  const rows = [
-    { n: fresh, label: t('vmDoneFresh'), id: 'fresh' },
-    { n: review, label: t('vmDoneReview'), id: 'review' },
-    { n: extra, label: t('vmDoneExtra'), id: 'extra' },
-  ].filter((r) => r.n > 0);
+const LOCALES = { de: 'de-DE', en: 'en-US' } as const;
+const msOf = (day: string) => new Date(`${day}T12:00:00`).getTime();
+/** Kurzer Wochentag („Mi“) bzw. Wochentag mit Datum („Fr, 6.11.“) eines Lerntags. */
+const weekday = (lang: 'de' | 'en', day: string) => new Intl.DateTimeFormat(LOCALES[lang], { weekday: 'short' }).format(msOf(day)).replace(/\.$/, '');
+const dayDate = (lang: 'de' | 'en', day: string) => new Intl.DateTimeFormat(LOCALES[lang], { weekday: 'short', day: 'numeric', month: 'numeric' }).format(msOf(day));
+
+/** Text mit einem englischen Wort an der Stelle `{w}` (das Wort in der Lernsprache ausgezeichnet). */
+function WithWord({ text, w }: { text: string; w: string }) {
+  const [a, b = ''] = text.split('\u0000');
   return (
-    <section className="lx-card mx-auto flex w-full max-w-xl flex-col gap-4 p-5" data-testid="vm-done">
-      <div className="flex flex-col gap-1">
-        <h2 className="lx-t-title">{t('vmDoneTitle')}</h2>
-        <p className="lx-t-support text-muted">{t('vmDoneSaved')}</p>
+    <>
+      {a}
+      <span lang="en" className="font-medium">
+        {w}
+      </span>
+      {b}
+    </>
+  );
+}
+
+/**
+ * Start der Pflicht-Runde (Bild B8; nach einer Pause B11 „Willkommen zurück“): Minuten, warum diese Wörter, Mischung bzw. Verteilung des
+ * Rückstands, ein Knopf. Alle Zahlen kommen aus dem eingefrorenen Tagesplan.
+ */
+function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
+  const { t, lang } = useT();
+  const freshText = s.fresh === 1 ? t('vmStartWhyFresh1') : t('vmStartWhyFresh', { n: s.fresh });
+  const spread = s.sp ? [[s.today, s.due + s.ahead] as [string, number], ...s.sp] : null;
+  const maxN = spread ? Math.max(...spread.map((x) => x[1]), 1) : 1;
+  return (
+    <section className="flex w-full flex-col gap-4 px-4 sm:px-0" data-testid="vm-start">
+      <div className="lx-card mx-auto flex w-full max-w-xl flex-col gap-4 p-5">
+        <div className="lx-t-label text-muted" data-testid="vm-start-label">
+          {t(s.back ? 'vmStartBack' : 'vmStartToday')}
+        </div>
+        <h2 className="lx-t-title" data-testid="vm-start-title">
+          {t('vmStartTitle', { min: s.min })}
+        </h2>
+        {spread ? (
+          <>
+            <p className="lx-t-body" data-testid="vm-start-why">
+              <b>{t('vmStartBackDue', { n: spread.reduce((a, x) => a + x[1], 0) })}</b>{' '}
+              {t('vmStartBackToday', { n: s.due + s.ahead, day: weekday(lang, spread[spread.length - 1]![0]) })}
+            </p>
+            <div className="flex items-end gap-3" role="img" aria-label={t('vmStartSpreadLabel')} data-testid="vm-start-spread">
+              {spread.map(([d, n], i) => (
+                <div key={d} className="flex min-w-0 flex-1 flex-col items-center gap-1">
+                  <b className="lx-t-support tabular-nums">{n}</b>
+                  <i className={`block w-full rounded-md ${i === 0 ? 'bg-accent' : 'bg-surface-strong'}`} style={{ height: `${Math.round(8 + (n / maxN) * 56)}px` }} />
+                  <span className="lx-t-meta text-muted">{i === 0 ? t('vmToday') : weekday(lang, d)}</span>
+                </div>
+              ))}
+            </div>
+            {s.fresh > 0 && <p className="lx-t-support text-muted">{s.fresh === 1 ? t('vmStartBackFresh1') : t('vmStartBackFresh', { n: s.fresh })}</p>}
+          </>
+        ) : (
+          <>
+            <p className="lx-t-body" data-testid="vm-start-why">
+              <b>{t('vmStartWhy')}</b> {[s.due > 0 ? t('vmStartWhyDue', { n: s.due }) : null, s.ahead > 0 ? t('vmStartWhyAhead', { n: s.ahead }) : null, s.fresh > 0 ? `${freshText}${s.fewer ? ` ${t('vmStartFewer')}` : ''}` : null].filter(Boolean).join(' · ')}
+            </p>
+            <div className="flex flex-col gap-1.5" aria-hidden="true">
+              <div className="flex h-2.5 gap-1 overflow-hidden rounded-full" data-testid="vm-start-mix">
+                {s.due > 0 && <span className="bg-accent rounded-full" style={{ flex: s.due }} />}
+                {s.ahead > 0 && <span className="bg-line-strong rounded-full" style={{ flex: s.ahead }} />}
+                {s.fresh > 0 && <span className="bg-ok-text rounded-full" style={{ flex: s.fresh }} />}
+              </div>
+              <div className="lx-t-meta text-muted flex justify-between gap-2">
+                {s.due > 0 && <span>{t('vmStartSegDue', { n: s.due })}</span>}
+                {s.ahead > 0 && <span>{t('vmStartSegAhead', { n: s.ahead })}</span>}
+                {s.fresh > 0 && <span>{t('vmStartSegFresh', { n: s.fresh })}</span>}
+              </div>
+            </div>
+          </>
+        )}
+        <Button variant="primary" onClick={onGo} data-testid="vm-start-go">
+          {t('vmStartGo')}
+        </Button>
       </div>
-      <dl className="flex flex-col gap-2">
-        {rows.map((r) => (
-          <div key={r.id} className="flex items-baseline justify-between gap-3" data-testid={`vm-done-${r.id}`}>
-            <dt className="lx-t-support">{r.label}</dt>
-            <dd className="lx-t-title tabular-nums">{r.n}</dd>
+      <p className="lx-t-meta text-muted mx-auto flex max-w-xl items-start gap-2" data-testid="vm-start-lock">
+        <Icon name="lock" size={14} aria-hidden="true" />
+        <span>{t('vmStartLock')}</span>
+      </p>
+    </section>
+  );
+}
+
+/**
+ * Abschluss der Runde (Bild B8): Minuten und Pflicht/Extra, dann je Zeile Gelerntes, Wiederholtes, Aufgestiegenes, Gestolpertes mit nächstem
+ * Termin und die Vorschau auf morgen. „Noch 5“ als ruhiger zweiter Weg, „Fertig“ zurück zu Heute. Alles ist schon gebucht.
+ */
+function Done({ sum, review, onMore, onToday }: { sum: DoneSummary; review: number; onMore: () => void; onToday: () => void }) {
+  const { t, lang } = useT();
+  const W = '\u0000';
+  const tomorrow = addDays(sum.today, 1);
+  const rows: { id: string; icon: 'plus' | 'refresh' | 'sparkle' | 'close' | 'arrowRight'; label: string; body: ReactNode }[] = [];
+  if (sum.learned.length)
+    rows.push({
+      id: 'learned',
+      icon: 'plus',
+      label: t('vmDoneLearned'),
+      body: (
+        <>
+          <b>{sum.learned.length === 1 ? t('vmDoneLearned1') : t('vmDoneLearnedN', { n: sum.learned.length })}</b>{' '}
+          <span lang="en">{sum.learned.join(', ')}</span>
+        </>
+      ),
+    });
+  if (review > 0) rows.push({ id: 'review', icon: 'refresh', label: t('vmDoneRepeated'), body: <b>{review === 1 ? t('vmDoneRepeated1') : t('vmDoneRepeatedN', { n: review })}</b> });
+  if (sum.up.n > 0)
+    rows.push({
+      id: 'up',
+      icon: 'sparkle',
+      label: t('vmDoneUp'),
+      body: (
+        <>
+          <b>{sum.up.n === 1 ? t('vmDoneUp1') : t('vmDoneUpN', { n: sum.up.n })}</b>{' '}
+          {sum.up.w && <WithWord w={sum.up.w} text={sum.up.produce ? t('vmDoneUpProduce', { w: W }) : t('vmDoneUpLevel', { w: W, lv: sum.up.lv })} />}
+        </>
+      ),
+    });
+  if (sum.slips.n > 0)
+    rows.push({
+      id: 'slips',
+      icon: 'close',
+      label: t('vmDoneSlips'),
+      body: (
+        <>
+          <b>{sum.slips.n}:</b>{' '}
+          {sum.slips.list.map((x, i) => (
+            <span key={x.w}>
+              {i > 0 && ', '}
+              <WithWord w={x.w} text={x.day === tomorrow ? t('vmDoneSlipTomorrow', { w: W }) : t('vmDoneSlipOn', { w: W, date: dayDate(lang, x.day) })} />
+            </span>
+          ))}
+          {sum.slips.n > sum.slips.list.length && <>, {t('vmDoneMore', { n: sum.slips.n - sum.slips.list.length })}</>}
+        </>
+      ),
+    });
+  if (sum.tomorrow)
+    rows.push({ id: 'tomorrow', icon: 'arrowRight', label: t('vmDoneTomorrow'), body: <b>{t('vmDoneTomorrowLine', { min: sum.tomorrow.min, due: sum.tomorrow.due, fresh: sum.tomorrow.fresh })}</b> });
+  return (
+    <section className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 pt-4 sm:px-0" data-testid="vm-done">
+      <div className="flex flex-col items-center gap-3 text-center">
+        <span className="bg-ok-soft text-ok-text flex h-14 w-14 items-center justify-center rounded-full" aria-hidden="true">
+          <Icon name="check" size={28} />
+        </span>
+        <h2 className="lx-t-title">{t('vmDoneWords')}</h2>
+        <p className="lx-t-support text-muted" data-testid="vm-done-min">
+          {t(sum.duty ? 'vmDoneMinDuty' : 'vmDoneMinExtra', { min: sum.min })}
+        </p>
+      </div>
+      <dl className="lx-card flex flex-col px-4 py-1">
+        {rows.map((r, i) => (
+          <div key={r.id} className={`flex items-start gap-3 py-3 ${i > 0 ? 'border-line border-t' : ''}`} data-testid={`vm-done-${r.id}`}>
+            <span className="text-muted mt-0.5 shrink-0" aria-hidden="true">
+              <Icon name={r.icon} size={18} />
+            </span>
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <dt className="lx-t-label text-muted">{r.label}</dt>
+              <dd className="lx-t-body">{r.body}</dd>
+            </div>
           </div>
         ))}
       </dl>
-      <Button variant="primary" onClick={onToday} data-testid="vm-back">
-        {t('vmToToday')}
-      </Button>
+      <div className="flex gap-3">
+        <Button variant="secondary" className="flex-1" onClick={onMore} data-testid="vm-more5">
+          {t('vmDoneMore5')}
+        </Button>
+        <Button variant="primary" className="flex-1" onClick={onToday} data-testid="vm-back">
+          {t('vmDoneFinish')}
+        </Button>
+      </div>
     </section>
   );
 }
