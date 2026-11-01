@@ -3,6 +3,8 @@ import { type Catalog, danger, dueOn, isNewLex } from './catalog';
 import type { DayPlan } from './day';
 import { mayPlan, RETRY_GAP, STEP_A_GAP, STEP_B_GAP, STEP_B_MS } from './planner';
 import { hash32 } from './rand';
+import { CUE_MAX_LV } from './forms';
+import { FORM_SPEC } from './grade';
 import type { Form, Lex, VocabCfg } from './types';
 
 // Wörter-Modul V1: Ablauf einer Runde (plan.md §2.2 `startSession`, §4.3 Lernschritte, §4.4; M9 Regel, M12, M72 Grundform, N2).
@@ -19,7 +21,8 @@ export const TRANSFER_MIN = 3;
 export const TRANSFER_MAX = 5;
 
 /** `step`: 0 kein Lernschritt · 1 Schritt A · 2 Schritt B · 3 Wiederkehr nach Fehler. */
-export type Task = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro: boolean; planned: boolean; why: string; group?: string[] };
+/** V2: `sent` mit/ohne englischen Satz, `cue` „Gesucht: …“ an der Lücke (M25, bis Stufe 4). */
+export type Task = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro: boolean; planned: boolean; why: string; group?: string[]; sent: 's' | 'n' | '-'; cue: boolean };
 
 type Slot = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro?: boolean; why: string; group?: string[]; afterCard?: number; afterMs?: number; evidence?: boolean };
 
@@ -68,16 +71,16 @@ export class SessionRun {
         if (!l || !notCarried(path)) continue;
         if (track === 'n') {
           if (l.intro === null) fresh.push({ path, form: 'intro', step: 0, intro: true, why: 'new' });
-        } else if (l.day !== day) reviews.push({ path, form: dueOn(l, day)?.form ?? form, step: 0, why: 'due' });
+        } else if (l.day !== day) reviews.push({ path, form: dueOn(l, day, this.cat.get(path)?.av)?.form ?? form, step: 0, why: 'due' });
       }
       this.queue = interleave(reviews, fresh);
       this.queue.push(...this.transferSlot(nowMs));
     } else if (this.kind === 'more5' || this.kind === 'free') {
       const n = this.kind === 'more5' ? 5 : FREE_SIZE;
       const due = items
-        .filter((it) => notCarried(it.path) && !this.seen.has(it.path) && it.lex.day !== day && dueOn(it.lex, day))
+        .filter((it) => notCarried(it.path) && !this.seen.has(it.path) && it.lex.day !== day && !this.cat.rests(it.path) && dueOn(it.lex, day, it.av))
         .sort((a, b) => danger(a.lex, nowMs) - danger(b.lex, nowMs) || a.path.localeCompare(b.path));
-      const out: Slot[] = due.slice(0, n).map((it) => ({ path: it.path, form: dueOn(it.lex, day)!.form, step: 0, why: 'due' }));
+      const out: Slot[] = due.slice(0, n).map((it) => ({ path: it.path, form: dueOn(it.lex, day, it.av)!.form, step: 0, why: 'due' }));
       const introduced = items.filter((it) => it.lex.intro === day).length;
       const quota = Math.max(0, this.opts.cfg.newPerDay - introduced);
       const fresh = items.filter((it) => isNewLex(it.lex)).sort((a, b) => a.order - b.order || a.path.localeCompare(b.path));
@@ -139,7 +142,9 @@ export class SessionRun {
     // Pflicht, „Noch 5“ und freie Runde nehmen nur Fälliges/Geplantes; die anderen Wege buchen nur Fälliges oder Gefährdetes (mayPlan).
     const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes';
     const planned = !!l && !s.evidence && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
-    return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned ? s.why : 'practice', ...(s.group ? { group: s.group } : {}) };
+    const sent = FORM_SPEC[s.form].sent;
+    const cue = sent === 's' && FORM_SPEC[s.form].track === 'b' && (l?.lv ?? 1) <= CUE_MAX_LV;
+    return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };
   }
 
   /** Nächste Aufgabe oder `null` (Runde zu Ende; offene Lernschritte bleiben in `lex.step` für die nächste Runde des Lerntags). */

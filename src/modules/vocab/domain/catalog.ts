@@ -1,5 +1,7 @@
 import { addDays, dayKey, dayStartOf, daysBetween } from '../shared';
+import { type Avail, pickForm } from './forms';
 import { retr } from './tracks';
+import { LEECH_AT, PAIR_HOLD_DAYS } from './leech';
 import { DEFAULT_FORM_MS, type Form, type FormStats, type Lex, type TrackKey } from './types';
 
 // Wörter-Modul V1: Bestand im Speicher (Lexeme mit Geschwistern) und erwartete Last je Tag in MINUTEN (M11, M63).
@@ -10,7 +12,14 @@ export type Item = {
   /** Reihenfolge neuer Lexeme (altes Feld `order`, sonst Zeitpunkt). */
   order: number;
   hidden?: boolean;
+  /** V2: Inhalt für die Formen (Satzbank, Partner, Situation, Ton …). Fehlt es, nur die Grundformen. */
+  av?: Avail;
+  /** V2: Paar-Art aus Lehrer-Charge 1 (`pair` echtes englisches Paar → Paar-Regel; `ff` falscher Freund → Kontrastkarte statt Pause). */
+  trap?: 'pair' | 'ff' | null;
 };
+
+/** Grundformen, wenn nichts über den Inhalt bekannt ist (jedes Lexem hat Ursprungssatz und deutschen Chunk). */
+export const BASE_AVAIL: Avail = { de: true };
 
 export const isNewLex = (l: Lex): boolean => l.intro === null;
 
@@ -19,20 +28,20 @@ export function formMs(f: Form, med: FormStats): number {
 }
 
 /** Welche Spur ist am Lerntag `day` fällig, und mit welcher Form? (Beide fällig → Benutzen; ohne Benutzen-Spur → Lücke, die sie anlegt.) */
-export function dueOn(l: Lex, day: string): { track: TrackKey; form: Form } | null {
+export function dueOn(l: Lex, day: string, av: Avail = BASE_AVAIL): { track: TrackKey; form: Form } | null {
   if (isNewLex(l)) return null;
   const end = dayStartOf(addDays(day, 1));
   const bDue = !!l.b && l.b.due < end;
   const uDue = l.u.due < end;
-  if (bDue) return { track: 'b', form: formFor(l) };
-  if (uDue) return l.b ? { track: 'u', form: 'meaning' } : { track: 'b', form: 'gap' };
+  if (bDue) return { track: 'b', form: formFor(l, av) };
+  if (uDue) return l.b ? { track: 'u', form: pickForm(l, 'u', av).form } : { track: 'b', form: 'gap' };
   return null;
 }
 
-/** Form einer fälligen Benutzen-Abfrage (V1): ab Stufe 4 jeder 3. Abruf ohne Satz (M27), sonst Lücke im Satz. V2 baut die Leiter aus. */
-export function formFor(l: Lex): Form {
+/** Form einer fälligen Benutzen-Abfrage (V2: Leiter je Stufe, schwächste Form zuerst, ab Stufe 4 jeder 3. ohne Satz; `forms.ts`). */
+export function formFor(l: Lex, av: Avail = BASE_AVAIL): Form {
   if (!l.b) return 'gap';
-  return l.lv >= 4 && l.b.reps % 3 === 2 ? 'nosent' : 'gap';
+  return pickForm(l, 'b', av).form;
 }
 
 /** Gefährdung: Abrufwahrscheinlichkeit der führenden Spur (kleiner = gefährdeter). */
@@ -66,6 +75,21 @@ export class Catalog {
   get(path: string): Item | undefined {
     return this.byPath.get(path);
   }
+  /**
+   * Paar-Regel (M14): Ein Lexem ruht, solange sein englischer Verwechslungspartner ein Problemwort ist (≥ 6 Fehler, mehr als dieses)
+   * und noch nicht 7 Tage hält. Falsche Freunde ruhen nie (sie bekommen eine Kontrastkarte).
+   */
+  rests(path: string): boolean {
+    const it = this.byPath.get(path);
+    if (!it?.lex.pair || it.trap === 'ff') return false;
+    const p = this.byPath.get(it.lex.pair);
+    if (!p || p.trap === 'ff' || p.lex.lc < LEECH_AT || p.lex.lc <= it.lex.lc) return false;
+    return (p.lex.b ?? p.lex.u).s < PAIR_HOLD_DAYS;
+  }
+  /** Lexeme, deren Kernwort `path` ist (Wortpartner, M56: beim Kollokationsfehler am Einzelwort markieren). */
+  partnersOf(path: string): string[] {
+    return [...this.byPath.values()].filter((it) => it.lex.core === path).map((it) => it.path);
+  }
   set(path: string, lex: Lex): void {
     const it = this.byPath.get(path);
     if (it) this.byPath.set(path, { ...it, lex });
@@ -92,8 +116,8 @@ export function loadByDay(cat: Catalog, med: FormStats, exclude?: string): Map<s
     const l = it.lex;
     const bd = l.b ? dayKey(l.b.due) : null;
     const ud = dayKey(l.u.due);
-    if (bd) add(bd, formMs(formFor(l), med));
-    if (ud !== bd) add(ud, formMs(l.b ? 'meaning' : 'gap', med));
+    if (bd) add(bd, formMs(formFor(l, it.av), med));
+    if (ud !== bd) add(ud, formMs(l.b ? pickForm(l, 'u', it.av ?? BASE_AVAIL).form : 'gap', med));
   }
   return m;
 }

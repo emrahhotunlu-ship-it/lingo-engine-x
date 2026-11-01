@@ -43,7 +43,12 @@ function sample(f: Form, ms: number): void {
   samples.set(f, l);
 }
 
-const INPUT: Record<Form, InputKind> = { intro: 'choice', gap: 'typed', nosent: 'typed', gap_hint: 'hint', meaning: 'meaning', listen: 'typed', choice: 'choice', flip: 'choice', transfer: 'transfer' };
+// Eingabeart des simulierten Lerners je Form: frei getippt, mit Stütze (`hint`), Bedeutung, Satz/Transfer, Auswahl.
+const INPUT: Record<Form, InputKind> = {
+  intro: 'choice', probe: 'typed', gap: 'typed', nosent: 'typed', de_sent: 'typed', gap_hint: 'hint', cloze_part: 'hint', complete: 'hint', prep: 'hint', count: 'hint', particle: 'hint',
+  partner: 'typed', family: 'typed', situation: 'typed', diplomatic: 'sentence', own: 'sentence', say: 'typed', transfer: 'transfer',
+  listen: 'hint', dictation: 'hint', tiles: 'hint', meaning: 'meaning', tone_mean: 'meaning', flip: 'choice', choice: 'choice', find_trap: 'choice', contrast: 'choice',
+};
 const toOutcome = (o: Outcome): VOutcome => (o.verdict === 'correct' ? 'ok' : o.verdict === 'near' ? 'typo' : 'wrong');
 
 function ctxFor(path: string, nowMs: number, planned: boolean): PlanCtx {

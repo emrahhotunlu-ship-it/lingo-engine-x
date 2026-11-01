@@ -55,8 +55,27 @@ const ARTICLES = /^(the|a|an)\s+/;
 const PRONOUNS = new Set(['it', 'them', 'him', 'her', 'me', 'us', 'you', 'this', 'that']);
 export const PREPOSITIONS = new Set(['about', 'at', 'by', 'for', 'from', 'in', 'into', 'of', 'on', 'onto', 'to', 'until', 'with', 'within', 'over', 'under', 'against', 'towards', 'toward', 'through', 'during', 'since', 'after', 'before']);
 
-/** (g) Angleichen: Groß/klein, typografische Apostrophe und Anführungen, Leerraum, Satzzeichen am Rand. */
+/** Kurzformen gelten wie die Langform (*I'm* = *I am*, english-teacher V2, Charge 3 Teil 2). */
+const CONTRACTIONS: readonly [RegExp, string][] = [
+  [/\b(i|you|we|they)'re\b/g, '$1 are'],
+  [/\bi'm\b/g, 'i am'],
+  [/\b(it|that|what|there|here|he|she|who)'s\b/g, '$1 is'],
+  [/\b(i|you|we|they|he|she|it|that|there)'d\b/g, '$1 would'],
+  [/\b(i|you|we|they|he|she|it|that|there)'ll\b/g, '$1 will'],
+  [/\b(i|you|we|they)'ve\b/g, '$1 have'],
+  [/\bcan't\b/g, 'cannot'],
+  [/\bwon't\b/g, 'will not'],
+  [/\b(do|does|did|is|are|was|were|has|have|had|would|should|could|must|need)n't\b/g, '$1 not'],
+];
+
+/** (g) Angleichen: Groß/klein, typografische Apostrophe und Anführungen, Leerraum, Satzzeichen am Rand, Kurzformen. */
 export function normalize(s: string): string {
+  let out = normalizeRaw(s);
+  for (const [re, rep] of CONTRACTIONS) out = out.replace(re, rep);
+  return out.replace(/\bcan not\b/g, 'cannot');
+}
+
+function normalizeRaw(s: string): string {
   return s
     .normalize('NFC')
     .replace(/[‘’ʼ`´]/g, "'")

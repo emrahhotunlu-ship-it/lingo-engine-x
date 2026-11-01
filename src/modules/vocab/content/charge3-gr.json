@@ -3,8 +3,88 @@
  "charge": 3,
  "review": {
   "by": "english-teacher",
-  "passes": [],
-  "date": null
+  "passes": [
+   {
+    "n": 1,
+    "items": "1-40",
+    "ok": 34,
+    "fixed": 6
+   },
+   {
+    "n": 2,
+    "items": "41-80",
+    "ok": 32,
+    "fixed": 8
+   },
+   {
+    "n": 3,
+    "items": "81-120",
+    "ok": 31,
+    "fixed": 9
+   },
+   {
+    "n": 4,
+    "items": "121-160",
+    "ok": 31,
+    "fixed": 9
+   },
+   {
+    "n": 5,
+    "items": "161-200",
+    "ok": 34,
+    "fixed": 6
+   },
+   {
+    "n": 6,
+    "items": "201-240",
+    "ok": 34,
+    "fixed": 6
+   },
+   {
+    "n": 7,
+    "items": "241-280",
+    "ok": 32,
+    "fixed": 8
+   },
+   {
+    "n": 8,
+    "items": "281-320",
+    "ok": 16,
+    "fixed": 26
+   },
+   {
+    "n": 9,
+    "items": "321-360",
+    "ok": 22,
+    "fixed": 19
+   },
+   {
+    "n": 10,
+    "items": "361-400",
+    "ok": 33,
+    "fixed": 9
+   },
+   {
+    "n": 11,
+    "items": "401-440",
+    "ok": 34,
+    "fixed": 7
+   },
+   {
+    "n": 12,
+    "items": "441-480",
+    "ok": 31,
+    "fixed": 9
+   },
+   {
+    "n": 13,
+    "items": "481-483",
+    "ok": 3,
+    "fixed": 0
+   }
+  ],
+  "date": "2026-11-01",
+  "recheck": null
  },
  "items": [
   {
@@ -65,8 +145,11 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "pat": "postpone sth"
-   }
+    "pat": "postpone sth / postpone doing sth"
+   },
+   "wrong": [
+    "postpone to do"
+   ]
   },
   {
    "head": "require",
@@ -95,8 +178,7 @@
     "pat": "despite sth"
    },
    "wrong": [
-    "despite of",
-    "despite that"
+    "despite of"
    ]
   },
   {
@@ -218,7 +300,8 @@
     "pat": "get used to sth/doing sth"
    },
    "wrong": [
-    "get used to do"
+    "get used to do",
+    "get use to"
    ]
   },
   {
@@ -266,7 +349,12 @@
    "reg": "n",
    "gr": {
     "pat": "afford sth / afford to do sth"
-   }
+   },
+   "wrong": [
+    "afford myself",
+    "afford ourselves",
+    "afford doing"
+   ]
   },
   {
    "head": "persuade",
@@ -352,7 +440,12 @@
    "reg": "n",
    "gr": {
     "pat": "lack sth"
-   }
+   },
+   "wrong": [
+    "lacks of",
+    "lacking of",
+    "lacked of"
+   ]
   },
   {
    "head": "replace",
@@ -381,8 +474,8 @@
     "pat": "complain about sth"
    },
    "wrong": [
-    "complain for",
-    "complain on"
+    "complain over",
+    "complain for"
    ]
   },
   {
@@ -411,7 +504,10 @@
    "head": "address concerns",
    "src": "pack:colloc-01",
    "k": "col",
-   "reg": "n"
+   "reg": "n",
+   "wrong": [
+    "solve concerns"
+   ]
   },
   {
    "head": "raise concerns",
@@ -499,10 +595,7 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "secure buy-in from sb",
-    "var": [
-     "get buy-in"
-    ]
+    "pat": "secure buy-in from sb"
    }
   },
   {
@@ -539,7 +632,6 @@
    "gr": {
     "pat": "stick to sth",
     "var": [
-     "keep to the timeline",
      "adhere to the timeline"
     ]
    },
@@ -596,10 +688,7 @@
    "k": "col",
    "reg": "f",
    "gr": {
-    "pat": "make a case for sth",
-    "var": [
-     "make a strong case"
-    ]
+    "pat": "make a case for sth"
    },
    "wrong": [
     "make a case about"
@@ -649,10 +738,7 @@
    "k": "col",
    "reg": "i",
    "gr": {
-    "pat": "keep sb in the loop (about/on sth)",
-    "var": [
-     "keep sb posted"
-    ]
+    "pat": "keep sb in the loop (about/on sth)"
    },
    "wrong": [
     "keep sb in loop",
@@ -784,12 +870,7 @@
    "head": "I see where you are coming from",
    "src": "pack:frame-10",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "I can see your point"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "with that in mind",
@@ -815,10 +896,7 @@
    "k": "ch",
    "reg": "f",
    "gr": {
-    "pat": "in light of sth",
-    "var": [
-     "in view of"
-    ]
+    "pat": "in light of sth"
    }
   },
   {
@@ -836,12 +914,7 @@
    "head": "for the time being",
    "src": "pack:frame-15",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "for now"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "would it be fair to say",
@@ -867,7 +940,6 @@
    "reg": "n",
    "gr": {
     "var": [
-     "in other words",
      "put another way"
     ]
    }
@@ -889,10 +961,7 @@
    "k": "ch",
    "reg": "i",
    "gr": {
-    "pat": "circle back to sth",
-    "var": [
-     "let us come back to"
-    ]
+    "pat": "circle back to sth"
    }
   },
   {
@@ -942,7 +1011,7 @@
    "head": "iron out",
    "src": "pack:phrasal-05",
    "k": "pv",
-   "reg": "i",
+   "reg": "n",
    "gr": {
     "pat": "iron out sth",
     "sep": 1
@@ -996,7 +1065,7 @@
    "k": "pv",
    "reg": "n",
    "gr": {
-    "pat": "step in",
+    "pat": "step in (to do sth)",
     "sep": 0
    }
   },
@@ -1046,6 +1115,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
+    "pat": "trade-off between A and B",
     "cnt": "c"
    }
   },
@@ -1092,7 +1162,13 @@
    "head": "leverage",
    "src": "pack:word-07",
    "k": "w",
-   "reg": "n"
+   "reg": "n",
+   "gr": {
+    "pat": "leverage sth"
+   },
+   "wrong": [
+    "leverage on"
+   ]
   },
   {
    "head": "streamline",
@@ -1139,7 +1215,7 @@
    "k": "w",
    "reg": "f",
    "gr": {
-    "pat": "rationale for sth",
+    "pat": "rationale for/behind sth",
     "cnt": "c"
    }
   },
@@ -1149,7 +1225,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -1191,11 +1267,14 @@
   {
    "head": "single source of truth",
    "src": "pack:tech-04",
-   "k": "w",
+   "k": "ch",
    "reg": "n",
    "gr": {
     "cnt": "c"
-   }
+   },
+   "wrong": [
+    "single point of truth"
+   ]
   },
   {
    "head": "role-based access",
@@ -1262,12 +1341,7 @@
    "head": "tamper-proof",
    "src": "pack:tech-11",
    "k": "w",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "tamper-resistant"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "document lifecycle",
@@ -1291,7 +1365,7 @@
    "head": "compliance",
    "src": "pack:family-01",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "pat": "compliance with sth",
     "cnt": "u"
@@ -1304,7 +1378,7 @@
    "head": "compliant",
    "src": "pack:family-02",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "pat": "be compliant with sth"
    },
@@ -1367,7 +1441,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -1382,7 +1456,10 @@
    "k": "ch",
    "reg": "i",
    "gr": {
-    "cnt": "c"
+    "cnt": "c",
+    "var": [
+     "ballpark estimate"
+    ]
    }
   },
   {
@@ -1424,12 +1501,7 @@
    "head": "back to the drawing board",
    "src": "pack:idiom-07",
    "k": "ch",
-   "reg": "i",
-   "gr": {
-    "var": [
-     "back to square one"
-    ]
-   }
+   "reg": "i"
   },
   {
    "head": "conduct an audit",
@@ -1443,8 +1515,7 @@
     ]
    },
    "wrong": [
-    "make an audit",
-    "do an audit"
+    "make an audit"
    ]
   },
   {
@@ -1536,7 +1607,10 @@
     "var": [
      "draft a contract"
     ]
-   }
+   },
+   "wrong": [
+    "set up a contract"
+   ]
   },
   {
    "head": "terminate a contract",
@@ -1634,10 +1708,7 @@
    "reg": "f",
    "gr": {
     "pat": "allocate sth to sb/sth"
-   },
-   "wrong": [
-    "allocate for"
-   ]
+   }
   },
   {
    "head": "manage expectations",
@@ -1667,8 +1738,7 @@
    "reg": "f",
    "gr": {
     "var": [
-     "postpone a decision",
-     "delay a decision"
+     "postpone a decision"
     ]
    }
   },
@@ -1676,12 +1746,7 @@
    "head": "chair a meeting",
    "src": "pack:colloc-49",
    "k": "col",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "lead a meeting"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "take minutes",
@@ -1694,8 +1759,9 @@
     ]
    },
    "wrong": [
-    "write minutes",
-    "make minutes"
+    "make minutes",
+    "write the protocol",
+    "keep the protocol"
    ]
   },
   {
@@ -1827,6 +1893,8 @@
     "pat": "bear the cost of sth"
    },
    "wrong": [
+    "carry the cost",
+    "carry the costs",
     "wear the costs"
    ]
   },
@@ -1851,7 +1919,10 @@
     "var": [
      "overrun the budget"
     ]
-   }
+   },
+   "wrong": [
+    "overstep the budget"
+   ]
   },
   {
    "head": "stay within budget",
@@ -2068,7 +2139,7 @@
    "reg": "n",
    "gr": {
     "var": [
-     "in summary"
+     "to summarize"
     ]
    }
   },
@@ -2091,8 +2162,7 @@
    "reg": "f",
    "gr": {
     "var": [
-     "with respect to",
-     "with reference to"
+     "with respect to"
     ]
    },
    "wrong": [
@@ -2184,11 +2254,7 @@
    "k": "ch",
    "reg": "f",
    "gr": {
-    "pat": "with the exception of sb/sth",
-    "var": [
-     "apart from",
-     "except for"
-    ]
+    "pat": "with the exception of sb/sth"
    },
    "wrong": [
     "with exception of"
@@ -2201,13 +2267,13 @@
    "reg": "n",
    "gr": {
     "var": [
-     "from my point of view",
-     "in my view"
+     "from my point of view"
     ]
    },
    "wrong": [
     "in my point of view",
-    "from my opinion"
+    "from my opinion",
+    "after my opinion"
    ]
   },
   {
@@ -2345,13 +2411,9 @@
    "k": "pv",
    "reg": "n",
    "gr": {
-    "pat": "opt for sth",
+    "pat": "opt for sth / opt to do sth",
     "sep": 0
-   },
-   "wrong": [
-    "opt to sth",
-    "opt on"
-   ]
+   }
   },
   {
    "head": "buy into",
@@ -2398,8 +2460,7 @@
     "sep": 0
    },
    "wrong": [
-    "come up it",
-    "come up for"
+    "come up it"
    ]
   },
   {
@@ -2550,12 +2611,7 @@
    "head": "concise",
    "src": "pack:word-26",
    "k": "w",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "succinct"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "pragmatic",
@@ -2567,12 +2623,7 @@
    "head": "tentative",
    "src": "pack:word-28",
    "k": "w",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "provisional"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "substantial",
@@ -2596,12 +2647,7 @@
    "head": "meticulous",
    "src": "pack:word-32",
    "k": "w",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "painstaking"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "reluctant",
@@ -2609,10 +2655,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "pat": "be reluctant to do sth",
-    "var": [
-     "hesitant"
-    ]
+    "pat": "be reluctant to do sth"
    }
   },
   {
@@ -2663,10 +2706,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "pat": "jeopardize sth",
-    "var": [
-     "endanger"
-    ]
+    "pat": "jeopardize sth"
    }
   },
   {
@@ -2720,7 +2760,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -2741,7 +2781,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -2825,7 +2865,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -2928,7 +2968,7 @@
    "head": "transparency",
    "src": "pack:family-09",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "cnt": "u"
    }
@@ -2946,7 +2986,7 @@
    "head": "implementation",
    "src": "pack:family-11",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "pat": "implementation of sth",
     "cnt": "uc"
@@ -2956,7 +2996,7 @@
    "head": "authorization",
    "src": "pack:family-12",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "cnt": "uc"
    }
@@ -2965,7 +3005,7 @@
    "head": "sustainability",
    "src": "pack:family-13",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "cnt": "u"
    }
@@ -2991,11 +3031,6 @@
    "src": "pack:colloc-79",
    "k": "col",
    "reg": "n",
-   "gr": {
-    "var": [
-     "bring up a point"
-    ]
-   },
    "wrong": [
     "rise a point"
    ]
@@ -3005,11 +3040,6 @@
    "src": "pack:colloc-83",
    "k": "col",
    "reg": "n",
-   "gr": {
-    "var": [
-     "come to a decision"
-    ]
-   },
    "wrong": [
     "do a decision"
    ]
@@ -3020,10 +3050,7 @@
    "k": "ch",
    "reg": "n",
    "gr": {
-    "pat": "take sth into account",
-    "var": [
-     "take into consideration"
-    ]
+    "pat": "take sth into account"
    },
    "wrong": [
     "take in account"
@@ -3044,7 +3071,6 @@
    "k": "col",
    "reg": "n",
    "wrong": [
-    "make a meeting",
     "do a meeting"
    ]
   },
@@ -3063,10 +3089,7 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "file a report on sth",
-    "var": [
-     "submit a report"
-    ]
+    "pat": "file a report on sth"
    }
   },
   {
@@ -3108,14 +3131,8 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "gain an advantage over sb",
-    "var": [
-     "gain an edge"
-    ]
-   },
-   "wrong": [
-    "gain an advantage against"
-   ]
+    "pat": "gain an advantage over sb"
+   }
   },
   {
    "head": "withstand pressure",
@@ -3127,12 +3144,7 @@
    "head": "exercise caution",
    "src": "pack:colloc-105",
    "k": "col",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "use caution"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "cast doubt on",
@@ -3140,10 +3152,7 @@
    "k": "col",
    "reg": "f",
    "gr": {
-    "pat": "cast doubt on sth",
-    "var": [
-     "throw doubt on"
-    ]
+    "pat": "cast doubt on sth"
    },
    "wrong": [
     "cast doubt in",
@@ -3156,14 +3165,11 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "keep pace with sb/sth",
-    "var": [
-     "keep up with"
-    ]
+    "pat": "keep pace with sb/sth"
    },
    "wrong": [
     "keep pace to",
-    "keep pace by"
+    "hold pace with"
    ]
   },
   {
@@ -3172,10 +3178,7 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "bridge the gap between A and B",
-    "var": [
-     "close the gap"
-    ]
+    "pat": "bridge the gap between A and B"
    }
   },
   {
@@ -3185,10 +3188,7 @@
    "reg": "n",
    "gr": {
     "pat": "take the lead in sth"
-   },
-   "wrong": [
-    "take the lead at"
-   ]
+   }
   },
   {
    "head": "draw a distinction",
@@ -3206,12 +3206,7 @@
    "head": "reach capacity",
    "src": "pack:colloc-117",
    "k": "col",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "hit capacity"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "voice an opinion",
@@ -3219,13 +3214,11 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "voice an opinion on sth",
-    "var": [
-     "express an opinion"
-    ]
+    "pat": "voice an opinion on sth"
    },
    "wrong": [
-    "voice out an opinion"
+    "say an opinion",
+    "tell an opinion"
    ]
   },
   {
@@ -3234,10 +3227,7 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "make an exception for sb/sth",
-    "var": [
-     "grant an exception"
-    ]
+    "pat": "make an exception for sb/sth"
    },
    "wrong": [
     "do an exception"
@@ -3249,10 +3239,7 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "gain access to sth",
-    "var": [
-     "obtain access to"
-    ]
+    "pat": "gain access to sth"
    },
    "wrong": [
     "gain access on",
@@ -3292,10 +3279,7 @@
    "k": "col",
    "reg": "n",
    "gr": {
-    "pat": "take a stand on sth",
-    "var": [
-     "take a position on"
-    ]
+    "pat": "take a stand on sth"
    },
    "wrong": [
     "take a stand about"
@@ -3305,35 +3289,19 @@
    "head": "to put it bluntly",
    "src": "pack:frame-43",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "to be blunt"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "needless to say",
    "src": "pack:frame-44",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "it goes without saying"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "to my mind",
    "src": "pack:frame-45",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "in my view",
-     "in my opinion"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "as far as I am concerned",
@@ -3361,12 +3329,7 @@
    "head": "on the whole",
    "src": "pack:frame-48",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "by and large"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "for what it is worth",
@@ -3392,8 +3355,7 @@
    "reg": "f",
    "gr": {
     "var": [
-     "as mentioned earlier",
-     "as stated above"
+     "as mentioned previously"
     ]
    }
   },
@@ -3407,12 +3369,7 @@
    "head": "that being the case",
    "src": "pack:frame-53",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "in that case"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "in view of",
@@ -3420,10 +3377,7 @@
    "k": "ch",
    "reg": "f",
    "gr": {
-    "pat": "in view of sth",
-    "var": [
-     "in light of"
-    ]
+    "pat": "in view of sth"
    }
   },
   {
@@ -3441,10 +3395,7 @@
    "k": "ch",
    "reg": "f",
    "gr": {
-    "pat": "owing to sth",
-    "var": [
-     "due to"
-    ]
+    "pat": "owing to sth"
    },
    "wrong": [
     "owing of"
@@ -3454,7 +3405,10 @@
    "head": "to what extent",
    "src": "pack:frame-57",
    "k": "ch",
-   "reg": "f"
+   "reg": "f",
+   "wrong": [
+    "in how far"
+   ]
   },
   {
    "head": "in the absence of",
@@ -3472,12 +3426,7 @@
    "head": "on the grounds that",
    "src": "pack:frame-59",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "on the basis that"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "in the interest of",
@@ -3509,7 +3458,7 @@
    "reg": "n",
    "gr": {
     "var": [
-     "if that works for you"
+     "if that is all right with you"
     ]
    }
   },
@@ -3539,24 +3488,13 @@
    "head": "I regret to inform you",
    "src": "pack:frame-66",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "I am sorry to inform you"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "please be advised that",
    "src": "pack:frame-67",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "please note that",
-     "kindly note that"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "further to our call",
@@ -3581,22 +3519,15 @@
    "src": "pack:frame-70",
    "k": "ch",
    "reg": "f",
-   "gr": {
-    "var": [
-     "I would be grateful if you could"
-    ]
-   }
+   "wrong": [
+    "i would appreciate if you could"
+   ]
   },
   {
    "head": "at your earliest convenience",
    "src": "pack:frame-71",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "at your earliest opportunity"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "for your reference",
@@ -3608,12 +3539,7 @@
    "head": "as per our agreement",
    "src": "pack:frame-73",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "as agreed"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "in accordance with",
@@ -3625,7 +3551,7 @@
    },
    "wrong": [
     "in accordance to",
-    "according with"
+    "in accordance of"
    ]
   },
   {
@@ -3689,17 +3615,19 @@
    "k": "ch",
    "reg": "f",
    "gr": {
-    "pat": "as a consequence of sth",
-    "var": [
-     "as a result"
-    ]
+    "pat": "as a consequence of sth"
    }
   },
   {
    "head": "what is more",
    "src": "pack:frame-83",
    "k": "ch",
-   "reg": "n"
+   "reg": "n",
+   "gr": {
+    "var": [
+     "what's more"
+    ]
+   }
   },
   {
    "head": "for one thing",
@@ -3714,8 +3642,7 @@
    "reg": "n",
    "gr": {
     "var": [
-     "to a great extent",
-     "in large part"
+     "to a great extent"
     ]
    }
   },
@@ -3723,12 +3650,7 @@
    "head": "come to think of it",
    "src": "pack:frame-86",
    "k": "ch",
-   "reg": "i",
-   "gr": {
-    "var": [
-     "now that I think about it"
-    ]
-   }
+   "reg": "i"
   },
   {
    "head": "speaking of which",
@@ -3751,35 +3673,19 @@
    "head": "let me rephrase that",
    "src": "pack:frame-89",
    "k": "ch",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "let me put that another way",
-     "let me reword that"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "by the way",
    "src": "pack:frame-90",
    "k": "ch",
-   "reg": "i",
-   "gr": {
-    "var": [
-     "incidentally"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "as it were",
    "src": "pack:frame-92",
    "k": "ch",
-   "reg": "f",
-   "gr": {
-    "var": [
-     "so to speak"
-    ]
-   }
+   "reg": "f"
   },
   {
    "head": "take on",
@@ -3860,11 +3766,14 @@
    "head": "pull together",
    "src": "pack:phrasal-42",
    "k": "pv",
-   "reg": "i",
+   "reg": "n",
    "gr": {
     "pat": "pull together sth",
     "sep": 1
-   }
+   },
+   "wrong": [
+    "pull together it"
+   ]
   },
   {
    "head": "pass on",
@@ -3937,11 +3846,7 @@
    "gr": {
     "pat": "settle for sth",
     "sep": 0
-   },
-   "wrong": [
-    "settle with sth",
-    "settle to sth"
-   ]
+   }
   },
   {
    "head": "account for",
@@ -4030,10 +3935,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "pat": "hinder sb from doing sth",
-    "var": [
-     "impede"
-    ]
+    "pat": "hinder sb from doing sth"
    },
    "wrong": [
     "hinder to do"
@@ -4115,12 +4017,7 @@
    "head": "inevitable",
    "src": "pack:word-63",
    "k": "w",
-   "reg": "n",
-   "gr": {
-    "var": [
-     "unavoidable"
-    ]
-   }
+   "reg": "n"
   },
   {
    "head": "unprecedented",
@@ -4180,10 +4077,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "c",
-    "var": [
-     "obstacle"
-    ]
+    "cnt": "c"
    }
   },
   {
@@ -4201,7 +4095,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -4249,10 +4143,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "pat": "elaborate on sth",
-    "var": [
-     "expand on"
-    ]
+    "pat": "elaborate on sth"
    },
    "wrong": [
     "elaborate about"
@@ -4297,7 +4188,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -4324,7 +4215,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -4454,12 +4345,11 @@
    "head": "non-disclosure agreement",
    "src": "pack:tech-52",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "cnt": "c",
     "var": [
-     "NDA",
-     "confidentiality agreement"
+     "NDA"
     ]
    }
   },
@@ -4497,7 +4387,7 @@
    "head": "accounts receivable",
    "src": "pack:tech-56",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "cnt": "u"
    }
@@ -4506,7 +4396,7 @@
    "head": "balance sheet",
    "src": "pack:tech-57",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "cnt": "c"
    }
@@ -4565,10 +4455,7 @@
    "k": "w",
    "reg": "n",
    "gr": {
-    "cnt": "c",
-    "var": [
-     "help desk"
-    ]
+    "cnt": "c"
    }
   },
   {
@@ -4593,7 +4480,7 @@
    "head": "analysis",
    "src": "pack:family-15",
    "k": "w",
-   "reg": "f",
+   "reg": "n",
    "gr": {
     "pat": "analysis of sth",
     "cnt": "uc"
@@ -4629,10 +4516,7 @@
    "gr": {
     "pat": "commitment to sth",
     "cnt": "uc"
-   },
-   "wrong": [
-    "commitment for"
-   ]
+   }
   },
   {
    "head": "competence",
@@ -4671,10 +4555,7 @@
    "gr": {
     "pat": "reliance on sb/sth",
     "cnt": "u"
-   },
-   "wrong": [
-    "reliance of"
-   ]
+   }
   },
   {
    "head": "authority",
@@ -4712,7 +4593,7 @@
    "reg": "n",
    "gr": {
     "pat": "emphasis on sth",
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
@@ -4733,10 +4614,7 @@
    "gr": {
     "pat": "contribution to sth",
     "cnt": "c"
-   },
-   "wrong": [
-    "contribution for"
-   ]
+   }
   },
   {
    "head": "specification",
@@ -4804,10 +4682,7 @@
    "head": "think outside the box",
    "src": "pack:idiom-19",
    "k": "ch",
-   "reg": "i",
-   "wrong": [
-    "think out of the box"
-   ]
+   "reg": "i"
   },
   {
    "head": "bite the bullet",

@@ -42,7 +42,8 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   for (const it of cat.items()) {
     if (it.lex.intro === day) introducedToday++;
     if (it.lex.day === day) continue; // heute schon gebucht
-    const d = dueOn(it.lex, day);
+    if (cat.rests(it.path)) continue; // Paar-Regel (M14)
+    const d = dueOn(it.lex, day, it.av);
     if (d) due.push({ path: it.path, lex: it.lex, ...d, ms: formMs(d.form, med), r: danger(it.lex, nowMs) });
   }
   const mustOf = (x: Due) => (x.lex.pri === 'core' || x.lex.mv >= MOVE_MAX ? 0 : 1);
@@ -96,13 +97,13 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
     const limit = startOfOffset(day, AHEAD_DAYS + 1);
     const cands = cat
       .items()
-      .filter((it) => !isNewLex(it.lex) && it.lex.day !== day && !dueOn(it.lex, day) && !(it.lex.step && dayKey(it.lex.step.at) === day) && (it.lex.b ?? it.lex.u).sd >= AHEAD_MIN_IVL)
+      .filter((it) => !isNewLex(it.lex) && it.lex.day !== day && !dueOn(it.lex, day, it.av) && !cat.rests(it.path) && !(it.lex.step && dayKey(it.lex.step.at) === day) && (it.lex.b ?? it.lex.u).sd >= AHEAD_MIN_IVL)
       .map((it) => ({ it, at: Math.min(it.lex.u.due, it.lex.b?.due ?? Infinity), lead: aheadDays((it.lex.b ?? it.lex.u).sd) }))
       .filter((x) => x.at < startOfOffset(day, x.lead + 1) && x.at < limit)
       .sort((a, b) => a.at - b.at || a.it.path.localeCompare(b.it.path));
     for (const { it } of cands) {
       const track: TrackKey = it.lex.b ? 'b' : 'u';
-      const form: Form = it.lex.b ? formForLex(it.lex) : 'gap';
+      const form: Form = it.lex.b ? formForLex(it.lex, it.av) : 'gap';
       const ms = formMs(form, med);
       if (total + ms > budgetMs) break;
       ahead.push({ path: it.path, lex: it.lex, track, form, ms, r: 1 });

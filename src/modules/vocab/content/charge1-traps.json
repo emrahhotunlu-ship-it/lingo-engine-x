@@ -3,8 +3,22 @@
  "charge": 1,
  "review": {
   "by": "english-teacher",
-  "passes": [],
-  "date": null
+  "passes": [
+   {
+    "n": 1,
+    "items": "1-40",
+    "ok": 25,
+    "fixed": 20
+   },
+   {
+    "n": 2,
+    "items": "41-80",
+    "ok": 25,
+    "fixed": 24
+   }
+  ],
+  "date": "2026-11-01",
+  "recheck": null
  },
  "items": [
   {
@@ -27,7 +41,7 @@
    "en": "actual",
    "k": "w",
    "type": "ff",
-   "de": "tatsächlich (im Gegensatz zur Planung)",
+   "de": "tatsächlich (Adjektiv, statt geplant)",
    "ex": "The [actual] costs were 20 percent higher than planned.",
    "why": "Adjektiv: tatsächlich, wirklich. „Aktuell“ heißt current.",
    "reg": "n",
@@ -44,7 +58,7 @@
    "why": "Verb: werden (zu etwas). „Bekommen“ heißt get oder receive.",
    "reg": "n",
    "trap": "bekommen",
-   "trapEn": "receive"
+   "trapEn": "get"
   },
   {
    "id": "t-sensible",
@@ -66,24 +80,30 @@
    "en": "control",
    "k": "w",
    "type": "ff",
-   "de": "regeln, wer Zugriff hat",
-   "ex": "Only administrators can [control] who has access to the archive.",
+   "de": "steuern, regulieren (nicht: überprüfen)",
+   "ex": "Only administrators can [control] access to the archive.",
    "why": "Verb: steuern, beherrschen. „Kontrollieren“ im Sinn von prüfen heißt check.",
    "reg": "n",
    "trap": "kontrollieren",
-   "trapEn": "check"
+   "trapEn": "check",
+   "evade": [
+    "manage"
+   ]
   },
   {
    "id": "t-chef",
    "en": "chef",
    "k": "w",
    "type": "ff",
-   "de": "der Koch, die Köchin",
+   "de": "der Küchenchef, die Küchenchefin",
    "ex": "The [chef] at the conference dinner prepared a vegetarian menu.",
-   "why": "Nomen: Koch/Köchin. Der „Chef“ ist the boss oder the manager.",
+   "why": "Nomen: Küchenchef(in). Der „Chef“ im Büro ist the boss oder the manager.",
    "reg": "n",
    "trap": "Chef",
-   "trapEn": "boss"
+   "trapEn": "boss",
+   "evade": [
+    "cook"
+   ]
   },
   {
    "id": "t-gift",
@@ -105,7 +125,7 @@
    "en": "handy",
    "k": "w",
    "type": "ff",
-   "de": "praktisch, griffbereit",
+   "de": "praktisch, nützlich (locker gesagt)",
    "ex": "A short checklist is [handy] when you onboard new users.",
    "why": "Adjektiv: praktisch, nützlich. Das „Handy“ heißt cell phone (UK: mobile).",
    "reg": "n",
@@ -140,7 +160,8 @@
    "trapEn": "consistent",
    "syn": [
     "therefore",
-    "as a result"
+    "as a result",
+    "as a consequence"
    ]
   },
   {
@@ -148,7 +169,7 @@
    "en": "meaning",
    "k": "w",
    "type": "ff",
-   "de": "die Bedeutung",
+   "de": "die Bedeutung (eines Wortes, einer Klausel)",
    "ex": "I do not understand the [meaning] of this clause.",
    "why": "Nomen: Bedeutung, Sinn. „Meinung“ heißt opinion.",
    "reg": "n",
@@ -180,7 +201,10 @@
    "why": "Adjektiv: verständnisvoll. „Sympathisch“ heißt nice oder likeable.",
    "reg": "n",
    "trap": "sympathisch",
-   "trapEn": "likeable"
+   "trapEn": "likable",
+   "syn": [
+    "understanding"
+   ]
   },
   {
    "id": "t-provision",
@@ -213,7 +237,7 @@
    "en": "tell",
    "k": "w",
    "type": "pair",
-   "de": "jemandem etwas mitteilen",
+   "de": "jemandem etwas sagen",
    "ex": "Please [tell] me when the audit starts.",
    "why": "tell + Person (+ Info). Ohne Person: say.",
    "reg": "n",
@@ -250,7 +274,10 @@
    "ex": "Please submit the report [by] Friday.",
    "why": "by = bis spätestens (Frist, einmalig). Dauer: until.",
    "reg": "n",
-   "pair": "until"
+   "pair": "until",
+   "syn": [
+    "no later than"
+   ]
   },
   {
    "id": "t-until",
@@ -272,7 +299,10 @@
    "ex": "There is a [possibility] that the audit will be postponed.",
    "why": "possibility = Möglichkeit, Eventualität. Chance: opportunity.",
    "reg": "n",
-   "pair": "opportunity"
+   "pair": "opportunity",
+   "syn": [
+    "chance"
+   ]
   },
   {
    "id": "t-opportunity",
@@ -297,7 +327,10 @@
    "ex": "The delay will [affect] our rollout plan.",
    "why": "affect = Verb, beeinflussen. Das Nomen „Auswirkung“: effect.",
    "reg": "n",
-   "pair": "effect"
+   "pair": "effect",
+   "syn": [
+    "impact"
+   ]
   },
   {
    "id": "t-effect",
@@ -322,7 +355,11 @@
    "ex": "Prices are expected to [rise] next quarter.",
    "why": "rise, rose, risen: ohne Objekt. Mit Objekt: raise.",
    "reg": "n",
-   "pair": "raise"
+   "pair": "raise",
+   "syn": [
+    "increase",
+    "go up"
+   ]
   },
   {
    "id": "t-raise",
@@ -333,7 +370,10 @@
    "ex": "We plan to [raise] our prices next quarter.",
    "why": "raise, raised: braucht ein Objekt. Ohne Objekt: rise.",
    "reg": "n",
-   "pair": "rise"
+   "pair": "rise",
+   "syn": [
+    "increase"
+   ]
   },
   {
    "id": "t-advice",
@@ -463,7 +503,7 @@
    "k": "w",
    "type": "spell",
    "de": "der Ausschuss",
-   "ex": "The steering [committee] meets every second Tuesday.",
+   "ex": "The steering [committee] meets every other Tuesday.",
    "why": "Nomen: zwei m, zwei t, zwei e.",
    "reg": "n",
    "wrong": [
@@ -532,7 +572,7 @@
    "en": "business",
    "k": "w",
    "type": "spell",
-   "de": "das Geschäftsfeld",
+   "de": "das Geschäft (als Branche)",
    "ex": "Digital archiving is a growing [business] in Europe.",
    "why": "Nomen: bus-i-ness, mit „i“ vor „n“.",
    "reg": "n",
@@ -561,13 +601,16 @@
    "en": "occur",
    "k": "w",
    "type": "spell",
-   "de": "auftreten, sich ereignen",
+   "de": "auftreten (Fehler, Problem; formeller als happen)",
    "ex": "The error [occurred] after the last update.",
    "why": "Verb: occur, aber occurred (r wird verdoppelt).",
    "reg": "n",
    "wrong": [
     "occured",
     "ocurred"
+   ],
+   "evade": [
+    "happened"
    ]
   },
   {
@@ -576,12 +619,12 @@
    "k": "w",
    "type": "spell",
    "de": "sich beziehen auf",
-   "ex": "I am [referring] to your email of Monday.",
+   "ex": "I am [referring] to your email from Monday.",
    "why": "Verb: refer, aber referring (r wird verdoppelt).",
    "reg": "n",
    "wrong": [
     "refering",
-    "refferring"
+    "reffering"
    ]
   },
   {
@@ -650,7 +693,7 @@
    "type": "spell",
    "de": "abhängig (Adjektiv)",
    "ex": "Our revenue is [dependent] on a few large customers.",
-   "why": "Adjektiv: -ent (US auch das Nomen: dependent).",
+   "why": "Adjektiv: -ent. „dependant“ ist nur britisch und nur Nomen (Angehöriger).",
    "reg": "n",
    "wrong": [
     "dependant"
@@ -748,11 +791,10 @@
    "type": "uncount",
    "de": "das Wissen, die Kenntnisse",
    "ex": "Her [knowledge] of records management is impressive.",
-   "why": "Nomen, nicht zählbar: kein Plural.",
+   "why": "Nomen, nicht zählbar: kein Plural. Aber richtig: a good knowledge of sth.",
    "reg": "n",
    "wrong": [
-    "knowledges",
-    "a knowledge of"
+    "knowledges"
    ],
    "gr": {
     "cnt": "u"
@@ -786,7 +828,7 @@
    "reg": "n",
    "wrong": [
     "researches",
-    "an research"
+    "a research"
    ],
    "gr": {
     "cnt": "u"
@@ -870,8 +912,8 @@
    "k": "col",
    "type": "prep",
    "de": "bestehen aus",
-   "ex": "The package will [consist of] three modules.",
-   "why": "consist + of. „Bestehen aus“ = consist of.",
+   "ex": "The package [consists of] three modules.",
+   "why": "consist of (nicht „out of“), keine Verlaufsform: nie „is consisting of“.",
    "reg": "n",
    "wrong": [
     "consist from",
@@ -905,11 +947,11 @@
    "type": "prep",
    "de": "sich bewerben um (eine Stelle)",
    "ex": "I would like to [apply for] the position of sales manager.",
-   "why": "apply for = sich um etwas bewerben; apply to = sich an jmd. wenden.",
+   "why": "apply for + Stelle, apply to + Firma: apply to Siemens for a job. Nicht: apply on.",
    "reg": "n",
    "wrong": [
     "apply on",
-    "apply to the position"
+    "apply at the position"
    ],
    "gr": {
     "pat": "apply for sth"
@@ -1008,9 +1050,9 @@
    "en": "enter",
    "k": "w",
    "type": "prep",
-   "de": "einen Markt erschließen",
+   "de": "in einen Markt eintreten",
    "ex": "We plan to [enter] the Asian market next year.",
-   "why": "enter + Objekt, ohne in/into. „Enter into“ nur bei Verträgen.",
+   "why": "enter + Objekt, ohne in/into. „enter into“ nur bei Verträgen und Gesprächen.",
    "reg": "n",
    "wrong": [
     "enter into the market",
@@ -1025,7 +1067,7 @@
    "en": "give a presentation",
    "k": "col",
    "type": "colloc",
-   "de": "einen Vortrag halten",
+   "de": "eine Präsentation halten",
    "ex": "I will [give a presentation] on our new archive at the conference.",
    "why": "give a presentation; „hold“ ist hier ein Germanismus.",
    "reg": "n",
@@ -1083,7 +1125,10 @@
    "reg": "n",
    "wrong": [
     "do a mistake",
-    "make a failure"
+    "make a fault"
+   ],
+   "syn": [
+    "make an error"
    ]
   },
   {
@@ -1115,6 +1160,7 @@
    "reg": "n",
    "wrong": [
     "hold the deadline",
+    "keep the deadline",
     "achieve the deadline"
    ],
    "syn": [
@@ -1133,6 +1179,9 @@
    "wrong": [
     "pull a conclusion",
     "make a conclusion"
+   ],
+   "syn": [
+    "draw conclusions"
    ]
   },
   {
@@ -1141,12 +1190,15 @@
    "k": "col",
    "type": "colloc",
    "de": "eine Frage aufwerfen",
-   "ex": "May I [raise a question] about the budget?",
+   "ex": "These figures [raise the question] of whether we need more staff.",
    "why": "raise a question = ansprechen. Einfach fragen: ask a question.",
    "reg": "n",
    "wrong": [
     "rise a question",
     "lift a question"
+   ],
+   "evade": [
+    "pose the question"
    ]
   },
   {
@@ -1155,8 +1207,8 @@
    "k": "col",
    "type": "colloc",
    "de": "ein Angebot unterbreiten",
-   "ex": "We would like to [make an offer] for the full archive solution.",
-   "why": "make an offer (nicht do/give); a, vor Vokal: an.",
+   "ex": "Before we [make an offer], we need your final requirements.",
+   "why": "make an offer (nicht do/give). Schriftliches Angebot mit Preisen: quote oder proposal.",
    "reg": "n",
    "wrong": [
     "do an offer",

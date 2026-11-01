@@ -3,8 +3,40 @@
  "charge": 2,
  "review": {
   "by": "english-teacher",
-  "passes": [],
-  "date": null
+  "passes": [
+   {
+    "n": 1,
+    "items": "1-40",
+    "ok": 15
+   },
+   {
+    "n": 2,
+    "items": "41-80",
+    "ok": 22
+   },
+   {
+    "n": 3,
+    "items": "81-120",
+    "ok": 18
+   },
+   {
+    "n": 4,
+    "items": "121-150",
+    "ok": 12
+   }
+  ],
+  "date": "2026-11-01",
+  "removed": [
+   "b-i-would-say",
+   "b-nonetheless",
+   "b-for-instance",
+   "b-whereas",
+   "b-come-to-terms",
+   "b-kindly-confirm",
+   "b-table-a-proposal",
+   "b-digital-archive"
+  ],
+  "recheck": null
  },
  "items": [
   {
@@ -27,10 +59,12 @@
    "k": "ch",
    "de": "bis zu einem gewissen Grad",
    "ex": "[To a certain extent], the pilot confirmed our assumptions.",
-   "why": "Abschwächende Wendung am Satzanfang oder -ende; „extent“ nicht „degree of extent“.",
-   "reg": "f",
+   "why": "Abschwächung mit „to“; nicht „in a certain extent“ (dt. „in gewissem Maße“).",
+   "reg": "n",
    "syn": [
-    "to a certain degree"
+    "to a certain degree",
+    "to some extent",
+    "to some degree"
    ]
   },
   {
@@ -38,10 +72,14 @@
    "fn": "hedge",
    "en": "up to a point",
    "k": "ch",
-   "de": "nur bis zu einem bestimmten Punkt gültig",
+   "de": "bis zu einem gewissen Punkt (stimmt nur teilweise)",
    "ex": "Your argument holds [up to a point], but it ignores the licensing costs.",
    "why": "Zeigt: stimmt teilweise, aber mit Grenze. Meist am Satzende.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "to a certain extent",
+    "to some extent"
+   ]
   },
   {
    "id": "b-it-would-appear",
@@ -53,7 +91,11 @@
    "why": "Sehr vorsichtig und formell; danach „that“ plus ganzer Satz.",
    "reg": "f",
    "syn": [
-    "it appears that"
+    "it appears that",
+    "it would seem that"
+   ],
+   "evade": [
+    "it seems that"
    ]
   },
   {
@@ -76,8 +118,11 @@
    "k": "ch",
    "de": "ich neige zu der Ansicht, dass",
    "ex": "[I tend to think that] the second vendor is the safer choice.",
-   "why": "Persönliche, abgeschwächte Meinung; „tend to“ statt „am inclined“.",
-   "reg": "n"
+   "why": "Abgeschwächte Meinung; „tend to“ + Infinitiv, nicht „I tend to the opinion“.",
+   "reg": "n",
+   "syn": [
+    "I'm inclined to think that"
+   ]
   },
   {
    "id": "b-from-what-i-gather",
@@ -100,7 +145,10 @@
    "de": "nach meiner Erfahrung",
    "ex": "[In my experience], projects like this need at least six months.",
    "why": "Feste Präposition „in“ (nicht „by“ oder „after“); stützt die Aussage auf Erfahrung.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "from my experience"
+   ]
   },
   {
    "id": "b-have-the-impression",
@@ -125,7 +173,8 @@
    "why": "Abschwächung bei Vermutungen; „as if“ mit Indikativ im Business-Alltag.",
    "reg": "n",
    "syn": [
-    "it looks like"
+    "it looks like",
+    "it looks as though"
    ]
   },
   {
@@ -138,7 +187,8 @@
    "why": "Feste Wendung mit „the best“; sichert die Aussage gegen Irrtum ab.",
    "reg": "f",
    "syn": [
-    "as far as I know"
+    "as far as I know",
+    "to my knowledge"
    ]
   },
   {
@@ -148,10 +198,11 @@
    "k": "ch",
    "de": "grob gesagt",
    "ex": "[Broadly speaking], the system meets all our core requirements.",
-   "why": "Fasst zusammen und lässt Details offen; nicht „roughly said“.",
+   "why": "Fasst zusammen und lässt Details offen; Partizip „speaking“, nicht „roughly said“.",
    "reg": "n",
    "syn": [
-    "generally speaking"
+    "generally speaking",
+    "roughly speaking"
    ]
   },
   {
@@ -178,24 +229,17 @@
    "de": "es besteht eine gute Chance, dass",
    "ex": "[There's a good chance that] they will extend the contract.",
    "why": "„chance“ ohne „big“; gilt auch für Unerwünschtes, nicht nur Positives.",
-   "reg": "n"
-  },
-  {
-   "id": "b-i-would-say",
-   "fn": "hedge",
-   "en": "I would say that",
-   "k": "ch",
-   "de": "ich würde sagen, dass",
-   "ex": "[I would say that] the second option is the safer one.",
-   "why": "Mildert ein Urteil ab; wirkt höflicher als „The second option is safer“.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "there is a good chance that"
+   ]
   },
   {
    "id": "b-i-suspect",
    "fn": "hedge",
    "en": "I suspect that",
    "k": "ch",
-   "de": "ich vermute, dass",
+   "de": "ich habe den Verdacht, dass",
    "ex": "[I suspect that] the delay is caused by the approval process.",
    "why": "„suspect“ = begründete Vermutung, oft über etwas Negatives.",
    "reg": "n"
@@ -208,7 +252,7 @@
    "de": "streng genommen",
    "ex": "[Strictly speaking], this request falls outside the scope of the contract.",
    "why": "Schränkt auf die wörtliche Regel ein; meist mit folgendem Aber.",
-   "reg": "f"
+   "reg": "n"
   },
   {
    "id": "b-on-the-face-of-it",
@@ -228,25 +272,22 @@
    "fn": "hedge",
    "en": "in principle",
    "k": "ch",
-   "de": "grundsätzlich",
+   "de": "grundsätzlich ja, aber mit Vorbehalt",
    "ex": "[In principle], we can deliver by the end of June.",
    "why": "Zusage mit Vorbehalt; Details sind noch offen.",
-   "reg": "n",
-   "syn": [
-    "in theory"
-   ]
+   "reg": "n"
   },
   {
    "id": "b-more-often-than-not",
    "fn": "hedge",
    "en": "more often than not",
    "k": "ch",
-   "de": "in den meisten Fällen",
+   "de": "meistens (feste Wendung mit „often“)",
    "ex": "[More often than not], delays come from unclear requirements.",
-   "why": "Feste Wendung für „meistens“; klingt natürlicher als „mostly times“.",
+   "why": "Feste Wendung für „meistens“; am Satzanfang besser als „Mostly,“.",
    "reg": "n",
    "syn": [
-    "as often as not"
+    "in most cases"
    ],
    "evade": [
     "usually"
@@ -269,10 +310,13 @@
    "k": "ch",
    "de": "größtenteils",
    "ex": "[For the most part], the feedback from users has been positive.",
-   "why": "Feste Wendung mit „the“; gilt für Zustände, nicht für Anzahlen.",
+   "why": "Feste Wendung mit „the“ (nicht „for most part“); am Satzanfang besser als „Mostly,“.",
    "reg": "n",
    "evade": [
     "mostly"
+   ],
+   "syn": [
+    "largely"
    ]
   },
   {
@@ -289,19 +333,6 @@
    ]
   },
   {
-   "id": "b-nonetheless",
-   "fn": "discourse",
-   "en": "nonetheless",
-   "k": "w",
-   "de": "nichtsdestotrotz",
-   "ex": "The pilot was delayed; [nonetheless], the client signed the order.",
-   "why": "Ein Wort geschrieben; gleichwertig mit „nevertheless“, etwas knapper.",
-   "reg": "f",
-   "syn": [
-    "nevertheless"
-   ]
-  },
-  {
    "id": "b-in-other-words",
    "fn": "discourse",
    "en": "in other words",
@@ -310,19 +341,6 @@
    "ex": "[In other words], we need a decision by Friday.",
    "why": "Leitet eine Umformulierung ein; Plural „words“.",
    "reg": "n"
-  },
-  {
-   "id": "b-for-instance",
-   "fn": "discourse",
-   "en": "for instance",
-   "k": "ch",
-   "de": "zum Beispiel",
-   "ex": "Several departments, [for instance] Finance, still work on paper.",
-   "why": "Leitet ein Beispiel ein; mit Kommas eingeschoben, gleichwertig mit „for example“.",
-   "reg": "n",
-   "syn": [
-    "for example"
-   ]
   },
   {
    "id": "b-as-a-result",
@@ -356,29 +374,16 @@
    "en": "conversely",
    "k": "w",
    "de": "umgekehrt",
-   "ex": "Cloud hosting is cheaper; [conversely], on-premises gives us more control.",
-   "why": "Adverb für den umgekehrten Fall; formeller als „on the other hand“.",
+   "ex": "Higher volumes lower the unit price; [conversely], smaller orders cost more per license.",
+   "why": "Für den umgekehrten Fall, nicht für bloßen Gegensatz (dafür „on the other hand“).",
    "reg": "f"
-  },
-  {
-   "id": "b-whereas",
-   "fn": "discourse",
-   "en": "whereas",
-   "k": "w",
-   "de": "während (im Gegensatz dazu)",
-   "ex": "The old system is stable, [whereas] the new one still crashes occasionally.",
-   "why": "Konjunktion für Gegensatz, nicht zeitlich; „while“ ist informeller.",
-   "reg": "f",
-   "syn": [
-    "while"
-   ]
   },
   {
    "id": "b-in-the-first-place",
    "fn": "discourse",
    "en": "in the first place",
    "k": "ch",
-   "de": "erstens, überhaupt erst",
+   "de": "überhaupt erst (ursprünglich)",
    "ex": "We should ask why the process was designed this way [in the first place].",
    "why": "Meint ursprünglich/zuerst; am Satzende oft „überhaupt“.",
    "reg": "n"
@@ -393,7 +398,8 @@
    "why": "Eröffnet eine Aufzählung; nicht „in the beginning with“.",
    "reg": "n",
    "syn": [
-    "for starters"
+    "for starters",
+    "first of all"
    ]
   },
   {
@@ -414,7 +420,7 @@
    "fn": "discourse",
    "en": "first and foremost",
    "k": "ch",
-   "de": "zuallererst",
+   "de": "in allererster Linie",
    "ex": "[First and foremost], we have to secure the sponsor's support.",
    "why": "Feste Zwillingsformel; betont Priorität.",
    "reg": "n"
@@ -445,7 +451,8 @@
    "why": "Idiomatisch, gesprochen; nicht „in the end of the day“.",
    "reg": "i",
    "syn": [
-    "when all is said and done"
+    "when all is said and done",
+    "ultimately"
    ]
   },
   {
@@ -482,7 +489,10 @@
    "de": "alles in allem betrachtet",
    "ex": "[All things considered], the second offer is the better fit.",
    "why": "Wägt mehrere Faktoren ab; Plural „things“.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "all in all"
+   ]
   },
   {
    "id": "b-that-is-to-say",
@@ -492,16 +502,19 @@
    "de": "das heißt, genauer gesagt",
    "ex": "We will go live in Q3, [that is to say], before the audit begins.",
    "why": "Präzisiert; eher schriftlich. Schriftlich auch „i.e.“.",
-   "reg": "f"
+   "reg": "f",
+   "syn": [
+    "that is"
+   ]
   },
   {
    "id": "b-in-any-case",
    "fn": "discourse",
    "en": "in any case",
    "k": "ch",
-   "de": "jedenfalls, auf jeden Fall",
+   "de": "wie dem auch sei, jedenfalls",
    "ex": "[In any case], we will need written approval before we start.",
-   "why": "Schließt Diskussion ab und kehrt zum Kern zurück; auch „anyway“.",
+   "why": "Kehrt zum Kern zurück; dt. „auf jeden Fall“ im Sinn von „sicher“ heißt „definitely“.",
    "reg": "n",
    "syn": [
     "anyway"
@@ -512,7 +525,7 @@
    "fn": "discourse",
    "en": "in the same vein",
    "k": "ch",
-   "de": "in ähnlicher Weise",
+   "de": "im selben Sinne (gleiche Stoßrichtung)",
    "ex": "[In the same vein], the second workshop will focus on user training.",
    "why": "Knüpft an Gedankenrichtung an; „vein“ ist die Ader.",
    "reg": "f",
@@ -526,7 +539,7 @@
    "en": "in contrast to",
    "k": "ch",
    "de": "im Gegensatz zu",
-   "ex": "[In contrast to] last year, the budget has been approved early.",
+   "ex": "[In contrast to] last year, the budget was approved early.",
    "why": "Mit „to“ plus Nomen; ohne Nomen heißt es „by contrast“.",
    "reg": "n",
    "syn": [
@@ -554,7 +567,7 @@
    "fn": "negotiate",
    "en": "meet sb halfway",
    "k": "ch",
-   "de": "jdm. entgegenkommen und einen Kompromiss finden",
+   "de": "jdm. auf halbem Weg entgegenkommen",
    "ex": "If you can accept a longer term, we can [meet you halfway] on the price.",
    "why": "Idiom; beide Seiten bewegen sich. Objekt steht vor „halfway“.",
    "reg": "n",
@@ -567,7 +580,7 @@
    "fn": "negotiate",
    "en": "a sticking point",
    "k": "col",
-   "de": "ein strittiger Punkt, der die Einigung hemmt",
+   "de": "ein Knackpunkt, an dem die Einigung hängt",
    "ex": "The liability clause is still [a sticking point] for both sides.",
    "why": "Nomen, zählbar; verbunden mit „be“ oder „remain“.",
    "reg": "n",
@@ -581,9 +594,9 @@
   {
    "id": "b-non-negotiable",
    "fn": "negotiate",
-   "en": "that's non-negotiable",
-   "k": "ch",
-   "de": "das steht nicht zur Verhandlung",
+   "en": "non-negotiable",
+   "k": "w",
+   "de": "nicht verhandelbar",
    "ex": "Data residency in Germany is [non-negotiable] for us.",
    "why": "Feste Absage mit Bindestrich; als Adjektiv nach „be“.",
    "reg": "n"
@@ -631,14 +644,18 @@
    "k": "col",
    "de": "ein Ausschlusskriterium, an dem der Abschluss scheitert",
    "ex": "An unlimited liability clause would be [a deal-breaker] for us.",
-   "why": "Mit Bindestrich geschrieben; Nomen, zählbar.",
+   "why": "Nomen, zählbar; geschrieben deal-breaker, deal breaker oder dealbreaker.",
    "reg": "n",
    "evade": [
     "problem"
    ],
    "gr": {
     "cnt": "c"
-   }
+   },
+   "syn": [
+    "a deal breaker",
+    "a dealbreaker"
+   ]
   },
   {
    "id": "b-take-it-or-leave-it",
@@ -655,23 +672,13 @@
    "fn": "negotiate",
    "en": "split the difference",
    "k": "ch",
-   "de": "sich in der Mitte treffen",
+   "de": "die Differenz teilen",
    "ex": "Why don't we [split the difference] and settle at 45,000 euros?",
    "why": "Preisgespräch: Differenz teilen. „difference“ im Singular.",
-   "reg": "n"
-  },
-  {
-   "id": "b-come-to-terms",
-   "fn": "negotiate",
-   "en": "come to terms",
-   "k": "ch",
-   "de": "sich einigen",
-   "ex": "After weeks of talks, both parties finally [came to terms].",
-   "why": "Vergangenheit „came“; „with sb“ möglich. Meint Einigung nach Streit.",
    "reg": "n",
-   "gr": {
-    "pat": "come to terms with sb"
-   }
+   "syn": [
+    "meet in the middle"
+   ]
   },
   {
    "id": "b-volume-discount",
@@ -679,7 +686,7 @@
    "en": "volume discount",
    "k": "col",
    "de": "ein Mengenrabatt",
-   "ex": "We can offer you [a volume discount] above 500 licenses.",
+   "ex": "We can offer you a [volume discount] for more than 500 licenses.",
    "why": "Zählbares Nomen; typisch: offer / grant / negotiate.",
    "reg": "n",
    "syn": [
@@ -738,7 +745,7 @@
    "k": "col",
    "de": "ein Faustpfand in der Verhandlung",
    "ex": "An early payment could be [a bargaining chip] in the talks.",
-   "why": "Zählbar; Etwas, das man als Tauschwert einsetzt.",
+   "why": "Zählbar; etwas, das man in der Verhandlung als Tauschwert einsetzt.",
    "reg": "n",
    "gr": {
     "cnt": "c"
@@ -766,7 +773,10 @@
    "gr": {
     "sep": 1,
     "pat": "lock sth in"
-   }
+   },
+   "syn": [
+    "lock this price in"
+   ]
   },
   {
    "id": "b-open-to-suggestions",
@@ -783,7 +793,7 @@
    "fn": "negotiate",
    "en": "still on the table",
    "k": "ch",
-   "de": "weiter gültig im Angebot",
+   "de": "liegt weiterhin auf dem Tisch (gilt noch)",
    "ex": "Our offer of a free pilot is [still on the table].",
    "why": "Idiom: Angebot gilt noch. Gegenteil: off the table.",
    "reg": "n"
@@ -799,7 +809,10 @@
    "reg": "n",
    "gr": {
     "pat": "dig in one's heels"
-   }
+   },
+   "syn": [
+    "dug their heels in"
+   ]
   },
   {
    "id": "b-binding-offer",
@@ -821,7 +834,7 @@
    "k": "col",
    "de": "für beide Seiten vorteilhaft",
    "ex": "We are looking for a [mutually beneficial] arrangement.",
-   "why": "Adverb vor Adjektiv; nicht „beneficial for both-sided“.",
+   "why": "Adverb + Adjektiv; dt. „beidseitig vorteilhaft“ nicht wörtlich mit „both-sided“.",
    "reg": "f"
   },
   {
@@ -831,10 +844,11 @@
    "k": "col",
    "de": "einen Kompromiss erzielen",
    "ex": "After a long discussion, we managed to [reach a compromise].",
-   "why": "„reach“ oder „arrive at“; nicht „find a compromise“.",
+   "why": "„reach“ ist die typische Verbindung; „make a compromise“ heißt eher „nachgeben“.",
    "reg": "n",
    "syn": [
-    "arrive at a compromise"
+    "arrive at a compromise",
+    "find a compromise"
    ],
    "gr": {
     "pat": "reach a compromise"
@@ -878,7 +892,7 @@
    "fn": "objection",
    "en": "that's a fair concern",
    "k": "ch",
-   "de": "das ist ein berechtigter Einwand",
+   "de": "das ist eine berechtigte Sorge",
    "ex": "[That's a fair concern], and I'd like to address it directly.",
    "why": "„fair“ = berechtigt; ohne „very“. Tür für die Gegenantwort.",
    "reg": "n",
@@ -966,7 +980,10 @@
    "reg": "n",
    "gr": {
     "pat": "put sth into perspective"
-   }
+   },
+   "syn": [
+    "put that in perspective"
+   ]
   },
   {
    "id": "b-what-makes-you-say",
@@ -995,7 +1012,7 @@
    "k": "ch",
    "de": "lassen Sie mich Sie beruhigen",
    "ex": "[Let me reassure you]: all data stays on servers in Germany.",
-   "why": "„reassure“ mit Objekt; nicht „assure“ (das braucht „that“).",
+   "why": "„reassure“ = beruhigen; „assure“ = versichern, geht weniger auf die Sorge ein.",
    "reg": "f",
    "syn": [
     "let me assure you"
@@ -1020,7 +1037,7 @@
    "en": "I wouldn't go that far",
    "k": "ch",
    "de": "so weit würde ich nicht gehen",
-   "ex": "The delay is annoying, but [I wouldn't go that far] and call it a failure.",
+   "ex": "A total failure? [I wouldn't go that far]; the core features work.",
    "why": "Dämpft eine Übertreibung; Modal „wouldn't“.",
    "reg": "n"
   },
@@ -1031,13 +1048,14 @@
    "k": "col",
    "de": "Bedenken zerstreuen",
    "ex": "We provided a security audit to [allay your concerns].",
-   "why": "Formelle Kollokation; „allay“ nicht mit „fears“ verwechseln.",
+   "why": "Formell; passt zu concerns, fears, doubts. Dt. „Bedenken ausräumen“ nicht mit „remove“.",
    "reg": "f",
    "syn": [
-    "ease your concerns"
+    "ease your concerns",
+    "dispel your concerns"
    ],
    "evade": [
-    "remove"
+    "address your concerns"
    ]
   },
   {
@@ -1093,10 +1111,11 @@
    "k": "ch",
    "de": "wie in unserem Telefonat besprochen",
    "ex": "[As per our call], I'm sending you the revised quote.",
-   "why": "Formelle E-Mail-Wendung; „as per“ + Nomen ohne Artikel.",
+   "why": "Knapp-formell in Mails; in den USA klingt „as discussed on our call“ moderner.",
    "reg": "f",
    "syn": [
-    "as discussed on the phone"
+    "as discussed on the phone",
+    "as discussed on our call"
    ]
   },
   {
@@ -1109,7 +1128,8 @@
    "why": "Standard in formellen Mails; „attached“ steht nach „find“.",
    "reg": "f",
    "syn": [
-    "attached you will find"
+    "attached please find",
+    "attached is"
    ]
   },
   {
@@ -1133,7 +1153,7 @@
    "fn": "email",
    "en": "I look forward to hearing from you",
    "k": "ch",
-   "de": "ich freue mich auf Ihre Antwort",
+   "de": "ich freue mich darauf, von Ihnen zu hören",
    "ex": "[I look forward to hearing from you] soon.",
    "why": "Nach „to“ steht -ing, nicht Infinitiv. Standard-Schlusssatz.",
    "reg": "f"
@@ -1169,7 +1189,10 @@
    "de": "bei Fragen geben Sie mir bitte Bescheid",
    "ex": "[Please let me know if you have any questions].",
    "why": "Standard-Schluss; „any“ im Bedingungssatz.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "let me know if you have any questions"
+   ]
   },
   {
    "id": "b-feel-free-to-reach-out",
@@ -1189,7 +1212,7 @@
    "fn": "email",
    "en": "I'd be grateful if you could",
    "k": "ch",
-   "de": "ich wäre Ihnen dankbar, wenn Sie könnten",
+   "de": "ich wäre Ihnen dankbar, wenn Sie … könnten",
    "ex": "[I'd be grateful if you could] confirm the delivery date.",
    "why": "Höfliche Bitte; „could“ nicht „can“ nach „if you“.",
    "reg": "f",
@@ -1207,7 +1230,7 @@
    "why": "Freundlich, informell; „that“-Satz folgt.",
    "reg": "i",
    "syn": [
-    "a friendly reminder"
+    "just a friendly reminder"
    ]
   },
   {
@@ -1215,13 +1238,17 @@
    "fn": "email",
    "en": "we would be happy to arrange",
    "k": "ch",
-   "de": "wir arrangieren gern",
+   "de": "wir organisieren gern (einen Termin)",
    "ex": "[We would be happy to arrange] a demo for your team.",
    "why": "Freundliches Angebot; „arrange“ + Nomen, kein „that“.",
    "reg": "n",
    "gr": {
     "pat": "arrange sth"
-   }
+   },
+   "syn": [
+    "we'd be happy to arrange",
+    "we would be happy to set up"
+   ]
   },
   {
    "id": "b-for-your-review",
@@ -1243,7 +1270,8 @@
    "why": "Formell; Infinitiv ohne „from“. Sehr verbreitet am Mailende.",
    "reg": "f",
    "syn": [
-    "please feel free to contact me"
+    "please feel free to contact me",
+    "please don't hesitate to contact me"
    ]
   },
   {
@@ -1257,24 +1285,26 @@
    "reg": "f",
    "syn": [
     "sorry for the delay"
-   ],
-   "uk": [
-    "apologise for the delay"
    ]
   },
   {
    "id": "b-copying-in",
    "fn": "email",
-   "en": "I'm copying in",
+   "en": "I'm cc'ing",
    "k": "ch",
    "de": "ich setze … in Kopie",
-   "ex": "[I'm copying in] my colleague Anna, who manages the project.",
-   "why": "„copy in“ trennbar: copy her in. In Kopie setzen.",
+   "ex": "[I'm cc'ing] my colleague Anna, who manages the project.",
+   "why": "US: „cc sb“ oder „copy sb on an email“; „copy sb in“ ist britisch.",
    "reg": "n",
    "gr": {
-    "sep": 1,
-    "pat": "copy sb in"
-   }
+    "pat": "cc sb on sth"
+   },
+   "syn": [
+    "I'm copying"
+   ],
+   "uk": [
+    "I'm copying in"
+   ]
   },
   {
    "id": "b-with-reference-to",
@@ -1299,7 +1329,9 @@
    "why": "„prompt“ = schnell; kollokiert mit response/reply/payment.",
    "reg": "f",
    "syn": [
-    "a quick reply"
+    "prompt reply",
+    "quick response",
+    "quick reply"
    ],
    "gr": {
     "cnt": "c"
@@ -1311,11 +1343,12 @@
    "en": "I'm out of the office until",
    "k": "ch",
    "de": "ich bin bis … nicht im Büro",
-   "ex": "[I'm out of the office until] Monday, June 9, with limited access to email.",
+   "ex": "[I'm out of the office until] Monday, June 8, with limited access to email.",
    "why": "Abwesenheitsnotiz; „until“ plus Datum, US-Datumsform.",
-   "reg": "f",
+   "reg": "n",
    "syn": [
-    "I will be out of the office until"
+    "I will be out of the office until",
+    "I'll be out of the office until"
    ]
   },
   {
@@ -1332,19 +1365,6 @@
    ]
   },
   {
-   "id": "b-kindly-confirm",
-   "fn": "email",
-   "en": "kindly confirm",
-   "k": "ch",
-   "de": "bitte bestätigen Sie",
-   "ex": "[Kindly confirm] receipt of this email by return.",
-   "why": "Förmlich-bestimmt; „kindly“ im Sinne von „bitte“, nicht freundlich.",
-   "reg": "f",
-   "syn": [
-    "please confirm"
-   ]
-  },
-  {
    "id": "b-circle-back",
    "fn": "meeting",
    "en": "circle back",
@@ -1352,9 +1372,10 @@
    "de": "später darauf zurückkommen",
    "ex": "Let's [circle back] to pricing once we have the final scope.",
    "why": "Büro-Jargon; „circle back to sth“. Nicht trennbar.",
-   "reg": "i",
+   "reg": "n",
    "syn": [
-    "come back to"
+    "come back",
+    "get back"
    ],
    "gr": {
     "sep": 0,
@@ -1375,22 +1396,6 @@
    ]
   },
   {
-   "id": "b-table-a-proposal",
-   "fn": "meeting",
-   "en": "table a proposal",
-   "k": "col",
-   "de": "einen Vorschlag vertagen (US)",
-   "ex": "Let's [table the proposal] until we have the cost figures.",
-   "why": "US: vertagen. Im UK bedeutet es das Gegenteil: einbringen!",
-   "reg": "n",
-   "syn": [
-    "postpone the proposal"
-   ],
-   "gr": {
-    "pat": "table sth"
-   }
-  },
-  {
    "id": "b-take-offline",
    "fn": "meeting",
    "en": "take this offline",
@@ -1405,13 +1410,10 @@
    "fn": "meeting",
    "en": "loop sb in",
    "k": "pv",
-   "de": "jdn. einbeziehen",
+   "de": "jdn. (informell) in die Abstimmung mit einbinden",
    "ex": "I will [loop her in] so she is aware of the change.",
    "why": "Trennbar: loop her in. Verwandt mit „keep sb in the loop“.",
    "reg": "i",
-   "syn": [
-    "bring her in"
-   ],
    "gr": {
     "sep": 1,
     "pat": "loop sb in"
@@ -1438,17 +1440,18 @@
    "fn": "meeting",
    "en": "kick off",
    "k": "pv",
-   "de": "starten, eröffnen",
+   "de": "(ein Meeting/Projekt) mit Schwung starten",
    "ex": "Let's [kick off] the meeting with a quick status update.",
    "why": "Phrasal Verb; auch „kick off the project“.",
    "reg": "n",
-   "syn": [
-    "start"
-   ],
    "gr": {
     "sep": 1,
     "pat": "kick sth off"
-   }
+   },
+   "evade": [
+    "start",
+    "begin"
+   ]
   },
   {
    "id": "b-quick-recap",
@@ -1476,7 +1479,7 @@
    "why": "Feste Präposition „on“; „agenda“ mit Artikel.",
    "reg": "n",
    "syn": [
-    "add sth to the agenda"
+    "add the budget to the agenda"
    ],
    "gr": {
     "pat": "put sth on the agenda"
@@ -1515,7 +1518,7 @@
    "k": "ch",
    "de": "Sonstiges",
    "ex": "Is there [any other business] before we close?",
-   "why": "Letzter Tagesordnungspunkt; Abkürzung AOB.",
+   "why": "Letzter Agendapunkt (AOB), eher britisch; in den USA oft „other business“.",
    "reg": "f",
    "syn": [
     "anything else"
@@ -1531,7 +1534,8 @@
    "why": "Idiom; Objekt vor „up to speed“. Auch „be up to speed“.",
    "reg": "n",
    "syn": [
-    "bring sb up to date"
+    "bring me up to speed",
+    "bring me up to date"
    ],
    "gr": {
     "pat": "get sb up to speed"
@@ -1542,7 +1546,7 @@
    "fn": "meeting",
    "en": "a show of hands",
    "k": "col",
-   "de": "per Handzeichen",
+   "de": "eine Abstimmung per Handzeichen",
    "ex": "Let's have [a show of hands]: who is in favor?",
    "why": "Feste Wendung; Abstimmung durch Heben der Hand.",
    "reg": "n",
@@ -1576,7 +1580,7 @@
     "deployment"
    ],
    "evade": [
-    "start"
+    "introduction"
    ],
    "gr": {
     "cnt": "c"
@@ -1592,11 +1596,14 @@
    "why": "Zählbar; Dauer vom Bedarf bis zum Kauf.",
    "reg": "n",
    "evade": [
-    "purchase time"
+    "buying process"
    ],
    "gr": {
     "cnt": "c"
-   }
+   },
+   "syn": [
+    "procurement process"
+   ]
   },
   {
    "id": "b-metadata-schema",
@@ -1609,7 +1616,10 @@
    "reg": "n",
    "gr": {
     "cnt": "c"
-   }
+   },
+   "syn": [
+    "metadata model"
+   ]
   },
   {
    "id": "b-access-rights",
@@ -1633,28 +1643,32 @@
    "en": "e-invoicing",
    "k": "w",
    "de": "elektronische Rechnungsstellung",
-   "ex": "[E-invoicing] becomes mandatory for B2B transactions in Germany.",
+   "ex": "[E-invoicing] is gradually becoming mandatory for B2B transactions in Germany.",
    "why": "Nicht zählbar; mit Bindestrich: e-invoicing.",
    "reg": "n",
    "gr": {
     "cnt": "u"
-   }
+   },
+   "syn": [
+    "electronic invoicing"
+   ]
   },
   {
    "id": "b-go-live",
    "fn": "dms",
    "en": "go-live",
-   "k": "col",
+   "k": "w",
    "de": "Produktivstart",
-   "ex": "The [go-live] is scheduled for the first of October.",
+   "ex": "The [go-live] is scheduled for October 1.",
    "why": "Bindestrich als Nomen; Verb „go live“ getrennt.",
    "reg": "n",
-   "syn": [
-    "launch"
-   ],
    "gr": {
     "cnt": "c"
-   }
+   },
+   "evade": [
+    "launch",
+    "start"
+   ]
   },
   {
    "id": "b-user-adoption",
@@ -1681,9 +1695,6 @@
    "ex": "Please include the [total cost of ownership] in the comparison.",
    "why": "Abkürzung TCO; „cost“ im Singular.",
    "reg": "n",
-   "syn": [
-    "TCO"
-   ],
    "gr": {
     "cnt": "u"
    }
@@ -1728,22 +1739,22 @@
    "fn": "dms",
    "en": "legal hold",
    "k": "col",
-   "de": "rechtliche Aufbewahrungspflicht (Löschsperre)",
+   "de": "Löschsperre wegen eines Rechtsstreits",
    "ex": "The files are under [legal hold] and cannot be deleted.",
-   "why": "Nur im Singular ohne Artikel nach „under“.",
+   "why": "Sperre bei Rechtsstreit; „under/on legal hold“. Nicht mit Aufbewahrungsfrist verwechseln.",
    "reg": "f",
    "gr": {
-    "cnt": "u"
+    "cnt": "uc"
    }
   },
   {
    "id": "b-check-out-document",
    "fn": "dms",
-   "en": "check out a document",
-   "k": "col",
+   "en": "check out",
+   "k": "pv",
    "de": "ein Dokument zur Bearbeitung auschecken",
-   "ex": "Users must [check out a document] before editing it.",
-   "why": "Phrasal Verb; Gegenteil: check in.",
+   "ex": "Users must [check out] a document before editing it.",
+   "why": "Phrasal Verb, im DMS = zur Bearbeitung sperren; Gegenteil: check in.",
    "reg": "n",
    "gr": {
     "sep": 1,
@@ -1797,7 +1808,10 @@
    "de": "lokal im eigenen Rechenzentrum",
    "ex": "Many banks still prefer an [on-premises] solution.",
    "why": "Immer mit s: on-premises (nicht „premise“). Gegenteil: cloud.",
-   "reg": "n"
+   "reg": "n",
+   "syn": [
+    "on-prem"
+   ]
   },
   {
    "id": "b-licensing-model",
@@ -1806,7 +1820,7 @@
    "k": "col",
    "de": "Lizenzmodell",
    "ex": "We prefer a subscription-based [licensing model].",
-   "why": "US: licensing; Zählbar.",
+   "why": "Zählbar; üblich ist „licensing model“, seltener „license model“.",
    "reg": "n",
    "gr": {
     "cnt": "c"
@@ -1863,9 +1877,6 @@
    "ex": "We received your [request for proposal] on Monday.",
    "why": "Abkürzung RFP; „proposal“ im Singular.",
    "reg": "f",
-   "syn": [
-    "RFP"
-   ],
    "gr": {
     "cnt": "c"
    }
@@ -1876,7 +1887,7 @@
    "en": "implementation partner",
    "k": "col",
    "de": "Einführungspartner",
-   "ex": "Hanse Archiv GmbH is our [implementation partner] for the project.",
+   "ex": "Nordwerk IT is our [implementation partner] for the project.",
    "why": "Zählbar; Firma, die das System einführt.",
    "reg": "n",
    "gr": {
@@ -1905,9 +1916,6 @@
    "ex": "Our [data protection officer] has to approve the setup.",
    "why": "Mit Abkürzung DPO; zählbar.",
    "reg": "f",
-   "syn": [
-    "DPO"
-   ],
    "gr": {
     "cnt": "c"
    }
@@ -1921,9 +1929,6 @@
    "ex": "Our [document management system] replaced three older tools.",
    "why": "Abkürzung DMS; zählbar.",
    "reg": "n",
-   "syn": [
-    "DMS"
-   ],
    "gr": {
     "cnt": "c"
    }
@@ -1933,31 +1938,12 @@
    "fn": "dms",
    "en": "enterprise content management",
    "k": "col",
-   "de": "Enterprise-Content-Management",
+   "de": "unternehmensweites Content-Management (ECM)",
    "ex": "[Enterprise content management] covers more than just documents.",
    "why": "Abkürzung ECM; nicht zählbar.",
    "reg": "n",
-   "syn": [
-    "ECM"
-   ],
    "gr": {
     "cnt": "u"
-   }
-  },
-  {
-   "id": "b-digital-archive",
-   "fn": "dms",
-   "en": "digital archive",
-   "k": "col",
-   "de": "digitales Archiv",
-   "ex": "The [digital archive] stores over two million documents.",
-   "why": "Zählbar; Adjektiv vor Nomen.",
-   "reg": "n",
-   "syn": [
-    "electronic archive"
-   ],
-   "gr": {
-    "cnt": "c"
    }
   }
  ]

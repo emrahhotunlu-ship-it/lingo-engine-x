@@ -2,10 +2,12 @@ import { addDays, dayKey, dayStartOf, daysBetween } from '../shared';
 import { pickDay } from './balance';
 import { capDays, EV_F_MAX } from './cap';
 import { corridor } from './fuzz';
-import { FORM_SPEC, gradeOf, isFreeGood } from './grade';
+import { easyAllowed, FORM_SPEC, gradeOf, isFreeGood, isVoid, speedOf } from './grade';
+import { formLevel, updateFq } from './forms';
+import { isLeechCount } from './leech';
 import { canAscend, descend } from './ladder';
 import { book, newTrack, retr } from './tracks';
-import type { Form, Grade, Lex, LexKind, Outcome, Track, TrackKey, VocabCfg } from './types';
+import type { Form, FormStats, Grade, Lex, LexKind, Outcome, Track, TrackKey, VocabCfg } from './types';
 
 // Wörter-Modul V1: der Planer je Antwort (plan.md §4.2–4.3, Methoden M1, M7, M8, M9, M10, M11, M15, M77).
 //  1. Note aus dem Ergebnis (grade.ts).
@@ -41,8 +43,19 @@ export type Answer = {
   self?: Grade;
   /** Zweiter Versuch nach Hinweis (M45): Fehler kostet keine Stufe. */
   second?: boolean;
+  /** V2, M45: Ausgang des ersten Versuchs (setzt `second`). */
+  first?: Outcome;
+  /** V2, M57: war der gezeigte Satz der Ankersatz? (`null`/fehlt = ohne Satz oder unbekannt) */
+  anchor?: boolean | null;
+  /** V2, M41: getroffenes Ausweichwort (für „zweites gleiches → Hard“). */
+  hit?: string | null;
   flags?: number;
 };
+
+/** V2: Zeitbasis je Form (Median der Zeit bis zum ersten Zeichen und Zahl der Antworten, `vmod/stats`). */
+export type FkStats = { med: FormStats; n: Partial<Record<Form, number>> };
+
+
 
 export type PlanCtx = {
   cfg: VocabCfg;
@@ -55,9 +68,16 @@ export type PlanCtx = {
   /** Tages-Offsets, an denen Geschwister (Partner, Kernwort/Kollokation) fällig sind. */
   siblings: ReadonlySet<number>;
   rest?: (offset: number) => boolean;
+  /** V2: Zeitbasis je Form (M39). Fehlt sie, gibt es kein Zeit-Urteil. */
+  fk?: FkStats;
 };
 
-export type AnswerResult = { lex: Lex; grade: Grade | null; booked: TrackKey[]; note: number; track: 0 | 1 | 2 };
+/**
+ * Ereignisse für die Oberfläche (V3): `leech` neue Darstellung (M14) · `partner` Kollokationsfehler am Einzelwort, Partner-Lexem markieren (M56) ·
+ * `unfair` an die Inhaltsprüfung (M43) · `bound` Signal satzgebunden (M57) · `grammar` Beugungsfehler mit Grammatik-Hinweis (M40c).
+ */
+export type AnswerEvent = 'leech' | 'partner' | 'unfair' | 'bound' | 'grammar';
+export type AnswerResult = { lex: Lex; grade: Grade | null; booked: TrackKey[]; note: number; track: 0 | 1 | 2; events: AnswerEvent[]; speed: 'slow' | 'fast' | null };
 
 export function emptyLex(k: LexKind, pri: Lex['pri'], nowMs: number): Lex {
   return { v: 1, k, of: null, core: null, sense: null, lv: 1, u: newTrack(nowMs), b: null, day: null, dayU: null, step: null, ev: { f: [], o: 0, s: 0 }, sn: [], gr: null, reg: null, pri, lc: 0, pair: null, mv: 0, sync: 0, mig: null, intro: null };
@@ -91,9 +111,25 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const lex = clone(lex0);
   const day = dayKey(a.t);
   const spec = FORM_SPEC[a.form];
-  const g = gradeOf({ form: a.form, outcome: a.outcome, hint: a.hint, speed: a.speed, self: a.self, isColloc: lex.k === 'col', easyOk: lex.lv >= 5 });
+  const events: AnswerEvent[] = [];
+  // M43 „Aufgabe war unfair“ und M31 abgelehnte Erkennung: die Abfrage hat nicht stattgefunden (keine Note, kein Lernschritt, kein Satz).
+  if (isVoid(a.outcome)) {
+    if (a.outcome === 'unfair') events.push('unfair');
+    return { lex, grade: null, booked: [], note: 0, track: 0, events, speed: null };
+  }
+  const second = !!a.second || (!!a.first && a.first !== 'ok');
+  const endOfDay = dayStartOf(addDays(day, 1));
+  const tgt0: Track | null = spec.track === 'b' ? lex.b : spec.track === 'u' ? lex.u : null;
+  const dueNow = !!tgt0 && tgt0.due < endOfDay;
+  const age = lex.intro ? daysBetween(lex.intro, day) : 0;
+  const speed = a.speed !== undefined ? a.speed : ctx.fk ? speedOf(a.fk, ctx.fk.med[a.form], ctx.fk.n[a.form]) : null;
+  const evadeRepeat = a.outcome === 'evade' && !!a.hit && !!lex.fq?.ew.includes(a.hit);
+  const g = gradeOf({ form: a.form, outcome: a.outcome, hint: a.hint, speed, self: a.self, k: lex.k, evadeRepeat, first: a.first, easyOk: easyAllowed(formLevel(lex), dueNow, age) });
   const wrong = g === 1;
   const booked: TrackKey[] = [];
+  if (a.outcome === 'infl') events.push('grammar');
+  if (a.outcome === 'colloc' && lex.k !== 'col') events.push('partner');
+  const fqBefore = lex.fq;
 
   if (a.sentence) {
     lex.sn = [[a.sentence, day] as [string, string], ...lex.sn.filter((x) => x[0] !== a.sentence)].slice(0, SN_MAX);
@@ -108,7 +144,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   }
   const ankiBlocked = a.form === 'flip' && (lex.dayU === day || lex.day === day);
   const bookedToday = lex.day === day || ankiBlocked;
-  const wasDue = (t: Track | null) => !!t && t.due < dayStartOf(addDays(day, 1));
+  const wasDue = (t: Track | null) => !!t && t.due < endOfDay;
   const dueBefore = target ? wasDue(target === 'b' ? lex.b : lex.u) : false;
 
   // Schritt A bucht nie (die erste Buchung eines neuen Lexems ist Schritt B, §4.2 Nr. 2).
@@ -144,9 +180,10 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     }
     if (a.form === 'flip') lex.dayU = day;
     else lex.day = day;
-    if (wrong && !a.second && !(a.flags && a.flags & FLAG.override)) {
+    if (wrong && !second && !(a.flags && a.flags & FLAG.override)) {
       lex.lv = descend(lex.lv);
       lex.lc += 1;
+      if (isLeechCount(lex.lc)) events.push('leech');
       // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).
       lex.ev.f = lex.lv <= 2 ? [] : lex.ev.f.slice(-(lex.lv - 2));
     } else if (g >= 3 || (g === 2 && a.outcome === 'typo')) {
@@ -181,10 +218,16 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     lex.step = { n: g === null ? 10 : 11, at: a.t, gap: RETRY_GAP };
   }
 
+  // V2: Formen-Statistik (Formwahl, jeder 3. ohne Satz, Satzbindung, Ausweichwort). Gezählt wird für „jeder 3.“ nur ein Abruf mit Planwirkung.
+  if (spec.track !== null && a.form !== 'flip') {
+    lex.fq = updateFq({ ...lex, fq: fqBefore }, { form: a.form, track: spec.track, freeGood: isFreeGood(a.form, a.outcome, a.hint), anchor: a.anchor ?? null, wrong, evadeHit: a.outcome === 'evade' ? (a.hit ?? null) : null, counted: booked.includes('b') });
+    if ((lex.fq.nb ?? 0) > (fqBefore?.nb ?? 0)) events.push('bound');
+  }
+
   lex.sync = Math.max(lex.sync, a.t);
   const note = booked.length ? (g ?? 0) : 0;
   const track: 0 | 1 | 2 = booked.length === 2 ? 2 : booked[0] === 'b' ? 1 : 0;
-  return { lex, grade: g, booked, note, track };
+  return { lex, grade: g, booked, note, track, events, speed };
 }
 
 /**

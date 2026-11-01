@@ -21,6 +21,25 @@ export const LEGACY_EX: Readonly<Record<Form, { x: string; m: (typeof LEGACY_MOD
   listen: { x: 'dictation', m: 'listen' },
   flip: { x: 'flip', m: 'recog' },
   choice: { x: 'mc_en', m: 'recog' },
+  // V2: neue Formen, abgebildet auf die nächste alte Übungsart (nur für alte Leser; die Wahrheit steht in `vlog`).
+  probe: { x: 'type', m: 'type' },
+  de_sent: { x: 'type', m: 'type' },
+  cloze_part: { x: 'cloze_hint', m: 'cloze' },
+  complete: { x: 'produce', m: 'produce' },
+  prep: { x: 'colloc_gap', m: 'colloc' },
+  count: { x: 'cloze_hint', m: 'cloze' },
+  particle: { x: 'colloc_gap', m: 'colloc' },
+  partner: { x: 'colloc_gap', m: 'colloc' },
+  family: { x: 'cloze', m: 'cloze' },
+  situation: { x: 'produce', m: 'produce' },
+  diplomatic: { x: 'produce', m: 'produce' },
+  own: { x: 'produce', m: 'produce' },
+  say: { x: 'speak', m: 'produce' },
+  dictation: { x: 'dictation', m: 'listen' },
+  tiles: { x: 'tiles', m: 'recog' },
+  tone_mean: { x: 'mc_de', m: 'recog' },
+  find_trap: { x: 'mc_en', m: 'recog' },
+  contrast: { x: 'mc_en', m: 'recog' },
 };
 
 const counts = (v: unknown): { c: number; w: number } | null =>

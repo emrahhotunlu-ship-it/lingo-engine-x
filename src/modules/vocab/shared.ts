@@ -4,3 +4,5 @@
 export { addDays, dayKey, dayStartOf, daysBetween, isDayKey, learningDayEnd, learningDayStart, DAY_START_HOUR } from '../../domain/date';
 export type { Writer, TransformOp } from '../../data/writer';
 export { logError, logWarn } from '../../platform/diagnostics';
+// V2: britische Schreibweise ist in Emrahs Eingaben richtig (A7, Tippfehler-Regel (h)); dieselbe Liste wie im Rest der App.
+export { toUSText } from '../../domain/text/british';
