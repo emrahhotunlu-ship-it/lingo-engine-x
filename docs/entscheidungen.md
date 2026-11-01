@@ -687,3 +687,10 @@ Emrah: „Bitte wenn die Unterchats … fertig [sind], ab jetzt nur noch von hie
 - **Wörter-Zeit auf Heute:** Schätzung („ca. 14 Min.“), keine feste Zeit.
 - VB-Fragen 4–6 (Spur „Selbst schreiben“, „Später prüfen lassen“, früher planen bei niedriger Behaltensrate) kommen mit dem Kurzplan V4.
 - Emrah 01.11.: **vor jedem Paket ein Refinement** (wie, mit welchen Agenten und Skills, was es bringt, wie es aussieht) **vor** Bildern und Fragen.
+
+## 01.11.2026 – Großpakete statt kleiner Pakete
+Emrah (Wortlaut): „wo in der roadmap stehen wir .. du veröffenlichst nach jedem kleinen pups ein test link .. ich will größere pakete die geplant werden gemeinsam .. und dann der ganze rest wie wir es geplant haben schritt für schritt .. aber nicht so kleine pakete“
+Frage-Dialog, beide wie empfohlen:
+- **Drei Großpakete:** A Wörter-App komplett (V3+V4+V5), B Design komplett (D6a, D6b, E1–E7, F2–F5), C schneller Start (1b). Je einmal gemeinsam planen, je ein Test-Link am Ende. Ersetzt „Test-Link je Paket“ vom 01.11.
+- **Zwischendurch nur bei Fragen:** Rückmeldung nur bei echten Entscheidungen (Pop-up mit Bildern), sonst durcharbeiten bis zum Test-Link.
+- Kleinkorrekturen werden gesammelt und mit dem nächsten Großpaket ausgeliefert, kein eigener Test-Link.

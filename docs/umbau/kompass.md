@@ -8,7 +8,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 ## 2. Was Emrah wichtig ist (Wortlaut in `entscheidungen.md`)
 - **Wörter-App zuerst** (30.10.). Grundlage: Analyse von 18 Lern-Apps, `vokabeln/synthese.md`, Plan `vokabeln/plan.md`; jede übernommene Methode landet in genau einem Paket.
 - **Vorschau ist die Untergrenze**, besser ist erwünscht – Design, Bedienung, Abläufe und Funktionen (30.10.). **Keine Funktion fällt weg**, Funktionen werden ausgebaut, neue sinnvolle kommen dazu.
-- **Paket für Paket** (01.11.): erst genau verfeinern und planen → **kurzer Plan an Emrah zum OK** → bauen → Prüfer → **Test-Link je Paket** mit Klick-Anleitung → Emrahs Review → erst dann das nächste Paket.
+- **Großpakete statt kleiner Pakete** (Emrah 01.11., ersetzt „Test-Link je Paket“): die Roadmap besteht aus drei Großpaketen A (Wörter-App komplett: V3+V4+V5), B (Design komplett: D6a, D6b, E1–E7, F2–F5), C (schneller Start: 1b). Je Großpaket: **einmal gemeinsam planen** (Refinement als Text, dann Bilder/Fragen im Pop-up) → OK → Schritt für Schritt bauen und selbst prüfen → **ein Test-Link am Ende** → Review. **Kein Test-Link für Kleinigkeiten**; kleine Korrekturen sammeln und mit dem nächsten Großpaket ausliefern. Zwischendurch **nur bei echten Fragen** melden (Pop-up mit Bildern), sonst durcharbeiten.
 - **Keine Unterchats mehr** (01.11.): Nach V2, D5, VB arbeitet nur noch der Hauptchat, effizient (wenige Helfer gezielt, Prüfer aus `.claude/agents/`), öfter komprimieren.
 - **Fragen nur im Frage-Dialog** (Pop-up, antippbar, Empfehlung zuerst), nie als Fließtext (31.10.).
 - **Einfache Sprache** ohne Fachwörter; bei jedem Test-Link: was geändert, wie testen (genaue Klicks am Handy), woran erkennen, was schicken (CLAUDE.md A2).
@@ -18,26 +18,22 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 - Keine Schleifen: je Prüfer eine Prüfung + eine gezielte Nachprüfung; roter Test höchstens zwei Behebungsversuche je Ursache, dann offen melden.
 - „Stopp“ heißt sofort anhalten.
 
-## 3. Roadmap (Paket-Reihenfolge, Stand 01.11.2026)
-| # | Paket | Inhalt | Stand |
+## 3. Roadmap (Großpakete, Stand 01.11.2026)
+| # | Großpaket | Inhalt | Stand |
 |---|---|---|---|
-| ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | zusammengeführt in `claude/umbau-fokus` (01.11.); alle Unterchats beendet |
-| 1 | **Test-Link** | Stand bis D5 (Heute, Übungsseite, Grammatik neu) + D5-Nachtrag (Gedämpft-Knopf, „Lehrkraft“) zum Review | **Test-Link v77 `1793534318-5906` (01.11.)**, Rückweg v76; wartet auf Emrahs Review |
-| 2 | V3 | Wörter: Lernkarte, Sitzung, Abschluss (Bilder Satz 1 vorher abgesegnet; 6 VB-Fragen mit dem Kurzplan) | **freigegeben 01.11.** (Plan + VB 1–3 wie empfohlen), Bau läuft |
-| 3 | V4 | Wörter: Anwenden, Wort-Detail, Übersicht (Bilder Satz 2 vorher) | |
-| 4 | V5 | Wörter: C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus | |
-| 5 | D6a, D6b | Praxis/Fortschritt; Fragen-Blatt/Ausfälle im neuen Design | |
-| 6 | 1b (P9a, P9b, P10) | schnellerer Start (Inhalte nachladen) | |
-| 7 | E1–E7, F2–F5 | übrige Bildschirme, fehlende Vorschau-Funktionen | |
+| ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB + D5-Nachtrag | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | in `claude/umbau-fokus`; Test-Link v77 `1793534318-5906` (01.11.), wartet auf Emrahs Review; nicht live |
+| A | **Wörter-App komplett** | V3 (Lernkarte, Sitzung, Abschluss; freigegeben 01.11. mit VB 1–3) + V4 (Anwenden, Wort-Detail, Übersicht; VB 4–6) + V5 (C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus erst nach Emrahs OK) + gesammelte Kleinkorrekturen | V3 Schritt 1 begonnen; Refinement V4+V5 an Emrah offen; **ein Test-Link am Ende** |
+| B | **Design komplett** | D6a, D6b (Praxis/Fortschritt, Fragen-Blatt/Ausfälle), E1–E7, F2–F5 (übrige Bildschirme, fehlende Vorschau-Funktionen) | Refinement nach A |
+| C | **Schneller Start** | 1b (P9a, P9b, P10: Inhalte nachladen) | Refinement nach B |
 | danach | Grammatik, Praxis, Lesen als eigene Module | gleiches Prinzip wie die Wörter-App | |
-Reihenfolge darf Emrah jederzeit ändern. Jedes Paket durchläuft §2 „Paket für Paket“.
+Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Großpakete“ und §4.
 
-## 4. Ablauf je Paket (Hauptchat)
+## 4. Ablauf je Großpaket (Hauptchat)
 1. **Verfeinern:** Plan-Abschnitt, Funktionsliste (Datei:Zeile), offene Punkte; Helfer nur zum Lesen/Prüfen.
 2. **Refinement an Emrah (Pflicht, Emrah 01.11.):** was, warum, was es bringt, wie es aussieht (Bild), **wie ich vorgehe, mit welchen Agenten und Skills**, was sich nicht ändert, offene Risiken – ZUERST als Text; erst danach Bilder und Fragen im Pop-up. Erst nach OK bauen.
 3. **Bauen** auf `claude/umbau-fokus`, kleine Commits, früh pushen.
 4. **Prüfen:** `verify:fast`, betroffene Specs, Prüfer (learning-scientist/english-teacher bei Übungen/Inhalten, ux-reviewer bei Bildschirmen, data-guard bei Daten, platform-guard vor Test-Link). Gesamtlauf `npm run verify` vor dem Test-Link.
-5. **Test-Link** (`AXHkh6…`, mit `db`, `sample`, `downloads`), Bericht in drei Teilen (A2), Lerntag-Durchlauf vorher.
+5. **Test-Link nur am Ende des Großpakets** (`AXHkh6…`, mit `db`, `sample`, `downloads`), Bericht in drei Teilen (A2), Lerntag-Durchlauf vorher.
 6. **Review Emrah** → Korrekturen → Eintrag in `stand.md` und hier §3.
 
 ## 5. Technik-Stolpersteine (Cloud-Umgebung)
