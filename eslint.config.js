@@ -21,6 +21,14 @@ const READ_DOOR_PATTERN = {
   regex: '(^|/)modules/read/(?!index$|registry$)',
   message: 'Lesen-Modul: von außen nur über modules/read/index oder modules/read/registry (docs/umbau/lesen-plan.md §5.3).',
 };
+/**
+ * Wörter-Modul (docs/umbau/vokabeln/plan.md §2.1): von außen nur über `modules/vocab/api` (Tür) und `modules/vocab/registry` (Schemas für
+ * src/data/paths.ts). Wird in JEDEM `no-restricted-imports`-Block wiederholt, weil ESLint je Datei nur einen Block anwendet.
+ */
+const VOCAB_DOOR_PATTERN = {
+  regex: '(^|/)modules/vocab/(?!api$|registry$)',
+  message: 'Wörter-Modul: von außen nur über modules/vocab/api oder modules/vocab/registry (docs/umbau/vokabeln/plan.md §2.1).',
+};
 const PLATFORM_SYNTAX = [
   { selector: "MemberExpression[property.name='claude']", message: 'claude.use nur in src/platform (Kap. 3.3).' },
   { selector: "Identifier[name='localStorage']", message: 'localStorage nur über src/platform/storage.ts.' },
@@ -160,11 +168,11 @@ export default defineConfig(
   {
     // Entfernungs-Audit: Importe aus den gelöschten Bereichen sind verboten (sonst käme der Code unbemerkt zurück).
     files: ['src/**/*.{ts,tsx}', 'tests/**/*.ts'],
-    ignores: ['src/modules/read/**', 'tests/unit/read/**'],
+    ignores: ['src/modules/read/**', 'tests/unit/read/**', 'src/modules/vocab/**', 'tests/unit/vocab/**', 'scripts/vocab/**'],
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, READ_DOOR_PATTERN] },
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] },
       ],
     },
   },
@@ -173,9 +181,9 @@ export default defineConfig(
     // (Die Umstellung der alten App rechnet die alte Serie bewusst selbst.) Wiederholt das Entfernungs-Audit, weil `no-restricted-imports` je Datei nur einmal gilt.
     // Seit P5 S1-ZAHL (Nacharbeit) sperrt der Block auch die Namen aus `SCREEN_NUMBER_NAMES`; der nächste Block gibt sie für die Erlaubnisliste frei.
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/domain/metrics/**', 'src/domain/migration/**', 'src/platform/**', 'src/modules/read/**'],
+    ignores: ['src/domain/metrics/**', 'src/domain/migration/**', 'src/platform/**', 'src/modules/read/**', 'src/modules/vocab/**'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, SCREEN_NUMBER_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, SCREEN_NUMBER_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] }],
     },
   },
   {
@@ -183,21 +191,21 @@ export default defineConfig(
     files: ['src/domain/**/*.{ts,tsx}', ...SCREEN_NUMBER_OK],
     ignores: ['src/domain/metrics/**', 'src/domain/migration/**'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] }],
     },
   },
   {
     // Dieselbe Regel für die beiden Ordner, die die Block oben auslässt (metrics, migration), mit Seed-/Adapter-Sperre.
     files: ['src/domain/metrics/**/*.{ts,tsx}', 'src/domain/migration/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] }],
     },
   },
   {
     // Die Plattform-Schicht darf Seed und Entwicklungs-Adapter laden, aber keine Anzeige-Zahlen selbst rechnen (Erlaubnisliste, P5 S1-ZAHL).
     files: ['src/platform/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN] }],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] }],
     },
   },
   {
@@ -208,7 +216,7 @@ export default defineConfig(
     files: DISPLAY_FILES,
     ignores: ['src/features/today/store.ts', 'src/features/today/state.ts'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, SCREEN_NUMBER_PATTERN, DISPLAY_RAW_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN] }],
+      'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, CARDS_PATTERN, STREAK_PATTERN, SCREEN_NUMBER_PATTERN, DISPLAY_RAW_PATTERN, DEV_PATTERN, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] }],
     },
   },
   {
@@ -270,9 +278,40 @@ export default defineConfig(
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN] },
+        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, VOCAB_DOOR_PATTERN] },
       ],
     },
+  },
+  {
+    // Wörter-Modul, Tür nach innen (plan.md §2.1): Nur `shared.ts` importiert aus dem Rest der App. Modulebene ohne `../`, Unterordner höchstens
+    // einen Schritt hoch (`../shared`). Vor allem kein Import aus src/domain/srs: das Modul ist neu, keine Reparatur am Alten.
+    files: ['src/modules/vocab/*.ts'],
+    ignores: ['src/modules/vocab/shared.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, { regex: '^\\.\\./', message: 'Wörter-Modul: Importe von außen nur in modules/vocab/shared.ts (plan.md §2.1).' }] },
+      ],
+    },
+  },
+  {
+    files: ['src/modules/vocab/*/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, { regex: '^\\.\\./\\.\\./', message: 'Wörter-Modul: höchstens ein Schritt hoch (../shared); Fremdes nur über shared.ts (plan.md §2.1).' }] },
+      ],
+    },
+  },
+  {
+    // shared.ts ist die einzige Tür nach innen; die Erlaubnisliste prüft tests/unit/vocab/isolation.test.ts.
+    files: ['src/modules/vocab/shared.ts'],
+    rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN, { regex: '(^|/)domain/srs(/|$)', message: 'Wörter-Modul: kein Import aus domain/srs (plan.md §2.1).' }] }] },
+  },
+  {
+    // Tests und Simulation des Wörter-Moduls dürfen ins Modul hineinsehen (nicht ins Lesen-Modul, nicht in gelöschte Bereiche).
+    files: ['tests/unit/vocab/**/*.ts', 'scripts/vocab/**/*.ts'],
+    rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, READ_DOOR_PATTERN] }] },
   },
   {
     // Tests des Moduls dürfen ins Modul hineinsehen.
@@ -280,7 +319,7 @@ export default defineConfig(
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }] },
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, VOCAB_DOOR_PATTERN] },
       ],
     },
   },

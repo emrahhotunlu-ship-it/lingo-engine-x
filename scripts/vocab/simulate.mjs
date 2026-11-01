@@ -7,7 +7,8 @@
 //
 //   node scripts/vocab/simulate.mjs                 # heutiger Planer, alle Szenarien, Tabelle auf stdout
 //   node scripts/vocab/simulate.mjs --write         # dazu docs/umbau/vokabeln/ausgangsmessung.md und .json neu schreiben
-//   node scripts/vocab/simulate.mjs --adapter v1    # später: neuer Planer (Datei adapter-v1.ts)
+//   node scripts/vocab/simulate.mjs --adapter v1    # neuer Planer (Datei adapter-v1.ts, Paket V1)
+//   node scripts/vocab/simulate.mjs --write --out v1-heute   # faire Neumessung des heutigen Planers mit Nebenwegen (V1)
 //   node scripts/vocab/simulate.mjs --days 60 --seed 20261031 --seeds 5   # Abnahme: schlechtester Wert über 5 Startwerte
 //
 // Der simulierte Lerner ist erfunden und deterministisch (fester Startwert). Keine echten Daten.
@@ -31,6 +32,7 @@ const adapterName = opt('adapter', 'current');
 const days = Number(opt('days', '60'));
 const seed = Number(opt('seed', '20261031'));
 const seeds = Number(opt('seeds', '5'));
+const only = opt('only', '') ? opt('only', '').split(',') : undefined; // z. B. --only C,D
 
 const { createServer } = await import(resolve(root, 'node_modules/vite/dist/node/index.js'));
 const server = await createServer({
@@ -46,7 +48,7 @@ let code = 0;
 try {
   const core = await server.ssrLoadModule('/scripts/vocab/sim-core.ts');
   const adapter = await server.ssrLoadModule(`/scripts/vocab/adapter-${adapterName}.ts`);
-  const result = core.runAll(adapter.default, { days, seed, seeds });
+  const result = core.runAll(adapter.default, { days, seed, seeds, only });
   const md = core.toMarkdown(result);
   process.stdout.write(md + '\n');
   const failed = core.selfCheck(result);
@@ -55,7 +57,8 @@ try {
     code = 1;
   }
   if (write) {
-    const suffix = adapterName === 'current' ? '' : `-${adapterName}`;
+    // V1: `--out <name>` wählt den Dateinamen (z. B. `--out v1-heute` für die faire Neumessung des heutigen Planers), sonst wie bisher.
+    const suffix = opt('out', '') ? `-${opt('out', '')}` : adapterName === 'current' ? '' : `-${adapterName}`;
     writeFileSync(resolve(root, `docs/umbau/vokabeln/ausgangsmessung${suffix}.json`), JSON.stringify(core.toJson(result), null, 1) + '\n');
     writeFileSync(resolve(root, `docs/umbau/vokabeln/ausgangsmessung${suffix}.tabelle.md`), md + '\n');
   }

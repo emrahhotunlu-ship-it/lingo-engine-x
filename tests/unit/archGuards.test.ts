@@ -14,7 +14,9 @@ function files(dir: string): string[] {
   });
 }
 const all = files(ROOT).map((p) => ({ rel: relative(ROOT, p).replaceAll('\\', '/'), text: readFileSync(p, 'utf8') }));
-const outside = all.filter((f) => !f.rel.startsWith('domain/metrics/') && !f.rel.startsWith('domain/migration/'));
+// Benannte Ausnahme (Wörter-Modul V1, docs/umbau/vokabeln/plan.md §2.1): `modules/vocab` hat eigene Spuren, eigene Termine und eine eigene
+// Zählung; die Zahlen für Heute kommen dort aus `api.ts` (todayBlock, lexemeState), nicht aus `domain/metrics`.
+const outside = all.filter((f) => !f.rel.startsWith('domain/metrics/') && !f.rel.startsWith('domain/migration/') && !f.rel.startsWith('modules/vocab/'));
 
 describe('Architektur: eine Quelle je Zahl', () => {
   it('buildTrainCards wird nur über domain/metrics importiert', () => {

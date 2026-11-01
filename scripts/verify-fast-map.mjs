@@ -73,6 +73,8 @@ export const RULES = [
   { prefix: 'src/features/vocab/', specs: [...TRAINER, ...VOCAB] },
   { prefix: 'src/domain/srs/', specs: [...TRAINER, 'rueckstand.spec.ts'] },
   { prefix: 'src/domain/vocab/', specs: [...TRAINER, ...VOCAB] },
+  // Wörter-Modul V1 (unsichtbar, hinter dem Schalter): keine eigenen Bildschirme; die Registrierung in src/data prüfen Sicherung/Diagnose/Kapazität.
+  { prefix: 'src/modules/vocab/', specs: ['platform.spec.ts', 'capacity.spec.ts', 'diagnose.spec.ts'] },
   { prefix: 'src/features/grammar/', specs: GRAMMAR },
   { prefix: 'src/domain/grammar/', specs: GRAMMAR },
   { prefix: 'src/features/learn/', specs: ['lernen.spec.ts', 'hint.spec.ts', 'hilfen.spec.ts'] },
