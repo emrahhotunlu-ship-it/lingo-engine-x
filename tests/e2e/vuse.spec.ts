@@ -28,7 +28,8 @@ function learnedLex(): Doc {
 function patch(): Record<string, Doc> {
   const p: Record<string, Doc> = {
     'app/schema': { ...MIGRATED['app/schema'], vocabModule: { v: 1, t: NOW - 3_600_000, state: 'done' } },
-    'app/profile': { vcfg: { min: 15, ret: 0.9, mod: 1 } },
+    // Keine neuen Wörter: sonst füllt S7 Neues nach, und die Anwenden-Karte kommt später (die Runde beginnt mit neuen Wörtern).
+    'app/profile': { vcfg: { min: 15, ret: 0.9, mod: 1 }, newPerDay: 0 },
   };
   for (const path of PATHS) p[path] = { lex: learnedLex() };
   return p;

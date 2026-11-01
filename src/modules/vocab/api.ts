@@ -165,3 +165,8 @@ export function loadWordPage() {
 export function loadOverview() {
   return import('./ui/Overview');
 }
+
+/** Einstufungstest (Großpaket A S7c): eigene Teil-Datei, erst beim Öffnen geladen. */
+export function loadPlace() {
+  return import('./ui/PlaceScreen');
+}

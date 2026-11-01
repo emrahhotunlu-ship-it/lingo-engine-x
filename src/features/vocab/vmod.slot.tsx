@@ -16,7 +16,7 @@ function OverviewHost() {
   if (!on) return null;
   return (
     <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-      <Overview onOpenList={() => go({ name: 'vocabList' })} />
+      <Overview onOpenList={() => go({ name: 'vocabList' })} onPlace={() => go({ name: 'vplace' })} />
     </Suspense>
   );
 }

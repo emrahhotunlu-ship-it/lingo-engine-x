@@ -97,14 +97,28 @@ export type Fresh = { src: Exclude<Src, 'own'>; word: string; de: string; ex: st
 /** Zielmarkierung `[…]` aus Lehrer-Sätzen entfernen. */
 export const plainEx = (s: string): string => s.replace(/\[([^\]]+)\]/g, '$1').replace(/\s+/g, ' ').trim();
 
-export type JobRaw = { id: string; en: string; k: string; de: string; ex: string };
-/** Beruf und Wendungen (Charge 2): in Dateireihenfolge, ohne vorhandene Stichwörter. */
+export type JobRaw = { id: string; en: string; k: string; de: string; ex: string; fn?: string };
+/**
+ * Beruf und Wendungen (Charge 2), ohne vorhandene Stichwörter, reihum je Gruppe (`fn`: Absichern, Verhandeln, E-Mail …), in jeder Gruppe in
+ * Dateireihenfolge. So kommen an einem Tag nicht lauter Wendungen derselben Art (english-teacher S7c).
+ */
 export function jobPool(items: readonly JobRaw[], have: ReadonlySet<string>): Fresh[] {
-  const out: Fresh[] = [];
+  const groups = new Map<string, Fresh[]>();
   for (const b of items) {
     const h = headwordOf(b.en);
     if (have.has(h)) continue;
-    out.push({ src: 'job', word: b.en, de: b.de, ex: plainEx(b.ex), pos: '', kind: b.k === 'ch' ? 'chunk' : 'vocab', core: null, ref: `charge2/${b.id}` });
+    const g = groups.get(b.fn ?? '') ?? [];
+    g.push({ src: 'job', word: b.en, de: b.de, ex: plainEx(b.ex), pos: '', kind: b.k === 'ch' ? 'chunk' : 'vocab', core: null, ref: `charge2/${b.id}` });
+    groups.set(b.fn ?? '', g);
+  }
+  const lists = [...groups.values()];
+  const longest = Math.max(0, ...lists.map((l) => l.length));
+  const out: Fresh[] = [];
+  for (let i = 0; i < longest; i++) {
+    for (const l of lists) {
+      const f = l[i];
+      if (f) out.push(f);
+    }
   }
   return out;
 }

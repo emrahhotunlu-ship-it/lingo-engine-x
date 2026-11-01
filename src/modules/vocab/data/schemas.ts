@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { FORMS, OS_MAX, OS_TEXT_MAX } from '../domain/types';
+import { PLACE_BANDS } from '../domain/place';
 
 // Wörter-Modul V1: Schemas (plan.md §3; data-guard V0 Befund 2). Gelesen wird tolerant (`looseObject`, eine höhere Version wird nie
 // zurückgeschrieben, wie `isFutureFsrs`), geschrieben wird streng (`lexWriteSchema`).
@@ -161,3 +162,17 @@ export const vcfgSchema = z
 
 /** `app/schema.vocabModule`: Versionsmarke der Umrechnung (§9.1). */
 export const vocabModuleMarkSchema = z.object({ v: z.literal(1), t: int.positive(), state: z.enum(['dry', 'running', 'done']) }).strict();
+
+/** Großpaket A S7c: höchstens so viele gekonnte Stichwörter merkt die Einstufung (5 Stufen × 8 Wörter = 40; Luft für spätere Stufen). */
+export const PLACE_OK_MAX = 200;
+/** `vmod/place` (Einstufung, Bild s3-04): Zeitpunkt, Grenze (Rang), je Stufe [von, Status, erkannt, gebildet], gekonnte Stichwörter. */
+export const vmodPlaceWriteSchema = z
+  .object({
+    v: z.literal(1),
+    t: int.positive(),
+    edge: int.min(0).max(100_000),
+    bands: z.array(z.tuple([int.min(0).max(100_000), z.enum(['ok', 'bad', 'skip']), int.min(0).max(6), int.min(0).max(2)])).max(PLACE_BANDS.length),
+    ok: z.array(z.string().min(1).max(80)).max(PLACE_OK_MAX),
+  })
+  .strict();
+export type PlaceDoc = z.infer<typeof vmodPlaceWriteSchema>;

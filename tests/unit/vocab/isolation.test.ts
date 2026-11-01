@@ -21,7 +21,7 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav|clock)$/,
   /^src\/i18n$/,
   /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented|GradeButtons|Switch)$/,
-  /^src\/engine\/(EnglishText|KineticGap|HiddenInput|MicButton|useHotkeys|wordTap)$/,
+  /^src\/engine\/(EnglishText|Choices|KineticGap|HiddenInput|MicButton|useHotkeys|wordTap)$/,
   /^src\/domain\/answer\/mask$/,
   /^src\/domain\/lexicon\/(dict|pron)$/,
   /^src\/data(\/live|\/reads)?$/,

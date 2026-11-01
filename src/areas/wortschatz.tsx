@@ -18,13 +18,14 @@ import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps, SheetProps } from '../app/registry';
 import { lazy, Suspense, useEffect } from 'react';
-import { loadOverview, loadScreens, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
+import { loadOverview, loadPlace, loadScreens, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
 import { useLive } from '../data/live';
 import { recordRoundEnd } from '../features/progress/persist';
 import { markExhausted } from '../features/today/store';
 import { useUnitRun } from '../features/unit/runStore';
 import { unitDone } from '../app/unit/done';
 import { useNav } from '../app/nav';
+import { closeSettings } from '../app/sheets';
 import { openCompanion } from '../features/companion/store';
 import { Skeleton } from '../ui/Skeleton';
 import { ExerciseTop } from '../features/learn/ui';
@@ -53,6 +54,8 @@ declare module '../app/router/types' {
     vlearn: { kind: VlearnKind; path?: string };
     /** Wort-Seite der neuen Wörter-App (Großpaket A S6): Stand, Verlauf, Sätze, Aktionen eines Lexems. */
     vword: { path: string };
+    /** Einstufungstest der Wörter-App (Großpaket A S7c): Grenze in der Häufigkeitsliste. */
+    vplace: NoParams;
   }
 }
 
@@ -66,14 +69,22 @@ const vwordParams = z.object({ path: LEX_PATH });
 const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScreen })));
 const WordPage = lazy(() => loadWordPage().then((m) => ({ default: m.WordPage })));
 const WordSettings = lazy(() => loadOverview().then((m) => ({ default: m.WordSettings })));
+const PlaceScreen = lazy(() => loadPlace().then((m) => ({ default: m.PlaceScreen })));
 
 /** Einstellungen › Wortschatz (Großpaket A S6, Bild s2-13): Zielzeit, neue Wörter, Sicherheit; nur bei eingeschalteter Wörter-App. */
 function WordSettingsHost() {
   const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
+  const go = useNav((s) => s.go);
   if (!on) return null;
   return (
     <Suspense fallback={<Skeleton className="h-48 w-full" />}>
-      <WordSettings />
+      <WordSettings
+        onPlace={() => {
+          // Einstellungen zu, sonst liegt das Blatt über dem Test (E2E vplace).
+          closeSettings();
+          go({ name: 'vplace' });
+        }}
+      />
     </Suspense>
   );
 }
@@ -124,6 +135,16 @@ function VlearnPage({ route }: ScreenProps<'vlearn'>) {
         onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
         renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} />}
       />
+    </Suspense>
+  );
+}
+
+/** Einstufung: ✕ und „Später“ zurück zur Herkunft, „Fertig“ ebenso (Übersicht oder Einstellungen). */
+function VplacePage() {
+  const back = useNav((s) => s.back);
+  return (
+    <Suspense fallback={<Skeleton className="m-4 h-40" />}>
+      <PlaceScreen onClose={back} onDone={back} renderTop={({ onClose, progress }) => <ExerciseTop onClose={onClose} closeTestId="vp-close" progress={progress} progressTestId="vp-progress" ctx={null} />} />
     </Suspense>
   );
 }
@@ -213,6 +234,7 @@ export const wortschatz = defineArea({
     // Neue Wörter-App (Großpaket A, V3): Lernrunde des Moduls; Einstieg von Heute kommt mit Schritt 4.
     vlearn: { kind: 'exercise', component: VlearnPage, title: 'vmScreenTitle', params: vlearnParams },
     vword: { kind: 'page', chrome: 'shell', component: VwordPage, title: 'vmWpTitle', params: vwordParams },
+    vplace: { kind: 'exercise', component: VplacePage, title: 'vmPlTitle' },
   },
   entries: [
     // Zeile unter Üben (place 'learn'): Lehrer-Feedback einfügen.

@@ -8,8 +8,11 @@ import { vcfgSchema } from '../data/schemas';
 import { Catalog, forecastMinutes, type Item } from '../domain/catalog';
 import { outlook, type Outlook } from '../domain/overview';
 import { YOUNG_MAX_LV } from '../domain/planner';
+import { PLACE_FLOOR } from '../domain/place';
 import { avg, boostExtraMinutes, groupCounts, rateOf, RET_GAP, RET_MIN_SAMPLE, RET_WINDOW_DAYS, retention, retentionGap, safetyMinutes, youngBoost, type Retention } from '../domain/stats';
 import { DEFAULT_CFG, type Lex, type VocabCfg } from '../domain/types';
+import { readPlace, type Place } from '../data/refill';
+import { VMOD_PLACE_PATH } from '../registry';
 
 // Großpaket A S6: Übersicht Wörter (Bild s2-05/s2-06: B1, M18, M63, N7) und Einstellungen Wörter (Bild s2-13: B9, F3, F5).
 // Liest live (`useLive`), den Verlauf der letzten 30 Lerntage einmal; schreibt nur über den einen Schreibpfad (data/settings.ts).
@@ -85,9 +88,49 @@ function useRetention(day: string, nowMs: number): RetState {
 export type OverviewProps = {
   /** „Alle Wörter“: kommt vom Bereich (Route der Liste). */
   onOpenList: () => void;
+  /** Einstufungstest (S7c): Route kommt vom Bereich. */
+  onPlace?: () => void;
 };
 
-export function Overview({ onOpenList }: OverviewProps) {
+/** Letzte Einstufung (`vmod/place`), einmal beim Öffnen gelesen (die Sammlung `vmod` ist nicht live). */
+function usePlace(): (Place & { t: number | null }) | null {
+  const [st, setSt] = useState<(Place & { t: number | null }) | null>(null);
+  useEffect(() => {
+    let live = true;
+    readOr(VMOD_PLACE_PATH)
+      .then((d) => {
+        const p = readPlace(d);
+        if (live && p) setSt({ ...p, t: d && typeof d.t === 'number' ? d.t : null });
+      })
+      .catch((e: unknown) => logError('vocab:place-read', e));
+    return () => {
+      live = false;
+    };
+  }, []);
+  return st;
+}
+
+/** Zeile „Wörter einstufen“ (Übersicht und Einstellungen): mit letzter Grenze, wenn es eine gibt. */
+export function PlaceEntry({ onPlace }: { onPlace: () => void }) {
+  const { t, lang, dateShort } = useT();
+  const place = usePlace();
+  // Grenze an der Untergrenze heißt „unter den 2.500“ – wie im Ergebnis (ux-reviewer S7c: keine Widersprüche).
+  const sub = place
+    ? t(place.edge <= PLACE_FLOOR ? 'vmPlEntryLow' : 'vmPlEntryDone', { n: place.edge.toLocaleString(LOCALES[lang]), date: place.t ? dateShort(place.t) : '–' })
+    : t('vmPlEntrySub');
+  return (
+    <button type="button" className="lx-card flex w-full items-center gap-3 p-4 text-left" onClick={onPlace} data-testid="vo-place" data-edge={place?.edge ?? ''}>
+      <Icon name="target" size={20} />
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="font-medium">{t('vmPlEntry')}</span>
+        <span className="text-sm text-muted">{sub}</span>
+      </span>
+      <Icon name="chevronRight" size={18} />
+    </button>
+  );
+}
+
+export function Overview({ onOpenList, onPlace }: OverviewProps) {
   const { t } = useT();
   const now = useClock((s) => s.now);
   const day = useClock((s) => s.today);
@@ -99,7 +142,7 @@ export function Overview({ onOpenList }: OverviewProps) {
   const ret = useRetention(day, now);
   if (!ready) return <Skeleton className="h-64 w-full rounded-[var(--radius-card)]" />;
   return (
-    <div className="flex flex-col gap-4" data-testid="vo">
+    <div className="mb-4 flex flex-col gap-4" data-testid="vo">
       <p className="lx-t-support m-0 text-muted">{t('vmOvSub')}</p>
       <section className="lx-card flex flex-col gap-3 p-4 sm:p-5" data-testid="vo-counts" aria-labelledby="vo-counts-title">
         <h3 id="vo-counts-title" className="m-0 flex items-baseline gap-3">
@@ -126,6 +169,7 @@ export function Overview({ onOpenList }: OverviewProps) {
         </span>
         <Icon name="chevronRight" size={18} />
       </button>
+      {onPlace && <PlaceEntry onPlace={onPlace} />}
     </div>
   );
 }
@@ -239,7 +283,7 @@ function RateChip({ label, v, testId }: { label: string; v: number | null; testI
 
 // ---------- Einstellungen Wörter
 
-export function WordSettings() {
+export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
   const { t } = useT();
   const now = useClock((s) => s.now);
   const { items, cfg, ready } = useWords();
@@ -323,6 +367,7 @@ export function WordSettings() {
         <Switch checked={pre} onChange={(v) => save({ pre: v ? 1 : 0 })} label={t('vmSetPre')} testId="vs-pre" />
         <p className="m-0 text-sm text-muted">{t('vmSetPreHint')}</p>
       </div>
+      {onPlace && <PlaceEntry onPlace={onPlace} />}
     </section>
   );
 }

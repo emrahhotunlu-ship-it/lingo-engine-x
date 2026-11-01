@@ -28,6 +28,8 @@ export { GradeButtons } from '../../ui/GradeButtons';
 
 // Lücke, antippbarer Text, Eingabe
 export { EnglishText } from '../../engine/EnglishText';
+// Einstufungstest (S7c): vier Bedeutungen zur Wahl, ohne Rückmeldung je Wort.
+export { Choices } from '../../engine/Choices';
 export { KineticGap } from '../../engine/KineticGap';
 export type { GapState } from '../../engine/KineticGap';
 export { useHiddenInput } from '../../engine/HiddenInput';

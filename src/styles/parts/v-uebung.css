@@ -569,3 +569,29 @@ html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secon
   font-size: 0.92rem;
   font-weight: 600;
 }
+
+/* Einstufung S7c: Selbst bilden zeigt nur den Anfangsbuchstaben auf einer festen Linie; die Lücke verrät die Wortlänge nicht (s3-03). */
+.lx-vp-gap .lx-gap[data-masked] {
+  min-width: 5.5em;
+  justify-content: flex-start;
+  box-shadow: inset 0 -2px 0 0 var(--fg-3);
+}
+.lx-vp-gap .lx-gap[data-masked] .lx-slot {
+  box-shadow: none;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+/* Einstufung S7c: Quellen-Mix in Abstufungen von Akzent und Neutral (Grün bleibt für „richtig“; jeder Punkt ≥ 3:1 sichtbar). */
+.lx-vp-src-col {
+  background: var(--act);
+}
+.lx-vp-src-job {
+  background: color-mix(in srgb, var(--act) 55%, var(--fg));
+}
+.lx-vp-src-own {
+  background: var(--fg-3);
+}
+.lx-vp-src-band {
+  background: color-mix(in srgb, var(--fg-3) 45%, var(--fg));
+}

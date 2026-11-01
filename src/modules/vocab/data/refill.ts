@@ -20,8 +20,11 @@ export function readPlace(doc: Doc | null): Place | null {
   return r?.success ? { edge: r.data.edge, ok: r.data.ok } : null;
 }
 
-/** Deckel (data-guard S7b): ab so vielen Wort- und Wendungsdokumenten legt das Nachfüllen nichts mehr an (Kap. 9: höchstens 5.000 je Artefakt). */
-export const REFILL_DOC_CAP = WARN_2;
+/**
+ * Deckel (data-guard S7b/S7c): ab so vielen Wort- und Wendungsdokumenten legt das Nachfüllen nichts mehr an. Die 5.000 (Kap. 9) gelten für alle
+ * Dokumente; 1.000 bleiben für Verlauf, Tage, Lektionen, Lesen und den Rest (500 unter der zweiten Speicherwarnung).
+ */
+export const REFILL_DOC_CAP = WARN_2 - 500;
 
 /** Rohdaten der Quellen (Tests geben sie hinein; die App lädt sie per dynamischem Import). */
 export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[] };

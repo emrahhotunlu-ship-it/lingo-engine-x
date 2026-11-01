@@ -103,6 +103,11 @@ describe('Kandidaten je Quelle', () => {
     ]);
     expect(p[1]!.ex).toBe("Let's circle back on this tomorrow.");
   });
+  it('jobPool: reihum je Gruppe, in der Gruppe Dateireihenfolge (english-teacher S7c)', () => {
+    const row = (id: string, fn: string) => ({ id, en: id, k: 'w', de: 'x', ex: 'x', fn });
+    const p = jobPool([row('h1', 'hedge'), row('h2', 'hedge'), row('h3', 'hedge'), row('m1', 'mail'), row('n1', 'neg'), row('n2', 'neg')], new Set());
+    expect(p.map((f) => f.word)).toEqual(['h1', 'm1', 'n1', 'h2', 'n2', 'h3']);
+  });
   it('colPool: nur Partner eingeführter Wörter, nie am Einführungstag, Kernwort als core', () => {
     const base = new Map([
       ['scope', { path: 'vocab/scope', intro: '2026-10-20' }],
