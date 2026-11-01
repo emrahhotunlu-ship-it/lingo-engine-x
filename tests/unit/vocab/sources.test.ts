@@ -7,7 +7,7 @@ import { buildDayPlan } from '../../../src/modules/vocab/domain/day';
 import { applyAnswer, emptyLex, introduce } from '../../../src/modules/vocab/domain/planner';
 import { bandPool, colPool, jobPool, nextSrc, plainEx, refillNeed, type Src, SRC_WEIGHTS, splitQuota, srcOf, weightsOf } from '../../../src/modules/vocab/domain/sources';
 import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
-import { readPlace, refillFresh, type SourceData } from '../../../src/modules/vocab/data/refill';
+import { readPlace, REFILL_DOC_CAP, refillFresh, type SourceData } from '../../../src/modules/vocab/data/refill';
 import { LearnRun } from '../../../src/modules/vocab/ui/learnRun';
 import { dayKey } from '../../../src/domain/date';
 
@@ -199,6 +199,33 @@ describe('Nachfüllen (refill.ts)', () => {
     const h = createMemoryDb({ seed: {} });
     const out = await refillFresh(createWriter(h.db), { docs: new Map(), items: [], quota: 2, nowMs: T0, place: { edge: 5000, ok: [] }, w: { col: 0, job: 0, own: 0, band: 1 }, load: () => Promise.resolve(SRC) });
     expect(out.map(([p]) => p)).toEqual(['vocab/ubiquitous']);
+  });
+  it('Einstufung unlesbar (skip): Häufigkeitsliste heute aus, andere Quellen füllen auf', async () => {
+    const h = createMemoryDb({ seed: {} });
+    const out = await refillFresh(createWriter(h.db), { docs: new Map(), items: [], quota: 2, nowMs: T0, place: 'skip', w: { col: 0, job: 0, own: 0, band: 1 }, load: () => Promise.resolve(SRC) });
+    expect(out).toEqual([]);
+    const out2 = await refillFresh(createWriter(h.db), { docs: new Map(), items: [], quota: 2, nowMs: T0, place: 'skip', w: SRC_WEIGHTS, load: () => Promise.resolve(SRC) });
+    expect(out2.every(([, d]) => d.src !== 'v5:band')).toBe(true);
+    expect(out2.length).toBe(2);
+  });
+  it('Deckel: ab REFILL_DOC_CAP Wort-/Wendungsdokumenten wird nichts angelegt, knapp darunter nur bis zum Deckel', async () => {
+    const full = new Map<string, Doc>(Array.from({ length: REFILL_DOC_CAP }, (_, i) => [`vocab/w${i}`, { word: `w${i}` }]));
+    const h = createMemoryDb({ seed: {} });
+    let loaded = 0;
+    expect(await refillFresh(createWriter(h.db), { docs: full, items: [], quota: 10, nowMs: T0, place: null, w: SRC_WEIGHTS, load: () => (loaded++, Promise.resolve(SRC)) })).toEqual([]);
+    expect(loaded).toBe(0);
+    full.delete('vocab/w0');
+    const out = await refillFresh(createWriter(h.db), { docs: full, items: [], quota: 10, nowMs: T0, place: null, w: SRC_WEIGHTS, load: () => Promise.resolve(SRC) });
+    expect(out).toHaveLength(1);
+  });
+  it('zweiter Lauf am selben Tag mit veraltetem Bestand legt nicht doppelt nach', async () => {
+    const h = createMemoryDb({ seed: {} });
+    const w = createWriter(h.db);
+    const o = { docs: new Map<string, Doc>(), items: [], quota: 3, nowMs: T0, place: null, w: { col: 0, job: 1, own: 0, band: 0 }, load: () => Promise.resolve(SRC) };
+    expect(await refillFresh(w, o)).toHaveLength(3);
+    // Zweiter Lauf sieht dieselben (leeren) Dokumente: die schon angelegten Pfade zählen als erledigt.
+    expect(await refillFresh(w, o)).toEqual([]);
+    expect(Object.keys(h.dump()).filter((p) => /^(vocab|chunk)\//.test(p))).toHaveLength(3);
   });
 });
 

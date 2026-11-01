@@ -354,7 +354,10 @@ export class LearnRun {
     if (!load) return [];
     try {
       const { refillFresh, readPlace } = await import('../data/refill');
-      const place = this.env.read ? readPlace(await this.env.read(VMOD_PLACE_PATH)) : null;
+      // Einstufung: fehlt = Grenze 4.500; vorhanden, aber nicht lesbar = Häufigkeitsliste heute auslassen; ein Lesefehler wirft und lässt das
+      // Nachfüllen heute ganz aus (unten protokolliert, data-guard S7b).
+      const raw = this.env.read ? await this.env.read(VMOD_PLACE_PATH) : null;
+      const place = raw === null ? null : (readPlace(raw) ?? 'skip');
       return await refillFresh(this.env.deps.writer, { docs: new Map(docs), items, quota: cfg.newPerDay, nowMs, place, w: weightsOf(cfg.w), load });
     } catch (err) {
       logError('vocab:refill', err);

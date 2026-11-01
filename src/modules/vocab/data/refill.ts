@@ -3,6 +3,7 @@ import { dayKey, loadAtlasText, loadColCharge, logError, logWarn, type Writer } 
 import { isNewLex, type Item } from '../domain/catalog';
 import { headwordOf } from '../domain/dupes';
 import { emptyLex } from '../domain/planner';
+import { WARN_2 } from '../domain/capacity';
 import { bandPool, type BandRaw, type ColRaw, colPool, DEFAULT_EDGE, type Fresh, jobPool, type JobRaw, refillNeed, type Src, V5_SRC, type Weights } from '../domain/sources';
 
 // Großpaket A Schritt 7 (V5, vokabeln/s7-bau.md): Nachfüllen neuer Wörter aus den Quellen Wortpartner, Beruf und Häufigkeitsliste, bevor der
@@ -18,6 +19,9 @@ export function readPlace(doc: Doc | null): Place | null {
   const r = doc ? placeReadSchema.safeParse(doc) : null;
   return r?.success ? { edge: r.data.edge, ok: r.data.ok } : null;
 }
+
+/** Deckel (data-guard S7b): ab so vielen Wort- und Wendungsdokumenten legt das Nachfüllen nichts mehr an (Kap. 9: höchstens 5.000 je Artefakt). */
+export const REFILL_DOC_CAP = WARN_2;
 
 /** Rohdaten der Quellen (Tests geben sie hinein; die App lädt sie per dynamischem Import). */
 export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[] };
@@ -54,12 +58,17 @@ export function freshDoc(f: Fresh, nowMs: number, order: number): { path: string
 /**
  * Fehlende neue Lexeme anlegen, damit der heutige Plan nach den Gewichten mischen kann. `docs` = alle Wörter und Wendungen (auch ausgeblendete,
  * damit nichts doppelt entsteht), `items` = Katalog ohne Ausgeblendete. Liefert die angelegten Dokumente (für Katalog und Bestand im Speicher).
+ * `place`: Einstufung; `null` = keine (Grenze 4.500), `'skip'` = Dokument da, aber nicht lesbar → Häufigkeitsliste heute auslassen (data-guard S7b).
+ * Ab `REFILL_DOC_CAP` Dokumenten wird nichts angelegt. Ein Pfad, den ein zweiter Lauf am selben Tag schon angelegt hat (`'exists'`), zählt als
+ * erledigt, damit zwei Läufe (zwei Geräte, Vorabplan) nicht doppelt nachfüllen.
  */
 export async function refillFresh(
   writer: Writer,
-  o: { docs: ReadonlyMap<string, Doc>; items: readonly Item[]; quota: number; nowMs: number; place: Place | null; w: Weights; load: () => Promise<SourceData> },
+  o: { docs: ReadonlyMap<string, Doc>; items: readonly Item[]; quota: number; nowMs: number; place: Place | null | 'skip'; w: Weights; load: () => Promise<SourceData> },
 ): Promise<[string, Doc][]> {
   if (o.quota <= 0) return [];
+  let room = REFILL_DOC_CAP - o.docs.size;
+  if (room <= 0) return [];
   const stock: Record<Src, number> = { col: 0, job: 0, own: 0, band: 0 };
   for (const it of o.items) if (isNewLex(it.lex)) stock[it.src ?? 'own']++;
   // Schneller Ausgang ohne Laden: genug Bestand für jede Quelle (Obergrenze = gesamtes Kontingent).
@@ -87,7 +96,7 @@ export async function refillFresh(
   const pools = {
     col: colPool(data.col, base, have, today),
     job: jobPool(data.job, have),
-    band: bandPool(data.band, o.place?.edge ?? DEFAULT_EDGE, have, new Set((o.place?.ok ?? []).map(headwordOf))),
+    band: o.place === 'skip' ? [] : bandPool(data.band, o.place?.edge ?? DEFAULT_EDGE, have, new Set((o.place?.ok ?? []).map(headwordOf))),
   };
   const need = refillNeed(o.quota, stock, { col: pools.col.length, job: pools.job.length, band: pools.band.length }, o.w);
   const out: [string, Doc][] = [];
@@ -95,7 +104,7 @@ export async function refillFresh(
   for (const s of ['col', 'job', 'band'] as const) {
     let left = need[s];
     for (const f of pools[s]) {
-      if (left <= 0) break;
+      if (left <= 0 || room <= 0) break;
       const h = headwordOf(f.word);
       if (have.has(h)) continue;
       const nd = freshDoc(f, o.nowMs, order++);
@@ -108,9 +117,11 @@ export async function refillFresh(
         return out;
       }
       have.add(h);
-      if (r !== 'created') continue; // 'exists' (anderes Stichwort mit gleicher Kennung) oder Fehler: nächster Kandidat
-      out.push([nd.path, nd.doc]);
       left--;
+      // 'exists': ein zweiter Lauf hat diesen Kandidaten schon angelegt (zählt als erledigt) oder ein anderes Stichwort trägt die Kennung.
+      if (r !== 'created') continue;
+      out.push([nd.path, nd.doc]);
+      room--;
     }
   }
   return out;
