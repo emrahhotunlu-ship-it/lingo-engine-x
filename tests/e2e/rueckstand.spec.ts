@@ -19,8 +19,9 @@ test.describe('Handy 390', () => {
     await expect(first.getByTestId('reason')).toContainText('Karten · du holst auf');
     const planned = ((await first.getByTestId('reason').innerText()).match(/(\d+)\s*Karten/) ?? [])[1] ?? '';
     expect(planned).not.toBe('');
-    // Die Minuten von Block 1 wachsen mit dem Rückstand (mehr als die 8 des Grundplans).
-    const min = Number(((await first.innerText()).match(/(\d+)\s*Min\./) ?? [])[1] ?? 0);
+    // Die Minuten von Block 1 wachsen mit dem Rückstand (mehr als die 8 des Grundplans). Der laufende Block zeigt seit D2
+    // „jetzt“ statt der Minuten (Vorschau `.statelist`); die Minuten stehen in `data-min`.
+    const min = Number((await first.getAttribute('data-min')) ?? 0);
     expect(min).toBeGreaterThan(8);
     expect(min).toBeLessThanOrEqual(12);
 

@@ -124,7 +124,7 @@ export function DayBlocks({ rows, prefix, id, open }: { rows: readonly DayRow[];
       {rows.map((r) => {
         const st = r.state === 'done' ? 'done' : r.state === 'now' ? 'run' : 'open';
         return (
-          <li key={r.id} data-testid={real ? 'duty' : 'start-duty'} data-duty={r.id} data-state={r.state === 'done' ? 'done' : 'open'} data-now={r.state === 'now' ? 'true' : undefined}>
+          <li key={r.id} data-testid={real ? 'duty' : 'start-duty'} data-duty={r.id} data-state={r.state === 'done' ? 'done' : 'open'} data-now={r.state === 'now' ? 'true' : undefined} data-min={r.min}>
             <span className="lx-v-st" data-state={st} aria-current={st === 'run' ? 'step' : undefined}>
               <span className="lx-v-st-mk" aria-hidden="true">
                 {st === 'done' && <Icon name="check" size={14} />}
