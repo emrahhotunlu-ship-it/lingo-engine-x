@@ -737,3 +737,11 @@ Wortlaut: „achtung .. ich will nicht immer auf claude hilfe tippen der hilfe b
 
 ## 02.11.2026 – Vier Reiter, Praxis unter Heute (Emrah, Pop-up)
 Frage „In der Vorschau hat die untere Leiste 4 Reiter … In der App gibt es heute noch einen 5. Reiter „Praxis“ … Wie soll ich das einbauen?“ → **„4 Reiter, Praxis unter Heute (Empfehlung)“**. Umsetzung (UX-Neuanfang B): Reiter Heute · Wörter · Grammatik · Fortschritt; „Praxis“ (Lesen, Sprechen, Satzbau, Schreiben, Kurse) ist eine Seite auf dem Stapel von Heute, erreichbar über Heute › Freiwillig › „Praxis: alles zum Üben“ (am Laptop ab 1280 px in der Kontextspalte). Die aufklappbaren Unterpunkte Sprechen/Hören/Lesen in der Seitenleiste entfallen; Lesen und Sprechen stehen auf der Praxis-Seite auf allen Breiten. Nichts geht verloren.
+
+### 02.11.2026 – Schnell-Modus beim Prüfen (Emrah, Pop-up)
+Emrah: „nach meinem gefühl tust du extrem viel zeit in testen verbrauchen statt am ende einmal zu testen?“ → Wahl „Schnell-Modus (Empfehlung)“:
+- Während des Bauens nur schnelle Prüfungen (Typprüfung, Lint, betroffene Unit-Tests, `verify:fast`).
+- Der volle Klicktest (E2E) bzw. `npm run verify` läuft **genau einmal am Ende**, direkt vor dem Test-Link (Live bleibt hinter grünem verify).
+- Prüfer (ux-reviewer, learning-scientist, data-guard, platform-guard, english-teacher) **einmal** je Großpaket, nur bei großen Änderungen; Nachprüfung nur bei echten Blockern.
+- Tests, die noch das alte Design erwarten, werden gebündelt aufgeräumt statt einzeln.
+Zum laufenden Stand: Test-Link nach dem bereits laufenden Endtest.

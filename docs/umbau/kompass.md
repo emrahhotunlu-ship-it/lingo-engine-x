@@ -18,6 +18,8 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 - Keine Schleifen: je Prüfer eine Prüfung + eine gezielte Nachprüfung; roter Test höchstens zwei Behebungsversuche je Ursache, dann offen melden.
 - „Stopp“ heißt sofort anhalten.
 
+- **Schnell-Modus (Emrah 02.11.2026):** beim Bauen nur schnelle Prüfungen; voller Klicktest/`verify` genau einmal am Ende vor dem Test-Link; Prüfer einmal je Großpaket (siehe `entscheidungen.md`).
+
 ## 3. Roadmap (Großpakete, Stand 02.11.2026)
 **Emrah 02.11.:** erst die fertige neue App haben und damit lernen → Feedback → dann gemeinsam überlegen, was wie neu entwickelt wird (B/C erst danach). Die Gesamtprüfung aller Bildschirme (Note 5/10) ist bis dahin angehalten; Funktionsliste „fehlt/versteckt“ liegt bereit.
 
