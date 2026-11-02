@@ -876,3 +876,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Schnell-Modus (Emrah): voller Klicktest nach 430 von 1.336 Tests angehalten (Emrah: Test-Link jetzt). Bis dahin 7 rot: 5 veraltete Erwartungen angepasst (Sonntag `ch:u-check`, kein „nichts fällig“ im Tagesweg, vier Reiter, Heute-fertig-Blatt), 2 Last-Wackler (einzeln grün), **1 echter Fehler behoben**: „Sicher?“-Rückfrage stand am Handy halb unter der Leiste (`JudgeFoot.tsx` rollt jetzt nach). Typprüfung, Lint, Plattform, Budget grün.
 - **Vor dem Live-Gang:** restliche ~900 Klicktests einmal laufen lassen (Schnell-Modus: einmal am Ende).
 - Lehrer-Nachprüfung der Texte eingebaut (u. a. „Weitere Extras“, „Enter zum Prüfen“, „Gib mir einen Tipp, aber nicht die Lösung“).
+
+## 02.11.2026 – UX-Neuanfang A–D live
+- Emrahs „ja live nehmen passt“. Alle Klicktests (1336) gelaufen; 7 rot: 5 veraltete Erwartungen (Sonntag Wochen-Check, Rückstand-Zeile ohne Kartenzahl), 1 echter Befund (Wort-Schritt hieß im älteren Plan „Wiederholen“ → jetzt überall „Wörter“, `DayCard.tsx dayRowName`), vswitch 2× Last-Wackler (allein grün). Betroffene Specs danach 45/45 grün.
+- **Live `JLL8…` v89 `1793658052-a404`** (Commit `fa369c66`), Rückweg v88 `1793612956-d9f4`. Manifest `docs/relaunch/publish/JLL8.json`.
+- Golden-Hinweis: Heute zeigt Tagesweg + Balken statt Ring im offenen Zustand; „N Karten“ steht nicht mehr in der Wörter-Zeile.
+- Als Nächstes: Großpaket G (Grammatik + Wiederholen neu) – erst Plan als Text, dann Bilder/Fragen im Pop-up, Bau nach Emrahs OK.
