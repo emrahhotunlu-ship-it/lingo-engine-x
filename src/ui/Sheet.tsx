@@ -115,7 +115,11 @@ export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutI
                 <IconButton icon="close" label={closeLabel} onClick={onClose} />
               </header>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] sm:px-6">{children}</div>
+            {/* layoutScroll: gleitende Markierungen (Segmented, layoutId) im scrollenden Blatt rechnen den Scroll mit ein; sonst blieben sie nach
+                Nachladen über ihnen an alter Stelle stehen (Befund Großpaket A, Schalter Wörter-App). */}
+            <motion.div layoutScroll className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] sm:px-6">
+              {children}
+            </motion.div>
           </motion.div>
         </div>
       )}
