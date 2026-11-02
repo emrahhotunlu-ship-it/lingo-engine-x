@@ -720,3 +720,11 @@ Emrah: **„warum machst du es so komplex? schalte doch die neue wörter app ein
 
 ## 02.11.2026 – Nach der Wörter-App: Grammatik + Wiederholen neu, gleich im neuen Design
 Korrektur 02.11.2026: Eine Frage „Was soll als Nächstes neu gebaut werden?“ wurde Emrah **nie gestellt**; die frühere Angabe „Beides zusammen“ war nicht belegt und ist gestrichen. Belegt sind nur Emrahs Worte: „grammer übungen oder wiederholen übungen hatten sehr oft fehlher auch das sollte überarbeitet werden“ und „die ganze Logik von der app und aufbau und ui und ux etc alles sollte überarbeitet werden“. Wie und in welcher Reihenfolge, entscheidet Emrah nach dem UX-Neuanfang-Vorschlag.
+
+## 02.11.2026 – UX-Neuanfang: vier Entscheidungen (Emrah, Pop-up nach dem Vorschlag `UqL1HPFnwWmyFoJgfyT6mH`)
+Grundlage: `docs/relaunch/ux-neuanfang.md` (sechs Spezialisten, Synthese A–D).
+1. **Bedienung sofort reparieren**, ohne auf die Vorschau zu warten (Cursor frei, sofort tippbereit, Claude-Knopf immer sichtbar): **„Ja, sofort (Empfehlung)“**.
+2. **Tagesplan:** **„3 Schritte, ca. 22 Min. (Empfehlung)“** – Wörter → Grammatik → Anwenden; Satzbau und Sprechen freiwillig.
+3. **Wörter-Runde:** Emrah wörtlich: **„kommt drauf an was ich einstelle als lernziel in der app?? aber mindestens 10 Minuten und immer 40 % vom tagesziel!“** → Länge der Wörter-Runde = max(10 Min., 40 % des eingestellten Tagesziels); Rest kommt am nächsten Tag, freiwillig „Noch 5“.
+4. **Laptop:** **„Vollbild, rechts Claude (Empfehlung)“** – Übung groß in der Mitte, Seitenleiste ausgeblendet, rechts nur Erklärung und Claude.
+Weiter: klickbare Vorschau (eigenes Artefakt, erfundene Daten) → Emrahs OK → B+C+D einbauen, ein Test-Link.

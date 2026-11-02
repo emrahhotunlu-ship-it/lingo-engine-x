@@ -846,3 +846,8 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - **Live `JLL8…` v88 `1793612956-d9f4`**, Rückweg v87 `1793608303-a6a8`.
 - Speicher voll: ~28 GB alte Testreste in /tmp; Emrah hat Löschen erlaubt, die automatische Sicherheitsprüfung hat das Löschen aber gesperrt. Frei gemacht nur npm-Zwischenspeicher (85 MB).
 - Nächstes Großpaket (Emrahs Worte: „grammer übungen oder wiederholen übungen hatten sehr oft fehlher … sollte überarbeitet werden“; Reihenfolge noch offen): Grammatik + Wiederholen neu, gleich im neuen Design; zuerst gemeinsam planen.
+
+## 02.11.2026 – UX-Neuanfang
+- Emrah zu v88: „nicht zumutbar … UI UX deutlich schlimmer“. Sechs Spezialisten (Design, Bedienung, Marktvergleich, Lernpfad, Aufgabenfehler, Noten) parallel; Synthese `docs/relaunch/ux-neuanfang.md` (`876adf65`), Vorschlagsseite `UqL1HPFnwWmyFoJgfyT6mH` v1.
+- Entscheidungen (Wortlaut `entscheidungen.md`): Bedienung sofort; 3 Schritte ~22 Min.; Wörter = max(10 Min., 40 % Tagesziel); Laptop Vollbild + rechts Claude.
+- Jetzt: (A) Bedienung der Lücke zentral reparieren (HiddenInput/KineticGap, Fokus, Claude-Knopf) · (1) klickbare Vorschau.
