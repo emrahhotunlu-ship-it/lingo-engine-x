@@ -257,8 +257,7 @@ test.describe('Handy 390: Verhalten', () => {
     await answerGrammar(page, solve, { wrong: true });
     // Am Handy steht „Erklär mir meine Antwort“ seit P3 im Mehr-Blatt des Bands.
     await openBandMore(page);
-    await page.getByTestId('tutor-ask').click();
-    await page.getByTestId('tutor-go').click();
+    // Seit dem UX-Neuanfang kommt die Erklärung bei falscher Antwort von selbst (ausgelöst durch das Prüfen).
     await expect(page.getByTestId('tutor-text')).toBeVisible();
     expect(await diagCalls(page)).toEqual([]);
     await nextItem(page);

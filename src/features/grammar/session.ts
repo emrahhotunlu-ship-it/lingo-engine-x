@@ -232,8 +232,8 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
-  // Tagesweg: eine Themen- oder Kapitelrunde aus dem Grammatik-Reiter erledigt den offenen Grammatik-Schritt (nicht Test, Kontrast, Art, Muster).
-  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && (o.mode === 'topic' || o.mode === 'xtra') ? openGrammarBlock(day) : null;
+  // Tagesweg: eine Themen- oder Kapitelrunde aus dem Grammatik-Reiter erledigt den offenen Grammatik-Schritt (nicht freie Mischrunde, Test, Kontrast, Art, Muster).
+  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && o.mode === 'topic' ? openGrammarBlock(day) : null;
   const ctx: Ctx = o.block || tabBlock ? 'duty' : o.kind || o.tasks?.length || o.test ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
@@ -267,7 +267,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   let tasks: GrammarTask[];
   let intro: IntroState | null = null;
   let test: TestState | null = null;
-  const size = o.size ?? ROUND_SIZE[mode];
+  const size = o.size ?? (tabBlock ? unitGrammarArgs(plan).n : ROUND_SIZE[mode]);
   // Einführung: die des Tages (Pflicht, `u.gt`) oder ein Einführungsschritt aus dem Kapitel (`o.intro`, Themenrunde).
   const introSrc = o.intro && topicById(o.intro.topic) ? { topic: o.intro.topic, pats: [...o.intro.pats] } : gt?.intro ? { topic: gt.intro, pats: gt.pats } : null;
   const introTopicId = introSrc ? introSrc.topic : null;

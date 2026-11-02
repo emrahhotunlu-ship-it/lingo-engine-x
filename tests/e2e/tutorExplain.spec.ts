@@ -3,7 +3,8 @@ import { bootAt } from './fixtures';
 import { answerGrammar, grammarKey } from './learnHelpers';
 import { dump } from './trainerHelpers';
 
-// P26 (Lernplattform 3.0, KI-Tutor T1): „Erklär mir meine Antwort“ mit explain-answer@2 – Vermutung zuerst, genau die erlaubten Aufrufe,
+// P26 (Lernplattform 3.0, KI-Tutor T1): „Erklär mir meine Antwort“ mit explain-answer@2 – seit dem UX-Neuanfang (02.11.2026) startet sie bei einer
+// falschen Antwort von selbst; genau die erlaubten Aufrufe,
 // Kennzeichnung, Melden, Speichern in der Datenbank, ohne Claude weder Knopf noch Zeile. Die Testlaufzeit antwortet fest (`canned/lp3/p26.ts`).
 
 const solve = grammarKey();
@@ -17,23 +18,18 @@ async function wrongAnswer(page: Page): Promise<void> {
   await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await answerGrammar(page, solve, { wrong: true });
-  await expect(page.getByTestId('tutor-ask')).toBeVisible();
+  await expect(page.getByTestId('tutor-text')).toBeVisible();
 }
 
-test('Vermutung zuerst, dann genau ein Aufruf; Karte mit Antwort, Begründung, Beispiel und Kennzeichnung', async ({ page }) => {
+test('falsche Antwort: Claudes Erklärung kommt von selbst, genau ein Aufruf; Karte mit Antwort, Begründung, Beispiel und Kennzeichnung', async ({ page }) => {
   await wrongAnswer(page);
-  await page.getByTestId('tutor-ask').click();
-  await expect(page.getByTestId('tutor-guessbox')).toBeVisible();
-  await page.getByTestId('tutor-guess-input').fill('falsche Zeitform');
-  expect(await calls(page)).toEqual([]);
-  await page.getByTestId('tutor-go').click();
-  await expect(page.getByTestId('tutor-text')).toBeVisible();
-  await expect(page.getByTestId('tutor-guess')).toContainText('falsche Zeitform');
+  await expect(page.getByTestId('tutor-guessbox')).toHaveCount(0);
   await expect(page.getByTestId('tutor-yours')).toBeVisible();
   await expect(page.getByTestId('tutor-why')).toBeVisible();
   await expect(page.getByTestId('tutor-example')).toContainText('archive module');
   await expect(page.getByTestId('tutor-mark')).toContainText('von Claude');
   await expect(page.getByTestId('ai-report')).toBeVisible();
+  await page.waitForTimeout(400);
   expect(await calls(page)).toEqual(['explain-answer:quick']);
   await expect(page.getByTestId('tutor-ask')).toHaveCount(0);
 });
@@ -44,8 +40,6 @@ test('invalid_json: genau ein Aufruf, kein roter Fehlerblock neben der festen Er
   await mode(page, 'zzjson');
   await answerGrammar(page, solve, { wrong: true });
   await expect(page.getByTestId('explanation')).toBeVisible();
-  await page.getByTestId('tutor-ask').click();
-  await page.getByTestId('tutor-go').click();
   // Die Erklär-Karte steht schon: nur eine ruhige Zeile, nie „Die Antwort von Claude war unvollständig“ als roter Alarm.
   await expect(page.getByTestId('tutor-unavailable')).toBeVisible();
   await expect(page.getByTestId('ai-error')).toHaveCount(0);
@@ -66,8 +60,6 @@ test('Schemafehler: genau zwei Aufrufe (der eine Neuversuch nach A6.3), dann die
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await mode(page, 'zzschema');
   await answerGrammar(page, solve, { wrong: true });
-  await page.getByTestId('tutor-ask').click();
-  await page.getByTestId('tutor-go').click();
   await expect(page.getByTestId('tutor-text')).toBeVisible();
   expect(await calls(page)).toEqual(['explain-answer:quick', 'explain-answer:quick']);
 });
@@ -77,8 +69,6 @@ test('britisches Beispiel und ein Signalwort, das nicht im Satz steht, fallen st
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await mode(page, 'zzbrit zzsignal');
   await answerGrammar(page, solve, { wrong: true });
-  await page.getByTestId('tutor-ask').click();
-  await page.getByTestId('tutor-go').click();
   await expect(page.getByTestId('tutor-text')).toBeVisible();
   await expect(page.getByTestId('tutor-example')).toHaveCount(0);
   await expect(page.getByTestId('tutor-signal')).toHaveCount(0);
@@ -87,9 +77,6 @@ test('britisches Beispiel und ein Signalwort, das nicht im Satz steht, fallen st
 
 test('Melden: Karte verschwindet, Qualitätszähler zählt, die Aufgabe selbst bleibt', async ({ page }) => {
   await wrongAnswer(page);
-  await page.getByTestId('tutor-ask').click();
-  await page.getByTestId('tutor-go').click();
-  await expect(page.getByTestId('tutor-text')).toBeVisible();
   await page.getByTestId('ai-report').click();
   await page.getByTestId('report-explain').click();
   await expect(page.getByTestId('tutor-text')).toHaveCount(0);
@@ -101,9 +88,6 @@ test('Melden: Karte verschwindet, Qualitätszähler zählt, die Aufgabe selbst b
 
 test('Erklärung wird an der falschen Antwort gespeichert (ax), ohne etwas zu löschen', async ({ page }) => {
   await wrongAnswer(page);
-  await page.getByTestId('tutor-ask').click();
-  await page.getByTestId('tutor-go').click();
-  await expect(page.getByTestId('tutor-text')).toBeVisible();
   await expect
     .poll(async () => {
       const d = await dump(page);

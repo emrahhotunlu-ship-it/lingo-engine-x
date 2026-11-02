@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAsk } from '../../ai/useAsk';
 import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
@@ -20,7 +20,9 @@ import { submitReport } from '../../ui/ReportSheet';
 import { openCompanion } from '../companion/store';
 import { dropAx, saveAx, type ExplainStore } from './explainSave';
 
-// „Erklär mir meine Antwort“ (Lernplattform 3.0 P26, KT T1) unter der Erklär-Karte einer falschen Antwort. Nur auf Tipp, nie automatisch.
+// „Erklär mir meine Antwort“ (Lernplattform 3.0 P26, KT T1) unter der Erklär-Karte einer falschen Antwort. Seit dem UX-Neuanfang (Emrah 02.11.2026:
+// „ich will nicht immer auf claude hilfe tippen“) startet die Erklärung bei einer falschen Antwort von selbst (`auto`, ohne Vermutungs-Schritt);
+// je Aufgabe und Antwort höchstens einmal je Ansicht, innerhalb der Tagesbremse. Scheitert der Aufruf, bleibt „Erneut versuchen“ (nie automatisch).
 // Ablauf: Knopf → „Was war mein Fehler?“ (erst die eigene Vermutung, gegen Abhängigkeit) → ein Aufruf `explain-answer@2` → Karte mit
 // „Deine Antwort“, „Richtig, weil“, Beispiel und Kennzeichnung. Die App urteilt, Claude erklärt (T-R2): `alsoRight` ändert nichts, bis
 // „Ich lag richtig“ getippt wird. Das Ergebnis liegt in der Datenbank (`ax`/`axs`); beim zweiten Öffnen derselben Antwort gibt es keinen Aufruf.
@@ -30,6 +32,8 @@ const TPL = `${explainAnswerV2.id}@${explainAnswerV2.version}`;
 type Shown = { out: ExplainOut; guess: string; stored: boolean };
 /** Erklärungen dieser Ansicht je Aufgabe (bis zum Neuladen). */
 const memo = new Map<string, Shown>();
+/** Schon automatisch gestartete Aufgaben dieser Ansicht (kein zweiter Aufruf bei Neuzeichnen oder Doppel-Mount). */
+const autoStarted = new Set<string>();
 
 export type ExplainMineProps = {
   /** Eindeutig je Aufgabe und Antwort; unter diesem Schlüssel hält die Karte die Erklärung im Speicher. */
@@ -52,6 +56,8 @@ export type ExplainMineProps = {
   onRight?: (() => void) | undefined;
   /** „Einmal richtig schreiben“ (vorhandene Selbstkorrektur der Übung). */
   onRewrite?: (() => void) | undefined;
+  /** Von selbst starten (Standard). `false`: nur auf Tipp, mit dem Vermutungs-Schritt. */
+  auto?: boolean;
 };
 
 /** Gespeicherte, zu dieser Antwort passende Erklärung aus den Live-Dokumenten. */
@@ -76,7 +82,7 @@ function outOfAx(ax: Ax): ExplainOut {
 }
 
 export function ExplainMine(props: ExplainMineProps) {
-  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite } = props;
+  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true } = props;
   const { t, lang } = useT();
   const ai = useAiAvailable();
   const ask = useAsk(explainAnswerV2);
@@ -95,10 +101,6 @@ export function ExplainMine(props: ExplainMineProps) {
   useEffect(() => {
     if (failedKey) logWarn('tutor:explain', { code: failedKey, message: 'optional explanation failed; static explanation stays' }, taskKey);
   }, [failedKey, taskKey]);
-  if (!ai || reported) return null;
-
-  const current: Shown | null = shown ?? (fromDb ? { out: outOfAx(fromDb), guess: '', stored: true } : null);
-
   const go = async () => {
     if (!takeTutorCall()) {
       setLimited(true);
@@ -134,6 +136,20 @@ export function ExplainMine(props: ExplainMineProps) {
     setStep('idle');
     if (store) void saveAx(store, toAx(given, r, TPL, Date.now()));
   };
+  // Auto-Start nach falscher Antwort: der jüngste `go` liegt im Ref (gesetzt im Effekt, nie beim Zeichnen).
+  const goRef = useRef(go);
+  useEffect(() => {
+    goRef.current = go;
+  });
+  const hasAnswer = !!shown || !!fromDb;
+  useEffect(() => {
+    if (!auto || !ai || reported || hasAnswer || autoStarted.has(taskKey)) return;
+    autoStarted.add(taskKey);
+    void goRef.current();
+  }, [auto, ai, reported, hasAnswer, taskKey]);
+  if (!ai || reported) return null;
+
+  const current: Shown | null = shown ?? (fromDb ? { out: outOfAx(fromDb), guess: '', stored: true } : null);
 
   const more = () =>
     openCompanion({

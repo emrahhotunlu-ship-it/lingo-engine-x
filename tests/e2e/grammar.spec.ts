@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openTab, screen, SEED_EVENING } from './fixtures';
-import { answerGrammar, grammarKey, nextItem, openAllChapters, openTopicList, shownPrompt, skipMiniLesson } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openAllChapters, openBandMore, openTopicList, shownPrompt, skipMiniLesson } from './learnHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
 // Grammatik (phase2-plan §5.2, §9.3): Runden mit allen vier Aufgabentypen, Ergebnis an fester
@@ -298,20 +298,17 @@ test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort �
   expect(external).toEqual([]);
 });
 
-test('KI-Tutor: „Erklär mir meine Antwort“ nur auf Tipp, gekennzeichnet, genau ein Aufruf; „Weiter fragen“ öffnet den Begleiter', async ({ page }) => {
+test('KI-Tutor: bei falscher Antwort kommt „Claude erklärt“ von selbst, gekennzeichnet, genau ein Aufruf; „Weiter fragen“ öffnet den Begleiter', async ({ page }) => {
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   const calls = () => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; tier: string }> } }).__LINGO_FAKE__.sampleCalls.map((c) => `${c.id}:${c.tier}`));
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await expect(page.getByTestId('tutor')).toHaveCount(0);
+  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual([]);
   await answerGrammar(page, solve, { wrong: true });
-  await expect(page.getByTestId('tutor-text')).toHaveCount(0);
-  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual([]);
-  await page.getByTestId('tutor-ask').click();
-  // Erst die eigene Vermutung (kein Aufruf), dann der eine Aufruf von explain-answer@2.
-  await expect(page.getByTestId('tutor-guessbox')).toBeVisible();
-  expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual([]);
-  await page.getByTestId('tutor-go').click();
+  // Seit dem UX-Neuanfang (02.11.2026) ohne Tippen und ohne Vermutungs-Schritt: genau ein Aufruf von explain-answer@2.
+  await openBandMore(page);
   await expect(page.getByTestId('tutor-text')).toBeVisible();
+  await expect(page.getByTestId('tutor-guessbox')).toHaveCount(0);
   await expect(page.getByTestId('tutor-mark')).toContainText('Claude');
   expect((await calls()).filter((c) => c.startsWith('explain-answer'))).toEqual(['explain-answer:quick']);
   await expect(page.getByTestId('tutor-ask')).toHaveCount(0);
