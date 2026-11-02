@@ -469,6 +469,29 @@ h2,
     color: var(--lx-cyan-text);
     will-change: transform, opacity;
   }
+  /* Freier Cursor in der Lücke (UX-Neuanfang 02.11.2026): sichtbar und blinkend an der Cursorstelle, Markierung hinterlegt. */
+  .lx-caret {
+    position: absolute;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--lx-accent);
+    pointer-events: none;
+    animation: lx-caret-blink 1.06s steps(1, end) infinite;
+  }
+  @keyframes lx-caret-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lx-caret {
+      animation: none;
+    }
+  }
+  .lx-letter[data-sel] {
+    border-radius: 2px;
+    background: var(--lx-accent-soft);
+  }
   .lx-hidden-input {
     position: absolute;
     z-index: 5;

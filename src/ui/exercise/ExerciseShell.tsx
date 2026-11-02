@@ -1,6 +1,9 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { closeContext, contextPortalTarget, openContext, useContextPresentation } from '../../app/shell/contextColumn';
+import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
+import { useCompanionSee, type Seeing } from '../../features/companion/seeing';
+import { openCompanion } from '../../features/companion/store';
 import { useSharedTarget } from '../../engine/shared';
 import type { ExplainDepth, ExplainLine, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import type { WordOp } from '../../domain/learn/types';
@@ -138,6 +141,8 @@ export type ExerciseShellProps = {
   barOverride?: ReactNode;
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
+  /** Was Claude gerade sieht (Begleiter, „Claude erklärt“) – für Übungen, die es nicht selbst anmelden (Wörter-App). Vor dem Prüfen ohne Lösung. */
+  see?: Seeing | null;
   /** Text der ruhigen Seitenkarte am Laptop vor dem Prüfen (Standard: „Die Regel kommt nach dem Prüfen“ – passt nur, wo es eine Regel gibt; UX-Prüfung S9). */
   sideNote?: string;
   layout?: 'auto' | 'stack' | 'split';
@@ -164,6 +169,8 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 export function ExerciseShell(props: ExerciseShellProps) {
   const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, sideNote, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
   const { t } = useT();
+  const ai = useAiAvailable();
+  useCompanionSee(props.see ?? null);
   const state = deriveShellState(props);
   const keyRange = typeof choiceCount === 'number' ? choiceKeyRange(choiceCount) : null;
   const profileSplit = useSplitLayout();
@@ -229,6 +236,19 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const moreOpen = useBand((s) => s.moreOpen);
   const keysOpen = useBand((s) => s.keysOpen);
   const hosts = useBand((s) => s.hosts);
+  // „Claude erklärt“ (UX-Neuanfang 02.11.2026): in jeder Übung vor und nach dem Prüfen sichtbar. Vor dem Prüfen sieht Claude die Aufgabe ohne
+  // Lösung (Begleiter-Kontext `question`), danach mit Lösung und eigener Antwort. Ohne KI unsichtbar; in Tests ohne Hilfe (Themen-Test, Vortest,
+  // Einstufung) erst nach dem Prüfen, damit die Messung gilt. Am Handy (Band mit Übungsleiste) steht er oben rechts in der Leiste, sonst in der Aufgabenzeile.
+  const claudeQuestion = ai && (!status.noInfo || !!feedback) ? t(feedback ? 'vuClaudeAskAfter' : 'vuClaudeAskBefore', { task: task.text }) : null;
+  const claudeAsk = useMemo(() => (claudeQuestion ? () => openCompanion({ tab: 'chat', send: claudeQuestion }) : null), [claudeQuestion]);
+  const claudeInBar = band && hosts > 0;
+  useEffect(() => {
+    if (!band) return;
+    useBand.setState({ explain: claudeAsk });
+    return () => {
+      if (useBand.getState().explain === claudeAsk) useBand.setState({ explain: null });
+    };
+  }, [band, claudeAsk]);
   const [ctxMore, setCtxMore] = useState(false);
   // Korrekturrunde P3 (Punkt 1d): „Erklär mir meine Antwort“ steht nie im Band, sondern im Mehr-Blatt – im Band höchstens „Mehr“ und
   // EINE Handlung der Rückmeldung (Wörter „War das auch richtig?“, Grammatik „Claude fragen“ & Co.).
@@ -736,6 +756,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           <h2 className="lx-vu-task" data-testid="task">
             {task.text}
           </h2>
+          {claudeAsk && !claudeInBar && <ClaudeExplain onClick={claudeAsk} />}
           {!status.noInfo && !task.open && (
             <button
               type="button"
@@ -868,5 +889,18 @@ export function ExerciseShell(props: ExerciseShellProps) {
       {!split && keysLine}
       {!split && bar}
     </article>
+  );
+}
+
+/** „Claude erklärt“: ruhige, beschriftete Knopfform wie „Wozu?“, mit Funken; Trefferfläche 44 px. Auch in der Übungsleiste (`ExerciseActions`). */
+export function ClaudeExplain({ onClick, testId = 'claude-explain' }: { onClick: () => void; testId?: string }) {
+  const { t } = useT();
+  return (
+    <button type="button" className="lx-vu-why lx-vu-claude" onClick={onClick} data-testid={testId} data-ai="">
+      <span className="lx-vu-why-face">
+        <Icon name="sparkle" size={14} />
+        {t('vuClaude')}
+      </span>
+    </button>
   );
 }

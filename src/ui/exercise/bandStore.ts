@@ -19,9 +19,14 @@ export type BandState = {
   menuOpen: boolean;
   moreOpen: boolean;
   keysOpen: boolean;
+  /**
+   * „Claude erklärt“ der laufenden Aufgabe (UX-Neuanfang 02.11.2026): am Handy steht der Knopf beschriftet oben rechts in der Übungsleiste
+   * (`ExerciseActions`), nicht im Menü. `null` = keine KI oder kein Knopf für diese Aufgabe.
+   */
+  explain: (() => void) | null;
 };
 
-export const useBand = create<BandState>(() => ({ items: {}, why: null, hosts: 0, shells: 0, menuOpen: false, moreOpen: false, keysOpen: false }));
+export const useBand = create<BandState>(() => ({ items: {}, why: null, hosts: 0, shells: 0, menuOpen: false, moreOpen: false, keysOpen: false, explain: null }));
 
 export const setBandMenuOpen = (open: boolean): void => useBand.setState({ menuOpen: open });
 export const setBandMoreOpen = (open: boolean): void => useBand.setState({ moreOpen: open });

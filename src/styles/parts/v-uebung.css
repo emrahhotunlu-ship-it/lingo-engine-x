@@ -595,3 +595,11 @@ html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secon
 .lx-vp-src-band {
   background: color-mix(in srgb, var(--fg-3) 45%, var(--fg));
 }
+
+/* „Claude erklärt“ in der Aufgabenzeile (UX-Neuanfang 02.11.2026): dieselbe ruhige Knopfform wie „Wozu?“, mit Funken. */
+.lx-vu-claude .lx-vu-why-face {
+  gap: 6px;
+}
+.lx-vu-claude + .lx-vu-why {
+  margin-left: -8px;
+}

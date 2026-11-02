@@ -179,7 +179,8 @@ function Item({ band, i, num, onAnswer }: { band: PlaceTest['bands'][number]; i:
   useEffect(() => {
     if (!prod || focused.current) return;
     focused.current = true;
-    if (typeof window.matchMedia === 'function' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) api.focusNow();
+    // Sofort tippbereit (UX-Neuanfang 02.11.2026), auf jedem Gerät; am Handy hält das bleibende Feld eine offene Tastatur offen.
+    api.focusNow();
   }, [api, prod]);
   const ready = rec ? chosen !== null : hasInput;
   const go = () => {

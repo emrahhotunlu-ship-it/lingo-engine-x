@@ -244,14 +244,16 @@ test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine dopp
     await page.getByTestId('dont-know').click();
     await page.getByTestId('next').click();
   }
-  await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
+  // Länge der Runde folgt seit dem Tagesweg den Grammatik-Minuten (dayMinutes); geprüft wird „4 von n“ vor und nach dem Neuladen.
+  await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\d+/);
+  const progress = await page.getByTestId('round-progress').innerText();
   const prompt = await page.getByTestId('gr-item').getAttribute('data-topic');
   const text = await page.getByTestId('gr-item').getByTestId('task').innerText();
   await expect.poll(logged).toBe(base + 3);
   await page.waitForTimeout(600);
   await page.reload();
   await screen(page, 'grammarSession');
-  await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
+  await expect(page.getByTestId('round-progress')).toHaveText(progress);
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', prompt ?? '');
   await expect(page.getByTestId('gr-item').getByTestId('task')).toHaveText(text);
   expect(await logged()).toBe(base + 3);
@@ -395,7 +397,7 @@ test('P7 Grammatik-Reiter: bei aktiver Bremse startet der Hauptknopf die Fehlers
   await expect(page.getByTestId('hub-errors')).toContainText(`Fehlersätze · ${dueN} fällig · heute ${n}`);
   await expect(page.getByTestId('hub-errors')).toHaveAttribute('data-today', String(n));
   await main.click();
-  // Plan v2: Schritt 4 von heute ist noch offen, der Knopf startet ihn (Pflicht, §2.4), nicht die freiwillige Runde.
-  await screen(page, 'unitAgain');
+  // Tagesweg (UX-Neuanfang C): Fehlersätze sind kein Pflicht-Schritt mehr, der Knopf startet die freiwillige Runde.
+  await screen(page, 'repairRound');
   expect(errs).toEqual([]);
 });

@@ -203,13 +203,16 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     shownAt.current = performance.now();
     lookupAtStart.current = lookupOpenMs();
   }, []);
-  // Mit Tastatur (Laptop) steht der Cursor sofort in der Lücke; am Handy öffnet erst ein Tippen die Tastatur (iOS). Einmal je Karte.
+  // Jede neue Karte ist sofort tippbereit (UX-Neuanfang 02.11.2026): der Cursor steht in der Lücke, auf jedem Gerät. Am Handy hält „Weiter“
+  // die Tastatur offen (das Feld bleibt dasselbe und wird im Tipp selbst fokussiert); ohne Lücke (Anki-Karte) ruht das Feld. Einmal je Karte.
   const focused = useRef(false);
+  const flipCard = card.mode === 'flip';
   useEffect(() => {
     if (focused.current) return;
     focused.current = true;
-    if (typeof window.matchMedia === 'function' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) api.focusNow();
-  }, [api]);
+    if (flipCard) api.blur();
+    else api.focusNow();
+  }, [api, flipCard]);
 
   const measure = () => {
     const now = performance.now();
@@ -269,6 +272,18 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     if (card.mode === 'meaning') return t('vmGapMeaningLabel', { word: card.answer });
     return g ? t('vmGapLabel', { sentence: `${g.text.slice(0, g.start)}…${g.text.slice(g.end)}` }) : t('vmTypeLabel', { de: card.de });
   })();
+  const tk = taskKey(view);
+  // Was Claude sieht („Claude erklärt“, Begleiter): Aufgabe und Satz mit Lücke; vor dem Prüfen nie die Lösung.
+  const seeGap = gapText(card);
+  const seeSentence = seeGap ? `${seeGap.text.slice(0, seeGap.start)}___${seeGap.text.slice(seeGap.end)}` : '';
+  const seeSolution = card.mode === 'meaning' ? card.de : card.answer;
+  const see = {
+    area: 'trainer',
+    label: `${t('cmpSeeTrainer')} · ${t(tk)}`.slice(0, 60),
+    phase: band ? 'feedback' : 'question',
+    detail: card.mode === 'meaning' ? `${t(tk)}\n${card.answer}${seeSentence ? `\n${seeSentence}` : ''}` : `${t(tk)}\n${seeSentence || card.de}${seeSentence && card.de ? `\n(${card.de})` : ''}`,
+    ...(band ? { reveal: `Solution: ${seeSolution}. Learner: ${band.given || '(empty)'}` } : { mask: card.mode === 'meaning' ? [card.de] : [card.answer, card.head] }),
+  } as const;
   const gap = (
     <KineticGap
       label={gapLabel}
@@ -421,11 +436,11 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     />
   ) : undefined;
 
-  const tk = taskKey(view);
   return (
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
       status={{ area: 'words', state: null, kindLabel: kindLabel(t, view) }}
+      see={see}
       task={{ text: t(tk), purpose: t(view.card.form === 'contrast' && view.card.contrast?.ff ? 'vmWozu_contrastFf' : wozuKey(tk)), open: true, reason: () => reasonLine(t, run.reason(), dateShort) }}
       prompt={prompt}
       answer={answer}

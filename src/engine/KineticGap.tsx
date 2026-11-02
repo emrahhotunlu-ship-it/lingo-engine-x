@@ -12,6 +12,8 @@ import type { MaskCell } from '../domain/answer/mask';
 // (Stufen mit Hilfe oder nach „Tipp", CLAUDE.md A7) zeigt die Lücke je Buchstabe einen
 // Platzhalter, Leerzeichen und Bindestriche sind sichtbar, und jeder getippte Buchstabe fliegt
 // auf seinen Platz. Bei reduzierter Bewegung erscheinen die Buchstaben ohne Flug.
+// Freier Cursor (UX-Neuanfang 02.11.2026): Jeder Buchstabe hat eine feste Kennung; eingefügt wird an der Cursorstelle, und nur
+// der neue Buchstabe fliegt. Die Lücke zeichnet Cursor (blinkend) und Markierung selbst, das unsichtbare Feld rechnet.
 
 export type GapState = 'input' | 'correct' | 'near' | 'wrong';
 
@@ -42,11 +44,13 @@ type Props = {
   silent?: boolean | undefined;
 };
 
-type Flyer = { id: number; index: number; ch: string; x: number; y: number; dx: number; dy: number; font: string };
+type Flyer = { id: number; cid: number; ch: string; x: number; y: number; dx: number; dy: number; font: string };
+type Pt = { x: number; top: number; bottom: number };
 
 const MAX_FLYERS = 12;
 const FLIGHT_MS = 240;
 let flyerSeq = 1;
+let charSeq = 1;
 let canvas: HTMLCanvasElement | null = null;
 
 function fontOf(el: Element): string {
@@ -68,10 +72,13 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
   const reduce = useReducedMotion();
   const gap = useRef<HTMLSpanElement>(null);
   const inner = useRef<HTMLSpanElement>(null);
+  const caret = useRef<HTMLSpanElement>(null);
   const [value, setValue] = useState('');
-  const [landed, setLanded] = useState<boolean[]>([]);
+  // Feste Kennung je Zeichen (Code-Punkte): Einfügen in der Mitte lässt die übrigen Buchstaben stehen.
+  const [ids, setIds] = useState<number[]>([]);
   const [flyers, setFlyers] = useState<Flyer[]>([]);
   const [focused, setFocused] = useState(false);
+  const [sel, setSel] = useState<[number, number]>([0, 0]);
   const width = useMotionValue<number | string>('3.5em');
   const locked = state !== 'input' || busy;
   // Ton und Vibration zur Rückmeldung (Kap. 4.7, 4.3) melden wir nur als Lernereignis; der Dirigent (`engine/fx`) spielt sie, einmal je Prüfen.
@@ -84,7 +91,6 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
   const landRef = useRef((f: Flyer) => {
     flyersNow.current = flyersNow.current.filter((x) => x.id !== f.id);
     setFlyers((all) => all.filter((x) => x.id !== f.id));
-    setLanded((l) => l.map((v, k) => (k === f.index ? true : v)));
   });
   useEffect(() => {
     const set = timers.current;
@@ -93,58 +99,119 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
       set.clear();
     };
   }, []);
-  const live = useRef({ locked, value, reduce, onChange, onEnter, onKey, mask });
+  const live = useRef({ locked, value, ids, reduce, onChange, onEnter, onKey, mask });
   useLayoutEffect(() => {
-    live.current = { locked, value, reduce, onChange, onEnter, onKey, mask };
+    live.current = { locked, value, ids, reduce, onChange, onEnter, onKey, mask };
   });
 
-  const handleInput = useCallback((next: string): string => {
-    const s = live.current;
-    if (s.locked) return s.value;
-    const prev = s.value;
-    let p = 0;
-    while (p < prev.length && p < next.length && prev[p] === next[p]) p++;
-    const g = gap.current;
+  /** Cursorstellen 0…n im Bild (n = Zeichenzahl): linke Kante des Zeichens, am Ende die rechte Kante des letzten. */
+  const points = useCallback((): Pt[] => {
     const i = inner.current;
-    const spawned: Flyer[] = [];
-    if (!s.reduce && g && i && next.length > p) {
-      const font = fontOf(i);
-      const gr = g.getBoundingClientRect();
-      const ir = i.getBoundingClientRect();
-      const fromX = Math.min(window.innerWidth - 24, gr.right + 8);
-      const fromY = Math.min(window.innerHeight - 24, gr.bottom + 56);
+    if (!i) return [];
+    const s = live.current;
+    const n = s.ids.length;
+    const ir = i.getBoundingClientRect();
+    const out: Pt[] = [];
+    if (s.mask) {
       const slots = i.querySelectorAll<HTMLElement>('[data-slot]');
-      const off = hintOffset(s.mask, next);
-      for (let k = p; k < next.length; k++) {
-        const slot = slots[k + off];
-        let x = ir.left + textWidth(next.slice(0, k), font);
-        let y = ir.top;
-        if (slot) {
-          const r = slot.getBoundingClientRect();
-          x = r.left + Math.max(0, (r.width - textWidth(next[k] ?? '', font)) / 2);
-          y = r.top;
-        }
-        spawned.push({ id: flyerSeq++, index: k, ch: next[k] ?? '', x, y, dx: fromX - x, dy: fromY - y, font });
+      const off = hintOffset(s.mask, s.value);
+      for (let b = 0; b <= n; b++) {
+        const el = slots[b + off];
+        const prev = slots[b + off - 1];
+        const r = (el ?? prev)?.getBoundingClientRect();
+        if (!r) out.push({ x: ir.left, top: ir.top, bottom: ir.bottom });
+        else out.push({ x: el ? r.left : r.right, top: r.top, bottom: r.bottom });
       }
-    }
-    // Höchstens 12 Flieger gleichzeitig: beim 13. landet der älteste sofort.
-    const all = [...flyersNow.current.filter((x) => x.index < p), ...spawned];
-    const drop = Math.max(0, all.length - MAX_FLYERS);
-    const keep = all.slice(drop);
-    const flying = new Set(keep.map((f) => f.index));
-    flyersNow.current = keep;
-    // Landung nach fester Flugzeit (≈ 240 ms): deterministisch, auch wenn ein Bild ausfällt.
-    for (const f of keep) if (spawned.includes(f)) timers.current.add(window.setTimeout(() => landRef.current(f), FLIGHT_MS));
-    setLanded((l) => {
-      const out = l.slice(0, p).map((v, k) => v || !flying.has(k));
-      for (let k = p; k < next.length; k++) out[k] = !flying.has(k);
       return out;
-    });
-    setFlyers(keep);
-    setValue(next);
-    s.onChange(next, { firstKey: prev.length === 0 && next.length > 0, deleted: Math.max(0, prev.length - p) });
-    return next;
+    }
+    const byId = new Map<number, HTMLElement>();
+    i.querySelectorAll<HTMLElement>('[data-cid]').forEach((el) => byId.set(Number(el.dataset.cid), el));
+    for (let b = 0; b <= n; b++) {
+      const el = b < n ? byId.get(s.ids[b] ?? -1) : undefined;
+      const last = b > 0 ? byId.get(s.ids[b - 1] ?? -1) : undefined;
+      const r = (el ?? last)?.getBoundingClientRect();
+      if (!r) out.push({ x: ir.left, top: ir.top, bottom: Math.max(ir.bottom, ir.top + 1) });
+      else out.push({ x: el ? r.left : r.right, top: r.top, bottom: r.bottom });
+    }
+    return out;
   }, []);
+
+  /** Nächste Cursorstelle zu einem Punkt (erst die Zeile, dann die Waagerechte). */
+  const caretAt = useCallback(
+    (x: number, y: number): number => {
+      const pts = points();
+      let best = pts.length > 0 ? pts.length - 1 : 0;
+      let bestD = Infinity;
+      pts.forEach((p, b) => {
+        const dy = y < p.top ? p.top - y : y > p.bottom ? y - p.bottom : 0;
+        const d = dy * 1000 + Math.abs(x - p.x);
+        if (d < bestD) {
+          bestD = d;
+          best = b;
+        }
+      });
+      return best;
+    },
+    [points],
+  );
+
+  const handleInput = useCallback(
+    (next: string): string => {
+      const s = live.current;
+      if (s.locked) return s.value;
+      const prev = s.value;
+      const a = [...prev];
+      const b = [...next];
+      // Gleicher Anfang und gleiches Ende bleiben stehen; dazwischen ist entfernt bzw. eingefügt (an der Cursorstelle).
+      let p = 0;
+      while (p < a.length && p < b.length && a[p] === b[p]) p++;
+      let q = 0;
+      while (q < a.length - p && q < b.length - p && a[a.length - 1 - q] === b[b.length - 1 - q]) q++;
+      const removed = a.length - p - q;
+      const added = b.slice(p, b.length - q);
+      const newIds = added.map(() => charSeq++);
+      const nextIds = [...s.ids.slice(0, p), ...newIds, ...s.ids.slice(a.length - q)];
+      const g = gap.current;
+      const i = inner.current;
+      const spawned: Flyer[] = [];
+      if (!s.reduce && g && i && added.length > 0) {
+        const font = fontOf(i);
+        const gr = g.getBoundingClientRect();
+        const fromX = Math.min(window.innerWidth - 24, gr.right + 8);
+        const fromY = Math.min(window.innerHeight - 24, gr.bottom + 56);
+        const slots = i.querySelectorAll<HTMLElement>('[data-slot]');
+        const off = hintOffset(s.mask, next);
+        const at = points()[p];
+        const ir = i.getBoundingClientRect();
+        added.forEach((ch, k) => {
+          const slot = s.mask ? slots[p + k + off] : undefined;
+          let x = (at?.x ?? ir.left) + textWidth(added.slice(0, k).join(''), font);
+          let y = at?.top ?? ir.top;
+          if (slot) {
+            const r = slot.getBoundingClientRect();
+            x = r.left + Math.max(0, (r.width - textWidth(ch, font)) / 2);
+            y = r.top;
+          }
+          spawned.push({ id: flyerSeq++, cid: newIds[k] ?? 0, ch, x, y, dx: fromX - x, dy: fromY - y, font });
+        });
+      }
+      // Höchstens 12 Flieger gleichzeitig: beim 13. landet der älteste sofort. Gelöschte Buchstaben fliegen nicht weiter.
+      const alive = new Set(nextIds);
+      const all = [...flyersNow.current.filter((x) => alive.has(x.cid)), ...spawned];
+      const keep = all.slice(Math.max(0, all.length - MAX_FLYERS));
+      flyersNow.current = keep;
+      // Landung nach fester Flugzeit (≈ 240 ms): deterministisch, auch wenn ein Bild ausfällt.
+      for (const f of keep) if (spawned.includes(f)) timers.current.add(window.setTimeout(() => landRef.current(f), FLIGHT_MS));
+      s.ids = nextIds;
+      s.value = next;
+      setIds(nextIds);
+      setFlyers(keep);
+      setValue(next);
+      s.onChange(next, { firstKey: prev.length === 0 && next.length > 0, deleted: removed });
+      return next;
+    },
+    [points],
+  );
 
   useEffect(() => {
     const el = gap.current;
@@ -157,8 +224,12 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
       onEnter: () => live.current.onEnter(),
       onKey: (k) => live.current.onKey?.(k) ?? false,
       onFocusChange: setFocused,
+      value: () => live.current.value,
+      locked: () => live.current.locked,
+      onSelect: (a, b) => setSel((cur) => (cur[0] === a && cur[1] === b ? cur : [a, b])),
+      caretAt,
     });
-  }, [api, label, maxLength, handleInput]);
+  }, [api, label, maxLength, handleInput, caretAt]);
 
   // Die Lücke wächst mit dem Text (Feder), mindestens 3,5em – unabhängig von der Lösung.
   // Mit Platzhaltern bemisst sie sich aus den Plätzen selbst (Breite `auto`, B3).
@@ -189,6 +260,44 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
     api.remeasure();
   }, [value, api, reduce, width, masked, revealed, shown]);
 
+  // Sichtbarer Cursor: steht an der Cursorstelle des Felds, nur solange die Lücke den Fokus hat und eingibt.
+  const showCaret = focused && !locked && !revealed && sel[0] === sel[1];
+  const placeCaret = useCallback(() => {
+    const c = caret.current;
+    const g = gap.current;
+    if (!c || !g) return;
+    const pt = points()[Math.min(sel[0], live.current.ids.length)];
+    if (!showCaret || !pt) {
+      c.style.display = 'none';
+      return;
+    }
+    const gr = g.getBoundingClientRect();
+    const left = `${Math.round((pt.x - gr.left - 1) * 10) / 10}px`;
+    const top = `${Math.round((pt.top - gr.top) * 10) / 10}px`;
+    const height = `${Math.max(12, pt.bottom - pt.top)}px`;
+    const moved = c.style.left !== left || c.style.top !== top || c.style.display === 'none';
+    c.style.display = '';
+    c.style.left = left;
+    c.style.top = top;
+    c.style.height = height;
+    // Nach jeder Bewegung zuerst sichtbar, dann wieder blinken.
+    if (moved && c.getAnimations) c.getAnimations().forEach((an) => (an.currentTime = 0));
+  }, [points, sel, showCaret]);
+  useLayoutEffect(() => {
+    placeCaret();
+  });
+  useEffect(() => {
+    const g = gap.current;
+    const i = inner.current;
+    if (!g || !i || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => placeCaret());
+    ro.observe(g);
+    ro.observe(i);
+    return () => ro.disconnect();
+  }, [placeCaret]);
+  const flyingIds = new Set(flyers.map((f) => f.cid));
+  const selRange: [number, number] | null = focused && !locked && sel[0] !== sel[1] ? sel : null;
+
 
   return (
     <>
@@ -198,6 +307,9 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
         data-testid="gap"
         data-state={revealed ? 'reveal' : state}
         data-focused={focused || undefined}
+        // Tab-Halt an der Lücke selbst: das unsichtbare Feld ist nicht in der Tab-Reihe, die Lücke reicht den Fokus weiter.
+        tabIndex={!locked && !focused ? 0 : -1}
+        onFocus={() => api.focusNow()}
         data-masked={mask && !revealed ? '' : undefined}
         data-revealed={revealed || undefined}
         style={{ width: mask || revealed ? 'auto' : width }}
@@ -222,23 +334,35 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
               {rv.solution}
             </motion.span>
           ) : mask ? (
-            <MaskedLetters mask={mask} value={value} shown={locked ? (shown ?? null) : null} landed={landed} marks={marks} reduce={!!reduce} />
+            <MaskedLetters mask={mask} value={value} shown={locked ? (shown ?? null) : null} ids={ids} flying={flyingIds} sel={selRange} marks={marks} reduce={!!reduce} />
           ) : (
             // Wörter bleiben zusammen; lange Antworten (ganze Satzteile) brechen zwischen Wörtern um,
             // statt über den Rand hinauszulaufen (Befund 27.09.: Feld zu klein).
             // Nach dem Prüfen darf der Rahmen eine bereinigte Fassung zeigen (`shown`, Q0: Abkürzung „mba“ → „MBA“); gleiche Länge, nur andere Zeichen.
-            wordGroups(locked && shown && shown.length === value.length ? shown : value).map((g) => (
-              <span key={g.start} className="lx-gap-word">
+            wordGroups(locked && shown && [...shown].length === ids.length ? shown : value).map((g) => (
+              <span key={ids[g.start] ?? `w${g.start}`} className="lx-gap-word">
                 <AnimatePresence initial={false}>
                   {[...g.text].map((ch, k) => {
                     const i = g.start + k;
-                    return <Letter key={`${i}-${ch}`} ch={ch} i={i} landed={locked || !!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />;
+                    const cid = ids[i];
+                    return (
+                      <Letter
+                        key={cid ?? `x${i}`}
+                        cid={cid}
+                        ch={ch}
+                        landed={locked || cid === undefined || !flyingIds.has(cid)}
+                        off={!!marks?.[i]}
+                        sel={!!selRange && i >= selRange[0] && i < selRange[1]}
+                        reduce={!!reduce}
+                      />
+                    );
                   })}
                 </AnimatePresence>
               </span>
             ))
           )}
         </span>
+        <span ref={caret} className="lx-caret" data-testid="gap-caret" aria-hidden="true" style={{ display: 'none' }} />
       </motion.span>
       {/* Nach dem Prüfen steht die Antwort fest: noch fliegende Buchstaben sind sofort gelandet (sonst blendet die Lücke sie bis 390 ms nach dem Prüfen erst ein und flackert). */}
       {flyers.length > 0 && !locked &&
@@ -278,14 +402,18 @@ function MaskedLetters({
   mask,
   value,
   shown,
-  landed,
+  ids,
+  flying,
+  sel,
   marks,
   reduce,
 }: {
   mask: readonly MaskCell[];
   value: string;
   shown: string | null;
-  landed: boolean[];
+  ids: readonly number[];
+  flying: ReadonlySet<number>;
+  sel: [number, number] | null;
   marks: boolean[] | undefined;
   reduce: boolean;
 }) {
@@ -310,7 +438,14 @@ function MaskedLetters({
         data-filled={ch !== undefined || fixedHint ? '' : undefined}
       >
         {ch !== undefined ? (
-          <Letter ch={ch} i={vi} landed={shown !== null || !!landed[vi]} off={!!marks?.[vi]} reduce={reduce} />
+          <Letter
+            ch={ch}
+            cid={ids[vi]}
+            landed={shown !== null || ids[vi] === undefined || !flying.has(ids[vi] ?? -1)}
+            off={!!marks?.[vi]}
+            sel={!!sel && vi >= sel[0] && vi < sel[1]}
+            reduce={reduce}
+          />
         ) : cell?.kind === 'fixed' ? (
           <span aria-hidden="true">{cell.ch === ' ' ? '\u00a0' : cell.ch}</span>
         ) : cell?.kind === 'slot' && cell.hint ? (
@@ -324,11 +459,12 @@ function MaskedLetters({
   return <>{cells}</>;
 }
 
-function Letter({ ch, i, landed, off, reduce }: { ch: string; i: number; landed: boolean; off: boolean; reduce: boolean }) {
+function Letter({ ch, cid, landed, off, sel, reduce }: { ch: string; cid: number | undefined; landed: boolean; off: boolean; sel: boolean; reduce: boolean }) {
   return (
     <motion.span
-      key={`${i}-${ch}`}
       data-letter=""
+      data-cid={cid}
+      data-sel={sel || undefined}
       data-landed={landed ? 'true' : 'false'}
       className={`lx-letter${off ? ' lx-letter-off' : ''}`}
       exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, transition: { duration: 0.12 } }}

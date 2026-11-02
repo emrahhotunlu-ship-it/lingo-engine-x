@@ -6,6 +6,8 @@ import { openSettings } from '../../app/sheets';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
 import { TopMenu, type MenuEntry } from '../../ui/exercise/ExerciseMenu';
+import { ClaudeExplain } from '../../ui/exercise/ExerciseShell';
+import { useBand } from '../../ui/exercise/bandStore';
 import { useMediaQuery } from '../../platform/input';
 import { openCompanion } from '../companion/store';
 
@@ -116,9 +118,12 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
   // dann nur, was die Navigation nicht hat (ux N1): kein Übersetzer, kein Einstellungs-Punkt und – Korrekturrunde P3, Punkt 13 – kein
   // eigenes Claude-Symbol: „Claude“ in der Seitenleiste öffnet denselben Begleiter mit demselben Aufgaben-Kontext (`useSeeing`).
   const nav = useContextPresentation() === 'column';
+  // „Claude erklärt“ der laufenden Aufgabe (UX-Neuanfang 02.11.2026): beschriftet oben rechts, vor und nach dem Prüfen – nie nur im Menü.
+  const explain = useBand((s) => s.explain);
   const tail: MenuEntry[] = nav ? [] : [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
   return (
     <div className="flex flex-none items-center gap-0.5" data-testid="exercise-actions">
+      {explain && <ClaudeExplain onClick={explain} />}
       {wide && !nav && (
         <>
           <TranslateButton />

@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useNav } from '../../app/nav';
+import { isGapInput } from '../../engine/HiddenInput';
 import { watchDoc } from '../../data/watch';
 import { useT } from '../../i18n';
 import { getDb, useCapabilities } from '../../platform/capabilities';
@@ -181,7 +182,8 @@ function CompanionOverlay() {
     // Esc auch dann, wenn der Fokus gerade auf der Seite liegt, weil der Knopf, den man gedrückt hatte, verschwand
     // (z. B. ein Vorschlag): maßgeblich ist, wo der Fokus zuletzt war.
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !e.defaultPrevented && (modalRef.current || inside.current)) closeCompanion();
+      // Aus der Lücke heraus (der Knopf „Claude erklärt“ lässt ihr den Fokus) schließt Esc das Fenster ebenfalls (UX-Neuanfang 02.11.2026).
+      if (e.key === 'Escape' && !e.defaultPrevented && (modalRef.current || inside.current || isGapInput(e.target))) closeCompanion();
     };
     document.addEventListener('focusin', mark);
     document.addEventListener('pointerdown', mark, true);

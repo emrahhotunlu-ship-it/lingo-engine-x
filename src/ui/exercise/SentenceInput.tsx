@@ -1,4 +1,6 @@
 import { useEffect, useRef, type ChangeEvent, type KeyboardEvent } from 'react';
+import { isGapInput } from '../../engine/HiddenInput';
+import { inputProfile } from '../../platform/input';
 import { useT } from '../../i18n';
 
 // Eingabebaustein für Sätze (§4.3/§4.4). `free`: einzeiliges, mit dem Text wachsendes Feld (Return = prüfen).
@@ -15,8 +17,31 @@ const textProps = { lang: 'en', autoCapitalize: 'off', autoCorrect: 'off', autoC
 export function SentenceInput(props: SentenceInputProps) {
   const { t } = useT();
   const area = useRef<HTMLTextAreaElement>(null);
+  const line = useRef<HTMLInputElement>(null);
+  const auto = useRef(false);
   const { value, onChange, onSubmit, testId, disabled } = props;
   const isFree = props.mode === 'free';
+  // Sofort tippbereit (UX-Neuanfang 02.11.2026): eine neue Satzaufgabe hat den Cursor im Feld – am Laptop immer, am Handy, wenn die Tastatur
+  // gerade offen ist (das Lückenfeld hatte noch den Fokus). Nie, wenn schon ein anderes Feld den Fokus hat. Einmal je Feld.
+  useEffect(() => {
+    if (disabled) return;
+    const el = isFree ? area.current : line.current;
+    if (!el) return;
+    const a = document.activeElement;
+    const fine = inputProfile() === 'keys';
+    const otherField = a instanceof HTMLElement && a !== el && !isGapInput(a) && (a.isContentEditable || a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT');
+    if (otherField || !(fine || isGapInput(a))) return;
+    auto.current = true;
+    el.focus({ preventScroll: true });
+    auto.current = false;
+    // Nur beim ersten Zeichnen: danach entscheidet die Lernende selbst.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  /** Am Handy bleibt das Feld sichtbar, wenn die Tastatur aufgeht (UX-Prüfung 14.10.): nach der Tastatur-Animation in die Mitte rollen. */
+  const keepVisible = (el: HTMLElement): void => {
+    if (auto.current) return;
+    window.setTimeout(() => el.scrollIntoView?.({ block: 'center', behavior: 'smooth' }), 320);
+  };
   // Wachsendes einzeiliges Feld: Höhe folgt dem Inhalt (Zeilenumbruch nur durch Umbruch, nie durch Return).
   useEffect(() => {
     const el = area.current;
@@ -44,11 +69,7 @@ export function SentenceInput(props: SentenceInputProps) {
         rows={1}
         className={`lx-field lx-t-prompt w-full resize-none overflow-hidden scroll-mb-40 ${props.tall ? 'min-h-[120px]' : 'min-h-14'}`}
         placeholder={props.placeholder}
-        // Am Handy bleibt das Feld sichtbar, wenn die Tastatur aufgeht (UX-Prüfung 14.10.): nach der Tastatur-Animation in die Mitte rollen.
-        onFocus={(e) => {
-          const el = e.currentTarget;
-          window.setTimeout(() => el.scrollIntoView?.({ block: 'center', behavior: 'smooth' }), 320);
-        }}
+        onFocus={(e) => keepVisible(e.currentTarget)}
         data-sentence=""
         data-testid={testId}
         aria-label={t('exSentenceLabel')}
@@ -70,6 +91,7 @@ export function SentenceInput(props: SentenceInputProps) {
     <p className="lx-t-prompt" lang="en" data-testid={`${testId}-sentence`}>
       {before && <span>{before} </span>}
       <input
+        ref={line}
         type="text"
         className="lx-field lx-t-prompt inline-block min-h-11 max-w-full align-baseline"
         // `.lx-field` ist 100 % breit; im Satz soll das Feld die Lücke sein: feste Anfangsbreite, wächst mit dem Text.
@@ -81,10 +103,7 @@ export function SentenceInput(props: SentenceInputProps) {
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKey}
-        onFocus={(e) => {
-          const el = e.currentTarget;
-          window.setTimeout(() => el.scrollIntoView?.({ block: 'center', behavior: 'smooth' }), 320);
-        }}
+        onFocus={(e) => keepVisible(e.currentTarget)}
         {...textProps}
       />
       {after && <span> {after}</span>}

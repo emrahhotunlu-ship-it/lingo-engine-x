@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useLive, useNav, useT, type MessageKey } from '../sharedUi';
+import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useHiddenInput, useLive, useNav, useT, type MessageKey } from '../sharedUi';
 import { addDays, logError, toUSText } from '../shared';
 import { checkDict } from '../content';
 import type { RoundReport, SessionKind } from '../domain/session';
@@ -96,6 +96,7 @@ export type LearnHooks = { onRoundEnd?: (r: RoundReport) => void; onFinish?: () 
 
 export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; paths?: string[]; ai?: VocabAi; renderTop?: LearnTop } & LearnHooks) {
   const { t, lang } = useT();
+  const gapInput = useHiddenInput();
   // „Noch 5“ im Abschluss startet eine neue Runde (Extra) im selben Bildschirm; ein anderer Routen-Parameter beginnt von vorn.
   const [round, setRound] = useState({ base: routeKind, kind: routeKind, n: 0 });
   if (round.base !== routeKind) setRound({ base: routeKind, kind: routeKind, n: round.n + 1 });
@@ -187,7 +188,19 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
         />
       );
     case 'start':
-      return frame(null, <Start s={view.s} onGo={() => run?.begin()} />);
+      // Das Eingabefeld im Tipp selbst fokussieren: so öffnet das iPhone die Tastatur, und die erste Karte ist sofort tippbereit.
+      return (
+        frame(
+          null,
+          <Start
+            s={view.s}
+            onGo={() => {
+              run?.begin();
+              gapInput.focusNow();
+            }}
+          />,
+        )
+      );
     case 'done':
       if (view.n === 0 || !view.sum) return frame(null, <Notice title={t('vmEmptyTitle')} body={t('vmEmpty')} onBack={back} back={t('vmBack')} testId="vm-done" />);
       return frame(
