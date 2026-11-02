@@ -835,3 +835,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Veröffentlicht auf `JLL8…`: **v87 `1793608303-a6a8`** aus Commit cff0a16c (dist wie Test-Link v79, 39 Dateien), Fähigkeiten db/sample/downloads übernommen. **Rückweg v86 `1793087421-695a`** (Einzeldatei, README „Rückweg auf v86“). Manifest `docs/relaunch/publish/JLL8.json`. Die 45 alten Dateien `css/*`, `js/*` der Vorgänger-App auf dem Link bleiben unangetastet (nicht verwendet).
 - Neue Wörter-App ist aus, bis Emrah sie in Einstellungen › Wortschatz › „Neue Wörter-App“ einschaltet (Sicherung, Probelauf, Übernehmen).
 - Nächste Runde (nach Emrahs Feedback): Wörter-App von selbst an, #6b, „kommt später“-Liste; danach gemeinsame Planung Neuentwicklung (Gesamtprüfung angehalten, Funktionsliste in Arbeit).
+
+### 02.11.2026 – Funktionsinventar (Grundlage für die Neuplanung)
+- `docs/umbau/funktionsinventar.md`: 138 Funktionen, 104 da, 11 teilweise, 23 fehlen, 74 versteckt (Weg ab Start, Code-Stelle, Top 15). Nur gelesen; Pläne teils nur angelesen.
+- Wichtigster Befund für jetzt: Der Platz `vocab.hub` im Wörter-Reiter wird von niemandem gefüllt. Auch mit eingeschalteter neuer Wörter-App zeigt der Reiter den alten Trainer; die neue App erreicht man über Heute und Fortschritt › Wörter. → nächste Korrekturrunde.
