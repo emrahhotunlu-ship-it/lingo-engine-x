@@ -728,3 +728,6 @@ Grundlage: `docs/relaunch/ux-neuanfang.md` (sechs Spezialisten, Synthese A–D).
 3. **Wörter-Runde:** Emrah wörtlich: **„kommt drauf an was ich einstelle als lernziel in der app?? aber mindestens 10 Minuten und immer 40 % vom tagesziel!“** → Länge der Wörter-Runde = max(10 Min., 40 % des eingestellten Tagesziels); Rest kommt am nächsten Tag, freiwillig „Noch 5“.
 4. **Laptop:** **„Vollbild, rechts Claude (Empfehlung)“** – Übung groß in der Mitte, Seitenleiste ausgeblendet, rechts nur Erklärung und Claude.
 Weiter: klickbare Vorschau (eigenes Artefakt, erfundene Daten) → Emrahs OK → B+C+D einbauen, ein Test-Link.
+
+## 02.11.2026 – Vorschau UX-Neuanfang freigegeben (Emrah, Pop-up)
+Vorschau `5Zwv5noCiNwzrzzfQsfzXy` v1 `1793616118-d40f`. Frage „Du hast die Vorschau ausprobiert. Wie geht es weiter?“ → **„Passt, so einbauen (Empfehlung)“**. Umsetzung B (Design-System), C (Tagesweg 3 Schritte), D (Rückmeldung/Aufgabenqualität) in die echte App; ein Test-Link am Ende; live erst nach „Ja live nehmen“.
