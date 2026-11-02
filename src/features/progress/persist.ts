@@ -265,6 +265,8 @@ async function saveGrammar(a: GrammarAnswer): Promise<boolean> {
 /** Aufzeichnung für Kurs, Grammatik und Übungen (genutzt von den Phase-2-Bildschirmen). */
 export const learnRecorder: LearnRecorder = {
   async grammar(a) {
+    // Gemeldete Aufgabe (UX-Neuanfang D): zählt nicht – kein Lernstand, keine Zählung, keine Protokollzeile, auf jedem Weg.
+    if (a.void) return true;
     const ok = await saveGrammar(a);
     const right = answerRight(a);
     open.counts.push({ day: a.day, kind: 'g', channel: grammarChannel(a), ok: right });

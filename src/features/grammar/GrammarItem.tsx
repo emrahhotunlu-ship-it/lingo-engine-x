@@ -48,6 +48,8 @@ import { plantedOf, tutorPreview } from '../tutor/sessionStore';
 import type { Diagnosis } from '../../domain/tutor/diagnose';
 import type { Verdict as TutorVerdict } from '../../domain/tutor/tutorTypes';
 import { legacyNorm } from '../../domain/grammar/key';
+import { ReportSheet } from '../../ui/ReportSheet';
+import { reportTask } from '../tutor/reportTask';
 import { GRAMMAR_FIT_PV, type GrammarFitOut, type GrammarFitVars } from '../../prompts/grammarFit';
 import { learnerNow, lintOnce, scheduleLearner } from '../tutor/learnerLive';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -97,6 +99,8 @@ export type GrammarItemProps = {
 };
 
 type Fb = {
+  /** Aufgabe gemeldet, bevor die Antwort gebucht war: zählt nicht (UX-Neuanfang D). */
+  void?: boolean;
   verdict: Verdict;
   check: GrammarCheck | null;
   given: string;
@@ -208,6 +212,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const [locateMisses, setLocateMisses] = useState(0);
   const [copyOpen, setCopyOpen] = useState(false);
   const [sheet, setSheet] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   // Menü ⋯ „Zeig es mir“ (P61): der Struktur-Film zum Muster der Aufgabe, falls es einen gibt.
   const [filmOpen, setFilmOpen] = useState(false);
   const film = filmEnabled() ? filmFor(task.topic, patId) : null;
@@ -606,7 +611,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           ...(fb.fit ? { fit: fb.fit } : {}),
           ...pickAttempt(fb),
         };
-    return a;
+    return fb.void ? { ...a, void: true } : a;
   };
 
   // Punkt 4 (LS3): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen. `booked`: die beim Verbergen gebuchte Antwort
@@ -786,6 +791,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const src = { area, source: `grammar/${task.topic}` };
   const gapState: GapState = !fb || checking ? 'input' : fb.verdict;
   const gapReveal = fb && !checking && fb.verdict === 'wrong' && gapKind ? { solution, given: fb.given.trim() ? fb.given : null } : null;
+  // Ganzer Satz (Satzkorrektur, Umformung ohne Lücke): nach falsch oder „Weiß nicht“ steht die Lösung im Feld, die eigene Antwort durchgestrichen darüber.
+  const sentReveal = fb && !checking && !fb.override && fb.verdict === 'wrong' && !gapKind ? { solution, given: fb.given.trim() ? fb.given : null } : null;
   const gapNode = (
     <KineticGap
       label={t('grGapLabel')}
@@ -906,14 +913,14 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       );
     } else prompt = null;
   } else if (type === 'correct') {
-    prompt = <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} testId="correct-input" />;
+    prompt = <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} reveal={sentReveal} testId="correct-input" />;
   } else {
     // Umformung ohne Lücke (ganzer Satz): Auftragssatz oben, leeres Feld darunter.
     prompt = (
       <div className="flex flex-col gap-3">
         <EnglishText as="p" text={task.prompt} {...src} testId="transform-from" />
         {task.hint && !task.prompt.includes(task.hint) && <Cue hint={task.hint} />}
-        <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} testId="correct-input" />
+        <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} reveal={sentReveal} testId="correct-input" />
       </div>
     );
   }
@@ -1011,6 +1018,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (wrongTyped) menu.copyOnce = () => setCopyOpen(true);
     menu.wholeTopic = () => setSheet(true);
     if (film) menu.showMe = () => setFilmOpen(true);
+    menu.report = () => setReportOpen(true);
     // KI-Tutor: Aufgabe, Antwort und Lösung wie bisher in „Erklär mir meine Antwort“ (Bedeutungsaufgabe: Sätze als Text).
     const mx = task.x?.kind === 'meaning' ? task.x : null;
     const meaningText = (k: string | null): string => (mx ? (k === 'a' ? mx.a : k === 'b' ? mx.b : k === 'both' ? 'Both sentences mean the same' : (k ?? '')) : (k ?? ''));
@@ -1164,6 +1172,20 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         side={fb && hasRule(task.topic, lang) ? <RuleSide topic={task.topic} onWhole={() => setSheet(true)} /> : null}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
+      <ReportSheet
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        tpl="task"
+        id={`gr:${task.key}`}
+        reasons={['solution', 'twofit', 'unnatural', 'other']}
+        thanks={!held && !noHelp ? 'ttReportVoid' : undefined}
+        onReport={() => {
+          // Gemeldet: die Antwort zählt nicht (noch nicht gebucht), die Lehrkraft-Prüfung findet die Aufgabe in `app/c1.bad`.
+          // Ausnahme Vortest, Themen-Test und Wochen-Check (`noHelp`): dort zählt jede Antwort fürs Ergebnis; gemeldet wird trotzdem.
+          if (fb && !held && !noHelp) setFb({ ...fb, void: true });
+          void reportTask(`gr:${task.key}`);
+        }}
+      />
       {film && <FilmSheet film={film} open={filmOpen} onClose={() => setFilmOpen(false)} />}
     </div>
   );

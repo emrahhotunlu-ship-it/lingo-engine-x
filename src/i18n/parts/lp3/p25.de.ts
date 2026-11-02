@@ -13,6 +13,7 @@ export const ttP25De = {
   ttReportWrongExplain: 'Erklärung falsch',
   ttReportUnnatural: 'Satz klingt unnatürlich',
   ttReportOther: 'Anderes',
+  ttReportVoid: 'Danke, gemeldet. Diese Aufgabe zählt nicht.',
   ttReportThanks: 'Danke, das ist gemerkt.',
   ttReportClose: 'Schließen',
   ttSampleTitle: 'KI-Stichprobe',

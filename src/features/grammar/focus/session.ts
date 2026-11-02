@@ -130,10 +130,12 @@ export function commitFocus(row: FocusRow, extra?: { missed?: { trapId: string; 
   const s = useFocus.getState();
   if (s.status !== 'running' || s.tasks[s.pos]?.id !== row.id) return inputOf(s.tasks[s.pos]);
   if (extra?.answer) void learnRecorder.grammar(extra.answer);
+  // Gemeldete Aufgabe (UX-Neuanfang D): zählt nicht, keine Ergebniszeile.
+  const voided = extra?.answer?.void === true;
   const pos = s.pos + 1;
   const done = pos >= s.tasks.length;
   useFocus.setState({
-    results: [...s.results, row],
+    results: voided ? s.results : [...s.results, row],
     missed: extra?.missed ? [...s.missed, extra.missed] : s.missed,
     pos,
     step: s.step + 1,

@@ -61,9 +61,11 @@ type Props = {
   onReport?: ((r: ReportInfo) => void) | undefined;
   /** Nur diese Gründe (z. B. ein Beispielsatz ohne Lösung und Erklärung: „klingt unnatürlich“, „Anderes“); ohne Angabe alle. */
   reasons?: readonly ReportReason[] | undefined;
+  /** Eigener Dankestext (z. B. „zählt nicht“); ohne Angabe der allgemeine. */
+  thanks?: MessageKey | undefined;
 };
 
-export function ReportSheet({ open, onClose, tpl, id, onReport, reasons }: Props) {
+export function ReportSheet({ open, onClose, tpl, id, onReport, reasons, thanks }: Props) {
   const { t } = useT();
   const pick = (reason: ReportReason) => {
     const info: ReportInfo = { tpl, id, reason };
@@ -73,7 +75,7 @@ export function ReportSheet({ open, onClose, tpl, id, onReport, reasons }: Props
     } catch (err) {
       logWarn('ai:flag-local', err, id);
     }
-    toast(t('ttReportThanks'));
+    toast(t(thanks ?? 'ttReportThanks'));
     onClose();
   };
   return (

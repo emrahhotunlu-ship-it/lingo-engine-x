@@ -469,7 +469,7 @@ export function bookGrammarLeft(a: GrammarAnswer): void {
   if (!s.active || bookedT.has(a.t)) return;
   bookedT.add(a.t);
   const repeating = inRepeat(s);
-  if (!repeating) void learnRecorder.grammar({ ...enrichGrammar(s, a, repeating).a, left: true });
+  if (!repeating && !a.void) void learnRecorder.grammar({ ...enrichGrammar(s, a, repeating).a, left: true });
 }
 
 /** Antwort übernehmen und weiter. Rückgabe: Eingabeart der nächsten Aufgabe. */
@@ -485,7 +485,11 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   let tasks = e.tasks;
   // Schon beim Verbergen gespeichert (Punkt 4): nicht noch einmal.
   const booked = bookedT.delete(a.t);
-  if (!repeating && !booked) void learnRecorder.grammar(a);
+  // Gemeldete Aufgabe (UX-Neuanfang D): zählt nicht – nicht gespeichert, keine Zeile in der Runde, kein Musterlog.
+  // Auch wenn sie beim Verbergen schon „gebucht“ war: gespeichert wurde sie dann nicht (`learnRecorder.grammar` übergeht `void`).
+  // Im Vortest und Themen-Test zählt jede Antwort für das Ergebnis; dort bietet die Aufgabe „zählt nicht“ gar nicht an.
+  const voided = a.void === true;
+  if (!repeating && !booked && !voided) void learnRecorder.grammar(a);
   const row: GrammarRow = {
     key: a.task.key,
     topic: a.task.topic,
@@ -498,8 +502,8 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     dontKnow: a.dontKnow,
     clean: cleanAnswer(a),
   };
-  const results = repeating ? s.results : [...s.results, row];
-  const patLog = repeating || !a.task.pat || a.alt ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
+  const results = repeating || voided ? s.results : [...s.results, row];
+  const patLog = repeating || voided || !a.task.pat || a.alt ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
   const pos = s.pos + 1;
   let repeatAt = s.repeatAt;
   // Themen-Test: keine „Nochmal“-Runde, das Ergebnis kommt sofort; die schwachen Stellen übt die nächste Runde (Cursor-Phase „Üben“).
@@ -534,7 +538,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   // Im Themen-Test bleibt jede Aufgabe, wie sie ist (keine Rückstufung).
   // Tutor-Engine (S3): Zug nach der Antwort (bekannte Aufgabe nach 3 Fehlern, Mini-Lektion, Stufenwechsel). Nie im Vortest, Themen-Test, in der
   // Wiederholung am Ende oder in einer festen Aufgabenfolge; ersetzt wird an Ort und Stelle, die Runde wird nie kürzer.
-  const acted = !repeating && !inVortest(s) && !(s.test && s.pos < s.test.n) ? tutorStep(s, next, a, done) : false;
+  const acted = !repeating && !voided && !inVortest(s) && !(s.test && s.pos < s.test.n) ? tutorStep(s, next, a, done) : false;
   // Hat die Tutor-Engine die Runde schon eine Stufe gestützter gestellt (−1), greift die alte Rückstufung nicht zusätzlich (nicht doppelt erleichtern).
   const eased = !next.fixed && useTutorSession.getState().s.shift === -1;
   if (!acted && !eased && !done && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {

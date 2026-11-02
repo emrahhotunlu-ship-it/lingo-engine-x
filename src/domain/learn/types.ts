@@ -86,6 +86,8 @@ export type GrammarAnswer = {
   task: GrammarTask;
   given: string;
   dontKnow: boolean;
+  /** UX-Neuanfang D: Aufgabe gemeldet, bevor die Antwort gebucht war – sie zählt nicht (nie gespeichert, nicht in der Runde). Nur im Speicher. */
+  void?: true;
   verdict: Verdict;
   grade: Grade;
   ms: number;

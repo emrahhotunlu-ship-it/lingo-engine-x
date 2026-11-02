@@ -151,6 +151,35 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Ant
   expect(errors).toEqual([]);
 });
 
+test('ganzer Satz: nach „Weiß nicht“ steht die Lösung im Feld, nach falsch dazu die eigene Antwort durchgestrichen (UX-Neuanfang D)', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openGrammar(page);
+  await openAllChapters(page);
+  await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
+  await page.getByTestId('topic-start').click();
+  await skipMiniLesson(page);
+  let shown = false;
+  for (let i = 0; i < 12 && !shown; i++) {
+    await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();
+    if (await page.getByTestId('summary').isVisible()) break;
+    const item = page.getByTestId('gr-item');
+    if ((await item.getAttribute('data-type')) === 'correct') {
+      await item.getByTestId('dont-know').click();
+      const box = item.getByTestId('correct-input');
+      await expect(box).toHaveAttribute('data-revealed', '');
+      await expect(box.getByTestId('correct-input-solution')).not.toBeEmpty();
+      await expect(box.getByTestId('correct-input-given')).toHaveCount(0);
+      shown = true;
+      break;
+    }
+    await answerGrammar(page, solve);
+    await resultComplete(page);
+    await nextItem(page);
+  }
+  expect(shown).toBe(true);
+  expect(errors).toEqual([]);
+});
+
 test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runden, alle richtig, ohne Notenknopf', async ({ page }) => {
   // Lange Runde (seit dem C1-Werkzeugkasten 23 Themen); unter Last mehr Zeit.
   test.slow();

@@ -70,6 +70,11 @@ export function AgainScreen() {
   };
 
   const onVariant = (c: RepairCard) => (a: GrammarAnswer) => {
+    // Gemeldete Aufgabe (UX-Neuanfang D): zählt nicht, der Fehlersatz bleibt offen.
+    if (a.void) {
+      skipAgain();
+      return null;
+    }
     const ok = a.verdict === 'correct';
     const near = a.verdict === 'near';
     book(c, ok, near, a.given, true);

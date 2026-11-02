@@ -13,6 +13,7 @@ export const ttP25En = {
   ttReportWrongExplain: 'Explanation is wrong',
   ttReportUnnatural: 'Sentence sounds unnatural',
   ttReportOther: 'Something else',
+  ttReportVoid: 'Thanks, reported. This task does not count.',
   ttReportThanks: 'Thanks, noted.',
   ttReportClose: 'Close',
   ttSampleTitle: 'AI sample',

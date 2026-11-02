@@ -232,6 +232,9 @@ describe('app/c1: Kapitelwahl (nur ergänzend)', () => {
     expect(programStartedOf({ v: 1, ch: { n: 3, d: TODAY }, chh: [[3, TODAY]] })).toBe(false);
     expect(programStartedOf({ v: 1, bad: ['x'] })).toBe(true);
     expect(programStartedOf(undefined)).toBe(false);
+    // UX-Neuanfang D: Aufgaben-Meldungen aus „Melden“ (gr:/c1:) starten das Programm nicht.
+    expect(programStartedOf({ v: 1, ch: { n: 3, d: TODAY }, bad: ['gr:t1', 'c1:x'] })).toBe(false);
+    expect(programStartedOf({ v: 1, ch: { n: 3, d: TODAY }, bad: ['gr:t1', 'out1'] })).toBe(true);
     // Rückweg: ein Dokument ohne Wahl gilt wie bisher als begonnen, auch leer.
     expect(programStartedOf({ v: 1, checks: [], gates: [], prod: [], bad: [] })).toBe(true);
   });

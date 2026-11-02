@@ -1,3 +1,4 @@
+import { reportTask } from '../tutor/reportTask';
 import { createElement, useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
@@ -53,6 +54,8 @@ import type { C1Ctrl, C1KindEntry, ResponseMeta } from './types';
 // keine Selbstbewertung (die Note folgt aus Richtigkeit, Zeit und Hilfe), Erklärung auch bei richtiger Antwort.
 
 type Fb = {
+  /** Aufgabe gemeldet, bevor die Antwort gebucht war: zählt nicht (UX-Neuanfang D). */
+  void?: boolean;
   score: C1Score;
   response: C1Response;
   meta: ResponseMeta;
@@ -384,6 +387,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       ...(f.fit && !f.dontKnow ? { fit: f.fit } : {}),
       ...pickAttempt(f),
     };
+    // Gemeldet: zählt nicht (kein Lernstand, kein Wortschatz-Eintrag).
+    if (f.void) return { a: { ...booked, void: true }, lex: null };
     return { a: booked, lex };
   };
 
@@ -596,8 +601,13 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const menu: Partial<Record<ShellMenuId, () => void>> = {};
     if (typedWrong && !held) menu.override = override;
     menu.report = () => {
-      logWarn('c1x:report', { message: 'Aufgabe gemeldet (lokal, nur im Protokoll)' }, item.id);
-      toast(t('cxReported'));
+      // UX-Neuanfang D: gemeldet → die Antwort zählt nicht (solange nicht schon beim Verbergen gebucht), Kennung in `app/c1.bad` für die Lehrkraft-Prüfung.
+      logWarn('c1x:report', { message: 'Aufgabe gemeldet' }, item.id);
+      // Vortest, Themen-Test, Wochen-Check und Tempo (`noHelp`): dort zählt jede Antwort fürs Ergebnis; gemeldet wird trotzdem.
+      const voids = !held && !noHelp;
+      if (voids && !fb.void) setFb({ ...fb, void: true });
+      void reportTask(`c1:${item.id}`);
+      toast(t(voids ? 'ttReportVoid' : 'cxReported'));
     };
     const tutor =
       // Nur EIN KI-Einstieg je Karte (Kap. 15): bei „Claude fragen“ kein „Erklär mir meine Antwort“ daneben.

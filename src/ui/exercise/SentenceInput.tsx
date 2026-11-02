@@ -8,7 +8,19 @@ import { useT } from '../../i18n';
 // mit dem Text `value` statt der alten Wörter. (Die Lücke mit Bewegung baut Teilpaket B in `src/engine`.)
 
 type Common = { value: string; onChange: (v: string) => void; onSubmit: () => void; testId: string; disabled?: boolean };
-type Free = Common & { mode: 'free'; maxWords?: number; /** Platzhalter im leeren Feld. */ placeholder?: string; /** Mehrzeilig vorgeben (Kundenmail, Kombi-Satz: 2–4 Sätze, mindestens 120 px). */ tall?: boolean };
+type Free = Common & {
+  mode: 'free';
+  maxWords?: number;
+  /** Platzhalter im leeren Feld. */
+  placeholder?: string;
+  /** Mehrzeilig vorgeben (Kundenmail, Kombi-Satz: 2–4 Sätze, mindestens 120 px). */
+  tall?: boolean;
+  /**
+   * Nach der Prüfung (UX-Neuanfang D, 02.11.2026): die Lösung steht IM Feld, die eigene Eingabe klein und durchgestrichen darüber –
+   * wie bei der Lücke (`KineticGap.reveal`). Auch nach „Weiß nicht“: das Feld bleibt nie leer.
+   */
+  reveal?: { solution: string; given: string | null } | null | undefined;
+};
 type Edit = Common & { mode: 'edit-span'; base: string; span: readonly [number, number] };
 export type SentenceInputProps = Free | Edit;
 
@@ -55,6 +67,24 @@ export function SentenceInput(props: SentenceInputProps) {
     e.preventDefault();
     onSubmit();
   };
+
+  if (props.mode === 'free' && props.reveal) {
+    const rv = props.reveal;
+    return (
+      <div className={`lx-field lx-t-prompt w-full ${props.tall ? 'min-h-[120px]' : 'min-h-14'}`} data-revealed="" data-testid={testId} lang="en">
+        {rv.given?.trim() && (
+          <span className="lx-gap-given" data-testid={`${testId}-given`}>
+            <span className="sr-only">{t('exGapYours')}: </span>
+            {rv.given}
+          </span>
+        )}
+        <span className="lx-gap-reveal" data-testid={`${testId}-solution`}>
+          <span className="sr-only">{t('exGapSolution')}: </span>
+          {rv.solution}
+        </span>
+      </div>
+    );
+  }
 
   if (props.mode === 'free') {
     const max = props.maxWords;

@@ -107,7 +107,7 @@ export const chosenChapterOf = (raw: unknown): C1Choice | null => (isObj(raw) &&
 /**
  * Hat das C1-Programm begonnen? Früher reichte „`app/c1` ist da“. Seit der Kapitelwahl kann das Dokument nur `ch`/`chh` tragen: das zählt NICHT
  * (die erste Wahl darf keinen C1-Check-Tag auslösen, K0). Ohne `ch`/`chh` gilt wie bisher „Dokument da = begonnen“; mit Wahl zählt nur Einstufung,
- * Check, Kapitelprüfung, Produktion oder gemeldete Aufgabe.
+ * Check, Kapitelprüfung, Produktion oder gemeldetes Ergebnis (Aufgaben-Meldungen `gr:`/`c1:` aus „Melden“ zählen nicht).
  */
 export function programStartedOf(raw: unknown): boolean {
   if (!isObj(raw)) return false;
@@ -115,7 +115,7 @@ export function programStartedOf(raw: unknown): boolean {
   const d = readC1(raw);
   // Ohne Kapitelwahl gilt wie bisher: das Dokument ist da, also hat das Programm begonnen.
   if (!d.ch && !d.chh) return true;
-  return !!d.place || d.checks.length > 0 || d.gates.length > 0 || d.prod.length > 0 || d.bad.length > 0;
+  return !!d.place || d.checks.length > 0 || d.gates.length > 0 || d.prod.length > 0 || d.bad.some((id) => !id.startsWith('gr:') && !id.startsWith('c1:'));
 }
 
 /** Kapitel wählen (rein): `ch` setzen und an `chh` anhängen (≤ 20, die ältesten fallen weg). `null`, wenn dasselbe Kapitel schon gewählt ist. */
