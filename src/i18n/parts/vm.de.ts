@@ -630,4 +630,8 @@ export const vmDe = {
   vmSwGap_one: 'Bei {n} Wort fehlt ein Teil der Antworten aus der Zwischenzeit; es wird ab jetzt normal weiter geplant.',
   vmSwGap_other: 'Bei {n} Wörtern fehlt ein Teil der Antworten aus der Zwischenzeit; sie werden ab jetzt normal weiter geplant.',
   vmSwError: 'Das hat nicht geklappt. Versuch es gleich noch einmal; Einzelheiten stehen unter Einstellungen › Diagnose.',
+  vmHomeEyebrow: 'Heute',
+  vmHomeGo: 'Wörter lernen',
+  vmHomeDone: 'Wörter für heute erledigt',
+  vmHomeMore: 'Noch 5 Wörter · als Extra',
 };

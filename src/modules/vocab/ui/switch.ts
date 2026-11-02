@@ -251,3 +251,23 @@ export async function reenableModule(writer: Writer, input: Pick<MigrationInput,
   const on = await setModuleSwitch(writer, 1);
   return { state: on ? 'done' : 'switch_failed', caught };
 }
+
+export type AutoResult = EnableResult | { state: 'skipped'; why: 'no_profile' | 'decided' };
+
+/**
+ * Automatisch einschalten (Emrah 02.11.2026: „schalte die neue Wörter-App einfach live, warum muss ich da noch manuell was machen“):
+ * einmal je App-Start, wenn `app/profile` da ist und `vcfg` FEHLT (Modul nie entschieden). Ein vorhandenes `vcfg` – auch `mod = 0` über den
+ * Rückweg – wird nie überstimmt. Dieselben Wächter wie von Hand (Profil gültig, nichts gekappt, Sperre); keine Doppel-Zusammenlegung (die
+ * bestätigt nur Emrah im Probelauf). Ohne Datei-Sicherung, weil die Umrechnung nur ergänzt (`lex`, Verlauf, Marke) und alte Felder stehen
+ * lässt (Entscheidung 02.11.2026). Kein Wiederholen in einer Schleife: scheitert es, gilt die alte Ansicht bis zum nächsten Start.
+ */
+export async function autoEnable(writer: Writer, read: () => Promise<SwitchRead>, nowMs: number): Promise<AutoResult> {
+  const snap = await read();
+  const profile = snap.raw.get(PROFILE_PATH);
+  if (!profile) return { state: 'skipped', why: 'no_profile' };
+  if (profile.vcfg !== undefined && profile.vcfg !== null) return { state: 'skipped', why: 'decided' };
+  const st = fromRead(snap, nowMs);
+  if (migrationDone(st.schema)) return reenableModule(writer, st.input, { schema: st.schema, profileValid: st.profileValid, possiblyTruncated: st.truncated });
+  logWarn('vocab:switch', { message: 'Automatisch übernehmen' }, summaryText(preview(st.input, [], st.skipped).summary, []));
+  return enableModule(writer, { ...st.input, confirmedPairs: [] }, { confirmed: true, backupWritten: true, profileValid: st.profileValid, possiblyTruncated: st.truncated, holder: lockHolder() });
+}

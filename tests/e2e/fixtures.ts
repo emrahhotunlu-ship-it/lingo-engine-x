@@ -35,7 +35,15 @@ export type BootOptions = {
   whatsNew?: boolean;
   /** Adress-Anker beim Start (ohne `#`), z. B. `go=trainer%3Fround%3Dextra` (siehe `bootAt`). */
   hash?: string;
+  /**
+   * `true` = die Wörter-App schaltet sich beim Start von selbst ein wie bei Emrah (kein `vcfg` im Profil, Emrah 02.11.2026). Standard: das
+   * Profil bekommt `vcfg.mod = 0` (Rückweg-Stand), damit Tests des alten Wörter-Bereichs ihn weiter sehen; ein eigenes `vcfg` im Test gewinnt.
+   */
+  vocabAuto?: boolean;
 };
+
+/** Rückweg-Stand der Wörter-App für Tests ohne `vocabAuto` (siehe oben). */
+export const VCFG_OFF = { min: 15, ret: 0.9, mod: 0 };
 
 export type Booted = { external: string[]; errors: string[] };
 
@@ -71,6 +79,10 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
     const fake: InstallOptions = { ...(opts.fake ?? {}) };
     const patch = { ...(fake.patch ?? {}) };
     if (opts.migrated) Object.assign(patch, MIGRATED);
+    // Nur Startdaten mit Profil bekommen den Rückweg-Stand (sonst entstünde ein Profil, wo der Test keins will).
+    const seed = fake.seed;
+    const hasProfile = seed === undefined || seed === 'sample' || seed === 'large' || (typeof seed === 'object' && !!seed['app/profile']);
+    if (!opts.vocabAuto && hasProfile && patch['app/profile'] !== null) patch['app/profile'] = { vcfg: VCFG_OFF, ...(patch['app/profile'] ?? {}) };
     if (opts.theme || opts.lang) {
       patch['app/profile'] = { ...(patch['app/profile'] ?? {}), ...(opts.lang ? { lang: opts.lang } : {}), ...(opts.theme ? { theme: { m: opts.theme, p: 'ocean' } } : {}) };
     }

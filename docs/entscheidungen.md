@@ -714,3 +714,9 @@ Antwort Emrah: **„Ja, so machen (Empfehlung)“.** Umsetzung ohne eigenen Test
 
 ## 02.11.2026 – Test-Link v79 sofort live
 Frage: „Soll ich so vorgehen … (Wörter-App von selbst an, 6b, Korrekturen, dann Test-Link und live)?“ Emrahs Wahl: **„Test-Link 79 sofort live“** (vorher: „ich will endlich eine fertige App haben .. dann kann ich dir feedback geben und dann überlegen wir was wir wie neu entwickeln“). Umgesetzt: Live `JLL8…` v87 `1793608303-a6a8`, Rückweg v86 `1793087421-695a`.
+
+## 02.11.2026 – Wörter-App von selbst an, ohne Datei-Sicherung
+Emrah: **„warum machst du es so komplex? schalte doch die neue wörter app einfach live warum muss ich da noch manuell was machen in der app???“** und **„tust du over managen / testen???“**. Umsetzung: Profil ohne `vcfg` → beim Start einmal `autoEnable` (dieselben Wächter wie von Hand: Profil gültig, nichts gekappt, Sperre); ohne Datei-Sicherung, weil die Umrechnung nur ergänzt (`lex`, Verlauf, Marke) und alte Felder stehen bleiben; keine Doppel-Zusammenlegung. Vorhandenes `vcfg` (auch Rückweg `mod 0`) bleibt unangetastet. Reiter Wörter zeigt bei eingeschalteter Wörter-App die neue Startseite (ein Knopf). Prüfung bewusst schlank: Typprüfung, Lint, Unit-Tests, Bau, Plattform/Budget, betroffene E2E statt Gesamtlauf.
+
+## 02.11.2026 – Nach der Wörter-App: Grammatik + Wiederholen neu, gleich im neuen Design
+Frage: „Was soll nach der Wörter-App als Nächstes komplett neu gebaut werden?“ Antwort Emrah: **„Beides zusammen“** (Grammatik + Wiederholen von Grund auf neu wie die Wörter-App, gleich im neuen Design; ein Test-Link am Ende). Anlass: „grammer übungen oder wiederholen übungen hatten sehr oft fehler auch das sollte überarbeitet werden“; „die ganze Logik von der app und aufbau und ui und ux etc alles sollte überarbeitet werden“.

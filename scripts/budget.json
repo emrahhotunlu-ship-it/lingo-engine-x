@@ -108,6 +108,14 @@
       "src/modules/vocab/ui/SwitchPanel.tsx": {
         "basis": 9000,
         "zuwachs": {}
+      },
+      "src/modules/vocab/ui/switch.ts": {
+        "basis": 7000,
+        "zuwachs": {}
+      },
+      "src/features/vocab/hub/VocabHome.tsx": {
+        "basis": 1500,
+        "zuwachs": {}
       }
     },
     "lazyNeu": 150000,

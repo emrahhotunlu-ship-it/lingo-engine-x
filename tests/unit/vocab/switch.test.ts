@@ -7,7 +7,7 @@ import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { lexOf } from '../../../src/modules/vocab/data/lex';
 import { lexWriteSchema, vcfgSchema } from '../../../src/modules/vocab/data/schemas';
 import { VOCAB_LOCK_PATH } from '../../../src/modules/vocab/registry';
-import { buildInput, catchUpAll, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
+import { autoEnable, buildInput, catchUpAll, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Eingabe aus vollem Lesen, Wächter, Schalter `vcfg.mod`, Rückweg und Nachholen.
 // Nur erfundene Daten (seed/sample-data.json und Testfälle hier).
@@ -221,5 +221,56 @@ describe('Einschalten: Übernehmen, Schalter und Rückweg', () => {
     // Nochmal: nichts mehr nachzuholen.
     const again = await catchUpAll(w, stateOf(h.dump()).input.docs, st.input.logs, t + 2000);
     expect(again).toEqual({ docs: 0, applied: 0, added: 0, incomplete: [] });
+  });
+});
+
+describe('Automatisch einschalten (Emrah 02.11.2026)', () => {
+  const readOf = (h: ReturnType<typeof createMemoryDb>, truncated: string[] = []) => () => Promise.resolve(snapshotFromRecord(h.dump(), truncated));
+
+  it('kein vcfg → übernimmt mit Wächtern und schaltet ein; Doppel werden nie zusammengelegt; zweiter Start ändert nichts', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    const r = await autoEnable(w, readOf(h), NOW);
+    expect(r.state).toBe('done');
+    const d = h.dump();
+    expect(vcfgSchema.parse((d['app/profile'] as Doc).vcfg)).toEqual({ min: 15, ret: 0.9, mod: 1 });
+    expect(migrationDone(d['app/schema'] as Doc)).toBe(true);
+    for (const p of ['vocab/deadline', 'vocab/deadline-2']) expect(lexOf(d[p] as Doc)?.of ?? null, p).toBeNull();
+    // Alte Felder bleiben stehen (die Umrechnung ergänzt nur).
+    expect(without(d['vocab/deadline'] as Doc, 'lex')).toEqual(EXTRA['vocab/deadline']);
+    const n = h.writes().length;
+    expect(await autoEnable(w, readOf(h), NOW)).toEqual({ state: 'skipped', why: 'decided' });
+    expect(h.writes().length).toBe(n);
+  });
+
+  it('vorhandenes vcfg (Rückweg mod = 0) wird nie überstimmt; ohne Profil nichts', async () => {
+    const off = createMemoryDb({ seed: { ...all(), 'app/profile': { ...(all()['app/profile'] as Doc), vcfg: { min: 15, ret: 0.9, mod: 0 } } } });
+    expect(await autoEnable(createWriter(off.db), readOf(off), NOW)).toEqual({ state: 'skipped', why: 'decided' });
+    expect(off.writes()).toEqual([]);
+    const none = createMemoryDb({ seed: without(all(), 'app/profile') as Record<string, Doc> });
+    expect(await autoEnable(createWriter(none.db), readOf(none), NOW)).toEqual({ state: 'skipped', why: 'no_profile' });
+    expect(none.writes()).toEqual([]);
+  });
+
+  it('gekappt oder Profil ungültig → gesperrt, nichts geschrieben', async () => {
+    const cut = createMemoryDb({ seed: all() });
+    expect((await autoEnable(createWriter(cut.db), readOf(cut, ['vocab']), NOW)).state).toBe('blocked');
+    expect(cut.writes()).toEqual([]);
+    const bad = createMemoryDb({ seed: { ...all(), 'app/profile': { days: 'kaputt' } } });
+    expect((await autoEnable(createWriter(bad.db), readOf(bad), NOW)).state).toBe('blocked');
+    expect(bad.writes()).toEqual([]);
+  });
+
+  it('Umrechnung schon fertig, vcfg fehlt → wieder an ohne neue Umrechnung', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    expect((await enableModule(w, stateOf(h.dump()).input, guards)).state).toBe('done');
+    const d = h.dump();
+    const profile = without(d['app/profile'] as Doc, 'vcfg');
+    const h2 = createMemoryDb({ seed: { ...d, 'app/profile': profile } });
+    const r = await autoEnable(createWriter(h2.db), readOf(h2), NOW);
+    expect(r.state).toBe('done');
+    expect(((h2.dump()['app/profile'] as Doc).vcfg as Doc).mod).toBe(1);
+    expect(h2.dump()['app/schema']).toEqual(d['app/schema']);
   });
 });

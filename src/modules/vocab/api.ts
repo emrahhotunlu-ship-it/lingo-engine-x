@@ -175,3 +175,8 @@ export function loadPlace() {
 export function loadSwitch() {
   return import('./ui/SwitchPanel');
 }
+
+/** Automatisch einschalten beim App-Start (Emrah 02.11.2026): Umrechnung und Schalter, eigene Teil-Datei, nie in der Einstiegsdatei. */
+export function loadAutoSwitch() {
+  return import('./ui/switch');
+}

@@ -12,6 +12,7 @@ import { SayOwnSheet } from '../features/vocab/hub/SayOwnSheet';
 import { VocabHub } from '../features/vocab/hub/VocabHub';
 import { VocabScreen } from '../features/vocab/list/VocabScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
+import { installAutoSwitch } from '../features/vocab/autoSwitch';
 import { restoreTrainer, roundProgress, startSession, trainerSnapshot, TRAINER_RESUME_ID, useSession, type TrainerSnapshot } from '../features/vocab/session';
 import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { ListenLoop } from '../features/vocab/listen/ListenLoop';
@@ -72,6 +73,18 @@ const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScre
 const WordPage = lazy(() => loadWordPage().then((m) => ({ default: m.WordPage })));
 const WordSettings = lazy(() => loadOverview().then((m) => ({ default: m.WordSettings })));
 const PlaceScreen = lazy(() => loadPlace().then((m) => ({ default: m.PlaceScreen })));
+const VocabHome = lazy(() => import('../features/vocab/hub/VocabHome').then((m) => ({ default: m.VocabHome })));
+
+/** Reiter Wörter: bei eingeschalteter Wörter-App deren Startseite (Emrah 02.11.2026), sonst der bisherige Reiter (Rückweg). */
+function VocabTab() {
+  const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
+  if (!on) return <VocabHub />;
+  return (
+    <Suspense fallback={<Skeleton className="mx-auto mt-10 h-64 w-full max-w-[47.5rem]" />}>
+      <VocabHome />
+    </Suspense>
+  );
+}
 
 // „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Probelauf, Sicherung, Übernehmen, Rückweg. Eigene Teil-Datei, erst hier geladen.
 const SwitchPanel = lazy(() => loadSwitch().then((m) => ({ default: m.SwitchPanel })));
@@ -250,7 +263,7 @@ function VocabListPage({ route }: ScreenProps<'vocabList'>) {
 export const wortschatz = defineArea({
   id: 'wortschatz',
   screens: {
-    vocab: { kind: 'tab', component: VocabHub, title: 'nbWsTitle', keepScroll: true },
+    vocab: { kind: 'tab', component: VocabTab, title: 'nbWsTitle', keepScroll: true },
     vocabList: { kind: 'page', component: VocabListPage, title: 'nbWsListTitle', keepScroll: true, params: z.object({ filter: z.string().max(24).optional(), q: z.string().max(80).optional() }) },
     atlas: { kind: 'page', component: AtlasScreen, title: 'atTitle', keepScroll: true },
     deck: { kind: 'page', component: DeckScreen, title: 'nbWsDecks', params: z.object({ id: z.string().min(1).max(64) }) },
@@ -286,5 +299,6 @@ export const wortschatz = defineArea({
   boot: () => {
     installFlushOnHide();
     installDecksWatch();
+    installAutoSwitch();
   },
 });

@@ -630,4 +630,8 @@ export const vmEn = {
   vmSwGap_one: 'For {n} word, some answers from the meantime are missing; it will be scheduled normally from now on.',
   vmSwGap_other: 'For {n} words, some answers from the meantime are missing; they will be scheduled normally from now on.',
   vmSwError: 'That did not work. Please try again in a moment; details are under Settings › Diagnostics.',
+  vmHomeEyebrow: 'Today',
+  vmHomeGo: 'Learn words',
+  vmHomeDone: 'Words done for today',
+  vmHomeMore: '5 more words · as extra',
 };

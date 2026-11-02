@@ -118,6 +118,7 @@ describe('Wörter-Modul: Isolation', () => {
     // Großpaket A Schritt 5: die Vorlagen-Liste (src/prompts/registry.ts) über die dritte Tür modules/vocab/prompts.
     // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (unit/labels, learn/ui) fragen den Schalter.
     // Großpaket A S6: Fortschritt › Wörter (Slot vmod mit api.loadOverview; alte Behaltens-Karte und alte Einstellung „neue Wörter“ fragen den Schalter).
+    // 02.11.2026 Wörter-App von selbst an: autoSwitch (api.loadAutoSwitch) und der neue Wörter-Reiter VocabHome (api.loadOverview).
     expect(touching.sort()).toEqual([
       'src/areas/wortschatz.tsx',
       'src/data/paths.ts',
@@ -131,6 +132,8 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/today/state.ts',
       'src/features/today/store.ts',
       'src/features/unit/labels.ts',
+      'src/features/vocab/autoSwitch.ts',
+      'src/features/vocab/hub/VocabHome.tsx',
       'src/features/vocab/vmod.slot.tsx',
       'src/prompts/registry.ts',
     ]);

@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { bootAt, layoutProblems, MIGRATED, openSettings, screen } from './fixtures';
+import { bootAt, layoutProblems, MIGRATED, openSettings, screen, VCFG_OFF } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Einstellungen › Wortschatz › Probelauf → Bericht → Sicherung → Übernehmen und einschalten
@@ -8,7 +8,8 @@ import { dump } from './trainerHelpers';
 
 type Doc = Record<string, unknown>;
 
-// Umgestellt wie nach Phase 0, die Wörter-App noch nie eingeschaltet (kein vcfg, keine Marke vocabModule).
+// Umgestellt wie nach Phase 0, Wörter noch nie übernommen (keine Marke vocabModule); das Profil steht auf dem Rückweg-Stand `vcfg.mod = 0`
+// (Fixture), sonst schaltete sich die Wörter-App beim Start von selbst ein (autoswitch.spec.ts).
 const patch = (): Record<string, Doc> => ({ 'app/schema': { ...MIGRATED['app/schema'] } });
 const saved = (page: Page) => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: { filename: string }[] } }).__LINGO_FAKE__.saved.map((s) => s.filename));
 const axe = async (page: Page, sel: string) => (await new AxeBuilder({ page }).include(sel).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations.map((v) => v.id);
@@ -144,7 +145,7 @@ for (const vp of [
       await expect(page.getByTestId('vsw').getByText('bleibt „Übernehmen und einschalten“ gesperrt')).toHaveCount(0);
       await expect(page.getByTestId('vsw-backup')).not.toHaveClass(/lx-btn-primary/);
       await expect(page.getByTestId('vsw-apply')).toBeDisabled();
-      expect((await dump(page))['app/profile']?.vcfg).toBeUndefined();
+      expect((await dump(page))['app/profile']?.vcfg).toEqual(VCFG_OFF);
       expect(errors).toEqual([]);
     });
   });
