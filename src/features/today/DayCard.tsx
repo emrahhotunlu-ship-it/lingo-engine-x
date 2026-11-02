@@ -353,6 +353,8 @@ export function useEnterStart(enabled: boolean, start: () => void): void {
  */
 export function dayRowName(r: { kind: string; block: number; id: string; fmt?: string | undefined }, t: T): string {
   if (r.block > 0) return blockName(r.kind as UnitBlockKind, r.block, t, r.fmt as Step3Fmt | undefined);
+  // UX-Neuanfang B: der Wort-Schritt heißt auf Heute überall „Wörter“, auch in einem älteren Plan ohne Einheit.
+  if (r.id === 'review') return t('nbHeuteBlock_words');
   return dutyLabel(r.id as DutyId, t);
 }
 

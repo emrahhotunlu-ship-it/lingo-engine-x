@@ -57,14 +57,14 @@ test('Plan wird einmal je Lerntag gespeichert und nach dem Neuladen nicht neu ge
   const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
   await screen(page, 'today');
   const status = page.getByTestId('today-status');
-  // Tagesweg (UX-Neuanfang C, 02.11.2026): Wörter → Grammatik → Anwenden, auch am Sonntag (Stichtag); Fehlersätze sind freiwillig.
+  // Tagesweg (UX-Neuanfang C, 02.11.2026): Wörter → Grammatik → Anwenden; am Sonntag (Stichtag) Wochen-Check statt Anwenden; Fehlersätze sind freiwillig.
   await expect(status).toHaveAttribute('data-total', '3');
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { v?: number } | undefined)?.v).toBe(1);
   type Plan = { d: string; v: number; ids: string[]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number }; lesson: string | null; at: number; u: { shape: string; b: unknown[] } };
   const plan = (await dump(page))['app/profile']?.plan as Plan;
   expect(plan.d).toBe(DAY);
-  expect(plan.duty).toEqual(['review', 'ch:u-focus', 'ch:u-task']);
-  expect(plan.u.shape).toBe('full'); // Tagesweg: der Sonntag hat keine eigene Form mehr (Wochen-Check entfällt aus der Pflicht).
+  expect(plan.duty).toEqual(['review', 'ch:u-focus', 'ch:u-check']);
+  expect(plan.u.shape).toBe('full');
   expect(plan.lesson).toBeNull();
   expect(plan.goal.review).toBeGreaterThan(0);
   expect(plan.goal.due + plan.goal.new + plan.goal.ahead).toBeLessThanOrEqual(plan.goal.review);

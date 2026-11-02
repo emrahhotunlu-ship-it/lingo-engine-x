@@ -17,10 +17,8 @@ test.describe('Handy 390', () => {
     const first = page.getByTestId('duty').first();
     // UX-Audit U1: nicht „überfällig“, sondern der Grund in Worten; Glossar 3.6: kein Altwort „Rückstand“.
     // Seit UX-Neuanfang C hat der Schritt „Wörter“ feste Minuten aus dem Tagesziel (Emrah 02.11.2026: „mindestens 10 Minuten und immer 40 %“),
-    // er wächst nicht mehr mit dem Rückstand; die Zeile nennt die geplanten Karten, Fällige zuerst.
-    await expect(first.getByTestId('reason')).toContainText('Karten · Fällige zuerst');
-    const planned = ((await first.getByTestId('reason').innerText()).match(/(\d+)\s*Karten/) ?? [])[1] ?? '';
-    expect(planned).not.toBe('');
+    // er wächst nicht mehr mit dem Rückstand; die Zeile sagt in Worten, dass die Wörter zur Zeit passen (keine Kartenzahl mehr auf Heute).
+    await expect(first.getByTestId('reason')).toContainText('passend zu deiner Zeit');
     // Tagesziel 25 → Wörter 10 Minuten, auch bei Rückstand.
     await expect(first).toHaveAttribute('data-min', '10');
 
@@ -28,7 +26,8 @@ test.describe('Handy 390', () => {
     await expect(page.getByTestId('ws-behind')).toHaveAttribute('data-n', '40');
     // Eine Zahl überall (UX-Audit U1): die Plan-Zahl des Wörter-Reiters ist die Kartenzahl der Heute-Karte, und die Wortliste nennt dieselbe Zeile.
     const behindEl = page.getByTestId('ws-behind');
-    await expect(behindEl).toHaveAttribute('data-planned', planned);
+    const planned = (await behindEl.getAttribute('data-planned')) ?? '';
+    expect(planned).toMatch(/^[1-9]\d*$/);
     const due = (await behindEl.getAttribute('data-due')) ?? '';
     const line = (await behindEl.innerText()).split('\n')[0] ?? '';
     expect(line).toContain(due);
