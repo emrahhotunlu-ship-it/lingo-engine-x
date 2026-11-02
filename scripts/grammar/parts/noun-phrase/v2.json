@@ -282,11 +282,16 @@
   "id": "np-k8",
   "type": "kwt",
   "pat": "np.to-inf",
-  "from": "This is the best way of reducing costs.",
+  "from": "Nothing reduces costs better than this.",
   "key": "WAY",
   "frame": "This is the best ___ costs.",
   "answer": "way to reduce",
-  "accepted": [],
+  "accepted": [
+   "way of reducing",
+   "way to cut",
+   "way of cutting",
+   "way to lower"
+  ],
   "words": [
    3,
    3
@@ -328,7 +333,9 @@
   ],
   "answer": "",
   "fixed": "That was the best presentation I have seen.",
-  "accepted": [],
+  "accepted": [
+   "that"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: what ist kein Relativpronomen nach einem Nomen. Richtig: the best presentation I have seen.",
@@ -466,29 +473,29 @@
   "id": "np-f6",
   "type": "find",
   "pat": "np.of-s",
-  "prompt": "The company CEO resigned yesterday.",
+  "prompt": "I spoke to the assistant of Maria yesterday.",
   "err": [
-   1,
-   2
+   3,
+   6
   ],
-  "answer": "company's CEO",
-  "fixed": "The company's CEO resigned yesterday.",
+  "answer": "Maria's assistant",
+  "fixed": "I spoke to Maria's assistant yesterday.",
   "accepted": [],
   "why": {
    "ok": {
-    "de": "Der Fehler: zwischen Firma und CEO fehlt das ’s. Richtig: the company’s CEO.",
-    "en": "The error: the ’s is missing between company and CEO. Correct: the company’s CEO."
+    "de": "Der Fehler: „the assistant of Maria“ klingt unnatürlich. Gehört etwas einer Person, steht ’s: Maria’s assistant.",
+    "en": "The error: “the assistant of Maria” sounds unnatural. When something belongs to a person, use ’s: Maria’s assistant."
    },
    "wrong": [
     {
      "tap": "none",
-     "de": "Doch, hier steckt ein Fehler: Der Besitzer braucht ’s.",
-     "en": "There is an error: The owner needs ’s."
+     "de": "Doch, hier steckt ein Fehler: Gehört etwas einer Person, steht ’s.",
+     "en": "There is an error: when something belongs to a person, use ’s."
     },
     {
      "tap": "*",
-     "de": "Der Fehler liegt woanders: Der Besitzer braucht ’s.",
-     "en": "The error is elsewhere: The owner needs ’s."
+     "de": "Der Fehler liegt woanders: Gehört etwas einer Person, steht ’s.",
+     "en": "The error is elsewhere: when something belongs to a person, use ’s."
     }
    ]
   }

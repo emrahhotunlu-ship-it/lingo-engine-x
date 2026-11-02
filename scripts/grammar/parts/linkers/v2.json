@@ -12,7 +12,9 @@
    "Even though we lost",
    "Although we had lost",
    "Though we had lost",
-   "Even though we had lost"
+   "Even though we had lost",
+   "Despite having lost",
+   "In spite of having lost"
   ],
   "words": [
    3,
@@ -61,10 +63,13 @@
    "Though the client approved",
    "Even though the client approved",
    "Although the client had approved",
-   "Though the client had approved"
+   "Though the client had approved",
+   "Although he had approved",
+   "Although he approved",
+   "Though he had approved"
   ],
   "words": [
-   4,
+   3,
    5
   ],
   "why": {
@@ -350,7 +355,9 @@
    "that said, the board",
    "the board, however,",
    "the board, nevertheless,",
-   "the board, nonetheless,"
+   "the board, nonetheless,",
+   "the board, though,",
+   "still, the board"
   ],
   "words": [
    3,
@@ -411,7 +418,9 @@
    "that said, the team",
    "the team, however,",
    "the team, nevertheless,",
-   "the team, nonetheless,"
+   "the team, nonetheless,",
+   "the team, though,",
+   "still, the team"
   ],
   "words": [
    3,
@@ -524,7 +533,9 @@
    "Hence, we need",
    "As a consequence, we need",
    "For this reason, we need",
-   "Accordingly, we need"
+   "Accordingly, we need",
+   "We therefore need",
+   "We consequently need"
   ],
   "words": [
    3,

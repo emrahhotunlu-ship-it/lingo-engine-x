@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { join } from 'node:path';
 import { expect, it } from 'vitest';
 import { scoreC1 } from '../../../src/domain/c1x/score';
+import { errFixed } from '../../../src/domain/c1x/kinds/err';
 import type { C1Item, C1Response } from '../../../src/domain/c1x/types';
 import { checkFind, checkGrammar, checkKwt, checkMeaning } from '../../../src/domain/grammar/check';
 import { allSeedTasks } from '../../../src/domain/grammar/tasks';
@@ -112,6 +113,14 @@ function findOne(t: GrammarTask, span: [number, number], fix: string): string {
     if (!s1.found) return 'wrong(loc)';
     const fixTask = s1.altErr ? { ...t, answer: t.x?.kind === 'find' ? (t.x.errAlt?.find((x) => x.err[0] === s1.altErr?.[0])?.answer ?? t.answer) : t.answer, accepted: [...(t.x?.kind === 'find' ? (t.x.errAlt?.find((x) => x.err[0] === s1.altErr?.[0])?.accepted ?? []) : [])] } : t;
     const s2 = checkFind(fixTask, { replacement: fix });
+    if (s2.verdict === 'wrong' && !s1.altErr && t.x?.kind === 'find' && t.x.err) {
+      // Ganzer Satz des Lösers gegen die richtigen ganzen Sätze (andere Stellengrenze, gleiche Korrektur).
+      const w = words(t.prompt);
+      const e = t.x.err;
+      const sent = (a: number, b: number, f: string) => [...w.slice(0, a), ...words(f), ...w.slice(b + 1)].map(bare).filter(Boolean).join(' ');
+      const goals = new Set([t.answer, ...t.accepted].map((f) => sent(e[0], e[1], f)));
+      if (goals.has(sent(span[0], span[1], fix))) return 'correct';
+    }
     return s2.verdict + (s2.needsJudge ? '(judge)' : '');
   }
 }
@@ -124,7 +133,13 @@ function scoreItem(it: C1Item, a: Ans): string {
     if (!o.wrong) r = { kind: 'err', tap: 'none' };
     else {
       const fix = o.fix ?? '';
-      return best(spansOf(it.text, o.wrong).map((span) => scoreC1(it, { kind: 'err', tap: span[0], fix, typed: true }).verdict));
+      const spans = spansOf(it.text, o.wrong);
+      // Gleicher Satz wie eine Musterkorrektur? Dann ist es nur eine andere Abgrenzung der Fehlerstelle, kein Inhaltsproblem.
+      const sk = (x: string) => words(x).map(bare).join(' ');
+      const ws = words(it.text);
+      const same = it.bad && spans.some(([a, b]) => it.bad?.fix.some((f) => sk([...ws.slice(0, a), fix, ...ws.slice(b + 1)].join(' ')) === sk(errFixed(it, f))));
+      if (same) return 'correct';
+      return best(spans.flatMap(([a, b]) => Array.from({ length: b - a + 1 }, (_, k) => scoreC1(it, { kind: 'err', tap: a + k, fix, typed: true }).verdict)));
     }
   } else if (it.kind === 'kwt') r = { kind: 'kwt', text: asText(a), typed: true };
   else if (it.kind === 'ocl' || it.kind === 'wf') r = { kind: it.kind, text: asText(a) };
@@ -153,6 +168,11 @@ it('G1', () => {
   mkdirSync(OUT, { recursive: true });
   const tasks = allSeedTasks();
   const items = c1xAll();
+  if (MODE === 'locate') {
+    // Wo liegt eine Aufgabe? (Quelle `ref`, Art, Felder) – für das Einspielen der Lehrer-Urteile.
+    writeFileSync(join(OUT, 'locate.json'), JSON.stringify(Object.fromEntries(tasks.map((t) => [tid(t), { ref: t.ref, type: t.type, prompt: t.prompt, answer: t.answer, accepted: t.accepted, x: t.x ?? null }]))));
+    return;
+  }
   if (MODE === 'export') {
     const blind: Blind[] = [...tasks.map(blindTask), ...items.map(blindC1).filter((b): b is Blind => !!b)];
     const keys: Key[] = [...tasks.map((t) => ({ id: tid(t), model: t.type === 'find' ? (t.x?.kind === 'find' && t.x.err ? `${t.prompt.split(/\s+/).slice(t.x.err[0], t.x.err[1] + 1).join(' ')} → ${t.answer}` : 'kein Fehler') : t.answer, accepted: t.accepted })), ...items.map((i) => ({ id: `c:${i.id}`, model: c1Model(i) }))];

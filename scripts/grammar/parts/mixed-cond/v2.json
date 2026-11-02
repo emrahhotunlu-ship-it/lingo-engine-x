@@ -600,7 +600,8 @@
   "answer": "were",
   "fixed": "If I were more patient, I would have waited for the quote.",
   "accepted": [
-   "was"
+   "was",
+   "had been"
   ],
   "why": {
    "ok": {

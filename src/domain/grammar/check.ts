@@ -272,8 +272,38 @@ export function checkFind(task: GrammarTask, step: { tapped: [number, number] | 
   }
   if (err === null) return { verdict: 'wrong', ops: [], needsJudge: false, found: false };
   const given = step.replacement.trim();
-  if (!task.answer.trim()) return { verdict: given ? 'wrong' : 'correct', ops: [], needsJudge: false, found: true };
-  return { ...checkGrammar({ ...task, type: 'gap' }, given), needsJudge: false, found: true };
+  // Leere Lösung = Wort streichen („system what we tested“ → „system we tested“); ein gleichwertiger Ersatz aus `accepted` („that“) gilt auch.
+  if (!task.answer.trim()) {
+    const ok = !given || task.accepted.some((a) => a.trim() && sentNorm(splitWords(a)) === sentNorm(splitWords(given)));
+    return { verdict: ok ? 'correct' : 'wrong', ops: [], needsJudge: false, found: true };
+  }
+  const res = checkGrammar({ ...task, type: 'gap' }, given);
+  // G1/G2: Die markierte Stelle ist manchmal breiter oder schmaler als das, was der Lernende ersetzt („might affected“ → nur „affect“ für
+  // „affected“; „lawyer“ → „is a lawyer“). Ergibt der Ersatz an einer Teil- oder Nachbarstelle genau den richtigen ganzen Satz, ist er richtig.
+  if (res.verdict === 'wrong' && given && fixesWholeSentence(task, err, given)) return { verdict: 'correct', ops: [], needsJudge: false, found: true };
+  return { ...res, needsJudge: false, found: true };
+}
+
+const sentNorm = (ws: readonly string[]): string =>
+  ws
+    .map((w) => toUS(w.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9'-]/g, '')))
+    .filter(Boolean)
+    .join(' ');
+
+/** Ergibt `given` an einer Stelle innerhalb von `err` (oder bis zu 2 Wörter darüber hinaus) genau einen der richtigen ganzen Sätze? */
+function fixesWholeSentence(task: GrammarTask, err: readonly [number, number], given: string): boolean {
+  const words = splitWords(task.prompt);
+  const g = splitWords(given);
+  const goals = new Set([task.answer, ...task.accepted].map((f) => sentNorm([...words.slice(0, err[0]), ...splitWords(f), ...words.slice(err[1] + 1)])));
+  const lo = Math.max(0, err[0] - 2);
+  const hi = Math.min(words.length - 1, err[1] + 2);
+  for (let a = lo; a <= hi; a++)
+    for (let b = a; b <= hi; b++) {
+      // Die Stelle muss die markierte Fehlerstelle berühren (sonst wäre ein anderer Fehler korrigiert).
+      if (b < err[0] || a > err[1]) continue;
+      if (goals.has(sentNorm([...words.slice(0, a), ...g, ...words.slice(b + 1)]))) return true;
+    }
+  return false;
 }
 
 /** Bedeutungspaar: `a`, `b` oder `both`. */

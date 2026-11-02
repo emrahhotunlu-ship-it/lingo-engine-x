@@ -2470,7 +2470,7 @@
   {
    "topic": "modals-deduction",
    "type": "gap",
-   "prompt": "She ___ at her desk right now – her coat is still here.",
+   "prompt": "She ___ somewhere in the building – her coat is still here.",
    "answer": "must be",
    "accepted": [
     "has to be",

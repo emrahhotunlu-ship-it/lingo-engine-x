@@ -2003,7 +2003,7 @@
    ]
   }
  },
- "c1-hedging|themigrationcouldtakelongerthanplanned": {
+ "c1-hedging|onlyasmallriskthemigrationcouldtakelongerthanplanned": {
   "pat": "hg.downtoner",
   "why": {
    "ok": {
@@ -6709,7 +6709,7 @@
    ]
   }
  },
- "future-past|thenewofficeshouldopeninjunebutthepermitwasdelayed": {
+ "future-past|thenewofficeshouldopeninjunebutthepermitwasdelayedsoitonlyopenedinaugust": {
   "pat": "fp.was-to",
   "why": {
    "ok": {
@@ -10456,7 +10456,7 @@
    ]
   }
  },
- "modals-deduction|sheatherdeskrightnowhercoatisstillhere": {
+ "modals-deduction|shesomewhereinthebuildinghercoatisstillhere": {
   "pat": "md.must-now",
   "why": {
    "ok": {
@@ -15928,12 +15928,12 @@
    ]
   }
  },
- "pres-simple-cont|iusuallyfromhomeonfridays": {
+ "pres-simple-cont|sheusuallyfromhomeonfridays": {
   "pat": "psc.habit",
   "why": {
    "ok": {
-    "de": "Richtig: „usually“ und „on Fridays“ nennen eine Regel, also Present Simple: work.",
-    "en": "Right: “usually” and “on Fridays” name a rule, so present simple: work."
+    "de": "Richtig: „usually“ und „on Fridays“ nennen eine Regel, also Present Simple. Nach „she“ steht die -s-Form: works.",
+    "en": "Right: “usually” and “on Fridays” name a rule, so present simple. After “she” comes the -s form: works."
    },
    "wrong": [
     {
@@ -15941,8 +15941,8 @@
       "working"
      ],
      "pat": "psc.now",
-     "de": "„am working“ passt zu jetzt oder vorübergehend. „usually“ nennt aber eine Regel.",
-     "en": "“am working” fits now or temporary. But “usually” names a rule."
+     "de": "„is working“ passt zu jetzt oder vorübergehend. „usually“ nennt aber eine Regel.",
+     "en": "“is working” fits now or temporary. But “usually” names a rule."
     },
     {
      "if": [
@@ -15953,17 +15953,20 @@
     },
     {
      "if": [
+      "work"
+     ],
+     "not": [
       "works"
      ],
-     "de": "Nach „I“ steht keine -s-Form: I work.",
-     "en": "After “I” there is no -s form: I work."
+     "de": "Nach „she“ (he/she/it) braucht das Verb ein -s: she works.",
+     "en": "After “she” (he/she/it) the verb needs an -s: she works."
     },
     {
      "not": [
-      "work"
+      "works"
      ],
-     "de": "Gesucht ist die Grundform von work: I usually work.",
-     "en": "The base form of work is needed: I usually work."
+     "de": "Gesucht ist Present Simple mit -s: She usually works.",
+     "en": "Present simple with -s is needed: She usually works."
     }
    ]
   }

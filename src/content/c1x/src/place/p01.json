@@ -2454,7 +2454,8 @@
    },
    "text": "We booked a ten-___ trip to Portugal for the summer vacation.",
    "accept": [
-    "day"
+    "day",
+    "night"
    ],
    "cls": "part",
    "chips": [
@@ -2888,6 +2889,30 @@
      "b": [
       "here since"
      ]
+    },
+    {
+     "a": [
+      "has been"
+     ],
+     "b": [
+      "with us since"
+     ]
+    },
+    {
+     "a": [
+      "has been"
+     ],
+     "b": [
+      "with the company since"
+     ]
+    },
+    {
+     "a": [
+      "has worked"
+     ],
+     "b": [
+      "for us since"
+     ]
     }
    ],
    "tiles": [
@@ -3307,6 +3332,14 @@
      "b": [
       "worth waiting"
      ]
+    },
+    {
+     "a": [
+      "It would be"
+     ],
+     "b": [
+      "worth waiting"
+     ]
     }
    ],
    "tiles": [
@@ -3597,6 +3630,38 @@
     {
      "a": [
       "costs the same"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "costs exactly the same"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "is exactly as expensive"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "is the same price"
+     ],
+     "b": [
+      "as"
+     ]
+    },
+    {
+     "a": [
+      "is priced the same"
      ],
      "b": [
       "as"

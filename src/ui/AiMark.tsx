@@ -32,11 +32,13 @@ type Props = {
   reasons?: readonly ReportReason[] | undefined;
   /** `false`: nur „Melden“ – die Kennzeichnung steht einmal über einer Liste (UX-Prüfung 19.10.2026: „Satz von Claude“ nur einmal). */
   label?: boolean;
+  /** Beschriftung des Melde-Knopfs (Großpaket G3: „Erklärung melden“, damit klar ist, dass die Erklärung gemeint ist, nicht die Aufgabe). */
+  reportKey?: MessageKey;
   className?: string;
   'data-testid'?: string;
 };
 
-export function AiMark({ variant, tpl, id, onReport, reasons, label = true, className, 'data-testid': testId = 'ai-mark' }: Props) {
+export function AiMark({ variant, tpl, id, onReport, reasons, label = true, reportKey = 'ttReport', className, 'data-testid': testId = 'ai-mark' }: Props) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -56,7 +58,7 @@ export function AiMark({ variant, tpl, id, onReport, reasons, label = true, clas
             onClick={() => setOpen(true)}
             data-testid="ai-report"
           >
-            {t('ttReport')}
+            {t(reportKey)}
           </button>
         )}
       </p>

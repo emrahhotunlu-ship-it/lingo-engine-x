@@ -149,7 +149,7 @@ export function toPoolItem(t: GrammarTask): Doc {
   return out;
 }
 
-type RuleTrap = { bad?: unknown; good?: unknown; why?: unknown; alt?: unknown };
+type RuleTrap = { bad?: unknown; good?: unknown; why?: unknown; alt?: unknown; accepted?: unknown };
 /** Fallen des Regelwerks je Thema (geparst beim ersten Gebrauch, `raw.ts`). */
 function ruleTraps(): Record<string, { traps?: RuleTrap[] }> {
   return {
@@ -185,7 +185,7 @@ export function seedTasks(): readonly GrammarTask[] {
   for (const tp of TOPICS) {
     for (const trap of RULES[tp.id]?.traps ?? []) {
       const why = Array.isArray(trap.why) ? trap.why.map(s) : [];
-      push(normalizeTask({ topic: tp.id, type: 'correct', prompt: s(trap.bad), answer: s(trap.good), expl: why[0], expl_en: why[1], ...(Array.isArray(trap.alt) ? { alt: trap.alt } : {}) }, 'seed', `rules/${tp.id}`));
+      push(normalizeTask({ topic: tp.id, type: 'correct', prompt: s(trap.bad), answer: s(trap.good), expl: why[0], expl_en: why[1], ...(Array.isArray(trap.alt) ? { alt: trap.alt } : {}), ...(Array.isArray(trap.accepted) ? { accepted: trap.accepted } : {}) }, 'seed', `rules/${tp.id}`));
     }
   }
   seedCache = out;
@@ -254,6 +254,11 @@ export type RoundInput = {
   seed: string;
   /** Höchstzahl der Fehlersätze (aus dem Plan, `errs`); Standard `ERRORS_PER_ROUND`. */
   errorsMax?: number;
+  /**
+   * Großpaket G4: eigene fällige Fehlersätze aus `app/repair` (schon als Aufgabe, älteste zuerst). Sie teilen sich die Plätze der Fehlersätze
+   * mit den Grammatik-Fehlern, im Wechsel (eigener Satz zuerst); die Runde wird dadurch nicht länger. Nur die neue Grammatik reicht sie herein.
+   */
+  repairs?: readonly GrammarTask[];
   /** Eingefrorenes Grammatikthema des Tages (`u.gt`, §2.3): hat Vorrang vor `rankTopics` und `introTopic`. */
   gt?: { intro: string | null; pats: string[]; topics: string[]; ch?: number } | null;
   /** Einführung vorn: die ersten 4 Plätze (nach den Fehlersätzen) gehören diesen Mustern, ungemischt. */
@@ -512,6 +517,28 @@ export function selectRound(i: RoundInput): GrammarTask[] {
       used.add(variant.key);
       errors.push({ ...variant, errorT: d.task.errorT });
     } else errors.push(own);
+  }
+  if (i.repairs?.length && maxErr > 0) {
+    const reps: GrammarTask[] = [];
+    for (const r of i.repairs) {
+      if (reps.length >= maxErr) break;
+      const own = forProfile(r, profile);
+      if (!own || used.has(own.key)) continue;
+      reps.push(own);
+    }
+    if (reps.length) {
+      const merged: GrammarTask[] = [];
+      for (let k = 0; merged.length < maxErr && (k < reps.length || k < errors.length); k++) {
+        const a = reps[k];
+        const b = errors[k];
+        if (a && merged.length < maxErr) merged.push(a);
+        if (b && merged.length < maxErr) merged.push(b);
+      }
+      // Verdrängte Grammatik-Fehlersätze bleiben fällig und kommen in der nächsten Runde; ihre Schlüssel sind wieder frei.
+      for (const t of errors) if (!merged.includes(t)) used.delete(t.key);
+      for (const t of merged) used.add(t.key);
+      errors.splice(0, errors.length, ...merged);
+    }
   }
   if (i.mode === 'errors') return errors;
 

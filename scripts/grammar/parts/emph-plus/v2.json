@@ -123,7 +123,9 @@
   "key": "SURPRISING",
   "frame": "___ it seems, the old tool is faster.",
   "answer": "Surprising though",
-  "accepted": [],
+  "accepted": [
+   "Surprising as"
+  ],
   "words": [
    2,
    2
@@ -395,11 +397,15 @@
   "prompt": "Hard as we tried, the migration not finished in time.",
   "err": [
    6,
-   6
+   7
   ],
-  "answer": "was not",
+  "answer": "was not finished",
   "fixed": "Hard as we tried, the migration was not finished in time.",
-  "accepted": [],
+  "accepted": [
+   "wasn't finished",
+   "didn't finish",
+   "did not finish"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: im Hauptsatz fehlt das Hilfsverb was. Richtig: the migration was not finished.",

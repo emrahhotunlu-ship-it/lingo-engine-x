@@ -7,6 +7,7 @@ export const ttP25De = {
   ttMarkDiag: 'Auswertung von Claude · kann Fehler enthalten',
   ttMarkEdit: 'Überarbeitung von Claude · kann Fehler enthalten',
   ttReport: 'Melden',
+  ttReportExplain: 'Erklärung melden',
   ttReportTitle: 'Was stimmt nicht?',
   ttReportWrongSolution: 'Lösung falsch',
   ttReportTwoFit: 'Zwei Antworten passen',

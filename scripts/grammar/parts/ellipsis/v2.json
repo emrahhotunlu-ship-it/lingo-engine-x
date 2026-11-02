@@ -456,7 +456,9 @@
   ],
   "answer": "those of the old provider.",
   "fixed": "The fees of the new provider are lower than those of the old provider.",
-  "accepted": [],
+  "accepted": [
+   "the old provider's."
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Gebühren werden mit Gebühren verglichen. Richtig: lower than those of the old provider.",
@@ -635,8 +637,8 @@
   "a": "I'd love to.",
   "b": "I'd love to do so.",
   "q": {
-   "de": "Bedeuten beide Sätze dasselbe?",
-   "en": "Do both sentences mean the same?"
+   "de": "Welcher Satz nimmt eine Einladung an?",
+   "en": "Which sentence accepts an invitation?"
   },
   "answer": "both",
   "why": {

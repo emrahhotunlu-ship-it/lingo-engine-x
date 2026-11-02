@@ -27,6 +27,7 @@ import { programChapters } from '../../domain/c1/chapters';
 import { chapterRunOn } from '../../app/flags';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
+import { grammarModuleOn } from '../../modules/grammar/api';
 import { useWhyReason, useWinOn } from '../tutor/WhyLine';
 import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
@@ -72,6 +73,7 @@ export function GrammarSessionScreen() {
   }, []);
 
   const showCards = cardsDue(s) && !!s.intro;
+  const gmod = useLive((x) => grammarModuleOn(x.docs['app/profile']));
   const vortest = inVortest(s);
   // Themen-Test (K4): die ersten Aufgaben sind der Test, ohne Hilfe.
   const inTest = s.status === 'running' && !!s.test && s.pos < s.test.n;
@@ -104,7 +106,7 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">

@@ -34,6 +34,7 @@ import { nbTrainingEn } from './parts/nbTraining.en';
 import { exEn } from './parts/ex.en';
 import { stxEn } from './parts/stx.en';
 import { gxEn } from './parts/gx.en';
+import { gmEn } from './parts/gm.en';
 import { wxEn } from './parts/wx.en';
 import { hxEn } from './parts/hx.en';
 import { fxEn } from './parts/fx.en';
@@ -104,6 +105,7 @@ export const en: Record<MessageKey, string> = {
   ...exEn,
   ...stxEn,
   ...gxEn,
+  ...gmEn,
   ...wxEn,
   ...hxEn,
   ...fxEn,

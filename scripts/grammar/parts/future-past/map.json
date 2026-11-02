@@ -76,7 +76,7 @@
    ]
   }
  },
- "The new office should open in June, but the permit was delayed.": {
+ "The new office should open in June, but the permit was delayed, so it only opened in August.": {
   "pat": "fp.was-to",
   "why": {
    "ok": {

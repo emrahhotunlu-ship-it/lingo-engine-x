@@ -36,6 +36,7 @@ import { nbTrainingDe } from './parts/nbTraining.de';
 import { exDe } from './parts/ex.de';
 import { stxDe } from './parts/stx.de';
 import { gxDe } from './parts/gx.de';
+import { gmDe } from './parts/gm.de';
 import { wxDe } from './parts/wx.de';
 import { hxDe } from './parts/hx.de';
 import { fxDe } from './parts/fx.de';
@@ -106,6 +107,7 @@ export const de = {
   ...exDe,
   ...stxDe,
   ...gxDe,
+  ...gmDe,
   ...wxDe,
   ...hxDe,
   ...fxDe,

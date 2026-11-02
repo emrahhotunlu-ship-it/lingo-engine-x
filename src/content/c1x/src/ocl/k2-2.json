@@ -803,7 +803,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "The engineers were tired because they had been testing the system ___ midnight without a break.",
+   "text": "By 6 a.m., the engineers were exhausted because they had been testing the system ___ midnight without a break.",
    "accept": [
     "since",
     "from"
@@ -816,8 +816,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Startpunkt der Dauer: since six o'clock (oder from six o'clock).",
-     "en": "The starting point of the duration: since six o'clock (or from six o'clock)."
+     "de": "Startpunkt der Dauer: since midnight (oder from midnight).",
+     "en": "The starting point of the duration: since midnight (or from midnight)."
     },
     "wrong": [
      {

@@ -469,9 +469,9 @@
   "id": "pc-fm-k2",
   "type": "kwt",
   "pat": "pc.form",
-  "from": "Recently we sleep badly because the neighbors are loud.",
+  "from": "These days we sleep badly because the neighbors are loud.",
   "key": "BEEN",
-  "frame": "We ___ well recently, because the neighbors are loud.",
+  "frame": "We ___ well recently because the neighbors are loud.",
   "answer": "haven't been sleeping",
   "accepted": [
    "have not been sleeping"
@@ -630,7 +630,11 @@
    "'ve been rising lately",
    "have risen lately",
    "'ve risen lately",
-   "have lately been getting longer"
+   "have lately been getting longer",
+   "have been getting slower lately",
+   "'ve been getting slower lately",
+   "have gotten slower lately",
+   "'ve gotten slower lately"
   ],
   "words": [
    3,

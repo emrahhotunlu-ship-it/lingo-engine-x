@@ -1305,7 +1305,7 @@
    "level": "B2+",
    "dom": "life",
    "src": "seed",
-   "text": "The street festival will take place on Saturday ___ the forecast shows heavy rain on Friday night.",
+   "text": "The street festival will take place on Saturday ___ it rains heavily on Friday night; in that case, it moves to Sunday.",
    "accept": [
     "unless"
    ],
@@ -1317,16 +1317,16 @@
    ],
    "why": {
     "ok": {
-     "de": "Eine Ausnahme verhindert den Plan: unless + Gegenwart.",
-     "en": "One exception would stop the plan: unless + present."
+     "de": "Eine Ausnahme verhindert den Plan: unless + Gegenwart (unless it rains).",
+     "en": "One exception would stop the plan: unless + present (unless it rains)."
     },
     "wrong": [
      {
       "if": [
        "if"
       ],
-      "de": "if würde die Bedeutung umkehren: Start, falls Probleme auftauchen.",
-      "en": "if would reverse the meaning: go live if problems appear."
+      "de": "if würde die Bedeutung umkehren: Das Fest fände gerade bei Regen statt.",
+      "en": "if would reverse the meaning: the festival would take place precisely if it rains."
      },
      {
       "if": [

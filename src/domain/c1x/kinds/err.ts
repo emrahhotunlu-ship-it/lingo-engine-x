@@ -27,6 +27,19 @@ export function errFixed(item: Pick<Err, 'text' | 'bad'>, fix: string): string {
 }
 
 const fixKey = (s: string): string => cmp(s);
+/** Satzvergleich ohne Satzzeichen am Wortrand (G1: „manager’s“ statt „manager’s decision“ getippt ergibt denselben Satz). */
+const sentKey = (s: string): string => cmp(splitWords(s).map(keyOf).join(' '));
+
+/** Ergibt die Korrektur einen gültigen Satz, wenn sie einen Teil der Fehlerstelle rund um das angetippte Wort ersetzt?
+ *  (Handy: ein Wort antippen, Korrektur tippen; „manager’s“ für „manager decision“ oder „should you“ für „you should share“.) */
+function fixesSentence(item: Err, tap: number, given: string, range: [number, number]): boolean {
+  if (!item.bad || !given) return false;
+  const words = splitWords(item.text);
+  const goal = new Set(item.bad.fix.map((f) => sentKey(errFixed(item, f))));
+  for (let a = range[0]; a <= tap; a++)
+    for (let b = tap; b <= range[1]; b++) if (goal.has(sentKey([...words.slice(0, a), given, ...words.slice(b + 1)].join(' ')))) return true;
+  return false;
+}
 
 export function scoreErr(item: Err, r: Extract<C1Response, { kind: 'err' }>): C1Score {
   const free = r.typed === true;
@@ -42,8 +55,9 @@ export function scoreErr(item: Err, r: Extract<C1Response, { kind: 'err' }>): C1
   if (!found) return { got: 0, max: 2, parts: [loc(false), fix(false)], verdict: 'wrong', free };
   const given = r.fix?.trim() ?? '';
   // `fix: ''` (streichen) gilt nur, wenn die Korrektur ausdrücklich leer abgegeben wurde.
-  const fixOk = r.fix !== undefined && item.bad.fix.some((f) => fixKey(f) === fixKey(given));
-  const us = fixOk && given !== '' ? usHint(given, item.bad.fix) : undefined;
+  const direct = r.fix !== undefined && item.bad.fix.some((f) => fixKey(f) === fixKey(given));
+  const fixOk = direct || (r.fix !== undefined && fixesSentence(item, r.tap, given, range));
+  const us = direct && given !== '' ? usHint(given, item.bad.fix) : undefined;
   const got = 1 + (fixOk ? 1 : 0);
   return { got, max: 2, parts: [loc(true), fix(fixOk)], verdict: got >= 2 ? 'correct' : 'near', free, ...(us ? { us } : {}) };
 }

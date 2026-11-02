@@ -104,7 +104,8 @@
    "reply to all emails within",
    "reply to every email within",
    "reply within",
-   "always reply to emails within"
+   "always reply to emails within",
+   "always reply within"
   ],
   "words": [
    2,
@@ -251,9 +252,12 @@
   "key": "ACTIVE",
   "frame": "We have 120 ___ today.",
   "answer": "active users as of",
-  "accepted": [],
+  "accepted": [
+   "active users",
+   "users who are active"
+  ],
   "words": [
-   4,
+   2,
    4
   ],
   "why": {

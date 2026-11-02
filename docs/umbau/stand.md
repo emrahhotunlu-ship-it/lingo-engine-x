@@ -882,3 +882,11 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - **Live `JLL8…` v89 `1793658052-a404`** (Commit `fa369c66`), Rückweg v88 `1793612956-d9f4`. Manifest `docs/relaunch/publish/JLL8.json`.
 - Golden-Hinweis: Heute zeigt Tagesweg + Balken statt Ring im offenen Zustand; „N Karten“ steht nicht mehr in der Wörter-Zeile.
 - Als Nächstes: Großpaket G (Grammatik + Wiederholen neu) – erst Plan als Text, dann Bilder/Fragen im Pop-up, Bau nach Emrahs OK.
+
+## 02.11.2026 – Großpaket G, Schritt G1 (Aufgaben-Prüfung) und G4-Anfang
+- Plan `docs/umbau/grammatik/grosspaket-g.md` (Emrahs OK + Pop-up: alle Aufgaben bleiben, Fehlersätze fest im Grammatik-Schritt, Schalter wie Wörter, Reiter als Themen-Weg).
+- G1: alle Aufgaben blind gelöst (Werkzeug `scripts/grammar/g1/`), Abweichungen 62 → 32; Rest = Lehrer-„bleibt“ (blinde Antwort wirklich falsch) oder neue Kennung. Repariert: 30 v2-Aufgaben, 31 C1-Aufgaben, Toolkit-/Muster-Aufgaben, Fallen mit `accepted`; neu np-f6, err-0119, ocl-0049/0094, kwt-0828.
+- Emrahs Einzelfälle: „just announced“ (Erklärung nennt beide Formen), „studied“ (Erklärung sagt: auch richtig), Hinweis = Lösung (`She usually ___` → works), Fehler finden: Ersatz an Nachbarstelle und gleichwertiges „that“ zählen (`checkFind`).
+- G4 begonnen: eigene Fehlersätze aus `app/repair` vorn im Grammatik-Schritt (höchstens 3, Runde nicht länger), Schalter `gcfg.mod` (fehlt = an).
+- Prüfung: `grammar:check` grün, 51 Inhalts-/Grammatik-Testdateien grün (Ausnahmeliste nur umbenannt, gap_no_hint 4 → 3).
+- Als Nächstes: G2/G3 (ruhige Rückmeldung im Modul), dann G5–G7 (Reiter Themen-Weg), G8 Lehrer + Prüfer + ein Test-Link.

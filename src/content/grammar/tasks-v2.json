@@ -846,7 +846,10 @@
     "more data",
     "more details",
     "more background information",
-    "more detailed information"
+    "more detailed information",
+    "to know more",
+    "to find out more",
+    "to learn more"
    ],
    "words": [
     2,
@@ -3054,10 +3057,12 @@
    "frame": "___ is whether the deal is still open.",
    "answer": "What I'd like to know",
    "accepted": [
-    "What I want to know"
+    "What I want to know",
+    "What I'm wondering",
+    "What I am wondering"
    ],
    "words": [
-    5,
+    3,
     5
    ],
    "why": {
@@ -3257,14 +3262,11 @@
    "id": "em-ic-k2",
    "type": "kwt",
    "pat": "em.it-cleft",
-   "from": "The contract was signed in March, not in April.",
+   "from": "We signed the contract in March, not in April.",
    "key": "THAT",
    "frame": "It was in March ___ the contract, not in April.",
    "answer": "that we signed",
-   "accepted": [
-    "that they signed",
-    "that I signed"
-   ],
+   "accepted": [],
    "words": [
     3,
     3
@@ -7016,7 +7018,8 @@
     "reply to all emails within",
     "reply to every email within",
     "reply within",
-    "always reply to emails within"
+    "always reply to emails within",
+    "always reply within"
    ],
    "words": [
     2,
@@ -7166,9 +7169,12 @@
    "key": "ACTIVE",
    "frame": "We have 120 ___ today.",
    "answer": "active users as of",
-   "accepted": [],
+   "accepted": [
+    "active users",
+    "users who are active"
+   ],
    "words": [
-    4,
+    2,
     4
    ],
    "why": {
@@ -13960,7 +13966,9 @@
    ],
    "answer": "those of the old provider.",
    "fixed": "The fees of the new provider are lower than those of the old provider.",
-   "accepted": [],
+   "accepted": [
+    "the old provider's."
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Gebühren werden mit Gebühren verglichen. Richtig: lower than those of the old provider.",
@@ -14145,8 +14153,8 @@
    "a": "I'd love to.",
    "b": "I'd love to do so.",
    "q": {
-    "de": "Bedeuten beide Sätze dasselbe?",
-    "en": "Do both sentences mean the same?"
+    "de": "Welcher Satz nimmt eine Einladung an?",
+    "en": "Which sentence accepts an invitation?"
    },
    "answer": "both",
    "why": {
@@ -14296,7 +14304,9 @@
    "key": "SURPRISING",
    "frame": "___ it seems, the old tool is faster.",
    "answer": "Surprising though",
-   "accepted": [],
+   "accepted": [
+    "Surprising as"
+   ],
    "words": [
     2,
     2
@@ -14576,11 +14586,15 @@
    "prompt": "Hard as we tried, the migration not finished in time.",
    "err": [
     6,
-    6
+    7
    ],
-   "answer": "was not",
+   "answer": "was not finished",
    "fixed": "Hard as we tried, the migration was not finished in time.",
-   "accepted": [],
+   "accepted": [
+    "wasn't finished",
+    "didn't finish",
+    "did not finish"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: im Hauptsatz fehlt das Hilfsverb was. Richtig: the migration was not finished.",
@@ -16595,13 +16609,13 @@
    "id": "fp-f1",
    "type": "find",
    "pat": "fp.was-going",
-   "prompt": "We are going to launch in June, but the supplier delayed everything.",
+   "prompt": "Last year, we are going to launch in June, but the supplier delayed everything.",
    "err": [
-    1,
-    2
+    3,
+    4
    ],
    "answer": "were going",
-   "fixed": "We were going to launch in June, but the supplier delayed everything.",
+   "fixed": "Last year, we were going to launch in June, but the supplier delayed everything.",
    "accepted": [
     "were planning",
     "had planned"
@@ -16778,13 +16792,13 @@
    "id": "fp-f7",
    "type": "find",
    "pat": "fp.was-to",
-   "prompt": "The new warehouse should open in March, but the permit was delayed.",
+   "prompt": "The new warehouse should open in March, but the permit was delayed, so it only opened in May.",
    "err": [
     3,
     4
    ],
    "answer": "was to open",
-   "fixed": "The new warehouse was to open in March, but the permit was delayed.",
+   "fixed": "The new warehouse was to open in March, but the permit was delayed, so it only opened in May.",
    "accepted": [
     "was supposed to open",
     "was due to open",
@@ -19689,7 +19703,9 @@
     "Even though we lost",
     "Although we had lost",
     "Though we had lost",
-    "Even though we had lost"
+    "Even though we had lost",
+    "Despite having lost",
+    "In spite of having lost"
    ],
    "words": [
     3,
@@ -19739,10 +19755,13 @@
     "Though the client approved",
     "Even though the client approved",
     "Although the client had approved",
-    "Though the client had approved"
+    "Though the client had approved",
+    "Although he had approved",
+    "Although he approved",
+    "Though he had approved"
    ],
    "words": [
-    4,
+    3,
     5
    ],
    "why": {
@@ -20033,7 +20052,9 @@
     "that said, the board",
     "the board, however,",
     "the board, nevertheless,",
-    "the board, nonetheless,"
+    "the board, nonetheless,",
+    "the board, though,",
+    "still, the board"
    ],
    "words": [
     3,
@@ -20095,7 +20116,9 @@
     "that said, the team",
     "the team, however,",
     "the team, nevertheless,",
-    "the team, nonetheless,"
+    "the team, nonetheless,",
+    "the team, though,",
+    "still, the team"
    ],
    "words": [
     3,
@@ -20210,7 +20233,9 @@
     "Hence, we need",
     "As a consequence, we need",
     "For this reason, we need",
-    "Accordingly, we need"
+    "Accordingly, we need",
+    "We therefore need",
+    "We consequently need"
    ],
    "words": [
     3,
@@ -22425,7 +22450,8 @@
    "answer": "were",
    "fixed": "If I were more patient, I would have waited for the quote.",
    "accepted": [
-    "was"
+    "was",
+    "had been"
    ],
    "why": {
     "ok": {
@@ -26148,11 +26174,16 @@
    "id": "np-k8",
    "type": "kwt",
    "pat": "np.to-inf",
-   "from": "This is the best way of reducing costs.",
+   "from": "Nothing reduces costs better than this.",
    "key": "WAY",
    "frame": "This is the best ___ costs.",
    "answer": "way to reduce",
-   "accepted": [],
+   "accepted": [
+    "way of reducing",
+    "way to cut",
+    "way of cutting",
+    "way to lower"
+   ],
    "words": [
     3,
     3
@@ -26195,7 +26226,9 @@
    ],
    "answer": "",
    "fixed": "That was the best presentation I have seen.",
-   "accepted": [],
+   "accepted": [
+    "that"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: what ist kein Relativpronomen nach einem Nomen. Richtig: the best presentation I have seen.",
@@ -26338,29 +26371,29 @@
    "id": "np-f6",
    "type": "find",
    "pat": "np.of-s",
-   "prompt": "The company CEO resigned yesterday.",
+   "prompt": "I spoke to the assistant of Maria yesterday.",
    "err": [
-    1,
-    2
+    3,
+    6
    ],
-   "answer": "company's CEO",
-   "fixed": "The company's CEO resigned yesterday.",
+   "answer": "Maria's assistant",
+   "fixed": "I spoke to Maria's assistant yesterday.",
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Der Fehler: zwischen Firma und CEO fehlt das ’s. Richtig: the company’s CEO.",
-     "en": "The error: the ’s is missing between company and CEO. Correct: the company’s CEO."
+     "de": "Der Fehler: „the assistant of Maria“ klingt unnatürlich. Gehört etwas einer Person, steht ’s: Maria’s assistant.",
+     "en": "The error: “the assistant of Maria” sounds unnatural. When something belongs to a person, use ’s: Maria’s assistant."
     },
     "wrong": [
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: Der Besitzer braucht ’s.",
-      "en": "There is an error: The owner needs ’s."
+      "de": "Doch, hier steckt ein Fehler: Gehört etwas einer Person, steht ’s.",
+      "en": "There is an error: when something belongs to a person, use ’s."
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt woanders: Der Besitzer braucht ’s.",
-      "en": "The error is elsewhere: The owner needs ’s."
+      "de": "Der Fehler liegt woanders: Gehört etwas einer Person, steht ’s.",
+      "en": "The error is elsewhere: when something belongs to a person, use ’s."
      }
     ]
    },
@@ -30344,8 +30377,8 @@
    ],
    "why": {
     "ok": {
-     "de": "just betont: ganz neu, die Nachricht gilt jetzt. Deshalb has just announced, ohne genannte Zeit.",
-     "en": "Just stresses: brand new, the news counts now. So has just announced, with no stated time."
+     "de": "Richtig: just heißt ganz neu, gilt jetzt. Britisch has just announced, im US-Englisch auch just announced.",
+     "en": "Right: just means brand new and relevant now. British: has just announced; US English also: just announced."
     },
     "wrong": [
      {
@@ -35558,9 +35591,9 @@
    "id": "pc-fm-k2",
    "type": "kwt",
    "pat": "pc.form",
-   "from": "Recently we sleep badly because the neighbors are loud.",
+   "from": "These days we sleep badly because the neighbors are loud.",
    "key": "BEEN",
-   "frame": "We ___ well recently, because the neighbors are loud.",
+   "frame": "We ___ well recently because the neighbors are loud.",
    "answer": "haven't been sleeping",
    "accepted": [
     "have not been sleeping"
@@ -35723,7 +35756,11 @@
     "'ve been rising lately",
     "have risen lately",
     "'ve risen lately",
-    "have lately been getting longer"
+    "have lately been getting longer",
+    "have been getting slower lately",
+    "'ve been getting slower lately",
+    "have gotten slower lately",
+    "'ve gotten slower lately"
    ],
    "words": [
     3,
@@ -40348,7 +40385,8 @@
     "what I need the most",
     "what I most need",
     "what we need most",
-    "What I need above all"
+    "What I need above all",
+    "what I really need"
    ],
    "words": [
     4,
@@ -41387,16 +41425,17 @@
    "prompt": "Our lawyer advised to wait until Monday.",
    "err": [
     2,
-    3
+    4
    ],
-   "answer": "advised us to",
+   "answer": "advised us to wait",
    "fixed": "Our lawyer advised us to wait until Monday.",
    "accepted": [
-    "advised me to",
-    "advised him to",
-    "advised them to",
-    "advised you to",
-    "advised her to"
+    "advised me to wait",
+    "advised him to wait",
+    "advised them to wait",
+    "advised you to wait",
+    "advised her to wait",
+    "advised waiting"
    ],
    "why": {
     "ok": {
@@ -42984,7 +43023,10 @@
    "answer": "urgently need",
    "accepted": [
     "really need",
-    "simply need"
+    "simply need",
+    "absolutely need",
+    "definitely need",
+    "do need"
    ],
    "words": [
     2,
@@ -43025,7 +43067,9 @@
    "answer": "fully understand",
    "accepted": [
     "completely understand",
-    "totally understand"
+    "totally understand",
+    "do understand",
+    "certainly understand"
    ],
    "words": [
     2,

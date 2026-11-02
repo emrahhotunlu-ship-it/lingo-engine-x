@@ -252,7 +252,10 @@
   "answer": "urgently need",
   "accepted": [
    "really need",
-   "simply need"
+   "simply need",
+   "absolutely need",
+   "definitely need",
+   "do need"
   ],
   "words": [
    2,
@@ -292,7 +295,9 @@
   "answer": "fully understand",
   "accepted": [
    "completely understand",
-   "totally understand"
+   "totally understand",
+   "do understand",
+   "certainly understand"
   ],
   "words": [
    2,

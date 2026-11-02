@@ -324,11 +324,11 @@
   {
    "topic": "pres-simple-cont",
    "type": "gap",
-   "prompt": "I usually ___ from home on Fridays.",
+   "prompt": "She usually ___ from home on Fridays.",
    "hint": "(work)",
-   "answer": "work",
-   "expl": "„usually“ ist ein Signalwort für Gewohnheiten → Present Simple.",
-   "expl_en": "\"usually\" signals a habit → Present Simple."
+   "answer": "works",
+   "expl": "„usually“ ist ein Signalwort für Gewohnheiten → Present Simple; nach „she“ mit -s: works.",
+   "expl_en": "\"usually\" signals a habit → Present Simple; after \"she\" add -s: works."
   },
   {
    "topic": "pres-simple-cont",
@@ -385,8 +385,8 @@
     "'ve been studying",
     "studied"
    ],
-   "expl": "Eine Tätigkeit über einen Zeitraum bis jetzt mit sichtbarem Ergebnis (müde) → have/has been + -ing.",
-   "expl_en": "An activity over a period until now with a visible result (tired) → have/has been + -ing."
+   "expl": "Eine Tätigkeit über einen Zeitraum bis jetzt mit sichtbarem Ergebnis (müde) → have/has been + -ing. „studied“ ist auch richtig: Es betont nur, dass das Lernen vorbei ist.",
+   "expl_en": "An activity over a period until now with a visible result (tired) → have/has been + -ing. \"studied\" is also correct: it simply presents the studying as finished."
   },
   {
    "topic": "pres-perf-cont",

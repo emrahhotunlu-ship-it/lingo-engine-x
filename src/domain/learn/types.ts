@@ -46,6 +46,8 @@ export type GrammarTask = {
   c1?: C1Item;
   /** Platz, für den `selectRound` die Aufgabe gewählt hat (Tutor-Engine v3 S2, „Warum diese Aufgabe?“); nur in der Runde, nie gespeichert. */
   slot?: TaskSlot;
+  /** Großpaket G4: eigener Fehlersatz aus `app/repair` (Kennung des Eintrags). Die Antwort gehört in `app/repair` (Boxen 1/3/9), nie in `grammar/<thema>`. */
+  rep?: string;
 };
 
 /**

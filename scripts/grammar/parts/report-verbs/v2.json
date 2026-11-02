@@ -891,16 +891,17 @@
   "prompt": "Our lawyer advised to wait until Monday.",
   "err": [
    2,
-   3
+   4
   ],
-  "answer": "advised us to",
+  "answer": "advised us to wait",
   "fixed": "Our lawyer advised us to wait until Monday.",
   "accepted": [
-   "advised me to",
-   "advised him to",
-   "advised them to",
-   "advised you to",
-   "advised her to"
+   "advised me to wait",
+   "advised him to wait",
+   "advised them to wait",
+   "advised you to wait",
+   "advised her to wait",
+   "advised waiting"
   ],
   "why": {
    "ok": {

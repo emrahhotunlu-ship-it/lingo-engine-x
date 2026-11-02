@@ -311,6 +311,9 @@
      "why": [
       "In der Vergangenheit heißt es had, nie have – have zieht den Satz in die Gegenwart.",
       "In a past context it is had, never have – have pulls the sentence into the present."
+     ],
+     "accepted": [
+      "By the time we arrived, the film had already started."
      ]
     }
    ],
@@ -397,6 +400,10 @@
      "why": [
       "Fester Termin → Present Continuous, nicht will.",
       "A fixed arrangement takes the present continuous, not will."
+     ],
+     "accepted": [
+      "I'm meeting Tom at six – it's in my calendar.",
+      "I am meeting Tom at six – it's in my calendar."
      ]
     }
    ],
@@ -492,6 +499,9 @@
      "why": [
       "Nach will steht nie eine gebeugte Form. Es fehlt das „have“: will + have + 3. Form.",
       "Never use an inflected verb after will. The “have” is missing: will + have + participle."
+     ],
+     "accepted": [
+      "By the end of the year, she will have worked here for five years."
      ]
     },
     {
@@ -500,6 +510,10 @@
      "why": [
       "Nach „have“ kommt die 3. Form (lived), nicht -ing. -ing kommt nur nach „be“ oder „been“.",
       "After “have” comes the participle (lived), not -ing. The -ing form only follows “be” or “been”."
+     ],
+     "accepted": [
+      "By next month, he will have been living here for ten years.",
+      "By next month, he will have lived here for ten years."
      ]
     },
     {
@@ -691,6 +705,9 @@
      "why": [
       "Third Conditional braucht would have + 3. Form – das „have“ fehlt.",
       "The third conditional needs would have + participle – the “have” is missing."
+     ],
+     "accepted": [
+      "If they had left earlier, they wouldn't have missed the train."
      ]
     }
    ],

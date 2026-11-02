@@ -160,6 +160,14 @@
      "b": [
       "the system"
      ]
+    },
+    {
+     "a": [
+      "can"
+     ],
+     "b": [
+      "the system be"
+     ]
     }
    ],
    "tiles": [
@@ -904,6 +912,30 @@
      "b": [
       "pay"
      ]
+    },
+    {
+     "a": [
+      "really did"
+     ],
+     "b": [
+      "settle"
+     ]
+    },
+    {
+     "a": [
+      "did actually"
+     ],
+     "b": [
+      "settle"
+     ]
+    },
+    {
+     "a": [
+      "did in fact"
+     ],
+     "b": [
+      "settle"
+     ]
     }
    ],
    "tiles": [
@@ -969,6 +1001,14 @@
      ],
      "b": [
       "the offer"
+     ]
+    },
+    {
+     "a": [
+      "Tempting as"
+     ],
+     "b": [
+      "it"
      ]
     }
    ],
@@ -1199,6 +1239,14 @@
       "they must",
       "they have to",
       "they need to"
+     ],
+     "b": [
+      "do so"
+     ]
+    },
+    {
+     "a": [
+      "must"
      ],
      "b": [
       "do so"
@@ -1602,6 +1650,30 @@
      ],
      "b": [
       "same"
+     ]
+    },
+    {
+     "a": [
+      "does"
+     ],
+     "b": [
+      "as well"
+     ]
+    },
+    {
+     "a": [
+      "does"
+     ],
+     "b": [
+      "so too"
+     ]
+    },
+    {
+     "a": [
+      "does"
+     ],
+     "b": [
+      "so as well"
      ]
     }
    ],
@@ -2196,6 +2268,30 @@
     {
      "a": [
       "I could"
+     ],
+     "b": [
+      "find"
+     ]
+    },
+    {
+     "a": [
+      "that I could"
+     ],
+     "b": [
+      "find"
+     ]
+    },
+    {
+     "a": [
+      "I was able to"
+     ],
+     "b": [
+      "find"
+     ]
+    },
+    {
+     "a": [
+      "that I was able to"
      ],
      "b": [
       "find"

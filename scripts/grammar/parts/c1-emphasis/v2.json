@@ -49,10 +49,12 @@
   "frame": "___ is whether the deal is still open.",
   "answer": "What I'd like to know",
   "accepted": [
-   "What I want to know"
+   "What I want to know",
+   "What I'm wondering",
+   "What I am wondering"
   ],
   "words": [
-   5,
+   3,
    5
   ],
   "why": {
@@ -246,14 +248,11 @@
   "id": "em-ic-k2",
   "type": "kwt",
   "pat": "em.it-cleft",
-  "from": "The contract was signed in March, not in April.",
+  "from": "We signed the contract in March, not in April.",
   "key": "THAT",
   "frame": "It was in March ___ the contract, not in April.",
   "answer": "that we signed",
-  "accepted": [
-   "that they signed",
-   "that I signed"
-  ],
+  "accepted": [],
   "words": [
    3,
    3

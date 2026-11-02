@@ -543,7 +543,9 @@
    "bad": {
     "span": "are going to",
     "fix": [
-     "were going to"
+     "were going to",
+     "were planning to",
+     "had planned to"
     ],
     "choices": [
      "were going to",
@@ -551,7 +553,7 @@
      "had going to"
     ]
    },
-   "text": "We are going to publish the report in March, but the board asked for changes."
+   "text": "We are going to publish the report in March, but the board asked for changes, so it only came out in May."
   },
   {
    "id": "err-0614",

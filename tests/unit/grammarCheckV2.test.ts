@@ -44,6 +44,20 @@ describe('neue Aufgabenarten (Lernplattform 2.0 §4.7)', () => {
     expect(checkFind(t, { replacement: 'xyzzy' }).verdict).toBe('wrong');
   });
 
+  it('find (G1): Ersatz an einer Nachbar- oder Teilstelle zählt, wenn der ganze Satz stimmt', () => {
+    const byPrompt = (p: string) => tasks('find').find((x) => x.prompt === p)!;
+    // markiert ist „lawyer“; wer „is lawyer“ als „is a lawyer“ ersetzt, hat den Satz richtig korrigiert
+    const lawyer = byPrompt('My sister is lawyer in Boston.');
+    expect(checkFind(lawyer, { replacement: 'a lawyer' }).verdict).toBe('correct');
+    expect(checkFind(lawyer, { replacement: 'is a lawyer' }).verdict).toBe('correct');
+    expect(checkFind(lawyer, { replacement: 'is the lawyer' }).verdict).toBe('wrong');
+    // leere Lösung = Wort streichen; das gleichwertige „that“ gilt auch, Unsinn nicht
+    const what = byPrompt('That was the best presentation what I have seen.');
+    expect(checkFind(what, { replacement: '' }).verdict).toBe('correct');
+    expect(checkFind(what, { replacement: 'that' }).verdict).toBe('correct');
+    expect(checkFind(what, { replacement: 'which what' }).verdict).toBe('wrong');
+  });
+
   it('find: ein fehlerfreier Satz ist nur mit „Kein Fehler“ richtig', () => {
     const t = tasks('find').find((x) => x.x?.kind === 'find' && x.x.err === null)!;
     expect(t).toBeTruthy();

@@ -62,6 +62,8 @@ export type ExplainMineProps = {
   auto?: boolean;
   /** Feste Begründung, die über der Karte schon steht; Claude soll sie nicht wiederholen. */
   shownWhy?: string | null;
+  /** Großpaket G3 (neue Grammatik): ruhige Karte – nur „Deine Antwort“ und „Die Regel dahinter“, ohne Beispiel, Signalwörter und Verwechslung; Melden heißt „Erklärung melden“. */
+  compact?: boolean;
 };
 
 /** Gespeicherte, zu dieser Antwort passende Erklärung aus den Live-Dokumenten. */
@@ -86,7 +88,7 @@ function outOfAx(ax: Ax): ExplainOut {
 }
 
 export function ExplainMine(props: ExplainMineProps) {
-  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true, shownWhy = null } = props;
+  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true, shownWhy = null, compact = false } = props;
   const { t, lang } = useT();
   const ai = useAiAvailable();
   const ask = useAsk(explainAnswerV2);
@@ -208,17 +210,17 @@ export function ExplainMine(props: ExplainMineProps) {
               {pick(o.why)}
             </p>
           </div>
-          {o.signal.length > 0 && (
+          {!compact && o.signal.length > 0 && (
             <p className="lx-t-meta m-0 text-muted" data-testid="tutor-signal">
               {t('ttXSignal', { words: o.signal.join(', ') })}
             </p>
           )}
-          {conf && (
+          {!compact && conf && (
             <p className="lx-t-meta m-0 text-muted" data-testid="tutor-confused">
               {t('ttXConfused', { name: conf.name })}
             </p>
           )}
-          {o.example && (
+          {!compact && o.example && (
             <div className="flex items-start gap-1" data-testid="tutor-example">
               <div className="min-w-0 flex-1">
                 <p className="lx-t-label m-0">{t('ttXExample')}</p>
@@ -235,7 +237,7 @@ export function ExplainMine(props: ExplainMineProps) {
               </Button>
             </div>
           )}
-          <AiMark variant="explain" tpl={TPL} id={taskKey} onReport={onReport} data-testid="tutor-mark" />
+          <AiMark variant="explain" tpl={TPL} id={taskKey} onReport={onReport} {...(compact ? { reportKey: 'ttReportExplain' as const } : {})} data-testid="tutor-mark" />
           <div className="flex flex-wrap gap-2">
             {onRewrite && (
               // UX M7: freiwillig – nie gleich stark wie „Weiter“ (der eine Hauptknopf der Übung).

@@ -325,13 +325,13 @@
   "id": "fp-f1",
   "type": "find",
   "pat": "fp.was-going",
-  "prompt": "We are going to launch in June, but the supplier delayed everything.",
+  "prompt": "Last year, we are going to launch in June, but the supplier delayed everything.",
   "err": [
-   1,
-   2
+   3,
+   4
   ],
   "answer": "were going",
-  "fixed": "We were going to launch in June, but the supplier delayed everything.",
+  "fixed": "Last year, we were going to launch in June, but the supplier delayed everything.",
   "accepted": [
    "were planning",
    "had planned"
@@ -502,13 +502,13 @@
   "id": "fp-f7",
   "type": "find",
   "pat": "fp.was-to",
-  "prompt": "The new warehouse should open in March, but the permit was delayed.",
+  "prompt": "The new warehouse should open in March, but the permit was delayed, so it only opened in May.",
   "err": [
    3,
    4
   ],
   "answer": "was to open",
-  "fixed": "The new warehouse was to open in March, but the permit was delayed.",
+  "fixed": "The new warehouse was to open in March, but the permit was delayed, so it only opened in May.",
   "accepted": [
    "was supposed to open",
    "was due to open",

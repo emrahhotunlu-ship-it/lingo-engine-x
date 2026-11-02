@@ -100,3 +100,31 @@ describe('err: Messwerte je Muster', () => {
     expect(rows).toEqual([{ pat: 'x.p', found: 1, withError: 2, hit: 0.5, falseAlarms: 1, clean: 2, falseAlarm: 0.5 }]);
   });
 });
+
+describe('err: Korrektur nur für das angetippte Wort (G1)', () => {
+  const it0: Err = {
+    id: 'err-t1', kind: 'err', area: 'gram', topic: 'noun-phrase', level: 'B2', dom: 'biz', src: 'seed',
+    text: 'The manager decision surprised the whole team on Monday.',
+    bad: { span: 'manager decision', fix: ["manager's decision"], choices: ["manager's decision", 'managers decision', 'manager decisions'] },
+  } as unknown as Err;
+  it('„manager’s“ auf „manager“ ergibt den richtigen Satz = 2 von 2 (auch gebogener Apostroph)', () => {
+    expect(scoreC1(it0, { kind: 'err', tap: 1, fix: 'manager’s', typed: true }).got).toBe(2);
+    expect(scoreC1(it0, { kind: 'err', tap: 1, fix: "manager's decision", typed: true }).got).toBe(2);
+  });
+  it('falsches Wort ersetzt bleibt 1 von 2', () => {
+    expect(scoreC1(it0, { kind: 'err', tap: 2, fix: 'decisions', typed: true }).got).toBe(1);
+    expect(scoreC1(it0, { kind: 'err', tap: 1, fix: 'managers', typed: true }).got).toBe(1);
+  });
+});
+
+describe('err: Teil der Fehlerstelle rund um das angetippte Wort (G1)', () => {
+  const it1: Err = {
+    id: 'err-t2', kind: 'err', area: 'gram', topic: 'inversion', level: 'C1', dom: 'biz', src: 'seed',
+    text: 'Under no circumstances you should share your login details with colleagues.',
+    bad: { span: 'you should share', fix: ['should you share'], choices: ['should you share', 'you shall share', 'you should sharing'] },
+  } as unknown as Err;
+  it('„should you“ auf „you“ = 2 von 2, „should“ allein = 1 von 2', () => {
+    expect(scoreC1(it1, { kind: 'err', tap: 3, fix: 'should you', typed: true }).got).toBe(2);
+    expect(scoreC1(it1, { kind: 'err', tap: 3, fix: 'should', typed: true }).got).toBe(1);
+  });
+});

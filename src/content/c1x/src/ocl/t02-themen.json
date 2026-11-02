@@ -347,7 +347,11 @@
     "already",
     "still",
     "often",
-    "frequently"
+    "frequently",
+    "all",
+    "currently",
+    "suddenly",
+    "regularly"
    ],
    "cls": "adv",
    "chips": [
@@ -396,7 +400,10 @@
    },
    "text": "We are ___ to hear from you by the end of the week.",
    "accept": [
-    "hoping"
+    "hoping",
+    "eager",
+    "keen",
+    "expecting"
    ],
    "cls": "part",
    "chips": [
@@ -549,7 +556,8 @@
     "slightly",
     "considerably",
     "significantly",
-    "way"
+    "way",
+    "ever"
    ],
    "cls": "adv",
    "chips": [

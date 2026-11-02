@@ -617,6 +617,9 @@
      "why": [
       "Nach „Would it be possible“ folgt to + Grundform, kein „that“-Satz.",
       "“Would it be possible” is followed by to + base form, not a that-clause."
+     ],
+     "accepted": [
+      "Would it be possible for you to send the offer again?"
      ]
     }
    ]
@@ -3063,6 +3066,9 @@
      "why": [
       "Das Deutsche sagt „das System, das wir getestet haben“ mit Relativpronomen. Im Englischen entfällt es oft ganz, und „what“ ist nach einem Nomen nie ein Relativpronomen.",
       "German says “das System, das wir getestet haben” with a relative pronoun. English often drops it, and “what” is never a relative pronoun after a noun."
+     ],
+     "accepted": [
+      "This is the most reliable system that we have tested."
      ]
     },
     {
@@ -3079,6 +3085,9 @@
      "why": [
       "Bei Zeitangaben steht ’s: yesterday’s meeting. Das deutsche „das Meeting von gestern“ führt zu „from yesterday“.",
       "With time words ’s is used: yesterday’s meeting. The German “das Meeting von gestern” leads to “from yesterday”."
+     ],
+     "accepted": [
+      "The meeting yesterday was canceled."
      ]
     },
     {
@@ -3457,14 +3466,25 @@
      "why": [
       "Wer aus der Vergangenheit auf Späteres blickt, braucht would. Will gehört in die Gegenwart.",
       "If you look from the past at something later, you need would. Will belongs to the present."
+     ],
+     "accepted": [
+      "In 2015 she joined the firm and later led the Berlin office.",
+      "In 2015 she joined the firm and went on to lead the Berlin office."
      ]
     },
     {
-     "bad": "The new office should open in June, but the permit was delayed.",
-     "good": "The new office was to open in June, but the permit was delayed.",
+     "bad": "The new office should open in June, but the permit was delayed, so it only opened in August.",
+     "good": "The new office was to open in June, but the permit was delayed, so it only opened in August.",
      "why": [
       "Das deutsche „sollte“ wird hier nicht zu should. Für einen Plan in der Vergangenheit gilt was to.",
       "The German “sollte” does not become should here. For a plan in the past was to is used."
+     ],
+     "accepted": [
+      "The new office was due to open in June, but the permit was delayed, so it only opened in August.",
+      "The new office was supposed to open in June, but the permit was delayed, so it only opened in August.",
+      "The new office was scheduled to open in June, but the permit was delayed, so it only opened in August.",
+      "The new office was meant to open in June, but the permit was delayed, so it only opened in August.",
+      "The new office should have opened in June, but the permit was delayed, so it only opened in August."
      ]
     }
    ]
@@ -3646,7 +3666,9 @@
    "answer": "might be",
    "accepted": [
     "could be",
-    "may be"
+    "may be",
+    "would be",
+    "'d be"
    ],
    "hint": "(be)",
    "expl": "Vorsichtiger Vorschlag: „might be worth“ + -ing-Form.",
@@ -3673,12 +3695,14 @@
   {
    "topic": "c1-hedging",
    "type": "gap",
-   "prompt": "The migration could take ___ longer than planned.",
+   "prompt": "Only a small risk: the migration could take ___ longer than planned.",
    "answer": "slightly",
    "accepted": [
     "a bit",
     "somewhat",
-    "a little"
+    "a little",
+    "a little bit",
+    "a tad"
    ],
    "expl": "„slightly“ schwächt die schlechte Nachricht ab; „hugely“ würde sie verstärken.",
    "expl_en": "“Slightly” softens the bad news; “hugely” would make it stronger."
@@ -3690,10 +3714,15 @@
    "answer": "might run",
    "accepted": [
     "could run",
-    "may run"
+    "may run",
+    "might well run",
+    "may well run",
+    "could well run",
+    "is likely to run"
    ],
    "expl": "Statt einer sicheren Vorhersage (will fail) eine Möglichkeit mit might.",
-   "expl_en": "Instead of a certain prediction (will fail), a possibility with might."
+   "expl_en": "Instead of a certain prediction (will fail), a possibility with might.",
+   "hint": "(less certain)"
   },
   {
    "topic": "c1-hedging",
@@ -4494,10 +4523,13 @@
     "Beginning",
     "Effective",
     "Starting from",
-    "Effective as of"
+    "Effective as of",
+    "Starting on",
+    "Beginning on"
    ],
    "expl": "Für „ab“ einem Stichtag nimmst du „As of“: As of June 1, …",
-   "expl_en": "For “from” a key date onward use “As of”: As of June 1, …"
+   "expl_en": "For “from” a key date onward use “As of”: As of June 1, …",
+   "hint": "(from this date on)"
   },
   {
    "topic": "c1-precision",
@@ -4562,7 +4594,8 @@
    "answer": "Roughly",
    "accepted": [
     "Around",
-    "Approximately"
+    "Approximately",
+    "Some"
    ],
    "expl": "„Roughly“, „around“ und „approximately“ ersetzen „about“ ohne Bedeutungsunterschied. Im Gespräch sind „about“ und „around“ am häufigsten, „approximately“ klingt förmlich (Berichte, Folien). Wichtig ist, zu zeigen, dass die Zahl gerundet ist.",
    "expl_en": "“Roughly”, “around” and “approximately” replace “about” with no change in meaning. In conversation “about” and “around” are the most common; “approximately” sounds formal (reports, slides). What matters is signaling that the figure is rounded."

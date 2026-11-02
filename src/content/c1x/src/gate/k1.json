@@ -386,6 +386,14 @@
       "pretty bitter",
       "fairly bitter"
      ]
+    },
+    {
+     "a": [
+      "tastes"
+     ],
+     "b": [
+      "somewhat bitter"
+     ]
     }
    ],
    "tiles": [
@@ -2241,6 +2249,14 @@
      "b": [
       "Thursday at the latest"
      ]
+    },
+    {
+     "a": [
+      "by"
+     ],
+     "b": [
+      "Thursday at the very latest"
+     ]
     }
    ],
    "tiles": [
@@ -2701,6 +2717,22 @@
       "that you can",
       "you could",
       "that you could"
+     ]
+    },
+    {
+     "a": [
+      "am hoping"
+     ],
+     "b": [
+      "you will"
+     ]
+    },
+    {
+     "a": [
+      "'m hoping"
+     ],
+     "b": [
+      "you will"
      ]
     }
    ],
@@ -6803,7 +6835,7 @@
    "dom": "biz",
    "src": "seed",
    "pool": "gate",
-   "lead": "The new deadline is a serious problem for our team.",
+   "lead": "The new deadline is a problem for our team.",
    "key": "BIT",
    "before": "The new deadline is",
    "after": "for our team.",
@@ -6815,7 +6847,8 @@
      "b": [
       "of a challenge",
       "of a problem",
-      "of an issue"
+      "of an issue",
+      "of a struggle"
      ]
     }
    ],

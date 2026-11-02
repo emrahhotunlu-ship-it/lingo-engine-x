@@ -6,7 +6,7 @@ import { mergeRadar, radarEvent, topicCat } from '../../domain/grammar/radar';
 import { answerRight } from '../../domain/learn/right';
 import { grammarWrite } from '../../domain/grammar/write';
 import type { NewRepair } from '../../domain/repair/repair';
-import { saveRepairs } from '../repair/store';
+import { recordRepair, saveRepairs } from '../repair/store';
 import type { DrillAnswer, GrammarAnswer, LearnRecorder, LearnRoundEnd, LessonDone, RadarEvent, SprintEntry } from '../../domain/learn/types';
 import { activityEntry, drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type AnyLogEntry, type RepairLogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, SEQ_KEEP_MS, type CountEvent, type RoundEnd } from '../../domain/progress/profilePatch';
@@ -267,8 +267,16 @@ export const learnRecorder: LearnRecorder = {
   async grammar(a) {
     // Gemeldete Aufgabe (UX-Neuanfang D): zählt nicht – kein Lernstand, keine Zählung, keine Protokollzeile, auf jedem Weg.
     if (a.void) return true;
-    const ok = await saveGrammar(a);
     const right = answerRight(a);
+    // Großpaket G4: eigener Fehlersatz (`app/repair`) im Grammatik-Schritt – Box und Fälligkeit dort, kein Grammatik-Lernstand, kein Radar.
+    if (a.task.rep) {
+      const ok = await recordRepair(a.task.rep, right, a.verdict === 'near');
+      open.counts.push({ day: a.day, kind: 'g', channel: grammarChannel(a), ok: right });
+      pushEntry(grammarLogEntry(a), a.day);
+      afterAnswer(!!a.left, a.left === true);
+      return ok;
+    }
+    const ok = await saveGrammar(a);
     open.counts.push({ day: a.day, kind: 'g', channel: grammarChannel(a), ok: right });
     pushEntry(grammarLogEntry(a), a.day);
     if (!right && !a.dontKnow) radarQueue.push(radarEvent(topicCat(a.task.topic), 'g', a.t, { q: a.task.prompt, g: a.given, a: a.task.answer }));

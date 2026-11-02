@@ -1557,7 +1557,8 @@
     "span": "would be",
     "fix": [
      "were",
-     "was"
+     "was",
+     "had been"
     ],
     "choices": [
      "be",
@@ -1683,18 +1684,18 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "If our team were bigger, we would have won the bid last quarter.",
+   "text": "If I spoke Spanish, I would have understood the client in Madrid last week.",
    "bad": null,
    "why": {
     "ok": {
-     "de": "Kein Fehler: Der Zustand jetzt steht im if-Teil mit were, die Folge in der Vergangenheit im Hauptsatz mit would have won.",
-     "en": "No mistake: the state now takes were in the if-clause, the past result takes would have won in the main clause."
+     "de": "Kein Fehler: Der unwirkliche Zustand jetzt steht im if-Teil mit spoke (ich spreche kein Spanisch), die Folge in der Vergangenheit mit would have understood.",
+     "en": "No mistake: the unreal state now takes spoke in the if-clause (I don’t speak Spanish), the past result takes would have understood."
     },
     "wrong": [
      {
-      "tap": "were",
-      "de": "Hier ist were richtig. „would be“ im if-Teil wäre der Fehler.",
-      "en": "Were is right here. “would be” in the if-clause would be the mistake."
+      "tap": "spoke",
+      "de": "Hier ist spoke richtig. „would speak“ im if-Teil wäre der Fehler.",
+      "en": "Spoke is right here. “would speak” in the if-clause would be the mistake."
      },
      {
       "tap": "*",

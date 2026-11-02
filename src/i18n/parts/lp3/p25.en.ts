@@ -7,6 +7,7 @@ export const ttP25En = {
   ttMarkDiag: 'Analysis from Claude · may contain mistakes',
   ttMarkEdit: 'Edit from Claude · may contain mistakes',
   ttReport: 'Report',
+  ttReportExplain: 'Report explanation',
   ttReportTitle: 'What is wrong?',
   ttReportWrongSolution: 'Solution is wrong',
   ttReportTwoFit: 'Two answers fit',

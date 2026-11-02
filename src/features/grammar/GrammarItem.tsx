@@ -90,6 +90,8 @@ export type GrammarItemProps = {
   topicRound?: boolean;
   /** Grammatikrunde mit Tutor-Engine (S3): nach 2 Fehlern gleicher Ursache kommt statt der Rückmeldung die Mini-Lektion. */
   tutor?: boolean;
+  /** Großpaket G (Schalter `gcfg.mod`): neue Grammatik – ruhige Claude-Karte bei falsch (G3). */
+  mod?: boolean;
   /** „Warum diese Aufgabe?“ (Tutor-Engine): Grund für das ⓘ, erst beim Öffnen gerechnet. */
   reason?: ((checked: boolean) => { text: string; code: string }) | null;
   /**
@@ -173,7 +175,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null, onLeave = null }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null, onLeave = null, mod = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -191,7 +193,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   // Ein wiederkehrender eigener Fehlersatz ist nie „Neu“ (UX-Prüfung 19.10.2026): er trägt das Wiederholungs-Abzeichen („dein Fehler“).
   const state = task.errorT !== null && state0 === 'new' ? 'learning' : state0;
   const tp = topicById(task.topic);
-  const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
+  const topicLabel = task.rep && !tp ? t('gmRepTopic') : tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
 
   const type = task.type;
   const choiceType = type === 'mc' || type === 'meaning';
@@ -992,6 +994,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
                       : c?.kind === 'words'
                         ? t('gxKwtWordCount')
                         : null;
+    // Großpaket G3 (neue Grammatik): bei falsch oder „Weiß ich nicht“ sagt eine Zeile, dass der Satz morgen wiederkommt (Fehlersatz, Box 0).
+    const comeBack = mod && !noHelp && !fb.override && !lesson && (fb.verdict === 'wrong' || fb.dontKnow) ? t('gmComesBack') : null;
+    const subLine = [sub, comeBack].filter((x): x is string => !!x).join(' · ') || null;
     // Vergleich nur, wo Lücke und Optionen die Lösung nicht schon zeigen (§5.2).
     let comparison: ShellFeedback['comparison'] = null;
     if (fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
@@ -1057,6 +1062,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         // Von selbst nur bei klar falscher, getippter oder gewählter Antwort; nie bei „Fast“/Tippfehler und nie in Tests ohne Hilfe (Prüfung 02.11.).
         auto={!noHelp && fb.verdict === 'wrong'}
         shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
+        compact={mod}
       />
     );
     // Rückmeldung 7 (Fehler finden): Kopf „Richtig erkannt“ / „Nicht ganz“ mit dem getippten Wort, darunter der korrigierte Satz mit sichtbarer
@@ -1071,7 +1077,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       find = {
         ...(h.title ? { title: h.title } : {}),
         // Andere gültige Stelle (`errAlt`): „Du hast … getippt“ entfällt, die Zeile sagt schon, was passiert ist.
-        sub: [sub, fb.altWhy ? null : h.sub].filter((x): x is string => !!x).join(' · ') || null,
+        sub: [sub, fb.altWhy ? null : h.sub, comeBack].filter((x): x is string => !!x).join(' · ') || null,
         fold: ['pattern'],
         unfold: ['contrast'],
       };
@@ -1115,7 +1121,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     feedback = {
       verdict: rv,
       ...(checking ? { title: t('exJudgingTitle') } : alsoRight ? { title: t('exAlsoRight') } : unsureHead ? { title: t('ttJgUnsureTitle') } : {}),
-      sub,
+      sub: subLine,
       comparison,
       ...(choiceLine ? { choice: choiceLine } : {}),
       ...(helped ? { helped: true } : {}),
