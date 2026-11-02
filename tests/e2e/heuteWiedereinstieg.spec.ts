@@ -58,7 +58,9 @@ test('Kein Fehlersatz fällig: der Schritt „Fehler korrigieren“ entfällt, a
     fake: { seed: 'empty', patch: { 'app/profile': { name: 'Test', days: { '2026-10-04': 3 }, pflicht: { '2026-10-04': 1 } } } },
   });
   await screen(page, 'today');
-  await expect(page.getByTestId('fix-none')).toContainText('Fehler korrigieren: heute nichts fällig');
+  // UX-Neuanfang B1 (02.11.2026): im Tagesweg (u.tw) gibt es keinen Fehler-Schritt mehr, also auch keinen Hinweis „nichts fällig“.
+  await expect(page.getByTestId('duty')).toHaveCount(3);
+  await expect(page.getByTestId('fix-none')).toHaveCount(0);
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-again"]')).toHaveCount(0);
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as Doc | undefined)?.d).toBe('2026-10-05');
   const plan = (await dump(page))['app/profile']?.plan as { duty: string[]; u: { b: Array<[number, string, number]>; min: number } };

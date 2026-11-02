@@ -120,11 +120,11 @@ test('Neuladen in Block 3 (Satzbau): Heute führt direkt zurück in Block 3', as
   expect(errors).toEqual([]);
 });
 
-test('Sonntag: derselbe Tagesweg mit 3 Schritten (Wörter · Grammatik · Anwenden)', async ({ page }) => {
+test('Sonntag: Tagesweg mit 3 Schritten, Wochen-Check statt Anwenden (Emrah 02.11.2026)', async ({ page }) => {
   await boot(page, { migrated: true, now: SUN_9, fake: { patch: { 'app/week': { v: 1, cur: { wk: '2026-W39', theme: 't01', by: 'auto', at: 1 } } } } });
   await screen(page, 'today');
   await expect(page.getByTestId('duty')).toHaveCount(3);
-  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(TW_DUTY);
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(['review', 'ch:u-focus', 'ch:u-check']);
   await page.close();
 });
 
@@ -300,14 +300,17 @@ test('P7 Heute fertig: eine Zeile „Extra ›“ mit Blatt, Sprechen ist erreic
   });
   await screen(page, 'today');
   await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
+  // UX-Neuanfang B: offen zeigt Heute Weg + Balken; im Zustand „fertig“ bleibt der volle Ring. „Weitere Extras“ öffnet das Blatt.
   await expect(page.getByTestId('today-ring')).toHaveAttribute('data-filled', /^[1-9]$/);
-  await expect(page.getByTestId('today-extra')).toHaveCount(1);
   await expect(page.getByTestId('offer')).toHaveCount(0);
-  // Auf Heute höchstens drei Zeilen (Vorschau `moreRows`), „Alles anzeigen“ öffnet das Blatt mit allen Angeboten.
   expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
-  await page.getByTestId('today-extra').click();
-  await expect(page.getByTestId('today-extra-sheet')).toBeVisible();
-  await page.locator('[data-testid="today-extra-sheet"] #extra-speak').click();
+  await expect(page.getByTestId('today-practice')).toBeVisible();
+  // „Weitere Extras“ steht nur da, wenn das Blatt mehr zeigt als die Zeilen auf Heute (sonst stünde dasselbe zweimal da, Kap. 15).
+  if ((await page.getByTestId('today-extra').count()) > 0) {
+    await page.getByTestId('today-extra').click();
+    await expect(page.getByTestId('today-extra-sheet')).toBeVisible();
+    await page.locator('[data-testid="today-extra-sheet"] #extra-speak').click();
+  } else await page.locator('#more-speak').click();
   await screen(page, 'speak');
   expect(errors).toEqual([]);
 });

@@ -93,6 +93,12 @@ function Sure({ sure, busy, phase, onSkip }: { sure: NonNullable<Props['sure']>;
       if (!el) return;
       el.querySelector<HTMLButtonElement>('[data-testid="override-sure-yes"]')?.focus({ preventScroll: true });
       el.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
+      // UX-Neuanfang D: die Frage steht im Seitenfluss (nicht mehr im Band). `scrollIntoView` lässt sie am Handy teils unter der festen
+      // Leiste stehen; dann rollt die Seite um den fehlenden Rest (Abstand wie `scroll-margin-bottom`).
+      const bar = document.querySelector('.lx-actionbar')?.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      const limit = (bar && bar.top > 0 ? bar.top : window.innerHeight) - 16;
+      if (r.bottom > limit) window.scrollBy({ top: Math.min(r.bottom - limit, Math.max(0, r.top - 16)), behavior: 'auto' });
     });
     return () => cancelAnimationFrame(id);
   }, []);

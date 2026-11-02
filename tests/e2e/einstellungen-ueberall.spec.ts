@@ -25,7 +25,8 @@ test('Einstellungen von jeder Reiter-Seite und von jeder Seite in höchstens zwe
   await screen(page, 'today');
   // Relaunch P2 S1-SHELL (stufe1-plan.md §6.3): im Kopf jeder Reiter-Wurzel EIN „Fragen“; das Zahnrad steht nur auf „Fortschritt“,
   // von jedem anderen Reiter also zwei Tipps (Fortschritt → Zahnrad). Ab 600 px steht „Einstellungen“ zusätzlich in der Navigation.
-  for (const id of ['today', 'vocab', 'learn', 'apply'] as const) {
+  // UX-Neuanfang B (02.11.2026): vier Reiter; Praxis ist eine Seite unter Heute (Kopf mit Zurück, siehe unten bei den Seiten).
+  for (const id of ['today', 'vocab', 'learn'] as const) {
     await openTab(page, id);
     const top = page.getByTestId('topbar');
     await expect(top.getByTestId('open-companion')).toBeVisible();
