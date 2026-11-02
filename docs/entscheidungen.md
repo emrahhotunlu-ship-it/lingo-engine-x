@@ -711,3 +711,6 @@ Frage-Dialog, beide wie empfohlen:
 ## 02.11.2026 – Frage 6b: Hinweis ab Stufe 5 und „Wort zeigen“ (Emrah, Pop-up)
 Frage: Ab Stufe 5 zeigt die Lernkarte statt der englischen Grundform nur einen deutschen Hinweis; „Wort zeigen“ zählt dann höchstens als „schwer“ (Hard), damit das Wort bald wiederkommt.
 Antwort Emrah: **„Ja, so machen (Empfehlung)“.** Umsetzung ohne eigenen Test-Link, Auslieferung mit dem nächsten Großpaket.
+
+## 02.11.2026 – Test-Link v79 sofort live
+Frage: „Soll ich so vorgehen … (Wörter-App von selbst an, 6b, Korrekturen, dann Test-Link und live)?“ Emrahs Wahl: **„Test-Link 79 sofort live“** (vorher: „ich will endlich eine fertige App haben .. dann kann ich dir feedback geben und dann überlegen wir was wir wie neu entwickeln“). Umgesetzt: Live `JLL8…` v87 `1793608303-a6a8`, Rückweg v86 `1793087421-695a`.

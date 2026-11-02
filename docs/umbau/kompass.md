@@ -18,11 +18,13 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 - Keine Schleifen: je Prüfer eine Prüfung + eine gezielte Nachprüfung; roter Test höchstens zwei Behebungsversuche je Ursache, dann offen melden.
 - „Stopp“ heißt sofort anhalten.
 
-## 3. Roadmap (Großpakete, Stand 01.11.2026)
+## 3. Roadmap (Großpakete, Stand 02.11.2026)
+**Emrah 02.11.:** erst die fertige neue App haben und damit lernen → Feedback → dann gemeinsam überlegen, was wie neu entwickelt wird (B/C erst danach). Die Gesamtprüfung aller Bildschirme (Note 5/10) ist bis dahin angehalten; Funktionsliste „fehlt/versteckt“ liegt bereit.
+
 | # | Großpaket | Inhalt | Stand |
 |---|---|---|---|
 | ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB + D5-Nachtrag | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | in `claude/umbau-fokus`; Test-Link v77 `1793534318-5906` (01.11.), wartet auf Emrahs Review; nicht live |
-| A | **Wörter-App komplett** | V3 (Lernkarte, Sitzung, Abschluss; freigegeben 01.11. mit VB 1–3) + V4 (Anwenden, Wort-Detail, Übersicht; VB 4–6) + V5 (C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus erst nach Emrahs OK) + gesammelte Kleinkorrekturen | Refinement `vokabeln/grosspaket-a.md` freigegeben (01.11.); **gebaut und geprüft, Test-Link `AXHkh6…` v79 `1793580449-abea` (02.11., mit Einschalt-Weg Einstellungen › Wortschatz › „Neue Wörter-App“; Rückweg v78 `1793574127-12ec`), wartet auf Emrahs Review; nicht live**. Offen: Frage #6b, „kommt später“-Liste in `stand.md` |
+| A | **Wörter-App komplett** | V3 (Lernkarte, Sitzung, Abschluss; freigegeben 01.11. mit VB 1–3) + V4 (Anwenden, Wort-Detail, Übersicht; VB 4–6) + V5 (C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus erst nach Emrahs OK) + gesammelte Kleinkorrekturen | Refinement `vokabeln/grosspaket-a.md` freigegeben (01.11.); gebaut, geprüft, Test-Link v79; **live `JLL8…` v87 `1793608303-a6a8` (02.11., Emrahs Wahl „Test-Link 79 sofort live“; Rückweg v86 `1793087421-695a`)**. Neue Wörter-App bleibt per Schalter Einstellungen › Wortschatz › „Neue Wörter-App“. Emrah lernt jetzt damit und gibt Feedback. Offen (nächste Runde): Wörter-App von selbst an, #6b, „kommt später“-Liste in `stand.md` |
 | B | **Design komplett** | D6a, D6b (Praxis/Fortschritt, Fragen-Blatt/Ausfälle), E1–E7, F2–F5 (übrige Bildschirme, fehlende Vorschau-Funktionen) | Refinement nach A |
 | C | **Schneller Start** | 1b (P9a, P9b, P10: Inhalte nachladen) | Refinement nach B |
 | danach | Grammatik, Praxis, Lesen als eigene Module | gleiches Prinzip wie die Wörter-App | |

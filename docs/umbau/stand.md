@@ -829,3 +829,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Tests: Unit 7.492 grün (nach Textscan-Fix), E2E gesamt 1.314 grün, Budget im Rahmen (Einstieg ~2,80 von 2,81 MB gzip – kaum Luft), Plattform FREIGABE.
 - Test-Link `AXHkh6…` v79 `1793580449-abea`, Rückweg v78 `1793574127-12ec`.
 - Offen: Nachholen schreibt keinen `vlog`; Wackler `wortschatz` „Atlas-Sperre“ und `vplace` „Einstufung“ unter Last (Testorganisation); Einstieg-Budget fast voll → Texte nachladen (Großpaket C).
+
+### 02.11.2026 – Live v87: Großpaket A (Stand Test-Link v79)
+- Emrah zu v79: Aussehen/Bedienung „maximal 5/10“, vieles versteckt. Danach: „ich will endlich eine fertige App haben … dann Feedback … dann überlegen wir, was wir neu entwickeln“. Pop-up-Wahl: **„Test-Link 79 sofort live“**.
+- Veröffentlicht auf `JLL8…`: **v87 `1793608303-a6a8`** aus Commit cff0a16c (dist wie Test-Link v79, 39 Dateien), Fähigkeiten db/sample/downloads übernommen. **Rückweg v86 `1793087421-695a`** (Einzeldatei, README „Rückweg auf v86“). Manifest `docs/relaunch/publish/JLL8.json`. Die 45 alten Dateien `css/*`, `js/*` der Vorgänger-App auf dem Link bleiben unangetastet (nicht verwendet).
+- Neue Wörter-App ist aus, bis Emrah sie in Einstellungen › Wortschatz › „Neue Wörter-App“ einschaltet (Sicherung, Probelauf, Übernehmen).
+- Nächste Runde (nach Emrahs Feedback): Wörter-App von selbst an, #6b, „kommt später“-Liste; danach gemeinsame Planung Neuentwicklung (Gesamtprüfung angehalten, Funktionsliste in Arbeit).

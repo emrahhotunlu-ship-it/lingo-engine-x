@@ -9,7 +9,7 @@ Hier liegt für jeden Link das Manifest der **zuletzt veröffentlichten** Fassun
 | `AXHkh6.json` | Test-Link `AXHkh6…` | Test mit Emrahs Datenkopie |
 | `JLL8.json` | Live `JLL8…` | laufende App, nur nach Emrahs „Ja live nehmen“ |
 
-**Stand 28.10.2026: Es gibt noch keine der beiden Dateien.** Ein Manifest der bisherigen Fassungen wurde nie geschrieben,
+**Stand 02.11.2026: beide Dateien gibt es** (`JLL8.json` seit Live v87). Früher: **Stand 28.10.2026: Es gibt noch keine der beiden Dateien.** Ein Manifest der bisherigen Fassungen wurde nie geschrieben,
 und eines im Nachhinein zu erfinden wäre falsch. Das erste echte Manifest entsteht bei der nächsten Veröffentlichung
 (Schritt „Erstes Mal“).
 
