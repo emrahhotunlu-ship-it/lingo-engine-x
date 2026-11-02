@@ -573,7 +573,7 @@ export const vmEn = {
   vmSwTitle: 'New Words app',
   vmSwIntro: 'The new Words app practices every word in two steps: first recognizing it, then producing it yourself. Your words and your progress so far come along. First take a calm look at what would happen. Nothing changes yet.',
   vmSwDry: 'View trial run',
-  vmSwReading: 'Reading your words …',
+  vmSwReading: 'Loading your words …',
   vmSwReadFailed: 'Your words could not be read right now. Please try again in a moment.',
   vmSwRetry: 'Try again',
   vmSwReportTitle: 'This is what it would look like',
