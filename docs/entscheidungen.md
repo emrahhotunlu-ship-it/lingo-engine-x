@@ -707,3 +707,7 @@ Frage-Dialog, beide wie empfohlen:
 
 ## 01.11.2026 – Dateiendungen beim Speichern (Hauptchat, Befund platform-guard vor Test-Link Großpaket A)
 - `downloads.save` speichert nur auf Nutzeraktion und nur zwei Formen: die **Sicherung als `.json`** und den **Anki-Export als `.csv`** (`src/features/settings/exportData.ts`, so seit Phase 0 und live). Beide Endungen erlaubt `contract/downloads.d.ts` ausdrücklich („a plain table is a `csv`“); `.csv` kann die Plattform je Ansicht abschalten (`extension_not_enabled`), das fängt `src/platform/downloads.ts` mit Protokoll und Hinweis ab. Die Prüfliste von `platform-guard` nannte bisher nur `.json` und ist entsprechend ergänzt; weitere Endungen nur mit neuer Entscheidung.
+
+## 02.11.2026 – Frage 6b: Hinweis ab Stufe 5 und „Wort zeigen“ (Emrah, Pop-up)
+Frage: Ab Stufe 5 zeigt die Lernkarte statt der englischen Grundform nur einen deutschen Hinweis; „Wort zeigen“ zählt dann höchstens als „schwer“ (Hard), damit das Wort bald wiederkommt.
+Antwort Emrah: **„Ja, so machen (Empfehlung)“.** Umsetzung ohne eigenen Test-Link, Auslieferung mit dem nächsten Großpaket.
