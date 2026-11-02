@@ -839,3 +839,10 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ### 02.11.2026 – Funktionsinventar (Grundlage für die Neuplanung)
 - `docs/umbau/funktionsinventar.md`: 138 Funktionen, 104 da, 11 teilweise, 23 fehlen, 74 versteckt (Weg ab Start, Code-Stelle, Top 15). Nur gelesen; Pläne teils nur angelesen.
 - Wichtigster Befund für jetzt: Der Platz `vocab.hub` im Wörter-Reiter wird von niemandem gefüllt. Auch mit eingeschalteter neuer Wörter-App zeigt der Reiter den alten Trainer; die neue App erreicht man über Heute und Fortschritt › Wörter. → nächste Korrekturrunde.
+
+## 02.11.2026 – Wörter-App von selbst an (live v88)
+- Profil ohne `vcfg`: beim Start einmal übernehmen und einschalten (`autoEnable`, gleiche Wächter, ohne Datei-Sicherung); vorhandenes `vcfg` bleibt. Reiter Wörter zeigt `VocabHome` (ein Knopf „Wörter lernen“, erledigt = Zustand + „Noch 5 Wörter · als Extra“, darunter die Übersicht).
+- Geprüft: Typprüfung, Lint, 7.496 Unit-Tests, Bau, Plattform, Budget, 57 betroffene E2E (autoswitch, vswitch, today, heute, today-duties, vlearn, wortschatz). Kein Gesamtlauf (Emrah: „tust du over managen / testen???“).
+- **Live `JLL8…` v88 `1793612956-d9f4`**, Rückweg v87 `1793608303-a6a8`.
+- Speicher voll: ~28 GB alte Testreste in /tmp; Emrah hat Löschen erlaubt, die automatische Sicherheitsprüfung hat das Löschen aber gesperrt. Frei gemacht nur npm-Zwischenspeicher (85 MB).
+- Nächstes Großpaket (Emrah „Beides zusammen“): Grammatik + Wiederholen neu, gleich im neuen Design; zuerst gemeinsam planen.
