@@ -90,13 +90,27 @@ export type SwitchSummary = {
   histFull: number;
 };
 
-/** Probelauf mit den bestätigten Doppeln (nur sie bekommen `of`); nichts wird geschrieben. */
-export function preview(input: MigrationInput, pairs: readonly (readonly [string, string])[], extraSkipped: readonly Skip[]): { report: MigrationReport; summary: SwitchSummary } {
-  const report = dryRun({ ...input, confirmedPairs: pairs });
-  // Doppel, die in ein führendes Wort gehen, zählen in den Gruppen nicht extra (wie report.lexemes). Die Vorschläge kommen aus dem Lauf ohne
-  // Bestätigung, damit ein bestätigtes Paar in der Liste stehen bleibt (sonst ließe es sich nicht wieder trennen).
-  const merged = new Set(pairs.filter(([l, o]) => l !== o && input.docs.has(l) && input.docs.has(o)).map(([, o]) => o));
-  const s: SwitchSummary = { cards: report.cards + extraSkipped.length, words: report.lexemes, fresh: 0, recognize: 0, onway: 0, produce: 0, partial: 0, skipped: [...extraSkipped, ...report.skipped], dupes: pairs.length ? dryRun(input).dupes : report.dupes, logDaysCapped: report.logDaysCapped, histFull: report.histFull };
+type Pair = readonly [string, string];
+
+/**
+ * Zusammenlegen nur für Paare der Art „gleiches Wort“ (Vorschlag aus `findDupes`); britische Schreibung, Artikel und „jemanden/etwas“ werden
+ * nur gemeldet (plan.md §9.2). Alles andere fällt hier heraus, auch wenn es als bestätigt ankommt. `dupes` = Lauf OHNE Bestätigung.
+ */
+export function proposedOnly(dupes: readonly DupePair[], pairs: readonly Pair[]): Pair[] {
+  const ok = new Set(dupes.filter((d) => d.kind === 'propose').map((d) => `${d.lead}|${d.other}`));
+  return pairs.filter(([l, o]) => ok.has(`${l}|${o}`));
+}
+
+/** Probelauf mit den bestätigten Doppeln (nur „gleiches Wort“ bekommt `of`); nichts wird geschrieben. */
+export function preview(input: MigrationInput, pairs: readonly Pair[], extraSkipped: readonly Skip[]): { report: MigrationReport; summary: SwitchSummary } {
+  // Die Vorschläge kommen aus dem Lauf ohne Bestätigung, damit ein bestätigtes Paar in der Liste stehen bleibt (sonst ließe es sich nicht
+  // wieder trennen).
+  const base = dryRun({ ...input, confirmedPairs: [] });
+  const keep = proposedOnly(base.dupes, pairs);
+  const report = keep.length ? dryRun({ ...input, confirmedPairs: keep }) : base;
+  // Doppel, die in ein führendes Wort gehen, zählen in den Gruppen nicht extra (wie report.lexemes).
+  const merged = new Set(keep.filter(([l, o]) => l !== o && input.docs.has(l) && input.docs.has(o)).map(([, o]) => o));
+  const s: SwitchSummary = { cards: report.cards + extraSkipped.length, words: report.lexemes, fresh: 0, recognize: 0, onway: 0, produce: 0, partial: 0, skipped: [...extraSkipped, ...report.skipped], dupes: base.dupes, logDaysCapped: report.logDaysCapped, histFull: report.histFull };
   for (const r of report.rows) {
     if (merged.has(r.path)) continue;
     if (r.uDue === null) s.fresh++;
@@ -110,7 +124,7 @@ export function preview(input: MigrationInput, pairs: readonly (readonly [string
 
 const MAX_LIST = 40;
 /** Bericht für das Diagnose-Protokoll (Einstellungen › Daten › Diagnose): Zahlen, Übersprungenes mit Grund, Doppel (je höchstens 40). */
-export function summaryText(s: SwitchSummary, pairs: readonly (readonly [string, string])[]): string {
+export function summaryText(s: SwitchSummary, pairs: readonly Pair[]): string {
   const skip = s.skipped.slice(0, MAX_LIST).map((x) => `${x.path}(${x.why})`);
   const confirmed = new Set(pairs.map(([l, o]) => `${l}|${o}`));
   const dupes = s.dupes.slice(0, MAX_LIST).map((d) => `${d.lead}|${d.other}(${d.why},${confirmed.has(`${d.lead}|${d.other}`) ? 'zusammen' : 'getrennt'})`);
@@ -214,7 +228,9 @@ export type EnableResult = { state: RunOutcome['state'] | 'switch_failed'; why?:
  * `partial` darf per Knopf erneut laufen, die Umrechnung ist idempotent).
  */
 export async function enableModule(writer: Writer, input: MigrationInput, g: RunGuards): Promise<EnableResult> {
-  const run = await runMigration(writer, input, g);
+  // Wächter am Schreibweg: nur „gleiches Wort“ darf zusammengelegt werden, egal was die Oberfläche schickt.
+  const pairs = input.confirmedPairs?.length ? proposedOnly(dryRun({ ...input, confirmedPairs: [] }).dupes, input.confirmedPairs) : [];
+  const run = await runMigration(writer, { ...input, confirmedPairs: pairs }, g);
   if (run.state !== 'done' && run.state !== 'already') return { state: run.state, ...(run.why ? { why: run.why } : {}), run };
   const caught = await catchUpAll(writer, input.docs, input.logs, input.nowMs);
   const on = await setModuleSwitch(writer, 1);

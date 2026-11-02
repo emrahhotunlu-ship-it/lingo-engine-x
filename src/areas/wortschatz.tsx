@@ -91,18 +91,28 @@ function WordSettingsHost() {
   const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
   const dbReady = useCapabilities((s) => s.db === 'ready');
   const go = useNav((s) => s.go);
+  // Die Einstellungen der Wörter-App stehen IN der Karte „Neue Wörter-App“ (unter der Zustandszeile); eigene Ladegrenze, damit die Karte
+  // beim Nachladen stehen bleibt (Sprungziel nach dem Einschalten).
+  const ws = on && (
+    <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+      <WordSettings
+        onPlace={() => {
+          // Einstellungen zu, sonst liegt das Blatt über dem Test (E2E vplace).
+          closeSettings();
+          go({ name: 'vplace' });
+        }}
+      />
+    </Suspense>
+  );
   return (
     <Suspense fallback={on ? <Skeleton className="h-48 w-full" /> : null}>
-      {on && (
-        <WordSettings
-          onPlace={() => {
-            // Einstellungen zu, sonst liegt das Blatt über dem Test (E2E vplace).
-            closeSettings();
-            go({ name: 'vplace' });
-          }}
-        />
+      {dbReady ? (
+        <SwitchPanel on={on} read={switchRead} backup={switchBackup}>
+          {ws}
+        </SwitchPanel>
+      ) : (
+        ws
       )}
-      {dbReady && <SwitchPanel on={on} read={switchRead} backup={switchBackup} />}
     </Suspense>
   );
 }

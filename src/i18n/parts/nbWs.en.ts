@@ -185,7 +185,7 @@ export const nbWsEn: Record<keyof typeof nbWsDe, string> = {
   nbWsDaysN: '{n} days',
   nbWsSure: 'Secure entries',
   nbWsAnswers: '{n} answers',
-  nbWsSetTitle: 'Vocabulary',
+  nbWsSetTitle: 'Old words view',
   nbWsSetMode: 'Default review mode',
   nbWsSetModeAuto: 'Auto',
   nbWsSetModeFlip: 'Flip',

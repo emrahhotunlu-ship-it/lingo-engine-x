@@ -7,7 +7,7 @@ import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { lexOf } from '../../../src/modules/vocab/data/lex';
 import { lexWriteSchema, vcfgSchema } from '../../../src/modules/vocab/data/schemas';
 import { VOCAB_LOCK_PATH } from '../../../src/modules/vocab/registry';
-import { buildInput, catchUpAll, enableModule, fromRead, lockHolder, migrationDone, preview, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
+import { buildInput, catchUpAll, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Eingabe aus vollem Lesen, Wächter, Schalter `vcfg.mod`, Rückweg und Nachholen.
 // Nur erfundene Daten (seed/sample-data.json und Testfälle hier).
@@ -160,6 +160,23 @@ describe('Einschalten: Übernehmen, Schalter und Rückweg', () => {
     const h2 = createMemoryDb({ seed: all() });
     await enableModule(createWriter(h2.db), stateOf(h2.dump()).input, guards);
     expect(lexOf((h2.dump() as Record<string, Doc>)[pair.other])?.of).toBeNull();
+  });
+
+  it('zusammengelegt wird nur „gleiches Wort“: britische Schreibung (nur gemeldet) fällt in Probelauf und Übernehmen heraus', async () => {
+    const brit: Record<string, Doc> = {
+      'vocab/colour': { id: 'colour', word: 'colour', de: 'Farbe', pos: 'noun', ex: 'What colour is it?', reps: 3, last: NOW - DAY, state: 'review', S: 3, D: 5, due: NOW, stage: 2 },
+      'vocab/color': { id: 'color', word: 'color', de: 'Farbe', pos: 'noun', ex: 'Pick a color.', reps: 1, last: NOW - 2 * DAY, state: 'review', S: 1, D: 5, due: NOW, stage: 1 },
+    };
+    const h = createMemoryDb({ seed: { ...all(), ...brit } });
+    const st = stateOf(h.dump());
+    const base = preview(st.input, [], st.skipped).summary;
+    const rep = base.dupes.find((p) => [p.lead, p.other].sort().join() === 'vocab/color,vocab/colour')!;
+    expect(rep).toMatchObject({ kind: 'report', why: 'british' });
+    const forced: [string, string][] = [[rep.lead, rep.other]];
+    expect(proposedOnly(base.dupes, forced)).toEqual([]);
+    expect(preview(st.input, forced, st.skipped).summary.words).toBe(base.words);
+    await enableModule(createWriter(h.db), { ...st.input, confirmedPairs: forced }, guards);
+    expect(lexOf((h.dump() as Record<string, Doc>)[rep.other])?.of).toBeNull();
   });
 
   it('Rückweg: mod = 0, Antworten im alten Bereich, wieder an → ohne neue Umrechnung, Antworten nachgeholt, neue Karte umgerechnet', async () => {

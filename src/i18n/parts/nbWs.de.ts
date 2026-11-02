@@ -192,7 +192,7 @@ export const nbWsDe = {
   nbWsSure: 'Sichere Einträge',
   nbWsAnswers: '{n} Antworten',
   // Einstellungen
-  nbWsSetTitle: 'Wortschatz',
+  nbWsSetTitle: 'Alte Wörter-Ansicht',
   nbWsSetMode: 'Standard-Modus beim Wiederholen',
   nbWsSetModeAuto: 'Automatisch',
   nbWsSetModeFlip: 'Aufdecken',

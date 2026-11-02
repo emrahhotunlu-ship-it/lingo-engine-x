@@ -47,7 +47,11 @@ for (const vp of [
 
       // Sicherung (Datei, nur auf Klick), dann Übernehmen.
       await page.getByTestId('vsw-backup').click();
+      // Erledigt ist Zustand: Häkchen-Zeile statt gleich beschriftetem Knopf, erneut nur als leiser Textknopf.
       await expect(page.getByTestId('vsw-backup-state')).toContainText('Sicherung gespeichert');
+      await expect(page.getByTestId('vsw-backup')).toHaveCount(0);
+      await expect(page.getByTestId('vsw-backup-again')).toHaveText('Noch einmal speichern');
+      await expect(page.getByTestId('vsw').getByText('bleibt „Übernehmen und einschalten“ gesperrt')).toHaveCount(0);
       expect(await saved(page)).toHaveLength(1);
       await expect(page.getByTestId('vsw-apply')).toBeEnabled();
       await page.getByTestId('vsw-apply').click();
@@ -56,9 +60,14 @@ for (const vp of [
       const d = await dump(page);
       const lexed = Object.entries(d).filter(([p, v]) => /^(vocab|chunk)\//.test(p) && v && typeof v === 'object' && 'lex' in v).length;
       expect(lexed).toBeGreaterThan(0);
-      // Eingeschaltet: Einstellungen der Wörter-App und darunter der Rückweg.
+      // Eingeschaltet: Abschnittsanfang im Bild, feste Zustandszeile oben, Einstellungen der Wörter-App und darunter der Rückweg.
+      const state = page.getByTestId('vsw-state');
+      await expect(state).toHaveText('Neue Wörter-App ist an');
+      await expect(state).toBeInViewport();
       await expect(page.getByTestId('vs')).toBeVisible();
       await expect(page.getByTestId('vsw-back')).toBeVisible();
+      await expect(page.getByTestId('vsw-on').getByTestId('vs'), 'Einstellungen der Wörter-App in der Karte').toHaveCount(1);
+      await expect(page.getByTestId('set-vocab').locator('h3')).toHaveText('Alte Wörter-Ansicht');
       expect(await layoutProblems(page)).toEqual([]);
       expect(await axe(page, '[data-testid="vsw-back"]')).toEqual([]);
 
@@ -76,9 +85,11 @@ for (const vp of [
       await expect.poll(async () => (await vcfgOf(page))?.mod).toBe(0);
       expect(((await dump(page))['app/schema']?.vocabModule as Doc).state).toBe('done');
       await expect(page.getByTestId('vs')).toHaveCount(0);
+      await expect(page.getByTestId('vsw-state')).toHaveText('Alte Wörter-Ansicht ist an');
+      await expect(page.getByTestId('vsw-state')).toBeInViewport();
       const again = page.getByTestId('vsw-reenable');
-      await again.scrollIntoViewIfNeeded();
       await expect(again).toBeVisible();
+      await expect(again, 'Zweitknopf, kein zweiter Hauptknopf').not.toHaveClass(/lx-btn-primary/);
       expect(await layoutProblems(page)).toEqual([]);
       expect(await axe(page, '[data-testid="vsw"]')).toEqual([]);
 
@@ -89,7 +100,33 @@ for (const vp of [
       expect(JSON.stringify((await dump(page))['app/schema'])).toBe(schemaBefore);
       expect(await saved(page)).toHaveLength(1);
       await expect(page.getByTestId('vsw-back')).toBeVisible();
+      await expect(page.getByTestId('vsw-state')).toHaveText('Neue Wörter-App ist an');
+      await expect(page.getByTestId('vsw-state')).toBeInViewport();
       expect(external).toEqual([]);
+      expect(errors).toEqual([]);
+    });
+
+    test('Doppel: nur „gleiches Wort“ ist wählbar und sagt, welches Wort bleibt; Ähnliches nur als Hinweis', async ({ page }) => {
+      const t = Date.parse('2026-09-18T10:00:00Z');
+      const card = (id: string, word: string, de: string, reps: number) => ({ id, word, de, pos: 'noun', ex: `A ${word} here.`, reps, last: t - reps * 3_600_000, state: 'review', S: 3, D: 5, due: t, stage: 2 });
+      const extra = { 'vocab/dl-a': card('dl-a', 'deadline', 'Frist', 4), 'vocab/dl-b': card('dl-b', 'Deadline', 'Frist', 2), 'vocab/col-a': card('col-a', 'colour', 'Farbe', 3), 'vocab/col-b': card('col-b', 'color', 'Farbe', 1) };
+      const { errors } = await bootAt(page, { name: 'overview' }, { migrated: false, fake: { patch: { ...patch(), ...extra } } });
+      await screen(page, 'overview');
+      await openSettings(page);
+      await page.getByTestId('vsw-dry').scrollIntoViewIfNeeded();
+      await page.getByTestId('vsw-dry').click();
+      const dupes = page.getByTestId('vsw-dupes');
+      await expect(dupes).toBeVisible();
+      const same = page.getByTestId('vsw-dupe').filter({ hasText: 'deadline · Deadline' });
+      await expect(same).toHaveCount(1);
+      await expect(same).toContainText('Zusammenlegen: du lernst nur noch „deadline“.');
+      await expect(page.getByTestId('vsw-dupe').filter({ hasText: 'colo' }), 'britisch: keine Wahl').toHaveCount(0);
+      await expect(page.getByTestId('vsw-like-item').filter({ hasText: 'colour · color' })).toContainText('britische Schreibweise');
+      const words = Number((await page.getByTestId('vsw-words').innerText()).replace(/\D/g, ''));
+      await same.getByTestId('vsw-merge').click();
+      await expect.poll(async () => Number((await page.getByTestId('vsw-words').innerText()).replace(/\D/g, ''))).toBe(words - 1);
+      expect(await layoutProblems(page)).toEqual([]);
+      expect(await axe(page, '[data-testid="vsw"]')).toEqual([]);
       expect(errors).toEqual([]);
     });
 
@@ -102,6 +139,10 @@ for (const vp of [
       await expect(page.getByTestId('vsw-report')).toBeVisible();
       await page.getByTestId('vsw-backup').click();
       await expect(page.getByTestId('vsw-backup-state')).toContainText('nicht verfügbar');
+      // Klarer nächster Schritt statt doppeltem Sperr-Satz; der Knopf ist nur noch Zweitknopf.
+      await expect(page.getByTestId('vsw-backup-state')).toContainText('am Computer in claude.ai');
+      await expect(page.getByTestId('vsw').getByText('bleibt „Übernehmen und einschalten“ gesperrt')).toHaveCount(0);
+      await expect(page.getByTestId('vsw-backup')).not.toHaveClass(/lx-btn-primary/);
       await expect(page.getByTestId('vsw-apply')).toBeDisabled();
       expect((await dump(page))['app/profile']?.vcfg).toBeUndefined();
       expect(errors).toEqual([]);
