@@ -29,7 +29,7 @@ import { RootBoundary, RootNotice } from './Boundary';
 import { SheetHost } from './SheetHost';
 import { TabBar } from './TabBar';
 import { ContextColumn, ContextSheet, SentenceGuard } from './ContextHost';
-import { useContextColumn, useContextPresentation } from './contextColumn';
+import { useContextColumn } from './contextColumn';
 import { tabOfPlace, type Place } from './tabs';
 import { TopBar } from './TopBar';
 import { TodayHead } from '../../features/today/TodayHead';
@@ -116,10 +116,9 @@ function Frame() {
     return () => root.removeAttribute('data-lx-tab');
   }, [activeTab]);
   const tabRoot = !system && kind === 'tab';
-  // In Übungen keine Handy-Leiste (Plan §6.2); ab 1024 px bleiben Schiene/Seitenleiste auch in Übungen stehen (P2-Nachbesserung).
-  // Beim Laden steht sie schon da (Start-Bild, U2).
-  const wide = useContextPresentation() === 'column';
-  const showNav = (!system || screen === 'loading') && (!exercise || wide);
+  // In Übungen keine Leiste: am Handy nicht (Plan §6.2) und seit dem UX-Neuanfang B auch am Laptop nicht – die Übung ist Vollbild,
+  // rechts steht Claude (Emrah 02.11.2026 „Vollbild, rechts Claude“). Beim Laden steht sie schon da (Start-Bild, U2).
+  const showNav = (!system || screen === 'loading') && !exercise;
   const ctxOpen = useContextColumn((s) => s.current !== null);
 
   return (

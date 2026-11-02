@@ -146,6 +146,7 @@ function ExtraSheet({ today, done, onClose }: { today: string; done: boolean; on
 export function MoreRows({ today, done, idp = '' }: { today: string; done: boolean; idp?: string }) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
+  const go = useNav((s) => s.go);
   const lines = useExtraLines(today, done);
   return (
     <div className="lx-vh-more" data-testid={`${idp}more-rows`}>
@@ -155,26 +156,33 @@ export function MoreRows({ today, done, idp = '' }: { today: string; done: boole
         ))}
       </div>
       {/* „Alles anzeigen“ nur, wenn das Blatt wirklich mehr zeigt als die Zeilen hier (sonst stünde dasselbe zweimal da, Kap. 15). */}
-      {lines.length > MORE_MAX && (
-        <div className="lx-vh-more-all">
+      {/* Praxis (Lesen, Sprechen, Satzbau, Schreiben, Kurse) ist seit UX-Neuanfang B kein Reiter mehr, sondern hier erreichbar. */}
+      <div className="lx-vh-more-all">
+        {lines.length > MORE_MAX && (
           <button type="button" className="lx-vh-link" onClick={() => setOpen(true)} data-testid="today-extra">
             {t('vhMoreAll')}
           </button>
-        </div>
-      )}
+        )}
+        <button type="button" className="lx-vh-link" onClick={() => go({ name: 'apply' })} data-testid={`${idp}today-practice`}>
+          {t('vhPracticeAll')}
+        </button>
+      </div>
       {open && <ExtraSheet today={today} done={done} onClose={() => setOpen(false)} />}
     </div>
   );
 }
 
-/** Handy und schmale Laptops: Trennzeile „Wenn du mehr willst“ und die Zeilen (Vorschau `more-div`). */
+/** Handy und schmale Laptops: Kopf „Freiwillig · zählt als Extra“ (UX-Neuanfang B) und die Zeilen. */
 export function ExtraRow({ today, done }: { today: string; done: boolean }) {
   const { t } = useT();
   return (
     <section className="lx-vh-moresec" aria-labelledby="td-more-title">
-      <h2 id="td-more-title" className="lx-vh-more-div">
-        {t('vhMore')}
-      </h2>
+      <div className="lx-vh-free-h">
+        <h2 id="td-more-title" className="lx-vh-label">
+          {t('vhFree')}
+        </h2>
+        <span className="lx-vh-meta">{t('vhFreeNote')}</span>
+      </div>
       <MoreRows today={today} done={done} />
     </section>
   );

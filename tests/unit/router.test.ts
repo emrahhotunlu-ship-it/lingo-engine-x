@@ -18,7 +18,7 @@ const AREAS: AreaDef[] = [
       vocab: { kind: 'tab', component: Empty },
       speak: { kind: 'tab', component: Empty },
       learn: { kind: 'tab', component: Empty },
-      apply: { kind: 'tab', component: Empty },
+      apply: { kind: 'page', component: Empty },
       read: { kind: 'page', component: Empty },
       grammar: { kind: 'page', component: Empty },
       wissen: { kind: 'page', component: Empty },
@@ -37,10 +37,10 @@ const top = (c: Core): Route => c.overlay?.route ?? (c.stacks[c.tab].at(-1) as R
 beforeAll(() => installAreas(AREAS));
 
 describe('Register', () => {
-  it('fünf Reiter mit Wurzeln (Relaunch Stufe 1 P2: Heute · Wörter · Grammatik · Praxis · Fortschritt); `learn` bleibt die Test-ID von „Grammatik“, `apply` die von „Praxis“; Lesen und Sprechen hängen an Praxis', () => {
-    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'progress']);
-    expect(tabOfPlace('read')).toBe('apply');
-    expect(tabOfPlace('speak')).toBe('apply');
+  it('vier Reiter mit Wurzeln (UX-Neuanfang B: Heute · Wörter · Grammatik · Fortschritt); `learn` bleibt die Test-ID von „Grammatik“; Praxis ist eine Seite unter Heute', () => {
+    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'progress']);
+    expect(tabOfPlace('read')).toBeNull();
+    expect(tabOfPlace('speak')).toBeNull();
     expect(TABS.find((t) => t.id === 'progress')?.root.name).toBe('overview');
   });
 

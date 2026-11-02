@@ -35,11 +35,11 @@ async function expectNoOverflow(page: Page): Promise<void> {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
 
-// ---------------------------------------------------------------- fünf Reiter am Handy, Lesen unter „Praxis“ (Relaunch P2 S1-SHELL)
+// ---------------------------------------------------------------- vier Reiter am Handy (UX-Neuanfang B), Lesen unter Heute › Praxis
 
 for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
   for (const w of [360, 390, 412]) {
-    test(`Reiterleiste mit fünf Reitern bei ${w} px einzeilig und mit Luft (${lang})`, async ({ browser }) => {
+    test(`Reiterleiste mit vier Reitern bei ${w} px einzeilig und mit Luft (${lang})`, async ({ browser }) => {
       const context = await browser.newContext({ viewport: { width: w, height: 800 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin' });
       const page = await context.newPage();
       const { errors } = await bootRead(page, { lang, migrated: true });
@@ -56,8 +56,7 @@ for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
           return { id: el.getAttribute('data-tab') ?? '', label: text?.textContent ?? '', lines, h: b.height, left: b.left, right: b.right, textLeft: tr.left, textRight: tr.right };
         }),
       );
-      expect(boxes.map((b) => b.id)).toEqual(['today', 'vocab', 'learn', 'apply', 'progress']);
-      expect(boxes.map((b) => b.label)[3]).toBe(lang === 'de' ? 'Praxis' : 'Practice');
+      expect(boxes.map((b) => b.id)).toEqual(['today', 'vocab', 'learn', 'progress']);
       for (const b of boxes) {
         expect(b.lines, b.label).toBe(1);
         expect(b.h, b.label).toBeGreaterThanOrEqual(44);
@@ -77,18 +76,20 @@ for (const lang of ['de', 'en'] as const satisfies readonly Lang[]) {
   }
 }
 
-test('Desktop: fünf Reiter in der Seitenleiste, Praxis › Lesen öffnet den Bildschirm', async ({ browser }) => {
+test('Desktop: vier Reiter in der Seitenleiste, Heute › Praxis › Lesen öffnet den Bildschirm', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, timezoneId: 'Europe/Berlin' });
   const page = await context.newPage();
   const { errors } = await bootRead(page, { migrated: true });
   await screen(page, 'today');
-  await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(5);
-  await page.getByTestId('side-practice-toggle').click();
-  await page.getByTestId('side-read').click();
+  await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(4);
+  await page.getByTestId('ctx-today-practice').click();
+  await screen(page, 'apply');
+  await page.getByTestId('hub-read').click();
   await screen(page, 'read');
   await expect(page.getByTestId('read')).toHaveAttribute('data-load', 'ready');
   await expect(page.getByTestId('read-title')).toHaveText('Lesen');
-  await expect(page.getByTestId('side-read')).toHaveAttribute('aria-current', 'page');
+  // Lesen liegt auf dem Stapel von Heute: der Reiter Heute bleibt markiert.
+  await expect(page.getByTestId('tab-today')).toHaveAttribute('aria-current', 'page');
   await expectNoOverflow(page);
   expect(errors).toEqual([]);
   await context.close();

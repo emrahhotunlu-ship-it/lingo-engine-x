@@ -734,3 +734,6 @@ Vorschau `5Zwv5noCiNwzrzzfQsfzXy` v1 `1793616118-d40f`. Frage „Du hast die Vor
 
 ## 02.11.2026 – Erklärung ohne Tippen (Emrah, Nachricht)
 Wortlaut: „achtung .. ich will nicht immer auf claude hilfe tippen der hilfe button muss auch so sichtbar sein?“ Umsetzung: Nach jedem Prüfen erscheinen Warum und Merke von selbst (auch bei richtig); bei falscher Antwort lädt Claudes Erklärung zur eigenen Antwort automatisch (wenn Claude verfügbar). Der Knopf „Claude erklärt“ ist in jeder Übung vor und nach dem Prüfen sichtbar beschriftet (Handy oben rechts, Laptop rechte Spalte offen), nie im Menü.
+
+## 02.11.2026 – Vier Reiter, Praxis unter Heute (Emrah, Pop-up)
+Frage „In der Vorschau hat die untere Leiste 4 Reiter … In der App gibt es heute noch einen 5. Reiter „Praxis“ … Wie soll ich das einbauen?“ → **„4 Reiter, Praxis unter Heute (Empfehlung)“**. Umsetzung (UX-Neuanfang B): Reiter Heute · Wörter · Grammatik · Fortschritt; „Praxis“ (Lesen, Sprechen, Satzbau, Schreiben, Kurse) ist eine Seite auf dem Stapel von Heute, erreichbar über Heute › Freiwillig › „Praxis: alles zum Üben“ (am Laptop ab 1280 px in der Kontextspalte). Die aufklappbaren Unterpunkte Sprechen/Hören/Lesen in der Seitenleiste entfallen; Lesen und Sprechen stehen auf der Praxis-Seite auf allen Breiten. Nichts geht verloren.

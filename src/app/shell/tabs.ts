@@ -27,15 +27,14 @@ export type TabDef = {
   readonly badge?: BadgeId;
 };
 
-// Fünf Reiter (Relaunch Stufe 1, P2 S1-SHELL, docs/relaunch/stufe1-plan.md §6.3, Konzept 13.1):
-// Heute · Wörter · Grammatik · Praxis · Fortschritt. „Praxis“ ist der frühere Reiter „Anwenden“ (Test-ID `tab-apply` bleibt);
-// Lesen (früher eigener Reiter, 13.10.2026) und Sprechen hängen als Seiten darunter (Plätze `read`/`speak` stehen auf Praxis).
+// Vier Reiter (UX-Neuanfang B, Vorschau `5Zwv5noCiNwzrzzfQsfzXy`, Emrah 02.11.2026 „4 Reiter, Praxis unter Heute“):
+// Heute · Wörter · Grammatik · Fortschritt. „Praxis“ (Lesen, Sprechen, Satzbau, Schreiben, Kurse) ist eine Seite, erreichbar über
+// Heute › Freiwillig › „Praxis: alles zum Üben“ (`today-practice`); ihre Plätze `apply`/`read`/`speak` hängen an der Seite, nicht an einem Reiter.
 // Fortschritt = die Seite „Dein Stand“ (Route `overview`, Emrahs Wunsch vom 01.10.2026). Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
 export const TABS = [
   { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today'], badge: 'openDuties' },
   { id: 'vocab', label: 'nbShTabVocab', icon: 'cards', root: { name: 'vocab' }, places: ['vocab'] },
   { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
-  { id: 'apply', label: 'shTabPractice', icon: 'bolt', root: { name: 'apply' }, places: ['apply', 'read', 'speak'] },
   { id: 'progress', label: 'nbShTabProgress', icon: 'chart', root: { name: 'overview' }, places: [] },
 ] as const satisfies readonly TabDef[];
 

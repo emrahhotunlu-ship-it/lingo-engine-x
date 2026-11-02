@@ -3,8 +3,8 @@ import { boot, screen } from './fixtures';
 import { MON, MON_9, NO_GRAMMAR_ERRORS, TUE_9, WEEK_W39, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
 import { LANGS, MODES, SIZES, axeFindings, box, compare, openVorschau, shotPath, type Check, type Lang, type Mode, type Size } from './vorschauHelpers';
 
-// Vorschau-Paare „Heute“ (Relaunch Teil 1c, D2 V-HEUTE; docs/relaunch/stufe1c-plan.md §3.0/§3.1): H1 × 6 (start, mid, ring, done, skeleton, pause)
-// am Handy (390 × 844) und L1 × 3 (main, start, done) am Laptop (1440 × 900, 2560 × 1440), je in Dunkel, Gedämpft und Hell, DE und EN.
+// Vorschau-Paare „Heute“ (Relaunch Teil 1c, D2 V-HEUTE; docs/relaunch/stufe1c-plan.md §3.0/§3.1): H1 done und pause
+// am Handy (390 × 844) und L1 done am Laptop (1440 × 900, 2560 × 1440), je in Dunkel, Gedämpft und Hell, DE und EN.
 // Links die Vorschau (`openVorschau`), rechts die echte App mit Testdaten (`fixtures.boot`) im passenden Tageszustand. Gemessen wird per
 // getBoundingClientRect (±2 px, Schrift exakt), was in beiden gleich aufgebaut ist; Inhalte (Thema, Zeilenzahl) sind echte Werte und dürfen
 // abweichen. Dazu axe ohne Befund auf der Heute-Fläche, keine fremde Anfrage und kein Fehler im Browser. Bilder: test-results/vorschau/<paar>/.
@@ -18,17 +18,6 @@ const HEAD: Check[] = [
   // Die Vorschau zieht `.phead` über die ganze Breite (Rand innen); gemessen werden Höhe und Lage des Inhalts (Titel, „Fragen“).
   { name: 'kopf', vorschau: '.phead', app: '.lx-vh-head', props: ['y', 'height'] },
   { name: 'titel', vorschau: '.phead h1', app: '.lx-vh-head h1', props: ['x', 'y', 'height', 'fontSize', 'lineHeight', 'fontWeight'] },
-];
-const CARD: Check[] = [
-  { name: 'tageskarte', vorschau: '.daycard', app: '[data-testid="today-card"]', props: ['x', 'y', 'width', 'borderRadius'] },
-  { name: 'ring', vorschau: '#ring', app: '[data-testid="today-ring"] .lx-v-ring', props: ['x', 'y', 'width', 'height'] },
-  { name: 'ringzahl', vorschau: '.ringc b', app: '[data-testid="today-ring"] .lx-v-ringc b', props: ['fontSize', 'lineHeight', 'fontWeight'] },
-  { name: 'ringtext', vorschau: '.ringc span', app: '[data-testid="today-ring"] .lx-v-ringc span', props: ['fontSize', 'fontWeight'] },
-];
-const TOPIC: Check[] = [
-  { name: 'thema', vorschau: '.dtopic .t', app: '[data-testid="today-topic"]', props: ['x', 'width', 'fontSize', 'lineHeight', 'fontWeight'] },
-  { name: 'naechstes', vorschau: '.nextl', app: '.lx-vh-next', props: ['x', 'width', 'fontSize'] },
-  { name: 'knopf', vorschau: '#today-go', app: '[data-testid="start"]', props: ['x', 'width', 'height', 'fontSize', 'fontWeight', 'borderRadius'] },
 ];
 const WEEK_MORE: Check[] = [
   { name: 'woche', vorschau: '.week', app: '.lx-vh-week', props: ['x', 'width', 'height'] },
@@ -54,26 +43,11 @@ const DESK: Check[] = [
   { name: 'wochentag', vorschau: '.ctx .st', app: '.lx-vh-weeklist .lx-v-st', props: ['fontSize'] },
   { name: 'spaltenzeile', vorschau: '.ctx .row', app: '.lx-vh-ctx [data-testid="more-row"]', props: ['fontSize'] },
 ];
-const DESK_GO: Check[] = [{ name: 'knopf', vorschau: '#d-go', app: '[data-testid="start"]', props: ['height', 'fontSize', 'fontWeight', 'borderRadius'] }];
 
 const PAIRS: Pair[] = [
   // Tagesanfang: Die Testdaten haben an diesem Dienstag keine laufende Serie (nie „Serie 0“), deshalb ohne Serienzahl.
-  { name: 'heute-start', vorschau: 'h1-start', app: 'start', phone: true, checks: [...HEAD, ...CARD, ...TOPIC, ...WEEK_MORE.filter((c) => c.name !== 'serie')] },
-  { name: 'heute-mid', vorschau: 'h1-mid', app: 'mid', phone: true, checks: [...HEAD, ...CARD, ...TOPIC, ...WEEK_MORE] },
-  {
-    name: 'heute-ring',
-    vorschau: 'h1-ring',
-    app: 'ring',
-    phone: true,
-    checks: [
-      ...HEAD,
-      ...CARD,
-      { name: 'block', vorschau: '.st', app: '[data-testid="duty"] .lx-v-st', props: ['x', 'width', 'height', 'fontSize'] },
-      { name: 'blockzeichen', vorschau: '.st .mk', app: '[data-testid="duty"] .lx-v-st-mk', props: ['x', 'width', 'height'] },
-      { name: 'blockzeit', vorschau: '.st .sm', app: '[data-testid="duty"] .lx-v-st-sm', props: ['fontSize'] },
-      { name: 'knopf', vorschau: '#today-go', app: '[data-testid="start"]', props: ['x', 'width', 'height', 'fontSize', 'borderRadius'] },
-    ],
-  },
+  // Seit UX-Neuanfang B zeigt Heute vor dem Abschluss den Tagesweg statt des Rings (Vergleich: vorschau-neuanfang-heute.spec.ts).
+  // Hier bleiben die Zustände mit Ring: Abschluss (DoneCard3) und Wiedereinstieg nach Pause (RestartCard).
   {
     name: 'heute-done',
     vorschau: 'h1-done',
@@ -87,17 +61,6 @@ const PAIRS: Pair[] = [
       { name: 'titel-karte', vorschau: '.dtopic .t', app: '[data-testid="balance"]', props: ['x', 'width', 'fontSize', 'lineHeight', 'fontWeight'] },
       { name: 'unterzeile', vorschau: '.dtopic .sub', app: '[data-testid="today-card"] .lx-vh-sub', props: ['fontSize', 'lineHeight'] },
       ...WEEK_MORE,
-    ],
-  },
-  {
-    name: 'heute-skelett',
-    vorschau: 'h1-skeleton',
-    app: 'skeleton',
-    phone: true,
-    checks: [
-      ...HEAD.filter((c) => c.name === 'kopf'),
-      { name: 'tageskarte', vorschau: '.daycard', app: '[data-testid="today-skeleton"]', props: ['x', 'y', 'width', 'borderRadius'] },
-      { name: 'ring', vorschau: '.daycard .sk', app: '[data-testid="today-skeleton"] .lx-vh-sk-ring', props: ['x', 'y', 'width', 'height', 'borderRadius'] },
     ],
   },
   {
@@ -115,8 +78,6 @@ const PAIRS: Pair[] = [
       { name: 'knopf', vorschau: '#today-go', app: '[data-testid="restart-start"]', props: ['x', 'width', 'height', 'fontSize', 'fontWeight', 'borderRadius'] },
     ],
   },
-  { name: 'heute-l1-main', vorschau: 'l1-main', app: 'mid', phone: false, checks: [...DESK, ...DESK_GO] },
-  { name: 'heute-l1-start', vorschau: 'l1-start', app: 'start', phone: false, checks: [...DESK, ...DESK_GO] },
   { name: 'heute-l1-done', vorschau: 'l1-done', app: 'done', phone: false, checks: DESK.filter((c) => c.name !== 'thema') },
 ];
 

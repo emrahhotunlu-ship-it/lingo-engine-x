@@ -15,15 +15,14 @@ test.describe('Handy 390', () => {
     const { errors, external } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39, ...patch } } });
     await screen(page, 'today');
     const first = page.getByTestId('duty').first();
-    // UX-Audit U1: nicht „überfällig“ (nur ein Teil der geplanten Karten ist überfällig), sondern der Grund in Worten; Glossar 3.6: kein Altwort „Rückstand“.
-    await expect(first.getByTestId('reason')).toContainText('Karten · du holst auf');
+    // UX-Audit U1: nicht „überfällig“, sondern der Grund in Worten; Glossar 3.6: kein Altwort „Rückstand“.
+    // Seit UX-Neuanfang C hat der Schritt „Wörter“ feste Minuten aus dem Tagesziel (Emrah 02.11.2026: „mindestens 10 Minuten und immer 40 %“),
+    // er wächst nicht mehr mit dem Rückstand; die Zeile nennt die geplanten Karten, Fällige zuerst.
+    await expect(first.getByTestId('reason')).toContainText('Karten · Fällige zuerst');
     const planned = ((await first.getByTestId('reason').innerText()).match(/(\d+)\s*Karten/) ?? [])[1] ?? '';
     expect(planned).not.toBe('');
-    // Die Minuten von Block 1 wachsen mit dem Rückstand (mehr als die 8 des Grundplans). Der laufende Block zeigt seit D2
-    // „jetzt“ statt der Minuten (Vorschau `.statelist`); die Minuten stehen in `data-min`.
-    const min = Number((await first.getAttribute('data-min')) ?? 0);
-    expect(min).toBeGreaterThan(8);
-    expect(min).toBeLessThanOrEqual(12);
+    // Tagesziel 25 → Wörter 10 Minuten, auch bei Rückstand.
+    await expect(first).toHaveAttribute('data-min', '10');
 
     await openTab(page, 'vocab');
     await expect(page.getByTestId('ws-behind')).toHaveAttribute('data-n', '40');
@@ -69,8 +68,8 @@ test.describe('Handy 390', () => {
 test.describe('Desktop', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
-  test('Pflichtrunde mit 70 überfälligen Karten: danach „Weitere Runde · 10 fällig“ startet eine freie Runde', async ({ page }) => {
-    const { patch } = ankiPatch(70);
+  test('Pflichtrunde mit 90 überfälligen Karten: danach „Weitere Runde · 15 fällig“ startet eine freie Runde', async ({ page }) => {
+    const { patch } = ankiPatch(90);
     const { errors } = await boot(page, {
       migrated: true,
       now: TUE_9,
@@ -80,7 +79,7 @@ test.describe('Desktop', () => {
     await openTab(page, 'vocab');
     await page.getByTestId('ws-review').click();
     await screen(page, 'trainer');
-    for (let i = 0; i < 100 && !(await page.getByTestId('summary').isVisible()); i++) {
+    for (let i = 0; i < 120 && !(await page.getByTestId('summary').isVisible()); i++) {
       const flip = page.getByTestId('flip');
       if (!(await flip.isVisible())) continue;
       const card = (await flip.getAttribute('data-card')) ?? '';
@@ -89,9 +88,9 @@ test.describe('Desktop', () => {
       await expect(page.locator(`[data-testid="flip"][data-card="${card}"]`)).toHaveCount(0);
     }
     await expect(page.getByTestId('summary')).toBeVisible();
-    // Budget 480 s + höchstens 50 % = 720 s: 60 Karten zu je 12 s – nicht alle 70.
+    // Budget 600 s (Wörter 10 Min. bei Tagesziel 25) + höchstens 50 % = 900 s: 75 Karten zu je 12 s – nicht alle 90.
     // UX-Prüfung W6 (07.10.2026): ohne doppeltes „Noch“.
-    await expect(page.getByTestId('session-end-more')).toContainText('Weitere Runde · 10 fällig');
+    await expect(page.getByTestId('session-end-more')).toContainText('Weitere Runde · 15 fällig');
     await page.getByTestId('session-end-more').click();
     await screen(page, 'trainer');
     await expect(page.getByTestId('flip')).toBeVisible();

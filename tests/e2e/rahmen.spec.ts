@@ -20,7 +20,7 @@ async function openVtest(page: Page): Promise<void> {
   await screen(page, 'vtest');
 }
 
-test('Einstieg: Kopf mit EINEM „Fragen“, fünf Reiter einzeilig, Zahnrad und Profil nur auf Fortschritt, Profil-Blatt', async ({ page }) => {
+test('Einstieg: Kopf mit EINEM „Fragen“, vier Reiter einzeilig, Zahnrad und Profil nur auf Fortschritt, Profil-Blatt', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
   const top = page.getByTestId('topbar');
@@ -34,9 +34,9 @@ test('Einstieg: Kopf mit EINEM „Fragen“, fünf Reiter einzeilig, Zahnrad und
   // Genau ein Claude-Knopf auf der Wurzel (die Seite zeichnet keinen zweiten).
   await expect(page.getByTestId('open-companion')).toHaveCount(1);
   const tabs = page.getByTestId('tabbar').locator('button[data-tab]');
-  // Heute · Wörter · Grammatik · Praxis · Fortschritt (Lesen und Sprechen hängen unter Praxis).
-  await expect(tabs).toHaveCount(5);
-  await expect(page.getByTestId('tab-apply')).toHaveText('Praxis');
+  // Heute · Wörter · Grammatik · Fortschritt (UX-Neuanfang B; Praxis mit Lesen und Sprechen ist eine Seite unter Heute).
+  await expect(tabs).toHaveCount(4);
+  await expect(page.getByTestId('tab-apply')).toHaveCount(0);
   await expect(page.getByTestId('tab-read')).toHaveCount(0);
   await expect(page.getByTestId('tab-speak')).toHaveCount(0);
   await expect(page.getByTestId('tab-learn')).toHaveText('Grammatik');
@@ -196,7 +196,7 @@ for (const [theme, lang] of [
   });
 }
 
-test('Praxis am Handy: Lesen und Sprechen hängen unter „Praxis“ (Hub-Zeilen), Rückweg „‹ Praxis“', async ({ page }) => {
+test('Praxis am Handy: Seite unter Heute (UX-Neuanfang B), Lesen und Sprechen als Hub-Zeilen, Rückweg „‹ Praxis“', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'apply');
@@ -207,12 +207,18 @@ test('Praxis am Handy: Lesen und Sprechen hängen unter „Praxis“ (Hub-Zeilen
   await page.getByTestId('hub-read').click();
   await screen(page, 'read');
   await expect(page.getByTestId('page-back')).toContainText('Praxis');
-  await expect(page.getByTestId('tab-apply')).toHaveAttribute('aria-current', 'page');
+  // Praxis liegt auf dem Stapel von Heute: der Reiter Heute bleibt markiert.
+  await expect(page.getByTestId('tab-today')).toHaveAttribute('aria-current', 'page');
   await page.getByTestId('page-back').click();
   await screen(page, 'apply');
   await page.getByTestId('hub-speak-page').click();
   await screen(page, 'speak');
-  await expect(page.getByTestId('tab-apply')).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByTestId('tab-today')).toHaveAttribute('aria-current', 'page');
+  // Zweimal zurück: wieder auf Heute.
+  await page.getByTestId('page-back').click();
+  await screen(page, 'apply');
+  await page.getByTestId('page-back').click();
+  await screen(page, 'today');
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -261,15 +267,14 @@ async function startTrainer(page: Page): Promise<void> {
 }
 
 for (const width of [600, 1024]) {
-  test(`Schiene bei ${width} px: links, nur Symbole, fünf Reiter + Werkzeuge, keine Leiste unten`, async ({ browser }) => {
+  test(`Schiene bei ${width} px: links, nur Symbole, vier Reiter + Werkzeuge, keine Leiste unten`, async ({ browser }) => {
     const { page, errors, close } = await at(browser, width, 800);
     const nav = await boxOf(page, 'tabbar');
     expect(nav.x).toBe(0);
     expect(nav.width).toBeLessThan(100);
     expect(nav.height).toBeGreaterThan(700);
-    await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(5);
+    await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(4);
     await expect(page.locator('.lx-nav-mark')).toBeHidden();
-    await expect(page.getByTestId('side-practice-toggle')).toBeHidden();
     await expect(page.getByTestId('side-settings')).toBeVisible();
     await expect(page.getByTestId('side-claude')).toBeVisible();
     // Bühne rechts der Schiene, nichts überlappt; Kontextspalte nur, wenn etwas offen ist.
@@ -286,44 +291,27 @@ for (const width of [600, 1024]) {
   });
 }
 
-test('Seitenleiste ab 1280 px: Wortmarke, Praxis aufklappbar (Sprechen, Hören, Lesen), Werkzeuge, Kontextspalte reserviert', async ({ browser }) => {
+test('Seitenleiste ab 1280 px: Wortmarke, vier Reiter ohne Unterpunkte, Werkzeuge, Kontextspalte reserviert, Praxis über Heute', async ({ browser }) => {
   const { page, errors, close } = await at(browser, 1280, 800);
   const nav = await boxOf(page, 'tabbar');
   expect(nav.width).toBeGreaterThan(200);
   await expect(page.locator('.lx-nav-mark')).toHaveText('Lingo');
-  await expect(page.getByTestId('tab-apply')).toHaveText('Praxis');
+  await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(4);
+  await expect(page.getByTestId('tab-apply')).toHaveCount(0);
+  await expect(page.getByTestId('side-practice-toggle')).toHaveCount(0);
   await expect(page.getByTestId('side-settings')).toBeVisible();
   await expect(page.getByTestId('side-translate')).toBeVisible();
   // D2 V-HEUTE (Vorschau L1): auf Heute zeigt die leere Spalte „Diese Woche“ und „Wenn du mehr willst“.
   await expect(page.getByTestId('today-context')).toBeVisible();
   // Bühne und Spalte nebeneinander, ohne Überlappung.
   expect(meets(await boxOf(page, 'stage'), await boxOf(page, 'context-column'))).toBe(false);
-  // Praxis zu → aufklappen → Unterpunkte.
-  const toggle = page.getByTestId('side-practice-toggle');
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.getByTestId('side-read')).toBeHidden();
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.getByTestId('side-speak')).toBeVisible();
-  await expect(page.getByTestId('side-listen')).toBeVisible();
-  await page.getByTestId('side-read').click();
-  await screen(page, 'read');
-  await expect(page.getByTestId('side-read')).toHaveAttribute('aria-current', 'page');
-  await expect(page.getByTestId('tab-apply')).toHaveAttribute('aria-current', 'page');
-  // Nie zwei aktive Zeilen: ist ein Unterpunkt aktiv, trägt „Praxis“ keine Pille (P2-Nachbesserung K2).
-  await expect(page.getByTestId('tab-apply').locator('.lx-nav-pill-item')).toBeHidden();
-  await expect(page.getByTestId('side-speak')).not.toHaveAttribute('aria-current', 'page');
-  await expect(page.getByTestId('side-listen')).not.toHaveAttribute('aria-current', 'page');
-  await page.getByTestId('side-speak').click();
-  await screen(page, 'speak');
-  await expect(page.getByTestId('side-speak')).toHaveAttribute('aria-current', 'page');
-  await page.getByTestId('side-listen').click();
+  // Praxis über die Kontextspalte von Heute; dort stehen Lesen und Sprechen als Hub-Zeilen (keine Seitenleisten-Unterpunkte mehr).
+  await page.getByTestId('ctx-today-practice').click();
   await screen(page, 'apply');
-  // Die Hub-Zeilen „Lesen und Sprechen“ führt hier die Seitenleiste – auf Praxis stehen sie nicht doppelt.
-  await expect(page.getByTestId('practice-more')).toBeHidden();
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.getByTestId('side-read')).toBeHidden();
+  await expect(page.getByTestId('practice-more')).toBeVisible();
+  await page.getByTestId('hub-read').click();
+  await screen(page, 'read');
+  await expect(page.getByTestId('tab-today')).toHaveAttribute('aria-current', 'page');
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
   await close();
@@ -358,9 +346,8 @@ for (const [width, height] of [
   test(`Claude bei ${width} px dockt in die Kontextspalte und verdeckt die Bühne nicht`, async ({ browser }) => {
     const { page, errors, close } = await at(browser, width, height, TRAINER);
     await startTrainer(page);
-    // Ab 1024 px bleiben Schiene/Seitenleiste auch in Übungen stehen („keine Leiste“ gilt nur für die Handy-Leiste unten).
-    await expect(page.getByTestId('tabbar')).toBeVisible();
-    expect(meets(await boxOf(page, 'tabbar'), await boxOf(page, 'stage'))).toBe(false);
+    // UX-Neuanfang B (Emrah 02.11.2026 „Vollbild, rechts Claude“): in Übungen auch am Laptop keine Leiste.
+    await expect(page.getByTestId('tabbar')).toHaveCount(0);
     await barAction(page, 'open-companion');
     await expect(page.getByTestId('frame')).toHaveAttribute('data-ctx', '');
     await expect(page.getByTestId('context-column')).toHaveAttribute('data-kind', 'claude');

@@ -52,6 +52,8 @@ export const VG_BLOCKS: Array<[number, string, number]> = [
 ];
 /** Pflichtpunkte dazu: Grammatik auf `ch:u-focus`, Satzbau auf `ch:u-task`. */
 export const VG_DUTY = ['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again'];
+/** Tagesweg (UX-Neuanfang C, Emrah 02.11.2026): jeden Tag Wörter · Grammatik · Anwenden. */
+export const TW_DUTY = ['review', 'ch:u-focus', 'ch:u-task'];
 
 /** Gespeicherter Tagesplan der Einheit (neue Blockfolge, Mo–Sa) mit `goal.review = 2`. */
 export function vgPlan(day = MON): Doc {

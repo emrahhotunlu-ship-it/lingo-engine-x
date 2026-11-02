@@ -3,13 +3,14 @@ import { boot, bootAt, layoutProblems, screen, type Lang } from './fixtures';
 import { typeInGap } from './learnHelpers';
 import { expected, forcedPatch, planPatch, TYPE_MODE } from './trainerHelpers';
 
-// Übungsrahmen mit Band (Relaunch Stufe 1 P3 S1-BAND, stufe1-plan §6.4; Korrekturrunde nach G2).
-// - Band am Handy in fester Reihenfolge: (a) Urteil mit „Wieder in …“ · (b) EINE Lösungszeile · (c) Warum bzw. Merke, 2–3 Zeilen
-//   mit Ausblenden · (d) Knopfzeile (`flex: none`, höchstens zwei Zweitknöpfe, je eine Zeile). Läuft (b) oder (c) über, steht
-//   `data-clipped` am Band und „Mehr“ ist da; das Blatt beginnt dann mit dem vollen Text.
-// - Wort falsch / Lösung gezeigt / fast richtig, Deutsch und Englisch, 390×844 und 390×700.
-// - Grammatik auf 390×700 mit dem längsten echten Warum (259 Zeichen, grammar-bank.json tasks[47], past-perfect).
-// - Laptop (geteilt, 1024 und 1440): nur EINE Spalte neben der Bühne; „Mehr“ und ⓘ klappen in der Ergebnisspalte auf.
+// Rückmeldung nach dem Prüfen (UX-Neuanfang B, freigegebene Vorschau `5Zwv5noCiNwzrzzfQsfzXy`, Emrah 02.11.2026).
+// Ersetzt das feste Band (Relaunch P3): Die Erklärung kommt von selbst und steht ganz da, nichts ist abgeschnitten.
+// - Handy: EINE Rückmeldung im Fluss (`data-flow`) in fester Reihenfolge: Urteil mit „Wieder in …“ · Lösung · Warum · Merke ·
+//   (Claude-Erklärung) · „Mehr“ (klappt an Ort und Stelle auf) · „Frag Claude“ mit Schnellfragen. Unten fest nur „Weiter“.
+// - Wort falsch / Lösung gezeigt / fast richtig, Deutsch und Englisch, 390×844 und 390×700; längste C1-Rückmeldung (err-0039);
+//   Grammatik mit dem längsten echten Warum (259 Zeichen, grammar-bank.json tasks[47], past-perfect).
+// - Laptop (1024 und 1440, Feinzeiger): Vollbild ohne Navigationsleiste; Mitte Urteil und Lösung, rechts „Erklärung“ und
+//   „Frag Claude“ (immer sichtbar, mit Eingabe). Dockt der Begleiter an, rückt die Erklärung in die Mitte (`data-noside`).
 
 type Doc = Record<string, unknown>;
 const OLD = Date.parse('2020-01-01T10:00:00+01:00');
@@ -79,76 +80,57 @@ async function word(page: Page, kind: WordCase, lang: Lang) {
   return booted;
 }
 
-type Measure = { band: number; bar: number; vh: number; scrolls: boolean; whyClipped: boolean; solClipped: boolean; clipped: boolean; position: string; bandTop: number; barTop: number; whyText: string; btnsInside: boolean; btnCount: number; btnWraps: boolean; order: string[] };
-const measure = (page: Page): Promise<Measure> =>
-  page.evaluate(() => {
-    const band = document.querySelector<HTMLElement>('[data-testid="result"]');
+type Flow = { position: string; vh: number; barTop: number; flowBottom: number; whyText: string; whyClipped: boolean; order: string[]; band: number; sheet: number };
+/** Misst die Rückmeldung im Fluss, nachdem sie ganz nach unten gerollt wurde. */
+const measureFlow = (page: Page): Promise<Flow> =>
+  page.evaluate(async () => {
+    window.scrollTo(0, document.documentElement.scrollHeight);
+    await new Promise((r) => setTimeout(r, 250));
+    const res = document.querySelector<HTMLElement>('[data-testid="result"]');
     const bar = document.querySelector<HTMLElement>('.lx-actionbar');
-    const why = band?.querySelector<HTMLElement>('.lx-band-why');
-    const btns = band?.querySelector<HTMLElement>('.lx-band-btns');
-    const b = band?.getBoundingClientRect();
-    const r = bar?.getBoundingClientRect();
-    const k = btns?.getBoundingClientRect();
-    const buttons = [...(btns?.querySelectorAll<HTMLElement>('button') ?? [])].filter((x) => x.offsetParent !== null);
-    const order = [...(band?.querySelector('.lx-band-inner')?.children ?? [])].map((c) => (c as HTMLElement).className.split(' ').find((x) => x.startsWith('lx-band-')) ?? '');
+    const why = res?.querySelector<HTMLElement>('[data-block="why"]');
+    const order = [...(res?.querySelectorAll<HTMLElement>('[data-block="verdict"], [data-block="why"], [data-block="remember"], [data-slot="more"], [data-testid="claude-ask-inline"]') ?? [])].map(
+      (el) => el.getAttribute('data-block') ?? el.getAttribute('data-slot') ?? el.getAttribute('data-testid') ?? '',
+    );
+    const lastBottom = [...(res?.children ?? [])].reduce((m, c) => Math.max(m, c.getBoundingClientRect().bottom), 0);
     return {
-      band: Math.round(b?.height ?? 0),
-      bar: Math.round(r?.height ?? 0),
+      position: res ? getComputedStyle(res).position : '',
       vh: window.innerHeight,
-      scrolls: !!band && (band.scrollHeight > band.clientHeight + 1 || ['auto', 'scroll'].includes(getComputedStyle(band).overflowY)),
-      // Überlauf am Inhalt gemessen (unterste Kinderkante gegen die sichtbare Höhe): die vergrößerte Tippfläche der Wörter (`::after`)
-      // zählt in scrollHeight mit, ist aber kein Text, der fehlt.
-      whyClipped: !!why && [...why.children].reduce((m, c) => Math.max(m, c.getBoundingClientRect().bottom), why.getBoundingClientRect().top) - why.getBoundingClientRect().top - why.clientHeight >= 18,
-      solClipped: !!band?.querySelector('.lx-band-sol[data-clipped]'),
-      clipped: !!band?.hasAttribute('data-clipped'),
-      position: band ? getComputedStyle(band).position : '',
-      bandTop: Math.round(b?.top ?? 0),
-      barTop: Math.round(r?.top ?? 0),
+      barTop: Math.round(bar?.getBoundingClientRect().top ?? window.innerHeight),
+      flowBottom: Math.round(lastBottom),
       whyText: (why?.textContent ?? '').replace(/\s+/g, ' ').trim(),
-      btnsInside: !!b && (!k || (k.top >= b.top - 1 && k.bottom <= b.bottom + 1 && k.bottom <= window.innerHeight)),
-      btnCount: buttons.length,
-      btnWraps: buttons.some((x) => getComputedStyle(x).whiteSpace !== 'nowrap'),
+      whyClipped: !!why && why.scrollHeight > why.clientHeight + 2,
       order,
+      band: document.querySelectorAll('.lx-band, [data-testid="band-more"]').length,
+      sheet: document.querySelectorAll('[role="dialog"]').length,
     };
   });
 
-/** Die gemeinsamen Band-Regeln (Punkt 1). Gibt die Messung zurück. */
-async function bandRules(page: Page, label: string): Promise<Measure> {
-  const m = await measure(page);
-  test.info().annotations.push({ type: 'band', description: `${label}: Band ${m.band} px + Leiste ${m.bar} px = ${m.band + m.bar} px von ${m.vh} (${Math.round(((m.band + m.bar) / m.vh) * 100)} %), Warum ${m.whyText.length} Zeichen, abgeschnitten: ${m.clipped}` });
-  expect(m.position).toBe('fixed');
-  // Ein Dock: das Band sitzt direkt auf der Leiste und rollt nie.
-  expect(Math.abs(m.bandTop + m.band - m.barTop)).toBeLessThanOrEqual(1);
-  expect(m.scrolls).toBe(false);
-  // Reihenfolge: Urteil (mit Lösung) · Warum · Knöpfe.
-  expect(m.order.filter((x) => ['lx-band-verdict', 'lx-band-why', 'lx-band-btns'].includes(x))).toEqual(['lx-band-verdict', 'lx-band-why', 'lx-band-btns'].filter((x) => m.order.includes(x)));
-  // Knöpfe ganz im Band und im Bild, höchstens zwei Zweitknöpfe, je eine Zeile.
-  expect(m.btnsInside).toBe(true);
-  expect(m.btnCount).toBeLessThanOrEqual(2);
-  expect(m.btnWraps).toBe(false);
-  // Die dritte Frage hat ihren Platz: ein sichtbares Warum, oder abgeschnitten mit „Mehr“.
+/** Die gemeinsamen Regeln für die Rückmeldung am Handy. Gibt die Messung zurück. */
+async function flowRules(page: Page, label: string): Promise<Flow> {
   const res = page.getByTestId('result');
-  await expect(res.getByTestId('verdict')).toBeVisible();
-  if (m.whyClipped) {
-    expect(m.clipped).toBe(true);
-    await expect(res.getByTestId('explanation-more')).toBeVisible();
-  } else expect(m.whyText.length).toBeGreaterThan(0);
+  await expect(res).toHaveAttribute('data-flow', '');
+  const m = await measureFlow(page);
+  test.info().annotations.push({ type: 'flow', description: `${label}: Warum ${m.whyText.length} Zeichen, Reihenfolge ${m.order.join(' · ')}` });
+  // Im Fluss, kein festes Band, kein Blatt.
+  expect(m.position).not.toBe('fixed');
+  expect(m.band, 'altes Band oder Mehr-Blatt').toBe(0);
+  expect(m.sheet, 'Dialog').toBe(0);
+  // Reihenfolge: Urteil · Warum · Merke · Mehr · Frag Claude (was jeweils da ist).
+  const want = ['verdict', 'why', 'remember', 'more', 'claude-ask-inline'];
+  expect(m.order).toEqual(want.filter((x) => m.order.includes(x)));
+  expect(m.order[0]).toBe('verdict');
+  // Die dritte Frage hat ihren Platz: Warum oder Merke steht sichtbar da, nichts ist abgeschnitten.
+  expect(m.order.some((x) => x === 'why' || x === 'remember'), 'Warum/Merke').toBe(true);
+  expect(m.whyClipped, 'Warum abgeschnitten').toBe(false);
+  // Hilfe ist sichtbar, ohne erst einen Knopf zu suchen (Emrah 02.11.2026).
+  await expect(res.getByTestId('claude-ask-inline')).toBeVisible();
+  await expect(res.getByTestId('claude-ask-inline').getByTestId('claude-ask-chip')).toHaveCount(3);
+  // Ganz unten gerollt verschwindet nichts hinter der festen Leiste; dort steht nur „Weiter“. Erneut messen, bis das Einrollen nach dem
+  // Prüfen und die Erklärung von Claude fertig sind (beide ändern Lage und Höhe noch kurz).
+  await expect.poll(async () => { const n = await measureFlow(page); return n.flowBottom - n.barTop; }, { timeout: 5000 }).toBeLessThanOrEqual(1);
+  await expect(page.locator('.lx-actionbar').getByTestId('next')).toBeVisible();
   return m;
-}
-
-/** Abgeschnitten → das Mehr-Blatt beginnt mit dem vollen Warum. */
-async function sheetHasFullWhy(page: Page, m: Measure): Promise<void> {
-  if (!m.clipped) return;
-  await page.getByTestId('result').getByTestId('explanation-more').click();
-  const sheet = page.getByTestId('band-more');
-  await expect(sheet).toBeVisible();
-  if (m.whyClipped) {
-    const full = (await sheet.getByTestId('sheet-why').innerText()).replace(/\s+/g, ' ').trim();
-    expect(full.length).toBeGreaterThanOrEqual(m.whyText.length - 2);
-    expect(full).toContain(m.whyText.slice(-30).trim());
-  } else await expect(sheet.locator('[data-slot="sheet-solution"]')).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(sheet).toHaveCount(0);
 }
 
 for (const vh of [844, 700] as const) {
@@ -157,37 +139,15 @@ for (const vh of [844, 700] as const) {
 
     for (const lang of ['de', 'en'] as const) {
       for (const kind of ['wrong', 'shown', 'near'] as const) {
-        test(`Wort ${kind} (${lang}): Band in fester Reihenfolge, Knöpfe im Band, Warum oder „Mehr“`, async ({ page }) => {
+        test(`Wort ${kind} (${lang}): Rückmeldung im Fluss, Warum ganz da, Frag Claude sichtbar, unten nur Weiter`, async ({ page }) => {
           const { errors } = await word(page, kind, lang);
-          const m = await bandRules(page, `390×${vh} Wort ${kind} ${lang}`);
           const res = page.getByTestId('result');
-          // Zeile (b): eine Lösungszeile bei falsch und gezeigt; „Wieder in …“ steht als Meta-Text in der Urteilszeile.
-          if (kind !== 'near') await expect(res.locator('[data-slot="solution"]')).toBeVisible();
-          // Nachprüfung A: Eine einzeilige Lösung ist nie „abgeschnitten“ (kein `data-clipped`, keine Ausblend-Maske) und steht in voller Farbe.
-          expect(m.solClipped, 'Lösungszeile abgeschnitten').toBe(false);
-          const sol = res.locator('.lx-band-sol');
-          if (await sol.count()) {
-            const fit = await sol.evaluate((el) => {
-              const lh = parseFloat(getComputedStyle(el).lineHeight) || 22;
-              const top = el.getBoundingClientRect().top;
-              const bottom = [...el.children].reduce((m, c) => Math.max(m, c.getBoundingClientRect().bottom), top);
-              const strong = el.querySelector<HTMLElement>('[data-testid="diff-correct"]');
-              const probe = document.createElement('span');
-              probe.style.color = 'var(--fg)';
-              document.body.appendChild(probe);
-              const fg = getComputedStyle(probe).color;
-              probe.remove();
-              return { lines: Math.round((bottom - top) / lh), mask: getComputedStyle(el).maskImage, color: strong ? getComputedStyle(strong).color : fg, fg };
-            });
-            if (fit.lines <= 1) expect(fit.mask === 'none' || fit.mask === '').toBe(true);
-            expect(fit.color).toBe(fit.fg);
-          }
-          await expect(res.locator('.lx-band-vline [data-testid="next-in"]')).toBeVisible();
-          // Der Wortkopf (Bedeutung, Lautschrift) steht im Mehr-Blatt, nicht im Band.
-          await expect(res.locator('.lx-band-inner [data-slot="head"]')).toHaveCount(0);
-          // „Erklär mir meine Antwort“ steht im Blatt, nicht als dritter Knopf im Band.
-          await expect(res.locator('.lx-band-btns').getByTestId('tutor-ask')).toHaveCount(0);
-          await sheetHasFullWhy(page, m);
+          // Gleich nach dem Prüfen stehen Urteil und Lösung im Bild, unter der Übungsleiste.
+          await expect(res.locator('[data-slot="verdict"]')).toBeInViewport();
+          // Die Lösung steht in der Lücke bzw. im Vergleich (UX-Neuanfang D), nicht in einer eigenen Bandzeile.
+          if (kind !== 'near') await expect(page.getByTestId('exercise')).toContainText(expected('cloze', 'overcome', null, 'vocab', lang));
+          await expect(res.locator('[data-block="verdict"] [data-testid="next-in"]')).toBeVisible();
+          await flowRules(page, `390×${vh} Wort ${kind} ${lang}`);
           if (vh === 844) expect(await layoutProblems(page), 'Layout').toEqual([]);
           expect(errors, 'Fehler').toEqual([]);
         });
@@ -195,11 +155,9 @@ for (const vh of [844, 700] as const) {
     }
 
     for (const choice of ['has signed off', 'will sign off'] as const) {
-      test(`längste C1-Rückmeldung (err-0039, ${choice}): Band-Regeln`, async ({ page }) => {
+      test(`längste C1-Rückmeldung (err-0039, ${choice}): Regeln im Fluss`, async ({ page }) => {
         const { errors } = await longest(page, choice);
-        const m = await bandRules(page, `390×${vh} err-0039 ${choice}`);
-        if (vh === 844) expect(m.band + m.bar).toBeLessThanOrEqual(Math.round(m.vh * 0.45) + 1);
-        await sheetHasFullWhy(page, m);
+        await flowRules(page, `390×${vh} err-0039 ${choice}`);
         expect(errors, 'Fehler').toEqual([]);
       });
     }
@@ -209,7 +167,7 @@ for (const vh of [844, 700] as const) {
 test.describe('Handy 390×700: längstes Warum (Grammatik, 259 Zeichen)', () => {
   test.use({ viewport: { width: 390, height: 700 }, hasTouch: true });
 
-  test('„Mehr“ sichtbar; abgeschnitten nur, wenn Text fehlt, dann beginnt das Blatt mit dem ganzen Warum', async ({ page }) => {
+  test('das Warum steht ganz da; „Mehr“ klappt an Ort und Stelle auf, kein Blatt', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { fake: { patch: { 'grammar/past-perfect': topicDoc('past-perfect', [PP_ERR]) } } });
     const item = page.getByTestId('gr-item');
     await expect(item).toBeVisible();
@@ -219,21 +177,16 @@ test.describe('Handy 390×700: längstes Warum (Grammatik, 259 Zeichen)', () => 
     await page.getByTestId('check').click();
     await expect(page.getByTestId('result')).toBeVisible();
     await page.waitForTimeout(400);
-    const m = await bandRules(page, '390×700 Grammatik past-perfect');
-    // Gezeigt wird die kuratierte Muster-Begründung (siehe unten); sie passt in drei Zeilen. Am Inhalt gemessen (nicht an scrollHeight,
-    // in das die Tippfläche der Wörter hineinzählt) heißt das: `data-clipped` genau dann, wenn Text fehlt.
-    expect(m.clipped).toBe(m.whyClipped || m.solClipped);
-    await page.getByTestId('result').getByTestId('explanation-more').click();
-    const sheet = page.getByTestId('band-more');
-    // Abgeschnitten → das Blatt beginnt mit dem vollen Warum aus dem Band; passt es ganz ins Band, wiederholt das Blatt es nicht.
-    if (m.whyClipped) {
-      const full = (await sheet.getByTestId('sheet-why').innerText()).replace(/\s+/g, ' ').trim();
-      expect(full).toContain(m.whyText.slice(-30).trim());
-    } else await expect(sheet.getByTestId('sheet-why')).toHaveCount(0);
-    // Hinweis: Für diese Aufgabe gewinnt die kuratierte Muster-Begründung (Tutor-Engine) über den 259-Zeichen-Text der Bank;
-    // der Test prüft deshalb das tatsächlich gezeigte Warum (abgeschnitten auf 700 px) samt Merke im Blatt.
-    await expect(sheet.getByTestId('explanation-remember')).toBeVisible();
-    await expect(sheet.getByTestId('sheet-grip')).toBeVisible();
+    await flowRules(page, '390×700 Grammatik past-perfect');
+    // Hinweis: Für diese Aufgabe gewinnt die kuratierte Muster-Begründung (Tutor-Engine) über den 259-Zeichen-Text der Bank.
+    const res = page.getByTestId('result');
+    const more = res.getByTestId('explanation-more');
+    if (await more.count()) {
+      await more.click();
+      await expect(more).toHaveAttribute('aria-expanded', 'true');
+      await expect(res.getByTestId('more-body')).toBeVisible();
+      await expect(page.getByRole('dialog')).toHaveCount(0);
+    }
     expect(errors).toEqual([]);
   });
 });
@@ -241,26 +194,33 @@ test.describe('Handy 390×700: längstes Warum (Grammatik, 259 Zeichen)', () => 
 test.describe('Handy 390×844: Verhalten', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-  test('das Band rollt nicht und verschwindet nicht von selbst; Mehr-Blatt ≤ 85 %, Esc schließt nur das Blatt', async ({ page }) => {
+  test('nach dem Prüfen: Urteil im Bild unter der Leiste; Esc klappt „Mehr“ zu, die Rückmeldung bleibt', async ({ page }) => {
     await longest(page, 'will sign off');
     const res = page.getByTestId('result');
-    const before = await measure(page);
-    // Ein Wischen über dem Band bewegt das Band nicht (es steht fest), und es bleibt auch nach 6 s stehen.
-    await page.mouse.wheel(0, 400);
-    await page.waitForTimeout(6000);
+    const pos = await page.evaluate(() => ({
+      verdict: document.querySelector('[data-testid="result"] [data-slot="verdict"]')?.getBoundingClientRect().top ?? -1,
+      bar: document.querySelector('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0,
+    }));
+    expect(pos.verdict).toBeGreaterThanOrEqual(pos.bar - 1);
+    // Die Rückmeldung verschwindet nicht von selbst.
+    await page.waitForTimeout(3000);
     await expect(res).toBeVisible();
-    const after = await measure(page);
-    expect(after.bandTop).toBe(before.bandTop);
-    expect(after.scrolls).toBe(false);
-    await res.getByTestId('explanation-more').click();
-    const sheet = page.getByTestId('band-more');
-    await expect(sheet).toBeVisible();
-    const h = await sheet.evaluate((el) => el.getBoundingClientRect().height / window.innerHeight);
-    expect(h).toBeLessThanOrEqual(0.851);
-    await page.keyboard.press('Escape');
-    await expect(sheet).toHaveCount(0);
+    const more = res.getByTestId('explanation-more');
+    if (await more.count()) {
+      await more.click();
+      await expect(res.getByTestId('more-body')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(more).toHaveAttribute('aria-expanded', 'false');
+    }
     await expect(page.getByTestId('gr-item')).toBeVisible();
     await expect(res).toBeVisible();
+  });
+
+  test('„Frag Claude“: eine Schnellfrage öffnet den Begleiter mit der Frage zur Aufgabe', async ({ page }) => {
+    await word(page, 'wrong', 'de');
+    const ask = page.getByTestId('claude-ask-inline');
+    await ask.getByTestId('claude-ask-chip').first().click();
+    await expect(page.getByTestId('companion')).toBeVisible();
   });
 
   test('Menü „Optionen“ oben: Claude, Übersetzer, Einstellungen, „Pause, später weiter“ – Pause verlässt die Runde ruhig', async ({ page }) => {
@@ -279,10 +239,10 @@ test.describe('Handy 390×844: Verhalten', () => {
     await screen(page, 'today');
   });
 
-  // G2 Nora M2 (Kap. 2 Nr. 4, §6.4): das Warum steht auch bei richtiger Antwort in Zeile 3 – nicht nur ein Merke-Satz.
-  test('richtig: Zeile 3 zeigt das Warum (Form des Kartenworts)', async ({ page }) => {
+  // G2 Nora M2 (Kap. 2 Nr. 4, §6.4): das Warum steht auch bei richtiger Antwort – nicht nur ein Merke-Satz.
+  test('richtig: das Warum steht da (Form des Kartenworts)', async ({ page }) => {
     const { errors } = await word(page, 'right', 'de');
-    const why = page.getByTestId('result').locator('.lx-band-why');
+    const why = page.getByTestId('result').locator('[data-block="why"]');
     await expect(why.getByTestId('word-form-why')).toBeVisible();
     await expect(why.getByTestId('word-form-why')).toContainText('overcome');
     expect(errors).toEqual([]);
@@ -314,85 +274,99 @@ test.describe('Handy 390×844: Verhalten', () => {
   });
 });
 
-// Laptop (Feinzeiger, geteilt): nur EINE Spalte neben der Bühne. „Mehr“ und ⓘ klappen in der Ergebnisspalte auf (Punkt 2).
-// Breiten nach Plan-Tabelle 6.2: ab 1280 Bühne 640–720 und Spalte 360–420; bei 1024 so nah an 600/320, wie die Leiste es zulässt
-// (gemessen: Bühne 590, Spalte 300 – die Leiste nimmt 76 px, für 600 + 320 + Abstände fehlen rund 30 px).
-const SPLIT = { 1024: { h: 768, stage: [585, 720], side: [300, 420] }, 1440: { h: 900, stage: [640, 720], side: [360, 420] } } as const;
+// Laptop (Feinzeiger): Vollbild ohne Navigationsleiste (Emrah 02.11.2026 „Vollbild, rechts Claude“). Mitte: Urteil und Lösung;
+// rechts EINE Spalte: „Erklärung“ (Warum, Merke, Claude, „Mehr“) und darunter immer „Frag Claude“ mit Eingabe.
+const SPLIT = { 1024: { h: 768, stage: [560, 760], side: [300, 440] }, 1440: { h: 900, stage: [600, 760], side: [340, 440] } } as const;
 for (const width of [1024, 1440] as const) {
   test.describe(`Laptop ${width}×${SPLIT[width].h} (geteilt)`, () => {
     test.use({ viewport: { width, height: SPLIT[width].h }, hasTouch: false });
 
-    test('„Mehr“ und ⓘ klappen in der Ergebnisspalte auf; keine zweite Spalte, Bühne ≥ 600 px, Urteil im Bild', async ({ page }) => {
+    test('Vollbild ohne Leiste; rechts Erklärung und „Frag Claude“; „Mehr“ und ⓘ in der Spalte; Urteil im Bild', async ({ page }) => {
       const { errors } = await longest(page, 'will sign off');
-      const res = page.getByTestId('result');
-      const more = res.getByTestId('explanation-more');
-      const oneColumn = async () => {
-        await expect(page.getByTestId('context-more')).toHaveCount(0);
-        await expect(page.getByTestId('band-more')).toHaveCount(0);
-        await expect(page.getByRole('dialog')).toHaveCount(0);
-        expect((await page.getByTestId('stage').boundingBox())?.width ?? 0).toBeGreaterThanOrEqual(600);
-      };
-      await expect(more).toBeVisible();
-      // Breiten der beiden Spalten (Nachprüfung B).
+      await expect(page.getByTestId('tabbar')).toHaveCount(0);
+      const side = page.locator('[data-col="side"]');
+      const explain = side.getByTestId('side-explain');
+      await expect(explain).toBeVisible();
+      await expect(explain.locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
+      // In der Mitte steht die Erklärung nicht noch einmal.
+      await expect(page.locator('[data-col="main"] [data-block="why"]')).toHaveCount(0);
+      const ask = side.getByTestId('claude-ask');
+      await expect(ask).toBeVisible();
+      await expect(ask.getByTestId('claude-ask-chip')).toHaveCount(3);
+      await expect(ask.getByTestId('claude-ask-input')).toBeVisible();
       const cols = await page.evaluate(() => ({
         main: Math.round(document.querySelector('[data-col="main"]')?.getBoundingClientRect().width ?? 0),
         side: Math.round(document.querySelector('[data-col="side"]')?.getBoundingClientRect().width ?? 0),
       }));
-      test.info().annotations.push({ type: 'split', description: `${width}: Bühne ${cols.main} px, Ergebnisspalte ${cols.side} px` });
+      test.info().annotations.push({ type: 'split', description: `${width}: Bühne ${cols.main} px, Spalte ${cols.side} px` });
       expect(cols.main).toBeGreaterThanOrEqual(SPLIT[width].stage[0]);
       expect(cols.main).toBeLessThanOrEqual(SPLIT[width].stage[1]);
       expect(cols.side).toBeGreaterThanOrEqual(SPLIT[width].side[0]);
       expect(cols.side).toBeLessThanOrEqual(SPLIT[width].side[1]);
-      await more.click();
-      await expect(more).toHaveAttribute('aria-expanded', 'true');
-      await expect(more).toContainText('Weniger');
-      await expect(res.getByTestId('more-body')).toBeVisible();
-      await oneColumn();
-      // Esc klappt zu, das Urteil steht danach im Bild und nicht unter der Übungsleiste (Nachprüfung C).
-      await page.mouse.wheel(0, 600);
-      await page.waitForTimeout(200);
-      await page.keyboard.press('Escape');
-      await expect(more).toHaveAttribute('aria-expanded', 'false');
-      await expect(res.locator('[data-slot="verdict"]')).toBeInViewport();
-      await page.waitForTimeout(400);
+      const more = explain.getByTestId('explanation-more');
+      if (await more.count()) {
+        await more.click();
+        await expect(more).toHaveAttribute('aria-expanded', 'true');
+        await expect(more).toContainText('Weniger');
+        await expect(explain.getByTestId('more-body')).toBeVisible();
+        await page.keyboard.press('Escape');
+        await expect(more).toHaveAttribute('aria-expanded', 'false');
+      }
+      await expect(page.getByTestId('result').locator('[data-slot="verdict"]')).toBeInViewport();
       const pos = await page.evaluate(() => ({
         verdict: document.querySelector('[data-testid="result"] [data-slot="verdict"]')?.getBoundingClientRect().top ?? -1,
         bar: document.querySelector('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0,
       }));
       expect(pos.verdict).toBeGreaterThanOrEqual(pos.bar);
-      // ⓘ: Zweck und Thema in der Ergebnisspalte, keine zweite Spalte.
+      // ⓘ: Zweck und Thema in der Spalte, keine zweite Spalte, kein Dialog.
       await page.getByTestId('purpose-info').click();
       await expect(page.getByTestId('purpose-info')).toHaveAttribute('aria-expanded', 'true');
-      await expect(page.locator('[data-col="side"] [data-slot="info"]')).toBeVisible();
-      await oneColumn();
-      await expect(page.getByTestId('exercise')).toBeVisible();
+      await expect(side.locator('[data-slot="info"]')).toBeVisible();
+      await expect(page.getByTestId('context-more')).toHaveCount(0);
+      await expect(page.getByRole('dialog')).toHaveCount(0);
+      expect(errors).toEqual([]);
+    });
+
+    test('vor dem Prüfen: rechts „Frag Claude“ mit zwei Fragen, die die Lösung nicht verraten', async ({ page }) => {
+      await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...OVERCOME } } });
+      await screen(page, 'today');
+      await page.getByTestId('start').click();
+      await screen(page, 'trainer');
+      await expect(page.getByTestId('tabbar')).toHaveCount(0);
+      const ask = page.locator('[data-col="side"]').getByTestId('claude-ask');
+      await expect(ask).toBeVisible();
+      await expect(ask.getByTestId('claude-ask-chip')).toHaveCount(2);
+    });
+
+    test('Begleiter angedockt: die Spalte weicht, die Erklärung steht in der Mitte', async ({ page }) => {
+      const { errors } = await longest(page, 'will sign off');
+      await page.locator('[data-col="side"]').getByTestId('claude-ask').getByTestId('claude-ask-chip').first().click();
+      await expect(page.getByTestId('companion')).toBeVisible();
+      await expect(page.locator('.lx-split[data-noside]')).toHaveCount(1);
+      await expect(page.locator('[data-col="side"]')).toHaveCount(0);
+      await expect(page.getByTestId('result').locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
       expect(errors).toEqual([]);
     });
   });
 }
 
-// Tablet quer mit Touch (Band): „Mehr“ steht in der Kontextspalte des Rahmens (P2, `#lx-context`), nicht im Blatt.
-test.describe('Tablet quer 1024 mit Touch (Band)', () => {
+// Tablet quer mit Touch: wie am Handy – die Rückmeldung im Fluss, „Mehr“ klappt an Ort und Stelle auf, keine Kontextspalte, kein Blatt.
+test.describe('Tablet quer 1024 mit Touch', () => {
   test.use({ viewport: { width: 1024, height: 768 }, hasTouch: true });
 
-  test('„Mehr“ öffnet die Kontextspalte, kein Blatt; ✕ schließt sie, die Übung bleibt', async ({ page }) => {
+  test('Rückmeldung im Fluss; „Mehr“ klappt auf, ohne Spalte und ohne Blatt', async ({ page }) => {
     const { errors } = await longest(page, 'will sign off');
-    const col = page.getByTestId('context-column');
-    const more = page.getByTestId('result').getByTestId('explanation-more');
-    await expect(more).toBeVisible();
-    await more.click();
-    await expect(col).toHaveAttribute('data-kind', 'more');
-    await expect(page.getByTestId('context-more')).toBeVisible();
+    const res = page.getByTestId('result');
+    await expect(res).toHaveAttribute('data-flow', '');
+    await expect(res.locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
+    const more = res.getByTestId('explanation-more');
+    if (await more.count()) {
+      await more.click();
+      await expect(res.getByTestId('more-body')).toBeVisible();
+    }
+    await expect(page.getByTestId('context-more')).toHaveCount(0);
     await expect(page.getByTestId('band-more')).toHaveCount(0);
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    // Die Spalte sitzt rechts neben der Bühne, nicht darüber.
-    const [stage, aside] = await Promise.all([page.getByTestId('stage').boundingBox(), col.boundingBox()]);
-    expect((aside?.x ?? 0) + 1).toBeGreaterThanOrEqual((stage?.x ?? 0) + (stage?.width ?? 0));
-    await expect(more).toHaveAttribute('aria-expanded', 'true');
-    await page.getByTestId('context-close').click();
-    await expect(page.getByTestId('context-more')).toHaveCount(0);
-    await expect(more).toHaveAttribute('aria-expanded', 'false');
-    await expect(page.getByTestId('result')).toBeVisible();
     expect(errors).toEqual([]);
   });
 });

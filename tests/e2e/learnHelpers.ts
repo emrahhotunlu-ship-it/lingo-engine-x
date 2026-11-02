@@ -164,14 +164,13 @@ export async function nextItem(page: Page): Promise<void> {
   if (await btn.isVisible().catch(() => false)) await btn.click().catch(() => undefined);
 }
 
-/** Band am Handy (Relaunch P3): Merke, Beispiele, Tutor und Rest stehen im Mehr-Blatt – öffnet es, falls es zu ist. Laptop: nichts zu tun. */
+/** Handy: Merke, Tutor und Wortkopf stehen seit dem UX-Neuanfang B offen in der Rückmeldung; Beispiele und Weiteres unter „Mehr“ – klappt es auf. Laptop: nichts zu tun. */
 export async function openBandMore(page: Page): Promise<void> {
-  const more = page.getByTestId('explanation-more');
-  const band = page.locator('section.lx-band');
-  if ((await band.count()) === 0 || !(await more.isVisible().catch(() => false))) return;
-  if (await page.getByTestId('band-more').isVisible().catch(() => false)) return;
+  const more = page.locator('[data-testid="result"][data-flow] [data-testid="explanation-more"]');
+  if (!(await more.isVisible().catch(() => false))) return;
+  if ((await more.getAttribute('aria-expanded')) === 'true') return;
   await more.click();
-  await expect(page.getByTestId('band-more')).toBeVisible();
+  await expect(page.getByTestId('more-body')).toBeVisible();
 }
 
 /** Übungsleiste: am Handy stehen Übersetzer, Claude und Zahnrad im Menü „…“ (Relaunch P3). Öffnet es bei Bedarf, dann den Eintrag. */

@@ -64,7 +64,7 @@
 .lx-vh-weekly { margin-top: 10px; }
 .lx-vh-more-div { display: flex; align-items: center; gap: 12px; margin: 22px 0 6px; color: var(--fg-3); font-size: 13px; line-height: 1.45; font-weight: 550; }
 .lx-vh-more-div::before, .lx-vh-more-div::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
-.lx-vh-more-all { display: flex; justify-content: flex-end; }
+.lx-vh-more-all { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; }
 .lx-vh-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 550; color: var(--act-text); }
 .lx-vh-sheet { display: flex; flex-direction: column; gap: 16px; }
 .lx-vh-note { margin: 0; font-size: 13px; line-height: 18px; color: var(--fg-2); }
@@ -137,3 +137,48 @@
 .lx-vh-mid-first { order: -1; }
 /* Abschluss: kein Knopf, also keine feste Höhe (die Karte ersetzt kein Skelett mit Knopf). */
 .lx-vh-day.lx-vh-done.lx-v-card { min-height: 0; }
+
+/* ------------------------------------------------------------------ UX-Neuanfang B: Tagesweg (Vorschau `5Zwv5noCiNwzrzzfQsfzXy`, „Heute“)
+   Emrah 02.11.2026 „Passt, so einbauen“. Kopf (Datum · Serie, „Schritt x von n“, Titel), Karte „Dein Tag“ mit dem Weg (Punkte 32 px, Linie
+   dazwischen, aktueller Schritt hinterlegt), Balken 6 px, EIN Hauptknopf 52 px, darunter „Freiwillig · zählt als Extra“ und „Tagesziel ändern“.
+   Start-Bild (index.html), Skelett, Startbild und echte Karte haben denselben Aufbau. */
+.lx-vh-today { display: flex; flex-direction: column; gap: 24px; }
+.lx-vh-hello { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.lx-vh-hello .lx-vh-topic { gap: 8px; text-align: left; }
+.lx-vh-hello-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0; font-size: 13px; line-height: 18px; color: var(--fg-2); }
+.lx-vh-meta { margin: 0; font-size: 13px; line-height: 18px; color: var(--fg-2); }
+.lx-vh-hello .lx-vh-t { font-size: 28px; line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+.lx-vh-pathcard.lx-v-card { display: flex; flex-direction: column; padding: 8px 0 16px; border: 1px solid var(--line); border-radius: 16px; }
+.lx-vh-path { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.lx-vh-st { position: relative; display: grid; grid-template-columns: 32px 1fr auto; gap: 16px; align-items: start; margin: 0 8px; padding: 12px 8px; border-radius: 10px; }
+.lx-vh-st:not(:last-child)::after { content: ''; position: absolute; left: 23px; top: 44px; bottom: -12px; width: 2px; background: var(--line); }
+.lx-vh-st[data-st='done']:not(:last-child)::after { background: var(--act); }
+.lx-vh-st[data-st='now'] { background: var(--act-soft); }
+.lx-vh-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 32px; height: 32px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--fg-3); font-size: 13px; font-weight: 600; }
+.lx-vh-st[data-st='done'] .lx-vh-dot { border-color: var(--act); background: var(--act); color: var(--act-fg); }
+.lx-vh-st[data-st='now'] .lx-vh-dot { border-color: var(--act); color: var(--act-text); box-shadow: 0 0 0 4px var(--act-soft); }
+.lx-vh-st-b { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lx-vh-st-n { margin: 0; font-size: 16px; line-height: 1.4; font-weight: 600; color: var(--fg); }
+.lx-vh-st[data-st='done'] .lx-vh-st-n { color: var(--fg-2); }
+.lx-vh-st-min { padding-top: 4px; font-size: 13px; color: var(--fg-2); white-space: nowrap; }
+.lx-vh-prog { display: flex; flex-direction: column; gap: 8px; padding: 8px 16px 0; }
+.lx-vh-bar { height: 6px; overflow: hidden; border-radius: 999px; background: var(--surface-2); }
+.lx-vh-bar > i { display: block; height: 100%; border-radius: inherit; background: var(--act); transition: width 0.4s ease; }
+.lx-vh-pathcard .lx-vh-fixnone { margin: 4px 16px 0; }
+.lx-vh-today .lx-vh-go { margin-top: 0; }
+.lx-vh-today .lx-vh-go .lx-v-btn { width: 100%; min-height: 52px; }
+/* Skelett des Wegs */
+.lx-vh-sk-row { width: 46%; height: 14px; }
+.lx-vh-sk-meta { width: 38%; height: 14px; }
+.lx-vh-hello .lx-vh-sk-t { width: 78%; height: 28px; margin-inline: 0; }
+.lx-vh-sk-n { width: 52%; height: 16px; margin-top: 4px; }
+.lx-vh-sk-s { width: 70%; height: 12px; }
+.lx-vh-dot.lx-v-sk { border: 0; }
+/* „Freiwillig · zählt als Extra“ (Vorschau `.sec .row`) und „Tagesziel ändern“. */
+.lx-vh-free-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 24px 0 4px; }
+.lx-vh-label { margin: 0; font-size: 11px; line-height: 1.2; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+.lx-vh-goal { align-self: flex-start; margin-top: 16px; }
+@media (min-width: 1024px) {
+  .lx-vh-today { max-width: 45rem; gap: 32px; }
+  .lx-vh-hello .lx-vh-t { font-size: 32px; }
+}

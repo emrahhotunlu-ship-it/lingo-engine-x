@@ -105,10 +105,11 @@ test.describe('Stufe „Ruhig“ (Handy)', () => {
     await expect.poll(async () => (await animsAround(page)).filter((a) => a.state === 'running').length, { timeout: 3000 }).toBe(0);
     const fill = await page.getByTestId('gap').evaluate((el) => getComputedStyle(el, '::before').backgroundColor);
     // Gleiche Gap-Farbe, wenn die Stufe auf „Aus“ wechselt (dann färbt die Lücke selbst).
-    await page.evaluate(() => {
+    // Umschalten und Messen in einem Schritt: die App kann `data-fx` bei einem Neuzeichnen wieder auf ihre Einstellung setzen (unter Last dazwischen).
+    const off = await page.getByTestId('gap').evaluate((el) => {
       document.documentElement.dataset.fx = 'off';
+      return getComputedStyle(el).backgroundColor;
     });
-    const off = await page.getByTestId('gap').evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(fill).toBe(off);
     expect(fill).not.toBe('rgba(0, 0, 0, 0)');
   });

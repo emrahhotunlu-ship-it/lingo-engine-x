@@ -4,6 +4,8 @@ import { boot, screen } from './fixtures';
 // Relaunch Stufe 1, P2 S1-SHELL (docs/relaunch/stufe1-plan.md §6.3, Abnahme A5): jeder Bereich und jeder frühere Reiter-Bildschirm
 // (Heute, Wortschatz, Grammatik, Anwenden/Praxis, Lesen, Fortschritt) ist von „Heute“ aus in höchstens zwei Klicks erreichbar –
 // am Handy über die Leiste unten und die Hub-Zeilen, am Laptop über die Seitenleiste.
+// Seit UX-Neuanfang B (Emrah 02.11.2026: vier Reiter) ist „Praxis“ eine Seite unter Heute › Freiwillig („Praxis: alles zum Üben“);
+// am Laptop ab 1280 px steht dieselbe Zeile in der Kontextspalte (`ctx-today-practice`).
 // Jeder Weg beginnt frisch auf „Heute“ (Tipp auf „Heute“ zählt nicht mit).
 
 type Goal = { name: string; clicks: string[]; done: (page: Page) => Locator };
@@ -14,7 +16,6 @@ const byId = (id: string) => (page: Page) => page.getByTestId(id);
 const COMMON: Goal[] = [
   { name: 'Wortschatz', clicks: ['tab-vocab'], done: onScreen('vocab') },
   { name: 'Grammatik', clicks: ['tab-learn'], done: onScreen('learn') },
-  { name: 'Praxis (früher Anwenden)', clicks: ['tab-apply'], done: onScreen('apply') },
   { name: 'Fortschritt', clicks: ['tab-progress'], done: onScreen('overview') },
   { name: 'Profil', clicks: ['tab-progress', 'open-profile'], done: byId('profile-sheet') },
   { name: 'Claude', clicks: ['open-companion'], done: byId('companion') },
@@ -25,17 +26,18 @@ const EXERCISE: Goal = { name: 'Übung', clicks: ['start'], done: (page) => page
 
 const PHONE: Goal[] = [
   ...COMMON,
-  { name: 'Lesen (früherer Reiter)', clicks: ['tab-apply', 'hub-read'], done: onScreen('read') },
-  { name: 'Sprechen', clicks: ['tab-apply', 'hub-speak-page'], done: onScreen('speak') },
+  { name: 'Praxis (früher Anwenden)', clicks: ['today-practice'], done: onScreen('apply') },
+  { name: 'Lesen (früherer Reiter)', clicks: ['today-practice', 'hub-read'], done: onScreen('read') },
+  { name: 'Sprechen', clicks: ['today-practice', 'hub-speak-page'], done: onScreen('speak') },
   { name: 'Einstellungen', clicks: ['tab-progress', 'open-settings'], done: (page) => page.getByRole('dialog', { name: 'Einstellungen' }) },
   EXERCISE,
 ];
 
 const DESK: Goal[] = [
   ...COMMON,
-  { name: 'Lesen (früherer Reiter)', clicks: ['side-practice-toggle', 'side-read'], done: onScreen('read') },
-  { name: 'Sprechen', clicks: ['side-practice-toggle', 'side-speak'], done: onScreen('speak') },
-  { name: 'Hören', clicks: ['side-practice-toggle', 'side-listen'], done: onScreen('apply') },
+  { name: 'Praxis (früher Anwenden)', clicks: ['ctx-today-practice'], done: onScreen('apply') },
+  { name: 'Lesen (früherer Reiter)', clicks: ['ctx-today-practice', 'hub-read'], done: onScreen('read') },
+  { name: 'Sprechen', clicks: ['ctx-today-practice', 'hub-speak-page'], done: onScreen('speak') },
   { name: 'Einstellungen', clicks: ['side-settings'], done: (page) => page.getByRole('dialog', { name: 'Einstellungen' }) },
   { name: 'Übersetzer', clicks: ['side-translate'], done: byId('companion') },
   EXERCISE,
@@ -59,10 +61,7 @@ for (const [label, viewport, goals] of [
     for (const [i, goal] of goals.entries()) {
       expect(goal.clicks.length, goal.name).toBeLessThanOrEqual(2);
       for (const id of goal.clicks) {
-        const el = page.getByTestId(id).first();
-        // „Praxis“ bleibt aufgeklappt, wenn sie es schon ist (der Klick würde sie wieder zuklappen).
-        if (id === 'side-practice-toggle' && (await el.getAttribute('aria-expanded')) === 'true') continue;
-        await el.click();
+        await page.getByTestId(id).filter({ visible: true }).first().click();
       }
       await expect(goal.done(page).first(), goal.name).toBeVisible();
       if (i < goals.length - 1) await home(page);

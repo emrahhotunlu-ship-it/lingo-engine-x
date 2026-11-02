@@ -4,7 +4,7 @@ import { selectAiAvailable } from '../ai/scope';
 import { useCapabilities } from '../platform/capabilities';
 import { startDrill } from '../features/drills/session';
 import { HubSections } from '../app/shell/Hub';
-import { placesOf } from '../app/shell/tabs';
+import type { Place } from '../app/shell/tabs';
 import { ApplyHub } from '../features/apply/ApplyHub';
 import { ComboSentenceScreen } from '../features/apply/ComboSentence';
 import { ListenQuestionScreen } from '../features/apply/ListenQuestion';
@@ -28,16 +28,19 @@ declare module '../app/router/types' {
   }
 }
 
-/** Reiter-Wurzel: der Hub; die Abschnitte des Platzes `apply` (Lesen und Sprechen) stehen oben unter dem Titel (P2, Vorschau H13). */
+/** Plätze der Praxis-Seite (seit UX-Neuanfang B kein Reiter mehr, sondern eine Seite unter Heute). */
+const PRACTICE_PLACES: readonly Place[] = ['apply', 'read', 'speak'];
+
+/** Praxis-Seite: der Hub; die Abschnitte der Plätze `apply`/`read`/`speak` (Lesen und Sprechen) stehen oben unter dem Titel (P2, Vorschau H13). */
 function ApplyRoot() {
-  return <ApplyHub lead={<HubSections places={placesOf('apply')} />} />;
+  return <ApplyHub lead={<HubSections places={PRACTICE_PLACES} />} />;
 }
 
 export const anwenden = defineArea({
   id: 'anwenden',
   screens: {
-    // P2 S1-SHELL: der Reiter heißt „Praxis“ – so lautet auch „‹ Praxis“ auf Lesen/Sprechen und „sieht gerade: Praxis“.
-    apply: { kind: 'tab', component: ApplyRoot, title: 'shTabPractice', keepScroll: true },
+    // „Praxis“ (P2 S1-SHELL) – seit UX-Neuanfang B eine Seite auf dem Stapel von Heute; so lautet auch „‹ Praxis“ auf Lesen/Sprechen.
+    apply: { kind: 'page', component: ApplyRoot, title: 'shTabPractice', keepScroll: true },
     repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
     tempoRound: { kind: 'exercise', component: TempoRoundScreen, title: 'cxTempoTitle' },
     listenQ: { kind: 'exercise', component: ListenQuestionScreen, title: 'apListenQ' },

@@ -11,7 +11,7 @@ import { LANGS, MODES, axeFindings, box, compare, openVorschau, shotPath, type C
 // im Satz. Lage nach oben (y) nur dort, wo beide Seiten denselben Aufbau darüber haben. Die gezeichnete Tastatur der Vorschau gibt es in der
 // App nicht (die echte Tastatur des Geräts) – deshalb keine y-Werte für die Knopfzeile.
 
-type AppState = 'gram-task' | 'gram-hint' | 'gram-band' | 'gram-more' | 'word-band' | 'intro';
+type AppState = 'gram-task' | 'gram-hint' | 'gram-band' | 'word-band' | 'intro';
 type Pair = { name: string; vorschau: string; app: AppState; sizes: Size[]; checks: Check[] };
 
 const PHONE: Size[] = [{ name: '390', width: 390, height: 844 }];
@@ -34,15 +34,8 @@ const FOOT: Check[] = [
   { name: 'tipp', vorschau: '#hint', app: '[data-testid="hint"]', props: ['height', 'fontSize', 'fontWeight', 'borderRadius'] },
   { name: 'weissnicht', vorschau: '#idk', app: '[data-testid="dont-know"]', props: ['height', 'fontSize', 'fontWeight', 'borderRadius'] },
 ];
-const BAND: Check[] = [
-  { name: 'band', vorschau: '.band', app: '[data-testid="result"].lx-band', props: ['x', 'width', 'borderRadius'] },
-  { name: 'urteil', vorschau: '.band .verdict', app: '.lx-band [data-testid="verdict"]', props: ['x', 'height', 'fontSize', 'lineHeight', 'fontWeight'] },
-  { name: 'urteilszeichen', vorschau: '.band .verdict .vi', app: '.lx-band .lx-vi', props: ['width', 'height'] },
-  { name: 'loesung', vorschau: '.band .cmp', app: '.lx-band [data-slot="solution"]', props: ['x', 'fontSize', 'lineHeight'] },
-  { name: 'warum', vorschau: '.band .whyl', app: '.lx-band-why [data-block="why"] .lx-t-support', props: ['fontSize', 'lineHeight'] },
-  { name: 'mehr', vorschau: '#band-more', app: '[data-testid="explanation-more"]', props: ['height', 'fontSize', 'fontWeight', 'borderRadius'] },
-  { name: 'weiter', vorschau: '#band-next', app: '[data-testid="next"]', props: ['x', 'width', 'height', 'fontSize', 'fontWeight', 'borderRadius'] },
-];
+// Band (h4-band, h4-more, h3-before) entfällt: seit dem UX-Neuanfang B steht die Rückmeldung im Fluss (freigegebene Vorschau
+// `5Zwv5noCiNwzrzzfQsfzXy`, Emrah 02.11.2026); sie wird in band.spec.ts geprüft.
 
 const PAIRS: Pair[] = [
   // H4 Grammatik-Block (screens.js:298–370).
@@ -59,20 +52,6 @@ const PAIRS: Pair[] = [
       { name: 'pruefen', vorschau: '#check', app: '[data-testid="check"]', props: ['height', 'fontSize', 'fontWeight', 'borderRadius'] },
     ],
   },
-  { name: 'h4-band', vorschau: 'h4-band', app: 'gram-band', sizes: PHONE, checks: [...HEAD.slice(0, 3), ...BAND] },
-  {
-    name: 'h4-more',
-    vorschau: 'h4-more',
-    app: 'gram-more',
-    sizes: PHONE,
-    checks: [
-      { name: 'blatt', vorschau: '#more-sheet', app: '[data-testid="band-more"]', props: ['x', 'width', 'borderRadius'] },
-      { name: 'blatttitel', vorschau: '#more-sheet h2', app: '[data-testid="band-more"] h2', props: ['fontSize', 'fontWeight'] },
-      { name: 'blattweiter', vorschau: '#more-next', app: '[data-testid="band-more-next"]', props: ['height', 'fontSize', 'fontWeight', 'borderRadius'] },
-    ],
-  },
-  // H3 Blockwechsel (screens.js:277–295): letzte Wort-Aufgabe mit Band · erste Grammatik-Aufgabe mit Blockzeile.
-  { name: 'h3-before', vorschau: 'h3-before', app: 'word-band', sizes: PHONE, checks: [HEAD[0] as Check, HEAD[1] as Check, ...BAND.filter((c) => c.name !== 'warum')] },
   { name: 'h3-after', vorschau: 'h3-after', app: 'gram-task', sizes: PHONE, checks: [...HEAD, ...FOOT] },
   // H5 Grammatik-Erklärung (screens.js:375–427) gegen die Einführung `IntroFlow` (vorhandene Felder).
   {
@@ -151,10 +130,6 @@ async function openApp(page: Page, st: AppState, mode: Mode, lang: Lang) {
       if (st !== 'gram-hint') {
         await page.getByTestId('check').click();
         await expect(item.getByTestId('result')).toBeVisible();
-        if (st === 'gram-more') {
-          await page.getByTestId('explanation-more').click();
-          await expect(page.getByTestId('band-more')).toBeVisible();
-        }
       }
     }
   }

@@ -2,13 +2,13 @@ import { expect, test } from '@playwright/test';
 import { boot, crashOnce, layoutProblems, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { answerGrammar, grammarKey, nextItem, orderSolution } from './learnHelpers';
-import { MON, MON_9, NO_GRAMMAR_ERRORS, SUN_9, TUE_9, VG_DUTY, WEEK_W39, profileWith, reviewedLog, unitStatus, vgPlan } from './heuteHelpers';
+import { MON, MON_9, NO_GRAMMAR_ERRORS, SUN_9, TUE_9, TW_DUTY, WEEK_W39, profileWith, reviewedLog, unitStatus, vgPlan } from './heuteHelpers';
 
 // P1 (plan.md §4.2): Heute mit Tageskarte, Tageseinheit mit Ersatzblöcken, Wochenthema.
-// Seit 04.10.2026 (Fokus Vokabeln und Grammatik) Mo–Sa: Wortschatz · Grammatik · Satzbau · Fehler korrigieren.
-// Paketkriterien: Morgen-Journey mit 1 Tipp bis zur ersten Aufgabe; Montag mit Bestätigungskarte
-// bis „Fertig“ und Serie +1; Neuladen in Block 3 (Satzbau) setzt dort fort; Sonntag 2 Blöcke, Kurz-Einheit 3;
-// ohne KI erfüllbar.
+// Seit UX-Neuanfang C (02.11.2026) jeden Tag drei Pflicht-Schritte: Wörter · Grammatik · Anwenden. Tests mit gespeichertem
+// Plan der alten Blockfolge (vgPlan: Wortschatz · Grammatik · Satzbau · Fehler korrigieren) prüfen, dass ein schon gespeicherter Tag
+// unverändert weiterläuft. Paketkriterien: Morgen-Journey mit 1 Tipp bis zur ersten Aufgabe; Blöcke bis „Fertig“ und Serie +1;
+// Neuladen in Block 3 setzt dort fort; ohne KI erfüllbar.
 
 type Doc = Record<string, unknown>;
 
@@ -16,34 +16,37 @@ type Doc = Record<string, unknown>;
 const SAY_REPAIR_T = Date.parse('2026-09-17T08:30:00+02:00');
 const SAY_REPAIR = { id: 'rh01', wrong: 'Please send me the actual version of the contract.', right: 'Please send me the current version of the contract.', why: '„actual“ heißt „tatsächlich“.', src: 'say', t: SAY_REPAIR_T, box: 0, due: SAY_REPAIR_T + 86_400_000 };
 
-test('Morgen-Journey: Tageskarte mit 4 Blöcken (Wortschatz · Grammatik · Satzbau · Fehler korrigieren), ein Tipp bis zur ersten Aufgabe', async ({ page }) => {
+test('Morgen-Journey: Tagesweg mit 3 Schritten (Wörter · Grammatik · Anwenden), ein Tipp bis zur ersten Aufgabe', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors, external } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39 } } });
   await screen(page, 'today');
   const { done, total } = await unitStatus(page);
   expect(done).toBe(0);
-  expect(total).toBe(4);
-  await expect(page.getByTestId('duty')).toHaveCount(4);
-  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(VG_DUTY);
+  expect(total).toBe(3);
+  // UX-Neuanfang C (Emrah 02.11.2026): jeden Tag genau drei Pflicht-Schritte; Satzbau und „Fehler korrigieren“ sind freiwillig.
+  await expect(page.getByTestId('duty')).toHaveCount(3);
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(TW_DUTY);
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-focus"]')).toContainText('Grammatik');
-  // Dienstag ist Format-Tag (Plan 3.0, P23): Schritt 3 heißt dort wie die Aufgabenart, die Blockart bleibt task.order.
-  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Kleines Wort');
-  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-again"]')).toContainText('Fehler korrigieren');
+  await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Anwenden');
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
+  // Tagesziel 25 → Wörter 10 Min. (40 %, mindestens 10), Grammatik 10, Anwenden 5.
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['10', '10', '5']);
+  await expect(page.getByTestId('today-title')).toHaveText('Schritt 1 von 3 · ca. 10 Min.');
+  await expect(page.getByTestId('day-bar')).toHaveAttribute('data-total', '25');
   await expect(page.getByTestId('today-theme')).toHaveCount(0);
   await expect(page.getByTestId('start')).toBeInViewport();
-  // D2 V-HEUTE: der eine Hauptknopf ist der volle Knopf der Vorschau (`.btn.pri`).
+  await expect(page.getByTestId('start')).toContainText('Los:');
+  // Der eine Hauptknopf ist der volle Knopf der Vorschau.
   await expect(page.locator('main .lx-v-btn[data-variant="pri"]')).toHaveCount(1);
   expect(await layoutProblems(page)).toEqual([]);
   // Plan einmal je Lerntag gespeichert, mit Pflicht der Einheit.
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as Doc | undefined)?.d).toBe('2026-09-22');
   const plan = (await dump(page))['app/profile']?.plan as { duty: string[]; u: { b: Array<[number, string, number]> } };
-  expect(plan.duty).toEqual(VG_DUTY);
+  expect(plan.duty).toEqual(TW_DUTY);
   expect(plan.u.b.map(([n, kind]) => [n, kind])).toEqual([
     [1, 'review'],
     [2, 'grammar'],
-    [3, 'task.order'],
-    [5, 'again'],
+    [3, 'task.apply'],
   ]);
   // Ein Tipp → erste Aufgabe (Wiederholen im Trainer), Zeile unter dem Balken nennt Pflicht.
   await page.getByTestId('start').click();
@@ -117,21 +120,21 @@ test('Neuladen in Block 3 (Satzbau): Heute führt direkt zurück in Block 3', as
   expect(errors).toEqual([]);
 });
 
-test('Sonntag: 3 Blöcke (Wiederholen + Wochen-Check + Fehler korrigieren, Seed hat fällige Fehlersätze); Kurz-Einheit bei Tagesziel 15: 3 Blöcke', async ({ page }) => {
+test('Sonntag: derselbe Tagesweg mit 3 Schritten (Wörter · Grammatik · Anwenden)', async ({ page }) => {
   await boot(page, { migrated: true, now: SUN_9, fake: { patch: { 'app/week': { v: 1, cur: { wk: '2026-W39', theme: 't01', by: 'auto', at: 1 } } } } });
   await screen(page, 'today');
   await expect(page.getByTestId('duty')).toHaveCount(3);
-  await expect(page.locator('[data-testid="duty"]').nth(1)).toHaveAttribute('data-duty', 'ch:u-check');
-  await expect(page.locator('[data-testid="duty"]').nth(2)).toHaveAttribute('data-duty', 'ch:u-again');
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(TW_DUTY);
   await page.close();
 });
 
-test('Kurz-Einheit (Tagesziel 15): 3 Blöcke', async ({ page }) => {
+test('Kurz-Einheit (Tagesziel 15): 3 Schritte, Wörter mindestens 10 Min.', async ({ page }) => {
   await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39, 'app/profile': { goalMin: 15 } } } });
   await screen(page, 'today');
   await expect(page.getByTestId('duty')).toHaveCount(3);
-  // Wortschatz · Grammatik · Fehler korrigieren (kein Satzbau in der Kurz-Einheit).
-  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(TW_DUTY);
+  // 15 Min. → Wörter 10 (Untergrenze), Grammatik 3, Anwenden 2.
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['10', '3', '2']);
 });
 
 test('Kein Wochenthema mehr auf Heute: keine Themenzeile, keine Bestätigungskarte, app/week bleibt unberührt', async ({ page }) => {
@@ -264,25 +267,27 @@ test('Wiedereinstieg: nach 3–6 Tagen Pause ein ruhiges Band, nach 7+ ein läng
   expect(errors).toEqual([]);
 });
 
-// Lernplattform 2.0 P7 (§2.2), seit D2 V-HEUTE (Vorschau H1): Kopf „Heute“ (das Datum steht für Screenreader in der Überschrift), Ring mit einem
-// Segment je Pflichtschritt, „Als Nächstes“; unter der Karte nur Wochenstreifen und „Wenn du mehr willst“ (höchstens drei Zeilen, nie Pflicht).
-test('P7/D2 Heute offen: Kopf „Heute“ mit Datum, Ring mit 4 Segmenten, „Als Nächstes“, darunter höchstens drei freiwillige Zeilen', async ({ page }) => {
+// Lernplattform 2.0 P7 (§2.2), seit UX-Neuanfang B (Vorschau `5Zwv5noCiNwzrzzfQsfzXy`): Kopf mit Datum und Serie, „Schritt 1 von 3“, der
+// Tagesweg als Liste mit einem Punkt je Pflichtschritt und ein Balken in Minuten; darunter getrennt „Freiwillig“ (höchstens drei Zeilen, nie Pflicht).
+test('P7/B Heute offen: Datum, „Schritt 1 von 3“, Tagesweg mit 3 Punkten und Balken, darunter höchstens drei freiwillige Zeilen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39 } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('today-date')).toHaveText('Dienstag, 22. September');
-  const ring = page.getByTestId('today-ring');
-  await expect(ring).toHaveAttribute('data-segments', '4');
-  await expect(ring).toHaveAttribute('data-filled', '0');
-  await expect(page.getByTestId('today-title')).toContainText('Als Nächstes');
+  await expect(page.getByTestId('hello-date')).toContainText('22. September');
+  await expect(page.getByTestId('today-title')).toHaveText(/^Schritt 1 von 3/);
+  await expect(page.getByTestId('duties').getByTestId('duty')).toHaveCount(3);
+  await expect(page.locator('[data-testid="duty"][data-state="done"]')).toHaveCount(0);
+  const bar = page.getByTestId('day-bar');
+  await expect(bar).toHaveAttribute('data-done', '0');
   // „Heute“ steht im Inhalt höchstens einmal (die Reiterleiste zählt nicht).
   const heute = await page.locator('main').evaluate((m) => ((m as HTMLElement).innerText.match(/\bHeute\b/g) ?? []).length);
   expect(heute).toBeLessThanOrEqual(1);
   for (const id of ['today-speak', 'check-missed', 'today-weekly', 'offer']) await expect(page.getByTestId(id)).toHaveCount(0);
-  // Freiwilliges steht getrennt unter „Wenn du mehr willst“, höchstens drei Zeilen, und zählt nicht zur Pflicht (Ring weiter leer).
+  // Freiwilliges steht getrennt unter „Freiwillig“, höchstens drei Zeilen, und zählt nicht zur Pflicht (Balken bleibt bei 0).
   await expect(page.locator('[data-testid="more-rows"], [data-testid="ctx-more-rows"]')).toBeVisible();
   expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
   await expect(page.locator('[data-testid="duties"] [data-testid="more-row"]')).toHaveCount(0);
+  await expect(bar).toHaveAttribute('data-done', '0');
   expect(errors).toEqual([]);
 });
 

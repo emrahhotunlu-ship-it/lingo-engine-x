@@ -146,7 +146,7 @@ function Block({ name, title, items, body, before, after }: { name: 'why' | 'rem
   if (!items.length && !before && !after) return null;
   return (
     <section className="-mx-4 flex flex-col gap-2 border-t border-line px-4 pt-4" data-block={name} aria-label={title}>
-      <h3 className="lx-eyebrow m-0 text-subtle">{title}</h3>
+      <h3 className="lx-eyebrow m-0 text-muted">{title}</h3>
       {before}
       {items.length > 0 && (
         <ul className="m-0 flex list-none flex-col gap-2 p-0">

@@ -101,9 +101,10 @@ for (const m of MODES) {
       await expect(page.getByTestId('explanation')).toBeVisible();
       await expect(page.getByTestId('ai-note')).toBeVisible();
     } else await expect(page.getByTestId('explanation')).toBeVisible();
-    // Band am Handy (Relaunch P3): Merke und Beispiel stehen im Mehr-Blatt – dort sind die englischen Wörter antippbar.
-    if ((await page.getByTestId('result').locator('button.lx-word').count()) === 0) await openBandMore(page);
-    expect(await page.getByTestId('result').locator('button.lx-word').count()).toBeGreaterThan(0);
+    // UX-Neuanfang B: Warum, Merke und Beispiel stehen am Laptop rechts unter „Erklärung“ – dort sind die englischen Wörter antippbar.
+    const words = page.locator('[data-testid="result"] button.lx-word, [data-testid="side-explain"] button.lx-word');
+    if ((await words.count()) === 0) await openBandMore(page);
+    expect(await words.count()).toBeGreaterThan(0);
     expect(await layoutProblems(page)).toEqual([]);
     const step = (await page.locator('[data-step]').getAttribute('data-step')) ?? '';
     await nextItem(page);
@@ -195,7 +196,8 @@ test('Eigener Satz: abgeschrieben (Beispielsatz) wird ohne Claude abgewiesen; dr
   const note = page.getByTestId('ai-note');
   await expect(note).toBeVisible();
   // U3: die Kennzeichnung steht in der Ergebnis-Karte bei der Begründung (Block „Warum“ bzw. „Merke“), nicht lose unter der Karte.
-  await expect(page.getByTestId('result').locator('[data-block="why"], [data-block="remember"]').getByTestId('ai-note')).toHaveCount(1);
+  // UX-Neuanfang B: am Laptop steht die Begründung rechts unter „Erklärung“.
+  await expect(page.locator('[data-testid="result"], [data-testid="side-explain"]').locator('[data-block="why"], [data-block="remember"]').getByTestId('ai-note')).toHaveCount(1);
   expect(errors).toEqual([]);
   await close();
 });

@@ -120,12 +120,26 @@ export const tabRoot = (id: TabId): Route['name'] => (TABS.find((t) => t.id === 
  * Reiter öffnen und auf seiner Wurzel stehen (Neubau §2.4). Ein fremder Reiter zeigt seinen
  * Stapel; ein zweiter Tipp auf den nun aktiven Reiter führt zur Wurzel.
  */
-export async function openTab(page: Page, id: TabId): Promise<void> {
+/**
+ * Reiter öffnen. `apply` ist seit UX-Neuanfang B (Emrah 02.11.2026: vier Reiter) kein Reiter mehr, sondern die Seite „Praxis“
+ * unter Heute › Freiwillig (`today-practice`, am Laptop ab 1280 px in der Kontextspalte `ctx-today-practice`).
+ */
+export async function openTab(page: Page, id: TabId | 'apply'): Promise<void> {
+  if (id === 'apply') return openPractice(page);
   const root = tabRoot(id);
   const btn = page.getByTestId(`tab-${id}`);
   await btn.click();
   if ((await btn.getAttribute('aria-current')) === 'page' && !(await page.locator(`[data-screen="${root}"]`).isVisible())) await btn.click();
   await screen(page, root);
+}
+
+/** Seite „Praxis“ öffnen: Reiter Heute, dann „Praxis: alles zum Üben“ (die sichtbare der beiden Stellen). */
+export async function openPractice(page: Page): Promise<void> {
+  if (await page.locator('[data-screen="apply"]').isVisible()) return;
+  await openTab(page, 'today');
+  const link = page.locator('[data-testid="today-practice"]:visible, [data-testid="ctx-today-practice"]:visible').first();
+  await link.click();
+  await screen(page, 'apply');
 }
 
 /** Klappt auf „Anwenden“ die Zeilen „… Übungen für den Laptop ›“ und „Mehr Übungen ›“ auf (Lernplattform 2.0 §2.6), sofern vorhanden. */
@@ -230,11 +244,8 @@ export async function openSettings(page: Page): Promise<void> {
 /** Lesen öffnen (Relaunch P2 S1-SHELL: kein eigener Reiter mehr, sondern eine Seite unter „Praxis“). */
 export async function openRead(page: Page): Promise<void> {
   if (await page.locator('[data-screen="read"]').isVisible()) return;
-  await openTab(page, 'apply');
-  // Ab 1280 px führt die Seitenleiste „Lesen“ (die Hub-Zeile ist dort ausgeblendet), darunter die Zeile auf Praxis.
-  const side = page.getByTestId('side-read');
-  if (await side.isVisible()) await side.click();
-  else await page.getByTestId('hub-read').click();
+  await openPractice(page);
+  await page.getByTestId('hub-read').click();
   await screen(page, 'read');
 }
 

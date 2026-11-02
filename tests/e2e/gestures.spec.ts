@@ -98,9 +98,9 @@ test('Nachschlage-Blatt am Handy: am Griff nach unten wischen schließt', async 
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
   await answerOnly(page);
-  // Band (Relaunch P3): Beispiele stehen am Handy im Mehr-Blatt.
+  // UX-Neuanfang B: Beispiele stehen in der Rückmeldung (Merke oder aufgeklapptes „Mehr“).
   await openBandMore(page);
-  await page.getByTestId('band-more').getByTestId('examples').locator('button.lx-word').first().click();
+  await page.getByTestId('result').getByTestId('examples').locator('button.lx-word').first().click();
   const lookup = page.getByTestId('lookup');
   await expect(lookup).toBeVisible();
   await page.waitForTimeout(400);

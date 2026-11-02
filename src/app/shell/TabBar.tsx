@@ -1,25 +1,23 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useFxLevel } from '../../engine/fx/level';
 import { openCompanion } from '../../features/companion/store';
-import { useT, type MessageKey } from '../../i18n';
+import { useT } from '../../i18n';
 import { Icon, type IconName } from '../../ui/Icon';
 import { SPRINGS } from '../../ui/motion';
 import { markNavStart } from '../perf';
 import { useNav } from '../nav';
 import { badgeOf, type BadgeDef } from '../registry';
 import { openSettings } from '../sheets';
-import type { Route, RouteName } from '../router/types';
 import { requestScrollTop } from './Layers';
 import { TABS, type TabDef, type TabId } from './tabs';
 
 // Navigation des Rahmens (Relaunch Stufe 1, P2 S1-SHELL, docs/relaunch/stufe1-plan.md §6.2/§6.3, Vorschau `.tabbar`/`.side`):
 // EIN Baustein für alle Breiten, die Darstellung macht `styles/parts/shell.css`:
-// - Handy (< 600 px): Leiste unten, fünf gleich breite Reiter (Symbol + Beschriftung), in Übungen ausgeblendet.
+// - Handy (< 600 px): Leiste unten, vier gleich breite Reiter (Symbol + Beschriftung), in Übungen ausgeblendet.
 // - Schiene (600–1279 px): schmale Spalte links, nur Symbole (Beschriftung bleibt für Screenreader).
-// - Seitenleiste (ab 1280 px): Wortmarke, fünf Reiter, „Praxis“ aufklappbar (Sprechen, Hören, Lesen),
-//   unten Claude, Übersetzer und Einstellungen.
+// - Seitenleiste (ab 1280 px): Wortmarke, vier Reiter, unten Claude, Übersetzer und Einstellungen.
+// Seit UX-Neuanfang B (Emrah 02.11.2026) kein Reiter „Praxis“ mehr: die Seite ist über Heute › Freiwillig erreichbar.
 // Abzeichen je Reiter liefert der Bereich, der es angemeldet hat. Tippen auf den aktiven Reiter führt zur Wurzel und nach oben (N01).
 
 function BadgeCount({ badge }: { badge: BadgeDef }) {
@@ -68,59 +66,6 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
   );
 }
 
-/** Praxis-Wurzel herstellen (Reiter „Praxis“, Stapel nur die Wurzel), dann `then` ausführen. */
-function atPracticeRoot(then: () => void): void {
-  markNavStart();
-  const s = useNav.getState();
-  if (s.tab !== 'apply' || s.overlay) s.switchTab('apply');
-  if (useNav.getState().stacks.apply.length > 1) useNav.getState().switchTab('apply');
-  then();
-}
-
-const READ_ROUTES: readonly RouteName[] = ['read', 'readArticle', 'readCourse', 'readLesson'];
-const LISTEN_ROUTES: readonly RouteName[] = ['listenQ', 'listenLoop'];
-
-/** Welcher Unterpunkt gerade gilt – nur im Reiter „Praxis“, höchstens einer. */
-function currentSub(route: Route): Sub['id'] | null {
-  if (route.name === 'speak') return 'speak';
-  if (LISTEN_ROUTES.includes(route.name) || (route.name === 'drill' && route.kind === 'dictate')) return 'listen';
-  if (READ_ROUTES.includes(route.name)) return 'read';
-  return null;
-}
-
-type Sub = { id: 'speak' | 'listen' | 'read'; label: MessageKey; icon: IconName; on: boolean; run: () => void };
-
-/** Unterpunkte von „Praxis“ (nur Seitenleiste, aufgeklappt). `on` nur, solange der Reiter „Praxis“ offen ist. */
-function PracticeSubs({ current }: { current: Sub['id'] | null }) {
-  const { t } = useT();
-  const subs: Sub[] = [
-    { id: 'speak', label: 'shSpeak', icon: 'chat', on: current === 'speak', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'speak' })) },
-    {
-      id: 'listen',
-      label: 'shListen',
-      icon: 'headphones',
-      on: current === 'listen',
-      run: () =>
-        atPracticeRoot(() => {
-          window.requestAnimationFrame(() => document.getElementById('ap-listen')?.scrollIntoView({ block: 'start' }));
-        }),
-    },
-    { id: 'read', label: 'shRead', icon: 'book', on: current === 'read', run: () => atPracticeRoot(() => useNav.getState().go({ name: 'read' })) },
-  ];
-  return (
-    <div className="lx-nav-subs" id="lx-nav-practice">
-      {subs.map((s) => (
-        <button key={s.id} type="button" className="lx-nav-item lx-nav-sub" aria-current={s.on ? 'page' : undefined} onClick={s.run} data-testid={`side-${s.id}`}>
-          <span className="lx-nav-icon">
-            <Icon name={s.icon} size={18} />
-          </span>
-          <span className="lx-nav-label">{t(s.label)}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
-
 function ToolButton({ icon, label, onClick, testId }: { icon: IconName; label: string; onClick: () => void; testId: string }) {
   return (
     <button type="button" className="lx-nav-item lx-nav-tool" onClick={onClick} data-testid={testId} title={label}>
@@ -136,40 +81,16 @@ function ToolButton({ icon, label, onClick, testId }: { icon: IconName; label: s
 export function TabBar() {
   const { t } = useT();
   const tab = useNav((s) => s.tab);
-  const route = useNav((s) => s.route);
   const ai = useAiAvailable();
-  // „Praxis“ ist aufgeklappt, solange der Reiter offen ist – außer man hat es selbst zu- oder aufgeklappt.
-  const [practiceOpen, setPracticeOpen] = useState<boolean | null>(null);
-  const expanded = practiceOpen ?? tab === 'apply';
   return (
     <nav aria-label={t('shNavLabel')} className="lx-nav dz-tabbar" data-testid="tabbar">
       <div className="lx-nav-mark" aria-hidden="true">
         {t('shWordmark')}
       </div>
       <div className="lx-nav-tabs">
-        {TABS.map((d) =>
-          d.id === 'apply' ? (
-            <div key={d.id} className="lx-nav-group">
-              <div className="lx-nav-row">
-                <TabButton tab={d} active={tab === d.id} />
-                <button
-                  type="button"
-                  className="lx-nav-toggle"
-                  aria-expanded={expanded}
-                  aria-controls="lx-nav-practice"
-                  aria-label={expanded ? t('shPracticeClose') : t('shPracticeOpen')}
-                  onClick={() => setPracticeOpen(!expanded)}
-                  data-testid="side-practice-toggle"
-                >
-                  <Icon name="chevronDown" size={16} />
-                </button>
-              </div>
-              {expanded && <PracticeSubs current={tab === 'apply' ? currentSub(route) : null} />}
-            </div>
-          ) : (
-            <TabButton key={d.id} tab={d} active={tab === d.id} />
-          ),
-        )}
+        {TABS.map((d) => (
+          <TabButton key={d.id} tab={d} active={tab === d.id} />
+        ))}
       </div>
       <div className="lx-nav-tools">
         {ai && <ToolButton icon="sparkle" label={t('shClaude')} onClick={() => openCompanion({ tab: 'chat' })} testId="side-claude" />}

@@ -62,7 +62,7 @@ test('Pilotthemen: nach dem Prüfen steht der Name des Musters, Beispiele kommen
       if ((await page.getByTestId('gr-item').getAttribute('data-type')) === 'find') {
         expect(names.some((n) => text.includes(n)), `Mustername bei Fehler finden nicht offen: „${text}“`).toBe(false);
         await page.locator('[data-testid="explanation-more"], [data-testid="examples-more"]').first().click();
-        text = await page.getByTestId('result').innerText();
+        text = (await page.locator('[data-testid="result"], [data-testid="side-explain"]').allInnerTexts()).join('\n');
       }
       expect(names.some((n) => text.includes(n)), `Name eines Musters von ${topic} in „${text}“`).toBe(true);
       const ex = await page.getByTestId('example').allInnerTexts();
@@ -101,7 +101,9 @@ test('falsche Auswahl: „Deine Antwort …“ kommt aus der Begründung der Auf
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
     await expect(item.getByTestId('choice-why')).toContainText(rule.de.slice(0, 30));
     // UX-Prüfung W2 (07.10.2026): „Deine Antwort“ steht als erste Zeile der Rückmeldekarte, vor der Erklärung.
-    await expect(item.getByTestId('result')).toContainText(rule.opt);
+    // UX-Neuanfang B: am Laptop steht die Begründung rechts unter „Erklärung“.
+    const fb = (await page.locator('[data-testid="result"], [data-testid="side-explain"]').allInnerTexts()).join('\n');
+    expect(fb).toContain(rule.opt);
     seen++;
   }
   expect(seen).toBeGreaterThanOrEqual(1);

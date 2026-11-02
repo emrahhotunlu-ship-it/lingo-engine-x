@@ -35,57 +35,53 @@ async function start(page: Page) {
   return booted;
 }
 
-test('ab 1024 px: Übungsleiste ohne Übersetzer und Zahnrad, die Seitenleiste hat sie', async ({ page }) => {
+test('ab 768 px: Übung im Vollbild ohne Seitenleiste; Übersetzer und Claude in der Leiste, Einstellungen im Menü „…“', async ({ page }) => {
   await page.setViewportSize({ width: 1024, height: 900 });
   const { errors } = await start(page);
   const bar = page.getByTestId('exercise-bar');
-  for (const width of [1024, 1440]) {
+  // UX-Neuanfang B (Emrah 02.11.2026 „Vollbild, rechts Claude“): in Übungen keine Navigationsleiste, auch nicht am Laptop.
+  for (const width of [1440, 1024, 900]) {
     await page.setViewportSize({ width, height: 900 });
-    await expect(page.getByTestId('tabbar')).toBeVisible();
-    await expect(page.getByTestId('side-translate')).toBeVisible();
-    await expect(page.getByTestId('side-settings')).toBeVisible();
-    await expect(bar.getByTestId('open-translate')).toHaveCount(0);
+    await expect(page.getByTestId('tabbar')).toHaveCount(0);
+    await expect(bar.getByTestId('open-translate')).toBeVisible();
+    await expect(bar.getByTestId('open-companion')).toBeVisible();
     await expect(bar.getByTestId('open-settings')).toHaveCount(0);
-    // Punkt 13: Claude nur in der Seitenleiste (gleicher Aufgaben-Kontext), nicht doppelt in der Leiste.
-    await expect(bar.getByTestId('open-companion')).toHaveCount(0);
-    await expect(page.getByTestId('side-claude')).toBeVisible();
     await bar.getByTestId('exercise-menu').click();
     await expect(page.getByRole('menu')).toBeVisible();
-    await expect(page.getByTestId('open-settings')).toHaveCount(0);
+    await expect(page.getByTestId('open-settings')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(page.getByRole('menu')).toHaveCount(0);
     await expect(page.getByTestId('exercise')).toBeVisible();
   }
-  // Unter 1024 px (keine Seitenleiste in Übungen): Übersetzer in der Leiste, Einstellungen im Menü „…“.
-  await page.setViewportSize({ width: 900, height: 900 });
-  await expect(page.getByTestId('tabbar')).toHaveCount(0);
-  await expect(bar.getByTestId('open-translate')).toBeVisible();
-  await bar.getByTestId('exercise-menu').click();
-  await expect(page.getByTestId('open-settings')).toBeVisible();
-  await page.keyboard.press('Escape');
   expect(errors).toEqual([]);
 });
 
-test('Reiterwechsel mitten in der Übung: die Übung endet sauber, Erledigtes zählt genau einmal, „Starten“ macht weiter', async ({ page }) => {
+test('Verlassen mitten in der Übung (✕ bzw. Reiter): die Übung endet sauber, Erledigtes zählt genau einmal, „Starten“ macht weiter', async ({ page }) => {
   test.slow();
   const { errors } = await start(page);
   const card = page.getByTestId('today-card');
+  // UX-Neuanfang B: in Übungen gibt es keine Reiter mehr (Vollbild) – verlassen wird mit ✕; wo die Reiter stehen, mit dem Reiter.
+  const leave = async (tab: 'tab-vocab' | 'tab-learn') => {
+    const close = page.getByTestId('trainer-close');
+    if (await close.isVisible().catch(() => false)) await close.click();
+    else await page.getByTestId(tab).click();
+  };
   await answerCurrent(page);
-  // 1) Wechsel mit offener Aufgabe: die Übung endet ganz (kein halber Zustand), die erledigte Aufgabe bleibt gezählt.
-  await page.getByTestId('tab-vocab').click();
+  // 1) Verlassen mit offener Aufgabe: die Übung endet ganz (kein halber Zustand), die erledigte Aufgabe bleibt gezählt.
+  await leave('tab-vocab');
   await expect(page.getByTestId('exercise')).toHaveCount(0);
   await expect(page.getByTestId('result')).toHaveCount(0);
   await page.getByTestId('tab-today').click();
   await expect(page.getByTestId('exercise')).toHaveCount(0);
   await expect(card).toContainText('1 von 6 erledigt');
-  // 2) Weiter über „Starten“; Wechsel mit offenem Ergebnis: die geprüfte Antwort wird beim Verlassen gebucht (LS3), genau einmal,
+  // 2) Weiter über „Starten“; Verlassen mit offenem Ergebnis: die geprüfte Antwort wird beim Verlassen gebucht (LS3), genau einmal,
   //    mit `left: true` im Protokoll; beim nächsten „Starten“ kommt die nächste Karte.
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
   const id = await page.getByTestId('exercise').getAttribute('data-card');
   const w0 = (await writes(page)).length;
   await answerOnly(page);
-  await page.getByTestId('tab-learn').click();
+  await leave('tab-learn');
   await expect(page.getByTestId('result')).toHaveCount(0);
   await page.getByTestId('tab-today').click();
   await expect(page.getByTestId('exercise')).toHaveCount(0);
@@ -103,7 +99,7 @@ test('Reiterwechsel mitten in der Übung: die Übung endet sauber, Erledigtes z�
     await answerCurrent(page);
   }
   await expect(page.getByTestId('summary')).toHaveCount(1);
-  await page.getByTestId('tab-vocab').click();
+  await leave('tab-vocab');
   await page.getByTestId('tab-today').click();
   // Die Abschlusskarte kommt höchstens einmal: nach dem Wechsel steht sie noch (dann „Weiter“) oder Heute ist schon erledigt.
   await expect(page.getByTestId('summary').or(page.locator('[data-testid="today-card"][data-done="true"]')).first()).toBeVisible();

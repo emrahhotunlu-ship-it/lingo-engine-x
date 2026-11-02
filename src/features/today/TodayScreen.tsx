@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { comebackBand, comebackGap, lastReturn, RESTART_DAYS, RESTART_GAP } from '../../domain/plan/comeback';
 import { dowOf, unitPlanFor } from '../../domain/unit/planFor';
 import { armShared } from '../../engine/shared';
@@ -25,7 +25,7 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { DoneCard3 } from './DoneCard3';
 import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { DayBlocks, DayCardFrame, dayRowName, GoLabel, NextLine, StartCard, TodayRing, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
+import { channelOf, DayBar, DayCardFrame, DayLayout, DayPath, dayRowName, doneMinutes, GoalLink, GoLabel, HelloRow, NextLine, StartCard, stepMeta, TodayRing, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
@@ -149,15 +149,23 @@ function dayTitle(gt: GrammarDay | null, t: T, lang: Lang): string {
   return t('vhDayTitle');
 }
 
+/** Titel über dem Weg (Vorschau „Grammatik: Present Perfect oder Past Simple“): der nächste Schritt, bei Grammatik mit dem Thema des Tages. */
+function stepTitle(now: DayRow | null, gt: GrammarDay | null, t: T, lang: Lang): string {
+  if (!now) return t('vhDayTitle');
+  if (channelOf(now.kind) === 'g' && gt && (gt.intro ?? gt.topics[0])) return `${now.name}: ${dayTitle(gt, t, lang)}`;
+  return now.name;
+}
+
 /** Minuten je Segment des Rings: die Minuten der Zeilen (Bogenlänge wie in der Vorschau). */
 const minutesOf = (rows: readonly CardRow[]): number[] => rows.map((r) => r.min);
 
-/** Tageskarte offen (Vorschau H1 `start`/`mid`/`ring`, L1 `main`/`start`): Ring mit Restminuten, Thema, Unterzeile, „Als Nächstes“, EIN Knopf. */
+/**
+ * Tageskarte offen (UX-Neuanfang B, Vorschau `5Zwv5noCiNwzrzzfQsfzXy`): Datum und Serie, „Schritt x von n“, Titel = nächster Schritt; Karte „Dein Tag“
+ * mit dem Weg (alle Schritte sichtbar, Zustand statt Knopf), Balken mit Minuten und EIN Knopf „Los: …“. Zahlen aus EINEM `todaySummary`.
+ */
 function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean; sub: ReactNode }) {
   const { t, lang } = useT();
   const { done, total } = sum;
-  const [list, setList] = useState(false);
-  const listId = useId();
   const now = rows.find((r) => r.state === 'now') ?? null;
   const start = useStartUnit();
   const started = done > 0 || sum.fills.some((f) => f > 0);
@@ -171,72 +179,58 @@ function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView;
     state: r.state,
   }));
   const nowRow = shown.find((r) => r.state === 'now') ?? null;
-  // Zeichnen des Rings nur einmal je Laden (Vorschau `S.drawOnce`) und nie, wenn die Karte ein Skelett/Startbild ersetzt (kein Sprung).
-  const [draw] = useState(() => !settled && takeDraw());
+  const all = minutesOf(rows).reduce((a, m) => a + m, 0);
   useEffect(() => markStart('lx:button'), []);
   useEnterStart(true, start);
   return (
-    <DayCardFrame
+    <DayLayout
       data-settled={settled ? '' : undefined}
       aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
-      data-list={list ? '' : undefined}
+      data-rest={sum.rest}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
-      ring={
-        <TodayRing
-          fills={sum.fills}
-          minutes={minutesOf(rows)}
-          label={`${t('vRingShowBlocks')} · ${t('nbHeuteRingLabel', { done, total })}`}
-          open={list}
-          onToggle={() => setList((v) => !v)}
-          controls={listId}
-          draw={draw}
-          testId="today-ring"
-        >
-          <b className="lx-v-disp lx-v-num" data-testid="today-min">
-            {sum.rest}
-          </b>
-          <span>{t(started ? 'vhMinLeft' : 'vhMinToday')}</span>
-        </TodayRing>
+      hello={
+        <>
+          <HelloRow foot />
+          <div className="lx-vh-topic" data-testid="hero" data-duty={now?.id}>
+            <p className="lx-vh-meta" data-testid="today-title">
+              {stepMeta(shown, t)}
+            </p>
+            <h2 id="td-unit-title" className="lx-vh-t" data-testid="today-topic">
+              {stepTitle(nowRow, view.plan?.u?.gt ?? null, t, lang)}
+            </h2>
+            <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="sr-only">
+              {t('nbHeuteRing', { done, total })}
+            </span>
+            <span hidden data-testid="today-min">
+              {sum.rest}
+            </span>
+            {sub}
+          </div>
+        </>
       }
-    >
-      <DayBlocks rows={shown} prefix="today" id={listId} open={list} />
-      {fixNone && (
-        <p className="lx-vh-fixnone" data-testid="fix-none" hidden={!list}>
-          <span className="lx-v-st-mk" aria-hidden="true">
-            <Icon name="check" size={14} />
-          </span>
-          {t('nbHeuteFixNone')}
-        </p>
-      )}
-      <div className="lx-vh-topic" data-testid="hero" data-duty={now?.id} hidden={list}>
-        <h2 id="td-unit-title" className="lx-vh-t lx-v-disp" data-testid="today-topic">
-          {dayTitle(view.plan?.u?.gt ?? null, t, lang)}
-        </h2>
-        <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="sr-only">
-          {t('nbHeuteRing', { done, total })}
-        </span>
-        {sub}
-      </div>
-      <div hidden={list}>
-        <NextLine now={nowRow} testId="today-title" />
-      </div>
-      <div className="lx-vh-go">
+      card={
+        <>
+          <DayPath rows={shown} prefix="today" />
+          {fixNone && (
+            <p className="lx-vh-fixnone" data-testid="fix-none">
+              <span className="lx-v-st-mk" aria-hidden="true">
+                <Icon name="check" size={14} />
+              </span>
+              {t('nbHeuteFixNone')}
+            </p>
+          )}
+          <DayBar done={doneMinutes(rows, sum.fills)} total={all} />
+        </>
+      }
+      go={
         <VButton variant="pri" full onClick={start} data-testid="start" data-duty={now?.id}>
-          <GoLabel label={started && now ? t('vhContinue') : t('vhGo')} />
+          <GoLabel label={nowRow ? t(started ? 'vhContinueStep' : 'vhGoStep', { what: nowRow.name }) : started ? t('vhContinue') : t('vhGo')} />
         </VButton>
-      </div>
-    </DayCardFrame>
+      }
+    />
   );
-}
-
-/** Ein Laden der Seite zeichnet den Ring höchstens einmal (Vorschau `S.drawOnce`). */
-let drawn = false;
-function takeDraw(): boolean {
-  if (drawn) return false;
-  drawn = true;
-  return true;
 }
 
 /**
@@ -482,13 +476,19 @@ export function TodayScreen() {
       {/* Woche und „Wenn du mehr willst“: am Handy unter der Karte (Vorschau H1), ab 1.280 px nur rechts in der Kontextspalte (L1). */}
       {ok && !ctxWide && (
         <motion.div variants={item}>
-          <TodayWeekStrip sw={sw} todayDone={view.status === 'allDone'} />
+          {/* UX-Neuanfang B: Die Serie steht oben in der Datumszeile; der Wochenstreifen bleibt nur, wenn heute erledigt ist (Abschluss). */}
+          {done && <TodayWeekStrip sw={sw} todayDone={view.status === 'allDone'} />}
           {weekly}
         </motion.div>
       )}
       {ok && !ctxWide && (
         <motion.div variants={item}>
           <ExtraRow today={today} done={done} />
+        </motion.div>
+      )}
+      {ok && !done && (
+        <motion.div variants={item}>
+          <GoalLink />
         </motion.div>
       )}
       {/* „Mein Arbeitsalltag“ & Co.: am Handy unter den Extras mit Abstand, ab 1.280 px in der Kontextspalte bei „Wenn du mehr willst“. */}
@@ -542,7 +542,7 @@ export function TodayContext() {
         <WeekList sw={sw} todayDone={view.status === 'allDone'} extra={comebackBand(gap) === 'none' && restartDay === null ? <WeeklyBand today={today} /> : null} />
       </section>
       <section aria-labelledby="td-ctx-more">
-        <h3 id="td-ctx-more">{t('vhMore')}</h3>
+        <h3 id="td-ctx-more">{t('vhFree')}</h3>
         <MoreRows today={today} done={done} idp="ctx-" />
         {done && (
           <div className="lx-vh-slot">
