@@ -731,3 +731,6 @@ Weiter: klickbare Vorschau (eigenes Artefakt, erfundene Daten) → Emrahs OK →
 
 ## 02.11.2026 – Vorschau UX-Neuanfang freigegeben (Emrah, Pop-up)
 Vorschau `5Zwv5noCiNwzrzzfQsfzXy` v1 `1793616118-d40f`. Frage „Du hast die Vorschau ausprobiert. Wie geht es weiter?“ → **„Passt, so einbauen (Empfehlung)“**. Umsetzung B (Design-System), C (Tagesweg 3 Schritte), D (Rückmeldung/Aufgabenqualität) in die echte App; ein Test-Link am Ende; live erst nach „Ja live nehmen“.
+
+## 02.11.2026 – Erklärung ohne Tippen (Emrah, Nachricht)
+Wortlaut: „achtung .. ich will nicht immer auf claude hilfe tippen der hilfe button muss auch so sichtbar sein?“ Umsetzung: Nach jedem Prüfen erscheinen Warum und Merke von selbst (auch bei richtig); bei falscher Antwort lädt Claudes Erklärung zur eigenen Antwort automatisch (wenn Claude verfügbar). Der Knopf „Claude erklärt“ ist in jeder Übung vor und nach dem Prüfen sichtbar beschriftet (Handy oben rechts, Laptop rechte Spalte offen), nie im Menü.
