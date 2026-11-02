@@ -44,6 +44,8 @@ export type UnitBuildInput = {
   step3?: { mode: Step3Mode; fmt?: Step3Fmt } | null;
   c1?: 'check';
   nx?: string;
+  /** Tagesweg (UX-Neuanfang C): drei Schritte mit Minuten aus `dayMinutes`. */
+  tw?: 1;
 };
 
 /** Plan-Vorstufe ohne Block-1-Umfang: liefert das Budget für die Berechnung von `goal.review`. */
@@ -51,9 +53,10 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2; step3?: UnitPrefs['step3'] }, reviewCount?: number, reviewMin?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2; step3?: UnitPrefs['step3']; tw?: 1 }, reviewCount?: number, reviewMin?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
   if (i.rv === 2) p.rv = 2;
+  if (i.tw === 1) p.tw = 1;
   if (i.fixDue !== undefined) p.fixDue = i.fixDue;
   if (i.comeback) p.comeback = i.comeback;
   if (i.step3) p.step3 = i.step3;
@@ -68,6 +71,7 @@ function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarD
   if (facts.ov !== undefined) m.ov = facts.ov;
   if (facts.sure !== undefined) m.sure = facts.sure;
   if (up.rv === 2) m.rv = 2;
+  if (up.tw === 1) m.tw = 1;
   if (facts.gt) m.gt = facts.gt;
   if (facts.ps && Object.keys(facts.ps).length) m.ps = facts.ps;
   if (facts.c1) m.c1 = facts.c1;
@@ -133,7 +137,7 @@ function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: null | undefined)
   const hasFix = p.u.b.some(([, kind]) => kind === 'again');
   const noFix = rv2 ? !hasFix : p.u.shape !== 'sun' && !hasFix;
   const fixDue = noFix ? { fixDue: 0 } : rv2 && p.u.shape === 'sun' ? { fixDue: 1 } : {};
-  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin, ...fixDue, ...(p.u.cb ? { comeback: p.u.cb } : {}), ...(rv2 ? { rv: 2 as const } : {}) }, p.goal.review, storedReviewMin));
+  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin, ...fixDue, ...(p.u.cb ? { comeback: p.u.cb } : {}), ...(rv2 ? { rv: 2 as const } : {}), ...(p.u.tw === 1 ? { tw: 1 as const } : {}) }, p.goal.review, storedReviewMin));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
   if (same) {
     if (!rv2) return live;

@@ -42,5 +42,6 @@ export const applyDe = {
   apComboNotice: 'Von Claude geprüft, kann Fehler enthalten.',
   apComboRepairNote: 'Dieser Satz ist als Fehlersatz gemerkt und kommt morgen unter „Fehler korrigieren“ wieder.',
   apComboUnavailable: 'Diese Übung braucht Claude und ein paar bekannte Wörter.',
+  apComboOrderInstead: 'Stattdessen Satzbau üben',
   apRoleplaySub: 'Frei sprechen mit festen Szenen',
 };

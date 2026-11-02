@@ -42,5 +42,6 @@ export const applyEn = {
   apComboNotice: 'Checked by Claude, may contain mistakes.',
   apComboRepairNote: 'This sentence is saved as a mistake sentence and comes back tomorrow under “Fix mistakes”.',
   apComboUnavailable: 'This exercise needs Claude and a few known words.',
+  apComboOrderInstead: 'Practice sentence building instead',
   apRoleplaySub: 'Speak freely with fixed scenes',
 };

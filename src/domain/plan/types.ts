@@ -70,6 +70,8 @@ export type UnitMeta = {
   sure?: number;
   /** Regelversion (Lernplattform 2.0 §2.3), additiv: `2` = Plan v2; fehlt = alte Regel. Die Planversion `v` bleibt 1. */
   rv?: 2;
+  /** Tagesweg (UX-Neuanfang C, 02.11.2026), additiv: `1` = drei Schritte Wörter · Grammatik · Anwenden. Ältere Versionen lesen es nicht und nehmen die eingefrorenen Blöcke (Rückweg). */
+  tw?: 1;
   /** Eingefroren (Lernplattform 2.0 §2.3): Einführungsthema, Muster des Tages und Rundenthemen. */
   gt?: GrammarDay;
   /** Eingefroren: Musterzustände vom Morgen für die Muster der `gt`-Themen (≤ 24). */

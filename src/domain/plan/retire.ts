@@ -10,7 +10,7 @@ import type { DutyId, StoredPlan } from './types';
 const RETIRED_DUTY = new Set<string>(['lesson', 'ch:u-in', 'ch:say', 'ch:dictate', 'ch:sprint']);
 
 /** Blockarten, die ein neuer Plan erzeugt (oder die ältere Pläne mit weiter vorhandener Übung tragen). */
-const LIVE_KINDS = new Set<string>(['review', 'grammar', 'focus', 'task.order', 'task.check', 'again']);
+const LIVE_KINDS = new Set<string>(['review', 'grammar', 'focus', 'task.order', 'task.apply', 'task.check', 'again']);
 
 /** Gibt es diesen Pflichtpunkt nach dem Umbau nicht mehr? */
 export const isRetiredDuty = (id: DutyId): boolean => RETIRED_DUTY.has(id);

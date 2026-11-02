@@ -3,6 +3,9 @@ import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
+import { unitDone } from '../../app/unit/done';
+import { unitBlockOf } from '../speak/unit';
+import { startDrill } from '../drills/session';
 import { useLive } from '../../data/live';
 import { pickPairs, type ComboPair } from '../../domain/apply/combo';
 import { topicById, TOPICS } from '../../domain/content';
@@ -16,6 +19,7 @@ import { useT } from '../../i18n';
 import { useInputProfile } from '../../platform/input';
 import { comboCheck, type ComboCheckOut } from '../../prompts/comboCheck';
 import { AiRunPanel } from '../../ui/AiRunPanel';
+import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { ExerciseShell, SentenceInput, type ShellFeedback } from '../../ui/exercise';
@@ -62,6 +66,11 @@ export function ComboSentenceScreen() {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const back = useNav((s) => s.back);
+  const go = useNav((s) => s.go);
+  // Tagesweg Schritt 3 (Anwenden): die Blocknummer kommt mit der Route; ohne sie ist es freies Üben.
+  const unitBlock = useNav((s) => (s.route.name === 'comboSentence' ? unitBlockOf(s.route.unit) : null));
+  const [unit] = useState(() => unitBlock);
+  const today = useClock((s) => s.today);
   const ai = useAiAvailable();
   const live = useComboPairs();
   const liveProfile = useInputProfile();
@@ -120,8 +129,19 @@ export function ComboSentenceScreen() {
     setMiss(false);
     setRes(null);
     setEndedAt(performance.now());
+    // Tagesweg: nach dem letzten Satz ist Schritt 3 erledigt; die Einheit führt zur Abschlusskarte (zählt zum Tagesziel, Kap. 2.6).
+    if (unit && pos + 1 >= fixed.length) {
+      api.blur();
+      unitDone(unit);
+    }
   };
   const right = results.filter((r) => r.word && r.rule && r.correct).length;
+  // Ohne Claude oder ohne passende Wörter: im Tagesweg geht es mit Satzbau weiter (ohne KI erfüllbar).
+  const orderInstead = () => {
+    if (!unit) return;
+    api.blur();
+    if (startDrill('order', today, unit) !== null) go({ name: 'drill', kind: 'order', ctx: 'duty' });
+  };
 
   const fb: ShellFeedback | null =
     res && cur
@@ -151,11 +171,16 @@ export function ComboSentenceScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="combo" data-state={finished ? 'done' : 'open'}>
-      <ExerciseTop onClose={close} progress={fixed.length && !finished ? { n: pos + 1, total: fixed.length } : null} ctx="xtra" />
+      <ExerciseTop onClose={close} progress={fixed.length && !finished ? { n: pos + 1, total: fixed.length } : null} ctx={unit ? 'duty' : 'xtra'} />
       {!ai || !fixed.length ? (
-        <p className="lx-glass rounded-[var(--radius-card)] p-5 lx-t-support text-muted" data-testid="combo-unavailable">
-          {t('apComboUnavailable')}
-        </p>
+        <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" data-testid="combo-unavailable">
+          <p className="lx-t-support text-muted">{t('apComboUnavailable')}</p>
+          {unit && (
+            <Button variant="primary" className="self-start" onClick={orderInstead} data-testid="combo-order-instead">
+              {t('apComboOrderInstead')}
+            </Button>
+          )}
+        </div>
       ) : finished ? (
         <SessionEnd right={right} total={Math.max(1, results.length)} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
       ) : (

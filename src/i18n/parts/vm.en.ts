@@ -494,6 +494,7 @@ export const vmEn = {
   vmSetTitle: 'Words',
   vmSetMin: 'Target time for the word block',
   vmSetMinHint: 'Minutes per day. The app spreads reviews so each day is about this long.',
+  vmSetMinAuto: '{n} min a day: 40% of your daily goal, at least 10 minutes. Set your daily goal under Settings › Learning.',
   vmSetNew: 'New words per study day',
   vmSetNewHint: 'As many as fit into your target time, up to this number. At least 2 on every study day, even when a lot is due; none only at 0.',
   vmSetRet: 'How firmly should words stick?',

@@ -37,6 +37,8 @@ export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'> & { args?
     case 'task.order':
       if (b.args?.mode === 'format' && b.args.fmt) return t('cxFormatWhy', { n: FORMAT_N[b.args.fmt] });
       return t('nbHeuteWhy_order');
+    case 'task.apply':
+      return t('nbHeuteWhy_apply');
     case 'again':
       return t('nbHeuteWhy_again');
     default:

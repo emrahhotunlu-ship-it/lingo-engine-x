@@ -1,4 +1,8 @@
+import { z } from 'zod';
 import { defineArea } from '../app/registry';
+import { selectAiAvailable } from '../ai/scope';
+import { useCapabilities } from '../platform/capabilities';
+import { startDrill } from '../features/drills/session';
 import { HubSections } from '../app/shell/Hub';
 import { placesOf } from '../app/shell/tabs';
 import { ApplyHub } from '../features/apply/ApplyHub';
@@ -19,8 +23,8 @@ declare module '../app/router/types' {
     tempoRound: NoParams;
     /** Hörübung mit Frage zu eigenen Wörtern (Sprachausgabe, Claude schreibt die Texte). */
     listenQ: NoParams;
-    /** „Eigener Satz“: Wort + Grammatikregel im selben Satz, Claude prüft. */
-    comboSentence: NoParams;
+    /** „Eigener Satz“: Wort + Grammatikregel im selben Satz, Claude prüft. `unit` = Schritt des Tagesweges (Anwenden), sonst frei. */
+    comboSentence: { unit?: number };
   }
 }
 
@@ -37,6 +41,18 @@ export const anwenden = defineArea({
     repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
     tempoRound: { kind: 'exercise', component: TempoRoundScreen, title: 'cxTempoTitle' },
     listenQ: { kind: 'exercise', component: ListenQuestionScreen, title: 'apListenQ' },
-    comboSentence: { kind: 'exercise', component: ComboSentenceScreen, title: 'apComboOwn' },
+    comboSentence: { kind: 'exercise', component: ComboSentenceScreen, title: 'apComboOwn', params: z.object({ unit: z.number().int().min(1).max(5).optional() }) },
   },
+  // Tagesweg Schritt 3 „Anwenden“ (UX-Neuanfang C, Emrah 02.11.2026): drei eigene Sätze mit Wörtern aus dem Wortschatz und einer
+  // Grammatikregel, Claude prüft. Ohne Claude: Satzbau mit den eigenen Wörtern (ohne KI erfüllbar), damit der Schritt nie hängt.
+  unitBlocks: [
+    {
+      kind: 'task.apply',
+      feasible: () => true,
+      start: (ctx) => {
+        if (selectAiAvailable(useCapabilities.getState())) return { name: 'comboSentence', unit: ctx.block };
+        return startDrill('order', ctx.day, ctx.block) === null ? false : { name: 'drill', kind: 'order', ctx: 'duty' };
+      },
+    },
+  ],
 });

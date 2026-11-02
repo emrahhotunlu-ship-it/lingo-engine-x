@@ -207,7 +207,8 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const vocabOn = vocabModuleOn(profile);
   // Wiedereinstieg: die Neustart-Woche steht schon vor dem Plan fest (nur die Pause zählt), der Kurz-Plan nach 7–13 Tagen erst mit dem Überfälligen.
   const restart = restartActive(profile, today);
-  const draft = unitDraft({ day: today, week: null, goalMin, ...(restart ? { comeback: 'restart' as const } : {}) });
+  // UX-Neuanfang C (Emrah 02.11.2026): Tagesweg mit drei Schritten (Wörter → Grammatik → Anwenden), Minuten aus `dayMinutes`.
+  const draft = unitDraft({ day: today, week: null, goalMin, tw: 1, ...(restart ? { comeback: 'restart' as const } : {}) });
   let review: ReviewGoal = { goal: 0, due: 0, fresh: 0, repairs: 0 };
   let facts: { ov: number; sure: number } | null = null;
   let fest: { units: number; vocab: number } | null = null;
@@ -257,6 +258,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     nowMs,
     week: null,
     goalMin,
+    tw: 1,
     review,
     fixDue,
     gt,

@@ -494,6 +494,7 @@ export const vmDe = {
   vmSetTitle: 'Wörter',
   vmSetMin: 'Zielzeit für den Wörter-Block',
   vmSetMinHint: 'Minuten am Tag. Die App verteilt Wiederholungen so, dass es jeden Tag ungefähr so viel ist.',
+  vmSetMinAuto: '{n} Min. am Tag: 40 % deines Tagesziels, mindestens 10 Minuten. Das Tagesziel stellst du unter Einstellungen › Lernen ein.',
   vmSetNew: 'Neue Wörter pro Lerntag',
   vmSetNewHint: 'Bis zu so viele, wie in deine Zielzeit passen. Mindestens 2 an jedem Lerntag, auch wenn viel fällig ist; nur bei 0 keine.',
   vmSetRet: 'Wie sicher sollen die Wörter sitzen?',

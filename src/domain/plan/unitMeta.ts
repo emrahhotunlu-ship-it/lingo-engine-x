@@ -79,6 +79,7 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
   if (sure !== null) out.sure = Math.round(sure);
   // Lernplattform 2.0 (§2.3), alles rein ergänzend: Regelversion, eingefrorenes Grammatikthema, Musterzustände vom Morgen.
   if (o.rv === 2) out.rv = 2;
+  if (o.tw === 1) out.tw = 1;
   const gt = readGt(o.gt);
   if (gt) out.gt = gt;
   const ps = readPs(o.ps);

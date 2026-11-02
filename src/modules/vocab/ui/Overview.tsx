@@ -3,7 +3,7 @@ import { getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switch, toast, us
 import { logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { readVlogRecent } from '../data/history';
-import { MIN_OPTIONS, NEW_OPTIONS, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
+import { NEW_OPTIONS, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
 import { vcfgSchema } from '../data/schemas';
 import { Catalog, forecastMinutes, type Item } from '../domain/catalog';
 import { outlook, type Outlook } from '../domain/overview';
@@ -291,7 +291,6 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
   const cat = useMemo(() => new Catalog(items), [items]);
   const out = useMemo(() => outlook(cat, {}, now, cfg, 14), [cat, now, cfg]);
   if (!ready) return <Skeleton className="h-48 w-full rounded-[var(--radius-card)]" />;
-  const min = pending.min ?? cfg.min;
   const ret = pending.ret ?? cfg.ret;
   const npd = pending.newPerDay ?? cfg.newPerDay;
   const anki = pending.anki !== undefined ? pending.anki === 1 : !!cfg.anki;
@@ -315,8 +314,10 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
       <h3 className="lx-eyebrow m-0">{t('vmSetTitle')}</h3>
       <div className="flex flex-col gap-2">
         <p className="m-0 text-sm font-medium">{t('vmSetMin')}</p>
-        <Segmented label={t('vmSetMin')} value={String(min)} columns={4} testId="vs-min" options={MIN_OPTIONS.map((n) => ({ value: String(n), label: String(n), testId: `vs-min-${n}` }))} onChange={(v) => save({ min: Number(v) as SettingsPatch['min'] })} />
-        <p className="m-0 text-sm text-muted">{t('vmSetMinHint')}</p>
+        {/* UX-Neuanfang C (Emrah 02.11.2026): die Wörter-Zeit folgt dem Tagesziel (40 %, mindestens 10 Min.), keine eigene Wahl mehr. */}
+        <p className="m-0 text-sm text-muted" data-testid="vs-min" data-min={cfg.min}>
+          {t('vmSetMinAuto', { n: cfg.min })}
+        </p>
       </div>
       <div className="flex flex-col gap-2">
         <p className="m-0 text-sm font-medium">{t('vmSetNew')}</p>

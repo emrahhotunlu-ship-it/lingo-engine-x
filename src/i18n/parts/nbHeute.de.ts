@@ -25,6 +25,7 @@ export const nbHeuteDe = {
   nbHeuteBlock_check: 'Wochen-Check',
   nbHeuteBlock_grammar: 'Grammatik',
   nbHeuteBlock_order: 'Satzbau',
+  nbHeuteBlock_apply: 'Anwenden',
   // Grund je Block (eine kurze Zeile)
   nbHeuteWhy_review: '{n} Karten · Fällige zuerst',
   nbHeuteWhy_reviewOne: '1 Karte · Fällige zuerst',
@@ -37,6 +38,7 @@ export const nbHeuteDe = {
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
   nbHeuteWhy_grammar: 'Deine Fehlerthemen, fällige und neue Grammatik, gemischt',
   nbHeuteWhy_order: 'Wortstellung im ganzen Satz üben',
+  nbHeuteWhy_apply: 'Drei eigene Sätze mit deinen Wörtern und einer Regel',
   nbHeuteWhy_again: 'Deine typischen Fehler in neuen Sätzen richtig sagen',
   // Fertig-Zustand (N15)
   nbHeuteDoneTitle: 'Fertig für heute',

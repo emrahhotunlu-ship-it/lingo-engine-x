@@ -20,6 +20,7 @@ export type UnitBlockKind =
   | 'task.roleplay'
   | 'task.check'
   | 'task.order'
+  | 'task.apply'
   | 'grammar'
   | 'focus'
   | 'focus.colloc'
@@ -99,6 +100,8 @@ export type UnitPlan = {
   minutes: number;
   /** Regelversion (Lernplattform 2.0 §2.3): `2` = Schritt 1 ohne Reparatur-Sätze, Grammatik ohne Fehlersätze, Schritt 4 mit `limit`. Fehlt = alte Regel. */
   rv?: 2;
+  /** Tagesweg (UX-Neuanfang C, 02.11.2026): `1` = drei Schritte Wörter · Grammatik · Anwenden, Minuten aus `dayMinutes`. */
+  tw?: 1;
   /** Wiedereinstieg (Gesamtkonzept 3.2): `reduced` = nur 3 Grammatikaufgaben, Satzbau pausiert; `restart` = Neustart-Woche (kleiner Plan). */
   comeback?: ComebackMode;
 };
@@ -121,6 +124,8 @@ export type UnitPrefs = {
   comeback?: ComebackMode;
   /** Regelversion; `2` schaltet Plan v2 ein (§2.3). Nur die Koordination stellt `PLAN_RV` um. */
   rv?: 1 | 2;
+  /** Tagesweg (UX-Neuanfang C): drei Schritte, Minuten aus `dayMinutes`; Satzbau und „Fehler korrigieren“ sind dann freiwillig. */
+  tw?: 1;
   /** Plan 3.0 (P23): Format von Schritt 3 (nur volle Tage, nur Regelversion 2); fehlt = Satzbau. */
   step3?: { mode: Step3Mode; fmt?: Step3Fmt } | null;
 };

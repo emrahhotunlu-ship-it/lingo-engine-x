@@ -11,6 +11,7 @@ import type {
   UnitStep,
 } from './types';
 import type { StepArgs } from '../plan/types';
+import { dayMinutes, grammarTasksFor, mixedErrorsFor } from '../plan/dayMinutes';
 
 // Wochenplan der Tageseinheit (Plan §1.5, N10/N12; Prüfung Tageseinheit M2, M3, M5, M7, M10, S1, S2, S5).
 // `unitPlanFor` hängt nur von Tag, `app/week` und den Einstellungen ab – nie von KI oder Sprachausgabe.
@@ -102,6 +103,7 @@ export function unitPlanFor(day: string, _week: unknown, prefs: UnitPrefs = {}):
   const rv2: StepArgs | undefined = v2 ? { errs: 0 } : undefined;
   const fixBlock = (base: number, limit: number): UnitBlock => block(5, step('again'), v2 ? fixMinutes(base, limit) : base, CHANNEL[5], v2 ? { limit } : undefined);
   const short = goalMin <= SHORT_GOAL_MAX || restart;
+  if (prefs.tw === 1) return tagesweg(day, dow, goalMin, prefs, restart);
   const blocks: UnitBlock[] = [];
   let shape: UnitShape;
   let reviewSec: number;
@@ -157,6 +159,39 @@ export function unitPlanFor(day: string, _week: unknown, prefs: UnitPrefs = {}):
     duty: kept.map((b) => b.channel),
     minutes: kept.reduce((s, b) => s + b.min, 0),
     ...(v2 ? { rv: 2 as const } : {}),
+    ...(prefs.comeback ? { comeback: prefs.comeback } : {}),
+  };
+}
+
+/**
+ * Tagesweg (UX-Neuanfang C, Emrahs Entscheidung 02.11.2026): jeden Tag genau drei Pflicht-Schritte – Wörter · Grammatik · Anwenden –
+ * mit den Minuten aus `dayMinutes` (eine Quelle). Fällige Fehlersätze laufen in der Grammatikrunde mit (höchstens 3); Satzbau und
+ * „Fehler korrigieren“ sind freiwillig. Neustart-Woche: die Minuten des kleinsten Ziels (15). Der Samstag behält seine Form (C1-Check-Tag).
+ */
+function tagesweg(day: string, dow: number, goalMin: number, prefs: UnitPrefs, restart: boolean): UnitPlan {
+  const m = dayMinutes(restart ? 15 : goalMin);
+  const errs = mixedErrorsFor(prefs.fixDue);
+  const blocks: UnitBlock[] = [
+    block(1, step('review'), m.words, CHANNEL[1], { repairs: 0 }),
+    block(2, step('grammar', { n: grammarTasksFor(m.grammar) }), m.grammar, 'ch:u-focus', { errs }),
+    block(3, step('task.apply'), m.apply, CHANNEL[3]),
+  ];
+  const kept = blocks.filter((b) => !(prefs.reviewCount === 0 && b.block === 1));
+  const short = goalMin <= SHORT_GOAL_MAX || restart;
+  return {
+    v: 1,
+    day,
+    wk: isoWeek(day),
+    dow,
+    shape: short ? 'short' : dow === 6 ? 'sat' : 'full',
+    short,
+    goalMin,
+    reviewSec: m.words * 60,
+    blocks: kept,
+    duty: kept.map((b) => b.channel),
+    minutes: kept.reduce((s, b) => s + b.min, 0),
+    rv: 2,
+    tw: 1,
     ...(prefs.comeback ? { comeback: prefs.comeback } : {}),
   };
 }

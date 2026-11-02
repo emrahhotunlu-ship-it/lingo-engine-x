@@ -3,7 +3,7 @@ import { bootAt, layoutProblems, MIGRATED, openSettings, SEED_EVENING, screen } 
 import { dump } from './trainerHelpers';
 
 // Großpaket A S6 (Bilder s2-05, s2-13): Übersicht der Wörter-App unter Fortschritt › Wörter (Zahlen, 14-Tage-Vorschau, Behaltensrate)
-// und Einstellungen › Wortschatz › Wörter (Zielzeit, neue Wörter, Sicherheit). Schreiben nur über den einen Schreibpfad auf app/profile.
+// und Einstellungen › Wortschatz › Wörter (Wörter-Zeit aus dem Tagesziel, neue Wörter, Sicherheit). Schreiben nur über den einen Schreibpfad auf app/profile.
 
 type Doc = Record<string, unknown>;
 const NOW = Date.parse(SEED_EVENING);
@@ -74,12 +74,12 @@ for (const vp of [
       await expect(page.getByTestId('set-newperday')).toHaveCount(0);
       for (const r of [85, 90, 95]) await expect(page.getByTestId(`vs-ret-${r}`)).toContainText(/\d/);
       await expect(page.getByTestId('vs-when')).not.toBeEmpty();
-      await page.getByTestId('vs-min-20').click();
-      await expect.poll(async () => ((await dump(page))['app/profile']?.vcfg as Doc | undefined)?.min).toBe(20);
+      // Wörter-Zeit folgt dem Tagesziel (UX-Neuanfang C): Anzeige statt Auswahl.
+      await expect(page.getByTestId('vs-min')).toContainText(/\d+/);
       await page.getByTestId('vs-new-0').click();
       await expect.poll(async () => (await dump(page))['app/profile']?.newPerDay).toBe(0);
       await page.getByTestId('vs-ret-95').click();
-      await expect.poll(async () => (await dump(page))['app/profile']?.vcfg).toEqual({ min: 20, ret: 0.95, mod: 1 });
+      await expect.poll(async () => (await dump(page))['app/profile']?.vcfg).toMatchObject({ ret: 0.95, mod: 1 });
       await expect(page.getByTestId('vs-ret-95')).toHaveAttribute('aria-checked', 'true');
       // S6b-3: Anki-Modus (Standard aus) und „Satz vor dem Prüfen anhören“ (Standard an) als Schalter.
       await expect(page.getByTestId('vs-anki')).toHaveAttribute('aria-checked', 'false');

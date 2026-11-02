@@ -1,4 +1,4 @@
-import { dayKey } from './shared';
+import { dayKey, dayMinutes, normGoalMin } from './shared';
 import type { Writer } from './shared';
 import { lexOf } from './data/lex';
 import { headwordOf } from './domain/dupes';
@@ -16,12 +16,21 @@ export type { VocabAi } from './aiPort';
 
 type Doc = Record<string, unknown>;
 
-/** Einstellungen aus `app/profile` (vcfg + newPerDay), tolerant: Ungültiges fällt auf den Standard zurück. */
+/**
+ * Wörter-Minuten am Tag (UX-Neuanfang C, Emrah 02.11.2026: „mindestens 10 Minuten und immer 40 % vom Tagesziel“): aus dem Tagesziel
+ * in `app/profile.goalMin`, nicht mehr aus `vcfg.min` (das Feld bleibt gespeichert und gilt für den Rückweg).
+ */
+export function wordsMinutes(profile: Doc | null | undefined): number {
+  return dayMinutes(normGoalMin(profile?.goalMin)).words;
+}
+
+/** Einstellungen aus `app/profile` (vcfg + newPerDay), tolerant: Ungültiges fällt auf den Standard zurück. `min` = Wörter-Minuten aus dem Tagesziel. */
 export function vocabCfg(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
   const npd = profile && typeof profile.newPerDay === 'number' && [0, 2, 5, 10].includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
-  if (!raw?.success) return { ...DEFAULT_CFG, newPerDay: npd };
-  return { min: raw.data.min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
+  const min = wordsMinutes(profile);
+  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay: npd };
+  return { min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
 }
 
 /** Ist das neue Modul eingeschaltet? (Rückweg-Schalter in der Datenbank, gilt auf allen Geräten.) */

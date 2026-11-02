@@ -6,6 +6,9 @@ export type { Writer, TransformOp } from '../../data/writer';
 export { logError, logWarn } from '../../platform/diagnostics';
 // V2: britische Schreibweise ist in Emrahs Eingaben richtig (A7, Tippfehler-Regel (h)); dieselbe Liste wie im Rest der App.
 export { toUSText } from '../../domain/text/british';
+// UX-Neuanfang C (02.11.2026): Die Wörter-Zeit kommt aus dem Tagesziel (eine Quelle für Heute, Runde und Einstellungen). Rein.
+export { dayMinutes } from '../../domain/plan/dayMinutes';
+export { normGoalMin } from '../../domain/progress/settings';
 // V3: Grundformen einer Wortform (*brought* → *bring*), um die Lücke im Satz zu finden (domain/card.ts). Rein, dieselbe Liste wie im Rest der App.
 export { lemmaCandidates } from '../../domain/text/lemma';
 // V4 (Großpaket A Schritt 5): Bausteine der drei Claude-Vorlagen (prompts/): Kopfzeile, Kürzen, Sprachtreue, tolerantes Lesen,

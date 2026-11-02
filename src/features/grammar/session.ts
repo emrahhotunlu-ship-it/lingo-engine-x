@@ -42,7 +42,7 @@ import { logWarn } from '../../platform/diagnostics';
 import { inputProfile } from '../../platform/input';
 import { learnRecorder } from '../progress/persist';
 import { useLearnInputs } from '../learn/inputs';
-import { roundCtx } from '../today/state';
+import { openGrammarBlock, roundCtx } from '../today/state';
 import { useTodayPlan } from '../today/store';
 import { allTrainCards } from '../vocab/session';
 import { wordsToday } from '../../domain/metrics';
@@ -232,7 +232,9 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
-  const ctx: Ctx = o.block ? 'duty' : o.kind || o.tasks?.length || o.test ? 'xtra' : roundCtx('gram', day);
+  // Tagesweg: eine Themen- oder Kapitelrunde aus dem Grammatik-Reiter erledigt den offenen Grammatik-Schritt (nicht Test, Kontrast, Art, Muster).
+  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && (o.mode === 'topic' || o.mode === 'xtra') ? openGrammarBlock(day) : null;
+  const ctx: Ctx = o.block || tabBlock ? 'duty' : o.kind || o.tasks?.length || o.test ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
   if (mode === 'duty' && ctx !== 'duty') mode = 'xtra';
@@ -360,7 +362,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     startedAt: performance.now(),
     activeMs: 0,
     lastInteract: performance.now(),
-    block: o.block ?? null,
+    block: o.block ?? tabBlock ?? null,
     before,
     patLog: [],
   };

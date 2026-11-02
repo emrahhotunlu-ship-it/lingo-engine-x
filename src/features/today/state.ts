@@ -6,6 +6,8 @@ import { deriveToday, mergeEntries, type DayEntry } from '../../domain/plan/buil
 import type { DutyId, StoredPlan, TodayState } from '../../domain/plan/types';
 import type { Ctx, DutyChannel } from '../../domain/learn/types';
 import { pflichtMarked } from '../../domain/plan/pflicht';
+import { unitRows } from '../../domain/unit/rows';
+import type { UnitBlockNo } from '../../app/unit/types';
 import { vocabModuleOn } from '../../modules/vocab/api';
 import { usePending } from '../progress/persist';
 import { useUnitRun } from '../unit/runStore';
@@ -243,6 +245,19 @@ export function roundCtx(kind: 'lesson' | DutyChannel, day: string): Ctx {
   const st = computeToday(day);
   const id: DutyId = kind === 'lesson' ? 'lesson' : `ch:${kind}`;
   return st.duties.items.some((d) => d.id === id && d.state === 'open') ? 'duty' : 'xtra';
+}
+
+/**
+ * Tagesweg (UX-Neuanfang C, 02.11.2026): der offene Grammatik-Schritt von heute (Blocknummer), sonst `null`. Eine Grammatikrunde aus dem
+ * Grammatik-Reiter (Kapitel, nächstes Thema) zählt dann als dieser Schritt – egal, wo sie gestartet wurde (Befund Lena: lief als „Extra“).
+ */
+export function openGrammarBlock(day: string): UnitBlockNo | null {
+  const p = useTodayPlan.getState();
+  const plan = viewPlan(p.day === day ? p.plan : null);
+  if (plan?.u?.tw !== 1) return null;
+  const st = computeToday(day);
+  const row = (unitRows(plan, st.duties.items) ?? []).find((r) => r.kind === 'grammar' && r.state !== 'done');
+  return row ? row.block : null;
 }
 
 /** Erster offener Pflichtpunkt (Tageskarte, „Weiter: …", M11). */
