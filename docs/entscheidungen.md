@@ -745,3 +745,9 @@ Emrah: „nach meinem gefühl tust du extrem viel zeit in testen verbrauchen sta
 - Prüfer (ux-reviewer, learning-scientist, data-guard, platform-guard, english-teacher) **einmal** je Großpaket, nur bei großen Änderungen; Nachprüfung nur bei echten Blockern.
 - Tests, die noch das alte Design erwarten, werden gebündelt aufgeräumt statt einzeln.
 Zum laufenden Stand: Test-Link nach dem bereits laufenden Endtest.
+
+## 02.11.2026 – Großpaket G: vier Entscheidungen (Emrah, Pop-up nach dem Refinement `docs/umbau/grammatik/grosspaket-g.md`)
+1. „Viele Grammatik-Aufgaben sind noch nicht geprüft. Was soll die App am Anfang zeigen?“ → **„Alle wie bisher“** (nicht die Empfehlung). Umsetzung: Alle Aufgaben bleiben im Angebot; die Prüfung G1 repariert oder entfernt kaputte Aufgaben fortlaufend. Ungeprüfte ruhen **nicht**.
+2. „Wie sollen deine eigenen Fehler (aus Grammatik und Anwenden) zurückkommen?“ → **„Fest im Grammatik-Schritt (Empfehlung)“**: bis zu 3 fällige Fehlersätze (auch `app/repair`) am Anfang der Grammatik-Runde, der Schritt wird nicht länger.
+3. „Wie soll die neue Grammatik eingeschaltet werden?“ → **„Wie bei Wörtern (Empfehlung)“**: auf dem Test-Link gleich an, alter Weg bleibt als Rückweg im Hintergrund, live nach Emrahs OK.
+4. „Wie soll der Grammatik-Reiter aufgebaut sein?“ → **„Ein Weg durch die Themen (Empfehlung)“**: Themen in fester Reihenfolge (Kapitel-Weg), Stand sichtbar (sitzt / jetzt dran / als Nächstes), darunter die Fehlersätze an einem Ort.

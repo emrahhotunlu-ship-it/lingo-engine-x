@@ -1,7 +1,7 @@
 # Großpaket G – Grammatik + Wiederholen neu (Refinement, Entwurf 02.11.2026)
 
 Grundlage: `g0-bestand.md` (Bestandsaufnahme mit Belegen). Vorbild: Wörter-App (`src/modules/vocab`, Ablauf `docs/umbau/vokabeln/grosspaket-a.md`).
-Status: **Entwurf an Emrah**. Gebaut wird erst nach seinem OK.
+Status: **freigegeben** (Emrah „Ok“ + Pop-up 02.11.2026, Wortlaut in `docs/entscheidungen.md`). Bau läuft.
 
 ## Warum
 - **Fehlerquote:** In der Stichprobe hatten rund 14 % der Grammatik-Aufgaben Befunde, 5 % waren hart falsch. Das ist etwa eine kaputte Aufgabe pro Tag.
@@ -43,5 +43,11 @@ Die neue Grammatik kommt wie die Wörter-App erst hinter einen Schalter. Rückwe
 Prüfmodus: Schnell-Modus.
 
 ## Risiken
-- **Menge (G1):** 2.900 Aufgaben brauchen Zeit. Vorschlag: zuerst nur geprüfte Aufgaben ausspielen, ungeprüfte ruhen.
+- **Menge (G1):** 2.900 Aufgaben brauchen Zeit. Emrah (02.11.): **alle Aufgaben bleiben im Angebot**, kaputte werden fortlaufend repariert oder entfernt.
 - **Zwei Wege parallel:** Bis zum Umschalten laufen alter und neuer Weg nebeneinander (Schalter wie bei der Wörter-App).
+
+## Entscheidungen (Emrah, Pop-up 02.11.2026)
+1. Aufgaben: alle wie bisher, G1 repariert fortlaufend.
+2. Fehlersätze (Grammatik + `app/repair`): fest im Grammatik-Schritt, bis zu 3 am Anfang, Schritt wird nicht länger.
+3. Umschalten wie bei Wörtern: Test-Link gleich an, alter Weg als Rückweg.
+4. Reiter: ein Weg durch die Themen (sitzt / jetzt dran / als Nächstes), Fehlersätze darunter an einem Ort.
