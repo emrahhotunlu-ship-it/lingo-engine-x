@@ -870,3 +870,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Golden-Kennzahlen: Teil A unverändert; im Test als bewusst entfernt markiert: Tagesring auf Heute (ersetzt durch Weg + Balken `day-bar`) und die Kartenzahl in der Wörter-Zeile. Teil B nach Diff-Durchsicht neu geschrieben.
 - Budget: Einstieg +9.000 B gzip mit Freigabe „UX-Neuanfang A-D“ (gemessen +8.491 B über der alten Grenze).
 - Unit 7.510/7.510 grün, Typprüfung und Lint sauber.
+
+## 02.11.2026 – Test-Link UX-Neuanfang A–D
+- **Test-Link `AXHkh6…` v80 `1793656247-a5e1`** (Commit `4052e09b`, 44 Dateien, 6,78 MB; Fähigkeiten db/sample/downloads übernommen; 17 alte Stücke entfernt). **Rückweg v79 `1793580449-abea`** (Dateiliste: `docs/relaunch/publish/AXHkh6.json` in `4052e09b`). Live `JLL8…` v88 unverändert.
+- Schnell-Modus (Emrah): voller Klicktest nach 430 von 1.336 Tests angehalten (Emrah: Test-Link jetzt). Bis dahin 7 rot: 5 veraltete Erwartungen angepasst (Sonntag `ch:u-check`, kein „nichts fällig“ im Tagesweg, vier Reiter, Heute-fertig-Blatt), 2 Last-Wackler (einzeln grün), **1 echter Fehler behoben**: „Sicher?“-Rückfrage stand am Handy halb unter der Leiste (`JudgeFoot.tsx` rollt jetzt nach). Typprüfung, Lint, Plattform, Budget grün.
+- **Vor dem Live-Gang:** restliche ~900 Klicktests einmal laufen lassen (Schnell-Modus: einmal am Ende).
+- Lehrer-Nachprüfung der Texte eingebaut (u. a. „Weitere Extras“, „Enter zum Prüfen“, „Gib mir einen Tipp, aber nicht die Lösung“).
