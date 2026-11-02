@@ -845,4 +845,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Geprüft: Typprüfung, Lint, 7.496 Unit-Tests, Bau, Plattform, Budget, 57 betroffene E2E (autoswitch, vswitch, today, heute, today-duties, vlearn, wortschatz). Kein Gesamtlauf (Emrah: „tust du over managen / testen???“).
 - **Live `JLL8…` v88 `1793612956-d9f4`**, Rückweg v87 `1793608303-a6a8`.
 - Speicher voll: ~28 GB alte Testreste in /tmp; Emrah hat Löschen erlaubt, die automatische Sicherheitsprüfung hat das Löschen aber gesperrt. Frei gemacht nur npm-Zwischenspeicher (85 MB).
-- Nächstes Großpaket (Emrah „Beides zusammen“): Grammatik + Wiederholen neu, gleich im neuen Design; zuerst gemeinsam planen.
+- Nächstes Großpaket (Emrahs Worte: „grammer übungen oder wiederholen übungen hatten sehr oft fehlher … sollte überarbeitet werden“; Reihenfolge noch offen): Grammatik + Wiederholen neu, gleich im neuen Design; zuerst gemeinsam planen.
