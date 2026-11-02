@@ -7,7 +7,7 @@ export const ttP26En = {
   ttXGo: 'Explain it',
   ttXMyGuess: 'Your guess: {text}',
   ttXYours: 'Your answer',
-  ttXWhy: 'Correct because',
+  ttXWhy: 'The rule behind it',
   ttXExample: 'An example for you',
   ttXSignal: 'Signal words: {words}',
   ttXConfused: 'Easy to mix up with: {name}',

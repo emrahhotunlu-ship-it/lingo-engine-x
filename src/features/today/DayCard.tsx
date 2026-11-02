@@ -247,7 +247,7 @@ export function DayPath({ rows, prefix }: { rows: readonly DayRow[]; prefix: 'to
   );
 }
 
-/** Balken und „x von y Min. · Tagesziel“ (Vorschau `.bar`). */
+/** Balken und „x von y Min. heute“ (Vorschau `.bar`; Lehrer-Prüfung 02.11.: bei Tagesziel unter 15 Min. ist die Summe größer als das Ziel). */
 export function DayBar({ done, total }: { done: number; total: number }) {
   const { t } = useT();
   const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
@@ -374,8 +374,17 @@ const docRowName = (b: TodayDocBlock, t: T): string => dayRowName({ kind: b.k, b
  * Startbild (Relaunch P6, stufe1-plan §4.3): Ring, Restminuten, Thema, „Als Nächstes“ und der Knopf aus dem gültigen `app/today`, solange der Plan
  * noch berechnet wird. Gründe erscheinen erst mit der echten Karte. Der Knopf startet nach dem BERECHNETEN Plan (`requestStart` → wartender Start).
  */
+/** Thema des Tages aus dem Startbild-Dokument (`th`), wie `dayTitle` der echten Karte: „Kapitel n: Thema“, „Neu: Thema“ oder das Thema. */
+function docTopicTitle(th: TodayDoc['th'], t: T, lang: 'de' | 'en'): string | null {
+  if (!th) return null;
+  const topic = th.nm?.[lang] ?? th.id;
+  if (th.k === 'ch' && th.ch) return t('pxKNext', { n: th.ch, topic });
+  if (th.k === 'intro') return t('vhNewTopic', { topic });
+  return topic;
+}
+
 export function StartCard({ doc }: { doc: TodayDoc }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const api = useHiddenInput();
   const blocks = todayDocBlocks(doc);
   const now = blocks.find((b) => b.id === doc.go?.id) ?? null;
@@ -398,9 +407,11 @@ export function StartCard({ doc }: { doc: TodayDoc }) {
       hello={
         <>
           <HelloRow />
-          <p className="lx-vh-meta">{stepMeta(rows, t)}</p>
+          <p className="lx-vh-meta" data-testid="start-next">
+            {stepMeta(rows, t)}
+          </p>
           <h2 id="td-start-title" className="lx-vh-t" data-testid="start-title">
-            {nowRow?.name ?? t('vhDayTitle')}
+            {nowRow ? (channelOf(nowRow.kind) === 'g' && docTopicTitle(doc.th, t, lang) ? `${nowRow.name}: ${docTopicTitle(doc.th, t, lang)}` : nowRow.name) : t('vhDayTitle')}
           </h2>
           <span data-testid="start-status" data-done={done} data-total={total} className="sr-only">
             {t('nbHeuteRing', { done, total })}

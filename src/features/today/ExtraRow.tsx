@@ -3,25 +3,22 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { addDays } from '../../domain/date';
-import { counts, laptopDeepen, wrongToday } from '../../domain/metrics';
+import { counts, wrongToday } from '../../domain/metrics';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
 import type { IconName } from '../../ui/Icon';
-import { useInputProfile } from '../../platform/input';
 import { unlockSpeech } from '../../platform/speech';
 import { toast } from '../../ui/Toast';
 import { VRow, VSheet } from '../../ui/v';
 import { checkAvailable, startCheck } from '../check/session';
 import { startExtra } from '../vocab/start';
 import { useVocabCards } from '../vocab/hub/data';
-import { useDocsOnce } from '../progress/useOnce';
 import { dowOf } from '../../domain/unit/planFor';
 
 // „Wenn du mehr willst“ (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1/L1 `moreRows`, screens.js:91–104): Trennzeile, höchstens DREI Zeilen,
 // dann „Alles anzeigen“ (Blatt mit allen Angeboten). Nichts davon zählt für Ring oder Serie (Kap. 2 Nr. 6, Kap. 15); die Unterzeilen sagen es.
 // Angebote wie bisher (Lernplattform 2.0 §2.2): „Am Laptop vertiefen“ bzw. „Heute falsch – noch einmal“, „Sprechen“, montags der Wochen-Check.
 // Neu nach der Pflicht und an erster Stelle (Vorschau, Vokabeltrainer §1): „Wörter üben“ mit der Zahl der fälligen Karten.
-// Die Wörter für „Am Laptop vertiefen“ kommen aus der Datenbank (`laptopDeepen`, `log/<tag>`); `localStorage` spielt keine Rolle.
 
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
@@ -37,11 +34,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
   const { t } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
-  const profile = useInputProfile();
   const cards = useVocabCards();
-  const paths = useMemo(() => [`log/${today}`], [today]);
-  const logs = useDocsOnce(paths);
-  const log = logs.status === 'ready' ? logs.value.get(`log/${today}`) : undefined;
   const appProfile = useLive((s) => s.docs['app/profile']);
   const now = useClock((s) => s.now);
 
@@ -62,33 +55,21 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
         });
       }
     }
-    if (profile === 'keys') {
-      const words = laptopDeepen({ log, cards, today, max: 3 });
+    // Lehrer-Prüfung 02.11.2026: „Am Laptop vertiefen“ war derselbe Satz-Schreiben-Schritt wie Schritt 3 (Anwenden) – entfällt. Auf jedem Gerät
+    // steht stattdessen „Heute falsch“ (falls es heute falsche Antworten gab).
+    const wrong = wrongToday(cards, today);
+    if (wrong.length > 0) {
+      const keys = new Set(wrong.map((c) => c.key));
       out.push({
-        id: 'laptop',
-        icon: 'sparkle',
-        label: t('hxExtraLaptop'),
-        sub: words.length ? t('hxExtraLaptopWords', { words: words.join(', ') }) : t('hxExtraLaptopSub'),
+        id: 'wrong',
+        icon: 'refresh',
+        label: t('hxExtraWrong'),
+        sub: t('hxExtraWrongSub', { n: wrong.length }),
         run: () => {
           before();
-          go({ name: 'comboSentence' });
+          startExtra(api, { deck: 'all', pick: (c) => keys.has(c.key), allowNew: false, size: Math.min(10, keys.size), label: t('hxExtraWrong') });
         },
       });
-    } else {
-      const wrong = wrongToday(cards, today);
-      if (wrong.length > 0) {
-        const keys = new Set(wrong.map((c) => c.key));
-        out.push({
-          id: 'wrong',
-          icon: 'refresh',
-          label: t('hxExtraWrong'),
-          sub: t('hxExtraWrongSub', { n: wrong.length }),
-          run: () => {
-            before();
-            startExtra(api, { deck: 'all', pick: (c) => keys.has(c.key), allowNew: false, size: Math.min(10, keys.size), label: t('hxExtraWrong') });
-          },
-        });
-      }
     }
     out.push({
       id: 'speak',
@@ -121,7 +102,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
     }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [done, profile, cards, log, today, appProfile, now, t]);
+  }, [done, cards, today, appProfile, now, t]);
 }
 
 /** Blatt „Alles anzeigen“: alle Angebote von heute (Kennungen wie das frühere Blatt „Extra“). */

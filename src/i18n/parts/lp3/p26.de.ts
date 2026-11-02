@@ -7,7 +7,7 @@ export const ttP26De = {
   ttXGo: 'Erklären lassen',
   ttXMyGuess: 'Deine Vermutung: {text}',
   ttXYours: 'Deine Antwort',
-  ttXWhy: 'Richtig, weil',
+  ttXWhy: 'Die Regel dahinter',
   ttXExample: 'Beispiel für dich',
   ttXSignal: 'Signalwörter: {words}',
   ttXConfused: 'Leicht zu verwechseln mit: {name}',

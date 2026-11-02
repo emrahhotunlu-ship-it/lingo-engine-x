@@ -6,7 +6,7 @@ import { addDays, dayKey, dayStartOf } from '../../../src/domain/date';
 import { dayWeight, pickDay } from '../../../src/modules/vocab/domain/balance';
 import { capDays } from '../../../src/modules/vocab/domain/cap';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
-import { buildDayPlan, MIN_NEW } from '../../../src/modules/vocab/domain/day';
+import { buildDayPlan, MIN_NEW, MIN_NEW_CLEAR, minNewFor } from '../../../src/modules/vocab/domain/day';
 import { corridor, fuzzRange } from '../../../src/modules/vocab/domain/fuzz';
 import { FORM_SPEC, gradeOf } from '../../../src/modules/vocab/domain/grade';
 import { type Answer, applyAnswer, emptyLex, evidencePlans, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
@@ -248,6 +248,16 @@ describe('Tagesplan (M12, M13, M21)', () => {
     const cat = new Catalog([...mk(200, -3), ...fresh(10)]);
     const { plan } = buildDayPlan(cat, T0, DEFAULT_CFG, {});
     expect(plan.fresh).toBe(MIN_NEW);
+  });
+  it('ohne Rückstand mindestens 5 neue, auch wenn die Fälligen das Budget fast füllen (Emrah 02.11.2026)', () => {
+    const full = DEFAULT_CFG.min * 60_000;
+    expect(minNewFor(10, full, full)).toBe(MIN_NEW_CLEAR);
+    expect(minNewFor(10, full + 1, full)).toBe(MIN_NEW);
+    expect(minNewFor(2, 0, full)).toBe(2);
+    expect(minNewFor(0, 0, full)).toBe(0);
+    const cat = new Catalog([...mk(3, -1), ...fresh(10)]);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 10 }, {}).plan.fresh).toBeGreaterThanOrEqual(MIN_NEW_CLEAR);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 2 }, {}).plan.fresh).toBe(2);
   });
   it('Kontingent 0 → keine neuen', () => {
     const cat = new Catalog([...mk(5, -1), ...fresh(10)]);

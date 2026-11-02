@@ -36,7 +36,7 @@ export const nbHeuteDe = {
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
-  nbHeuteWhy_grammar: 'Deine Fehlerthemen, fällige und neue Grammatik, gemischt',
+  nbHeuteWhy_grammar: 'Thema von heute, dazu Sätze mit deinen früheren Fehlern',
   nbHeuteWhy_order: 'Wortstellung im ganzen Satz üben',
   nbHeuteWhy_apply: 'Drei eigene Sätze mit deinen Wörtern und einer Regel',
   nbHeuteWhy_again: 'Deine typischen Fehler in neuen Sätzen richtig sagen',
@@ -74,6 +74,7 @@ export const nbHeuteDe = {
   nbHeuteClose: 'Einheit schließen',
   nbHeuteSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',
   nbHeuteNote: 'Heute · Pflicht',
+  nbHeuteNoteStep: 'Heute · Schritt {n}: {name}',
   // Ersatzschritte (bis die Anbieter der Pakete kommen)
   nbHeuteAgainTask: 'Schreib es noch einmal aus dem Kopf – kürzer, klarer, richtig.',
   nbHeuteAgainPurpose: 'Neu formulieren festigt, was du vorhin gelernt hast (Generierungseffekt).',

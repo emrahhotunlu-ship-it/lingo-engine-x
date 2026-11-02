@@ -197,6 +197,26 @@ export function wrongToday(cards: readonly TrainCard[], today: string): TrainCar
   return cards.filter((c) => !c.hidden && histOf(c.doc).some((h) => h.g === 1 && dayKey(h.t) === today));
 }
 
+/**
+ * Heute geübte Wörter (UX-Neuanfang, Prüfung learning-scientist 02.11.2026): Schritt 3 „Anwenden“ nimmt zuerst Wörter, die heute (auf jedem
+ * Gerät) geübt wurden und noch nicht fest sitzen (Stufe 1–3) oder heute neu sind. Aus `log/<tag>`, nie `localStorage`.
+ */
+export function practicedToday(i: { log: Doc | null | undefined; cards: readonly TrainCard[]; today: string; max?: number }): string[] {
+  const entries = Array.isArray(i.log?.entries) ? (i.log.entries as unknown[]) : [];
+  const byKey = new Map(i.cards.map((c) => [c.key, c]));
+  const out: string[] = [];
+  for (const raw of entries) {
+    if (!raw || typeof raw !== 'object') continue;
+    const key = entryCardKey(raw);
+    const c = key ? byKey.get(key) : undefined;
+    if (!c || c.hidden || !(c.intro === i.today || (c.stage >= 1 && c.stage <= 3))) continue;
+    const w = c.word.trim();
+    if (w && !out.includes(w)) out.push(w);
+    if (out.length >= (i.max ?? 12)) break;
+  }
+  return out;
+}
+
 /** „Am Laptop vertiefen“: Wörter, die heute am Handy geübt wurden (`log/<tag>`, `dev: 't'`) und fest sitzen (Stufe ≥ 4) oder heute neu sind. Nie `localStorage`. */
 export function laptopDeepen(i: { log: Doc | null | undefined; cards: readonly TrainCard[]; today: string; max?: number }): string[] {
   const entries = Array.isArray(i.log?.entries) ? (i.log.entries as unknown[]) : [];

@@ -50,7 +50,7 @@ describe('Mehrzahl', () => {
 
 describe('Höchstens ein Zähler je Bildschirm', () => {
   it('die Wörter unter dem Übungsbalken und die Stufen-Zeile zählen nicht („von“/„of“)', () => {
-    for (const k of ['nbHeuteNote', 'nvDuty', 'nbTrainingLevel'] as const) {
+    for (const k of ['nbHeuteNote', 'nbHeuteNoteStep', 'nvDuty', 'nbTrainingLevel'] as const) {
       expect(DE[k], k).not.toMatch(/\bvon\b/);
       expect(EN[k], k).not.toMatch(/\bof\b/);
     }

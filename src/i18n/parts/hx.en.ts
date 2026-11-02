@@ -14,7 +14,7 @@ export const hxEn = {
   hxDoneFixed: 'Mistake sentences done: {n}',
   hxExtraRow: 'Extra',
   hxExtraTitle: 'Extra',
-  hxExtraNote: 'Optional. Does not count for the ring or your streak.',
+  hxExtraNote: 'Optional. Doesn’t count toward your daily goal.',
   hxExtraLaptop: 'Go deeper on the laptop',
   hxExtraLaptopSub: '3 own sentences with today\'s words · about 5 min',
   hxExtraLaptopWords: 'Today\'s words: {words}',

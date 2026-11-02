@@ -1,6 +1,7 @@
 import { reportTask } from '../tutor/reportTask';
 import { createElement, useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { useClock } from '../../app/clock';
+import { companionOpenedSince } from '../companion/store';
 import { useLive } from '../../data/live';
 import { bookAnswer, givenOf, type C1Run } from '../../domain/c1x/book';
 import { c1Key, type C1Task } from '../../domain/c1x/runtime';
@@ -167,6 +168,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const elapsed = (): number => Math.max(0, Math.round(tick() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
   const help: HelpLevel = tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0;
+  // „Claude erklärt“ vor dem Prüfen zählt als Hilfe-Stufe 1 (learning-scientist 02.11.2026).
+  const helpAt = (): HelpLevel => (help < 1 && companionOpenedSince(shownAt.current) ? 1 : help);
 
   const setResponse = useCallback(
     (r: C1Response | null, meta: ResponseMeta = { form: 'default' }) => {
@@ -197,7 +200,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     const ms = elapsed();
     const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
     const given = givenOf(item, response);
-    setFb({ score, response, meta, given, dontKnow: false, override: false, ms, firstKeyMs, help, ...timing(score, meta, given), ...extra });
+    setFb({ score, response, meta, given, dontKnow: false, override: false, ms, firstKeyMs, help: helpAt(), ...timing(score, meta, given), ...extra });
     if (profile === 'touch') api.blur();
   };
 

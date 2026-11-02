@@ -89,9 +89,10 @@ function rows(html: string, id: 'duty' | 'start-duty'): string[] {
   const out: string[] = [];
   for (const m of html.matchAll(new RegExp(`<li[^>]*data-testid="${id}"[^>]*>([\\s\\S]*?)</li>`, 'g'))) {
     const head = m[0].slice(0, m[0].indexOf('>') + 1);
-    // D2 V-HEUTE: Blockliste der Vorschau (`lx-v-st`): Name, rechts Minuten bzw. „läuft“/„erledigt“.
-    const name = /<span class="lx-v-st-nm">([^<]*)<\/span>/.exec(m[1]!)?.[1] ?? '?';
-    const right = /<span class="lx-v-st-sm[^"]*"[^>]*>([\s\S]*?)<\/span>/.exec(m[1]!)?.[1] ?? '';
+    // UX-Neuanfang B (02.11.2026): Tagesweg `DayPath` (`lx-vh-st`): Name in der Überschrift, rechts die Minuten.
+    // Früher (D2 V-HEUTE) Blockliste `lx-v-st` mit Name und „läuft“/„erledigt“; beide Formen werden gelesen.
+    const name = (/<h3 class="lx-vh-st-n">([^<]*)</.exec(m[1]!) ?? /<span class="lx-v-st-nm">([^<]*)<\/span>/.exec(m[1]!))?.[1] ?? '?';
+    const right = (/<span class="lx-vh-st-min[^"]*"[^>]*>([\s\S]*?)<\/span>/.exec(m[1]!) ?? /<span class="lx-v-st-sm[^"]*"[^>]*>([\s\S]*?)<\/span>/.exec(m[1]!))?.[1] ?? '';
     const st = / data-state="([^"]*)"/.exec(head)?.[1];
     const now = / data-now="true"/.test(head) ? ' now' : '';
     out.push(`${/ data-duty="([^"]*)"/.exec(head)?.[1]} | ${name} | ${text(right)} | ${st}${now}`);

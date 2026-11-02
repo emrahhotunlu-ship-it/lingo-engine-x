@@ -15,6 +15,7 @@ import { UnitStepScreen } from '../features/unit/UnitStep';
 import { handleUnitDone, installUnitWatch } from '../features/unit/run';
 import { installTodayDocRounds } from '../features/today/startDoc';
 import { EMPTY_RUN, useUnitRun, type UnitRun } from '../features/unit/runStore';
+import { blockName } from '../features/unit/labels';
 import { useT } from '../i18n';
 
 // Bereich „Heute“ – Besitz: Paket P1 (plan.md §4.2): Heute-Wurzel mit der Tageskarte, die
@@ -55,11 +56,15 @@ function useUnitNote(route: Route): string | null {
   const runDay = useUnitRun((s) => s.day);
   const runRoute = useUnitRun((s) => s.routeName);
   const duty = useUnitRun((s) => s.duty);
+  const kind = useUnitRun((s) => s.kind);
+  const block = useUnitRun((s) => s.block);
   const duties = useToday((s) => s.plan?.duty);
   if (route.name === 'unitCard' || runDay !== today || !duty || !duties || (runRoute !== route.name && route.name !== 'unitStep')) return null;
   const n = duties.indexOf(duty as (typeof duties)[number]) + 1;
-  // Ohne Schrittzahl (UX-Audit U1: „3 von 52“ und „Schritt 1 von 4“ standen übereinander; der Balken ist der eine Zähler).
-  return n > 0 ? t('nbHeuteNote') : null;
+  if (n <= 0) return null;
+  // Ohne „von“ (UX-Audit U1: „3 von 52“ und „Schritt 1 von 4“ standen übereinander; der Balken ist der eine Zähler).
+  // UX-Neuanfang M6: aber mit Schritt und Namen, damit klar ist, wo im Tagesweg man steht („Heute · Schritt 1: Wörter“).
+  return kind && block ? t('nbHeuteNoteStep', { n, name: blockName(kind, block, t) }) : t('nbHeuteNote');
 }
 
 type UnitSnap = Pick<UnitRun, 'day' | 'block' | 'duty' | 'kind' | 'via' | 'watch' | 'routeName' | 'route' | 'sentences' | 'phrases' | 'task' | 'offline' | 'at' | 'draft'>;

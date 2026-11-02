@@ -2,7 +2,7 @@
 
 export const ttDe = {
   ttAsk: 'Erklär mir meine Antwort',
-  ttLabel: 'Erklärung',
+  ttLabel: 'Was in deiner Antwort schiefging',
   ttMark: 'von Claude · kann Fehler enthalten',
   ttMore: 'Weiter fragen',
   ttLimit: 'Für heute sind die 20 Erklärungen von Claude aufgebraucht. Morgen geht es weiter.',

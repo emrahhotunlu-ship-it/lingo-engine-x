@@ -860,3 +860,13 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Grammatik aus dem Grammatik-Reiter (Thema/Kapitel) zählt als offener Schritt 2 (`openGrammarBlock`), nicht mehr als „Extra“.
 - Golden-Kennzahlen bewusst neu erzeugt (auch Teil A, `metrics-kennzahlen.json`): 3 statt 4 Segmente, Restminuten = Tagesziel, Neustart-Woche 15 statt 11–12 Min. **Beim Live-Gang erwähnen.**
 - Unit 7221/7221 grün. Offen: Großpaket-Rest A (Helfer), B, D, dann ein Test-Link.
+
+## 02.11.2026 – UX-Neuanfang A–D fertig gebaut, Prüfer-Befunde behoben (vor Test-Link)
+- Emrahs Pop-up-Antworten: Sonntag Wochen-Check statt Anwenden (`ch:u-check`); neue Wörter mindestens 5, wenn kein Rückstand (`minNewFor`, sonst 2).
+- ux-reviewer behoben: B1 (Hinweis „nichts zum Nacharbeiten“ nicht mehr im Tagesweg), M1 (Zeile „Morgen“ rechnet mit Tagesweg), M2 (Schritt 1 heißt immer „Wörter“), M3 (Wörter-Zeile ohne „75 Karten“ neben „10 Min.“), M4, M6 (Kopfzeile „Heute · Schritt 2: Grammatik“, deckt M5 mit), M7 („Einmal richtig schreiben“ zweitrangig), M9 (Lücke: Lösung nur im Satz, keine zweite „Richtig“-Zeile), M13 (Meldungen oben), K2 (Links „Weitere Angebote“ / „Praxis: Sprechen, Satzbau und mehr“), K4 (Fachwörter in Texten).
+- Bewusst nicht geändert: M8 (Hilfe/Claude bleibt immer sichtbar – Emrahs Vorgabe gilt vor dem Befund).
+- Verschoben (Großpaket G / nächste Runde): M10 leere rechte Spalte am Laptop, M11 Kennzahl-Karten/Wochenrückblick, M12 Grammatik-Reiter „Test starten“ und zweite Themenliste, M14 Melden nur über „…“ und zu hohes Blatt, M15 Wort-Tippziele unter 44 px, K1, K3, K5–K9; learning-scientist 5, 7, 9, 12.
+- Startbild: fünfter Reiter „Praxis“ entfernt (App hat vier), Grammatik-Titel mit Thema wie die echte Seite (kein Sprung beim Öffnen).
+- Golden-Kennzahlen: Teil A unverändert; im Test als bewusst entfernt markiert: Tagesring auf Heute (ersetzt durch Weg + Balken `day-bar`) und die Kartenzahl in der Wörter-Zeile. Teil B nach Diff-Durchsicht neu geschrieben.
+- Budget: Einstieg +9.000 B gzip mit Freigabe „UX-Neuanfang A-D“ (gemessen +8.491 B über der alten Grenze).
+- Unit 7.510/7.510 grün, Typprüfung und Lint sauber.

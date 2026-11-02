@@ -14,6 +14,8 @@ export type { MessageKey } from '../../i18n';
 
 // Bausteine der Übungsseite
 export { ExerciseShell, SentenceInput } from '../../ui/exercise';
+export { TutorButton } from '../../ui/exercise/TutorButton';
+export { companionOpenedSince } from '../../features/companion/store';
 export { PrimaryAction } from '../../ui/ActionBar';
 export type { ShellAction, ShellFeedback, ShellSecondary, ShellStatus } from '../../ui/exercise';
 export { Button } from '../../ui/Button';

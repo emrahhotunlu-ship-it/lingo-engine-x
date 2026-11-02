@@ -6,6 +6,7 @@ import { kwtWords } from '../c1x/kwtNorm';
 import type { GrammarTask, GrammarTaskType, TaskSlot, TaskSrc } from '../learn/types';
 import { formsOfPat, patsOf } from '../metrics/pattern';
 import { dayKey } from '../date';
+import { isReportedTask } from '../c1/report';
 import { kindsFor, pickUnseen } from '../c1x/select';
 import { toTask } from '../c1x/runtime';
 import { errorsByPat, patInfos } from './slotInput';
@@ -263,6 +264,8 @@ export type RoundInput = {
   wordsToday?: readonly string[];
   /** Schlüssel, die in dieser Runde nicht (mehr) vorkommen dürfen (z. B. die Aufgaben des Vortests). */
   exclude?: ReadonlySet<string>;
+  /** Gemeldete Aufgaben (`app/c1.bad`): werden nie wieder gestellt, auch nicht als Fehlersatz. */
+  reported?: ReadonlySet<string>;
   /** c1x (Lernplattform 3.0 §3.4): löst einen Fehlersatz mit `cid` zur Aufgabe im selben Baustein auf (`features/c1x/resolve.ts`); `null` = der Fehlersatz-Text. */
   c1?: (topic: string, e: ErrorEntry) => GrammarTask | null;
   /** Kapitel-Arbeit (K3): Themen des gewählten Kapitels. Ihre fälligen Fehlersätze stehen vor denen anderer Themen (die Höchstzahl bleibt). */
@@ -389,6 +392,8 @@ function picker(i: Pick2) {
     }
     return v;
   };
+  const reported = i.reported;
+  const isRep = (t: GrammarTask): boolean => isReportedTask(reported, t.key);
   const dupBlocked = (t: GrammarTask): boolean => {
     const dup = mapEntryOf(t.topic, t.key)?.dup;
     return !!dup && used.has(dup.slice(dup.indexOf('|') + 1));
@@ -400,7 +405,7 @@ function picker(i: Pick2) {
     // Zugeordnete Aufgaben vor nicht zugeordneten (nur in Themen mit Musterdatei), innerhalb davon gilt die Quellenreihenfolge.
     for (const onlyAssigned of assigned ? [true, false] : [false]) {
       for (const list of sources) {
-        const cands = list.filter((t) => t.topic === p.topic && !used.has(t.key) && !seen.has(t.key) && eligible(t) && !dupBlocked(t) && (!onlyAssigned || !!t.pat) && (!p.pats || (!!t.pat && p.pats.includes(t.pat))));
+        const cands = list.filter((t) => t.topic === p.topic && !used.has(t.key) && !seen.has(t.key) && eligible(t) && !dupBlocked(t) && !isRep(t) && (!onlyAssigned || !!t.pat) && (!p.pats || (!!t.pat && p.pats.includes(t.pat))));
         if (!cands.length) continue;
         for (const ty of p.prefer) {
           const of = cands.filter((t) => t.type === ty);
@@ -411,15 +416,15 @@ function picker(i: Pick2) {
     }
     return null;
   };
-  const anySeed = (topic: string): GrammarTask | null => seed.find((t) => t.topic === topic && !used.has(t.key) && eligible(t)) ?? null;
+  const anySeed = (topic: string): GrammarTask | null => seed.find((t) => t.topic === topic && !used.has(t.key) && eligible(t) && !isRep(t)) ?? null;
   const take = (t: GrammarTask | null): GrammarTask | null => {
     if (!t) return null;
     used.add(t.key);
     return t;
   };
-  return { used, profile, sources, gt, block, fresh, anySeed, take, eligible };
+  return { used, profile, sources, gt, block, fresh, anySeed, take, eligible, isRep };
 }
-type Pick2 = Pick<RoundInput, 'mode' | 'introduce' | 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'introBlock' | 'profile' | 'wordsToday' | 'exclude'>;
+type Pick2 = Pick<RoundInput, 'mode' | 'introduce' | 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'introBlock' | 'profile' | 'wordsToday' | 'exclude' | 'reported'>;
 
 /** Vorrang der Formen im Einführungsblock: erkennen (meaning, mc), ergänzen (gap), dann das Gegenstück (§5.3). */
 const INTRO_FORMS: readonly (readonly GrammarTaskType[])[] = [['meaning', 'mc'], ['mc', 'meaning'], ['gap', 'kwt', 'find'], ['mc', 'meaning', 'find', 'kwt', 'gap']];
@@ -484,7 +489,7 @@ export function variantOf(t: GrammarTask, i: Pick2 & { exclude?: ReadonlySet<str
  */
 export function selectRound(i: RoundInput): GrammarTask[] {
   const pk = picker(i);
-  const { used, profile, gt, block, fresh, anySeed, take } = pk;
+  const { used, profile, gt, block, fresh, anySeed, take, isRep } = pk;
 
   // 1. Fällige Fehler.
   const errors: GrammarTask[] = [];
@@ -496,7 +501,7 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   for (const d of due) {
     if (errors.length >= maxErr) break;
     const own = forProfile(d.task, profile);
-    if (!own || used.has(own.key)) continue;
+    if (!own || used.has(own.key) || isRep(own)) continue;
     used.add(own.key);
     const pat = typeof d.e.pat === 'string' && d.e.pat ? d.e.pat : null;
     // Variante nur mit Muster und nur für ein eingeführtes Muster (wie `variantFor`); sonst der eigene Satz.
@@ -591,7 +596,7 @@ export function selectRound(i: RoundInput): GrammarTask[] {
       const seen = seenOf(i.grammarDocs.get(topic));
       const before = [...formsOfPat(patsOf(i.grammarDocs.get(topic))[sl.pat]), ...(roundForms.get(sl.pat) ?? [])];
       for (const kind of kindsFor(p, inp, sl.pat, undefined, before)) {
-        const item = pickUnseen({ pat: sl.pat, kind, seen, used, seed: i.seed, ...(i.wordsToday ? { wordsToday: i.wordsToday } : {}) });
+        const item = pickUnseen({ pat: sl.pat, kind, seen, used, seed: i.seed, ...(i.wordsToday ? { wordsToday: i.wordsToday } : {}), ...(i.reported ? { bad: i.reported } : {}) });
         if (item) {
           pick = take(toTask(item, { ref: `grammar/${topic}` }));
           roundForms.set(sl.pat, [...(roundForms.get(sl.pat) ?? []), kind]);

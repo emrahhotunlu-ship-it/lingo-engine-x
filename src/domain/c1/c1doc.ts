@@ -113,9 +113,11 @@ export function programStartedOf(raw: unknown): boolean {
   if (!isObj(raw)) return false;
   if (!c1Readable(raw)) return true;
   const d = readC1(raw);
-  // Ohne Kapitelwahl gilt wie bisher: das Dokument ist da, also hat das Programm begonnen.
-  if (!d.ch && !d.chh) return true;
-  return !!d.place || d.checks.length > 0 || d.gates.length > 0 || d.prod.length > 0 || d.bad.some((id) => !id.startsWith('gr:') && !id.startsWith('c1:'));
+  const real = !!d.place || d.checks.length > 0 || d.gates.length > 0 || d.prod.length > 0 || d.bad.some((id) => !id.startsWith('gr:') && !id.startsWith('c1:'));
+  // Ohne Kapitelwahl gilt wie bisher: das Dokument ist da, also hat das Programm begonnen – außer es trägt nur Aufgaben-Meldungen
+  // (data-guard 02.11.2026: „Melden“ legt `app/c1` an, das darf keinen C1-Check-Tag auslösen).
+  if (!d.ch && !d.chh) return real || d.bad.length === 0;
+  return real;
 }
 
 /** Kapitel wählen (rein): `ch` setzen und an `chh` anhängen (≤ 20, die ältesten fallen weg). `null`, wenn dasselbe Kapitel schon gewählt ist. */

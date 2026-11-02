@@ -1298,6 +1298,8 @@ export function ExerciseView({
           store={{ kind: 'vocab', path: card.path }}
           onRight={menu.override}
           onRewrite={menu.copyOnce}
+          auto={fb.result.verdict === 'wrong'}
+          shownWhy={model.lines.find((l) => l.k === 'why')?.text ?? null}
         />
       );
     feedback = {

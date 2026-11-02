@@ -403,7 +403,7 @@ export const de = {
   exName_mc_en: 'Bedeutung wählen',
   exName_mc_de: 'Wort wählen',
   exName_cloze_hint: 'Lücke mit Hilfe',
-  exName_cloze: 'Lücke frei',
+  exName_cloze: 'Lücke ohne Auswahl',
   exName_type: 'Wort schreiben',
   exName_colloc: 'Wortpartner',
   exModeEarlier: '{mode} (bisher)',

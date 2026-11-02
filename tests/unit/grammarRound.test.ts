@@ -108,3 +108,17 @@ describe('Pflichtrunde (Lernplattform 2.0 §3.3, §4.7)', () => {
     expect(variantOf({ ...t, pat: null }, input())).toBeNull();
   });
 });
+
+describe('Gemeldete Aufgaben (app/c1.bad, UX-Neuanfang D)', () => {
+  it('eine gemeldete Aufgabe kommt in keiner Runde wieder', async () => {
+    const { reportId } = await import('../../src/domain/c1/report');
+    for (const seed of ['a', 'b', 'c']) {
+      const first = selectRound(input({ seed }));
+      expect(first.length).toBeGreaterThan(0);
+      const reported = new Set(first.map((t) => reportId(`gr:${t.key}`)));
+      const again = selectRound(input({ seed, reported }));
+      for (const t of again) expect(reported.has(reportId(`gr:${t.key}`)), t.key).toBe(false);
+    }
+  });
+});
+

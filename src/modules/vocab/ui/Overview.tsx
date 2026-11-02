@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switch, toast, useClock, useLive, useT, type MessageKey } from '../sharedUi';
-import { logError } from '../shared';
+import { dayMinutes, logError, normGoalMin } from '../shared';
 import { lexOf } from '../data/lex';
 import { readVlogRecent } from '../data/history';
 import { NEW_OPTIONS, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
@@ -24,12 +24,16 @@ const EMPTY = new Map<string, Doc>();
 const LOCALES = { de: 'de-DE', en: 'en-US' } as const;
 const pct = (x: number) => Math.round(x * 100);
 
-/** Einstellungen aus dem Profil (wie api.ts `vocabCfg`, hier ohne Import von api.ts, damit kein Kreis entsteht). */
+/**
+ * Einstellungen aus dem Profil (wie api.ts `vocabCfg`, hier ohne Import von api.ts, damit kein Kreis entsteht). `min` = Wörter-Minuten aus dem
+ * Tagesziel (UX-Neuanfang C; data-guard 02.11.2026: früher stand hier noch das alte `vcfg.min`).
+ */
 function cfgOf(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
   const npd = profile && typeof profile.newPerDay === 'number' && (NEW_OPTIONS as readonly number[]).includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
-  if (!raw?.success) return { ...DEFAULT_CFG, newPerDay: npd };
-  return { min: raw.data.min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0 };
+  const min = dayMinutes(normGoalMin(profile?.goalMin)).words;
+  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay: npd };
+  return { min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0 };
 }
 
 /** Alle sichtbaren Lexeme (pausierte zählen nicht), live. */

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
+import { companionOpenedSince } from '../companion/store';
 import { useSharedTarget } from '../../engine/shared';
 import { useLive } from '../../data/live';
 import { alignWords, splitWords } from '../../domain/answer/align';
@@ -267,6 +268,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 3 }) : null;
   // Jede Stufe der Tipp-Leiter zählt als Hilfe: H1 (Leitfrage) bis „Gut“, H2 (Formel) und H3 (erster Buchstabe) bis „Schwer“; der Zweitversuch wie H2/H3.
   const help: Help = { level: tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0 };
+  // „Claude erklärt“ vor dem Prüfen (oder Claude sonst geöffnet) ist Hilfe-Stufe 1 (learning-scientist 02.11.2026, wie im Wörter-Trainer E5-05).
+  const helpAt = (): Help => (help.level < 1 && companionOpenedSince(shownAt.current) ? { level: 1 } : help);
 
   useCompanionSee({
     area: 'grammar',
@@ -296,9 +299,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     // Zeit: Gesamtzeit ab dem Einblenden über beide Versuche; bei „Fehler finden“ ab dem Fund der Stelle (§4.10).
     const ms = elapsed();
     const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
-    const grade = learnGrade(type, verdict, { submitMs: ms, firstKeyMs }, help, profile);
+    const helpNow = helpAt();
+    const grade = learnGrade(type, verdict, { submitMs: ms, firstKeyMs }, helpNow, profile);
     const tv: TutorVerdict = verdict === 'correct' ? (check?.kind === 'other' ? 'alt_ok' : 'correct') : verdict;
-    setFb({ verdict, check, given, dontKnow: false, grade, ms, help, judged: 'local', unsure: false, override: false, tv, by: 'local', fitsGoal: null, dx: null, ask: false, ...timing(given), ...extra });
+    setFb({ verdict, check, given, dontKnow: false, grade, ms, help: helpNow, judged: 'local', unsure: false, override: false, tv, by: 'local', fitsGoal: null, dx: null, ask: false, ...timing(given), ...extra });
     if ((gapKind || findTask) && profile === 'touch') api.blur();
   };
 
@@ -495,7 +499,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       return;
     }
     const ms = elapsed();
-    finishCheck('wrong', res, word, { tapped: word, grade: 1, ms, help });
+    finishCheck('wrong', res, word, { tapped: word, grade: 1, ms, help: helpAt() });
   };
 
   const noError = () => {
@@ -993,7 +997,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
       if (type === 'correct' || (type === 'transform' && whole)) comparison = { given: fb.given, ops: c?.ops ?? alignWords(fb.given, task.answer) };
       else if (type === 'kwt' && (c?.ops ?? []).filter((o) => o.op !== 'eq').length > 1) comparison = { given: fb.given, ops: c?.ops ?? [] };
-      else if ((type === 'gap' || type === 'transform') && !choiceType && nonEmpty(fb.given)) {
+      // Lücke: die Lösung steht seit UX-Neuanfang D in der Lücke selbst (deine Antwort durchgestrichen darüber) – keine zweite Lösungszeile
+      // „Richtig: …“ (UX M9: die Lösung stand bis zu viermal da). Umformen: der ganze Zielsatz als eine Zeile.
+      else if (type === 'transform' && !choiceType && nonEmpty(fb.given)) {
         // Die Lücke zeigt nur ein Wort: Der Vergleich nennt den ganzen Satz („Du: … → Richtig: …“) mit der markierten Stelle.
         const base = type === 'transform' ? (task.prompt.split('→').pop() ?? '').trim() : task.prompt;
         if (GAP.test(base)) {
@@ -1048,6 +1054,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         store={{ kind: 'grammar', topic: task.topic, q: task.prompt }}
         onRight={menu.override}
         onRewrite={menu.copyOnce}
+        // Von selbst nur bei klar falscher, getippter oder gewählter Antwort; nie bei „Fast“/Tippfehler und nie in Tests ohne Hilfe (Prüfung 02.11.).
+        auto={!noHelp && fb.verdict === 'wrong'}
+        shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
       />
     );
     // Rückmeldung 7 (Fehler finden): Kopf „Richtig erkannt“ / „Nicht ganz“ mit dem getippten Wort, darunter der korrigierte Satz mit sichtbarer

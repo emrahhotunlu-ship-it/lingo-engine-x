@@ -49,6 +49,16 @@ describe('Tagesweg (tw: 1)', () => {
     expect(small.blocks.map((b) => b.kind)).toEqual(['review', 'grammar', 'task.apply']);
     expect(small.blocks[0]!.min).toBe(10);
   });
+  it('Sonntag: Schritt 3 ist der Wochen-Check (ca. 5 Min.) statt Anwenden (Emrah 02.11.2026); Neustart-Woche bleibt bei Anwenden', () => {
+    const sun = unitPlanFor('2026-11-08', null, { goalMin: 25, tw: 1, reviewCount: 20 });
+    expect(sun.blocks.map((b) => [b.block, b.kind, b.channel, b.min])).toEqual([
+      [1, 'review', 'review', 10],
+      [2, 'grammar', 'ch:u-focus', 10],
+      [3, 'task.check', 'ch:u-check', 5],
+    ]);
+    const restart = unitPlanFor('2026-11-08', null, { goalMin: 25, tw: 1, reviewCount: 20, comeback: 'restart' });
+    expect(restart.blocks[2]!.kind).toBe('task.apply');
+  });
   it('ohne tw bleibt der bisherige Plan (Rückweg)', () => {
     const old = unitPlanFor(day, null, { goalMin: 25, rv: 2, reviewCount: 20 });
     expect(old.tw).toBeUndefined();

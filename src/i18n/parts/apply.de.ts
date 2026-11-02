@@ -31,7 +31,7 @@ export const applyDe = {
   apListenQEndNotice: 'Das war Hören mit Sprachausgabe, keine Messung deines Hörverstehens.',
   apComboOwn: 'Eigener Satz',
   apComboOwnSub: 'Ein Wort und eine Regel in einem Satz',
-  apComboTask: 'Schreibe einen Satz mit „{word}“ – Regel: {topic}.',
+  apComboTask: 'Schreib einem Kunden einen Satz mit „{word}“. Grammatik: {topic}.',
   apComboPurpose: 'Du benutzt das Wort und die Regel zusammen in deinem eigenen Satz. So bleibt beides hängen.',
   apComboRule: 'Regel ansehen',
   apComboInput: 'Dein Satz auf Englisch',

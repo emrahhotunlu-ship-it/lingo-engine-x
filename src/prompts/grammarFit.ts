@@ -116,7 +116,7 @@ export const grammarFit: PromptTemplate<GrammarFitVars, GrammarFitOut> = {
       'Reply with only one JSON object:',
       GRAMMAR_FIT_EXAMPLE,
       'Rules:',
-      '- fits: true only if the learner sentence is fully grammatical AND natural in American English AND says what the context says (small shades of meaning, such as simple past instead of used to, are fine; a different time, person, number, polarity or fact is not).',
+      '- fits: true only if the learner sentence is fully grammatical AND natural in American or British English AND says what the context says (small shades of meaning, such as simple past instead of used to, are fine; a different time, person, number, polarity or fact is not).',
       '- certain: true only if you have no real doubt. If it is borderline, regional, stilted or depends on context you do not have, set certain to false.',
       '- fitsGoal: true only if the learner sentence uses the practiced pattern or meets the goal of the exercise (in another correct form). A correct sentence with a different structure has fitsGoal false.',
       '- Do not be generous: a wrong form, a missing or extra word, a wrong tense for the context or an unnatural collocation means fits is false.',

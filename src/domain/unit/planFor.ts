@@ -174,7 +174,8 @@ function tagesweg(day: string, dow: number, goalMin: number, prefs: UnitPrefs, r
   const blocks: UnitBlock[] = [
     block(1, step('review'), m.words, CHANNEL[1], { repairs: 0 }),
     block(2, step('grammar', { n: grammarTasksFor(m.grammar) }), m.grammar, 'ch:u-focus', { errs }),
-    block(3, step('task.apply'), m.apply, CHANNEL[3]),
+    // Emrah 02.11.2026: sonntags ist Schritt 3 der Wochen-Check (ca. 5 Min.) statt Anwenden (nicht in der Neustart-Woche).
+    dow === 7 && !restart ? block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check') : block(3, step('task.apply'), m.apply, CHANNEL[3]),
   ];
   const kept = blocks.filter((b) => !(prefs.reviewCount === 0 && b.block === 1));
   const short = goalMin <= SHORT_GOAL_MAX || restart;

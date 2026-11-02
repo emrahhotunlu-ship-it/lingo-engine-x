@@ -1,7 +1,5 @@
 import type { MessageKey } from '../../i18n';
 import { blockNameKey } from '../../domain/unit/rows';
-import { useLive } from '../../data/live';
-import { vocabModuleOn } from '../../modules/vocab/api';
 import { FORMAT_N } from '../../domain/c1/checkSchedule';
 import type { Step3Fmt } from '../../domain/plan/types';
 import type { UnitBlock, UnitBlockKind } from '../../domain/unit/types';
@@ -15,8 +13,8 @@ type T = (k: MessageKey, v?: Record<string, string | number>) => string;
 export function blockName(kind: UnitBlockKind, block: number, t: T, fmt?: Step3Fmt): string {
   if (fmt && block === 3 && kind === 'task.order') return t(`cxKindName_${fmt}` as MessageKey);
   const key = blockNameKey(kind, block);
-  // Neue Wörter-App (Befund ux 4b Nr. 2): Block 1 heißt überall „Wörter“, wie Start, Runde und Abschluss.
-  if (key === 'review' && vocabModuleOn(useLive.getState().docs['app/profile'])) return t('nbHeuteBlock_words');
+  // Block 1 heißt überall „Wörter“, wie Start, Runde und Abschluss (Befund ux 4b Nr. 2; UX-Neuanfang M2: nie dreimal „Wiederholen“).
+  if (key === 'review') return t('nbHeuteBlock_words');
   return t(`nbHeuteBlock_${key}` as MessageKey);
 }
 

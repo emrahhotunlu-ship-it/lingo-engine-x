@@ -9,7 +9,8 @@ import { startDrill } from '../drills/session';
 import { useLive } from '../../data/live';
 import { pickPairs, type ComboPair } from '../../domain/apply/combo';
 import { topicById, TOPICS } from '../../domain/content';
-import { laptopDeepen } from '../../domain/metrics';
+import { laptopDeepen, practicedToday } from '../../domain/metrics';
+import { useTodayPlan } from '../today/store';
 import { errorsOf } from '../../domain/grammar/errors';
 import { alignWords } from '../../domain/answer/align';
 import { normText } from '../../domain/text/normText';
@@ -42,8 +43,9 @@ export function willRepair(out: ComboCheckOut, given: string): boolean {
 
 type Done = { word: boolean; rule: boolean | null; correct: boolean | null };
 
-/** Wörter aus „Am Laptop vertiefen“ sortieren `pickPairs` (nach Fehlern) vor alle anderen. */
+/** Wörter aus „Am Laptop vertiefen“ sortieren `pickPairs` (nach Fehlern) vor alle anderen, danach die heute geübten Wörter. */
 const DEEPEN_BOOST = 1000;
+const TODAY_BOOST = 500;
 
 /** Paare für die Runde: aus den Live-Daten, fest je Lerntag. */
 export function useComboPairs(): ComboPair[] {
@@ -51,15 +53,19 @@ export function useComboPairs(): ComboPair[] {
   const grammar = useLive((s) => s.collections.grammar);
   const today = useClock((s) => s.today);
   const log = useLive((s) => s.day?.doc);
+  // Thema des Tages aus dem eingefrorenen Plan (`u.gt`), nur wenn der Plan von heute ist.
+  const gtTopics = useTodayPlan((s) => (s.plan && s.plan.d === today ? s.plan.u?.gt?.topics : undefined));
   return useMemo(() => {
-    // „Am Laptop vertiefen“ (Matrix §6): Wörter, die heute am Handy geübt wurden und fest sitzen, kommen zuerst.
+    // „Am Laptop vertiefen“ (Matrix §6): Wörter, die heute am Handy geübt wurden und fest sitzen, kommen zuerst; danach die heute geübten.
     const deepen = new Set(laptopDeepen({ log, cards, today }).map((w) => w.toLowerCase()));
+    const practiced = new Set(practicedToday({ log, cards, today }).map((w) => w.toLowerCase()));
+    const boost = (w: string): number => (deepen.has(w) ? DEEPEN_BOOST : practiced.has(w) ? TODAY_BOOST : 0);
     const words = cards
       .filter((c) => !c.hidden && !c.isNew && c.stage >= 1 && c.word.trim() && c.word.trim().split(/\s+/).length <= 2)
-      .map((c) => ({ word: c.word.trim(), lapses: lapsesOf(c.doc) + (deepen.has(c.word.trim().toLowerCase()) ? DEEPEN_BOOST : 0), stage: c.stage }));
+      .map((c) => ({ word: c.word.trim(), lapses: lapsesOf(c.doc) + boost(c.word.trim().toLowerCase()), stage: c.stage }));
     const errorTopics = [...(grammar ?? new Map<string, Record<string, unknown>>()).entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
-    return pickPairs(words, TOPICS, errorTopics, today);
-  }, [cards, grammar, today, log]);
+    return pickPairs(words, TOPICS, errorTopics, today, undefined, gtTopics ?? []);
+  }, [cards, grammar, today, log, gtTopics]);
 }
 
 export function ComboSentenceScreen() {

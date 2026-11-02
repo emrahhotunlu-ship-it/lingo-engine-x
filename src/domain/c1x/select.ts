@@ -1,5 +1,6 @@
 import { kindEnabled } from '../../app/flags';
 import { patternById } from '../grammar/patterns';
+import { isReportedTask } from '../c1/report';
 import { hash32 } from '../random';
 import { c1Items } from './preload';
 import { c1Key } from './runtime';
@@ -53,7 +54,7 @@ export function varyKinds(kinds: readonly C1Kind[], recent: readonly string[]): 
 }
 
 /** Darf die Aufgabe im Training vorkommen? Nie Check (`probe`), Kapitelprüfung/Einstufung (`pool`), gemeldete (`bad`). */
-export const trainable = (item: C1Item, bad?: ReadonlySet<string>): boolean => !item.probe && !item.pool && !bad?.has(item.id);
+export const trainable = (item: C1Item, bad?: ReadonlySet<string>): boolean => !item.probe && !item.pool && !bad?.has(item.id) && !isReportedTask(bad, c1Key(item.id));
 
 export type PickOpts = {
   pat: string;

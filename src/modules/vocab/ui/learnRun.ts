@@ -803,7 +803,7 @@ export class LearnRun {
   }
 
   /** Prüfen (bzw. Aufdecken/„Weiß ich nicht“ mit `dunno`). */
-  check(given: string, m: Measured, dunno = false): void {
+  check(given: string, m: Measured, dunno = false, asked = false): void {
     const v = this.view;
     const cat = this.cat;
     if (v.k !== 'card' || !cat) return;
@@ -811,7 +811,8 @@ export class LearnRun {
     if (!before) return;
     const t = this.env.now();
     const c = evaluate(v.card, given, this.env.dict, dunno || !given.trim());
-    const f: Frozen = { t, ms: Math.max(0, Math.round(m.ms)), fk: Math.max(0, Math.round(m.fk)), hint: v.tip ? 1 : 0 };
+    // `asked`: Claude vor dem Prüfen gefragt (learning-scientist 02.11.2026) = Hilfe wie der Tipp.
+    const f: Frozen = { t, ms: Math.max(0, Math.round(m.ms)), fk: Math.max(0, Math.round(m.fk)), hint: v.tip || asked ? 1 : 0 };
     const p: Pending = { task: v.task, card: v.card, kind: v.kind, before, given, check: c, f, choice: null, a: answerOf(v.card, c, f), result: this.compute(v.kind, v.card, v.task, before, answerOf(v.card, c, f)), committed: false };
     this.pending = p;
     if (v.card.sentence) this.lastSent.set(v.task.path, v.card.sentence.sent.key);

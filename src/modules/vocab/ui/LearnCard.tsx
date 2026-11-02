@@ -22,6 +22,8 @@ import {
   type ShellFeedback,
   type ShellSecondary,
   toast,
+  TutorButton,
+  companionOpenedSince,
 } from '../sharedUi';
 import { addDays, dayKey } from '../shared';
 import type { Band, Line, Next, Why } from '../domain/band';
@@ -222,7 +224,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   };
   const check = (dunno = false) => {
     if (view.k !== 'card') return;
-    run.check(dunno ? '' : typed.current, measure(), dunno);
+    run.check(dunno ? '' : typed.current, measure(), dunno, companionOpenedSince(shownAt.current));
   };
   const next = () => {
     run.next();
@@ -453,6 +455,28 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   );
 }
 
+/**
+ * Claude erklärt bei falscher getippter Antwort von selbst, was an DIESER Antwort schiefging (learning-scientist 02.11.2026, Befund 8:
+ * wie im alten Trainer). Nicht in der Einführung (dort ist ein Fehlversuch kein Fehler), nicht ohne Eingabe, nicht nach „Wusste ich“/„Später“.
+ */
+function tutorOf(v: BandView, t: T): ReactNode {
+  if (v.kind === 'intro' || v.band.tone !== 'no' || !v.given.trim() || v.choice) return null;
+  const g = gapText(v.card);
+  const prompt = g ? `${g.text.slice(0, g.start)}___${g.text.slice(g.end)}` : v.card.de || v.card.answer;
+  const why = v.band.why.kind === 'teach' ? v.band.why.text : whyText(t, v.band.why);
+  return (
+    <TutorButton
+      taskKey={`vm:${v.card.path}:${v.n}:${v.given}`}
+      vars={{ topic: v.card.answer, prompt, answer: v.card.answer, given: v.given, pattern: null }}
+      kind="word"
+      word={{ en: v.card.answer, de: v.card.de, pos: v.card.pos ?? '', other: null, falseFriend: v.card.contrast?.ff ?? null }}
+      store={{ kind: 'vocab', path: v.card.path }}
+      auto
+      shownWhy={why || null}
+    />
+  );
+}
+
 /** „Warum heute?“ (Menü „…“ → „Warum diese Aufgabe?“): Teile aus reason.ts als ein Satz, Tag und Spur in Oberflächensprache. */
 function reasonLine(t: T, r: Reason | null, dateShort: (ms: number) => string): { text: string; code: string } | null {
   if (!r) return null;
@@ -636,6 +660,7 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
     ),
     nextIn: null,
     act,
+    tutor: tutorOf(v, t),
     depth: 'min',
     explanation: null,
   };

@@ -237,6 +237,9 @@ describe('app/c1: Kapitelwahl (nur ergänzend)', () => {
     expect(programStartedOf({ v: 1, ch: { n: 3, d: TODAY }, bad: ['gr:t1', 'out1'] })).toBe(true);
     // Rückweg: ein Dokument ohne Wahl gilt wie bisher als begonnen, auch leer.
     expect(programStartedOf({ v: 1, checks: [], gates: [], prod: [], bad: [] })).toBe(true);
+    // data-guard 02.11.: ein Dokument, das nur durch „Melden“ entstand (ohne Wahl), ist kein Programmstart.
+    expect(programStartedOf({ v: 1, bad: ['gr:t1', 'c1:x'] })).toBe(false);
+    expect(programStartedOf({ v: 1, bad: ['gr:t1'], checks: [] })).toBe(false);
   });
   it('Schemas: alte Dokumente ohne neue Felder gültig; neue Felder gelesen; unbekannte bleiben', () => {
     expect(c1Schema.safeParse({ v: 1 }).success).toBe(true);

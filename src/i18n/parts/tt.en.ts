@@ -4,7 +4,7 @@ import type { ttDe } from './tt.de';
 
 export const ttEn: Record<keyof typeof ttDe, string> = {
   ttAsk: 'Explain my answer',
-  ttLabel: 'Explanation',
+  ttLabel: 'What went wrong in your answer',
   ttMark: 'by Claude · may contain errors',
   ttMore: 'Ask more',
   ttLimit: 'You have used all 20 explanations from Claude for today. More tomorrow.',

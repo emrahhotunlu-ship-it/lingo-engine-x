@@ -40,7 +40,11 @@
         "D1 V-BAU": 6000,
         "D2 V-HEUTE": 8000,
         "D3 V-UEBUNG": 6000,
-        "D5 V-GRAMMATIK": 3000
+        "D5 V-GRAMMATIK": 3000,
+        "UX-Neuanfang A-D": {
+          "bytes": 9000,
+          "freigabe": "Hauptsitzung 02.11.2026: Tagesweg, Claude-Erklärung bei falsch, Aufgabe melden, Hilfe immer sichtbar (Emrahs Freigabe UX-Neuanfang)"
+        }
       }
     },
     "css": {

@@ -26,7 +26,9 @@ import { dropAx, saveAx, type ExplainStore } from './explainSave';
 // Ablauf: Knopf → „Was war mein Fehler?“ (erst die eigene Vermutung, gegen Abhängigkeit) → ein Aufruf `explain-answer@2` → Karte mit
 // „Deine Antwort“, „Richtig, weil“, Beispiel und Kennzeichnung. Die App urteilt, Claude erklärt (T-R2): `alsoRight` ändert nichts, bis
 // „Ich lag richtig“ getippt wird. Das Ergebnis liegt in der Datenbank (`ax`/`axs`); beim zweiten Öffnen derselben Antwort gibt es keinen Aufruf.
-// Tagesbremse: höchstens 20 Aufrufe je Tag und Gerät (`ai/tutorBudget.ts`). Ohne Claude gibt es weder Knopf noch Zeile.
+// Tagesbremse: eigener Topf `explain` (30 je Tag und Gerät, `ai/tutorBudget.ts`), damit die Zweitmeinung nie leer läuft. Ohne Claude gibt es
+// weder Knopf noch Zeile. Auto-Start nur mit eigener (nicht leerer) Antwort und erst, wenn das Dokument mit einer gespeicherten Erklärung geladen
+// ist (sonst liefe ein zweiter Aufruf trotz gespeicherter Erklärung). `shownWhy` = die feste Begründung darüber; Claude wiederholt sie nicht.
 
 const TPL = `${explainAnswerV2.id}@${explainAnswerV2.version}`;
 type Shown = { out: ExplainOut; guess: string; stored: boolean };
@@ -58,6 +60,8 @@ export type ExplainMineProps = {
   onRewrite?: (() => void) | undefined;
   /** Von selbst starten (Standard). `false`: nur auf Tipp, mit dem Vermutungs-Schritt. */
   auto?: boolean;
+  /** Feste Begründung, die über der Karte schon steht; Claude soll sie nicht wiederholen. */
+  shownWhy?: string | null;
 };
 
 /** Gespeicherte, zu dieser Antwort passende Erklärung aus den Live-Dokumenten. */
@@ -82,12 +86,15 @@ function outOfAx(ax: Ax): ExplainOut {
 }
 
 export function ExplainMine(props: ExplainMineProps) {
-  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true } = props;
+  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true, shownWhy = null } = props;
   const { t, lang } = useT();
   const ai = useAiAvailable();
   const ask = useAsk(explainAnswerV2);
   const profile = useLive((s) => s.docs['app/profile']);
-  const doc = useLive((s) => (store ? (store.kind === 'grammar' ? s.collections.grammar?.get(store.topic) : (store.path.startsWith('chunk/') ? s.collections.chunk : s.collections.vocab)?.get(store.path.slice(store.path.indexOf('/') + 1))) : undefined));
+  const coll = useLive((s) => (store ? (store.kind === 'grammar' ? s.collections.grammar : store.path.startsWith('chunk/') ? s.collections.chunk : s.collections.vocab) : undefined));
+  const doc = store && coll ? coll.get(store.kind === 'grammar' ? store.topic : store.path.slice(store.path.indexOf('/') + 1)) : undefined;
+  // Ohne Speicherort gibt es nichts zu laden; sonst erst starten, wenn die Sammlung da ist.
+  const loaded = !store || coll !== undefined;
   const [openedAt] = useState(() => Date.now());
   const fromDb = useMemo(() => storedAx(store, doc, vars.given, openedAt), [store, doc, vars.given, openedAt]);
   const [shown, setShown] = useState<Shown | null>(() => memo.get(taskKey) ?? null);
@@ -102,7 +109,7 @@ export function ExplainMine(props: ExplainMineProps) {
     if (failedKey) logWarn('tutor:explain', { code: failedKey, message: 'optional explanation failed; static explanation stays' }, taskKey);
   }, [failedKey, taskKey]);
   const go = async () => {
-    if (!takeTutorCall()) {
+    if (!takeTutorCall(Date.now(), 'explain')) {
       setLimited(true);
       return;
     }
@@ -122,6 +129,7 @@ export function ExplainMine(props: ExplainMineProps) {
       word: kind === 'word' ? (word ?? null) : null,
       ctx: tutorCtx(profile),
       uiLang: lang,
+      ...(shownWhy && shownWhy.trim() ? { shown: shownWhy.trim() } : {}),
     };
     noteQuality(TPL, 'gen');
     const r = await ask.run(ev);
@@ -142,11 +150,12 @@ export function ExplainMine(props: ExplainMineProps) {
     goRef.current = go;
   });
   const hasAnswer = !!shown || !!fromDb;
+  const hasGiven = vars.given.trim().length > 0;
   useEffect(() => {
-    if (!auto || !ai || reported || hasAnswer || autoStarted.has(taskKey)) return;
+    if (!auto || !ai || !hasGiven || !loaded || reported || hasAnswer || autoStarted.has(taskKey)) return;
     autoStarted.add(taskKey);
     void goRef.current();
-  }, [auto, ai, reported, hasAnswer, taskKey]);
+  }, [auto, ai, hasGiven, loaded, reported, hasAnswer, taskKey]);
   if (!ai || reported) return null;
 
   const current: Shown | null = shown ?? (fromDb ? { out: outOfAx(fromDb), guess: '', stored: true } : null);
@@ -229,7 +238,8 @@ export function ExplainMine(props: ExplainMineProps) {
           <AiMark variant="explain" tpl={TPL} id={taskKey} onReport={onReport} data-testid="tutor-mark" />
           <div className="flex flex-wrap gap-2">
             {onRewrite && (
-              <Button variant="primary" onClick={onRewrite} data-testid="tutor-rewrite">
+              // UX M7: freiwillig – nie gleich stark wie „Weiter“ (der eine Hauptknopf der Übung).
+              <Button variant="secondary" onClick={onRewrite} data-testid="tutor-rewrite">
                 {t('ttXRewrite')}
               </Button>
             )}

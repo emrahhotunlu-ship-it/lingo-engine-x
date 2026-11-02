@@ -14,7 +14,7 @@ export const hxDe = {
   hxDoneFixed: 'Fehlersätze erledigt: {n}',
   hxExtraRow: 'Extra',
   hxExtraTitle: 'Extra',
-  hxExtraNote: 'Freiwillig. Zählt nicht für Ring oder Serie.',
+  hxExtraNote: 'Freiwillig. Zählt nicht zum Tagesziel.',
   hxExtraLaptop: 'Am Laptop vertiefen',
   hxExtraLaptopSub: '3 eigene Sätze mit Wörtern von heute · ca. 5 Min.',
   hxExtraLaptopWords: 'Wörter von heute: {words}',

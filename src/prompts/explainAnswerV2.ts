@@ -5,8 +5,10 @@ import { clip, header } from './common';
 import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// explain-answer@2 (Lernplattform 3.0 P26, KI-Tutor T1): „Erklär mir meine Antwort“. Nur auf Antippen, `quick`, 24 h zwischengespeichert, nie
-// automatisch wiederholt. Die App hat die Antwort schon bewertet (nicht richtig) und die Abweichung berechnet (`ops`, `alignWords`); Claude
+// explain-answer@2 (Lernplattform 3.0 P26, KI-Tutor T1): „Erklär mir meine Antwort“. Seit dem UX-Neuanfang (02.11.2026) startet sie bei einer
+// falschen, nicht leeren Antwort von selbst (sonst auf Antippen), `quick`, 24 h zwischengespeichert, nie automatisch wiederholt. Lehrer-Prüfung
+// 02.11.: eigene Regel für Wort-Aufgaben (Bedeutung, Wortpartner, falscher Freund), Einfluss des Deutschen nennen, britische Formen gelten als
+// richtig, je Text höchstens 18 Wörter, die schon gezeigte Begründung (`shown`) nicht wiederholen. Die App hat die Antwort schon bewertet (nicht richtig) und die Abweichung berechnet (`ops`, `alignWords`); Claude
 // erklärt nur diese Stellen. Ausgabe: `yours` (was die eigene Form ausdrückt), `why` (Signalwort und Regel), `signal` (nur wörtlich im Satz),
 // `confused` (nur aus der Kontrastfamilie), `alsoRight` (ändert nichts, bis Emrah „Ich lag richtig“ tippt), `example` (neuer Satz, formal geprüft;
 // fällt still weg statt Neuversuch). Ein Neuversuch nach A6.3 nur, wenn `yours`/`why` fehlen oder in der falschen Sprache stehen.
@@ -29,6 +31,8 @@ export type ExplainVars = {
   /** Berufsprofil-Zeile (nur für das Beispiel), ≤ 300. */
   ctx: string;
   uiLang: UiLang;
+  /** Feste Begründung, die der Lernende schon sieht (≤ 300); Claude wiederholt sie nicht. */
+  shown?: string;
 };
 
 export type ExplainBi = { de: string; en: string };
@@ -103,7 +107,7 @@ export const explainAnswerV2: PromptTemplate<ExplainVars, ExplainOut> = {
       header({ id: ID, version: VERSION }),
       'You explain one wrong answer in an English exercise to a German-speaking learner (B2, aiming for C1, business English).',
       'The app has already graded this answer as NOT correct. Do not grade again; only set alsoRight to true if the learner answer is fully correct English for this exact task.',
-      'Explain ONLY the listed changes (ops). Never mention other problems. American English is the standard.',
+      'Explain ONLY the listed changes (ops). Never mention other problems. American English is the standard; British spelling and British forms count as correct.',
       line('Kind', v.kind),
       line('Task', clip(v.task, EXPLAIN_TASK_MAX)),
       line('Learner answer', clip(v.given, EXPLAIN_GIVEN_MAX) || '(none, the learner did not know)'),
@@ -116,11 +120,15 @@ export const explainAnswerV2: PromptTemplate<ExplainVars, ExplainOut> = {
         ? line('Word', `${clip(v.word.en, 60)} = ${clip(v.word.de, 60)} (${clip(v.word.pos, 20)})${v.word.other ? `; the learner's answer is another word of theirs: ${clip(v.word.other.en, 60)} = ${clip(v.word.other.de, 60)}` : ''}${v.word.falseFriend ? `; false friend: ${clip(v.word.falseFriend, 100)}` : ''}`)
         : '',
       v.ctx ? line('Learner work context (only for the example)', clip(v.ctx, 300)) : '',
+      v.shown ? line('Already shown to the learner (do not repeat it; add what is missing)', clip(v.shown, 300)) : '',
       'Reply with only one JSON object in exactly this shape:',
       EXPLAIN_EXAMPLE_JSON,
       'Rules:',
-      '- yours: what the learner form expresses, or when it would be right (one sentence). null only if the learner gave no answer. why: the signal word in the sentence and the rule (one or two sentences, only if not already obvious).',
-      '- yours and why are written in both languages: "de" in simple German, "en" in English; each at most 25 words. English terms inside German text go in „…“.',
+      v.kind === 'word'
+        ? '- yours: what the learner word means or where it would fit (one sentence). null only if the learner gave no answer. why: the difference in meaning, the usual word partner (collocation) or the false friend that makes the correct word right here.'
+        : '- yours: what the learner form expresses, or when it would be right (one sentence). null only if the learner gave no answer. why: the signal word in the sentence and the rule (one or two sentences, only if not already obvious).',
+      '- If the mistake comes from German (a word-for-word translation, German word order or a German tense), say so briefly in why.',
+      '- yours and why are written in both languages: "de" in simple German, "en" in English; each at most 18 words. English terms inside German text go in „…“.',
       '- signal: up to 3 words copied exactly from the task sentence. Empty list if none.',
       '- confused: the id of ONE easily confused pattern from the list above if the learner mixed it up, otherwise null.',
       '- alsoRight: true only if the learner answer is fully correct English for this exact task, otherwise false.',

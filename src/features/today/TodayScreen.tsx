@@ -359,7 +359,8 @@ export function TodayScreen() {
         id: r.id,
         name: dayRowName({ kind: r.kind, block: r.block, id: r.id, fmt: r.fmt }, t),
         // Neues Wörter-Modul: der Block ist eine Runde (fällige und neue Wörter), keine Kartenzahl.
-        why: b ? (b.kind === 'review' && vocabMod ? t('nbHeuteWhy_vocabMod') : blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec)) : '',
+        // Tagesweg (UX M3): Schritt 1 ist eine Zeit, keine Kartenzahl („64 Karten · 10 Min.“ widersprach sich).
+        why: b ? (b.kind === 'review' && (vocabMod || up.tw === 1) ? t('nbHeuteWhy_vocabMod') : blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec)) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,
         kind: r.kind,
@@ -374,7 +375,8 @@ export function TodayScreen() {
   // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`). `topic` allein (R5): für die eine Zeile mit der Lernzeit.
   const tomorrow = useMemo((): { line: string; topic: string } => {
     const next = addDays(today, 1);
-    const p = unitPlanFor(next, null, { goalMin: unit?.u.goalMin });
+    // Tagesweg (UX M1): morgen nach derselben Regel wie heute, sonst stünde dort ein Schritt, den es nicht mehr gibt (Satzbau).
+    const p = unitPlanFor(next, null, { goalMin: unit?.u.goalMin, ...(unit?.u.tw === 1 ? { tw: 1 as const } : {}) });
     const task = p.blocks.find((b) => b.block === 3);
     if (p.shape === 'sun') {
       const sun = `${t('nbHeuteBlock_check')} · ${t('nbHeuteWhy_check')}`;
@@ -415,7 +417,8 @@ export function TodayScreen() {
     }
   }, [welcome, lang, clockNow]);
   // Kein Fehlersatz fällig: „Fehler korrigieren“ steht nicht im Plan (Plan der Einheit, nicht am Sonntag) – Zustand statt leerem Schritt.
-  const fixNone = !!unit && unit.u.shape !== 'sun' && !unit.u.b.some(([, kind]) => kind === 'again');
+  // Tagesweg (UX B1): „Fehler korrigieren“ ist dort freiwillig, fällige Fehlersätze laufen in der Grammatik mit – keine Zeile.
+  const fixNone = !!unit && unit.u.tw !== 1 && unit.u.shape !== 'sun' && !unit.u.b.some(([, kind]) => kind === 'again');
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
 
   // Unterzeile der Tageskarte (Vorschau `.sub`): die früheren Bänder „Wiedereinstieg“ und „Neustart-Woche · Tag n“ (stufe1c-plan §3.1 D2).

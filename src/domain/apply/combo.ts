@@ -11,12 +11,18 @@ export type ComboWord = { word: string; lapses: number; stage: number };
 
 export const COMBO_ROUNDS = 3;
 
-export function pickPairs(words: readonly ComboWord[], topics: readonly Topic[], errorTopics: readonly string[], seed: string, n: number = COMBO_ROUNDS): ComboPair[] {
+/**
+ * `todayTopics`: Grammatikthemen des heutigen Plans (`u.gt.topics`); sie kommen vor allen anderen (Prüfung learning-scientist 02.11.2026:
+ * Anwenden verbindet die Wörter und das Thema von heute). Danach Themen mit offenen Fehlersätzen, dann der Rest fest je Tag gemischt.
+ */
+export function pickPairs(words: readonly ComboWord[], topics: readonly Topic[], errorTopics: readonly string[], seed: string, n: number = COMBO_ROUNDS, todayTopics: readonly string[] = []): ComboPair[] {
   const usable = topics.filter((t) => t.rule && t.rule.trim());
   if (!usable.length || !words.length) return [];
-  const withErrors = usable.filter((t) => errorTopics.includes(t.id));
-  const rest = usable.filter((t) => !errorTopics.includes(t.id)).sort((a, b) => hash32(`${seed}|${a.id}`) - hash32(`${seed}|${b.id}`));
-  const topicOrder = [...withErrors, ...rest];
+  const fromToday = todayTopics.map((id) => usable.find((t) => t.id === id)).filter((t): t is Topic => !!t);
+  const first = new Set(fromToday.map((t) => t.id));
+  const withErrors = usable.filter((t) => !first.has(t.id) && errorTopics.includes(t.id));
+  const rest = usable.filter((t) => !first.has(t.id) && !errorTopics.includes(t.id)).sort((a, b) => hash32(`${seed}|${a.id}`) - hash32(`${seed}|${b.id}`));
+  const topicOrder = [...fromToday, ...withErrors, ...rest];
   const wordOrder = [...words].sort((a, b) => b.lapses - a.lapses || a.stage - b.stage || (a.word < b.word ? -1 : 1));
   const out: ComboPair[] = [];
   const seenWords = new Set<string>();

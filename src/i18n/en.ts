@@ -400,7 +400,7 @@ export const en: Record<MessageKey, string> = {
   exName_mc_en: 'Pick the meaning',
   exName_mc_de: 'Pick the word',
   exName_cloze_hint: 'Gap with hints',
-  exName_cloze: 'Free gap',
+  exName_cloze: 'Gap without choices',
   exName_type: 'Write the word',
   exName_colloc: 'Word partner',
   exModeEarlier: '{mode} (earlier)',

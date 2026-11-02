@@ -8,6 +8,7 @@ import { flags } from '../../app/flags';
 import { kindRound } from '../../domain/grammar/kindRound';
 import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { lexDoneSet } from '../c1x/lexDone';
+import { reportedSetOf } from '../../domain/c1/report';
 import type { C1Kind } from '../../domain/c1x/types';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
@@ -233,7 +234,11 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
   // Tagesweg: eine Themen- oder Kapitelrunde aus dem Grammatik-Reiter erledigt den offenen Grammatik-Schritt (nicht freie Mischrunde, Test, Kontrast, Art, Muster).
-  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && o.mode === 'topic' ? openGrammarBlock(day) : null;
+  // Nur ein Thema des Tages (`u.gt.topics`) oder eine Runde ohne festes Thema (Kapitel) – sonst erfüllte jede beliebige Themenrunde den Schritt
+  // und das heutige Thema bliebe ungeübt (learning-scientist 02.11.2026, Befund 4).
+  const gtToday = useTodayPlan.getState().plan?.u?.gt?.topics ?? [];
+  const todayTopic = !o.topic || gtToday.includes(o.topic);
+  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && o.mode === 'topic' && todayTopic ? openGrammarBlock(day) : null;
   const ctx: Ctx = o.block || tabBlock ? 'duty' : o.kind || o.tasks?.length || o.test ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
@@ -249,6 +254,8 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const wfFocus = focusFor(live.docs['app/profile']?.wf, { planAt: plan?.at ?? null, day });
   roundNo++;
   const seed = `${day}|${mode}|${o.topic ?? ''}|${roundNo}`;
+  // Gemeldete Aufgaben (`app/c1.bad`) kommen nie wieder (learning-scientist 02.11.2026).
+  const reported = reportedSetOf(live.docs['app/c1']);
   const base = {
     grammarDocs: docs,
     dailyOpen: [...(mode === 'topic' ? extraTasks : []), ...inputs.dailyOpen],
@@ -257,6 +264,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     gt,
     profile,
     wordsToday: words,
+    reported,
   } as const;
   ensureC1xLoaded();
   const c1 = c1ErrorResolver({ grammarDocs: docs, nowMs, seed, profile });
@@ -283,7 +291,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     tasks = [...o.tasks];
   } else if (o.kind) {
     // Anwenden: eine Runde nur einer c1x-Art, über die eingeführten Muster.
-    tasks = kindRound({ kind: o.kind, size: o.size ?? 6, grammarDocs: docs, seed, wordsToday: words, lexDone: lexDoneSet() });
+    tasks = kindRound({ kind: o.kind, size: o.size ?? 6, grammarDocs: docs, seed, wordsToday: words, lexDone: lexDoneSet(), bad: reported });
   } else if (o.pat && o.topic) {
     // Ein Muster üben (Themenblatt): 4 Aufgaben nur dieses Musters.
     tasks = selectRound({ ...common, mode: 'topic', size: 4, errorsMax: 0, introBlock: { topic: o.topic, pats: [o.pat] }, gt: null });

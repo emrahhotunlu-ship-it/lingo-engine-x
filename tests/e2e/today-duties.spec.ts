@@ -9,7 +9,7 @@ import { DAY, dump, writes } from './trainerHelpers';
 
 type Doc = Record<string, unknown>;
 const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
-const LABEL: Record<string, string> = { review: 'Wiederholen', 'ch:order': 'Satzbau' };
+const LABEL: Record<string, string> = { review: 'Wörter', 'ch:order': 'Satzbau' };
 // Seit dem Fokus-Umbau gibt es die Lektion nicht mehr als Pflichtpunkt: zwei Punkte.
 const DUTIES = ['review', 'ch:order'] as const;
 
@@ -92,7 +92,7 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
 
 const CASES: Array<{ name: string; done: string[] }> = [
   { name: '0 von 2', done: [] },
-  { name: '1 von 2 (Wiederholen)', done: ['review'] },
+  { name: '1 von 2 (Wörter)', done: ['review'] },
   { name: '1 von 2 (nur Satzbau)', done: ['ch:order'] },
   { name: '2 von 2', done: ['review', 'ch:order'] },
 ];

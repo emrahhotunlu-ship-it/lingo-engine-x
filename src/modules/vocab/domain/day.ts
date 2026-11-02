@@ -8,13 +8,18 @@ import type { Form, FormStats, Lex, TrackKey, VocabCfg } from './types';
 //  - Fällige nach Gefährdung (gefährdetste zuerst), Kernwörter vor Randwörtern.
 //  - Rückstand: höchstens 2 Tagesbudgets je Tag. Der Rest: Randwörter werden nach Gefährdung auf die nächsten 7 Tage verteilt (Lastausgleich),
 //    jedes höchstens 3-mal (`lex.mv`); Kernwörter und dreimal verschobene bleiben fällig und kommen am nächsten Tag zuerst.
-//  - Neue: mindestens 2 an jedem Lerntag (auch bei Rückstand), darüber so viele, wie das Minutenbudget erlaubt, höchstens das Kontingent;
+//  - Neue: mindestens 2 an jedem Lerntag (auch bei Rückstand), ohne Rückstand (alle Fälligen passen ins Tagesbudget) mindestens 5
+//    (Emrah 02.11.2026; der Wörter-Schritt darf dafür 1–3 Minuten länger dauern); darüber so viele, wie das Minutenbudget erlaubt, höchstens das Kontingent;
 //    bei Kontingent 0 keine (Emrahs Antwort 5). Nie zwei verwechselbare neue am selben Tag, nie eine Kollokation am Einführungstag ihres Kernworts.
 
 export const MOVE_MAX = 3;
 export const BACKLOG_BUDGETS = 2;
 export const SPREAD_DAYS = 7;
 export const MIN_NEW = 2;
+/** Mindestzahl neuer Wörter, wenn kein Rückstand besteht (Emrah 02.11.2026: „Mind. 5 neue, wenn kein Rückstand“). */
+export const MIN_NEW_CLEAR = 5;
+/** Mindestzahl neuer Wörter für einen Lerntag: ohne Rückstand (Fällige ≤ Tagesbudget) 5, sonst 2; nie über dem Kontingent. */
+export const minNewFor = (quota: number, dueMs: number, budgetMs: number): number => Math.min(dueMs <= budgetMs ? MIN_NEW_CLEAR : MIN_NEW, quota);
 /** Vorgezogen (M15): bis zu dieser Zahl Lerntage voraus, nur solange der Plan unter AHEAD_FILL × Zielzeit liegt. */
 export const AHEAD_DAYS = 2;
 export const AHEAD_FILL = 0.9;
@@ -53,7 +58,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   due.sort((a, b) => mustOf(a) - mustOf(b) || a.r - b.r || a.path.localeCompare(b.path));
 
   const quota = Math.max(0, cfg.newPerDay - introducedToday);
-  const minNew = Math.min(MIN_NEW, quota);
+  const minNew = minNewFor(quota, due.reduce((a, x) => a + x.ms, 0), budgetMs);
   const nc = newCostMs(med);
   const cap = BACKLOG_BUDGETS * budgetMs - minNew * nc;
   const taken: Due[] = [];

@@ -93,6 +93,10 @@ describe('Speicher und Auswahl', () => {
     registerC1Items([probe, gate, place, flagged, fine]);
     expect(trainable(probe) || trainable(gate) || trainable(place)).toBe(false);
     expect(trainable(flagged, new Set(['kwt-0904']))).toBe(false);
+    // Gemeldet aus Anwenden (`c1:<id>`) oder aus der Grammatik-Runde (`gr:c1:<id>`).
+    expect(trainable(flagged, new Set(['c1:kwt-0904']))).toBe(false);
+    expect(trainable(flagged, new Set(['gr:c1:kwt-0904']))).toBe(false);
+    expect(trainable(fine, new Set(['c1:kwt-0904']))).toBe(true);
     const picked = new Set<string>();
     for (let i = 0; i < 20; i++) {
       const it = pickUnseen({ pat: 'pp.personal', kind: 'kwt', seen: new Set([...picked].map((x) => `c1:${x}`)), bad: new Set(['kwt-0904']), seed: `x${i}` });

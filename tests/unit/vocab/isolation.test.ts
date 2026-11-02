@@ -20,6 +20,9 @@ const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/br
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav|clock)$/,
   /^src\/i18n$/,
+  // UX-Neuanfang D (02.11.2026): Claude-Hilfe bei falscher Antwort in der Lernkarte, und ob die Hilfe offen war (zählt als Hilfe).
+  /^src\/ui\/exercise\/TutorButton$/,
+  /^src\/features\/companion\/store$/,
   /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented|GradeButtons|Switch)$/,
   /^src\/engine\/(EnglishText|Choices|KineticGap|HiddenInput|MicButton|useHotkeys|wordTap)$/,
   /^src\/domain\/answer\/mask$/,
@@ -116,7 +119,7 @@ describe('Wörter-Modul: Isolation', () => {
     // Heute, Wort-Popup, C1-Aufgaben docken ab V3 an.
     // V3 Schritt 2b-2: der Bereich Wortschatz bindet den Lernbildschirm über api.loadScreens() (nachgeladen) an.
     // Großpaket A Schritt 5: die Vorlagen-Liste (src/prompts/registry.ts) über die dritte Tür modules/vocab/prompts.
-    // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (unit/labels, learn/ui) fragen den Schalter.
+    // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (learn/ui) fragen den Schalter; unit/labels seit UX-Neuanfang nicht mehr (Block 1 heißt immer „Wörter“).
     // Großpaket A S6: Fortschritt › Wörter (Slot vmod mit api.loadOverview; alte Behaltens-Karte und alte Einstellung „neue Wörter“ fragen den Schalter).
     // 02.11.2026 Wörter-App von selbst an: autoSwitch (api.loadAutoSwitch) und der neue Wörter-Reiter VocabHome (api.loadOverview).
     expect(touching.sort()).toEqual([
@@ -131,7 +134,6 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/today/TodayScreen.tsx',
       'src/features/today/state.ts',
       'src/features/today/store.ts',
-      'src/features/unit/labels.ts',
       'src/features/vocab/autoSwitch.ts',
       'src/features/vocab/hub/VocabHome.tsx',
       'src/features/vocab/vmod.slot.tsx',

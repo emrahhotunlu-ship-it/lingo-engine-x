@@ -11,7 +11,7 @@ export { FEST_GOAL, FEST_RULE_FROM, festNoteActive, expectedKnown, festCount, ne
 export { errorSentenceStats, errorsDueByTopic, grammarDistribution, topicShown, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicShown, type TopicStage } from './grammar';
 export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
 // Lernplattform 2.0 (§4.9): Zahlen von Heute, Wörtern und Grammatik, Musterzustand, Messwerte.
-export { EXTRA_ROUND_MAX, atlasCounts, atlasSize, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, dueLineSplit, reviewAll, reviewFigures, reviewToday, todaySummary, vocabEstimate, wordsToday, wrongToday, type TodaySummary } from './today';
+export { EXTRA_ROUND_MAX, atlasCounts, atlasSize, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, practicedToday, dueLineSplit, reviewAll, reviewFigures, reviewToday, todaySummary, vocabEstimate, wordsToday, wrongToday, type TodaySummary } from './today';
 // P5 S1-ZAHL Nacharbeit: Zahlen der Erledigt-Karte und der Willkommens-Karte (Neustart-Woche).
 export { doneDay, overdueUnits, type DoneDay } from './done';
 // Relaunch Stufe 1 P5 S1-ZAHL: Tagesring und Heute-Zusammenfassung (Quelle für Heute und später `app/today`).

@@ -158,9 +158,10 @@ export async function openApplyFolds(page: Page): Promise<void> {
  */
 export async function openEntry(page: Page, testId: string): Promise<void> {
   await page.getByTestId('tabbar').waitFor();
-  for (const t of TABS) {
-    await openTab(page, t.id);
-    if (t.id === 'apply') await openApplyFolds(page);
+  // UX-Neuanfang B: die Praxis-Seite (`apply`) ist kein Reiter mehr; sie kommt nach den Reitern dran (über Heute › Praxis).
+  for (const id of [...TABS.map((t) => t.id), 'apply' as const]) {
+    await openTab(page, id);
+    if (id === 'apply') await openApplyFolds(page);
     const el = page.getByTestId(testId).first();
     if (await el.isVisible()) {
       await el.click();
