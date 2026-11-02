@@ -852,3 +852,11 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Entscheidungen (Wortlaut `entscheidungen.md`): Bedienung sofort; 3 Schritte ~22 Min.; Wörter = max(10 Min., 40 % Tagesziel); Laptop Vollbild + rechts Claude.
 - Jetzt: (A) Bedienung der Lücke zentral reparieren (HiddenInput/KineticGap, Fokus, Claude-Knopf) · (1) klickbare Vorschau.
 - Klickbare Vorschau v1 `5Zwv5noCiNwzrzzfQsfzXy` `1793616118-d40f` (ohne Fähigkeiten, Beispieldaten; Quelle `docs/relaunch/vorschau-neuanfang/vorschau.html`): Heute mit 3 Schritten und Tagesziel-Aufteilung (Wörter max(10, 40 %)), Wörter-Runde (5 Karten: tippen, wählen, hören; Auch richtig, Tippfehler), Grammatik-Runde (Regel + 4 Aufgaben), Anwenden, Reiter Wörter/Grammatik/Fortschritt; Laptop Vollbild + rechts Erklärung/Claude, Tastenkürzel. Wartet auf Emrahs OK.
+
+## 02.11.2026 – UX-Neuanfang C: Tagesweg in drei Schritten (Commit f672aefc, nicht live)
+- Emrahs Entscheidung: Tagesweg Wörter → Grammatik → Anwenden; Wörter „mindestens 10 Minuten und immer 40 % vom Tagesziel“. Satzbau und Fehler korrigieren nur noch freiwillig.
+- `src/domain/plan/dayMinutes.ts` ist die eine Quelle für die Minuten (25 → 10/10/5, 40 → 16/16/8, 10 → 10/3/2). Wörter-Einstellungen zeigen die Zeit nur noch an (`vmSetMinAuto`); `vcfg.min` bleibt gespeichert (Rückweg).
+- Planfeld `u.tw = 1` (neue Tagespläne): Block 3 `task.apply` (ComboSentence mit Claude, ohne Claude Satzbau als Ersatz). Ältere App-Versionen kennen `tw` nicht und blenden `task.apply` aus (2 Schritte) – Rückweg bleibt heil.
+- Grammatik aus dem Grammatik-Reiter (Thema/Kapitel) zählt als offener Schritt 2 (`openGrammarBlock`), nicht mehr als „Extra“.
+- Golden-Kennzahlen bewusst neu erzeugt (auch Teil A, `metrics-kennzahlen.json`): 3 statt 4 Segmente, Restminuten = Tagesziel, Neustart-Woche 15 statt 11–12 Min. **Beim Live-Gang erwähnen.**
+- Unit 7221/7221 grün. Offen: Großpaket-Rest A (Helfer), B, D, dann ein Test-Link.
