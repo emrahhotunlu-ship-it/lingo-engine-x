@@ -1,0 +1,771 @@
+<title>Lingo Vorschau</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Layout: Handy = Inhalt + Reiterleiste unten, Übung im Vollbild mit Aktionsleiste unten.
+   Laptop (≥960px) = Seitenleiste 240px + Mitte max 720px; Übung im Vollbild: Mitte 720px + rechts 360px Erklärung & Claude.
+   Design-System B: 7 Schriftrollen, 3 Gewichte, Raster 4/8, 4 Radien, genau ein Hauptknopf je Bildschirm. */
+:root{
+  --bg:#f6f6f9; --surface:#ffffff; --surface-2:#efeff4; --line:#e2e2ea;
+  --fg:#14151b; --fg-2:#5c5e6e; --fg-3:#8b8d9c;
+  --accent:#4f46e5; --accent-soft:#ecebfd; --btn:#4f46e5; --btn-fg:#ffffff;
+  --good:#15803d; --good-soft:#e6f5ea; --bad:#c2410c; --bad-soft:#fdede4;
+  --shadow:0 1px 2px rgba(20,21,27,.06),0 8px 24px rgba(20,21,27,.06);
+  --font:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  /* Schriftrollen (Handy) */
+  --t-kpi:48px; --t-title:28px; --t-sentence:26px; --t-section:17px; --t-body:16px; --t-meta:13px; --t-label:11px;
+  /* Radien */
+  --r-s:6px; --r-m:10px; --r-l:16px; --r-full:999px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d0e13; --surface:#16171e; --surface-2:#1f2029; --line:#2a2c37;
+  --fg:#edeef3; --fg-2:#a4a7b6; --fg-3:#707384;
+  --accent:#a5a0ff; --accent-soft:#232147; --btn:#5b54e8; --btn-fg:#ffffff;
+  --good:#4ade80; --good-soft:#123020; --bad:#fb923c; --bad-soft:#3a2214;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d0e13; --surface:#16171e; --surface-2:#1f2029; --line:#2a2c37;
+  --fg:#edeef3; --fg-2:#a4a7b6; --fg-3:#707384;
+  --accent:#a5a0ff; --accent-soft:#232147; --btn:#5b54e8; --btn-fg:#ffffff;
+  --good:#4ade80; --good-soft:#123020; --bad:#fb923c; --bad-soft:#3a2214;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3); color-scheme:dark}
+@media (min-width:960px){:root{--t-kpi:64px; --t-title:32px; --t-sentence:34px; --t-section:18px}}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:var(--t-body);line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.t-kpi{font-size:var(--t-kpi);line-height:1;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.t-title{font-size:var(--t-title);line-height:1.15;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+.t-section{font-size:var(--t-section);line-height:1.3;font-weight:600}
+.t-meta{font-size:var(--t-meta);line-height:1.4;color:var(--fg-2)}
+.t-label{font-size:var(--t-label);line-height:1.2;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-3)}
+.muted{color:var(--fg-2)}
+
+/* App-Rahmen */
+.app{min-height:100%;display:flex}
+.side{display:none}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.page{width:100%;max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 112px;display:flex;flex-direction:column;gap:24px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tab{height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:var(--t-label);font-weight:500;color:var(--fg-3)}
+.tab svg{width:22px;height:22px}
+.tab[aria-current="page"]{color:var(--accent)}
+.demo{font-size:var(--t-meta);color:var(--fg-3);display:flex;align-items:center;gap:8px}
+.demo::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+@media (min-width:960px){
+  .side{display:flex;flex-direction:column;gap:4px;width:240px;flex:none;position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:var(--surface);padding:24px 12px}
+  .brand{font-weight:600;font-size:var(--t-section);padding:0 12px 20px;letter-spacing:-.01em}
+  .nav{display:flex;align-items:center;gap:12px;height:40px;padding:0 12px;border-radius:var(--r-m);color:var(--fg-2);font-weight:500;width:100%;text-align:left}
+  .nav svg{width:18px;height:18px}
+  .nav:hover{background:var(--surface-2)}
+  .nav[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+  .side-foot{margin-top:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+  .tabs{display:none}
+  .page{padding-block:48px 64px;gap:32px}
+}
+
+/* Bausteine */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 24px;border-radius:var(--r-m);font-weight:600;font-size:var(--t-body)}
+.btn-primary{background:var(--btn);color:var(--btn-fg)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-secondary{background:var(--surface-2);color:var(--fg)}
+.btn-text{height:44px;padding:0 12px;color:var(--fg-2);font-weight:500;border-radius:var(--r-m)}
+.btn-text:hover{background:var(--surface-2);color:var(--fg)}
+.btn-block{width:100%}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:var(--r-s);font-size:var(--t-label);font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:var(--surface-2);color:var(--fg-2)}
+.chip.new{background:var(--accent-soft);color:var(--accent)}
+.chip.fest{background:var(--good-soft);color:var(--good)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l)}
+.link{color:var(--accent);font-weight:500;text-decoration:none}
+.link:hover{text-decoration:underline}
+.row{display:flex;align-items:center;gap:12px}
+.sp{flex:1}
+
+/* Heute */
+.hello{display:flex;flex-direction:column;gap:8px}
+.path{display:flex;flex-direction:column;padding:8px 0;margin:0;list-style:none}
+.st{display:grid;grid-template-columns:32px 1fr auto;gap:16px;align-items:start;padding:12px 16px;position:relative}
+.st:not(:last-child)::after{content:"";position:absolute;left:31px;top:44px;bottom:-12px;width:2px;background:var(--line)}
+.st.done:not(:last-child)::after{background:var(--accent)}
+.dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:var(--t-meta);font-weight:600;color:var(--fg-3);background:var(--surface);position:relative;z-index:1}
+.st.done .dot{background:var(--accent);border-color:var(--accent);color:var(--btn-fg)}
+.st.now .dot{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.st h3{font-size:var(--t-body);font-weight:600;line-height:1.4}
+.st.done h3{color:var(--fg-2)}
+.st .min{font-size:var(--t-meta);color:var(--fg-2);font-variant-numeric:tabular-nums;padding-top:4px}
+.st.now{background:var(--accent-soft);border-radius:var(--r-m)}
+.bar{height:6px;border-radius:var(--r-full);background:var(--surface-2);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .4s ease}
+.extra{display:flex;flex-direction:column}
+.extra button{display:grid;grid-template-columns:1fr auto;gap:4px 12px;text-align:left;padding:16px 0;border-top:1px solid var(--line)}
+.extra button:last-child{border-bottom:1px solid var(--line)}
+.extra b{font-weight:500}
+.extra .chev{color:var(--fg-3);grid-row:span 2;align-self:center}
+
+/* Übung (Vollbild) */
+.ex{position:fixed;inset:0;z-index:30;background:var(--bg);display:grid;grid-template-rows:auto 1fr auto;padding-top:env(safe-area-inset-top,0px)}
+.ex-top{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:8px;padding:8px max(8px,env(safe-area-inset-right,0px)) 8px max(8px,env(safe-area-inset-left,0px))}
+.ex-top .meta{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ex-top .meta span{min-width:0}
+.icon-btn{width:44px;height:44px;border-radius:var(--r-m);display:grid;place-items:center;color:var(--fg-2)}
+.icon-btn:hover{background:var(--surface-2);color:var(--fg)}
+.icon-btn svg{width:20px;height:20px}
+.claude-btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:var(--r-full);background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:var(--t-meta)}
+.claude-btn svg{width:16px;height:16px}
+.ex-body{overflow-y:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+.ex-col{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px;padding-top:24px}
+.ask{font-size:var(--t-body);color:var(--fg-2)}
+.sentence{font-size:var(--t-sentence);line-height:1.45;font-weight:500;letter-spacing:-.01em}
+.hint{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;font-size:var(--t-body);color:var(--fg-2)}
+.hint b{color:var(--fg);font-weight:500}
+.gap{font:inherit;color:var(--fg);background:var(--accent-soft);border:0;border-bottom:2px solid var(--accent);border-radius:var(--r-s) var(--r-s) 0 0;padding:0 6px;margin:0 2px;min-width:3ch;caret-color:var(--accent);outline:none;vertical-align:baseline;line-height:1.2}
+.gap:focus{box-shadow:0 0 0 3px var(--accent-soft)}
+.blank{display:inline-block;min-width:5ch;border-bottom:2px solid var(--fg-3);margin:0 2px}
+.ans{padding:0 4px;border-radius:var(--r-s);font-weight:600}
+.ans.ok{background:var(--good-soft);color:var(--good)}
+.ans.fix{background:var(--good-soft);color:var(--good)}
+.mine{text-decoration:line-through;text-decoration-thickness:2px;color:var(--bad);margin-right:6px;font-weight:500}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{min-height:56px;padding:12px 16px;border-radius:var(--r-m);border:1px solid var(--line);background:var(--surface);text-align:left;display:flex;gap:12px;align-items:center;font-weight:500}
+.opt kbd{font:inherit;font-size:var(--t-label);color:var(--fg-3);border:1px solid var(--line);border-radius:4px;width:20px;height:20px;display:grid;place-items:center;flex:none}
+.opt:hover{border-color:var(--accent)}
+.opt.ok{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft);color:var(--bad);text-decoration:line-through}
+.listen{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 12px;border-radius:var(--r-full);border:1px solid var(--line);color:var(--fg);font-weight:500;font-size:var(--t-meta);align-self:flex-start}
+.listen svg{width:18px;height:18px;color:var(--accent)}
+.rule{padding:20px;display:flex;flex-direction:column;gap:12px}
+.rule ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.ex-foot{border-top:1px solid var(--line);background:var(--surface);padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.ex-foot .in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.ex-foot .acts{display:flex;gap:8px;align-items:center}
+.ex-foot .acts .btn-primary{flex:1}
+.verdict{display:flex;flex-direction:column;gap:8px;padding-top:4px}
+.verdict .head{display:flex;align-items:center;gap:8px;font-weight:600;font-size:var(--t-section)}
+.verdict .head svg{width:22px;height:22px}
+.verdict.good .head{color:var(--good)}
+.verdict.bad .head{color:var(--bad)}
+.why{font-size:var(--t-body);line-height:1.55;color:var(--fg)}
+.why b{font-weight:600}
+.merke{font-size:var(--t-meta);color:var(--fg-2);border-left:2px solid var(--accent);padding-left:12px}
+.keys{display:none}
+.lg{display:none}
+.why-wrap{display:flex;flex-direction:column;gap:8px}
+.aside{display:none}
+.write{width:100%;min-height:160px;resize:vertical;font:inherit;font-size:var(--t-section);line-height:1.5;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:16px}
+.write:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.wchips{display:flex;flex-wrap:wrap;gap:8px}
+.wchip{height:36px;padding:0 12px;border-radius:var(--r-full);border:1px solid var(--line);font-size:var(--t-meta);font-weight:500}
+.wchip.used{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.fb{padding:16px;display:flex;flex-direction:column;gap:12px}
+.fb .better{font-size:var(--t-section);line-height:1.5}
+.done-card{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding-top:40px}
+.done-ic{width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--btn-fg);display:grid;place-items:center}
+.done-ic svg{width:28px;height:28px}
+.stats{display:flex;gap:24px;flex-wrap:wrap}
+.stats div{display:flex;flex-direction:column;gap:2px}
+.stats b{font-size:var(--t-title);font-weight:600;font-variant-numeric:tabular-nums}
+
+@media (min-width:960px){
+  .ex{grid-template-columns:1fr 380px;grid-template-rows:auto 1fr auto}
+  .ex-top{grid-column:1/-1;padding:12px 24px;border-bottom:1px solid var(--line)}
+  .ex-top .claude-btn{display:none}
+  .ex-body{grid-column:1;padding:0 48px}
+  .ex-col{padding-top:12vh;gap:24px}
+  .ex-foot{grid-column:1;border-top:0;background:transparent;padding:0 48px 32px}
+  .ex-foot .acts{justify-content:flex-start}
+  .ex-foot .acts .btn-primary{flex:none;min-width:200px}
+  .keys{display:block;font-size:var(--t-meta);color:var(--fg-3)}
+  .keys kbd{font:inherit;border:1px solid var(--line);border-radius:4px;padding:0 6px;color:var(--fg-2)}
+  .why-wrap{display:none}
+  .lg{display:inline}
+  .aside{display:flex;grid-column:2;grid-row:2/4;border-left:1px solid var(--line);background:var(--surface);flex-direction:column;min-height:0}
+  .opts{grid-template-columns:1fr 1fr}
+}
+
+/* Claude-Bereich (Laptop rechts, Handy als Blatt) */
+.cl{display:flex;flex-direction:column;gap:16px;padding:24px;overflow-y:auto;flex:1;min-height:0}
+.cl-h{display:flex;align-items:center;gap:8px}
+.cl-h svg{width:18px;height:18px;color:var(--accent)}
+.qs{display:flex;flex-direction:column;gap:8px}
+.q{min-height:44px;text-align:left;padding:10px 14px;border-radius:var(--r-m);background:var(--surface-2);font-size:var(--t-meta);font-weight:500;line-height:1.4}
+.q:hover{background:var(--accent-soft);color:var(--accent)}
+.bubble{background:var(--surface-2);border-radius:var(--r-m);padding:14px 16px;font-size:var(--t-body);line-height:1.55;display:flex;flex-direction:column;gap:8px}
+.bubble .t-label{color:var(--accent)}
+.you{align-self:flex-end;background:var(--accent-soft);color:var(--fg);max-width:85%}
+.cl-in{display:flex;gap:8px;padding:12px 24px 24px;border-top:1px solid var(--line)}
+.cl-in input{flex:1;min-width:0;height:44px;border-radius:var(--r-m);border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;padding:0 12px}
+.cl-in input:focus{outline:none;border-color:var(--accent)}
+.sheet-bg{position:fixed;inset:0;z-index:40;background:rgba(10,10,15,.45)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:78vh;background:var(--surface);border-radius:var(--r-l) var(--r-l) 0 0;display:flex;flex-direction:column;box-shadow:var(--shadow);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 0}
+.sheet .cl{padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+.sheet .cl-in{padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px))}
+@media (min-width:960px){.sheet{left:auto;right:24px;bottom:24px;width:420px;border-radius:var(--r-l)}}
+
+/* Wörter / Grammatik / Fortschritt */
+.seg{display:flex;height:10px;border-radius:var(--r-full);overflow:hidden;gap:2px}
+.seg i{display:block}
+.legend{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.legend div{display:flex;flex-direction:column;gap:2px}
+.legend b{font-size:var(--t-section);font-weight:600;font-variant-numeric:tabular-nums}
+.legend span{display:flex;align-items:center;gap:6px;font-size:var(--t-meta);color:var(--fg-2)}
+.legend span::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+.search{height:44px;width:100%;border-radius:var(--r-m);border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;padding:0 14px}
+.search:focus{outline:none;border-color:var(--accent)}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.filter{height:36px;padding:0 14px;border-radius:var(--r-full);border:1px solid var(--line);font-size:var(--t-meta);font-weight:500;white-space:nowrap;color:var(--fg-2)}
+.filter[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.wl{display:flex;flex-direction:column}
+.wr{display:grid;grid-template-columns:1fr auto;gap:2px 12px;text-align:left;padding:14px 4px;border-bottom:1px solid var(--line);width:100%}
+.wr:hover{background:var(--surface-2)}
+.wr b{font-weight:600}
+.wr .d{color:var(--fg-2);font-size:var(--t-meta)}
+.wr .r{grid-row:span 2;align-self:center;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.unit .row .t-meta{white-space:nowrap}
+.unit{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.unit.locked{opacity:.55}
+.chap{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:center;padding:8px 0}
+.chap .c{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.chap.done .c{background:var(--accent);border-color:var(--accent);color:var(--btn-fg)}
+.chap.now .c{border-color:var(--accent)}
+.chap.now .c::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.chap .c svg{width:14px;height:14px}
+.track{position:relative;height:40px;margin-top:8px}
+.track .ln{position:absolute;left:0;right:0;top:12px;height:4px;border-radius:2px;background:var(--surface-2)}
+.track .fill{position:absolute;left:0;top:12px;height:4px;border-radius:2px;background:var(--accent)}
+.track .mk{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:var(--t-meta);color:var(--fg-2)}
+.track .mk i{width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--fg-3);margin-top:8px}
+.track .mk.on i{border-color:var(--accent);background:var(--accent);width:16px;height:16px;margin-top:6px;box-shadow:0 0 0 4px var(--accent-soft)}
+.track .mk.on{color:var(--fg);font-weight:600}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;text-align:center}
+.week div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:var(--t-meta);color:var(--fg-2)}
+.week i{width:28px;height:28px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center}
+.week i.y{background:var(--accent);color:var(--btn-fg)}
+.week i.r{background:transparent;border:2px dashed var(--line)}
+.week i.t{border:2px solid var(--accent);background:transparent}
+.week i svg{width:14px;height:14px}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kv div{display:flex;flex-direction:column;gap:2px}
+.kv b{font-size:var(--t-title);font-weight:600;font-variant-numeric:tabular-nums}
+.sec{display:flex;flex-direction:column;gap:12px}
+.pad{padding:20px;display:flex;flex-direction:column;gap:16px}
+.goal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.goal button{height:52px;border-radius:var(--r-m);border:1px solid var(--line);font-weight:600}
+.goal button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.split{display:flex;flex-direction:column;gap:8px;font-size:var(--t-body)}
+.split div{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:var(--r-m);font-size:var(--t-meta);font-weight:500;box-shadow:var(--shadow)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.fade{animation:fade .18s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<div class="app" id="app">
+  <aside class="side" aria-label="Navigation">
+    <div class="brand">Lingo</div>
+    <div id="sidenav"></div>
+    <div class="side-foot">
+      <button class="nav" data-act="goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="sidegoal">Tagesziel</span></button>
+      <span class="demo">Vorschau mit Beispieldaten</span>
+    </div>
+  </aside>
+  <div class="main"><main class="page" id="page"></main></div>
+  <nav class="tabs" id="tabs" aria-label="Bereiche"></nav>
+</div>
+<div id="layer"></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(() => {
+const ICON = {
+  heute:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg>',
+  woerter:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg>',
+  grammatik:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5h10a4 4 0 014 4v10H9a4 4 0 01-4-4z"/><path d="M9 10h6M9 14h4"/></svg>',
+  fortschritt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19h16"/><path d="M7 15v-3M12 15V8M17 15V5"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+  speak:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M19 6a8 8 0 010 12"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>'
+};
+const TABS = [['heute','Heute'],['woerter','Wörter'],['grammatik','Grammatik'],['fortschritt','Fortschritt']];
+
+/* ---------- Beispieldaten ---------- */
+const WORD_CARDS = [
+  {kind:'type', ask:'Schreib das fehlende Wort.', before:'We need to ', after:' the budget before the board meeting.', answer:'finalize',
+   also:{finalise:'Britische Schreibweise. Auch richtig.'}, hint:'endgültig festlegen',
+   why:'<b>finalize the budget</b> heißt: das Budget endgültig festlegen. Typische Verbindungen: <b>finalize a contract</b>, <b>finalize the details</b>.',
+   merke:'finalize = die letzte Fassung festmachen. finish = nur „beenden“.',
+   claude:'„finalize“ passt, weil es um die letzte, verbindliche Fassung geht. „finish the budget“ klingt so, als würdest du nur aufhören, daran zu arbeiten. Im Meeting-Englisch hörst du oft: „Let’s finalize the numbers by Friday.“'},
+  {kind:'type', ask:'Schreib das fehlende Wort.', before:'The new software will ', after:' our delivery times by two days.', answer:'shorten',
+   also:{cut:'„cut … by two days“ passt hier auch.', reduce:'„reduce … by two days“ passt hier auch.'}, hint:'verkürzen',
+   why:'<b>shorten</b> = kürzer machen. Bei Zeiten und Fristen: <b>shorten lead times</b>, <b>shorten a deadline</b>. <b>by two days</b> = um zwei Tage.',
+   merke:'by + Menge = um wie viel: by two days, by 10 %.',
+   claude:'„shorten“ ist hier am genauesten: Die Lieferzeit wird kürzer. „cut“ und „reduce“ gehen auch. „cut“ klingt etwas lockerer, „reduce“ etwas formeller.'},
+  {kind:'choice', ask:'Welches Wort passt?', before:'Our margins are under ', after:' because of rising costs.', answer:'pressure',
+   options:['pressure','weight','push','load'], hint:'Druck',
+   why:'<b>under pressure</b> ist eine feste Verbindung: unter Druck stehen. Nach „under“ passen weight, push und load in dieser Bedeutung nicht.',
+   merke:'Feste Verbindung: be under pressure, put pressure on someone.',
+   claude:'Im Englischen sagt man „under pressure“ auch für Zahlen: Margins, prices oder budgets können „under pressure“ sein. Das heißt: Sie werden kleiner oder sind gefährdet.'},
+  {kind:'type', ask:'Schreib die passende Form.', before:'After the merger, she was ', after:' head of sales.', answer:'appointed',
+   also:{named:'Bedeutet dasselbe. Gesucht war „appointed“, das zählt nicht als Fehler.'}, hint:'ernannt · Grundform: appoint',
+   why:'<b>was appointed</b> = wurde ernannt (Passiv: was + 3. Form). Nach <b>appoint someone head of …</b> steht meist kein „as“.',
+   merke:'appoint → appointed → appointment (die Ernennung).',
+   claude:'„was appointed“ ist Passiv: Jemand anderes hat sie ernannt. Im Business ist „appoint someone head of / director of“ der übliche Ausdruck, z. B. „He was appointed CFO in May.“'},
+  {kind:'listen', ask:'Hör zu und schreib das fehlende Wort.', before:'We can ', after:' our existing network.', answer:'leverage', say:'We can leverage our existing network.',
+   also:{}, hint:'nutzen, gezielt einsetzen',
+   why:'<b>leverage</b> = etwas Vorhandenes gezielt nutzen: <b>leverage our network</b>, <b>leverage data</b>, <b>leverage experience</b>.',
+   merke:'Aussprache (US): LEV-er-ij, Betonung vorne.',
+   claude:'„leverage“ ist im Business sehr häufig. Es heißt mehr als „use“: Du nutzt etwas, das du schon hast, um mehr zu erreichen. Einfacher wäre „make use of our network“.'}
+];
+const GRAM_CARDS = [
+  {kind:'rule', title:'Present Perfect oder Past Simple',
+   body:'<ul><li><b>Past Simple</b>: abgeschlossen, mit Zeitpunkt. Signalwörter: <i>yesterday, last Friday, in 2021, two years ago</i>.</li><li><b>Present Perfect</b>: Verbindung zu jetzt, ohne Zeitpunkt. Signalwörter: <i>since, for, so far, yet, already</i>.</li></ul>',
+   ex:['We <b>signed</b> the deal last week.','We <b>have signed</b> three deals so far this year.'],
+   claude:'Merke dir die Frage: Gibt es einen fertigen Zeitpunkt in der Vergangenheit? Dann Past Simple. Reicht der Zeitraum bis heute? Dann Present Perfect.'},
+  {kind:'type', ask:'Setz das Verb in der richtigen Zeit ein.', before:'We ', after:' the contract last Friday.', answer:'signed', also:{}, hint:'Verb: sign',
+   why:'<b>last Friday</b> nennt einen abgeschlossenen Zeitpunkt. Deshalb <b>Past Simple</b>: signed.', merke:'Signalwort: last Friday → Past Simple.',
+   claude:'Sobald ein fertiger Zeitpunkt dasteht (last Friday, in May, two weeks ago), nimmst du Past Simple. „We have signed the contract last Friday“ ist ein typischer Fehler deutscher Sprecher.'},
+  {kind:'type', ask:'Setz das Verb in der richtigen Zeit ein.', before:'I ', after:' at this company since 2019.', answer:'have worked',
+   also:{'have been working':'Present Perfect Continuous betont die Dauer. Auch richtig.',"'ve worked":'Kurzform. Auch richtig.',"'ve been working":'Kurzform. Auch richtig.'}, hint:'Verb: work',
+   why:'<b>since 2019</b> = von damals bis heute. Der Zeitraum ist nicht vorbei, deshalb <b>Present Perfect</b>: have worked.', merke:'Signalwort: since / for + bis heute → Present Perfect.',
+   claude:'Im Deutschen sagst du „Ich arbeite seit 2019 hier“, also Präsens. Im Englischen geht das nicht: „I work here since 2019“ ist falsch. Richtig ist „I have worked“ oder „I have been working“.'},
+  {kind:'choice', ask:'Welche Form passt?', before:'So far this quarter, we ', after:' three new clients.', answer:'have won', options:['have won','won','win','have win'], hint:'Verb: win',
+   why:'<b>so far</b> = bis jetzt. Das Quartal läuft noch, deshalb <b>Present Perfect</b>. Nach have kommt die 3. Form: won.', merke:'win → won → won.',
+   claude:'„so far this quarter“ zeigt: Der Zeitraum ist noch offen. Sobald das Quartal vorbei ist, sagst du „Last quarter, we won three new clients.“'},
+  {kind:'type', ask:'Setz das Verb in der richtigen Zeit ein.', before:'Two years ago, the company ', after:' its first office in Berlin.', answer:'opened', also:{}, hint:'Verb: open',
+   why:'<b>two years ago</b> nennt einen fertigen Zeitpunkt. Deshalb <b>Past Simple</b>: opened.', merke:'Signalwort: ago → immer Past Simple.',
+   claude:'„ago“ steht immer mit Past Simple. „have opened … ago“ ist immer falsch.'}
+];
+const WORDS = [
+  ['finalize','/ˈfaɪnəˌlaɪz/','endgültig festlegen','Verb','sitzt','in 6 Tagen','We need to finalize the budget before the board meeting.'],
+  ['appoint','/əˈpɔɪnt/','ernennen','Verb','aufbau','morgen','After the merger, she was appointed head of sales.'],
+  ['leverage','/ˈlɛvərɪdʒ/','nutzen, gezielt einsetzen','Verb','neu','heute','We can leverage our existing network.'],
+  ['shorten','/ˈʃɔrtn/','verkürzen','Verb','fest','in 41 Tagen','The new software will shorten our delivery times.'],
+  ['streamline','/ˈstrimˌlaɪn/','vereinfachen, straffen','Verb','sitzt','in 9 Tagen','We streamlined the approval process.'],
+  ['negotiate','/nɪˈɡoʊʃiˌeɪt/','verhandeln','Verb','fest','in 63 Tagen','They negotiated better payment terms.'],
+  ['stakeholder','/ˈsteɪkˌhoʊldər/','Beteiligte(r), Interessengruppe','Nomen','aufbau','heute','We need buy-in from all stakeholders.'],
+  ['outsource','/ˈaʊtˌsɔrs/','auslagern','Verb','sitzt','in 4 Tagen','We outsource our IT support.'],
+  ['bottleneck','/ˈbɑtlˌnɛk/','Engpass','Nomen','aufbau','morgen','Approval is the main bottleneck.'],
+  ['forecast','/ˈfɔrˌkæst/','Prognose','Nomen','fest','in 52 Tagen','The sales forecast looks strong.'],
+  ['commitment','/kəˈmɪtmənt/','Zusage, Verpflichtung','Nomen','neu','heute','We need a firm commitment by Monday.'],
+  ['pressure','/ˈprɛʃər/','Druck','Nomen','fest','in 70 Tagen','Our margins are under pressure.']
+];
+const STATUS = {neu:['Neu','new'],aufbau:['Im Aufbau',''],sitzt:['Sitzt',''],fest:['Fest','fest']};
+
+/* ---------- Zustand ---------- */
+const S = { view:'heute', goal:22, done:{w:false,g:false,a:false}, filter:'alle', q:'' };
+try { const v = localStorage.getItem('lx-prev-view'); if (v && TABS.some(t=>t[0]===v)) S.view = v; } catch(e) { /* Vorschau ohne Speicher */ }
+const fromHash = () => { const h = location.hash.slice(1); if (TABS.some(t=>t[0]===h)) S.view = h; };
+fromHash();
+
+function split(goal){ const w = Math.max(10, Math.round(goal*0.4)); const r = goal - w; const g = Math.round(r*0.65); return {w, g, a: r - g}; }
+const STEPS = () => { const m = split(S.goal); return [
+  {k:'w', name:'Wörter', sub:'18 Wiederholungen · 6 neue Wörter', min:m.w},
+  {k:'g', name:'Grammatik', sub:'Present Perfect oder Past Simple', min:m.g},
+  {k:'a', name:'Anwenden', sub:'2 eigene Sätze mit den Wörtern von heute', min:m.a}
+];};
+
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const page = $('#page'), layer = $('#layer');
+function toast(t){ const el=$('#toast'); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,2200); }
+const coarse = () => matchMedia('(pointer:coarse)').matches;
+
+/* ---------- Navigation ---------- */
+function renderNav(){
+  $('#sidenav').innerHTML = TABS.map(([k,l]) => `<button class="nav" data-go="${k}" ${S.view===k?'aria-current="page"':''}>${ICON[k]}<span>${l}</span></button>`).join('');
+  $('#tabs').innerHTML = TABS.map(([k,l]) => `<button class="tab" data-go="${k}" ${S.view===k?'aria-current="page"':''}>${ICON[k]}<span>${l}</span></button>`).join('');
+  $('#sidegoal').textContent = `Tagesziel ${S.goal} Min.`;
+}
+function go(v){ S.view=v; try{localStorage.setItem('lx-prev-view',v)}catch(e){ /* egal */ } if(location.hash.slice(1)!==v) history.replaceState(null,'','#'+v); render(); window.scrollTo(0,0); }
+window.addEventListener('hashchange', () => { fromHash(); render(); });
+
+function render(){ renderNav(); page.innerHTML = VIEWS[S.view](); page.classList.remove('fade'); void page.offsetWidth; page.classList.add('fade'); }
+
+/* ---------- Heute ---------- */
+function nextStep(){ return STEPS().find(s => !S.done[s.k]); }
+const VIEWS = {};
+VIEWS.heute = () => {
+  const steps = STEPS(), nx = nextStep();
+  const doneMin = steps.filter(s=>S.done[s.k]).reduce((a,s)=>a+s.min,0);
+  const idx = nx ? steps.findIndex(s=>s.k===nx.k)+1 : 3;
+  const head = nx
+    ? `<span class="t-meta">Schritt ${idx} von 3 · ca. ${nx.min} Min.</span><h1 class="t-title">${nx.k==='w'?'Wörter wiederholen':nx.k==='g'?'Grammatik: Present Perfect oder Past Simple':'Anwenden: 2 eigene Sätze'}</h1>`
+    : `<span class="t-meta">Alle 3 Schritte erledigt</span><h1 class="t-title">Tag geschafft. Bis morgen.</h1>`;
+  return `
+  <div class="hello">
+    <div class="row"><span class="t-meta">Montag, 2. November</span><span class="sp"></span><span class="t-meta">23 Tage in Folge</span></div>
+    ${head}
+  </div>
+  <section class="card" aria-label="Dein Tag">
+    <ol class="path">
+      ${steps.map((s,i) => { const st = S.done[s.k] ? 'done' : (nx && nx.k===s.k ? 'now' : '');
+        return `<li class="st ${st}"><span class="dot">${S.done[s.k]?ICON.check.replace('stroke-width="2.5"','stroke-width="3" width="16" height="16"'):i+1}</span>
+        <div><h3>${s.name}</h3><p class="t-meta">${S.done[s.k]?'Erledigt':esc(s.sub)}</p></div><span class="min">${s.min} Min.</span></li>`; }).join('')}
+    </ol>
+    <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:8px">
+      <div class="bar" aria-hidden="true"><i style="width:${Math.round(doneMin/S.goal*100)}%"></i></div>
+      <span class="t-meta">${doneMin} von ${S.goal} Min. · Tagesziel</span>
+    </div>
+  </section>
+  ${nx ? `<button class="btn btn-primary btn-block" data-act="start">Los: ${nx.name}</button>` : ''}
+  <section class="sec">
+    <div class="row"><h2 class="t-label">Freiwillig</h2><span class="sp"></span><span class="t-meta">zählt als Extra</span></div>
+    <div class="extra">
+      <button data-act="soon"><b>Satzbau</b><span class="chev">${ICON.chev}</span><span class="t-meta">Sätze aus Bausteinen bauen</span></button>
+      <button data-act="soon"><b>Sprechen</b><span class="chev">${ICON.chev}</span><span class="t-meta">Rollenspiel: Preisverhandlung mit einem Lieferanten</span></button>
+      <button data-act="soon"><b>Lesen</b><span class="chev">${ICON.chev}</span><span class="t-meta">Artikel des Tages · 4 Min.</span></button>
+    </div>
+  </section>
+  <button class="btn-text" data-act="goal" style="align-self:flex-start">Tagesziel ${S.goal} Min. ändern</button>
+  <span class="demo">Vorschau mit Beispieldaten · nichts wird gespeichert</span>`;
+};
+
+/* ---------- Wörter ---------- */
+VIEWS.woerter = () => {
+  const list = WORDS.filter(w => (S.filter==='alle' || w[4]===S.filter) && (!S.q || (w[0]+' '+w[2]).toLowerCase().includes(S.q.toLowerCase())));
+  return `
+  <div class="hello"><span class="t-meta">1.060 Wörter · 320 davon fest</span><h1 class="t-title">Wörter</h1></div>
+  <section class="card pad">
+    <div class="row"><div><h2 class="t-section">${S.done.w?'Heute erledigt':'Heute im Plan'}</h2><p class="t-meta">${S.done.w?'Morgen sind 21 Wörter dran.':`18 Wiederholungen · 6 neue Wörter · ${split(S.goal).w} Min.`}</p></div></div>
+    ${S.done.w ? `<button class="btn btn-secondary btn-block" data-act="more">Noch 5 Wörter · als Extra</button>` : `<button class="btn btn-primary btn-block" data-act="startw">Wörter lernen</button>`}
+  </section>
+  <section class="sec">
+    <h2 class="t-label">Dein Wortschatz</h2>
+    <div class="seg" aria-hidden="true"><i style="flex:42;background:var(--accent)"></i><i style="flex:186;background:color-mix(in srgb,var(--accent) 55%,var(--surface-2))"></i><i style="flex:512;background:color-mix(in srgb,var(--good) 55%,var(--surface-2))"></i><i style="flex:320;background:var(--good)"></i></div>
+    <div class="legend">
+      <div><b>42</b><span style="--c:var(--accent)">Neu</span></div>
+      <div><b>186</b><span style="--c:color-mix(in srgb,var(--accent) 55%,var(--surface-2))">Im Aufbau</span></div>
+      <div><b>512</b><span style="--c:color-mix(in srgb,var(--good) 55%,var(--surface-2))">Sitzt</span></div>
+      <div><b>320</b><span style="--c:var(--good)">Fest</span></div>
+    </div>
+  </section>
+  <section class="sec">
+    <label class="vh" for="wsearch">Wort suchen</label>
+    <input class="search" id="wsearch" type="search" placeholder="Wort suchen (Englisch oder Deutsch)" value="${esc(S.q)}" autocomplete="off">
+    <div class="filters" role="group" aria-label="Filter">
+      ${[['alle','Alle'],['neu','Neu'],['aufbau','Im Aufbau'],['sitzt','Sitzt'],['fest','Fest']].map(([k,l])=>`<button class="filter" data-filter="${k}" aria-pressed="${S.filter===k}">${l}</button>`).join('')}
+    </div>
+    <div class="wl">
+      ${list.length ? list.map((w,i) => `<button class="wr" data-word="${WORDS.indexOf(w)}"><b>${w[0]}</b><span class="r"><span class="chip ${STATUS[w[4]][1]}">${STATUS[w[4]][0]}</span><span class="t-meta">${w[5]}</span></span><span class="d">${esc(w[2])}</span></button>`).join('') : '<p class="t-meta" style="padding:16px 0">Kein Wort gefunden.</p>'}
+    </div>
+    <p class="t-meta">In der Vorschau: 12 von 1.060 Wörtern.</p>
+  </section>`;
+};
+
+/* ---------- Grammatik ---------- */
+VIEWS.grammatik = () => {
+  const c = (n,st,sub) => `<div class="chap ${st}"><span class="c">${st==='done'?ICON.check.replace('stroke-width="2.5"','stroke-width="3"'):''}</span><div><b style="font-weight:${st==='now'?600:500}">${n}</b><p class="t-meta">${sub}${st==='done'?' · Test bestanden':st==='now'?' · jetzt dran':''}</p></div></div>`;
+  return `
+  <div class="hello"><span class="t-meta">Kurs B2 → C1 · Kapitel 11 von 30</span><h1 class="t-title">Grammatik</h1></div>
+  <section class="card pad">
+    <div><span class="t-label">Einheit 2 · Kapitel 3</span><h2 class="t-section" style="margin-top:6px">Present Perfect oder Past Simple</h2>
+    <p class="t-meta" style="margin-top:4px">${S.done.g?'Heute geübt. Morgen: 5 Aufgaben, danach der Kapiteltest.':'Lernen ✓ · Üben 2 von 3 · Test kommt danach'}</p></div>
+    ${S.done.g ? `<button class="btn btn-secondary btn-block" data-act="soon">Weiter üben · als Extra</button>` : `<button class="btn btn-primary btn-block" data-act="startg">Weiter lernen · ${split(S.goal).g} Min.</button>`}
+  </section>
+  <section class="sec">
+    <h2 class="t-label">Dein Kurs</h2>
+    <div class="card unit"><div class="row"><b>Einheit 1 · Sätze bauen</b><span class="sp"></span><span class="t-meta">5 von 5</span></div></div>
+    <div class="card unit">
+      <div class="row"><b>Einheit 2 · Zeiten im Geschäftsalltag</b><span class="sp"></span><span class="t-meta">2 von 5</span></div>
+      <div>
+        ${c('Present Simple oder Continuous','done','Routinen und laufende Projekte')}
+        ${c('Past Simple: Berichte und Rückblicke','done','Was im Meeting passiert ist')}
+        ${c('Present Perfect oder Past Simple','now','Ergebnisse bis heute oder fertig')}
+        ${c('Present Perfect Continuous','','Wie lange schon?')}
+        ${c('Zukunft: will, going to, Present Continuous','','Pläne und Zusagen')}
+      </div>
+    </div>
+    <div class="card unit locked"><div class="row"><b>Einheit 3 · Modalverben und Höflichkeit</b><span class="sp"></span><span class="t-meta">0 von 5</span></div></div>
+    <div class="card unit locked"><div class="row"><b>Einheit 4 · Passiv und Berichte</b><span class="sp"></span><span class="t-meta">0 von 5</span></div></div>
+    <div class="card unit locked"><div class="row"><b>Einheit 5 · Bedingungen und Verhandeln</b><span class="sp"></span><span class="t-meta">0 von 5</span></div></div>
+    <div class="card unit locked"><div class="row"><b>Einheit 6 · C1: Betonung und Umstellung</b><span class="sp"></span><span class="t-meta">0 von 5</span></div></div>
+  </section>`;
+};
+
+/* ---------- Fortschritt ---------- */
+VIEWS.fortschritt = () => `
+  <div class="hello"><span class="t-meta">Stand 1. November · aus 214 Antworten der letzten 4 Wochen</span><h1 class="t-title">Fortschritt</h1></div>
+  <section class="card pad">
+    <span class="t-label">Dein Niveau</span>
+    <div class="row" style="align-items:baseline;gap:16px"><span class="t-kpi">B2+</span><span class="muted">auf dem Weg zu C1</span></div>
+    <div class="track" aria-label="B1, B2, B2+ (du), C1">
+      <div class="ln"></div><div class="fill" style="width:66%"></div>
+      <span class="mk" style="left:2%"><i></i>B1</span><span class="mk" style="left:34%"><i></i>B2</span><span class="mk on" style="left:66%"><i></i>B2+</span><span class="mk" style="left:97%"><i></i>C1</span>
+    </div>
+    <p class="why">Du formulierst Bitten und Absagen schon sicher und höflich. Bremse auf dem Weg zu C1 sind die Zeiten: Present Perfect und Past Simple verwechselst du noch in etwa jedem vierten Satz. Dein Wortschatz für Finanzen und Projekte wächst schnell, bei Verhandlungen fehlen dir noch feste Wendungen.</p>
+    <span class="t-meta">Einschätzung von Claude · Beispieltext in der Vorschau</span>
+  </section>
+  <section class="card pad">
+    <div class="row"><h2 class="t-section">Diese Woche</h2><span class="sp"></span><span class="t-meta">118 Min.</span></div>
+    <div class="week">
+      ${['Mo','Di','Mi','Do','Fr','Sa','So'].map((d,i)=>`<div><i class="${i<5?'y':i===5?'r':'t'}">${i<5?ICON.check:''}</i>${d}</div>`).join('')}
+    </div>
+    <p class="t-meta">5 Tage geschafft, Samstag war dein Ruhetag. 23 Tage in Folge.</p>
+  </section>
+  <section class="card pad">
+    <div class="kv">
+      <div><b>320</b><span class="t-meta">Wörter fest · +14 diese Woche</span></div>
+      <div><b>11/30</b><span class="t-meta">Grammatik-Kapitel</span></div>
+      <div><b>86 %</b><span class="t-meta">richtig beim ersten Versuch</span></div>
+    </div>
+    <button class="link" data-go="woerter" style="align-self:flex-start">Alle Wörter ansehen</button>
+  </section>`;
+
+/* ---------- Übung ---------- */
+let R = null; // laufende Runde
+const gap = document.createElement('input');
+Object.assign(gap, {className:'gap', id:'gap', autocomplete:'off', spellcheck:false});
+gap.setAttribute('autocapitalize','none'); gap.setAttribute('autocorrect','off'); gap.setAttribute('enterkeyhint','go'); gap.setAttribute('aria-label','Lücke');
+gap.addEventListener('input', () => sizeGap());
+function sizeGap(){ const c = R && R.cur(); const n = Math.max((c && c.answer ? c.answer.length : 6), gap.value.length) + 1; gap.style.width = n + 'ch'; }
+
+function startRound(kind){
+  const cards = (kind==='w' ? WORD_CARDS : kind==='g' ? GRAM_CARDS : [{kind:'apply'}]).map(c => ({...c}));
+  R = { kind, queue:cards, i:0, checked:false, res:null, right:0, wrong:0, again:0, chat:[], cur(){ return this.queue[this.i]; } };
+  layer.innerHTML = ''; renderEx(true);
+}
+function stepNo(){ return {w:1,g:2,a:3}[R.kind]; }
+function stepName(){ return {w:'Wörter',g:'Grammatik',a:'Anwenden'}[R.kind]; }
+function nextName(){ const s = STEPS()[stepNo()]; return s ? s.name : null; }
+
+function renderEx(focus){
+  const c = R.cur(); const total = R.queue.length; const m = split(S.goal)[R.kind];
+  const left = Math.max(1, Math.round(m * (total - R.i) / total));
+  const nn = nextName();
+  const fin = !c;
+  layer.innerHTML = `
+  <div class="ex" role="dialog" aria-label="${stepName()}">
+    <header class="ex-top">
+      <button class="icon-btn" data-act="exit" aria-label="Schließen">${ICON.close}</button>
+      <div class="meta">
+        <div class="bar" aria-hidden="true"><i style="width:${Math.round((fin?total:R.i)/total*100)}%"></i></div>
+        <span class="t-meta"><span class="lg">Schritt ${stepNo()} von 3 · </span>${stepName()}${fin?' · fertig':` · ${R.kind==='a'?'Aufgabe 1 von 1':`Karte ${R.i+1} von ${total}`} · noch ca. ${left} Min.`}<span class="lg">${nn?` · danach ${nn}`:''}</span></span>
+      </div>
+      <button class="claude-btn" data-act="claude">${ICON.spark}Claude erklärt</button>
+    </header>
+    <div class="ex-body"><div class="ex-col" id="excol">${fin ? finishHtml() : cardHtml(c)}</div></div>
+    <footer class="ex-foot"><div class="in" id="exfoot">${fin ? '' : footHtml(c)}</div></footer>
+    <aside class="aside" aria-label="Erklärung und Claude">${asideHtml(c)}</aside>
+  </div>`;
+  if (fin) { const b = $('#finbtn'); if (b) b.focus(); return; }
+  const slot = $('#gapslot');
+  if (slot && !R.checked) { gap.value = ''; slot.replaceWith(gap); sizeGap(); if (focus) gap.focus({preventScroll:true}); }
+  const ta = $('#write'); if (ta && focus) ta.focus({preventScroll:true});
+  if (R.checked && !coarse()) { const b = $('#nextbtn'); if (b) b.focus({preventScroll:true}); }
+}
+
+function sentenceHtml(c){
+  let mid;
+  if (!R.checked) mid = c.kind==='choice' ? '<span class="blank" aria-label="Lücke"></span>' : '<span id="gapslot"></span>';
+  else if (R.res.ok) mid = `<span class="ans ok">${esc(R.res.shown)}</span>`;
+  else mid = `${R.res.mine?`<span class="mine">${esc(R.res.mine)}</span>`:''}<span class="ans fix">${esc(c.answer)}</span>`;
+  return `<p class="sentence">${esc(c.before)}${mid}${esc(c.after)}</p>`;
+}
+function cardHtml(c){
+  if (c.kind==='rule') return `
+    <span class="t-label">Kurz erklärt</span>
+    <h2 class="t-title">${c.title}</h2>
+    <div class="card rule">${c.body}<div class="merke">${c.ex.join('<br>')}</div></div>`;
+  if (c.kind==='apply') return `
+    <span class="ask">Schreib zwei Sätze über deine Arbeit diese Woche. Benutze mindestens eines der Wörter von heute und einmal das Present Perfect.</span>
+    <div class="wchips" id="wchips">${['finalize','shorten','under pressure','appointed','leverage'].map(w=>`<span class="wchip" data-w="${w}">${w}</span>`).join('')}</div>
+    <label class="vh" for="write">Deine Sätze</label>
+    <textarea class="write" id="write" placeholder="This week, I have …" ${R.checked?'readonly':''}>${esc(R.text||'')}</textarea>
+    ${R.checked ? applyFeedback() : ''}`;
+  return `
+    <span class="ask">${c.ask}</span>
+    ${c.kind==='listen' ? `<button class="listen" data-act="say" data-nofocus>${ICON.speak}Satz anhören</button>` : ''}
+    ${sentenceHtml(c)}
+    <div class="hint"><span><b>${esc(c.hint)}</b></span>${R.checked && c.kind!=='listen' && c.say!==false ? `<button class="listen" data-act="sayfull" data-nofocus>${ICON.speak}Anhören</button>` : ''}</div>
+    ${c.kind==='choice' ? `<div class="opts">${c.options.map((o,i)=>{ let cl=''; if(R.checked){ if(o===c.answer) cl='ok'; else if(o===R.res.mine) cl='no'; } return `<button class="opt ${cl}" data-opt="${esc(o)}" ${R.checked?'disabled':''}><kbd>${i+1}</kbd>${esc(o)}</button>`; }).join('')}</div>` : ''}
+    ${R.checked ? verdictHtml(c, true) : ''}`;
+}
+function verdictHtml(c, inline){
+  const r = R.res;
+  const head = r.ok ? `<div class="head">${ICON.check}${r.note ? 'Auch richtig' : 'Richtig'}</div>` : `<div class="head">${ICON.x}Nicht ganz · kommt in 2 Karten wieder</div>`;
+  const body = `<p class="why">${c.why}</p><p class="merke">${c.merke}</p>`;
+  if (!inline) return `<div class="verdict">${body}</div>`;
+  return `<div class="verdict ${r.ok?'good':'bad'}">${head}${r.note?`<p class="t-meta">${esc(r.note)}</p>`:''}<div class="why-wrap">${body}</div></div>`;
+}
+function footHtml(c){
+  const keys = `<span class="keys"><kbd>Enter</kbd> ${R.checked||c.kind==='rule'?'weiter':'prüfen'} · <kbd>Strg</kbd>+<kbd>E</kbd> Claude erklärt${c.kind==='choice'&&!R.checked?' · <kbd>1</kbd>–<kbd>4</kbd> wählen':''}${c.kind==='listen'?' · <kbd>Strg</kbd>+<kbd>.</kbd> anhören':''}</span>`;
+  if (c.kind==='rule') return `<div class="acts"><button class="btn btn-primary" id="nextbtn" data-act="next">Verstanden, los</button></div>${keys}`;
+  if (R.checked) return `<div class="acts"><button class="btn btn-primary" id="nextbtn" data-act="next">Weiter</button></div>${keys}`;
+  if (c.kind==='apply') return `<div class="acts"><button class="btn-text" data-act="skipapply">Heute überspringen</button><button class="btn btn-primary" data-act="check">Prüfen</button></div><span class="keys"><kbd>Strg</kbd>+<kbd>Enter</kbd> prüfen · <kbd>Strg</kbd>+<kbd>E</kbd> Claude erklärt</span>`;
+  return `<div class="acts"><button class="btn-text" data-act="dunno" data-nofocus>Weiß ich nicht</button>${c.kind==='choice'?'':'<button class="btn btn-primary" data-act="check">Prüfen</button>'}</div>${keys}`;
+}
+function asideHtml(c, sheet){
+  const msgs = R.chat.map(m => `<div class="bubble ${m.you?'you':''}">${m.you?'':'<span class="t-label">Claude · Beispielantwort</span>'}${m.t}</div>`).join('');
+  let top = '';
+  if (!sheet && c && R.checked && c.kind!=='apply') top = verdictHtml(c, false);
+  else if (c && c.kind==='rule') top = `<p class="why">${c.claude}</p>`;
+  return `<div class="cl" id="clpanel">
+    <div class="cl-h">${ICON.spark}<h2 class="t-section">${R.checked?'Erklärung':'Claude erklärt'}</h2></div>
+    ${top}
+    ${msgs}
+    ${c ? `<div class="qs">${quickQs(c).map(q=>`<button class="q" data-q="${esc(q)}" data-nofocus>${esc(q)}</button>`).join('')}</div>` : ''}
+  </div>
+  ${c ? `<form class="cl-in" data-form="ask"><label class="vh" for="askin">Eigene Frage an Claude</label><input id="askin" placeholder="Eigene Frage an Claude…" autocomplete="off"><button class="btn-text" type="submit">Fragen</button></form>` : ''}`;
+}
+function quickQs(c){
+  if (c.kind==='apply') return ['Gib mir einen Satzanfang','Welche Zeit passt zu „this week“?'];
+  if (c.kind==='rule') return ['Noch ein Beispiel aus dem Büro','Was ist der häufigste Fehler?'];
+  return R.checked ? ['Warum ist das so?','Noch ein Beispielsatz','Wann sagt man das anders?'] : ['Gib mir einen Tipp, ohne die Lösung','Was bedeutet der Satz?'];
+}
+function claudeAnswer(c, q){
+  if (/Tipp|Satzanfang/.test(q)) return c.kind==='apply' ? '„This week, I have finalized …“ oder „Our team has been under pressure because …“' : `Das Wort fängt mit „${c.answer[0]}“ an und hat ${c.answer.replace(/ /g,'').length} Buchstaben.`;
+  if (/bedeutet/.test(q)) return `Sinngemäß: ${esc(c.before)}…${esc(c.after)}. Gesucht ist ein Wort für „${esc(c.hint.split('·')[0].trim())}“.`;
+  if (/Beispiel/.test(q)) return c.kind==='rule' ? '„I have sent the offer.“ (Ergebnis jetzt wichtig) · „I sent the offer on Monday.“ (fertiger Zeitpunkt)' : 'Noch ein Beispiel aus dem Büro: „Can we finalize this by Friday?“';
+  if (/Fehler/.test(q)) return 'Der häufigste Fehler: Present Perfect zusammen mit einem fertigen Zeitpunkt, z. B. „I have met him yesterday“. Richtig: „I met him yesterday.“';
+  return c.claude || 'Gute Frage. In der echten App antwortet hier Claude zu genau dieser Aufgabe.';
+}
+
+const norm = s => s.toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g,' ').trim();
+function lev(a,b){ const d=[...Array(b.length+1).keys()]; for(let i=1;i<=a.length;i++){ let p=d[0]; d[0]=i; for(let j=1;j<=b.length;j++){ const t=d[j]; d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1)); p=t; } } return d[b.length]; }
+function judge(c, v){
+  const n = norm(v), a = norm(c.answer);
+  if (!n) return {ok:false, mine:''};
+  if (n===a) return {ok:true, shown:c.answer};
+  for (const [k,note] of Object.entries(c.also||{})) if (norm(k)===n) return {ok:true, shown:v.trim(), note};
+  if (a.length>=5 && lev(n,a)===1) return {ok:true, shown:c.answer, note:`Kleiner Tippfehler: Du hattest „${v.trim()}“. Zählt als richtig.`};
+  return {ok:false, mine:v.trim()};
+}
+function check(val){
+  const c = R.cur(); if (!c || R.checked) return;
+  if (c.kind==='apply'){ R.text = $('#write').value; if (!R.text.trim()) { toast('Schreib zuerst einen Satz.'); $('#write').focus(); return; } R.checked = true; R.res={ok:true}; renderEx(false); return; }
+  const v = val !== undefined ? val : gap.value;
+  if (c.kind!=='choice' && !v.trim()) { toast('Tippe zuerst eine Antwort oder wähle „Weiß ich nicht“.'); gap.focus(); return; }
+  R.res = judge(c, v); R.checked = true;
+  if (R.res.ok) R.right++; else { R.wrong++; if (!c.requeued) { const again = {...c, requeued:true}; R.queue.splice(Math.min(R.i+3, R.queue.length), 0, again); R.again++; } }
+  if (coarse()) gap.blur();
+  renderEx(false);
+}
+function dunno(){ const c = R.cur(); if (!c || R.checked) return; R.res = {ok:false, mine:''}; R.checked = true; R.wrong++; if (!c.requeued){ R.queue.splice(Math.min(R.i+3,R.queue.length),0,{...c,requeued:true}); R.again++; } if (coarse()) gap.blur(); renderEx(false); }
+function next(){ R.i++; R.checked=false; R.res=null; R.chat=[]; renderEx(true); }
+function finishHtml(){
+  S.done[R.kind] = true;
+  const nn = nextStep();
+  const stats = R.kind==='a' ? '' : `<div class="stats"><div><b>${R.right}</b><span class="t-meta">richtig</span></div><div><b>${R.wrong}</b><span class="t-meta">noch nicht</span></div><div><b>${R.kind==='w'?R.again:0}</b><span class="t-meta">${R.kind==='w'?'kommen morgen wieder':'Kapiteltest morgen'}</span></div></div>`;
+  return `<div class="done-card"><span class="done-ic">${ICON.check}</span>
+    <h2 class="t-title">${stepName()} geschafft</h2>
+    <p class="muted">${R.kind==='w'?'Deine Wörter sind für heute erledigt. Was noch wackelt, plant die App für morgen ein.':R.kind==='g'?'Du kannst jetzt erkennen, wann ein Zeitpunkt fertig ist und wann nicht.':'Dein Tag ist komplett.'}</p>
+    ${stats}
+    ${nn ? `<button class="btn btn-primary" id="finbtn" data-act="startnext">Weiter mit ${nn.name}</button><button class="btn-text" data-act="exit">Zur Übersicht</button>` : `<button class="btn btn-primary" id="finbtn" data-act="exit">Zur Übersicht</button>`}
+  </div>`;
+}
+function applyFeedback(){
+  const t = R.text || ''; const used = ['finalize','shorten','under pressure','appointed','leverage'].filter(w => t.toLowerCase().includes(w.split(' ').pop()));
+  const pp = /\b(have|has|'ve|'s)\s+\w+(ed|en|wn|ne|ught|ght)\b/i.test(t);
+  return `<div class="card fb"><div class="row" style="color:var(--good);font-weight:600">${ICON.check.replace('<svg','<svg width="20" height="20"')}Gut gemacht</div>
+    <p class="why">${used.length?`Du hast <b>${used.join(', ')}</b> richtig eingesetzt. `:'Versuch beim nächsten Mal, eines der Wörter von heute einzubauen. '}${pp?'Das Present Perfect ist richtig gebildet.':'Ein Present Perfect fehlt noch, zum Beispiel „I have finalized …“.'}</p>
+    <span class="t-label">So klingt es noch natürlicher</span>
+    <p class="better">This week, our team has finalized the Q4 budget, even though we were under a lot of pressure.</p>
+    <span class="t-meta">Rückmeldung von Claude · Beispieltext in der Vorschau</span></div>`;
+}
+
+function openClaude(q){
+  const c = R && R.cur();
+  if (q && c) { R.chat.push({you:true, t:esc(q)}, {t:claudeAnswer(c, q)}); }
+  if (matchMedia('(min-width:960px)').matches){
+    const aside = $('.aside'); if (aside) { aside.innerHTML = asideHtml(c); const p=$('#clpanel'); p.scrollTop = p.scrollHeight; if(!q) $('#askin') && $('#askin').focus(); }
+    return;
+  }
+  let sh = $('#sheet');
+  const html = `<div class="sheet-bg" data-act="closesheet"></div><div class="sheet" id="sheet" role="dialog" aria-label="Claude erklärt"><div class="grab"></div>${asideHtml(c, true)}</div>`;
+  if (!sh) { const d = document.createElement('div'); d.id='sheetwrap'; d.innerHTML = html; document.body.appendChild(d); }
+  else $('#sheetwrap').innerHTML = html;
+  const p = $('#clpanel'); p.scrollTop = p.scrollHeight;
+}
+function closeSheet(){ const w = $('#sheetwrap'); if (w) { w.remove(); if (R && !R.checked && gap.isConnected) gap.focus({preventScroll:true}); return true; } return false; }
+
+function exitRound(){ closeSheet(); R = null; layer.innerHTML=''; render(); }
+
+function goalSheet(){
+  const d = document.createElement('div'); d.id='sheetwrap';
+  const draw = () => { const m = split(S.goal); d.innerHTML = `<div class="sheet-bg" data-act="closesheet"></div><div class="sheet" role="dialog" aria-label="Tagesziel"><div class="grab"></div><div class="cl">
+    <h2 class="t-section">Tagesziel</h2>
+    <div class="goal" role="group" aria-label="Minuten pro Tag">${[15,22,30,45].map(g=>`<button data-goal="${g}" aria-pressed="${S.goal===g}">${g} Min.</button>`).join('')}</div>
+    <div class="split"><div><span>Wörter (40 %, mindestens 10 Min.)</span><b>${m.w} Min.</b></div><div><span>Grammatik</span><b>${m.g} Min.</b></div><div><span>Anwenden</span><b>${m.a} Min.</b></div></div>
+    <button class="btn btn-primary" data-act="closesheet">Fertig</button></div></div>`; };
+  draw(); document.body.appendChild(d); d.draw = draw;
+}
+
+/* ---------- Ereignisse ---------- */
+document.addEventListener('mousedown', e => { if (e.target.closest('[data-nofocus]')) e.preventDefault(); });
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-go],[data-act],[data-filter],[data-word],[data-opt],[data-q],[data-goal]'); if (!t) return;
+  if (t.dataset.go) return go(t.dataset.go);
+  if (t.dataset.filter) { S.filter = t.dataset.filter; return render(); }
+  if (t.dataset.word) return wordSheet(+t.dataset.word);
+  if (t.dataset.opt) return check(t.dataset.opt);
+  if (t.dataset.q) return openClaude(t.dataset.q);
+  if (t.dataset.goal) { S.goal = +t.dataset.goal; $('#sheetwrap').draw(); render(); return; }
+  const a = t.dataset.act;
+  if (a==='start') { const n = nextStep(); if (n) startRound(n.k); }
+  else if (a==='startnext') { const n = nextStep(); if (n) startRound(n.k); }
+  else if (a==='startw') startRound('w');
+  else if (a==='startg') startRound('g');
+  else if (a==='check') check();
+  else if (a==='dunno') dunno();
+  else if (a==='next') next();
+  else if (a==='exit') exitRound();
+  else if (a==='claude') openClaude();
+  else if (a==='closesheet') closeSheet();
+  else if (a==='goal') goalSheet();
+  else if (a==='say') say(R.cur().say);
+  else if (a==='sayfull') { const c=R.cur(); say(c.before + c.answer + c.after); }
+  else if (a==='skipapply') { R.i = 1; renderEx(false); }
+  else if (a==='more') toast('In der echten App startet hier eine Extra-Runde mit 5 Wörtern.');
+  else if (a==='soon') toast('Freiwillig: In der Vorschau nicht ausgebaut.');
+});
+document.addEventListener('submit', e => { const f = e.target.closest('[data-form="ask"]'); if (!f) return; e.preventDefault(); const v = $('#askin', f).value.trim(); if (v) openClaude(v); });
+document.addEventListener('input', e => {
+  if (e.target.id==='wsearch') { S.q = e.target.value; const pos = e.target.selectionStart; render(); const s=$('#wsearch'); s.focus(); s.setSelectionRange(pos,pos); }
+  if (e.target.id==='write') { const t = e.target.value.toLowerCase(); document.querySelectorAll('.wchip').forEach(ch => ch.classList.toggle('used', t.includes(ch.dataset.w.split(' ').pop()))); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') { if (closeSheet()) { e.preventDefault(); return; } }
+  if (!R) return;
+  const c = R.cur(); const ae = document.activeElement;
+  const typing = ae && (ae.tagName==='INPUT' || ae.tagName==='TEXTAREA');
+  if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='e') { e.preventDefault(); openClaude(); return; }
+  if ((e.ctrlKey||e.metaKey) && e.key==='.') { e.preventDefault(); if (c && c.say) say(c.say); return; }
+  if (!c) { return; }
+  if (c.kind==='apply' && e.key==='Enter' && (e.ctrlKey||e.metaKey) && !R.checked) { e.preventDefault(); check(); return; }
+  if (e.key==='Enter') {
+    if (ae && ae.id==='askin') return;
+    if (ae && ae.tagName==='TEXTAREA' && !R.checked) return;
+    if (ae && ae.tagName==='BUTTON' && ae.id!=='nextbtn' && ae!==gap) return;
+    e.preventDefault();
+    if (c.kind==='rule' || R.checked) next(); else if (c.kind!=='choice' && c.kind!=='apply') check();
+    return;
+  }
+  if (c.kind==='choice' && !R.checked && /^[1-4]$/.test(e.key) && !typing) { check(c.options[+e.key-1]); return; }
+  if (!typing && !R.checked && gap.isConnected && e.key.length===1 && !e.ctrlKey && !e.metaKey && !e.altKey) gap.focus();
+});
+
+function say(text){ try { if (!('speechSynthesis' in window)) { toast('Sprachausgabe ist hier nicht verfügbar.'); return; } speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=.95; speechSynthesis.speak(u); } catch(err) { toast('Sprachausgabe ist hier nicht verfügbar.'); } }
+
+function wordSheet(i){
+  const w = WORDS[i]; const d = document.createElement('div'); d.id='sheetwrap';
+  d.innerHTML = `<div class="sheet-bg" data-act="closesheet"></div><div class="sheet" role="dialog" aria-label="${w[0]}"><div class="grab"></div><div class="cl">
+    <div class="row"><div><h2 class="t-title">${w[0]}</h2><p class="t-meta">${w[1]} · ${w[3]}</p></div><span class="sp"></span><button class="icon-btn" data-act="sayword" data-w="${w[0]}" aria-label="Anhören">${ICON.speak}</button></div>
+    <p class="t-section" style="font-weight:500">${esc(w[2])}</p>
+    <div class="bubble"><span class="t-label">Aus deinem Lernsatz</span>${esc(w[6])}</div>
+    <div class="split"><div><span>Stand</span><b>${STATUS[w[4]][0]}</b></div><div><span>Nächste Wiederholung</span><b>${w[5]}</b></div></div>
+    <button class="btn btn-secondary" data-act="closesheet">Schließen</button></div></div>`;
+  document.body.appendChild(d);
+}
+document.addEventListener('click', e => { const t = e.target.closest('[data-act="sayword"]'); if (t) say(t.dataset.w); });
+
+render();
+})();
+</script>
