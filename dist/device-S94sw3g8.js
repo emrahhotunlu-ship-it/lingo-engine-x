@@ -1,0 +1,1 @@
+import{fr as e}from"./registry-ZyJzTeml.js";import"./sharedUi-BFlSDzqt.js";var t=`lx:vm-dev`;function n(){let n=e.get(t);if(n&&/^[a-z0-9]{6,16}$/.test(n))return n;let r=`d${Math.random().toString(36).slice(2,10)}`;return e.set(t,r),r}export{n as t};

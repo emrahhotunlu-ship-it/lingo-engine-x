@@ -40,7 +40,7 @@ export const anwenden = defineArea({
   id: 'anwenden',
   screens: {
     // „Praxis“ (P2 S1-SHELL) – seit UX-Neuanfang B eine Seite auf dem Stapel von Heute; so lautet auch „‹ Praxis“ auf Lesen/Sprechen.
-    apply: { kind: 'page', component: ApplyRoot, title: 'shTabPractice', keepScroll: true },
+    apply: { kind: 'page', chrome: 'shell', component: ApplyRoot, title: 'shTabPractice', keepScroll: true },
     repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
     tempoRound: { kind: 'exercise', component: TempoRoundScreen, title: 'cxTempoTitle' },
     listenQ: { kind: 'exercise', component: ListenQuestionScreen, title: 'apListenQ' },

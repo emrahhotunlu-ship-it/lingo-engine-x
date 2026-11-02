@@ -43,7 +43,7 @@ test('Einstieg: Kopf mit EINEM „Fragen“, vier Reiter einzeilig, Zahnrad und 
   for (const b of await tabs.all()) expect((await b.boundingBox())?.height ?? 99).toBeLessThan(64);
   // Am Handy keine Werkzeuge in der Leiste (die stehen ab 600 px in Schiene/Seitenleiste).
   await expect(page.getByTestId('side-settings')).toBeHidden();
-  for (const id of ['vocab', 'learn', 'apply', 'progress', 'today'] as const) {
+  for (const id of ['vocab', 'learn', 'progress', 'today'] as const) {
     await openTab(page, id);
     await expect(page.getByTestId('topbar')).toBeVisible();
     await expect(page.getByTestId('topbar').getByTestId('open-settings')).toHaveCount(id === 'progress' ? 1 : 0);
@@ -201,6 +201,9 @@ test('Praxis am Handy: Seite unter Heute (UX-Neuanfang B), Lesen und Sprechen al
   await screen(page, 'today');
   await openTab(page, 'apply');
   await expect(page.getByTestId('practice-more')).toBeVisible();
+  // Kopf der Seite: „‹ Heute“ und ein „Fragen“ (wie jede Seite).
+  await expect(page.getByTestId('page-back')).toContainText('Heute');
+  await expect(page.getByTestId('open-companion')).toHaveCount(1);
   // „Sprechen“ nur einmal auf Praxis (keine zweite Rollenspiel-Kachel), Lesen und Sprechen oben.
   await expect(page.getByTestId('hub-speak')).toHaveCount(0);
   expect((await boxOf(page, 'practice-more')).y).toBeLessThan(400);

@@ -155,7 +155,8 @@ for (const vp of [
       await expect(page.getByTestId('verdict')).toContainText('Zielwort drin');
       await expect(page.getByTestId('result')).not.toContainText('ist in deinem Satz');
       await expect(page.getByTestId('result')).not.toContainText('Mustersatz');
-      await expect(page.getByTestId('result')).toContainText('Try to avoid driving in rush hour.');
+      // Am Laptop steht „Merke“ mit dem Beispiel in der rechten Spalte neben der Übung (UX-Neuanfang B), am Handy unter dem Ergebnis.
+      await expect(vp.mobile ? page.getByTestId('result') : page.locator('[data-col="side"]')).toContainText('Try to avoid driving in rush hour.');
       await page.screenshot({ path: `${OUT}/ww-05-sag-es-ergebnis-${vp.w}.png`, fullPage: true });
       await axe(page);
       expect(errors).toEqual([]);

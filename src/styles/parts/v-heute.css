@@ -62,8 +62,6 @@
 
 /* ------------------------------------------------------------------ Woche und „Wenn du mehr willst“ (style.css:186–200) */
 .lx-vh-weekly { margin-top: 10px; }
-.lx-vh-more-div { display: flex; align-items: center; gap: 12px; margin: 22px 0 6px; color: var(--fg-3); font-size: 13px; line-height: 1.45; font-weight: 550; }
-.lx-vh-more-div::before, .lx-vh-more-div::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
 .lx-vh-more-all { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 16px; }
 .lx-vh-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 550; color: var(--act-text); }
 .lx-vh-sheet { display: flex; flex-direction: column; gap: 16px; }

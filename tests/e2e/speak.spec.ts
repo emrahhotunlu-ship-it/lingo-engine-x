@@ -119,12 +119,10 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Heute: Das Gespräch zählt nicht als „Wiederholen“; Angebote erst nach der Pflicht (Kap. 2.1).
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
-  // Plan v2: Sonntag = Wiederholen + Wochen-Check + Fehler korrigieren (Seed hat fällige Fehlersätze, Grenze 3); das Gespräch zählt in keinen.
-  // Wiederholen darf bei Rückstand länger dauern (Seed: viele überfällige Karten; Sonntag 5 Min. + höchstens 50 %), Wochen-Check 5, Fehler korrigieren 2.
-  // UX-Audit U1: die Minuten stehen nur im Ring, die Zeile zählt nur die Schritte.
+  // Tagesweg (UX-Neuanfang C): drei Schritte; das Gespräch zählt in keinen. Die Minuten stehen je Schritt und im Kopf „Schritt 1 von 3 · ca. … Min.“.
   await expect(page.getByTestId('today-status')).toHaveText('Schritte: 0 von 3 erledigt');
-  await expect(page.getByTestId('today-min')).toHaveText(/^(13|14|15|16)$/);
-  // „27 Min.“ nie doppelt: die Minutenzahl des Rings steht kein zweites Mal als „noch ca. … Min.“ auf der Karte.
+  await expect(page.getByTestId('today-title')).toHaveText(/^Schritt 1 von 3 · ca\. \d+ Min\.$/);
+  // Keine Restzeit doppelt: kein zweites „noch ca. … Min.“ auf der Karte.
   await expect(page.getByTestId('today-card')).not.toContainText('noch ca.');
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);

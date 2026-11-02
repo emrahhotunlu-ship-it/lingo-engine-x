@@ -24,7 +24,7 @@ const WEEK_MORE: Check[] = [
   { name: 'tag', vorschau: '.wd i', app: '.lx-vh-week .lx-v-wd i', props: ['x', 'width', 'height'] },
   { name: 'tagname', vorschau: '.wd', app: '.lx-vh-week .lx-v-wd', props: ['width', 'fontSize', 'fontWeight'] },
   { name: 'serie', vorschau: '.streak b', app: '.lx-vh-week .lx-v-streak b', props: ['fontSize', 'lineHeight', 'fontWeight'] },
-  { name: 'trenner', vorschau: '.more-div', app: '.lx-vh-more-div', props: ['height', 'fontSize', 'fontWeight'] },
+  // Der Trenner „Wenn du mehr willst“ ist seit UX-Neuanfang B die Kopfzeile „Freiwillig · zählt als Extra“ (eigener Vergleich in vorschau-neuanfang-heute).
   { name: 'zeile', vorschau: '.row', app: '[data-testid="more-row"]', props: ['x', 'width'] },
   { name: 'zeilensymbol', vorschau: '.row .ri', app: '[data-testid="more-row"] .lx-v-row-ic', props: ['x', 'width', 'height', 'borderRadius'] },
   { name: 'zeilentitel', vorschau: '.row .rt b', app: '[data-testid="more-row"] .lx-v-row-t b', props: ['fontSize', 'fontWeight'] },
