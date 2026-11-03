@@ -8,10 +8,17 @@
 html:not([data-theme='dim']) {
   background-color: var(--bg);
   background-image:
-    radial-gradient(44% 48% at 12% 8%, var(--fleck-1) 0%, transparent 70%),
-    radial-gradient(52% 56% at 92% 96%, var(--fleck-2) 0%, transparent 70%),
-    radial-gradient(38% 40% at 70% 10%, var(--fleck-3) 0%, transparent 70%);
+    radial-gradient(700px 520px at 12% 8%, var(--fleck-1) 0%, transparent 70%),
+    radial-gradient(820px 600px at 92% 96%, var(--fleck-2) 0%, transparent 70%),
+    radial-gradient(600px 420px at 70% 10%, var(--fleck-3) 0%, transparent 70%);
   background-attachment: fixed;
+}
+
+/* Das alte Lichtfeld (r6a.css `.lx-ambient`, deckend in --lx-bg) lag über Stein und Flecken: im Glas ist es durchsichtig, nur das feine
+   Korn (`.lx-ambient-dither`) bleibt. Die Verläufe setzt AmbientLight.tsx als Inline-Stil, daher hier `!important`. */
+html:not([data-theme='dim']) .lx-ambient {
+  background-color: transparent;
+  background-image: none !important;
 }
 
 /* 2. Glasblätter: die großen Karten (Heute, Übung, Rückmeldung, Kacheln, Fortschritt, allgemeine Karten). */
@@ -140,6 +147,7 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
   /* Kontextspalte: ohne Trennlinie, oben bündig mit der Kopfleiste. */
   html:not([data-theme='dim']) .lx-ctx {
     padding-top: 14px;
+    padding-bottom: 14px;
     border-left: 0;
   }
 }
@@ -286,4 +294,91 @@ html:not([data-theme='dim']) .lx-kask:hover {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+}
+
+/* 10. Glas wie im Küchenstudio (Emrah 03.11.2026: „sieht lange nicht so glassy aus wie meine andere App“): Blätter, Schiene und Kopfleiste
+   sind zu 52 % weiß (--glass; Carbon: Graphit 55 %), damit Stein und Flecken durchscheinen; die Angaben rechts sind dichter (--glass-dense,
+   wie `--glas-angaben`); helle Innenkarten (laufender Schritt, Zeilen, aktive Pille) sind --glass-hi; Kapseln --kapsel mit Lichtkante. */
+html:not([data-theme='dim']) :is(.lx-kh-stand, .lx-kh-ctx .lx-kh-free) {
+  background: var(--glass-dense);
+}
+html:not([data-theme='dim']) .lx-kh-st[data-st='now'],
+html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
+  background: var(--glass-hi);
+}
+html:not([data-theme='dim']) .lx-kask,
+html:not([data-theme='dim']) .lx-vh-ask.lx-v-iconbtn {
+  background: var(--kapsel);
+}
+@media (min-width: 600px) {
+  html:not([data-theme='dim']) .lx-nav-pill-item {
+    background: var(--glass-hi);
+  }
+}
+/* Monitor: die Blätter reichen bis unten wie Fenster (Vorschau/Küchenstudio), nichts endet mitten auf dem Stein. Unter der Tageskarte bleibt
+   Platz für „Tagesziel ändern“. */
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) .lx-kh-card {
+    min-height: calc(100dvh - 14px - 64px - 12px - 14px - 44px);
+  }
+  html:not([data-theme='dim']) .lx-kh-ctx {
+    min-height: calc(100dvh - 28px);
+  }
+  html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-free {
+    flex: 1 1 auto;
+  }
+}
+
+/* 11. Die Übungskarte ist ein Glasblatt (kern.css setzt sie mit `:root …[data-kern]` deckend; hier eine Stufe stärker). Nach dem Prüfen
+   am Handy/Tablet tragen Rückmeldung und Wortkarte (`.lx-kleft`, `.lx-kside`) das Glas, die Übung selbst ist dann nur der Rahmen. */
+html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern]:not([data-kres]) {
+  border-color: transparent;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 var(--glanz),
+    inset 0 0 0 1px var(--glass-rim),
+    var(--shadow);
+}
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern][data-kres] {
+    border-color: transparent;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+}
+@media (max-width: 1023.98px) {
+  html:not([data-theme='dim']) .lx-exercise[data-kres] :is(.lx-kleft, .lx-kside) {
+    border-color: transparent;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern],
+  html:not([data-theme='dim']) .lx-exercise[data-kres] :is(.lx-kleft, .lx-kside) {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+/* Nebenknöpfe der Übung („Tipp“, „Weiß ich nicht“): helle Kapsel wie `[data-variante="neben"]` im Küchenstudio (--glass-hi mit Lichtkante). */
+html:not([data-theme='dim']) .lx-exercise [data-slot='secondary'] .lx-btn-quiet {
+  border-color: transparent;
+  background: var(--glass-hi);
+  box-shadow:
+    inset 0 1px 0 var(--glanz),
+    inset 0 0 0 1px var(--glass-rim),
+    var(--shadow-sm);
 }
