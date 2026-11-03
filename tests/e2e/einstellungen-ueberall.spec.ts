@@ -30,7 +30,8 @@ test('Einstellungen von jeder Reiter-Seite und von jeder Seite in höchstens zwe
     await openTab(page, id);
     const top = page.getByTestId('topbar');
     await expect(top.getByTestId('open-companion')).toBeVisible();
-    await expect(top.getByTestId('open-settings')).toHaveCount(0);
+    // Großpaket B1 (Emrah 03.11.2026 „Übersetzer · Claude · Zahnrad“): das Zahnrad steht im Kopf JEDES Reiters (ab 600 px zusätzlich in der Schiene).
+    await expect(top.getByTestId('open-settings')).toHaveCount(1);
     await page.getByTestId('tab-progress').click();
     await screen(page, tabRoot('progress'));
     await openAndClose(page, 'topbar');

@@ -11,9 +11,12 @@ const NOW = Date.parse(SEED_EVENING);
 
 /** Text der Lücke aus den Buchstaben (ohne ausblendende Buchstaben, die gerade gelöscht wurden). */
 const gapText = (page: Page): Promise<string> =>
-  page
-    .locator('[data-testid="gap"] [data-letter]')
-    .evaluateAll((els) => els.filter((e) => getComputedStyle(e).opacity !== '0' || e.getAttribute('data-landed') === 'false').map((e) => (e.textContent ?? '').replace(/\u00a0/g, ' ')).join(''));
+  page.locator('[data-testid="gap"] [data-letter]').evaluateAll((els) =>
+    els
+      .filter((e) => getComputedStyle(e).opacity !== '0' || e.getAttribute('data-landed') === 'false')
+      .map((e) => (e.textContent ?? '').replace(/\u00a0/g, ' '))
+      .join(''),
+  );
 const active = (page: Page): Promise<string | null> => page.evaluate(() => document.activeElement?.getAttribute('data-testid') ?? null);
 
 /** Klick bzw. Tippen auf den linken Rand des n-ten Buchstabens (Cursor davor). */
@@ -32,11 +35,41 @@ async function startTypeCard(page: Page, tap = false): Promise<string[]> {
   return errors;
 }
 
+/** Kern (03.11.2026): neue Wörter kommen erst mit der Einführungskarte – durchtippen bis zur ersten Lücke. */
+async function pastIntros(page: Page, tap = false): Promise<void> {
+  const go = page.getByTestId('vm-intro-go');
+  await expect(go.or(page.getByTestId('vm-check')).first()).toBeVisible();
+  for (let i = 0; i < 5 && (await go.isVisible()); i++) {
+    if (tap) await go.tap();
+    else await go.click();
+    await page.waitForTimeout(150);
+  }
+}
+
 /** Neues Lexem der Wörter-App (wie in vlearn.spec.ts). */
 const newLex = (): Doc => ({
-  v: 1, k: 'w', of: null, core: null, sense: null, lv: 1,
+  v: 1,
+  k: 'w',
+  of: null,
+  core: null,
+  sense: null,
+  lv: 1,
   u: { due: NOW, s: 0, d: 0, st: 0, reps: 0, lapses: 0, last: null, sd: 0, ls: 0 },
-  b: null, day: null, dayU: null, step: null, ev: { f: [], o: 0, s: 0 }, sn: [], gr: null, reg: null, pri: 'core', lc: 0, pair: null, mv: 0, sync: 0, mig: null, intro: null,
+  b: null,
+  day: null,
+  dayU: null,
+  step: null,
+  ev: { f: [], o: 0, s: 0 },
+  sn: [],
+  gr: null,
+  reg: null,
+  pri: 'core',
+  lc: 0,
+  pair: null,
+  mv: 0,
+  sync: 0,
+  mig: null,
+  intro: null,
 });
 function vocabPatch(): Record<string, Doc> {
   const p: Record<string, Doc> = {
@@ -103,7 +136,8 @@ test.describe('Laptop', () => {
     const errors = await startTypeCard(page);
     const btn = page.getByTestId('claude-explain');
     await expect(btn).toBeVisible();
-    await expect(btn).toHaveText('Claude erklärt');
+    // Kern (03.11.2026): der Knopf heißt „Frag Claude“ und steht oben in der Übungsleiste.
+    await expect(btn).toHaveText('Frag Claude');
     // Trefferfläche ≥ 44 px (nach dem Einblenden der Karte gemessen).
     await expect.poll(async () => Math.round((await btn.boundingBox())?.height ?? 0)).toBeGreaterThanOrEqual(44);
     await page.keyboard.type('str');
@@ -134,15 +168,41 @@ test.describe('Laptop', () => {
   test('Grammatik und C1-Aufgabe: „Claude erklärt“ steht vor dem Prüfen in der Aufgabenzeile', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
     await expect(page.getByTestId('gr-item')).toBeVisible();
-    await expect(page.getByTestId('gr-item').getByTestId('claude-explain')).toBeVisible();
+    // Kern: „Frag Claude“ steht oben in der Übungsleiste (nicht mehr in der Aufgabenzeile).
+    await expect(page.getByTestId('exercise-bar').getByTestId('claude-explain')).toBeVisible();
     await expect(page.getByTestId('claude-explain')).toHaveCount(1);
     expect(errors).toEqual([]);
   });
 
   test('C1-Aufgabe (Umformen): „Claude erklärt“ vor dem Prüfen', async ({ page }) => {
     const OLD = Date.parse('2020-01-01T10:00:00+01:00');
-    const err: Doc = { q: 'The company ___ planning to move its headquarters.', given: '', ans: 'is said to be', t: OLD, due: OLD, box: 0, src: 'seed', cid: 'kwt-9001', pat: 'pp.personal', pts: [0, 2] };
-    const topic: Doc = { id: 'passive-plus', p: 0.9, anchor: 0.9, anchorD: '2026-09-15', n: 8, c: 6, due: OLD, last: OLD, recent: [1, 1, 1, 1], seen: [], seenText: [], hist: [{ d: '2026-09-15', p: 0.9 }], errors: [err] };
+    const err: Doc = {
+      q: 'The company ___ planning to move its headquarters.',
+      given: '',
+      ans: 'is said to be',
+      t: OLD,
+      due: OLD,
+      box: 0,
+      src: 'seed',
+      cid: 'kwt-9001',
+      pat: 'pp.personal',
+      pts: [0, 2],
+    };
+    const topic: Doc = {
+      id: 'passive-plus',
+      p: 0.9,
+      anchor: 0.9,
+      anchorD: '2026-09-15',
+      n: 8,
+      c: 6,
+      due: OLD,
+      last: OLD,
+      recent: [1, 1, 1, 1],
+      seen: [],
+      seenText: [],
+      hist: [{ d: '2026-09-15', p: 0.9 }],
+      errors: [err],
+    };
     const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { localStorage: { 'lx:flags': 'kwt' }, fake: { patch: { 'grammar/passive-plus': topic } } });
     await expect(page.getByTestId('c1x-kwt')).toBeVisible();
     await expect(page.getByTestId('claude-explain')).toBeVisible();
@@ -152,6 +212,7 @@ test.describe('Laptop', () => {
   test('Wörter-App: nächste Karte sofort tippbereit; ein Buchstabe ohne Fokus landet in der Lücke', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: vocabPatch() } });
     await screen(page, 'vlearn');
+    await pastIntros(page);
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('claude-explain')).toBeVisible();
     await expect(page.getByTestId('gap-input')).toBeFocused();
@@ -192,6 +253,7 @@ test.describe('Handy mit Touch', () => {
   test('Wörter-App: nach „Weiter“ steht der Fokus sofort in der neuen Lücke (Tastatur bleibt offen)', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: vocabPatch() } });
     await screen(page, 'vlearn');
+    await pastIntros(page, true);
     await expect(page.getByTestId('exercise-bar').getByTestId('claude-explain')).toBeVisible();
     await page.getByTestId('gap-input').tap();
     await page.getByTestId('vm-check').tap();

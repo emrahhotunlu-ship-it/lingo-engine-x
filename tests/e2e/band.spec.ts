@@ -11,6 +11,8 @@ import { expected, forcedPatch, planPatch, TYPE_MODE } from './trainerHelpers';
 //   Grammatik mit dem längsten echten Warum (259 Zeichen, grammar-bank.json tasks[47], past-perfect).
 // - Laptop (1024 und 1440, Feinzeiger): Vollbild ohne Navigationsleiste; Mitte Urteil und Lösung, rechts „Erklärung“ und
 //   „Frag Claude“ (immer sichtbar, mit Eingabe). Dockt der Begleiter an, rückt die Erklärung in die Mitte (`data-noside`).
+// Kern (Emrah 03.11.2026, Vorschau 9pdpfT8E): die Rückmeldung ist EINE Karte – Urteilsstreifen oben, darin Lösung · Warum · Merke ·
+//   „Mehr“; „Kommt … wieder“ unter der Karte; „Frag Claude dazu“ steht neben „Weiter“ (keine Schnellfragen, keine eigene Seitenspalte).
 
 type Doc = Record<string, unknown>;
 const OLD = Date.parse('2020-01-01T10:00:00+01:00');
@@ -27,7 +29,21 @@ const ERR_LONG: Doc = {
   pat: 'tc.present-perfect',
   pts: [0, 2],
 };
-const topicDoc = (id: string, errors: Doc[]): Doc => ({ id, p: 0.5, anchor: 0.5, anchorD: '2026-09-15', n: 8, c: 6, due: OLD, last: OLD, recent: [1, 1, 1, 1], seen: [], seenText: [], hist: [{ d: '2026-09-15', p: 0.5 }], errors });
+const topicDoc = (id: string, errors: Doc[]): Doc => ({
+  id,
+  p: 0.5,
+  anchor: 0.5,
+  anchorD: '2026-09-15',
+  n: 8,
+  c: 6,
+  due: OLD,
+  last: OLD,
+  recent: [1, 1, 1, 1],
+  seen: [],
+  seenText: [],
+  hist: [{ d: '2026-09-15', p: 0.5 }],
+  errors,
+});
 
 // Längstes echtes Warum (audit-why-length): grammar-bank.json tasks[47], 259 Zeichen auf Deutsch.
 const PP_DE =
@@ -37,7 +53,11 @@ const PP_EN =
 const PP_ERR: Doc = { q: 'It was the first time she ___ such a large account.', given: 'has handled', ans: 'had handled', t: OLD, due: OLD, box: 0, src: 'seed', expl: { de: PP_DE, en: PP_EN } };
 
 async function longest(page: Page, choice: 'has signed off' | 'will sign off') {
-  const booted = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { localStorage: { 'lx:flags': 'err' }, fake: { patch: { 'grammar/time-clauses': topicDoc('time-clauses', [ERR_LONG]) } } });
+  const booted = await bootAt(
+    page,
+    { name: 'grammarSession', mode: 'errors' },
+    { localStorage: { 'lx:flags': 'err' }, fake: { patch: { 'grammar/time-clauses': topicDoc('time-clauses', [ERR_LONG]) } } },
+  );
   const item = page.getByTestId('gr-item');
   await expect(item.getByTestId('c1x-err')).toBeVisible();
   await item.getByTestId('spot-word').nth(5).click();
@@ -55,7 +75,21 @@ async function longest(page: Page, choice: 'has signed off' | 'will sign off') {
 }
 
 /** overcome: Stufe 4, schwächste Art „cloze“ (freie Lücke), Tag 1 mit Ursprungssatz (wie hint.spec). */
-const OVERCOME = { 'vocab/overcome': { na: 9, hist: [], state: 'learning', stage: 4, S: 1, D: 5, due: 1_700_000_000_000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } } };
+const OVERCOME = {
+  'vocab/overcome': {
+    na: 9,
+    hist: [],
+    state: 'learning',
+    stage: 4,
+    S: 1,
+    D: 5,
+    due: 1_700_000_000_000,
+    last: 1_699_900_000_000,
+    reps: 3,
+    lapses: 0,
+    xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } },
+  },
+};
 
 type WordCase = 'wrong' | 'shown' | 'near' | 'right';
 async function word(page: Page, kind: WordCase, lang: Lang) {
@@ -109,26 +143,35 @@ const measureFlow = (page: Page): Promise<Flow> =>
 /** Die gemeinsamen Regeln für die Rückmeldung am Handy. Gibt die Messung zurück. */
 async function flowRules(page: Page, label: string): Promise<Flow> {
   const res = page.getByTestId('result');
-  await expect(res).toHaveAttribute('data-flow', '');
+  await expect(res).toBeVisible();
   const m = await measureFlow(page);
   test.info().annotations.push({ type: 'flow', description: `${label}: Warum ${m.whyText.length} Zeichen, Reihenfolge ${m.order.join(' · ')}` });
   // Im Fluss, kein festes Band, kein Blatt.
   expect(m.position).not.toBe('fixed');
   expect(m.band, 'altes Band oder Mehr-Blatt').toBe(0);
   expect(m.sheet, 'Dialog').toBe(0);
-  // Reihenfolge: Urteil · Warum · Merke · Mehr · Frag Claude (was jeweils da ist).
-  const want = ['verdict', 'why', 'remember', 'more', 'claude-ask-inline'];
+  // Reihenfolge: Urteil · Warum · Merke · Mehr (was jeweils da ist).
+  const want = ['verdict', 'why', 'remember', 'more'];
   expect(m.order).toEqual(want.filter((x) => m.order.includes(x)));
-  expect(m.order[0]).toBe('verdict');
   // Die dritte Frage hat ihren Platz: Warum oder Merke steht sichtbar da, nichts ist abgeschnitten.
-  expect(m.order.some((x) => x === 'why' || x === 'remember'), 'Warum/Merke').toBe(true);
+  expect(
+    m.order.some((x) => x === 'why' || x === 'remember'),
+    'Warum/Merke',
+  ).toBe(true);
   expect(m.whyClipped, 'Warum abgeschnitten').toBe(false);
-  // Hilfe ist sichtbar, ohne erst einen Knopf zu suchen (Emrah 02.11.2026).
-  await expect(res.getByTestId('claude-ask-inline')).toBeVisible();
-  await expect(res.getByTestId('claude-ask-inline').getByTestId('claude-ask-chip')).toHaveCount(3);
+  // Hilfe ist sichtbar, ohne erst einen Knopf zu suchen (Emrah 02.11.2026): Kern – „Frag Claude dazu“ neben „Weiter“.
+  await expect(page.locator('.lx-actionbar').getByTestId('claude-ask-about')).toBeVisible();
   // Ganz unten gerollt verschwindet nichts hinter der festen Leiste; dort steht nur „Weiter“. Erneut messen, bis das Einrollen nach dem
   // Prüfen und die Erklärung von Claude fertig sind (beide ändern Lage und Höhe noch kurz).
-  await expect.poll(async () => { const n = await measureFlow(page); return n.flowBottom - n.barTop; }, { timeout: 5000 }).toBeLessThanOrEqual(1);
+  await expect
+    .poll(
+      async () => {
+        const n = await measureFlow(page);
+        return n.flowBottom - n.barTop;
+      },
+      { timeout: 5000 },
+    )
+    .toBeLessThanOrEqual(1);
   await expect(page.locator('.lx-actionbar').getByTestId('next')).toBeVisible();
   return m;
 }
@@ -146,7 +189,8 @@ for (const vh of [844, 700] as const) {
           await expect(res.locator('[data-slot="verdict"]')).toBeInViewport();
           // Die Lösung steht in der Lücke bzw. im Vergleich (UX-Neuanfang D), nicht in einer eigenen Bandzeile.
           if (kind !== 'near') await expect(page.getByTestId('exercise')).toContainText(expected('cloze', 'overcome', null, 'vocab', lang));
-          await expect(res.locator('[data-block="verdict"] [data-testid="next-in"]')).toBeVisible();
+          // Kern: „Wieder in …“ steht unter der Karte.
+          await expect(page.getByTestId('next-in')).toBeVisible();
           await flowRules(page, `390×${vh} Wort ${kind} ${lang}`);
           if (vh === 844) expect(await layoutProblems(page), 'Layout').toEqual([]);
           expect(errors, 'Fehler').toEqual([]);
@@ -216,10 +260,9 @@ test.describe('Handy 390×844: Verhalten', () => {
     await expect(res).toBeVisible();
   });
 
-  test('„Frag Claude“: eine Schnellfrage öffnet den Begleiter mit der Frage zur Aufgabe', async ({ page }) => {
+  test('„Frag Claude dazu“ öffnet den Begleiter zur Aufgabe', async ({ page }) => {
     await word(page, 'wrong', 'de');
-    const ask = page.getByTestId('claude-ask-inline');
-    await ask.getByTestId('claude-ask-chip').first().click();
+    await page.getByTestId('claude-ask-about').click();
     await expect(page.getByTestId('companion')).toBeVisible();
   });
 
@@ -274,76 +317,52 @@ test.describe('Handy 390×844: Verhalten', () => {
   });
 });
 
-// Laptop (Feinzeiger): Vollbild ohne Navigationsleiste (Emrah 02.11.2026 „Vollbild, rechts Claude“). Mitte: Urteil und Lösung;
-// rechts EINE Spalte: „Erklärung“ (Warum, Merke, Claude, „Mehr“) und darunter immer „Frag Claude“ mit Eingabe.
-const SPLIT = { 1024: { h: 768, stage: [560, 760], side: [300, 440] }, 1440: { h: 900, stage: [600, 760], side: [340, 440] } } as const;
+// Laptop (Feinzeiger): Vollbild ohne Navigationsleiste. Kern: EINE Rückmeldekarte – Urteilsstreifen oben, darunter links Lösung und
+// Warum, rechts (falls vorhanden) Regel bzw. Wortkarte; „Frag Claude dazu“ und „Weiter“ unten. Vor dem Prüfen steht „Frag Claude“ oben.
 for (const width of [1024, 1440] as const) {
-  test.describe(`Laptop ${width}×${SPLIT[width].h} (geteilt)`, () => {
-    test.use({ viewport: { width, height: SPLIT[width].h }, hasTouch: false });
+  const h = width === 1024 ? 768 : 900;
+  test.describe(`Laptop ${width}×${h}`, () => {
+    test.use({ viewport: { width, height: h }, hasTouch: false });
 
-    test('Vollbild ohne Leiste; rechts Erklärung und „Frag Claude“; „Mehr“ und ⓘ in der Spalte; Urteil im Bild', async ({ page }) => {
+    test('Vollbild ohne Leiste; Erklärung in der Karte, „Mehr“ an Ort und Stelle, ⓘ ohne Dialog, Urteil im Bild', async ({ page }) => {
       const { errors } = await longest(page, 'will sign off');
       await expect(page.getByTestId('tabbar')).toHaveCount(0);
-      const side = page.locator('[data-col="side"]');
-      const explain = side.getByTestId('side-explain');
-      await expect(explain).toBeVisible();
-      await expect(explain.locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
-      // In der Mitte steht die Erklärung nicht noch einmal.
-      await expect(page.locator('[data-col="main"] [data-block="why"]')).toHaveCount(0);
-      const ask = side.getByTestId('claude-ask');
-      await expect(ask).toBeVisible();
-      await expect(ask.getByTestId('claude-ask-chip')).toHaveCount(3);
-      await expect(ask.getByTestId('claude-ask-input')).toBeVisible();
-      const cols = await page.evaluate(() => ({
-        main: Math.round(document.querySelector('[data-col="main"]')?.getBoundingClientRect().width ?? 0),
-        side: Math.round(document.querySelector('[data-col="side"]')?.getBoundingClientRect().width ?? 0),
-      }));
-      test.info().annotations.push({ type: 'split', description: `${width}: Bühne ${cols.main} px, Spalte ${cols.side} px` });
-      expect(cols.main).toBeGreaterThanOrEqual(SPLIT[width].stage[0]);
-      expect(cols.main).toBeLessThanOrEqual(SPLIT[width].stage[1]);
-      expect(cols.side).toBeGreaterThanOrEqual(SPLIT[width].side[0]);
-      expect(cols.side).toBeLessThanOrEqual(SPLIT[width].side[1]);
-      const more = explain.getByTestId('explanation-more');
+      const res = page.getByTestId('result');
+      await expect(res.locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
+      await expect(page.locator('[data-col="side"]')).toHaveCount(0);
+      await expect(page.getByTestId('claude-ask-about')).toBeVisible();
+      await expect(page.getByTestId('next')).toBeVisible();
+      const more = res.getByTestId('explanation-more');
       if (await more.count()) {
         await more.click();
         await expect(more).toHaveAttribute('aria-expanded', 'true');
-        await expect(more).toContainText('Weniger');
-        await expect(explain.getByTestId('more-body')).toBeVisible();
+        await expect(res.getByTestId('more-body')).toBeVisible();
         await page.keyboard.press('Escape');
         await expect(more).toHaveAttribute('aria-expanded', 'false');
       }
-      await expect(page.getByTestId('result').locator('[data-slot="verdict"]')).toBeInViewport();
+      await expect(res.locator('[data-slot="verdict"]')).toBeInViewport();
       const pos = await page.evaluate(() => ({
         verdict: document.querySelector('[data-testid="result"] [data-slot="verdict"]')?.getBoundingClientRect().top ?? -1,
         bar: document.querySelector('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0,
       }));
       expect(pos.verdict).toBeGreaterThanOrEqual(pos.bar);
-      // ⓘ: Zweck und Thema in der Spalte, keine zweite Spalte, kein Dialog.
-      await page.getByTestId('purpose-info').click();
-      await expect(page.getByTestId('purpose-info')).toHaveAttribute('aria-expanded', 'true');
-      await expect(side.locator('[data-slot="info"]')).toBeVisible();
-      await expect(page.getByTestId('context-more')).toHaveCount(0);
       await expect(page.getByRole('dialog')).toHaveCount(0);
       expect(errors).toEqual([]);
     });
 
-    test('vor dem Prüfen: rechts „Frag Claude“ mit zwei Fragen, die die Lösung nicht verraten', async ({ page }) => {
+    test('vor dem Prüfen: „Frag Claude“ steht oben in der Übungsleiste', async ({ page }) => {
       await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...OVERCOME } } });
       await screen(page, 'today');
       await page.getByTestId('start').click();
       await screen(page, 'trainer');
       await expect(page.getByTestId('tabbar')).toHaveCount(0);
-      const ask = page.locator('[data-col="side"]').getByTestId('claude-ask');
-      await expect(ask).toBeVisible();
-      await expect(ask.getByTestId('claude-ask-chip')).toHaveCount(2);
+      await expect(page.getByTestId('exercise-bar').locator('.lx-kask')).toBeVisible();
     });
 
-    test('Begleiter angedockt: die Spalte weicht, die Erklärung steht in der Mitte', async ({ page }) => {
+    test('Begleiter aus „Frag Claude dazu“: die Erklärung bleibt sichtbar', async ({ page }) => {
       const { errors } = await longest(page, 'will sign off');
-      await page.locator('[data-col="side"]').getByTestId('claude-ask').getByTestId('claude-ask-chip').first().click();
+      await page.getByTestId('claude-ask-about').click();
       await expect(page.getByTestId('companion')).toBeVisible();
-      await expect(page.locator('.lx-split[data-noside]')).toHaveCount(1);
-      await expect(page.locator('[data-col="side"]')).toHaveCount(0);
       await expect(page.getByTestId('result').locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
       expect(errors).toEqual([]);
     });
@@ -357,7 +376,7 @@ test.describe('Tablet quer 1024 mit Touch', () => {
   test('Rückmeldung im Fluss; „Mehr“ klappt auf, ohne Spalte und ohne Blatt', async ({ page }) => {
     const { errors } = await longest(page, 'will sign off');
     const res = page.getByTestId('result');
-    await expect(res).toHaveAttribute('data-flow', '');
+    await expect(res).toBeVisible();
     await expect(res.locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
     const more = res.getByTestId('explanation-more');
     if (await more.count()) {

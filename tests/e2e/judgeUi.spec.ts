@@ -98,7 +98,8 @@ test('ohne Zustimmung: unsicher → nur der Knopf „Claude fragen“; nach Clau
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
   // UX-Prüfung 19.10.2026: keine widersprechende „Richtig: …“-Zeile, sondern die neutrale Zeile zur Wertung.
   await expect(page.getByTestId('explanation-yours')).toContainText('Deine Wertung');
-  await expect(page.getByRole('region', { name: 'Erklärung' })).not.toContainText('Richtig:');
+  // Kern: die Rückmeldekarte enthält rechts die Regel (mit „Richtig:“-Beispiel für Vorleseprogramme); geprüft wird die linke Spalte zur eigenen Antwort.
+  await expect(page.getByRole('region', { name: 'Erklärung' }).locator('.lx-kleft')).not.toContainText('Richtig:');
   await page.getByTestId('next').click();
   await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('used to keep');
   expect(JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt)).toContain('"by":"me"');
@@ -160,7 +161,8 @@ test('Einspruch „Ich lag richtig“: als richtig gewertet und gemerkt, kein Cl
   await expect(page.getByTestId('ask-claude')).toHaveCount(0);
   // Die Erklärung widerspricht der Entscheidung nicht: neutrale Zeile statt „Richtig: used to have“.
   await expect(page.getByTestId('explanation-yours')).toContainText('Du hast gesagt, deine Antwort stimmt.');
-  await expect(page.getByRole('region', { name: 'Erklärung' })).not.toContainText('Richtig:');
+  // Kern: die Rückmeldekarte enthält rechts die Regel (mit „Richtig:“-Beispiel für Vorleseprogramme); geprüft wird die linke Spalte zur eigenen Antwort.
+  await expect(page.getByRole('region', { name: 'Erklärung' }).locator('.lx-kleft')).not.toContainText('Richtig:');
   await page.getByTestId('next').click();
   await expect.poll(async () => JSON.stringify((await dump(page))['grammar/used-to']?.fitAlt ?? {})).toContain('"by":"me"');
   expect(errors).toEqual([]);

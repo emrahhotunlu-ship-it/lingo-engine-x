@@ -10,7 +10,8 @@ import { dump } from './trainerHelpers';
 
 type Doc = Record<string, unknown>;
 const vcfgOf = async (page: Parameters<typeof dump>[0]) => (await dump(page))['app/profile']?.vcfg as Doc | undefined;
-const axe = async (page: Parameters<typeof dump>[0], sel: string) => (await new AxeBuilder({ page }).include(sel).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations.map((v) => v.id);
+const axe = async (page: Parameters<typeof dump>[0], sel: string) =>
+  (await new AxeBuilder({ page }).include(sel).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations.map((v) => v.id);
 
 for (const vp of [
   { name: 'Handy 390', use: { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } },
@@ -31,7 +32,8 @@ for (const vp of [
       await openTab(page, 'vocab');
       await expect(page.getByTestId('vocab-home')).toBeVisible();
       await expect(page.getByTestId('vocab'), 'alter Reiter weg').toHaveCount(0);
-      await expect(page.getByTestId('vo-counts')).toBeVisible();
+      // Großpaket B3: die Wortliste mit Filtern ersetzt die Zählerzeile (`vo-counts`).
+      await expect(page.getByTestId('vw-chips')).toBeVisible();
       expect(await layoutProblems(page)).toEqual([]);
       expect(await axe(page, '[data-testid="vocab-home"]')).toEqual([]);
       // Testdaten: Wörter sind heute schon erledigt (act.review) → Zustand statt Knopf, dazu „Noch 5“ als Extra.

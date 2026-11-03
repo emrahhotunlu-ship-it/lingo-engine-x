@@ -10,7 +10,10 @@ const spoken = (page: Page): Promise<string[]> => page.evaluate(() => [...(windo
 
 test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewertung', async ({ page }) => {
   const { patch } = ankiPatch(3);
-  const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } } });
+  const { errors, external } = await boot(page, {
+    migrated: true,
+    fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } },
+  });
   await screen(page, 'today');
   await openTab(page, 'vocab');
   await page.getByTestId('ws-review').click();
@@ -27,7 +30,7 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   await expect(page.getByTestId('trainer-close')).toBeVisible();
   // Ab 1024 px steht der Übersetzer in der Seitenleiste, nicht doppelt in der Übungsleiste (ux N1).
   await expect(page.getByTestId('open-translate').or(page.getByTestId('side-translate')).first()).toBeVisible();
-  await expect(page.getByTestId('open-companion').or(page.getByTestId('side-claude')).first()).toBeVisible();
+  await expect(page.getByTestId('open-companion').or(page.getByTestId('side-claude')).or(page.getByTestId('claude-explain')).first()).toBeVisible();
   // Relaunch P3: Einstellungen stehen in Übungen im Menü „…“ (kein Zahnrad in der Übungsleiste).
   await expect(page.getByTestId('exercise-bar').getByTestId('exercise-menu')).toBeVisible();
   // Befund 29.09. (Emrahs Kommentar „blockiert den Counter"): die Zahl „n / total" bleibt jetzt
@@ -48,7 +51,7 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   const db = await dump(page);
   const card = db[`vocab/${id}`] as Doc;
   expect((card.hist as Doc[])[0]).toMatchObject({ x: 'flip', g: 3 });
-  expect(((card.xs as Doc).flip as Doc)).toEqual({ c: 1, w: 0 });
+  expect((card.xs as Doc).flip as Doc).toEqual({ c: 1, w: 0 });
   expect(card.lapses).toBe(0);
   expect((card.fsrs as Doc).due).toBe(card.due);
   await expect(page.getByTestId('undo-bar')).toHaveCount(0);

@@ -65,10 +65,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  padding: 0 14px;
+  /* Trefferfläche mindestens 44 px (Kap. 8, a11y). */
+  height: 44px;
+  padding: 0 16px;
   border: 1px solid var(--line-2);
-  border-radius: 20px;
+  border-radius: 22px;
   background: var(--surface);
   color: var(--fg);
   font: 500 14px/1 var(--font-sans);
@@ -140,7 +141,22 @@
 
 /* ------------------------------------------------------------------ Nach dem Prüfen: EINE Rückmeldekarte */
 /* Status, Aufgabe und Hilfe treten zurück: die Karte beginnt mit dem Urteil (Vorschau). */
-.lx-exercise[data-kres] :is([data-slot='status'], [data-slot='task'], [data-slot='aid']) {
+.lx-exercise[data-kres] :is([data-slot='status'], [data-slot='aid']) {
+  display: none;
+}
+/* Die Aufgabe bleibt für Vorleseprogramme stehen (Überschrift h2 vor den h3 der Erklärung, axe „heading-order“), sichtbar ist sie nicht. */
+.lx-exercise[data-kres] [data-slot='task'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.lx-exercise[data-kres] [data-slot='task'] :is(button, p, [data-slot='info']) {
   display: none;
 }
 :root .lx-exercise[data-kres] .lx-kcard.lx-result {
