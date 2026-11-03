@@ -757,3 +757,11 @@ Zum laufenden Stand: Test-Link nach dem bereits laufenden Endtest.
 2. „Was soll oben rechts auf jedem der 4 Reiter stehen?“ → **„Übersetzer · Claude · Zahnrad“ (Empfehlung)**.
 3. „Was soll mit den alten Abläufen passieren?“ → **„Notbremse behalten“ (Empfehlung)**: kein Knopf führt mehr hin, Rückweg über Schalter in den Einstellungen.
 4. „Reihenfolge B und C?“ → **„Erst B, dann C“ (Empfehlung)**.
+
+## 03.11.2026 – Kern zuerst (Emrah: „extrem unzufrieden … die app ist nicht gebrauchbar“)
+Pop-up 1: Vorgehen **„Kern zuerst“ (Empfehlung)**: Großpaket B ruht. Nur Übungskarte (Wörter, Grammatik) und Heute werden neu: große Eingabe, klare Erklärung (was falsch, was richtig, warum), neue Wörter immer mit Einführungskarte und Beispielsätzen, ehrlicher Fortschritt, gutes Layout auf großem Bildschirm. Erst Bilder, dann bauen, dann ein Test-Link. Alte App war besser bei: Wort-Erklärungen, Übersichtlichkeit, angenehmeren Übungen, Aussehen. Handy und großer Bildschirm gleich wichtig.
+Pop-up 2 (nach Vorschau-Artefakt `9pdpfT8Es8nrdE3vnVeqqx`, 11 Bilder):
+1. Vorschau → **„Ja, so bauen“ (Empfehlung)**.
+2. Farbe → **„beides soll möglich sein“** (eigene Antwort): hell-warm (wie alte App: Creme, weiße Karten, Grün) und dunkel, beide gestaltet und in den Einstellungen wählbar.
+3. Nach Fehler → **„Ja, einmal nachtippen“ (Empfehlung)**: „Weiter“ erst nach einmal richtig getipptem Wort.
+4. Alte Wörter → **„Ja, einmal kurz Einführungskarte“ (Empfehlung)**: jedes übernommene Wort zeigt beim ersten Mal in der neuen App einmal die Einführungskarte, danach nie wieder.
