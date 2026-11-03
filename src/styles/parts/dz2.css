@@ -148,15 +148,11 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
 .lx-ring[data-today][data-state='done'] {
   box-shadow: none;
 }
-/* Antippbare Wörter: Trefferfläche größer ohne Layoutänderung. Großpaket G7 (M15): mindestens 44 px hoch und 36 px breit („a“, „of“),
-   mittig über dem Wort; Nachbarwörter überlappen nur am Rand, die Wortmitte trifft immer das eigene Wort. */
+/* Antippbare Wörter: Großpaket G7 (M15) hatte die Trefferfläche auf 44 × 36 px vergrößert; in G8 zurückgenommen: am Handy deckte die
+   Fläche eines späteren Worts die Mitte des Worts in der Zeile darüber bzw. eines kurzen Nachbarworts ab (falsches Wort getroffen,
+   senseFit.spec „declined“). Es gilt wieder index.css (≥ 36 px hoch, wortbreit); nur ein Hauch breiter, der Wortabstand bleibt frei. */
 .lx-word::after {
-  inset: auto;
-  left: 50%;
-  top: 50%;
-  width: max(100% + 0.3em, 2.25rem);
-  height: max(100% + 1em, 2.75rem);
-  transform: translate(-50%, -50%);
+  inset: -0.45em -0.1em;
 }
 /* Laptop: Reiterleiste deckend (ohne Weichzeichner, Relaunch P1). */
 @media (min-width: 768px) {
