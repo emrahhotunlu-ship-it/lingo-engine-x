@@ -51,6 +51,7 @@ import type { Verdict as TutorVerdict } from '../../domain/tutor/tutorTypes';
 import { legacyNorm } from '../../domain/grammar/key';
 import { ReportSheet } from '../../ui/ReportSheet';
 import { reportTask } from '../tutor/reportTask';
+import { recordFlag } from '../tutor/flagLog';
 import { GRAMMAR_FIT_PV, type GrammarFitOut, type GrammarFitVars } from '../../prompts/grammarFit';
 import { learnerNow, lintOnce, scheduleLearner } from '../tutor/learnerLive';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -1132,6 +1133,16 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       menu,
       tutor,
       act: foot,
+      // G6 (M14): Melden nicht nur hinter „…“ – mit der neuen Grammatik ein leiser Link bei „Noch nicht“/„Fast“, solange die Antwort noch nicht zählt.
+      ...(mod && !held && !noHelp && !fb.void && !fb.override && (fb.verdict === 'wrong' || fb.verdict === 'near')
+        ? {
+            tail: (
+              <button type="button" className="self-start text-sm text-muted underline underline-offset-4 min-h-11" onClick={() => setReportOpen(true)} data-testid="gm-unfair">
+                {t('gmUnfairLink')}
+              </button>
+            ),
+          }
+        : {}),
       ...(foldWhy ? { fold: ['why' as const] } : {}),
       auto: fb.help.level === 0 && !fb.override && !alsoRight && !fixedCase && rawAction === 'next' && !fb.aiMsg && !lesson,
       ...find,
@@ -1196,11 +1207,14 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         id={`gr:${task.key}`}
         reasons={['solution', 'twofit', 'unnatural', 'other']}
         thanks={!held && !noHelp ? 'ttReportVoid' : undefined}
-        onReport={() => {
+        onReport={(info) => {
           // Gemeldet: die Antwort zählt nicht (noch nicht gebucht), die Lehrkraft-Prüfung findet die Aufgabe in `app/c1.bad`.
           // Ausnahme Vortest, Themen-Test und Wochen-Check (`noHelp`): dort zählt jede Antwort fürs Ergebnis; gemeldet wird trotzdem.
+          const counted = !fb || held || noHelp;
           if (fb && !held && !noHelp) setFb({ ...fb, void: true });
           void reportTask(`gr:${task.key}`);
+          // G6: Spur im Tagesprotokoll (`flags`, zählt nirgends) mit Satz, Antwort, Lösung und Grund für die wöchentliche Inhaltsprüfung.
+          void recordFlag(day, { t: Date.now(), id: `gr:${task.key}`, topic: task.topic, q: task.prompt, given: fb ? (fb.dontKnow ? '?' : (fb.picked ?? fb.given)) : '', ans: task.answer, r: info.reason, ...(counted && fb ? { c: true as const } : {}) });
         }}
       />
       {film && <FilmSheet film={film} open={filmOpen} onClose={() => setFilmOpen(false)} />}

@@ -34,7 +34,7 @@ export const cxP14En = {
   cxReasonUnsure: 'Cannot be checked for sure. If your version is right, tap “I was right”.',
   cxUsHint: 'American: {us}',
   cxCambridge: 'How Cambridge counts: 3–6 words, key word unchanged.',
-  cxMenuReport: 'Report this task',
+  cxMenuReport: 'Task was unfair',
   cxReported: 'Thanks, the task is noted.',
   cxKindName_mcc: 'Best word',
   cxKindName_ocl: 'Small word',

@@ -519,6 +519,9 @@ export const logSchema = z.looseObject({
       }),
     )
     .nullish(),
+  // Großpaket G6: „Aufgabe war unfair“ – gemeldete Aufgaben des Tages mit Satz, Antwort und Grund. Bewusst NICHT in `entries`:
+  // sie zählen nirgends (keine Zählung, kein Lernstand); gelesen nur von der Inhaltsprüfung (Lehrkraft-Routine). Höchstens 40 je Tag.
+  flags: z.array(z.looseObject({ t: num, id: str, topic: str, q: str, given: str, ans: str, r: str, c: bool })).nullish(),
 });
 
 /** Vom Claude-Tagesauftrag geschrieben – Format bleibt exakt erhalten, die App liest nur. */

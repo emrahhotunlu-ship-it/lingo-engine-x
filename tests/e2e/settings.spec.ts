@@ -88,7 +88,7 @@ test('Akzentfarbe: Standard Iris, Bernstein wählen, nach Neuladen bleibt die Wa
 test('Großpaket G: Schalter „Neue Grammatik“ ist an und schreibt gcfg.mod (Rückweg und wieder an)', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await boot(page, { migrated: true });
+  await boot(page, { migrated: true, grammarNew: true });
   await openOverview(page);
   await openSettings(page);
   const sw = page.getByRole('dialog').getByTestId('set-gmod');

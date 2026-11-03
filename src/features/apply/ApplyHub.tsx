@@ -25,6 +25,7 @@ import { useToday } from '../today/state';
 import { Slot } from '../../app/slots';
 import { kindEnabled } from '../../app/flags';
 import { startGrammar, useGrammarSession } from '../grammar/session';
+import { grammarModuleOn } from '../../modules/grammar/api';
 
 // Reiter „Anwenden“ (Emrahs Wunsch 04.10.2026): Wörter und Grammatik zusammen benutzen – Hören und
 // Aufschreiben, Sätze bauen, freies Sprechen. Alles hier ist freiwillig und zählt nie zur Pflicht (Kap. 2.6);
@@ -92,6 +93,8 @@ export function ApplyHub({ lead }: { lead?: ReactNode } = {}) {
   const vocab = useLive((s) => s.collections.vocab);
   const grammar = useLive((s) => s.collections.grammar);
   const repairDoc = useLive((s) => s.docs['app/repair']);
+  // Großpaket G5 (M12): mit der neuen Grammatik stehen die Fehlersätze nur im Grammatik-Reiter (ein Ort), nicht noch einmal hier.
+  const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
   const plan = useToday((s) => s.plan);
   const fixOpen = useToday((s) => s.duties.items.some((d) => d.id === 'ch:u-again' && d.state === 'open'));
   const tts = useSpeech((s) => s.status === 'ready');
@@ -163,7 +166,7 @@ export function ApplyHub({ lead }: { lead?: ReactNode } = {}) {
   const findErr: TileData | null = kindEnabled('err') ? { id: 'hub-find-err', icon: 'search', channel: 'grammar', title: t('hxApplyFindErr'), sub: t('hxApplyFindErrSub'), meta: touch, run: () => startKind('err', () => toast(t('hxApplyFindErrNone'))) } : null;
   const transform = kindEnabled('kwt') && oldTransform ? withMeta({ ...oldTransform, run: startKwt }, touch) : withMeta(oldTransform, laptop);
   // „Sprechen“ steht nur einmal auf Praxis (P2, Kap. 15): als Zeile oben in `lead` (Bereich Praxis), keine eigene Kachel mehr.
-  const repair: TileData | null = moreFix > 0 ? { id: 'hub-repair-round', icon: 'refresh', channel: 'grammar', title: t('hxApplyMoreFix', { n: moreFix }), sub: t('apRepairSub', { n: moreFix }), meta: touch, run: () => go({ name: 'repairRound' }) } : null;
+  const repair: TileData | null = moreFix > 0 && !gmod ? { id: 'hub-repair-round', icon: 'refresh', channel: 'grammar', title: t('hxApplyMoreFix', { n: moreFix }), sub: t('apRepairSub', { n: moreFix }), meta: touch, run: () => go({ name: 'repairRound' }) } : null;
 
   const list = (xs: Array<TileData | null>): TileData[] => xs.filter((x): x is TileData => x !== null);
   const render = (xs: TileData[], featured?: string) => xs.map((x) => <Tile key={x.id} icon={x.icon} channel={x.channel} title={x.title} sub={x.sub} meta={x.meta} onClick={x.run} testId={x.id} featured={x.id === featured} />);

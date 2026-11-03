@@ -79,7 +79,7 @@ export function ReportSheet({ open, onClose, tpl, id, onReport, reasons, thanks 
     onClose();
   };
   return (
-    <Sheet open={open} onClose={onClose} title={t('ttReportTitle')} closeLabel={t('ttReportClose')}>
+    <Sheet open={open} onClose={onClose} title={t('ttReportTitle')} closeLabel={t('ttReportClose')} fit>
       <div className="flex flex-col gap-2" data-testid="report-sheet">
         {REASONS.filter((r) => !reasons || reasons.includes(r.id)).map((r) => (
           <Button key={r.id} variant="secondary" onClick={() => pick(r.id)} data-testid={`report-${r.id}`}>

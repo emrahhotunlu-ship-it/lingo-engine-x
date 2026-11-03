@@ -34,7 +34,7 @@ export const cxP14De = {
   cxReasonUnsure: 'Nicht sicher prüfbar. Wenn deine Fassung stimmt, tippe auf „Ich lag richtig“.',
   cxUsHint: 'Amerikanisch: {us}',
   cxCambridge: 'So zählt Cambridge: 3–6 Wörter, Schlüsselwort unverändert.',
-  cxMenuReport: 'Aufgabe melden',
+  cxMenuReport: 'Aufgabe war unfair',
   cxReported: 'Danke, die Aufgabe ist gemerkt.',
   cxKindName_mcc: 'Passendes Wort',
   cxKindName_ocl: 'Kleines Wort',

@@ -16,6 +16,7 @@ import { startGrammar } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
 import { useToday } from '../today/state';
 import { useFix } from './fix';
+import { grammarModuleOn } from '../../modules/grammar/api';
 
 // „Du bist hier“ (Relaunch Teil 1c, D5 V-GRAMMATIK; Vorschau `hereCard` screens.js:445–450): Kleinüberschrift, Thema groß (20/26), eine Zeile,
 // der Lernweg als geteilter Balken und EIN Hauptknopf. Ersetzt die Weiter-Karte des Reiters und den Kopf der C1-Reise (eine rote Linie, Kap. 2 Nr. 1).
@@ -53,6 +54,8 @@ export function HereCard() {
   const today = useClock((s) => s.today);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const fix = useFix();
+  // Großpaket G5 (M12): mit der neuen Grammatik beginnt der Reiter nicht mit „Test starten“; derselbe Schritt heißt „Thema abschließen“.
+  const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
 
   // Kapitel-Arbeit (K5): „Du bist hier“ und der Knopf kommen aus EINEM Cursor (Einführung, Übung oder Themen-Test).
   const chapterNowRes = useChapterNow();
@@ -96,7 +99,7 @@ export function HereCard() {
         <Steps topic={cursor.topic} />
         {canGo && (
           <VButton variant="pri" full className="lx-vg-go" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase} data-prep={prep ? 'true' : undefined}>
-            {t(chapterBtnKey(cursor, prep))}
+            {gmod && cursor.phase === 'test' && !prep ? t('gmBtnTest') : t(chapterBtnKey(cursor, prep))}
           </VButton>
         )}
       </VCard>

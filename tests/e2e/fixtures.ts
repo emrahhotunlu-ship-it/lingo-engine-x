@@ -40,10 +40,17 @@ export type BootOptions = {
    * Profil bekommt `vcfg.mod = 0` (Rückweg-Stand), damit Tests des alten Wörter-Bereichs ihn weiter sehen; ein eigenes `vcfg` im Test gewinnt.
    */
   vocabAuto?: boolean;
+  /**
+   * `true` = die neue Grammatik (Großpaket G, Schalter `gcfg.mod`) ist an wie bei Emrah (kein `gcfg` im Profil). Standard: `gcfg.mod = 0`
+   * (Rückweg-Stand, wie bei der Wörter-App), damit die Tests des bisherigen Grammatik-Reiters ihn weiter sehen; ein eigenes `gcfg` im Test gewinnt.
+   */
+  grammarNew?: boolean;
 };
 
 /** Rückweg-Stand der Wörter-App für Tests ohne `vocabAuto` (siehe oben). */
 export const VCFG_OFF = { min: 15, ret: 0.9, mod: 0 };
+/** Rückweg-Stand der neuen Grammatik für Tests ohne `grammarNew` (siehe oben). */
+export const GCFG_OFF = { mod: 0 };
 
 export type Booted = { external: string[]; errors: string[] };
 
@@ -83,6 +90,7 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
     const seed = fake.seed;
     const hasProfile = seed === undefined || seed === 'sample' || seed === 'large' || (typeof seed === 'object' && !!seed['app/profile']);
     if (!opts.vocabAuto && hasProfile && patch['app/profile'] !== null) patch['app/profile'] = { vcfg: VCFG_OFF, ...(patch['app/profile'] ?? {}) };
+    if (!opts.grammarNew && hasProfile && patch['app/profile'] !== null) patch['app/profile'] = { gcfg: GCFG_OFF, ...(patch['app/profile'] ?? {}) };
     if (opts.theme || opts.lang) {
       patch['app/profile'] = { ...(patch['app/profile'] ?? {}), ...(opts.lang ? { lang: opts.lang } : {}), ...(opts.theme ? { theme: { m: opts.theme, p: 'ocean' } } : {}) };
     }

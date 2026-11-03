@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useLive } from '../../data/live';
+import { grammarModuleOn } from '../../modules/grammar/api';
 import { flags } from '../../app/flags';
 import { useNav } from '../../app/nav';
 import { openSheet } from '../../app/sheets';
@@ -17,6 +19,7 @@ import { useChapterNow } from '../c1/chapterRun';
 import { ChapterList } from './ChapterList';
 import { useFix } from './fix';
 import { HereCard } from './HereCard';
+import { TopicPath } from './TopicPath';
 
 // Reiter „Grammatik“ (Relaunch Teil 1c, D5 V-GRAMMATIK; Vorschau H6 `path` screens.js:468–480, L4 desk.js:238–248). Aufbau wie die Vorschau:
 // Kopf „Grammatik“ (vom Rahmen, `LearnHead`), Karte „Du bist hier“ mit dem EINEN Hauptknopf, die Kapitelliste „Dein Weg zu C1“ und leise
@@ -51,15 +54,48 @@ export function LearnHub() {
   const { cursor } = useChapterNow();
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
   const highlight = cursor?.topic ?? null;
+  // Großpaket G5: mit der neuen Grammatik EIN Themen-Weg (Als Nächstes / Sitzt schon) statt Kapitelliste und zweiter Themenliste (M12);
+  // die Fehlersätze stehen mit Überschrift an EINEM Ort. Schalter aus (`gcfg.mod = 0`): der bisherige Aufbau, unverändert.
+  const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
+
+  const lookupRows = (
+    <>
+      <div className="lx-v-row lx-vg-lookup" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">
+        <span className="lx-v-row-ic" aria-hidden="true">
+          <Icon name="book" size={18} />
+        </span>
+        <span className="lx-v-row-t">
+          <b>{t('hxLearnLookup')}</b>
+          <span className="lx-vg-links">
+            <button type="button" onClick={() => go({ name: 'wissen' })} className="lx-vg-link" data-testid="hub-wissen">
+              {t('hxLearnRules')}
+            </button>
+            <button type="button" onClick={() => go({ name: 'patterns' })} className="lx-vg-link" data-testid="hub-traps">
+              {t('hxLearnTraps')}
+            </button>
+            <button type="button" onClick={() => go({ name: 'grammar' })} className="lx-vg-link" data-testid="hub-lookup">
+              {t('hxLearnSearch')}
+            </button>
+          </span>
+        </span>
+      </div>
+      <ForeignRows />
+    </>
+  );
 
   return (
     <div className="lx-vg" data-testid="learn-hub">
       <HereCard />
 
-      {program && <ChapterList />}
+      {gmod ? <TopicPath current={highlight} onOpen={setOpen} /> : program && <ChapterList />}
 
-      <Slot name="grammar.foot" />
+      {!gmod && <Slot name="grammar.foot" />}
 
+      {gmod && (
+        <h2 className="lx-vg-lbl lx-vg-pathlbl" data-testid="hub-errors-head">
+          {t('gmErrorsHead')}
+        </h2>
+      )}
       <div className="lx-vg-rows" data-testid="hub-errors-list">
         {fix.nDue > 0 ? (
           // Zeile wie `VRow`, mit den Zahlen als Attribute (Tests prüfen „n fällig · heute m“ gegen den Hauptknopf, P7).
@@ -78,29 +114,18 @@ export function LearnHub() {
         ) : (
           <VRow icon="check" title={t('nbLernenFixNone')} sub={t('nbLernenFixNoneSub')} data-testid="hub-errors-none" />
         )}
-        <div className="lx-v-row lx-vg-lookup" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">
-          <span className="lx-v-row-ic" aria-hidden="true">
-            <Icon name="book" size={18} />
-          </span>
-          <span className="lx-v-row-t">
-            <b>{t('hxLearnLookup')}</b>
-            <span className="lx-vg-links">
-              <button type="button" onClick={() => go({ name: 'wissen' })} className="lx-vg-link" data-testid="hub-wissen">
-                {t('hxLearnRules')}
-              </button>
-              <button type="button" onClick={() => go({ name: 'patterns' })} className="lx-vg-link" data-testid="hub-traps">
-                {t('hxLearnTraps')}
-              </button>
-              <button type="button" onClick={() => go({ name: 'grammar' })} className="lx-vg-link" data-testid="hub-lookup">
-                {t('hxLearnSearch')}
-              </button>
-            </span>
-          </span>
-        </div>
-        <ForeignRows />
+        {!gmod && lookupRows}
       </div>
 
-      {program ? (
+      {gmod && (
+        <div className="lx-vg-rows" data-testid="hub-more-list">
+          {lookupRows}
+        </div>
+      )}
+
+      {gmod && <Slot name="grammar.foot" />}
+
+      {gmod ? null : program ? (
         // Die vollständige Themenliste bleibt eingeklappt erreichbar (kein doppelter Kapitelkopf neben der Kapitelliste).
         <section className="lx-vg-all" aria-label={t('nbLernenPathAll', { n: pathTopics().length })}>
           <Disclosure label={t('nbLernenPathAll', { n: pathTopics().length })} testId="hub-all-topics">
@@ -126,4 +151,3 @@ export function LearnHub() {
     </div>
   );
 }
-
