@@ -160,13 +160,13 @@
   background: var(--ok-soft);
   animation: lx-band-fade 220ms var(--ease-soft) backwards;
 }
-.lx-kstrip[data-verdict='wrong'] {
+:root .lx-kstrip[data-slot][data-verdict='wrong'] {
   background: var(--bad-soft);
 }
-.lx-kstrip[data-verdict='near'] {
+:root .lx-kstrip[data-slot][data-verdict='near'] {
   background: var(--near-soft);
 }
-.lx-kstrip[data-verdict='dontKnow'] {
+:root .lx-kstrip[data-slot][data-verdict='dontKnow'] {
   background: var(--surface-2);
 }
 .lx-kstrip,

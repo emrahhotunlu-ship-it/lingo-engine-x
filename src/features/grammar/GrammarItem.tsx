@@ -1,3 +1,4 @@
+import { useAiAvailable } from '../../ai/scope';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { companionOpenedSince } from '../companion/store';
@@ -198,6 +199,8 @@ function LegacyGrammarItem({
   onLeave = null,
   mod = false,
 }: GrammarItemProps) {
+  // Kern (learning-scientist 03.11.2026): „1 · Was war falsch“ kommt von Claude (`ExplainMine`); ohne KI beginnt die Erklärung bei 1.
+  const aiOn = useAiAvailable();
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -1335,7 +1338,7 @@ function LegacyGrammarItem({
       stepsSide = (
         <RuleSteps
           topic={task.topic}
-          start={hasYours || tutor ? 2 : 1}
+          start={hasYours || (tutor && aiOn) ? 2 : 1}
           pattern={patLine ? { name: patLine.name, formula: patLine.formula } : null}
           why={whyLine?.text ?? null}
           mistake={

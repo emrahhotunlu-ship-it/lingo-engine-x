@@ -134,6 +134,12 @@ export function KernDayCard({
                   ) : !now && r.min ? (
                     <p className="lx-kh-st-s lx-v-num">{t('kernAbout', { min: r.min })}</p>
                   ) : null}
+                  {/* Ehrlicher Zähler (ux-reviewer 03.11.): vor der ersten Karte steht der Stand („0 von 46 erledigt“) unter dem Grund; danach ist er die Unterzeile. */}
+                  {now && r.progress && r.progress.done === 0 && r.progress.total > 0 && (
+                    <p className="lx-kh-st-s lx-v-num" data-testid={real ? 'today-step-count' : 'start-step-count'}>
+                      {t('tdProgressLabel', { done: 0, total: r.progress.total })}
+                    </p>
+                  )}
                   {now && pct !== null && (
                     <div className="lx-kh-bar" aria-hidden="true">
                       <i style={{ width: `${pct}%` }} />

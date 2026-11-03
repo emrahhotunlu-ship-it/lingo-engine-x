@@ -17,9 +17,11 @@ export type SegBarProps = {
   segments?: { count: number; current: number } | null;
   label?: string | undefined;
   testId?: string | undefined;
+  /** Kern (03.11.2026, ehrlicher Zähler): Füllung nach erledigten Karten (n − 1) wie der Text „x von N erledigt“, nicht nach der gezeigten. */
+  fillDone?: boolean;
 };
 
-export function SegBar({ progress, segments = null, label, testId = 'round-progress' }: SegBarProps) {
+export function SegBar({ progress, segments = null, label, testId = 'round-progress', fillDone = false }: SegBarProps) {
   const { t } = useT();
   const total = Math.max(1, progress.total);
   const n = Math.max(1, Math.min(total, progress.n));
@@ -47,7 +49,7 @@ export function SegBar({ progress, segments = null, label, testId = 'round-progr
       root.removeAttribute('data-lx-blockflash');
     };
   }, [flash]);
-  const frac = Math.round((n / total) * 100);
+  const frac = Math.round(((fillDone ? Math.max(0, Math.min(total, progress.n - 1)) : n) / total) * 100);
   return (
     <div className="flex items-center gap-3" data-testid="seg-bar" data-segs={count} data-cur={cur}>
       <div

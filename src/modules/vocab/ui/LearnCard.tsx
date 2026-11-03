@@ -618,7 +618,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       ? [{ id: 'hint', label: t('vmBtnTip'), onClick: () => run.tip(), testId: 'vm-tip-btn', variant: 'quiet' } as const]
       : []),
     ...(card0 && card0.kind !== 'intro' && !teachCard && !isFlip ? [{ id: 'dontKnow', label: t('vmBtnDunno'), onClick: () => check(true), testId: 'vm-dunno', variant: 'quiet' } as const] : []),
-    ...(card0?.canProbe
+    // Kern (learning-scientist 03.11.2026): nicht auf der Einführungskarte – dort stehen Wort und Bedeutung schon (kein echter Abruf).
+    ...(card0?.canProbe && !teaching
       ? [
           {
             id: 'skip',
@@ -815,6 +816,8 @@ function comeBack(t: T, b: Band, dateShort: (ms: number) => string): string {
         : next.kind === 'step'
           ? t('kernBecauseNew')
           : t('kernBecauseOk');
+  // Fällig noch heute, obwohl sicher gewusst (z. B. Lernschritt): kein Grund „Abstand wird größer“, der widerspräche (Lehrer-Prüfung 03.11.).
+  if (next.kind === 'date' && next.day <= today && because === t('kernBecauseOk')) return `${when}.`;
   return t('kernComeBecause', { when, because });
 }
 

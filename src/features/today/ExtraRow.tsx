@@ -32,7 +32,7 @@ export type ExtraLine = { id: string; icon: IconName; label: string; sub: string
 
 /** Die Angebote von heute in fester Reihenfolge. `done`: Pflicht erledigt („Wörter üben“ steht dann vorn). */
 export function useExtraLines(today: string, done: boolean, before: () => void = () => undefined): ExtraLine[] {
-  const { t } = useT();
+  const { t, tn } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
   const cards = useVocabCards();
@@ -67,7 +67,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
         icon: 'refresh',
         label: t('hxExtraWrong'),
         sub: t('hxExtraWrongSub', { n: wrong.length }),
-        tile: [t('kernTileWrong'), t('kernTileWrongSub', { n: wrong.length })],
+        tile: [t('kernTileWrong'), tn('kernTileWrongSub', wrong.length)],
         run: () => {
           before();
           startExtra(api, { deck: 'all', pick: (c) => keys.has(c.key), allowNew: false, size: Math.min(10, keys.size), label: t('hxExtraWrong') });

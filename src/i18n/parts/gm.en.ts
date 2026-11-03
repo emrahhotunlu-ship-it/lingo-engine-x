@@ -2,7 +2,7 @@
 
 export const gmEn = {
   gmRepTopic: 'Your own sentence',
-  gmComesBack: 'Comes back tomorrow',
+  gmComesBack: "Comes back tomorrow because the correction sticks better after a day's break.",
   gmSwitch: 'New grammar',
   gmSwitchOnHint: 'On: your sentences to fix come first, and Claude’s explanation is shorter. Turning it off returns to the previous flow; your progress stays.',
   gmSwitchOffHint: 'Off: grammar works as before. Your progress stays the same.',

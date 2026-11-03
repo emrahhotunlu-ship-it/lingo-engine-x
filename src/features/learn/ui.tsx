@@ -182,7 +182,7 @@ export function ExerciseTop({
       progressTestId={progressTestId ?? 'round-progress'}
       note={note}
       end={<ExerciseActions onPause={close} />}
-      middleOverlay={middleOverlay ?? (has ? <SegBar progress={progress} segments={segments} label={label} testId={progressTestId ?? 'round-progress'} /> : null)}
+      middleOverlay={middleOverlay ?? (has ? <SegBar progress={progress} segments={segments} label={label} testId={progressTestId ?? 'round-progress'} fillDone={!!areaName} /> : null)}
     />
   );
 }

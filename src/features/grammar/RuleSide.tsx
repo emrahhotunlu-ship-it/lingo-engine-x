@@ -78,6 +78,13 @@ export type RuleStepsProps = {
  * Kern (Emrah 03.11.2026, Vorschau 9pdpfT8E „Handy-Grammatik-Falsch“/„Monitor-Grammatik“): die Erklärung bei Fehler in fester Reihenfolge
  * – (1 · Was war falsch steht links) · Die Regel · Die Falle · Noch ein Beispiel · „Ganze Regel ansehen“. Nur vorhandene Inhalte, nichts erfunden.
  */
+/** Name des Musters ohne doppelten Anfang: beginnt die Formel mit dem ersten Teil des Namens („Past Simple · …“ / „Past Simple + …“), entfällt er
+ *  im Namen (Lehrer-Prüfung 03.11.2026: „Past Simple“ stand zweimal in einer Zeile). */
+function patternHead(p: { name: string; formula?: string | null }): string {
+  const [head, ...rest] = p.name.split(' · ');
+  return head && rest.length > 0 && p.formula?.trim().startsWith(head.trim()) ? rest.join(' · ') : p.name;
+}
+
 export function RuleSteps({ topic, start, pattern, why, mistake, example, signals: own = null, onWhole }: RuleStepsProps) {
   const { t, lang } = useT();
   const rule = ruleOf(topic, lang);
@@ -104,7 +111,7 @@ export function RuleSteps({ topic, start, pattern, why, mistake, example, signal
         <>
           {pattern && (
             <p className="lx-t-support m-0 font-semibold" data-testid="rule-step-pattern">
-              {pattern.name}
+              {patternHead(pattern)}
               {pattern.formula ? <span className="font-normal text-muted"> · {pattern.formula}</span> : null}
             </p>
           )}
@@ -113,7 +120,14 @@ export function RuleSteps({ topic, start, pattern, why, mistake, example, signal
               {ruleText}
             </p>
           )}
-          {signals.length > 0 && <p className="lx-t-support m-0 text-muted">{t('kernSignals', { words: signals.join(', ') })}</p>}
+          {signals.length > 0 && (
+            <p className="lx-t-support m-0 text-muted">
+              {/* Die Signalwörter sind Englisch (Sprachausgabe, Sprachtreue): eigene Spanne mit lang="en". */}
+              {t('kernSignals', { words: '\u0000' }).split('\u0000')[0]}
+              <span lang="en">{signals.join(', ')}</span>
+              {t('kernSignals', { words: '\u0000' }).split('\u0000')[1]}
+            </p>
+          )}
         </>
       ),
     });

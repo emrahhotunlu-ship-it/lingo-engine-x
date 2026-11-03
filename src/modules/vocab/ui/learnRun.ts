@@ -224,6 +224,8 @@ export class LearnRun {
   private readonly lastSent = new Map<string, string>();
   /** Übernommene Wörter, deren Einführungskarte diese Runde schon kam (K10). */
   private readonly taught = new Set<string>();
+  /** Pfad, dessen Einführungskarte gerade gelesen wurde: die nächste Antwort darauf zählt wie mit Hilfe (siehe `check`). */
+  private justTaught: string | null = null;
   private pending: Pending | null = null;
   /** Anki-Modus: eingefrorene Zeit beim Aufdecken (Antwortzeit = Zeit bis zum Aufdecken). */
   private flipF: Frozen | null = null;
@@ -513,6 +515,7 @@ export class LearnRun {
     const v = this.view;
     if (v.k !== 'card' || !v.teach) return;
     this.taught.add(v.task.path);
+    this.justTaught = v.task.path;
     this.shownAt = this.env.now();
     this.set({ ...v, teach: null });
   }
@@ -899,7 +902,11 @@ export class LearnRun {
     const t = this.env.now();
     const c = evaluate(v.card, given, this.env.dict, dunno || !given.trim());
     // `asked`: Claude vor dem Prüfen gefragt (learning-scientist 02.11.2026) = Hilfe wie der Tipp.
-    const f: Frozen = { t, ms: Math.max(0, Math.round(m.ms)), fk: Math.max(0, Math.round(m.fk)), hint: v.tip || asked ? 1 : 0 };
+    // Kern (learning-scientist 03.11.2026): direkt nach der Einführungskarte eines übernommenen Worts ist die Antwort kein freier Abruf –
+    // sie zählt wie mit Hilfe (höchstens „Gut“), damit das Intervall nicht aus dem Kurzzeitgedächtnis wächst.
+    const justTaught = this.justTaught === v.task.path;
+    this.justTaught = null;
+    const f: Frozen = { t, ms: Math.max(0, Math.round(m.ms)), fk: Math.max(0, Math.round(m.fk)), hint: v.tip || asked || justTaught ? 1 : 0 };
     const p: Pending = {
       task: v.task,
       card: v.card,
