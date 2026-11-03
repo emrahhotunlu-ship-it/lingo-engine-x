@@ -240,6 +240,9 @@
      "why": [
       "Nach „been“ kommt die -ing-Form, nicht das Partizip.",
       "After “been” comes the -ing form, not the past participle."
+     ],
+     "accepted": [
+      "I have studied all afternoon."
      ]
     }
    ],
@@ -403,7 +406,9 @@
      ],
      "accepted": [
       "I'm meeting Tom at six – it's in my calendar.",
-      "I am meeting Tom at six – it's in my calendar."
+      "I am meeting Tom at six – it's in my calendar.",
+      "I'm going to meet Tom at six – it's in my calendar.",
+      "I am going to meet Tom at six – it's in my calendar."
      ]
     }
    ],
@@ -1154,8 +1159,11 @@
      "bad": "He mustn't have seen us.",
      "good": "He can't have seen us.",
      "why": [
-      "Für „sicher nicht“ nimmt man can't have, nicht mustn't (das heißt „darf nicht“).",
-      "For “certainly not” use can't have, not mustn't (which means “not allowed”)."
+      "Für „ganz sicher nicht“ ist can't have die sichere Form. Im US-Englisch hört man auch must not have – das heißt aber eher „wohl nicht“.",
+      "For “certainly not”, can't have is the safe choice. In US English you also hear must not have – but that means “probably not”."
+     ],
+     "accepted": [
+      "He couldn't have seen us."
      ]
     }
    ],
@@ -1237,6 +1245,10 @@
      "why": [
       "Nach suggest folgt -ing oder ein that-Satz, nie to + Grundform.",
       "After suggest use -ing or a that-clause, never to + base form."
+     ],
+     "accepted": [
+      "He suggested that we meet at the office.",
+      "He suggested that we should meet at the office."
      ]
     },
     {

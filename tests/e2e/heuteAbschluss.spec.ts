@@ -25,7 +25,7 @@ test.describe('Handy 390 × 844', () => {
     await expect(card).toHaveAttribute('data-done', 'true');
     await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
     // Zeile 4: Serie und Woche an einer Stelle (im Kopf des Wochenstreifens), die Zählung der Tage steht nicht noch einmal daneben.
-    await expect(page.getByTestId('today-streak')).toHaveText(/^Serie 1\d · 1 von 6 Lerntagen$/);
+    await expect(page.getByTestId('today-streak')).toHaveText(/^1\d Tage in Folge · 1 von 6 Tagen diese Woche$/);
     await expect(page.getByTestId('today-streak')).toHaveCount(1);
     await expect(page.getByTestId('week-summary')).toHaveCount(0);
     // Zeile 2: das eine nächste Ziel (kein Meilenstein heute).

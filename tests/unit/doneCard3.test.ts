@@ -41,7 +41,7 @@ describe('weekText', () => {
   it('6 nicht mehr erreichbar: Zahl der Lerntage und „Montag beginnt neu“', () => {
     const w = weekText(weekGoal(week('dooodoo')));
     expect(w).toEqual({ key: 'moWeekOver', params: { n: 2 } });
-    expect(tde(w!.key, w!.params)).toBe('Diese Woche: 2 Lerntage · Montag beginnt neu');
+    expect(tde(w!.key, w!.params)).toBe('Diese Woche: 2 von 6 Tagen · Montag beginnt neu');
   });
 });
 

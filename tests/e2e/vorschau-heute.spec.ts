@@ -38,7 +38,7 @@ const DESK: Check[] = [
   { name: 'ringzahl', vorschau: '.ringc b', app: '[data-testid="today-ring"] .lx-v-ringc b', props: ['fontSize', 'lineHeight', 'fontWeight'] },
   { name: 'thema', vorschau: '.dtopic .t', app: '[data-testid="today-topic"]', props: ['fontSize', 'lineHeight', 'fontWeight'] },
   { name: 'tageskarte', vorschau: '.daycard', app: '[data-testid="today-card"]', props: ['borderRadius'] },
-  { name: 'mitte', vorschau: '.l1mid .card', app: '.lx-vh-mid-card', props: ['borderRadius'] },
+  // „mitte“ entfällt bewusst: Großpaket G7 (M11) ersetzt die zwei Karten durch eine ruhige Zeile „Dein Stand“ ohne Kartenfläche.
   { name: 'spaltentitel', vorschau: '.ctx h3', app: '.lx-vh-ctx h3', props: ['fontSize', 'fontWeight'] },
   { name: 'wochentag', vorschau: '.ctx .st', app: '.lx-vh-weeklist .lx-v-st', props: ['fontSize'] },
   { name: 'spaltenzeile', vorschau: '.ctx .row', app: '.lx-vh-ctx [data-testid="more-row"]', props: ['fontSize'] },

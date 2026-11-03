@@ -5,7 +5,7 @@ export const moP22De = {
   moWeekProgress: '{n} von 6 Tagen diese Woche',
   moWeekReached: '6 von 6 Tagen diese Woche ✓',
   moWeekReached7: 'Alle 7 Tage diese Woche ✓',
-  moWeekOver: 'Diese Woche: {n} Lerntage · Montag beginnt neu',
+  moWeekOver: 'Diese Woche: {n} von 6 Tagen · Montag beginnt neu',
   moStreakWeek: '{streak} · {week}',
   moRestFree: 'Ruhetag diese Woche frei',
   moRestUsed: 'Ruhetag genutzt ({day})',

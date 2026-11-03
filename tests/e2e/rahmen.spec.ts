@@ -186,7 +186,7 @@ for (const [theme, lang] of [
     await screen(page, 'today');
     await expect(page.getByTestId('profile-streak')).toHaveCount(0);
     // UX-Prüfung KLEIN: Heute-Fußzeile in einem Format „n von 6 Lerntagen“ (Text geändert, Zahlen unverändert).
-    await expect(page.getByTestId('today-streak')).toHaveText(lang === 'de' ? 'Serie 12 · 6 von 6 Lerntagen ✓ · 7 Tage' : 'Streak 12 · 6 of 6 study days ✓ · 7 days');
+    await expect(page.getByTestId('today-streak')).toHaveText(lang === 'de' ? '12 Tage in Folge · Alle 7 Tage diese Woche ✓' : '12-day streak · All 7 days this week ✓');
     await expect(page.getByTestId('tab-vocab')).toHaveText(lang === 'de' ? 'Wörter' : 'Words');
     expect(await layoutProblems(page)).toEqual([]);
     await openProfile(page);

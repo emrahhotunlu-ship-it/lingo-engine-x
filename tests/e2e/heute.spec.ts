@@ -92,7 +92,7 @@ test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne 
   expect(act).toMatchObject({ 'u-focus': 1, 'u-task': 1, 'u-again': 1 });
   // `app/week` bleibt unberührt (kein Wochenthema mehr, nichts wird geschrieben).
   expect((await dump(page))['app/week']).toMatchObject({ cur: { wk: '2026-W38' } });
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie 13 · 1 von 6 Lerntagen');
+  await expect(page.getByTestId('today-streak')).toHaveText('13 Tage in Folge · 1 von 6 Tagen diese Woche');
   expect(errors).toEqual([]);
 });
 
