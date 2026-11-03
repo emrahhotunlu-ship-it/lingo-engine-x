@@ -40,7 +40,8 @@ export function Button({ variant = 'secondary', size = 'md', icon, iconAfter, bu
       type="button"
       whileTap={disabled || busy ? undefined : { scale: 0.98 }}
       transition={{ duration: DURATION.fast }}
-      className={`${base} ${variants[variant]} ${sizes[size]} ${className ?? ''}`}
+      className={`lx-btn ${base} ${variants[variant]} ${sizes[size]} ${className ?? ''}`}
+      data-size={size}
       disabled={disabled || busy}
       aria-busy={busy || undefined}
       {...rest}

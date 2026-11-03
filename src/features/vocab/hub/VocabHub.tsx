@@ -19,7 +19,6 @@ import { HeroCard } from '../../../ui/HeroCard';
 import { Row, RowList } from '../../../ui/RowList';
 import { Segmented } from '../../../ui/Segmented';
 import { toast } from '../../../ui/Toast';
-import { TabTitle } from '../../system/Chrome';
 import { useDecks, writeDecks } from '../decksStore';
 import { decksErrorKey } from './errors';
 import { startAllDue, startExtra } from '../start';
@@ -132,15 +131,11 @@ export function VocabHub() {
 
   return (
     <div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-6 py-6 sm:py-10" data-testid="vocab">
-      <TabTitle
-        title={t('nbWsTitle')}
-        actions={
-          <>
-            <IconButton icon="search" label={t('nbWsSearch')} onClick={() => setSearching((v) => !v)} aria-expanded={searching} data-testid="vocab-search-open" />
-            <IconButton icon="plus" label={t('nbWsHAddLabel')} onClick={() => openSheet('add')} data-testid="vocab-add" />
-          </>
-        }
-      />
+      {/* B1: Titel und Werkzeuge stehen im Reiter-Kopf (TabHead); hier nur noch Suchen/Hinzufügen. */}
+      <div className="flex justify-end gap-1" data-testid="vocab-actions">
+        <IconButton icon="search" label={t('nbWsSearch')} onClick={() => setSearching((v) => !v)} aria-expanded={searching} data-testid="vocab-search-open" />
+        <IconButton icon="plus" label={t('nbWsHAddLabel')} onClick={() => openSheet('add')} data-testid="vocab-add" />
+      </div>
       {searching && (
         <form
           role="search"

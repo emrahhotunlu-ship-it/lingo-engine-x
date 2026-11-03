@@ -23,6 +23,10 @@
 
 .lx-vh-ask-l { display: none; }
 .lx-vh-ask-gap { display: block; width: 44px; height: 44px; }
+/* Großpaket B1: Übersetzer und Zahnrad im Reiter-Kopf nur am Handy – ab 600 px stehen sie in der Schiene links (`lx-nav-tools`). */
+.lx-v-phead-right > .lx-vh-tool + .lx-vh-ask, .lx-v-phead-right > .lx-vh-ask + .lx-vh-tool { margin-left: 0; }
+.lx-v-phead .lx-v-phead-right > .lx-v-iconbtn:not(:last-child) { margin-right: 0; }
+@media (min-width: 600px) { .lx-vh-tool { display: none; } }
 
 /* ------------------------------------------------------------------ Tageskarte (`.daycard`, style.css:173) */
 .lx-vh-day.lx-v-card { display: flex; flex-direction: column; gap: 18px; padding: 22px 20px 20px; }

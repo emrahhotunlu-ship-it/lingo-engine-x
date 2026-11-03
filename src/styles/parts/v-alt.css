@@ -1,0 +1,111 @@
+/* Großpaket B (docs/umbau/design/grosspaket-b.md §2): Angleichung der bisherigen Bausteine an die Vorschau `WBft3EEx7jYYv4QHdepuNm` v2.
+   Bildschirme, die noch nicht einzeln umgebaut sind, bauen auf `lx-card`, `lx-glass`, `ui/Button`, `ui/Tabs`, `ui/Sheet`, `lx-eyebrow` und
+   `lx-field` auf. Diese Schicht gibt ihnen dieselben Flächen, Radien, Knöpfe und Beschriftungen wie die neuen Bausteine (`lx-v-*`, v.css):
+   deckende Fläche ohne Kante und ohne Glanz, ein Radius (--r), Hauptknopf in Iris (--act-btn), Zweitknopf auf --surface-2, Segmente wie
+   `.seg2`, Beschriftung wie `.lbl`. Nur Tokens. Steht nach den alten Teilen (index.css) und gewinnt als ungeschichtete Regel über Tailwind. */
+
+/* ------------------------------------------------------------------ Flächen (style.css:312 `.card`) */
+.lx-card,
+.lx-glass:not(.lx-exercise) {
+  background-color: var(--surface);
+  background-image: none;
+  border-color: transparent;
+  border-radius: var(--r);
+  box-shadow: none;
+}
+/* Karten auf einer Karte (verschachtelt) heben sich mit der zweiten Fläche ab statt mit einer Kante. */
+.lx-card .lx-card,
+.lx-glass:not(.lx-exercise) .lx-card,
+.lx-card .lx-glass:not(.lx-btn) {
+  background-color: var(--surface-2);
+}
+
+/* ------------------------------------------------------------------ Knöpfe (style.css:161–170 `.btn`) */
+.lx-btn {
+  border-radius: var(--r);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  transition: transform 140ms var(--ease-soft), background-color 140ms, opacity 140ms;
+}
+.lx-btn[data-size='lg'] { min-height: 52px; font-size: 17px; }
+.lx-btn[data-size='md'] { min-height: 44px; font-size: 15px; }
+button.lx-btn-primary,
+a.lx-btn-primary {
+  background: var(--act-btn);
+  color: var(--act-btn-fg);
+  border: 0;
+}
+button.lx-btn-primary:hover:not(:disabled) { filter: none; background: var(--act-btn); }
+.lx-btn.lx-glass {
+  background: var(--surface-2);
+  border-color: transparent;
+  box-shadow: none;
+}
+.lx-btn.lx-glass:hover:not(:disabled) { background: var(--surface-3); }
+.lx-btn:disabled { opacity: 0.4; }
+.lx-btn-quiet {
+  border-color: transparent;
+  background: var(--surface-2);
+}
+
+/* ------------------------------------------------------------------ Segmente (style.css:310–312 `.seg2`) */
+.lx-seg[role='tablist'] {
+  background: var(--surface-2);
+  border-radius: 12px;
+  padding: 3px;
+  gap: 3px;
+}
+.lx-seg[role='tablist'] > [role='tab'] {
+  min-height: 44px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fg-2);
+}
+.lx-seg[role='tablist'] > [role='tab'][aria-selected='true'] {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.2);
+}
+
+/* ------------------------------------------------------------------ Beschriftung und Titel (style.css:316 `.lbl`, :148 `.phead`) */
+.lx-eyebrow {
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--fg-2);
+}
+.lx-tabtitle {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  font-variation-settings: 'opsz' 32;
+}
+/* Seitentitel unter „‹ Herkunft“ (Seiten mit Rahmen-Kopf): 26/32 wie die Unterseiten der Vorschau (screens.js `h2` in `.scroll`). */
+.lx-pagetitle {
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ------------------------------------------------------------------ Eingabefeld (style.css:367 `.field`) */
+.lx-field {
+  border: 0;
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line-2) inset;
+  font-size: 17px;
+}
+.lx-field:focus,
+.lx-field:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--act) inset;
+}
+
+/* ------------------------------------------------------------------ Zeilenlisten (style.css:194–200 `.row`): Liste ohne Kartenrahmen */
+.lx-rowlist {
+  background: transparent;
+  padding-inline: 0;
+}
+.lx-rowlist > li { border-top-color: var(--line); }

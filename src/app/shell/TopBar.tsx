@@ -1,6 +1,7 @@
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
-import { AskButton, SettingsButton } from '../../features/system/Chrome';
+import { AskButton } from '../../features/system/Chrome';
+import { TabHead } from '../../features/system/TabHead';
 import { TodayHead } from '../../features/today/TodayHead';
 import { LearnHead } from '../../features/learn/LearnHead';
 import { useNav } from '../nav';
@@ -33,26 +34,15 @@ export function ProfileButton() {
   );
 }
 
-/** Kopf auf jeder Reiter-Wurzel (einmal im Rahmen, nicht je Bildschirm – eindeutige Test-IDs). */
+/** Kopf auf jeder Reiter-Wurzel (einmal im Rahmen, nicht je Bildschirm – eindeutige Test-IDs). Großpaket B1: alle vier Reiter
+ *  haben denselben Kopf (Titel links, Übersetzer · Fragen · Zahnrad rechts). */
 export function TopBar() {
+  const { t } = useT();
   const tab = useNav((s) => s.tab);
-  // D2 V-HEUTE: Auf „Heute“ ist der Kopf die Titelzeile der Vorschau (`phead`: „Heute“ links, „Fragen“ rechts).
   if (tab === 'today') return <TodayHead />;
-  // D5 V-GRAMMATIK: Grammatik bekommt denselben Titelkopf (Vorschau H6 `phead`: „Grammatik“ links, „Fragen“ rechts).
   if (tab === 'learn') return <LearnHead />;
-  if (tab === 'progress') {
-    return (
-      <div className="flex min-h-11 items-center justify-between gap-3 pt-3" data-testid="topbar">
-        <ProfileButton />
-        <SettingsButton />
-      </div>
-    );
-  }
-  return (
-    <div className="flex min-h-11 items-center justify-end gap-3 pt-3" data-testid="topbar">
-      <AskButton />
-    </div>
-  );
+  if (tab === 'vocab') return <TabHead testId="vocab" title={t('nbShTabVocab')} />;
+  return <TabHead testId="progress" title={t('nbShTabProgress')} />;
 }
 
 /** Titel der Herkunft („Heute“, „Üben“ …) für „‹ Herkunft“; `null` = keine Herkunft bekannt. */

@@ -23,7 +23,7 @@ export function RowList({ children, title, titleMeta, testId, className, label }
   return (
     <section className={`flex flex-col gap-2.5 ${className ?? ''}`} aria-label={aria} data-testid={testId}>
       {title !== undefined && <Eyebrow meta={titleMeta}>{title}</Eyebrow>}
-      <ul className="lx-card m-0 flex list-none flex-col px-3.5 py-1">{children}</ul>
+      <ul className="lx-card lx-rowlist m-0 flex list-none flex-col px-3.5 py-1">{children}</ul>
     </section>
   );
 }

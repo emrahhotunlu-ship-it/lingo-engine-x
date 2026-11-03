@@ -36,7 +36,7 @@ export function Tabs<T extends string>({ label, items, value, onChange, testId, 
 
   return (
     <div className="flex flex-col gap-5">
-      <div role="tablist" aria-label={label} onKeyDown={onKey} data-testid={testId} className="grid w-full auto-cols-fr grid-flow-col gap-1 rounded-[var(--radius-control)] bg-track p-1">
+      <div role="tablist" aria-label={label} onKeyDown={onKey} data-testid={testId} className="lx-seg grid w-full auto-cols-fr grid-flow-col gap-1 rounded-[var(--radius-control)] bg-track p-1">
         {items.map((it, i) => {
           const active = it.id === value;
           return (
