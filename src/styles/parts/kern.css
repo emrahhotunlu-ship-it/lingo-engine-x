@@ -983,3 +983,15 @@
     display: none;
   }
 }
+
+/* Emrahs Kommentar 03.11.2026 („schwarze Leiste … warum ist sie überhaupt da“): am Monitor stand die Knopfzeile vor dem Prüfen auf einer
+   eigenen Fläche (`--bg`, im Dunkelmodus fast schwarz) mit Trennlinie – ein Rest des alten Aufbaus. In der Kern-Karte stehen die Knöpfe
+   ohne eigene Fläche unten in der Karte (Vorschau). */
+@media (min-width: 1024px) {
+  :root .lx-exercise[data-kern] .lx-split[data-split] .lx-actionbar-column {
+    margin-top: 8px;
+    padding: 0;
+    border-top: 0;
+    background: none;
+  }
+}
