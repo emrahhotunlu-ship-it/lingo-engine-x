@@ -890,3 +890,12 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - G4 begonnen: eigene Fehlersätze aus `app/repair` vorn im Grammatik-Schritt (höchstens 3, Runde nicht länger), Schalter `gcfg.mod` (fehlt = an).
 - Prüfung: `grammar:check` grün, 51 Inhalts-/Grammatik-Testdateien grün (Ausnahmeliste nur umbenannt, gap_no_hint 4 → 3).
 - Als Nächstes: G2/G3 (ruhige Rückmeldung im Modul), dann G5–G7 (Reiter Themen-Weg), G8 Lehrer + Prüfer + ein Test-Link.
+
+## 03.11.2026 – Großpaket G, Schritte G2–G4
+- Erklärung ohne Abschneiden: `explain-answer@2` erlaubt bis 240 Zeichen für „Warum“ und „Deine Antwort“; wird es zu lang, fällt zuerst die Zeile zur eigenen Antwort weg, „Warum“ bleibt immer ganz (`explainOps.fitAx`).
+- Zweitmeinung (G2): „Claude fragen“ jetzt bei jeder getippten Art (Lücke auch ohne Muster, Schlüsselwort, Ersetzen, Ganzsatz-Korrektur); nicht bei Formfehlern, Auswahl, Bedeutungspaaren und nicht bei Unsinn ohne Muster (dort erklärt Claude von selbst, ein KI-Einstieg je Karte).
+- Fehler finden: eigene Korrektur mit Nachbarwörtern („is a lawyer“) markiert die passende Stelle (`fixSpan`), keine doppelte Anzeige.
+- Schalter „Neue Grammatik“ in den Einstellungen (Lernen), von Anfang an an; aus = bisheriger Ablauf, Lernstand bleibt (`gcfg.mod`).
+- Verlauf je Antwort: kein eigener `glog`-Bereich – die Einträge in `log/<Tag>` (`grammarLogEntry`) sind der Verlauf (weniger Dokumente, Grenze 5.000).
+- Prüfung: Unit 7.240/7.240, gezielte Klicktests (settings, judgeUi, alsoRight, grammar, band) grün, Typprüfung/Lint sauber.
+- Als Nächstes: G5 Reiter als Themen-Weg, G6 „Aufgabe war unfair“ (zählt nicht, bleibt im Verlauf), G7 Fortschritt.

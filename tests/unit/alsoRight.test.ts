@@ -32,11 +32,21 @@ describe('„Auch richtig“ (Art other)', () => {
     expect(ok).toMatchObject({ verdict: 'correct', kind: 'other', needsJudge: false });
   });
 
-  it('nicht fragbar: Schlüsselwort, Formfehler, Auswahl, kein Muster, leer, lange Antwort', () => {
+  it('G2: fragbar bei jeder getippten Art, auch ohne Muster', () => {
     const wrong = { verdict: 'wrong' as const };
-    expect(fitAskable({ type: 'kwt', prompt: 'We ___ a handbook.', pat: 'x' }, wrong, 'had')).toBe(false);
+    expect(fitAskable({ type: 'gap', prompt: 'We ___ a handbook.', pat: null }, wrong, 'had')).toBe(true);
+    expect(fitAskable({ type: 'kwt', prompt: 'We ___ a handbook.', pat: 'x' }, wrong, 'had')).toBe(true);
+    expect(fitAskable({ type: 'find', prompt: 'We has a handbook.', pat: null }, wrong, 'have')).toBe(true);
+    expect(fitAskable({ type: 'correct', prompt: 'We has a handbook.', pat: null }, wrong, 'We have got a handbook.')).toBe(true);
+  });
+
+  it('nicht fragbar: Schlüsselwort fehlt, Formfehler, Auswahl, leer, lange Antwort', () => {
+    const wrong = { verdict: 'wrong' as const };
+    expect(fitAskable({ type: 'kwt', prompt: 'We ___ a handbook.', pat: 'x' }, { verdict: 'wrong', kind: 'key' }, 'had')).toBe(false);
+    expect(fitAskable({ type: 'kwt', prompt: 'We ___ a handbook.', pat: 'x' }, { verdict: 'wrong', kind: 'words' }, 'had')).toBe(false);
     expect(fitAskable({ type: 'mc', prompt: 'We ___ a handbook.', pat: 'x' }, wrong, 'had')).toBe(false);
-    expect(fitAskable({ type: 'gap', prompt: 'We ___ a handbook.', pat: null }, wrong, 'had')).toBe(false);
+    expect(fitAskable({ type: 'meaning', prompt: 'We ___ a handbook.', pat: 'x' }, wrong, 'a')).toBe(false);
+    expect(fitAskable({ type: 'gap', prompt: 'We ___ a handbook.', pat: 'x' }, wrong, 'a b c d e f g h i')).toBe(false);
     expect(fitAskable({ type: 'gap', prompt: 'We ___ a handbook.', pat: 'x' }, { verdict: 'wrong', kind: 'form' }, 'had')).toBe(false);
     expect(fitAskable({ type: 'gap', prompt: 'We ___ a handbook.', pat: 'x' }, { verdict: 'correct' }, 'had')).toBe(false);
     expect(fitAskable({ type: 'gap', prompt: 'We ___ a handbook.', pat: 'x' }, wrong, '')).toBe(false);

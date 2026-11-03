@@ -22,7 +22,7 @@ import { WorkProfile } from '../tutor/WorkProfile';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll, exportAnkiCsv } from './exportData';
 import { VoiceSection } from './VoiceSection';
-import { LearningSection, SoundSection } from './LearningSection';
+import { GrammarSwitchSection, LearningSection, SoundSection } from './LearningSection';
 import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
 import { DictationEntry } from './DictationEntry';
@@ -62,6 +62,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
       <div className="flex flex-col gap-8 pt-2">
         <Group title={t('setGroupLearn')} testId="set-group-learn">
           <LearningSection />
+          <GrammarSwitchSection />
           <Practice />
           <Registered groups={['learn']} />
           <Slot name="settings.learn" />

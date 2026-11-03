@@ -33,7 +33,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteWhy_reviewNone: 'Due cards and new words',
   nbHeuteWhy_check: '12 items on the week',
   nbHeuteWhy_focus: 'Your corrections and typical mistakes',
-  nbHeuteWhy_grammar: 'Today’s topic, plus sentences with your past mistakes',
+  nbHeuteWhy_grammar: 'Today’s topic; your due mistake sentences come first',
   nbHeuteWhy_order: 'Practice word order in whole sentences',
   nbHeuteWhy_apply: 'Three sentences of your own with your words and a rule',
   nbHeuteWhy_again: 'Say your typical mistakes correctly in new sentences',

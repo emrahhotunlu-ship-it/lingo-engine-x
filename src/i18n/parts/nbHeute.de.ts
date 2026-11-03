@@ -36,7 +36,7 @@ export const nbHeuteDe = {
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
-  nbHeuteWhy_grammar: 'Thema von heute, dazu Sätze mit deinen früheren Fehlern',
+  nbHeuteWhy_grammar: 'Thema von heute; fällige eigene Fehlersätze kommen zuerst',
   nbHeuteWhy_order: 'Wortstellung im ganzen Satz üben',
   nbHeuteWhy_apply: 'Drei eigene Sätze mit deinen Wörtern und einer Regel',
   nbHeuteWhy_again: 'Deine typischen Fehler in neuen Sätzen richtig sagen',

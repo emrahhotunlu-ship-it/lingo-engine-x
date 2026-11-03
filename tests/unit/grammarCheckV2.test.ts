@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkFind, checkKwt, checkMeaning, guessOptions } from '../../src/domain/grammar/check';
+import { checkFind, checkKwt, checkMeaning, fixSpan, guessOptions } from '../../src/domain/grammar/check';
 import { bktStep } from '../../src/domain/grammar/bkt';
 import { asFind, fromV2, allSeedTasks } from '../../src/domain/grammar/tasks';
 import { v2Tasks } from '../../src/domain/grammar/patterns';
@@ -56,6 +56,14 @@ describe('neue Aufgabenarten (Lernplattform 2.0 §4.7)', () => {
     expect(checkFind(what, { replacement: '' }).verdict).toBe('correct');
     expect(checkFind(what, { replacement: 'that' }).verdict).toBe('correct');
     expect(checkFind(what, { replacement: 'which what' }).verdict).toBe('wrong');
+  });
+
+  it('fixSpan (G2): eigene Korrektur mit Nachbarwörtern erweitert die markierte Stelle', () => {
+    const w = ['My', 'sister', 'is', 'lawyer', 'in', 'Boston.'];
+    expect(fixSpan(w, [3, 3], 'a lawyer')).toEqual([3, 3]);
+    expect(fixSpan(w, [3, 3], 'is a lawyer')).toEqual([2, 3]);
+    expect(fixSpan(w, [3, 3], 'a lawyer in')).toEqual([3, 4]);
+    expect(fixSpan(w, [3, 3], 'is')).toEqual([3, 3]);
   });
 
   it('find: ein fehlerfreier Satz ist nur mit „Kein Fehler“ richtig', () => {

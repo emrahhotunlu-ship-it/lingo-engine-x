@@ -75,8 +75,8 @@ export function explainSchema(v: ExplainVars): z.ZodType<ExplainOut> {
   const ids = new Set(v.neighbors.map((n) => n.id));
   return z
     .object({
-      yours: z.preprocess((x) => (x === undefined ? null : x), bi(160).nullable()),
-      why: bi(160),
+      yours: z.preprocess((x) => (x === undefined ? null : x), bi(240).nullable()),
+      why: bi(240),
       // Nur Signalwörter, die wörtlich im Satz (oder in der Lösung) stehen; alles andere fällt still weg.
       signal: z
         .preprocess((x) => (x === undefined || x === null ? [] : asList(x)), z.array(z.unknown()))

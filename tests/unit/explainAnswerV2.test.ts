@@ -123,7 +123,7 @@ describe('Schema mit 12 Musterantworten', () => {
   it('12 zu lange Texte werden gekürzt statt abgelehnt; Beispiel als reiner Text wird gelesen', () => {
     const long = `${DE} `.repeat(30);
     const r = ok({ ...good, why: { de: long, en: `${EN} `.repeat(30) }, example: 'We wish the team had told us about the delay earlier.' });
-    expect(r.success && r.data.why.de.length).toBeLessThanOrEqual(160);
+    expect(r.success && r.data.why.de.length).toBeLessThanOrEqual(240);
     expect(r.success && r.data.example?.en).toContain('delay');
   });
 });
@@ -153,7 +153,8 @@ describe('gespeicherte Erklärung (ax)', () => {
   const ax = toAx('sent', out, 'explain-answer@2', 1_000);
   it('Eintrag bleibt unter 1 KB und ist an genau diese Antwort gebunden', () => {
     expect(new TextEncoder().encode(JSON.stringify(fitAx(ax))).length).toBeLessThanOrEqual(AX_MAX_BYTES);
-    const huge = fitAx({ ...ax, ex: { en: 'e'.repeat(200), de: 'd'.repeat(200) }, w: { de: 'x'.repeat(160), en: 'y'.repeat(160) }, y: { de: 'x'.repeat(160), en: 'y'.repeat(160) } });
+    const huge = fitAx({ ...ax, ex: { en: 'e'.repeat(200), de: 'd'.repeat(200) }, w: { de: 'ä'.repeat(240), en: 'y'.repeat(240) }, y: { de: 'x'.repeat(240), en: 'y'.repeat(240) } });
+    expect(huge.w.de).toHaveLength(240);
     expect(new TextEncoder().encode(JSON.stringify(huge)).length).toBeLessThanOrEqual(AX_MAX_BYTES);
     const back = readAx(JSON.parse(JSON.stringify(ax)));
     expect(axFits(back, 'Sent', 2_000)).toBe(true);

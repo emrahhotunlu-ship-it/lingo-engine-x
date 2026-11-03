@@ -136,7 +136,7 @@ export const AX_MAX_BYTES = 1024;
 const enc = new TextEncoder();
 const bytes = (v: unknown): number => enc.encode(JSON.stringify(v)).length;
 
-/** Hält den Eintrag unter 1 KB: erst die deutsche Übersetzung des Beispiels, dann das Beispiel, dann die Signalwörter weglassen. */
+/** Hält den Eintrag unter 1 KB: erst die deutsche Übersetzung des Beispiels, dann das Beispiel, dann die Signalwörter, zuletzt die Zeile zur eigenen Antwort weglassen (das „Warum“ bleibt immer ganz). */
 export function fitAx(ax: Ax): Ax {
   let cur = ax;
   const steps: Array<(a: Ax) => Ax> = [
@@ -149,6 +149,11 @@ export function fitAx(ax: Ax): Ax {
     (a) => {
       const { sig: _sig, ...rest } = a;
       void _sig;
+      return rest;
+    },
+    (a) => {
+      const { y: _y, ...rest } = a;
+      void _y;
       return rest;
     },
   ];

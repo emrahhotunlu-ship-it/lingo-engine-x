@@ -85,6 +85,24 @@ test('Akzentfarbe: Standard Iris, Bernstein wählen, nach Neuladen bleibt die Wa
   expect(errors).toEqual([]);
 });
 
+test('Großpaket G: Schalter „Neue Grammatik“ ist an und schreibt gcfg.mod (Rückweg und wieder an)', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await boot(page, { migrated: true });
+  await openOverview(page);
+  await openSettings(page);
+  const sw = page.getByRole('dialog').getByTestId('set-gmod');
+  await expect(sw).toHaveAttribute('aria-checked', 'true');
+  await sw.click();
+  await expect(sw).toHaveAttribute('aria-checked', 'false');
+  await expect.poll(async () => (await dump(page))['app/profile']?.gcfg).toEqual({ mod: 0 });
+  await sw.click();
+  await expect(sw).toHaveAttribute('aria-checked', 'true');
+  await expect.poll(async () => (await dump(page))['app/profile']?.gcfg).toEqual({ mod: 1 });
+  await expect(page.getByTestId('set-gmod-failed')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('Tab bleibt im geöffneten Dialog (Tastaturbedienung)', async ({ page }) => {
   await boot(page, { migrated: true });
   await openOverview(page);

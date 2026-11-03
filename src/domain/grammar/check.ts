@@ -306,6 +306,31 @@ function fixesWholeSentence(task: GrammarTask, err: readonly [number, number], g
   return false;
 }
 
+/**
+ * Stelle, die eine eigene Korrektur der Fehlersuche ersetzt (G2): Schreibt der Lernende die Nachbarwörter mit („lawyer“ → „is a lawyer“),
+ * wird die Stelle um genau diese Wörter (höchstens 2 je Seite) erweitert, damit die Anzeige nie „is ~~lawyer~~ → is a lawyer“ zeigt.
+ */
+export function fixSpan(words: readonly string[], span: readonly [number, number], fix: string): [number, number] {
+  const n = (w: string): string => toUS(w.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9'-]/g, ''));
+  const g = splitWords(fix).map(n);
+  const ws = words.map(n);
+  let [a, b] = span;
+  for (let k = Math.min(2, a, g.length - 1); k > 0; k--) {
+    if (ws.slice(a - k, a).join(' ') === g.slice(0, k).join(' ')) {
+      a -= k;
+      break;
+    }
+  }
+  const used = span[0] - a;
+  for (let k = Math.min(2, ws.length - 1 - b, g.length - 1 - used); k > 0; k--) {
+    if (ws.slice(b + 1, b + 1 + k).join(' ') === g.slice(g.length - k).join(' ')) {
+      b += k;
+      break;
+    }
+  }
+  return [a, b];
+}
+
 /** Bedeutungspaar: `a`, `b` oder `both`. */
 export function checkMeaning(task: GrammarTask, pick: 'a' | 'b' | 'both'): GrammarCheck {
   return { verdict: pick === task.answer ? 'correct' : 'wrong', ops: [], needsJudge: false };
@@ -314,21 +339,25 @@ export function checkMeaning(task: GrammarTask, pick: 'a' | 'b' | 'both'): Gramm
 // ------------------------------------------------------------------ „Auch richtig“ durch Claude (grammar-fit@1)
 
 /**
- * Darf bei dieser abgelehnten Antwort gefragt werden, ob sie im ganzen Satz trotzdem richtig ist? Nur Lücken (`gap`, Umformung mit Lücke) mit
- * Grammatik-Muster und ein echtes, lokal als falsch geprüftes Ergebnis. Nicht bei Schlüsselwort (das Wort ist Pflicht), Auswahl, Fehlersuche,
- * Bedeutungspaaren, Ganzsatz-Eingabe und nicht bei Formfehlern (work statt works: die Form ist der Lernstoff).
+ * Darf bei dieser abgelehnten Antwort Claude als Zweitmeinung gefragt werden, ob sie im ganzen Satz trotzdem richtig ist (G2: jede getippte Art)?
+ * Lücke und Umformung mit Lücke, Schlüsselwort (das Wort steht da, Wortzahl stimmt), „Ersetze die markierte Stelle“ und Ganzsatz-Korrektur;
+ * ein Muster ist keine Bedingung mehr. Nicht bei Auswahl und Bedeutungspaaren und nicht bei Formfehlern (work statt works: die Form ist der Lernstoff).
  */
-export function fitAskable(task: Pick<GrammarTask, 'type' | 'prompt' | 'pat'>, check: Pick<GrammarCheck, 'verdict' | 'kind'>, given: string): boolean {
+export function fitAskable(task: Pick<GrammarTask, 'type' | 'prompt' | 'pat'>, check: Pick<GrammarCheck, 'verdict' | 'kind'> & { found?: boolean }, given: string): boolean {
   if (check.verdict !== 'wrong' || check.kind === 'form' || check.kind === 'key' || check.kind === 'words') return false;
-  if (!task.pat) return false;
+  const g = given.trim();
+  const words = splitWords(g);
+  if (!words.length) return false;
+  // Fehlersuche: nur wenn die richtige Stelle angetippt war (sonst wäre ein anderer Satzteil ersetzt).
+  if (task.type === 'find') return check.found !== false && fitAskableReplace(check, g);
+  if (task.type === 'correct') return words.length <= 30 && g.length <= 220;
+  if (task.type !== 'gap' && task.type !== 'transform' && task.type !== 'kwt') return false;
   const gapPrompt = task.type === 'transform' ? (task.prompt.split('→').pop() ?? '') : task.prompt;
-  if (task.type !== 'gap' && task.type !== 'transform') return false;
   if (!/_{3,}/.test(gapPrompt)) return false;
-  const words = splitWords(given);
-  return words.length >= 1 && words.length <= 8 && given.trim().length <= 80;
+  return words.length <= 8 && g.length <= 80;
 }
 
-/** „Ersetze nur die markierte Stelle“: darf der getippte Ersatz von Claude im ganzen Satz geprüft werden? (Lokal falsch, kurz, nicht leer.) */
+/** „Ersetze die markierte Stelle“: nur lokal falsche, kurze Ersetzungen. */
 export function fitAskableReplace(check: Pick<GrammarCheck, 'verdict' | 'kind'>, given: string): boolean {
   if (check.verdict !== 'wrong' || check.kind === 'form') return false;
   const words = splitWords(given);

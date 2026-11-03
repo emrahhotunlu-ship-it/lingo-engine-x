@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { lapseLoad, lowerNewPerDay } from '../../domain/srs/load';
 import { useT } from '../../i18n';
@@ -12,6 +12,7 @@ import { Segmented } from '../../ui/Segmented';
 import { Switch } from '../../ui/Switch';
 import { InputProfileSection } from './InputProfileSection';
 import { vocabModuleOn } from '../../modules/vocab/api';
+import { grammarModuleOn, setGrammarModule } from '../../modules/grammar/api';
 
 // Einstellungen „Lernen" und „Ton" (Kap. 6.14, Plan §9): neue Wörter pro Tag (0/2/5/10),
 // Tagesziel in Minuten (10–40), Töne an/aus (Standard aus). Optimistisch mit Rückrollen.
@@ -100,6 +101,43 @@ export function SoundSection() {
         />
       ) : (
         <p className="text-sm text-muted">{t('setSoundNone')}</p>
+      )}
+    </section>
+  );
+}
+
+/**
+ * Großpaket G (Entscheidung 3): Schalter „Neue Grammatik“. An ist Standard; aus = Rückweg auf den alten Ablauf (gilt auf allen Geräten,
+ * Lernstand bleibt gleich). Optimistisch: der Schalter springt sofort um und fällt zurück, wenn das Speichern scheitert.
+ */
+export function GrammarSwitchSection() {
+  const { t } = useT();
+  const db = useCapabilities((s) => s.db);
+  const saved = useLive((s) => grammarModuleOn(s.docs['app/profile']));
+  const [want, setWant] = useState<boolean | null>(null);
+  const [failed, setFailed] = useState(false);
+  if (db !== 'ready') return null;
+  const on = want ?? saved;
+  return (
+    <section className="flex flex-col gap-2" data-testid="grammar-switch-section">
+      <Switch
+        checked={on}
+        label={t('gmSwitch')}
+        testId="set-gmod"
+        onChange={(v) => {
+          setWant(v);
+          setFailed(false);
+          void setGrammarModule(v ? 1 : 0).then((ok) => {
+            setWant(null);
+            if (!ok) setFailed(true);
+          });
+        }}
+      />
+      <p className="m-0 text-sm text-muted">{t(on ? 'gmSwitchOnHint' : 'gmSwitchOffHint')}</p>
+      {failed && (
+        <p className="m-0 text-sm" role="status" data-testid="set-gmod-failed">
+          {t('gmSwitchFailed')}
+        </p>
       )}
     </section>
   );

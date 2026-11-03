@@ -159,10 +159,11 @@ export function judge(task: GrammarTask, given: string, ctx: JudgeCtx): Judgemen
   const v: Verdict = wrong ? 'wrong' : 'unsure';
 
   const { available, confirmed, budgetLeft } = ctx.aiState;
+  // G2: Zweitmeinung für jede getippte Art, aber nicht bei Unsinn ohne Muster (dann erklärt Claude von selbst, Kap. 15: ein KI-Einstieg).
   let askAi: Judgement['askAi'] = 'no';
   if (available) {
     if (v === 'unsure') askAi = confirmed && budgetLeft > 0 ? 'auto' : 'button';
-    else if (!dx.known && !hardKind && !['typo', 'form', 'auxform', 'order', 'span'].includes(dx.cause) && (fitAskable(task, check, raw) || check.needsJudge)) askAi = 'button';
+    else if (!dx.known && !hardKind && !['typo', 'form', 'auxform', 'order', 'span'].includes(dx.cause) && ((fitAskable(task, check, raw) && (plausible || !!task.pat)) || check.needsJudge)) askAi = 'button';
   }
 
   const ai = ctx.ai;

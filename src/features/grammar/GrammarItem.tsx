@@ -8,7 +8,7 @@ import { maskOf } from '../../domain/answer/mask';
 import { topicById } from '../../domain/content';
 import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { topicP } from '../../domain/grammar/bkt';
-import { asAlsoRight, checkFind, checkGrammar, checkMeaning } from '../../domain/grammar/check';
+import { asAlsoRight, checkFind, checkGrammar, checkMeaning, fixSpan } from '../../domain/grammar/check';
 import { shortWhy } from '../../domain/grammar/alsoRight';
 import { caseFix, isVariant } from '../../domain/grammar/learnerView';
 import { grammarExplanation } from '../../domain/grammar/explain';
@@ -900,7 +900,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       // Eigene Fassung zeigen bei „Auch richtig“, nach Einspruch und bei einer anderen gültigen Stelle (`errAlt`), sonst die Lösung der Stelle.
       const own = (fb.check?.kind === 'other' && !fb.override) || (fb.verdict === 'correct' && (errAltHere || fb.by === 'me')) ? fb.given.trim() : '';
       const fixText = own || spotAnswer.trim() || null;
-      const marks = errSpan ? [{ span: [errSpan[0], errSpan[1]] as [number, number], tone: fb.verdict === 'correct' && fixText ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
+      // Eigene Fassung mit Nachbarwörtern („is a lawyer“ für „lawyer“): die durchgestrichene Stelle wächst mit (G2), sonst stünde „is“ doppelt.
+      const markSpan = errSpan ? (own ? fixSpan(words, errSpan, own) : ([errSpan[0], errSpan[1]] as [number, number])) : null;
+      const marks = markSpan ? [{ span: markSpan, tone: fb.verdict === 'correct' && fixText ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
       prompt = <SpotSentence words={words} pick="one" selected={null} onSelect={() => undefined} locked marks={marks} area={area} source={src.source} testId="spot-sentence" />;
     } else if (stage === 'locate') {
       prompt = <SpotSentence words={words} pick="one" selected={tapped} onSelect={(w) => { attempt.contact(tick(), lookupOpenMs() - lookupAt.current); setTapped(w); }} area={area} source={src.source} testId="spot-sentence" />;
