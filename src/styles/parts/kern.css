@@ -975,3 +975,11 @@
     height: 60px;
   }
 }
+
+/* Fortschritt hat im Kopf zusätzlich den Profil-Knopf: auf sehr schmalen Handys (< 360 px) passt die Zeile nur ohne den Übersetzer-Knopf
+   (der Übersetzer bleibt über „Fragen“ erreichbar; breiten.spec A3 320 px). */
+@media (max-width: 359.98px) {
+  [data-tabhead='progress'] [data-testid='open-translate'] {
+    display: none;
+  }
+}

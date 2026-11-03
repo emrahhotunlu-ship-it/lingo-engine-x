@@ -176,6 +176,8 @@ export async function nextItem(page: Page): Promise<void> {
     return;
   }
   const btn = page.getByTestId('next');
+  // Unter Last erscheint „Weiter“ nach dem Einblenden der Rückmeldung etwas später: kurz darauf warten statt still nichts zu tun.
+  await btn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => undefined);
   if (await btn.isVisible().catch(() => false)) await btn.click().catch(() => undefined);
 }
 

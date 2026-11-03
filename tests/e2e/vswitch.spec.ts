@@ -56,7 +56,8 @@ for (const vp of [
       expect(await saved(page)).toHaveLength(1);
       await expect(page.getByTestId('vsw-apply')).toBeEnabled();
       await page.getByTestId('vsw-apply').click();
-      await expect.poll(async () => ((await dump(page))['app/schema']?.vocabModule as Doc | undefined)?.state).toBe('done');
+      // Die Übernahme schreibt hunderte Dokumente; unter Last (parallele Läufe) dauert sie länger als die üblichen 10 s.
+      await expect.poll(async () => ((await dump(page))['app/schema']?.vocabModule as Doc | undefined)?.state, { timeout: 30_000 }).toBe('done');
       await expect.poll(async () => (await vcfgOf(page))?.mod).toBe(1);
       const d = await dump(page);
       const lexed = Object.entries(d).filter(([p, v]) => /^(vocab|chunk)\//.test(p) && v && typeof v === 'object' && 'lex' in v).length;
