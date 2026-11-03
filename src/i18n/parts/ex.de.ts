@@ -4,7 +4,7 @@ export const exDe = {
   // Urteil (ein Wortlaut für alle Übungen)
   exVerdictOk: 'Richtig',
   exVerdictNear: 'Fast richtig',
-  exVerdictWrong: 'Noch nicht',
+  exVerdictWrong: 'Noch nicht richtig',
   exVerdictDontKnow: 'Kein Problem – so\u00a0geht’s',
   exVerdictUnchecked: 'Ohne Prüfung gespeichert',
   // Zustand einer Einheit (Wort, Muster)

@@ -5,6 +5,8 @@ import {
   EnglishText,
   ExerciseShell,
   GradeButtons,
+  Icon,
+  ipaOf,
   KineticGap,
   lookupOpenMs,
   maskOf,
@@ -26,7 +28,7 @@ import {
   companionOpenedSince,
 } from '../sharedUi';
 import { addDays, dayKey } from '../shared';
-import type { Band, Line, Next, Why } from '../domain/band';
+import { type Band, type Line, type Next, partnersOf, type Why } from '../domain/band';
 import { tipOf } from '../domain/card';
 import type { CardModel } from '../domain/flow';
 import type { Reason } from '../domain/reason';
@@ -165,6 +167,185 @@ function partnersNode(t: T, partners: Band['partners']): ReactNode {
   );
 }
 
+/** Wort vorlesen (ein Knopf mit Lautsprecher, ohne Stimme unsichtbar). */
+function SpeakWord({ text, testId }: { text: string; testId: string }) {
+  const { t } = useT();
+  const status = useSpeech((x) => x.status);
+  if (status === 'unsupported' || status === 'novoice' || !text) return null;
+  return (
+    <button type="button" className="lx-kspeak" onClick={() => void speak(text)} aria-label={t('kernListenWord', { word: text })} data-testid={testId}>
+      <Icon name="speaker" size={18} aria-hidden="true" />
+      <span>{t('kernListen')}</span>
+    </button>
+  );
+}
+
+/** Lautschrift · Wortart (Wendungen ohne Lautschrift). */
+function ipaLine(t: T, card: CardModel): string | null {
+  const ipa = card.path.startsWith('chunk/') ? null : ipaOf(card.head);
+  const pos = card.path.startsWith('chunk/') ? t('pos_phrase') : card.pos ? t(`pos_${card.pos}` as MessageKey) : null;
+  const parts = [ipa ? `/${ipa.replace(/^\/|\/$/g, '')}/` : null, pos].filter((x): x is string => !!x);
+  return parts.length ? parts.join(' · ') : null;
+}
+
+/**
+ * Einführungskarte (Kern, Emrah 03.11.2026 „neue Wörter immer mit Einführungskarte und Beispielsätzen“, Vorschau „Handy-Einfuehrung“):
+ * eine reine Lernkarte ohne Eingabe – Wort groß mit Anhören, Lautschrift · Wortart, Bedeutung groß, englische Erklärung, Beispielsatz mit
+ * markiertem Wort und Übersetzung, häufige Wortpartner. Abgefragt wird das Wort erst danach (Schritt A).
+ */
+function IntroTeach({ card }: { card: CardModel }) {
+  const { t } = useT();
+  const whole = fullText(card);
+  const line = ipaLine(t, card);
+  const partners = partnersOf(card.col, 3);
+  return (
+    <div className="lx-kintro" data-testid="vm-intro">
+      <div className="lx-kintro-head">
+        <h2 className="lx-kword" lang="en" data-testid="vm-intro-word">
+          {card.head}
+        </h2>
+        <SpeakWord text={card.head} testId="vm-intro-listen" />
+      </div>
+      {line && (
+        <p className="lx-kintro-ipa" data-testid="vm-intro-ipa">
+          {line}
+        </p>
+      )}
+      {card.de && (
+        <p className="lx-kintro-de" lang="de" data-testid="vm-intro-de">
+          {card.de}
+        </p>
+      )}
+      {card.def && (
+        <div className="lx-kintro-sec" data-testid="vm-intro-def">
+          <p className="lx-kintro-k">{t('kernInEnglish')}</p>
+          <p className="m-0" lang="en">
+            {card.def}
+          </p>
+        </div>
+      )}
+      {whole && (
+        <div className="lx-kintro-sec" data-testid="vm-intro-example">
+          <p className="lx-kintro-k">{t('kernInSentence')}</p>
+          <EnglishText as="p" testId="vm-sentence" text={whole.text} area="intro" source={card.path} title={card.head} highlight={[whole.start, whole.end]} />
+          {card.sentence?.sent.de ? (
+            <p className="lx-kintro-tr" lang="de" data-testid="vm-intro-tr">
+              {card.sentence.sent.de}
+            </p>
+          ) : null}
+          <ListenButton parts={[whole.text]} testId="vm-listen" />
+        </div>
+      )}
+      {partners.length > 0 && (
+        <div className="lx-kintro-sec" data-testid="vm-intro-partners">
+          <p className="lx-kintro-k">{t('kernOftenWith')}</p>
+          <ul className="lx-kpairs">
+            {partners.map((p) => (
+              <li key={p.p}>
+                <span lang="en">{p.p}</span>
+                {p.de ? <span lang="de">{p.de}</span> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Wortkarte neben dem Ergebnis (Kern, Vorschau: Monitor rechts, Handy darunter): Wort mit Anhören, Lautschrift · Wortart, Bedeutung,
+ * englische Erklärung und Wortpartner – damit nach jeder Abfrage das ganze Wort im Blick ist, nicht nur die Lösung.
+ */
+function WordSide({ card, partners }: { card: CardModel; partners: Band['partners'] }) {
+  const { t } = useT();
+  const line = ipaLine(t, card);
+  return (
+    <div className="lx-kwordcard" data-testid="vm-wordcard">
+      <p className="lx-kintro-label">{t('kernTheWord')}</p>
+      <div className="lx-kintro-head">
+        <p className="lx-kword lx-kword-sm m-0" lang="en">
+          {card.head}
+        </p>
+        <SpeakWord text={card.head} testId="vm-word-listen" />
+      </div>
+      {line && <p className="lx-kintro-ipa">{line}</p>}
+      {card.de && (
+        <p className="lx-kintro-de lx-kintro-de-sm" lang="de">
+          {card.de}
+        </p>
+      )}
+      {card.def && (
+        <p className="lx-t-support m-0 text-muted" lang="en">
+          {card.def}
+        </p>
+      )}
+      {partners.length > 0 && (
+        <div className="lx-kintro-sec" data-testid="vm-partners">
+          <p className="lx-kintro-k">{t('kernOftenWith')}</p>
+          <ul className="lx-kpairs">
+            {partners.map((p) => (
+              <li key={p.p}>
+                <span lang="en">{p.p}</span>
+                {p.de ? <span lang="de">{p.de}</span> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Nach einem Fehler einmal richtig nachtippen (Emrah 03.11.2026): „Weiter“ erst danach. Groß-/Kleinschreibung und Leerzeichen zählen nicht. */
+const sameWord = (a: string, b: string): boolean => a.trim().replace(/\s+/g, ' ').toLowerCase() === b.trim().replace(/\s+/g, ' ').toLowerCase();
+
+function Retype({ answer, onDone, onEnter }: { answer: string; onDone: (ok: boolean) => void; onEnter: () => void }) {
+  const { t } = useT();
+  const [v, setV] = useState('');
+  const ok = sameWord(v, answer);
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    ref.current?.focus({ preventScroll: true });
+  }, []);
+  useEffect(() => {
+    onDone(ok);
+  }, [ok, onDone]);
+  return (
+    <label className="lx-kretype" data-testid="vm-retype" data-ok={ok ? '' : undefined}>
+      <span className="lx-kintro-k">{t('kernRetype')}</span>
+      <span className="lx-kretype-row">
+        <input
+          ref={ref}
+          type="text"
+          lang="en"
+          value={v}
+          onChange={(e) => setV(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              if (ok) onEnter();
+            }
+          }}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          enterKeyHint="next"
+          placeholder={answer.replace(/\S/g, '·')}
+          aria-label={t('kernRetypeLabel', { answer })}
+          data-testid="vm-retype-input"
+        />
+        {ok ? (
+          <span className="lx-kretype-ok" aria-hidden="true">
+            ✓
+          </span>
+        ) : null}
+      </span>
+    </label>
+  );
+}
+
 function taskKey(v: CardView | BandView): MessageKey {
   if (v.card.mode === 'flip') return 'vmTask_flip';
   if (v.kind === 'intro') return 'vmTask_intro';
@@ -183,7 +364,7 @@ function kindLabel(t: T, v: CardView | BandView): string {
 
 export function LearnCard({ view, run }: { view: CardView | BandView; run: LearnRun }) {
   // Je Karte frisch (Lücke, Messung); das Band behält die Eingabe der Karte.
-  const key = `${view.task.path}|${view.kind}|${view.n}`;
+  const key = `${view.task.path}|${view.kind}|${view.n}|${view.k === 'card' && view.teach ? 't' : ''}`;
   return <CardInner key={key} view={view} run={run} />;
 }
 
@@ -209,12 +390,16 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   // die Tastatur offen (das Feld bleibt dasselbe und wird im Tipp selbst fokussiert); ohne Lücke (Anki-Karte) ruht das Feld. Einmal je Karte.
   const focused = useRef(false);
   const flipCard = card.mode === 'flip';
+  // Einführungskarte (Kern): reine Lernkarte ohne Eingabe – die Tastatur bleibt zu, bis die Abfrage kommt.
+  // Übernommenes Wort zum ersten Mal hier (K10): dieselbe Einführungskarte, nur zum Lesen, danach die eigentliche Abfrage.
+  const teachCard = view.k === 'card' ? (view.teach ?? null) : null;
+  const teaching = (view.kind === 'intro' || !!teachCard) && view.k === 'card';
   useEffect(() => {
     if (focused.current) return;
     focused.current = true;
-    if (flipCard) api.blur();
+    if (flipCard || teaching) api.blur();
     else api.focusNow();
-  }, [api, flipCard]);
+  }, [api, flipCard, teaching]);
 
   const measure = () => {
     const now = performance.now();
@@ -234,7 +419,9 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   const isFlip = card.mode === 'flip';
   const flip = view.k === 'card' ? (view.flip ?? null) : null;
   // Abstands-Deckel: Schwer/Gut/Leicht können denselben Termin ergeben; dann ehrlich sagen, warum (ux-reviewer S6c).
-  const sameDay = flip ? new Set(flip.opts.filter((o) => o.g >= 2).map((o) => (o.when.k === 'day' ? o.when.day : o.when.k))).size === 1 && flip.opts.some((o) => o.g >= 2 && o.when.k === 'day') : false;
+  const sameDay = flip
+    ? new Set(flip.opts.filter((o) => o.g >= 2).map((o) => (o.when.k === 'day' ? o.when.day : o.when.k))).size === 1 && flip.opts.some((o) => o.g >= 2 && o.when.k === 'day')
+    : false;
   const flipMeaningRule = !!flip?.why && flip.why.kind === 'rule' && (flip.why.key === 'vmWhyMeaning' || flip.why.key === 'vmWhyMeaningNoPos');
   const flipPos = flip?.why && flip.why.kind === 'rule' ? (flip.why.vars.pos ?? null) : null;
   const flipOpen = () => {
@@ -245,7 +432,18 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     run.flipGrade(g);
     api.focusNow();
   };
-  const onEnter = () => (isFlip ? flipOpen() : band ? next() : check());
+  const introGo = () => {
+    if (!teaching) return;
+    if (teachCard) run.teachSeen();
+    else run.introSeen(measure());
+    api.focusNow();
+  };
+  // Nach einem Fehler einmal richtig nachtippen (Emrah 03.11.2026): „Weiter“ erst danach. Nicht bei „Bedeutung“ (Antwort Deutsch), nicht
+  // nach „Das wusste ich“/„Später prüfen“, nicht in Einführung und Probe (dort gibt es keinen Fehler).
+  const [retyped, setRetyped] = useState(false);
+  const needRetype = !!band && band.kind === 'answer' && band.band.tone !== 'ok' && !band.choice && card.mode !== 'meaning' && !isFlip;
+  const blocked = needRetype && !retyped;
+  const onEnter = () => (teaching ? introGo() : isFlip ? flipOpen() : band ? (blocked ? undefined : next()) : check());
   useHotkeys(
     {
       enter: onEnter,
@@ -309,11 +507,12 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     />
   );
 
-  const cue = card.cue && card.mode !== 'meaning' ? (
-    <p className="lx-t-support text-muted" data-testid="vm-cue" lang={lang}>
-      {t(card.cue.ff ? 'vmCueFf' : 'vmCue', { de: card.cue.de })}
-    </p>
-  ) : null;
+  const cue =
+    card.cue && card.mode !== 'meaning' ? (
+      <p className="lx-t-support text-muted" data-testid="vm-cue" lang={lang}>
+        {t(card.cue.ff ? 'vmCueFf' : 'vmCue', { de: card.cue.de })}
+      </p>
+    ) : null;
   const tipLine =
     view.k === 'card' && view.tip && !card.firstLetters ? (
       <p className="lx-t-support text-muted" data-testid="vm-tip">
@@ -331,13 +530,26 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   // Vorlesen: nach dem Prüfen und bei sichtbarem Wort der ganze Satz; vor dem Prüfen einer Lücke nur mit der Einstellung (Lücke als Ton).
   const parts = band || (card.mode !== 'gap' && card.mode !== 'intro') ? (whole ? [whole.text] : null) : run.listenFirst() ? gapParts(card) : null;
   const listen = parts ? <ListenButton key={band ? 'full' : 'pre'} parts={parts} testId="vm-listen" onSpent={band ? undefined : (ms) => (listenMs.current += ms)} /> : null;
-  if (isFlip) {
+  if (teachCard) {
+    prompt = <IntroTeach card={teachCard} />;
+  } else if (isFlip) {
     prompt = (
       <div className="flex flex-col gap-3">
         <p className="lx-t-display min-w-0 break-words" lang="en" data-testid="vm-flip-head">
           {card.head}
         </p>
-        {whole ? <EnglishText as="p" testId="vm-sentence" text={whole.text} area="trainer" source={card.path} title={card.head} highlight={[whole.start, whole.end]} exclude={flip ? null : [whole.start, whole.end]} /> : null}
+        {whole ? (
+          <EnglishText
+            as="p"
+            testId="vm-sentence"
+            text={whole.text}
+            area="trainer"
+            source={card.path}
+            title={card.head}
+            highlight={[whole.start, whole.end]}
+            exclude={flip ? null : [whole.start, whole.end]}
+          />
+        ) : null}
         {listen}
       </div>
     );
@@ -375,6 +587,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       </div>
     ) : null;
     answer = gap;
+  } else if (teaching) {
+    prompt = <IntroTeach card={card} />;
   } else if (g && (card.mode === 'gap' || card.mode === 'intro')) {
     prompt = (
       <div className="flex flex-col gap-3">
@@ -400,10 +614,10 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
 
   const card0 = view.k === 'card' ? view : null;
   const secondary: ShellSecondary[] = [
-    ...(card0 && card0.kind === 'answer' && typedGap && !card0.tip && !card.firstLetters
+    ...(card0 && !teachCard && card0.kind === 'answer' && typedGap && !card0.tip && !card.firstLetters
       ? [{ id: 'hint', label: t('vmBtnTip'), onClick: () => run.tip(), testId: 'vm-tip-btn', variant: 'quiet' } as const]
       : []),
-    ...(card0 && card0.kind !== 'intro' && !isFlip ? [{ id: 'dontKnow', label: t('vmBtnDunno'), onClick: () => check(true), testId: 'vm-dunno', variant: 'quiet' } as const] : []),
+    ...(card0 && card0.kind !== 'intro' && !teachCard && !isFlip ? [{ id: 'dontKnow', label: t('vmBtnDunno'), onClick: () => check(true), testId: 'vm-dunno', variant: 'quiet' } as const] : []),
     ...(card0?.canProbe
       ? [
           {
@@ -420,11 +634,13 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       : []),
   ];
   const introEmpty = intro && view.k === 'card' && !hasInput;
-  const primary = isFlip
-    ? { label: t('vmBtnReveal'), onClick: flipOpen, testId: 'vm-flip-reveal' }
-    : band
-      ? { label: t('vmBtnNext'), onClick: next, testId: 'vm-next', arrow: true }
-      : { label: t(introEmpty ? 'vmBtnReveal' : 'vmBtnCheck'), onClick: () => check(introEmpty), testId: 'vm-check' };
+  const primary = teaching
+    ? { label: t(teachCard ? 'kernTeachGo' : 'kernIntroGo'), onClick: introGo, testId: 'vm-intro-go', arrow: true }
+    : isFlip
+      ? { label: t('vmBtnReveal'), onClick: flipOpen, testId: 'vm-flip-reveal' }
+      : band
+        ? { label: t('vmBtnNext'), onClick: next, testId: 'vm-next', arrow: true, disabled: blocked }
+        : { label: t(introEmpty ? 'vmBtnReveal' : 'vmBtnCheck'), onClick: () => check(introEmpty), testId: 'vm-check' };
   const grades = flip ? (
     <GradeButtons
       options={flip.opts.map((o) => {
@@ -441,16 +657,22 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   return (
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
-      status={{ area: 'words', state: null, kindLabel: kindLabel(t, view) }}
+      status={{ area: 'words', state: null, kindLabel: teachCard ? t('kernKindKnown') : kindLabel(t, view) }}
       see={see}
-      task={{ text: t(tk), purpose: t(view.card.form === 'contrast' && view.card.contrast?.ff ? 'vmWozu_contrastFf' : wozuKey(tk)), open: true, reason: () => reasonLine(t, run.reason(), dateShort) }}
+      task={{
+        text: teachCard ? t('kernTeachTask') : teaching ? t('kernIntroTask') : t(tk),
+        purpose: teachCard ? t('kernTeachWozu') : teaching ? t('kernIntroWozu') : t(view.card.form === 'contrast' && view.card.contrast?.ff ? 'vmWozu_contrastFf' : wozuKey(tk)),
+        open: !teaching,
+        reason: () => reasonLine(t, run.reason(), dateShort),
+      }}
       prompt={prompt}
       answer={answer}
       secondary={secondary}
       primary={primary}
       barOverride={grades}
       keysHint={null}
-      feedback={band ? feedbackOf(band, t, dateShort, run) : null}
+      feedback={band ? feedbackOf(band, t, dateShort, run, needRetype ? <Retype answer={card.answer} onDone={setRetyped} onEnter={next} /> : null) : null}
+      side={band && band.kind !== 'intro' ? <WordSide card={card} partners={band.band.partners} /> : null}
     />
   );
 }
@@ -570,13 +792,40 @@ function nextText(t: T, next: Next, dateShort: (ms: number) => string): string {
   }
 }
 
-function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: LearnRun): ShellFeedback {
+/**
+ * „Kommt … weil …“ (Kern, Vorschau): EIN Satz, wann das Wort wiederkommt und warum – aus derselben Buchung wie der Plan (Kap. 2 Nr. 2).
+ * Der Grund folgt dem Urteil: nicht gewusst, knapp, neues Wort am ersten Tag oder sicher gewusst (Abstand wächst).
+ */
+function comeBack(t: T, b: Band, dateShort: (ms: number) => string): string {
+  const next = b.next;
+  if (next.kind === 'practice') return `${t('vmNextTitle')}: ${nextText(t, next, dateShort)}`;
+  const today = dayKey(Date.now());
+  let when: string;
+  if (next.kind === 'step') {
+    when = t(next.mode === 'later' ? 'kernComeLater' : next.mode === 'sentence' ? 'kernComeSoonSent' : next.mode === 'nosent' ? 'kernComeSoonNoSent' : 'kernComeSoon');
+    if (next.thenTomorrow) when += t('kernAndTomorrow');
+  } else if (next.day <= today) when = t('kernComeToday');
+  else if (next.day === addDays(today, 1)) when = t('kernComeTomorrow');
+  else when = t('kernComeDate', { date: dateShort(new Date(`${next.day}T12:00:00`).getTime()) });
+  const because =
+    b.tone === 'no' || b.tone === 'info'
+      ? t('kernBecauseNo')
+      : b.tone === 'almost' || (next.kind === 'date' && next.extra === 'tight')
+        ? t('kernBecauseAlmost')
+        : next.kind === 'step'
+          ? t('kernBecauseNew')
+          : t('kernBecauseOk');
+  return t('kernComeBecause', { when, because });
+}
+
+function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: LearnRun, retype: ReactNode): ShellFeedback {
   const b = v.band;
   // Einführung: ein misslungener Versuch ist kein Fehler, das Band zeigt die Lösung.
   const soft = v.kind === 'intro' && b.tone !== 'ok';
   const verdict = soft ? 'dontKnow' : TONE[b.tone];
   const title = soft ? t('vmVerdict_dunno') : t(`vmVerdict_${b.verdict}` as MessageKey, { answer: v.card.answer });
-  const partners = partnersNode(t, b.partners);
+  // Wortpartner stehen in der Wortkarte daneben (`WordSide`); ohne Wortkarte (Einführung mit Versuch) hier.
+  const partners = v.kind === 'intro' ? partnersNode(t, b.partners) : null;
   // Kontrastkarte: die Falle ausdrücklich benennen (deutsche Falle, Paar, zuletzt verwechselt), englische Wörter mit `lang="en"`.
   const ct = v.card.contrast;
   const mixed = ct?.w && ct.w.toLowerCase() !== (ct.pair ?? '').toLowerCase() ? ct.w : null;
@@ -651,14 +900,13 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
     // Feste Reihenfolge: Urteil · Lösung · Warum · Wortpartner · Kommt wieder (volle Breite, nie abgeschnitten).
     tail: (
       <>
+        {retype}
         {contrast}
         {partners}
-        <p className="lx-t-meta text-muted" data-testid="next-in">
-          {t('vmNextTitle')}: {nextText(t, b.next, dateShort)}
-        </p>
       </>
     ),
-    nextIn: null,
+    // „Kommt … weil …“ (Vorschau): wann das Wort wiederkommt und warum, als ein Satz unter der Karte.
+    nextIn: comeBack(t, b, dateShort),
     act,
     tutor: tutorOf(v, t),
     depth: 'min',

@@ -64,6 +64,8 @@ export type ExplainMineProps = {
   shownWhy?: string | null;
   /** Großpaket G3 (neue Grammatik): ruhige Karte – nur „Deine Antwort“ und „Die Regel dahinter“, ohne Beispiel, Signalwörter und Verwechslung; Melden heißt „Erklärung melden“. */
   compact?: boolean;
+  /** Kern (Vorschau 9pdpfT8E): eigene Überschrift der Karte, z. B. „1 · Was war falsch“ in der nummerierten Grammatik-Erklärung. */
+  label?: string | null;
 };
 
 /** Gespeicherte, zu dieser Antwort passende Erklärung aus den Live-Dokumenten. */
@@ -88,7 +90,7 @@ function outOfAx(ax: Ax): ExplainOut {
 }
 
 export function ExplainMine(props: ExplainMineProps) {
-  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true, shownWhy = null, compact = false } = props;
+  const { taskKey, kind = 'grammar', vars, pattern, accepted, word, store, onRight, onRewrite, auto = true, shownWhy = null, compact = false, label = null } = props;
   const { t, lang } = useT();
   const ai = useAiAvailable();
   const ask = useAsk(explainAnswerV2);
@@ -124,9 +126,7 @@ export function ExplainMine(props: ExplainMineProps) {
       answer: vars.answer,
       accepted: accepted && accepted.length ? accepted : [vars.answer],
       ops: explainOps(given, vars.answer),
-      pattern: pattern
-        ? { id: pattern.id, name: pattern.name.en, form: pattern.form.en, signals: pattern.signals, trap: `${pattern.trap.bad} → ${pattern.trap.good}` }
-        : null,
+      pattern: pattern ? { id: pattern.id, name: pattern.name.en, form: pattern.form.en, signals: pattern.signals, trap: `${pattern.trap.bad} → ${pattern.trap.good}` } : null,
       neighbors: kind === 'grammar' ? neighborsOf(vars.topic, pattern?.id ?? null) : [],
       word: kind === 'word' ? (word ?? null) : null,
       ctx: tutorCtx(profile),
@@ -190,7 +190,7 @@ export function ExplainMine(props: ExplainMineProps) {
     return (
       <div className="flex flex-col gap-2" data-testid="tutor" data-ai="">
         <div className="lx-card flex flex-col gap-3 p-3" data-testid="tutor-text">
-          <p className="lx-eyebrow m-0 text-subtle">{t('ttLabel')}</p>
+          <p className="lx-eyebrow m-0 text-subtle">{label ?? t('ttLabel')}</p>
           {current.guess && (
             <p className="lx-t-meta m-0 text-muted" data-testid="tutor-guess">
               {t('ttXMyGuess', { text: current.guess })}
@@ -227,7 +227,7 @@ export function ExplainMine(props: ExplainMineProps) {
             <div className="flex items-start gap-1" data-testid="tutor-example">
               <div className="min-w-0 flex-1">
                 <p className="lx-t-label m-0">{t('ttXExample')}</p>
-                <Examples items={[{ en: o.example.en, de: o.example.de, ctx: null }]} open={1} area="trainer" />
+                <Examples items={[{ en: o.example.en, de: o.example.de, ctx: null }]} open={1} area="trainer" label={false} />
               </div>
               <SpeakButton text={o.example.en} testId="tutor-speak" />
             </div>

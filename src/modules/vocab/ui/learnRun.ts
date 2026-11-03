@@ -42,7 +42,8 @@ export type UnfairResult = 'void' | 'again' | 'counts';
 export type LearnView =
   | { k: 'loading' }
   | { k: 'closed'; why: 'off' | 'migrate' | 'error' }
-  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null }
+  /** `teach`: übernommenes Wort zum ersten Mal in der neuen App – erst einmal die Einführungskarte (nur Anzeige), dann diese Karte (K10). */
+  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null; teach?: CardModel | null }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
@@ -221,6 +222,8 @@ export class LearnRun {
   private med: FormStats = {};
   private sbGate: unknown = null;
   private readonly lastSent = new Map<string, string>();
+  /** Übernommene Wörter, deren Einführungskarte diese Runde schon kam (K10). */
+  private readonly taught = new Set<string>();
   private pending: Pending | null = null;
   /** Anki-Modus: eingefrorene Zeit beim Aufdecken (Antwortzeit = Zeit bis zum Aufdecken). */
   private flipF: Frozen | null = null;
@@ -320,7 +323,14 @@ export class LearnRun {
       this.docs.set(path, doc);
       // Lehrer-Falle des Stichworts (falscher Freund / Paar): steuert Kontrastkarte und Paar-Regel (catalog.ts `trap`).
       const tc = teachOf(headOf(path, doc));
-      items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null, av: { de: true, ai, anki: !!cfg.anki }, src: srcOf(doc.src) });
+      items.push({
+        path,
+        lex,
+        order: typeof doc.order === 'number' ? doc.order : i++,
+        trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null,
+        av: { de: true, ai, anki: !!cfg.anki },
+        src: srcOf(doc.src),
+      });
     }
     // Großpaket A S7: Vor dem ersten Pflicht-Plan des Lerntags fehlende neue Wörter aus den Quellen anlegen (Wortpartner, Beruf, Häufigkeitsliste).
     const dayNow = this.env.now();
@@ -471,16 +481,40 @@ export class LearnRun {
         run.done(task, nowMs);
         continue;
       }
+      const teach = task.intro ? null : this.teachFor(task);
       const card = this.cardFor(task);
       if (card) {
         this.shownAt = nowMs;
-        this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: task.intro, tip: false });
+        this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: task.intro, tip: false, teach });
         return;
       }
       run.done(task, nowMs);
     }
     logWarn('vocab:learn', 'zu viele Aufgaben ohne Karte', String(SKIP_MAX));
     this.set(this.doneView());
+  }
+
+  /**
+   * Einführungskarte für ein übernommenes Wort (Emrah 03.11.2026, K10): einmal, beim ersten Auftauchen in der neuen App. „Noch nie hier
+   * geübt“ steht in den Daten selbst – keine Antwort nach der Umstellung (`last` beider Spuren ≤ `mig.t`); kein eigenes Merkfeld. Der Satz
+   * der Einführung gilt als zuletzt gezeigt, damit die folgende Abfrage einen anderen nimmt.
+   */
+  private teachFor(task: Task): CardModel | null {
+    const lex = this.cat?.get(task.path)?.lex;
+    if (!lex?.mig || lex.intro === null || this.taught.has(task.path)) return null;
+    if (Math.max(lex.u.last ?? 0, lex.b?.last ?? 0) > lex.mig.t) return null;
+    const card = this.cardFor({ ...task, form: 'intro', intro: true });
+    if (card?.sentence) this.lastSent.set(task.path, card.sentence.sent.key);
+    return card;
+  }
+
+  /** Einführungskarte eines übernommenen Worts gelesen: ohne Buchung weiter zur eigentlichen Abfrage (K10). */
+  teachSeen(): void {
+    const v = this.view;
+    if (v.k !== 'card' || !v.teach) return;
+    this.taught.add(v.task.path);
+    this.shownAt = this.env.now();
+    this.set({ ...v, teach: null });
   }
 
   private cardFor(task: Task): CardModel | null {
@@ -508,7 +542,18 @@ export class LearnRun {
     const m = this.useFor(task, it.t);
     if (!m) return false;
     this.useBooked = false;
-    this.set({ k: 'use', m: { ...m, frame: it.frame, sit: it.sit, evidence: true }, task, n: this.n, left: this.run?.remaining() ?? 0, text: it.text, spoken: it.spoken, spokenKeys: null, st: { s: 'write', fail: null }, later: it });
+    this.set({
+      k: 'use',
+      m: { ...m, frame: it.frame, sit: it.sit, evidence: true },
+      task,
+      n: this.n,
+      left: this.run?.remaining() ?? 0,
+      text: it.text,
+      spoken: it.spoken,
+      spokenKeys: null,
+      st: { s: 'write', fail: null },
+      later: it,
+    });
     return true;
   }
 
@@ -533,7 +578,19 @@ export class LearnRun {
       if (!w) return;
       out.push({
         path: tg.path,
-        u: { t: t + i, form: v.m.form, v: w.v, err: w.err, at: w.at, evade: isEvade(w), spoken: v.spokenKeys ? v.spokenKeys.includes(tg.key) : v.spoken, lvAt: this.lvAt(v, tg.path), evidenceOnly: v.m.evidence || !!v.later, evDone: this.evToday.has(tg.path), ...this.sentOf(v, w.at) },
+        u: {
+          t: t + i,
+          form: v.m.form,
+          v: w.v,
+          err: w.err,
+          at: w.at,
+          evade: isEvade(w),
+          spoken: v.spokenKeys ? v.spokenKeys.includes(tg.key) : v.spoken,
+          lvAt: this.lvAt(v, tg.path),
+          evidenceOnly: v.m.evidence || !!v.later,
+          evDone: this.evToday.has(tg.path),
+          ...this.sentOf(v, w.at),
+        },
       });
     });
     return out;
@@ -548,7 +605,16 @@ export class LearnRun {
       const tg = v.m.targets.find((x) => x.path === path)!;
       const r: UseResult | null = lex ? applyUse(lex, u, planCtxOf(this.cat!, this.med, path, u.t, this.cfg!, v.task.planned && !u.evidenceOnly)) : null;
       const g = r?.grade ?? null;
-      rows.push({ ...w, path, head: tg.word, fx: g === null ? 'none' : g >= 3 ? 'up' : 'soon', ev: u.lvAt >= EV_MIN_LV && r ? r.lex.ev.o : null, evNew: !!r?.ev, evS: r?.lex.ev.s ?? 0, core: lex?.pri === 'core' });
+      rows.push({
+        ...w,
+        path,
+        head: tg.word,
+        fx: g === null ? 'none' : g >= 3 ? 'up' : 'soon',
+        ev: u.lvAt >= EV_MIN_LV && r ? r.lex.ev.o : null,
+        evNew: !!r?.ev,
+        evS: r?.lex.ev.s ?? 0,
+        core: lex?.pri === 'core',
+      });
     }
     return rows;
   }
@@ -693,7 +759,10 @@ export class LearnRun {
         drafts.push(d);
         jobs.push(async () => {
           await writeUse(deps, path, d.a, u, { cfg, cat, med: this.med, planned });
-          writeDrafts(this.env.drafts, readDrafts(this.env.drafts).filter((x) => !(x.path === d.path && x.a.t === d.a.t && x.kind === 'use')));
+          writeDrafts(
+            this.env.drafts,
+            readDrafts(this.env.drafts).filter((x) => !(x.path === d.path && x.a.t === d.a.t && x.kind === 'use')),
+          );
         });
       }
       writeDrafts(this.env.drafts, [...readDrafts(this.env.drafts), ...drafts]);
@@ -702,7 +771,15 @@ export class LearnRun {
         jobs.push(() => dropLater(deps, t));
       }
     } else if (v.st.s === 'self' && v.st.later && !v.later) {
-      const item: UseLater = { t: this.env.now(), form: v.m.form, frame: v.m.frame, sit: v.m.sit, text: v.text.slice(0, 1200), spoken: v.spoken, w: v.m.targets.map((x) => [x.path, Math.max(0, Math.min(7, x.lv))] as [string, number]) };
+      const item: UseLater = {
+        t: this.env.now(),
+        form: v.m.form,
+        frame: v.m.frame,
+        sit: v.m.sit,
+        text: v.text.slice(0, 1200),
+        spoken: v.spoken,
+        w: v.m.targets.map((x) => [x.path, Math.max(0, Math.min(7, x.lv))] as [string, number]),
+      };
       jobs.push(() => addLater(deps, item, item.t));
     }
     if (!v.later && v.m.frame === 'life' && v.st.s !== 'write' && v.st.s !== 'checking') {
@@ -778,7 +855,17 @@ export class LearnRun {
       return { g, when };
     });
     const good = this.compute('answer', v.card, v.task, before, this.flipAnswer(v.card, v.task, f, 3));
-    const band = previewOf({ m: v.card, check: { outcome: 'ok' }, given: v.card.answer, lang: this.env.lang(), before, result: good, planned: v.task.planned, t, ...(this.env.meaningOf ? { meaningOf: this.env.meaningOf } : {}) });
+    const band = previewOf({
+      m: v.card,
+      check: { outcome: 'ok' },
+      given: v.card.answer,
+      lang: this.env.lang(),
+      before,
+      result: good,
+      planned: v.task.planned,
+      t,
+      ...(this.env.meaningOf ? { meaningOf: this.env.meaningOf } : {}),
+    });
     this.set({ ...v, flip: { opts, why: band?.why ?? null, partners: band?.partners ?? [] } });
   }
 
@@ -813,10 +900,34 @@ export class LearnRun {
     const c = evaluate(v.card, given, this.env.dict, dunno || !given.trim());
     // `asked`: Claude vor dem Prüfen gefragt (learning-scientist 02.11.2026) = Hilfe wie der Tipp.
     const f: Frozen = { t, ms: Math.max(0, Math.round(m.ms)), fk: Math.max(0, Math.round(m.fk)), hint: v.tip || asked ? 1 : 0 };
-    const p: Pending = { task: v.task, card: v.card, kind: v.kind, before, given, check: c, f, choice: null, a: answerOf(v.card, c, f), result: this.compute(v.kind, v.card, v.task, before, answerOf(v.card, c, f)), committed: false };
+    const p: Pending = {
+      task: v.task,
+      card: v.card,
+      kind: v.kind,
+      before,
+      given,
+      check: c,
+      f,
+      choice: null,
+      a: answerOf(v.card, c, f),
+      result: this.compute(v.kind, v.card, v.task, before, answerOf(v.card, c, f)),
+      committed: false,
+    };
     this.pending = p;
     if (v.card.sentence) this.lastSent.set(v.task.path, v.card.sentence.sent.key);
     this.showBand(v.n, v.left);
+  }
+
+  /**
+   * Kern (Emrah 03.11.2026, Vorschau 9pdpf… „Handy-Einfuehrung“): die Einführung ist eine reine Lernkarte ohne Eingabe. „Verstanden“ bucht
+   * sie wie bisher das Aufdecken (`introduce`, `writeIntro`) und geht ohne Lösungs-Band direkt weiter; Schritt A fragt das Wort danach ab.
+   */
+  introSeen(m: Measured): void {
+    const v = this.view;
+    if (v.k !== 'card' || v.kind !== 'intro') return;
+    this.check('', m, true);
+    const after = this.view;
+    if (after.k === 'band' && after.kind === 'intro' && this.pending?.kind === 'intro') this.next();
   }
 
   /** Rein gerechnetes Ergebnis je Art (gebucht wird dasselbe auf dem frischen Dokument). */
@@ -830,7 +941,17 @@ export class LearnRun {
   private showBand(n: number, left: number): void {
     const p = this.pending;
     if (!p) return;
-    const band = previewOf({ m: p.card, check: p.check, given: p.given, lang: this.env.lang(), before: p.before, result: p.result, planned: p.task.planned, t: p.f.t, ...(this.env.meaningOf ? { meaningOf: this.env.meaningOf } : {}) });
+    const band = previewOf({
+      m: p.card,
+      check: p.check,
+      given: p.given,
+      lang: this.env.lang(),
+      before: p.before,
+      result: p.result,
+      planned: p.task.planned,
+      t: p.f.t,
+      ...(this.env.meaningOf ? { meaningOf: this.env.meaningOf } : {}),
+    });
     if (!band) {
       // Abfrage, die nicht zählt: ohne Band weiter (kommt in V3 mit „Aufgabe war unfair“).
       this.next();
@@ -838,7 +959,9 @@ export class LearnRun {
     }
     // Einführung und Probe: kein Einspruch (es gibt keine Note), danach „gleich noch einmal“.
     const fixed: Band =
-      p.kind === 'answer' ? band : { ...band, knewIt: false, alsoRight: false, ...(p.kind === 'probe' && p.check.outcome !== 'ok' ? { next: { kind: 'step', mode: 'same', thenTomorrow: false } } : {}) };
+      p.kind === 'answer'
+        ? band
+        : { ...band, knewIt: false, alsoRight: false, ...(p.kind === 'probe' && p.check.outcome !== 'ok' ? { next: { kind: 'step', mode: 'same', thenTomorrow: false } } : {}) };
     this.set({ k: 'band', card: p.card, task: p.task, kind: p.kind, n, left, given: p.given, check: p.check, band: fixed, choice: p.choice });
   }
 

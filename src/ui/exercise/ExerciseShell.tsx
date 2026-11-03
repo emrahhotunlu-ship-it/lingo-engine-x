@@ -59,8 +59,23 @@ export type ShellStatus = {
   /** Ohne Hilfe (Themen-Test, Vortest, Messung): kein ⓘ mit Zweck und Muster – die Aufgabe selbst nennt den Hinweis. */
   noInfo?: boolean;
 };
-export type ShellAction = { /** Pfeil auch ohne Ergebnis (z. B. „Weiter“ mitten in der Aufgabe). */ arrow?: boolean; label: string; onClick: () => void; testId: string; disabled?: boolean; busy?: boolean; busyLabel?: string };
-export type ShellSecondary = { id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound' | 'phone'; label: string; onClick: () => void; testId: string; disabled?: boolean; /** Standard `quiet` (leise Knopfform, U3); umrandeter Glasknopf für die Einführungskarte „Kenne ich“. */ variant?: 'quiet' | 'ghost' | 'secondary' };
+export type ShellAction = {
+  /** Pfeil auch ohne Ergebnis (z. B. „Weiter“ mitten in der Aufgabe). */ arrow?: boolean;
+  label: string;
+  onClick: () => void;
+  testId: string;
+  disabled?: boolean;
+  busy?: boolean;
+  busyLabel?: string;
+};
+export type ShellSecondary = {
+  id: 'hint' | 'dontKnow' | 'unclear' | 'noError' | 'skip' | 'replay' | 'reset' | 'noSound' | 'phone';
+  label: string;
+  onClick: () => void;
+  testId: string;
+  disabled?: boolean;
+  /** Standard `quiet` (leise Knopfform, U3); umrandeter Glasknopf für die Einführungskarte „Kenne ich“. */ variant?: 'quiet' | 'ghost' | 'secondary';
+};
 export type ShellMenuId = 'override' | 'copyOnce' | 'showMe' | 'translate' | 'moreInfo' | 'askClaude' | 'wholeTopic' | 'report';
 export type ShellFeedback = {
   verdict: ResultVerdict;
@@ -103,6 +118,8 @@ export type ShellFeedback = {
   /** G8 (UX M3): leise Zeile nach der Handlung und Claude, vor „Mehr“ (Grammatik: „Aufgabe war unfair?“). */
   late?: ReactNode;
   nextIn?: string | null;
+  /** Kern: eigene Überschrift des Warum-Blocks (Grammatik bei Fehler: „1 · Was war falsch“, Vorschau 9pdpfT8E). */
+  whyTitle?: string | null;
   /** Warum die Stufe noch nicht steigt (Wörter: so viele freie Antworten an anderen Tagen fehlen noch), eigene ruhige Zeile unter „Wieder in …“. */
   stageNote?: string | null;
   /**
@@ -365,7 +382,16 @@ export function ExerciseShell(props: ExerciseShellProps) {
 
   if (state === 'loading') {
     return (
-      <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="exercise" data-area={status.area} data-state="loading" aria-busy="true" aria-label={t('exLoading')} data-ex={meta.ex} data-card={meta.id}>
+      <article
+        className="lx-glass lx-exercise flex flex-col gap-4"
+        data-testid="exercise"
+        data-area={status.area}
+        data-state="loading"
+        aria-busy="true"
+        aria-label={t('exLoading')}
+        data-ex={meta.ex}
+        data-card={meta.id}
+      >
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-6 w-3/4" />
         <Skeleton className="h-24 w-full" />
@@ -414,7 +440,15 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const cmp = feedback?.comparison && (band ? !feedback.choice : !feedback.comparison.bandOnly) ? feedback.comparison : null;
   const comparisonNode = cmp ? (
     <div data-slot="comparison">
-      <Comparison given={cmp.given} ops={cmp.ops} compact={!!cmp.compact} {...(cmp.label ? { label: cmp.label } : {})} {...(cmp.correct ? { correct: cmp.correct } : {})} hideCorrect={!!cmp.hideCorrect} inline={band} />
+      <Comparison
+        given={cmp.given}
+        ops={cmp.ops}
+        compact={!!cmp.compact}
+        {...(cmp.label ? { label: cmp.label } : {})}
+        {...(cmp.correct ? { correct: cmp.correct } : {})}
+        hideCorrect={!!cmp.hideCorrect}
+        inline={band}
+      />
     </div>
   ) : null;
   // Auswahl (LS6): „Du: B · Richtig: C …“ – nur im Band; am Laptop stehen Wahl und Lösung mit ✕/✓ an den Optionen.
@@ -461,7 +495,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
   // UX-Neuanfang B: EINE Rückmeldung im Fluss (Handy und Laptop). Am Laptop mit eigener Spalte stehen Warum, Merke, Tutor und „Mehr“ rechts
   // in „Erklärung“ (Vorschau `.aside`); sonst (Handy, angedockter Begleiter) hier unter dem Urteil.
   const moreId = `${infoId}-more`;
-  const explainNode = feedback ? <ResultBlocks plan={plan} area="trainer" ai={!!feedback.explanation?.ai} {...blocksSource} depth={feedback.depth} {...whyBefore} /> : null;
+  const explainNode = feedback ? (
+    <ResultBlocks plan={plan} area="trainer" ai={!!feedback.explanation?.ai} {...blocksSource} depth={feedback.depth} {...whyBefore} {...(feedback.whyTitle ? { whyTitle: feedback.whyTitle } : {})} />
+  ) : null;
   const moreNode =
     feedback && hasMore ? (
       <div data-slot="more" className="lx-vu-dmore">
@@ -559,9 +595,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         )}
         {info && !task.open && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
-            {[status.topic, status.pattern].filter(Boolean).length > 0 && (
-              <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>
-            )}
+            {[status.topic, status.pattern].filter(Boolean).length > 0 && <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>}
             {status.state && status.detail && (
               <span className="block" data-testid="status-detail">
                 {status.detail}
@@ -582,17 +616,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
           </h2>
           {claudeAsk && !claudeInBar && <ClaudeExplain onClick={claudeAsk} />}
           {!status.noInfo && !task.open && (
-            <button
-              type="button"
-              className="lx-vu-why"
-              aria-expanded={info || infoCtx}
-              aria-controls={info ? infoId : undefined}
-              onClick={() => showWhy(true)}
-              data-testid="purpose-info"
-            >
-              <span className="lx-vu-why-face">
-                {t('vuWhy')}
-              </span>
+            <button type="button" className="lx-vu-why" aria-expanded={info || infoCtx} aria-controls={info ? infoId : undefined} onClick={() => showWhy(true)} data-testid="purpose-info">
+              <span className="lx-vu-why-face">{t('vuWhy')}</span>
             </button>
           )}
         </div>

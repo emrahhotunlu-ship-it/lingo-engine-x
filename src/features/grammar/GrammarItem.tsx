@@ -6,7 +6,7 @@ import { useLive } from '../../data/live';
 import { alignWords, splitWords } from '../../domain/answer/align';
 import { maskOf } from '../../domain/answer/mask';
 import { topicById } from '../../domain/content';
-import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
+import type { ExplainDepth, ExplainLine, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { topicP } from '../../domain/grammar/bkt';
 import { asAlsoRight, checkFind, checkGrammar, checkMeaning, fixSpan } from '../../domain/grammar/check';
 import { shortWhy } from '../../domain/grammar/alsoRight';
@@ -15,7 +15,7 @@ import { grammarExplanation } from '../../domain/grammar/explain';
 import { patternOf } from '../../domain/grammar/patterns';
 import { topicState } from '../../domain/grammar/path';
 import { formHint } from '../../domain/grammar/rules';
-import { RuleSide, hasRule } from './RuleSide';
+import { RuleSide, RuleSteps, hasRule } from './RuleSide';
 import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/retryHint';
 import { scaffolded, splitTransform, wholeSentence, type InputProfile } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
@@ -164,7 +164,6 @@ const formMistake = (f: Fb): boolean => !f.override && f.verdict !== 'correct' &
 /** Urteil der Tutor-Engine → Protokollfeld `v`. */
 const TJ_V: Record<TutorVerdict, 'c' | 'a' | 'n' | 'w' | 'u'> = { correct: 'c', alt_ok: 'a', near: 'n', wrong: 'w', unsure: 'u' };
 
-
 /** Uhr (eigene Funktion, damit die Zeitnahme nie als Teil des Zeichnens gilt). */
 const tick = (): number => performance.now();
 const GAP = /_{3,}/;
@@ -181,7 +180,24 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, testVoid = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null, onLeave = null, mod = false }: GrammarItemProps) {
+function LegacyGrammarItem({
+  task,
+  ctx,
+  day,
+  onDone,
+  area = 'trainer',
+  badge = null,
+  badgeTone,
+  badgeTestId,
+  noHelp = false,
+  testVoid = false,
+  profile: profileProp,
+  topicRound = false,
+  tutor: tutorOn = false,
+  reason = null,
+  onLeave = null,
+  mod = false,
+}: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -244,7 +260,16 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
   }, []);
   // S1-ZEIT (P4): Tasten und Einfügungen in der versteckten Eingabe (außerhalb der Übung) oder in einem Feld der Übung.
-  useEffect(() => bindInputKind(document, { accept: (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)), tracker: attempt, now: tick, paused: () => lookupOpenMs() - lookupAt.current }), [api, attempt]);
+  useEffect(
+    () =>
+      bindInputKind(document, {
+        accept: (el) => api.isInput(el) || (el instanceof Node && !!root.current?.contains(el)),
+        tracker: attempt,
+        now: tick,
+        paused: () => lookupOpenMs() - lookupAt.current,
+      }),
+    [api, attempt],
+  );
   // Tutor-Engine v3: Aufgaben-Prüfung als Warnzähler (§4.2) und Lernermodell zum Rundenstart (§3.1, verzögert).
   useEffect(() => {
     lintOnce(task);
@@ -258,13 +283,24 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const solution = task.answer;
   // Fehler finden an einer anderen gültigen Stelle: deren Lösung (für Anzeige und Claude).
   const errSpan: [number, number] | null = activeErr ?? err;
-  const errAltHere = findTask && activeErr && err && (activeErr[0] !== err[0] || activeErr[1] !== err[1]) ? ((task.x?.kind === 'find' ? task.x.errAlt : undefined)?.find((a) => a.err[0] === activeErr[0] && a.err[1] === activeErr[1]) ?? null) : null;
+  const errAltHere =
+    findTask && activeErr && err && (activeErr[0] !== err[0] || activeErr[1] !== err[1])
+      ? ((task.x?.kind === 'find' ? task.x.errAlt : undefined)?.find((a) => a.err[0] === activeErr[0] && a.err[1] === activeErr[1]) ?? null)
+      : null;
   const spotAnswer = errAltHere ? errAltHere.answer : solution;
   // Q0: richtig mit einer weiteren gültigen Fassung (`accepted`), nicht der Musterlösung → „Auch richtig“ + „Musterlösung: …“, ohne den
   // Vorspann „Richtig: <Musterlösung>.“ der Begründung (pc-rc-k1). Nicht bei Auswahl, Familien (`alt`), `other`, Einspruch und `errAlt`.
   const kwtKey = type === 'kwt' && task.x?.kind === 'kwt' ? task.x.key : null;
   const variantModel =
-    fb && !fb.dontKnow && !fb.override && fb.verdict === 'correct' && !choiceType && !errAltHere && (!findTask || stage === 'replace') && (fb.check?.kind === undefined || fb.check.kind === 'contraction' || fb.check.kind === 'uk') && isVariant(fb.given, spotAnswer, kwtKey ? { kwtKey } : {})
+    fb &&
+    !fb.dontKnow &&
+    !fb.override &&
+    fb.verdict === 'correct' &&
+    !choiceType &&
+    !errAltHere &&
+    (!findTask || stage === 'replace') &&
+    (fb.check?.kind === undefined || fb.check.kind === 'contraction' || fb.check.kind === 'uk') &&
+    isVariant(fb.given, spotAnswer, kwtKey ? { kwtKey } : {})
       ? spotAnswer
       : null;
   // Q0: Abkürzung als Schlüsselwort klein getippt (mba): angenommen, die Lücke zeigt die richtige Schreibung, die Rückmeldung sagt es.
@@ -310,7 +346,25 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const helpNow = helpAt();
     const grade = learnGrade(type, verdict, { submitMs: ms, firstKeyMs }, helpNow, profile);
     const tv: TutorVerdict = verdict === 'correct' ? (check?.kind === 'other' ? 'alt_ok' : 'correct') : verdict;
-    setFb({ verdict, check, given, dontKnow: false, grade, ms, help: helpNow, judged: 'local', unsure: false, override: false, tv, by: 'local', fitsGoal: null, dx: null, ask: false, ...timing(given), ...extra });
+    setFb({
+      verdict,
+      check,
+      given,
+      dontKnow: false,
+      grade,
+      ms,
+      help: helpNow,
+      judged: 'local',
+      unsure: false,
+      override: false,
+      tv,
+      by: 'local',
+      fitsGoal: null,
+      dx: null,
+      ask: false,
+      ...timing(given),
+      ...extra,
+    });
     if ((gapKind || findTask) && profile === 'touch') api.blur();
   };
 
@@ -525,7 +579,25 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       fit.cancel();
     }
     const spot = findTask && stage === 'replace' ? tappedWord() : undefined;
-    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false, tv: 'wrong', by: 'local', fitsGoal: null, dx: null, ask: false, ...timing(typed.current || text), ...(spot ? { spot } : {}) });
+    setFb({
+      verdict: 'wrong',
+      check: null,
+      given: '',
+      dontKnow: true,
+      grade: 1,
+      ms: elapsed(),
+      help,
+      judged: 'local',
+      unsure: false,
+      override: false,
+      tv: 'wrong',
+      by: 'local',
+      fitsGoal: null,
+      dx: null,
+      ask: false,
+      ...timing(typed.current || text),
+      ...(spot ? { spot } : {}),
+    });
     api.blur();
   };
 
@@ -549,7 +621,19 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       abandonFit(fit.ctl);
       fit.cancel();
     }
-    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: null, how: 'me', sure: false, ...(fb.given.trim() && !fb.dontKnow ? { fit: { by: 'me' as const, pv: GRAMMAR_FIT_PV, a: fb.given.trim() } } : {}) });
+    setFb({
+      ...fb,
+      verdict: 'correct',
+      grade: Math.min(3, Math.max(2, fb.grade)) as Grade,
+      override: true,
+      tv: 'correct',
+      by: 'me',
+      ask: false,
+      aiMsg: null,
+      how: 'me',
+      sure: false,
+      ...(fb.given.trim() && !fb.dontKnow ? { fit: { by: 'me' as const, pv: GRAMMAR_FIT_PV, a: fb.given.trim() } } : {}),
+    });
   };
   const cancelSure = () => {
     if (fb) setFb({ ...fb, sure: false });
@@ -558,7 +642,18 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   /** „Als richtig werten“ (Claude: das Zielmuster in anderer Form): wie „Ich lag richtig“, dann voll gebucht. */
   const counts = () => {
     if (!fb) return;
-    setFb({ ...fb, verdict: 'correct', grade: Math.min(3, Math.max(2, fb.grade)) as Grade, override: true, tv: 'correct', by: 'me', ask: false, aiMsg: null, how: 'counts', fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() } });
+    setFb({
+      ...fb,
+      verdict: 'correct',
+      grade: Math.min(3, Math.max(2, fb.grade)) as Grade,
+      override: true,
+      tv: 'correct',
+      by: 'me',
+      ask: false,
+      aiMsg: null,
+      how: 'counts',
+      fit: { by: 'me', pv: GRAMMAR_FIT_PV, a: fb.given.trim() },
+    });
   };
 
   /** Zielform-Zweitversuch nach „Auch richtig“ mit anderem Muster: die App bewertet selbst (ohne Claude), halbes Gewicht beim Buchen. */
@@ -712,7 +807,18 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   const composed: { model: ExplanationModel; action: FeedbackAction; lesson: boolean } | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
-    const m0 = tighten(grammarExplanation({ task, verdict, given: fb.given, variant: variantModel !== null, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined && !(findTask && stage === 'replace') ? { tapped: fb.tapped } : {}), lang, learning }));
+    const m0 = tighten(
+      grammarExplanation({
+        task,
+        verdict,
+        given: fb.given,
+        variant: variantModel !== null,
+        ...(picked !== undefined ? { picked } : {}),
+        ...(fb.tapped !== undefined && !(findTask && stage === 'replace') ? { tapped: fb.tapped } : {}),
+        lang,
+        learning,
+      }),
+    );
     // „Auch richtig“ zählt nur bei Art `other` als solches; eine lokale Familie (`alt`) und `errAlt` sind richtig (voll gebucht).
     const v: TutorVerdict = fb.override ? 'correct' : fb.tv === 'alt_ok' && fb.check?.kind !== 'other' ? 'correct' : fb.tv;
     const out = composeFeedback({
@@ -731,7 +837,12 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       targetTried: !!fb.target || noHelp,
       texts: {
         altNoCount: t('grAltNoCount'),
-        byMe: fb.by === 'me' ? (fb.how === 'counts' ? { head: t('ttJgCountedHead'), text: t('ttJgCountedWhy') } : { head: t('ttJgByMeHead'), text: t(fb.override ? 'ttJgByMeWhy' : 'ttJgByMeEarlier') }) : null,
+        byMe:
+          fb.by === 'me'
+            ? fb.how === 'counts'
+              ? { head: t('ttJgCountedHead'), text: t('ttJgCountedWhy') }
+              : { head: t('ttJgByMeHead'), text: t(fb.override ? 'ttJgByMeWhy' : 'ttJgByMeEarlier') }
+            : null,
         unsure: { head: t('ttJgUnsureHead'), text: t('ttJgUnsureWhy', { want: findTask ? spotAnswer : solution }) },
         claudeHead: t('ttJgClaudeHead'),
       },
@@ -782,7 +893,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     if (tip >= 2) return pattern ? `${t('gxHintFormula')}: ${lang === 'de' ? pattern.form.de : pattern.form.en}` : (task.hint ?? formHint(task, lang));
     return '';
   };
-  const retryText = (r: GrammarRetryHint): string => (r.kind === 'nudge' ? r.text : r.kind === 'hint' ? t('rhGrammarHint', { hint: r.text }) : r.kind === 'topic' ? t('rhGrammarTopic', { topic: r.name }) : t('rhGrammarVerb'));
+  const retryText = (r: GrammarRetryHint): string =>
+    r.kind === 'nudge' ? r.text : r.kind === 'hint' ? t('rhGrammarHint', { hint: r.text }) : r.kind === 'topic' ? t('rhGrammarTopic', { topic: r.name }) : t('rhGrammarVerb');
   const hint = fb ? null : retry ? { text: retryText(retry), tone: 'near' as const } : tip > 0 && tipText() ? { text: tipText(), tone: 'hint' as const } : null;
 
   // Hinweisleiter (Tutor-Engine, Rang 1): Leitfrage → Formel → erster Buchstabe (nur bei Lücken).
@@ -831,7 +943,16 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const m = GAP.exec(sentence);
     if (!m) return <EnglishText as="p" text={sentence} {...src} />;
     const hl = lit(sentence);
-    return <EnglishText as="p" testId="sentence" text={sentence} {...src} {...(hl && (hl[1] <= m.index || hl[0] >= m.index + m[0].length) ? { highlight: hl } : {})} slot={{ start: m.index, end: m.index + m[0].length, node: slot }} />;
+    return (
+      <EnglishText
+        as="p"
+        testId="sentence"
+        text={sentence}
+        {...src}
+        {...(hl && (hl[1] <= m.index || hl[0] >= m.index + m[0].length) ? { highlight: hl } : {})}
+        slot={{ start: m.index, end: m.index + m[0].length, node: slot }}
+      />
+    );
   };
 
   let prompt: ReactNode;
@@ -852,7 +973,20 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const yours = model.lines.find((l) => l.k === 'yours');
       if (yours && yours.k === 'yours') why[chosen] = yours.text;
     }
-    answer = <Choices options={opts} chosen={chosen} correct={opts.indexOf(solution) >= 0 ? opts.indexOf(solution) : null} revealed={!!fb} onPick={pick} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
+    answer = (
+      <Choices
+        options={opts}
+        chosen={chosen}
+        correct={opts.indexOf(solution) >= 0 ? opts.indexOf(solution) : null}
+        revealed={!!fb}
+        onPick={pick}
+        lang="en"
+        collapse={profile === 'touch'}
+        why={why}
+        label={t('trChoicesLabel')}
+        testId="choices"
+      />
+    );
   } else if (type === 'meaning' && task.x?.kind === 'meaning') {
     const x = task.x;
     prompt = (
@@ -866,7 +1000,21 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const yours = model.lines.find((l) => l.k === 'yours');
       if (yours && yours.k === 'yours') why[chosen] = yours.text;
     }
-    answer = <Choices options={[x.a, x.b, t('gxMeaningBoth')]} langs={['en', 'en', lang]} chosen={chosen} correct={correctIdx >= 0 ? correctIdx : null} revealed={!!fb} onPick={pick} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
+    answer = (
+      <Choices
+        options={[x.a, x.b, t('gxMeaningBoth')]}
+        langs={['en', 'en', lang]}
+        chosen={chosen}
+        correct={correctIdx >= 0 ? correctIdx : null}
+        revealed={!!fb}
+        onPick={pick}
+        lang="en"
+        collapse={profile === 'touch'}
+        why={why}
+        label={t('trChoicesLabel')}
+        testId="choices"
+      />
+    );
   } else if (type === 'gap') {
     prompt = (
       <>
@@ -911,7 +1059,20 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       const marks = markSpan ? [{ span: markSpan, tone: fb.verdict === 'correct' && fixText ? ('ok' as const) : ('wrong' as const), ...(fixText ? { fix: fixText } : {}) }] : [];
       prompt = <SpotSentence words={words} pick="one" selected={null} onSelect={() => undefined} locked marks={marks} area={area} source={src.source} testId="spot-sentence" />;
     } else if (stage === 'locate') {
-      prompt = <SpotSentence words={words} pick="one" selected={tapped} onSelect={(w) => { attempt.contact(tick(), lookupOpenMs() - lookupAt.current); setTapped(w); }} area={area} source={src.source} testId="spot-sentence" />;
+      prompt = (
+        <SpotSentence
+          words={words}
+          pick="one"
+          selected={tapped}
+          onSelect={(w) => {
+            attempt.contact(tick(), lookupOpenMs() - lookupAt.current);
+            setTapped(w);
+          }}
+          area={area}
+          source={src.source}
+          testId="spot-sentence"
+        />
+      );
     } else if (errSpan) {
       const before = words.slice(0, errSpan[0]).join(' ');
       const after = words.slice(errSpan[1] + 1).join(' ');
@@ -927,14 +1088,38 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       );
     } else prompt = null;
   } else if (type === 'correct') {
-    prompt = <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} reveal={sentReveal} testId="correct-input" />;
+    prompt = (
+      <SentenceInput
+        mode="free"
+        value={text}
+        onChange={(v) => {
+          if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
+          setText(v);
+        }}
+        onSubmit={primaryGo}
+        disabled={!!fb || fit.busy}
+        reveal={sentReveal}
+        testId="correct-input"
+      />
+    );
   } else {
     // Umformung ohne Lücke (ganzer Satz): Auftragssatz oben, leeres Feld darunter.
     prompt = (
       <div className="flex flex-col gap-3">
         <EnglishText as="p" text={task.prompt} {...src} testId="transform-from" />
         {task.hint && !task.prompt.includes(task.hint) && <Cue hint={task.hint} />}
-        <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb || fit.busy} reveal={sentReveal} testId="correct-input" />
+        <SentenceInput
+          mode="free"
+          value={text}
+          onChange={(v) => {
+            if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
+            setText(v);
+          }}
+          onSubmit={primaryGo}
+          disabled={!!fb || fit.busy}
+          reveal={sentReveal}
+          testId="correct-input"
+        />
       </div>
     );
   }
@@ -942,10 +1127,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     answer = (
       <>
         {answer}
-        <FitSlow
-          phase={fit.phase}
-          onSkip={fit.skip}
-        />
+        <FitSlow phase={fit.phase} onSkip={fit.skip} />
       </>
     );
   }
@@ -961,6 +1143,8 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   // ------------------------------------------------------------------ Rückmeldung
 
   let feedback: ShellFeedback | null = null;
+  // Kern (Vorschau 9pdpfT8E): bei Fehler die Erklärung nummeriert – links „1 · Was war falsch“, rechts bzw. darunter Regel · Falle · Beispiel.
+  let stepsSide: ReactNode = null;
   if (fb && model) {
     const c = fb.check;
     const why = shortWhy(task.why ? (lang === 'de' ? task.why.ok.de : task.why.ok.en) : lang === 'de' ? task.expl.de : task.expl.en);
@@ -972,39 +1156,44 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const sub: string | null = lesson
       ? t('ttLessonWhy')
       : fb.dontKnow
-      ? null
-      : fb.override
-        ? t('lrOverridden')
-        : helpedRight
-        ? t('bandRightHelped')
-        : fb.check?.kind === 'other'
-          ? altLine
-          : variantModel
-          ? [t('grVariantSub', { model: variantModel }), fixedCase && kwtKey ? t('grCaseHint', { key: kwtKey }) : null].filter(Boolean).join(' · ')
-          : fixedCase && kwtKey
-          ? t('grCaseHint', { key: kwtKey })
-          : fb.unsure
-          ? t('ttJgUnsureSub')
-          : fb.altWhy
-          ? t('ttJgAltErr')
-          : c?.kind === 'uk' && c.us
-            ? t('trUsHint', { us: c.us })
-            : c?.kind === 'contraction'
-              ? t('grVerdictContraction')
-              : c?.kind === 'alt'
-                ? t('grVerdictAlt')
-                : c?.kind === 'typo'
-                  ? t('trVerdictTypo')
-                  : c?.kind === 'form'
-                    ? t('grVerdictForm')
-                    : c?.kind === 'key'
-                      ? t('gxKwtKeyMissing')
-                      : c?.kind === 'words'
-                        ? t('gxKwtWordCount')
-                        : null;
+        ? null
+        : fb.override
+          ? t('lrOverridden')
+          : helpedRight
+            ? t('bandRightHelped')
+            : fb.check?.kind === 'other'
+              ? altLine
+              : variantModel
+                ? [t('grVariantSub', { model: variantModel }), fixedCase && kwtKey ? t('grCaseHint', { key: kwtKey }) : null].filter(Boolean).join(' · ')
+                : fixedCase && kwtKey
+                  ? t('grCaseHint', { key: kwtKey })
+                  : fb.unsure
+                    ? t('ttJgUnsureSub')
+                    : fb.altWhy
+                      ? t('ttJgAltErr')
+                      : c?.kind === 'uk' && c.us
+                        ? t('trUsHint', { us: c.us })
+                        : c?.kind === 'contraction'
+                          ? t('grVerdictContraction')
+                          : c?.kind === 'alt'
+                            ? t('grVerdictAlt')
+                            : c?.kind === 'typo'
+                              ? t('trVerdictTypo')
+                              : c?.kind === 'form'
+                                ? t('grVerdictForm')
+                                : c?.kind === 'key'
+                                  ? t('gxKwtKeyMissing')
+                                  : c?.kind === 'words'
+                                    ? t('gxKwtWordCount')
+                                    : null;
     // Großpaket G3 (neue Grammatik): bei falsch oder „Weiß ich nicht“ sagt eine Zeile, dass der Satz morgen wiederkommt (Fehlersatz, Box 0).
+    // Kern: die Zeile steht wie in der Vorschau unter der Karte (`nextIn`), nicht mehr im Untertitel.
     const comeBack = mod && !noHelp && !fb.override && !lesson && (fb.verdict === 'wrong' || fb.dontKnow) ? t('gmComesBack') : null;
-    const subLine = [sub, comeBack].filter((x): x is string => !!x).join(' · ') || null;
+    const subLine = sub;
+    const hasYours = model.lines.some((l) => l.k === 'yours' && !!l.given.trim());
+    const stepsMode =
+      mod && !findTask && !lesson && !fb.override && variantModel === null && c?.kind !== 'other' && (fb.verdict === 'wrong' || fb.dontKnow) && (!!pattern || hasRule(task.topic, lang));
+    const stepWrong = t('kernStep', { n: 1, label: t('kernStepWrong') });
     // Vergleich nur, wo Lücke und Optionen die Lösung nicht schon zeigen (§5.2).
     let comparison: ShellFeedback['comparison'] = null;
     if (fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
@@ -1053,26 +1242,28 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     const rawAction: FeedbackAction = composed?.action ?? 'next';
     const action: FeedbackAction = held ? 'next' : rawAction;
     // Nur EIN KI-Einstieg je Karte (Kap. 15): steht „Claude fragen“ da (oder läuft „Sicher?“), gibt es „Erklär mir meine Antwort“ erst danach.
-    const tutor = fb.dontKnow || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
-      <TutorButton
-        taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
-        vars={{
-          topic: task.topic,
-          prompt: mx ? `${mx.q.en}\nA: ${mx.a}\nB: ${mx.b}` : findTask && fixedFull ? `Find the mistake in this sentence: ${task.prompt}` : task.prompt,
-          answer: mx ? meaningText(solution) : findTask && fixedFull ? fixedFull : solution,
-          given: mx ? meaningText(pickedKey) : findTask && fixedFull ? findGiven() : (fb.picked ?? fb.given),
-          pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null,
-        }}
-        pattern={pattern}
-        store={{ kind: 'grammar', topic: task.topic, q: task.prompt }}
-        onRight={menu.override}
-        onRewrite={menu.copyOnce}
-        // Von selbst nur bei klar falscher, getippter oder gewählter Antwort; nie bei „Fast“/Tippfehler und nie in Tests ohne Hilfe (Prüfung 02.11.).
-        auto={!noHelp && fb.verdict === 'wrong'}
-        shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
-        compact={mod}
-      />
-    );
+    const tutor =
+      fb.dontKnow || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
+        <TutorButton
+          taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
+          vars={{
+            topic: task.topic,
+            prompt: mx ? `${mx.q.en}\nA: ${mx.a}\nB: ${mx.b}` : findTask && fixedFull ? `Find the mistake in this sentence: ${task.prompt}` : task.prompt,
+            answer: mx ? meaningText(solution) : findTask && fixedFull ? fixedFull : solution,
+            given: mx ? meaningText(pickedKey) : findTask && fixedFull ? findGiven() : (fb.picked ?? fb.given),
+            pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null,
+          }}
+          pattern={pattern}
+          store={{ kind: 'grammar', topic: task.topic, q: task.prompt }}
+          onRight={menu.override}
+          onRewrite={menu.copyOnce}
+          // Von selbst nur bei klar falscher, getippter oder gewählter Antwort; nie bei „Fast“/Tippfehler und nie in Tests ohne Hilfe (Prüfung 02.11.).
+          auto={!noHelp && fb.verdict === 'wrong'}
+          shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
+          compact={mod}
+          label={stepsMode && !hasYours ? stepWrong : null}
+        />
+      );
     // Rückmeldung 7 (Fehler finden): Kopf „Richtig erkannt“ / „Nicht ganz“ mit dem getippten Wort, darunter der korrigierte Satz mit sichtbarer
     // Änderung (auch bei richtiger Antwort und „Weiß ich nicht“); die Muster-Fachsprache unter „Mehr“, das Kontrastbeispiel offen.
     let find: Partial<ShellFeedback> = {};
@@ -1085,7 +1276,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       find = {
         ...(h.title ? { title: h.title } : {}),
         // Andere gültige Stelle (`errAlt`): „Du hast … getippt“ entfällt, die Zeile sagt schon, was passiert ist.
-        sub: [sub, fb.altWhy ? null : h.sub, comeBack].filter((x): x is string => !!x).join(' · ') || null,
+        sub: [sub, fb.altWhy ? null : h.sub].filter((x): x is string => !!x).join(' · ') || null,
         fold: ['pattern'],
         unfold: ['contrast'],
       };
@@ -1114,17 +1305,52 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     );
     // Höchstens drei Erklärblöcke bei „Noch nicht“ (Deine Antwort · Muster · Beispiel): „Deine Antwort“ sagt schon, warum – die allgemeine
     // Begründung steht dann unter „Mehr“. Sonst steht die Formel höchstens einmal: steckt sie schon in der Begründung, entfällt das Etikett.
-    const hasYours = model.lines.some((l) => l.k === 'yours' && !!l.given.trim());
-    const foldWhy = fb.verdict === 'wrong' && !fb.override && !fb.dontKnow && hasYours && !lesson && !findTask;
+    const foldWhy = !stepsMode && fb.verdict === 'wrong' && !fb.override && !fb.dontKnow && hasYours && !lesson && !findTask;
     const formula = pattern ? (lang === 'de' ? pattern.form.de : pattern.form.en).toLowerCase() : '';
     const whyHasFormula = !!formula && model.lines.some((l) => l.k === 'why' && l.text.toLowerCase().includes(formula));
     const shown: ExplanationModel = {
       ...model,
       lines: model.lines.map((l) =>
         // „Richtig, weil“ + „Richtig: …“ wäre doppelt: der Vorspann der Aufgabenbegründung fällt weg.
-        l.k === 'why' ? { ...l, text: l.text.replace(/^(?:richtig|right|correct)\s*:\s*/i, '').replace(/^./, (x) => x.toUpperCase()) } : l.k === 'pattern' && whyHasFormula && !foldWhy ? { ...l, formula: null } : l,
+        l.k === 'why'
+          ? { ...l, text: l.text.replace(/^(?:richtig|right|correct)\s*:\s*/i, '').replace(/^./, (x) => x.toUpperCase()) }
+          : l.k === 'pattern' && whyHasFormula && !foldWhy
+            ? { ...l, formula: null }
+            : l,
       ),
     };
+    let explanation: ExplanationModel = shown;
+    let whyTitle: string | null = null;
+    if (stepsMode) {
+      const patLine = shown.lines.find((l): l is Extract<ExplainLine, { k: 'pattern' }> => l.k === 'pattern');
+      const whyLine = shown.lines.find((l): l is Extract<ExplainLine, { k: 'why' }> => l.k === 'why');
+      const mistakeLine = shown.lines.find((l): l is Extract<ExplainLine, { k: 'mistake' }> => l.k === 'mistake');
+      // Links bleibt nur „Was war falsch“ (deine Antwort) – Regel, Falle und Beispiel stehen nummeriert in der Spalte, nie doppelt.
+      explanation = {
+        ...shown,
+        lines: shown.lines.filter((l) => l.k === 'yours' || l.k === 'contrast' || l.k === 'note').map((l) => (l.k === 'yours' ? { k: 'yours' as const, given: l.given, text: l.text } : l)),
+        examples: [],
+      };
+      whyTitle = hasYours ? stepWrong : null;
+      stepsSide = (
+        <RuleSteps
+          topic={task.topic}
+          start={hasYours || tutor ? 2 : 1}
+          pattern={patLine ? { name: patLine.name, formula: patLine.formula } : null}
+          why={whyLine?.text ?? null}
+          mistake={
+            mistakeLine
+              ? { bad: mistakeLine.bad, good: mistakeLine.good, cause: mistakeLine.cause }
+              : pattern
+                ? { bad: pattern.trap.bad, good: pattern.trap.good, cause: lang === 'de' ? pattern.trap.cause.de : pattern.trap.cause.en }
+                : null
+          }
+          example={model.examples[0] ?? (pattern?.ex[0] ? { en: pattern.ex[0].en, de: pattern.ex[0].de ?? null } : null)}
+          signals={pattern?.signals ?? null}
+          onWhole={() => setSheet(true)}
+        />
+      );
+    }
     const unsureHead = fb.unsure && !fb.override && fb.verdict === 'near' && !lesson;
     feedback = {
       verdict: rv,
@@ -1133,7 +1359,9 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       comparison,
       ...(choiceLine ? { choice: choiceLine } : {}),
       ...(helped ? { helped: true } : {}),
-      explanation: shown,
+      explanation,
+      ...(whyTitle ? { whyTitle } : {}),
+      ...(comeBack ? { nextIn: comeBack } : {}),
       depth,
       menu,
       tutor,
@@ -1157,7 +1385,17 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
   }
 
   const kindLabel = t(findTask ? 'gxKind_find' : type === 'kwt' ? 'gxKind_kwt' : type === 'meaning' ? 'gxKind_meaning' : (`grKind_${type}` as MessageKey));
-  const taskKey: MessageKey = findTask ? (stage === 'locate' ? 'gxTask_find1' : 'gxTask_find2') : type === 'kwt' ? 'gxTask_kwt' : type === 'meaning' ? 'gxTask_meaning' : type === 'transform' && whole ? 'grTask_transformWhole' : (`grTask_${type}` as MessageKey);
+  const taskKey: MessageKey = findTask
+    ? stage === 'locate'
+      ? 'gxTask_find1'
+      : 'gxTask_find2'
+    : type === 'kwt'
+      ? 'gxTask_kwt'
+      : type === 'meaning'
+        ? 'gxTask_meaning'
+        : type === 'transform' && whole
+          ? 'grTask_transformWhole'
+          : (`grTask_${type}` as MessageKey);
   const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
   // Vor dem Prüfen nur ein neutraler Mustername ohne Formel (UX-Prüfung 19.10.2026: das ⓘ verrät die Lösung nicht).
   const patName = pattern ? (lang === 'de' ? pattern.name.de : pattern.name.en) : null;
@@ -1168,8 +1406,12 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
 
   const primary = fb
     ? { label: t('exNext'), onClick: () => next(), testId: 'next' }
-    : { label: fit.busy ? t('exChecking') : t('exCheck'), onClick: () => submit(), testId: 'check', disabled: fit.busy || (choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false) };
-
+    : {
+        label: fit.busy ? t('exChecking') : t('exCheck'),
+        onClick: () => submit(),
+        testId: 'check',
+        disabled: fit.busy || (choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false),
+      };
 
   return (
     <div
@@ -1191,7 +1433,17 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
     >
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
-        status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge, ...(badgeTone ? { badgeTone } : {}), ...(badgeTestId ? { badgeTestId } : {}), noInfo: noHelp }}
+        status={{
+          area: 'grammar',
+          state,
+          kindLabel,
+          topic: learnLine.topic,
+          pattern: learnLine.pattern,
+          badge,
+          ...(badgeTone ? { badgeTone } : {}),
+          ...(badgeTestId ? { badgeTestId } : {}),
+          noInfo: noHelp,
+        }}
         task={{ text: taskText, purpose: t(purposeKey), reason: reason ? () => reason(!!fb) : null }}
         // UX-Prüfung W1/W4: keine Regelkarte vor dem Prüfen (verrät die Lösung) – weder am Handy noch rechts am Laptop; die Regel gibt es als Tipp.
         aid={null}
@@ -1202,7 +1454,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         primary={primary}
         feedback={feedback}
         // D3 V-UEBUNG (Vorschau L3): nach dem Prüfen steht am Laptop die Karte „Regel“ in der Spalte (vorher nie, s. o.).
-        side={fb && hasRule(task.topic, lang) ? <RuleSide topic={task.topic} onWhole={() => setSheet(true)} /> : null}
+        side={stepsSide ?? (fb && hasRule(task.topic, lang) ? <RuleSide topic={task.topic} onWhole={() => setSheet(true)} /> : null)}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
       <ReportSheet
@@ -1224,7 +1476,16 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           // G8 (LS-B1): ein gemeldeter eigener Satz (`app/repair`) kommt nirgends wieder (Zähler, „Fehler korrigieren“), wie „Kann ich nicht nachvollziehen“.
           if (task.rep) void markUnclear({ store: 'repair', id: task.rep });
           // G6: Spur im Tagesprotokoll (`flags`, zählt nirgends) mit Satz, Antwort, Lösung und Grund für die wöchentliche Inhaltsprüfung.
-          void recordFlag(day, { t: Date.now(), id: `gr:${task.key}`, topic: task.topic, q: task.prompt, given: fb ? (fb.dontKnow ? '?' : (fb.picked ?? fb.given)) : '', ans: task.answer, r: info.reason, ...(counted && fb ? { c: true as const } : {}) });
+          void recordFlag(day, {
+            t: Date.now(),
+            id: `gr:${task.key}`,
+            topic: task.topic,
+            q: task.prompt,
+            given: fb ? (fb.dontKnow ? '?' : (fb.picked ?? fb.given)) : '',
+            ans: task.answer,
+            r: info.reason,
+            ...(counted && fb ? { c: true as const } : {}),
+          });
         }}
       />
       {film && <FilmSheet film={film} open={filmOpen} onClose={() => setFilmOpen(false)} />}
@@ -1240,14 +1501,19 @@ function tighten(m: ExplanationModel): ExplanationModel {
   const hasYours = m.lines.some((l) => l.k === 'yours');
   const w = (x: string | null | undefined): number => (x ? x.split(/\s+/).filter(Boolean).length : 0);
   // Offene Wörter ohne den typischen Fehler: Muster, „Deine Antwort“, Warum und das eine offene Beispiel.
-  const base =
-    m.lines.reduce((n, l) => n + (l.k === 'pattern' ? w(l.name) + w(l.formula) : l.k === 'yours' ? w(l.given) + w(l.text) : l.k === 'why' ? w(l.text) : 0), 0) + w(m.examples[0]?.en);
+  const base = m.lines.reduce((n, l) => n + (l.k === 'pattern' ? w(l.name) + w(l.formula) : l.k === 'yours' ? w(l.given) + w(l.text) : l.k === 'why' ? w(l.text) : 0), 0) + w(m.examples[0]?.en);
   const lines = m.lines.flatMap((l): ExplanationModel['lines'] => {
     if (l.k !== 'mistake') return [l];
     const cause = nonEmpty(l.cause) ? l.cause : '';
     const sentences = w(l.bad) + w(l.good);
     // Passt der Fehler mit seinen zwei Sätzen noch in die 45 Wörter, bleibt er offen (ohne Ursache); sonst steht er unter „Mehr“.
-    if (!hasYours && base + sentences <= 45) return cause ? [{ k: 'mistake', bad: l.bad, good: l.good, cause: null }, { k: 'note', text: cause }] : [l];
+    if (!hasYours && base + sentences <= 45)
+      return cause
+        ? [
+            { k: 'mistake', bad: l.bad, good: l.good, cause: null },
+            { k: 'note', text: cause },
+          ]
+        : [l];
     return [{ k: 'note', text: `${l.bad} → ${l.good}${cause ? ` · ${cause}` : ''}` }];
   });
   // Die Reihenfolge bleibt: pattern → yours → why → mistake → contrast → note (Notizen zuletzt).
@@ -1278,7 +1544,19 @@ function CopyOnceField({ solution }: { solution: string }) {
   return (
     <label className="flex flex-col gap-1">
       <span className="lx-t-support text-muted">{t('lrCopyLabel')}</span>
-      <input className="lx-field" lang="en" autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck={false} value={value} onChange={(e) => setValue(e.target.value)} data-testid="copy-input" data-state={ok ? 'correct' : undefined} autoFocus />
+      <input
+        className="lx-field"
+        lang="en"
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck={false}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        data-testid="copy-input"
+        data-state={ok ? 'correct' : undefined}
+        autoFocus
+      />
       {ok && (
         <span className="lx-t-support text-ok-text" data-testid="copy-ok">
           {t('lrCopyOk')}
@@ -1287,4 +1565,3 @@ function CopyOnceField({ solution }: { solution: string }) {
     </label>
   );
 }
-

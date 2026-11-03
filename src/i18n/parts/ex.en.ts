@@ -3,7 +3,7 @@
 export const exEn = {
   exVerdictOk: 'Correct',
   exVerdictNear: 'Almost right',
-  exVerdictWrong: 'Not yet',
+  exVerdictWrong: 'Not right yet',
   exVerdictDontKnow: 'No problem – here’s how it\u00a0works',
   exVerdictUnchecked: 'Saved without checking',
   exStateNew: 'New',

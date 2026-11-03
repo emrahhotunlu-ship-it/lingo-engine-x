@@ -20,7 +20,10 @@ async function toGap(page: Page): Promise<void> {
   throw new Error('keine Lückenaufgabe in der Runde');
 }
 
-for (const vp of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
+for (const vp of [
+  { width: 390, height: 844 },
+  { width: 1440, height: 900 },
+]) {
   test(`Lücke: eine richtige, aber andere Antwort wird „Auch richtig“ – nie rot (${vp.width})`, async ({ page }) => {
     await page.setViewportSize(vp);
     const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': BEGUN } } });
@@ -33,7 +36,7 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
     await expect(verdict).toHaveAttribute('data-verdict', 'ok');
     await expect(verdict).toContainText('Auch richtig');
     await expect(page.getByTestId('verdict-sub')).toContainText('Geübt wird hier:');
-    await expect(page.getByText('Noch nicht', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('Noch nicht richtig', { exact: true })).toHaveCount(0);
     await expect(page.getByTestId('gap')).toHaveAttribute('data-state', 'correct');
     // Der Hinweis „zählt nicht als Fehler“ steht sichtbar (nicht unter „Mehr“).
     await expect(page.getByTestId('explanation')).toContainText('Zählt nicht als Fehler');

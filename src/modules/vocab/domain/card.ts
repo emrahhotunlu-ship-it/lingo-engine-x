@@ -63,7 +63,10 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
   const push = (raw: string, own: unknown, src: Sent['src'], anchor = false) => {
     // Inhalte markieren das Gesuchte mit eckigen Klammern („She [achieved] her goal“): gezeigt wird der Satz ohne sie (UX-Prüfung V3 Nr. 2).
     // Die Schlüssel ändern sich dadurch nicht (`exampleKey` entfernt Klammern ohnehin).
-    const en = raw.replace(/\[([^\]]*)\]/g, '$1').replace(/\s+/g, ' ').trim();
+    const en = raw
+      .replace(/\[([^\]]*)\]/g, '$1')
+      .replace(/\s+/g, ' ')
+      .trim();
     const k = exampleKey(en);
     if (!k || seen.has(k)) return;
     seen.add(k);
@@ -108,6 +111,18 @@ export function headWords(head: string): string[] {
     .replace(/^to /, '')
     .split(' ')
     .filter((w) => w && !PLACEHOLDER.has(w));
+}
+
+/**
+ * Stichwort zum Zeigen (Lösung, Nachtippen): wie geschrieben, nur ohne „to“ und Platzhalter. Nur wenn das Ergebnis genau dieselben
+ * Wörter ergibt wie `headWords`, sonst die geprüfte Grundform – so bleibt Groß-/Kleinschreibung und „I'd“ erhalten.
+ */
+export function headShown(head: string): string {
+  const words = headWords(head).join(' ');
+  const toks = head.trim().split(/\s+/);
+  if (toks[0]?.toLowerCase() === 'to') toks.shift();
+  const shown = toks.filter((w) => !PLACEHOLDER.has(w.toLowerCase().replace(/^[([]|[)\],;:]$/g, ''))).join(' ');
+  return shown && normalize(shown) === words ? shown : words;
 }
 
 type Tok = { w: string; s: number; e: number };
@@ -159,7 +174,12 @@ export function locateGap(en: string, head: string, opts: { pv?: boolean } = {})
     const [verb, part] = hw as [string, string];
     for (let i = 0; i < toks.length; i++) {
       if (!matchesWord(toks[i]!.w, verb)) continue;
-      for (let j = i + 2; j <= Math.min(toks.length - 1, i + 1 + SPLIT_MAX_BETWEEN); j++) if (toks[j]!.w === part) return build(en, toks, [[i, i], [j, j]]);
+      for (let j = i + 2; j <= Math.min(toks.length - 1, i + 1 + SPLIT_MAX_BETWEEN); j++)
+        if (toks[j]!.w === part)
+          return build(en, toks, [
+            [i, i],
+            [j, j],
+          ]);
     }
   }
   return null;
@@ -193,7 +213,12 @@ export function chooseSentence(lex: Lex, usable: readonly CardSentence[], day: s
   const anchor = usable.find((u) => u.sent.key === 'a');
   if (o.anchorOnly && anchor) return anchor;
   const pool = o.avoid && usable.length > 1 ? usable.filter((u) => u.sent.key !== o.avoid) : usable;
-  const key = pickSentence(lex, pool.map((u) => u.sent.key), day, { fresh: !!o.fresh });
+  const key = pickSentence(
+    lex,
+    pool.map((u) => u.sent.key),
+    day,
+    { fresh: !!o.fresh },
+  );
   return pool.find((u) => u.sent.key === key) ?? pool[0] ?? null;
 }
 

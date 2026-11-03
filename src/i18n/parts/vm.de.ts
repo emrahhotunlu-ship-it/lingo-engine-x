@@ -10,7 +10,7 @@ export const vmDe = {
   vmVerdict_spell: 'Schreibweise',
   vmVerdict_evade: 'Geht – genauer: {answer}',
   vmVerdict_colloc: 'Wortpartner falsch',
-  vmVerdict_notYet: 'Noch nicht',
+  vmVerdict_notYet: 'Noch nicht richtig',
   vmVerdict_dunno: 'Lösung',
 
   // Lösungszeile
@@ -638,7 +638,7 @@ export const vmDe = {
   // Großpaket B3: Reiter Wörter im neuen Aussehen.
   vmWhPracticeT: "Wörter üben",
   vmWhPracticeSub: "Die Wörter von heute · zählt zum Tagesziel",
-  vmWhPracticeSubDone: "Mehr üben ist freiwillig und zählt als Extra",
+  vmWhPracticeSubDone: "Weiter üben ist freiwillig und zählt als Extra",
   vmWhGo: "Üben",
   vmWhMoreBtn: "Noch 5 Wörter",
   vmWhSearch: "Wort suchen",
@@ -663,7 +663,7 @@ export const vmDe = {
   vmWhEmpty: "In dieser Auswahl gibt es noch keine Wörter.",
   vmWhNoHit: "Kein Wort passt zu „{q}“.",
   vmWhShowMore: "Mehr zeigen (noch {n})",
-  vmWhMoreHead: "Mehr üben, freiwillig",
+  vmWhMoreHead: "Extra-Runden, freiwillig",
   vmWhFree: "Freies Üben",
   vmWhFreeSub: "Bis zu 20 Wörter, die als Nächstes dran wären · Extra",
   vmWhEvening: "Heute neu, noch einmal",

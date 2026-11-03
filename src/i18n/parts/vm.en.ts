@@ -10,7 +10,7 @@ export const vmEn = {
   vmVerdict_spell: 'Spelling',
   vmVerdict_evade: 'Works – more precise: {answer}',
   vmVerdict_colloc: 'Wrong word partner',
-  vmVerdict_notYet: 'Not yet',
+  vmVerdict_notYet: 'Not right yet',
   vmVerdict_dunno: "Here's the answer",
 
   // Solution line

@@ -342,4 +342,40 @@ describe('LearnRun', () => {
     await s.run.settled();
     expect(s.vlog()).toBe(1);
   });
+
+  it('übernommenes Wort zum ersten Mal hier (K10): erst die Einführungskarte ohne Buchung, dann die Abfrage; einmal je Runde', async () => {
+    const lex = learned(T0 - 10 * D);
+    lex.mig = { t: T0 - D, from: 'srs1', h: 2, full: 1 };
+    const s = setup(lex);
+    await s.start();
+    const v = s.run.get();
+    expect(v.k).toBe('card');
+    if (v.k !== 'card') return;
+    expect(v.kind).toBe('answer');
+    expect(v.teach?.head).toBe('scope');
+    s.run.teachSeen();
+    const w = s.run.get();
+    expect(w).toMatchObject({ k: 'card', kind: 'answer', n: v.n, teach: null });
+    expect(w.k === 'card' && w.task).toBe(v.task);
+    await s.run.settled();
+    expect(s.vlog()).toBe(0);
+    if (w.k !== 'card') return;
+    s.run.check(w.card.answer, { ms: 5000, fk: 1500 });
+    s.run.next();
+    await s.run.settled();
+    expect(s.vlog()).toBe(1);
+  });
+
+  it('K10: nicht bei Wörtern ohne Umstellung und nicht, wenn das Wort nach der Umstellung schon geübt wurde', async () => {
+    const a = setup(learned(T0 - 10 * D));
+    await a.start();
+    const va = a.run.get();
+    expect(va.k === 'card' && va.teach).toBeFalsy();
+    const lex = learned(T0 - 10 * D);
+    lex.mig = { t: T0 - 11 * D, from: 'srs1', h: 0, full: 1 };
+    const b = setup(lex);
+    await b.start();
+    const vb = b.run.get();
+    expect(vb.k === 'card' && vb.teach).toBeFalsy();
+  });
 });

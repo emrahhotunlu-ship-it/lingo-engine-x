@@ -1,7 +1,7 @@
 import { leechTreatment } from './leech';
 import { addDays, dayKey } from '../shared';
 import { type Band, bandOf } from './band';
-import { type CardSentence, chooseSentence, cueOf, headWords, type Pos, posOf, sentencesOf, targetOf, type Teach, tipOf, usableSentences } from './card';
+import { type CardSentence, chooseSentence, cueOf, headShown, type Pos, posOf, sentencesOf, targetOf, type Teach, tipOf, usableSentences } from './card';
 import { type Catalog, loadByDay } from './catalog';
 import { type Check, type CheckDict, checkAnswer, damerau, type Target } from './check';
 import { FORM_SPEC } from './grade';
@@ -30,6 +30,8 @@ export type CardModel = {
   form: Form;
   head: string;
   de: string;
+  /** Englische Erklärung aus dem Wort-Dokument (`def`), leer ohne. Nur Anzeige (Einführungs- und Wortkarte). */
+  def?: string;
   pos: Pos | null;
   teach: Teach;
   sentence: CardSentence | null;
@@ -55,7 +57,7 @@ const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
 export const headOf = (path: string, doc: Doc): string => str(path.startsWith('chunk/') ? doc.en : doc.word);
 
 /** Grundform zum Tippen ohne Satz (*to rely on sth* → *rely on*). */
-export const baseAnswer = (head: string): string => headWords(head).join(' ') || head.trim();
+export const baseAnswer = (head: string): string => headShown(head) || head.trim();
 
 /**
  * Was zeigt die Karte zu dieser Aufgabe? `null` = diese Form hat noch keine Karte (die Runde geht weiter, ohne zu buchen).
@@ -72,7 +74,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   const { ok: usable } = usableSentences(sentencesOf(doc, x.nowMs, x.sbGate), head, lex.k === 'pv');
   // Offener Kontrast bei einer fälligen Abfrage (die Kontrastkarte entfällt dann): das Band nennt die Falle trotzdem.
   const open = lex.ct ? { contrast: { w: lex.ct.w ?? null, ff: teach.ff ?? null, pair: teach.pair ?? null } } : {};
-  const base = { path: task.path, head, de, pos, teach, moreSentences: usable.length > 1, col: doc.col, ...open };
+  const base = { path: task.path, head, de, def: str(doc.def), pos, teach, moreSentences: usable.length > 1, col: doc.col, ...open };
   const spec = FORM_SPEC[task.form];
   const noSentence = (form: Form, mode: CardMode): CardModel => {
     const answer = baseAnswer(head);
@@ -90,7 +92,16 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   if (task.intro) {
     const s = chooseSentence(lex, usable, day, { anchorOnly: true });
     if (!s) return { ...noSentence('intro', 'intro'), cue: cueOf({ ...lex, lv: 1 }, de, teach) };
-    return { ...base, mode: 'intro', form: 'intro', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: cueOf({ ...lex, lv: 1 }, de, teach), firstLetters: false };
+    return {
+      ...base,
+      mode: 'intro',
+      form: 'intro',
+      sentence: s,
+      answer: s.gap.answer,
+      target: targetOf(lex, s.gap.answer, pos, teach, s.gap),
+      cue: cueOf({ ...lex, lv: 1 }, de, teach),
+      firstLetters: false,
+    };
   }
   // Anki-Modus (S6b-3): Vorderseite das Wort, markiert im Satz (ohne nutzbaren Satz allein); Rückseite Bedeutung und Warum.
   if (task.form === 'flip') {
@@ -272,7 +283,18 @@ export function isDraft(v: unknown): v is Draft {
   const kindOk = d.kind === 'answer' || d.kind === 'intro' || d.kind === 'probe' || (d.kind === 'use' && isUseInput(d.u));
   // Aufdecken bucht nur mit gültigem Selbsturteil 1–4 (sonst gäbe gradeOf eine beliebige Note weiter).
   const selfOk = !a || a.form !== 'flip' || (typeof a.self === 'number' && [1, 2, 3, 4].includes(a.self));
-  return d.v === 1 && kindOk && selfOk && typeof d.path === 'string' && /^(vocab|chunk)\//.test(d.path) && typeof d.planned === 'boolean' && !!a && typeof a.t === 'number' && typeof a.form === 'string' && typeof a.outcome === 'string';
+  return (
+    d.v === 1 &&
+    kindOk &&
+    selfOk &&
+    typeof d.path === 'string' &&
+    /^(vocab|chunk)\//.test(d.path) &&
+    typeof d.planned === 'boolean' &&
+    !!a &&
+    typeof a.t === 'number' &&
+    typeof a.form === 'string' &&
+    typeof a.outcome === 'string'
+  );
 }
 
 /** Muss der Entwurf noch gebucht werden? Antwort/Probe: das Lexem kennt diese Zeit noch nicht (`sync < t`); Einführung: noch nicht eingeführt. */

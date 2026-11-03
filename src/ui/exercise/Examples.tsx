@@ -54,8 +54,11 @@ export function Examples({
   area = 'trainer',
   onFoldChange,
   more,
+  label = true,
 }: {
   items: readonly ExplainExample[];
+  /** `false`: ohne eigene Überschrift „Beispiel“ (der Aufrufer hat schon eine). */
+  label?: boolean;
   open: number;
   area?: WordTapArea;
   onFoldChange?: (open: boolean) => void;
@@ -104,7 +107,7 @@ export function Examples({
     <div className="lx-t-support flex flex-col gap-1" data-testid="examples">
       {shown.length > 0 && (
         <>
-          <p className="lx-t-label">{t('exExampleLabel')}</p>
+          {label && <p className="lx-t-label">{t('exExampleLabel')}</p>}
           <ul className="flex flex-col gap-1.5">
             {shown.map((ex) => (
               <ExampleItem key={ex.en} ex={ex} area={area} />
