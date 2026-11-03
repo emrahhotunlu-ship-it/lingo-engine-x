@@ -27,7 +27,8 @@ const PRACTICE_SIZE = 10;
 /** Sichtbare Zeilen auf Heute (Vorschau: höchstens drei). */
 export const MORE_MAX = 3;
 
-export type ExtraLine = { id: string; icon: IconName; label: string; sub: string; run: () => void };
+/** `tile` = kurze Beschriftung für die Kacheln auf Heute (Kern e, Vorschau „Sprechen · Rollenspiel“). */
+export type ExtraLine = { id: string; icon: IconName; label: string; sub: string; tile: [string, string]; run: () => void };
 
 /** Die Angebote von heute in fester Reihenfolge. `done`: Pflicht erledigt („Wörter üben“ steht dann vorn). */
 export function useExtraLines(today: string, done: boolean, before: () => void = () => undefined): ExtraLine[] {
@@ -48,6 +49,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
           icon: 'cards',
           label: t('vhWordsPractice'),
           sub: t('vhWordsPracticeSub', { n: due }),
+          tile: [t('kernTileWords'), t('kernTileWordsSub', { n: due })],
           run: () => {
             before();
             startExtra(api, { deck: 'all', size: PRACTICE_SIZE, label: t('vhWordsPractice') });
@@ -65,6 +67,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
         icon: 'refresh',
         label: t('hxExtraWrong'),
         sub: t('hxExtraWrongSub', { n: wrong.length }),
+        tile: [t('kernTileWrong'), t('kernTileWrongSub', { n: wrong.length })],
         run: () => {
           before();
           startExtra(api, { deck: 'all', pick: (c) => keys.has(c.key), allowNew: false, size: Math.min(10, keys.size), label: t('hxExtraWrong') });
@@ -76,9 +79,22 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
       icon: 'mic',
       label: t('hxExtraSpeak'),
       sub: t('hxExtraSpeakSub'),
+      tile: [t('kernTileSpeak'), t('kernTileSpeakSub')],
       run: () => {
         before();
         go({ name: 'speak' });
+      },
+    });
+    // Kern e (Vorschau „Lesen · Artikel des Tages“): Lesen steht wie Sprechen als freiwilliges Angebot auf Heute.
+    out.push({
+      id: 'read',
+      icon: 'book',
+      label: t('shRead'),
+      sub: t('shReadSub'),
+      tile: [t('shRead'), t('kernTileReadSub')],
+      run: () => {
+        before();
+        go({ name: 'read' });
       },
     });
     if (dowOf(today) === 1 && checkAvailable(appProfile, addDays(today, -1)) && Number(obj(appProfile).answers ?? 0) >= 40) {
@@ -87,6 +103,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
         icon: 'target',
         label: t('hxExtraCheck'),
         sub: t('hxExtraCheckSub'),
+        tile: [t('kernTileCheck'), t('kernTileCheckSub')],
         run: () => {
           unlockSpeech();
           before();
@@ -124,18 +141,30 @@ function ExtraSheet({ today, done, onClose }: { today: string; done: boolean; on
 }
 
 /** Zeilen und „Alles anzeigen“ (ohne Trennzeile; die setzt der Aufrufer: Handy Trennzeile, Laptop Abschnitt in der Kontextspalte). */
-export function MoreRows({ today, done, idp = '' }: { today: string; done: boolean; idp?: string }) {
+export function MoreRows({ today, done, idp = '', tiles = false }: { today: string; done: boolean; idp?: string; tiles?: boolean }) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
   const go = useNav((s) => s.go);
   const lines = useExtraLines(today, done);
   return (
-    <div className="lx-vh-more" data-testid={`${idp}more-rows`}>
-      <div>
-        {lines.slice(0, MORE_MAX).map((l) => (
-          <VRow key={l.id} icon={l.icon} title={l.label} sub={l.sub} onClick={l.run} data-testid="more-row" id={`${idp}more-${l.id}`} />
-        ))}
-      </div>
+    <div className="lx-vh-more" data-testid={`${idp}more-rows`} data-tiles={tiles ? '' : undefined}>
+      {tiles ? (
+        // Kern e (Vorschau): ruhige Kacheln „Sprechen · Rollenspiel“ – am Handy zwei nebeneinander, am Monitor untereinander.
+        <div className="lx-kh-tiles">
+          {lines.slice(0, MORE_MAX).map((l) => (
+            <button key={l.id} type="button" className="lx-kh-tile" onClick={l.run} data-testid="more-row" id={`${idp}more-${l.id}`}>
+              <b>{l.tile[0]}</b>
+              <span>{l.tile[1]}</span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div>
+          {lines.slice(0, MORE_MAX).map((l) => (
+            <VRow key={l.id} icon={l.icon} title={l.label} sub={l.sub} onClick={l.run} data-testid="more-row" id={`${idp}more-${l.id}`} />
+          ))}
+        </div>
+      )}
       {/* „Alles anzeigen“ nur, wenn das Blatt wirklich mehr zeigt als die Zeilen hier (sonst stünde dasselbe zweimal da, Kap. 15). */}
       {/* Praxis (Lesen, Sprechen, Satzbau, Schreiben, Kurse) ist seit UX-Neuanfang B kein Reiter mehr, sondern hier erreichbar. */}
       <div className="lx-vh-more-all">
@@ -153,18 +182,15 @@ export function MoreRows({ today, done, idp = '' }: { today: string; done: boole
   );
 }
 
-/** Handy und schmale Laptops: Kopf „Freiwillig · zählt als Extra“ (UX-Neuanfang B) und die Zeilen. */
+/** Handy und schmale Laptops: Kopf „Freiwillig – nur wenn du Zeit hast“ (Kern e, Vorschau) und die Kacheln. */
 export function ExtraRow({ today, done }: { today: string; done: boolean }) {
   const { t } = useT();
   return (
-    <section className="lx-vh-moresec" aria-labelledby="td-more-title">
-      <div className="lx-vh-free-h">
-        <h2 id="td-more-title" className="lx-vh-label">
-          {t('vhFree')}
-        </h2>
-        <span className="lx-vh-meta">{t('vhFreeNote')}</span>
-      </div>
-      <MoreRows today={today} done={done} />
+    <section className="lx-vh-moresec lx-kh-free" aria-labelledby="td-more-title">
+      <h2 id="td-more-title" className="lx-kh-lbl">
+        {t('kernFreeHead')}
+      </h2>
+      <MoreRows today={today} done={done} tiles />
     </section>
   );
 }

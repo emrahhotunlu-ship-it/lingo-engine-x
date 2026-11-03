@@ -13,13 +13,11 @@ import { dutyLabel } from '../learn/ui';
 import { blockName } from '../unit/labels';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
-import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { normGoalMin } from '../../domain/progress/settings';
 import { openSettings } from '../../app/sheets';
-import { dateLabelOf } from './dateLabel';
 import { useStreakWeek } from './TodayWeek';
-import { useMediaQuery } from '../../platform/input';
+import { KernDayCard, KernHello, type KernRow } from './KernDay';
 
 // Die Tageskarte im Design der Vorschau (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1 screens.js:117–176, L1 desk.js:79–106).
 // EIN Aufbau für die echte Karte (`TodayScreen`), das Startbild aus `app/today` (`StartCard`), das Skelett und das Start-Bild in index.html (#lx-boot):
@@ -121,17 +119,18 @@ export function DayBlocks({ rows, prefix, id, open }: { rows: readonly DayRow[];
   const { t } = useT();
   const real = prefix === 'today';
   return (
-    <ul
-      id={id}
-      className="lx-v-statelist lx-v-springopen lx-vh-blocks"
-      aria-label={t('vRingBlocks')}
-      data-testid={real ? 'duties' : 'start-duties'}
-      hidden={!open}
-    >
+    <ul id={id} className="lx-v-statelist lx-v-springopen lx-vh-blocks" aria-label={t('vRingBlocks')} data-testid={real ? 'duties' : 'start-duties'} hidden={!open}>
       {rows.map((r) => {
         const st = r.state === 'done' ? 'done' : r.state === 'now' ? 'run' : 'open';
         return (
-          <li key={r.id} data-testid={real ? 'duty' : 'start-duty'} data-duty={r.id} data-state={r.state === 'done' ? 'done' : 'open'} data-now={r.state === 'now' ? 'true' : undefined} data-min={r.min}>
+          <li
+            key={r.id}
+            data-testid={real ? 'duty' : 'start-duty'}
+            data-duty={r.id}
+            data-state={r.state === 'done' ? 'done' : 'open'}
+            data-now={r.state === 'now' ? 'true' : undefined}
+            data-min={r.min}
+          >
             <span className="lx-v-st" data-state={st} aria-current={st === 'run' ? 'step' : undefined}>
               <span className="lx-v-st-mk" aria-hidden="true">
                 {st === 'done' && <Icon name="check" size={14} />}
@@ -164,121 +163,6 @@ export function DayBlocks({ rows, prefix, id, open }: { rows: readonly DayRow[];
 // darunter die Karte „Dein Tag“ mit den Schritten als sichtbarem Weg (Punkt mit Nummer bzw. Häkchen, Name, Grund, Minuten – kein Knopf,
 // erledigt ist Zustand, Kap. 2 Nr. 2), ein Balken „x von y Min. · Tagesziel“ und EIN Hauptknopf „Los: …“. Echte Karte, Startbild und Skelett
 // teilen diesen Aufbau, damit beim Laden nichts springt.
-
-/** Erledigte Minuten aus Zeilen und Füllung je Schritt (dieselben `fills` wie früher der Ring; nie neu gerechnet). */
-export function doneMinutes(rows: readonly { min: number }[], fills: readonly number[]): number {
-  return Math.round(rows.reduce((a, r, i) => a + r.min * Math.max(0, Math.min(1, fills[i] ?? 0)), 0));
-}
-
-/** Datum und Serie über dem Weg (Vorschau `.hello .row`). Das Datum ist der Lerntag (04:00, `useClock`). */
-export function HelloRow({ foot = false }: { foot?: boolean }) {
-  const { t, lang } = useT();
-  const today = useClock((s) => s.today);
-  const sw = useStreakWeek();
-  // Ab 1.280 px trägt die Wochenliste rechts die Fußzeile (`today-streak`); darunter steht sie hier für Screenreader (früher im Wochenstreifen).
-  const ctxWide = useMediaQuery('(min-width: 1280px)');
-  return (
-    <p className="lx-vh-hello-row">
-      {foot && !ctxWide && sw.foot && (
-        <span className="sr-only" data-testid="today-streak">
-          {sw.foot}
-        </span>
-      )}
-      <span data-testid="hello-date">{dateLabelOf(today, lang)}</span>
-      {sw.streak ? (
-        <span className="lx-v-num" data-testid="hello-streak" data-n={sw.streak}>
-          {sw.streak === 1 ? t('vhStreak1') : t('vhStreak', { n: sw.streak })}
-        </span>
-      ) : null}
-    </p>
-  );
-}
-
-/** „Schritt x von n · ca. m Min.“ zum nächsten offenen Schritt. */
-export function stepMeta(rows: readonly DayRow[], t: T): string | null {
-  const i = rows.findIndex((r) => r.state === 'now');
-  if (i < 0) return null;
-  return t('vhStepOf', { i: i + 1, n: rows.length, min: rows[i]?.min ?? 0 });
-}
-
-/** Die Schritte als Weg (Vorschau `ol.path`). Test-Kennungen wie bisher: `duties`/`duty`/`reason` (Startbild `start-…`). */
-export function DayPath({ rows, prefix }: { rows: readonly DayRow[]; prefix: 'today' | 'start' }) {
-  const { t } = useT();
-  const real = prefix === 'today';
-  return (
-    <ol className="lx-vh-path" aria-label={t('vRingBlocks')} data-testid={real ? 'duties' : 'start-duties'}>
-      {rows.map((r, i) => (
-        <li
-          key={r.id}
-          className="lx-vh-st"
-          data-st={r.state}
-          data-testid={real ? 'duty' : 'start-duty'}
-          data-duty={r.id}
-          data-state={r.state === 'done' ? 'done' : 'open'}
-          data-now={r.state === 'now' ? 'true' : undefined}
-          data-min={r.min}
-          aria-current={r.state === 'now' ? 'step' : undefined}
-        >
-          <span className="lx-vh-dot lx-v-num" aria-hidden="true">
-            {r.state === 'done' ? <Icon name="check" size={16} /> : i + 1}
-          </span>
-          <div className="lx-vh-st-b">
-            <h3 className="lx-vh-st-n">
-              {r.name}
-              <span className="sr-only">
-                {' · '}
-                {t(r.state === 'done' ? 'vStepDone' : r.state === 'now' ? 'vStepRun' : 'vStepOpen')}
-              </span>
-            </h3>
-            {r.state === 'done' ? (
-              <p className="lx-vh-meta">{t('vhStepDone')}</p>
-            ) : r.why ? (
-              <p className="lx-vh-meta">
-                <span data-testid={real ? 'reason' : undefined} data-why={r.whyKey}>
-                  {r.why}
-                </span>
-              </p>
-            ) : null}
-          </div>
-          <span className="lx-vh-st-min lx-v-num">{t('nbHeuteMin', { min: r.min })}</span>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-/** Balken und „x von y Min. heute“ (Vorschau `.bar`; Lehrer-Prüfung 02.11.: bei Tagesziel unter 15 Min. ist die Summe größer als das Ziel). */
-export function DayBar({ done, total }: { done: number; total: number }) {
-  const { t } = useT();
-  const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
-  return (
-    <div className="lx-vh-prog" data-testid="day-bar" data-done={done} data-total={total}>
-      <div className="lx-vh-bar" aria-hidden="true">
-        <i style={{ width: `${pct}%` }} />
-      </div>
-      <span className="lx-vh-meta lx-v-num">{t('vhBarLine', { done, total })}</span>
-    </div>
-  );
-}
-
-/** Aufbau von Kopf, Karte „Dein Tag“ und Hauptknopf – gleich für echte Karte, Startbild und Skelett. */
-export function DayLayout({
-  hello,
-  card,
-  go,
-  ...rest
-}: { hello: ReactNode; card: ReactNode; go: ReactNode } & Omit<ComponentProps<'div'>, 'children'>) {
-  const { t } = useT();
-  return (
-    <div className="lx-vh-today" {...rest}>
-      <header className="lx-vh-hello">{hello}</header>
-      <section className="lx-v-card lx-vh-pathcard" aria-label={t('vhDayCard')}>
-        {card}
-      </section>
-      <div className="lx-vh-go">{go}</div>
-    </div>
-  );
-}
 
 /** „Tagesziel x Min. ändern“ (Vorschau): öffnet die Einstellungen (Lernen › Tagesziel steht oben). */
 export function GoalLink() {
@@ -388,90 +272,96 @@ function docTopicTitle(th: TodayDoc['th'], t: T, lang: 'de' | 'en'): string | nu
 export function StartCard({ doc }: { doc: TodayDoc }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
+  const sw = useStreakWeek();
   const blocks = todayDocBlocks(doc);
   const now = blocks.find((b) => b.id === doc.go?.id) ?? null;
   const total = blocks.length;
   const done = blocks.filter((b) => b.st === 'done').length;
   const fills = ringFills(blocks.map((b) => ({ state: b.st === 'done' ? ('done' as const) : ('open' as const), progress: b.of > 0 ? { done: b.n, total: b.of } : null })));
-  const rows: DayRow[] = blocks.map((b) => ({ id: b.id, name: docRowName(b, t), why: null, whyKey: b.k, min: b.m, kind: b.k, state: b.id === now?.id ? 'now' : b.st === 'done' ? 'done' : 'open' }));
+  const topic = docTopicTitle(doc.th, t, lang);
+  // Kern e: derselbe Aufbau wie die echte Karte (`KernDayCard`). Gründe kennt das Startbild nicht; Grammatik nennt das Thema, der laufende Schritt den Stand.
+  const rows: KernRow[] = blocks.map((b) => {
+    const st: DayRowState = b.id === now?.id ? 'now' : b.st === 'done' ? 'done' : 'open';
+    const prog = st === 'now' && b.k === 'review' && b.of > 0 ? { done: b.n, total: b.of } : null;
+    const isGrammar = b.k === 'grammar' || b.k === 'focus';
+    return {
+      id: b.id,
+      name: docRowName(b, t),
+      why: null,
+      sub: prog && prog.done > 0 ? t('tdProgressLabel', { done: prog.done, total: prog.total }) : isGrammar ? topic : null,
+      whyKey: b.k,
+      min: b.m,
+      kind: b.k,
+      state: st,
+      progress: prog,
+    };
+  });
   const nowRow = rows.find((r) => r.state === 'now') ?? null;
   const started = done > 0 || fills.some((f) => f > 0);
   const start = () => requestStart(api, false);
-  const sum = rows.reduce((a, r) => a + r.min, 0);
   useEffect(() => markStart('lx:button'), []);
   return (
-    <DayLayout
-      data-testid="start-card"
-      data-source="doc"
-      data-day={doc.d}
-      data-rest={doc.rest ?? 0}
-      aria-labelledby="td-start-title"
-      hello={
-        <>
-          <HelloRow />
-          <p className="lx-vh-meta" data-testid="start-next">
-            {stepMeta(rows, t)}
-          </p>
-          <h2 id="td-start-title" className="lx-vh-t" data-testid="start-title">
-            {nowRow ? (channelOf(nowRow.kind) === 'g' && docTopicTitle(doc.th, t, lang) ? `${nowRow.name}: ${docTopicTitle(doc.th, t, lang)}` : nowRow.name) : t('vhDayTitle')}
-          </h2>
-          <span data-testid="start-status" data-done={done} data-total={total} className="sr-only">
-            {t('nbHeuteRing', { done, total })}
-          </span>
-          <span hidden data-testid="start-min">
-            {doc.rest ?? 0}
-          </span>
-        </>
-      }
-      card={
-        <>
-          <DayPath rows={rows} prefix="start" />
-          <DayBar done={doneMinutes(rows, fills)} total={sum} />
-        </>
-      }
-      go={
-        <VButton variant="pri" full onClick={start} data-testid="start-go" data-duty={doc.go?.id}>
-          <GoLabel label={nowRow ? t(started ? 'vhContinueStep' : 'vhGoStep', { what: nowRow.name }) : started ? t('vhContinue') : t('vhGo')} />
-        </VButton>
-      }
-    />
+    <div className="lx-kh" data-testid="start-card" data-source="doc" data-day={doc.d} data-rest={doc.rest ?? 0}>
+      <KernHello sw={sw} />
+      <span data-testid="start-status" data-done={done} data-total={total} className="sr-only">
+        {t('nbHeuteRing', { done, total })}
+      </span>
+      <span hidden data-testid="start-min">
+        {doc.rest ?? 0}
+      </span>
+      <KernDayCard
+        rows={rows}
+        fills={fills}
+        done={done}
+        total={total}
+        rest={doc.rest ?? 0}
+        prefix="start"
+        titleId="td-start-title"
+        go={
+          <VButton variant="pri" full onClick={start} data-testid="start-go" data-duty={doc.go?.id}>
+            <GoLabel label={nowRow ? t(started ? 'vhContinueStep' : 'vhGoStep', { what: nowRow.name }) : started ? t('vhContinue') : t('vhGo')} />
+          </VButton>
+        }
+      />
+    </div>
   );
 }
 
-/** Platzhalter von Heute (Vorschau-Aufbau): Datumszeile, Titel, drei Schritte, Balken, Knopf – derselbe Aufbau wie die Karte. */
+/** Platzhalter von Heute (Kern e): Datum, „Dein Tag“, Pflicht-Karte mit drei Schritten, der erste mit Knopf – derselbe Aufbau wie die Karte. */
 export function TodaySkeletonCard() {
+  const step = (now: boolean, i: number) => (
+    <div key={i} className="lx-kh-st" data-st={now ? 'now' : 'open'}>
+      <div className="lx-kh-st-row">
+        <div className="lx-v-sk lx-kh-dot" data-round="" />
+        <div className="lx-kh-st-b">
+          <div className="lx-v-sk lx-vh-sk-n" />
+          <div className="lx-v-sk lx-vh-sk-s" />
+        </div>
+      </div>
+      {now && (
+        <div className="lx-kh-go">
+          <div className="lx-v-sk lx-vh-sk-go" />
+        </div>
+      )}
+    </div>
+  );
   return (
-    <DayLayout
-      aria-hidden="true"
-      data-testid="today-skeleton"
-      data-settled="true"
-      hello={
-        <>
-          <div className="lx-v-sk lx-vh-sk-row" />
+    <div className="lx-kh" aria-hidden="true" data-testid="today-skeleton" data-settled="true">
+      <header className="lx-kh-hello">
+        <div className="lx-v-sk lx-vh-sk-row" />
+        <div className="lx-v-sk lx-vh-sk-t" />
+      </header>
+      <section className="lx-kh-card">
+        <div className="lx-kh-head">
           <div className="lx-v-sk lx-vh-sk-meta" />
-          <div className="lx-v-sk lx-vh-sk-t" />
-        </>
-      }
-      card={
-        <>
-          <div className="lx-vh-path">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="lx-vh-st" data-st="open">
-                <div className="lx-v-sk lx-vh-dot" data-round="" />
-                <div className="lx-vh-st-b">
-                  <div className="lx-v-sk lx-vh-sk-n" />
-                  <div className="lx-v-sk lx-vh-sk-s" />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="lx-vh-prog">
-            <div className="lx-vh-bar" />
-            <div className="lx-v-sk lx-vh-sk-s" />
-          </div>
-        </>
-      }
-      go={<div className="lx-v-sk lx-vh-sk-go" />}
-    />
+        </div>
+        <div className="lx-kh-segs" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
+          <i />
+          <i />
+          <i />
+        </div>
+        <div className="lx-kh-steps">{[true, false, false].map((n, i) => step(n, i))}</div>
+      </section>
+    </div>
   );
 }

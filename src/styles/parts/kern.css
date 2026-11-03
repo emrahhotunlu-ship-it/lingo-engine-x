@@ -563,3 +563,399 @@
     font-size: 22px;
   }
 }
+
+/* ------------------------------------------------------------------ Kern e: Heute (Vorschau `Main` 390 px, `Monitor-Heute` 1440 px)
+   Datum + „Dein Tag“, EINE Pflicht-Karte (Kopf, ein Balken je Schritt, laufender Schritt grün mit Knopf, übrige Schritte ruhig),
+   darunter „Freiwillig – nur wenn du Zeit hast“ (Kacheln) und „Dein Stand“; ab 1.280 px stehen beide rechts in der Kontextspalte. */
+.lx-kh {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.lx-kh-hello {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lx-kh-date {
+  margin: 0;
+  font-size: 15px;
+  color: var(--fg-2);
+}
+.lx-kh-h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.15;
+  color: var(--fg);
+}
+.lx-kh-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
+}
+.lx-kh-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.lx-kh-count {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--fg);
+}
+.lx-kh-min {
+  white-space: nowrap;
+  font-size: 15px;
+  color: var(--fg-2);
+}
+.lx-kh-segs {
+  display: grid;
+  gap: 6px;
+}
+.lx-kh-segs > i {
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--line);
+}
+.lx-kh-segs > i > b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--act);
+}
+.lx-kh-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lx-kh-st {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 4px;
+}
+.lx-kh-st[data-st='now'] {
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--act-soft);
+}
+.lx-kh-st-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.lx-kh-dot {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fg-2);
+}
+.lx-kh-st[data-st='now'] .lx-kh-dot {
+  border-color: var(--act);
+  background: var(--act);
+  font-weight: 700;
+  color: var(--act-fg);
+}
+.lx-kh-st[data-st='done'] .lx-kh-dot {
+  border-color: var(--act-soft);
+  background: var(--act-soft);
+  color: var(--act-text);
+}
+.lx-kh-st-b {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.lx-kh-st-n {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--fg);
+}
+.lx-kh-st[data-st='now'] .lx-kh-st-n {
+  font-size: 19px;
+}
+.lx-kh-st[data-st='done'] .lx-kh-st-n {
+  color: var(--fg-2);
+}
+.lx-kh-st-s {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--fg-2);
+}
+.lx-kh-st[data-st='now'] .lx-kh-st-s {
+  color: var(--fg);
+}
+.lx-kh-bar {
+  height: 6px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--line);
+}
+.lx-kh-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--act);
+}
+.lx-kh-go .lx-v-btn {
+  width: 100%;
+  min-height: 56px;
+  border-radius: 14px;
+  font-size: 18px;
+}
+.lx-kh-go .lx-vh-sk-go {
+  height: 56px;
+  border-radius: 14px;
+}
+.lx-kh-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  color: var(--fg-2);
+}
+.lx-kh-lbl {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.lx-kh-free {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.lx-kh-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.lx-kh-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  text-align: left;
+  color: var(--fg);
+  cursor: pointer;
+}
+.lx-kh-tile:hover {
+  border-color: var(--line-2);
+}
+.lx-kh-tile:focus-visible {
+  outline: 2px solid var(--act);
+  outline-offset: 2px;
+}
+.lx-kh-tile > b {
+  font-size: 16px;
+  font-weight: 600;
+}
+.lx-kh-tile > span {
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--fg-2);
+}
+.lx-kh-stand[data-variant='row'] {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  text-align: center;
+}
+.lx-kh-stand[data-variant='row'] > p {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+.lx-kh-stand[data-variant='row'] b {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--fg);
+}
+.lx-kh-stand[data-variant='row'] span {
+  font-size: 13px;
+  color: var(--fg-2);
+}
+.lx-kh-stand[data-variant='list'] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+}
+.lx-kh-stand-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+}
+.lx-kh-stand-row > span {
+  font-size: 17px;
+  color: var(--fg-2);
+}
+.lx-kh-stand-row > b {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--fg);
+}
+.lx-kh-ctx {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.lx-kh-ctx .lx-kh-free {
+  margin-top: 0;
+}
+.lx-kh-ctx .lx-kh-tiles {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lx-kh-ctx .lx-kh-tile {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-radius: 18px;
+}
+.lx-kh-ctx .lx-kh-tile > b {
+  font-size: 18px;
+}
+.lx-kh-ctx .lx-kh-tile > span {
+  font-size: 16px;
+  text-align: right;
+}
+
+/* Monitor (Vorschau `Monitor-Heute`): größere Schrift, der laufende Schritt als Zeile mit dem Knopf rechts. */
+@media (min-width: 1024px) {
+  .lx-kh {
+    gap: 24px;
+  }
+  .lx-kh-hello {
+    gap: 6px;
+  }
+  .lx-kh-date {
+    font-size: 18px;
+  }
+  .lx-kh-h {
+    font-size: 48px;
+    line-height: 1.1;
+  }
+  .lx-kh-card {
+    gap: 24px;
+    padding: 32px;
+    border-radius: 28px;
+  }
+  .lx-kh-count {
+    font-size: 26px;
+  }
+  .lx-kh-min {
+    font-size: 18px;
+  }
+  .lx-kh-segs {
+    gap: 8px;
+  }
+  .lx-kh-segs > i {
+    height: 10px;
+    border-radius: 5px;
+  }
+  .lx-kh-steps {
+    gap: 20px;
+  }
+  .lx-kh-st {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    padding: 4px 24px;
+  }
+  .lx-kh-st[data-st='now'] {
+    padding: 22px 24px;
+    border-radius: 20px;
+  }
+  .lx-kh-st-row {
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+  }
+  .lx-kh-dot {
+    width: 44px;
+    height: 44px;
+    font-size: 19px;
+  }
+  .lx-kh-st[data-st='now'] .lx-kh-dot {
+    font-size: 20px;
+  }
+  .lx-kh-st-b {
+    gap: 4px;
+  }
+  .lx-kh-st-n {
+    font-size: 22px;
+  }
+  .lx-kh-st[data-st='now'] .lx-kh-st-n {
+    font-size: 24px;
+  }
+  .lx-kh-st-s {
+    font-size: 18px;
+  }
+  .lx-kh-bar {
+    max-width: 420px;
+  }
+  .lx-kh-st .lx-kh-go {
+    flex: 0 0 auto;
+  }
+  .lx-kh-st .lx-kh-go .lx-v-btn {
+    width: auto;
+    min-height: 60px;
+    padding-inline: 32px;
+    border-radius: 16px;
+    font-size: 19px;
+  }
+  .lx-kh-st .lx-kh-go .lx-vh-sk-go {
+    width: 220px;
+    height: 60px;
+  }
+}

@@ -25,25 +25,7 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { DoneCard3 } from './DoneCard3';
 import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import {
-  channelOf,
-  DayBar,
-  DayCardFrame,
-  DayLayout,
-  DayPath,
-  dayRowName,
-  doneMinutes,
-  GoalLink,
-  GoLabel,
-  HelloRow,
-  NextLine,
-  StartCard,
-  stepMeta,
-  TodayRing,
-  TodaySkeletonCard,
-  useEnterStart,
-  type DayRow,
-} from './DayCard';
+import { DayCardFrame, dayRowName, GoalLink, GoLabel, NextLine, StartCard, TodayRing, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
@@ -60,14 +42,14 @@ import { vocabModuleOn } from '../../modules/vocab/api';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
-import { TodayMid } from './TodayMid';
-import { TodayWeekStrip, WeekList, useStreakWeek } from './TodayWeek';
+import { TodayWeekStrip, WeekList, useStreakWeek, type StreakWeek } from './TodayWeek';
+import { KernDayCard, KernHello, KernStand, type KernRow } from './KernDay';
 
-// „Heute“ im Design der Vorschau (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1 screens.js:117–176, L1 desk.js:79–150): die rote Linie.
-// Kopf „Heute“ (Rahmen, `TodayHead`), EINE Tageskarte mit großem Segmentring (Restminuten), Thema, Unterzeile, „Als Nächstes“ und EIN Knopf;
-// Antippen des Rings zeigt die Blöcke von heute (Zustand, kein Knopf; Kap. 2 Nr. 2). Darunter am Handy der Wochenstreifen mit Serie und
-// „Wenn du mehr willst“ (höchstens drei Zeilen, zählt nie zur Pflicht); ab 1.280 px stehen beide rechts in der Kontextspalte (`TodayContext`),
-// am Laptop darunter Kapitelstand und Wörter fest (`TodayMid`). Nach der Pflicht: Abschlusskarte (Zustand, kein Knopf).
+// „Heute“ (Kern e, Emrah 03.11.2026, Vorschau 9pdpfT8Es8nrdE3vnVeqqx `Main`/`Monitor-Heute`): die rote Linie.
+// Kopf „Heute“ (Rahmen, `TodayHead`), darunter Datum und „Dein Tag“ und EINE Pflicht-Karte (`KernDayCard`): „Pflicht: x von n erledigt“, ein Balken
+// je Schritt, der laufende Schritt grün mit EINEM Knopf, die anderen als ruhige Zeilen (Zustand, kein Knopf; Kap. 2 Nr. 2). Am Handy darunter
+// „Freiwillig – nur wenn du Zeit hast“ (Kacheln, zählt nie zur Pflicht) und „Dein Stand“ (Serie, Wörter fest, Minuten der Woche); ab 1.280 px stehen
+// beide rechts in der Kontextspalte (`TodayContext`). Nach der Pflicht: Abschlusskarte (Zustand, kein Knopf).
 // Die Logik (Plan, Zahlen, Serie, Tageswechsel 04:00, Wiedereinstieg) ist unverändert: Alle Zahlen kommen aus EINEM `todaySummary`.
 
 let statusMarked = false;
@@ -166,87 +148,87 @@ function dayTitle(gt: GrammarDay | null, t: T, lang: Lang): string {
   return t('vhDayTitle');
 }
 
-/** Titel über dem Weg (Vorschau „Grammatik: Present Perfect oder Past Simple“): der nächste Schritt, bei Grammatik mit dem Thema des Tages. */
-function stepTitle(now: DayRow | null, gt: GrammarDay | null, t: T, lang: Lang): string {
-  if (!now) return t('vhDayTitle');
-  if (channelOf(now.kind) === 'g' && gt && (gt.intro ?? gt.topics[0])) return `${now.name}: ${dayTitle(gt, t, lang)}`;
-  return now.name;
-}
-
 /** Minuten je Segment des Rings: die Minuten der Zeilen (Bogenlänge wie in der Vorschau). */
 const minutesOf = (rows: readonly CardRow[]): number[] => rows.map((r) => r.min);
 
 /**
- * Tageskarte offen (UX-Neuanfang B, Vorschau `5Zwv5noCiNwzrzzfQsfzXy`): Datum und Serie, „Schritt x von n“, Titel = nächster Schritt; Karte „Dein Tag“
- * mit dem Weg (alle Schritte sichtbar, Zustand statt Knopf), Balken mit Minuten und EIN Knopf „Los: …“. Zahlen aus EINEM `todaySummary`.
+ * Tageskarte offen (Kern e, Vorschau `Main`/`Monitor-Heute`): Datum und „Dein Tag“, EINE Pflicht-Karte mit „Pflicht: x von n erledigt · ca. m Min.“,
+ * einem Balken je Schritt, dem laufenden Schritt grün hinterlegt (Fortschritt, EIN Knopf) und den übrigen Schritten als ruhige Zeilen.
+ * Zahlen aus EINEM `todaySummary` (Kap. 2 Nr. 2). Grammatik-Zeilen nennen das Thema des Tages (`u.gt`, eingefroren).
  */
-function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean; sub: ReactNode }) {
+function UnitCard({ view, rows, sum, fixNone, settled, sub, sw }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean; sub: ReactNode; sw: StreakWeek }) {
   const { t, lang } = useT();
   const { done, total } = sum;
   const now = rows.find((r) => r.state === 'now') ?? null;
   const start = useStartUnit();
   const started = done > 0 || sum.fills.some((f) => f > 0);
-  const shown: DayRow[] = rows.map((r) => ({
-    id: r.id,
-    name: r.name,
-    why: r.id === 'review' && r.progress && r.state !== 'done' && r.progress.done > 0 ? t('tdProgressLabel', { done: r.progress.done, total: r.progress.total }) : r.why,
-    whyKey: r.whyKey,
-    min: r.min,
-    kind: r.kind,
-    state: r.state,
-  }));
+  const gt = view.plan?.u?.gt ?? null;
+  const topic = gt && (gt.intro ?? gt.topics[0]) ? dayTitle(gt, t, lang) : null;
+  const shown: KernRow[] = rows.map((r) => {
+    // Stand nur beim Wort-Schritt („12 von 38 erledigt“, Vorschau); Grammatik nennt das Thema.
+    const prog = r.kind === 'review' && r.progress && r.progress.total > 0 ? r.progress : null;
+    const isGrammar = r.kind === 'grammar' || r.kind === 'focus';
+    const base = isGrammar && topic ? topic : r.why;
+    return {
+      id: r.id,
+      name: r.name,
+      // Laufender Wort-Schritt: Stand („12 von 38 erledigt“), sobald etwas erledigt ist; sonst Thema bzw. Grund (wie bisher).
+      sub: r.state === 'now' && prog && prog.done > 0 ? t('tdProgressLabel', { done: prog.done, total: prog.total }) : base || null,
+      why: r.why,
+      whyKey: r.whyKey,
+      min: r.min,
+      kind: r.kind,
+      state: r.state,
+      progress: r.state === 'now' ? prog : null,
+    };
+  });
   const nowRow = shown.find((r) => r.state === 'now') ?? null;
-  const all = minutesOf(rows).reduce((a, m) => a + m, 0);
   useEffect(() => markStart('lx:button'), []);
   useEnterStart(true, start);
   return (
-    <DayLayout
+    <div
+      className="lx-kh"
       data-settled={settled ? '' : undefined}
-      aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
       data-rest={sum.rest}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
-      hello={
-        <>
-          <HelloRow foot />
-          <div className="lx-vh-topic" data-testid="hero" data-duty={now?.id}>
-            <p className="lx-vh-meta" data-testid="today-title">
-              {stepMeta(shown, t)}
-            </p>
-            <h2 id="td-unit-title" className="lx-vh-t" data-testid="today-topic">
-              {stepTitle(nowRow, view.plan?.u?.gt ?? null, t, lang)}
-            </h2>
-            <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="sr-only">
-              {t('nbHeuteRing', { done, total })}
-            </span>
-            <span hidden data-testid="today-min">
-              {sum.rest}
-            </span>
-            {sub}
-          </div>
-        </>
-      }
-      card={
-        <>
-          <DayPath rows={shown} prefix="today" />
-          {fixNone && (
-            <p className="lx-vh-fixnone" data-testid="fix-none">
-              <span className="lx-v-st-mk" aria-hidden="true">
-                <Icon name="check" size={14} />
-              </span>
-              {t('nbHeuteFixNone')}
-            </p>
-          )}
-          <DayBar done={doneMinutes(rows, sum.fills)} total={all} />
-        </>
-      }
-      go={
-        <VButton variant="pri" full onClick={start} data-testid="start" data-duty={now?.id}>
-          <GoLabel label={nowRow ? t(started ? 'vhContinueStep' : 'vhGoStep', { what: nowRow.name }) : started ? t('vhContinue') : t('vhGo')} />
-        </VButton>
-      }
-    />
+    >
+      <KernHello foot sw={sw} />
+      <div className="lx-kh-hero" data-testid="hero" data-duty={now?.id}>
+        <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="sr-only">
+          {t('nbHeuteRing', { done, total })}
+        </span>
+        <span hidden data-testid="today-min">
+          {sum.rest}
+        </span>
+        <KernDayCard
+          rows={shown}
+          fills={sum.fills}
+          done={done}
+          total={total}
+          rest={sum.rest}
+          prefix="today"
+          titleId="td-unit-title"
+          go={
+            <VButton variant="pri" full onClick={start} data-testid="start" data-duty={now?.id}>
+              <GoLabel label={nowRow ? t(started ? 'vhContinueStep' : 'vhGoStep', { what: nowRow.name }) : started ? t('vhContinue') : t('vhGo')} />
+            </VButton>
+          }
+          extra={
+            <>
+              {fixNone && (
+                <p className="lx-kh-note" data-testid="fix-none">
+                  <Icon name="check" size={14} />
+                  {t('nbHeuteFixNone')}
+                </p>
+              )}
+              {sub}
+            </>
+          }
+        />
+      </div>
+    </div>
   );
 }
 
@@ -412,7 +394,6 @@ export function TodayScreen() {
     firstMount = false;
   }, []);
   const settled = boot || sawSkeleton;
-  const wide = useMediaQuery('(min-width: 1024px)');
   const ctxWide = useMediaQuery('(min-width: 1280px)');
   const sw = useStreakWeek();
   const gap = useMemo(() => comebackGap(obj(profile), today), [profile, today]);
@@ -482,7 +463,7 @@ export function TodayScreen() {
 
       {ok && !done && !welcome && sum.total > 0 && (
         <motion.div variants={item} initial={settled ? false : undefined}>
-          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} sub={bandSub} />
+          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} sub={bandSub} sw={sw} />
         </motion.div>
       )}
 
@@ -503,6 +484,12 @@ export function TodayScreen() {
       {ok && !ctxWide && (
         <motion.div variants={item}>
           <ExtraRow today={today} done={done} />
+        </motion.div>
+      )}
+      {/* Kern e (Vorschau `Main`): unter „Freiwillig“ die ruhige Zeile „Dein Stand“ (am Monitor ab 1.280 px rechts als Karte). */}
+      {ok && !ctxWide && (
+        <motion.div variants={item}>
+          <KernStand sw={sw} variant="row" />
         </motion.div>
       )}
       {ok && !done && (
@@ -534,11 +521,6 @@ export function TodayScreen() {
         </div>
       )}
       {planStatus === 'local' && <p className="lx-vh-note">{t('nbHeuteLocal')}</p>}
-      {wide && ok && (
-        <motion.div variants={item}>
-          <TodayMid />
-        </motion.div>
-      )}
     </motion.div>
   );
 }
@@ -557,14 +539,23 @@ export function TodayContext() {
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
   if (!ok) return null;
   return (
-    <div className="lx-vh-ctx" data-testid="today-context">
-      <section aria-labelledby="td-ctx-week">
-        <h3 id="td-ctx-week">{t('vWeek')}</h3>
-        <WeekList sw={sw} todayDone={view.status === 'allDone'} extra={comebackBand(gap) === 'none' && restartDay === null ? <WeeklyBand today={today} /> : null} />
-      </section>
-      <section aria-labelledby="td-ctx-more">
-        <h3 id="td-ctx-more">{t('vhFree')}</h3>
-        <MoreRows today={today} done={done} idp="ctx-" />
+    <div className="lx-vh-ctx lx-kh-ctx" data-testid="today-context">
+      {/* Kern e (Vorschau `Monitor-Heute`): rechts „Dein Stand“ und „Freiwillig – nur wenn du Zeit hast“; die Woche nur nach der Pflicht. */}
+      <KernStand sw={sw} variant="list" />
+      {comebackBand(gap) === 'none' && restartDay === null && <WeeklyBand today={today} />}
+      {done && (
+        <section aria-labelledby="td-ctx-week">
+          <h3 id="td-ctx-week" className="lx-kh-lbl">
+            {t('vWeek')}
+          </h3>
+          <WeekList sw={sw} todayDone={view.status === 'allDone'} />
+        </section>
+      )}
+      <section aria-labelledby="td-ctx-more" className="lx-kh-free">
+        <h3 id="td-ctx-more" className="lx-kh-lbl">
+          {t('kernFreeHead')}
+        </h3>
+        <MoreRows today={today} done={done} idp="ctx-" tiles />
         {done && (
           <div className="lx-vh-slot">
             <Slot name="today.extra" />

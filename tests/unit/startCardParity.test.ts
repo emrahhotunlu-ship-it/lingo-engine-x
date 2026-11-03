@@ -84,23 +84,26 @@ function inner(html: string, id: string): string | null {
   return html.slice(html.indexOf('>', a) + 1, html.indexOf(`</${tag}>`, a));
 }
 
-/** Zeilen: Name (erste Text-Spanne), Minuten/Zustand-Text rechts und `data-state`/`data-now`. */
+/** Zeilen: Kennung, Name, Minuten (`data-min`) und `data-state`/`data-now`. Kern e (03.11.2026): Pflicht-Karte `KernDayCard` (`lx-kh-st`). */
 function rows(html: string, id: 'duty' | 'start-duty'): string[] {
   const out: string[] = [];
   for (const m of html.matchAll(new RegExp(`<li[^>]*data-testid="${id}"[^>]*>([\\s\\S]*?)</li>`, 'g'))) {
     const head = m[0].slice(0, m[0].indexOf('>') + 1);
-    // UX-Neuanfang B (02.11.2026): Tagesweg `DayPath` (`lx-vh-st`): Name in der Überschrift, rechts die Minuten.
-    // Früher (D2 V-HEUTE) Blockliste `lx-v-st` mit Name und „läuft“/„erledigt“; beide Formen werden gelesen.
-    const name = (/<h3 class="lx-vh-st-n">([^<]*)</.exec(m[1]!) ?? /<span class="lx-v-st-nm">([^<]*)<\/span>/.exec(m[1]!))?.[1] ?? '?';
-    const right = (/<span class="lx-vh-st-min[^"]*"[^>]*>([\s\S]*?)<\/span>/.exec(m[1]!) ?? /<span class="lx-v-st-sm[^"]*"[^>]*>([\s\S]*?)<\/span>/.exec(m[1]!))?.[1] ?? '';
+    const name = /<h4 class="lx-kh-st-n"[^>]*>([^<]*)</.exec(m[1]!)?.[1] ?? '?';
     const st = / data-state="([^"]*)"/.exec(head)?.[1];
     const now = / data-now="true"/.test(head) ? ' now' : '';
-    out.push(`${/ data-duty="([^"]*)"/.exec(head)?.[1]} | ${name} | ${text(right)} | ${st}${now}`);
+    out.push(`${/ data-duty="([^"]*)"/.exec(head)?.[1]} | ${name} | ${/ data-min="([^"]*)"/.exec(head)?.[1]} | ${st}${now}`);
   }
   return out;
 }
 
-type Face = { min: string | null; status: string | null; title: string | null; next: string | null; go: string | null; rows: string[] };
+/** Unterzeile des laufenden Schritts (Grammatik: Thema des Tages, Wörter: Stand). */
+function nowSub(html: string, id: 'duty' | 'start-duty'): string {
+  const m = new RegExp(`<li[^>]*data-testid="${id}"[^>]*data-now="true"[^>]*>([\\s\\S]*?)</li>`).exec(html);
+  return text(/<p class="lx-kh-st-s[^"]*">([\s\S]*?)<\/p>/.exec(m?.[1] ?? '')?.[1] ?? '');
+}
+
+type Face = { min: string | null; status: string | null; title: string | null; next: string | null; go: string | null; sub: string; rows: string[] };
 /** „Als Nächstes: Block“ ohne den Grund (den kennt das Startbild noch nicht; er kommt mit der echten Karte). */
 const nextOf = (s: string): string => s.split(' · ')[0] ?? s;
 
@@ -110,6 +113,7 @@ const realFace = (html: string): Face => ({
   title: text(inner(html, 'today-topic') ?? ''),
   next: nextOf(text(inner(html, 'today-title') ?? '')),
   go: text(inner(html, 'start') ?? ''),
+  sub: nowSub(html, 'duty'),
   rows: rows(html, 'duty'),
 });
 const startFace = (html: string): Face => ({
@@ -118,6 +122,7 @@ const startFace = (html: string): Face => ({
   title: text(inner(html, 'start-title') ?? ''),
   next: nextOf(text(inner(html, 'start-next') ?? '')),
   go: text(inner(html, 'start-go') ?? ''),
+  sub: nowSub(html, 'start-duty'),
   rows: rows(html, 'start-duty'),
 });
 
@@ -135,7 +140,7 @@ function both(plan: StoredPlan, lang: 'de' | 'en', reviews: number): { real: Fac
   const out = { real: realFace(real), start: startFace(render(StartCard as ComponentType<never>, { doc: valid })) };
   // Die echte Karte steht wirklich da (sonst verglichen wir zwei leere Bilder).
   for (const k of ['min', 'status', 'title', 'next', 'go'] as const) expect(out.real[k], k).toBeTruthy();
-  for (const r of out.real.rows) expect(r).toMatch(/^\S+ \| \S.* \| \S.* \| (done|open)/);
+  for (const r of out.real.rows) expect(r).toMatch(/^\S+ \| \S.* \| \d+ \| (done|open)/);
   return out;
 }
 
@@ -163,20 +168,21 @@ describe('Startbild gleicht der echten Karte (Tarek S2)', () => {
     it(`Einheit, nichts erledigt (${lang})`, () => {
       const { real, start } = both(unitPlan(), lang, 0);
       expect(real.rows.length).toBeGreaterThan(1);
-      expect(start).toEqual(real);
+      // Wörter, nichts erledigt: die echte Karte nennt den Grund, das Startbild kennt ihn noch nicht (wie früher „Als Nächstes“ ohne Grund).
+      expect({ ...start, sub: '' }).toEqual({ ...real, sub: '' });
     });
 
     it(`Kapitel-Thema, Grammatik ist dran (${lang})`, () => {
       const p = unitPlan({ intro: null, pats: [], topics: ['passive'], ch: 3 });
       const { real, start } = both(p, lang, fullReview(p));
-      expect(real.title).toMatch(/3/);
+      expect(real.sub).toMatch(/3/);
       expect(start).toEqual(real);
     });
 
     it(`neues Thema, Grammatik ist dran (${lang})`, () => {
       const p = unitPlan({ intro: 'conditionals', pats: [], topics: [] });
       const { real, start } = both(p, lang, fullReview(p));
-      expect(real.title).toMatch(/neu|new/i);
+      expect(real.sub).toMatch(/neu|new/i);
       expect(start).toEqual(real);
     });
 

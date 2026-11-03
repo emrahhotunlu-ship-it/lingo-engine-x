@@ -156,6 +156,7 @@ function kennScreens(cases: Record<string, unknown>): Record<string, unknown> {
  * UX-Neuanfang B (Emrahs Freigabe der Vorschau, 01.11.2026): Auf Heute ersetzt der Tagesweg (3 Schritte + Balken `day-bar`) den Tagesring.
  * Eine Ring-Zeile der Datei entfällt NUR in Fällen, in denen der jetzige Lauf gar keinen Ring mehr zeigt (die Erledigt-Karte zeigt ihn weiter
  * und wird weiter verglichen). Alle übrigen Kennzahlen (Restminuten, „x von N“ …) bleiben unverändert Pflicht.
+ * Kern e (03.11.2026): Zeile „Dein Fortschritt“ (`stand`) neu zusammengesetzt, siehe unten.
  */
 const RETIRED_TODAY = 'today-ring';
 const shows = (k: unknown, id: string): boolean => Array.isArray(k) && k.some((l) => typeof l === 'string' && l.split(' ')[0] === id);
@@ -168,6 +169,15 @@ function retire(section: 'today' | 'screens' | 'extra', a: unknown, now: Record<
     // UX-Neuanfang (ux-reviewer M3, 02.11.2026): Im Tagesweg nennt die Zeile „Wörter“ Minuten statt „75 Karten · Fällige zuerst“ (sonst stünden
     // Karten und Minuten widersprüchlich nebeneinander). Die Kartenzahl entfällt nur dort, wo der jetzige Lauf gar keine Zahl mehr zeigt.
     if (cur && 'rev' in e && cur.rev === '') e = { ...e, rev: '' };
+    // Kern e (Emrah 03.11.2026 „Kern zuerst“, Vorschau `Main`/`Monitor-Heute`): „Dein Fortschritt“ steht jetzt auf jeder Breite und zeigt Serie ·
+    // Wörter fest · Minuten der Woche statt Wörter fest · Kapitelstand (der Kapitelstand steht weiter auf „Grammatik“). Der neue Stand wird nur
+    // übernommen, wo früher keiner stand oder seine erste Zahl (Wörter fest bzw. im Lernen) im neuen wieder vorkommt. Hatte der alte Stand nur
+    // die drei Zahlen des Kapitels (kein Wort im Lernen, als Satz ohne Zahl), muss der neue dort 0 zeigen.
+    if (cur && 'stand' in e && typeof cur.stand === 'string' && cur.stand !== e.stand) {
+      const old = typeof e.stand === 'string' ? e.stand.split(' ') : null;
+      const now = cur.stand.split(' ');
+      if (old === null || (old.length === 4 && now.includes(old[0]!)) || (old.length === 3 && now[1] === '0')) e = { ...e, stand: cur.stand };
+    }
     out[key] = e;
   }
   return out;
@@ -449,11 +459,28 @@ describe('Kennzahlen-Golden (A11: jede Zahl vor und nach dem Umbau gleich)', () 
     const cases = Object.entries(out) as Array<[string, { s: string[]; stand: string | null; min: string | null }]>;
     const fertig = cases.filter(([k]) => / (fertig|bilanz)/.test(k));
     expect(fertig.length).toBeGreaterThan(0);
-    for (const [k, c] of fertig) expect(c.s.some((l) => l.includes('today-card done=true') || l.includes('status=nothing')), k).toBe(true);
+    for (const [k, c] of fertig)
+      expect(
+        c.s.some((l) => l.includes('today-card done=true') || l.includes('status=nothing')),
+        k,
+      ).toBe(true);
     expect(fertig.some(([, c]) => c.s.some((l) => l.includes('status=allDone')))).toBe(true);
-    // UX-Neuanfang B: statt Ring mit 95-%-Deckel zeigt „fast“ den Balken knapp vor voll (erledigt < Ziel).
-    expect(cases.some(([k, c]) => / fast/.test(k) && c.s.some((l) => { const m = /^day-bar .*done=(\d+) .*total=(\d+)/.exec(l); return !!m && Number(m[1]) > 0 && Number(m[1]) < Number(m[2]); })), 'kein Fall knapp vor voll').toBe(true);
-    expect(cases.some(([k, c]) => / bilanz/.test(k) && !!(c as { truth?: string | null }).truth), 'keine Wahrheitszeile mit Zahlen').toBe(true);
+    // Kern e (03.11.2026): statt eines Minutenbalkens zeigt „fast“ den Balken des Wort-Schritts knapp vor voll (0 < Füllung < 1).
+    expect(
+      cases.some(
+        ([k, c]) =>
+          / fast/.test(k) &&
+          c.s.some((l) => {
+            const m = /^day-segs fills=(\S+)/.exec(l);
+            return !!m && m[1]!.split(',').some((f) => Number(f) > 0 && Number(f) < 1);
+          }),
+      ),
+      'kein Fall knapp vor voll',
+    ).toBe(true);
+    expect(
+      cases.some(([k, c]) => / bilanz/.test(k) && !!(c as { truth?: string | null }).truth),
+      'keine Wahrheitszeile mit Zahlen',
+    ).toBe(true);
     for (const [k, c] of cases.filter(([k]) => / breit/.test(k))) expect(c.stand, k).not.toBeNull();
     expect(cases.filter(([k, c]) => / 02:30/.test(k) && c.min !== null).length).toBeGreaterThan(0);
 
