@@ -765,3 +765,11 @@ Pop-up 2 (nach Vorschau-Artefakt `9pdpfT8Es8nrdE3vnVeqqx`, 11 Bilder):
 2. Farbe → **„beides soll möglich sein“** (eigene Antwort): hell-warm (wie alte App: Creme, weiße Karten, Grün) und dunkel, beide gestaltet und in den Einstellungen wählbar.
 3. Nach Fehler → **„Ja, einmal nachtippen“ (Empfehlung)**: „Weiter“ erst nach einmal richtig getipptem Wort.
 4. Alte Wörter → **„Ja, einmal kurz Einführungskarte“ (Empfehlung)**: jedes übernommene Wort zeigt beim ersten Mal in der neuen App einmal die Einführungskarte, danach nie wieder.
+
+## 03.11.2026 – Glas-Aufbau (Emrah)
+Kommentar auf dem Test-Link: „dieses Grün gefällt mir nicht … schau dir das Projekt Küchenstudio SaaS Produkt an … glassy und dunkel glassy“, danach: „es ging nicht nur um Design, sondern UI/UX-Design“. Vorlage: Küchenstudio-Projekt (Repo `Saas-Product-Kitchen-Stores-on-GitHub`), Farbwelten „Glas“ (hell) und „Carbon“ (dunkel), Skizze `docs/review/glas-2026-11-02/skizze.html`, Regeln `pakete/design-handschrift/SKILL.md`.
+Antworten im Frage-Dialog:
+1. **Erst klickbarer Entwurf** (Heute und Übungskarte im Glas-Aufbau, hell und dunkel, Handy und Monitor), dann OK, dann Bau.
+2. **Umfang zuerst: Rahmen + Heute + Übung** (Wörter und Grammatik inkl. Fehler-Erklärung); Wörter-Reiter, Grammatik-Reiter, Fortschritt folgen im selben Stil.
+3. **Schrift wie Küchenstudio: Plus Jakarta Sans** für alles (Fraunces entfällt).
+Farben Glas/Carbon sind schon in den Tokens (`eeb4e3c`).
