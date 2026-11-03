@@ -31,7 +31,18 @@ for (const vp of [
       // Der Tagesplan wird beim Start nach dem Nachfüllen eingefroren; erst danach ist der Stand ruhig.
       await expect.poll(async () => (await dump(page))['vmod/day'] !== undefined).toBe(true);
       const before = await dump(page);
-      const wordsOf = (d: Record<string, Doc>) => JSON.stringify(Object.entries(d).filter(([k]) => /^(vocab|chunk)\//.test(k)).sort(([a], [b]) => a.localeCompare(b)));
+      // Das C1-Paket legt nach dem Einfrieren noch bis zu 2 Karten des Lerntags an (Heute `packTopUp`, src.ref `c1pack/…`); unter Last kann das
+      // nach diesem Vorher-Stand landen. Die Einstufung schreibt nie Paket-Karten, deshalb zählen sie hier nicht mit (G8, Wackler im vollen Lauf).
+      const fromPack = (doc: Doc) => {
+        const ref = (doc.src as { ref?: unknown } | undefined)?.ref;
+        return typeof ref === 'string' && ref.startsWith('c1pack/');
+      };
+      const wordsOf = (d: Record<string, Doc>) =>
+        JSON.stringify(
+          Object.entries(d)
+            .filter(([k, doc]) => /^(vocab|chunk)\//.test(k) && !fromPack(doc))
+            .sort(([a], [b]) => a.localeCompare(b)),
+        );
       await entry.click();
       await screen(page, 'vplace');
 
