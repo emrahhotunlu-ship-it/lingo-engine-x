@@ -65,7 +65,7 @@ button.lx-btn-primary:hover:not(:disabled) { filter: none; background: var(--act
 .lx-seg[role='tablist'] > [role='tab'][aria-selected='true'] {
   background: var(--surface);
   color: var(--fg);
-  box-shadow: 0 1px 3px oklch(0 0 0 / 0.2);
+  box-shadow: 0 0 0 1px var(--line);
 }
 
 /* ------------------------------------------------------------------ Beschriftung und Titel (style.css:316 `.lbl`, :148 `.phead`) */

@@ -68,7 +68,7 @@ export function resolveTheme(mode: ThemeMode, prefersLight: boolean): ResolvedTh
 }
 
 // Browserleiste in der Grundfarbe des Modus (--bg aus src/styles/index.css, nach sRGB gerundet; gleiche Werte in index.html).
-const THEME_COLOR: Record<ResolvedTheme, string> = { dark: '#0C0E14', dim: '#282A2F', light: '#F5F7FA' };
+const THEME_COLOR: Record<ResolvedTheme, string> = { dark: '#141614', dim: '#282A2F', light: '#F5F3EE' };
 
 export function applyDocumentSettings(lang: Lang, theme: ResolvedTheme, accent: Accent = 'iris'): void {
   const root = document.documentElement;

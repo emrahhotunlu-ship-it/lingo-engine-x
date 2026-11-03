@@ -3,6 +3,6 @@
 export const themeEn = {
   themeMode: 'Mode',
   themeAccent: 'Accent color',
-  themeAccentIris: 'Iris',
+  themeAccentIris: 'Green',
   themeAccentAmber: 'Amber',
 };

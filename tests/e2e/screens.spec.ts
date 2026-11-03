@@ -19,7 +19,7 @@ const VIEWPORTS = [
 const THEMES: Theme[] = ['dark', 'dim', 'light'];
 const LANGS: Lang[] = ['de', 'en'];
 // Seit Relaunch P1 S1-TOK stehen die Flächen in OKLCH (src/styles/index.css, --bg je Modus).
-const BG: Record<Theme, string> = { dark: 'oklch(0.165 0.012 268)', dim: 'oklch(0.285 0.01 268)', light: 'oklch(0.975 0.004 268)' };
+const BG: Record<Theme, string> = { dark: 'oklch(0.197 0.005 145)', dim: 'oklch(0.285 0.01 268)', light: 'oklch(0.964 0.007 89)' };
 
 // Der Browser schreibt dieselbe Farbe je nach Weg als oklch(…) oder lab(…): verglichen wird der gemalte Bildpunkt.
 async function expectBg(page: Page, theme: Theme, name?: string): Promise<void> {

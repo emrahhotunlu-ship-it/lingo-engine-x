@@ -37,6 +37,17 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* Fraunces 600 (Kern zuerst, 03.11.2026): Überschriften und das Wort auf der Wortkarte, wie in Emrahs freigegebener Vorschau.
+   Nur ein statischer latin-Schnitt (18 KB), eingebettet per Build. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('../../node_modules/@fontsource/fraunces/files/fraunces-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ---------------------------------------------------------------- Tokens (Relaunch Stufe 1, P1 S1-TOK)
    Quelle: Vorschau `docs/relaunch/vorschau/src/style.css` (Plan docs/relaunch/stufe1-plan.md §6.1). Feste OKLCH-Werte je Modus und
    Akzent, keine rechnerische Ableitung (Plan P1, Hinweis H5). Dunkel ist Standard (bare :root, Entscheidung 27.10.2026).
@@ -45,54 +56,52 @@
    src/styles/bridge.css. tests/unit/contrast.test.ts rechnet jeden Wert nach (3 Modi × 2 Akzente).
    Ergänzungen gegenüber der Vorschau (die App braucht sie, die Vorschau nicht): --ok-soft, --near-soft, --bad-soft, --words-soft (Füllung hinter
    Schrift), --fg-on (Schrift auf einer Zustandsfarbe) und --swatch-* (Farbpunkte der Akzent-Auswahl).
-   Iris ist 0,56/0,18 (Nora, 28.10.2026): weiße Knopfschrift wie in der freigegebenen Vorschau (≥ 4,5:1 in Dunkel und Hell). Nur Gedämpft
-   nimmt Iris 0,62/0,16 mit dunkler Knopfschrift (Weiß hielte dort, aber Iris 0,56 nicht 3:1 auf dem gedämpften Grund). Bernstein liegt im
-   Farbton ≥ 25° von „fast richtig“ (near) entfernt.
-   Hauptknopf (--act-btn/--act-btn-fg): überall gleich der Handlungsfarbe mit ihrer Knopfschrift, auch in Gedämpft (Emrah 01.11.2026:
-   kräftigere Fläche ≥ 3:1 mit dunkler Schrift statt weißer Schrift auf dunklerer Iris; tests/unit/contrast.test.ts).
-   Weitere Abweichungen von der Vorschau nur, wo 4,5:1 (Text) bzw. 3:1 (Bedienelement) sonst nicht hält: Dunkel fg-3; Gedämpft
-   line-2, fg-2, fg-3, act-text, ok, near, bad, ch-words und die weichen Füllungen; Hell fg-3, ok, near, bad, ch-words. Bernstein und Hell + Bernstein nach Nora (28.10.2026). */
+   Kern zuerst (03.11.2026, Emrahs Freigabe der Vorschau 9pdpfT8E… v13): Dunkel und Hell tragen die Farben der Vorschau – Hell warm
+   (Papier #F5F3EE, Karte weiß, Grün #2F6B58), Dunkel grünlich-schwarz (#141614, Grün #7CC3A6 mit dunkler Knopfschrift). Der
+   interne Akzentname bleibt „iris“ (gespeicherte Werte), sein Wert ist jetzt das Grün; Bernstein bleibt wählbar. Gedämpft ist
+   unverändert. Falsch-Farbe (bad) ist das Terrakotta der Vorschau.
+   Hauptknopf (--act-btn/--act-btn-fg): überall gleich der Handlungsfarbe mit ihrer Knopfschrift (tests/unit/contrast.test.ts). */
 
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: oklch(0.165 0.012 268);
-  --bg-deep: oklch(0.13 0.01 268);
-  --surface: oklch(0.205 0.014 268);
-  --surface-2: oklch(0.245 0.016 268);
-  --surface-3: oklch(0.29 0.016 268);
-  --line: oklch(0.96 0.01 268 / 0.08);
-  --line-2: oklch(0.96 0.01 268 / 0.15);
-  --fg: oklch(0.955 0.006 268);
-  --fg-2: oklch(0.76 0.014 268);
-  --fg-3: oklch(0.66 0.016 268);
-  --fg-on: oklch(0.16 0.012 268);
-  --act: oklch(0.56 0.18 275);
-  --act-fg: oklch(0.99 0.005 275);
-  --act-btn: oklch(0.56 0.18 275);
-  --act-btn-fg: oklch(0.99 0.005 275);
-  --act-text: oklch(0.77 0.12 275);
-  --act-soft: oklch(0.56 0.18 275 / 0.18);
-  --ok: oklch(0.77 0.15 155);
-  --ok-soft: oklch(0.77 0.15 155 / 0.18);
+  --bg: oklch(0.197 0.005 145);
+  --bg-deep: oklch(0.17 0.005 145);
+  --surface: oklch(0.244 0.006 157);
+  --surface-2: oklch(0.28 0.008 153);
+  --surface-3: oklch(0.315 0.01 152);
+  --line: oklch(0.315 0.01 152);
+  --line-2: oklch(0.364 0.01 157);
+  --fg: oklch(0.944 0.005 118);
+  --fg-2: oklch(0.839 0.009 157);
+  --fg-3: oklch(0.75 0.011 155);
+  --fg-on: oklch(0.205 0.019 165);
+  --act: oklch(0.762 0.083 166);
+  --act-fg: oklch(0.205 0.019 165);
+  --act-btn: oklch(0.762 0.083 166);
+  --act-btn-fg: oklch(0.205 0.019 165);
+  --act-text: oklch(0.806 0.078 165);
+  --act-soft: oklch(0.762 0.083 166 / 0.16);
+  --ok: oklch(0.806 0.078 165);
+  --ok-soft: oklch(0.762 0.083 166 / 0.16);
   --near: oklch(0.83 0.13 92);
   --near-soft: oklch(0.83 0.13 92 / 0.14);
-  --bad: oklch(0.72 0.16 25);
-  --bad-soft: oklch(0.72 0.16 25 / 0.14);
-  --ch-words: oklch(0.76 0.11 195);
-  --ch-gram: oklch(0.74 0.13 340);
+  --bad: oklch(0.793 0.101 46);
+  --bad-soft: oklch(0.73 0.118 45 / 0.18);
+  --ch-words: oklch(0.806 0.078 165);
+  --ch-gram: oklch(0.78 0.09 250);
   --ch-listen: oklch(0.74 0.11 245);
   --ch-speak: oklch(0.77 0.12 60);
-  --words-soft: oklch(0.76 0.11 195 / 0.12);
-  --mark: oklch(0.76 0.11 195 / 0.26);
-  --swatch-iris: oklch(0.56 0.18 275);
+  --words-soft: oklch(0.762 0.083 166 / 0.12);
+  --mark: oklch(0.762 0.083 166 / 0.26);
+  --swatch-iris: oklch(0.762 0.083 166);
   --swatch-amber: oklch(0.74 0.16 55);
   --kb: oklch(0.3 0.006 268);
   --kb-key: oklch(0.44 0.006 268);
   --kb-key-2: oklch(0.36 0.006 268);
   --kb-fg: oklch(0.97 0 0);
-  --scrim: oklch(0.08 0.01 268 / 0.62);
-  --shadow: 0 1px 0 0 oklch(1 0 0 / 0.04) inset, 0 18px 40px -24px oklch(0 0 0 / 0.8);
+  --scrim: oklch(0.08 0.005 145 / 0.62);
+  --shadow: 0 1px 0 0 oklch(1 0 0 / 0.03) inset, 0 18px 40px -24px oklch(0 0 0 / 0.7);
 }
 
 :root[data-theme='dim'] {
@@ -126,38 +135,43 @@
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: oklch(0.975 0.004 268);
-  --bg-deep: oklch(0.945 0.006 268);
+  --bg: oklch(0.964 0.007 89);
+  --bg-deep: oklch(0.935 0.009 89);
   --surface: oklch(1 0 0);
-  --surface-2: oklch(0.955 0.006 268);
-  --surface-3: oklch(0.915 0.008 268);
-  --line: oklch(0.25 0.02 268 / 0.09);
-  --line-2: oklch(0.25 0.02 268 / 0.16);
-  --fg: oklch(0.21 0.016 268);
-  --fg-2: oklch(0.43 0.016 268);
-  --fg-3: oklch(0.5 0.014 268);
+  --surface-2: oklch(0.97 0.007 89);
+  --surface-3: oklch(0.925 0.011 90);
+  --line: oklch(0.91 0.013 92);
+  --line-2: oklch(0.864 0.016 90);
+  --fg: oklch(0.231 0.006 157);
+  --fg-2: oklch(0.386 0.011 161);
+  --fg-3: oklch(0.485 0.011 161);
   --fg-on: oklch(1 0 0);
-  --act-text: oklch(0.5 0.18 275);
-  --act-soft: oklch(0.56 0.18 275 / 0.12);
-  --ok: oklch(0.47 0.13 155);
-  --ok-soft: oklch(0.5 0.13 155 / 0.08);
+  --act: oklch(0.482 0.07 170);
+  --act-fg: oklch(1 0 0);
+  --act-btn: oklch(0.482 0.07 170);
+  --act-btn-fg: oklch(1 0 0);
+  --act-text: oklch(0.45 0.07 170);
+  --act-soft: oklch(0.482 0.07 170 / 0.1);
+  --ok: oklch(0.45 0.07 170);
+  --ok-soft: oklch(0.482 0.07 170 / 0.1);
   --near: oklch(0.5 0.11 92);
   --near-soft: oklch(0.5 0.11 92 / 0.1);
-  --bad: oklch(0.52 0.19 25);
-  --bad-soft: oklch(0.54 0.19 25 / 0.08);
-  --ch-words: oklch(0.48 0.1 200);
-  --ch-gram: oklch(0.55 0.15 340);
+  --bad: oklch(0.511 0.134 41);
+  --bad-soft: oklch(0.6 0.12 45 / 0.12);
+  --ch-words: oklch(0.45 0.07 170);
+  --ch-gram: oklch(0.5 0.1 250);
   --ch-listen: oklch(0.53 0.13 245);
   --ch-speak: oklch(0.6 0.14 55);
-  --words-soft: oklch(0.5 0.1 200 / 0.08);
-  --mark: oklch(0.7 0.12 195 / 0.24);
+  --words-soft: oklch(0.482 0.07 170 / 0.08);
+  --mark: oklch(0.6 0.09 165 / 0.22);
+  --swatch-iris: oklch(0.482 0.07 170);
   --swatch-amber: oklch(0.65 0.16 52);
-  --kb: oklch(0.86 0.006 268);
+  --kb: oklch(0.86 0.006 89);
   --kb-key: oklch(1 0 0);
-  --kb-key-2: oklch(0.74 0.008 268);
+  --kb-key-2: oklch(0.74 0.008 89);
   --kb-fg: oklch(0.15 0 0);
-  --scrim: oklch(0.2 0.02 268 / 0.38);
-  --shadow: 0 1px 2px oklch(0.2 0.02 268 / 0.06), 0 18px 40px -24px oklch(0.2 0.02 268 / 0.28);
+  --scrim: oklch(0.2 0.01 157 / 0.38);
+  --shadow: 0 1px 2px oklch(0.3 0.02 90 / 0.05), 0 16px 36px -26px oklch(0.3 0.02 90 / 0.22);
 }
 
 :root[data-accent='amber'] {
@@ -186,6 +200,7 @@
 
 /* Tailwind-Skala (Typografie, Radius). Die Farb-Hilfsklassen (bg-surface, text-muted …) stehen in bridge.css. */
 @theme inline {
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Typografie-Skala (px): 12 · 13 · 15 · 17 · 20 · 24 · 32 · 44 · 64 */

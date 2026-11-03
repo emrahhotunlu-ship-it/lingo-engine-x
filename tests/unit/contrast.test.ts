@@ -150,12 +150,12 @@ describe.each(MODES.flatMap((m) => ACCENTS.map((a) => [m, a] as const)))('Modus 
 
 describe('Grundregeln der Token-Blöcke', () => {
   it('Dunkel steht im blanken :root (Standard ohne gespeicherte Wahl)', () => {
-    expect(BASE.bg).toBe('oklch(0.165 0.012 268)');
+    expect(BASE.bg).toBe('oklch(0.197 0.005 145)');
     expect(css).toMatch(/:root,\s*:root\[data-theme='dark'\]\s*\{\s*color-scheme: dark;/);
   });
 
-  it('Iris ist der Standard-Akzent: oklch(0.56 0.18 275), ohne eigenen Iris-Block (Nora, 28.10.2026)', () => {
-    expect(BASE.act).toBe('oklch(0.56 0.18 275)');
+  it('Standard-Akzent (intern „iris“) ist das Grün der Vorschau, ohne eigenen Akzent-Block (Kern zuerst, 03.11.2026)', () => {
+    expect(BASE.act).toBe('oklch(0.762 0.083 166)');
     expect(BASE['swatch-iris']).toBe(BASE.act);
     expect(css.includes(`[data-accent='iris']`)).toBe(false);
   });
@@ -173,52 +173,29 @@ describe('Grundregeln der Token-Blöcke', () => {
   });
 });
 
-// Iris 0,56/0,18 (Nora, 28.10.2026) statt 0,62/0,16: weiße Knopfschrift wie in der freigegebenen Vorschau.
-// Messwerte für den Bericht: Weiß auf Iris 0,56 hält 4,5:1, Iris 0,56 hält 3:1 auf dunklem und hellem Grund, aber nicht auf dem
-// gedämpften Grund – dort bleibt Iris 0,62/0,16 mit dunkler Knopfschrift (Weiß auf 0,62 nur 3,67:1).
-/** Messwerte (Kontrastverhältnis, gerundet) für den Bericht P1, Nachprüfung Nora 28.10.2026. */
-const MEASURED = {
-  weissAuf56: 4.76,
-  weissAuf62: 3.67,
-  dunkelAuf62: 5.15,
-  iris56AufDunkel: 3.94,
-  iris56AufHell: 4.56,
-  iris56AufGedaempft: 2.93,
-  iris62AufGedaempft: 3.8,
-};
-describe('Iris 0,56/0,18 mit weißer Knopfschrift, Ausnahme Gedämpft', () => {
-  const WHITE = 'oklch(0.99 0.005 275)';
-  const DARK = 'oklch(0.16 0.03 275)';
-  const r2 = (n: number): number => Math.round(n * 100) / 100;
-
-  it.each(['dark', 'light'] as const)('%s: Knopfschrift weiß, ≥ 4,5:1 auf Iris 0,56', (mode) => {
-    const t = tokens(mode, 'iris');
-    expect(t.act).toBe('oklch(0.56 0.18 275)');
-    expect(t['act-fg']).toBe(WHITE);
-    expect(on(WHITE, parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
+// Kern zuerst (Emrah, 03.11.2026): Dunkel und Hell tragen die Farben der freigegebenen Vorschau 9pdpfT8E… v13.
+// Dunkel: helles Grün #7CC3A6 mit dunkler Knopfschrift #0F1A15. Hell: tiefes Grün #2F6B58 mit weißer Knopfschrift. Gedämpft unverändert.
+describe('Grün der Vorschau (Kern zuerst)', () => {
+  it('Dunkel: Grün 0,762 mit dunkler Knopfschrift, ≥ 4,5:1, Fläche ≥ 3:1 auf dem Grund', () => {
+    const t = tokens('dark', 'iris');
+    expect(t.act).toBe('oklch(0.762 0.083 166)');
+    expect(t['act-fg']).toBe('oklch(0.205 0.019 165)');
+    expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
+    expect(on(t.act ?? '', parse(t.bg ?? ''))).toBeGreaterThanOrEqual(3);
   });
 
-  it('Gedämpft: Iris 0,62/0,16 mit dunkler Knopfschrift (Weiß hielte, Iris 0,56 aber nicht 3:1 auf dem Grund)', () => {
+  it('Hell: Grün 0,482 mit weißer Knopfschrift, ≥ 4,5:1, auf warmem Papiergrund', () => {
+    const t = tokens('light', 'iris');
+    expect(t.bg).toBe('oklch(0.964 0.007 89)');
+    expect(t.act).toBe('oklch(0.482 0.07 170)');
+    expect(t['act-fg']).toBe('oklch(1 0 0)');
+    expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('Gedämpft bleibt bei Iris 0,62/0,16 mit dunkler Knopfschrift', () => {
     const t = tokens('dim', 'iris');
     expect(t.act).toBe('oklch(0.62 0.16 275)');
-    expect(t['act-fg']).toBe(DARK);
-    expect(on(DARK, parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
-    expect(on('oklch(0.56 0.18 275)', parse(t.bg ?? ''))).toBeLessThan(3);
-  });
-
-  it('Messwerte (festgehalten)', () => {
-    const iris56 = parse('oklch(0.56 0.18 275)');
-    const iris62 = parse('oklch(0.62 0.16 275)');
-    const m = {
-      weissAuf56: r2(ratio(parse(WHITE), iris56)),
-      weissAuf62: r2(ratio(parse(WHITE), iris62)),
-      dunkelAuf62: r2(ratio(parse(DARK), iris62)),
-      iris56AufDunkel: r2(ratio(iris56, parse(tokens('dark', 'iris').bg ?? ''))),
-      iris56AufHell: r2(ratio(iris56, parse(tokens('light', 'iris').bg ?? ''))),
-      iris56AufGedaempft: r2(ratio(iris56, parse(tokens('dim', 'iris').bg ?? ''))),
-      iris62AufGedaempft: r2(ratio(iris62, parse(tokens('dim', 'iris').bg ?? ''))),
-    };
-    expect(m).toEqual(MEASURED);
+    expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
   });
 });
 

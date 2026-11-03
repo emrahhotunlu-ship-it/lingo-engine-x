@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#0C0E14" />
+    <meta name="theme-color" content="#141614" />
     <title>Lingo-Engine X</title>
     <!-- U2 Start-Bild: Darstellung vor dem ersten Zeichnen wie die App (src/app/settings.ts): gespeicherte Wahl, „auto“ = System, sonst Dunkel. -->
     <script>
@@ -22,7 +22,7 @@
           d.lang = s.getItem('lx:lang') === 'en' ? 'en' : 'de';
           d.style.colorScheme = t === 'light' ? 'light' : 'dark';
           var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', t === 'light' ? '#F5F7FA' : t === 'dim' ? '#282A2F' : '#0C0E14');
+          if (m) m.setAttribute('content', t === 'light' ? '#F5F3EE' : t === 'dim' ? '#282A2F' : '#141614');
         } catch (e) {
           d.setAttribute('data-accent', 'iris');
         }

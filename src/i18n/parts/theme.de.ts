@@ -3,6 +3,6 @@
 export const themeDe = {
   themeMode: 'Modus',
   themeAccent: 'Akzentfarbe',
-  themeAccentIris: 'Iris',
+  themeAccentIris: 'Grün',
   themeAccentAmber: 'Bernstein',
 };
