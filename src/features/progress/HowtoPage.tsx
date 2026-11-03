@@ -9,7 +9,7 @@ const PARTS: ReadonlyArray<{ id: string; head: MessageKey; lines: readonly Messa
   { id: 'day', head: 'hwDayH', lines: ['hwDay1', 'hwDay2', 'hwDay3'] },
   { id: 'review', head: 'hwReviewH', lines: ['hwReview1', 'hwReview2', 'hwReview3'] },
   { id: 'grade', head: 'hwGradeH', lines: ['hwGrade1', 'hwGrade2', 'hwGrade3'] },
-  { id: 'streak', head: 'hwStreakH', lines: ['hwStreak1', 'hwStreak2', 'hwStreak3'] },
+  { id: 'streak', head: 'hwStreakH', lines: ['hwStreak1', 'hwStreak2', 'hwStreak4', 'hwStreak3'] },
 ];
 
 export function HowtoPage() {

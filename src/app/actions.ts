@@ -6,6 +6,7 @@ import { toast } from '../ui/Toast';
 import { translate } from '../i18n';
 import { useSettings, type Lang, type Accent, type ThemeMode } from './settings';
 import { WORK_MAX } from '../prompts/work';
+import { VACATION_MAX_ENTRIES } from '../domain/streak';
 
 // Einstellungen ändern: optimistisch sofort anzeigen, in `app/profile` speichern,
 // bei Fehler zurückrollen (Kap. 3.4).
@@ -127,4 +128,33 @@ export async function toggleCanDo(id: string, on: boolean, day: string): Promise
       return { canDo: next };
     }),
   );
+}
+
+// ------------------------------------------------------------------ Urlaub ankündigen (Großpaket B10)
+
+type VacEntry = { from: string; to: string; t: number; x?: number };
+const vacList = (): VacEntry[] => {
+  const v = useLive.getState().docs['app/profile']?.vac;
+  return Array.isArray(v) ? (v.filter((e) => e && typeof e === 'object') as VacEntry[]) : [];
+};
+
+/**
+ * Urlaub eintragen (`app/profile.vac`, nur ergänzend). Höchstens 24 Einträge: ist die Liste voll, fällt der älteste schon vergangene heraus
+ * (ein laufender oder kommender Urlaub nie). Prüfen (Spanne, Datum) tut die Oberfläche, die Serienregel liest ohnehin tolerant.
+ */
+export async function addVacation(from: string, to: string, today: string, nowMs: number): Promise<boolean> {
+  const list = [...vacList(), { from, to, t: nowMs }];
+  while (list.length > VACATION_MAX_ENTRIES) {
+    const i = list.findIndex((e) => typeof e.to === 'string' && e.to < today);
+    if (i < 0) return false;
+    list.splice(i, 1);
+  }
+  await persist({ vac: list }, () => undefined);
+  return true;
+}
+
+/** Urlaub aufheben: der Eintrag bleibt stehen und bekommt `x` (nie gelöscht). */
+export async function cancelVacation(t: number, nowMs: number): Promise<void> {
+  const list = vacList().map((e) => (e.t === t && !e.x ? { ...e, x: nowMs } : e));
+  await persist({ vac: list }, () => undefined);
 }

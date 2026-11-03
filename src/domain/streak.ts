@@ -111,18 +111,21 @@ export function pflichtDays(pflicht: unknown): Set<string> {
 
 /** Höchstens so viele Tage je Urlaubseintrag (gegen Tippfehler wie ein ganzes Jahr). */
 export const VACATION_MAX_DAYS = 31;
+/** Höchstens so viele Urlaubseinträge in `app/profile.vac` (die ältesten vergangenen fallen beim Eintragen heraus). */
+export const VACATION_MAX_ENTRIES = 24;
 
 /**
- * Urlaubstage aus `app/profile.vac` (`[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t}]`, Großpaket B10). Tolerant: ungültige Einträge, umgedrehte
+ * Urlaubstage aus `app/profile.vac` (`[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t, x?}]`, Großpaket B10; `x` = aufgehoben). Tolerant: ungültige Einträge, umgedrehte
  * oder zu lange Spannen (> 31 Tage) werden übergangen – nie ein Fehler, der die Serie sperrt.
  */
 export function vacationDays(vac: unknown): Set<string> {
   const out = new Set<string>();
   if (!Array.isArray(vac)) return out;
   const day = /^\d{4}-\d{2}-\d{2}$/;
-  for (const e of vac.slice(0, 24)) {
+  for (const e of vac.slice(-VACATION_MAX_ENTRIES)) {
     if (!e || typeof e !== 'object') continue;
-    const { from, to } = e as { from?: unknown; to?: unknown };
+    const { from, to, x } = e as { from?: unknown; to?: unknown; x?: unknown };
+    if (x) continue;
     if (typeof from !== 'string' || typeof to !== 'string' || !day.test(from) || !day.test(to) || to < from) continue;
     const days: string[] = [];
     for (let d = from; d <= to && days.length <= VACATION_MAX_DAYS; d = addDays(d, 1)) days.push(d);

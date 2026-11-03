@@ -197,6 +197,8 @@ export const profileSchema = z.looseObject({
   ms: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Lernplattform 3.0 P50, nur ergänzend): Wochenfokus `[{w: 'JJJJ-Www', a: Musterkennung oder '' (die App entscheidet), t}]`, höchstens 12, nie gelöscht. */
   wf: z.array(z.looseObject({ w: str, a: str, t: num })).nullish(),
+  /** Neu (Großpaket B10, Urlaub ankündigen, nur ergänzend): `[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t, x?: ms}]`, höchstens 24, je ≤ 31 Tage; `x` = aufgehoben (nie gelöscht). Tolerant gelesen (`vacationDays`). */
+  vac: loose,
   dk: loose, // S1-DIKTAT: Diktat-Probe (streng: dkSchema)
 });
 
