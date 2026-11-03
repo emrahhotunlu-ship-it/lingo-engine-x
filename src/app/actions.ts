@@ -158,3 +158,9 @@ export async function cancelVacation(t: number, nowMs: number): Promise<void> {
   const list = vacList().map((e) => (e.t === t && !e.x ? { ...e, x: nowMs } : e));
   await persist({ vac: list }, () => undefined);
 }
+
+/** Ruhetag wählen (Großpaket B10): 1–7 oder `null` (frei). Nur ergänzend in `app/profile.restDow`. */
+export async function changeRestDow(dow: number | null): Promise<void> {
+  if ((useLive.getState().docs['app/profile']?.restDow ?? null) === dow) return;
+  await persist({ restDow: dow }, () => undefined);
+}

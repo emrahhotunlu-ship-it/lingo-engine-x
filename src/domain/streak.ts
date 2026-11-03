@@ -135,6 +135,11 @@ export function vacationDays(vac: unknown): Set<string> {
   return out;
 }
 
+/** Gewählter Ruhetag (`app/profile.restDow`, Großpaket B10): 1 = Montag … 7 = Sonntag, sonst `null` (frei, wie bisher). Ändert die Serienregel nicht. */
+export function restDowOf(v: unknown): number | null {
+  return typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= 7 ? v : null;
+}
+
 // ------------------------------------------------------------------ Wochenstreifen (M7)
 
 export type WeekDayState = 'done' | 'rest' | 'open' | 'future';

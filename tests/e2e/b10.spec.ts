@@ -52,5 +52,21 @@ for (const vp of [
       expect(await layoutProblems(page)).toEqual([]);
       expect(errors).toEqual([]);
     });
+
+    test('Ruhetag wählen: Einstellungen speichern restDow, Heute sagt es am Sonntag (Seed) ehrlich an', async ({ page }) => {
+      const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { restDow: 7 } } } });
+      await screen(page, 'today');
+      const note = page.getByTestId('rest-day-note');
+      await expect(note).toBeVisible();
+      await expect(note).toContainText(/Ruhetag/);
+      await openSettings(page);
+      const sec = page.getByTestId('rest-section');
+      await sec.scrollIntoViewIfNeeded();
+      await sec.getByRole('radio', { name: 'Mi' }).click();
+      await expect.poll(async () => ((await dump(page))['app/profile'] as { restDow?: number }).restDow).toBe(3);
+      await page.keyboard.press('Escape');
+      await expect(note).toHaveCount(0);
+      expect(errors).toEqual([]);
+    });
   });
 }

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { addVacation, cancelVacation } from '../../app/actions';
+import { addVacation, cancelVacation, changeRestDow } from '../../app/actions';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { addDays } from '../../domain/date';
-import { VACATION_MAX_DAYS } from '../../domain/streak';
+import { restDowOf, VACATION_MAX_DAYS } from '../../domain/streak';
+import { Segmented } from '../../ui/Segmented';
+import type { MessageKey } from '../../i18n';
 import { useT } from '../../i18n';
 import { useCapabilities } from '../../platform/capabilities';
 import { Button } from '../../ui/Button';
@@ -89,6 +91,22 @@ export function VacationSection() {
           ))}
         </ul>
       )}
+    </section>
+  );
+}
+
+/** Großpaket B10 „Ruhetag selbst wählen“: Wochentag oder frei. Die Serienregel bleibt (ein Ruhetag je Woche); Heute sagt am Tag Bescheid. */
+export function RestDaySection() {
+  const { t } = useT();
+  const db = useCapabilities((s) => s.db);
+  const dow = restDowOf(useLive((s) => s.docs['app/profile']?.restDow));
+  if (db !== 'ready') return null;
+  const options = [{ value: '0', label: t('restFree') }, ...[1, 2, 3, 4, 5, 6, 7].map((n) => ({ value: String(n), label: t(`restDow${n}` as MessageKey) }))];
+  return (
+    <section className="flex flex-col gap-3" data-testid="rest-section">
+      <h3 className="lx-eyebrow">{t('restTitle')}</h3>
+      <Segmented label={t('restTitle')} value={String(dow ?? 0)} columns={4} testId="set-restdow" options={options} onChange={(v) => void changeRestDow(v === '0' ? null : Number(v))} />
+      <p className="text-sm text-muted">{t('restHint')}</p>
     </section>
   );
 }

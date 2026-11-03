@@ -44,6 +44,7 @@ import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
 import { TodayWeekStrip, WeekList, useStreakWeek } from './TodayWeek';
 import { KernDayCard, KernHello, KernStand, type KernRow } from './KernDay';
+import { RestDayNote } from './RestDayNote';
 
 // „Heute“ (Kern e, Emrah 03.11.2026, Vorschau 9pdpfT8Es8nrdE3vnVeqqx `Main`/`Monitor-Heute`): die rote Linie.
 // Kopf „Heute“ (Rahmen, `TodayHead`), darunter Datum und „Dein Tag“ und EINE Pflicht-Karte (`KernDayCard`): „Pflicht: x von n erledigt“, ein Balken
@@ -461,6 +462,7 @@ export function TodayScreen() {
         </motion.div>
       )}
 
+      {ok && !done && !welcome && sum.total > 0 && sum.done === 0 && <RestDayNote sw={sw} />}
       {ok && !done && !welcome && sum.total > 0 && (
         <motion.div variants={item} initial={settled ? false : undefined}>
           <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} sub={bandSub} />

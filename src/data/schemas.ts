@@ -199,6 +199,8 @@ export const profileSchema = z.looseObject({
   wf: z.array(z.looseObject({ w: str, a: str, t: num })).nullish(),
   /** Neu (Großpaket B10, Urlaub ankündigen, nur ergänzend): `[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t, x?: ms}]`, höchstens 24, je ≤ 31 Tage; `x` = aufgehoben (nie gelöscht). Tolerant gelesen (`vacationDays`). */
   vac: loose,
+  /** Neu (Großpaket B10, Ruhetag wählen): 1 = Montag … 7 = Sonntag; fehlt = frei. Nur Anzeige auf Heute, die Serienregel liest ihn nie. */
+  restDow: loose,
   dk: loose, // S1-DIKTAT: Diktat-Probe (streng: dkSchema)
 });
 
