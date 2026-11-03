@@ -2,7 +2,7 @@
 // (geprüft von `tests/unit/motivationText.test.ts`).
 
 export const moP27De = {
-  moStreakAlone: 'Serie {streak}',
+  moStreakAlone: '{streak}',
   moNoStudyDay: 'kein Lerntag',
   moBackTitle: 'Erster Tag zurück',
   moStillThere: 'Von deinen {n} gelernten Wörtern sind voraussichtlich noch {k} da.',

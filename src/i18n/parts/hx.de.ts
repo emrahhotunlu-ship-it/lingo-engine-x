@@ -21,7 +21,7 @@ export const hxDe = {
   hxExtraWrong: 'Fehlwörter von heute',
   hxExtraWrongSub: '{n} Wörter · 2 Min.',
   hxExtraSpeak: 'Sprechen üben (Rollenspiel, Einwände)',
-  hxExtraSpeakSub: 'Freiwillig, mit Mikrofon-Taste der Tastatur oder getippt.',
+  hxExtraSpeakSub: 'Mit der Mikrofon-Taste der Tastatur oder getippt.',
   hxExtraCheck: 'Wochen-Check nachholen',
   hxExtraCheckSub: '12 Aufgaben zur letzten Woche',
   hxWsDutyBtn: 'Pflicht: {n} Karten · {min} Min.',

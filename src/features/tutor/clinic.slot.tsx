@@ -33,7 +33,7 @@ function ClinicRow() {
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="font-medium">{t('ttClTileTitle')}</span>
           <span className="text-sm text-muted">{t('ttClTileSub')}</span>
-          <span className="lx-tnum text-xs text-subtle">{t('ttClTileMeta')}</span>
+          <span className="lx-tnum text-xs text-muted">{t('ttClTileMeta')}</span>
         </span>
         <Icon name="chevronRight" size={18} className="flex-none text-subtle" />
       </button>

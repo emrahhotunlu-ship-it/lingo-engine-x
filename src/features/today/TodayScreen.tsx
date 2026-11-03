@@ -25,7 +25,25 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { DoneCard3 } from './DoneCard3';
 import { StillThere } from './StillThere';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { channelOf, DayBar, DayCardFrame, DayLayout, DayPath, dayRowName, doneMinutes, GoalLink, GoLabel, HelloRow, NextLine, StartCard, stepMeta, TodayRing, TodaySkeletonCard, useEnterStart, type DayRow } from './DayCard';
+import {
+  channelOf,
+  DayBar,
+  DayCardFrame,
+  DayLayout,
+  DayPath,
+  dayRowName,
+  doneMinutes,
+  GoalLink,
+  GoLabel,
+  HelloRow,
+  NextLine,
+  StartCard,
+  stepMeta,
+  TodayRing,
+  TodaySkeletonCard,
+  useEnterStart,
+  type DayRow,
+} from './DayCard';
 import { useValidTodayDoc } from '../../data/todayDoc';
 import { markStart } from './startPerf';
 import { requestStart } from './startRun';
@@ -125,7 +143,6 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
     };
   });
 }
-
 
 /**
  * Start der Tageseinheit (Tageskarte und Willkommens-Karte): der erste offene Block, sonst der alte Weg. SYNCHRON im Klick (iPhone-Tastatur).
@@ -481,7 +498,6 @@ export function TodayScreen() {
         <motion.div variants={item}>
           {/* UX-Neuanfang B: Die Serie steht oben in der Datumszeile; der Wochenstreifen bleibt nur, wenn heute erledigt ist (Abschluss). */}
           {done && <TodayWeekStrip sw={sw} todayDone={view.status === 'allDone'} />}
-          {weekly}
         </motion.div>
       )}
       {ok && !ctxWide && (
@@ -494,6 +510,8 @@ export function TodayScreen() {
           <GoalLink />
         </motion.div>
       )}
+      {/* Großpaket G7 (M11): der Wochenrückblick steht am Handy nicht mehr zwischen Hauptknopf und „Freiwillig“, sondern ruhig darunter. */}
+      {ok && !ctxWide && weekly && <motion.div variants={item}>{weekly}</motion.div>}
       {/* „Mein Arbeitsalltag“ & Co.: am Handy unter den Extras mit Abstand, ab 1.280 px in der Kontextspalte bei „Wenn du mehr willst“. */}
       {ok && done && !ctxWide && (
         <div className="lx-vh-slot">

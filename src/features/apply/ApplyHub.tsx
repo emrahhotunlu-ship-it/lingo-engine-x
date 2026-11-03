@@ -66,7 +66,7 @@ function Tile({ icon, channel, title, sub, meta, onClick, testId, featured }: { 
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="font-medium">{title}</span>
         <span className="text-sm text-muted">{sub}</span>
-        <span className="lx-tnum flex items-center gap-1 text-xs text-subtle empty:hidden" data-testid="tile-meta" data-meta={meta}>
+        <span className="lx-tnum flex items-center gap-1 text-xs text-muted empty:hidden" data-testid="tile-meta" data-meta={meta}>
           {meta.split(' · ').filter(Boolean).map((part, i) => (
             <span key={i} className="flex items-center gap-1">
               {i > 0 && <span aria-hidden="true">·</span>}

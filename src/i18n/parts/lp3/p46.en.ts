@@ -6,7 +6,7 @@ export const ttP46En = {
   ttClClose: 'Close Sentence Clinic',
   ttClTileTitle: 'Sentence Clinic',
   ttClTileSub: 'Your own sentence from your work, checked by Claude',
-  ttClTileMeta: 'Optional · 2 min',
+  ttClTileMeta: '2 min',
   ttClLead: 'Write a sentence you would really say or write at work. Claude shows you the spots that are off, and why.',
   ttClPurposeLabel: 'What is the sentence for?',
   ttClSentenceLabel: 'Your sentence',

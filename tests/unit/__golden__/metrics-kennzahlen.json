@@ -5404,7 +5404,7 @@
    "stand": null,
    "truth": null,
    "goal": "100 100",
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "seed 2026-09-20 fast": {
    "min": "16",
@@ -5417,7 +5417,7 @@
    "stand": null,
    "truth": null,
    "goal": null,
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "seed 2026-09-20 bilanz": {
    "min": null,
@@ -5431,7 +5431,7 @@
    "stand": null,
    "truth": "7",
    "goal": "100 100",
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "seed 2026-09-21 fertig": {
    "min": null,
@@ -6479,7 +6479,7 @@
    "stand": null,
    "truth": null,
    "goal": "100 100",
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "gross 2026-09-20 fast": {
    "min": "16",
@@ -6492,7 +6492,7 @@
    "stand": null,
    "truth": null,
    "goal": null,
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "gross 2026-09-20 bilanz": {
    "min": null,
@@ -6506,7 +6506,7 @@
    "stand": null,
    "truth": "7",
    "goal": "100 100",
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "gross 2026-09-23 fertig": {
    "min": null,
@@ -7244,7 +7244,7 @@
    "stand": "1.240 1 0 7",
    "truth": null,
    "goal": null,
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "leer 2026-09-20 leer breit": {
    "min": "25",
@@ -7322,7 +7322,7 @@
    "stand": null,
    "truth": null,
    "goal": null,
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "seed 2026-09-20 halb 02:30": {
    "min": "22",
@@ -7335,7 +7335,7 @@
    "stand": null,
    "truth": null,
    "goal": null,
-   "streak": "12 6 6 7"
+   "streak": "12 7"
   },
   "seed 2026-09-23 leer 02:30": {
    "min": "25",

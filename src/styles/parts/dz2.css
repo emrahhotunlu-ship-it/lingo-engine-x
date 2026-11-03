@@ -148,12 +148,15 @@ html:has(.dz-kwt-dock:not([data-locked])) #main {
 .lx-ring[data-today][data-state='done'] {
   box-shadow: none;
 }
-/* Antippbare Wörter: Trefferfläche auch seitlich größer, kurze Wörter mindestens 2 rem breit (ohne Layoutänderung). */
+/* Antippbare Wörter: Trefferfläche größer ohne Layoutänderung. Großpaket G7 (M15): mindestens 44 px hoch und 36 px breit („a“, „of“),
+   mittig über dem Wort; Nachbarwörter überlappen nur am Rand, die Wortmitte trifft immer das eigene Wort. */
 .lx-word::after {
-  inset: -0.5em auto;
+  inset: auto;
   left: 50%;
-  width: max(100% + 0.3em, 2rem);
-  transform: translateX(-50%);
+  top: 50%;
+  width: max(100% + 0.3em, 2.25rem);
+  height: max(100% + 1em, 2.75rem);
+  transform: translate(-50%, -50%);
 }
 /* Laptop: Reiterleiste deckend (ohne Weichzeichner, Relaunch P1). */
 @media (min-width: 768px) {

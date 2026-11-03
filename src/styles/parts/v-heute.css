@@ -80,10 +80,10 @@
 .lx-vh-weeklist .lx-vh-weekly { margin: 0; border-top: 1px solid var(--line); }
 
 /* ------------------------------------------------------------------ Laptop-Mitte (L1 `l1mid`, style-soll.css:172) */
-.lx-vh-mid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-top: 1.6rem; max-width: 45rem; }
-.lx-vh-mid-card.lx-v-card { display: flex; flex-direction: column; gap: 6px; }
+.lx-vh-mid { display: flex; flex-direction: column; gap: 4px; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); max-width: 45rem; }
+.lx-vh-mid h2 { margin: 0 0 2px; }
+.lx-vh-mid-item { margin: 0; font-size: 14px; line-height: 20px; color: var(--fg-2); }
 .lx-vh-lbl { font-size: 13px; font-weight: 550; color: var(--fg-2); }
-.lx-vh-mid-card b { font-weight: 600; }
 .lx-vh-p2 { margin: 0; font-size: 15px; line-height: 21px; color: var(--fg-2); }
 
 /* ------------------------------------------------------------------ Laptop (L1, desk.js:79–106): Karte quer, Kopf mit „Fragen“-Knopf */

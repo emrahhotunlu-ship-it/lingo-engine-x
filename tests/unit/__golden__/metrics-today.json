@@ -428,7 +428,7 @@
  "seed 2026-09-20 leer": {
   "min": "25",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 25 1 10 2 10 3 12 5 0 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 25 1 10 2 10 3 12 5 0 25 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hello-streak n=12",
@@ -447,7 +447,7 @@
  "seed 2026-09-20 halb": {
   "min": "22",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 22 1 16 46 10 2 10 3 12 5 3 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 22 1 16 46 10 2 10 3 12 5 3 25 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hello-streak n=12",
@@ -466,7 +466,7 @@
  "seed 2026-09-20 zwei": {
   "min": "5",
   "restart": null,
-  "n": "12 6 6 7 20. 12 3 3 5 1 2 3 5 10 10 3 12 5 20 25 25",
+  "n": "12 7 20. 12 3 3 5 1 2 3 5 10 10 3 12 5 20 25 25",
   "s": [
    "settled= today-card shape=full rest=5",
    "hello-streak n=12",
@@ -483,7 +483,7 @@
  "seed 2026-09-20 alt": {
   "min": "10",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 2 10 1 2 10 1 4 12 10 5 8 15 25",
+  "n": "12 7 20. 12 1 2 10 1 2 10 1 4 12 10 5 8 15 25",
   "s": [
    "settled= today-card shape=legacy rest=10",
    "hello-streak n=12",
@@ -2484,7 +2484,7 @@
  "gross 2026-09-20 leer": {
   "min": "25",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 25 1 10 2 10 3 12 5 0 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 25 1 10 2 10 3 12 5 0 25 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hello-streak n=12",
@@ -2503,7 +2503,7 @@
  "gross 2026-09-20 halb": {
   "min": "22",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 22 1 23 68 10 2 10 3 12 5 3 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 22 1 23 68 10 2 10 3 12 5 3 25 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hello-streak n=12",
@@ -2522,7 +2522,7 @@
  "gross 2026-09-20 zwei": {
   "min": "5",
   "restart": null,
-  "n": "12 6 6 7 20. 12 3 3 5 1 2 3 5 10 10 3 12 5 20 25 25",
+  "n": "12 7 20. 12 3 3 5 1 2 3 5 10 10 3 12 5 20 25 25",
   "s": [
    "settled= today-card shape=full rest=5",
    "hello-streak n=12",
@@ -2539,7 +2539,7 @@
  "gross 2026-09-20 alt": {
   "min": "10",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 2 10 1 2 10 1 4 12 10 5 8 15 25",
+  "n": "12 7 20. 12 1 2 10 1 2 10 1 4 12 10 5 8 15 25",
   "s": [
    "settled= today-card shape=legacy rest=10",
    "hello-streak n=12",

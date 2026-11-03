@@ -5,7 +5,7 @@ export const ttP47De = {
   ttWsClose: 'Schreibwerkstatt schließen',
   ttWsTileTitle: 'Schreibwerkstatt',
   ttWsTileSub: 'Wochen-Mail zu einer echten Situation, von Claude geprüft',
-  ttWsTileMeta: 'Freiwillig · am Laptop · 15 Min.',
+  ttWsTileMeta: 'Am Laptop · 15 Min.',
   ttWsPhoneTitle: 'Am Laptop schreiben',
   ttWsPhoneText: 'Die Wochen-Mail schreibst du am Laptop: Dort ist Platz für 120 bis 180 Wörter. Am Handy gibt es dafür nur den Satz-Check.',
   ttWsBriefLabel: 'Deine Aufgabe',

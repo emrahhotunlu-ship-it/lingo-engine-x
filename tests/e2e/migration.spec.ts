@@ -50,7 +50,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await page.reload();
   await screen(page, 'today');
   // UX-Prüfung KLEIN: Heute-Fußzeile in einem Format „n von 6 Lerntagen“ (Text geändert, Zahlen unverändert).
-  await expect(page.getByTestId('today-streak')).toHaveText('Serie 12 · 6 von 6 Lerntagen ✓ · 7 Tage');
+  await expect(page.getByTestId('today-streak')).toHaveText('12 Tage in Folge · Alle 7 Tage diese Woche ✓');
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

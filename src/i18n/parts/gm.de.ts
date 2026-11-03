@@ -13,4 +13,8 @@ export const gmDe = {
   gmErrorsHead: 'Deine Fehlersätze',
   gmBtnTest: 'Thema abschließen',
   gmUnfairLink: 'Aufgabe war unfair?',
+  gmPathSteps: '{n} von 5 Schritten',
+  gmStandHead: 'Dein Stand',
+  gmStandOnWay_one: 'Noch keins fest · 1 Wort auf dem Weg',
+  gmStandOnWay_other: 'Noch keins fest · {n} Wörter auf dem Weg',
 } as const;

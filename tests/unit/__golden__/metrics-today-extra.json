@@ -446,7 +446,7 @@
  "seed 2026-09-20 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 6 6 7 46",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -466,12 +466,12 @@
   "stand": null,
   "truth": null,
   "goal": "100 100",
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "seed 2026-09-20 fast": {
   "min": "16",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 16 1 45 46 10 2 10 3 12 5 10 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 16 1 45 46 10 2 10 3 12 5 10 25 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hello-streak n=12",
@@ -490,12 +490,12 @@
   "stand": null,
   "truth": null,
   "goal": null,
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "seed 2026-09-20 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 6 6 7 46",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -515,7 +515,7 @@
   "stand": null,
   "truth": "7",
   "goal": "100 100",
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "seed 2026-09-21 fertig": {
   "min": null,
@@ -2321,7 +2321,7 @@
  "gross 2026-09-20 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 6 6 7 867",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2341,12 +2341,12 @@
   "stand": null,
   "truth": null,
   "goal": "100 100",
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "gross 2026-09-20 fast": {
   "min": "16",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 16 1 67 68 10 2 10 3 12 5 10 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 16 1 67 68 10 2 10 3 12 5 10 25 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hello-streak n=12",
@@ -2365,12 +2365,12 @@
   "stand": null,
   "truth": null,
   "goal": null,
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "gross 2026-09-20 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 6 6 7 867",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2390,7 +2390,7 @@
   "stand": null,
   "truth": "7",
   "goal": "100 100",
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "gross 2026-09-23 fertig": {
   "min": null,
@@ -3677,7 +3677,7 @@
  "gross 2026-09-20 halb breit": {
   "min": "22",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 22 1 23 68 10 2 10 3 12 5 3 25 25 1.240 1 0 7",
+  "n": "12 7 20. 12 1 3 10 0 3 22 1 23 68 10 2 10 3 12 5 3 25 25 1.240 1 0 7",
   "s": [
    "settled= today-card shape=full rest=22",
    "hello-streak n=12",
@@ -3697,7 +3697,7 @@
   "stand": "1.240 1 0 7",
   "truth": null,
   "goal": null,
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "leer 2026-09-20 leer breit": {
   "min": "25",
@@ -3822,7 +3822,7 @@
  "seed 2026-09-20 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 25 1 10 2 10 3 12 5 0 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 25 1 10 2 10 3 12 5 0 25 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hello-streak n=12",
@@ -3841,12 +3841,12 @@
   "stand": null,
   "truth": null,
   "goal": null,
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "seed 2026-09-20 halb 02:30": {
   "min": "22",
   "restart": null,
-  "n": "12 6 6 7 20. 12 1 3 10 0 3 22 1 16 46 10 2 10 3 12 5 3 25 25",
+  "n": "12 7 20. 12 1 3 10 0 3 22 1 16 46 10 2 10 3 12 5 3 25 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hello-streak n=12",
@@ -3865,7 +3865,7 @@
   "stand": null,
   "truth": null,
   "goal": null,
-  "streak": "12 6 6 7"
+  "streak": "12 7"
  },
  "seed 2026-09-23 leer 02:30": {
   "min": "25",

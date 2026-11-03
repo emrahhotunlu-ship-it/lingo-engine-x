@@ -46,15 +46,15 @@ describe('weekText', () => {
 });
 
 describe('Kartenfuß', () => {
-  it('„Serie 12 · 4 von 6 Lerntagen“ (Deutsch und Englisch)', () => {
+  it('„12 Tage in Folge · 4 von 6 Tagen diese Woche“ (Deutsch und Englisch)', () => {
     const p = footParts({ streak: 12, goal: weekGoal(week('ddddtff')) })!;
-    expect(footText(p, tde)).toBe('Serie 12 · 4 von 6 Lerntagen');
-    expect(footText(p, ten)).toBe('Streak 12 · 4 of 6 study days');
+    expect(footText(p, tde)).toBe('12 Tage in Folge · 4 von 6 Tagen diese Woche');
+    expect(footText(p, ten)).toBe('12-day streak · 4 of 6 days this week');
   });
   it('ohne Serie nur die Woche, ohne Woche nur die Serie, ohne beides keine Zeile', () => {
-    expect(footText(footParts({ streak: 0, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('2 von 6 Lerntagen');
-    expect(footText(footParts({ streak: null, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('2 von 6 Lerntagen');
-    expect(footText(footParts({ streak: 12, goal: weekGoal(week('tffffff')) })!, tde)).toBe('Serie 12');
+    expect(footText(footParts({ streak: 0, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('2 von 6 Tagen diese Woche');
+    expect(footText(footParts({ streak: null, goal: weekGoal(week('ddtffff')) })!, tde)).toBe('2 von 6 Tagen diese Woche');
+    expect(footText(footParts({ streak: 12, goal: weekGoal(week('tffffff')) })!, tde)).toBe('12 Tage in Folge');
     expect(footParts({ streak: 0, goal: weekGoal(week('tffffff')) })).toBeNull();
   });
   it('alle 128 Wochenmuster: kein „Serie 0“, kein Verlust-Wort, kein Ausrufezeichen, keine Zahl 0', () => {

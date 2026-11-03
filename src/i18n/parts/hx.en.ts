@@ -21,7 +21,7 @@ export const hxEn = {
   hxExtraWrong: 'Words you missed today',
   hxExtraWrongSub: '{n} words · 2 min',
   hxExtraSpeak: 'Practice speaking (role play, objections)',
-  hxExtraSpeakSub: 'Optional, with the keyboard microphone key or typed.',
+  hxExtraSpeakSub: 'With the keyboard microphone key or typed.',
   hxExtraCheck: 'Catch up on the weekly check',
   hxExtraCheckSub: '12 tasks on last week',
   hxWsDutyBtn: 'Required: {n} cards · {min} min',

@@ -2,11 +2,11 @@
 // (geprüft von `tests/unit/motivationText.test.ts`).
 
 export const moP22De = {
-  moWeekProgress: '{n} von 6 Lerntagen',
-  moWeekReached: '6 von 6 Lerntagen ✓',
-  moWeekReached7: '6 von 6 Lerntagen ✓ · 7 Tage',
+  moWeekProgress: '{n} von 6 Tagen diese Woche',
+  moWeekReached: '6 von 6 Tagen diese Woche ✓',
+  moWeekReached7: 'Alle 7 Tage diese Woche ✓',
   moWeekOver: 'Diese Woche: {n} Lerntage · Montag beginnt neu',
-  moStreakWeek: 'Serie {streak} · {week}',
+  moStreakWeek: '{streak} · {week}',
   moRestFree: 'Ruhetag diese Woche frei',
   moRestUsed: 'Ruhetag genutzt ({day})',
   moFestUnits: '{n} Wörter und Wendungen fest',

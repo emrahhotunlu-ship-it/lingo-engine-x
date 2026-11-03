@@ -5,7 +5,7 @@ export const ttP47En = {
   ttWsClose: 'Close Email Workshop',
   ttWsTileTitle: 'Email Workshop',
   ttWsTileSub: 'A weekly email for a real situation, checked by Claude',
-  ttWsTileMeta: 'Optional · on a laptop · 15 min',
+  ttWsTileMeta: 'On a laptop · 15 min',
   ttWsPhoneTitle: 'Write on a laptop',
   ttWsPhoneText: 'You write the weekly email on a laptop: there is room for 120 to 180 words. On your phone you only get the Sentence Clinic.',
   ttWsBriefLabel: 'Your task',

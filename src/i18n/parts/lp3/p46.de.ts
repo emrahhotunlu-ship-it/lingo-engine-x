@@ -6,7 +6,7 @@ export const ttP46De = {
   ttClClose: 'Satz-Klinik schließen',
   ttClTileTitle: 'Satz-Klinik',
   ttClTileSub: 'Dein eigener Satz aus dem Arbeitsalltag, von Claude geprüft',
-  ttClTileMeta: 'Freiwillig · 2 Min.',
+  ttClTileMeta: '2 Min.',
   ttClLead: 'Schreib einen Satz, den du bei der Arbeit wirklich sagen oder schreiben würdest. Claude zeigt dir die Stellen, die nicht stimmen, und warum.',
   ttClPurposeLabel: 'Wofür ist der Satz?',
   ttClSentenceLabel: 'Dein Satz',

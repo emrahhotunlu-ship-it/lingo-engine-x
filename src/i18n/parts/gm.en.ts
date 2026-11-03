@@ -13,4 +13,8 @@ export const gmEn = {
   gmErrorsHead: 'Your error sentences',
   gmBtnTest: 'Finish topic',
   gmUnfairLink: 'Was this task unfair?',
+  gmPathSteps: '{n} of 5 steps',
+  gmStandHead: 'Where you stand',
+  gmStandOnWay_one: 'None solid yet · 1 word on its way',
+  gmStandOnWay_other: 'None solid yet · {n} words on their way',
 } as const;

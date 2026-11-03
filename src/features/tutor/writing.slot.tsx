@@ -46,7 +46,7 @@ function WriteRow() {
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="font-medium">{t('ttWsTileTitle')}</span>
           <span className="text-sm text-muted">{t('ttWsTileSub')}</span>
-          <span className="lx-tnum text-xs text-subtle">{t('ttWsTileMeta')}</span>
+          <span className="lx-tnum text-xs text-muted">{t('ttWsTileMeta')}</span>
         </span>
         <Icon name="chevronRight" size={18} className="flex-none text-subtle" />
       </button>

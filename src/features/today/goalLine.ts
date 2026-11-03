@@ -38,7 +38,7 @@ export function weekText(g: Pick<WeekGoal, 'done' | 'reached' | 'possible'>): We
 
 export type FootParts = { streak: number | null; week: WeekText | null };
 
-/** Kartenfuß: „Serie 12 · Woche 4 von 6“. Die Serie steht nur ab 1 („Serie 0“ gibt es nie); ohne beides gibt es keine Zeile. */
+/** Kartenfuß: „12 Tage in Folge · 4 von 6 Tagen diese Woche“. Die Serie steht nur ab 1 („Serie 0“ gibt es nie); ohne beides gibt es keine Zeile. */
 export function footParts(i: { streak: number | null; goal: Pick<WeekGoal, 'done' | 'reached' | 'possible'> }): FootParts | null {
   const streak = i.streak !== null && i.streak >= 1 ? i.streak : null;
   const week = weekText(i.goal);
@@ -48,7 +48,9 @@ export function footParts(i: { streak: number | null; goal: Pick<WeekGoal, 'done
 /** Der Text des Kartenfußes aus `footParts` (`t` = Übersetzer der Oberfläche). */
 export function footText(p: FootParts, t: (k: MessageKey, v?: Record<string, string | number>) => string): string {
   const week = p.week ? t(p.week.key, p.week.params) : null;
-  if (p.streak !== null && week) return t('moStreakWeek', { streak: p.streak, week });
-  if (p.streak !== null) return t('moStreakAlone', { streak: p.streak });
+  // Großpaket G7 (K3): die Serie heißt überall gleich wie oben in der Datumszeile („12 Tage in Folge“), nicht „Serie 12“.
+  const streak = p.streak === null ? null : p.streak === 1 ? t('vhStreak1') : t('vhStreak', { n: p.streak });
+  if (streak !== null && week) return t('moStreakWeek', { streak, week });
+  if (streak !== null) return t('moStreakAlone', { streak });
   return week ?? '';
 }

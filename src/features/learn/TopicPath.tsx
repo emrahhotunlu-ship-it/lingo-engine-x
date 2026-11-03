@@ -35,7 +35,7 @@ export function splitPath(rows: readonly Row[], current: string | null): { safe:
 }
 
 function TopicRow({ r, onOpen, points }: { r: Row; onOpen: (id: string) => void; points: number }) {
-  const { tn, lang } = useT();
+  const { t, tn, lang } = useT();
   return (
     <li>
       <button type="button" className="lx-v-row" onClick={() => onOpen(r.id)} data-testid="gpath-topic" data-topic={r.id} data-state={r.state}>
@@ -46,8 +46,12 @@ function TopicRow({ r, onOpen, points }: { r: Row; onOpen: (id: string) => void;
             {r.due > 0 ? ` · ${tn('grDueBadge', r.due)}` : ''}
           </span>
         </span>
-        <span className="flex flex-none items-center text-sm text-muted" aria-hidden="true">
+        {/* G7 (K9): Punkte nicht ohne Legende – daneben steht klein, was sie zählen (auch für Vorlese-Programme). */}
+        <span className="flex flex-none flex-col items-end gap-0.5 text-muted">
           <Dots n={points} />
+          <span className="lx-tnum text-xs" data-testid="gpath-steps">
+            {t('gmPathSteps', { n: points })}
+          </span>
         </span>
         <span className="lx-v-row-chev" aria-hidden="true">
           <Icon name="chevronRight" size={18} />
