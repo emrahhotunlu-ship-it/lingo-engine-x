@@ -9,7 +9,7 @@ import { setAssessBad } from './canned/assess';
 
 export type FakeOptions = {
   /** Welche Fähigkeiten `use()` liefert; fehlend = verfügbar. */
-  capabilities?: Partial<Record<'db' | 'sample' | 'downloads' | 'permissions', boolean>>;
+  capabilities?: Partial<Record<'db' | 'sample' | 'downloads' | 'permissions' | 'comments', boolean>>;
   /** Anfangsbestand der Datenbank. */
   seed?: Record<string, Record<string, unknown>>;
   /** Datenbank über Neuladen hinweg in sessionStorage halten. */
@@ -18,7 +18,7 @@ export type FakeOptions = {
   /** Zeit, bis `use()` antwortet (echte Viewer antworten verzögert). */
   useDelayMs?: number;
   /** Relaunch P6: Zeit je Fähigkeit (z. B. `{ db: 8000 }`), sonst `useDelayMs`. */
-  useDelayMsBy?: Partial<Record<'db' | 'sample' | 'downloads' | 'permissions', number>>;
+  useDelayMsBy?: Partial<Record<'db' | 'sample' | 'downloads' | 'permissions' | 'comments', number>>;
   /** Relaunch P6: erste Lieferung jedes Datenbank-Abonnements verzögern (ms); `get` bleibt schnell. */
   subscribeDelayMs?: number;
   sampleMode?: FakeSampleMode;
@@ -147,10 +147,21 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
     request: () => Promise.resolve(granted),
   });
 
-  const namespaces: Record<string, unknown> = { db: dbHandle.db, sample, downloads, permissions };
+  // Kommentare: nur `openComposer` (composer_only). Aufrufe landen in `window.__LINGO_COMMENTS__` für Tests.
+  // Standard aus (wie eine Ansicht ohne Fähigkeit); Tests schalten sie mit `capabilities.comments = true` an.
+  const composerCalls: string[] = [];
+  const comments = Object.freeze({
+    openComposer: (target: { element?: Element }) => {
+      const el = target.element;
+      composerCalls.push(el ? (el.getAttribute('data-testid') ?? el.tagName.toLowerCase()) : '?');
+      (window as { __LINGO_COMMENTS__?: string[] }).__LINGO_COMMENTS__ = composerCalls;
+      return Promise.resolve({ opened: true });
+    },
+  });
+  const namespaces: Record<string, unknown> = { db: dbHandle.db, sample, downloads, permissions, comments };
   const memo = new Map<string, Promise<unknown>>();
   const enabled = (name: string) =>
-    name in namespaces && (opts.capabilities?.[name as keyof NonNullable<FakeOptions['capabilities']>] ?? true);
+    name in namespaces && (opts.capabilities?.[name as keyof NonNullable<FakeOptions['capabilities']>] ?? name !== 'comments');
 
   const claude = Object.freeze({
     use(name: CapabilityName) {

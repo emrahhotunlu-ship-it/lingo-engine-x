@@ -22,3 +22,5 @@ export type Permissions = ClaudeCapabilityMap['permissions'];
 
 export type CapabilityName = Extract<keyof ClaudeCapabilityMap, string>;
 export type ClaudeHost = Claude;
+
+export type Comments = ClaudeCapabilityMap['comments'];

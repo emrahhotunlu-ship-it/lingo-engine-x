@@ -19,4 +19,10 @@ export const shellDe = {
   shPracticeMore: 'Lesen und Sprechen',
   shReadSub: 'Artikel von heute und Kurse',
   shSpeakSub: 'Rollenspiel und Einwand-Training',
+  shComment: 'Kommentieren',
+  shCommentHint: 'Tippe auf die Stelle, die du kommentieren willst.',
+  shCommentCancel: 'Abbrechen',
+  shCommentBusy: 'Ein Kommentarfeld ist schon offen.',
+  shCommentOff: 'Kommentieren geht in dieser Ansicht nicht.',
+  shCommentError: 'Das Kommentarfeld ließ sich nicht öffnen.',
 };
