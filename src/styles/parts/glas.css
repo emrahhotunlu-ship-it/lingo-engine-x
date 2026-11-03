@@ -151,10 +151,49 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     border-left: 0;
   }
 }
-/* 600–1.279 px: Beschriftung unter dem Symbol wie in der Vorschau (72 px breit); Werkzeuge unten bleiben reine Symbole mit Tooltip. */
-@media (min-width: 600px) and (max-width: 1279.98px) {
-  html:not([data-theme='dim']) .lx-nav-tabs .lx-nav-item {
+/* Schiene wie im Küchenstudio auf JEDER Breite ab 600 px (Emrah 03.11.2026 „genau so“): 92 px breit, oben die Petrol-Marke, Reiter als
+   Symbol mit Beschriftung darunter (72 px), unten Claude · Übersetzer · Einstellungen als runde Symbolknöpfe (Name als Tooltip und für
+   Vorleser). Die breite Seitenleiste ab 1.280 px gibt es nur noch im Modus „Gedämpft“. */
+@media (min-width: 600px) {
+  html:not([data-theme='dim']) .lx-frame[data-nav] {
+    --lx-side-w: calc(92px + 14px);
+  }
+  html:not([data-theme='dim']) nav.lx-nav.dz-tabbar {
+    align-items: center;
+    gap: 6px;
+    padding: 14px 0;
+  }
+  html:not([data-theme='dim']) .lx-nav-mark {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 14px;
+    padding: 0;
+    border-radius: 14px;
+    background: var(--act);
+    font-size: 0;
+    box-shadow: 0 4px 14px var(--act-soft);
+  }
+  html:not([data-theme='dim']) .lx-nav-mark::before {
+    content: attr(data-short);
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0;
+    color: var(--act-fg);
+  }
+  html:not([data-theme='dim']) :is(.lx-nav-tabs, .lx-nav-tools) {
+    align-items: center;
     gap: 4px;
+  }
+  html:not([data-theme='dim']) .lx-nav-tabs .lx-nav-item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 72px;
     min-height: 0;
     padding: 10px 0;
     font-size: 12px;
@@ -166,12 +205,37 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     clip-path: none;
   }
-}
-@media (min-width: 1280px) {
-  html:not([data-theme='dim']) .lx-frame[data-nav] {
-    --lx-side-w: calc(14.5rem + 14px);
+  html:not([data-theme='dim']) .lx-nav-tools .lx-nav-item {
+    flex-direction: column;
+    justify-content: center;
+    width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 999px;
+  }
+  html:not([data-theme='dim']) .lx-nav-tools .lx-nav-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    overflow: visible;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  html:not([data-theme='dim']) .lx-nav-item > .lx-nav-icon {
+    position: relative;
+  }
+  html:not([data-theme='dim']) .lx-nav-item .lx-nav-badge {
+    top: -0.375rem;
+    right: -0.75rem;
+    transform: none;
+  }
+  html:not([data-theme='dim']) .lx-nav-item:hover:not([aria-current='page']) {
+    background: var(--kapsel);
   }
 }
 /* Monitor: „Fragen“ als Glaskapsel (Vorschau `g-kapsel`, 40 px hoch). */

@@ -274,14 +274,15 @@ async function startTrainer(page: Page): Promise<void> {
 }
 
 for (const width of [600, 1024]) {
-  test(`Schiene bei ${width} px: links, nur Symbole, vier Reiter + Werkzeuge, keine Leiste unten`, async ({ browser }) => {
+  // Glas (Emrah 03.11.2026, Küchenstudio): die Schiene schwebt 14 px vom Rand, oben die Petrol-Marke, Beschriftung unter dem Symbol.
+  test(`Schiene bei ${width} px: links schwebend, Marke, vier Reiter + Werkzeuge, keine Leiste unten`, async ({ browser }) => {
     const { page, errors, close } = await at(browser, width, 800);
     const nav = await boxOf(page, 'tabbar');
-    expect(nav.x).toBe(0);
+    expect(nav.x).toBeLessThanOrEqual(14);
     expect(nav.width).toBeLessThan(100);
     expect(nav.height).toBeGreaterThan(700);
     await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(4);
-    await expect(page.locator('.lx-nav-mark')).toBeHidden();
+    await expect(page.locator('.lx-nav-mark')).toBeVisible();
     await expect(page.getByTestId('side-settings')).toBeVisible();
     await expect(page.getByTestId('side-claude')).toBeVisible();
     // Bühne rechts der Schiene, nichts überlappt; Kontextspalte nur, wenn etwas offen ist.
@@ -298,10 +299,11 @@ for (const width of [600, 1024]) {
   });
 }
 
-test('Seitenleiste ab 1280 px: Wortmarke, vier Reiter ohne Unterpunkte, Werkzeuge, Kontextspalte reserviert, Praxis über Heute', async ({ browser }) => {
+test('Ab 1280 px: schmale Glas-Schiene mit Marke, vier Reiter ohne Unterpunkte, Werkzeuge, Kontextspalte reserviert, Praxis über Heute', async ({ browser }) => {
   const { page, errors, close } = await at(browser, 1280, 800);
   const nav = await boxOf(page, 'tabbar');
-  expect(nav.width).toBeGreaterThan(200);
+  // Glas (Emrah 03.11.2026): auch hier die schmale Schiene wie im Küchenstudio (die breite Seitenleiste nur noch im Modus „Gedämpft“).
+  expect(nav.width).toBeLessThan(100);
   await expect(page.locator('.lx-nav-mark')).toHaveText('Lingo');
   await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(4);
   await expect(page.getByTestId('tab-apply')).toHaveCount(0);

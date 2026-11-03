@@ -17,6 +17,8 @@ import { TABS, type TabDef, type TabId } from './tabs';
 // - Handy (< 600 px): Leiste unten, vier gleich breite Reiter (Symbol + Beschriftung), in Übungen ausgeblendet.
 // - Schiene (600–1279 px): schmale Spalte links, nur Symbole (Beschriftung bleibt für Screenreader).
 // - Seitenleiste (ab 1280 px): Wortmarke, vier Reiter, unten Claude, Übersetzer und Einstellungen.
+// Glas/Carbon (Emrah 03.11.2026, Küchenstudio): auf jeder Breite ab 600 px die schmale Glas-Schiene mit Petrol-Marke (`data-short`) und
+// Beschriftung unter dem Symbol (glas.css); die breite Seitenleiste bleibt nur im Modus „Gedämpft“.
 // Seit UX-Neuanfang B (Emrah 02.11.2026) kein Reiter „Praxis“ mehr: die Seite ist über Heute › Freiwillig erreichbar.
 // Abzeichen je Reiter liefert der Bereich, der es angemeldet hat. Tippen auf den aktiven Reiter führt zur Wurzel und nach oben (N01).
 
@@ -84,7 +86,7 @@ export function TabBar() {
   const ai = useAiAvailable();
   return (
     <nav aria-label={t('shNavLabel')} className="lx-nav dz-tabbar" data-testid="tabbar">
-      <div className="lx-nav-mark" aria-hidden="true">
+      <div className="lx-nav-mark" aria-hidden="true" data-short={t('shWordmark').slice(0, 1)}>
         {t('shWordmark')}
       </div>
       <div className="lx-nav-tabs">
