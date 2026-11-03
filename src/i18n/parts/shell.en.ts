@@ -21,4 +21,10 @@ export const shellEn: Record<keyof typeof shellDe, string> = {
   shPracticeMore: 'Reading and speaking',
   shReadSub: 'Today’s article and courses',
   shSpeakSub: 'Role-play and objection training',
+  shComment: 'Comment',
+  shCommentHint: 'Tap the spot you want to comment on.',
+  shCommentCancel: 'Cancel',
+  shCommentBusy: 'A comment box is already open.',
+  shCommentOff: 'Commenting isn’t available in this view.',
+  shCommentError: 'Couldn’t open the comment box.',
 };

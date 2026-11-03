@@ -502,3 +502,19 @@
   height: 22px;
   border-radius: 7px;
 }
+
+/* Kommentar-Modus (Emrah 03.11.2026): Griff am rechten Rand, Leiste oben, Zielrahmen beim Darüberfahren. */
+.lx-cmode-btn {
+  position: fixed; right: 0; top: 46%; z-index: 80; display: grid; place-items: center; width: 40px; height: 48px;
+  border-radius: 12px 0 0 12px; background: var(--surface-3); color: var(--fg-2); box-shadow: var(--shadow);
+  opacity: 0.85;
+}
+.lx-cmode-btn:hover, .lx-cmode-btn:focus-visible { opacity: 1; color: var(--fg); }
+.lx-cmode-bar {
+  position: fixed; left: 50%; top: calc(env(safe-area-inset-top) + 8px); z-index: 80; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; width: max-content; max-width: calc(100vw - 24px); padding: 8px 8px 8px 14px;
+  border-radius: 14px; background: var(--act-btn); color: var(--act-btn-fg); box-shadow: var(--shadow); font-size: 14px; font-weight: 600;
+}
+.lx-cmode-cancel { min-height: 36px; padding: 0 12px; border-radius: 10px; background: transparent; box-shadow: 0 0 0 1.5px currentColor inset; color: inherit; font-weight: 650; }
+[data-lx-cmode] body { cursor: crosshair; }
+[data-lx-cmode] body *:hover:not([data-lx-cmode-ui] *):not([data-lx-cmode-ui]) { outline: 2px dashed var(--act); outline-offset: 2px; }
