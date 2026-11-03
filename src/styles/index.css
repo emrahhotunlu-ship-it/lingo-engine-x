@@ -27,26 +27,15 @@
    tests/unit/contrast.test.ts prüft die Kontraste (WCAG AA) aus dieser Datei.
    ========================================================================== */
 
-/* Inter Variable (Gewicht + optische Größe), eingebettet per Build – nur EIN woff2-Schnitt
-   (latin, Neubau N09 / leistung.md 5d): Deutsch und Englisch liegen vollständig darin. Zeichen
-   außerhalb (z. B. die Lautschrift-Zeichen ə ɪ ˈ) zeichnet die Systemschrift im Fallback-Stapel. */
+/* Plus Jakarta Sans (Emrah 03.11.2026, Glas-Aufbau wie im Küchenstudio-Projekt): EINE Schrift für alles, variabel (200–800),
+   eingebettet per Build – nur der latin-Schnitt (Deutsch und Englisch vollständig). Zeichen außerhalb (Lautschrift ə ɪ ˈ) zeichnet die
+   Systemschrift im Fallback-Stapel. Ersetzt Inter und Fraunces. */
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-standard-normal.woff2') format('woff2-variations');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* Fraunces 600 (Kern zuerst, 03.11.2026): Überschriften und das Wort auf der Wortkarte, wie in Emrahs freigegebener Vorschau.
-   Nur ein statischer latin-Schnitt (18 KB), eingebettet per Build. */
-@font-face {
-  font-family: 'Fraunces';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 600;
-  src: url('../../node_modules/@fontsource/fraunces/files/fraunces-latin-600-normal.woff2') format('woff2');
+  font-weight: 200 800;
+  src: url('../../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2') format('woff2-variations');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -107,6 +96,7 @@
   --kb-fg: oklch(0.97 0 0);
   --scrim: oklch(0.1 0.01 254 / 0.62);
   --shadow: 0 1px 0 0 oklch(1 0 0 / 0.06) inset, 0 18px 40px -24px oklch(0 0 0 / 0.7);
+  --shadow-sm: 0 1px 0 0 oklch(1 0 0 / 0.06) inset, 0 8px 22px -14px oklch(0 0 0 / 0.6);
   --fleck-1: oklch(0.322 0.023 78);
   --fleck-2: oklch(0.324 0.041 203);
   --fleck-3: oklch(0.287 0.013 253);
@@ -143,37 +133,38 @@
   --ch-words: oklch(0.8 0.11 195);
   --words-soft: oklch(0.8 0.11 195 / 0.1);
   --shadow: 0 1px 0 0 oklch(1 0 0 / 0.05) inset, 0 18px 40px -26px oklch(0 0 0 / 0.7);
+  --shadow-sm: 0 1px 0 0 oklch(1 0 0 / 0.05) inset, 0 8px 22px -14px oklch(0 0 0 / 0.6);
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: oklch(0.925 0.008 244);
-  --bg-deep: oklch(0.88 0.01 244);
+  --bg: oklch(0.854 0.011 244);
+  --bg-deep: oklch(0.808 0.012 244);
   --surface: oklch(0.972 0.003 229);
   --surface-2: oklch(0.935 0.007 248);
   --surface-3: oklch(0.9 0.008 248);
   --line: oklch(0.201 0.022 252 / 0.1);
   --line-2: oklch(0.201 0.022 252 / 0.18);
   --fg: oklch(0.201 0.022 252);
-  --fg-2: oklch(0.405 0.028 255);
-  --fg-3: oklch(0.445 0.027 255);
+  --fg-2: oklch(0.36 0.027 255);
+  --fg-3: oklch(0.41 0.026 255);
   --fg-on: oklch(1 0 0);
   --act: oklch(0.49 0.08 205);
   --act-fg: oklch(1 0 0);
   --act-btn: oklch(0.49 0.08 205);
   --act-btn-fg: oklch(1 0 0);
-  --act-text: oklch(0.425 0.068 205);
+  --act-text: oklch(0.39 0.064 205);
   --act-soft: oklch(0.49 0.08 205 / 0.12);
-  --ok: oklch(0.46 0.1 158);
+  --ok: oklch(0.42 0.095 158);
   --ok-soft: oklch(0.516 0.109 158 / 0.1);
-  --near: oklch(0.49 0.1 85);
+  --near: oklch(0.44 0.09 85);
   --near-soft: oklch(0.626 0.125 85 / 0.12);
-  --bad: oklch(0.5 0.17 29);
-  --bad-soft: oklch(0.548 0.18 29 / 0.1);
-  --ch-words: oklch(0.425 0.068 205);
+  --bad: oklch(0.46 0.16 29);
+  --bad-soft: oklch(0.548 0.18 29 / 0.07);
+  --ch-words: oklch(0.39 0.064 205);
   --ch-gram: oklch(0.5 0.1 250);
   --ch-listen: oklch(0.53 0.13 245);
-  --ch-speak: oklch(0.6 0.14 55);
+  --ch-speak: oklch(0.52 0.13 55);
   --words-soft: oklch(0.49 0.08 205 / 0.08);
   --mark: oklch(0.49 0.08 205 / 0.2);
   --swatch-iris: oklch(0.49 0.08 205);
@@ -184,6 +175,7 @@
   --kb-fg: oklch(0.15 0 0);
   --scrim: oklch(0.201 0.022 252 / 0.38);
   --shadow: 0 1px 2px oklch(0.201 0.022 252 / 0.06), 0 10px 30px oklch(0.201 0.022 252 / 0.1);
+  --shadow-sm: 0 1px 2px oklch(0.201 0.022 252 / 0.06), 0 6px 18px oklch(0.201 0.022 252 / 0.06);
   --fleck-1: oklch(0.9 0.029 78);
   --fleck-2: oklch(0.808 0.032 201);
   --fleck-3: oklch(0.935 0.007 248);
@@ -207,7 +199,7 @@
   --act-fg: oklch(1 0 0);
   --act-btn: oklch(0.52 0.14 52);
   --act-btn-fg: oklch(1 0 0);
-  --act-text: oklch(0.46 0.12 52);
+  --act-text: oklch(0.42 0.11 52);
   --act-soft: oklch(0.65 0.16 52 / 0.12);
 }
 
@@ -221,8 +213,8 @@
 
 /* Tailwind-Skala (Typografie, Radius). Die Farb-Hilfsklassen (bg-surface, text-muted …) stehen in bridge.css. */
 @theme inline {
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Typografie-Skala (px): 12 · 13 · 15 · 17 · 20 · 24 · 32 · 44 · 64 */
   --text-2xs: 0.75rem;
@@ -295,13 +287,6 @@ h3 {
   text-wrap: balance;
 }
 
-/* Überschriften im großen Schnitt: die eingebettete Inter hat die Achse opsz (14–32), geprüft in tests/unit/noColorLiterals.test.ts. */
-h1,
-h2,
-.lx-t-display,
-.lx-t-title {
-  font-variation-settings: 'opsz' 32;
-}
 
 :focus-visible {
   outline: 2px solid var(--lx-focus);

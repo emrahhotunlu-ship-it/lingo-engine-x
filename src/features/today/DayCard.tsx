@@ -347,11 +347,13 @@ export function TodaySkeletonCard() {
     <div className="lx-kh" aria-hidden="true" data-testid="today-skeleton" data-settled="true">
       <header className="lx-kh-hello">
         <div className="lx-v-sk lx-vh-sk-row" />
-        <div className="lx-v-sk lx-vh-sk-t" />
       </header>
       <section className="lx-kh-card">
         <div className="lx-kh-head">
-          <div className="lx-v-sk lx-vh-sk-meta" />
+          <div className="lx-kh-ti">
+            <div className="lx-v-sk lx-vh-sk-row" />
+            <div className="lx-v-sk lx-vh-sk-meta" />
+          </div>
         </div>
         <div className="lx-kh-segs" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
           <i />

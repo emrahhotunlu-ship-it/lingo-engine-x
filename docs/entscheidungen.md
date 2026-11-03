@@ -773,3 +773,4 @@ Antworten im Frage-Dialog:
 2. **Umfang zuerst: Rahmen + Heute + Übung** (Wörter und Grammatik inkl. Fehler-Erklärung); Wörter-Reiter, Grammatik-Reiter, Fortschritt folgen im selben Stil.
 3. **Schrift wie Küchenstudio: Plus Jakarta Sans** für alles (Fraunces entfällt).
 Farben Glas/Carbon sind schon in den Tokens (`eeb4e3c`).
+**Nachtrag 03.11.2026 (Emrah zur Glas-Vorschau `LmMc6qKNttaAyKRWhuFAC5`):** „wir können es abkürzen. genau so will ich es! den white sowie dark mode wie in der datei beschrieben“ → Vorschau freigegeben (Monitor Heute + Übung), weitere Vorschau-Bilder entfallen; direkt in die App bauen: schwebende Glas-Leiste, Glas-Kopfzeile mit Kapseln, Glas-Blätter, Steingrund #C9D0D6 mit Flecken (Glas) bzw. Graphit (Carbon), Plus Jakarta Sans.

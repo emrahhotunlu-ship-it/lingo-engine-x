@@ -16,7 +16,7 @@ html:not([data-theme='dim']) {
 
 /* 2. Glasblätter: die großen Karten (Heute, Übung, Rückmeldung, Kacheln, Fortschritt, allgemeine Karten). */
 html:not([data-theme='dim'])
-  :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card, [data-testid='today-extra-sheet']) {
+  :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-kh-ctx .lx-kh-free, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card, [data-testid='today-extra-sheet']) {
   border-color: transparent;
   background: var(--glass);
   -webkit-backdrop-filter: blur(28px) saturate(1.5);
@@ -38,12 +38,12 @@ html:not([data-theme='dim']) .lx-kh-go .lx-v-btn {
 
 /* 4. Rückfall ohne Unschärfe: deckende Fläche statt Glas. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  html:not([data-theme='dim']) :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card) {
+  html:not([data-theme='dim']) :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-kh-ctx .lx-kh-free, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card) {
     background: var(--surface);
   }
 }
 @media (prefers-reduced-transparency: reduce) {
-  html:not([data-theme='dim']) :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card) {
+  html:not([data-theme='dim']) :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-kh-ctx .lx-kh-free, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card) {
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -60,6 +60,229 @@ html:not([data-theme='dim']) nav.lx-nav {
 @media (prefers-reduced-transparency: reduce) {
   html:not([data-theme='dim']) nav.lx-nav {
     background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* 6. Glas-Aufbau UI/UX (Emrah 03.11.2026 „genau so will ich es“, Vorschau LmMc6qKNttaAyKRWhuFAC5): Überschriften kräftig (800, eng). */
+html:not([data-theme='dim']) .lx-v-phead h1 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+/* Freiwillig rechts: helle Zeilen im Glasblatt (Vorschau: weiße Zeilen), kein Glas im Glas. */
+html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
+  border-color: transparent;
+  background: var(--surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 7. Schwebende Schiene und Kopfleiste (ab 600 px): die Schiene steht 14 px vom Rand als Glasleiste (Rundung 24), der Reiter-Kopf ist eine
+   Glasleiste (64 px, Rundung 20) mit dem Titel links und Kapsel-Knöpfen rechts. Zwischen den Teilen 12 px Luft wie in der Vorschau. */
+@media (min-width: 600px) {
+  html:not([data-theme='dim']) .lx-frame[data-nav] {
+    --lx-side-w: calc(92px + 14px);
+  }
+  html:not([data-theme='dim']) nav.lx-nav.dz-tabbar {
+    top: 14px;
+    height: calc(100dvh - 28px);
+    margin: 14px 0 14px 14px;
+    padding: 14px 10px;
+    border: 0;
+    border-radius: 24px;
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+  html:not([data-theme='dim']) .lx-nav-item {
+    border-radius: 16px;
+  }
+  /* Aktiver Reiter: helle Glaspille mit dunkler Schrift (Vorschau `g-nav-aktiv`). */
+  html:not([data-theme='dim']) .lx-nav-pill-item {
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      var(--shadow-sm);
+  }
+  html:not([data-theme='dim']) .lx-nav-item[aria-current='page'],
+  html:not([data-theme='dim']) .lx-nav-item[aria-current='page'] .lx-nav-icon {
+    color: var(--fg);
+  }
+  html:not([data-theme='dim']) .lx-vh-head.lx-v-phead.lx-v-gx {
+    min-height: 64px;
+    margin: 14px 0 12px;
+    padding: 0 12px 0 24px;
+    border-radius: 20px;
+    background: var(--glass-soft);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+  html:not([data-theme='dim']) .lx-vh-head.lx-v-phead h1 {
+    font-size: 22px;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+  }
+  html:not([data-theme='dim']) .lx-vh-head .lx-v-phead-right {
+    gap: 8px;
+  }
+  html:not([data-theme='dim']) .lx-vh-head .lx-v-iconbtn {
+    margin-right: 0;
+    border-radius: 999px;
+  }
+  /* Kontextspalte: ohne Trennlinie, oben bündig mit der Kopfleiste. */
+  html:not([data-theme='dim']) .lx-ctx {
+    padding-top: 14px;
+    border-left: 0;
+  }
+}
+/* 600–1.279 px: Beschriftung unter dem Symbol wie in der Vorschau (72 px breit); Werkzeuge unten bleiben reine Symbole mit Tooltip. */
+@media (min-width: 600px) and (max-width: 1279.98px) {
+  html:not([data-theme='dim']) .lx-nav-tabs .lx-nav-item {
+    gap: 4px;
+    min-height: 0;
+    padding: 10px 0;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+  }
+  html:not([data-theme='dim']) .lx-nav-tabs .lx-nav-label {
+    position: static;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    clip-path: none;
+  }
+}
+@media (min-width: 1280px) {
+  html:not([data-theme='dim']) .lx-frame[data-nav] {
+    --lx-side-w: calc(14.5rem + 14px);
+  }
+}
+/* Monitor: „Fragen“ als Glaskapsel (Vorschau `g-kapsel`, 40 px hoch). */
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) .lx-vh-head.lx-v-phead.lx-v-gx {
+    padding-top: 0;
+  }
+  html:not([data-theme='dim']) .lx-vh-ask.lx-v-iconbtn {
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--glass-soft);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim);
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) .lx-vh-head.lx-v-phead.lx-v-gx {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* 8. Kopfleiste mit Datum (Heute) und volle Breite am Monitor (Vorschau: Raster `1fr 380px`, 12 px Abstand, nichts schwimmt in der Mitte). */
+.lx-v-phead-meta {
+  display: none;
+}
+@media (min-width: 600px) {
+  .lx-v-phead-meta {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-left: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: var(--fg-2);
+  }
+  /* Das Datum steht in der Kopfleiste; über der Karte nicht noch einmal (Kap. 15). */
+  .lx-kh-hello {
+    display: none;
+  }
+}
+@media (min-width: 1280px) {
+  html:not([data-theme='dim']) .lx-frame,
+  html:not([data-theme='dim']) .lx-frame[data-ctx] {
+    --lx-stage-max: 72rem;
+    --lx-dmain-pad: 12px;
+    --lx-ctx-gap: 12px;
+    --lx-ctx-w: 380px;
+  }
+  html:not([data-theme='dim']) .lx-frame .lx-dmain {
+    padding-right: 14px;
+  }
+  html:not([data-theme='dim']) .lx-ctx {
+    padding-left: 0;
+  }
+  html:not([data-theme='dim']) .lx-kh-ctx {
+    padding-top: 0;
+    gap: 12px;
+  }
+}
+
+/* 9. Übung (Vorschau `Monitor-Uebung`): die Übungsleiste ist eine Glasleiste (✕, „Wörter · 12 von 38 erledigt“, Balken, Kapseln rechts),
+   „Frag Claude“ und „Wozu?“ sind Glaskapseln, der Satz steht am Monitor groß. Scrollt die Karte unter die Leiste, zeichnet das Glas sie weich. */
+html:not([data-theme='dim']) .lx-exbar.lx-kbar[data-kern] {
+  background: var(--glass-soft);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+}
+html:not([data-theme='dim']) .lx-kask {
+  border-color: transparent;
+  background: var(--glass-soft);
+  box-shadow:
+    inset 0 1px 0 var(--glanz),
+    inset 0 0 0 1px var(--glass-rim);
+  font-weight: 600;
+}
+html:not([data-theme='dim']) .lx-kask:hover {
+  border-color: transparent;
+  background: var(--surface);
+}
+@media (min-width: 600px) {
+  html:not([data-theme='dim']) .lx-exbar.lx-kbar[data-kern] {
+    top: 14px;
+    margin-top: -18px;
+    padding: 10px 16px 14px 12px;
+    border-radius: 20px;
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+  html:not([data-theme='dim']) .lx-exbar.lx-kbar[data-kern] .lx-kbar-row > button:first-child {
+    margin-left: 0;
+    border-radius: 999px;
+  }
+  html:not([data-theme='dim']) .lx-kbar-title {
+    font-weight: 700;
+  }
+}
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) .lx-exercise[data-kern] .lx-t-prompt[data-slot='prompt'] {
+    font-size: 30px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern] {
+    border-radius: 22px;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) .lx-exbar.lx-kbar[data-kern] {
+    background: var(--bg);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }

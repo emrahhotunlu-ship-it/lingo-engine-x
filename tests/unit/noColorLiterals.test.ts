@@ -61,8 +61,10 @@ describe('keine Farbliterale außerhalb der Token-Blöcke', () => {
   });
 });
 
-it('kein backdrop-filter in src/styles (Glas entfällt)', () => {
-  for (const f of cssFiles(STYLES)) expect(stripComments(readFileSync(f, 'utf8')), relative(STYLES, f)).not.toMatch(/backdrop-filter/);
+// Emrah 03.11.2026 (Glas-Aufbau aus dem Küchenstudio-Projekt): Weichzeichner ist wieder gewollt – aber nur an EINER Stelle (parts/glas.css),
+// mit deckendem Rückfall (@supports / prefers-reduced-transparency).
+it('backdrop-filter nur in parts/glas.css (Glas-Aufbau)', () => {
+  for (const f of cssFiles(STYLES)) if (relative(STYLES, f) !== join('parts', 'glas.css')) expect(stripComments(readFileSync(f, 'utf8')), relative(STYLES, f)).not.toMatch(/backdrop-filter/);
 });
 
 it('jede in CSS benutzte --lx-Variable ohne Ersatzwert ist definiert (CSS oder aus dem Code gesetzt)', () => {
@@ -77,8 +79,8 @@ it('jede in CSS benutzte --lx-Variable ohne Ersatzwert ist definiert (CSS oder a
   expect(missing).toEqual([]);
 });
 
-// Schrift: 'opsz' 32 für Überschriften nur, wenn die eingebettete Datei die Achse hat (Plan P1).
-it('eingebettete Inter hat die Achse opsz (bis 32) und Überschriften nutzen sie', () => {
+// Schrift (Emrah 03.11.2026, Glas-Aufbau): Plus Jakarta Sans, variabel im Gewicht (bis 800); sie hat keine opsz-Achse, also setzt das CSS sie nicht.
+it('eingebettete Plus Jakarta Sans hat die Gewichtsachse bis 800, kein opsz im CSS', () => {
   const css = readFileSync(join(STYLES, 'index.css'), 'utf8');
   const src = /src: url\('([^']+\.woff2)'\)/.exec(css)?.[1] ?? '';
   const buf = readFileSync(new URL(src, new URL('../../src/styles/', import.meta.url)));
@@ -121,6 +123,7 @@ it('eingebettete Inter hat die Achse opsz (bis 32) und Überschriften nutzen sie
     const a = f.subarray(f.readUInt16BE(4) + i * f.readUInt16BE(10));
     axes[a.toString('latin1', 0, 4)] = a.readInt32BE(12) / 65536;
   }
-  expect(axes.opsz).toBeGreaterThanOrEqual(32);
-  expect(css).toMatch(/h1,\s*h2,\s*\.lx-t-display,\s*\.lx-t-title\s*\{\s*font-variation-settings: 'opsz' 32;/);
+  expect(src).toContain('plus-jakarta-sans');
+  expect(axes.wght).toBeGreaterThanOrEqual(800);
+  expect(css).not.toMatch(/'opsz'/);
 });

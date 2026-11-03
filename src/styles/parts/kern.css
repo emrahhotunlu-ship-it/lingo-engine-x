@@ -598,14 +598,6 @@
   font-size: 15px;
   color: var(--fg-2);
 }
-.lx-kh-h {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 32px;
-  line-height: 1.15;
-  color: var(--fg);
-}
 .lx-kh-card {
   display: flex;
   flex-direction: column;
@@ -622,11 +614,28 @@
   justify-content: space-between;
   gap: 4px 12px;
 }
+.lx-kh-ti {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+/* Glas-Aufbau (Emrah 03.11.2026, Vorschau LmMc6qKNttaAyKRWhuFAC5 `Main`): „DEIN TAG“ als kleine Überzeile in der Karte, darunter groß der Stand. */
+.lx-kh-eye {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--act-text);
+}
 .lx-kh-count {
   margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.25;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   color: var(--fg);
 }
 .lx-kh-min {
@@ -654,7 +663,7 @@
 .lx-kh-steps {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -663,12 +672,23 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 0 4px;
+  padding: 14px 4px;
+  border-top: 1px solid var(--line);
 }
+.lx-kh-st:first-child {
+  border-top: 0;
+}
+/* Der laufende Schritt ist eine helle Innenkarte (Vorschau: weiß auf Glas), die Zeile danach braucht keine Trennlinie. */
 .lx-kh-st[data-st='now'] {
+  margin-bottom: 4px;
   padding: 16px;
-  border-radius: 16px;
-  background: var(--act-soft);
+  border-top: 0;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.lx-kh-st[data-st='now'] + .lx-kh-st {
+  border-top: 0;
 }
 .lx-kh-st-row {
   display: flex;
@@ -686,13 +706,15 @@
   border: 2px solid var(--line-2);
   border-radius: 999px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--fg-2);
 }
 .lx-kh-st[data-st='now'] .lx-kh-dot {
+  width: 36px;
+  height: 36px;
   border-color: var(--act);
   background: var(--act);
-  font-weight: 700;
+  font-weight: 800;
   color: var(--act-fg);
 }
 .lx-kh-st[data-st='done'] .lx-kh-dot {
@@ -709,13 +731,14 @@
 }
 .lx-kh-st-n {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   line-height: 1.3;
   color: var(--fg);
 }
 .lx-kh-st[data-st='now'] .lx-kh-st-n {
-  font-size: 19px;
+  font-size: 20px;
+  font-weight: 800;
 }
 .lx-kh-st[data-st='done'] .lx-kh-st-n {
   color: var(--fg-2);
@@ -727,7 +750,7 @@
   color: var(--fg-2);
 }
 .lx-kh-st[data-st='now'] .lx-kh-st-s {
-  color: var(--fg);
+  color: var(--fg-2);
 }
 .lx-kh-bar {
   height: 6px;
@@ -744,13 +767,14 @@
 }
 .lx-kh-go .lx-v-btn {
   width: 100%;
-  min-height: 56px;
-  border-radius: 14px;
-  font-size: 18px;
+  min-height: 52px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
 }
 .lx-kh-go .lx-vh-sk-go {
-  height: 56px;
-  border-radius: 14px;
+  height: 52px;
+  border-radius: 999px;
 }
 .lx-kh-note {
   display: flex;
@@ -762,8 +786,8 @@
 }
 .lx-kh-lbl {
   margin: 0;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--fg-2);
@@ -801,7 +825,7 @@
 }
 .lx-kh-tile > b {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
 }
 .lx-kh-tile > span {
   font-size: 14px;
@@ -827,7 +851,7 @@
 }
 .lx-kh-stand[data-variant='row'] b {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--fg);
 }
 .lx-kh-stand[data-variant='row'] span {
@@ -837,10 +861,10 @@
 .lx-kh-stand[data-variant='list'] {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   padding: 24px;
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 22px;
   background: var(--surface);
 }
 .lx-kh-stand-row {
@@ -851,12 +875,12 @@
   margin: 0;
 }
 .lx-kh-stand-row > span {
-  font-size: 17px;
+  font-size: 15px;
   color: var(--fg-2);
 }
 .lx-kh-stand-row > b {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 800;
   color: var(--fg);
 }
 .lx-kh-ctx {
@@ -866,6 +890,10 @@
 }
 .lx-kh-ctx .lx-kh-free {
   margin-top: 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface);
 }
 .lx-kh-ctx .lx-kh-tiles {
   grid-template-columns: minmax(0, 1fr);
@@ -874,14 +902,14 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-radius: 18px;
+  padding: 14px 16px;
+  border-radius: 14px;
 }
 .lx-kh-ctx .lx-kh-tile > b {
-  font-size: 18px;
+  font-size: 16px;
 }
 .lx-kh-ctx .lx-kh-tile > span {
-  font-size: 16px;
+  font-size: 14px;
   text-align: right;
 }
 
@@ -894,22 +922,18 @@
     gap: 6px;
   }
   .lx-kh-date {
-    font-size: 18px;
-  }
-  .lx-kh-h {
-    font-size: 48px;
-    line-height: 1.1;
+    font-size: 15px;
   }
   .lx-kh-card {
     gap: 24px;
-    padding: 32px;
-    border-radius: 28px;
+    padding: 32px 36px;
+    border-radius: 22px;
   }
   .lx-kh-count {
-    font-size: 26px;
+    font-size: 30px;
   }
   .lx-kh-min {
-    font-size: 18px;
+    font-size: 16px;
   }
   .lx-kh-segs {
     gap: 8px;
@@ -918,18 +942,16 @@
     height: 10px;
     border-radius: 5px;
   }
-  .lx-kh-steps {
-    gap: 20px;
-  }
   .lx-kh-st {
     flex-direction: row;
     align-items: center;
     gap: 20px;
-    padding: 4px 24px;
+    padding: 16px 24px;
   }
   .lx-kh-st[data-st='now'] {
+    margin-bottom: 0;
     padding: 22px 24px;
-    border-radius: 20px;
+    border-radius: 18px;
   }
   .lx-kh-st-row {
     flex: 1 1 auto;
@@ -938,24 +960,26 @@
     min-width: 0;
   }
   .lx-kh-dot {
-    width: 44px;
-    height: 44px;
-    font-size: 19px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
   }
   .lx-kh-st[data-st='now'] .lx-kh-dot {
-    font-size: 20px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
   }
   .lx-kh-st-b {
     gap: 4px;
   }
   .lx-kh-st-n {
-    font-size: 22px;
+    font-size: 17px;
   }
   .lx-kh-st[data-st='now'] .lx-kh-st-n {
-    font-size: 24px;
+    font-size: 20px;
   }
   .lx-kh-st-s {
-    font-size: 18px;
+    font-size: 15px;
   }
   .lx-kh-bar {
     max-width: 420px;
@@ -965,14 +989,14 @@
   }
   .lx-kh-st .lx-kh-go .lx-v-btn {
     width: auto;
-    min-height: 60px;
-    padding-inline: 32px;
-    border-radius: 16px;
-    font-size: 19px;
+    min-height: 52px;
+    padding-inline: 28px;
+    border-radius: 999px;
+    font-size: 16px;
   }
   .lx-kh-st .lx-kh-go .lx-vh-sk-go {
     width: 220px;
-    height: 60px;
+    height: 52px;
   }
 }
 

@@ -19,7 +19,9 @@ export function AskHeadButton() {
   return (
     <button type="button" className="lx-v-iconbtn lx-vh-ask" onClick={() => openCompanion()} aria-label={t('vhAsk')} title={t('vhAsk')} data-testid="open-companion" data-ai="">
       <Icon name="ask" size={24} />
-      <span className="lx-vh-ask-l" aria-hidden="true">{t('vhAsk')}</span>
+      <span className="lx-vh-ask-l" aria-hidden="true">
+        {t('vhAsk')}
+      </span>
     </button>
   );
 }
@@ -29,7 +31,15 @@ function TranslateHeadButton() {
   const ai = useAiAvailable();
   if (!ai) return null;
   return (
-    <button type="button" className="lx-v-iconbtn lx-vh-tool" onClick={() => openCompanion({ tab: 'translate' })} aria-label={t('shTranslator')} title={t('shTranslator')} data-testid="open-translate" data-ai="">
+    <button
+      type="button"
+      className="lx-v-iconbtn lx-vh-tool"
+      onClick={() => openCompanion({ tab: 'translate' })}
+      aria-label={t('shTranslator')}
+      title={t('shTranslator')}
+      data-testid="open-translate"
+      data-ai=""
+    >
       <Icon name="translate" size={22} />
     </button>
   );
@@ -59,10 +69,11 @@ export function HeadTools({ loading = false, lead = null }: { loading?: boolean;
 
 /** Kopf einer Reiter-Wurzel (gerendert vom Rahmen, `TopBar`; Test-ID `topbar` bleibt). */
 /** `lead`: zusätzlicher Knopf vor den Werkzeugen (Fortschritt: Profil-Knopf, sonst wäre das Profil-Blatt nicht erreichbar). */
-export function TabHead({ title, loading = false, testId, lead = null }: { title: ReactNode; loading?: boolean; testId?: string; lead?: ReactNode }) {
+/** `meta`: Zeile neben dem Titel in der Glas-Kopfleiste (ab 600 px; Heute: das Datum, nur sichtbar – Vorleser hören es im Titel). */
+export function TabHead({ title, loading = false, testId, lead = null, meta }: { title: ReactNode; loading?: boolean; testId?: string; lead?: ReactNode; meta?: ReactNode }) {
   return (
     <div data-testid="topbar" data-tabhead={testId}>
-      <VPageHead className="lx-vh-head" title={title} right={<HeadTools loading={loading} lead={lead} />} />
+      <VPageHead className="lx-vh-head" title={title} meta={meta} right={<HeadTools loading={loading} lead={lead} />} />
     </div>
   );
 }

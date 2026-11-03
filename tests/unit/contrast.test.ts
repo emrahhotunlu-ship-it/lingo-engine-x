@@ -187,7 +187,7 @@ describe('Glas und Carbon (Emrah 03.11.2026, Küchenstudio-Farbwelten)', () => {
 
   it('Hell = Glas: heller Steingrund, Petrol mit weißer Knopfschrift ≥ 4,5:1, Glas-Rollen vorhanden', () => {
     const t = tokens('light', 'iris');
-    expect(t.bg).toBe('oklch(0.925 0.008 244)');
+    expect(t.bg).toBe('oklch(0.854 0.011 244)');
     expect(t.act).toBe('oklch(0.49 0.08 205)');
     expect(t['act-fg']).toBe('oklch(1 0 0)');
     expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);

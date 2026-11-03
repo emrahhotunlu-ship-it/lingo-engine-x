@@ -79,7 +79,6 @@ button.lx-btn-primary:hover:not(:disabled) { filter: none; background: var(--act
   line-height: 36px;
   font-weight: 700;
   letter-spacing: -0.022em;
-  font-variation-settings: 'opsz' 32;
 }
 /* Seitentitel unter „‹ Herkunft“ (Seiten mit Rahmen-Kopf): 26/32 wie die Unterseiten der Vorschau (screens.js `h2` in `.scroll`). */
 .lx-pagetitle {

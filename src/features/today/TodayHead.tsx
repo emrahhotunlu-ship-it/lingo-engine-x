@@ -16,6 +16,7 @@ export function TodayHead({ loading = false }: { loading?: boolean }) {
     <TabHead
       loading={loading}
       testId="today"
+      meta={dateLabelOf(today, lang)}
       title={
         <>
           {t('vhToday')}

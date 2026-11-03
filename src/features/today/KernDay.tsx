@@ -17,16 +17,15 @@ import type { StreakWeek } from './TodayWeek';
 /** Eine Zeile der Pflicht-Karte: `sub` = Unterzeile (Grund/Thema), `progress` = Stand des laufenden Schritts. */
 export type KernRow = DayRow & { sub: string | null; progress?: { done: number; total: number } | null };
 
-/** Datum und „Dein Tag“ (Vorschau `Dienstag, 4. November` / `Dein Tag`). Die Serie steht unter „Dein Stand“; für Screenreader bleibt die Fußzeile. */
+/** Datum über der Karte (Vorschau `Dienstag, 4. November`). „Dein Tag“ steht seit dem Glas-Aufbau (Emrah 03.11.2026) als Überzeile IN der Karte. */
 export function KernHello() {
-  const { t, lang } = useT();
+  const { lang } = useT();
   const today = useClock((s) => s.today);
   return (
     <header className="lx-kh-hello">
       <p className="lx-kh-date">
         <span data-testid="hello-date">{dateLabelOf(today, lang)}</span>
       </p>
-      <h2 className="lx-kh-h">{t('vhDayCard')}</h2>
     </header>
   );
 }
@@ -82,9 +81,12 @@ export function KernDayCard({
   return (
     <section className="lx-kh-card" aria-labelledby={titleId} {...attrs}>
       <div className="lx-kh-head">
-        <h3 id={titleId} className="lx-kh-count lx-v-num" data-testid={real ? 'today-title' : 'start-next'}>
-          {t('kernDuty', { n: done, total })}
-        </h3>
+        <div className="lx-kh-ti">
+          <h2 className="lx-kh-eye">{t('vhDayCard')}</h2>
+          <h3 id={titleId} className="lx-kh-count lx-v-num" data-testid={real ? 'today-title' : 'start-next'}>
+            {t('kernDuty', { n: done, total })}
+          </h3>
+        </div>
         {rest > 0 && <span className="lx-kh-min lx-v-num">{t('kernAbout', { min: rest })}</span>}
       </div>
       <Segs fills={fills} />

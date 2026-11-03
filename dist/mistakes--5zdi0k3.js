@@ -1,0 +1,1 @@
+import{Vn as e}from"./registry-Cdwsgi8-.js";import{k as t}from"./v-BGGLlhF-.js";import"./sharedUi-Bx54Lpv7.js";import{l as n,n as r}from"./history-EBaPKqJV.js";async function i(n){let r=e();if(!r)return null;let i=await t(r,n);return i.status===`valid`?i.doc:null}async function a(e){return n(await r(i,e,14),e)}export{a as t};

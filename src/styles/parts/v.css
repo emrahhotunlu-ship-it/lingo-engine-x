@@ -10,7 +10,7 @@
 .lx-v-phead, .lx-v-btn, .lx-v-card, .lx-v-row, .lx-v-chip, .lx-v-tile, .lx-v-ringwrap, .lx-v-week, .lx-v-statelist, .lx-v-sheet, .lx-v-reload { line-height: 1.45; }
 
 /* Schriftschnitt für große Zahlen und Titel (style.css:119–120). */
-.lx-v-disp { font-variation-settings: 'opsz' 32; letter-spacing: -0.022em; }
+.lx-v-disp { letter-spacing: -0.022em; }
 .lx-v-num { font-variant-numeric: tabular-nums; }
 
 /* Kanalpunkt (style.css:124–125). */
