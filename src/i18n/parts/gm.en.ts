@@ -14,6 +14,8 @@ export const gmEn = {
   gmBtnTest: 'Finish topic',
   gmUnfairLink: 'Was this task unfair?',
   gmPathSteps: '{n} of 5 steps',
+  gmReportNote: "This answer won't count then.",
+  gmTestEarly: "You don't need all 5 steps for it: if it doesn't stick yet, you practice exactly that next.",
   gmStandHead: 'Where you stand',
   gmStandOnWay_one: 'None solid yet · 1 word on its way',
   gmStandOnWay_other: 'None solid yet · {n} words on their way',

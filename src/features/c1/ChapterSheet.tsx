@@ -56,7 +56,25 @@ function eyebrowKey(p: ChapterProgress, later: boolean): MessageKey {
   return later ? 'vgChEyeLater' : 'vgChEyeOpen';
 }
 
-export function ChapterDetail({ chapter, progress, view, later = false, onStarted }: { chapter: ProgramChapter; progress: ChapterProgress; view: ChapterView; later?: boolean; onStarted?: () => void }) {
+/**
+ * `slim` (Großpaket G8, UX M1): Kontextspalte mit neuer Grammatik – ohne Themenliste, Start-Knopf und die Zeilen Fehler/Lehrkraft/Reise, die der
+ * Themen-Weg links schon zeigt (Entscheidung 4: ein Weg, Fehlersätze an einem Ort; Kap. 15). Es bleiben Film, Abschlussprüfung und Ziel.
+ */
+export function ChapterDetail({
+  chapter,
+  progress,
+  view,
+  later = false,
+  onStarted,
+  slim = false,
+}: {
+  chapter: ProgramChapter;
+  progress: ChapterProgress;
+  view: ChapterView;
+  later?: boolean;
+  onStarted?: () => void;
+  slim?: boolean;
+}) {
   const { t, tn, lang } = useT();
   const go = useNav((s) => s.go);
   const [topic, setTopic] = useState<string | null>(null);
@@ -103,84 +121,88 @@ export function ChapterDetail({ chapter, progress, view, later = false, onStarte
         </p>
       )}
 
-      <ul className="lx-v-card lx-vg-topics" aria-label={t('pxChTopics')}>
-        {progress.topics.map((r) => {
-          const name = r.exists ? topicName(r.id, lang) : (pendingName(r.id, lang) ?? r.id);
-          const tone = topicTone(r, run);
-          const phase = r.exists ? phases?.get(r.id) : undefined;
-          // Kapitel-Modus: „Geschafft“ (sicher oder Test bestanden) zeigt das Häkchen – dieselbe Quelle wie die Phase. Sonst „Sicher/Fest“.
-          const full = run ? r.done : tone === 'safe';
-          const state = full ? 'done' : r.id === curTopic ? 'run' : 'open';
-          const subText = !r.exists ? t('pxChTopicSoon') : phase ? t(PHASE_KEY[phase]) : t(TONE_KEY[tone]);
-          const label = phase ? t('pxKTopicAria', { name, phase: t(PHASE_KEY[phase]) }) : t('pxChTopicAria', { name, a: r.patSafe, b: r.patTotal });
-          const inner = (
-            <>
-              <span className="lx-vg-tname">{name}</span>
-              {phase ? (
-                <span className="lx-vg-tsub" data-testid="chapter-topic-phase" data-phase={phase}>
-                  {subText}
-                </span>
-              ) : r.exists ? (
-                <span className="lx-vg-tsub" data-testid="chapter-topic-chip" data-tone={tone}>
-                  {subText}
-                </span>
-              ) : (
-                <span className="lx-vg-tsub">{subText}</span>
-              )}
-            </>
-          );
-          return (
-            <li key={r.id} className="lx-v-st lx-vg-topic" data-state={state} data-testid="chapter-topic" data-topic={r.id} data-exists={r.exists ? 'true' : 'false'}>
-              <span className="lx-v-st-mk" data-testid="chapter-topic-ring" data-done={full ? 'true' : undefined} role="img" aria-label={label}>
-                {full && <Icon name="check" size={14} />}
-              </span>
-              {r.exists ? (
-                <>
-                <button type="button" className="lx-vg-tnm" onClick={() => setTopic(r.id)} aria-label={`${t('vgTopicOpen', { name })} · ${subText}`} data-testid="chapter-topic-open">
-                  {inner}
-                </button>
-                {/* Vorschau H6 `chapter`: am laufenden Thema der Link „Erklärung“ (Themenblatt mit Regel, Beispielen und Fallen). */}
-                {state === 'run' && (
-                  <button type="button" className="lx-vg-link lx-vg-explain" onClick={() => setTopic(r.id)} data-testid="chapter-topic-explain">
-                    {t('vgExplain')}
-                  </button>
+      {!slim && (
+        <ul className="lx-v-card lx-vg-topics" aria-label={t('pxChTopics')}>
+          {progress.topics.map((r) => {
+            const name = r.exists ? topicName(r.id, lang) : (pendingName(r.id, lang) ?? r.id);
+            const tone = topicTone(r, run);
+            const phase = r.exists ? phases?.get(r.id) : undefined;
+            // Kapitel-Modus: „Geschafft“ (sicher oder Test bestanden) zeigt das Häkchen – dieselbe Quelle wie die Phase. Sonst „Sicher/Fest“.
+            const full = run ? r.done : tone === 'safe';
+            const state = full ? 'done' : r.id === curTopic ? 'run' : 'open';
+            const subText = !r.exists ? t('pxChTopicSoon') : phase ? t(PHASE_KEY[phase]) : t(TONE_KEY[tone]);
+            const label = phase ? t('pxKTopicAria', { name, phase: t(PHASE_KEY[phase]) }) : t('pxChTopicAria', { name, a: r.patSafe, b: r.patTotal });
+            const inner = (
+              <>
+                <span className="lx-vg-tname">{name}</span>
+                {phase ? (
+                  <span className="lx-vg-tsub" data-testid="chapter-topic-phase" data-phase={phase}>
+                    {subText}
+                  </span>
+                ) : r.exists ? (
+                  <span className="lx-vg-tsub" data-testid="chapter-topic-chip" data-tone={tone}>
+                    {subText}
+                  </span>
+                ) : (
+                  <span className="lx-vg-tsub">{subText}</span>
                 )}
-                </>
-              ) : (
-                <span className="lx-vg-tnm">{inner}</span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+              </>
+            );
+            return (
+              <li key={r.id} className="lx-v-st lx-vg-topic" data-state={state} data-testid="chapter-topic" data-topic={r.id} data-exists={r.exists ? 'true' : 'false'}>
+                <span className="lx-v-st-mk" data-testid="chapter-topic-ring" data-done={full ? 'true' : undefined} role="img" aria-label={label}>
+                  {full && <Icon name="check" size={14} />}
+                </span>
+                {r.exists ? (
+                  <>
+                    <button type="button" className="lx-vg-tnm" onClick={() => setTopic(r.id)} aria-label={`${t('vgTopicOpen', { name })} · ${subText}`} data-testid="chapter-topic-open">
+                      {inner}
+                    </button>
+                    {/* Vorschau H6 `chapter`: am laufenden Thema der Link „Erklärung“ (Themenblatt mit Regel, Beispielen und Fallen). */}
+                    {state === 'run' && (
+                      <button type="button" className="lx-vg-link lx-vg-explain" onClick={() => setTopic(r.id)} data-testid="chapter-topic-explain">
+                        {t('vgExplain')}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <span className="lx-vg-tnm">{inner}</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
-      {run && (
+      {run && !slim && (
         <section className="lx-vg-sec" aria-label={t('pxKStart')} data-testid="chapter-run">
           <p className="lx-vg-p2" data-testid="chapter-daily" data-active={active ? 'true' : 'false'}>
             {t(active ? 'pxKDaily' : 'pxKDailyIf')}
           </p>
           {showStart && (
-          <VButton
-            variant={startVariant}
-            full
-            data-testid="chapter-start"
-            data-chapter={chapter.n}
-            onClick={() => {
-              startChapter(chapter.n - 1, api);
-              onStarted?.();
-            }}
-          >
-            {active ? t(chapterBtnKey(active, prep)) : later ? t('vgChPull') : progress.introduced > 0 ? t('pxKContinue') : t('pxKStart')}
-          </VButton>
+            <VButton
+              variant={startVariant}
+              full
+              data-testid="chapter-start"
+              data-chapter={chapter.n}
+              onClick={() => {
+                startChapter(chapter.n - 1, api);
+                onStarted?.();
+              }}
+            >
+              {active ? t(chapterBtnKey(active, prep)) : later ? t('vgChPull') : progress.introduced > 0 ? t('pxKContinue') : t('pxKStart')}
+            </VButton>
           )}
         </section>
       )}
 
-      <div className="lx-vg-rows">
-        <VRow icon="flag" title={t('vgErrors')} sub={dueHere > 0 ? tn('vgErrorsCh', dueHere) : t('vgErrorsChNone')} onClick={() => fix.start(api)} data-testid="chapter-errors" />
-        <VRow icon="pen" title={t('vgTeacher')} sub={t('vgTeacherSub')} onClick={() => go({ name: 'teacherFeedback' })} data-testid="chapter-teacher" />
-        {view !== 'sheet' && flags.program && <VRow icon="map" title={t('vgJourney')} sub={t('vgJourneySub')} onClick={() => go({ name: 'journey' })} data-testid="chapter-journey" />}
-      </div>
+      {!slim && (
+        <div className="lx-vg-rows">
+          <VRow icon="flag" title={t('vgErrors')} sub={dueHere > 0 ? tn('vgErrorsCh', dueHere) : t('vgErrorsChNone')} onClick={() => fix.start(api)} data-testid="chapter-errors" />
+          <VRow icon="pen" title={t('vgTeacher')} sub={t('vgTeacherSub')} onClick={() => go({ name: 'teacherFeedback' })} data-testid="chapter-teacher" />
+          {view !== 'sheet' && flags.program && <VRow icon="map" title={t('vgJourney')} sub={t('vgJourneySub')} onClick={() => go({ name: 'journey' })} data-testid="chapter-journey" />}
+        </div>
+      )}
 
       {film && (
         <section className="lx-vg-sec" aria-labelledby={`vg-film-${view}`} data-testid="chapter-film">

@@ -24,7 +24,7 @@ export const vgEn = {
   vgJourney: 'View the C1 journey',
   vgJourneySub: 'All chapters as a route, with your progress',
   vgMore: 'Extra practice, optional',
-  vgErrorsAll: 'All mistake sentences',
+  vgErrorsAll: 'All sentences to fix',
   vgChPull: 'Move chapter forward',
   vgExplain: 'Explanation',
   vgTopicOpen: 'View topic: {name}',

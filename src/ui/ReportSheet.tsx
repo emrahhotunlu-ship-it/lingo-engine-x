@@ -63,9 +63,11 @@ type Props = {
   reasons?: readonly ReportReason[] | undefined;
   /** Eigener Dankestext (z. B. „zählt nicht“); ohne Angabe der allgemeine. */
   thanks?: MessageKey | undefined;
+  /** Ruhige Zeile über den Gründen (G8, UX K5: „Diese Antwort zählt dann nicht.“). */
+  note?: MessageKey | undefined;
 };
 
-export function ReportSheet({ open, onClose, tpl, id, onReport, reasons, thanks }: Props) {
+export function ReportSheet({ open, onClose, tpl, id, onReport, reasons, thanks, note }: Props) {
   const { t } = useT();
   const pick = (reason: ReportReason) => {
     const info: ReportInfo = { tpl, id, reason };
@@ -81,6 +83,11 @@ export function ReportSheet({ open, onClose, tpl, id, onReport, reasons, thanks 
   return (
     <Sheet open={open} onClose={onClose} title={t('ttReportTitle')} closeLabel={t('ttReportClose')} fit>
       <div className="flex flex-col gap-2" data-testid="report-sheet">
+        {note && (
+          <p className="lx-t-meta m-0 text-muted" data-testid="report-note">
+            {t(note)}
+          </p>
+        )}
         {REASONS.filter((r) => !reasons || reasons.includes(r.id)).map((r) => (
           <Button key={r.id} variant="secondary" onClick={() => pick(r.id)} data-testid={`report-${r.id}`}>
             {t(r.label)}

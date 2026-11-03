@@ -204,12 +204,15 @@ export function ExplainMine(props: ExplainMineProps) {
               </p>
             </div>
           )}
-          <div className="flex flex-col gap-0.5" data-testid="tutor-why">
-            <p className="lx-t-label m-0">{t('ttXWhy')}</p>
-            <p className="lx-t-body m-0" lang={lang}>
-              {pick(o.why)}
-            </p>
-          </div>
+          {/* G8 (UX M3): in der ruhigen Karte steht „Warum“ schon darüber – mit „Deine Antwort“ fällt die Regel hier weg, sonst stünde sie doppelt. */}
+          {!(compact && o.yours && shownWhy && shownWhy.trim()) && (
+            <div className="flex flex-col gap-0.5" data-testid="tutor-why">
+              <p className="lx-t-label m-0">{t('ttXWhy')}</p>
+              <p className="lx-t-body m-0" lang={lang}>
+                {pick(o.why)}
+              </p>
+            </div>
+          )}
           {!compact && o.signal.length > 0 && (
             <p className="lx-t-meta m-0 text-muted" data-testid="tutor-signal">
               {t('ttXSignal', { words: o.signal.join(', ') })}

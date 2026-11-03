@@ -29,19 +29,28 @@ const EMPTY = new Map<string, Doc>();
 const K_LINE: Record<TopicPhase, MessageKey> = { intro: 'pxKNextIntro', practice: 'pxKNextPractice', test: 'pxKNextTest', done: 'pxKNextDone' };
 
 /** Lernweg-Balken (Vorschau `.bar`, 6 px, 4 px Abstand): ein Abschnitt je Lernweg-Punkt, erreichte gefüllt. */
-function Steps({ topic }: { topic: string | null }) {
+function Steps({ topic, shown = false }: { topic: string | null; /** G8 (UX M2): mit neuer Grammatik sichtbar beschriftet wie die Punkte im Themen-Weg. */ shown?: boolean }) {
   const { t } = useT();
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   if (!topic) return null;
   const done = lernweg(topic, docs.get(topic), now).done;
   const n = done.filter(Boolean).length;
-  return (
+  const bar = (
     <div className="lx-vg-bar" data-testid="here-steps" data-n={n} data-total={done.length}>
-      <span className="sr-only">{t('vgHereSteps', { n, total: done.length })}</span>
+      {!shown && <span className="sr-only">{t('vgHereSteps', { n, total: done.length })}</span>}
       {done.map((d, i) => (
         <i key={i} data-d={d ? '' : undefined} aria-hidden="true" />
       ))}
+    </div>
+  );
+  if (!shown) return bar;
+  return (
+    <div>
+      {bar}
+      <p className="lx-tnum mt-1 text-xs text-muted" data-testid="here-steps-label">
+        {t('gmPathSteps', { n })}
+      </p>
     </div>
   );
 }
@@ -95,10 +104,19 @@ export function HereCard() {
         </h2>
         <p className="lx-vg-p2" data-testid="hub-next-line">
           {prep ? t('pxKTestPrep') : t(cursor.phase === 'test' && cursor.retry ? 'pxKNextRetry' : K_LINE[cursor.phase], { n: cursor.phase === 'intro' ? TOPIC_ROUND_MIN + 1 : TOPIC_ROUND_MIN })}
+          {gmod && cursor.phase === 'test' && !prep && !cursor.retry ? ` ${t('gmTestEarly')}` : ''}
         </p>
-        <Steps topic={cursor.topic} />
+        <Steps topic={cursor.topic} shown={gmod} />
         {canGo && (
-          <VButton variant="pri" full className="lx-vg-go" onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)} data-testid="hub-next-start" data-action={cursor.phase} data-prep={prep ? 'true' : undefined}>
+          <VButton
+            variant="pri"
+            full
+            className="lx-vg-go"
+            onClick={() => startChapter(cursor.phase === 'done' ? cursor.chapter + 1 : cursor.chapter, api)}
+            data-testid="hub-next-start"
+            data-action={cursor.phase}
+            data-prep={prep ? 'true' : undefined}
+          >
             {gmod && cursor.phase === 'test' && !prep ? t('gmBtnTest') : t(chapterBtnKey(cursor, prep))}
           </VButton>
         )}
@@ -116,7 +134,7 @@ export function HereCard() {
       <p className="lx-vg-p2" data-testid="hub-next-line">
         {next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}
       </p>
-      <Steps topic={next.id} />
+      <Steps topic={next.id} shown={gmod} />
       {brakeActive ? (
         <>
           <VButton variant="pri" full className="lx-vg-go" onClick={() => fix.start(api)} data-testid="hub-next-start" data-action="fix" data-n={fix.nToday}>

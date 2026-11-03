@@ -1141,7 +1141,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
       // G6 (M14): Melden nicht nur hinter „…“ – mit der neuen Grammatik ein leiser Link bei „Noch nicht“/„Fast“, solange die Antwort noch nicht zählt.
       ...(mod && !held && !noHelp && !fb.void && !fb.override && (fb.verdict === 'wrong' || fb.verdict === 'near')
         ? {
-            tail: (
+            late: (
               <button type="button" className="self-start text-sm text-muted underline underline-offset-4 min-h-11" onClick={() => setReportOpen(true)} data-testid="gm-unfair">
                 {t('gmUnfairLink')}
               </button>
@@ -1212,6 +1212,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         id={`gr:${task.key}`}
         reasons={['solution', 'twofit', 'unnatural', 'other']}
         thanks={!held && (!noHelp || testVoid) ? 'ttReportVoid' : undefined}
+        note={fb && !held && (!noHelp || testVoid) ? 'gmReportNote' : undefined}
         onReport={(info) => {
           // Gemeldet: die Antwort zählt nicht (noch nicht gebucht), die Lehrkraft-Prüfung findet die Aufgabe in `app/c1.bad`.
           // Ausnahme Vortest, Themen-Test und Wochen-Check (`noHelp`): dort zählt jede Antwort fürs Ergebnis; gemeldet wird trotzdem.

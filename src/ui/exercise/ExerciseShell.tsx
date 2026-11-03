@@ -102,6 +102,8 @@ export type ShellFeedback = {
   act?: ReactNode;
   /** Zeilen nach dem Warum (Wörter: Wortpartner, „Kommt wieder“): im Band unter dem Warum, am Laptop unter der Erklärung; nie abgeschnitten. */
   tail?: ReactNode;
+  /** G8 (UX M3): leise Zeile nach der Handlung und Claude, vor „Mehr“ (Grammatik: „Aufgabe war unfair?“). */
+  late?: ReactNode;
   nextIn?: string | null;
   /** Warum die Stufe noch nicht steigt (Wörter: so viele freie Antworten an anderen Tagen fehlen noch), eigene ruhige Zeile unter „Wieder in …“. */
   stageNote?: string | null;
@@ -545,6 +547,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             {!sideCol && tutorNode}
           </div>
         )}
+        {feedback.late && <div data-slot="late">{feedback.late}</div>}
         {!sideCol && moreNode}
         {/* Handy: „Frag Claude“ steht offen unter der Rückmeldung (Emrah 02.11.2026: Hilfe muss sichtbar sein, ohne erst zu suchen). */}
         {band && claudeQuestion && <ClaudeAskBox task={task.text} after input={false} testId="claude-ask-inline" />}
