@@ -2,7 +2,7 @@
  "seed 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 1 6 6 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -24,7 +24,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1 6 6 124 170",
+  "stand": "6 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -60,7 +60,7 @@
  "seed 2026-09-14 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 1 6 6 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -82,7 +82,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1 6 6 124 170",
+  "stand": "6 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "6 1 6"
@@ -90,7 +90,7 @@
  "seed 2026-09-15 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 2 6 7 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -112,7 +112,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "7 2 6 7 124 170",
+  "stand": "7 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "7 2 6"
@@ -148,7 +148,7 @@
  "seed 2026-09-15 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 2 6 7 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -170,7 +170,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "7 2 6 7 124 170",
+  "stand": "7 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "7 2 6"
@@ -178,7 +178,7 @@
  "seed 2026-09-16 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 3 6 8 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -200,7 +200,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "8 3 6 8 124 170",
+  "stand": "8 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "8 3 6"
@@ -236,7 +236,7 @@
  "seed 2026-09-16 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 3 6 8 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -258,7 +258,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "8 3 6 8 124 170",
+  "stand": "8 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "8 3 6"
@@ -266,7 +266,7 @@
  "seed 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 4 6 9 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -288,7 +288,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 4 6 9 124 170",
+  "stand": "9 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "9 4 6"
@@ -324,7 +324,7 @@
  "seed 2026-09-17 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 4 6 9 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -346,7 +346,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 4 6 9 124 170",
+  "stand": "9 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "9 4 6"
@@ -354,7 +354,7 @@
  "seed 2026-09-18 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 5 6 10 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -376,7 +376,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "10 5 6 10 124 170",
+  "stand": "10 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "10 5 6"
@@ -412,7 +412,7 @@
  "seed 2026-09-18 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 5 6 10 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -434,7 +434,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "10 5 6 10 124 170",
+  "stand": "10 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "10 5 6"
@@ -442,7 +442,7 @@
  "seed 2026-09-19 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 6 6 11 124 170",
+  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -464,7 +464,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 6 6 11 124 170",
+  "stand": "11 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "11 6 6"
@@ -500,7 +500,7 @@
  "seed 2026-09-19 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 6 6 11 124 170",
+  "n": "25 3 7 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -522,7 +522,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 6 6 11 124 170",
+  "stand": "11 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "11 6 6"
@@ -530,7 +530,7 @@
  "seed 2026-09-20 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 7 12 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -552,7 +552,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 7 12 124 170",
+  "stand": "12 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "12 7"
@@ -588,7 +588,7 @@
  "seed 2026-09-20 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 7 12 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -610,7 +610,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 7 12 124 170",
+  "stand": "12 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "12 7"
@@ -618,7 +618,7 @@
  "seed 2026-09-21 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 12 124 0",
+  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -640,7 +640,7 @@
    "stand-week min=0"
   ],
   "rev": null,
-  "stand": "12 12 124 0",
+  "stand": "12 124 0",
   "truth": null,
   "goal": "100 100",
   "streak": "12"
@@ -676,7 +676,7 @@
  "seed 2026-09-21 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 12 124 0",
+  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -698,7 +698,7 @@
    "stand-week min=0"
   ],
   "rev": null,
-  "stand": "12 12 124 0",
+  "stand": "12 124 0",
   "truth": "7",
   "goal": "100 100",
   "streak": "12"
@@ -2615,7 +2615,7 @@
  "gross 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1 6 6 1.240 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2637,7 +2637,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1 6 6 1.240 170",
+  "stand": "6 1.240 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -2673,7 +2673,7 @@
  "gross 2026-09-14 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1 6 6 1.240 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2695,7 +2695,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1 6 6 1.240 170",
+  "stand": "6 1.240 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "6 1 6"
@@ -2703,7 +2703,7 @@
  "gross 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 4 6 9 1.240 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2725,7 +2725,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 4 6 9 1.240 170",
+  "stand": "9 1.240 170",
   "truth": null,
   "goal": "100 100",
   "streak": "9 4 6"
@@ -2761,7 +2761,7 @@
  "gross 2026-09-17 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 4 6 9 1.240 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2783,7 +2783,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 4 6 9 1.240 170",
+  "stand": "9 1.240 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "9 4 6"
@@ -2791,7 +2791,7 @@
  "gross 2026-09-20 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 7 12 1.240 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2813,7 +2813,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 7 12 1.240 170",
+  "stand": "12 1.240 170",
   "truth": null,
   "goal": "100 100",
   "streak": "12 7"
@@ -2849,7 +2849,7 @@
  "gross 2026-09-20 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 7 12 1.240 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2871,7 +2871,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 7 12 1.240 170",
+  "stand": "12 1.240 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "12 7"
@@ -4093,7 +4093,7 @@
  "seed 2026-09-14 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 1 6 6 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -4115,7 +4115,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1 6 6 124 170",
+  "stand": "6 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -4151,7 +4151,7 @@
  "seed 2026-09-19 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 6 6 11 124 170",
+  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -4173,7 +4173,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 6 6 11 124 170",
+  "stand": "11 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "11 6 6"
@@ -5676,7 +5676,7 @@
  "seed 2026-09-14 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14 15 16 17 18 19 20 6 6 1 6 6 6 1 6 6 124 170",
+  "n": "25 3 100 100 14 15 16 17 18 19 20 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -5698,7 +5698,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1 6 6 124 170",
+  "stand": "6 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -5706,7 +5706,7 @@
  "seed 2026-09-19 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14 15 16 17 18 19 20 11 11 6 6 17 11 6 6 11 124 170",
+  "n": "25 3 100 100 12 14 15 16 17 18 19 20 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -5728,7 +5728,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 6 6 11 124 170",
+  "stand": "11 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "11 6 6"
