@@ -11,3 +11,4 @@ Status: offen · in Arbeit · behoben (Version)
 | K4 | 03.11. 14:12 | 84d73501 | Kopfzeile der Übung „Wörter · Wiederholung“ | Blaues Licht unklar („was heißt das?“), ganze Zeile nichtssagend | offen |
 | K5 | 03.11. 14:13 | 4e6779b0 | Abschnitt „Erklärung“ (Wörter) | Nichtssagend: keine Beispielsätze, nicht wie das Wort angewendet wird; alte App war besser | offen |
 | K6 | 03.11. 14:13 | f160a2e3 | Seitenbereich „Regel und Erklärung“ (aside, Laptop) | Ganzer Bereich sieht schlecht aus | offen |
+| K7 | 03.11. 14:13 | f7ce1ee1 | Erklärung-Karte „Anwenden“/eigener Satz | Schlechte Karte: „später prüfen lassen“ unklar, „kommt wieder“ nicht erklärt, bringt nichts | offen |
