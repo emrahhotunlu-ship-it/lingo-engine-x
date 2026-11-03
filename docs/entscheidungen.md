@@ -751,3 +751,9 @@ Zum laufenden Stand: Test-Link nach dem bereits laufenden Endtest.
 2. „Wie sollen deine eigenen Fehler (aus Grammatik und Anwenden) zurückkommen?“ → **„Fest im Grammatik-Schritt (Empfehlung)“**: bis zu 3 fällige Fehlersätze (auch `app/repair`) am Anfang der Grammatik-Runde, der Schritt wird nicht länger.
 3. „Wie soll die neue Grammatik eingeschaltet werden?“ → **„Wie bei Wörtern (Empfehlung)“**: auf dem Test-Link gleich an, alter Weg bleibt als Rückweg im Hintergrund, live nach Emrahs OK.
 4. „Wie soll der Grammatik-Reiter aufgebaut sein?“ → **„Ein Weg durch die Themen (Empfehlung)“**: Themen in fester Reihenfolge (Kapitel-Weg), Stand sichtbar (sitzt / jetzt dran / als Nächstes), darunter die Fehlersätze an einem Ort.
+
+## 03.11.2026 – Großpaket B: vier Entscheidungen (Emrah, Pop-up nach dem Refinement `docs/umbau/design/grosspaket-b.md`)
+1. „Sollen dabei auch kleine neue Funktionen dazukommen?“ → **„Dazu kleine Neue“** (nicht die Empfehlung): Urlaub ankündigen, Ruhetag selbst wählen, „kurzer Tag“, Seite „So funktioniert’s“ (Schritt B10). Große Neufunktionen (Missionen, Termin, Hör-Kurs, Schreibtag) nicht.
+2. „Was soll oben rechts auf jedem der 4 Reiter stehen?“ → **„Übersetzer · Claude · Zahnrad“ (Empfehlung)**.
+3. „Was soll mit den alten Abläufen passieren?“ → **„Notbremse behalten“ (Empfehlung)**: kein Knopf führt mehr hin, Rückweg über Schalter in den Einstellungen.
+4. „Reihenfolge B und C?“ → **„Erst B, dann C“ (Empfehlung)**.

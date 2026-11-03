@@ -37,5 +37,8 @@ Hauptchat baut selbst (Schnell-Modus: Typprüfung, Lint, betroffene Unit-Tests, 
 - Budget der ersten Datei fast voll: neue Bildschirme als nachgeladene Teile; alte CSS wird gelöscht und gegengerechnet.
 - Business-Szenen: Inhalte wurden lange nicht gezeigt → english-teacher liest sie einmal gegen (Teil von B9).
 
-## 7. Entscheidungen Emrah
-(nach dem Pop-up hier eintragen)
+## 7. Entscheidungen Emrah (03.11.2026, Pop-up)
+1. Umfang → **„Dazu kleine Neue“** (nicht die Empfehlung): zusätzlich Schritt **B10 Kleine Neufunktionen**: Urlaub ankündigen (Serie pausiert für gewählte Tage), Ruhetag der Woche selbst wählen, „kurzer Tag“ (Tagesweg mit verkürzten Schritten, zählt als Pflicht erledigt), Seite „So funktioniert’s“ (Tagesweg, Wiederholen, Bewertung, Serie in einfachen Worten). Daten nur additiv in vorhandenen Dokumenten (data-guard in B9). Große Neufunktionen (§4) bleiben draußen.
+2. Kopfzeile → **„Übersetzer · Claude · Zahnrad“ (Empfehlung)**.
+3. Alte Wege → **„Notbremse behalten“ (Empfehlung)**: kein Knopf führt mehr hin, Rückweg nur über die Schalter in den Einstellungen.
+4. Reihenfolge → **„Erst B, dann C“ (Empfehlung)**.

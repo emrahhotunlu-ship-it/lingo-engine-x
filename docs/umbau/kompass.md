@@ -20,7 +20,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 
 - **Schnell-Modus (Emrah 02.11.2026):** beim Bauen nur schnelle Prüfungen; voller Klicktest/`verify` genau einmal am Ende vor dem Test-Link; Prüfer einmal je Großpaket (siehe `entscheidungen.md`).
 
-## 3. Roadmap (Großpakete, Stand 02.11.2026)
+## 3. Roadmap (Großpakete, Stand 03.11.2026)
 **Emrah 02.11.:** erst die fertige neue App haben und damit lernen → Feedback → dann gemeinsam überlegen, was wie neu entwickelt wird (B/C erst danach). Die Gesamtprüfung aller Bildschirme (Note 5/10) ist bis dahin angehalten; Funktionsliste „fehlt/versteckt“ liegt bereit.
 
 | # | Großpaket | Inhalt | Stand |
@@ -28,8 +28,8 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 | ✓ | V0, Q0, D1, D2, D3, V1, V2, D5, VB + D5-Nachtrag | Plan Wörter-App, Aufgaben-Qualität, Bausteine, Heute, Übungsseite, Wörter-Planer und -Bewertung (unsichtbar), Grammatik-Reiter, Bilder der Wörter-Bildschirme | in `claude/umbau-fokus`; Test-Link v77 `1793534318-5906` (01.11.), wartet auf Emrahs Review; nicht live |
 | A | **Wörter-App komplett** | V3 (Lernkarte, Sitzung, Abschluss; freigegeben 01.11. mit VB 1–3) + V4 (Anwenden, Wort-Detail, Übersicht; VB 4–6) + V5 (C1-Wortauswahl, Einstufung; alter Wörter-Bereich raus erst nach Emrahs OK) + gesammelte Kleinkorrekturen | Refinement `vokabeln/grosspaket-a.md` freigegeben (01.11.); gebaut, geprüft, Test-Link v79; **live `JLL8…` v87 `1793608303-a6a8` (02.11., Emrahs Wahl „Test-Link 79 sofort live“; Rückweg v86 `1793087421-695a`)**. **Seit v88 `1793612956-d9f4` (02.11.) schaltet sich die Wörter-App von selbst ein** (Rückweg v87); Reiter Wörter zeigt die neue Startseite. Emrah lernt jetzt damit und gibt Feedback. Offen: #6b, „kommt später“-Liste in `stand.md` |
 | ✓ | **UX-Neuanfang A–D** | Tagesweg 3 Schritte, Design Heute, 4 Reiter, Hilfe/Claude sichtbar, Erklärung bei falsch, Aufgabe melden | **live `JLL8…` v89 `1793658052-a404` (02.11., Rückweg v88 `1793612956-d9f4`)** |
-| G | **Grammatik + Wiederholen neu, gleich im neuen Design** (Emrah 02.11.: Grammatik-/Wiederholen-Übungen „hatten sehr oft Fehler … sollte überarbeitet werden“) | eigene Logik wie die Wörter-App, geprüfte Aufgaben ohne Fehler, Bildschirme nach Vorschau | als Nächstes: Refinement |
-| B | **Design komplett** | D6a, D6b (Praxis/Fortschritt, Fragen-Blatt/Ausfälle), E1–E7, F2–F5 (übrige Bildschirme, fehlende Vorschau-Funktionen) | Refinement nach A |
+| G | **Grammatik + Wiederholen neu, gleich im neuen Design** (Emrah 02.11.: Grammatik-/Wiederholen-Übungen „hatten sehr oft Fehler … sollte überarbeitet werden“) | eigene Logik wie die Wörter-App, geprüfte Aufgaben ohne Fehler, Bildschirme nach Vorschau | **live `JLL8…` v90 `1793692316-d0c1` (03.11., Rückweg v89 `1793658052-a404`)** |
+| B | **Design komplett** | D6a, D6b (Praxis/Fortschritt, Fragen-Blatt/Ausfälle), E1–E7, F2–F5 (übrige Bildschirme, fehlende Vorschau-Funktionen) | **im Bau** (03.11.): Refinement `design/grosspaket-b.md` freigegeben, Umfang „Design + Verstecktes + kleine Neue“ (B1–B9 + B10) |
 | C | **Schneller Start** | 1b (P9a, P9b, P10: Inhalte nachladen) | Refinement nach B |
 | danach | Grammatik, Praxis, Lesen als eigene Module | gleiches Prinzip wie die Wörter-App | |
 Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Großpakete“ und §4.
