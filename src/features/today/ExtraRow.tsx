@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
@@ -14,6 +14,8 @@ import { checkAvailable, startCheck } from '../check/session';
 import { startExtra } from '../vocab/start';
 import { useVocabCards } from '../vocab/hub/data';
 import { dowOf } from '../../domain/unit/planFor';
+import { countMistakes, vocabModuleOn } from '../../modules/vocab/api';
+import { logError } from '../../platform/diagnostics';
 
 // „Wenn du mehr willst“ (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1/L1 `moreRows`, screens.js:91–104): Trennzeile, höchstens DREI Zeilen,
 // dann „Alles anzeigen“ (Blatt mit allen Angeboten). Nichts davon zählt für Ring oder Serie (Kap. 2 Nr. 6, Kap. 15); die Unterzeilen sagen es.
@@ -38,10 +40,36 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
   const cards = useVocabCards();
   const appProfile = useLive((s) => s.docs['app/profile']);
   const now = useClock((s) => s.now);
+  // Großpaket B2 (alte Wege abklemmen): mit der neuen Wörter-App führen „Wörter üben“ und „Fehlwörter“ in ihre Runden `free` und `mistakes`,
+  // nie mehr in den alten Trainer. Die Zahl der Fehlwörter rechnet wie der Wörter-Reiter (einmal je Lerntag gelesen).
+  const vmod = vocabModuleOn(appProfile);
+  const [mistakes, setMistakes] = useState(0);
+  useEffect(() => {
+    if (!vmod) return;
+    let live = true;
+    countMistakes(useClock.getState().now)
+      .then((n) => live && setMistakes(n))
+      .catch((e: unknown) => logError('today:mistakes', e));
+    return () => {
+      live = false;
+    };
+  }, [vmod, today]);
 
   return useMemo((): ExtraLine[] => {
     const out: ExtraLine[] = [];
-    if (done) {
+    if (done && vmod) {
+      out.push({
+        id: 'words',
+        icon: 'cards',
+        label: t('vmWhFree'),
+        sub: t('vmWhFreeSub'),
+        tile: [t('kernTileWords'), t('kernTileFreeSub')],
+        run: () => {
+          before();
+          go({ name: 'vlearn', kind: 'free' });
+        },
+      });
+    } else if (done) {
       const due = counts(cards, now).due;
       if (due > 0) {
         out.push({
@@ -59,7 +87,20 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
     }
     // Lehrer-Prüfung 02.11.2026: „Am Laptop vertiefen“ war derselbe Satz-Schreiben-Schritt wie Schritt 3 (Anwenden) – entfällt. Auf jedem Gerät
     // steht stattdessen „Heute falsch“ (falls es heute falsche Antworten gab).
-    const wrong = wrongToday(cards, today);
+    const wrong = vmod ? [] : wrongToday(cards, today);
+    if (vmod && mistakes > 0) {
+      out.push({
+        id: 'wrong',
+        icon: 'refresh',
+        label: t('vmWhMistakes'),
+        sub: tn('vmWhMistakesSub', mistakes),
+        tile: [t('kernTileMistakes'), tn('kernTileWrongSub', mistakes)],
+        run: () => {
+          before();
+          go({ name: 'vlearn', kind: 'mistakes' });
+        },
+      });
+    }
     if (wrong.length > 0) {
       const keys = new Set(wrong.map((c) => c.key));
       out.push({
@@ -119,7 +160,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
     }
     return out;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [done, cards, today, appProfile, now, t]);
+  }, [done, cards, today, appProfile, now, t, vmod, mistakes]);
 }
 
 /** Blatt „Alles anzeigen“: alle Angebote von heute (Kennungen wie das frühere Blatt „Extra“). */

@@ -25,6 +25,11 @@ export type StreakInput = {
   today: string;
   /** Heutiger Kalendertag der alten App (Wechsel um Mitternacht). */
   legacyToday?: string;
+  /**
+   * Angekündigter Urlaub (Großpaket B10, `app/profile.vac`): diese Lerntage überspringt die Serie – sie zählen nicht und reißen sie nicht,
+   * und sie verbrauchen den Ruhetag der Woche nicht. Ein erledigter Urlaubstag zählt trotzdem.
+   */
+  pauseDays?: ReadonlySet<string>;
 };
 
 export type Streak = { count: number; todayDone: boolean; restDays: string[] };
@@ -66,6 +71,11 @@ export function computeStreak(input: StreakInput): Streak {
       d = addDays(d, -1);
       continue;
     }
+    if (input.pauseDays?.has(d)) {
+      pendingRest.push(d);
+      d = addDays(d, -1);
+      continue;
+    }
     const week = isoWeek(d);
     if (pflichtSince && d >= pflichtSince && !usedWeeks.has(week)) {
       usedWeeks.add(week);
@@ -95,6 +105,29 @@ export function pflichtDays(pflicht: unknown): Set<string> {
   const out = new Set<string>();
   if (pflicht && typeof pflicht === 'object' && !Array.isArray(pflicht)) {
     for (const [k, v] of Object.entries(pflicht as Record<string, unknown>)) if (v) out.add(k);
+  }
+  return out;
+}
+
+/** Höchstens so viele Tage je Urlaubseintrag (gegen Tippfehler wie ein ganzes Jahr). */
+export const VACATION_MAX_DAYS = 31;
+
+/**
+ * Urlaubstage aus `app/profile.vac` (`[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t}]`, Großpaket B10). Tolerant: ungültige Einträge, umgedrehte
+ * oder zu lange Spannen (> 31 Tage) werden übergangen – nie ein Fehler, der die Serie sperrt.
+ */
+export function vacationDays(vac: unknown): Set<string> {
+  const out = new Set<string>();
+  if (!Array.isArray(vac)) return out;
+  const day = /^\d{4}-\d{2}-\d{2}$/;
+  for (const e of vac.slice(0, 24)) {
+    if (!e || typeof e !== 'object') continue;
+    const { from, to } = e as { from?: unknown; to?: unknown };
+    if (typeof from !== 'string' || typeof to !== 'string' || !day.test(from) || !day.test(to) || to < from) continue;
+    const days: string[] = [];
+    for (let d = from; d <= to && days.length <= VACATION_MAX_DAYS; d = addDays(d, 1)) days.push(d);
+    if (days.length > VACATION_MAX_DAYS) continue;
+    for (const d of days) out.add(d);
   }
   return out;
 }

@@ -4,6 +4,7 @@ import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { ClaudeDrillScreen } from '../features/companion/ClaudeDrillScreen';
 import { ProgressScreen } from '../features/progress/ProgressScreen';
 import { ChecksPage, TodayRescueRow, WeeklyPage } from '../features/progress/ProfilePages';
+import { HowtoPage } from '../features/progress/HowtoPage';
 import { ProfileHead, ProfileMoreRows, ProfileRescueRow, ProfileStandRows, ProfileTestRows } from '../features/progress/profile/ProfileSections';
 import { VtestScreen } from '../features/vtest/VtestScreen';
 import { vtestResume } from '../features/vtest/session';
@@ -24,6 +25,7 @@ declare module '../app/router/types' {
     vtest: NoParams;
     checks: NoParams;
     weekly: NoParams;
+    howto: NoParams;
     claudeDrill: NoParams;
   }
 }
@@ -47,6 +49,8 @@ export const profil = defineArea({
     },
     checks: { kind: 'page', component: ChecksPage, title: 'ckTitle', keepScroll: true, chrome: 'shell' },
     weekly: { kind: 'page', component: WeeklyPage, title: 'nbProfilWeekly', keepScroll: true, chrome: 'shell' },
+    // Großpaket B10: „So funktioniert’s“ (Regeln in einfachen Worten), aus dem Profil-Blatt.
+    howto: { kind: 'page', component: HowtoPage, title: 'hwTitle', keepScroll: true, chrome: 'shell' },
     vtest: { kind: 'exercise', component: VtestScreen, title: 'vtTitle' },
     // N96: „Mach mir eine Übung dazu“ aus dem Claude-Blatt; ohne Sitzung zurück zur Herkunft.
     claudeDrill: { kind: 'exercise', component: ClaudeDrillScreen, title: 'nbProfilDrillTitle', ensure: () => useClaudeDrill.getState().phase !== 'idle' },

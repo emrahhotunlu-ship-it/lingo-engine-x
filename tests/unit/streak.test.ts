@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { addDays, dayKey, legacyDayKey } from '../../src/domain/date';
-import { computeStreak, legacyActive, legacyStreak } from '../../src/domain/streak';
+import { computeStreak, legacyActive, legacyStreak, vacationDays, weekStrip } from '../../src/domain/streak';
 import { berlin, loadSeed, SEED_ANCHOR } from './helpers';
 
 const range = (from: string, n: number) => Array.from({ length: n }, (_, i) => addDays(from, i));
@@ -102,5 +102,36 @@ describe('Serie – ohne Pflicht-Erfassung läuft die alte Regel weiter', () => 
     for (const today of ['2026-09-21', '2026-09-25', '2026-09-30']) {
       expect(computeStreak({ days, today }).count, today).toBe(Number(today.slice(8)));
     }
+  });
+});
+
+describe('Serie – Urlaub ankündigen (Großpaket B10, app/profile.vac)', () => {
+  const pflichtSince = '2026-09-07';
+  it('Urlaubstage überspringt die Serie: zählen nicht, reißen nicht, verbrauchen den Ruhetag nicht', () => {
+    // Pflicht 7.–10., Urlaub 11.–18. (über zwei Wochen), Pflicht wieder ab 19.; dazu ein normaler Ruhetag am 20. (Woche 14.–20.).
+    const pflicht = new Set([...range('2026-09-07', 4), '2026-09-19', '2026-09-21']);
+    const pauseDays = vacationDays([{ from: '2026-09-11', to: '2026-09-18', t: 1 }]);
+    const s = computeStreak({ pflichtDone: pflicht, pflichtSince, today: '2026-09-21', pauseDays });
+    expect(s.count).toBe(6);
+    expect(s.restDays).toContain('2026-09-20');
+    expect(s.restDays).toContain('2026-09-12');
+    // Ohne Urlaub reißt dieselbe Lücke die Serie.
+    expect(computeStreak({ pflichtDone: pflicht, pflichtSince, today: '2026-09-21' }).count).toBe(2);
+  });
+  it('ein erledigter Urlaubstag zählt trotzdem', () => {
+    const pflicht = new Set(range('2026-09-07', 5));
+    const pauseDays = vacationDays([{ from: '2026-09-10', to: '2026-09-11' }]);
+    expect(computeStreak({ pflichtDone: pflicht, pflichtSince, today: '2026-09-11', pauseDays }).count).toBe(5);
+  });
+  it('Wochenstreifen: Urlaubstage stehen als Ruhetag da', () => {
+    const pflicht = new Set(['2026-09-14']);
+    const pauseDays = vacationDays([{ from: '2026-09-15', to: '2026-09-16' }]);
+    const w = weekStrip({ pflichtDone: pflicht, pflichtSince, today: '2026-09-17', pauseDays });
+    expect(w.map((d) => d.state)).toEqual(['done', 'rest', 'rest', 'open', 'future', 'future', 'future']);
+  });
+  it('liest tolerant: falsche, umgedrehte und zu lange Einträge zählen nicht', () => {
+    expect(vacationDays(null).size).toBe(0);
+    expect(vacationDays([{ from: 'x', to: '2026-09-02' }, { from: '2026-09-05', to: '2026-09-01' }, { from: '2026-01-01', to: '2026-12-31' }, 7]).size).toBe(0);
+    expect([...vacationDays([{ from: '2026-09-30', to: '2026-10-02' }])]).toEqual(['2026-09-30', '2026-10-01', '2026-10-02']);
   });
 });

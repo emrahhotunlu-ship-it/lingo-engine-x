@@ -7,6 +7,8 @@ import { unlockSpeech } from '../../platform/speech';
 import { startAuxDrill, startDrill } from '../drills/session';
 import { startGrammar } from '../grammar/session';
 import { startSession } from '../vocab/session';
+import { useLive } from '../../data/live';
+import { vocabModuleOn } from '../../modules/vocab/api';
 
 // „Üben"-Ziele der Einschätzung und des Radars (Plan §0.1, §4.6): Aktion → Bildschirm. Gibt es
 // kein Ziel, fehlt der Knopf (`actionRoute` = null) – nie ein Knopf ins Leere.
@@ -66,6 +68,11 @@ export function startAction(action: string, api: FocusApi): boolean {
     const first = action === AUX_ACTION ? startAuxDrill() : startDrill(route.kind);
     if (first === 'typed') api.focusNow();
     else api.blur();
+  } else if (route.name === 'trainer' && vocabModuleOn(useLive.getState().docs['app/profile'])) {
+    // Großpaket B2: mit der neuen Wörter-App nie mehr in den alten Trainer – „Hartnäckige Wörter“ → Fehlwörter, sonst Freies Üben.
+    api.blur();
+    go({ name: 'vlearn', kind: action === 'vocab:leech' ? 'mistakes' : 'free' });
+    return true;
   } else if (route.name === 'trainer') {
     const deck = action === 'vocab:leech' ? 'hard' : action === 'chunks' ? 'phrases' : 'all';
     const first = startSession('extra', { deck, size: 10 });

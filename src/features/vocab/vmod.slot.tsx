@@ -6,17 +6,18 @@ import { loadOverview, vocabModuleOn } from '../../modules/vocab/api';
 import { Skeleton } from '../../ui/Skeleton';
 
 // Großpaket A S6 (Bild s2-05): Fortschritt › Wörter zeigt bei eingeschalteter Wörter-App deren Übersicht (Zahlen, 14-Tage-Vorschau,
-// Behaltensrate) über dem bisherigen Teil. `enabled` am Slot ist nicht reaktiv, deshalb prüft der Wirt das Modul selbst.
+// Behaltensrate) über dem bisherigen Teil. „Alle Wörter“ führt seit Großpaket B2 in den Reiter Wörter (neue Liste), nicht in die alte Liste. `enabled` am Slot ist nicht reaktiv, deshalb prüft der Wirt das Modul selbst.
 
 const Overview = lazy(() => loadOverview().then((m) => ({ default: m.Overview })));
 
 function OverviewHost() {
   const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
   const go = useNav((s) => s.go);
+  const switchTab = useNav((s) => s.switchTab);
   if (!on) return null;
   return (
     <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-      <Overview onOpenList={() => go({ name: 'vocabList' })} onPlace={() => go({ name: 'vplace' })} />
+      <Overview onOpenList={() => switchTab('vocab')} onPlace={() => go({ name: 'vplace' })} />
     </Suspense>
   );
 }

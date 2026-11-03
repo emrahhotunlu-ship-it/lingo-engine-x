@@ -194,3 +194,9 @@ export function loadSwitch() {
 export function loadAutoSwitch() {
   return import('./ui/switch');
 }
+
+/** Zahl der Fehlwörter der letzten 14 Lerntage (Runde `mistakes`, dieselbe Rechnung wie im Wörter-Reiter). Nachgeladen, nie in der Einstiegsdatei. */
+export async function countMistakes(nowMs: number): Promise<number> {
+  const { readMistakes } = await import('./ui/mistakes');
+  return (await readMistakes(nowMs)).length;
+}

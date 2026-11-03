@@ -1,0 +1,1 @@
+import{Vn as e}from"./registry-Cdwsgi8-.js";import{k as t}from"./v-rSuZbZjQ.js";import"./sharedUi-D-VNS5Xe.js";import{l as n,n as r}from"./history-kBE1aCZH.js";async function i(n){let r=e();if(!r)return null;let i=await t(r,n);return i.status===`valid`?i.doc:null}async function a(e){return n(await r(i,e,14),e)}export{a as readMistakes};

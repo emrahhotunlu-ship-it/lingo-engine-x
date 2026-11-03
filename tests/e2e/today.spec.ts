@@ -9,8 +9,8 @@ import { DAY, dump, planPatch, writes } from './trainerHelpers';
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 const GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Einstellungen|Serie|Heute|Wiederholen)\b/;
-// Kern a (Emrah 03.11.2026, Vorschau 9pdpfT8E): Hell warm, Dunkel grünlich.
-const BG: Record<Theme, number[]> = { dark: [20, 22, 20], dim: [40, 42, 47], light: [245, 243, 238] };
+// Glas/Carbon (Emrah 03.11.2026, Küchenstudio): Hell Stein #C9D0D6, Dunkel Graphit #1B1F24 (die Flecken liegen als Bild darüber).
+const BG: Record<Theme, number[]> = { dark: [27, 31, 36], dim: [40, 42, 47], light: [201, 208, 214] };
 // Farbe als Pixel (r, g, b) über ein 1×1-Canvas: der Build schreibt oklch() als lab() um, Texte sind nicht vergleichbar.
 const px = (page: Page, color: string): Promise<number[]> =>
   page.evaluate((c) => {

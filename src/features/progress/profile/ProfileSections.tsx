@@ -177,6 +177,7 @@ export function ProfileMoreRows() {
   return (
     <RowList testId="profile-more">
       <Row icon="book" title={t('nbProfilWeekly')} sub={t('nbProfilWeeklySub')} testId="profile-weekly" onClick={() => leave(() => go({ name: 'weekly' }))} />
+      <Row icon="info" title={t('hwTitle')} sub={t('hwRowSub')} testId="profile-howto" onClick={() => leave(() => go({ name: 'howto' }))} />
     </RowList>
   );
 }

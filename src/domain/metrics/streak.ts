@@ -1,6 +1,6 @@
 import { mergeArchives } from '../capacity/compact';
 import { dayKey, legacyDayKey } from '../date';
-import { computeStreak, pflichtDays, weekStrip, type Streak, type StreakInput, type WeekDay } from '../streak';
+import { computeStreak, pflichtDays, vacationDays, weekStrip, type Streak, type StreakInput, type WeekDay } from '../streak';
 
 // EINE Serie (Gesamtkonzept Kap. 4): Heute, Profil-Knopf, Fortschritt und Wochenstreifen lesen dieselbe Rechnung aus denselben
 // Dokumenten (`app/profile`, `app/schema.pflichtSince`, ausgelagerte Jahre). Die Regel selbst steht in `domain/streak.ts` und ändert sich nicht.
@@ -31,6 +31,7 @@ export function streakInputOf(i: StreakDocs): { input: StreakInput; merged: Doc 
       pflichtDone: pflichtDays(merged.pflicht),
       today: i.today ?? dayKey(i.nowMs),
       legacyToday: legacyDayKey(i.nowMs),
+      pauseDays: vacationDays(merged.vac),
     },
   };
 }

@@ -402,7 +402,10 @@ function CompanionOverlay() {
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-line px-5 pb-2.5 group-data-[low]/cmp:hidden sm:px-6" data-testid="companion-sub">
             <p className="flex min-w-0 flex-1 items-center @max-[26rem]:basis-full gap-2 text-xs text-muted" data-testid="seeing" data-area={seeing?.area ?? route}>
               <span className="inline-block size-1.5 flex-none rounded-full bg-accent" aria-hidden="true" />
-              <span className="min-w-0 break-words">{t('cmpSeeing', { label: areaLabel })}</span>
+              {/* Eine Zeile (mit „…“, ganzer Text als Tooltip): zweizeilig schob sie am Handy unter dem Aufgabensatz das Eingabefeld unter den Rand. */}
+              <span className="min-w-0 truncate" title={t('cmpSeeing', { label: areaLabel })}>
+                {t('cmpSeeing', { label: areaLabel })}
+              </span>
             </p>
             {tab === 'chat' && ai && (
               <div role="radiogroup" aria-label={t('cmpTierLabel')} className="flex rounded-full bg-track p-0.5 text-xs">

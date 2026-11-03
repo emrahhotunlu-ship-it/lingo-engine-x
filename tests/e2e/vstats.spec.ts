@@ -58,8 +58,9 @@ for (const vp of [
       const [a, b] = await Promise.all([vo.boundingBox(), page.getByTestId('seg-words').boundingBox()]);
       expect(a!.y).toBeLessThan(b!.y);
       expect(await layoutProblems(page)).toEqual([]);
+      // Großpaket B2: „Alle Wörter“ führt in den Reiter Wörter (neue Liste), nicht mehr in die alte Liste.
       await page.getByTestId('vo-list').click();
-      await screen(page, 'vocabList');
+      await screen(page, 'vocab');
       expect(external).toEqual([]);
       expect(errors).toEqual([]);
     });

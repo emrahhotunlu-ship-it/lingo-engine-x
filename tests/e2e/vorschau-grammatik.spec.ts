@@ -90,7 +90,8 @@ for (const pair of PAIRS) {
   test.describe(`Vorschau-Paar ${pair.name}`, () => {
     for (const size of SIZES) {
       if (deskSize(size) === pair.phone) continue;
-      for (const mode of MODES) {
+      // Glas/Carbon (Emrah 03.11.2026, Küchenstudio) ersetzt in Hell und Dunkel die Vorschau WBft3…; verglichen wird nur noch „Gedämpft“.
+      for (const mode of MODES.filter((m) => m === 'dim')) {
         for (const lang of LANGS) {
           test(`${size.name} · ${mode} · ${lang}`, async ({ browser }) => {
             const ctx = await browser.newContext({ viewport: { width: size.width, height: size.height }, reducedMotion: 'reduce', locale: lang === 'de' ? 'de-DE' : 'en-US' });
