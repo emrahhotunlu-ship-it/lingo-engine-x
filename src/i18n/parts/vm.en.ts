@@ -663,7 +663,7 @@ export const vmEn = {
   vmWhEmpty: "There are no words in this view yet.",
   vmWhNoHit: "No word matches “{q}”.",
   vmWhShowMore: "Show more ({n} left)",
-  vmWhMoreHead: "Practice more (optional)",
+  vmWhMoreHead: "More rounds (optional)",
   vmWhFree: "Free practice",
   vmWhFreeSub: "Up to 20 words that would come up next · extra",
   vmWhEvening: "Today's new words, once more",
