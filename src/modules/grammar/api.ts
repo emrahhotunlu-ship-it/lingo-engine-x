@@ -7,8 +7,8 @@ import { logError, logWarn } from '../../platform/diagnostics';
 
 type Doc = Readonly<Record<string, unknown>>;
 
-/** `app/profile.gcfg`: `mod` = Schalter neue Grammatik (1 an, 0 alter Weg). */
-export const gcfgSchema = z.object({ mod: z.union([z.literal(0), z.literal(1)]) }).strict();
+/** `app/profile.gcfg`: `mod` = Schalter neue Grammatik (1 an, 0 alter Weg). Tolerant (data-guard G8): spätere Zusatzfelder machen den Schalter nicht ungültig. */
+export const gcfgSchema = z.looseObject({ mod: z.union([z.literal(0), z.literal(1)]) });
 
 /** Ist die neue Grammatik eingeschaltet? Nur ein gültiges `gcfg.mod = 0` schaltet sie aus. */
 export function grammarModuleOn(profile: Doc | null | undefined): boolean {
@@ -31,7 +31,7 @@ export async function setGrammarModule(mod: 0 | 1): Promise<boolean> {
       if (base && !base.success) return null;
       ok = true;
       if (base?.success && base.data.mod === mod) return null;
-      return { update: { gcfg: gcfgSchema.parse({ mod }) } };
+      return { update: { gcfg: gcfgSchema.parse({ ...(base?.success ? base.data : {}), mod }) } };
     });
   } catch (err) {
     logError('grammar:switch', err, `mod ${mod}`);

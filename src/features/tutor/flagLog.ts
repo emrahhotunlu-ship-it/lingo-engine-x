@@ -18,7 +18,7 @@ export function addFlag(cur: readonly unknown[] | null | undefined, f: TaskFlag)
   const list = (Array.isArray(cur) ? cur : []) as TaskFlag[];
   if (list.some((x) => x && typeof x === 'object' && x.id === f.id)) return null;
   if (list.length >= FLAGS_MAX) return null;
-  return [...list, { ...f, q: clip(f.q), given: clip(f.given), ans: clip(f.ans) }];
+  return [...list, { ...f, id: clip(f.id), topic: clip(f.topic), r: clip(f.r), q: clip(f.q), given: clip(f.given), ans: clip(f.ans) }];
 }
 
 /** Meldung im Tagesprotokoll vermerken. Fehler werden protokolliert, nie geworfen (die Meldung selbst ist schon in `app/c1.bad`). */

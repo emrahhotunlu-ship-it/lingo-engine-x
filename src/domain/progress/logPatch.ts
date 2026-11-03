@@ -11,7 +11,8 @@ import type { ChannelLogEntry } from './channelLog';
 type Doc = Record<string, unknown>;
 
 export const LOG_ENTRIES_MAX = 300;
-export const LOG_DOC_MAX_BYTES = 240 * 1024;
+// 200 KiB für `entries`: Platz für `flags` (höchstens 40 gekürzte Meldungen, Großpaket G6) unter der Grenze von 256 KiB je Dokument.
+export const LOG_DOC_MAX_BYTES = 200 * 1024;
 const TEXT_MAX = 160;
 const clip = (s: string) => (s.length > TEXT_MAX ? s.slice(0, TEXT_MAX) : s);
 
