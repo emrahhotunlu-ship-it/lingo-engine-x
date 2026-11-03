@@ -54,10 +54,10 @@ export const EXPLAIN_EXAMPLE_JSON =
 const ID = 'explain-answer';
 const VERSION = 2;
 
-/** Zweisprachiger Text; zu lange Texte werden gekürzt, die falsche Sprache löst den einen Neuversuch aus. */
-const bi = (max: number) =>
+/** Zweisprachiger Text; zu lange Texte werden gekürzt (`strict`: abgelehnt, also der eine Neuversuch), die falsche Sprache löst den einen Neuversuch aus. */
+const bi = (max: number, strict = false) =>
   z
-    .object({ de: clipped(8, max), en: clipped(8, max) })
+    .object(strict ? { de: z.string().trim().min(8).max(max), en: z.string().trim().min(8).max(max) } : { de: clipped(8, max), en: clipped(8, max) })
     .superRefine((b, ctx) => {
       if (isWrongLang(b.de, 'de')) ctx.addIssue({ code: 'custom', path: ['de'], message: 'must be written in German' });
       if (isWrongLang(b.en, 'en')) ctx.addIssue({ code: 'custom', path: ['en'], message: 'must be written in English' });
@@ -76,7 +76,8 @@ export function explainSchema(v: ExplainVars): z.ZodType<ExplainOut> {
   return z
     .object({
       yours: z.preprocess((x) => (x === undefined ? null : x), bi(240).nullable()),
-      why: bi(240),
+      // G8 (LS-B3): das „Warum“ wird nie mitten im Satz gekürzt – zu lang ist ein Schemafehler (der eine Neuversuch mit Fehlerbeschreibung, A6.3).
+      why: bi(240, true),
       // Nur Signalwörter, die wörtlich im Satz (oder in der Lösung) stehen; alles andere fällt still weg.
       signal: z
         .preprocess((x) => (x === undefined || x === null ? [] : asList(x)), z.array(z.unknown()))
@@ -128,7 +129,7 @@ export const explainAnswerV2: PromptTemplate<ExplainVars, ExplainOut> = {
         ? '- yours: what the learner word means or where it would fit (one sentence). null only if the learner gave no answer. why: the difference in meaning, the usual word partner (collocation) or the false friend that makes the correct word right here.'
         : '- yours: what the learner form expresses, or when it would be right (one sentence). null only if the learner gave no answer. why: the signal word in the sentence and the rule (one or two sentences, only if not already obvious).',
       '- If the mistake comes from German (a word-for-word translation, German word order or a German tense), say so briefly in why.',
-      '- yours and why are written in both languages: "de" in simple German, "en" in English; each at most 18 words. English terms inside German text go in „…“.',
+      '- yours and why are written in both languages: "de" in simple German, "en" in English; each at most 18 words; never cut a sentence off. English terms inside German text go in „…“.',
       '- signal: up to 3 words copied exactly from the task sentence. Empty list if none.',
       '- confused: the id of ONE easily confused pattern from the list above if the learner mixed it up, otherwise null.',
       '- alsoRight: true only if the learner answer is fully correct English for this exact task, otherwise false.',

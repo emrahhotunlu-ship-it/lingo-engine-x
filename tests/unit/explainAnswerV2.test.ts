@@ -120,11 +120,12 @@ describe('Schema mit 12 Musterantworten', () => {
     expect(ok({ ...good, why: undefined }).success).toBe(false);
   });
 
-  it('12 zu lange Texte werden gekürzt statt abgelehnt; Beispiel als reiner Text wird gelesen', () => {
+  it('12 zu lange Texte: „yours“ wird gekürzt, „Warum“ abgelehnt (der eine Neuversuch, G8 LS-B3); Beispiel als reiner Text wird gelesen', () => {
     const long = `${DE} `.repeat(30);
-    const r = ok({ ...good, why: { de: long, en: `${EN} `.repeat(30) }, example: 'We wish the team had told us about the delay earlier.' });
-    expect(r.success && r.data.why.de.length).toBeLessThanOrEqual(240);
+    const r = ok({ ...good, yours: { de: long, en: `${EN} `.repeat(30) }, example: 'We wish the team had told us about the delay earlier.' });
+    expect(r.success && r.data.yours?.de.length).toBeLessThanOrEqual(240);
     expect(r.success && r.data.example?.en).toContain('delay');
+    expect(ok({ ...good, why: { de: long, en: `${EN} `.repeat(30) } }).success).toBe(false);
   });
 });
 

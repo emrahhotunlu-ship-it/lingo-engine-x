@@ -8,7 +8,7 @@ import { flags } from '../../app/flags';
 import { kindRound } from '../../domain/grammar/kindRound';
 import { focusFor, focusTopicOf } from '../../domain/progress/weekly3';
 import { lexDoneSet } from '../c1x/lexDone';
-import { reportedSetOf } from '../../domain/c1/report';
+import { isReportedTask, reportedSetOf } from '../../domain/c1/report';
 import type { C1Kind } from '../../domain/c1x/types';
 import { c1ErrorResolver, ensureC1xLoaded } from '../c1x/resolve';
 import { useLive } from '../../data/live';
@@ -76,6 +76,8 @@ export type GrammarRow = {
   dontKnow?: boolean;
   /** Richtig, ohne Hilfe und schnell genug (Vortest, §5.3). */
   clean?: boolean;
+  /** Im Themen-Test gemeldet: zählt nicht fürs Testergebnis (G8). */
+  xt?: true;
 };
 
 /** Einführung des Tages in dieser Runde (nur wenn es Karten oder einen Vortest gibt). */
@@ -140,6 +142,13 @@ type State = {
 };
 
 export type TestState = { topic: string; n: number; result: { c: number; n: number; ok: boolean } | null };
+
+/** G8 (LS-B2): Läuft der Themen-Test und darf eine weitere gemeldete Aufgabe noch aus dem Ergebnis fallen (danach bleiben mindestens `TT_MIN`)? */
+export function testVoidOpen(s: { test: TestState | null; pos: number; results: readonly GrammarRow[] }): boolean {
+  if (!s.test || s.test.result || s.pos >= s.test.n) return false;
+  const out = s.results.slice(0, s.test.n).filter((r) => r.xt).length;
+  return s.test.n - out - 1 >= TT_MIN;
+}
 
 export const useGrammarSession = create<State>(() => ({
   active: false,
@@ -276,7 +285,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   // Großpaket G4 (Entscheidung 2): Mit der neuen Grammatik kommen eigene Fehlersätze (`app/repair`) im Grammatik-Schritt und in der
   // Fehlersatz-Runde zurück, innerhalb derselben Höchstzahl. Der alte Weg (`gcfg.mod = 0`) bleibt unverändert.
   const repairs = (mode === 'duty' || mode === 'errors') && grammarModuleOn(live.docs['app/profile'])
-    ? repairTasks(dueFehlersaetze({ grammarDocs: docs, repairDoc: live.docs['app/repair'], nowMs, today: day, lang }).filter((f) => f.store === 'repair' && !reported.has(`gr:rep:${f.id}`)))
+    ? repairTasks(dueFehlersaetze({ grammarDocs: docs, repairDoc: live.docs['app/repair'], nowMs, today: day, lang }).filter((f) => f.store === 'repair' && !isReportedTask(reported, `rep:${f.id}`)))
     : [];
   const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}), ...(chapterTopics ? { chapter: chapterTopics } : {}), ...(repairs.length ? { repairs } : {}) };
 
@@ -469,12 +478,18 @@ function enrichGrammar(s: State, a0: GrammarAnswer, repeating: boolean): Enriche
   // Themen-Test (K4): Mit der letzten Testantwort steht das Ergebnis fest und geht als `tt` mit dieser Antwort ins Thema. Zählt nur richtig ohne Hilfe.
   let test = s.test;
   if (test && !repeating && test.result === null && s.pos === test.n - 1) {
-    const c = s.results.slice(0, test.n - 1).filter((r) => r.ok && !r.help).length + (isOk(a) && a.help.level === 0 ? 1 : 0);
+    // G8 (LS-B2): gemeldete Testaufgaben (`xt`) fallen aus dem Ergebnis, solange mindestens `TT_MIN` bleiben (`testVoidOpen` sorgt dafür).
+    const rows = s.results.slice(0, test.n - 1);
+    const out = rows.filter((r) => r.xt).length + (a.xt ? 1 : 0);
+    const all = test.n;
+    const n = all - out >= TT_MIN ? all - out : all;
+    const counts = (xt: boolean | undefined): boolean => n === all || !xt;
+    const c = rows.filter((r) => counts(r.xt) && r.ok && !r.help).length + (counts(a.xt) && isOk(a) && a.help.level === 0 ? 1 : 0);
     // Schwache Muster (falsch oder mit Hilfe), dieselbe Regel wie die Liste „Das übst du als Nächstes“ im Ergebnis: danach wird genau das geübt (`tt.w`).
-    const weakRows = [...s.results.slice(0, test.n - 1).filter((r) => !r.ok || r.help).map((r) => r.pat), ...(!isOk(a) || a.help.level > 0 || a.firstWrong !== undefined ? [a.task.pat] : [])];
+    const weakRows = [...rows.filter((r) => counts(r.xt) && (!r.ok || r.help)).map((r) => r.pat), ...(counts(a.xt) && (!isOk(a) || a.help.level > 0 || a.firstWrong !== undefined) ? [a.task.pat] : [])];
     const w = [...new Set(weakRows.filter((x): x is string => !!x))];
-    a = { ...a, tt: { c, n: test.n, ...(w.length ? { w } : {}) } };
-    test = { ...test, result: { c, n: test.n, ok: ttPassed(c, test.n) } };
+    a = { ...a, tt: { c, n, ...(w.length ? { w } : {}) } };
+    test = { ...test, result: { c, n, ok: ttPassed(c, n) } };
   }
   return { a, intro, tasks, test };
 }
@@ -503,7 +518,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   const booked = bookedT.delete(a.t);
   // Gemeldete Aufgabe (UX-Neuanfang D): zählt nicht – nicht gespeichert, keine Zeile in der Runde, kein Musterlog.
   // Auch wenn sie beim Verbergen schon „gebucht“ war: gespeichert wurde sie dann nicht (`learnRecorder.grammar` übergeht `void`).
-  // Im Vortest und Themen-Test zählt jede Antwort für das Ergebnis; dort bietet die Aufgabe „zählt nicht“ gar nicht an.
+  // Im Vortest zählt jede Antwort für das Ergebnis; im Themen-Test fällt eine gemeldete Antwort aus dem Ergebnis (`xt`, G8), gespeichert wird sie.
   const voided = a.void === true;
   if (!repeating && !booked && !voided) void learnRecorder.grammar(a);
   const row: GrammarRow = {
@@ -517,6 +532,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     right: a.task.x?.kind === 'find' && a.task.x.fixed ? a.task.x.fixed : a.task.prompt.includes('___') ? fillGap(a.task.prompt, a.task.answer) : a.task.answer,
     dontKnow: a.dontKnow,
     clean: cleanAnswer(a),
+    ...(a.xt ? { xt: true as const } : {}),
   };
   const results = repeating || voided ? s.results : [...s.results, row];
   const patLog = repeating || voided || !a.task.pat || a.alt ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];

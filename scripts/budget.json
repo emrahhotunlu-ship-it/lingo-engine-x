@@ -44,7 +44,11 @@
         "UX-Neuanfang A-D": {
           "bytes": 9000,
           "freigabe": "Hauptsitzung 02.11.2026: Tagesweg, Claude-Erklärung bei falsch, Aufgabe melden, Hilfe immer sichtbar (Emrahs Freigabe UX-Neuanfang)"
-        }
+        },
+      "Großpaket G": {
+        "bytes": 6000,
+        "freigabe": "Hauptsitzung 03.11.2026: Grammatik neu (Schalter gcfg, Themen-Weg, eigene Fehlersätze im Schritt, Aufgabe war unfair mit Spur, Zweitmeinung für alle getippten Arten; Emrahs OK zu Großpaket G)"
+      }
       }
     },
     "css": {

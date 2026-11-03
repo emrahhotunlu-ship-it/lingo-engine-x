@@ -23,9 +23,10 @@ type Row = TopicNode & { chapter: { de: string; en: string } };
 
 /** Reine Auswahl (testbar): Themen in Lernweg-Reihenfolge, „sitzt“ und die nächsten nach dem aktuellen Thema. */
 export function splitPath(rows: readonly Row[], current: string | null): { safe: Row[]; next: Row[]; current: string | null } {
-  const safe = rows.filter(isSafe);
   const at = current ? rows.findIndex((r) => r.id === current) : -1;
   const cur = at >= 0 ? current : (rows.find((r) => !isSafe(r))?.id ?? null);
+  // G8 (LS-B5): das Thema der Karte „Du bist hier“ steht nicht noch einmal unter „Sitzt schon“ (Kap. 15).
+  const safe = rows.filter((r) => isSafe(r) && r.id !== cur);
   const from = cur ? rows.findIndex((r) => r.id === cur) + 1 : 0;
   const next = rows
     .slice(from)

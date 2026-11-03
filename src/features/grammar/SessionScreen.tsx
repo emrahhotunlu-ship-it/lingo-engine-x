@@ -31,7 +31,7 @@ import { grammarModuleOn } from '../../modules/grammar/api';
 import { useWhyReason, useWinOn } from '../tutor/WhyLine';
 import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
-import { bookGrammarLeft, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession, type TestState } from './session';
+import { bookGrammarLeft, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt. Vorn steht bei einem neuen Muster der Vortest und die Einführung
@@ -106,7 +106,7 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">

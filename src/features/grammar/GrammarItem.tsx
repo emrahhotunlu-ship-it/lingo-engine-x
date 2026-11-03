@@ -52,6 +52,7 @@ import { legacyNorm } from '../../domain/grammar/key';
 import { ReportSheet } from '../../ui/ReportSheet';
 import { reportTask } from '../tutor/reportTask';
 import { recordFlag } from '../tutor/flagLog';
+import { markUnclear } from '../repair/store';
 import { GRAMMAR_FIT_PV, type GrammarFitOut, type GrammarFitVars } from '../../prompts/grammarFit';
 import { learnerNow, lintOnce, scheduleLearner } from '../tutor/learnerLive';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -85,6 +86,8 @@ export type GrammarItemProps = {
   badgeTestId?: string;
   /** Wochen-Check und Vortest (M10): ohne Tipp, ohne Platzhalter und ohne Zweitversuch – es wird gemessen, nicht geholfen. */
   noHelp?: boolean;
+  /** G8 (LS-B2): Themen-Test, in dem eine gemeldete Aufgabe noch aus dem Ergebnis genommen werden kann (Mindestzahl bleibt). */
+  testVoid?: boolean;
   /** Eingabeprofil der Runde (einmal eingefroren). Ohne Angabe das des Geräts. */
   profile?: InputProfile;
   /** Themenrunde oder Einführung: die Musterkarte steht offen. */
@@ -105,6 +108,8 @@ export type GrammarItemProps = {
 type Fb = {
   /** Aufgabe gemeldet, bevor die Antwort gebucht war: zählt nicht (UX-Neuanfang D). */
   void?: boolean;
+  /** Im Themen-Test gemeldet: zählt nicht fürs Testergebnis (G8). */
+  xt?: boolean;
   verdict: Verdict;
   check: GrammarCheck | null;
   given: string;
@@ -176,7 +181,7 @@ export function GrammarItem(props: GrammarItemProps) {
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
 }
 
-function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null, onLeave = null, mod = false }: GrammarItemProps) {
+function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, badgeTestId, noHelp = false, testVoid = false, profile: profileProp, topicRound = false, tutor: tutorOn = false, reason = null, onLeave = null, mod = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -618,7 +623,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           ...(fb.fit ? { fit: fb.fit } : {}),
           ...pickAttempt(fb),
         };
-    return fb.void ? { ...a, void: true } : a;
+    return fb.void ? { ...a, void: true } : fb.xt ? { ...a, xt: true } : a;
   };
 
   // Punkt 4 (LS3): geprüft, aber nicht mit „Weiter“ bestätigt → beim Verlassen buchen. `booked`: die beim Verbergen gebuchte Antwort
@@ -1206,13 +1211,17 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         tpl="task"
         id={`gr:${task.key}`}
         reasons={['solution', 'twofit', 'unnatural', 'other']}
-        thanks={!held && !noHelp ? 'ttReportVoid' : undefined}
+        thanks={!held && (!noHelp || testVoid) ? 'ttReportVoid' : undefined}
         onReport={(info) => {
           // Gemeldet: die Antwort zählt nicht (noch nicht gebucht), die Lehrkraft-Prüfung findet die Aufgabe in `app/c1.bad`.
           // Ausnahme Vortest, Themen-Test und Wochen-Check (`noHelp`): dort zählt jede Antwort fürs Ergebnis; gemeldet wird trotzdem.
-          const counted = !fb || held || noHelp;
+          // G8 (LS-B2): im Themen-Test fällt die gemeldete Antwort aus dem Ergebnis (`xt`), solange die Mindestzahl bleibt.
+          const counted = !fb || held || (noHelp && !testVoid);
           if (fb && !held && !noHelp) setFb({ ...fb, void: true });
+          else if (fb && !held && testVoid) setFb({ ...fb, xt: true });
           void reportTask(`gr:${task.key}`);
+          // G8 (LS-B1): ein gemeldeter eigener Satz (`app/repair`) kommt nirgends wieder (Zähler, „Fehler korrigieren“), wie „Kann ich nicht nachvollziehen“.
+          if (task.rep) void markUnclear({ store: 'repair', id: task.rep });
           // G6: Spur im Tagesprotokoll (`flags`, zählt nirgends) mit Satz, Antwort, Lösung und Grund für die wöchentliche Inhaltsprüfung.
           void recordFlag(day, { t: Date.now(), id: `gr:${task.key}`, topic: task.topic, q: task.prompt, given: fb ? (fb.dontKnow ? '?' : (fb.picked ?? fb.given)) : '', ans: task.answer, r: info.reason, ...(counted && fb ? { c: true as const } : {}) });
         }}

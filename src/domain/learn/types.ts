@@ -90,6 +90,8 @@ export type GrammarAnswer = {
   dontKnow: boolean;
   /** UX-Neuanfang D: Aufgabe gemeldet, bevor die Antwort gebucht war – sie zählt nicht (nie gespeichert, nicht in der Runde). Nur im Speicher. */
   void?: true;
+  /** G8 (LS-B2): im Themen-Test gemeldet – gespeichert wie jede Antwort, zählt aber nicht fürs Testergebnis. Nur im Speicher. */
+  xt?: true;
   verdict: Verdict;
   grade: Grade;
   ms: number;
