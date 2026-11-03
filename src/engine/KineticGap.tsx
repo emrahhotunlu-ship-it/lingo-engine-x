@@ -272,9 +272,12 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
       return;
     }
     const gr = g.getBoundingClientRect();
+    // Emrahs Kommentar 03.11.2026 („der Cursor blinkt genau in die Zeile rein“): der Strich steht in der Schrifthöhe und endet über der
+    // Unterstreichung der Lücke (oben 12 %, Länge 70 % der Zeilenhöhe), statt die ganze Zeilenhöhe bis auf die Linie zu reichen.
+    const lineH = Math.max(12, pt.bottom - pt.top);
     const left = `${Math.round((pt.x - gr.left - 1) * 10) / 10}px`;
-    const top = `${Math.round((pt.top - gr.top) * 10) / 10}px`;
-    const height = `${Math.max(12, pt.bottom - pt.top)}px`;
+    const top = `${Math.round((pt.top - gr.top + lineH * 0.12) * 10) / 10}px`;
+    const height = `${Math.round(Math.max(10, lineH * 0.7) * 10) / 10}px`;
     const moved = c.style.left !== left || c.style.top !== top || c.style.display === 'none';
     c.style.display = '';
     c.style.left = left;
