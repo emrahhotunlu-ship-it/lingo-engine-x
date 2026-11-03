@@ -1,0 +1,66 @@
+/* Glas (Emrah 03.11.2026, Kommentar „dieses Grün gefällt mir nicht … glassy und dunkel glassy“): die Farbwelten „Glas“ (Hell) und „Carbon“
+   (Dunkel) aus Emrahs Küchenstudio-Projekt (apps/web/src/v8/rahmen/glas.css). Der Grund ist eine ruhige Steinfläche mit drei weichen,
+   unscharfen Flecken; Karten sind mattes, leicht durchscheinendes Glas mit heller Lichtkante; Knöpfe sind Kapseln. Nur Rollen aus
+   index.css (--glass, --glanz, --glass-rim, --fleck-1..3), keine Farbwerte. Gedämpft bleibt wie bisher. Ohne Unschärfe (alte Geräte,
+   „Transparenz reduzieren“) tragen die Karten die deckende Fläche (--surface). */
+
+/* 1. Grund: Stein mit drei Flecken (fest, scrollt nicht mit). */
+html:not([data-theme='dim']) {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(44% 48% at 12% 8%, var(--fleck-1) 0%, transparent 70%),
+    radial-gradient(52% 56% at 92% 96%, var(--fleck-2) 0%, transparent 70%),
+    radial-gradient(38% 40% at 70% 10%, var(--fleck-3) 0%, transparent 70%);
+  background-attachment: fixed;
+}
+
+/* 2. Glasblätter: die großen Karten (Heute, Übung, Rückmeldung, Kacheln, Fortschritt, allgemeine Karten). */
+html:not([data-theme='dim'])
+  :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card, [data-testid='today-extra-sheet']) {
+  border-color: transparent;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 var(--glanz),
+    inset 0 0 0 1px var(--glass-rim),
+    var(--shadow);
+}
+
+/* 3. Kapseln: Knöpfe rund wie im Küchenstudio. */
+html:not([data-theme='dim']) :is(.lx-v-btn, .lx-kask, .lx-kask-about, .lx-actionbar-main, .lx-vu-why, [data-slot='secondary'] button) {
+  border-radius: 999px;
+}
+:root:not([data-theme='dim']) .lx-exercise .lx-actionbar-column .lx-actionbar-inner :is(.lx-actionbar-main, .lx-kask-about),
+html:not([data-theme='dim']) .lx-kh-go .lx-v-btn {
+  border-radius: 999px;
+}
+
+/* 4. Rückfall ohne Unschärfe: deckende Fläche statt Glas. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  html:not([data-theme='dim']) :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card) {
+    background: var(--surface);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) :is(.lx-kh-card, .lx-kh-tile, .lx-kh-stand, .lx-glass.lx-exercise, .lx-v-card, .lx-v-row-card, .lx-vw-card) {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* 5. Leiste (Handy unten, Laptop Schiene links): Glas statt deckendem Grund, damit der Stein mit den Flecken durchscheint. */
+html:not([data-theme='dim']) nav.lx-nav {
+  background: var(--glass-soft);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+  border-color: var(--glass-rim);
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) nav.lx-nav {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

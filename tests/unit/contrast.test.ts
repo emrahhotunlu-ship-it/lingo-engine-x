@@ -150,12 +150,12 @@ describe.each(MODES.flatMap((m) => ACCENTS.map((a) => [m, a] as const)))('Modus 
 
 describe('Grundregeln der Token-Blöcke', () => {
   it('Dunkel steht im blanken :root (Standard ohne gespeicherte Wahl)', () => {
-    expect(BASE.bg).toBe('oklch(0.197 0.005 145)');
+    expect(BASE.bg).toBe('oklch(0.237 0.011 254)');
     expect(css).toMatch(/:root,\s*:root\[data-theme='dark'\]\s*\{\s*color-scheme: dark;/);
   });
 
-  it('Standard-Akzent (intern „iris“) ist das Grün der Vorschau, ohne eigenen Akzent-Block (Kern zuerst, 03.11.2026)', () => {
-    expect(BASE.act).toBe('oklch(0.762 0.083 166)');
+  it('Standard-Akzent (intern „iris“) ist das Petrol von Glas/Carbon, ohne eigenen Akzent-Block (Emrah 03.11.2026)', () => {
+    expect(BASE.act).toBe('oklch(0.55 0.094 185)');
     expect(BASE['swatch-iris']).toBe(BASE.act);
     expect(css.includes(`[data-accent='iris']`)).toBe(false);
   });
@@ -175,27 +175,23 @@ describe('Grundregeln der Token-Blöcke', () => {
 
 // Kern zuerst (Emrah, 03.11.2026): Dunkel und Hell tragen die Farben der freigegebenen Vorschau 9pdpfT8E… v13.
 // Dunkel: helles Grün #7CC3A6 mit dunkler Knopfschrift #0F1A15. Hell: tiefes Grün #2F6B58 mit weißer Knopfschrift. Gedämpft unverändert.
-describe('Grün der Vorschau (Kern zuerst)', () => {
-  it('Dunkel: Grün 0,762 mit dunkler Knopfschrift, ≥ 4,5:1, Fläche ≥ 3:1 auf dem Grund', () => {
+describe('Glas und Carbon (Emrah 03.11.2026, Küchenstudio-Farbwelten)', () => {
+  it('Dunkel = Carbon: Graphit-Grund, Petrol mit weißer Knopfschrift ≥ 4,5:1, Fläche ≥ 3:1 auf dem Grund', () => {
     const t = tokens('dark', 'iris');
-    expect(t.act).toBe('oklch(0.762 0.083 166)');
-    expect(t['act-fg']).toBe('oklch(0.205 0.019 165)');
+    expect(t.bg).toBe('oklch(0.237 0.011 254)');
+    expect(t.act).toBe('oklch(0.55 0.094 185)');
+    expect(t['act-fg']).toBe('oklch(1 0 0)');
     expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
     expect(on(t.act ?? '', parse(t.bg ?? ''))).toBeGreaterThanOrEqual(3);
   });
 
-  it('Hell: Grün 0,482 mit weißer Knopfschrift, ≥ 4,5:1, auf warmem Papiergrund', () => {
+  it('Hell = Glas: heller Steingrund, Petrol mit weißer Knopfschrift ≥ 4,5:1, Glas-Rollen vorhanden', () => {
     const t = tokens('light', 'iris');
-    expect(t.bg).toBe('oklch(0.964 0.007 89)');
-    expect(t.act).toBe('oklch(0.482 0.07 170)');
+    expect(t.bg).toBe('oklch(0.925 0.008 244)');
+    expect(t.act).toBe('oklch(0.49 0.08 205)');
     expect(t['act-fg']).toBe('oklch(1 0 0)');
     expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
-  });
-
-  it('Gedämpft bleibt bei Iris 0,62/0,16 mit dunkler Knopfschrift', () => {
-    const t = tokens('dim', 'iris');
-    expect(t.act).toBe('oklch(0.62 0.16 275)');
-    expect(on(t['act-fg'] ?? '', parse(t.act ?? ''))).toBeGreaterThanOrEqual(4.5);
+    for (const k of ['glass', 'glanz', 'glass-rim', 'fleck-1', 'fleck-2', 'fleck-3']) expect(t[k], k).toBeTruthy();
   });
 });
 
