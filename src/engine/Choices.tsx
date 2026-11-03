@@ -62,7 +62,7 @@ function LegacyChoices({ items, chosen, onChoose, label, letters = false }: Lega
     <div role="group" aria-label={label} className={letters ? 'grid grid-cols-1 gap-3' : 'grid gap-2 sm:grid-cols-2'} data-testid="choices">
       {items.map((o, i) => {
         const pickedRight = !!items.find((x) => x.id === chosen)?.correct;
-        // UX-Audit U1: falsch sieht nie nach Erfolg aus – nach einer falschen Wahl steht die Lösung neutral (`answer`, ohne ✓).
+        // Falsch sieht nie nach Erfolg aus; die Lösung nach falscher Wahl trägt grünen Rahmen und ✓ (`answer`, Kern-Rest 03.11.2026).
         const state = !done ? 'idle' : o.correct ? (pickedRight ? 'correct' : 'answer') : o.id === chosen ? 'wrong' : 'dim';
         return (
           <motion.button
@@ -84,6 +84,7 @@ function LegacyChoices({ items, chosen, onChoose, label, letters = false }: Lega
               {o.label}
             </span>
             {letters && (state === 'correct' || state === 'wrong') && <Mark state={state} />}
+            {letters && state === 'answer' && <Mark state="correct" />}
           </motion.button>
         );
       })}
@@ -132,7 +133,7 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
       <AnimatePresence initial={false}>
         {options.map((text, i) => {
           const isMuted = !revealed && !!muted?.includes(i);
-          // UX-Audit U1: Grün nur, wenn die eigene Wahl richtig war. Nach falscher Wahl oder „Weiß ich nicht“ steht die Lösung neutral (`answer`, ohne ✓).
+          // Eigene richtige Wahl: grün gefüllt (`correct`). Nach falscher Wahl oder „Weiß ich nicht“: die Lösung mit grünem Rahmen und ✓ (`answer`, Kern-Rest 03.11.2026).
           const state = !revealed ? (isMuted ? 'dim' : 'idle') : i === correct ? (chosen === correct ? 'correct' : 'answer') : i === chosen ? 'wrong' : 'dim';
           if (revealed && collapse && state === 'dim') return null;
           // Am Handy (collapse) direkt unter der gewählten Option; sonst unter der Liste, damit keine Option verrutscht (UX-Prüfung 19.10.2026).
@@ -159,6 +160,7 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
                   {text}
                 </span>
                 {(state === 'correct' || state === 'wrong') && <Mark state={state} />}
+                {state === 'answer' && <Mark state="correct" />}
               </button>
               {line && (
                 <p className="px-1 pt-1.5 text-sm text-muted" data-testid="choice-why">

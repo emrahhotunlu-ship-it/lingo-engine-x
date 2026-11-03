@@ -52,7 +52,9 @@ export function measure(dir) {
   };
   walk(entryKey);
 
-  const keyOfFile = new Map(Object.entries(manifest).map(([k, m]) => [m.file, k]));
+  // Geteilte Stücke heißen im Manifest `_name-HASH.js`: der Hash ändert sich mit jedem Bau, eingetragen wird `_name`.
+  const stable = (k) => (k.startsWith('_') ? k.replace(/-[\w-]{6,}\.js$/, '') : k);
+  const keyOfFile = new Map(Object.entries(manifest).map(([k, m]) => [m.file, stable(k)]));
   const lazy = {};
   const bin = {};
   let css = 0;

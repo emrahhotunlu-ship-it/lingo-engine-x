@@ -291,6 +291,7 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     --lx-dmain-pad: 12px;
     --lx-ctx-gap: 12px;
     --lx-ctx-w: 380px;
+    --lx-bar-right: calc(var(--lx-ctx-w) + 14px + var(--lx-ctx-gap));
   }
   html:not([data-theme='dim']) .lx-frame .lx-dmain {
     padding-right: 14px;
@@ -445,4 +446,124 @@ html:not([data-theme='dim']) .lx-exercise [data-slot='secondary'] .lx-btn-quiet 
     inset 0 1px 0 var(--glanz),
     inset 0 0 0 1px var(--glass-rim),
     var(--shadow-sm);
+}
+
+/* 12. Reiter und Unterseiten (Wörter, Grammatik, Fortschritt, Listen, Einstellungs-Seiten) wie das Küchenstudio: der Inhalt liegt auf EINEM
+   Glasblatt unter der Kopfleiste, Karten und Tabellen darauf sind deckend hell (--glass-hi, „Platte“), nie Glas auf Glas. Heute hat sein
+   eigenes Raster (Tageskarte + Spalte), Übungen ihre Glaskarte. Die Kontextspalte rechts ist ein dichtes Glasblatt (--glass-dense) bis unten. */
+@media (min-width: 600px) {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+    min-height: calc(100dvh - 14px - 64px - 12px - 14px);
+    margin-bottom: 14px;
+    border-radius: 22px;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'])
+    :is(.lx-card, .lx-v-card, .lx-glass, .lx-v-row-card, .lx-vw-card, .lx-kh-tile) {
+    border-color: transparent;
+    background: var(--glass-hi);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      var(--shadow-sm);
+  }
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) > :not(.mx-auto) {
+    padding: 16px 20px;
+  }
+  html:not([data-theme='dim']) .lx-ctx > :not(.lx-kh-ctx) {
+    box-sizing: border-box;
+    min-height: calc(100dvh - 28px);
+    padding: 24px;
+    border-radius: 22px;
+    background: var(--glass-dense);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow);
+  }
+}
+/* Monitor: der Inhalt nutzt die Breite des Blatts (statt einer schmalen Spalte in der Mitte). */
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) > .mx-auto {
+    max-width: none;
+    padding-inline: 32px;
+  }
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) > :not(.mx-auto) {
+    padding: 24px 32px;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']),
+  html:not([data-theme='dim']) .lx-ctx > :not(.lx-kh-ctx) {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* 13. Blätter, Claude-Fenster und Pop-ups: dichtes Glas (Küchenstudio `--glas-dicht`), Lichtkante, weicher Schatten. Claude dockt am Monitor
+   als schwebendes Glasblatt in die rechte Spalte (14 px Rand oben/unten/rechts wie die übrigen Blätter). */
+html:not([data-theme='dim']) [role='dialog'][aria-modal='true'][class*='bg-surface-solid'],
+html:not([data-theme='dim']) [data-testid='companion'] {
+  border-color: transparent;
+  background: var(--glass-dense);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 var(--glanz),
+    inset 0 0 0 1px var(--glass-rim),
+    var(--shadow);
+}
+@media (min-width: 1024px) {
+  html:not([data-theme='dim'])[data-lx-dock='claude'] [data-testid='companion'][data-mode='float']:not([data-minimized]) {
+    top: 14px !important;
+    width: calc(var(--lx-dock-w) - 14px) !important;
+    height: calc(100dvh - 28px) !important;
+    border: 0 !important;
+    border-radius: 22px !important;
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow) !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) [role='dialog'][aria-modal='true'][class*='bg-surface-solid'],
+  html:not([data-theme='dim']) [data-testid='companion'] {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* 14. Monitor nach dem Prüfen (Kern-Rest „Weiter ohne Scrollen“): bei langer Rückmeldung bleibt die Knopfzeile unten im Bild stehen – als
+   Glaskapsel über dem Text (wie die Maskenfußzeile im Küchenstudio). `overflow: clip` statt `hidden`, damit `sticky` greift. */
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern][data-kres] {
+    overflow: clip;
+  }
+  html:not([data-theme='dim']) .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > .lx-actionbar-column {
+    position: sticky;
+    bottom: 14px;
+    z-index: 5;
+    margin: 0 28px 20px 0;
+    padding: 8px;
+    border-radius: 24px;
+    background: var(--glass-dense);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 var(--glanz),
+      inset 0 0 0 1px var(--glass-rim),
+      var(--shadow-sm);
+  }
 }

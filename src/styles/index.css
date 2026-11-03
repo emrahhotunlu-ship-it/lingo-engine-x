@@ -706,10 +706,16 @@ h3 {
   .lx-choice[data-state='dim'] {
     opacity: 0.55;
   }
-  /* Lösung nach falscher Wahl oder „Weiß ich nicht“: neutraler Rahmen, kein Grün, kein Häkchen (UX-Audit U1). */
+  /* Lösung nach falscher Wahl oder „Weiß ich nicht“ (Kern-Rest 03.11.2026, ersetzt UX-Audit U1 „neutral“): grüner Rahmen mit Häkchen, aber
+     ohne grüne Fläche – so ist die richtige Option sofort zu finden und bleibt doch von einer eigenen richtigen Wahl (grün gefüllt) unterscheidbar. */
   .lx-choice[data-state='answer'] {
     background: var(--lx-surface-strong);
-    border: 2px solid var(--lx-fg-muted);
+    border: 2px dashed var(--lx-ok);
+  }
+  .lx-choice[data-state='answer'] .lx-choice-key,
+  .lx-choice[data-state='answer'] .lx-choice-letter {
+    box-shadow: inset 0 0 0 2px var(--lx-ok);
+    color: var(--lx-ok);
   }
   @media (pointer: coarse) {
     .lx-choice-key:not(.lx-choice-letter) {
@@ -737,7 +743,8 @@ h3 {
     font-weight: 700;
     line-height: 1;
   }
-  .lx-choice[data-state='correct'] .lx-choice-mark {
+  .lx-choice[data-state='correct'] .lx-choice-mark,
+  .lx-choice[data-state='answer'] .lx-choice-mark {
     color: var(--lx-ok-text);
   }
   .lx-choice[data-state='wrong'] .lx-choice-mark {

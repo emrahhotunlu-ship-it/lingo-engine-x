@@ -45,10 +45,10 @@
           "bytes": 9000,
           "freigabe": "Hauptsitzung 02.11.2026: Tagesweg, Claude-Erklärung bei falsch, Aufgabe melden, Hilfe immer sichtbar (Emrahs Freigabe UX-Neuanfang)"
         },
-      "Großpaket G": {
-        "bytes": 6000,
-        "freigabe": "Hauptsitzung 03.11.2026: Grammatik neu (Schalter gcfg, Themen-Weg, eigene Fehlersätze im Schritt, Aufgabe war unfair mit Spur, Zweitmeinung für alle getippten Arten; Emrahs OK zu Großpaket G)"
-      }
+        "Großpaket G": {
+          "bytes": 6000,
+          "freigabe": "Hauptsitzung 03.11.2026: Grammatik neu (Schalter gcfg, Themen-Weg, eigene Fehlersätze im Schritt, Aufgabe war unfair mit Spur, Zweitmeinung für alle getippten Arten; Emrahs OK zu Großpaket G)"
+        }
       }
     },
     "css": {
@@ -123,6 +123,42 @@
       },
       "src/features/vocab/hub/VocabHome.tsx": {
         "basis": 1500,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/ui/Home.tsx": {
+        "basis": 3600,
+        "zuwachs": {}
+      },
+      "_device": {
+        "basis": 500,
+        "zuwachs": {}
+      },
+      "_history": {
+        "basis": 2000,
+        "zuwachs": {}
+      },
+      "_mistakes": {
+        "basis": 500,
+        "zuwachs": {}
+      },
+      "_refill": {
+        "basis": 1800,
+        "zuwachs": {}
+      },
+      "_settings": {
+        "basis": 700,
+        "zuwachs": {}
+      },
+      "_sharedUi": {
+        "basis": 9000,
+        "zuwachs": {}
+      },
+      "_store": {
+        "basis": 10500,
+        "zuwachs": {}
+      },
+      "_vlog": {
+        "basis": 2400,
         "zuwachs": {}
       }
     },
