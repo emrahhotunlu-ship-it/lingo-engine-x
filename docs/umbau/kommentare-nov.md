@@ -13,3 +13,4 @@ Status: offen · in Arbeit · behoben (Version)
 | K6 | 03.11. 14:13 | f160a2e3 | Seitenbereich „Regel und Erklärung“ (aside, Laptop) | Ganzer Bereich sieht schlecht aus | offen |
 | K7 | 03.11. 14:13 | f7ce1ee1 | Erklärung-Karte „Anwenden“/eigener Satz | Schlechte Karte: „später prüfen lassen“ unklar, „kommt wieder“ nicht erklärt, bringt nichts | offen |
 | K8 | 03.11. 14:14 | d0757e75 | Eingabe-Lücke „Auf Englisch eingeben: erkennen, anerkennen …“ | Eingabebereich viel zu klein – das Wichtigste ist das Kleinste auf der Seite | offen |
+| K9 | 03.11. 14:16 | 4ae626c3 | Grammatik-Aufgabe „Setz das fehlende Wort ein.“ nach dem Prüfen | Nicht klar erklärt, was genau falsch war | offen |
