@@ -42,7 +42,8 @@ export function TopBar() {
   if (tab === 'today') return <TodayHead />;
   if (tab === 'learn') return <LearnHead />;
   if (tab === 'vocab') return <TabHead testId="vocab" title={t('nbShTabVocab')} />;
-  return <TabHead testId="progress" title={t('nbShTabProgress')} />;
+  // Profil-Blatt (Überblick, Einstellungen): der Profil-Knopf steht wie vor Großpaket B1 auf „Fortschritt“.
+  return <TabHead testId="progress" title={t('nbShTabProgress')} lead={<ProfileButton />} />;
 }
 
 /** Titel der Herkunft („Heute“, „Üben“ …) für „‹ Herkunft“; `null` = keine Herkunft bekannt. */

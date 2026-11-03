@@ -2,7 +2,7 @@
  "seed 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 1 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -24,7 +24,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 124 170",
+  "stand": "6 1 6 6 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -32,7 +32,7 @@
  "seed 2026-09-14 fast": {
   "min": "20",
   "restart": null,
-  "n": "14. 6 1 6 0 3 20 0 3 20 1 1 2 2 1 10 3 5 6 6 124 170 25",
+  "n": "14. 0 3 20 0 3 20 1 1 2 2 1 10 3 5 6 6 1 6 6 124 170 25",
   "s": [
    "settled= today-card shape=full rest=20",
    "hero duty=review",
@@ -52,7 +52,7 @@
    "stand-week min=170"
   ],
   "rev": "1 2",
-  "stand": "6 124 170",
+  "stand": "6 1 6 6 124 170",
   "truth": null,
   "goal": null,
   "streak": "6 1 6"
@@ -60,7 +60,7 @@
  "seed 2026-09-14 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 1 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -82,7 +82,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 124 170",
+  "stand": "6 1 6 6 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "6 1 6"
@@ -90,7 +90,7 @@
  "seed 2026-09-15 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 2 6 7 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -112,7 +112,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "7 124 170",
+  "stand": "7 2 6 7 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "7 2 6"
@@ -120,7 +120,7 @@
  "seed 2026-09-15 fast": {
   "min": "20",
   "restart": null,
-  "n": "15. 7 2 6 0 3 20 0 3 20 1 1 2 2 1 10 3 5 7 7 124 170 25",
+  "n": "15. 0 3 20 0 3 20 1 1 2 2 1 10 3 5 7 7 2 6 7 124 170 25",
   "s": [
    "settled= today-card shape=full rest=20",
    "hero duty=review",
@@ -140,7 +140,7 @@
    "stand-week min=170"
   ],
   "rev": "1 2",
-  "stand": "7 124 170",
+  "stand": "7 2 6 7 124 170",
   "truth": null,
   "goal": null,
   "streak": "7 2 6"
@@ -148,7 +148,7 @@
  "seed 2026-09-15 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 2 6 7 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -170,7 +170,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "7 124 170",
+  "stand": "7 2 6 7 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "7 2 6"
@@ -178,7 +178,7 @@
  "seed 2026-09-16 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 3 6 8 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -200,7 +200,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "8 124 170",
+  "stand": "8 3 6 8 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "8 3 6"
@@ -208,7 +208,7 @@
  "seed 2026-09-16 fast": {
   "min": "17",
   "restart": null,
-  "n": "16. 8 3 6 0 3 17 0 3 17 1 4 5 2 1 10 3 5 6 8 124 170 25",
+  "n": "16. 0 3 17 0 3 17 1 4 5 2 1 10 3 5 6 8 3 6 8 124 170 25",
   "s": [
    "settled= today-card shape=full rest=17",
    "hero duty=review",
@@ -228,7 +228,7 @@
    "stand-week min=170"
   ],
   "rev": "4 5",
-  "stand": "8 124 170",
+  "stand": "8 3 6 8 124 170",
   "truth": null,
   "goal": null,
   "streak": "8 3 6"
@@ -236,7 +236,7 @@
  "seed 2026-09-16 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 3 6 8 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -258,7 +258,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "8 124 170",
+  "stand": "8 3 6 8 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "8 3 6"
@@ -266,7 +266,7 @@
  "seed 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 4 6 9 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -288,7 +288,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 124 170",
+  "stand": "9 4 6 9 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "9 4 6"
@@ -296,7 +296,7 @@
  "seed 2026-09-17 fast": {
   "min": "17",
   "restart": null,
-  "n": "17. 9 4 6 0 3 17 0 3 17 1 7 8 2 1 10 3 5 3 9 124 170 25",
+  "n": "17. 0 3 17 0 3 17 1 7 8 2 1 10 3 5 3 9 4 6 9 124 170 25",
   "s": [
    "settled= today-card shape=full rest=17",
    "hero duty=review",
@@ -316,7 +316,7 @@
    "stand-week min=170"
   ],
   "rev": "7 8",
-  "stand": "9 124 170",
+  "stand": "9 4 6 9 124 170",
   "truth": null,
   "goal": null,
   "streak": "9 4 6"
@@ -324,7 +324,7 @@
  "seed 2026-09-17 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 4 6 9 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -346,7 +346,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 124 170",
+  "stand": "9 4 6 9 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "9 4 6"
@@ -354,7 +354,7 @@
  "seed 2026-09-18 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 5 6 10 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -376,7 +376,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "10 124 170",
+  "stand": "10 5 6 10 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "10 5 6"
@@ -384,7 +384,7 @@
  "seed 2026-09-18 fast": {
   "min": "16",
   "restart": null,
-  "n": "18. 10 5 6 0 3 16 0 3 16 1 16 17 2 1 10 3 5 4 10 124 170 25",
+  "n": "18. 0 3 16 0 3 16 1 16 17 2 1 10 3 5 4 10 5 6 10 124 170 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hero duty=review",
@@ -404,7 +404,7 @@
    "stand-week min=170"
   ],
   "rev": "16 17",
-  "stand": "10 124 170",
+  "stand": "10 5 6 10 124 170",
   "truth": null,
   "goal": null,
   "streak": "10 5 6"
@@ -412,7 +412,7 @@
  "seed 2026-09-18 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 5 6 10 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -434,7 +434,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "10 124 170",
+  "stand": "10 5 6 10 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "10 5 6"
@@ -442,7 +442,7 @@
  "seed 2026-09-19 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
+  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 6 6 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -464,7 +464,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 124 170",
+  "stand": "11 6 6 11 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "11 6 6"
@@ -472,7 +472,7 @@
  "seed 2026-09-19 fast": {
   "min": "16",
   "restart": null,
-  "n": "19. 11 6 6 0 3 16 0 3 16 1 21 22 2 1 10 3 5 11 124 170 25",
+  "n": "19. 0 3 16 0 3 16 1 21 22 2 1 10 3 5 11 6 6 11 124 170 25",
   "s": [
    "settled= today-card shape=sat rest=16",
    "hero duty=review",
@@ -492,7 +492,7 @@
    "stand-week min=170"
   ],
   "rev": "21 22",
-  "stand": "11 124 170",
+  "stand": "11 6 6 11 124 170",
   "truth": null,
   "goal": null,
   "streak": "11 6 6"
@@ -500,7 +500,7 @@
  "seed 2026-09-19 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
+  "n": "25 3 7 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 6 6 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -522,7 +522,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 124 170",
+  "stand": "11 6 6 11 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "11 6 6"
@@ -530,7 +530,7 @@
  "seed 2026-09-20 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 7 12 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -552,7 +552,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 124 170",
+  "stand": "12 7 12 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "12 7"
@@ -560,7 +560,7 @@
  "seed 2026-09-20 fast": {
   "min": "16",
   "restart": null,
-  "n": "20. 12 7 0 3 16 0 3 16 1 45 46 2 1 10 3 12 5 12 124 170 25",
+  "n": "20. 0 3 16 0 3 16 1 45 46 2 1 10 3 12 5 12 7 12 124 170 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hero duty=review",
@@ -580,7 +580,7 @@
    "stand-week min=170"
   ],
   "rev": "45 46",
-  "stand": "12 124 170",
+  "stand": "12 7 12 124 170",
   "truth": null,
   "goal": null,
   "streak": "12 7"
@@ -588,7 +588,7 @@
  "seed 2026-09-20 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 124 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 46 12 7 12 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -610,7 +610,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 124 170",
+  "stand": "12 7 12 124 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "12 7"
@@ -618,7 +618,7 @@
  "seed 2026-09-21 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
+  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 12 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -640,7 +640,7 @@
    "stand-week min=0"
   ],
   "rev": null,
-  "stand": "12 124 0",
+  "stand": "12 12 124 0",
   "truth": null,
   "goal": "100 100",
   "streak": "12"
@@ -648,7 +648,7 @@
  "seed 2026-09-21 fast": {
   "min": "16",
   "restart": null,
-  "n": "21. 12 0 3 16 0 3 16 1 61 62 2 1 10 3 5 12 124 0 25",
+  "n": "21. 0 3 16 0 3 16 1 61 62 2 1 10 3 5 12 12 124 0 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hero duty=review",
@@ -668,7 +668,7 @@
    "stand-week min=0"
   ],
   "rev": "61 62",
-  "stand": "12 124 0",
+  "stand": "12 12 124 0",
   "truth": null,
   "goal": null,
   "streak": "12"
@@ -676,7 +676,7 @@
  "seed 2026-09-21 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
+  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 12 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -698,7 +698,7 @@
    "stand-week min=0"
   ],
   "rev": null,
-  "stand": "12 124 0",
+  "stand": "12 12 124 0",
   "truth": "7",
   "goal": "100 100",
   "streak": "12"
@@ -2615,7 +2615,7 @@
  "gross 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1 6 6 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2637,7 +2637,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1.240 170",
+  "stand": "6 1 6 6 1.240 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -2645,7 +2645,7 @@
  "gross 2026-09-14 fast": {
   "min": "16",
   "restart": null,
-  "n": "14. 6 1 6 0 3 16 0 3 16 1 74 75 2 1 10 3 5 60 6 1.240 170 25",
+  "n": "14. 0 3 16 0 3 16 1 74 75 2 1 10 3 5 60 6 1 6 6 1.240 170 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hero duty=review",
@@ -2665,7 +2665,7 @@
    "stand-week min=170"
   ],
   "rev": "74 75",
-  "stand": "6 1.240 170",
+  "stand": "6 1 6 6 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "6 1 6"
@@ -2673,7 +2673,7 @@
  "gross 2026-09-14 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1 6 6 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2695,7 +2695,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 1.240 170",
+  "stand": "6 1 6 6 1.240 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "6 1 6"
@@ -2703,7 +2703,7 @@
  "gross 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 4 6 9 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2725,7 +2725,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 1.240 170",
+  "stand": "9 4 6 9 1.240 170",
   "truth": null,
   "goal": "100 100",
   "streak": "9 4 6"
@@ -2733,7 +2733,7 @@
  "gross 2026-09-17 fast": {
   "min": "16",
   "restart": null,
-  "n": "17. 9 4 6 0 3 16 0 3 16 1 67 68 2 1 10 3 5 30 9 1.240 170 25",
+  "n": "17. 0 3 16 0 3 16 1 67 68 2 1 10 3 5 30 9 4 6 9 1.240 170 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hero duty=review",
@@ -2753,7 +2753,7 @@
    "stand-week min=170"
   ],
   "rev": "67 68",
-  "stand": "9 1.240 170",
+  "stand": "9 4 6 9 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "9 4 6"
@@ -2761,7 +2761,7 @@
  "gross 2026-09-17 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 4 6 9 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2783,7 +2783,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "9 1.240 170",
+  "stand": "9 4 6 9 1.240 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "9 4 6"
@@ -2791,7 +2791,7 @@
  "gross 2026-09-20 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 1.240 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 7 12 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2813,7 +2813,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 1.240 170",
+  "stand": "12 7 12 1.240 170",
   "truth": null,
   "goal": "100 100",
   "streak": "12 7"
@@ -2821,7 +2821,7 @@
  "gross 2026-09-20 fast": {
   "min": "16",
   "restart": null,
-  "n": "20. 12 7 0 3 16 0 3 16 1 67 68 2 1 10 3 12 5 12 1.240 170 25",
+  "n": "20. 0 3 16 0 3 16 1 67 68 2 1 10 3 12 5 12 7 12 1.240 170 25",
   "s": [
    "settled= today-card shape=full rest=16",
    "hero duty=review",
@@ -2841,7 +2841,7 @@
    "stand-week min=170"
   ],
   "rev": "67 68",
-  "stand": "12 1.240 170",
+  "stand": "12 7 12 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "12 7"
@@ -2849,7 +2849,7 @@
  "gross 2026-09-20 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 1.240 170",
+  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 12 12 7 867 12 7 12 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2871,7 +2871,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "12 1.240 170",
+  "stand": "12 7 12 1.240 170",
   "truth": "7",
   "goal": "100 100",
   "streak": "12 7"
@@ -3515,7 +3515,7 @@
  "leer 2026-09-14 fast": {
   "min": "25",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3573,7 +3573,7 @@
  "leer 2026-09-17 fast": {
   "min": "25",
   "restart": null,
-  "n": "17. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "17. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3631,7 +3631,7 @@
  "leer 2026-09-20 fast": {
   "min": "25",
   "restart": null,
-  "n": "20. 0 3 25 0 3 25 1 2 1 10 3 12 5 0 0 0 25",
+  "n": "20. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3689,7 +3689,7 @@
  "leer 2026-09-23 fast": {
   "min": "25",
   "restart": null,
-  "n": "23. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "23. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3747,7 +3747,7 @@
  "leer 2026-09-26 fast": {
   "min": "25",
   "restart": null,
-  "n": "26. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "26. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -3805,7 +3805,7 @@
  "leer 2026-09-29 fast": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3863,7 +3863,7 @@
  "leer 2026-10-02 fast": {
   "min": "25",
   "restart": null,
-  "n": "2. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "2. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3921,7 +3921,7 @@
  "leer 2026-10-05 fast": {
   "min": "25",
   "restart": null,
-  "n": "5. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "5. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3979,7 +3979,7 @@
  "leer 2026-10-08 fast": {
   "min": "25",
   "restart": null,
-  "n": "8. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "8. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4037,7 +4037,7 @@
  "leer 2026-10-11 fast": {
   "min": "25",
   "restart": null,
-  "n": "11. 0 3 25 0 3 25 1 2 1 10 3 12 5 0 0 0 25",
+  "n": "11. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4065,7 +4065,7 @@
  "seed 2026-09-14 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "14. 6 1 6 0 3 25 0 3 25 1 2 1 10 3 5 6 6 124 170 25",
+  "n": "14. 0 3 25 0 3 25 1 0 2 2 1 10 3 5 6 6 1 6 6 124 170 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4085,7 +4085,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "6 124 170",
+  "stand": "6 1 6 6 124 170",
   "truth": null,
   "goal": null,
   "streak": "6 1 6"
@@ -4093,7 +4093,7 @@
  "seed 2026-09-14 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
+  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 1 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -4115,7 +4115,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 124 170",
+  "stand": "6 1 6 6 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -4123,7 +4123,7 @@
  "seed 2026-09-19 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "19. 11 6 6 0 3 25 0 3 25 1 2 1 10 3 5 11 124 170 25",
+  "n": "19. 0 3 25 0 3 25 1 0 22 2 1 10 3 5 11 6 6 11 124 170 25",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -4143,7 +4143,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "11 124 170",
+  "stand": "11 6 6 11 124 170",
   "truth": null,
   "goal": null,
   "streak": "11 6 6"
@@ -4151,7 +4151,7 @@
  "seed 2026-09-19 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
+  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 6 6 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -4173,7 +4173,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 124 170",
+  "stand": "11 6 6 11 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "11 6 6"
@@ -4181,7 +4181,7 @@
  "seed 2026-09-24 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 2 1 10 3 5 0 124 0 25",
+  "n": "24. 0 3 25 0 3 25 1 0 66 2 1 10 3 5 0 124 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4240,7 +4240,7 @@
  "seed 2026-09-29 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 2 1 10 3 5 124 103 0 124 0 25",
+  "n": "29. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 124 103 0 124 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4300,7 +4300,7 @@
  "seed 2026-10-04 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "4. 0 3 25 0 3 25 1 2 1 10 3 12 5 124 99 0 124 0 25",
+  "n": "4. 0 3 25 0 3 25 1 0 68 2 1 10 3 12 5 124 99 0 124 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4412,7 +4412,7 @@
  "gross 2026-09-20 halb breit": {
   "min": "22",
   "restart": null,
-  "n": "20. 12 7 0 3 22 0 3 22 1 23 68 2 1 10 3 12 5 12 1.240 170 25",
+  "n": "20. 0 3 22 0 3 22 1 23 68 2 1 10 3 12 5 12 7 12 1.240 170 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hero duty=review",
@@ -4432,7 +4432,7 @@
    "stand-week min=170"
   ],
   "rev": "23 68",
-  "stand": "12 1.240 170",
+  "stand": "12 7 12 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "12 7"
@@ -4440,7 +4440,7 @@
  "leer 2026-09-20 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "20. 0 3 25 0 3 25 1 2 1 10 3 12 5 0 0 0 25",
+  "n": "20. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4468,7 +4468,7 @@
  "seed 2026-09-14 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "14. 7 1 6 0 3 25 0 3 25 1 2 1 10 3 5 6 7 124 170 25",
+  "n": "14. 0 3 25 0 3 25 1 0 2 2 1 10 3 5 6 7 1 6 7 124 170 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4488,7 +4488,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "7 124 170",
+  "stand": "7 1 6 7 124 170",
   "truth": null,
   "goal": null,
   "streak": "7 1 6"
@@ -4496,7 +4496,7 @@
  "seed 2026-09-14 halb 02:30": {
   "min": "20",
   "restart": null,
-  "n": "14. 7 1 6 0 3 20 0 3 20 1 1 2 2 1 10 3 5 6 7 124 170 25",
+  "n": "14. 0 3 20 0 3 20 1 1 2 2 1 10 3 5 6 7 1 6 7 124 170 25",
   "s": [
    "settled= today-card shape=full rest=20",
    "hero duty=review",
@@ -4516,7 +4516,7 @@
    "stand-week min=170"
   ],
   "rev": "1 2",
-  "stand": "7 124 170",
+  "stand": "7 1 6 7 124 170",
   "truth": null,
   "goal": null,
   "streak": "7 1 6"
@@ -4524,7 +4524,7 @@
  "seed 2026-09-17 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "17. 10 4 6 0 3 25 0 3 25 1 2 1 10 3 5 3 10 124 170 25",
+  "n": "17. 0 3 25 0 3 25 1 0 8 2 1 10 3 5 3 10 4 6 10 124 170 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4544,7 +4544,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "10 124 170",
+  "stand": "10 4 6 10 124 170",
   "truth": null,
   "goal": null,
   "streak": "10 4 6"
@@ -4552,7 +4552,7 @@
  "seed 2026-09-17 halb 02:30": {
   "min": "22",
   "restart": null,
-  "n": "17. 10 4 6 0 3 22 0 3 22 1 3 8 2 1 10 3 5 3 10 124 170 25",
+  "n": "17. 0 3 22 0 3 22 1 3 8 2 1 10 3 5 3 10 4 6 10 124 170 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hero duty=review",
@@ -4572,7 +4572,7 @@
    "stand-week min=170"
   ],
   "rev": "3 8",
-  "stand": "10 124 170",
+  "stand": "10 4 6 10 124 170",
   "truth": null,
   "goal": null,
   "streak": "10 4 6"
@@ -4580,7 +4580,7 @@
  "seed 2026-09-20 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "20. 12 7 0 3 25 0 3 25 1 2 1 10 3 12 5 12 124 170 25",
+  "n": "20. 0 3 25 0 3 25 1 0 46 2 1 10 3 12 5 12 7 12 124 170 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4600,7 +4600,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "12 124 170",
+  "stand": "12 7 12 124 170",
   "truth": null,
   "goal": null,
   "streak": "12 7"
@@ -4608,7 +4608,7 @@
  "seed 2026-09-20 halb 02:30": {
   "min": "22",
   "restart": null,
-  "n": "20. 12 7 0 3 22 0 3 22 1 16 46 2 1 10 3 12 5 12 124 170 25",
+  "n": "20. 0 3 22 0 3 22 1 16 46 2 1 10 3 12 5 12 7 12 124 170 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hero duty=review",
@@ -4628,7 +4628,7 @@
    "stand-week min=170"
   ],
   "rev": "16 46",
-  "stand": "12 124 170",
+  "stand": "12 7 12 124 170",
   "truth": null,
   "goal": null,
   "streak": "12 7"
@@ -4636,7 +4636,7 @@
  "seed 2026-09-23 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "23. 0 3 25 0 3 25 1 2 1 10 3 5 0 124 0 25",
+  "n": "23. 0 3 25 0 3 25 1 0 66 2 1 10 3 5 0 124 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4692,7 +4692,7 @@
  "seed 2026-09-26 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "26. 0 3 25 0 3 25 1 2 1 10 3 5 0 124 0 25",
+  "n": "26. 0 3 25 0 3 25 1 0 67 2 1 10 3 5 0 124 0 25",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -4750,7 +4750,7 @@
  "seed 2026-09-29 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 2 1 10 3 5 124 102 0 124 0 25",
+  "n": "29. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 124 102 0 124 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4810,7 +4810,7 @@
  "seed 2026-10-02 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "2. 0 3 25 0 3 25 1 2 1 10 3 5 124 99 0 124 0 25",
+  "n": "2. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 124 99 0 124 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5005,7 +5005,7 @@
  "gross 2026-09-14 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "14. 7 1 6 0 3 25 0 3 25 1 2 1 10 3 5 60 7 1.240 170 25",
+  "n": "14. 0 3 25 0 3 25 1 0 75 2 1 10 3 5 60 7 1 6 7 1.240 170 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5025,7 +5025,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "7 1.240 170",
+  "stand": "7 1 6 7 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "7 1 6"
@@ -5033,7 +5033,7 @@
  "gross 2026-09-14 halb 02:30": {
   "min": "22",
   "restart": null,
-  "n": "14. 7 1 6 0 3 22 0 3 22 1 25 75 2 1 10 3 5 60 7 1.240 170 25",
+  "n": "14. 0 3 22 0 3 22 1 25 75 2 1 10 3 5 60 7 1 6 7 1.240 170 25",
   "s": [
    "settled= today-card shape=full rest=22",
    "hero duty=review",
@@ -5053,7 +5053,7 @@
    "stand-week min=170"
   ],
   "rev": "25 75",
-  "stand": "7 1.240 170",
+  "stand": "7 1 6 7 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "7 1 6"
@@ -5061,7 +5061,7 @@
  "gross 2026-09-19 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "19. 12 6 6 0 3 25 0 3 25 1 2 1 10 3 5 12 1.240 170 25",
+  "n": "19. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 12 6 6 12 1.240 170 25",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -5081,7 +5081,7 @@
    "stand-week min=170"
   ],
   "rev": "",
-  "stand": "12 1.240 170",
+  "stand": "12 6 6 12 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "12 6 6"
@@ -5089,7 +5089,7 @@
  "gross 2026-09-19 halb 02:30": {
   "min": "22",
   "restart": null,
-  "n": "19. 12 6 6 0 3 22 0 3 22 1 23 68 2 1 10 3 5 12 1.240 170 25",
+  "n": "19. 0 3 22 0 3 22 1 23 68 2 1 10 3 5 12 6 6 12 1.240 170 25",
   "s": [
    "settled= today-card shape=sat rest=22",
    "hero duty=review",
@@ -5109,7 +5109,7 @@
    "stand-week min=170"
   ],
   "rev": "23 68",
-  "stand": "12 1.240 170",
+  "stand": "12 6 6 12 1.240 170",
   "truth": null,
   "goal": null,
   "streak": "12 6 6"
@@ -5117,7 +5117,7 @@
  "gross 2026-09-24 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 2 1 10 3 5 0 1.240 0 25",
+  "n": "24. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 0 1.240 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5175,7 +5175,7 @@
  "gross 2026-09-29 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 2 1 10 3 5 1.240 984 0 1.240 0 25",
+  "n": "29. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 1.240 984 0 1.240 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5235,7 +5235,7 @@
  "gross 2026-10-04 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "4. 0 3 25 0 3 25 1 2 1 10 3 12 5 1.240 953 0 1.240 0 25",
+  "n": "4. 0 3 25 0 3 25 1 0 68 2 1 10 3 12 5 1.240 953 0 1.240 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5340,7 +5340,7 @@
  "leer 2026-09-14 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5368,7 +5368,7 @@
  "leer 2026-09-14 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5396,7 +5396,7 @@
  "leer 2026-09-19 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "19. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -5424,7 +5424,7 @@
  "leer 2026-09-19 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "19. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -5452,7 +5452,7 @@
  "leer 2026-09-24 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "24. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5480,7 +5480,7 @@
  "leer 2026-09-24 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "24. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5508,7 +5508,7 @@
  "leer 2026-09-29 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5536,7 +5536,7 @@
  "leer 2026-09-29 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5564,7 +5564,7 @@
  "leer 2026-10-04 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "4. 0 3 25 0 3 25 1 2 1 10 3 12 5 0 0 0 25",
+  "n": "4. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5592,7 +5592,7 @@
  "leer 2026-10-04 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "4. 0 3 25 0 3 25 1 2 1 10 3 12 5 0 0 0 25",
+  "n": "4. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5620,7 +5620,7 @@
  "leer 2026-10-09 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "9. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "9. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5648,7 +5648,7 @@
  "leer 2026-10-09 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "9. 0 3 25 0 3 25 1 2 1 10 3 5 0 0 0 25",
+  "n": "9. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 0 0 0 25",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5676,7 +5676,7 @@
  "seed 2026-09-14 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14 15 16 17 18 19 20 6 6 1 6 6 6 124 170",
+  "n": "25 3 100 100 14 15 16 17 18 19 20 6 6 1 6 6 6 1 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -5698,7 +5698,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "6 124 170",
+  "stand": "6 1 6 6 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "6 1 6"
@@ -5706,7 +5706,7 @@
  "seed 2026-09-19 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14 15 16 17 18 19 20 11 11 6 6 17 11 124 170",
+  "n": "25 3 100 100 12 14 15 16 17 18 19 20 11 11 6 6 17 11 6 6 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -5728,7 +5728,7 @@
    "stand-week min=170"
   ],
   "rev": null,
-  "stand": "11 124 170",
+  "stand": "11 6 6 11 124 170",
   "truth": null,
   "goal": "100 100",
   "streak": "11 6 6"

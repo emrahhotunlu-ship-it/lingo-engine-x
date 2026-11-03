@@ -45,10 +45,11 @@ function GearHeadButton() {
 }
 
 /** Rechte Seite des Reiter-Kopfs. `loading`: beim Laden nur ein freier Platz in Kopfhöhe. */
-export function HeadTools({ loading = false }: { loading?: boolean }) {
+export function HeadTools({ loading = false, lead = null }: { loading?: boolean; lead?: ReactNode }) {
   if (loading) return <span className="lx-vh-ask-gap" aria-hidden="true" />;
   return (
     <>
+      {lead}
       <TranslateHeadButton />
       <AskHeadButton />
       <GearHeadButton />
@@ -57,10 +58,11 @@ export function HeadTools({ loading = false }: { loading?: boolean }) {
 }
 
 /** Kopf einer Reiter-Wurzel (gerendert vom Rahmen, `TopBar`; Test-ID `topbar` bleibt). */
-export function TabHead({ title, loading = false, testId }: { title: ReactNode; loading?: boolean; testId?: string }) {
+/** `lead`: zusätzlicher Knopf vor den Werkzeugen (Fortschritt: Profil-Knopf, sonst wäre das Profil-Blatt nicht erreichbar). */
+export function TabHead({ title, loading = false, testId, lead = null }: { title: ReactNode; loading?: boolean; testId?: string; lead?: ReactNode }) {
   return (
     <div data-testid="topbar" data-tabhead={testId}>
-      <VPageHead className="lx-vh-head" title={title} right={<HeadTools loading={loading} />} />
+      <VPageHead className="lx-vh-head" title={title} right={<HeadTools loading={loading} lead={lead} />} />
     </div>
   );
 }

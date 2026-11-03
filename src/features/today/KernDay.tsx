@@ -3,7 +3,6 @@ import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
-import { useMediaQuery } from '../../platform/input';
 import { useVocabMetrics } from '../progress/WordsSegment';
 import { dateLabelOf } from './dateLabel';
 import type { DayRow } from './DayCard';
@@ -19,19 +18,13 @@ import { useStreakWeek, type StreakWeek } from './TodayWeek';
 export type KernRow = DayRow & { sub: string | null; progress?: { done: number; total: number } | null };
 
 /** Datum und „Dein Tag“ (Vorschau `Dienstag, 4. November` / `Dein Tag`). Die Serie steht unter „Dein Stand“; für Screenreader bleibt die Fußzeile. */
-export function KernHello({ foot = false, sw }: { foot?: boolean; sw?: StreakWeek }) {
+export function KernHello() {
   const { t, lang } = useT();
   const today = useClock((s) => s.today);
-  const ctxWide = useMediaQuery('(min-width: 1280px)');
   return (
     <header className="lx-kh-hello">
       <p className="lx-kh-date">
         <span data-testid="hello-date">{dateLabelOf(today, lang)}</span>
-        {foot && !ctxWide && sw?.foot && (
-          <span className="sr-only" data-testid="today-streak">
-            {sw.foot}
-          </span>
-        )}
       </p>
       <h2 className="lx-kh-h">{t('vhDayCard')}</h2>
     </header>
@@ -174,9 +167,16 @@ export function KernStand({ sw, variant }: { sw: StreakWeek; variant: 'row' | 'l
   const minutes = obj(obj(profile).minutes);
   const week = Math.round(sw.week.reduce((a, d) => a + Math.max(0, Number(minutes[d.day] ?? 0) || 0), 0));
   const streak = sw.streak ?? 0;
+  // Fußzeile der Serie für Screenreader und Tests (`today-streak`, früher bei der Woche): steht genau einmal, hier bei „Dein Fortschritt“.
+  const foot = sw.foot ? (
+    <span className="sr-only" data-testid="today-streak">
+      {sw.foot}
+    </span>
+  ) : null;
   if (variant === 'list') {
     return (
       <section className="lx-kh-stand" data-variant="list" aria-labelledby="kh-stand" data-testid="today-stand">
+        {foot}
         <h2 id="kh-stand" className="lx-kh-lbl">
           {t('gmStandHead')}
         </h2>
@@ -203,6 +203,7 @@ export function KernStand({ sw, variant }: { sw: StreakWeek; variant: 'row' | 'l
   }
   return (
     <section className="lx-kh-stand" data-variant="row" aria-label={t('gmStandHead')} data-testid="today-stand">
+      {foot}
       <p>
         <b className="lx-v-num" data-testid="stand-streak" data-n={streak}>
           {num(streak)}

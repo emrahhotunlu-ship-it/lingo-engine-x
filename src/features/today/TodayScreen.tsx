@@ -42,7 +42,7 @@ import { vocabModuleOn } from '../../modules/vocab/api';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
 import { useMediaQuery } from '../../platform/input';
-import { TodayWeekStrip, WeekList, useStreakWeek, type StreakWeek } from './TodayWeek';
+import { TodayWeekStrip, WeekList, useStreakWeek } from './TodayWeek';
 import { KernDayCard, KernHello, KernStand, type KernRow } from './KernDay';
 
 // „Heute“ (Kern e, Emrah 03.11.2026, Vorschau 9pdpfT8Es8nrdE3vnVeqqx `Main`/`Monitor-Heute`): die rote Linie.
@@ -156,7 +156,7 @@ const minutesOf = (rows: readonly CardRow[]): number[] => rows.map((r) => r.min)
  * einem Balken je Schritt, dem laufenden Schritt grün hinterlegt (Fortschritt, EIN Knopf) und den übrigen Schritten als ruhige Zeilen.
  * Zahlen aus EINEM `todaySummary` (Kap. 2 Nr. 2). Grammatik-Zeilen nennen das Thema des Tages (`u.gt`, eingefroren).
  */
-function UnitCard({ view, rows, sum, fixNone, settled, sub, sw }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean; sub: ReactNode; sw: StreakWeek }) {
+function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView; rows: CardRow[]; sum: TodaySummary; fixNone: boolean; settled: boolean; sub: ReactNode }) {
   const { t, lang } = useT();
   const { done, total } = sum;
   const now = rows.find((r) => r.state === 'now') ?? null;
@@ -194,7 +194,7 @@ function UnitCard({ view, rows, sum, fixNone, settled, sub, sw }: { view: TodayV
       data-rest={sum.rest}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
-      <KernHello foot sw={sw} />
+      <KernHello />
       <div className="lx-kh-hero" data-testid="hero" data-duty={now?.id}>
         <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="sr-only">
           {t('nbHeuteRing', { done, total })}
@@ -463,7 +463,7 @@ export function TodayScreen() {
 
       {ok && !done && !welcome && sum.total > 0 && (
         <motion.div variants={item} initial={settled ? false : undefined}>
-          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} sub={bandSub} sw={sw} />
+          <UnitCard view={view} rows={rows} sum={sum} fixNone={fixNone} settled={settled} sub={bandSub} />
         </motion.div>
       )}
 

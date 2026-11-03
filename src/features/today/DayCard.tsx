@@ -16,7 +16,6 @@ import { requestStart } from './startRun';
 import { useLive } from '../../data/live';
 import { normGoalMin } from '../../domain/progress/settings';
 import { openSettings } from '../../app/sheets';
-import { useStreakWeek } from './TodayWeek';
 import { KernDayCard, KernHello, type KernRow } from './KernDay';
 
 // Die Tageskarte im Design der Vorschau (Relaunch Teil 1c, D2 V-HEUTE; Vorschau H1 screens.js:117–176, L1 desk.js:79–106).
@@ -272,7 +271,6 @@ function docTopicTitle(th: TodayDoc['th'], t: T, lang: 'de' | 'en'): string | nu
 export function StartCard({ doc }: { doc: TodayDoc }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
-  const sw = useStreakWeek();
   const blocks = todayDocBlocks(doc);
   const now = blocks.find((b) => b.id === doc.go?.id) ?? null;
   const total = blocks.length;
@@ -302,7 +300,7 @@ export function StartCard({ doc }: { doc: TodayDoc }) {
   useEffect(() => markStart('lx:button'), []);
   return (
     <div className="lx-kh" data-testid="start-card" data-source="doc" data-day={doc.d} data-rest={doc.rest ?? 0}>
-      <KernHello sw={sw} />
+      <KernHello />
       <span data-testid="start-status" data-done={done} data-total={total} className="sr-only">
         {t('nbHeuteRing', { done, total })}
       </span>
