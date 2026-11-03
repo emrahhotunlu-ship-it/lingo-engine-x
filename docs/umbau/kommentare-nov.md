@@ -16,3 +16,6 @@ Status: offen · in Arbeit · behoben (Version)
 | K9 | 03.11. 14:16 | 4ae626c3 | Grammatik-Aufgabe „Setz das fehlende Wort ein.“ nach dem Prüfen | Nicht klar erklärt, was genau falsch war | offen |
 | K10 | 03.11. 14:17 | 611e911f | Wörter-Karte „Setz das Wort ein, der erste Buchstabe hilft.“ | Komplett neues, nie geübtes Wort kommt direkt als Abfrage-Karte, ohne Einführung vorher – Ursache prüfen (Einführungskarte übersprungen? Wort aus alter App/Lesen mit Lernstufe übernommen?) | offen |
 | K11 | 03.11. 14:19 | 9919ceb0 | Statuszeile „1 von 38 · Heute · Schritt 1: Wörter“ | Zeile nichtssagend; nach Verlassen der Wörter-Runde (viele Wörter schon gemacht) beginnt sie wieder bei „1 von 38“ – wirkt wie von vorn. Prüfen: Zählung nach Wiedereinstieg (erledigte mitzählen), ob Wörter doppelt kommen | offen |
+| K12 | 03.11. 14:19 | db047821 | Heute-Seite (ganz) | „sieht einfach beschissen aus!“ | offen |
+| K13 | 03.11. 14:19 | e07c3522 | Heute-Seite (ganz) | „sieht sehr schlecht aus“ | offen |
+| K14 | 03.11. 14:20 | e7838ccb | Heute-Seite (ganz, inkl. Lade-Rahmen) | Viel zu viel leere Fläche (vermutlich großer Bildschirm, vgl. K1) | offen |
