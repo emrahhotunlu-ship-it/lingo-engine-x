@@ -177,7 +177,7 @@ function VlearnPage({ route }: ScreenProps<'vlearn'>) {
         ai={vocabAi}
         onRoundEnd={onVlearnEnd}
         onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
-        renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} />}
+        renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} area="words" />}
       />
     </Suspense>
   );

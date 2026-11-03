@@ -83,7 +83,7 @@ export function GrammarSessionScreen() {
   const badge = win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
-      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
+      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" area="grammar" />
       {/* Kapitel-Arbeit: Themen-Test noch in Vorbereitung (zu wenig Testaufgaben), stattdessen Übung: kurzer Hinweis vor der ersten Aufgabe. */}
       {s.prep && s.status === 'running' && s.pos === 0 && !showCards && (
         <p className="m-0 text-sm text-muted" role="status" data-testid="tt-prep">

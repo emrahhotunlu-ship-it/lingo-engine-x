@@ -1,0 +1,392 @@
+/* Kern (Emrah 03.11.2026, Vorschau 9pdpfT8Es8nrdE3vnVeqqx v13): Übungsleiste, weiße Übungskarte und Rückmeldung als EINE Karte.
+   Handy: Karte mit Urteilsstreifen oben, Wortkarte/Regel als eigene Karte darunter, „Kommt …“ mittig, unten „Frag Claude dazu“ 1 : 2 „Weiter“.
+   Monitor (ab 1024 px): Karte bis 1120 px, Streifen über die ganze Breite, zwei Spalten (links Satz/Vergleich/Warum, rechts `side`),
+   Fußzeile in der Karte („Kommt …“ links, rechts „Frag Claude dazu“ und „Weiter“). Nur Tokens, keine Farbwerte (noColorLiterals). */
+
+/* ------------------------------------------------------------------ Übungsleiste: ✕ · „Wörter · 12 von 38 erledigt“ · Frag Claude, darunter der Balken */
+:root .lx-exbar.lx-kbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  margin-top: -16px;
+  padding: 14px 0 10px;
+  background: var(--bg);
+}
+.lx-kbar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.lx-kbar-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fg);
+}
+/* Handy: „Wörter“ und darunter klein „12 von 38 erledigt“; ab 480 px eine Zeile „Wörter · 12 von 38 erledigt“ (Vorschau). */
+.lx-kbar-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.lx-kbar-area,
+.lx-kbar-count {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lx-kbar-count {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg-2);
+}
+@media (min-width: 480px) {
+  .lx-kbar-title {
+    display: block;
+  }
+  .lx-kbar-count {
+    font: inherit;
+    color: inherit;
+  }
+  .lx-kbar-count::before {
+    content: ' · ';
+  }
+}
+.lx-kbar-prog .lx-segs,
+.lx-kbar-prog .lx-segs > * {
+  height: 6px;
+}
+.lx-kask {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--fg);
+  font: 500 14px/1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.lx-kask:hover {
+  border-color: var(--fg-3);
+}
+.lx-kask:focus-visible {
+  outline: 2px solid var(--act);
+  outline-offset: 2px;
+}
+@media (min-width: 768px) {
+  :root .lx-exbar.lx-kbar {
+    gap: 12px;
+    padding-top: 20px;
+  }
+  .lx-kbar-title {
+    font-size: 18px;
+  }
+  .lx-kbar-prog .lx-segs,
+  .lx-kbar-prog .lx-segs > * {
+    height: 8px;
+  }
+  .lx-kask {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 22px;
+    font-size: 16px;
+  }
+}
+@media (min-width: 1024px) {
+  :root .lx-exbar.lx-kbar {
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ Die Übungskarte (vor dem Prüfen): weiß, Rand, rund */
+:root .lx-glass.lx-exercise[data-kern] {
+  margin-top: 6px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: none;
+}
+/* Vor dem Prüfen sind Karte, Rumpf und linke Spalte nur Hüllen: die Übung sieht aus wie bisher. */
+.lx-exercise[data-kern]:not([data-kres]) :is(.lx-kcard, .lx-kbody, .lx-kleft) {
+  display: contents;
+}
+@media (min-width: 1024px) {
+  :root .lx-glass.lx-exercise[data-kern] {
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding: 32px 36px;
+    border-radius: 28px;
+  }
+  :root .lx-exercise[data-kern] .lx-split[data-split] {
+    display: block;
+  }
+  :root .lx-exercise[data-kern] .lx-split[data-split] > [data-col='main'] {
+    min-height: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ Nach dem Prüfen: EINE Rückmeldekarte */
+/* Status, Aufgabe und Hilfe treten zurück: die Karte beginnt mit dem Urteil (Vorschau). */
+.lx-exercise[data-kres] :is([data-slot='status'], [data-slot='task'], [data-slot='aid']) {
+  display: none;
+}
+:root .lx-exercise[data-kres] .lx-kcard.lx-result {
+  display: block;
+  animation: none;
+  padding: 0;
+  background: none;
+}
+/* `:root … [data-slot]` schlägt die alte Spalten-Regel `[data-slot='verdict']:not(.lx-band-vline)` (v-uebung.css). */
+:root .lx-kstrip[data-slot] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin: -20px -20px 0;
+  padding: 16px 20px;
+  background: var(--ok-soft);
+  animation: lx-band-fade 220ms var(--ease-soft) backwards;
+}
+.lx-kstrip[data-verdict='wrong'] {
+  background: var(--bad-soft);
+}
+.lx-kstrip[data-verdict='near'] {
+  background: var(--near-soft);
+}
+.lx-kstrip[data-verdict='dontKnow'] {
+  background: var(--surface-2);
+}
+.lx-kstrip,
+.lx-kstrip [data-testid='verdict-block'],
+.lx-kstrip [data-testid='verdict'] {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+}
+.lx-kstrip [data-testid='verdict-block'] {
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+}
+.lx-kstrip [data-testid='verdict'] {
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+.lx-kstrip .lx-vi {
+  width: 34px;
+  height: 34px;
+  font-size: 16px;
+}
+.lx-kstrip .lx-vi[data-mark='ok'] {
+  background: var(--ok);
+  color: var(--surface);
+}
+.lx-kstrip .lx-vi[data-mark='wrong'] {
+  background: var(--bad);
+  color: var(--surface);
+}
+.lx-kstrip .lx-vi[data-mark='near'] {
+  background: var(--near);
+  color: var(--surface);
+}
+.lx-kchip {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--act-soft);
+  color: var(--fg);
+  font-size: 15px;
+  font-weight: 600;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lx-kstrip {
+    animation: none;
+  }
+}
+:root[data-fx='off'] .lx-kstrip {
+  animation: none;
+}
+.lx-exercise[data-kres] .lx-kbody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.lx-exercise[data-kres] .lx-kleft {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding-top: 18px;
+}
+/* Das Warum als ruhige Fläche (Vorschau `Warum`-Kasten). */
+.lx-exercise[data-kres] .lx-kleft [data-block='why'] {
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+.lx-knext {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--fg-2);
+  text-align: center;
+}
+
+/* Handy und Tablet: Rückmeldekarte und Wortkarte sind zwei Karten (die Übung selbst ist dann nur noch der Rahmen). */
+@media (max-width: 1023.98px) {
+  :root .lx-glass.lx-exercise[data-kres] {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  .lx-exercise[data-kres] .lx-kstrip {
+    margin: 0;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: 24px 24px 0 0;
+  }
+  .lx-exercise[data-kres] .lx-kleft {
+    padding: 18px 20px 20px;
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 24px 24px;
+    background: var(--surface);
+  }
+  .lx-exercise[data-kres] .lx-kside {
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--surface);
+  }
+  /* Unten: „Frag Claude dazu“ 1 : 2 „Weiter“, beide 56 px. */
+  /* Wie die Vorschau: Breite nach Inhalt, der Rest 1 : 2 verteilt (`flex-grow` auf `auto`). */
+  :root .lx-actionbar .lx-kask-about {
+    flex: 1 0 auto;
+    min-width: 0;
+    border: 1px solid var(--line-2);
+    background: var(--surface);
+    color: var(--fg);
+    padding: 0 14px;
+    font-size: 16px;
+    white-space: nowrap;
+    min-height: 56px;
+    border-radius: 16px;
+  }
+  html:has(.lx-exercise[data-kres]) .lx-actionbar .lx-actionbar-inner > .lx-actionbar-main {
+    flex: 2 1 auto;
+    min-height: 56px;
+    border-radius: 16px;
+  }
+}
+
+/* Monitor: Streifen über die ganze Karte, zwei Spalten, Fußzeile in der Karte. */
+@media (min-width: 1024px) {
+  :root .lx-glass.lx-exercise[data-kres] {
+    padding: 0;
+    overflow: hidden;
+  }
+  .lx-exercise[data-kres] .lx-kstrip {
+    gap: 14px;
+    margin: 0;
+    padding: 20px 36px;
+  }
+  .lx-exercise[data-kres] .lx-kstrip [data-testid='verdict'] {
+    font-size: 24px;
+  }
+  .lx-exercise[data-kres] .lx-kstrip .lx-vi {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  .lx-exercise[data-kres] .lx-kbody {
+    padding: 32px 36px;
+  }
+  .lx-exercise[data-kres] .lx-kbody[data-side] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+  .lx-exercise[data-kres] .lx-kleft {
+    gap: 22px;
+    padding: 0;
+  }
+  .lx-exercise[data-kres] .lx-kside {
+    padding: 26px 28px;
+    border-radius: 22px;
+    background: var(--surface-2);
+  }
+  .lx-exercise[data-kres] .lx-kleft [data-block='why'] {
+    padding: 18px 20px;
+    border-radius: 16px;
+  }
+  .lx-exercise[data-kres] [data-slot='prompt'].lx-t-prompt {
+    font-size: 28px;
+    line-height: 1.5;
+  }
+  /* Fußzeile: „Kommt …“ links, die Knöpfe rechts – eine Zeile unten in der Karte. */
+  :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 14px;
+    row-gap: 0;
+    align-items: center;
+  }
+  :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > * {
+    grid-column: 1 / -1;
+  }
+  :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > .lx-knext {
+    grid-column: 1;
+    padding: 0 0 28px 36px;
+    font-size: 16px;
+    text-align: left;
+  }
+  :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > .lx-actionbar-column {
+    grid-column: 2;
+    position: static;
+    margin: 0;
+    padding: 0 36px 28px 0;
+    border: 0;
+    background: none;
+  }
+  :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > .lx-keys-line {
+    display: none;
+  }
+  :root .lx-exercise[data-kres] .lx-actionbar-column .lx-actionbar-inner {
+    flex-wrap: nowrap;
+    gap: 14px;
+  }
+  :root .lx-exercise[data-kres] .lx-actionbar-column .lx-kask-about {
+    border: 1px solid var(--line-2);
+    background: var(--surface);
+    color: var(--fg);
+    white-space: nowrap;
+    min-height: 56px;
+    padding: 0 24px;
+    border-radius: 16px;
+    font-size: 17px;
+  }
+  :root .lx-exercise[data-kres] .lx-actionbar-column .lx-actionbar-inner > .lx-actionbar-main {
+    min-height: 56px;
+    min-width: 0;
+    padding: 0 48px;
+    border-radius: 16px;
+    font-size: 19px;
+  }
+}

@@ -5,7 +5,6 @@ import { openSettings } from '../../app/sheets';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
 import { TopMenu, type MenuEntry } from '../../ui/exercise/ExerciseMenu';
-import { ClaudeExplain } from '../../ui/exercise/ExerciseShell';
 import { useBand } from '../../ui/exercise/bandStore';
 import { useMediaQuery } from '../../platform/input';
 import { openCompanion } from '../companion/store';
@@ -106,26 +105,22 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
   const { t } = useT();
   const ai = useAiAvailable();
   const wide = useMediaQuery('(min-width: 768px)');
-  const lead: MenuEntry[] =
-    !wide && ai
-      ? [
-          { id: 'companion', label: t('openCompanion'), onClick: () => openCompanion(), testId: 'open-companion' },
-          { id: 'translate', label: t('cmpTabTranslate'), onClick: () => openCompanion({ tab: 'translate' }), testId: 'open-translate' },
-        ]
-      : [];
-  // Seit dem UX-Neuanfang B (Emrah 02.11.2026 „Vollbild, rechts Claude“) hat keine Übung mehr die Seitenleiste – auch nicht am Laptop.
-  // Übersetzer und Claude stehen deshalb ab 768 px in der Übungsleiste, die Einstellungen im Menü „…“.
-  // „Claude erklärt“ der laufenden Aufgabe (UX-Neuanfang 02.11.2026): beschriftet oben rechts, vor und nach dem Prüfen – nie nur im Menü.
+  // Kern (Emrah 03.11.2026, Vorschau 9pdpf…): oben rechts EIN beschrifteter Knopf „Frag Claude“. In einer Aufgabe fragt er Claude zu genau
+  // dieser Aufgabe (vorher ohne Lösung, danach mit Antwort), sonst öffnet er den Begleiter. Der freie Chat bleibt im Menü „…“ erreichbar.
   const explain = useBand((s) => s.explain);
+  const ask = explain ?? (ai ? () => openCompanion() : null);
+  const lead: MenuEntry[] = [
+    ...(ai && explain ? [{ id: 'companion', label: t('openCompanion'), onClick: () => openCompanion(), testId: 'open-companion' }] : []),
+    ...(ai && !wide ? [{ id: 'translate', label: t('cmpTabTranslate'), onClick: () => openCompanion({ tab: 'translate' }), testId: 'open-translate' }] : []),
+  ];
   const tail: MenuEntry[] = [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
   return (
-    <div className="flex flex-none items-center gap-0.5" data-testid="exercise-actions">
-      {explain && <ClaudeExplain onClick={explain} />}
-      {wide && (
-        <>
-          <TranslateButton />
-          <ClaudeButton />
-        </>
+    <div className="flex flex-none items-center gap-1" data-testid="exercise-actions">
+      {wide && <TranslateButton />}
+      {ask && (
+        <button type="button" className="lx-kask" onClick={ask} data-testid={explain ? 'claude-explain' : 'open-companion'} data-ai="">
+          {t('kernAsk')}
+        </button>
       )}
       <TopMenu lead={lead} tail={tail} onPause={onPause} />
     </div>

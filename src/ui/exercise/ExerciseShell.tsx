@@ -3,7 +3,7 @@ import { closeContext, contextPortalTarget, openContext, useContextPresentation 
 import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
 import { useCompanionSee, type Seeing } from '../../features/companion/seeing';
-import { openCompanion, useCompanion } from '../../features/companion/store';
+import { openCompanion } from '../../features/companion/store';
 import { useSharedTarget } from '../../engine/shared';
 import type { ExplainDepth, ExplainLine, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import type { WordOp } from '../../domain/learn/types';
@@ -25,8 +25,6 @@ import { shouldAutoAdvance } from './autoAdvance';
 import { choiceKeyRange } from '../../engine/choiceKeys';
 import { useAutoAdvance } from './useAutoAdvance';
 import { Verdict } from './Verdict';
-import { ClaudeAskBox } from './ClaudeAskBox';
-import { TodayMini } from './TodayMini';
 import { inTextField, setBandMoreOpen, useBand } from './bandStore';
 
 // Das eine Übungsgerüst (Lernplattform 2.0 §4.2). Es erzwingt Reihenfolge und Darstellung (`data-slot`):
@@ -165,7 +163,7 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, sideNote, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
   const { t } = useT();
   const ai = useAiAvailable();
   useCompanionSee(props.see ?? null);
@@ -177,11 +175,9 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const tablet = useMediaQuery('(min-width: 768px)');
   const fine = useMediaQuery('(pointer: fine)');
   const presentation = useContextPresentation();
-  // Angedockter Begleiter (ab 1024 px, `ContextHost`): er ist dann die rechte Spalte; die Übung zeigt ihre eigene Spalte nicht.
-  const docked = useCompanion((s) => s.open && s.winMode === 'float' && !s.minimized) && presentation === 'column';
-  const sideCol = split && !docked;
+  // Kern (Vorschau 9pdpf…, 03.11.2026): keine eigene Seitenspalte mehr. Die Rückmeldung ist EINE Karte – oben der Urteilsstreifen,
+  // darunter links Satz, Vergleich und Warum, rechts (Monitor) bzw. darunter (Handy) die Wortkarte/Regel (`side`); „Frag Claude“ steht oben.
   const [info, setInfo] = useState(false);
-  const sideRef = useRef<HTMLElement>(null);
   const [reason, setReason] = useState<{ text: string; code: string } | null>(null);
   const infoId = useId();
   // Ab 1024 px mit Kontextspalte des Rahmens steht „Wozu?“ in der Spalte statt über der Aufgabe (Hauptsitzung 28.10.2026, Vorschau L2/L3);
@@ -219,11 +215,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
     }
     if (task.reason) setReason(task.reason());
     setInfo(true);
-    if (!toggle) window.requestAnimationFrame(() => (split ? sideRef.current : taskRef.current)?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' }));
+    if (!toggle) window.requestAnimationFrame(() => taskRef.current?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' }));
   };
-  // D3 (Prüfung learning-scientist): am Laptop steht in der Spalte gleich der Grund für genau diese Aufgabe, nicht nur der allgemeine Zweck.
-  const taskReason = task.reason;
-  const sideReason = useMemo(() => (split && taskReason ? taskReason() : null), [split, taskReason]);
   const showWhyRef = useRef(showWhy);
   useEffect(() => {
     showWhyRef.current = showWhy;
@@ -242,14 +235,14 @@ export function ExerciseShell(props: ExerciseShellProps) {
   // Einstufung) erst nach dem Prüfen, damit die Messung gilt. Am Handy (Band mit Übungsleiste) steht er oben rechts in der Leiste, sonst in der Aufgabenzeile.
   const claudeQuestion = ai && (!status.noInfo || !!feedback) ? t(feedback ? 'vuClaudeAskAfter' : 'vuClaudeAskBefore', { task: task.text }) : null;
   const claudeAsk = useMemo(() => (claudeQuestion ? () => openCompanion({ tab: 'chat', send: claudeQuestion }) : null), [claudeQuestion]);
-  const claudeInBar = band && hosts > 0;
+  // Kern (Vorschau 9pdpf…): „Frag Claude“ steht auf jeder Breite oben rechts in der Übungsleiste, sobald es eine gibt.
+  const claudeInBar = hosts > 0;
   useEffect(() => {
-    if (!band) return;
     useBand.setState({ explain: claudeAsk });
     return () => {
       if (useBand.getState().explain === claudeAsk) useBand.setState({ explain: null });
     };
-  }, [band, claudeAsk]);
+  }, [claudeAsk]);
   // Strg+E (Vorschau-Tastenzeile): „Claude erklärt“ – auch im Textfeld, weil es eine Steuerungstaste ist.
   useEffect(() => {
     if (!claudeAsk) return;
@@ -342,33 +335,25 @@ export function ExerciseShell(props: ExerciseShellProps) {
   }, [answering]);
 
   // Das Ergebnis messen: nur die Verweise für das Einrollen (UX-Neuanfang B: kein Band mehr).
-  const resultRef = useRef<HTMLElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const taskRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
   const hasResult = feedback !== null;
   // Neues Ergebnis: das Urteil rückt ins Bild – über die feste Leiste unten (Handy) bzw. den Bildrand, nie hinter die Übungsleiste oben;
   // höchstens so weit, dass die Statuszeile oben stehen bleibt (Aufgabe und eigene Antwort bleiben sichtbar, UX-Prüfung W8).
+  // Kern: Status und Aufgabe treten im Ergebnis zurück – die Karte beginnt mit dem Urteilsstreifen direkt unter der Übungsleiste.
   useEffect(() => {
     if (!hasResult) return;
     const id = window.requestAnimationFrame(() => {
       const el = resultRef.current;
       if (!el) return;
       const topBar = document.querySelector<HTMLElement>('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0;
-      const fixedBar = band ? document.querySelector<HTMLElement>('.lx-actionbar')?.getBoundingClientRect().top : undefined;
-      const bottom = Math.min(window.innerHeight, fixedBar ?? window.innerHeight);
-      const r = el.getBoundingClientRect();
-      const head = el.querySelector<HTMLElement>('[data-block="verdict"]')?.getBoundingClientRect().bottom ?? r.top + 120;
-      // Ziel: Urteil und Lösung ganz sichtbar, gern auch das Warum (bis 160 px darunter).
-      const need = Math.min(r.bottom, head + 160) + 12 - bottom;
-      const stTop = statusRef.current?.getBoundingClientRect().top ?? r.top;
-      const room = stTop - topBar - 8;
-      const by = Math.min(need, room);
-      if (by > 0) window.scrollBy({ top: by, behavior: 'auto' });
-      else if (r.top < topBar + 8) window.scrollBy({ top: r.top - topBar - 16, behavior: 'auto' });
+      const by = el.getBoundingClientRect().top - topBar - 12;
+      if (Math.abs(by) > 4) window.scrollBy({ top: by, behavior: 'auto' });
     });
     return () => window.cancelAnimationFrame(id);
-  }, [hasResult, resultKey, band]);
+  }, [hasResult, resultKey]);
 
   // Hauptknopf in der Bereichsfarbe (Design LP2): Wörter violett, Grammatik blau; nur solange die Übung steht.
   const area = status.area;
@@ -499,60 +484,45 @@ export function ExerciseShell(props: ExerciseShellProps) {
       </div>
     ) : null;
   const tutorNode = feedback?.tutor ? <div data-slot="tutor">{feedback.tutor}</div> : null;
+  // Kern: der Urteilsstreifen oben auf der Karte (Vorschau `Handy-Falsch`, `Monitor-Falsch`) – Zeichen, Urteil, rechts das Menü „…“.
+  const stripNode = feedback ? (
+    <div key={resultKey} data-slot="verdict" className="lx-kstrip" data-verdict={feedback.verdict}>
+      <div className="min-w-0 flex-1">
+        {verdictNode}
+        {feedback.parts}
+        {feedback.stageNote && (
+          <p className="lx-t-meta mt-1 text-muted" data-testid="stage-hold">
+            {feedback.stageNote}
+          </p>
+        )}
+      </div>
+      {taskMenu && <div className="flex-none">{taskMenu}</div>}
+    </div>
+  ) : null;
   if (feedback) {
     result = (
-      <section
-        key={resultKey}
-        ref={resultRef}
-        className="lx-vu-dverdict lx-result relative flex scroll-mt-4 flex-col gap-3"
-        data-testid="result"
-        aria-label={t('exExplanationLabel')}
-        data-verdict={feedback.verdict}
-        data-flow={band ? '' : undefined}
-      >
+      <>
         <div data-block="verdict" className="flex flex-col gap-3">
-          <div data-slot="verdict" className={`lx-result-head${taskMenu ? ' pr-12' : ''}`}>
-            {/* „Wieder in …“ rechts neben dem Urteil (Nachprüfung P3, G). */}
-            <div className="lx-band-vline">
-              <div className="min-w-0 flex-1">
-                {verdictNode}
-                {feedback.parts}
-              </div>
-              {feedback.nextIn && (
-                <span className="lx-t-meta lx-band-next text-muted" data-testid="next-in">
-                  {feedback.nextIn}
-                </span>
-              )}
-            </div>
-            {feedback.stageNote && (
-              <p className="lx-t-meta mt-1 text-muted" data-testid="stage-hold">
-                {feedback.stageNote}
-              </p>
-            )}
-          </div>
           {feedback.head && <div data-slot="head">{feedback.head}</div>}
           {feedback.right && <div data-slot="right">{feedback.right}</div>}
           {comparisonNode}
           {choiceNode}
         </div>
-        {!sideCol && explainNode}
+        {explainNode}
         {feedback.tail && (
           <div className="flex flex-col gap-1.5" data-slot="tail">
             {feedback.tail}
           </div>
         )}
-        {(feedback.act || (tutorNode && !sideCol)) && (
+        {(feedback.act || tutorNode) && (
           <div className="flex flex-col gap-2" data-block="act">
             {feedback.act && <div data-slot="act">{feedback.act}</div>}
-            {!sideCol && tutorNode}
+            {tutorNode}
           </div>
         )}
         {feedback.late && <div data-slot="late">{feedback.late}</div>}
-        {!sideCol && moreNode}
-        {/* Handy: „Frag Claude“ steht offen unter der Rückmeldung (Emrah 02.11.2026: Hilfe muss sichtbar sein, ohne erst zu suchen). */}
-        {band && claudeQuestion && <ClaudeAskBox task={task.text} after input={false} testId="claude-ask-inline" />}
-        {taskMenu && <div className="absolute right-1 top-2">{taskMenu}</div>}
-      </section>
+        {moreNode}
+      </>
     );
   }
 
@@ -587,7 +557,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             )}
           </p>
         )}
-        {info && !task.open && !split && (
+        {info && !task.open && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
             {[status.topic, status.pattern].filter(Boolean).length > 0 && (
               <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>
@@ -628,31 +598,64 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </div>
       </div>
       {aid && <div data-slot="aid">{aid}</div>}
-      {(wrapCard ?? ((c: ReactNode) => c))(
-        <>
-          <div data-slot="prompt" className="lx-t-prompt">
-            {prompt}
+      {/* Kern: EIN fester Aufbau vor und nach dem Prüfen (die Lücke wird nie neu eingehängt). Vor dem Prüfen sind Karte, Rumpf und linke
+          Spalte unsichtbare Hüllen (`display: contents`); danach Streifen oben, links Satz + Vergleich + Warum, rechts `side` (kern.css). */}
+      <div
+        ref={resultRef}
+        className={`lx-kcard${feedback ? ' lx-result' : ''}`}
+        data-testid={feedback ? 'result' : undefined}
+        data-verdict={feedback?.verdict}
+        role={feedback ? 'region' : undefined}
+        aria-label={feedback ? t('exExplanationLabel') : undefined}
+      >
+        {stripNode}
+        <div className="lx-kbody" data-side={feedback && side ? '' : undefined}>
+          <div className="lx-kleft">
+            {(wrapCard ?? ((c: ReactNode) => c))(
+              <>
+                <div data-slot="prompt" className="lx-t-prompt">
+                  {prompt}
+                </div>
+                <div ref={answerRef} data-slot="answer">
+                  {answer}
+                </div>
+              </>,
+            )}
+            {!asideSecondary && secondaryNode}
+            {hint && state !== 'aiError' && (
+              // Tipp-Runde (Vorschau `hintband`): EINE ruhige Zeile mit Glühbirne, nie Rot.
+              <div data-slot="hint" className="lx-hintband" data-state={state === 'retry' ? 'retry' : undefined} data-tone={hint.tone}>
+                <Icon name="lightbulb" size={18} aria-hidden="true" className="lx-hintband-icon" />
+                <HintLine text={hint.text} tone={hint.tone} />
+              </div>
+            )}
+            {errorNode}
+            {result}
           </div>
-          <div ref={answerRef} data-slot="answer">
-            {answer}
-          </div>
-        </>,
-      )}
-      {!asideSecondary && secondaryNode}
-      {hint && state !== 'aiError' && (
-        // Tipp-Runde (Vorschau `hintband`): EINE ruhige Zeile mit Glühbirne, nie Rot.
-        <div data-slot="hint" className="lx-hintband" data-state={state === 'retry' ? 'retry' : undefined} data-tone={hint.tone}>
-          <Icon name="lightbulb" size={18} aria-hidden="true" className="lx-hintband-icon" />
-          <HintLine text={hint.text} tone={hint.tone} />
+          {feedback && side && (
+            <section className="lx-kside" data-testid="ex-rule" aria-label={t('vuSideRule')}>
+              {side}
+            </section>
+          )}
         </div>
+      </div>
+      {feedback?.nextIn && (
+        <p className="lx-knext" data-testid="next-in">
+          {feedback.nextIn}
+        </p>
       )}
-      {errorNode}
-      {result}
     </>
   );
 
+  // Kern: nach dem Prüfen steht „Frag Claude dazu“ neben „Weiter“ (Vorschau: Handy 1 : 2, Monitor rechts unten in der Karte).
+  const askAbout =
+    feedback && claudeAsk ? (
+      <Button variant="secondary" onClick={claudeAsk} data-testid="claude-ask-about" className="lx-kask-about">
+        {t('kernAskAbout')}
+      </Button>
+    ) : null;
   const bar = (
-    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={asideSecondary || undefined}>
+    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={(feedback ? askAbout : asideSecondary) || undefined}>
       {barOverride ?? (
         <PrimaryAction
           onClick={feedback ? fire : primary.onClick}
@@ -705,50 +708,15 @@ export function ExerciseShell(props: ExerciseShellProps) {
       data-card={meta.id}
       data-stage={meta.stage}
       data-kind={meta.kind}
+      data-kern=""
+      data-kres={feedback ? '' : undefined}
     >
-      <div className="lx-split" data-split={split || undefined} data-noside={split && !sideCol ? '' : undefined}>
+      <div className="lx-split" data-split={split || undefined} data-noside={split ? '' : undefined}>
         <div data-col="main" className="flex min-w-0 flex-col gap-4">
           {main}
           {split && bar}
           {split && keysLine}
         </div>
-        {sideCol && (
-          // UX-Neuanfang B (Vorschau `.aside`): rechts „Erklärung“ (nach dem Prüfen) bzw. „Wozu?“/„Regel“ (davor), darunter immer „Frag Claude“.
-          <aside ref={sideRef} data-col="side" className="lx-vu-side flex min-w-0 scroll-mt-4 flex-col" aria-label={t('exSideLabel')}>
-            {feedback && (explainNode || tutorNode || moreNode) && (
-              <section className="lx-vu-ctx" data-testid="side-explain">
-                <h3 className="lx-vu-ctx-h">{t('vuExplain')}</h3>
-                {explainNode}
-                {tutorNode}
-                {moreNode}
-              </section>
-            )}
-            {info && !task.open && (
-              <section id={infoId} className="lx-vu-ctx" data-slot="info">
-                <h3 className="lx-vu-ctx-h">{t('vuSideWhy')}</h3>
-                {purposeBody(reason)}
-              </section>
-            )}
-            {side ? (
-              <section className="lx-vu-ctx" data-testid="ex-rule">
-                <h3 className="lx-vu-ctx-h">{t('vuSideRule')}</h3>
-                {side}
-              </section>
-            ) : (
-              !feedback &&
-              !info &&
-              !status.noInfo &&
-              !task.open && (
-                <section className="lx-vu-ctx" data-testid="side-placeholder">
-                  <h3 className="lx-vu-ctx-h">{t('vuSideWhy')}</h3>
-                  {task.purpose || sideReason ? purposeBody(sideReason, 'side-purpose') : <p className="lx-t-support m-0 text-muted">{sideNote ?? t('exSidePlaceholder')}</p>}
-                </section>
-              )
-            )}
-            {claudeQuestion && <ClaudeAskBox task={task.text} after={!!feedback} />}
-            {!claudeQuestion && <TodayMini />}
-          </aside>
-        )}
       </div>
       {!split && keysLine}
       {!split && bar}

@@ -115,6 +115,7 @@ export function TrainerScreen() {
         progressTestId="trainer-progress"
         ctx={round === 'extra' ? 'extra' : 'duty'}
         duty="review"
+        area="words"
         middleOverlay={undo.t !== null ? <UndoBar progress={progress} progressTestId="trainer-progress" /> : null}
       />
       <CardStack stackKey={status === 'summary' ? 'summary' : `step-${step}`} data={{ 'data-step': status === 'summary' ? 'summary' : step }}>

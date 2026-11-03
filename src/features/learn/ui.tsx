@@ -127,6 +127,7 @@ export function ExerciseTop({
   ctx = null,
   duty = null,
   middleOverlay = null,
+  area = null,
 }: {
   onClose: () => void;
   closeLabel?: string;
@@ -137,6 +138,8 @@ export function ExerciseTop({
   duty?: DutyId | null;
   /** Siehe `ExerciseBar`: ersetzt nur den Fortschrittsbalken, nie ✕ oder `end`. */
   middleOverlay?: ReactNode;
+  /** Kern (Vorschau 9pdpf…): Bereich für die Titelzeile „Wörter · 12 von 38 erledigt“. */
+  area?: 'words' | 'grammar' | null;
 }) {
   const { t } = useT();
   const player = usePlayer();
@@ -159,8 +162,18 @@ export function ExerciseTop({
   }, [ctx, duty]);
   const segments = ctx === 'duty' && today.duties.total >= 2 ? { count: today.duties.total, current: dutyStep(today.duties, duty) - 1 } : null;
   const label = has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined;
+  // Ehrlicher Zähler (Kern): „erledigt“ zählt die abgeschlossenen Karten, nicht die gerade gezeigte.
+  const areaName = area ? t(area === 'words' ? 'kernAreaWords' : 'kernAreaGrammar') : null;
+  // Am Handy steht der Zähler unter dem Bereich (sonst schnitte „… erledigt“ neben „Frag Claude“ ab), ab 480 px in einer Zeile mit „ · “.
+  const title = areaName ? (
+    <>
+      <span className="lx-kbar-area">{areaName}</span>
+      {has && <span className="lx-kbar-count lx-tnum">{t('kernCount', { n: Math.max(0, Math.min(progress.total, progress.n - 1)), total: progress.total })}</span>}
+    </>
+  ) : undefined;
   return (
     <ExerciseBar
+      {...(title ? { title } : {})}
       onClose={close}
       closeLabel={closeLabel ?? t('trClose')}
       closeTestId={closeTestId ?? 'round-close'}
@@ -175,8 +188,22 @@ export function ExerciseTop({
 }
 
 /** Kopf einer Runde (Grammatik, Übungen, Wochen-Check): die gemeinsame Übungsleiste. */
-export function RoundTop({ onClose, progress, ctx, closeLabel, duty = null }: { onClose: () => void; progress: { n: number; total: number } | null; ctx: Ctx | 'extra'; closeLabel?: string; duty?: DutyId | null }) {
-  return <ExerciseTop onClose={onClose} progress={progress} ctx={ctx} duty={duty} {...(closeLabel ? { closeLabel } : {})} />;
+export function RoundTop({
+  onClose,
+  progress,
+  ctx,
+  closeLabel,
+  duty = null,
+  area = null,
+}: {
+  onClose: () => void;
+  progress: { n: number; total: number } | null;
+  ctx: Ctx | 'extra';
+  closeLabel?: string;
+  duty?: DutyId | null;
+  area?: 'words' | 'grammar' | null;
+}) {
+  return <ExerciseTop onClose={onClose} progress={progress} ctx={ctx} duty={duty} area={area} {...(closeLabel ? { closeLabel } : {})} />;
 }
 
 /** Soll nach grün ohne Hilfe automatisch weitergehen? (`app/profile.autoNext`, Standard an wie in der alten App.) */
@@ -386,7 +413,12 @@ export function TaskLine({ task, purpose }: { task: string; purpose: string }) {
   );
 }
 
-const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder',
+const DUTY_LABEL: Record<string, MessageKey> = {
+  review: 'tdReviewTitle',
+  lesson: 'lrDutyLesson',
+  'ch:gram': 'drGram',
+  'ch:cloze': 'drCloze',
+  'ch:order': 'drOrder',
   // Tageseinheit (Neubau): Pflichtpunkte `ch:u-*` heißen wie die Blöcke auf der Tageskarte.
   'ch:u-in': 'nbHeuteBlock_input',
   // Seit 04.10.2026 (Vokabeln und Grammatik): Block 2 Grammatik auf `ch:u-focus`, Block 3 Satzbau auf `ch:u-task`.

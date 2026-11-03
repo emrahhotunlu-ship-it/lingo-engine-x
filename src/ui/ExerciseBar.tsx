@@ -31,59 +31,97 @@ type Props = {
    * Eine Zählzeile „Pflicht 2/4 · Karte 7/30 +2“ (Lernplattform 2.0 §4.5). Sie ersetzt „n / total“ und das kleine
    * Wort darunter; der Balken folgt `card`. Für Vorleseprogramme heißt „+2“ „2 Wiederholungen in dieser Runde“.
    */
-  counter?: { duty?: [n: number, total: number]; card: [n: number, total: number]; extra?: number };
+  counter?: {
+    duty?: [n: number, total: number];
+    card: [n: number, total: number];
+    extra?: number;
+  };
+  /**
+   * Kern (Emrah 03.11.2026, Vorschau `9pdpfT8Es8nrdE3vnVeqqx`): Titelzeile „Wörter · 12 von 38 erledigt“. Mit Titel steht oben
+   * ✕ · Titel · `end` und darunter der Balken über die ganze Breite; das kleine Wort (`note`) bleibt nur für Vorleseprogramme.
+   */
+  title?: ReactNode;
 };
 
-export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', progress: progressProp = null, progressLabel, progressTestId = 'round-progress', note, end, middleOverlay = null, counter }: Props) {
+export function ExerciseBar({
+  onClose,
+  closeLabel,
+  closeTestId = 'round-close',
+  progress: progressProp = null,
+  progressLabel,
+  progressTestId = 'round-progress',
+  note,
+  end,
+  middleOverlay = null,
+  counter,
+  title,
+}: Props) {
   const { t } = useT();
   const progress = counter ? { n: counter.card[0], total: counter.card[1], extra: counter.extra } : progressProp;
   const has = !!progress && progress.total > 0;
   const n = has ? Math.max(1, Math.min(progress.total, progress.n)) : 0;
   const pct = has ? Math.round((n / progress.total) * 100) : 0;
+  const barNode = middleOverlay ? (
+    middleOverlay
+  ) : has ? (
+    <div className="flex items-center gap-3">
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-track" role="progressbar" aria-valuemin={0} aria-valuemax={progress.total} aria-valuenow={n} aria-label={progressLabel}>
+        <motion.div className="h-full rounded-full bg-accent" initial={false} animate={{ width: `${pct}%` }} transition={{ duration: DURATION.base, ease: EASE_OUT }} />
+      </div>
+      {counter ? (
+        <span className="lx-tnum lx-t-meta flex-none text-muted" data-testid={progressTestId} data-counter="">
+          {/* Höchstens ein sichtbarer Zähler (UX-Audit U1): der Pflichtschritt steht nur für Vorleseprogramme da. */}
+          {counter.duty && (
+            <span className="sr-only" data-testid="counter-duty">
+              {t('exCounterDuty', {
+                n: counter.duty[0],
+                total: counter.duty[1],
+              })}{' '}
+              ·{' '}
+            </span>
+          )}
+          <span data-testid="counter-card">{t('exCounterCard', { n, total: progress.total })}</span>
+          {!!counter.extra && (
+            <span className="sr-only" data-testid="round-extra" aria-label={t('exCounterExtraLabel', { n: counter.extra })}>
+              {t('exCounterExtra', { n: counter.extra })}
+            </span>
+          )}
+        </span>
+      ) : (
+        <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
+          {t('nvProgress', { n, total: progress.total })}
+        </span>
+      )}
+      {/* Wiedervorlagen („+1“) nur für Vorleseprogramme: sichtbar wuchs der Zähler sonst während der Runde (UX-Audit U1, „3 von 52 +1“). */}
+      {!counter && !!progress.extra && (
+        <span className="sr-only" data-testid="round-extra" data-n={progress.extra}>
+          +{progress.extra}
+        </span>
+      )}
+    </div>
+  ) : (
+    <div className="h-1.5" aria-hidden="true" />
+  );
+  if (title) {
+    return (
+      <div className="lx-exbar lx-kbar sticky top-0 z-30" data-testid="exercise-bar" data-kern="">
+        <div className="lx-kbar-row">
+          <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
+          <span className="lx-kbar-title" data-testid="exercise-title">
+            {title}
+          </span>
+          {note && <span className="sr-only">{note}</span>}
+          <div className="flex min-w-11 flex-none items-center justify-end">{end}</div>
+        </div>
+        <div className="lx-kbar-prog">{barNode}</div>
+      </div>
+    );
+  }
   return (
     <div className="lx-exbar sticky top-0 z-30 flex min-h-12 items-center gap-2 sm:gap-3" data-testid="exercise-bar">
       <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        {middleOverlay ? (
-          middleOverlay
-        ) : has ? (
-          <div className="flex items-center gap-3">
-            <div
-              className="h-1.5 flex-1 overflow-hidden rounded-full bg-track"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={progress.total}
-              aria-valuenow={n}
-              aria-label={progressLabel}
-            >
-              <motion.div className="h-full rounded-full bg-accent" initial={false} animate={{ width: `${pct}%` }} transition={{ duration: DURATION.base, ease: EASE_OUT }} />
-            </div>
-            {counter ? (
-              <span className="lx-tnum lx-t-meta flex-none text-muted" data-testid={progressTestId} data-counter="">
-                {/* Höchstens ein sichtbarer Zähler (UX-Audit U1): der Pflichtschritt steht nur für Vorleseprogramme da. */}
-                {counter.duty && <span className="sr-only" data-testid="counter-duty">{t('exCounterDuty', { n: counter.duty[0], total: counter.duty[1] })} · </span>}
-                <span data-testid="counter-card">{t('exCounterCard', { n, total: progress.total })}</span>
-                {!!counter.extra && (
-                  <span className="sr-only" data-testid="round-extra" aria-label={t('exCounterExtraLabel', { n: counter.extra })}>
-                    {t('exCounterExtra', { n: counter.extra })}
-                  </span>
-                )}
-              </span>
-            ) : (
-              <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
-                {t('nvProgress', { n, total: progress.total })}
-              </span>
-            )}
-            {/* Wiedervorlagen („+1“) nur für Vorleseprogramme: sichtbar wuchs der Zähler sonst während der Runde (UX-Audit U1, „3 von 52 +1“). */}
-            {!counter && !!progress.extra && (
-              <span className="sr-only" data-testid="round-extra" data-n={progress.extra}>
-                +{progress.extra}
-              </span>
-            )}
-          </div>
-        ) : (
-          <div className="h-1.5" aria-hidden="true" />
-        )}
+        {barNode}
         {note && !counter && <div className="text-2xs leading-none text-subtle">{note}</div>}
       </div>
       <div className="flex min-w-11 flex-none items-center justify-end">{end}</div>
