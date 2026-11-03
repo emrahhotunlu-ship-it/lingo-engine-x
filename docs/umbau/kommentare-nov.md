@@ -12,3 +12,4 @@ Status: offen · in Arbeit · behoben (Version)
 | K5 | 03.11. 14:13 | 4e6779b0 | Abschnitt „Erklärung“ (Wörter) | Nichtssagend: keine Beispielsätze, nicht wie das Wort angewendet wird; alte App war besser | offen |
 | K6 | 03.11. 14:13 | f160a2e3 | Seitenbereich „Regel und Erklärung“ (aside, Laptop) | Ganzer Bereich sieht schlecht aus | offen |
 | K7 | 03.11. 14:13 | f7ce1ee1 | Erklärung-Karte „Anwenden“/eigener Satz | Schlechte Karte: „später prüfen lassen“ unklar, „kommt wieder“ nicht erklärt, bringt nichts | offen |
+| K8 | 03.11. 14:14 | d0757e75 | Eingabe-Lücke „Auf Englisch eingeben: erkennen, anerkennen …“ | Eingabebereich viel zu klein – das Wichtigste ist das Kleinste auf der Seite | offen |
