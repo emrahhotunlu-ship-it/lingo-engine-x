@@ -6,7 +6,7 @@ import { Icon } from '../../ui/Icon';
 import { useVocabMetrics } from '../progress/WordsSegment';
 import { dateLabelOf } from './dateLabel';
 import type { DayRow } from './DayCard';
-import { useStreakWeek, type StreakWeek } from './TodayWeek';
+import type { StreakWeek } from './TodayWeek';
 
 // Kern e (Emrah 03.11.2026 „Kern zuerst“, Vorschau 9pdpfT8Es8nrdE3vnVeqqx `Main`/`Monitor-Heute`): Heute als EINE Pflicht-Karte.
 // Oben Datum und „Dein Tag“; in der Karte „Pflicht: x von n erledigt · ca. m Min.“, ein Balken je Schritt, der laufende Schritt grün hinterlegt
@@ -158,7 +158,8 @@ const obj = (v: unknown): Record<string, unknown> => (v && typeof v === 'object'
  * „Dein Stand“ (Vorschau): Serie, Wörter fest, Minuten dieser Woche. Handy: eine ruhige Zeile mit drei Zahlen; Monitor (`list`): Karte mit
  * drei Zeilen rechts. Zahlen aus denselben Quellen wie überall (`useStreakWeek`, `useVocabMetrics`, `app/profile.minutes` der Wochentage).
  */
-export function KernStand({ sw, variant }: { sw: StreakWeek; variant: 'row' | 'list' }) {
+/** `foot`: Serien-Fußzeile für Vorleseprogramme hier zeigen (nach der Pflicht trägt sie der Wochenstreifen bzw. die Wochenliste). */
+export function KernStand({ sw, variant, foot: withFoot = true }: { sw: StreakWeek; variant: 'row' | 'list'; foot?: boolean }) {
   const { t, tn, num } = useT();
   const { fest, onWay } = useVocabMetrics();
   // Keine nackte Null (UX-Audit U1): solange noch kein Wort fest ist, steht die Zahl der Wörter im Lernen da.
@@ -168,11 +169,12 @@ export function KernStand({ sw, variant }: { sw: StreakWeek; variant: 'row' | 'l
   const week = Math.round(sw.week.reduce((a, d) => a + Math.max(0, Number(minutes[d.day] ?? 0) || 0), 0));
   const streak = sw.streak ?? 0;
   // Fußzeile der Serie für Screenreader und Tests (`today-streak`, früher bei der Woche): steht genau einmal, hier bei „Dein Fortschritt“.
-  const foot = sw.foot ? (
-    <span className="sr-only" data-testid="today-streak">
-      {sw.foot}
-    </span>
-  ) : null;
+  const foot =
+    withFoot && sw.foot ? (
+      <span className="sr-only" data-testid="today-streak">
+        {sw.foot}
+      </span>
+    ) : null;
   if (variant === 'list') {
     return (
       <section className="lx-kh-stand" data-variant="list" aria-labelledby="kh-stand" data-testid="today-stand">
@@ -224,10 +226,4 @@ export function KernStand({ sw, variant }: { sw: StreakWeek; variant: 'row' | 'l
       </p>
     </section>
   );
-}
-
-/** Kurzform für Aufrufer ohne eigene Serie. */
-export function KernStandAuto({ variant }: { variant: 'row' | 'list' }) {
-  const sw = useStreakWeek();
-  return <KernStand sw={sw} variant={variant} />;
 }

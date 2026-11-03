@@ -53,7 +53,7 @@ test('Sprache und Darstellung werden sofort angewendet und in app/profile gespei
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toHaveCount(0);
   // Großpaket B1: Zahnrad im Kopf und in der Schiene – der Fokus kehrt zu dem zurück, das geöffnet hat.
-  await expect(page.locator('[data-testid="open-settings"]:focus')).toHaveCount(1);
+  await expect(page.locator('[data-testid="open-settings"]:focus, [data-testid="side-settings"]:focus')).toHaveCount(1);
 
   expect(errors).toEqual([]);
 });

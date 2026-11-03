@@ -489,7 +489,7 @@ export function TodayScreen() {
       {/* Kern e (Vorschau `Main`): unter „Freiwillig“ die ruhige Zeile „Dein Stand“ (am Monitor ab 1.280 px rechts als Karte). */}
       {ok && !ctxWide && (
         <motion.div variants={item}>
-          <KernStand sw={sw} variant="row" />
+          <KernStand sw={sw} variant="row" foot={!done} />
         </motion.div>
       )}
       {ok && !done && (
@@ -541,7 +541,7 @@ export function TodayContext() {
   return (
     <div className="lx-vh-ctx lx-kh-ctx" data-testid="today-context">
       {/* Kern e (Vorschau `Monitor-Heute`): rechts „Dein Stand“ und „Freiwillig – nur wenn du Zeit hast“; die Woche nur nach der Pflicht. */}
-      <KernStand sw={sw} variant="list" />
+      <KernStand sw={sw} variant="list" foot={!done} />
       {comebackBand(gap) === 'none' && restartDay === null && <WeeklyBand today={today} />}
       {done && (
         <section aria-labelledby="td-ctx-week">

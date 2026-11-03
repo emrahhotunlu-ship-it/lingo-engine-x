@@ -13,7 +13,11 @@ const json = (rel: string): unknown => JSON.parse(readFileSync(new URL(rel, impo
 const SEED = json('../../seed/sample-data.json') as Record<string, Doc>;
 
 /** Buchstaben und Ziffern, klein – Lücken, Satzzeichen und Leerraum fallen weg. */
-export const squash = (s: string): string => s.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9']/g, '');
+export const squash = (s: string): string =>
+  s
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[^a-z0-9']/g, '');
 
 type Known = { prompt: string; answer: string; type?: string; err?: [number, number] | null; fixed?: string };
 
@@ -43,7 +47,14 @@ function collectTasks(extra: readonly Doc[]): Known[] {
   // Neue Aufgabenarten (Lernplattform 2.0 §3.4): Der Schlüssel ist der Rahmensatz (kwt), der Satz (find) bzw. Satz a (meaning).
   for (const v of (json('../../src/content/grammar/tasks-v2.json') as { tasks: Doc[] }).tasks) {
     if (v.type === 'kwt') out.push({ prompt: String(v.frame), answer: String(v.answer), type: 'kwt' });
-    else if (v.type === 'find') out.push({ prompt: String(v.prompt), answer: typeof v.answer === 'string' ? v.answer : '', type: 'find', err: (v.err as [number, number] | null) ?? null, fixed: typeof v.fixed === 'string' ? v.fixed : '' });
+    else if (v.type === 'find')
+      out.push({
+        prompt: String(v.prompt),
+        answer: typeof v.answer === 'string' ? v.answer : '',
+        type: 'find',
+        err: (v.err as [number, number] | null) ?? null,
+        fixed: typeof v.fixed === 'string' ? v.fixed : '',
+      });
     else if (v.type === 'meaning') out.push({ prompt: String(v.a), answer: String(v.answer), type: 'meaning' });
   }
   // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): Aufgaben und Fallen der Regelblätter.
@@ -82,7 +93,11 @@ export async function shownPrompt(page: Page): Promise<string> {
  * Eine Grammatikaufgabe beantworten: richtig (Lösung aus den Testdaten), falsch oder frei
  * (`given`). Wartet auf das Ergebnis; weiter geht es mit `next`. Rückgabe: Typ und Lösung.
  */
-export async function answerGrammar(page: Page, solve: ((shown: string) => string | null) & { full?: (shown: string) => Known | null }, opts: { wrong?: boolean; given?: string } = {}): Promise<{ type: string; answer: string | null }> {
+export async function answerGrammar(
+  page: Page,
+  solve: ((shown: string) => string | null) & { full?: (shown: string) => Known | null },
+  opts: { wrong?: boolean; given?: string } = {},
+): Promise<{ type: string; answer: string | null }> {
   const item = page.getByTestId('gr-item');
   await expect(item).toHaveCount(1);
   const type = (await item.getAttribute('data-type')) ?? '';
@@ -394,7 +409,10 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   await expect(page.getByTestId('vocab')).toBeVisible();
   await settle();
   await visit('wortschatz');
-  for (const [kind, name] of [['cloze', 'lueckenjagd'], ['order', 'satzbau']] as const) {
+  for (const [kind, name] of [
+    ['cloze', 'lueckenjagd'],
+    ['order', 'satzbau'],
+  ] as const) {
     await openTab(page, 'apply');
     await openApplyFolds(page);
     await settle();
@@ -428,4 +446,16 @@ export async function openJourney(page: Page): Promise<void> {
   }
   await expect(page.getByTestId('journey-page')).toBeVisible();
   await expect(page.getByTestId('program-map')).toBeVisible();
+}
+
+/**
+ * Kern (Emrah 03.11.2026 „einmal nachtippen“): nach einer falschen oder ausgelassenen Antwort in der Wörter-App ist „Weiter“ erst frei, wenn das
+ * Wort einmal richtig abgetippt ist. Steht das Feld da, wird das Wort aus seiner Beschriftung („Schreib „…“ einmal richtig ab“) eingetippt.
+ */
+export async function retypeIfAsked(page: Page): Promise<void> {
+  const input = page.getByTestId('vm-retype-input');
+  if (!(await input.isVisible().catch(() => false))) return;
+  const label = (await input.getAttribute('aria-label')) ?? '';
+  const word = /[„“"]([^“”"]+)[“”"]/.exec(label)?.[1] ?? '';
+  await input.fill(word);
 }

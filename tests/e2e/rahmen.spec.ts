@@ -46,7 +46,8 @@ test('Einstieg: Kopf mit EINEM „Fragen“, vier Reiter einzeilig, Zahnrad und 
   for (const id of ['vocab', 'learn', 'progress', 'today'] as const) {
     await openTab(page, id);
     await expect(page.getByTestId('topbar')).toBeVisible();
-    await expect(page.getByTestId('topbar').getByTestId('open-settings')).toHaveCount(id === 'progress' ? 1 : 0);
+    // Großpaket B1: das Zahnrad steht im Kopf jedes Reiters; das Profil nur auf Fortschritt.
+    await expect(page.getByTestId('topbar').getByTestId('open-settings')).toHaveCount(1);
     await expect(page.getByTestId('topbar').getByTestId('open-profile')).toHaveCount(id === 'progress' ? 1 : 0);
     expect(await layoutProblems(page), id).toEqual([]);
   }

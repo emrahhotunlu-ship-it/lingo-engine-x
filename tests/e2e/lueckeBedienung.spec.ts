@@ -1,3 +1,4 @@
+import { retypeIfAsked } from './learnHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, MIGRATED, SEED_EVENING, screen } from './fixtures';
 import { forcedPatch, planPatch, TYPE_MODE } from './trainerHelpers';
@@ -217,6 +218,7 @@ test.describe('Laptop', () => {
     await expect(page.getByTestId('claude-explain')).toBeVisible();
     await expect(page.getByTestId('gap-input')).toBeFocused();
     await page.getByTestId('vm-check').click();
+    await retypeIfAsked(page);
     await page.getByTestId('vm-next').click();
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('gap-input')).toBeFocused();
@@ -257,6 +259,7 @@ test.describe('Handy mit Touch', () => {
     await expect(page.getByTestId('exercise-bar').getByTestId('claude-explain')).toBeVisible();
     await page.getByTestId('gap-input').tap();
     await page.getByTestId('vm-check').tap();
+    await retypeIfAsked(page);
     await page.getByTestId('vm-next').tap();
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('gap-input')).toBeFocused();

@@ -68,12 +68,7 @@ const inGroup = (w: Word, g: Group): boolean => {
 };
 
 /** Suchtext ohne Groß/klein und Akzente (Treffer im englischen Kopf oder in der Bedeutung). */
-const norm = (s: string) =>
-  s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .trim();
+const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 
 export function WordsHome({ duty, onRound, onWord, onStats, onPlace, onAdd, onAtlas }: HomeProps) {
   const { t, tn, lang } = useT();
@@ -203,7 +198,7 @@ export function WordsHome({ duty, onRound, onWord, onStats, onPlace, onAdd, onAt
         />
       </div>
 
-      <div className="lx-vw-chiprow" role="group" aria-label={t('vmWhFilterAria')} data-testid="vw-chips">
+      <div className="lx-vw-chiprow" role="group" aria-label={t('vmWhFilterAria')} data-testid="vw-chips" data-hscroll="">
         {chips.map((c) => (
           <VChip key={c.id} count={c.n} selected={group === c.id} onClick={() => (setGroup(c.id), reset())} data-testid={`vw-chip-${c.id}`}>
             {t(c.label)}
@@ -216,7 +211,14 @@ export function WordsHome({ duty, onRound, onWord, onStats, onPlace, onAdd, onAt
           {tn('vmWhCount', list.length)}
         </h2>
         <span className="lx-vw-tools">
-          <button type="button" className="lx-vw-tool" onClick={() => (setSort((s) => (s === 'stage' ? 'az' : 'stage')), reset())} aria-label={t('vmWhSortAria', { s: t(sort === 'stage' ? 'vmWhSortStage' : 'vmWhSortAz') })} data-testid="vocab-sort" data-sort={sort}>
+          <button
+            type="button"
+            className="lx-vw-tool"
+            onClick={() => (setSort((s) => (s === 'stage' ? 'az' : 'stage')), reset())}
+            aria-label={t('vmWhSortAria', { s: t(sort === 'stage' ? 'vmWhSortStage' : 'vmWhSortAz') })}
+            data-testid="vocab-sort"
+            data-sort={sort}
+          >
             <Icon name="sort" size={16} />
             {t(sort === 'stage' ? 'vmWhSortStage' : 'vmWhSortAz')}
           </button>

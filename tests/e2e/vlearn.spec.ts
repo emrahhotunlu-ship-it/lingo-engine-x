@@ -1,3 +1,4 @@
+import { retypeIfAsked } from './learnHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, MIGRATED, SEED_EVENING, screen } from './fixtures';
 import { TUE_9 } from './heuteHelpers';
@@ -60,6 +61,7 @@ async function playRound(page: Page, base: number): Promise<void> {
     }
     if ((await check.textContent()) === 'Aufdecken') await check.click();
     else await page.getByTestId('vm-dunno').click();
+    await retypeIfAsked(page);
     await page.getByTestId('vm-next').click();
   }
 }
@@ -167,6 +169,7 @@ test.describe('Handy 390', () => {
       }
       if ((await check.textContent()) === 'Aufdecken') await check.click();
       else await page.getByTestId('vm-dunno').click();
+      await retypeIfAsked(page);
       await page.getByTestId('vm-next').click();
     }
     await expect(page.getByTestId('vm-done')).toBeVisible();
