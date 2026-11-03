@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useHiddenInput, useLive, useNav, useT, type MessageKey } from '../sharedUi';
+import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useHiddenInput, useClock, useLive, useNav, useT, type MessageKey } from '../sharedUi';
 import { addDays, logError, toUSText } from '../shared';
 import { checkDict } from '../content';
 import type { RoundReport, SessionKind } from '../domain/session';
@@ -10,6 +10,7 @@ import { deviceId } from './device';
 import { LearnCard } from './LearnCard';
 import { sitKey, UseCard } from './UseCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
+import { readMistakes } from './mistakes';
 
 // Wörter-Modul V3 Schritt 2b-2: Bildschirm der neuen Lernrunde (Route `vlearn`, nur bei `vcfg.mod = 1`). Liest die Live-Daten einmal beim
 // Start (die Runde rechnet danach mit ihrem eigenen Bestand), bucht jede Antwort beim Weiter und beim Verlassen genau einmal.
@@ -119,7 +120,10 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
     if (!run) return;
     // „Dieses Wort üben“ (Wort-Seite): nur die übergebenen Lexeme; die Liste kommt als Text, damit ein neues Array keinen Neustart auslöst.
     const only = kind === 'word' && pathKey ? pathKey.split('|') : undefined;
-    run.start({ kind, ...liveLexDocs(), ...(only ? { paths: only } : {}) }).catch((err: unknown) => logError('vocab:learn-start', err));
+    const begin = (p?: string[]) => run.start({ kind, ...liveLexDocs(), ...(p ? { paths: p } : {}) });
+    // „Deine Fehlwörter“ (Großpaket B3): die Liste kommt aus dem Verlauf, mit derselben Rechnung wie die Zahl im Wörter-Reiter.
+    const started = kind === 'mistakes' && !only ? readMistakes(useClock.getState().now).then(begin) : begin(only);
+    started.catch((err: unknown) => logError('vocab:learn-start', err));
   }, [run, kind, pathKey]);
 
   // Beim Verlassen (Bildschirmwechsel, Tab im Hintergrund, Seite zu): offene Antwort sofort buchen.

@@ -175,6 +175,11 @@ export function loadOverview() {
   return import('./ui/Overview');
 }
 
+/** Reiter Wörter im neuen Aussehen (Großpaket B3): Üben-Karte, Suche, Liste, freie Runden. Eigene Teil-Datei, erst beim Öffnen geladen. */
+export function loadHome() {
+  return import('./ui/Home');
+}
+
 /** Einstufungstest (Großpaket A S7c): eigene Teil-Datei, erst beim Öffnen geladen. */
 export function loadPlace() {
   return import('./ui/PlaceScreen');

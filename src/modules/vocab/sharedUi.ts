@@ -27,6 +27,8 @@ export { Segmented } from '../../ui/Segmented';
 export { Switch } from '../../ui/Switch';
 // Anki-Modus (S6b-3): Nochmal · Schwer · Gut · Leicht in der Aktionsleiste.
 export { GradeButtons } from '../../ui/GradeButtons';
+// Großpaket B3: Reiter Wörter im neuen Aussehen (Bausteine der Vorschau).
+export { VButton, VCard, VChip, VRow } from '../../ui/v';
 
 // Lücke, antippbarer Text, Eingabe
 export { EnglishText } from '../../engine/EnglishText';

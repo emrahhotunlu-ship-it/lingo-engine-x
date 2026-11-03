@@ -59,10 +59,12 @@ declare module '../app/router/types' {
     vword: { path: string };
     /** Einstufungstest der Wörter-App (Großpaket A S7c): Grenze in der Häufigkeitsliste. */
     vplace: NoParams;
+    /** Übersicht der Wörter-App (Großpaket B3): Zahlen je Gruppe, nächste 14 Tage, Behaltensrate. */
+    vstats: NoParams;
   }
 }
 
-const VLEARN_KINDS = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes'] as const;
+const VLEARN_KINDS = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes', 'use'] as const;
 type VlearnKind = (typeof VLEARN_KINDS)[number];
 const LEX_PATH = z.string().max(160).regex(/^(vocab|chunk)\/[^/]+$/);
 const vlearnParams = z.object({ kind: z.enum(VLEARN_KINDS), path: LEX_PATH.optional() });
@@ -73,6 +75,7 @@ const LearnScreen = lazy(() => loadScreens().then((m) => ({ default: m.LearnScre
 const WordPage = lazy(() => loadWordPage().then((m) => ({ default: m.WordPage })));
 const WordSettings = lazy(() => loadOverview().then((m) => ({ default: m.WordSettings })));
 const PlaceScreen = lazy(() => loadPlace().then((m) => ({ default: m.PlaceScreen })));
+const Overview = lazy(() => loadOverview().then((m) => ({ default: m.Overview })));
 const VocabHome = lazy(() => import('../features/vocab/hub/VocabHome').then((m) => ({ default: m.VocabHome })));
 
 /** Reiter Wörter: bei eingeschalteter Wörter-App deren Startseite (Emrah 02.11.2026), sonst der bisherige Reiter (Rückweg). */
@@ -191,6 +194,18 @@ function VplacePage() {
 }
 
 /** Wort-Seite: „Dieses Wort üben“ startet eine Runde nur mit diesem Lexem, „Claude fragen“ öffnet den Begleiter mit der Frage. */
+/** Übersicht Wörter (Großpaket B3): eigene Seite statt unter dem Reiter; „Alle Wörter“ führt zurück zur Liste im Reiter. */
+function VstatsPage() {
+  const go = useNav((s) => s.go);
+  return (
+    <Suspense fallback={<Skeleton className="mx-auto mt-6 h-64 w-full max-w-xl" />}>
+      <div className="mx-auto w-full max-w-xl px-4 pt-2 sm:px-0">
+        <Overview onOpenList={() => go({ name: 'vocab' })} onPlace={() => go({ name: 'vplace' })} />
+      </div>
+    </Suspense>
+  );
+}
+
 function VwordPage({ route }: ScreenProps<'vword'>) {
   const go = useNav((s) => s.go);
   return (
@@ -276,6 +291,7 @@ export const wortschatz = defineArea({
     vlearn: { kind: 'exercise', component: VlearnPage, title: 'vmScreenTitle', params: vlearnParams },
     vword: { kind: 'page', chrome: 'shell', component: VwordPage, title: 'vmWpTitle', params: vwordParams },
     vplace: { kind: 'exercise', component: VplacePage, title: 'vmPlTitle' },
+    vstats: { kind: 'page', chrome: 'shell', component: VstatsPage, title: 'vmWhStats' },
   },
   entries: [
     // Zeile unter Üben (place 'learn'): Lehrer-Feedback einfügen.

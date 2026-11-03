@@ -203,3 +203,26 @@ export const timelineStart = (nowMs: number, days = HISTORY_DAYS): string => add
 export function daysUntil(due: number, nowMs: number): number {
   return Math.max(0, daysBetween(dayKey(nowMs), dayKey(due)));
 }
+
+/** Fehlwörter (Großpaket B3, Wörter-Reiter „Deine Fehlwörter“): Fenster in Lerntagen und Größe der Runde. */
+export const MISTAKE_DAYS = 14;
+export const MISTAKE_MAX = 12;
+
+/**
+ * Lexeme mit mindestens einer falschen Antwort (Note 1) in den letzten `days` Lerntagen, jüngster Fehler zuerst, höchstens `max`.
+ * Umgestellte Einträge (`FLAG.mig`) und Belege aus anderen Bereichen (`FLAG.ext`) zählen nicht; ob ein Lexem neu oder ausgeblendet ist,
+ * entscheidet die Runde selbst (sie nimmt nur eingeführte Lexeme).
+ */
+export function mistakePaths(tuples: readonly VlogTuple[], nowMs: number, days = MISTAKE_DAYS, max = MISTAKE_MAX): string[] {
+  const from = addDays(dayKey(nowMs), -(days - 1));
+  const last = new Map<string, number>();
+  for (const tp of tuples) {
+    const [t, path, , , note, , , , , , , flags] = tp;
+    if (note !== 1 || (flags & (FLAG.mig | FLAG.ext)) !== 0 || dayKey(t) < from) continue;
+    if ((last.get(path) ?? -1) < t) last.set(path, t);
+  }
+  return [...last.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, max)
+    .map(([p]) => p);
+}

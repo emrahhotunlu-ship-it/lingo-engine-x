@@ -51,7 +51,7 @@ function useWords(): { items: Item[]; lexes: Lex[]; cfg: VocabCfg; ready: boolea
     ] as const) {
       for (const [id, doc] of m) {
         const lex = lexOf(doc);
-        if (lex && doc.hidden !== true) items.push({ path: `${kind}/${id}`, lex, order: typeof doc.order === 'number' ? doc.order : i++ });
+        if (lex && !lex.of && doc.hidden !== true) items.push({ path: `${kind}/${id}`, lex, order: typeof doc.order === 'number' ? doc.order : i++ });
       }
     }
     return { items, lexes: items.map((x) => x.lex), cfg: cfgOf(profile), ready };
@@ -115,15 +115,22 @@ function usePlace(): (Place & { t: number | null }) | null {
 }
 
 /** Zeile „Wörter einstufen“ (Übersicht und Einstellungen): mit letzter Grenze, wenn es eine gibt. */
-export function PlaceEntry({ onPlace }: { onPlace: () => void }) {
+/** Unterzeile „Wörter einstufen“: letzte Grenze, wenn es eine gibt (auch im Reiter Wörter, Großpaket B3). */
+export function usePlaceSub(): { sub: string; edge: number | null } {
   const { t, lang, dateShort } = useT();
   const place = usePlace();
   // Grenze an der Untergrenze heißt „unter den 2.500“ – wie im Ergebnis (ux-reviewer S7c: keine Widersprüche).
   const sub = place
     ? t(place.edge <= PLACE_FLOOR ? 'vmPlEntryLow' : 'vmPlEntryDone', { n: place.edge.toLocaleString(LOCALES[lang]), date: place.t ? dateShort(place.t) : '–' })
     : t('vmPlEntrySub');
+  return { sub, edge: place?.edge ?? null };
+}
+
+export function PlaceEntry({ onPlace }: { onPlace: () => void }) {
+  const { t } = useT();
+  const { sub, edge } = usePlaceSub();
   return (
-    <button type="button" className="lx-card flex w-full items-center gap-3 p-4 text-left" onClick={onPlace} data-testid="vo-place" data-edge={place?.edge ?? ''}>
+    <button type="button" className="lx-card flex w-full items-center gap-3 p-4 text-left" onClick={onPlace} data-testid="vo-place" data-edge={edge ?? ''}>
       <Icon name="target" size={20} />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="font-medium">{t('vmPlEntry')}</span>

@@ -11,8 +11,9 @@ import type { Form, Lex, VocabCfg } from './types';
 // Jede Art läuft durch dieselbe Tagesmarke (`lex.day`): Ein heute schon gebuchtes Lexem zählt in jeder weiteren Runde nur als Übung
 // (`planned: false`, N2), außer es ist ein Lernschritt. So holt kein Weg der App ein Wort am Planer vorbei.
 
-export type SessionKind = 'pflicht' | 'more5' | 'free' | 'evening' | 'week' | 'word' | 'mistakes';
-export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes'];
+// Großpaket B3 (03.11.2026): `use` = Anwenden frei gestartet (Wörter-Reiter „Anwenden“): dieselbe Anwenden-Aufgabe wie am Ende der Pflicht.
+export type SessionKind = 'pflicht' | 'more5' | 'free' | 'evening' | 'week' | 'word' | 'mistakes' | 'use';
+export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes', 'use'];
 export const EVENING_MAX = 8;
 export const WEEK_MAX = 10;
 export const FREE_SIZE = 20;
@@ -61,7 +62,7 @@ export class SessionRun {
     const day = this.day;
     const items = this.cat.items();
     // Offene Lernschritte dieses Lerntags gehen in die nächste Runde (§4.3), in jeder Art außer „Dieses Wort“.
-    if (this.kind !== 'word')
+    if (this.kind !== 'word' && this.kind !== 'use')
       for (const it of items) if (this.stepToday(it.lex) && it.lex.intro !== null) this.pending.push(this.stepSlot(it.path, it.lex, 0, nowMs, true));
     const carried = new Set(this.pending.map((s) => s.path));
     const notCarried = (p: string) => !carried.has(p);
@@ -92,6 +93,9 @@ export class SessionRun {
         out.push({ path: it.path, form: 'intro', step: 0, intro: true, why: 'new' });
       }
       this.queue = out;
+    } else if (this.kind === 'use') {
+      // Nur die Anwenden-Aufgabe (dieselbe Auswahl wie in der Pflicht; ohne passende Lexeme „nur Beleg“, ohne Stufe 4–6 leer).
+      this.queue = this.transferSlot(nowMs);
     } else {
       let paths: string[];
       if (this.kind === 'evening') paths = items.filter((it) => it.lex.intro === day).sort((a, b) => a.order - b.order).slice(0, EVENING_MAX).map((it) => it.path);
@@ -112,7 +116,7 @@ export class SessionRun {
     // Nicht in „Dieses Wort“ (dort übt man genau ein Wort) und nie für ausgeblendete oder ruhende Lexeme.
     // Steht das Wort in dieser Runde als fällige Abfrage an, entfällt die Kontrastkarte: erst ehrlich messen (die Abfrage zeigt den Kontrast im
     // Band, richtig beantwortet schließt sie ihn), sonst gäbe die Kontrastkarte die Antwort kurz vorher vor (learning-scientist V3 S3, B1).
-    if (this.kind !== 'word') {
+    if (this.kind !== 'word' && this.kind !== 'use') {
       const asked = new Set(this.queue.filter((s) => s.why === 'due').map((s) => s.path));
       const open = items
         .filter((it) => it.lex.ct && !asked.has(it.path) && !it.hidden && !this.cat.rests(it.path))

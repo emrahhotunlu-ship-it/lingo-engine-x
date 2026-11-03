@@ -22,7 +22,7 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PARTS = 'src/styles/parts';
 
 /** Neue Schichten (Relaunch): keine Altlast. */
-export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css', 'v-uebung.css', 'v-grammatik.css', 'v-alt.css'];
+export const NEU = ['shell.css', 'band.css', 'v.css', 'v-heute.css', 'v-uebung.css', 'v-grammatik.css', 'v-woerter.css', 'v-alt.css'];
 
 /** Umgebaute Dateien/Ordner (Präfix relativ zum Repo). Nur anhängen, nie still entfernen. */
 export const UMGEBAUT = [

@@ -192,3 +192,21 @@ describe('Nebenwege laufen durch dieselbe Tagesmarke (F2, N2)', () => {
     expect(dayKey(T0)).toBe(cat.get('vocab/n1')!.lex.intro);
   });
 });
+
+describe('Anwenden frei gestartet (Großpaket B3, Art `use`)', () => {
+  it('nur die Anwenden-Aufgabe, ohne Lernschritte und Kontrastkarten; ohne Lexeme der Stufen 4–6 leer', () => {
+    const low = new Catalog([learned(1), learned(2)]);
+    expect(new SessionRun('use', low, null, T0, { cfg: DEFAULT_CFG }).next(T0)).toBeNull();
+    const ripe = (i: number) => {
+      const it = learned(i, 2);
+      return { ...it, lex: { ...it.lex, lv: 5, ct: { at: T0 - D, w: 'x' } } };
+    };
+    const cat = new Catalog([ripe(1), ripe(2), ripe(3), learned(4)]);
+    const run = new SessionRun('use', cat, null, T0, { cfg: DEFAULT_CFG });
+    const t = run.next(T0)!;
+    expect(t.form).toBe('transfer');
+    expect(t.group?.length).toBe(3);
+    run.done(t, T0);
+    expect(run.next(T0)).toBeNull();
+  });
+});

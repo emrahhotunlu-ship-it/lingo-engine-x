@@ -8,6 +8,7 @@ import {
   attemptsOf,
   boostExtraMinutes,
   groupCounts,
+  mistakePaths,
   retention,
   retentionGap,
   safetyMinutes,
@@ -192,5 +193,22 @@ describe('Verlauf lesen und vmod/day.ry', () => {
     const stored = (snap.exists ? snap.data() : null) as Doc | null;
     expect(stored?.ry).toBe(0.93);
     expect(vmodDayWriteSchema.safeParse({ ...stored, ry: 0.99 }).success).toBe(false);
+  });
+});
+
+describe('mistakePaths (Großpaket B3, „Deine Fehlwörter“)', () => {
+  it('falsch im Fenster, jüngster Fehler zuerst; ohne umgestellte und fremde Belege, ohne alte Fehler; höchstens max', () => {
+    const tuples = [
+      tp(T0 - 20 * D, 1, 3, { path: 'vocab/old' }), // vor dem Fenster
+      tp(T0 - 3 * D, 1, 3, { path: 'vocab/a' }),
+      tp(T0 - 2 * D, 3, 4, { path: 'vocab/a' }), // danach richtig: bleibt ein Fehlwort
+      tp(T0 - D, 1, 2, { path: 'vocab/b' }),
+      tp(T0 - D, 3, 4, { path: 'vocab/ok' }), // nie falsch
+      tp(T0 - D, 1, 2, { path: 'vocab/mig', flags: FLAG.mig }),
+      tp(T0 - D, 1, 2, { path: 'vocab/ext', flags: FLAG.ext }),
+    ];
+    expect(mistakePaths(tuples, T0)).toEqual(['vocab/b', 'vocab/a']);
+    expect(mistakePaths(tuples, T0, 14, 1)).toEqual(['vocab/b']);
+    expect(mistakePaths([], T0)).toEqual([]);
   });
 });

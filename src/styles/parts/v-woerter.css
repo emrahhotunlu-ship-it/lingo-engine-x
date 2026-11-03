@@ -1,0 +1,84 @@
+/* Großpaket B3 (docs/umbau/design/grosspaket-b.md): Reiter „Wörter“ wie die Vorschau `WBft3EEx7jYYv4QHdepuNm` v2, H12 (screens.js `woerter`)
+   und style-woerter.css (`.tw-practice` 28–30, `.tw-chiprow` 33, `.stagepill` 37, Suchfeld `.field`). Bausteine aus D1 (`lx-v-*`) werden nur
+   kombiniert; hier stehen nur die Wörter-eigenen Teile (Präfix `lx-vw-`). Nur Tokens, ein Radius, keine Farbwerte. Handy in px wie die
+   Vorschau, Laptop in rem. Erledigt = Indigo (`--act-*`, Emrah 30.10.). */
+
+.lx-vw { display: flex; flex-direction: column; gap: 14px; padding-bottom: 24px; }
+@media (max-width: 599.98px) {
+  .lx-vw { padding-inline: calc(20px - var(--lx-dmain-pad, 1rem)); }
+}
+
+/* Karte „Wörter üben“: Titel + Unterzeile links, EIN Knopf rechts. */
+.lx-vw-practice {
+  display: flex; align-items: center; gap: 1em; padding: 1em 1em 1em 1.15em;
+  border-radius: calc(var(--r) + 4px); background: var(--surface); box-shadow: 0 0 0 1px var(--line) inset;
+}
+.lx-vw-practice[data-state='done'] { background: var(--act-soft); box-shadow: none; }
+.lx-vw-practice-t { display: flex; flex: 1; flex-direction: column; gap: 2px; min-width: 0; }
+.lx-vw-practice-t b { font-size: 17px; font-weight: 650; color: var(--fg); }
+.lx-vw-practice-t > span { font-size: 14px; color: var(--fg-2); }
+.lx-vw-done { display: inline-flex; align-items: center; gap: 6px; color: var(--act-text); }
+
+/* Suchfeld (Vorschau `.field`, min-height 46). */
+.lx-vw-search {
+  display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 14px; border-radius: var(--r);
+  background: var(--surface-2); color: var(--fg-2);
+}
+.lx-vw-search:focus-within { box-shadow: 0 0 0 2px var(--act) inset; }
+.lx-vw-search-in { flex: 1; min-width: 0; min-height: 44px; border: 0; background: transparent; color: var(--fg); font-size: 16px; outline: none; }
+.lx-vw-search-in::placeholder { color: var(--fg-3); }
+
+/* Filterchips: eine Zeile, am Handy waagerecht wischbar bis an den Rand. */
+.lx-vw-chiprow { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0; scrollbar-width: none; }
+.lx-vw-chiprow::-webkit-scrollbar { display: none; }
+@media (max-width: 599.98px) {
+  .lx-vw-chiprow { margin-inline: -20px; padding-inline: 20px; }
+}
+
+.lx-vw-listhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lx-vw-tools { display: flex; gap: 4px; }
+.lx-vw-tool {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; border-radius: var(--r);
+  font-size: 13px; font-weight: 600; color: var(--fg-2);
+}
+.lx-vw-tool[aria-pressed='true'] { background: var(--act-soft); color: var(--act-text); }
+
+/* Wortzeilen (Vorschau `.row` mit Stufen-Pille). */
+.lx-vw-words { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.lx-vw-word {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 8px 0;
+  border-bottom: 1px solid var(--line); text-align: left; color: var(--fg);
+}
+.lx-vw-words > li:last-child .lx-vw-word { border-bottom: 0; }
+.lx-vw-word-t { display: flex; flex: 1; flex-direction: column; gap: 1px; min-width: 0; }
+.lx-vw-word-t b { font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.lx-vw-word-t span { font-size: 14px; color: var(--fg-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lx-vw-word[data-paused] .lx-vw-word-t b { color: var(--fg-2); }
+.lx-vw-word[aria-pressed='true'] { background: var(--act-soft); }
+.lx-vw-pill {
+  display: inline-flex; align-items: center; flex: none; min-height: 22px; padding: 3px 8px; border-radius: 7px;
+  background: var(--surface-2); color: var(--fg-2); font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums;
+}
+.lx-vw-pick {
+  display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 6px;
+  box-shadow: 0 0 0 1.5px var(--line-2) inset; color: var(--act-text);
+}
+.lx-vw-word[aria-pressed='true'] .lx-vw-pick { background: var(--act-soft); box-shadow: 0 0 0 1.5px var(--act) inset; }
+.lx-vw-empty { margin: 0; padding: 18px 0; font-size: 15px; color: var(--fg-2); }
+
+/* Mehrfach-Auswahl: Leiste unten am Bildschirm, über der Reiterleiste (Handy 3,25 rem + Rand; ab 600 px keine Leiste unten). */
+.lx-vw-bulk {
+  position: sticky; bottom: calc(4rem + env(safe-area-inset-bottom)); z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 12px 10px 16px; border-radius: calc(var(--r) + 4px); background: var(--surface-3); box-shadow: var(--shadow);
+  font-size: 14px; color: var(--fg);
+}
+
+.lx-vw-sec { padding-top: 10px; }
+
+@media (min-width: 600px) {
+  .lx-vw { gap: 1rem; }
+  .lx-vw-bulk { bottom: 1rem; }
+  .lx-vw-practice-t b { font-size: 1.0625rem; }
+  .lx-vw-practice-t > span, .lx-vw-word-t span { font-size: 0.875rem; }
+  .lx-vw-word-t b { font-size: 1rem; }
+}
