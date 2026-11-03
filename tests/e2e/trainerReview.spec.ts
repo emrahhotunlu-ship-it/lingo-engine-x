@@ -79,7 +79,9 @@ test.describe('Desktop', () => {
     await expect(page.getByTestId('form-hint')).toHaveCount(0);
     // Keine doppelte Bedeutung: Die Frage zeigt sie, die Erklär-Karte wiederholt sie nicht.
     const cue = (await page.getByTestId('cue-meaning').innerText()).trim();
-    await expect(page.getByTestId('result')).not.toContainText(cue);
+    // Kern: die Rückmeldung ist EINE Karte, in der auch die Frage steht – die Bedeutung steht darin genau einmal.
+    const shown = await page.getByTestId('result').innerText();
+    expect(shown.split(cue).length - 1).toBeLessThanOrEqual(1);
     expect(errors).toEqual([]);
   });
 

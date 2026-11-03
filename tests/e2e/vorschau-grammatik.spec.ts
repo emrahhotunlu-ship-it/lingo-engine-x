@@ -15,7 +15,8 @@ type Pair = { name: string; vorschau: string; app: AppState; phone: boolean; che
 const HEAD: Check[] = [
   { name: 'kopf', vorschau: '.phead', app: '.lx-vh-head', props: ['y', 'height'] },
   { name: 'titel', vorschau: '.phead h1', app: '.lx-vh-head h1', props: ['x', 'y', 'height', 'fontSize', 'lineHeight', 'fontWeight'] },
-  { name: 'fragen', vorschau: '#ask-open', app: '[data-testid="open-companion"]', props: ['x', 'y', 'width', 'height', 'borderRadius'] },
+  // Großpaket B1: im Kopf stehen Übersetzer · Fragen · Zahnrad – „Fragen“ sitzt weiter links als in der Vorschau, verglichen wird die Form.
+  { name: 'fragen', vorschau: '#ask-open', app: '[data-testid="open-companion"]', props: ['width', 'height', 'borderRadius'] },
 ];
 const HERE: Check[] = [
   { name: 'hierkarte', vorschau: '.scroll .card', app: '[data-testid="hub-next-topic"]', props: ['x', 'y', 'width', 'borderRadius'] },

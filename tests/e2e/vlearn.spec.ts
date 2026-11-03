@@ -12,9 +12,28 @@ const PATHS = ['vocab/access-rights', 'vocab/achieve', 'vocab/affect'];
 
 /** Neues Lexem (Form wie `emptyLex` im Modul; hier als Literal, weil Tests außerhalb des Moduls nur die Türen nutzen). */
 const newLex = (): Doc => ({
-  v: 1, k: 'w', of: null, core: null, sense: null, lv: 1,
+  v: 1,
+  k: 'w',
+  of: null,
+  core: null,
+  sense: null,
+  lv: 1,
   u: { due: NOW, s: 0, d: 0, st: 0, reps: 0, lapses: 0, last: null, sd: 0, ls: 0 },
-  b: null, day: null, dayU: null, step: null, ev: { f: [], o: 0, s: 0 }, sn: [], gr: null, reg: null, pri: 'core', lc: 0, pair: null, mv: 0, sync: 0, mig: null, intro: null,
+  b: null,
+  day: null,
+  dayU: null,
+  step: null,
+  ev: { f: [], o: 0, s: 0 },
+  sn: [],
+  gr: null,
+  reg: null,
+  pri: 'core',
+  lc: 0,
+  pair: null,
+  mv: 0,
+  sync: 0,
+  mig: null,
+  intro: null,
 });
 
 function patch(on: boolean): Record<string, Doc> {
@@ -30,9 +49,15 @@ function patch(on: boolean): Record<string, Doc> {
 async function playRound(page: Page, base: number): Promise<void> {
   for (let i = 0; i < 60; i++) {
     const check = page.getByTestId('vm-check');
-    await expect(check.or(page.getByTestId('vm-done'))).toBeVisible();
+    const go = page.getByTestId('vm-intro-go');
+    await expect(check.or(go).or(page.getByTestId('vm-done')).first()).toBeVisible();
     if (await page.getByTestId('vm-done').isVisible()) return;
     await page.clock.setFixedTime(new Date(base + (i + 1) * 60_000));
+    // Kern (03.11.2026): neue Wörter zeigen erst die Einführungskarte – „Verstanden – weiter“ bucht sie und geht direkt weiter.
+    if (await go.isVisible()) {
+      await go.click();
+      continue;
+    }
     if ((await check.textContent()) === 'Aufdecken') await check.click();
     else await page.getByTestId('vm-dunno').click();
     await page.getByTestId('vm-next').click();
@@ -59,26 +84,25 @@ test.describe('Handy 390', () => {
   test('Schalter an: neues Wort einführen → Band → Weiter; je Antwort ein Verlaufseintrag; ohne Querüberstand', async ({ page }) => {
     const { errors, external } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
     await screen(page, 'vlearn');
-    await expect(page.getByTestId('vm-check')).toBeVisible();
-    await expect(page.getByTestId('vm-knowit')).toBeVisible();
+    // Kern (03.11.2026): neues Wort = Einführungskarte mit EINEM Knopf; „Kenne ich schon“ steht dort nicht (Wort und Bedeutung sind schon sichtbar).
+    await expect(page.getByTestId('vm-intro-go')).toBeVisible();
+    await expect(page.getByTestId('vm-knowit')).toHaveCount(0);
     // Die eine Übungsleiste: ✕, Fortschritt, „Extra“ (UX-Prüfung V3 Nr. 1).
     await expect(page.getByTestId('vm-close')).toBeVisible();
     await expect(page.getByTestId('vm-progress').first()).toBeVisible();
     expect(await layoutProblems(page)).toEqual([]);
-    // Einführung ohne Eingabe: Aufdecken zeigt die Lösung im Band.
-    await expect(page.getByTestId('vm-check')).toHaveText('Aufdecken');
-    await page.getByTestId('vm-check').click();
-    await expect(page.getByTestId('vm-next')).toBeVisible();
-    expect(await layoutProblems(page)).toEqual([]);
-    await page.getByTestId('vm-next').click();
+    // Einführung gelesen: „Verstanden – weiter“ bucht sie und zeigt die nächste Karte.
+    await page.getByTestId('vm-intro-go').click();
     await expect.poll(async () => vlogEntries(await dump(page))).toBe(1);
     // Genau ein Wort ist eingeführt (Lernschritt A steht im Lexem).
-    await expect.poll(async () => {
-      const d = await dump(page);
-      return PATHS.filter((p) => ((d[p]?.lex as Doc | undefined)?.intro ?? null) !== null).length;
-    }).toBe(1);
+    await expect
+      .poll(async () => {
+        const d = await dump(page);
+        return PATHS.filter((p) => ((d[p]?.lex as Doc | undefined)?.intro ?? null) !== null).length;
+      })
+      .toBe(1);
     // Nächste Karte steht (Einführung des nächsten Worts oder Lernschritt).
-    await expect(page.getByTestId('vm-check')).toBeVisible();
+    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).first()).toBeVisible();
     // ✕ verlässt die Runde ohne Nachfrage; nichts zusätzlich gebucht.
     await page.getByTestId('vm-close').click();
     await expect(page.locator('[data-screen="vlearn"]')).toHaveCount(0);
@@ -96,10 +120,9 @@ test.describe('Handy 390', () => {
     await list.getByTestId('menu-whyTask').click();
     await expect(page.getByTestId('why-line').first()).toContainText('Neues Wort für heute.');
     // Bis zur ersten echten Abfrage (Lernschritt A): Einführungen aufdecken und weiter.
-    for (let i = 0; i < 10 && (await page.getByTestId('vm-check').textContent()) === 'Aufdecken'; i++) {
-      await page.getByTestId('vm-check').click();
-      await page.getByTestId('vm-next').click();
-      await expect(page.getByTestId('vm-check')).toBeVisible();
+    for (let i = 0; i < 10 && (await page.getByTestId('vm-intro-go').isVisible()); i++) {
+      await page.getByTestId('vm-intro-go').click();
+      await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).first()).toBeVisible();
     }
     await expect(page.getByTestId('vm-check')).toHaveText('Prüfen');
     // Die Uhr steht in den E2E-Tests (setFixedTime); eine Minute weiter, damit der Verlaufseintrag einen eigenen Zeitschlüssel hat.
@@ -134,9 +157,14 @@ test.describe('Handy 390', () => {
     for (let i = 0; i < 60; i++) {
       if (await page.getByTestId('vm-done').isVisible()) break;
       const check = page.getByTestId('vm-check');
-      await expect(check.or(page.getByTestId('vm-done'))).toBeVisible();
+      const go = page.getByTestId('vm-intro-go');
+      await expect(check.or(go).or(page.getByTestId('vm-done')).first()).toBeVisible();
       if (await page.getByTestId('vm-done').isVisible()) break;
       await page.clock.setFixedTime(new Date(NOW + (i + 1) * 60_000));
+      if (await go.isVisible()) {
+        await go.click();
+        continue;
+      }
       if ((await check.textContent()) === 'Aufdecken') await check.click();
       else await page.getByTestId('vm-dunno').click();
       await page.getByTestId('vm-next').click();

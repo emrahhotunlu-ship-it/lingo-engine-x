@@ -2,8 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, openOverview, expectStreak } from './fixtures';
 
 type Dump = Record<string, Record<string, unknown>>;
-const dump = (page: Page) =>
-  page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Dump } } }).__LINGO_FAKE__.db.dump());
+const dump = (page: Page) => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Dump } } }).__LINGO_FAKE__.db.dump());
 
 // Token gegen Sollwert als Pixel (r, g, b) über ein 1×1-Canvas, ±1: der Build schreibt oklch() als lab() um,
 // deshalb werden nie Farbtexte verglichen. Liefert die größte Kanal-Abweichung.
@@ -53,7 +52,8 @@ test('Sprache und Darstellung werden sofort angewendet und in app/profile gespei
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dim');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  await expect(page.getByTestId('open-settings')).toBeFocused();
+  // Großpaket B1: Zahnrad im Kopf und in der Schiene – der Fokus kehrt zu dem zurück, das geöffnet hat.
+  await expect(page.locator('[data-testid="open-settings"]:focus')).toHaveCount(1);
 
   expect(errors).toEqual([]);
 });
@@ -179,12 +179,18 @@ test('Englisch: Sicherung heißt „backup", Diagnose-Meldungen auf Englisch', a
   const { errors } = await boot(page, {
     migrated: true,
     lang: 'en',
-    localStorage: { 'lx:diag': JSON.stringify([{ id: 1, t: Date.parse('2026-09-20T20:00:00+02:00'), level: 'warn', scope: 'grammar:generate', code: 'invalid_document', message: 'Pool ungültig – nicht überschrieben' }]) },
+    localStorage: {
+      'lx:diag': JSON.stringify([
+        { id: 1, t: Date.parse('2026-09-20T20:00:00+02:00'), level: 'warn', scope: 'grammar:generate', code: 'invalid_document', message: 'Pool ungültig – nicht überschrieben' },
+      ]),
+    },
   });
   await openOverview(page);
   await openSettings(page);
   await page.getByRole('button', { name: 'Back up all data as JSON' }).click();
-  await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ filename: string }> } }).__LINGO_FAKE__.saved[0]?.filename ?? '')).toBe('lingo-engine-x-backup-2026-09-20.json');
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ filename: string }> } }).__LINGO_FAKE__.saved[0]?.filename ?? ''))
+    .toBe('lingo-engine-x-backup-2026-09-20.json');
   await page.getByTestId('diag-toggle').click();
   const log = page.getByTestId('diag-log');
   await expect(log).toContainText('Pool invalid – not overwritten');

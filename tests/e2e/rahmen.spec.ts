@@ -26,10 +26,10 @@ test('Einstieg: Kopf mit EINEM „Fragen“, vier Reiter einzeilig, Zahnrad und 
   const top = page.getByTestId('topbar');
   await expect(top.getByTestId('open-companion')).toBeVisible();
   await expect(top.getByTestId('open-companion')).toHaveAttribute('aria-label', 'Fragen');
-  // Kein Profil, kein Übersetzer, kein Zahnrad im Kopf von Heute (Plan §6.3); die Serie steht nicht im Kopf (Gesamtkonzept 3.1).
+  // Großpaket B1 (Emrah 03.11.2026): im Kopf jedes Reiters Übersetzer · Fragen · Zahnrad; kein Profil auf Heute, keine Serie im Kopf.
   await expect(top.getByTestId('open-profile')).toHaveCount(0);
-  await expect(top.getByTestId('open-translate')).toHaveCount(0);
-  await expect(top.getByTestId('open-settings')).toHaveCount(0);
+  await expect(top.getByTestId('open-translate')).toHaveCount(1);
+  await expect(top.getByTestId('open-settings')).toHaveCount(1);
   await expect(top.getByTestId('profile-streak')).toHaveCount(0);
   // Genau ein Claude-Knopf auf der Wurzel (die Seite zeichnet keinen zweiten).
   await expect(page.getByTestId('open-companion')).toHaveCount(1);
@@ -164,7 +164,10 @@ async function openVtestAgain(page: Page): Promise<void> {
 
 test('Neuladen: veraltete oder fremde Fortsetz-Stände werden verworfen, Heute startet normal', async ({ page }) => {
   const stale = JSON.stringify({ v: 1, id: 'gibtsnicht', day: '2026-09-20', at: Date.parse('2026-09-20T20:59:00+02:00') });
-  const { errors } = await boot(page, { migrated: true, localStorage: { 'lx:resume': stale, 'lx:resume:alt': JSON.stringify({ v: 1, id: 'alt', day: '2026-09-01', savedAt: 1, tabId: 'x', route: { name: 'today' }, data: {} }) } });
+  const { errors } = await boot(page, {
+    migrated: true,
+    localStorage: { 'lx:resume': stale, 'lx:resume:alt': JSON.stringify({ v: 1, id: 'alt', day: '2026-09-01', savedAt: 1, tabId: 'x', route: { name: 'today' }, data: {} }) },
+  });
   await screen(page, 'today');
   await expect(page.getByTestId('resume-row')).toHaveCount(0);
   await expect.poll(() => page.evaluate(() => [window.localStorage.getItem('lx:resume'), window.localStorage.getItem('lx:resume:alt')])).toEqual([null, null]);

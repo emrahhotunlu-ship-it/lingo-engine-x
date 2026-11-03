@@ -101,7 +101,23 @@ for (const vp of [
     });
 
     test('Neues Wort: einmal vorgelesen nach der Berührung, „Sag es einmal laut“ freiwillig und unbewertet', async ({ page }) => {
-      const fresh: Doc = { word: 'to streamline', de: 'vereinfachen, straffen', def: 'to make a process simpler and more efficient', ex: 'We want to [streamline] the approval process.', pos: 'verb', state: 'new', stage: 0, S: 0, D: 5, due: 0, last: 0, reps: 0, lapses: 0, src: 'lookup', added: '2026-09-20' };
+      const fresh: Doc = {
+        word: 'to streamline',
+        de: 'vereinfachen, straffen',
+        def: 'to make a process simpler and more efficient',
+        ex: 'We want to [streamline] the approval process.',
+        pos: 'verb',
+        state: 'new',
+        stage: 0,
+        S: 0,
+        D: 5,
+        due: 0,
+        last: 0,
+        reps: 0,
+        lapses: 0,
+        src: 'lookup',
+        added: '2026-09-20',
+      };
       const { errors } = await boot(page, { migrated: true, fake: { patch: only({ 'vocab/streamline': fresh }, { ...planPatch(1), newPerDay: 2 }) } });
       await screen(page, 'today');
       await page.getByTestId('start').click();
@@ -122,7 +138,23 @@ for (const vp of [
     });
 
     test('Neue Wörter vorlesen lässt sich in den Einstellungen abschalten', async ({ page }) => {
-      const fresh: Doc = { word: 'to streamline', de: 'vereinfachen', def: 'to make a process simpler', ex: 'We want to [streamline] the approval process.', pos: 'verb', state: 'new', stage: 0, S: 0, D: 5, due: 0, last: 0, reps: 0, lapses: 0, src: 'lookup', added: '2026-09-20' };
+      const fresh: Doc = {
+        word: 'to streamline',
+        de: 'vereinfachen',
+        def: 'to make a process simpler',
+        ex: 'We want to [streamline] the approval process.',
+        pos: 'verb',
+        state: 'new',
+        stage: 0,
+        S: 0,
+        D: 5,
+        due: 0,
+        last: 0,
+        reps: 0,
+        lapses: 0,
+        src: 'lookup',
+        added: '2026-09-20',
+      };
       await boot(page, { migrated: true, localStorage: { 'lx:speak-new': '0' }, fake: { patch: only({ 'vocab/streamline': fresh }, { ...planPatch(1), newPerDay: 2 }) } });
       await screen(page, 'today');
       await page.getByTestId('start').click();
@@ -135,7 +167,23 @@ for (const vp of [
 
     test('„Sag es“: deutsche Absicht, eigener Satz, Zielwort geprüft, sonst ehrlich ungeprüft', async ({ page }) => {
       // „Sag es“ gibt es nur mit gespeicherter deutscher Übersetzung des Satzes (UX-Prüfung M3).
-      const sayIt: Doc = { ...SEED['vocab/avoid'], state: 'learning', stage: 4, S: 1, D: 5, due: 1_690_000_000_000, last: 1_689_900_000_000, reps: 3, lapses: 0, na: 9, fsrs: undefined, hist: RECALLED, intro: '2023-07-01', exDe: SAY_IT_DE, xs: { say_it: { c: 0, w: 6 }, cloze: { c: 6, w: 0 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 }, produce: { c: 6, w: 0 }, dictation: { c: 6, w: 0 } } };
+      const sayIt: Doc = {
+        ...SEED['vocab/avoid'],
+        state: 'learning',
+        stage: 4,
+        S: 1,
+        D: 5,
+        due: 1_690_000_000_000,
+        last: 1_689_900_000_000,
+        reps: 3,
+        lapses: 0,
+        na: 9,
+        fsrs: undefined,
+        hist: RECALLED,
+        intro: '2023-07-01',
+        exDe: SAY_IT_DE,
+        xs: { say_it: { c: 0, w: 6 }, cloze: { c: 6, w: 0 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 }, produce: { c: 6, w: 0 }, dictation: { c: 6, w: 0 } },
+      };
       const { errors } = await boot(page, { migrated: true, fake: { patch: only({ 'vocab/avoid': sayIt }) } });
       await screen(page, 'today');
       await page.getByTestId('start').click();
@@ -155,8 +203,8 @@ for (const vp of [
       await expect(page.getByTestId('verdict')).toContainText('Zielwort drin');
       await expect(page.getByTestId('result')).not.toContainText('ist in deinem Satz');
       await expect(page.getByTestId('result')).not.toContainText('Mustersatz');
-      // Am Laptop steht „Merke“ mit dem Beispiel in der rechten Spalte neben der Übung (UX-Neuanfang B), am Handy unter dem Ergebnis.
-      await expect(vp.mobile ? page.getByTestId('result') : page.locator('[data-col="side"]')).toContainText('Try to avoid driving in rush hour.');
+      // Kern: „Merke“ mit dem Beispiel steht in der Rückmeldekarte (keine eigene Seitenspalte mehr).
+      await expect(page.getByTestId('result')).toContainText('Try to avoid driving in rush hour.');
       await page.screenshot({ path: `${OUT}/ww-05-sag-es-ergebnis-${vp.w}.png`, fullPage: true });
       await axe(page);
       expect(errors).toEqual([]);
@@ -191,7 +239,26 @@ for (const vp of [
     });
 
     test('Angebote im Reiter Wörter: Abend-Check (heute eingeführt, nur freier Abruf) und „Sag es selbst“ (Claude prüft, nichts gespeichert)', async ({ page }) => {
-      const learned = (word: string, de: string, intro: string, i: number, hist: Doc[] = []): Doc => ({ word, de, def: `to ${word}`, ex: `We [${word}] it every week.`, pos: 'verb', state: 'learning', stage: 1, S: 1, D: 5, due: at('2026-09-22'), last: at(intro, 9), reps: 1, lapses: 0, src: 'lookup', added: intro, intro, order: i, hist });
+      const learned = (word: string, de: string, intro: string, i: number, hist: Doc[] = []): Doc => ({
+        word,
+        de,
+        def: `to ${word}`,
+        ex: `We [${word}] it every week.`,
+        pos: 'verb',
+        state: 'learning',
+        stage: 1,
+        S: 1,
+        D: 5,
+        due: at('2026-09-22'),
+        last: at(intro, 9),
+        reps: 1,
+        lapses: 0,
+        src: 'lookup',
+        added: intro,
+        intro,
+        order: i,
+        hist,
+      });
       // „Sag es selbst“ nur für Wörter, die schon an einem Folgetag frei gewusst wurden (Lernwissenschaft S9).
       const freeNext = (d: string): Doc => ({ t: at(d, 5), m: 'cloze', g: 3, x: 'cloze' });
       const cards = {

@@ -41,7 +41,12 @@ async function say(page: Page, text: string): Promise<void> {
   await expect(page.getByTestId('roleplay')).toHaveAttribute('data-state', 'composing');
 }
 
-const SENTENCES = ['That depends on your test team and the exposure.', 'I think the budget is not the problem here.', 'We must delay the start by two weeks.', 'The penalty risk is real for your company.'];
+const SENTENCES = [
+  'That depends on your test team and the exposure.',
+  'I think the budget is not the problem here.',
+  'We must delay the start by two weeks.',
+  'The penalty risk is real for your company.',
+];
 
 test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen, Mitnehmen, Bericht, gespeichert', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -121,7 +126,7 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   await screen(page, 'today');
   // Tagesweg (UX-Neuanfang C): drei Schritte; das Gespräch zählt in keinen. Die Minuten stehen je Schritt und im Kopf „Schritt 1 von 3 · ca. … Min.“.
   await expect(page.getByTestId('today-status')).toHaveText('Schritte: 0 von 3 erledigt');
-  await expect(page.getByTestId('today-title')).toHaveText(/^Schritt 1 von 3 · ca\. \d+ Min\.$/);
+  await expect(page.getByTestId('today-title')).toHaveText(/^Pflicht: 0 von 3 erledigt$/);
   // Keine Restzeit doppelt: kein zweites „noch ca. … Min.“ auf der Karte.
   await expect(page.getByTestId('today-card')).not.toContainText('noch ca.');
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
@@ -145,7 +150,7 @@ test('Feste Szene „Preisverhandlung“: Einweisung, Gespräch, Bericht legt sc
   await say(page, SENTENCES[0]!);
   await page.getByTestId('rp-end').click();
   await expect(page.getByTestId('report')).toBeVisible();
-  await expect.poll(async () => ((await dump(page))['scene/sc-price'])?.runs).toBe(1);
+  await expect.poll(async () => (await dump(page))['scene/sc-price']?.runs).toBe(1);
   const doc = (await dump(page))['scene/sc-price'] as Doc;
   expect(doc).toMatchObject({ id: 'sc-price', title_de: 'Den Preis für das Cloud-DMS verhandeln', done: true });
   expect(errors).toEqual([]);
@@ -164,7 +169,10 @@ test('Analyse fällt aus: Gespräch läuft weiter, Chips „fehlgeschlagen“, �
   await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { setSampleFail(id: string, c: null): void } }).__LINGO_FAKE__.setSampleFail('turn-analysis', null));
   const idx = await chips.nth(1).getAttribute('data-idx');
   await chips.nth(1).click();
-  await page.locator(`[data-testid="analysis"][data-idx="${idx ?? ''}"]`).getByTestId('an-retry').click();
+  await page
+    .locator(`[data-testid="analysis"][data-idx="${idx ?? ''}"]`)
+    .getByTestId('an-retry')
+    .click();
   await expect(chips.nth(1)).toHaveAttribute('data-state', 'errors');
 });
 
@@ -246,7 +254,14 @@ const LOOKS: Array<{ width: number; theme: Theme; lang: Lang }> = [
 for (const s of LOOKS) {
   test(`Rollenspiel rendert · ${s.width}px · ${s.theme} · ${s.lang} · axe`, async ({ browser }) => {
     const mobile = s.width < 768;
-    const context = await browser.newContext({ viewport: { width: s.width, height: 900 }, isMobile: mobile, hasTouch: mobile, reducedMotion: 'reduce', timezoneId: 'Europe/Berlin', locale: s.lang === 'de' ? 'de-DE' : 'en-US' });
+    const context = await browser.newContext({
+      viewport: { width: s.width, height: 900 },
+      isMobile: mobile,
+      hasTouch: mobile,
+      reducedMotion: 'reduce',
+      timezoneId: 'Europe/Berlin',
+      locale: s.lang === 'de' ? 'de-DE' : 'en-US',
+    });
     const page = await context.newPage();
     const { errors, external } = await boot(page, { migrated: true, theme: s.theme, lang: s.lang });
     await openHub(page);
@@ -260,8 +275,7 @@ for (const s of LOOKS) {
       // LP3 P51: Die Karte startet verdeckt; aufdecken, dann ist die C1-Fassung da.
       await page.getByTestId('analysis-panel').getByTestId('rs-reveal').click();
       await expect(page.getByTestId('analysis-panel').getByTestId('an-upgraded')).toBeVisible();
-    }
-    else await page.getByTestId('an-chip').first().click();
+    } else await page.getByTestId('an-chip').first().click();
     expect(await layoutProblems(page)).toEqual([]);
     const rpAxe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(rpAxe.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);

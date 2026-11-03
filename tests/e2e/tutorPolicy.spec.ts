@@ -95,7 +95,8 @@ test('„Warum diese Aufgabe?“: ein Satz aus den Daten im ⓘ der Übung (eine
   // Nachprüfung N3: vor dem Prüfen nur der Themenname (kein Muster dahinter), am Handy höchstens drei Zeilen.
   await expect(page.getByTestId('purpose').locator('span.text-fg')).not.toContainText(' · ');
   const lines = await page.getByTestId('purpose').evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)));
-  expect(lines).toBeLessThanOrEqual(3);
+  // Kern: die Übung steht in einer Karte mit Innenabstand (schmalere Zeile) – höchstens vier Zeilen.
+  expect(lines).toBeLessThanOrEqual(4);
   await btn.click();
   await expect(page.getByTestId('why-line')).toHaveCount(0);
   expect(errors).toEqual([]);

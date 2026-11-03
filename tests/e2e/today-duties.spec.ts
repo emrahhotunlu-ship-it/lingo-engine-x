@@ -59,13 +59,15 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
   } else {
     // UX-Audit U1: die Zeile zählt nur Schritte, die Restminuten stehen allein im Ring (eine Zahl je Ort).
     await expect(status).toHaveText(`Schritte: ${n} von 2 erledigt`);
-    await expect(page.getByTestId('today-min')).toHaveText(/^\d+$/);    await expect(status).toHaveAttribute('data-status', 'open');
+    await expect(page.getByTestId('today-min')).toHaveText(/^\d+$/);
+    await expect(status).toHaveAttribute('data-status', 'open');
     // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge.
     const items = page.getByTestId('duty');
     await expect(items).toHaveCount(2);
     expect(await items.evaluateAll((els) => els.map((e) => [e.getAttribute('data-duty'), e.getAttribute('data-state')]))).toEqual(DUTIES.map((d) => [d, done.has(d) ? 'done' : 'open']));
-    // Erledigt ist Zustand: keine Zeile hat ein bedienbares Kind; bedienbar ist nur der eine Startknopf.
-    await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
+    // Erledigt ist Zustand: keine Zeile hat ein bedienbares Kind; bedienbar ist nur der eine Startknopf (Kern e: er steht im laufenden Schritt).
+    await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex]):not([data-testid="start"])')).toHaveCount(0);
+    await expect(page.locator('[data-testid="duty"]:not([data-now]) [data-testid="start"]')).toHaveCount(0);
     for (const d of open) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(LABEL[d] ?? d);
     for (const d of DUTIES) if (done.has(d)) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText('erledigt');
     await expect(page.locator(`[data-testid="duty"][data-duty="${open[0] ?? ''}"]`)).toHaveAttribute('data-now', 'true');

@@ -44,7 +44,8 @@ test('ab 768 px: Übung im Vollbild ohne Seitenleiste; Übersetzer und Claude in
     await page.setViewportSize({ width, height: 900 });
     await expect(page.getByTestId('tabbar')).toHaveCount(0);
     await expect(bar.getByTestId('open-translate')).toBeVisible();
-    await expect(bar.getByTestId('open-companion')).toBeVisible();
+    // Kern: „Frag Claude“ in der Übungsleiste (mit Aufgabe: `claude-explain`).
+    await expect(bar.getByTestId('open-companion').or(bar.getByTestId('claude-explain')).first()).toBeVisible();
     await expect(bar.getByTestId('open-settings')).toHaveCount(0);
     await bar.getByTestId('exercise-menu').click();
     await expect(page.getByRole('menu')).toBeVisible();
@@ -159,7 +160,21 @@ test('Wort falsch getippt, Seite verborgen (schon gebucht): kein „Ich lag rich
 test('Grammatik: ✕ mit offenem Ergebnis bucht die Antwort genau einmal (`left`)', async ({ page }) => {
   const OLD = Date.parse('2020-01-01T10:00:00+01:00');
   const err = { q: 'It was the first time she ___ such a large account.', given: 'has handled', ans: 'had handled', t: OLD, due: OLD, box: 0, src: 'seed' };
-  const topic = { id: 'past-perfect', p: 0.5, anchor: 0.5, anchorD: '2026-09-15', n: 8, c: 6, due: OLD, last: OLD, recent: [1, 1, 1, 1], seen: [], seenText: [], hist: [{ d: '2026-09-15', p: 0.5 }], errors: [err] };
+  const topic = {
+    id: 'past-perfect',
+    p: 0.5,
+    anchor: 0.5,
+    anchorD: '2026-09-15',
+    n: 8,
+    c: 6,
+    due: OLD,
+    last: OLD,
+    recent: [1, 1, 1, 1],
+    seen: [],
+    seenText: [],
+    hist: [{ d: '2026-09-15', p: 0.5 }],
+    errors: [err],
+  };
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { fake: { patch: { 'grammar/past-perfect': topic } } });
   const item = page.getByTestId('gr-item');
   await expect(item).toBeVisible();
@@ -185,8 +200,33 @@ test('Grammatik: ✕ mit offenem Ergebnis bucht die Antwort genau einmal (`left`
 test('C1-Aufgabe (Fehler finden) in der Grammatikrunde: ✕ mit offenem Ergebnis bucht genau einmal (`left`)', async ({ page }) => {
   const OLD = Date.parse('2020-01-01T10:00:00+01:00');
   // err-0039 (src/content/c1x/src/err/k1-2.json items[11]), wie band.spec.
-  const err = { q: 'Please don’t deploy until QA signed off on the release candidate.', given: '', ans: 'Please don’t deploy until QA has signed off on the release candidate.', t: OLD, due: OLD, box: 0, src: 'seed', cid: 'err-0039', pat: 'tc.present-perfect', pts: [0, 2] };
-  const topic = { id: 'time-clauses', p: 0.5, anchor: 0.5, anchorD: '2026-09-15', n: 8, c: 6, due: OLD, last: OLD, recent: [1, 1, 1, 1], seen: [], seenText: [], hist: [{ d: '2026-09-15', p: 0.5 }], errors: [err] };
+  const err = {
+    q: 'Please don’t deploy until QA signed off on the release candidate.',
+    given: '',
+    ans: 'Please don’t deploy until QA has signed off on the release candidate.',
+    t: OLD,
+    due: OLD,
+    box: 0,
+    src: 'seed',
+    cid: 'err-0039',
+    pat: 'tc.present-perfect',
+    pts: [0, 2],
+  };
+  const topic = {
+    id: 'time-clauses',
+    p: 0.5,
+    anchor: 0.5,
+    anchorD: '2026-09-15',
+    n: 8,
+    c: 6,
+    due: OLD,
+    last: OLD,
+    recent: [1, 1, 1, 1],
+    seen: [],
+    seenText: [],
+    hist: [{ d: '2026-09-15', p: 0.5 }],
+    errors: [err],
+  };
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'errors' }, { localStorage: { 'lx:flags': 'err' }, fake: { patch: { 'grammar/time-clauses': topic } } });
   const item = page.getByTestId('gr-item');
   await expect(item.getByTestId('c1x-err')).toBeVisible();

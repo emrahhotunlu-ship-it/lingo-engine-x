@@ -14,7 +14,8 @@ type Pair = { name: string; vorschau: string; app: AppState; phone: boolean; che
 
 /** Gemeinsame Handy-Messpunkte: Kopf und Tageskarte (H1 screens.js:174–176). */
 const HEAD: Check[] = [
-  { name: 'fragen', vorschau: '#ask-open', app: '[data-testid="open-companion"]', props: ['x', 'y', 'width', 'height', 'borderRadius'] },
+  // Großpaket B1: im Kopf stehen Übersetzer · Fragen · Zahnrad – „Fragen“ sitzt weiter links als in der Vorschau, verglichen wird die Form.
+  { name: 'fragen', vorschau: '#ask-open', app: '[data-testid="open-companion"]', props: ['width', 'height', 'borderRadius'] },
   // Die Vorschau zieht `.phead` über die ganze Breite (Rand innen); gemessen werden Höhe und Lage des Inhalts (Titel, „Fragen“).
   { name: 'kopf', vorschau: '.phead', app: '.lx-vh-head', props: ['y', 'height'] },
   { name: 'titel', vorschau: '.phead h1', app: '.lx-vh-head h1', props: ['x', 'y', 'height', 'fontSize', 'lineHeight', 'fontWeight'] },
@@ -24,10 +25,8 @@ const WEEK_MORE: Check[] = [
   { name: 'tag', vorschau: '.wd i', app: '.lx-vh-week .lx-v-wd i', props: ['x', 'width', 'height'] },
   { name: 'tagname', vorschau: '.wd', app: '.lx-vh-week .lx-v-wd', props: ['width', 'fontSize', 'fontWeight'] },
   { name: 'serie', vorschau: '.streak b', app: '.lx-vh-week .lx-v-streak b', props: ['fontSize', 'lineHeight', 'fontWeight'] },
-  // Der Trenner „Wenn du mehr willst“ ist seit UX-Neuanfang B die Kopfzeile „Freiwillig · zählt als Extra“ (eigener Vergleich in vorschau-neuanfang-heute).
-  { name: 'zeile', vorschau: '.row', app: '[data-testid="more-row"]', props: ['x', 'width'] },
-  { name: 'zeilensymbol', vorschau: '.row .ri', app: '[data-testid="more-row"] .lx-v-row-ic', props: ['x', 'width', 'height', 'borderRadius'] },
-  { name: 'zeilentitel', vorschau: '.row .rt b', app: '[data-testid="more-row"] .lx-v-row-t b', props: ['fontSize', 'fontWeight'] },
+  // Der Trenner „Wenn du mehr willst“ ist seit UX-Neuanfang B die Kopfzeile „Freiwillig · zählt als Extra“.
+  // Kern e (Emrah 03.11.2026, Vorschau 9pdpfT8E): „Freiwillig“ sind Kacheln statt Zeilen mit Symbol – die Zeilen-Vergleiche entfallen.
 ];
 
 /** Laptop L1 (desk.js:96–106): Größen und Schrift (die Lage hängt an Seitenleiste und Spalte, beide eigene Pakete). */
@@ -46,7 +45,7 @@ const DESK: Check[] = [
 
 const PAIRS: Pair[] = [
   // Tagesanfang: Die Testdaten haben an diesem Dienstag keine laufende Serie (nie „Serie 0“), deshalb ohne Serienzahl.
-  // Seit UX-Neuanfang B zeigt Heute vor dem Abschluss den Tagesweg statt des Rings (Vergleich: vorschau-neuanfang-heute.spec.ts).
+  // Seit UX-Neuanfang B zeigt Heute vor dem Abschluss den Tagesweg statt des Rings.
   // Hier bleiben die Zustände mit Ring: Abschluss (DoneCard3) und Wiedereinstieg nach Pause (RestartCard).
   {
     name: 'heute-done',

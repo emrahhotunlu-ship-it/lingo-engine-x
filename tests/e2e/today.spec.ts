@@ -9,7 +9,8 @@ import { DAY, dump, planPatch, writes } from './trainerHelpers';
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 const GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Einstellungen|Serie|Heute|Wiederholen)\b/;
-const BG: Record<Theme, number[]> = { dark: [12, 14, 20], dim: [40, 42, 47], light: [245, 247, 250] };
+// Kern a (Emrah 03.11.2026, Vorschau 9pdpfT8E): Hell warm, Dunkel grünlich.
+const BG: Record<Theme, number[]> = { dark: [20, 22, 20], dim: [40, 42, 47], light: [245, 243, 238] };
 // Farbe als Pixel (r, g, b) über ein 1×1-Canvas: der Build schreibt oklch() als lab() um, Texte sind nicht vergleichbar.
 const px = (page: Page, color: string): Promise<number[]> =>
   page.evaluate((c) => {
@@ -19,7 +20,6 @@ const px = (page: Page, color: string): Promise<number[]> =>
     return [...x.getImageData(0, 0, 1, 1).data].slice(0, 3);
   }, color);
 const near = (a: number[], b: number[]): boolean => a.length === 3 && a.every((v, i) => Math.abs(v - (b[i] ?? -9)) <= 1);
-
 
 const SAMPLES: Array<{ width: number; theme: Theme; lang: Lang }> = [
   { width: 390, theme: 'dark', lang: 'de' },
@@ -32,7 +32,13 @@ const SAMPLES: Array<{ width: number; theme: Theme; lang: Lang }> = [
 for (const s of SAMPLES) {
   test(`Heute rendert · ${s.width}px · ${s.theme} · ${s.lang}`, async ({ browser }) => {
     const mobile = s.width < 768;
-    const context = await browser.newContext({ viewport: { width: s.width, height: mobile ? 844 : 900 }, isMobile: mobile, hasTouch: mobile, timezoneId: 'Europe/Berlin', locale: s.lang === 'de' ? 'de-DE' : 'en-US' });
+    const context = await browser.newContext({
+      viewport: { width: s.width, height: mobile ? 844 : 900 },
+      isMobile: mobile,
+      hasTouch: mobile,
+      timezoneId: 'Europe/Berlin',
+      locale: s.lang === 'de' ? 'de-DE' : 'en-US',
+    });
     const page = await context.newPage();
     const { errors, external } = await boot(page, { migrated: true, theme: s.theme, lang: s.lang });
     await screen(page, 'today');
@@ -60,7 +66,16 @@ test('Plan wird einmal je Lerntag gespeichert und nach dem Neuladen nicht neu ge
   // Tagesweg (UX-Neuanfang C, 02.11.2026): Wörter → Grammatik → Anwenden; am Sonntag (Stichtag) Wochen-Check statt Anwenden; Fehlersätze sind freiwillig.
   await expect(status).toHaveAttribute('data-total', '3');
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { v?: number } | undefined)?.v).toBe(1);
-  type Plan = { d: string; v: number; ids: string[]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number }; lesson: string | null; at: number; u: { shape: string; b: unknown[] } };
+  type Plan = {
+    d: string;
+    v: number;
+    ids: string[];
+    duty: string[];
+    goal: { review: number; due: number; new: number; ahead: number };
+    lesson: string | null;
+    at: number;
+    u: { shape: string; b: unknown[] };
+  };
   const plan = (await dump(page))['app/profile']?.plan as Plan;
   expect(plan.d).toBe(DAY);
   expect(plan.duty).toEqual(['review', 'ch:u-focus', 'ch:u-check']);
