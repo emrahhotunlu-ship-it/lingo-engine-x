@@ -15862,8 +15862,8 @@
   "pat": "pc.form",
   "why": {
    "ok": {
-    "de": "„all afternoon“ nennt die Dauer, deshalb Verlaufsform: have been studying. Nach been steht -ing, nie die 3. Form studied.",
-    "en": "“All afternoon” gives the duration, so the continuous form: have been studying. After been comes -ing, never the participle studied."
+    "de": "„all afternoon“ nennt die Dauer, deshalb Verlaufsform: have been studying. Nach been steht -ing, nie die 3. Form studied. Ohne been geht auch have studied.",
+    "en": "“All afternoon” gives the duration, so the continuous form: have been studying. After been comes -ing, never the participle studied. Without been, have studied also works."
    },
    "wrong": [
     {

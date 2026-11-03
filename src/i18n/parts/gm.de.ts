@@ -16,7 +16,7 @@ export const gmDe = {
   gmPathSteps: '{n} von 5 Schritten',
   gmReportNote: 'Diese Antwort zählt dann nicht.',
   gmTestEarly: 'Dafür brauchst du nicht alle 5 Schritte: Sitzt es noch nicht, übst du danach gezielt weiter.',
-  gmStandHead: 'Dein Stand',
+  gmStandHead: 'Dein Fortschritt',
   gmStandOnWay_one: 'Noch keins fest · 1 Wort auf dem Weg',
   gmStandOnWay_other: 'Noch keins fest · {n} Wörter auf dem Weg',
 } as const;
