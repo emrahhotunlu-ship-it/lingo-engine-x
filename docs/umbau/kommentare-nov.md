@@ -14,3 +14,4 @@ Status: offen · in Arbeit · behoben (Version)
 | K7 | 03.11. 14:13 | f7ce1ee1 | Erklärung-Karte „Anwenden“/eigener Satz | Schlechte Karte: „später prüfen lassen“ unklar, „kommt wieder“ nicht erklärt, bringt nichts | offen |
 | K8 | 03.11. 14:14 | d0757e75 | Eingabe-Lücke „Auf Englisch eingeben: erkennen, anerkennen …“ | Eingabebereich viel zu klein – das Wichtigste ist das Kleinste auf der Seite | offen |
 | K9 | 03.11. 14:16 | 4ae626c3 | Grammatik-Aufgabe „Setz das fehlende Wort ein.“ nach dem Prüfen | Nicht klar erklärt, was genau falsch war | offen |
+| K10 | 03.11. 14:17 | 611e911f | Wörter-Karte „Setz das Wort ein, der erste Buchstabe hilft.“ | Komplett neues, nie geübtes Wort kommt direkt als Abfrage-Karte, ohne Einführung vorher – Ursache prüfen (Einführungskarte übersprungen? Wort aus alter App/Lesen mit Lernstufe übernommen?) | offen |
