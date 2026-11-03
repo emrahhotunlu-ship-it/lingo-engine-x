@@ -178,7 +178,7 @@ it('G1', () => {
     const keys: Key[] = [...tasks.map((t) => ({ id: tid(t), model: t.type === 'find' ? (t.x?.kind === 'find' && t.x.err ? `${t.prompt.split(/\s+/).slice(t.x.err[0], t.x.err[1] + 1).join(' ')} → ${t.answer}` : 'kein Fehler') : t.answer, accepted: t.accepted })), ...items.map((i) => ({ id: `c:${i.id}`, model: c1Model(i) }))];
     for (let i = 0; i * BATCH < blind.length; i++) writeFileSync(join(OUT, `blind-${String(i + 1).padStart(2, '0')}.json`), JSON.stringify(blind.slice(i * BATCH, (i + 1) * BATCH), null, 1));
     writeFileSync(join(OUT, 'keys.json'), JSON.stringify(keys));
-    console.log(`G1 export: ${blind.length} Aufgaben, ${Math.ceil(blind.length / BATCH)} Chargen`);
+    console.warn(`G1 export: ${blind.length} Aufgaben, ${Math.ceil(blind.length / BATCH)} Chargen`);
     expect(blind.length).toBeGreaterThan(2000);
     return;
   }
@@ -198,5 +198,5 @@ it('G1', () => {
     }
   }
   writeFileSync(join(OUT, 'mismatch.json'), JSON.stringify(mism, null, 1));
-  console.log(`G1 score: ${n} Antworten, ${mism.length} Abweichungen`);
+  console.warn(`G1 score: ${n} Antworten, ${mism.length} Abweichungen`);
 });
