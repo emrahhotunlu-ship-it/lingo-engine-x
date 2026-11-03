@@ -214,3 +214,12 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
+
+**03.11.2026, nachmittags – Live zurück auf v86 (Emrahs Wunsch „alten Stand wiederherstellen, bis die App umgebaut wird“)**
+- Emrah fand den neuen Stand (v87–v91: Wörter-App, UX-Neuanfang, Großpaket G, Kommentar-Knopf) „nicht zumutbar“ (Kommentare K1–K14 in `docs/umbau/kommentare-nov.md` auf `claude/umbau-fokus`). Seine Wahl: „Ja, v86 live nehmen“.
+- `dist/index.html` aus Commit `3377252` („Live v86 …“, Einzeldatei) liegt auf `JLL8…` als Artefakt-Version 92 `1793716283-91ab`.
+  - Fähigkeiten unverändert übernommen (`db`, `sample`, `downloads`, `comments`), Vertrag 0.2.49.
+  - Die Dateien des Mehr-Datei-Baus (v91) blieben auf dem Link liegen; v86 lädt sie nicht. Beim nächsten Vorwärts-Veröffentlichen nach `docs/relaunch/publish/README.md` vorgehen.
+- Rückweg (zur neuen App): v91 `1793704143-939f`.
+- Daten: v86 ignoriert alle neuen Felder und Dokumente (Rückweg-Test `tests/e2e/rueckweg.spec.ts`, zuletzt grün im vollen E2E-Lauf von Großpaket G). Wörter nur in Sammeldokumenten `vs/<seg>` sieht v86 nicht, sie bleiben erhalten.
+- **Bis zum Umbau** nichts Neues auf `JLL8…` veröffentlichen ohne Emrahs ausdrückliches „Ja live nehmen“.

@@ -38,6 +38,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 
 ## A4. Stand
 - Phasen 0–7 fertig und produktiv auf `JLL8…` (Umzug 27.09.2026). Danach: Fehlerbehebungs-Paket, Komplettpaket, KI-Antworten lesbar, Paket 1 (Sag es, Reparatur-Sätze, neue Struktur mit 4 Reitern), Paket 2 (Deutsch-Fallen, C1-Werkzeugkasten, Flüssigkeit, nächster Termin).
+- **Seit 03.11.2026 läuft live wieder v86** (Artefakt-Version 92 `1793716283-91ab`, aus Commit `3377252`), Emrahs Wunsch bis zum Umbau. Rückweg zur neuen App: v91 `1793704143-939f`. Details in `docs/verlauf.md`.
 - Letzte Version laut Protokoll: `1790541376-265e` (Artefakt-Version 53), Rückweg `1790536760-1f37`. Eine andere Sitzung hat danach Version 54 veröffentlicht und in `8bdb031` in den Code übernommen.
 - Phasenplan, alle Versionen und Rückwege: `docs/verlauf.md`. Neue Meilensteine dort eintragen, hier nur die letzte Version und den Rückweg.
 
