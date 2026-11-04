@@ -163,3 +163,33 @@ export function applyMove(lex: Lex, m: Move, startOf: (day: string) => number): 
 
 /** Tage seit dem Plan (für den Abbau-Test). */
 export const planAge = (p: DayPlan, nowMs: number): number => daysBetween(p.d, dayKey(nowMs));
+
+/** Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026): Wörter-Minuten des verkürzten Tagesplans. */
+export const SHORT_DAY_MIN = 5;
+
+/**
+ * Kurzer Tag: den eingefrorenen Plan von heute verkleinern (rein). Behalten werden die ersten fälligen Einträge (gefährdetste zuerst, wie
+ * eingefroren) so weit, wie `targetMin` reicht, und höchstens `MIN_NEW` neue. Was wegfällt, bleibt fällig (es wird nichts verschoben) und
+ * kommt am nächsten Lerntag zuerst; nicht eingeführte neue Wörter bleiben neu. Minuten je Eintrag wie im Plan gemittelt. `null`, wenn der Plan
+ * schon klein genug ist.
+ */
+export function shrinkDayPlan(p: DayPlan, targetMin: number): DayPlan | null {
+  if (!p.plan.length || p.min <= targetMin) return null;
+  const per = p.min / p.plan.length;
+  const fresh = p.plan.filter((e) => e[1] === 'n').slice(0, MIN_NEW);
+  const old = p.plan.filter((e) => e[1] !== 'n');
+  const room = Math.max(0, targetMin - fresh.length * per);
+  const keepOld = old.length ? Math.max(1, Math.min(old.length, Math.floor(room / per))) : 0;
+  const kept = [...old.slice(0, keepOld), ...fresh];
+  if (kept.length >= p.plan.length) return null;
+  const due = Math.min(p.due, keepOld);
+  return {
+    ...p,
+    plan: kept,
+    min: Math.round(kept.length * per * 10) / 10,
+    due,
+    ahead: Math.max(0, keepOld - due),
+    fresh: fresh.length,
+    why: `${p.why} · short day`.slice(0, 200),
+  };
+}

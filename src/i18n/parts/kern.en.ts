@@ -118,4 +118,8 @@ export const kernEn: Record<keyof typeof kernDe, string> = {
   restDow7: 'Sun',
   assessNewTitle: 'Claude reassessed you on {date}',
   assessNewNow: '{dim} now {now} (was {before})',
+  shortDayGo: 'Short on time? About 10 minutes today',
+  shortDayLeft_one: 'You can do this once more this week.',
+  shortDayLeft_other: 'You can do this {n} more times this week.',
+  shortDayOn: 'Short day: about 10 minutes. Finish it and your streak holds.',
 };

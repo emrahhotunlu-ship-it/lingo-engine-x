@@ -126,6 +126,7 @@ describe('Wörter-Modul: Isolation', () => {
     // 02.11.2026 Wörter-App von selbst an: autoSwitch (api.loadAutoSwitch) und der neue Wörter-Reiter VocabHome (api.loadOverview).
     // Großpaket B2 (alte Wege abklemmen): „Üben“-Ziele (actionRoute), Wörter-Pflicht ohne Tageseinheit (learn/flow) und die freiwilligen Zeilen
     // auf Heute (ExtraRow: Schalter und api.countMistakes) fragen den Schalter.
+    // Kurzer Tag (2A, 04.11.2026): today/shortDay verkleinert den Wörter-Plan über api.shrinkToday.
     expect(touching.sort()).toEqual([
       'src/areas/wortschatz.tsx',
       'src/data/paths.ts',
@@ -139,6 +140,7 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/settings/LearningSection.tsx',
       'src/features/today/ExtraRow.tsx',
       'src/features/today/TodayScreen.tsx',
+      'src/features/today/shortDay.ts',
       'src/features/today/state.ts',
       'src/features/today/store.ts',
       'src/features/vocab/autoSwitch.ts',

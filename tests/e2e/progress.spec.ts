@@ -420,6 +420,7 @@ test('1B Fortschritt: neue Einschätzung kommt mit Hinweis „neu eingeschätzt 
   const line = await page.getByTestId('stand-line').innerText();
   const now = (await note.innerText()).match(/Wörter jetzt (\S+)/)?.[1];
   expect(line).toContain(`Wörter ${now}`);
+  expect(errors).toEqual([]);
 });
 
 test('P7 Fortschritt: unter Verlauf stehen „Messwerte dahinter“ mit fünf Größen, ohne Daten „noch keine Daten“', async ({ page }) => {

@@ -20,17 +20,32 @@ type Doc = Record<string, unknown>;
  * Wörter-Minuten am Tag (UX-Neuanfang C, Emrah 02.11.2026: „mindestens 10 Minuten und immer 40 % vom Tagesziel“): aus dem Tagesziel
  * in `app/profile.goalMin`, nicht mehr aus `vcfg.min` (das Feld bleibt gespeichert und gilt für den Rückweg).
  */
-export function wordsMinutes(profile: Doc | null | undefined): number {
+export function wordsMinutes(profile: Doc | null | undefined, nowMs: number = Date.now()): number {
+  // Kurzer Tag (2A, 04.11.2026): an einem Tag mit `app/profile.kt[heute] = 1` plant ein neu eingefrorener Wörter-Plan nur SHORT_DAY_WORDS_MIN.
+  if (isShortDay(profile, nowMs)) return SHORT_DAY_WORDS_MIN;
   return dayMinutes(normGoalMin(profile?.goalMin)).words;
 }
+
+/** Ist heute ein kurzer Tag (`app/profile.kt[heute] = 1`)? */
+export function isShortDay(profile: Doc | null | undefined, nowMs: number = Date.now()): boolean {
+  const kt = profile?.kt;
+  return !!kt && typeof kt === 'object' && !Array.isArray(kt) && (kt as Doc)[dayKey(nowMs)] === 1;
+}
+
+/** Neue Wörter am kurzen Tag höchstens so viele (die Regel „mindestens 5 ohne Rückstand“ gilt dann nicht, sonst würde der Tag nicht kurz). */
+export const SHORT_DAY_NEW = 2;
+
+/** Wörter-Minuten am kurzen Tag (gleich `SHORT_DAY_MIN` in domain/day.ts, geprüft in tests/unit/shortDay.test.ts). */
+export const SHORT_DAY_WORDS_MIN = 5;
 
 /** Einstellungen aus `app/profile` (vcfg + newPerDay), tolerant: Ungültiges fällt auf den Standard zurück. `min` = Wörter-Minuten aus dem Tagesziel. */
 export function vocabCfg(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
   const npd = profile && typeof profile.newPerDay === 'number' && [0, 2, 5, 10].includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
   const min = wordsMinutes(profile);
-  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay: npd };
-  return { min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
+  const newPerDay = isShortDay(profile) ? Math.min(npd, SHORT_DAY_NEW) : npd;
+  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay };
+  return { min, ret: raw.data.ret, mod: raw.data.mod, newPerDay, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
 }
 
 /** Ist das neue Modul eingeschaltet? (Rückweg-Schalter in der Datenbank, gilt auf allen Geräten.) */
@@ -158,6 +173,12 @@ export async function reportEvidence(e: Evidence, o: { writer: Writer; device: s
 export async function prepareDay(aiReady?: () => boolean): Promise<number | null> {
   const { prepareDay: run } = await import('./ui/LearnScreen');
   return run(aiReady);
+}
+
+/** Kurzer Tag (2A, 04.11.2026): den heutigen Wörter-Plan einmal verkleinern (ca. 5 Minuten). Liefert die neuen Minuten oder `null`. Nachgeladen. */
+export async function shrinkToday(writer: Writer, nowMs: number): Promise<number | null> {
+  const { shrinkToday: run } = await import('./data/shrink');
+  return run(writer, nowMs);
 }
 
 /** V3: Bildschirme der neuen Lernrunde, nur nachgeladen (nie statisch, Ladezeit-Test). Der Bereich Wörter hängt sie hinter `vcfg.mod = 1` ein. */

@@ -118,4 +118,8 @@ export const kernDe = {
   restDow7: 'So',
   assessNewTitle: 'Claude hat dich am {date} neu eingeschätzt',
   assessNewNow: '{dim} jetzt {now} (vorher {before})',
+  shortDayGo: 'Heute nur kurz: ca. 10 Minuten',
+  shortDayLeft_one: 'Geht diese Woche noch einmal.',
+  shortDayLeft_other: 'Geht diese Woche noch {n}-mal.',
+  shortDayOn: 'Kurzer Tag: ca. 10 Minuten. Schaffst du ihn, hält die Serie.',
 };

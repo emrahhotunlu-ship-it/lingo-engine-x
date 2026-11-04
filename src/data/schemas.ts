@@ -201,6 +201,8 @@ export const profileSchema = z.looseObject({
   vac: loose,
   /** Neu (Großpaket B10, Ruhetag wählen): 1 = Montag … 7 = Sonntag; fehlt = frei. Nur Anzeige auf Heute, die Serienregel liest ihn nie. */
   restDow: loose,
+  /** Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026), additiv: `{ 'JJJJ-MM-TT': 1 }` je Tag mit verkürztem Tagesweg (höchstens zwei je Kalenderwoche). Nur ergänzt, nie gelöscht. */
+  kt: loose,
   dk: loose, // S1-DIKTAT: Diktat-Probe (streng: dkSchema)
 });
 

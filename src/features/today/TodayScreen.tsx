@@ -32,6 +32,7 @@ import { requestStart } from './startRun';
 import { flush, usePending } from '../progress/persist';
 import { useToday, type TodayView } from './state';
 import { healToday, retryPlan } from './store';
+import { ShortDayLink } from './ShortDayLink';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
@@ -495,7 +496,8 @@ export function TodayScreen() {
         </motion.div>
       )}
       {ok && !done && (
-        <motion.div variants={item}>
+        <motion.div variants={item} className="flex flex-col gap-3">
+          {!welcome && <ShortDayLink view={sum} />}
           <GoalLink />
         </motion.div>
       )}

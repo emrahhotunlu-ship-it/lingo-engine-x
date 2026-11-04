@@ -1,9 +1,16 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, openProfile, openSettings, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Großpaket B10 (Emrahs Wahl 03.11.2026): „Urlaub ankündigen“ in den Einstellungen und die Seite „So funktioniert’s“ aus dem Profil-Blatt.
 // Seed-Lerntag 20.09.2026 (Sonntag).
+
+type Doc = Record<string, unknown>;
+const SEED_PROFILE = (JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>)['app/profile'] as Doc;
+/** Der Seed hat am 20.09. schon gelernt; für den kurzen Tag ein unberührter Tag: ohne Aktivität und ohne gespeicherten Plan von heute. */
+const without = (k: string): Doc => Object.fromEntries(Object.entries((SEED_PROFILE[k] ?? {}) as Doc).filter(([d]) => d !== '2026-09-20'));
+const UNTOUCHED: Doc = { days: without('days'), xpDays: without('xpDays'), minutes: without('minutes'), act: without('act'), plan: null };
 
 for (const vp of [
   { name: 'Handy', width: 390, height: 844 },
@@ -66,6 +73,41 @@ for (const vp of [
       await expect.poll(async () => ((await dump(page))['app/profile'] as { restDow?: number }).restDow).toBe(3);
       await page.keyboard.press('Escape');
       await expect(note).toHaveCount(0);
+      expect(errors).toEqual([]);
+    });
+
+    // Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026): nur solange heute nichts angefasst ist, höchstens zweimal je Woche; Pflicht und
+    // Serie bleiben (dieselben Schritte, kleiner). Seed-Lerntag 20.09.2026 (Sonntag: Schritt 3 ist der Wochen-Check und behält 5 Minuten).
+    test('Kurzer Tag: einmal antippen → Tagesweg ca. 10 Minuten, kt im Profil, Wörter-Plan kleiner, Link danach weg', async ({ page }) => {
+      // Wie bei Emrah: die Wörter-App schaltet sich selbst ein; erst danach tippen (sie übernimmt die Karten einige Sekunden nach dem Start).
+      const { errors } = await boot(page, { migrated: true, vocabAuto: true, fake: { patch: { 'app/profile': UNTOUCHED } } });
+      await screen(page, 'today');
+      await expect
+        .poll(async () => ((await dump(page))['app/schema'] as { vocabModule?: { state?: string } } | undefined)?.vocabModule?.state, { timeout: 20_000 })
+        .toBe('done');
+      const go = page.getByTestId('short-day-go');
+      await expect(go).toBeVisible();
+      await expect(page.getByTestId('short-day')).toContainText('noch 2-mal');
+      await go.click();
+      await expect(page.getByTestId('short-day-on')).toBeVisible();
+      await expect(go).toHaveCount(0);
+      const d = await dump(page);
+      const prof = d['app/profile'] as { kt?: Record<string, number>; plan?: { u?: { kt?: number; min?: number; goalMin?: number; b?: unknown[][] } } };
+      expect(prof.kt).toEqual({ '2026-09-20': 1 });
+      expect(prof.plan?.u?.kt).toBe(1);
+      expect(prof.plan?.u?.goalMin).toBe(10);
+      expect(prof.plan?.u?.b?.map((b) => b[2])).toEqual([5, 3, 5]);
+      // Die Wörter-Runde friert den heutigen Wörter-Plan mit ca. 5 Minuten ein (statt 10).
+      await page.getByTestId('start').click();
+      await expect.poll(async () => ((await dump(page))['vmod/day'] as { min?: number } | undefined)?.min ?? 99, { timeout: 15_000 }).toBeLessThanOrEqual(7);
+      expect(errors).toEqual([]);
+    });
+
+    test('Kurzer Tag: nach zwei kurzen Tagen in dieser Woche kein Link mehr', async ({ page }) => {
+      const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { ...UNTOUCHED, kt: { '2026-09-14': 1, '2026-09-16': 1 } } } } });
+      await screen(page, 'today');
+      await expect(page.getByTestId('today-goal-change')).toBeVisible();
+      await expect(page.getByTestId('short-day-go')).toHaveCount(0);
       expect(errors).toEqual([]);
     });
   });
