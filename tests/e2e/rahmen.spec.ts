@@ -378,12 +378,11 @@ for (const [width, height] of [
   });
 }
 
-test('Ohne KI (1440 px): der Platzhalter der Kontextspalte nennt Claude nicht, die Bühne ist bei 1280 px mindestens 640 px breit', async ({ browser }) => {
+test('Ohne KI (1440 px): eine leere Kontextspalte wird nicht gezeigt (B-Rest 04.11.2026, kein Platzhalter), die Bühne ist bei 1280 px mindestens 640 px breit', async ({ browser }) => {
   const { page, errors, close } = await at(browser, 1440, 900, { capabilities: { sample: false } });
-  // Auf Heute steht die Woche in der Spalte (D2); der Platzhalter erscheint auf einem anderen Reiter.
+  // Auf Heute steht die Woche in der Spalte (D2); auf einem anderen Reiter ohne Inhalt bleibt die Spalte weg.
   await openTab(page, 'vocab');
-  await expect(page.getByTestId('context-empty')).toBeVisible();
-  await expect(page.getByTestId('context-empty')).not.toContainText('Claude');
+  await expect(page.getByTestId('context-empty')).toBeHidden();
   await page.setViewportSize({ width: 1280, height: 800 });
   await expect.poll(async () => (await boxOf(page, 'stage')).width).toBeGreaterThanOrEqual(640);
   expect(errors).toEqual([]);

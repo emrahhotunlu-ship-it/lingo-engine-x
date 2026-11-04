@@ -3,7 +3,7 @@ import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
 import { loadSnapshot } from '../../data/snapshot';
 import { translate } from '../../i18n';
-import { loadAutoSwitch, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
+import { loadAutoSwitch, registerCatchUp, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { toast } from '../../ui/Toast';
@@ -50,23 +50,28 @@ function moduleOn(): boolean {
   return s.status === 'ready' && vocabModuleOn(s.docs['app/profile']) && !s.invalid['app/profile'];
 }
 
-function catchUp(): void {
+async function runCatchUp(): Promise<unknown> {
   const writer = getWriter();
-  if (!writer) return;
-  void startCatchUpOnce(async () => {
-    try {
-      const sw = await loadAutoSwitch();
-      return await sw.startCatchUp(writer, read, Date.now());
-    } catch (err) {
-      logError('vocab:catchup', err, 'Start');
-      return null;
-    }
-  });
+  if (!writer) return null;
+  try {
+    const sw = await loadAutoSwitch();
+    return await sw.startCatchUp(writer, read, Date.now());
+  } catch (err) {
+    logError('vocab:catchup', err, 'Start');
+    return null;
+  }
+}
+
+function catchUp(): void {
+  if (!getWriter()) return;
+  void startCatchUpOnce(runCatchUp);
 }
 
 /** Beim Start des Bereichs Wörter einhängen (`boot`). Läuft höchstens einmal je App-Start. */
 export function installAutoSwitch(): void {
   if (started) return;
+  // Startet eine Wörter-Runde vor dem ersten Abgleich, stößt sie das Nachholen selbst an (`catchUpDone`).
+  registerCatchUp(runCatchUp);
   const check = () => {
     if (started) return;
     if (moduleOn()) {

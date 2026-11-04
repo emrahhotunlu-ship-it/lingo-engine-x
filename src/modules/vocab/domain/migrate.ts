@@ -252,12 +252,14 @@ export function catchUp(lex0: Lex, doc: Record<string, unknown>, path: string, l
         doneDay.u.add(day);
       }
       if (isFreeGood(r.form, outcomeOf(g), r.hint) && day !== lex.intro && !lex.ev.f.includes(day)) lex.ev.f = [...lex.ev.f, day].slice(-EV_F_MAX);
-      lex.day = day;
+      // Nie zurück (data-guard 04.11.2026): hat die neue App das Wort heute schon gebucht, bleibt „heute erledigt“ stehen.
+      if (!lex.day || day > lex.day) lex.day = day;
       applied++;
     } else if (!doneDay.u.has(day)) {
       lex.u = book(lex.u, g, r.t, 0.9).track;
       doneDay.u.add(day);
-      lex.day = day;
+      // Nie zurück (data-guard 04.11.2026): hat die neue App das Wort heute schon gebucht, bleibt „heute erledigt“ stehen.
+      if (!lex.day || day > lex.day) lex.day = day;
       applied++;
     }
   }

@@ -7,6 +7,7 @@ import { catchUp, convertDoc, type LogEntry } from '../domain/migrate';
 import type { DupePair } from '../domain/dupes';
 import { DEFAULT_CFG } from '../domain/types';
 import { deviceId } from './device';
+import { VOCAB_LOCK_PATH } from '../registry';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.1–9.4): der Kleber zwischen Einstellungen › Wortschatz und der Umrechnung. Nachgeladen
 // (api.loadSwitch), nie in der Einstiegsdatei. Lesen und Sicherung macht der Aufrufer (src/features/settings), hier wird nur gerechnet und
@@ -285,5 +286,18 @@ export async function startCatchUp(writer: Writer, read: () => Promise<SwitchRea
   if (!vcfg || vcfg.mod !== 1) return null;
   const st = fromRead(snap, nowMs);
   if (!migrationDone(st.schema) || !st.profileValid || st.truncated) return null;
+  // Nur bei Offenem die kurze Sperre holen (data-guard 04.11.2026): zwei Tabs/Geräte zugleich buchten dieselben alten Antworten sonst doppelt.
+  let open = false;
+  for (const [path, doc] of st.input.docs) {
+    if (!CARD.test(path)) continue;
+    const lex = lexOf(doc);
+    if (!isObj(doc.lex) || (lex && typeof doc.last === 'number' && doc.last > lex.sync)) {
+      open = true;
+      break;
+    }
+  }
+  if (!open) return null;
+  const lock = await writer.acquire(VOCAB_LOCK_PATH, { holder: lockHolder(), ttlMs: 30_000 });
+  if (!lock.acquired) return null;
   return catchUpAll(writer, st.input.docs, st.input.logs, nowMs);
 }

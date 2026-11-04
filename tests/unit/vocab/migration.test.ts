@@ -287,4 +287,12 @@ describe('Rückweg über lex.sync (plan.md §9.4)', () => {
     const hist = Array.from({ length: 12 }, (_, k) => ({ t: 5000 + k * 86_400_000, g: 3, x: 'cloze' }));
     expect(catchUp(lex, { last: hist[11]!.t, hist }, 'vocab/x').incomplete).toBe(true);
   });
+  it('neue App hat heute gebucht, nachgeholte alte Antwort von gestern: „heute erledigt“ (lex.day) bleibt heute (data-guard 04.11.2026)', async () => {
+    const { catchUp } = await import('../../../src/modules/vocab/domain/migrate');
+    const t0 = Date.parse('2026-11-03T09:00:00Z');
+    const lex = { ...emptyLex('w', 'edge', 1), intro: '2026-10-01', sync: t0 - 86_400_000, day: '2026-11-04' };
+    const r = catchUp(lex, { last: t0, hist: [{ t: t0, g: 3, x: 'cloze' }] }, 'vocab/x');
+    expect(r.applied).toBe(1);
+    expect(r.lex.day).toBe('2026-11-04');
+  });
 });

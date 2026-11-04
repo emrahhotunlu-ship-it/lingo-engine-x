@@ -281,7 +281,8 @@ describe('Nachholen bei jedem Start (Emrah 04.11.2026: vormittags in der alten A
   it('Wörter-App an, alte App hat geantwortet → Antwort übernommen, Wort heute erledigt (lex.day); zweiter Start ändert nichts', async () => {
     const h = createMemoryDb({ seed: all() });
     const w = createWriter(h.db);
-    await enableModule(w, stateOf(h.dump()).input, guards);
+    // Gleicher Tab wie die Umrechnung (dieselbe Sperre gehört ihm).
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: lockHolder() });
     const d = h.dump() as Record<string, Doc>;
     const lex0 = lexOf(d['vocab/deadline'])!;
     const t = NOW + 2 * DAY;
@@ -295,8 +296,23 @@ describe('Nachholen bei jedem Start (Emrah 04.11.2026: vormittags in der alten A
     expect(lex1.u.reps).toBe(lex0.u.reps + 1);
     expect(lex1.day).toBe(new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date(t - 4 * 3_600_000)));
     const n = h.writes().length;
-    expect(await startCatchUp(w, readOf(h), t + 2000)).toEqual({ docs: 0, applied: 0, added: 0, incomplete: [] });
+    // Nichts mehr nachzuholen: nichts gebucht, nichts geschrieben (nicht umrechenbare Altkarten bleiben ein Leerlauf).
+    expect((await startCatchUp(w, readOf(h), t + 2000))?.applied ?? 0).toBe(0);
     expect(h.writes().length).toBe(n);
+  });
+
+  it('anderer Tab hält die Sperre → nichts nachgeholt, nichts gebucht (keine Doppelbuchung, data-guard 04.11.2026)', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: 'dother-tab9' });
+    const d = h.dump() as Record<string, Doc>;
+    const t = NOW + 2 * DAY;
+    const old = d['vocab/deadline']!;
+    d['vocab/deadline'] = { ...old, last: t, hist: [...((old.hist as unknown[]) ?? []), { t, g: 3, x: 'type' }] };
+    h.load(d);
+    const before = lexOf((h.dump() as Record<string, Doc>)['vocab/deadline']);
+    expect(await startCatchUp(w, readOf(h), t + 1000)).toBeNull();
+    expect(lexOf((h.dump() as Record<string, Doc>)['vocab/deadline'])).toEqual(before);
   });
 
   it('Wörter-App aus, Umrechnung offen oder gekappt → läuft nicht, schreibt nichts', async () => {
