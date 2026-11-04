@@ -30,7 +30,7 @@ export const vmDe = {
   vmWhyTypo: 'Nur ein Tippfehler, das Wort kanntest du. Achte auf die Schreibweise von {answer}.',
   vmWhyTypoAn: 'a oder an richtet sich nach dem Laut: an vor Vokal-Laut (an hour), a vor Konsonant-Laut (a user).',
   vmWhySpell: 'Typischer Fehler bei Deutschsprachigen, kein Vertipper. Schreibweise bewusst merken: {answer}.',
-  vmWhyInfl: 'Richtiges Wort, falsche Form. Der Satz verlangt {answer}: Achte auf Zeit, Einzahl/Mehrzahl, Form.',
+  vmWhyInfl: 'Richtiges Wort, falsche Form: {given} → {answer}. Der Satz verlangt genau diese Form.',
   vmWhyInflArticle: 'Die Wörter stimmen, der Artikel nicht (a/an, the oder keiner). Hier oft anders als im Deutschen.',
   vmWhyHyphPos: 'Getrennt oder mit Bindestrich ist hier ein anderes Wort: to follow up (Verb), a follow-up (Nomen). Gesucht: {pos}.',
   vmWhyHyphNoPos: 'Getrennt oder mit Bindestrich ist hier ein anderes Wort: to follow up (Verb), a follow-up (Nomen). Richtig: {answer}.',
@@ -48,8 +48,8 @@ export const vmDe = {
   vmWhyOrder: 'Bei Phrasal Verbs steht ein Pronomen (it, them) in der Mitte: set it up, nie set up it.',
   vmWhyWrong: 'Gesucht war {answer} = {de} ({pos}).',
   vmWhyWrongNoPos: 'Gesucht war {answer} = {de}.',
-  vmWhyDunno: 'Besser als raten. {answer} = {de} ({pos}). Schreib es gleich einmal richtig – so bleibt es hängen.',
-  vmWhyDunnoNoPos: 'Besser als raten. {answer} = {de}. Schreib es gleich einmal richtig – so bleibt es hängen.',
+  vmWhyDunno: 'Kein Problem – jetzt lernst du es richtig: {answer} = {de} ({pos}). Schreib es einmal richtig, dann bleibt es hängen.',
+  vmWhyDunnoNoPos: 'Kein Problem – jetzt lernst du es richtig: {answer} = {de}. Schreib es einmal richtig, dann bleibt es hängen.',
 
   // Wortart
   vmPos_noun: 'Nomen',

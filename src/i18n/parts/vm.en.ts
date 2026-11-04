@@ -30,7 +30,7 @@ export const vmEn = {
   vmWhyTypo: 'Just a typo. You knew the word. Watch the spelling of {answer}.',
   vmWhyTypoAn: 'a vs. an depends on the sound: an before a vowel sound (an hour), a before a consonant sound (a user).',
   vmWhySpell: 'A classic error for German speakers, not a slip. Lock in the spelling: {answer}.',
-  vmWhyInfl: 'Right word, wrong form. The sentence needs {answer}: check tense, singular/plural, form.',
+  vmWhyInfl: 'Right word, wrong form: {given} → {answer}. The sentence needs exactly this form.',
   vmWhyInflArticle: "The words are right, the article isn't (a/an, the, or none). English often differs from German here.",
   vmWhyHyphPos: 'Spacing changes the word type: to follow up (verb), a follow-up (noun). You need the {pos} here.',
   vmWhyHyphNoPos: 'Spacing changes the word type: to follow up (verb), a follow-up (noun). Correct: {answer}.',
@@ -48,8 +48,8 @@ export const vmEn = {
   vmWhyOrder: 'With phrasal verbs, a pronoun (it, them) goes in the middle: set it up, never set up it.',
   vmWhyWrong: 'You needed {answer} = {de} ({pos}).',
   vmWhyWrongNoPos: 'You needed {answer} = {de}.',
-  vmWhyDunno: 'Better than guessing. {answer} = {de} ({pos}). Type it once correctly now – that’s what makes it stick.',
-  vmWhyDunnoNoPos: 'Better than guessing. {answer} = {de}. Type it once correctly now – that’s what makes it stick.',
+  vmWhyDunno: 'No problem – now you learn it properly: {answer} = {de} ({pos}). Type it once correctly, and it will stick.',
+  vmWhyDunnoNoPos: 'No problem – now you learn it properly: {answer} = {de}. Type it once correctly, and it will stick.',
 
   // Word type
   vmPos_noun: 'noun',
