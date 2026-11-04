@@ -8,3 +8,8 @@ declare module 'virtual:content/loaders' {
   /** Mehr-Datei-Build: Dateiname je Bündel (flach, neben dem Skript); im Einzeldatei-Build `null`. */
   export const remote: Record<string, string> | null;
 }
+/** Großpaket C (P9): Schlüssel (Pfad unter src/) → Dateiname der nachgeladenen Rohtext-Datei; leer im Einzeldatei-Build und in Tests. */
+declare module 'virtual:lx-raw-list' {
+  const list: Record<string, string>;
+  export default list;
+}

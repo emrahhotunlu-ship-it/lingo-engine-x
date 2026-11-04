@@ -5,6 +5,8 @@ import { App } from './app/App';
 import { initDiagnostics, logContext, logError, logWarn } from './platform/diagnostics';
 import { applyDocumentSettings, resolveTheme, useSettings } from './app/settings';
 import { startC1xPreload } from './features/c1x/ready';
+import { loadRawTexts } from './content/store/rawText';
+import { ensureLang } from './i18n';
 
 /** Komponenten-Stapel kurz fürs Protokoll. */
 const stackOf = (info: { componentStack?: string | null }): string => (info.componentStack ?? '').split('\n').slice(0, 6).join(' ‹ ').replace(/\s+/g, ' ').trim();
@@ -19,7 +21,11 @@ async function boot(): Promise<void> {
     const { installFakeRuntime, optionsFromUrl } = await import('./platform/dev/install');
     installFakeRuntime(optionsFromUrl(window.location.search));
   }
+  // Großpaket C (P9): die großen Inhalte (Mehr-Datei-Build) sofort parallel nachladen; das Startbild wartet nicht darauf.
+  void loadRawTexts();
   const s = useSettings.getState();
+  // Großpaket C: Startet die App auf Englisch, erst das englische Wörterbuch laden (sonst kurz Deutsch).
+  if (s.lang !== 'de') await ensureLang(s.lang);
   applyDocumentSettings(s.lang, resolveTheme(s.theme, window.matchMedia('(prefers-color-scheme: light)').matches), s.accent);
   const root = document.getElementById('root');
   if (!root) throw new Error('#root fehlt');

@@ -1,6 +1,6 @@
 import type { MessageKey } from './de';
 import { ttEn } from './parts/tt.en';
-import { lp3En } from './lp3';
+import { lp3En } from './lp3en';
 import { aiEn } from './parts/ai.en';
 import { learnEn } from './parts/learn.en';
 import { speakEn } from './parts/speak.en';

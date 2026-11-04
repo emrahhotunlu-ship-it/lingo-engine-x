@@ -31,7 +31,7 @@ export default defineConfig(({ command }) => {
   return {
     define: { __LX_BUILD__: JSON.stringify(BUILD_ID) },
     // bootFirst (U2) steht NACH viteSingleFile: es schiebt das eingebettete Skript hinter das Start-Bild (scripts/vite-boot-first.mjs).
-    plugins: [contentStore({ multi: MULTI }), rawJsonZip(), react(), tailwindcss(), ...(MULTI ? [] : [viteSingleFile({ removeViteModuleLoader: true }), bootFirst()])],
+    plugins: [contentStore({ multi: MULTI }), rawJsonZip({ multi: MULTI }), react(), tailwindcss(), ...(MULTI ? [] : [viteSingleFile({ removeViteModuleLoader: true }), bootFirst()])],
     build: {
       target: ['es2022', 'safari16'],
       outDir: 'dist',

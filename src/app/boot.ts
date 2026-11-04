@@ -1,3 +1,4 @@
+import { useRawReady } from '../content/store/rawText';
 import { useEffect } from 'react';
 import { getDb, initCapabilities, useCapabilities } from '../platform/capabilities';
 import { startDayLive, startLive, useLive } from '../data/live';
@@ -125,11 +126,13 @@ export function useScreen(): Screen {
   const overlay = useNav((s) => s.overlay !== null);
   // Gepackte c1x-Inhalte (nur wenn eine Aufgabenart eingeschaltet ist): der Rundenbau ist synchron und liest nur, was geladen ist.
   const c1xReady = useC1xReady();
+  // Großpaket C (P9): Ohne die nachgeladenen Inhalte bleibt der Rahmen beim Startbild (kein Bildschirm, kein Tagesplan – W6).
+  const rawReady = useRawReady((s) => s.ready);
   if (db === 'absent') return 'nodb';
   if (status === 'error') return 'offline';
   // Relaunch P6 (Nr. 6): kein globales Warten mehr auf alles. „Rahmen bereit“ = Datenbank und Abos; die Reiter (Heute zuerst) erscheinen
   // ohne die gepackten c1x-Inhalte. „Bereich bereit“: Nur Übungen und Unterseiten (dort werden Aufgaben gebaut) warten auf sie.
-  if (db === 'pending' || status !== 'ready') return 'loading';
+  if (db === 'pending' || status !== 'ready' || !rawReady) return 'loading';
   if (!c1xReady && (overlay || kindOf(route.name) !== 'tab')) return 'loading';
   const migrated = !!schema && !schemaInvalid && typeof schema.version === 'number' && schema.version >= 1;
   return migrated ? route.name : 'migration';
