@@ -8,6 +8,9 @@ import { wordBank } from './wordBank';
 import { explainAnswerV2 } from './explainAnswerV2';
 import { sentenceClinic } from './sentenceClinic';
 import { c1Mail } from './c1Mail';
+import { applyReply } from './applyReply';
+import { applySummary } from './applySummary';
+import { applyKeypoints } from './applyKeypoints';
 import { grammarItems } from './grammarItems';
 import { grammarFit } from './grammarFit';
 import { grammarJudge } from './grammarJudge';
@@ -91,6 +94,10 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   sentenceClinic,
   // Lernplattform 3.0 P47: Schreibwerkstatt (Wochen-Mail)
   c1Mail,
+  // Fokus 2.0 F3 Anwenden (docs/umbau/fokus2/anwenden-plan.md): auf eine Mail antworten, Artikel zusammenfassen (mit festen Kernpunkten)
+  applyReply,
+  applySummary,
+  applyKeypoints,
   // Lernplattform 3.0 P52: Wörter-Tutor (neue Sätze und Kontrast für schwache Wörter)
   wordCtx,
   // Tutor-Engine S4 (E6): Satzbank je Karte (Quarantäne in `domain/tutor/sentenceBank.ts`)

@@ -80,7 +80,15 @@ export type UnitMeta = {
   c1?: 'check';
   /** Plan 3.0, additiv: Kennung des nächsten Ziels (`nextGoal`), beim Anlegen eingefroren (höchstens 24 Zeichen). */
   nx?: string;
+  /**
+   * Fokus 2.0 F3 (Anwenden), additiv: Disziplin von Schritt 3 an diesem Tag, beim Anlegen aus dem Zähler `app/profile.apc` eingefroren und nie neu gewürfelt.
+   * Ältere Versionen lesen es nicht und starten den eigenen Satz wie bisher.
+   */
+  ap?: ApplyDiscipline;
 };
+
+/** Disziplinen von Schritt 3 „Anwenden“ (F3): eigener Satz, auf eine Mail antworten, eine Mail schreiben, einen Artikel zusammenfassen. */
+export type ApplyDiscipline = 'combo' | 'reply' | 'write' | 'summary';
 
 export type DutyState = { id: DutyId; state: 'done' | 'open'; progress: { done: number; total: number } | null };
 

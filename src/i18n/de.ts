@@ -27,6 +27,7 @@ import { patternsDe } from './parts/patterns.de';
 import { teacherDe } from './parts/teacher.de';
 import { nbShDe } from './parts/nbSh.de';
 import { readMessages } from '../modules/read/registry';
+import { applyMessages } from '../modules/apply/registry';
 import { nbHeuteDe } from './parts/nbHeute.de';
 import { kernDe } from './parts/kern.de';
 import { nbLernenDe } from './parts/nbLernen.de';
@@ -98,6 +99,8 @@ export const de = {
   ...nbShDe,
   // Lesen (13.10.2026): Texte des Moduls, Präfix `rd`
   ...readMessages.de,
+  // Anwenden (F3, 04.11.2026): Texte des Moduls, Präfix `ax`
+  ...applyMessages.de,
   ...nbHeuteDe,
   ...kernDe,
   ...nbLernenDe,

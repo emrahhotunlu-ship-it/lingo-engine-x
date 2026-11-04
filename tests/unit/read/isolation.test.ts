@@ -129,7 +129,9 @@ describe('Lesen-Modul: Isolation', () => {
     expect(bad).toEqual([]);
     // Wächst diese Liste, ist ein weiteres Fremdfile vom Modul abhängig: bewusst entscheiden und Plan §5.4 nachziehen.
     // L3: dazu src/areas/index.ts (index), src/i18n/de.ts und en.ts (registry: readMessages), src/data/snapshot.ts und reads.ts (registry: träge Sammlung, Zählung, Sicherung).
-    expect([...touching].sort()).toEqual(['src/areas/index.ts', 'src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/i18n/de.ts', 'src/i18n/en.ts', 'src/prompts/registry.ts']);
+    // F3 Anwenden: src/modules/apply/sharedUi.ts liest den neuesten Artikel (registry: loadRecentArticle) als Material für „Artikel zusammenfassen“.
+    expect([...touching].sort()).toEqual(['src/areas/index.ts', 'src/data/paths.ts', 'src/data/reads.ts', 'src/data/snapshot.ts', 'src/i18n/de.ts', 'src/i18n/en.ts', 'src/modules/apply/sharedUi.ts', 'src/prompts/registry.ts']);
+    expect(new Set(importsOf(readFileSync(join(ROOT, 'src/modules/apply/sharedUi.ts'), 'utf8')).filter((s) => s.includes('read/')))).toEqual(new Set(['../read/registry']));
   });
 
   it('der Rest der App liest nichts aus dem Modul außer über registry (Schema, Vorlagen)', () => {

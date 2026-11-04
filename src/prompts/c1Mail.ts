@@ -61,7 +61,7 @@ const TONE_ALIASES: ReadonlyArray<[RegExp, ToneFit]> = [
   [/^too[\s_-]?(informal|casual|relaxed|chatty)$/, 'too-informal'],
   [/^too[\s_-]?(stiff|formal|rigid|stilted|wordy)$/, 'too-stiff'],
 ];
-const toneFit = (v: unknown): unknown => {
+export const toneFit = (v: unknown): unknown => {
   if (typeof v !== 'string') return v;
   const s = v.trim().toLowerCase();
   for (const [re, out] of TONE_ALIASES) if (re.test(s)) return out;

@@ -31,6 +31,7 @@ import { healDay } from '../today/store';
 import { syncTodayDoc } from '../today/startDoc';
 import { startSession } from '../vocab/session';
 import { EMPTY_RUN, useUnitRun, type UnitRun, type UnitVia } from './runStore';
+import { applyCountPatch } from '../../modules/apply/registry';
 
 // Die Tageseinheit als Kette im Player (plan.md §1.5, N10; architektur.md §2.7):
 // - Ein Tipp auf der Tageskarte startet den ersten offenen Block (montags erst die Bestätigungskarte).
@@ -260,12 +261,22 @@ export function continueUnit(api: FocusApi): void {
 let fieldsChain: Promise<unknown> = Promise.resolve();
 
 /** Block als erledigt zählen: sofort sichtbar, dann `act[tag]['u-…'] = 1` und Selbstheilung der Pflicht. */
+/**
+ * Fokus 2.0 F3 (Nachtrag learning-scientist Muss 4): Schritt 3 „Anwenden“ zum ersten Mal an diesem Tag erledigt → Zähler `apc` der Anwenden-Tage +1 (im
+ * selben Patch wie `act[Tag]['u-task']`, auf dem frischen Stand). Ein kurzer Tag zählt nicht (die Disziplin wandert zum nächsten vollen Tag).
+ */
+function withApplyCount(cur: Readonly<Record<string, unknown>>, day: string, key: string, patch: Record<string, unknown> | null): Record<string, unknown> | null {
+  if (!patch || key !== 'u-task') return patch;
+  const apc = applyCountPatch(cur, day);
+  return apc ? { ...patch, ...apc } : patch;
+}
+
 export function markBlockDone(day: string, duty: string): void {
   const key = unitActKey(duty);
   if (!key) return;
   markUnitLocal(day, key);
   fieldsChain = fieldsChain
-    .then(() => recordProfileFields('unit:done', (cur) => unitDonePatch(cur, day, key)))
+    .then(() => recordProfileFields('unit:done', (cur) => withApplyCount(cur, day, key, unitDonePatch(cur, day, key))))
     .then((ok) => {
       if (!ok) logWarn('unit:done', { code: 'not_saved', message: `${key} nicht gespeichert – wird nachgeholt` }, 'app/profile');
       return healDay(day);
