@@ -189,11 +189,22 @@
       "_sources": {
         "basis": 2200,
         "zuwachs": {}
+      },
+      "src/i18n/en.ts": {
+        "basis": 80000,
+        "zuwachs": {},
+        "paket": "Großpaket C: Englisch erst bei Bedarf"
       }
     },
     "lazyNeu": 150000,
     "bin": 500000,
-    "files": 99
+    "files": 99,
+    "binEinzeln": {
+      "raw-atlas": {
+        "bytes": 560000,
+        "freigabe": "Hauptsitzung 04.11.2026: Großpaket C – der Wort-Atlas ist EINE JSON-Datei (Wortfelder), wird erst beim Öffnen der Wortlandkarte nachgeladen; vorher stand er in der Einstiegsdatei"
+      }
+    }
   },
   "vorab": {
     "P1 S1-TOK": {

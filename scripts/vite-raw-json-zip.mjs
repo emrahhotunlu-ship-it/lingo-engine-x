@@ -9,7 +9,7 @@
 // Importe (direkt und `import.meta.glob`) im Quelltext; die Liste liefert das virtuelle Modul `virtual:lx-raw-list`.
 import { createHash } from 'node:crypto';
 import { globSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { basename, dirname, join, relative, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { deflateRawSync } from 'node:zlib';
 
 const MIN_BYTES = 12_000;

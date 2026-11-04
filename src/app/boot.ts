@@ -128,8 +128,10 @@ export function useScreen(): Screen {
   const c1xReady = useC1xReady();
   // Großpaket C (P9): Ohne die nachgeladenen Inhalte bleibt der Rahmen beim Startbild (kein Bildschirm, kein Tagesplan – W6).
   const rawReady = useRawReady((s) => s.ready);
+  // Konnten die Inhalte nicht geladen werden: nicht ewig das Startbild, sondern „Verbindung unterbrochen“ mit Neu laden.
+  const rawFailed = useRawReady((s) => s.failed);
   if (db === 'absent') return 'nodb';
-  if (status === 'error') return 'offline';
+  if (status === 'error' || (rawFailed && !rawReady)) return 'offline';
   // Relaunch P6 (Nr. 6): kein globales Warten mehr auf alles. „Rahmen bereit“ = Datenbank und Abos; die Reiter (Heute zuerst) erscheinen
   // ohne die gepackten c1x-Inhalte. „Bereich bereit“: Nur Übungen und Unterseiten (dort werden Aufgaben gebaut) warten auf sie.
   if (db === 'pending' || status !== 'ready' || !rawReady) return 'loading';

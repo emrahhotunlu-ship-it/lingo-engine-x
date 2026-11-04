@@ -49,9 +49,10 @@ export function formatShortDate(lang: Lang, ms: number): string {
 
 export function translate(lang: Lang, key: MessageKey, vars?: Vars): string {
   // Ein fehlender Schlüssel zeigt sich als er selbst (nie ein leerer Text); `i18nParts.test.ts` prüft, dass jeder benutzte Schlüssel existiert.
-  const template = (dicts[lang] ?? de)[key] ?? key;
+  const dict: Record<MessageKey, string> = dicts[lang] ?? de;
+  const template: string = dict[key] ?? key;
   if (!vars) return template;
-  return template.replace(/\{(\w+)\}/g, (m, name: string) => {
+  return template.replace(/\{(\w+)\}/g, (m: string, name: string) => {
     const v = vars[name];
     if (v === undefined) return m;
     return typeof v === 'number' ? formatNumber(lang, v) : v;

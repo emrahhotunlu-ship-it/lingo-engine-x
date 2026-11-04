@@ -22,7 +22,7 @@ import { MAX_FILES_PER_PUBLISH, WARN_TOTAL_BYTES, mb } from './limits.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 export const MANIFEST = join('.vite', 'manifest.json');
-const BIN_KEY = /^(content-.+)-[0-9a-f]{6,}\.txt$/;
+const BIN_KEY = /^((?:content|raw)-.+)-[0-9a-f]{6,}\.txt$/;
 
 /** Gepackte Größe in Byte (gzip, Standardstufe). */
 export const gz = (buf) => gzipSync(buf).length;
@@ -130,7 +130,8 @@ export function evaluate(m, budget) {
       notes.push(`Neues nachgeladenes Stück ${key} (${piece.file}): gilt die Grenze für neue Stücke (lazyNeu); bitte mit Paketname in budget.json unter grenzen.lazy eintragen`);
     }
   }
-  for (const [key, piece] of Object.entries(m.bin)) row(`bin ${key}`, piece.gz, g.bin ?? 0);
+  // Einzelne Rohtext-Dateien dürfen mit Freigabe größer sein (`grenzen.binEinzeln.<schlüssel> = {bytes, freigabe}`), z. B. eine einzelne große JSON-Datei.
+  for (const [key, piece] of Object.entries(m.bin)) row(`bin ${key}`, piece.gz, g.binEinzeln?.[key]?.bytes ?? g.bin ?? 0);
   const maxFiles = Math.min(g.files ?? MAX_FILES_PER_PUBLISH, MAX_FILES_PER_PUBLISH);
   rows.push({ name: 'files', gz: m.files, limit: maxFiles, ok: m.files <= maxFiles });
   if (m.files > maxFiles) problems.push(`files: ${m.files} Dateien, Grenze ${maxFiles}`);
