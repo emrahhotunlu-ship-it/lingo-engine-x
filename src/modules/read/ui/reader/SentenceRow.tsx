@@ -19,9 +19,13 @@ export type SentenceRowProps = {
   title: string;
   lang: RdrLang;
   onToggle: (n: number) => void;
+  /** Übersetzung dieses Satzes ist schon gemeldet (`st.rep`). */
+  reported?: boolean;
+  /** „Übersetzung falsch?“ (L2, `st.rep`); fehlt = kein Knopf. */
+  onReport?: (n: number) => void;
 };
 
-function SentenceRowImpl({ sentence, view, revealed, hl, articleId, title, lang, onToggle }: SentenceRowProps) {
+function SentenceRowImpl({ sentence, view, revealed, hl, articleId, title, lang, onToggle, reported = false, onReport }: SentenceRowProps) {
   const { n, e, d } = sentence;
   const st = sentenceState(view, revealed);
   // Aufdecken blendet in 200 ms ein (Kap. 4); der erste Aufbau und das Zudecken bleiben ohne Bewegung.
@@ -53,6 +57,22 @@ function SentenceRowImpl({ sentence, view, revealed, hl, articleId, title, lang,
       <p lang="de" className={`m-0 min-w-0 flex-1 ${st.deFirst ? 'text-base leading-7 text-fg 2xl:text-lg 2xl:leading-8' : 'text-sm text-muted'}`} data-testid="rdr-de">
         {d}
       </p>
+      {onReport &&
+        (reported ? (
+          <span className="shrink-0 pt-1 text-2xs text-subtle" data-testid="rdr-reported">
+            {rdrText(lang, 'rdrReported')}
+          </span>
+        ) : (
+          <button
+            type="button"
+            className="min-h-11 shrink-0 px-1 text-2xs text-subtle underline-offset-2 hover:text-fg hover:underline"
+            aria-label={rdrText(lang, 'rdrReportN', { n })}
+            onClick={() => onReport(n)}
+            data-testid="rdr-report"
+          >
+            {rdrText(lang, 'rdrReport')}
+          </button>
+        ))}
     </div>
   ) : null;
   return (

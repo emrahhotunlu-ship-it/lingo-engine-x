@@ -18,6 +18,8 @@ export const rdDe = {
   rdFetchMore: 'Noch einen Artikel holen',
   rdFetchExtra: 'Noch einen Artikel schreiben lassen',
   rdFetching: 'Claude schreibt … Artikel {n} von {total}',
+  rdGateWarn: 'Du hast schon an {n} Tagen eigene Artikel gespeichert. Ab 400 Tagen holt die App keine neuen eigenen Artikel mehr; deine Artikel bleiben alle erhalten, und Artikel aus dem Tagesauftrag kommen weiter.',
+  rdGateFull: 'Du hast an {n} Tagen eigene Artikel gespeichert – das ist die Obergrenze. Neue eigene Artikel holt die App deshalb nicht mehr; alles Gespeicherte bleibt erhalten, Artikel aus dem Tagesauftrag kommen weiter.',
   rdAllDone: 'Heute alles gelesen',
   rdMore: 'Noch einen Artikel holen (anderes Thema)',
   rdWeek_one: 'Diese Woche: {n} Artikel · {m} Min',

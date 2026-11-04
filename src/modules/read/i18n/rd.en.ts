@@ -17,6 +17,8 @@ export const rdEn = {
   rdFetchExtra: 'Have one more article written',
   rdFetchMore: 'Get one more article',
   rdFetching: 'Claude is writing … article {n} of {total}',
+  rdGateWarn: 'You have saved your own articles on {n} days. From 400 days on, the app won’t fetch new articles of its own; all your articles stay, and articles from the daily routine keep coming.',
+  rdGateFull: 'You have saved your own articles on {n} days – that’s the limit. The app won’t fetch new articles of its own anymore; everything saved stays, and articles from the daily routine keep coming.',
   rdAllDone: 'All read for today',
   rdMore: 'Get one more article (different topic)',
   rdWeek_one: 'This week: {n} article · {m} min',

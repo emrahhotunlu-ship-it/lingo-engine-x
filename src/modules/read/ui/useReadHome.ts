@@ -9,6 +9,8 @@ import { runFetch } from '../run';
 import type { RunFailure, RunResult } from '../run';
 import { suggestTopics } from '../suggest';
 import { CUSTOM_TOPICS_MAX, PER_DAY_MAX } from '../domain/docs';
+import { readDocGate } from '../domain/retention';
+import type { DocGate } from '../shared';
 import { sanitizeCustomTopic } from '../domain/topics';
 import { earlierEntries, entriesOfDay, fetchCount, fetchCountWithRoutine, nextToRead, weekStats } from '../domain/view';
 import { isOwn } from '../domain/routine';
@@ -34,6 +36,10 @@ export type ReadHome = {
   load: LoadState;
   home: Home | null;
   today: string;
+  /** Speicher-Ampel der Lesetage (`ok` · `warn` ab 250 · `full` ab 400). */
+  gate: DocGate;
+  /** Anzahl der Tage mit eigenen Artikeln (`read/d-…`). */
+  dayDocs: number;
   aiOn: boolean;
   entries: IndexItem[];
   next: IndexItem | null;
@@ -118,6 +124,9 @@ export function useReadHome(): ReadHome {
   const next = useMemo(() => nextToRead(entries), [entries]);
   const earlier = useMemo(() => (home ? earlierEntries(home.items, today) : []), [home, today]);
   const week = useMemo(() => (home ? weekStats(home.items, today) : { articles: 0, minutes: 0 }), [home, today]);
+  // L2 (Plan Module P/L): Hinweis ab 250 Lesetagen, ab 400 holt die App keine eigenen neuen Tage mehr (nichts wird gelöscht).
+  const gate: DocGate = home ? readDocGate(home.days.length, docTotal()) : 'ok';
+  const dayDocs = home?.days.length ?? 0;
   const perDay = home?.prefs.perDay ?? 3;
   const routineToday = useMemo(() => entries.filter((e) => !isOwn(e)).length, [entries]);
   const toFetch = fetchCountFor(entries, perDay);
@@ -240,5 +249,5 @@ export function useReadHome(): ReadHome {
     });
   }, [scope, suggestions.state]);
 
-  return { load, home, today, aiOn, entries, next, earlier, week, perDay, routineToday, toFetch, running, outcome, rateLocked, getArticles, stop, toggleTopic, addCustom, removeCustom, setPerDay, suggest, suggestions, reload };
+  return { load, home, today, gate, dayDocs, aiOn, entries, next, earlier, week, perDay, routineToday, toFetch, running, outcome, rateLocked, getArticles, stop, toggleTopic, addCustom, removeCustom, setPerDay, suggest, suggestions, reload };
 }

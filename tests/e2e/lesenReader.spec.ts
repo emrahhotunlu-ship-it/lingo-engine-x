@@ -128,6 +128,16 @@ test.describe('Leser 390 px, Deutsch, dunkel', () => {
     await expect.poll(async () => (await dump(page))['read/p']?.view).toBe('c');
   });
 
+  test('L2: „Übersetzung falsch?“ meldet den Satz einmal in st.rep (nur ergänzend), danach „Gemeldet“; ohne Deutsch kein Knopf', async ({ page }) => {
+    await open(page);
+    await ready(page);
+    await expect(page.getByTestId('rdr-report')).toHaveCount(0);
+    await sentence(page, 3).getByTestId('rdr-marker').click();
+    await sentence(page, 3).getByTestId('rdr-report').click();
+    await expect(sentence(page, 3).getByTestId('rdr-reported')).toBeVisible();
+    await expect.poll(async () => ((await dump(page))['read/m-2026-10']?.items as Array<{ st?: Doc }>)[0]?.st?.rep).toEqual([3]);
+  });
+
   test('gemerkte Ansicht aus read/p wird beim Öffnen benutzt', async ({ page }) => {
     await open(page, { prefs: { v: 1, view: 'c' } });
     await ready(page);

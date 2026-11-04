@@ -74,6 +74,8 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
   const [view, setViewState] = useState<ReadView>(() => viewOf(viewProp));
   const [revealed, setRevealed] = useState<Set<number>>(() => initialRevealed(viewOf(viewProp), model.total));
   const [done, setDone] = useState(state?.done === true);
+  // L2: gemeldete Übersetzungen (`st.rep`, Satznummern). Melden ist eine Handlung → sofort ein Lesestand-Patch (nur ergänzend).
+  const [reported, setReported] = useState<Set<number>>(() => new Set((state?.rep ?? []).map(Number).filter((x) => Number.isFinite(x))));
   const [resumeAt, setResumeAt] = useState<number | null>(() => (!startAt && state?.pos && state.pos > 1 && !state.done && state.pos <= model.total ? state.pos : null));
 
   // ---- Zustand außerhalb des Zeichnens: Zähler, Zwischenstand, aktuelle Rückruf-Funktionen
@@ -87,6 +89,15 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
   useEffect(() => {
     cb.current = { onProgress, autoSpeak, onViewChange, sentences: model.sentences, lessonAnswers };
   });
+  const onReport = useCallback((n: number) => {
+    setReported((prev) => {
+      if (prev.has(n)) return prev;
+      const next = new Set(prev);
+      next.add(n);
+      return next;
+    });
+    cb.current.onProgress?.({ rep: [n] });
+  }, []);
   const barRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -312,7 +323,7 @@ export function ReaderView({ article, state = null, view: viewProp = null, autoS
           {model.paragraphs.map((para) => (
             <ol key={para[0]?.n} start={para[0]?.n} className="m-0 flex list-none flex-col p-0">
               {para.map((s) => (
-                <SentenceRow key={s.n} sentence={s} view={view} revealed={revealed.has(s.n)} hl={marks.get(s.n) ?? null} articleId={article.id} title={article.title} lang={lang} onToggle={onToggle} />
+                <SentenceRow key={s.n} sentence={s} view={view} revealed={revealed.has(s.n)} hl={marks.get(s.n) ?? null} articleId={article.id} title={article.title} lang={lang} onToggle={onToggle} reported={reported.has(s.n)} onReport={onProgress ? onReport : undefined} />
               ))}
             </ol>
           ))}

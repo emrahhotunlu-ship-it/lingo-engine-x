@@ -198,6 +198,11 @@ function TodayCard({ h }: { h: ReadHome }) {
         </ul>
       )}
       {!empty && !h.aiOn && <p className="m-0 text-sm text-muted">{t('rdAiOff')}</p>}
+      {h.gate !== 'ok' && (
+        <p className="m-0 text-sm text-muted" role="status" data-testid="read-gate" data-gate={h.gate}>
+          {t(h.gate === 'full' ? 'rdGateFull' : 'rdGateWarn', { n: h.dayDocs })}
+        </p>
+      )}
       {!busy && <Outcome h={h} />}
     </HeroCard>
   );

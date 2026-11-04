@@ -4,6 +4,7 @@ import { parseDayDoc, parseMonthDoc, parsePrefs } from '../../domain/docs';
 import type { Prefs } from '../../domain/docs';
 import { articleDocPath, dayOfArticleId, isRoutineId, monthOfDay, readMonthPath, READ_PREFS_PATH } from '../../domain/paths';
 import { parseRoutineDoc, routineEntryOf } from '../../domain/routine';
+import { indexEntryOf } from '../../domain/day';
 import { rdrText } from '../../domain/readerText';
 import { saveReadState } from '../../store';
 import { logError, logWarn } from '../../shared';
@@ -84,7 +85,9 @@ export function ReaderScreen({ id, writer, startAt = null, onOpen, onList }: Rea
         const at = items.findIndex((x) => x.id === id);
         const nextId = [...items.slice(at + 1), ...items.slice(0, at)].find((x) => !doneIds.has(x.id))?.id ?? null;
         // Routine-Artikel haben im Monatsindex erst einen Eintrag, wenn der erste Lesestand gespeichert wird: die App legt ihn selbst an.
-        const seed = routine ? routineEntryOf(article, day) : null;
+        // L2 (Plan Module P/L): Fehlt bei einem eigenen Artikel der Indexeintrag (z. B. abgebrochenes Speichern), ergänzt der erste Lesestand ihn
+        // genauso – nur ergänzend, einmalig (danach ist er da), nie ein Entfernen.
+        const seed = routine ? routineEntryOf(article, day) : indexEntryOf(article, day);
         setPhase({ key, status: 'ready', article, day, state, prefs: parsePrefs(p.exists ? p.data() : undefined), nextId, seed });
       } catch (err) {
         logError('read:reader', err, id);
