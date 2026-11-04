@@ -59,7 +59,7 @@ test.describe('Desktop', () => {
     await page.waitForTimeout(400);
     await expect(page.locator('[data-slot="extra"]')).toHaveCount(4);
     const letters = await page.locator('[data-letter]').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().toJSON() as DOMRect));
-    for (let i = 1; i < letters.length; i++) expect(letters[i]!.left).toBeGreaterThanOrEqual(letters[i - 1]!.right - 1); // ±1 px: Plus Jakarta Sans rundet Zeichenbreiten anders (03.11.2026)
+    for (let i = 1; i < letters.length; i++) expect(letters[i]!.left).toBeGreaterThanOrEqual(letters[i - 1]!.right - 0.5);
     const gap2 = (await page.getByTestId('gap').boundingBox())!;
     expect(letters.at(-1)!.right).toBeLessThanOrEqual(gap2.x + gap2.width + 1);
     expect(errors).toEqual([]);

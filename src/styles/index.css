@@ -453,7 +453,9 @@ h3 {
     display: inline-flex;
     align-items: flex-end;
     justify-content: center;
-    width: 0.68em;
+    /* Mindestbreite statt fester Breite: breite Zeichen (m, w) von Plus Jakarta Sans sind breiter als 0.68em und dürfen den Platz weiten. */
+    width: auto;
+    min-width: 0.68em;
     min-height: 1.35em;
     line-height: 1.35;
     margin: 0 0.03em;
