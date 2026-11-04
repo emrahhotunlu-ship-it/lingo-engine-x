@@ -959,3 +959,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Grammatik: Fortsetzen statt Neustart an allen Einstiegen (`resumeOrStartGrammar`), `endedN` gegen Doppelzählung. Anwenden: Stand im Browser.
 - Ladezeiten: Bildschirm-Teile werden nach dem ersten Bild im Leerlauf vorgeladen (`src/app/prefetch.ts`); der große Schritt kommt mit Großpaket C (kleinere Einstiegsdatei).
 - Test-Link `AXHkh6…` v87 `1793800761-0601` (Rückweg v86 `1793790983-4895`). Live erst nach „Ja live nehmen“.
+- **Live** `JLL8…` v94 `1793804819-55c8` (Emrahs „ja live nehmen“, Rückweg v93 `1793794178-00dd`).
