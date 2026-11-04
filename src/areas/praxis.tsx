@@ -1,4 +1,5 @@
 import { defineArea } from '../app/registry';
+import { FOCUS2 } from '../app/focus';
 import { useNav } from '../app/nav';
 import { markNavStart } from '../app/perf';
 import { useT } from '../i18n';
@@ -27,5 +28,6 @@ function PracticeMore() {
 export const praxis = defineArea({
   id: 'praxis',
   screens: {},
-  sections: [{ id: 'practice-more', place: 'apply', order: 5, component: PracticeMore }],
+  // Fokus 2.0: Lesen und Sprechen nicht mehr als Einstieg auf Praxis.
+  sections: FOCUS2 ? [] : [{ id: 'practice-more', place: 'apply', order: 5, component: PracticeMore }],
 });

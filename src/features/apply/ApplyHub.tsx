@@ -1,3 +1,4 @@
+import { FOCUS2 } from '../../app/focus';
 import { toast } from '../../ui/Toast';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, type ReactNode } from 'react';
@@ -173,12 +174,14 @@ export function ApplyHub({ lead }: { lead?: ReactNode } = {}) {
 
   // Reihenfolge nach Gerät (§2.6): Handy zuerst kurze Textübungen, Kopfhörer-Übungen danach, Laptop-Übungen eingeklappt; Laptop: Hören und Schreiben oben.
   const ruleTiles = kindEnabled('wf') && oldWordform ? [withMeta({ ...oldWordform, run: startWf }, touch), ...ruleTilesBase.slice(1)] : ruleTilesBase;
-  const phoneFirst = list([repair, wordPartner, order, ...ruleTiles, ...(kindEnabled('kwt') ? [transform] : []), findErr]);
+  // Fokus 2.0 (Emrah 04.11.2026): auf Anwenden nur noch aktive Nutzung – eigener Satz (und Fehlersätze ohne neue Grammatik); Hören, Diktat,
+  // Satzbau, Lückenjagd, Wortpartner-/Regel-Sets und C1-Grammatikarten sind hier nicht mehr angeboten (Grammatik übt sie im eigenen Reiter).
+  const phoneFirst = FOCUS2 ? list([own, repair]) : list([repair, wordPartner, order, ...ruleTiles, ...(kindEnabled('kwt') ? [transform] : []), findErr]);
   const featured = phoneFirst[0];
   const phoneRest = phoneFirst.slice(1);
-  const listenTiles = list([listenQ, loop]);
-  const laptopTiles = list([dictate, own, ...(kindEnabled('kwt') ? [] : [transform])]);
-  const more = list([cloze]);
+  const listenTiles = FOCUS2 ? [] : list([listenQ, loop]);
+  const laptopTiles = FOCUS2 ? [] : list([dictate, own, ...(kindEnabled('kwt') ? [] : [transform])]);
+  const more = FOCUS2 ? [] : list([cloze]);
 
   return (
     <motion.div className="mx-auto flex w-full max-w-[47.5rem] flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="apply-hub" data-profile={profile}>
@@ -220,10 +223,10 @@ export function ApplyHub({ lead }: { lead?: ReactNode } = {}) {
       ) : (
         <>
           <Section id="ap-listen" title={t('apListenWrite')}>
-            <div className={GRID}>{render(list([dictate, listenQ, loop, own]))}</div>
+            <div className={GRID}>{render(FOCUS2 ? list([own]) : list([dictate, listenQ, loop, own]))}</div>
           </Section>
           <Section id="ap-build" title={t('apBuild')}>
-            <div className={GRID}>{render(list([repair, wordPartner, order, ...ruleTiles, transform]))}</div>
+            <div className={GRID}>{render(FOCUS2 ? list([repair]) : list([repair, wordPartner, order, ...ruleTiles, transform]))}</div>
           </Section>
         </>
       )}

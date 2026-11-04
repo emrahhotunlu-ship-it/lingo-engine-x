@@ -1,3 +1,4 @@
+import { FOCUS2 } from '../../app/focus';
 import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -115,7 +116,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
         },
       });
     }
-    out.push({
+    if (!FOCUS2) out.push({
       id: 'speak',
       icon: 'mic',
       label: t('hxExtraSpeak'),
@@ -127,7 +128,7 @@ export function useExtraLines(today: string, done: boolean, before: () => void =
       },
     });
     // Kern e (Vorschau „Lesen · Artikel des Tages“): Lesen steht wie Sprechen als freiwilliges Angebot auf Heute.
-    out.push({
+    if (!FOCUS2) out.push({
       id: 'read',
       icon: 'book',
       label: t('shRead'),

@@ -1,3 +1,4 @@
+import { FOCUS2 } from '../../../app/focus';
 import { useMemo, useState } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
@@ -266,9 +267,9 @@ export function ExtraSheet({ onClose, params }: SheetProps) {
       <div className="flex flex-col gap-5" data-testid="extra-sheet">
         {scope !== 'grammar' && group('words', t('nbWsXWords'), wordLines)}
         {scope !== 'words' && group('grammar', t('nbWsXGrammar'), grammarLines)}
-        {scope !== 'words' && group('apply', t('nbWsXApply'), applyLines)}
-        {scope !== 'words' && group('speak', t('nbWsXSpeak'), speakLines)}
-        {scope !== 'grammar' && tts && (
+        {!FOCUS2 && scope !== 'words' && group('apply', t('nbWsXApply'), applyLines)}
+        {!FOCUS2 && scope !== 'words' && group('speak', t('nbWsXSpeak'), speakLines)}
+        {!FOCUS2 && scope !== 'grammar' && tts && (
           <button
             type="button"
             onClick={() => {

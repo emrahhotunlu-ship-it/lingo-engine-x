@@ -1,3 +1,4 @@
+import { FOCUS2 } from '../../app/focus';
 import { flags } from '../../app/flags';
 import { registerSlot } from '../../app/slots';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -39,4 +40,5 @@ function TempoTile() {
   );
 }
 
-registerSlot({ slot: 'apply.tiles', order: 40, enabled: () => flags.tempo, render: () => <TempoTile /> });
+// Fokus 2.0: Tempo ist keine Anwenden-Übung (aktive Nutzung) – nicht mehr auf der Seite.
+registerSlot({ slot: 'apply.tiles', order: 40, enabled: () => flags.tempo && !FOCUS2, render: () => <TempoTile /> });
