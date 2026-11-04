@@ -1,0 +1,616 @@
+{
+ "app/profile": {
+  "days": {
+   "2026-10-05": 12,
+   "2026-10-06": 4
+  },
+  "xpDays": {
+   "2026-10-05": 85,
+   "2026-10-06": 33
+  },
+  "act": {},
+  "answers": 16,
+  "vAnswers": 0,
+  "gAnswers": 16,
+  "xp": 118,
+  "ema": {
+   "write": 0.573,
+   "all": 0.5794
+  },
+  "n": {
+   "write": 16
+  }
+ },
+ "grammar/future-perf-cont": {
+  "id": "future-perf-cont",
+  "p": 0.4993405273597214,
+  "n": 8,
+  "c": 6,
+  "last": 1791273614000,
+  "hist": [
+   {
+    "d": "2026-10-05",
+    "p": 0.38
+   },
+   {
+    "d": "2026-10-06",
+    "p": 0.499
+   }
+  ],
+  "errors": [
+   {
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "finish",
+    "ans": "will have finished",
+    "t": 1791187202000,
+    "src": "seed",
+    "expl": {
+     "de": "By + Zeitpunkt → Future Perfect.",
+     "en": "By + point in time → future perfect."
+    }
+   }
+  ],
+  "seen": [
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse",
+   "bynextjuneifinishmycourse"
+  ],
+  "seenText": [
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course.",
+   "By next June, I ___ (finish) my course."
+  ],
+  "due": 1791705614000,
+  "anchor": 0.3793405503382551,
+  "anchorD": "2026-10-06",
+  "recent": [
+   1,
+   0,
+   1,
+   1,
+   1,
+   0,
+   1,
+   1
+  ],
+  "vt": {
+   "d": "2026-10-05",
+   "ok": true,
+   "pats": [
+    "fp.by"
+   ]
+  },
+  "tt": {
+   "d": "2026-10-06",
+   "c": 5,
+   "n": 6,
+   "ok": true,
+   "k": 1,
+   "w": [
+    "fp.by"
+   ]
+  }
+ },
+ "log/2026-10-05": {
+  "date": "2026-10-05",
+  "entries": [
+   {
+    "t": 1791187201000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finished",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 3,
+    "ms": 4000,
+    "ctx": "duty"
+   },
+   {
+    "t": 1791187202000,
+    "ok": false,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "finish",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 1,
+    "ms": 4000,
+    "ctx": "duty"
+   },
+   {
+    "t": 1791187203000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finished",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 3,
+    "ms": 4000,
+    "ctx": "xtra"
+   },
+   {
+    "t": 1791187204000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finished",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 3,
+    "ms": 4000,
+    "ctx": "xtra"
+   },
+   {
+    "t": 1791187205000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finished",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 3,
+    "ms": 4000,
+    "ctx": "xtra",
+    "hl": 1
+   },
+   {
+    "t": 1791187206000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finished",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 3,
+    "ms": 4000,
+    "ctx": "xtra"
+   },
+   {
+    "t": 1791187207000,
+    "ok": false,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "(don't know)",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 1,
+    "ms": 4000,
+    "ctx": "xtra"
+   },
+   {
+    "t": 1791187208000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "passive-plus",
+    "type": "kwt",
+    "q": "The company ___ planning to move its headquarters.",
+    "given": "is said to be",
+    "ans": "is said to be",
+    "src": "seed",
+    "m": "gr-kwt",
+    "g": 4,
+    "ms": 6000,
+    "ctx": "duty",
+    "dev": "k",
+    "pts": [
+     2,
+     2
+    ],
+    "c1k": "kwt",
+    "cid": "kwt-9001",
+    "pat": "pp.personal",
+    "free": true,
+    "tm": 6000
+   },
+   {
+    "t": 1791187209000,
+    "ok": false,
+    "lang": "de",
+    "k": "g",
+    "topic": "passive-plus",
+    "type": "kwt",
+    "q": "The company ___ planning to move its headquarters.",
+    "given": "is said that it is",
+    "ans": "is said to be",
+    "src": "seed",
+    "m": "gr-kwt",
+    "g": 2,
+    "ms": 6000,
+    "ctx": "xtra",
+    "dev": "k",
+    "pts": [
+     1,
+     2
+    ],
+    "c1k": "kwt",
+    "cid": "kwt-9001",
+    "pat": "pp.personal",
+    "free": true,
+    "tm": 6000
+   },
+   {
+    "t": 1791187210000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "gerund-inf",
+    "type": "find",
+    "q": "I'm really looking forward to hear from you.",
+    "given": "hear → hearing",
+    "ans": "I'm really looking forward to hearing from you.",
+    "src": "seed",
+    "m": "gr-find",
+    "g": 3,
+    "ms": 6000,
+    "ctx": "xtra",
+    "dev": "k",
+    "pts": [
+     2,
+     2
+    ],
+    "c1k": "err",
+    "cid": "err-9001",
+    "pat": "gi.prep-ing",
+    "free": true,
+    "tm": 6000
+   },
+   {
+    "t": 1791187211000,
+    "ok": false,
+    "lang": "de",
+    "k": "g",
+    "topic": "gerund-inf",
+    "type": "find",
+    "q": "I'm really looking forward to hear from you.",
+    "given": "hear",
+    "ans": "I'm really looking forward to hearing from you.",
+    "src": "seed",
+    "m": "gr-find",
+    "g": 2,
+    "ms": 6000,
+    "ctx": "xtra",
+    "dev": "k",
+    "pts": [
+     1,
+     2
+    ],
+    "c1k": "err",
+    "cid": "err-9001",
+    "pat": "gi.prep-ing"
+   },
+   {
+    "t": 1791187212000,
+    "ok": false,
+    "lang": "de",
+    "k": "g",
+    "topic": "lex",
+    "type": "gap",
+    "q": "The response to our new pricing model has been ___ positive.",
+    "given": "x",
+    "ans": "overwhelmingly",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 1,
+    "ms": 6000,
+    "ctx": "xtra",
+    "dev": "k",
+    "pts": [
+     0,
+     1
+    ],
+    "c1k": "wf",
+    "cid": "wf-0001",
+    "pat": "lx.adverb-before-adjective",
+    "free": true,
+    "tm": 6000
+   }
+  ]
+ },
+ "app/radar": {
+  "events": [
+   {
+    "c": "tense",
+    "s": "g",
+    "t": 1791187202000,
+    "q": "By next June, I ___ (finish) my course.",
+    "g": "finish",
+    "a": "will have finished"
+   },
+   {
+    "c": "tense",
+    "s": "g",
+    "t": 1791187209000,
+    "q": "The company ___ planning to move its headquarters.",
+    "g": "is said that it is",
+    "a": "is said to be"
+   },
+   {
+    "c": "pattern",
+    "s": "g",
+    "t": 1791187211000,
+    "q": "I'm really looking forward to hear from you.",
+    "g": "hear",
+    "a": "I'm really looking forward to hearing from you."
+   },
+   {
+    "c": "pattern",
+    "s": "g",
+    "t": 1791273616000,
+    "q": "I'm really looking forward to hear from you.",
+    "g": "hear → heard",
+    "a": "I'm really looking forward to hearing from you."
+   }
+  ]
+ },
+ "grammar/passive-plus": {
+  "id": "passive-plus",
+  "p": 0.5099999845679032,
+  "n": 3,
+  "c": 2,
+  "last": 1791273615000,
+  "hist": [
+   {
+    "d": "2026-10-05",
+    "p": 0.45
+   },
+   {
+    "d": "2026-10-06",
+    "p": 0.51
+   }
+  ],
+  "errors": [
+   {
+    "q": "The company ___ planning to move its headquarters.",
+    "given": "is said that it is",
+    "ans": "is said to be",
+    "t": 1791187209000,
+    "src": "seed",
+    "pat": "pp.personal",
+    "expl": {
+     "de": "Berichtspassiv: Subjekt + is said + to-Infinitiv; laufende Handlung: to be + -ing.",
+     "en": "Reporting passive: subject + is said + to-infinitive; ongoing action: to be + -ing."
+    },
+    "cid": "kwt-9001",
+    "pts": [
+     1,
+     2
+    ]
+   }
+  ],
+  "seen": [
+   "c1:kwt-9001",
+   "c1:kwt-9001",
+   "c1:kwt-9001"
+  ],
+  "seenText": [
+   "The company ___ planning to move its headquarters.",
+   "The company ___ planning to move its headquarters.",
+   "The company ___ planning to move its headquarters."
+  ],
+  "due": 1791792015000,
+  "anchor": 0.4499999845679032,
+  "anchorD": "2026-10-06",
+  "recent": [
+   1,
+   0,
+   1
+  ],
+  "pats": {
+   "pp.personal": {
+    "n": 3,
+    "c": 2,
+    "h": 0,
+    "r": 5,
+    "k": 3,
+    "dd": [
+     "2026-10-05",
+     "2026-10-06"
+    ],
+    "last": 1791273615000,
+    "f": "kwt,kwt,kwt",
+    "i": "2026-10-05",
+    "s": "2026-10-06"
+   }
+  }
+ },
+ "grammar/gerund-inf": {
+  "id": "gerund-inf",
+  "p": 0.34377480517449316,
+  "n": 3,
+  "c": 1,
+  "last": 1791273616000,
+  "hist": [
+   {
+    "d": "2026-10-05",
+    "p": 0.404
+   },
+   {
+    "d": "2026-10-06",
+    "p": 0.344
+   }
+  ],
+  "errors": [
+   {
+    "q": "I'm really looking forward to hear from you.",
+    "given": "hear",
+    "ans": "I'm really looking forward to hearing from you.",
+    "t": 1791187211000,
+    "src": "seed",
+    "pat": "gi.prep-ing",
+    "expl": {
+     "de": "„to“ ist hier eine Präposition (look forward to sth); danach steht -ing.",
+     "en": "Here \"to\" is a preposition (look forward to sth), so -ing follows."
+    },
+    "cid": "err-9001",
+    "pts": [
+     1,
+     2
+    ]
+   }
+  ],
+  "seen": [
+   "c1:err-9001",
+   "c1:err-9001",
+   "c1:err-9001"
+  ],
+  "seenText": [
+   "I'm really looking forward to hear from you.",
+   "I'm really looking forward to hear from you.",
+   "I'm really looking forward to hear from you."
+  ],
+  "due": 1791360016000,
+  "anchor": 0.40377480517449316,
+  "anchorD": "2026-10-06",
+  "recent": [
+   1,
+   0,
+   0
+  ],
+  "pats": {
+   "gi.prep-ing": {
+    "n": 3,
+    "c": 1,
+    "h": 1,
+    "r": 4,
+    "k": 3,
+    "dd": [
+     "2026-10-05"
+    ],
+    "last": 1791273616000,
+    "f": "err,err,err",
+    "i": "2026-10-05"
+   }
+  }
+ },
+ "log/2026-10-06": {
+  "date": "2026-10-06",
+  "entries": [
+   {
+    "t": 1791273613000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finished",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 3,
+    "ms": 4000,
+    "ctx": "duty"
+   },
+   {
+    "t": 1791273614000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "future-perf-cont",
+    "type": "gap",
+    "q": "By next June, I ___ (finish) my course.",
+    "given": "will have finish",
+    "ans": "will have finished",
+    "src": "seed",
+    "m": "gr-gap",
+    "g": 2,
+    "ms": 4000,
+    "ctx": "xtra"
+   },
+   {
+    "t": 1791273615000,
+    "ok": true,
+    "lang": "de",
+    "k": "g",
+    "topic": "passive-plus",
+    "type": "kwt",
+    "q": "The company ___ planning to move its headquarters.",
+    "given": "is said to be",
+    "ans": "is said to be",
+    "src": "seed",
+    "m": "gr-kwt",
+    "g": 4,
+    "ms": 6000,
+    "ctx": "xtra",
+    "dev": "k",
+    "pts": [
+     2,
+     2
+    ],
+    "c1k": "kwt",
+    "cid": "kwt-9001",
+    "pat": "pp.personal",
+    "free": true,
+    "tm": 6000
+   },
+   {
+    "t": 1791273616000,
+    "ok": false,
+    "lang": "de",
+    "k": "g",
+    "topic": "gerund-inf",
+    "type": "find",
+    "q": "I'm really looking forward to hear from you.",
+    "given": "hear → heard",
+    "ans": "I'm really looking forward to hearing from you.",
+    "src": "seed",
+    "m": "gr-find",
+    "g": 2,
+    "ms": 6000,
+    "ctx": "duty",
+    "dev": "k",
+    "pts": [
+     1,
+     2
+    ],
+    "c1k": "err",
+    "cid": "err-9001",
+    "pat": "gi.prep-ing",
+    "free": true,
+    "tm": 6000
+   }
+  ]
+ }
+}
