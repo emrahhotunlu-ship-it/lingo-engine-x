@@ -106,7 +106,9 @@ export function rawJsonZip(opts = {}) {
       const [file, query] = id.split('?');
       if (query !== 'raw' || !file.endsWith('.json')) return null;
       const key = keyOf(file);
-      if (remote.has(key)) return `import { remoteText } from ${JSON.stringify(RAWTEXT)};\nexport default remoteText(${JSON.stringify(key)});`;
+      // Oberste-Ebene-await: jedes Modul, das den Text braucht, wird erst ausgewertet, wenn die Sammeldatei da ist (viele Module lesen ihn
+      // schon beim Laden, z. B. `JSON.parse(raw)` ganz oben). Die Dateien laden parallel, sobald der erste Inhalt gebraucht wird.
+      if (remote.has(key)) return `import { rawTextReady } from ${JSON.stringify(RAWTEXT)};\nexport default await rawTextReady(${JSON.stringify(key)});`;
       const min = minify(file);
       if (min.length < MIN_BYTES) return `export default ${JSON.stringify(min)};`;
       const b64 = deflateRawSync(Buffer.from(min, 'utf8'), { level: 9 }).toString('base64');

@@ -83,5 +83,36 @@ export function loadRawTexts(): Promise<boolean> {
   return running;
 }
 
+/**
+ * Text einer nachgeladenen Datei, sobald alle Sammeldateien da sind (vom Build-Plugin als `export default await rawTextReady(key)` benutzt).
+ * Scheitert das Laden, zeigt die Seite einen schlichten Hinweis mit „Neu laden“ (React steht dann noch nicht) und wartet nicht weiter.
+ */
+export async function rawTextReady(key: string): Promise<string> {
+  if (!(await loadRawTexts())) {
+    showLoadFailed();
+    return new Promise<string>(() => undefined);
+  }
+  return texts.get(key) ?? '';
+}
+
+function showLoadFailed(): void {
+  const root = document.getElementById('root');
+  if (!root || root.querySelector('[data-testid="raw-failed"]')) return;
+  const en = document.documentElement.lang === 'en';
+  const box = document.createElement('div');
+  box.setAttribute('role', 'alert');
+  box.setAttribute('data-testid', 'raw-failed');
+  box.style.cssText = 'max-width:28rem;margin:4rem auto;padding:1.5rem;font:16px/1.5 system-ui,sans-serif;text-align:center';
+  const p = document.createElement('p');
+  p.textContent = en ? 'The app could not finish loading. Please check your connection.' : 'Die App konnte nicht fertig laden. Bitte prüfe die Verbindung.';
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.textContent = en ? 'Reload' : 'Neu laden';
+  b.style.cssText = 'margin-top:1rem;padding:.6rem 1.2rem;border-radius:999px;border:1px solid currentColor;background:none;color:inherit;font:inherit';
+  b.addEventListener('click', () => window.location.reload());
+  box.append(p, b);
+  root.replaceChildren(box);
+}
+
 /** Sind alle Rohtexte da? (für nicht-React-Aufrufer, z. B. den Startknopf) */
 export const rawReadyNow = (): boolean => useRawReady.getState().ready;
