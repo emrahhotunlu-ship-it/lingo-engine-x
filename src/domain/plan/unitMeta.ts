@@ -87,7 +87,5 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
   // Lernplattform 3.0 (§2.4), rein ergänzend: C1-Check-Tag und Kennung des nächsten Ziels.
   if (o.c1 === 'check') out.c1 = 'check';
   if (typeof o.nx === 'string' && NX_RE.test(o.nx)) out.nx = o.nx;
-  // Kurzer Tag (2A, 04.11.2026), rein ergänzend.
-  if (o.kt === 1) out.kt = 1;
   return out;
 }

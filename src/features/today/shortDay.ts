@@ -61,16 +61,23 @@ export async function takeShortDay(today: string, view: { done: number; fills: r
     return false;
   }
   const done: StoredPlan | null = next;
-  if (!done || useTodayPlan.getState().day !== today) return false;
+  if (!done) return false;
+  // Gespeichert ist der kurze Tag ab hier (Plan und `kt`); die Ansicht folgt nur, solange noch derselbe Lerntag gilt.
   if (vocabModuleOn(profile)) {
-    try {
-      await shrinkToday(writer, useClock.getState().now);
-    } catch (err) {
-      logError('today:short-day-words', err);
+    // Wörter-Plan: einmal wiederholen, sonst bliebe er voll (data-guard S2). Steht er noch nicht, plant die Runde am kurzen Tag ohnehin 5 Minuten.
+    for (let k = 0; k < 2; k++) {
+      try {
+        await shrinkToday(writer, useClock.getState().now);
+        break;
+      } catch (err) {
+        logError('today:short-day-words', err, k ? 'zweiter Versuch' : undefined);
+      }
     }
   }
-  useTodayPlan.setState({ plan: done });
-  saveLocalPlan(done);
-  void syncTodayDocForDay(today, 'plan');
+  if (useTodayPlan.getState().day === today) {
+    useTodayPlan.setState({ plan: done });
+    saveLocalPlan(done);
+    void syncTodayDocForDay(today, 'plan');
+  }
   return true;
 }

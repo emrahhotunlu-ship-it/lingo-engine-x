@@ -80,8 +80,6 @@ export type UnitMeta = {
   c1?: 'check';
   /** Plan 3.0, additiv: Kennung des nächsten Ziels (`nextGoal`), beim Anlegen eingefroren (höchstens 24 Zeichen). */
   nx?: string;
-  /** Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026), additiv: `1` = der Plan von heute wurde vor dem ersten Schritt auf ca. 10 Minuten verkürzt. */
-  kt?: 1;
 };
 
 export type DutyState = { id: DutyId; state: 'done' | 'open'; progress: { done: number; total: number } | null };

@@ -92,9 +92,8 @@ for (const vp of [
       await expect(page.getByTestId('short-day-on')).toBeVisible();
       await expect(go).toHaveCount(0);
       const d = await dump(page);
-      const prof = d['app/profile'] as { kt?: Record<string, number>; plan?: { u?: { kt?: number; min?: number; goalMin?: number; b?: unknown[][] } } };
+      const prof = d['app/profile'] as { kt?: Record<string, number>; plan?: { u?: { min?: number; goalMin?: number; b?: unknown[][] } } };
       expect(prof.kt).toEqual({ '2026-09-20': 1 });
-      expect(prof.plan?.u?.kt).toBe(1);
       expect(prof.plan?.u?.goalMin).toBe(10);
       expect(prof.plan?.u?.b?.map((b) => b[2])).toEqual([5, 3, 5]);
       // Die Wörter-Runde friert den heutigen Wörter-Plan mit ca. 5 Minuten ein (statt 10).

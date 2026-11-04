@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
-import { shortDayAllowed, shortDaysLeft } from '../../domain/plan/shortDay';
+import { isShortToday, shortDayAllowed, shortDaysLeft } from '../../domain/plan/shortDay';
 import { useT } from '../../i18n';
 import { takeShortDay, untouchedToday } from './shortDay';
 import { useTodayPlan } from './store';
@@ -15,7 +15,7 @@ export function ShortDayLink({ view }: { view: { done: number; fills: readonly n
   const plan = useTodayPlan((s) => (s.day === today && s.status === 'ready' ? s.plan : null));
   const profile = useLive((s) => s.docs['app/profile']);
   const [busy, setBusy] = useState(false);
-  if (plan?.u?.kt === 1) {
+  if (plan && isShortToday(profile?.kt, today)) {
     return (
       <p className="lx-vh-short text-sm text-muted" data-testid="short-day-on">
         {t('shortDayOn')}
@@ -38,7 +38,9 @@ export function ShortDayLink({ view }: { view: { done: number; fills: readonly n
       >
         {t('shortDayGo')}
       </button>
-      <span className="text-xs text-muted">{t(left === 1 ? 'shortDayLeft_one' : 'shortDayLeft_other', { n: left })}</span>
+      <span className="text-xs text-muted">
+        {t('shortDayWhy')} {t(left === 1 ? 'shortDayLeft_one' : 'shortDayLeft_other', { n: left })}
+      </span>
     </div>
   );
 }

@@ -43,9 +43,11 @@ export function vocabCfg(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
   const npd = profile && typeof profile.newPerDay === 'number' && [0, 2, 5, 10].includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
   const min = wordsMinutes(profile);
-  const newPerDay = isShortDay(profile) ? Math.min(npd, SHORT_DAY_NEW) : npd;
-  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay };
-  return { min, ret: raw.data.ret, mod: raw.data.mod, newPerDay, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
+  const short = isShortDay(profile);
+  const newPerDay = short ? Math.min(npd, SHORT_DAY_NEW) : npd;
+  const sh = short ? { short: true } : {};
+  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay, ...sh };
+  return { ...sh, min, ret: raw.data.ret, mod: raw.data.mod, newPerDay, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
 }
 
 /** Ist das neue Modul eingeschaltet? (Rückweg-Schalter in der Datenbank, gilt auf allen Geräten.) */

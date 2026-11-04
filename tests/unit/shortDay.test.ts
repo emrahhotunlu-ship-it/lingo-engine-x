@@ -17,18 +17,18 @@ const raw = (over: Record<string, unknown> = {}) => ({
 });
 
 describe('shortDayPlan', () => {
-  it('verkleinert die drei Schritte, setzt goalMin 10 und kt, behält Pflicht, Themen und Unbekanntes', () => {
+  it('verkleinert die drei Schritte, setzt goalMin 10, behält Pflicht, Themen und Unbekanntes (keine Markierung im Plan)', () => {
     const p = shortDayPlan(raw())!;
     const u = p.u as Record<string, unknown>;
-    expect(u.b).toEqual([[1, 'review', 5, { repairs: 0 }], [2, 'grammar', 3, { n: 8, errs: 2 }], [3, 'task.apply', 2]]);
+    expect(u.b).toEqual([[1, 'review', 5, { repairs: 0 }], [2, 'grammar', 3, { n: 8, errs: 1 }], [3, 'task.apply', 3]]);
     expect(u.goalMin).toBe(10);
-    expect(u.min).toBe(10);
-    expect(u.kt).toBe(1);
+    expect(u.min).toBe(11);
+    expect(u.kt).toBeUndefined();
     expect(u.gt).toEqual({ ch: 1 });
     expect(p.duty).toEqual(['review', 'ch:u-focus', 'ch:u-task']);
     expect(p.extra).toBe('bleibt');
     expect((p.goal as Record<string, number>).review).toBe(20);
-    expect(readPlan(p, '2026-11-04')?.u?.kt).toBe(1);
+    expect(readPlan(p, '2026-11-04')?.u?.min).toBe(11);
   });
   it('der Wochen-Check am Sonntag behält seine Minuten', () => {
     const p = shortDayPlan(raw({ b: [[1, 'review', 10], [2, 'grammar', 10], [3, 'task.check', 5]] }))!;
@@ -45,11 +45,16 @@ describe('shortDayAllowed', () => {
   it('nur unberührt, nur Tagesweg, nicht doppelt, höchstens zweimal je Kalenderwoche', () => {
     expect(shortDayAllowed({ plan, today: '2026-11-04', kt: undefined, untouched: true })).toBe(true);
     expect(shortDayAllowed({ plan, today: '2026-11-04', kt: undefined, untouched: false })).toBe(false);
-    expect(shortDayAllowed({ plan: readPlan(raw({ kt: 1 }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
+    // Heute schon kurz: allein `kt[heute]` zählt; ein altes `u.kt` aus der Mischung mit dem Plan von gestern stört nicht (data-guard B1).
+    expect(shortDayAllowed({ plan, today: '2026-11-04', kt: { '2026-11-04': 1 }, untouched: true })).toBe(false);
+    expect(shortDayAllowed({ plan: readPlan(raw({ kt: 1 }), '2026-11-04'), today: '2026-11-04', kt: { '2026-11-02': 1 }, untouched: true })).toBe(true);
+    // Nicht zwei Tage hintereinander, nicht in der Neustart-Woche (learning-scientist 1).
+    expect(shortDayAllowed({ plan, today: '2026-11-04', kt: { '2026-11-03': 1 }, untouched: true })).toBe(false);
+    expect(shortDayAllowed({ plan: readPlan(raw({ cb: 'reduced' }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
     expect(shortDayAllowed({ plan: readPlan(raw({ tw: undefined }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
     expect(shortDayAllowed({ plan: readPlan(raw({ c1: 'check' }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
     // Woche Mo 02.11.–So 08.11.: zwei schon genommen → nein; Vorwoche zählt nicht.
-    expect(shortDayAllowed({ plan, today: '2026-11-04', kt: { '2026-11-02': 1, '2026-11-03': 1 }, untouched: true })).toBe(false);
+    expect(shortDayAllowed({ plan, today: '2026-11-05', kt: { '2026-11-02': 1, '2026-11-03': 1 }, untouched: true })).toBe(false);
     expect(shortDayAllowed({ plan, today: '2026-11-04', kt: { '2026-11-01': 1, '2026-10-31': 1, '2026-11-02': 1 }, untouched: true })).toBe(true);
   });
   it('zählt nur gültige Tage derselben Woche', () => {

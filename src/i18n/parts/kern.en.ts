@@ -121,5 +121,6 @@ export const kernEn: Record<keyof typeof kernDe, string> = {
   shortDayGo: 'Short on time? About 10 minutes today',
   shortDayLeft_one: 'You can do this once more this week.',
   shortDayLeft_other: 'You can do this {n} more times this week.',
-  shortDayOn: 'Short day: about 10 minutes. Finish it and your streak holds.',
+  shortDayOn: 'Short day: about 10 minutes. The words you are most likely to forget are in; the rest comes along tomorrow. Finish it and your streak holds.',
+  shortDayWhy: 'You practice the words you are most likely to forget, 2 new ones and a short grammar round. The rest comes along tomorrow.',
 };

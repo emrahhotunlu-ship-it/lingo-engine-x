@@ -21,6 +21,8 @@ describe('shrinkDayPlan (Wörter)', () => {
     expect(s.min).toBe(5);
     expect(s.due).toBe(8);
     expect(s.fresh).toBe(2);
+    // Die 12 weggefallenen Wiederholungen stehen in der Verteilung am nächsten Tag (Startkarte, learning-scientist 3).
+    expect(s.sp).toEqual([['2026-11-05', 12]]);
   });
   it('schon klein genug: null', () => {
     expect(shrinkDayPlan(day(4, 2), 5)).toBeNull();

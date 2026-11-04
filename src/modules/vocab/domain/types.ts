@@ -136,7 +136,7 @@ export type Grade = 1 | 2 | 3 | 4;
  * Wörter (Stufe ≤ 4), solange ihre echte Rate deutlich unter dem Ziel liegt; steht je Lerntag fest in `vmod/day.ry`. Fehlt sie: `ret`.
  */
 /** `w` (Großpaket A S7): Gewichte der Quellen neuer Wörter aus `vcfg.w`; fehlt = Startgewichte (domain/sources.ts). */
-export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null; retY?: number | null; anki?: boolean; pre?: boolean; w?: { col: number; job: number; own: number; band: number } };
+export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null; retY?: number | null; anki?: boolean; pre?: boolean; w?: { col: number; job: number; own: number; band: number }; /** Kurzer Tag (2A): Rückstand höchstens ein Budget, nichts verschieben, nichts vorziehen. */ short?: boolean };
 export const DEFAULT_CFG: VocabCfg = { min: 15, ret: 0.9, newPerDay: 5, mod: 0, restDow: null };
 
 /** Median-Zeiten je Form in ms (vmod/stats.med); Startwerte, bis echte Antworten da sind. */

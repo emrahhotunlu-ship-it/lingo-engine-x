@@ -60,7 +60,9 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   const quota = Math.max(0, cfg.newPerDay - introducedToday);
   const minNew = minNewFor(quota, due.reduce((a, x) => a + x.ms, 0), budgetMs);
   const nc = newCostMs(med);
-  const cap = BACKLOG_BUDGETS * budgetMs - minNew * nc;
+  // Kurzer Tag (2A, learning-scientist 6): Rückstand höchstens ein Tagesbudget, nichts verschieben, nichts vorziehen (wie `shrinkDayPlan`).
+  const short = cfg.short === true;
+  const cap = (short ? 1 : BACKLOG_BUDGETS) * budgetMs - minNew * nc;
   const taken: Due[] = [];
   const rest: Due[] = [];
   let used = 0;
@@ -74,7 +76,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   const moves: Move[] = [];
   const load = loadByDay(cat, med);
   for (const x of rest) {
-    if (mustOf(x) === 0) continue;
+    if (short || mustOf(x) === 0) continue;
     const sib = cat.siblingOffsets(x.path, day);
     const off = pickDay({ lo: 1, hi: SPREAD_DAYS, load: (i) => load.get(addDays(day, i)) ?? 0, siblings: sib, seed: `${x.path}|mv|${x.lex.mv}|${day}` });
     const to = addDays(day, off);
@@ -118,7 +120,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   // werden (früheste zuerst). FSRS rechnet die frühere Abfrage mit kleinerem Zuwachs (Abrufwahrscheinlichkeit), der Folgetag wird leichter.
   let total = used + fresh.length * nc;
   const ahead: Due[] = [];
-  if (total < budgetMs * AHEAD_FILL) {
+  if (!short && total < budgetMs * AHEAD_FILL) {
     const limit = startOfOffset(day, AHEAD_DAYS + 1);
     const cands = cat
       .items()
@@ -170,7 +172,7 @@ export const SHORT_DAY_MIN = 5;
 /**
  * Kurzer Tag: den eingefrorenen Plan von heute verkleinern (rein). Behalten werden die ersten fälligen Einträge (gefährdetste zuerst, wie
  * eingefroren) so weit, wie `targetMin` reicht, und höchstens `MIN_NEW` neue. Was wegfällt, bleibt fällig (es wird nichts verschoben) und
- * kommt am nächsten Lerntag zuerst; nicht eingeführte neue Wörter bleiben neu. Minuten je Eintrag wie im Plan gemittelt. `null`, wenn der Plan
+ * kommt am nächsten Lerntag mit (die gefährdetsten zuerst); nicht eingeführte neue Wörter bleiben neu. Minuten je Eintrag wie im Plan gemittelt. `null`, wenn der Plan
  * schon klein genug ist.
  */
 export function shrinkDayPlan(p: DayPlan, targetMin: number): DayPlan | null {
@@ -183,8 +185,15 @@ export function shrinkDayPlan(p: DayPlan, targetMin: number): DayPlan | null {
   const kept = [...old.slice(0, keepOld), ...fresh];
   if (kept.length >= p.plan.length) return null;
   const due = Math.min(p.due, keepOld);
+  // Weggefallene Wiederholungen kommen am nächsten Lerntag mit (learning-scientist 3): die Verteilung `sp` der Startkarte zählt sie dort.
+  const dropped = old.length - keepOld;
+  const tomorrow = addDays(p.d, 1);
+  const sp = new Map<string, number>(p.sp ?? []);
+  if (dropped > 0) sp.set(tomorrow, (sp.get(tomorrow) ?? 0) + dropped);
+  const spList = [...sp.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)).slice(0, 8);
   return {
     ...p,
+    ...(spList.length ? { sp: spList } : {}),
     plan: kept,
     min: Math.round(kept.length * per * 10) / 10,
     due,
