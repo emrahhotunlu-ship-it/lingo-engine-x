@@ -11,7 +11,7 @@ import { type VlogTuple, tuple } from './vlog';
 // Die alten Felder (`fsrs`, `S`, `D`, `due`, `stage`, `hist`, `modes`, `xs`, `pa`/`ac`/`co` …) bleiben unberührt; das Ergebnis ist nur `lex`
 // und die nachgespielten Verlaufseinträge für `vlog/*`. Formeln: docs/fsrs-umrechnung.md, Abschnitt „Wörter-Modul V1“.
 
-export type LogEntry = { t: number; k?: string; type?: string; id?: string; m?: string; ex?: string; g?: number; ok?: boolean; override?: boolean; ms?: number; fk?: number };
+export type LogEntry = { t: number; k?: string; type?: string; id?: string; m?: string; ex?: string; g?: number; ok?: boolean; override?: boolean; ms?: number; fk?: number; /** M0: nur Beleg (reportEvidence), nie eine Antwort. */ ext?: boolean };
 export type SkipReason = 'invalid' | 'hidden' | 'done' | 'future_lex' | 'future_fsrs';
 export type Converted = {
   path: string;
@@ -65,7 +65,8 @@ export function collectRows(path: string, doc: Record<string, unknown>, logs: Re
   if (logs)
     for (const [d, list] of logs) {
       daysWithLog.add(d);
-      for (const e of list) if ((chunk ? e.type === 'chunk' || e.k === 'c' : e.k === 'v') && e.id === id && num(e.t)) logT.set(e.t, e);
+      // M0: Belege aus anderen Bereichen (`ext`, Modul an, Karte nicht gebucht) sind keine Antworten und werden nie nachgespielt.
+      for (const e of list) if ((chunk ? e.type === 'chunk' || e.k === 'c' : e.k === 'v') && e.id === id && num(e.t) && e.ext !== true) logT.set(e.t, e);
     }
   const hist = Array.isArray(doc.hist) ? doc.hist : [];
   for (const h of hist) {

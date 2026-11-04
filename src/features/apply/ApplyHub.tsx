@@ -151,7 +151,8 @@ export function ApplyHub({ lead }: { lead?: ReactNode } = {}) {
   const oldTransform = entry('training-transform');
   // Ist `kwt` angeboten, führt die Zeile „Umformen“ auf die Aufgabenart `kwt` (am Handy mit Bausteinen); gibt es dort nichts zu üben, gilt die alte Übung.
   const startKind = (kind: 'kwt' | 'err' | 'wf', fallback?: () => void): void => {
-    const first = startGrammar({ mode: 'xtra', kind });
+    // M0: Praxis ist freiwillig – Antworten tragen `ext: 'c1x'` (höchstens eine BKT-Wirkung je Thema und Lerntag, nur freie Produktion).
+    const first = startGrammar({ mode: 'xtra', kind, ext: 'c1x' });
     if (!useGrammarSession.getState().tasks.length) {
       fallback?.();
       return;

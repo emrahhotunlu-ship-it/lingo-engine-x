@@ -34,12 +34,28 @@ export type LexCtx = {
 
 export type LexBooking = { card: LexCard; ex: ExerciseId; grade: Grade };
 
+/**
+ * M0 (Nachtrag learning-scientist Nr. 1): Ein Fehler bucht nie beide Konten. `kwt` und `err` buchen nur Grammatik, `wf` nur Wörter; die übrigen
+ * Arten nach ihrem Bereich (`lex` → Wörter, sonst Grammatik). `lexBookings` bucht nur Wörter-Aufgaben, `grammarWrite` nur Grammatik-Aufgaben.
+ */
+export function c1Account(item: Pick<C1Item, 'kind' | 'area'>): 'grammar' | 'word' {
+  if (item.kind === 'kwt' || item.kind === 'err') return 'grammar';
+  if (item.kind === 'wf') return 'word';
+  return item.area === 'lex' ? 'word' : 'grammar';
+}
+
+/**
+ * M0 (Nachtrag learning-scientist Nr. 4): Steht das Wort sichtbar in der Aufgabe (`cued`)? Schlüsselwort bei `kwt`, Stamm bei `wf`, Optionen bei den
+ * Auswahlarten: dann ist ein Wörter-Beleg nur ein Beleg (`reportEvidence`), nie eine Planwirkung. Nur `ocl` und die Korrektur bei `err` sind frei.
+ */
+export const C1_CUED: Readonly<Record<C1Item['kind'], boolean>> = { kwt: true, wf: true, mcc: true, cnet: true, pair: true, reg: true, para: true, ocl: false, err: false };
+
 const TYPED = new Set<C1Item['kind']>(['ocl', 'wf']);
 const CHOICE = new Set<C1Item['kind']>(['mcc', 'cnet', 'pair']);
 
 /** Die Kartenbuchungen einer beantworteten Aufgabe (leer, wenn keine zulässig ist). `grade` = die berechnete Note der Antwort. */
 export function lexBookings(item: C1Item, score: C1Score, grade: Grade, ctx: LexCtx, opts: { again?: boolean } = {}): LexBooking[] {
-  if (item.src !== 'seed' || opts.again || !item.lex?.length) return [];
+  if (item.src !== 'seed' || opts.again || !item.lex?.length || c1Account(item) !== 'word') return [];
   const typed = TYPED.has(item.kind);
   const choice = CHOICE.has(item.kind);
   if (!typed && !choice) return [];

@@ -117,6 +117,14 @@ export type GrammarAnswer = {
   free?: boolean;
   /** Antwort aus einer Tempo-Runde: im Protokoll `tp: true`, zählt nicht für K6 (P44-Nachbesserung). */
   tempo?: boolean;
+  /**
+   * M0 (docs/umbau/module/plan.md, Nachträge architect/learning-scientist): Herkunft aus einem freiwilligen Bereich – Tempo-Runde bzw. eine
+   * Runde einer c1x-Art (kwt/err/wf) aus Praxis. Wirkung in `grammarWrite`: höchstens EINE BKT-Wirkung je Thema und Lerntag (`grammar/<t>.xd`),
+   * nur bei freier Produktion (`free`); sonst kein BKT-Schritt, alles andere wie bisher. Nur im Speicher, nie im Protokoll.
+   */
+  ext?: 'tempo' | 'c1x';
+  /** M0 Tempo: die Antwort kam nach Ablauf der Zielzeit (falsch → kein BKT-Schritt; schnelle Fehler legen keinen Fehlersatz an). Nur im Speicher. */
+  late?: true;
   /** Korrekturrunde P3 (Punkt 4, LS3): geprüft, aber nicht mit „Weiter“ bestätigt – beim Verlassen gebucht. Im Protokoll `left: true`. */
   left?: true;
   /** Zweite Sicht einer schon gesehenen Aufgabe: hebt BKT nie, setzt das Bit „ohne Hilfe“ nicht. */

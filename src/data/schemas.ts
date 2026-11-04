@@ -458,6 +458,9 @@ export const grammarSchema = z.looseObject({
   /** Neu (Kapitel-Arbeiten, 11.10.2026, nur ergänzend): letzter Themen-Test `{d, c, n, ok, k}` (Tag, richtig, gestellt, je bestanden, Versuche);
    *  `w` = schwache Muster des letzten Versuchs (Liste von Kennungen, ≤ 12, tolerant gelesen). */
   tt: z.looseObject({ d: str, c: num, n: num, ok: bool, k: num, w: loose }).nullish(),
+  /** Neu (M0 Beleg-Türen, 04.11.2026, nur ergänzend): Lerntag der letzten BKT-Wirkung aus Tempo/c1x-Praxis (`ext`), höchstens eine je Thema und Lerntag.
+   *  Tolerant gelesen (kein Text → kein Deckel), geschrieben nur im selben `transform` wie der BKT-Schritt. */
+  xd: loose,
 });
 
 export const lessonSchema = z.looseObject({

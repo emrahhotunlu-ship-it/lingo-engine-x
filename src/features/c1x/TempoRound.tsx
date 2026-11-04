@@ -170,8 +170,10 @@ export function TempoRound({ items, day, ctx, recent, onClose, onFinish }: Tempo
 
   const onDone = (a: GrammarAnswer): 'typed' | 'choice' | null => {
     // Gebucht wird wie bei den Arten selbst (BKT, Muster, Fehlersatz, Protokoll mit `tm`), dazu `tp` (zählt nicht für K6). Gemeldet (`void`): weder gebucht noch gezählt.
-    void learnRecorder.grammar({ ...a, tempo: true });
+    // M0: freiwillig (`xtra`) → `ext: 'tempo'`; nach Ablauf der Zielzeit `late` (falsch → kein BKT-Schritt, schnell falsch → kein Fehlersatz).
     const kind = a.task.c1?.kind;
+    const late = !!kind && isTempoKind(kind) && a.ms > targetMs(kind, inp);
+    void learnRecorder.grammar({ ...a, tempo: true, ...(ctx === 'xtra' ? { ext: 'tempo' as const, ...(late ? { late: true as const } : {}) } : {}) });
     const row: TempoRow | null = !a.void && kind && isTempoKind(kind) ? { kind, ok: answerRight(a) && a.firstWrong === undefined, ms: a.ms, target: targetMs(kind, inp) } : null;
     const list = row ? [...rows, row] : rows;
     if (row) setRows(list);
