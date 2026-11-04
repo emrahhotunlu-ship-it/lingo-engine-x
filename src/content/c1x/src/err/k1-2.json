@@ -61,43 +61,43 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "We’re going to launching the new app in May, so please hold the date.",
+   "text": "Finance is going to switching to digital invoice archiving in the third quarter, so paper copies will no longer be needed.",
    "bad": {
-    "span": "launching",
+    "span": "switching",
     "fix": [
-     "launch"
+     "switch"
     ],
     "choices": [
-     "launched",
-     "launch",
-     "to launch"
+     "switched",
+     "switch",
+     "to switch"
     ]
    },
    "why": {
     "ok": {
-     "de": "Nach going to steht die Grundform: going to launch. Das -ing von „going“ rutscht oft ins nächste Verb.",
-     "en": "After going to comes the base form: going to launch. The -ing of “going” often slips into the next verb."
+     "de": "Nach going to steht die Grundform: going to switch. Das -ing von „going“ rutscht oft ins nächste Verb.",
+     "en": "After going to comes the base form: going to switch. The -ing of “going” often slips into the next verb."
     },
     "wrong": [
      {
-      "opt": "launched",
-      "de": "Nach going to steht keine Vergangenheitsform: launch.",
-      "en": "No past form follows going to: launch."
+      "opt": "switched",
+      "de": "Nach going to steht keine Vergangenheitsform: switch.",
+      "en": "No past form follows going to: switch."
      },
      {
-      "opt": "to launch",
-      "de": "„to launch“ wäre doppelt: Das to steht schon in going to.",
-      "en": "“to launch” would double the to that is already in going to."
+      "opt": "to switch",
+      "de": "„to switch“ wäre doppelt: Das to steht schon in going to.",
+      "en": "“to switch” would double the to that is already in going to."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „launching“, nicht hier.",
-      "en": "The mistake is at “launching”, not here."
+      "de": "Der Fehler steckt bei „switching“, nicht hier.",
+      "en": "The mistake is at “switching”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „launching“ ist falsch.",
-      "en": "There is a mistake: “launching” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „switching“ ist falsch.",
+      "en": "There is a mistake: “switching” is wrong."
      }
     ]
    }
@@ -111,9 +111,9 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "I am going to call the supplier yesterday, but I got pulled into a meeting.",
+   "text": "The client is going to sign the archiving contract last week, but their legal team found a problem.",
    "bad": {
-    "span": "am",
+    "span": "is",
     "fix": [
      "was"
     ],
@@ -125,29 +125,29 @@
    },
    "why": {
     "ok": {
-     "de": "Ein Plan, der in der Vergangenheit nicht zustande kam, braucht was going to. „Yesterday“ und „but“ zeigen es. Deutsch sagt „wollte anrufen“.",
-     "en": "A plan that did not happen in the past needs was going to. “Yesterday” and “but” show it. German says “wollte anrufen”."
+     "de": "Ein Plan, der in der Vergangenheit nicht zustande kam, braucht was going to. „Last week“ und „but“ zeigen es. Deutsch sagt „wollte unterschreiben“.",
+     "en": "A plan that did not happen in the past needs was going to. “Last week” and “but” show it. German says “wollte unterschreiben”."
     },
     "wrong": [
      {
       "opt": "were",
-      "de": "Zu I passt was, nicht were.",
-      "en": "With I the form is was, not were."
+      "de": "Zu „the client“ passt was, nicht were.",
+      "en": "With “the client” the form is was, not were."
      },
      {
       "opt": "be",
-      "de": "„I be going to“ ist keine gültige Zeitform.",
-      "en": "“I be going to” is not a valid tense."
+      "de": "„The client be going to“ ist keine gültige Zeitform.",
+      "en": "“The client be going to” is not a valid tense."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „am“, nicht hier.",
-      "en": "The mistake is at “am”, not here."
+      "de": "Der Fehler steckt bei „is“, nicht hier.",
+      "en": "The mistake is at “is”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „am“ ist falsch.",
-      "en": "There is a mistake: “am” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „is“ ist falsch.",
+      "en": "There is a mistake: “is” is wrong."
      }
     ]
    }

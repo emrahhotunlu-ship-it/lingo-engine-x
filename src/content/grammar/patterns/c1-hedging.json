@@ -228,11 +228,11 @@
         }
       ],
       "trap": {
-        "bad": "I would be inclined hiring a freelancer first.",
-        "good": "I would be inclined to hire a freelancer first.",
+        "bad": "I tend to the second offer.",
+        "good": "I'd be inclined to go with the second offer.",
         "cause": {
-          "de": "Die Ursache ist nicht belegt. Vermutlich wird das -ing-Muster von Wörtern wie worth oder avoid auf inclined übertragen, und to fällt weg.",
-          "en": "The cause is not documented. Probably the -ing pattern of words like worth or avoid gets carried over to inclined, and to drops out."
+          "de": "Im Deutschen sagt man „ich tendiere zum zweiten Angebot“. Auf Englisch folgt auf tend to ein Verb, und tend to + Nomen heißt „sich kümmern um“. Die eigene Neigung: I'd be inclined to + Grundform.",
+          "en": "German says “ich tendiere zum zweiten Angebot”. In English tend to is followed by a verb, and tend to + noun means “look after”. For your own leaning: I'd be inclined to + base verb."
         }
       },
       "contrast": {

@@ -110,71 +110,99 @@
   "id": "hg-mod-f1",
   "type": "find",
   "pat": "hg.modal",
-  "prompt": "The new rules might affected our timeline.",
+  "prompt": "The new rules will maybe affect our timeline.",
   "err": [
    3,
    4
   ],
-  "answer": "might affect",
+  "answer": "might",
   "fixed": "The new rules might affect our timeline.",
   "accepted": [
-   "could affect",
-   "may affect",
-   "might have affected",
-   "could have affected",
-   "may have affected"
+   "may",
+   "could",
+   "may well",
+   "might well",
+   "could well",
+   "are likely to",
+   "will probably",
+   "will likely"
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach might steht die Grundform, nicht affected: might affect.",
-    "en": "The error: after might use the base form, not affected: might affect."
+    "de": "Der Fehler: will maybe ist „wird vielleicht“ Wort für Wort. Vorsichtig heißt es might affect oder are likely to affect.",
+    "en": "The error: will maybe copies the German pattern word for word. The careful form is might affect or are likely to affect."
    },
    "wrong": [
     {
      "tap": "none",
-     "de": "Doch, hier steckt ein Fehler: Nach might folgt die Grundform.",
-     "en": "There is an error: the base form follows might."
+     "de": "Doch, hier steckt ein Fehler: will maybe klingt deutsch. Englisch sagt might oder may.",
+     "en": "There is an error: will maybe sounds German. English says might or may."
     },
     {
      "tap": "*",
-     "de": "Der Fehler liegt bei „might affected“: Nach might steht die Grundform.",
-     "en": "The error is in “might affected”: the base form follows might."
+     "de": "Der Fehler liegt bei „will maybe“: will zeigt Gewissheit, maybe Zweifel. Besser: might.",
+     "en": "The error is in “will maybe”: will shows certainty, maybe shows doubt. Better: might."
+    },
+    {
+     "if": [
+      "maybe"
+     ],
+     "de": "Dein Ersatz hat noch maybe. Das Modalverb trägt den Zweifel schon: might affect.",
+     "en": "Your replacement still has maybe. The modal already carries the doubt: might affect."
     }
    ]
+  },
+  "hint": {
+   "de": "Die Vermutung klingt Wort für Wort aus dem Deutschen übersetzt.",
+   "en": "The guess sounds translated word for word from German."
   }
  },
  {
   "id": "hg-mod-f2",
   "type": "find",
   "pat": "hg.modal",
-  "prompt": "It could takes a few more days to get approval.",
+  "prompt": "This delay can cost us the Miller account.",
   "err": [
-   1,
+   2,
    2
   ],
-  "answer": "could take",
-  "fixed": "It could take a few more days to get approval.",
+  "answer": "could",
+  "fixed": "This delay could cost us the Miller account.",
   "accepted": [
-   "might take",
-   "may take"
+   "might",
+   "may",
+   "could well",
+   "might well",
+   "may well"
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Nach could steht die Grundform, nicht takes: could take.",
-    "en": "The error: after could use the base form, not takes: could take."
+    "de": "Der Fehler: can nennt, was allgemein möglich ist. Für eine konkrete Gefahr steht could, may oder might.",
+    "en": "The error: can says what is possible in general. For a specific risk use could, may or might."
    },
    "wrong": [
     {
      "tap": "none",
-     "de": "Doch, hier steckt ein Fehler: could verlangt die Grundform.",
-     "en": "There is an error: could needs the base form."
+     "de": "Doch, hier steckt ein Fehler: Deutsch sagt hier „kann“, Englisch aber nicht can.",
+     "en": "There is an error: this is about one specific case, so can does not fit."
     },
     {
      "tap": "*",
-     "de": "Der Fehler liegt bei „could takes“: Nach could kein -s.",
-     "en": "The error is in “could takes”: no -s after could."
+     "de": "Der Fehler liegt bei „can“: Für eine konkrete Möglichkeit sagt man could cost.",
+     "en": "The error is at “can”: for a specific possibility say could cost."
+    },
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Dein Ersatz hat noch can. Für diesen einen Fall: could, may oder might.",
+     "en": "Your replacement still has can. For this one case use could, may or might."
     }
    ]
+  },
+  "hint": {
+   "de": "Es geht um eine konkrete Gefahr, nicht um eine allgemeine Möglichkeit.",
+   "en": "This is about one specific risk, not a general possibility."
   }
  },
  {

@@ -38,9 +38,9 @@
      },
      {
       "opt": "would",
-      "cat": "grammar",
-      "de": "would braucht eine Bedingung (if …).",
-      "en": "would needs a condition (if …)."
+      "cat": "meaning",
+      "de": "would schwächt eine Folgerung ab (That would suggest …). Für eine ungeprüfte Ursache steht might, may oder could.",
+      "en": "would softens a conclusion (That would suggest …). For an unchecked cause, use might, may or could."
      }
     ]
    }

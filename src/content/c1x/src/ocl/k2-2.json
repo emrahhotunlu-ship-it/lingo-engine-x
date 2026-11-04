@@ -46,8 +46,8 @@
       "if": [
        "would"
       ],
-      "de": "would braucht eine Bedingung (if …); hier steht keine.",
-      "en": "would needs a condition (if …); there is none here."
+      "de": "would schwächt eine Folgerung ab (That would suggest …). Für eine ungeprüfte Ursache steht might, may oder could.",
+      "en": "would softens a conclusion (That would suggest …). For an unchecked cause, use might, may or could."
      }
     ]
    }
@@ -98,8 +98,8 @@
       "if": [
        "would"
       ],
-      "de": "would ohne if-Satz klingt unvollständig.",
-      "en": "would without an if-clause sounds incomplete."
+      "de": "would passt zu einer Folgerung (That would mean …) oder einem gedachten Fall. Für eine offene Möglichkeit: might, may, could.",
+      "en": "would fits a conclusion (That would mean …) or an imagined case. For an open possibility: might, may, could."
      }
     ]
    }

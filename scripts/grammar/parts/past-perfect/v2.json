@@ -799,12 +799,14 @@
   "answer": "had already left",
   "fixed": "Tom said he had already left the office the day before.",
   "accepted": [
-   "had left"
+   "had left",
+   "left",
+   "already left"
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: Mit „the day before“ braucht das Berichtete had + Partizip.",
-    "en": "The error: with “the day before” the reported event needs had + participle."
+    "de": "Der Fehler: „has“ passt nicht zu „the day before“. Standard ist had already left, im US-Englisch geht auch left.",
+    "en": "The error: “has” does not fit “the day before”. The standard form is had already left; US English also allows left."
    },
    "wrong": [
     {
