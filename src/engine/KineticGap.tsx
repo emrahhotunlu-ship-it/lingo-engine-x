@@ -251,10 +251,14 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
         // Erst ohne Umbruch messen, dann entscheiden (die umgebrochene Breite verrät nicht, ob die Lösung in eine Zeile passt).
         i.style.flexWrap = 'nowrap';
         i.style.whiteSpace = 'nowrap';
-        if (i.scrollWidth + 0.6 * em > ravail) {
+        const natural = i.scrollWidth + 0.6 * em;
+        if (natural > ravail) {
           i.style.flexWrap = 'wrap';
           i.style.whiteSpace = '';
         }
+        // Die Breite der Lücke folgt der Lösung (vorher blieb die Eingabe-Breite stehen: die Lösung brach um bzw. lief über den Satz).
+        const fit = Math.min(natural, ravail);
+        g.style.width = `${Math.round(fit)}px`;
       }
       api.remeasure();
       return;

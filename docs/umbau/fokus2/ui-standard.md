@@ -4,7 +4,7 @@ Emrah 04.11.2026: „Welche Schriftgröße sollte welcher Text haben? Ist es lei
 Grundlage: Apple Human Interface Guidelines (Typografie/Dynamic Type, Layout, Tastatur), Material Design 3 (Type Scale, 8-dp-Raster, Zustände), Nielsens 10 Heuristiken, WCAG 2.2 AA. **Jeder Bildschirm von Wörter, Grammatik, Anwenden und Heute wird gegen diese Liste gebaut und geprüft (ux-reviewer: Bestanden/Nicht bestanden je Punkt).**
 
 ## 1. Schrift: EINE Größenreihe (Ist-Zustand: ~40 verschiedene Größen → Ziel: 6 Rollen)
-| Rolle | Wofür | Handy (< 768) | Tablet/iPhone aufgeklappt, Laptop | Gewicht | Zeilenhöhe |
+| Rolle | Wofür | Handy (< 700 px) | ab 700 px: iPhone aufgeklappt, Tablet, Laptop | Gewicht | Zeilenhöhe |
 |---|---|---|---|---|---|
 | **Hauptinhalt** | der Satz mit Lücke, das Stichwort, die deutsche Vorgabe – das, worum es geht | 24 px | 28 px | 500 (Stichwort 600) | 1.35 |
 | **Titel** | Seitentitel („Heute“, „Wörter“), Lösung im Urteilsstreifen | 22 px | 24 px | 600 | 1.3 |
