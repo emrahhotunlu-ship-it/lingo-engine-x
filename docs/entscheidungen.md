@@ -782,3 +782,6 @@ Emrah: „frag die frage hier im chat .. aber deine fragen sind meistens nicht a
 ## 04.11.2026 – Neue Einschätzung sofort mit Hinweis (1B) und „kurzer Tag“ (2A)
 - **1B:** Eine neue KI-Einschätzung erscheint sofort; auf „Fortschritt“ steht dazu ein deutlicher Hinweis „Claude hat dich am … neu eingeschätzt: Wörter jetzt B2 (vorher B2+)“. Grundlage ist der Verlauf `app/assess.hist` (vorheriger Tag), keine neue Datenstruktur. Hinweis bis 3 Tage nach der Einschätzung.
 - **2A:** „Kurzer Tag“ (ca. 10 Minuten) auf Heute: nur solange an dem Tag noch nichts erledigt ist, danach steht der Tagesweg fest; höchstens zweimal je Kalenderwoche. Die Serie hält, wenn der kurze Tagesweg erledigt ist.
+
+## 04.11.2026 – Live nehmen und Roadmap fertig programmieren
+Emrah: „Ja live nehmen. Und die gesamte roadmap im Hintergrund abschließen also fertig programmieren“. Live: Stand Test-Link v86 (JLL8 Version 93). Danach Großpaket B fertig (Rest auf Test-Link), dann Großpaket C (schneller Start) und die übrigen Roadmap-Punkte ohne weiteres gemeinsames Planen; Live-Gang weiter nur nach „Ja live nehmen“.
