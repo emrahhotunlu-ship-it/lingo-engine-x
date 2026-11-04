@@ -24,13 +24,12 @@ export { Skeleton } from '../../ui/Skeleton';
 export { Row, RowList } from '../../ui/RowList';
 export { TabTitle } from '../../features/system/Chrome';
 export { ExerciseTop } from '../../features/learn/ui';
-export { MarkedText } from '../../features/tutor/MarkedText';
 
 // KI: Anfrage, Verfügbarkeit, Tagesbremse
 export { useAsk } from '../../ai/useAsk';
-export { selectAiAvailable, useAiAvailable } from '../../ai/scope';
+export { useAiAvailable } from '../../ai/scope';
 export { takeTutorCall } from '../../ai/tutorBudget';
-export { useCapabilities, getDb } from '../../platform/capabilities';
+export { getDb } from '../../platform/capabilities';
 
 // Daten: Live-Stand, träges Lesen, der eine Schreibpfad und die vorhandenen Schreiber
 export { useLive } from '../../data/live';
