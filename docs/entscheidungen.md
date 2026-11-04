@@ -796,3 +796,6 @@ Festlegung (ersetzt den Plan „Module P/L“ vom 04.11. abends):
 - **Raus aus der Oberfläche** (nur ausblenden, Daten werden nie gelöscht, Rückweg per Schalter): Sprechen/Rollenspiel, Einwand-Training, Hören (Hörschleife, Hörübung, Diktat), Lesen-Reiter mit Kursen, Sprint, Satzbau/Lückenjagd als eigene Übungen, nbdrill-Sets, Tempo, C1-Filme und weitere Praxis-Kacheln. Der Tagesartikel dient nur noch als Material für „Artikel zusammenfassen“.
 - Weniger, dafür qualitativ besser: jede verbleibende Übung wird geprüft (english-teacher, learning-scientist) und an Emrahs Kommentaren K1–K14 gemessen.
 - Kurs-Routine: wird beim Live-Gang des Fokus 2.0 angehalten (nicht gelöscht).
+
+## 04.11.2026 spät – Wörter-Tagesplan passt in die Wörter-Zeit (Emrah: „A“)
+Anlass: Runde zeigte „42 von 88“ (Zählfehler: Wiederholungen derselben Karte mitgezählt – behoben mit einer Zählquelle, einzelne Wörter) und der Plan hatte 43 Wörter. Frage: Plan bis zur doppelten Wörter-Zeit (Rückstand schneller weg) oder immer in der eingestellten Zeit? Emrah: **A** – der Tagesplan passt in die eingestellte Wörter-Zeit (`BACKLOG_BUDGETS = 1`, vorher 2); Rückstand: Randwörter über die nächsten 7 Tage verteilt, Kernwörter nie verschoben (bleiben fällig, morgen zuerst). Gilt ab dem nächsten neu eingefrorenen Tagesplan.

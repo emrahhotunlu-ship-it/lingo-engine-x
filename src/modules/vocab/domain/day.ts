@@ -6,14 +6,15 @@ import type { Form, FormStats, Lex, TrackKey, VocabCfg } from './types';
 
 // Wörter-Modul V1: Tagesplan, eingefroren je Lerntag (`vmod/day`, Kap. 15; plan.md §4.4; M12, M13, M21).
 //  - Fällige nach Gefährdung (gefährdetste zuerst), Kernwörter vor Randwörtern.
-//  - Rückstand: höchstens 2 Tagesbudgets je Tag. Der Rest: Randwörter werden nach Gefährdung auf die nächsten 7 Tage verteilt (Lastausgleich),
+//  - Rückstand: höchstens 1 Tagesbudget je Tag (Emrah 04.11.2026, Wahl A: „88 Wörter in einem Durchgang“ – der Plan passt in die eingestellte
+//    Wörter-Zeit; vorher 2 Budgets). Der Rest: Randwörter werden nach Gefährdung auf die nächsten 7 Tage verteilt (Lastausgleich),
 //    jedes höchstens 3-mal (`lex.mv`); Kernwörter und dreimal verschobene bleiben fällig und kommen am nächsten Tag zuerst.
 //  - Neue: mindestens 2 an jedem Lerntag (auch bei Rückstand), ohne Rückstand (alle Fälligen passen ins Tagesbudget) mindestens 5
 //    (Emrah 02.11.2026; der Wörter-Schritt darf dafür 1–3 Minuten länger dauern); darüber so viele, wie das Minutenbudget erlaubt, höchstens das Kontingent;
 //    bei Kontingent 0 keine (Emrahs Antwort 5). Nie zwei verwechselbare neue am selben Tag, nie eine Kollokation am Einführungstag ihres Kernworts.
 
 export const MOVE_MAX = 3;
-export const BACKLOG_BUDGETS = 2;
+export const BACKLOG_BUDGETS = 1;
 export const SPREAD_DAYS = 7;
 export const MIN_NEW = 2;
 /** Mindestzahl neuer Wörter, wenn kein Rückstand besteht (Emrah 02.11.2026: „Mind. 5 neue, wenn kein Rückstand“). */

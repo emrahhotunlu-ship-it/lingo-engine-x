@@ -263,14 +263,19 @@ describe('Tagesplan (M12, M13, M21)', () => {
     const cat = new Catalog([...mk(5, -1), ...fresh(10)]);
     expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 0 }, {}).plan.fresh).toBe(0);
   });
-  it('Rückstand: höchstens 2 Tagesbudgets; nur Randwörter werden verschoben, Kernwörter zuerst', () => {
+  // Emrah 04.11.2026 (Wahl A): der Plan passt in die eingestellte Wörter-Zeit (1 Tagesbudget statt 2); Kernwörter zuerst, sie werden nie
+  // verschoben (bleiben fällig und kommen morgen zuerst), Randwörter werden auf die nächsten 7 Tage verteilt.
+  it('Rückstand: höchstens 1 Tagesbudget; nur Randwörter werden verschoben, Kernwörter zuerst', () => {
     const cat = new Catalog([...mk(60, -3, 'core'), ...mk(140, -3, 'edge'), ...fresh(3)]);
     const { plan, moves } = buildDayPlan(cat, T0, DEFAULT_CFG, {});
-    expect(plan.min).toBeLessThanOrEqual(2 * DEFAULT_CFG.min + 0.1);
+    expect(plan.min).toBeLessThanOrEqual(DEFAULT_CFG.min + 3.1);
     expect(moves.length).toBeGreaterThan(0);
     for (const m of moves) expect(m.path).toMatch(/edge/);
-    const corePlanned = plan.plan.filter((e) => e[0].includes('core')).length;
-    expect(corePlanned).toBe(60);
+    const due = plan.plan.filter((e) => e[1] !== 'n');
+    const corePlanned = due.filter((e) => e[0].includes('core')).length;
+    expect(corePlanned).toBeGreaterThan(0);
+    // Solange Kernwörter offen bleiben, steht kein Randwort im Plan.
+    if (corePlanned < 60) expect(due.every((e) => e[0].includes('core'))).toBe(true);
     for (const m of moves) expect(m.to > dayKey(T0) && m.to <= addDays(dayKey(T0), 7)).toBe(true);
     // Start-Bildschirm (V3 Schritt 4): `sp` zählt den ganzen Rückstand je Lerntag (Verschobene am Zieltag, nicht verschobene morgen).
     const sp = plan.sp ?? [];
