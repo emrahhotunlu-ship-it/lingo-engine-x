@@ -240,11 +240,25 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
     const g = gap.current;
     const i = inner.current;
     if (!g || !i) return;
+    const em = parseFloat(getComputedStyle(g).fontSize) || 16;
     if (masked || revealed) {
+      // K3 (Abgleich 04.11.2026): Die aufgedeckte Lösung brach in der Lücke um („trade-/off“), obwohl die Zeile Platz hatte.
+      // Passt sie in die Zeile, bleibt sie in einer Zeile; nur zu lange Lösungen dürfen umbrechen.
+      if (revealed) {
+        let rbox: HTMLElement | null = g.parentElement;
+        while (rbox && getComputedStyle(rbox).display.startsWith('inline')) rbox = rbox.parentElement;
+        const ravail = rbox && rbox.clientWidth > 0 ? rbox.clientWidth : Infinity;
+        // Erst ohne Umbruch messen, dann entscheiden (die umgebrochene Breite verrät nicht, ob die Lösung in eine Zeile passt).
+        i.style.flexWrap = 'nowrap';
+        i.style.whiteSpace = 'nowrap';
+        if (i.scrollWidth + 0.6 * em > ravail) {
+          i.style.flexWrap = 'wrap';
+          i.style.whiteSpace = '';
+        }
+      }
       api.remeasure();
       return;
     }
-    const em = parseFloat(getComputedStyle(g).fontSize) || 16;
     // Natürliche Breite = Summe der Wortgruppen (die Innenfläche selbst kann schon umbrechen);
     // höchstens die volle Zeilenbreite, darüber bricht die Antwort zwischen Wörtern um.
     const natural = Array.from(i.children).reduce((sum, el) => sum + el.getBoundingClientRect().width, 0) || i.scrollWidth;
@@ -254,6 +268,7 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
     const target = Math.min(Math.max(3.5 * em, natural + 0.6 * em), avail);
     // Passt die Antwort in die Zeile, bricht sie nie im Kasten um (auch nicht, solange die Breite noch nachzieht); nur zu lange Antworten umbrechen.
     i.style.flexWrap = natural + 0.6 * em <= avail ? 'nowrap' : 'wrap';
+    i.style.whiteSpace = '';
     const cur = width.get();
     if (typeof cur !== 'number' || reduce) width.set(target);
     else if (cur !== target) void animate(width, target, { type: 'spring', stiffness: 520, damping: 40 });
@@ -274,9 +289,22 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
     const gr = g.getBoundingClientRect();
     // Emrahs Kommentar 03.11.2026 („der Cursor blinkt genau in die Zeile rein“): der Strich steht in der Schrifthöhe und endet über der
     // Unterstreichung der Lücke (oben 12 %, Länge 70 % der Zeilenhöhe), statt die ganze Zeilenhöhe bis auf die Linie zu reichen.
-    const lineH = Math.max(12, pt.bottom - pt.top);
+    const em = parseFloat(getComputedStyle(g).fontSize) || 16;
+    let lineH = pt.bottom - pt.top;
+    let top0 = pt.top - gr.top;
+    // K2 (Abgleich 04.11.2026): In der leeren Lücke hat die Messstelle keine Höhe – der Strich lag dann als kurzer Rest auf der Linie.
+    // Ohne Buchstaben stehen Höhe und Oberkante deshalb aus Schriftgröße und Innenfläche der Lücke selbst (mittig über der Unterstreichung).
+    if (lineH < em * 0.6) {
+      const cs = getComputedStyle(g);
+      const padT = parseFloat(cs.paddingTop) || 0;
+      const padB = parseFloat(cs.paddingBottom) || 0;
+      const innerH = Math.max(em, g.clientHeight - padT - padB);
+      lineH = Math.min(innerH, em * 1.25);
+      top0 = padT + (innerH - lineH) / 2;
+    }
+    lineH = Math.max(12, lineH);
     const left = `${Math.round((pt.x - gr.left - 1) * 10) / 10}px`;
-    const top = `${Math.round((pt.top - gr.top + lineH * 0.12) * 10) / 10}px`;
+    const top = `${Math.round((top0 + lineH * 0.12) * 10) / 10}px`;
     const height = `${Math.round(Math.max(10, lineH * 0.7) * 10) / 10}px`;
     const moved = c.style.left !== left || c.style.top !== top || c.style.display === 'none';
     c.style.display = '';
