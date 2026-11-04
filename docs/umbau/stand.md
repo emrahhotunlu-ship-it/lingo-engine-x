@@ -960,3 +960,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Ladezeiten: Bildschirm-Teile werden nach dem ersten Bild im Leerlauf vorgeladen (`src/app/prefetch.ts`); der große Schritt kommt mit Großpaket C (kleinere Einstiegsdatei).
 - Test-Link `AXHkh6…` v87 `1793800761-0601` (Rückweg v86 `1793790983-4895`). Live erst nach „Ja live nehmen“.
 - **Live** `JLL8…` v94 `1793804819-55c8` (Emrahs „ja live nehmen“, Rückweg v93 `1793794178-00dd`).
+
+## 04.11.2026 – Großpaket C „schneller Start“ auf dem Test-Link
+- Einstiegsdatei 1,09 MB gzip statt ca. 2,8 MB: große Inhalte (Grammatik, C1-Aufgaben, Wörterbuch, Lautschrift, Lehrer, Atlas) liegen als gebündelte `raw-*.txt` und werden beim Start parallel geladen; Englisch lädt erst, wenn es gebraucht wird (`src/i18n/dicts.ts`, `ensureLang`). Dauert das Laden länger als 15 s: Band „Das Laden dauert länger als üblich“ mit „Neu laden“; schlägt es fehl: Hinweis mit „Neu laden“ statt leerer Seite.
+- Prüfer: data-guard und platform-guard ohne Blocker, Sollte-Punkte umgesetzt. Voller Lauf: 7561 Unit grün, Typprüfung/Lint grün, `check:platform` Freigabe (82 Dateien, 6,66 MB); E2E 1154 grün, 10 rot unter Last → einzeln nachgelaufen alle grün bis auf einen Wackler (`r6aFx` reduzierte Bewegung: zählte Bilder vor dem Einschwingen), behoben (`5ebb7e8`), betroffene Testdateien 88/88 grün.
+- Test-Link `AXHkh6…` v88 `1793817467-f318` (Rückweg v87 `1793800761-0601`), Stand `5ebb7e8`; 82 Dateien (`.txt` als text/plain bestätigt), 33 alte Stücke mit `null` entfernt; Fähigkeiten unverändert. Live `JLL8…` bleibt v94 bis Emrahs „Ja live nehmen“.
+- Offen (optional): `budget.json` Einträge für die neuen nachgeladenen Stücke, `docs/umbau/mehr-datei.md` (txt, Grenzen 255 Dateien/64 MB), Einzeldatei-Rückfall nicht gemessen.
