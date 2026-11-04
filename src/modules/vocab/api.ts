@@ -78,6 +78,15 @@ export function wordsDayPlan(dayDoc: Doc | null | undefined, day: string): PlanE
 }
 
 /**
+ * Heutigen Wörter-Plan lesen (für Heute, K11): der Pfad bleibt im Modul; der Aufrufer reicht nur das Lesen eines Dokuments herein
+ * (`undefined` = fehlt oder unlesbar). Wirft bei Lesefehlern.
+ */
+export async function loadWordsDayPlan(read: (path: string) => Promise<Doc | undefined>, day: string): Promise<PlanEntry[] | null> {
+  const { VMOD_DAY_PATH } = await import('./registry');
+  return wordsDayPlan(await read(VMOD_DAY_PATH), day);
+}
+
+/**
  * Stand der Wörter für Heute (K11/K12/K13): dieselbe Zählregel wie der Zähler der Runde (`domain/dayCount.ts`), aus dem eingefrorenen
  * Plan und den Live-Dokumenten. `docOf(path)` liefert das Wort-Dokument; ausgeblendete und zusammengeführte Wörter zählen wie in der Runde nicht.
  */

@@ -362,10 +362,7 @@ function Retype({ answer, onDone, onEnter }: { answer: string; onDone: (ok: bool
           // Kein Kontakt-/Namensvorschlag von iOS (Emrah 04.11.2026), wie im Antwortfeld der Lücke.
           name="lx-retype"
           aria-autocomplete="none"
-          data-form-type="other"
-          data-lpignore="true"
-          data-1p-ignore=""
-          placeholder={answer.replace(/\S/g, '·')}
+                placeholder={answer.replace(/\S/g, '·')}
           aria-label={t('kernRetypeLabel', { answer })}
           data-testid="vm-retype-input"
         />

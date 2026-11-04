@@ -3515,7 +3515,7 @@
  "leer 2026-09-14 fast": {
   "min": "25",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3573,7 +3573,7 @@
  "leer 2026-09-17 fast": {
   "min": "25",
   "restart": null,
-  "n": "17. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "17. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3631,7 +3631,7 @@
  "leer 2026-09-20 fast": {
   "min": "25",
   "restart": null,
-  "n": "20. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 2 2 25 0 0 0",
+  "n": "20. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3689,7 +3689,7 @@
  "leer 2026-09-23 fast": {
   "min": "25",
   "restart": null,
-  "n": "23. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "23. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3747,7 +3747,7 @@
  "leer 2026-09-26 fast": {
   "min": "25",
   "restart": null,
-  "n": "26. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "26. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -3805,7 +3805,7 @@
  "leer 2026-09-29 fast": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3863,7 +3863,7 @@
  "leer 2026-10-02 fast": {
   "min": "25",
   "restart": null,
-  "n": "2. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "2. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3921,7 +3921,7 @@
  "leer 2026-10-05 fast": {
   "min": "25",
   "restart": null,
-  "n": "5. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "5. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -3979,7 +3979,7 @@
  "leer 2026-10-08 fast": {
   "min": "25",
   "restart": null,
-  "n": "8. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "8. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4037,7 +4037,7 @@
  "leer 2026-10-11 fast": {
   "min": "25",
   "restart": null,
-  "n": "11. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 2 2 25 0 0 0",
+  "n": "11. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4181,7 +4181,7 @@
  "seed 2026-09-24 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 0 66 2 1 10 3 5 10 2 2 25 0 124 0",
+  "n": "24. 0 3 25 0 3 25 1 0 66 2 1 10 3 5 10 25 2 2 25 0 124 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4440,7 +4440,7 @@
  "leer 2026-09-20 leer breit": {
   "min": "25",
   "restart": null,
-  "n": "20. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 2 2 25 0 0 0",
+  "n": "20. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4636,7 +4636,7 @@
  "seed 2026-09-23 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "23. 0 3 25 0 3 25 1 0 66 2 1 10 3 5 10 2 2 25 0 124 0",
+  "n": "23. 0 3 25 0 3 25 1 0 66 2 1 10 3 5 10 25 2 2 25 0 124 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -4692,7 +4692,7 @@
  "seed 2026-09-26 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "26. 0 3 25 0 3 25 1 0 67 2 1 10 3 5 10 2 2 25 0 124 0",
+  "n": "26. 0 3 25 0 3 25 1 0 67 2 1 10 3 5 10 25 2 2 25 0 124 0",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -5117,7 +5117,7 @@
  "gross 2026-09-24 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 10 2 2 25 0 1.240 0",
+  "n": "24. 0 3 25 0 3 25 1 0 68 2 1 10 3 5 10 25 2 2 25 0 1.240 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5340,7 +5340,7 @@
  "leer 2026-09-14 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5368,7 +5368,7 @@
  "leer 2026-09-14 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "14. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5396,7 +5396,7 @@
  "leer 2026-09-19 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "19. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -5424,7 +5424,7 @@
  "leer 2026-09-19 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "19. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=sat rest=25",
    "hero duty=review",
@@ -5452,7 +5452,7 @@
  "leer 2026-09-24 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "24. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5480,7 +5480,7 @@
  "leer 2026-09-24 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "24. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5508,7 +5508,7 @@
  "leer 2026-09-29 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5536,7 +5536,7 @@
  "leer 2026-09-29 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "29. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5564,7 +5564,7 @@
  "leer 2026-10-04 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "4. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 2 2 25 0 0 0",
+  "n": "4. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5592,7 +5592,7 @@
  "leer 2026-10-04 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "4. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 2 2 25 0 0 0",
+  "n": "4. 0 3 25 0 3 25 1 0 5 2 1 10 3 12 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5620,7 +5620,7 @@
  "leer 2026-10-09 leer 02:30": {
   "min": "25",
   "restart": null,
-  "n": "9. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "9. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",
@@ -5648,7 +5648,7 @@
  "leer 2026-10-09 halb 02:30": {
   "min": "25",
   "restart": null,
-  "n": "9. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 2 2 25 0 0 0",
+  "n": "9. 0 3 25 0 3 25 1 0 5 2 1 10 3 5 10 25 2 2 25 0 0 0",
   "s": [
    "settled= today-card shape=full rest=25",
    "hero duty=review",

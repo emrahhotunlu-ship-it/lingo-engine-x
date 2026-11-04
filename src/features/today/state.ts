@@ -39,7 +39,7 @@ type Sources = {
   liveEntries: readonly DayEntry[];
   pending: Pending;
   marks: readonly string[];
-  /** Wörter von heute aus `vmod/day` (K11); `undefined` = nicht übergeben. */
+  /** Wörter von heute aus eingefrorenen Wörter-Plan (K11); `undefined` = nicht übergeben. */
   vocabDay?: { done: number; total: number } | null;
 };
 

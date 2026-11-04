@@ -321,7 +321,7 @@ export function TodayScreen() {
   // sobald er steht (`ok`): Die echte Karte ersetzt das Startbild an derselben Stelle und in derselben Höhe.
   const startDoc = useValidTodayDoc();
   useEffect(() => markStart('lx:skeleton'), []);
-  // K11: Wörter-Stand aus dem eingefrorenen `vmod/day` (dieselbe Zählung wie die Runde), beim Öffnen und sobald der Plan steht frisch gelesen.
+  // K11: Wörter-Stand aus dem eingefrorenen Wörter-Plan (dieselbe Zählung wie die Runde), beim Öffnen und sobald der Plan steht frisch gelesen.
   const vocabOn = vocabModuleOn(profile);
   useEffect(() => {
     if (vocabOn && ready) void loadWordsDay(today);

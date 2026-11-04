@@ -193,7 +193,7 @@ export type DeriveInput = {
    */
   vocabMod?: boolean;
   /**
-   * Neue Wörter-App: Stand des eingefrorenen Wörter-Plans (`vmod/day`, einzelne Wörter; dieselbe Zählung wie die Runde, K11). `null` = Plan
+   * Neue Wörter-App: Stand des eingefrorenen Wörter-Plans (einzelne Wörter, einzelne Wörter; dieselbe Zählung wie die Runde, K11). `null` = Plan
    * noch nicht gelesen (dann nennt Heute keine Wortzahl); fehlt das Feld, gilt die frühere Zahl des Tagesplans.
    */
   vocabDay?: { done: number; total: number } | null;

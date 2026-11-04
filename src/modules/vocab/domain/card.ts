@@ -27,7 +27,14 @@ export const sentenceKey = (en: string): string => `h${hash32(exampleKey(en)).to
 
 // ---------------------------------------------------------------- Sätze je Lexem
 
-export type Sent = { key: string; en: string; de: string | null; src: 'ex' | 'wx' | 'sb' };
+export type Sent = {
+  key: string;
+  en: string;
+  de: string | null;
+  src: 'ex' | 'wx' | 'sb';
+  /** Vom Inhalt markierte Stelle (`[…]` im Rohsatz), Zeichenbereich im gezeigten Satz `en`; Rückfall für die Lücke (Inhalts-Audit 04.11.2026). */
+  mark?: readonly [number, number];
+};
 
 const DAY_MS = 86_400_000;
 /** Satzbank: 4 Wochen Sammelzeit je Satz und für die Freigabe (gleiche Regel wie src/domain/tutor/sentenceBank). */
@@ -63,14 +70,15 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
   const push = (raw: string, own: unknown, src: Sent['src'], anchor = false) => {
     // Inhalte markieren das Gesuchte mit eckigen Klammern („She [achieved] her goal“): gezeigt wird der Satz ohne sie (UX-Prüfung V3 Nr. 2).
     // Die Schlüssel ändern sich dadurch nicht (`exampleKey` entfernt Klammern ohnehin).
-    const en = raw
-      .replace(/\[([^\]]*)\]/g, '$1')
-      .replace(/\s+/g, ' ')
-      .trim();
+    const norm = raw.replace(/\s+/g, ' ').trim();
+    const en = norm.replace(/\[([^\]]*)\]/g, '$1');
     const k = exampleKey(en);
     if (!k || seen.has(k)) return;
     seen.add(k);
-    out.push({ key: anchor ? 'a' : sentenceKey(en), en, de: deOf(en, own), src });
+    // Die erste markierte Stelle merken (vor ihr steht keine Klammer mehr, die Lage stimmt also im gezeigten Satz).
+    const m = /\[([^\]]*)\]/.exec(norm);
+    const mark: [number, number] | null = m && m[1]!.trim() ? [m.index, m.index + m[1]!.length] : null;
+    out.push({ key: anchor ? 'a' : sentenceKey(en), en, de: deOf(en, own), src, ...(mark ? { mark } : {}) });
   };
   const ex = str(doc.ex);
   if (ex) push(ex, null, 'ex', true);
@@ -107,10 +115,20 @@ export const SPLIT_MAX_BETWEEN = 2;
 
 /** Wörter des Stichworts (ohne „to“, ohne Platzhalter wie *sth*). */
 export function headWords(head: string): string[] {
-  return normalize(head)
-    .replace(/^to /, '')
-    .split(' ')
-    .filter((w) => w && !PLACEHOLDER.has(w));
+  const n = normalize(head);
+  return (verbTo(n) ? n.replace(/^to /, '') : n).split(' ').filter((w) => w && !PLACEHOLDER.has(w));
+}
+
+/**
+ * Ist „to“ am Anfang das Infinitiv-Zeichen (Verb: „to adjust“) und nicht Teil einer festen Wendung („to a certain extent“, „to the best of my
+ * knowledge“, „to date“, „to begin with“)? Inhalts-Audit 04.11.2026: vorher wurde „to“ immer abgeschnitten, die Lücke zeigte „To ___“.
+ */
+const KEEP_TO = new Set(['a', 'an', 'the', 'my', 'your', 'our', 'his', 'her', 'their', 'some', 'this', 'that', 'what', 'date', 'no', 'and', 'be']);
+function verbTo(normalized: string): boolean {
+  const m = /^to (\S+)(?: (\S+))?/.exec(normalized);
+  if (!m) return false;
+  if (KEEP_TO.has(m[1]!)) return false;
+  return !(m[1] === 'begin' && m[2] === 'with');
 }
 
 /**
@@ -120,7 +138,7 @@ export function headWords(head: string): string[] {
 export function headShown(head: string): string {
   const words = headWords(head).join(' ');
   const toks = head.trim().split(/\s+/);
-  if (toks[0]?.toLowerCase() === 'to') toks.shift();
+  if (toks[0]?.toLowerCase() === 'to' && verbTo(normalize(head))) toks.shift();
   const shown = toks.filter((w) => !PLACEHOLDER.has(w.toLowerCase().replace(/^[([]|[)\],;:]$/g, ''))).join(' ');
   return shown && normalize(shown) === words ? shown : words;
 }
@@ -185,6 +203,21 @@ export function locateGap(en: string, head: string, opts: { pv?: boolean } = {})
   return null;
 }
 
+/**
+ * Rückfall, wenn `locateGap` nichts findet (Inhalts-Audit 04.11.2026: „meet sb halfway“ ↔ „[meet you halfway]“ – der Platzhalter steht im Satz
+ * als echtes Wort): die vom Inhalt markierte Stelle wird die Lücke. Sicherung: mindestens ein Wort des Stichworts steht (gebeugt) in der
+ * markierten Stelle, sonst `null`.
+ */
+export function gapFromMark(en: string, mark: readonly [number, number], head: string): Gap | null {
+  const hw = headWords(head);
+  if (!hw.length) return null;
+  const toks = tokenize(en);
+  const inside = toks.map((t, i) => ({ t, i })).filter(({ t }) => t.s >= mark[0] && t.e <= mark[1]);
+  if (!inside.length) return null;
+  if (!inside.some(({ t }) => hw.some((h) => matchesWord(t.w, h)))) return null;
+  return build(en, toks, [[inside[0]!.i, inside.at(-1)!.i]]);
+}
+
 /** Satz mit dem Gesuchten in eckigen Klammern (Format der Inhalte, für `leaks`). */
 export const bracketed = (g: Gap): string => g.segs.map((s) => (s.t === 'gap' ? `[${s.s}]` : s.s)).join('');
 
@@ -197,7 +230,7 @@ export function usableSentences(sents: readonly Sent[], head: string, pv: boolea
   const ok: CardSentence[] = [];
   const skipped: Sent[] = [];
   for (const s of sents) {
-    const gap = locateGap(s.en, head, { pv });
+    const gap = locateGap(s.en, head, { pv }) ?? (s.mark ? gapFromMark(s.en, s.mark, head) : null);
     if (!gap) skipped.push(s);
     else if (!leaks(bracketed(gap), gap.answer)) ok.push({ sent: s, gap });
   }
