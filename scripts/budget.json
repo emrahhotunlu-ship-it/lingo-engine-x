@@ -48,6 +48,10 @@
         "Großpaket G": {
           "bytes": 6000,
           "freigabe": "Hauptsitzung 03.11.2026: Grammatik neu (Schalter gcfg, Themen-Weg, eigene Fehlersätze im Schritt, Aufgabe war unfair mit Spur, Zweitmeinung für alle getippten Arten; Emrahs OK zu Großpaket G)"
+        },
+        "Kern + Großpaket B": {
+          "bytes": 4000,
+          "freigabe": "Hauptsitzung 04.11.2026: Urlaub/Ruhetag in der Serie, Seite So funktioniert's, alte Wege auf die Wörter-App (Emrahs Auftrag 03.11.2026: restlichen Gesamtplan bauen)"
         }
       }
     },
@@ -159,6 +163,18 @@
       },
       "_vlog": {
         "basis": 2400,
+        "zuwachs": {}
+      },
+      "_day": {
+        "basis": 1800,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/ui/mistakes.ts": {
+        "basis": 400,
+        "zuwachs": {}
+      },
+      "_sources": {
+        "basis": 2200,
         "zuwachs": {}
       }
     },

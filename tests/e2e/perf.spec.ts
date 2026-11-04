@@ -143,7 +143,7 @@ async function trackLayout(page: Page): Promise<void> {
     const tick = () => {
       const q = (s: string) => document.querySelector(s)?.getBoundingClientRect() ?? null;
       // Relaunch P6: dazu das Startbild aus `app/today` (`start-card`, Knopf `start-go`) an derselben Stelle.
-      const card = q('[data-testid="today-card"]') ?? q('[data-testid="start-card"]') ?? q('[data-testid="today-skeleton"]') ?? q('#lx-boot .lx-vh-today');
+      const card = q('[data-testid="today-card"]') ?? q('[data-testid="start-card"]') ?? q('[data-testid="today-skeleton"]') ?? q('#lx-boot .lx-kh-card');
       const start = q('[data-testid="start"]') ?? q('[data-testid="start-go"]');
       w.__lay.push({ t: performance.now(), boot: !!document.getElementById('lx-boot'), card: card ? card.y : null, h: card ? card.height : null, start: start ? start.y : null, date: document.querySelector('h1')?.textContent?.trim() ?? '' });
       if (performance.now() < 30_000) requestAnimationFrame(tick);
