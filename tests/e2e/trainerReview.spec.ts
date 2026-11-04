@@ -151,11 +151,11 @@ test.describe('Desktop', () => {
     await expect(page.getByTestId('hint-line')).toBeVisible();
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-    await expect(page.getByTestId('status')).toContainText('Lernt');
+    await expect(page.getByTestId('status')).toContainText('lernst du gerade');
     await page.keyboard.press('Enter');
     await expect(page.locator('[data-step]')).toHaveCount(1);
     await expect(page.getByTestId('exercise')).toHaveAttribute('data-card', 'avoid');
-    await expect(page.getByTestId('status')).toContainText('Lernt');
+    await expect(page.getByTestId('status')).toContainText('lernst du gerade');
     await expect(page.getByTestId('again-badge')).toHaveText('noch einmal');
     expect(errors).toEqual([]);
   });

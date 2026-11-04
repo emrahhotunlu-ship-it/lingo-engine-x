@@ -25,15 +25,19 @@ async function settled(page: Page) {
   await page.waitForTimeout(150);
 }
 
-/** Überlappt das Fenster eine der Leisten (Aktionsleiste, untere Reiterleiste)? */
+/** Überlappt das Fenster eine der Leisten (Aktionsleiste, untere Reiterleiste)? Auf Touch-Geräten steht die Knopfleiste seit Fokus 2.0
+ *  im Inhalt der Karte (ActionBar `inlineOnTouch`); das Fenster bleibt dann bewusst über der Aufgabe frei und darf die Knöpfe überdecken
+ *  (Schließen bringt sie zurück) – gezählt werden nur feste Leisten. */
 async function overlap(page: Page): Promise<string[]> {
   return page.evaluate(() => {
+    const inline = document.documentElement.hasAttribute('data-actionbar-inline');
     const w = document.querySelector('[data-testid="companion"]')?.getBoundingClientRect();
     if (!w) return ['kein Fenster'];
     const out: string[] = [];
     for (const el of document.querySelectorAll<HTMLElement>('[data-testid="actionbar"], .dz-tabbar')) {
       const r = el.getBoundingClientRect();
       if (r.height < 8 || r.top < window.innerHeight * 0.4) continue;
+      if (inline && el.closest('.lx-actionbar-column')) continue;
       const hit = !(w.right <= r.left || w.left >= r.right || w.bottom <= r.top + 1 || w.top >= r.bottom);
       if (hit) out.push(`${el.getAttribute('data-testid') ?? el.className}: Fenster ${Math.round(w.top)}-${Math.round(w.bottom)} / Leiste ab ${Math.round(r.top)}`);
     }

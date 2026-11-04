@@ -654,3 +654,15 @@ html:not([data-theme='dim']) .lx-kretype input {
     --lx-stage-max: none;
   }
 }
+
+/* Touch-Geräte: die Knopfleiste in der Karte haftet beim Scrollen unten im Bild (sticky). Damit nichts durchscheint, trägt sie eine eigene
+   dichte Glasfläche wie die Kapsel am Monitor (kern.css); ohne Glas eine deckende Fläche. */
+html[data-actionbar-inline] .lx-actionbar-column {
+  margin-inline: -8px;
+  padding: 8px;
+  border-radius: 24px;
+  background: var(--glass-dense, var(--surface));
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow: var(--shadow);
+}

@@ -281,12 +281,15 @@ test.describe('Kap. 4.1: Lücke und Prüfen-Knopf bleiben über der iPhone-Tasta
     const expected = await page.evaluate(() => {
       const vv = window.visualViewport as unknown as EventTarget & { height: number };
       vv.height = 300;
-      // Die feste Aktionsleiste (Prüfen) folgt der Tastatur selbst: Es zählt nur der Bereich darüber.
+      // Fokus 2.0: Auf Touch-Geräten steht die Knopfleiste im Inhalt (`data-actionbar-inline`) – dann müssen Lücke UND Prüfen-Knopf über
+      // der Tastatur stehen. Eine feste Leiste (ohne Touch) folgt der Tastatur selbst: dann zählt nur der Bereich darüber.
+      const inline = document.documentElement.hasAttribute('data-actionbar-inline');
       const bar = document.querySelector<HTMLElement>('[data-testid="actionbar"]')!;
       const gap = document.querySelector('[data-testid="gap"]')!.getBoundingClientRect();
+      const check = document.querySelector('[data-testid="check"]')!.getBoundingClientRect();
       const top = gap.top;
-      const bottom = gap.bottom;
-      const h = 300 - bar.offsetHeight;
+      const bottom = inline ? Math.max(gap.bottom, check.bottom) : gap.bottom;
+      const h = inline ? 300 : 300 - bar.offsetHeight;
       vv.dispatchEvent(new Event('resize'));
       if (bottom - top > h - 24) return Math.round(top - 12);
       if (bottom > h - 12) return Math.round(bottom - (h - 12));

@@ -3,7 +3,7 @@ import { useT, type MessageKey } from '../../i18n';
 import type { ShellStatus } from './ExerciseShell';
 
 // Blockzeile (Relaunch Teil 1c, D3 V-UEBUNG; Vorschau `blockline`): Bereich · Übungsart · Stand in Worten · Plakette, 13 px in --fg-2.
-// K4 (Emrah 04.11.2026): kein farbiger Kanalpunkt mehr (sagte nichts), und statt „●●●● Lernt“ steht der Stand in Worten („Dein Stand:
+// K4 (Emrah 04.11.2026): kein farbiger Kanalpunkt mehr (sagte nichts), und statt „●●●● Lernt“ steht der Stand in Worten („
 // lernst du gerade“). Kennungen (`status`, `ex-kind`, `again-badge`, `status-where`) bleiben. `state: null` = kein Stand (nie ein falsches „Neu“).
 
 const AREA: Record<ShellStatus['area'], MessageKey> = { words: 'vuAreaWords', grammar: 'vuAreaGrammar' };

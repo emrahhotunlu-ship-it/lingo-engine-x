@@ -12,7 +12,7 @@ export const exEn = {
   exStateSafe: 'Safe',
   exStateFirm: 'Firm',
   exStateLabel: 'Status: {state}',
-  exStandLine: 'Your level: {state}',
+  exStandLine: '{state}',
   exStandNew: 'new to you',
   exStandLearning: 'still learning',
   exStandWobbly: 'still shaky',

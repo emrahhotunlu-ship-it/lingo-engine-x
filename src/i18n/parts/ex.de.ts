@@ -15,7 +15,7 @@ export const exDe = {
   exStateFirm: 'Fest',
   exStateLabel: 'Stand: {state}',
   // Statuszeile der Übung in Worten (K4, statt Punkten und „Lernt“)
-  exStandLine: 'Dein Stand: {state}',
+  exStandLine: '{state}',
   exStandNew: 'neu für dich',
   exStandLearning: 'lernst du gerade',
   exStandWobbly: 'wackelt noch',

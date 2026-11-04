@@ -32,11 +32,10 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   const { errors } = await startWith(page, { 'vocab/avoid': avoid() });
   const ex = page.getByTestId('exercise');
   await expect(ex).toHaveAttribute('data-ex', 'cloze_hint');
-  // Status: vier Punkte mit Zustandswort (Neu · Lernt · Sicher · Fest) und Abfrageart; Aufgabe in einer Zeile.
+  // Status: Stand in Worten (K4, 04.11.2026: keine Punkte mehr in der Statuszeile) und Abfrageart; Aufgabe in einer Zeile.
   await expect(page.getByTestId('status')).toBeVisible();
-  await expect(page.getByTestId('status').locator('.lx-dot')).toHaveCount(4);
-  await expect(page.getByTestId('status')).toContainText('Lernt');
-  await expect(page.getByTestId('status').locator('.lx-dot[data-on]')).toHaveCount(2);
+  await expect(page.getByTestId('status').locator('.lx-dot')).toHaveCount(0);
+  await expect(page.getByTestId('ex-stand')).toHaveText('lernst du gerade');
   await expect(page.getByTestId('ex-kind')).toContainText('Lücke mit Hilfe');
   await expect(page.getByTestId('task')).toHaveText('Ergänze die Lücke.');
   // „Wozu" nur hinter dem Info-Symbol.

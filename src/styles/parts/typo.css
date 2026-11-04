@@ -35,7 +35,6 @@ html:root body .lx-exercise [data-testid='purpose'],
 html:root body .lx-exercise [data-testid='vm-cue'],
 html:root body .lx-exercise .lx-kintro-ipa,
 html:root body .lx-exercise .lx-kintro-tr,
-html:root body .lx-exercise .lx-t-meta,
 html:root body .lx-exercise .lx-knext {
   font-size: var(--t-hint);
   line-height: 1.45;
@@ -113,16 +112,4 @@ html:root body .lx-kbar-count {
     flex: 1 1 100%;
     order: 2;
   }
-}
-
-/* Touch-Geräte: die Knopfleiste in der Karte haftet beim Scrollen unten im Bild (sticky). Damit nichts durchscheint, trägt sie eine eigene
-   dichte Glasfläche wie die Kapsel am Monitor (kern.css); ohne Glas eine deckende Fläche. */
-html[data-actionbar-inline] .lx-actionbar-column {
-  margin-inline: -8px;
-  padding: 8px;
-  border-radius: 24px;
-  background: var(--glass-dense, var(--surface));
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
-  backdrop-filter: blur(24px) saturate(1.4);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
 }
