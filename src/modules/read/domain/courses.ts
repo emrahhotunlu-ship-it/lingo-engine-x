@@ -74,6 +74,14 @@ export const COURSES: readonly CourseDef[] = [
 ];
 
 export const ACTIVE_COURSES: readonly CourseDef[] = COURSES.filter((c) => c.active);
+
+/**
+ * Kursfolge (lesen-kurse.md §1 und Emrahs Entscheidung vom 14.10.2026: Start K1 + K5, höchstens zwei Kurse gleichzeitig). Ist ein laufender Kurs
+ * fertig, rückt der nächste freigeschaltete Kurs dieser Reihe nach. Die Routine wendet dieselbe Regel auf `read/cp` an (lesen-routine-kurse.md).
+ */
+export const COURSE_ORDER: readonly CourseId[] = ['k1', 'k5', 'k3', 'k4', 'k6', 'k7', 'k2', 'k8'];
+/** Höchstens so viele Kurse laufen gleichzeitig. */
+export const COURSES_AT_ONCE = 2;
 export const TOTAL_LESSONS = COURSES.reduce((a, c) => a + c.lessons, 0);
 
 export const isCourseId = (v: unknown): v is CourseId => COURSE_IDS.some((c) => c === v);

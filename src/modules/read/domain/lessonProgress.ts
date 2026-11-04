@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { TransformOp } from '../shared';
-import { courseDef, parseLessonKey } from './courses';
+import { COURSE_ORDER, COURSES_AT_ONCE, courseDef, parseLessonKey } from './courses';
 import type { CourseDef, CourseId } from './courses';
 import { jsonBytes, READ_DOC_MAX_BYTES } from './size';
 
@@ -227,4 +227,32 @@ export function courseProgress(courseId: CourseId, entries: readonly LessonEntry
   const def = courseDef(courseId);
   const done = new Set(entries.filter((e) => e.course === courseId && e.done === true).map((e) => e.n ?? 0)).size;
   return { done, total: def?.lessons ?? 0 };
+}
+
+/** Ein Kurs ist fertig, wenn alle seine Lektionen fertig sind. */
+export function courseFinished(def: CourseDef, entries: readonly LessonEntry[]): boolean {
+  return def.lessons > 0 && courseProgress(def.id, entries).done >= def.lessons;
+}
+
+/**
+ * Laufende Kurse (Kursfolge `COURSE_ORDER`): die ersten `COURSES_AT_ONCE` freigeschalteten Kurse, die noch nicht fertig sind. Rein aus `read/cp`
+ * berechnet, ohne eigenes Feld; dieselbe Regel nutzt die Kurs-Routine, um zu wissen, für welche Kurse sie Lektionen schreibt.
+ */
+export function currentCourses(entries: readonly LessonEntry[]): CourseDef[] {
+  const out: CourseDef[] = [];
+  for (const id of COURSE_ORDER) {
+    const def = courseDef(id);
+    if (!def || !def.active || def.plan.length === 0 || courseFinished(def, entries)) continue;
+    out.push(def);
+    if (out.length >= COURSES_AT_ONCE) break;
+  }
+  return out;
+}
+
+export type CourseStatus = 'current' | 'finished' | 'queued' | 'later';
+/** Stand eines Kurses für die Liste: läuft · fertig · rückt als Nächstes nach (freigeschaltet) · später (noch ohne Lehrplan). */
+export function courseStatus(def: CourseDef, entries: readonly LessonEntry[]): CourseStatus {
+  if (!def.active || def.plan.length === 0) return 'later';
+  if (courseFinished(def, entries)) return 'finished';
+  return currentCourses(entries).some((c) => c.id === def.id) ? 'current' : 'queued';
 }

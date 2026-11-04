@@ -1,10 +1,10 @@
 import { logError, logWarn } from './shared';
 import type { Writer } from './shared';
-import { ACTIVE_COURSES, courseDef } from './domain/courses';
+import { courseDef } from './domain/courses';
 import type { CourseId } from './domain/courses';
 import { acceptLesson } from './domain/lesson';
 import type { Lesson } from './domain/lesson';
-import { firstUnfinished, lessonStatePlan, parseProgress, pickNextLesson } from './domain/lessonProgress';
+import { firstUnfinished, lessonStatePlan, parseProgress, pickNextLesson, currentCourses } from './domain/lessonProgress';
 import type { LessonEntry, NextLesson } from './domain/lessonProgress';
 import { readLessonPath, READ_PROGRESS_PATH } from './domain/paths';
 import { notifyReadStateSaved } from './store';
@@ -64,15 +64,17 @@ export async function loadCourseHome(read: Reader): Promise<CourseHome> {
   const entries = parsed.ok ? parsed.items : [];
   if (!parsed.ok) logWarn('read:courses', { code: 'invalid_doc', message: 'read/cp hat keinen lesbaren Aufbau' }, READ_PROGRESS_PATH);
   const ready = new Set<CourseId>();
+  // Nur die laufenden Kurse (höchstens zwei, Kursfolge): ein fertiger Kurs macht Platz für den nächsten.
+  const running = currentCourses(entries);
   await Promise.all(
-    ACTIVE_COURSES.map(async (def) => {
+    running.map(async (def) => {
       const n = firstUnfinished(def, entries, def.id);
       if (n === null) return;
       const res = await loadLesson(read, def.id, n);
       if (res.status === 'ready') ready.add(def.id);
     }),
   );
-  return { entries, hidden: parsed.ok ? parsed.hidden.length : 0, progressInvalid: !parsed.ok, ready, next: pickNextLesson(ACTIVE_COURSES, entries, ready) };
+  return { entries, hidden: parsed.ok ? parsed.hidden.length : 0, progressInvalid: !parsed.ok, ready, next: pickNextLesson(running, entries, ready) };
 }
 
 /**

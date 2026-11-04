@@ -6,6 +6,7 @@ export const rdcDe = {
   rdcHint: 'Kleine Lektionsreihen für deinen Berufsalltag. Etwa zehn Minuten je Lektion, immer freiwillig.',
   rdcLessonsCount: '{n}\u00a0Lektionen',
   rdcLater: 'Später',
+  rdcQueued: 'Als Nächstes',
   rdcProgressShort: '{done} von {total}',
   rdcToday: 'Lektion {n} · {min}\u00a0Min',
   rdcContinue: 'Weiter mit Lektion {n}',

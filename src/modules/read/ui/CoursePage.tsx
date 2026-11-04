@@ -3,7 +3,7 @@ import { Button, Disclosure, Eyebrow, HeroCard, Icon, Row, RowList, Skeleton, us
 import type { ScreenProps } from '../sharedUi';
 import { COURSES, LESSON_MINUTES, courseDef, lessonPlan } from '../domain/courses';
 import type { CourseDef, CourseId } from '../domain/courses';
-import { courseProgress, courseRows } from '../domain/lessonProgress';
+import { courseProgress, courseRows, courseStatus } from '../domain/lessonProgress';
 import type { LessonRowState, NextLesson } from '../domain/lessonProgress';
 import { useCourseHome } from './useCourseHome';
 import type { UseCourseHome } from './useCourseHome';
@@ -33,15 +33,18 @@ export function CoursesCard({ c }: { c: UseCourseHome }) {
   const lesson = next && (next.state === 'started' || !c.doneToday) ? next : null;
   const lessonDef = lesson ? courseDef(lesson.course) : null;
   const lessonName = lessonDef ? `${titleOf(lessonDef, lang)} · ${lessonTitle(lesson!.course, lesson!.n, lang) || t('rdcLessonN', { n: lesson!.n })}` : '';
-  const active = COURSES.filter((d) => d.active);
-  const later = COURSES.filter((d) => !d.active);
+  // Kursfolge: laufende Kurse (höchstens zwei) oben, dann fertige, dann die als Nächstes nachrückenden und die späteren.
+  const status = (d: CourseDef) => courseStatus(d, entries);
+  const active = COURSES.filter((d) => status(d) === 'current' || status(d) === 'finished');
+  const later = COURSES.filter((d) => status(d) === 'queued' || status(d) === 'later');
   const row = (def: CourseDef) => {
     const title = titleOf(def, lang);
     const goal = lang === 'de' ? def.goalDe : def.goalEn;
     const sub = `${goal} · ${t('rdcLessonsCount', { n: def.lessons })}`;
-    if (!def.active) return <Row key={def.id} title={title} sub={sub} value={t('rdcLater')} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'false' }} />;
+    const st = status(def);
+    if (st === 'queued' || st === 'later') return <Row key={def.id} title={title} sub={sub} value={t(st === 'queued' ? 'rdcQueued' : 'rdcLater')} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'false', 'data-status': st }} />;
     const p = courseProgress(def.id, entries);
-    return <Row key={def.id} title={title} sub={sub} value={t('rdcProgressShort', { done: p.done, total: p.total })} chevron onClick={() => go({ name: 'readCourse', id: def.id })} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'true' }} />;
+    return <Row key={def.id} title={title} sub={sub} value={t('rdcProgressShort', { done: p.done, total: p.total })} chevron onClick={() => go({ name: 'readCourse', id: def.id })} testId="read-course" data={{ 'data-course': def.id, 'data-active': 'true', 'data-status': st }} />;
   };
   return (
     <section className="flex flex-col gap-2.5" aria-label={t('rdcTitle')} data-testid="read-courses" data-load={c.load}>

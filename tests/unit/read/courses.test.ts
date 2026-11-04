@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkApply, phraseUsed, stem, tokens } from '../../../src/modules/read/domain/apply';
-import { ACTIVE_COURSES, COURSES, COURSE_IDS, TOTAL_LESSONS, courseDef, lessonKey, lessonPlan, parseLessonKey } from '../../../src/modules/read/domain/courses';
+import { ACTIVE_COURSES, COURSES, COURSE_IDS, COURSE_ORDER, TOTAL_LESSONS, courseDef, lessonKey, lessonPlan, parseLessonKey } from '../../../src/modules/read/domain/courses';
+import { courseStatus, currentCourses } from '../../../src/modules/read/domain/lessonProgress';
 import { isLessonDocId, lessonDocId, parseLessonDocId, readDocKind, readLessonPath, READ_PROGRESS_PATH } from '../../../src/modules/read/domain/paths';
 
 // Kurskatalog und lokale Prüfung des Schritts „Selbst anwenden“ (Paket L8).
@@ -101,5 +102,24 @@ describe('checkApply: nur eine Hürde für Mühe und Sprache', () => {
     const partial = checkApply('The assistant works inside my project folder. Every change is shown to me first.', targets);
     expect(partial.ok).toBe(true);
     expect(partial.hits).toEqual([false, false]);
+  });
+});
+
+describe('Kursfolge: höchstens zwei Kurse gleichzeitig, der nächste rückt nach', () => {
+  const doneAll = (course: string, n: number) => Array.from({ length: n }, (_, i) => ({ id: `${course}-${String(i + 1).padStart(2, '0')}`, course, n: i + 1, done: true }));
+  it('Start: K1 und K5 laufen (Entscheidung 14.10.2026)', () => {
+    expect(currentCourses([]).map((c) => c.id)).toEqual(['k1', 'k5']);
+    expect(courseStatus(courseDef('k1')!, [])).toBe('current');
+  });
+  it('K1 fertig → der nächste freigeschaltete Kurs der Reihe rückt nach; K1 steht als „fertig“ da', () => {
+    const entries = doneAll('k1', 10);
+    expect(courseStatus(courseDef('k1')!, entries)).toBe('finished');
+    const cur = currentCourses(entries).map((c) => c.id);
+    expect(cur).toHaveLength(Math.min(2, COURSES.filter((c) => c.active && c.plan.length > 0 && c.id !== 'k1').length));
+    expect(cur[0]).toBe('k5');
+    expect(cur).not.toContain('k1');
+  });
+  it('Reihenfolge der Kursfolge enthält jeden Kurs genau einmal', () => {
+    expect([...COURSE_ORDER].sort()).toEqual([...COURSE_IDS].sort());
   });
 });

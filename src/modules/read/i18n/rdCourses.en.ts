@@ -4,6 +4,7 @@ export const rdcEn = {
   rdcHint: 'Short lesson series for your work. About ten minutes each, always optional.',
   rdcLessonsCount: '{n}\u00a0lessons',
   rdcLater: 'Later',
+  rdcQueued: 'Up next',
   rdcProgressShort: '{done} of {total}',
   rdcToday: 'Lesson {n} · {min}\u00a0min',
   rdcContinue: 'Continue with lesson {n}',
