@@ -210,6 +210,9 @@ test.describe('Handy · Lichtfeld (P57)', () => {
     await installRafCounter(page);
     await expect(page.getByTestId('ambient')).toHaveCount(1);
     const first = await stillFrame(page);
+    // Schneller Start (Großpaket C): Inhalte kommen kurz nach dem ersten Bild nach und lösen einzelne Bilder aus.
+    // Geprüft wird „keine Dauerschleife“, deshalb erst nach dem Einschwingen zählen (wie im Test darüber).
+    await page.waitForTimeout(1500);
     const n = await rafCount(page);
     await page.waitForTimeout(800);
     expect(await rafCount(page)).toBe(n);
