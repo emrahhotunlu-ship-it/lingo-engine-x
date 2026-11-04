@@ -967,3 +967,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Test-Link `AXHkh6…` v88 `1793817467-f318` (Rückweg v87 `1793800761-0601`), Stand `5ebb7e8`; 82 Dateien (`.txt` als text/plain bestätigt), 33 alte Stücke mit `null` entfernt; Fähigkeiten unverändert. Live `JLL8…` bleibt v94 bis Emrahs „Ja live nehmen“.
 - Offen (optional): `budget.json` Einträge für die neuen nachgeladenen Stücke, `docs/umbau/mehr-datei.md` (txt, Grenzen 255 Dateien/64 MB), Einzeldatei-Rückfall nicht gemessen.
 - **Live** `JLL8…` v95 `1793821540-69ed` (Emrahs „Ja live nehmen und Plan fertigstellen“, Rückweg v94 `1793804819-55c8`); 82 Dateien, 33 alte Build-Stücke mit `null` entfernt, alte `js/`/`css/`-Dateien der Vorgänger-App unverändert; Fähigkeiten übernommen.
+
+## 04.11.2026 abends – Rest-Roadmap „Module P/L“ (Emrahs „Plan fertigstellen“)
+- Plan `docs/umbau/module/plan.md` mit Bestandslisten (`bestand-praxis.md`, `bestand-lesen.md`), architect- und learning-scientist-Prüfung eingearbeitet (Grammatik-Herkunftsmarke `ext` statt eigener Tür, Wörter über `reportEvidence` ohne Doppelbuchung, ein Fehler bucht nie beide Konten, Lesen ohne Entfernen, Kurs-Routine erst nach Live).
+- K-Abgleich der Live-Kommentare (`docs/review/k-abgleich-2026-11-04/befund.md`): K1, K6, K8, K9, K10 erledigt und im Kommentar geschlossen; K2/K3 gebaut (`de6371b`); K4, K5, K7, K11–K14 im Bau (Zweig `claude/umbau-k-rest`), M0 Belege im Bau (Zweig `claude/umbau-m0`).
