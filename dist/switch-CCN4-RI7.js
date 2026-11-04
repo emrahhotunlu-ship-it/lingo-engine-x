@@ -1,0 +1,1 @@
+import{a as e,c as t,d as n,f as r,i,l as a,m as o,n as s,o as c,p as l,r as u,s as d,t as f,u as p}from"./switch-bSFD1qOz.js";export{f as SWITCH_COLLECTIONS,s as autoEnable,u as buildInput,i as catchUpAll,e as enableModule,c as fromRead,d as lockHolder,t as migrationDone,a as preview,p as proposedOnly,n as reenableModule,r as setModuleSwitch,l as startCatchUp,o as summaryText};

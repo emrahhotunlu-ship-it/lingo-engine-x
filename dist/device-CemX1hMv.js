@@ -1,1 +1,0 @@
-import{pr as e}from"./registry-Cdwsgi8-.js";import"./sharedUi-CL3DIQ6S.js";var t=`lx:vm-dev`,n=null;function r(){let r=e.get(t);if(r&&/^[a-z0-9]{6,16}$/.test(r))return r;let i=n??`d${Math.random().toString(36).slice(2,10)}`;return n=i,e.set(t,i),i}export{r as t};

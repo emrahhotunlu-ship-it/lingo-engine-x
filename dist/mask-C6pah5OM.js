@@ -1,0 +1,1 @@
+var e=/[\p{L}\p{N}]/u;function t(t,n={}){let r=Array.from(t.trim()),i=!1,a=!0;return r.map(t=>{if(!e.test(t))return/\s/.test(t)&&(a=!0),{kind:`fixed`,ch:t};let r=n.perWord?a:!i;return a=!1,n.firstLetter&&r?(i=!0,{kind:`slot`,hint:t}):(i=!0,{kind:`slot`})})}export{t};

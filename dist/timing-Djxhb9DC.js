@@ -1,0 +1,1 @@
+import{p as e}from"./level-DZqDXhBQ.js";var t=Math.round(e.morph.visualDuration*1e3),n={first:1600,step:3200},r=6e3;function i(e){let r=(n.first+(e.steps.length-1)*(n.step+t))/1e3;return Math.max(10,Math.round((r+8)/5)*5)}export{i,t as n,r,n as t};
