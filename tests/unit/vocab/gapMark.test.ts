@@ -23,3 +23,11 @@ describe('Lücke aus der markierten Stelle', () => {
     expect(headShown('to a certain extent')).toBe('to a certain extent');
   });
 });
+
+describe('Wendungen aus Rollenspiel und Mail', () => {
+  it('ohne ex: src.upgraded ist der Ankersatz, die Lücke wird gefunden', () => {
+    const sents = sentencesOf({ en: 'behind schedule', src: { kind: 'mail', upgraded: 'The scanners are running two weeks behind schedule.' } }, 0, null);
+    expect(sents[0]).toMatchObject({ key: 'a', en: 'The scanners are running two weeks behind schedule.' });
+    expect(usableSentences(sents, 'behind schedule', false).ok).toHaveLength(1);
+  });
+});

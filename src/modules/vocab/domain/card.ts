@@ -82,6 +82,10 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
   };
   const ex = str(doc.ex);
   if (ex) push(ex, null, 'ex', true);
+  // Inhalts-Audit 04.11.2026: Wendungen aus Rollenspiel und Mail (`chunk/*`) tragen ihren Satz in `src.upgraded` (die bessere Fassung von
+  // Emrahs eigenem Satz) – vorher nicht gelesen, die Karte kam ohne Satz. Ohne `ex` wird er der Ankersatz.
+  const up = isObj(doc.src) ? str(doc.src.upgraded) : '';
+  if (up) push(up, null, ex ? 'wx' : 'ex', !ex);
   if (Array.isArray(doc.wx)) for (const x of doc.wx) if (isObj(x) && x.bad !== 1 && x.bad !== true && str(x.en)) push(str(x.en), x.de, 'wx');
   const gate = sbGateOn(sbGate);
   if (Array.isArray(doc.sb))
