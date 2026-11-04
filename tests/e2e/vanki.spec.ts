@@ -18,7 +18,7 @@ function uDueLex(): Doc {
     v: 1, k: 'w', of: null, core: null, sense: null, lv: 4,
     u: { due: NOW - D, ...fs }, b: { due: NOW + 20 * D, ...fs },
     day, dayU: null, step: null, ev: { f: [day, day], o: 0, s: 0 }, sn: [['a', day]], gr: null, reg: null, pri: 'core',
-    lc: 0, pair: null, mv: 0, sync: 0, mig: null, intro: day,
+    lc: 0, pair: null, mv: 0, sync: NOW - D, mig: null, intro: day,
   };
 }
 

@@ -20,7 +20,7 @@ function learnedLex(): Doc {
   return {
     v: 1, k: 'w', of: null, core: null, sense: null, lv: 5,
     u: { due: NOW + 30 * D, ...fs }, b: { due: NOW + 2 * D, ...fs },
-    day, dayU: null, step: null, ev: { f: [], o: 0, s: 0 }, sn: [['a', day]], gr: null, reg: null, pri: 'core', lc: 0, pair: null, mv: 0, sync: 0, mig: null, intro: day,
+    day, dayU: null, step: null, ev: { f: [], o: 0, s: 0 }, sn: [['a', day]], gr: null, reg: null, pri: 'core', lc: 0, pair: null, mv: 0, sync: NOW - D, mig: null, intro: day,
     fq: { l: 'gap', c: 0, h: { gap_hint: [1, 1], gap: [1, 1] }, nb: 0, ak: null, ew: [] },
   };
 }

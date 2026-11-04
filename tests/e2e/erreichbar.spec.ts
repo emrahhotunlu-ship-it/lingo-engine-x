@@ -54,6 +54,8 @@ for (const [label, viewport, goals] of [
   ['Laptop 1280 px', { width: 1280, height: 800 }, DESK],
 ] as const) {
   test(`A5 ${label}: jeder Bereich in höchstens zwei Klicks`, async ({ browser }) => {
+    // Rund 15 Neuladungen in einem Test: allein ~30 s, unter voller Last mehr als die üblichen 45 s (gleich auf dem Live-Stand v94).
+    test.setTimeout(120_000);
     const ctx = await browser.newContext({ viewport, hasTouch: viewport.width < 600 });
     const page = await ctx.newPage();
     const { errors, external } = await boot(page, { migrated: true });

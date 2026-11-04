@@ -1,35 +1,15 @@
-import { create } from 'zustand';
 import { de, type MessageKey } from './de';
 import { useSettings, type Lang } from '../app/settings';
-import { logError } from '../platform/diagnostics';
+import { dicts, ensureLang, useDicts } from './dicts';
 
 // Übersetzung mit Platzhaltern {name} und Mehrzahl (_one / _other).
 
 export type { MessageKey, Lang };
+export { ensureLang };
 type Vars = Record<string, string | number>;
 export type PluralBase = MessageKey extends infer K ? (K extends `${infer B}_one` ? B : never) : never;
 
-// Großpaket C „schneller Start“ (04.11.2026, Plan Stufe 1 P10 Nr. 4): Deutsch steht in der Startdatei, Englisch wird erst geladen, wenn es
-// gebraucht wird (Start mit Englisch, Sprachwechsel). Bis es da ist, gilt Deutsch; danach zeichnet `useT` neu (`useDicts`).
-const dicts: Partial<Record<Lang, Record<MessageKey, string>>> = { de };
-const useDicts = create<{ v: number }>(() => ({ v: 0 }));
-let enLoading: Promise<void> | null = null;
-
-/** Wörterbuch einer Sprache bereitstellen (Englisch nachladen). Wiederholbar; ein Fehler wird protokolliert, dann gilt Deutsch. */
-export function ensureLang(lang: Lang): Promise<void> {
-  if (dicts[lang]) return Promise.resolve();
-  enLoading ??= import('./en')
-    .then((m) => {
-      dicts.en = m.en;
-      useDicts.setState((s) => ({ v: s.v + 1 }));
-    })
-    .catch((err: unknown) => {
-      logError('i18n:load', err, lang);
-      enLoading = null;
-    });
-  return enLoading;
-}
-
+// Großpaket C „schneller Start“: Wörterbücher und Nachladen stehen in `dicts.ts` (ohne Einstellungen, damit Tests sie vorab laden können).
 useSettings.subscribe((s) => void ensureLang(s.lang));
 
 const locales: Record<Lang, string> = { de: 'de-DE', en: 'en-US' };
