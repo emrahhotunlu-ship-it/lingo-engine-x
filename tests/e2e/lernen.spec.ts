@@ -44,7 +44,8 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   // Fehler, Regeln suchen, Deutsch-Fallen, Nachschlagen und Extra als Zeilen; der Kurs ist kein Eintrag des Reiters mehr.
   await expect(page.getByTestId('hub-errors').or(page.getByTestId('hub-errors-none')).first()).toBeVisible();
   await expect(page.getByTestId('hub-extra')).toBeVisible();
-  for (const id of ['hub-lookup', 'hub-traps', 'hub-wissen']) await expect(page.getByTestId(id)).toBeVisible();
+  // Großpaket B (04.11.2026): „Nachschlagen“ ist eine Zeile, die zur gemeinsamen Seite führt.
+  await expect(page.getByTestId('hub-lookup')).toBeVisible();
   for (const id of ['hub-course', 'hub-next-lesson']) await expect(page.getByTestId(id)).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“.

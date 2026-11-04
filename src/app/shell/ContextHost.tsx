@@ -55,8 +55,9 @@ function useDockMetrics(el: RefObject<HTMLElement | null>, docked: boolean): voi
     const measure = () => {
       const r = node.getBoundingClientRect();
       root.style.setProperty('--lx-dock-left', `${Math.round(r.left)}px`);
-      // Bis an den rechten Fensterrand (die Spalte selbst endet vor dem Seitenrand).
-      root.style.setProperty('--lx-dock-w', `${Math.round(root.clientWidth - r.left)}px`);
+      // Bis an den rechten Rand des Rahmens (die Spalte selbst endet vor dem Seitenrand); am sehr breiten Monitor ist der Rahmen zentriert.
+      const right = Math.min(root.clientWidth, node.parentElement?.getBoundingClientRect().right ?? root.clientWidth);
+      root.style.setProperty('--lx-dock-w', `${Math.round(right - r.left)}px`);
     };
     measure();
     root.setAttribute('data-lx-dock', 'claude');
@@ -88,7 +89,15 @@ export function ContextColumn() {
   // D5 V-GRAMMATIK (Vorschau L4): auf der Wurzel „Grammatik“ zeigt die leere Spalte das Kapitel-Detail.
   const onLearn = useNav((s) => s.route.name === 'learn' && !s.overlay) && wideCtx && flags.program;
   return (
-    <aside ref={ref} id={CONTEXT_PORTAL_ID} className="lx-ctx" aria-label={t('shContext')} data-testid="context-column" data-kind={current?.kind}>
+    <aside
+      ref={ref}
+      id={CONTEXT_PORTAL_ID}
+      className="lx-ctx"
+      aria-label={t('shContext')}
+      data-testid="context-column"
+      data-kind={current?.kind}
+      data-blank={current === null && !onToday && !onLearn ? '' : undefined}
+    >
       {show ? (
         <div className="lx-ctx-body" data-testid={`context-${current.kind}`}>
           <div className="flex min-h-11 items-center justify-between gap-2">

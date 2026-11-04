@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useT } from '../i18n';
 import { logWarn } from '../platform/diagnostics';
 import { Icon } from './Icon';
@@ -78,6 +78,24 @@ export function CopyButton({ text, target, testId, copiedTestId }: { text: strin
 /** Nachricht an den Lehrer: schreibgeschütztes Feld plus Kopieren. */
 export function CopyBox({ text, label, testId = 'pp-copy', copiedTestId = 'pp-copied' }: { text: string; label: string; testId?: string; copiedTestId?: string }) {
   const field = useRef<HTMLTextAreaElement>(null);
+  // Höhe nach Inhalt (ux-reviewer 04.11.2026 Befund 10): in der schmalen Kontextspalte reichte die geschätzte Zeilenzahl nicht, der Satz war
+  // mitten in der Zeile abgeschnitten. Gemessen bei jeder Breitenänderung.
+  useLayoutEffect(() => {
+    const el = field.current;
+    if (!el) return;
+    let w = -1;
+    const fit = () => {
+      // Nur bei neuer Breite messen: die eigene Höhenänderung löst sonst den Beobachter erneut aus.
+      if (el.clientWidth === w) return;
+      w = el.clientWidth;
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight + 2}px`;
+    };
+    fit();
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(() => requestAnimationFrame(fit)) : null;
+    ro?.observe(el);
+    return () => ro?.disconnect();
+  }, [text]);
   return (
     <div className="flex flex-col gap-2">
       <textarea

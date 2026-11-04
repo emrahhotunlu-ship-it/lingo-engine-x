@@ -60,25 +60,8 @@ export function LearnHub() {
 
   const lookupRows = (
     <>
-      <div className="lx-v-row lx-vg-lookup" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">
-        <span className="lx-v-row-ic" aria-hidden="true">
-          <Icon name="book" size={18} />
-        </span>
-        <span className="lx-v-row-t">
-          <b>{t('hxLearnLookup')}</b>
-          <span className="lx-vg-links">
-            <button type="button" onClick={() => go({ name: 'wissen' })} className="lx-vg-link" data-testid="hub-wissen">
-              {t('hxLearnRules')}
-            </button>
-            <button type="button" onClick={() => go({ name: 'patterns' })} className="lx-vg-link" data-testid="hub-traps">
-              {t('hxLearnTraps')}
-            </button>
-            <button type="button" onClick={() => go({ name: 'grammar' })} className="lx-vg-link" data-testid="hub-lookup">
-              {t('hxLearnSearch')}
-            </button>
-          </span>
-        </span>
-      </div>
+      {/* Großpaket B (04.11.2026): EIN Weg „Nachschlagen“ (Suche, Themen, typische Fallen auf einer Seite) statt dreier Links. */}
+      <VRow icon="book" title={t('hxLearnLookup')} sub={t('lkRowSub')} chevron onClick={() => go({ name: 'grammar' })} data-testid="hub-lookup" />
       <ForeignRows />
     </>
   );

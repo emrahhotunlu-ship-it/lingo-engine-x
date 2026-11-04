@@ -380,11 +380,11 @@ html:not([data-theme='dim']) .lx-vh-ask.lx-v-iconbtn {
     background: var(--glass-hi);
   }
 }
-/* Monitor: die Blätter reichen bis unten wie Fenster (Vorschau/Küchenstudio), nichts endet mitten auf dem Stein. Unter der Tageskarte bleibt
-   Platz für „Tagesziel ändern“. */
+/* Monitor: die Blätter reichen bis unten wie Fenster (Vorschau/Küchenstudio), nichts endet mitten auf dem Stein. „Kurzer Tag“ und „Tagesziel
+   ändern“ stehen unten in der Karte (`.lx-kh-foot`). */
 @media (min-width: 1024px) {
   html:not([data-theme='dim']) .lx-kh-card {
-    min-height: calc(100dvh - 14px - 64px - 12px - 14px - 44px);
+    min-height: calc(100dvh - 14px - 64px - 12px - 14px);
   }
   html:not([data-theme='dim']) .lx-kh-ctx {
     min-height: calc(100dvh - 28px);
@@ -654,5 +654,14 @@ html:not([data-theme='dim']) .lx-kretype input {
   html:not([data-theme='dim']) .lx-stage:not(:has(> .lx-vh-head)) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) {
     min-height: calc(100dvh - 28px);
     margin-top: 14px;
+  }
+}
+
+/* §19 Sehr breiter Monitor (ab 2.000 px, ux-reviewer 04.11.2026 Befund 6): der Rahmen ist zentriert (shell.css); die Bühne nutzt die Breite
+   zwischen Schiene und Spalte statt einer schmalen Mitte. */
+@media (min-width: 2000px) {
+  html:not([data-theme='dim']) .lx-frame,
+  html:not([data-theme='dim']) .lx-frame[data-ctx] {
+    --lx-stage-max: none;
   }
 }

@@ -26,7 +26,8 @@ import { useLearnInputs } from '../learn/inputs';
 import { CERTAINTY_KEYS, ScreenHeader } from '../learn/ui';
 import { PathList } from './PathList';
 import { PatternSheetBody } from './PatternSheet';
-import { RuleSearch } from './WissenScreen';
+import { RuleSearch, TrapsList } from './WissenScreen';
+import { Tabs } from '../../ui/Tabs';
 import { generateTopicTasks } from './generate';
 import { setExtraTasks, startGrammar } from './session';
 import { Dots, topicName } from './topicUi';
@@ -56,23 +57,38 @@ export function GrammarScreen() {
   const [open, setOpen] = useState<string | null>(() => (deepTopic && topicById(deepTopic) ? deepTopic : null));
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
   const close = useCallback(() => setOpen(null), []);
+  const [tab, setTab] = useState<'topics' | 'traps'>('topics');
 
   return (
     <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="grammar">
       <motion.div variants={item}>
-        <ScreenHeader eyebrow={t('lhGrammar')} title={t('grTitle')} lead={t('grLead')} back={back} />
+        <ScreenHeader eyebrow={t('lhGrammar')} title={t('hxLearnLookup')} lead={t('lkLead')} back={back} />
       </motion.div>
-      {/* UX-Beratung Nr. 9: „Wissen" geht in Grammatik auf – Suche oben, typische Fallen als Zeile. */}
-      <motion.div variants={item} className="flex flex-col gap-1">
+      {/* Großpaket B (04.11.2026): „Nachschlagen“ ist EINE Seite – Suche oben, darunter Themen und typische Fallen als Reiter, die eigenen
+          Deutsch-Fallen als Zeile. „Wissen“ (Fallen) und „Muster“ bleiben als Ziele alter Links erreichbar. */}
+      <motion.div variants={item}>
         <RuleSearch onOpen={setOpen} />
-        <button type="button" onClick={() => go({ name: 'wissen' })} data-testid="open-wissen" className="flex min-h-12 w-full items-center gap-3 text-left text-sm font-medium text-muted transition-colors hover:text-fg">
-          <Icon name="book" size={18} className="flex-none" />
-          <span className="flex-1">{t('grTrapsLink')}</span>
-          <Icon name="arrowRight" size={16} className="flex-none text-subtle" />
-        </button>
       </motion.div>
       <motion.div variants={item}>
-        <PathList onOpen={setOpen} />
+        <Tabs
+          label={t('hxLearnLookup')}
+          items={[
+            { id: 'topics', label: t('lkTabTopics'), testId: 'lookup-tab-topics' },
+            { id: 'traps', label: t('lkTabTraps'), testId: 'lookup-tab-traps' },
+          ]}
+          value={tab}
+          onChange={setTab}
+          testId="lookup-tabs"
+        >
+          {tab === 'topics' ? <PathList onOpen={setOpen} /> : <TrapsList onOpen={setOpen} />}
+        </Tabs>
+      </motion.div>
+      <motion.div variants={item}>
+        <button type="button" onClick={() => go({ name: 'patterns' })} data-testid="open-patterns" className="flex min-h-12 w-full items-center gap-3 text-left text-sm font-medium text-muted transition-colors hover:text-fg">
+          <Icon name="book" size={18} className="flex-none" />
+          <span className="flex-1">{t('ptTitle')}</span>
+          <Icon name="arrowRight" size={16} className="flex-none text-subtle" />
+        </button>
       </motion.div>
       <TopicSheet topic={open} onClose={close} />
     </motion.div>

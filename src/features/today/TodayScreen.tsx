@@ -226,6 +226,11 @@ function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView;
                 </p>
               )}
               {sub}
+              {/* Großpaket B (ux-reviewer 04.11.2026 Befund 11): „Kurzer Tag“ und „Tagesziel ändern“ stehen unten IN der Tageskarte, nicht verwaist darunter. */}
+              <div className="lx-kh-foot">
+                <ShortDayLink view={sum} />
+                <GoalLink />
+              </div>
             </>
           }
         />
@@ -495,9 +500,8 @@ export function TodayScreen() {
           <KernStand sw={sw} variant="row" foot={!done} />
         </motion.div>
       )}
-      {ok && !done && (
-        <motion.div variants={item} className="flex flex-col gap-3">
-          {!welcome && <ShortDayLink view={sum} />}
+      {ok && !done && welcome && (
+        <motion.div variants={item}>
           <GoalLink />
         </motion.div>
       )}

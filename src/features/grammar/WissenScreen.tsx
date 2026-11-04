@@ -47,11 +47,28 @@ export function searchRules(query: string, index = searchIndex()): string[] {
  * Unterseite von Grammatik.
  */
 export function WissenScreen() {
-  const { t, lang } = useT();
+  const { t } = useT();
   const back = useNav((s) => s.back);
   useCompanionSee({ area: 'grammar', label: t('wsTraps'), phase: 'idle' });
   const [open, setOpen] = useState<string | null>(null);
   const close = useCallback(() => setOpen(null), []);
+
+  return (
+    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="wissen">
+      <motion.div variants={item}>
+        <ScreenHeader eyebrow={t('lhGrammar')} title={t('wsTraps')} back={back} />
+      </motion.div>
+      <motion.div variants={item}>
+        <TrapsList onOpen={setOpen} />
+      </motion.div>
+      <TopicSheet topic={open} onClose={close} />
+    </motion.div>
+  );
+}
+
+/** „Deutsch → Englisch: typische Fallen“ als Liste (Kontrast, ein typischer Fehler, Sprung zum Thema) – in „Wissen“ und auf „Nachschlagen“. */
+export function TrapsList({ onOpen }: { onOpen: (topic: string) => void }) {
+  const { t, lang } = useT();
   const traps = useMemo(
     () =>
       TOPICS.map((tp) => ({ id: tp.id, rule: ruleOf(tp.id, lang) }))
@@ -59,39 +76,32 @@ export function WissenScreen() {
         .map((x) => ({ id: x.id, contrast: x.rule?.contrast ?? '', trap: x.rule?.traps[0] ?? null })),
     [lang],
   );
-
   return (
-    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="wissen">
-      <motion.div variants={item}>
-        <ScreenHeader eyebrow={t('lhGrammar')} title={t('wsTraps')} back={back} />
-      </motion.div>
-      <motion.ul variants={item} className="flex flex-col divide-y divide-line" data-testid="wissen-traps" aria-label={t('wsTraps')}>
-        {traps.map((x) => (
-          <li key={x.id} className="flex flex-col gap-2 py-4" data-testid="wissen-trap" data-topic={x.id}>
-            <p className="font-medium">{topicName(x.id, lang)}</p>
-            {x.contrast && (
-              <p className="text-sm text-muted" lang={lang}>
-                {x.contrast}
-              </p>
-            )}
-            {x.trap && (
-              <p className="flex flex-col text-sm">
-                <span className="lx-diff-off" lang="en">
-                  {x.trap.bad}
-                </span>
-                <EnglishText as="span" className="font-medium" text={x.trap.good} area="trainer" source={`grammar/${x.id}`} />
-              </p>
-            )}
-            <div>
-              <Button variant="ghost" iconAfter="arrowRight" className="-ml-4" onClick={() => setOpen(x.id)} data-testid="wissen-open">
-                {t('wsToTopic')}
-              </Button>
-            </div>
-          </li>
-        ))}
-      </motion.ul>
-      <TopicSheet topic={open} onClose={close} />
-    </motion.div>
+  <ul className="flex flex-col divide-y divide-line" data-testid="wissen-traps" aria-label={t('wsTraps')}>
+    {traps.map((x) => (
+      <li key={x.id} className="flex flex-col gap-2 py-4" data-testid="wissen-trap" data-topic={x.id}>
+        <p className="font-medium">{topicName(x.id, lang)}</p>
+        {x.contrast && (
+          <p className="text-sm text-muted" lang={lang}>
+            {x.contrast}
+          </p>
+        )}
+        {x.trap && (
+          <p className="flex flex-col text-sm">
+            <span className="lx-diff-off" lang="en">
+              {x.trap.bad}
+            </span>
+            <EnglishText as="span" className="font-medium" text={x.trap.good} area="trainer" source={`grammar/${x.id}`} />
+          </p>
+        )}
+        <div>
+          <Button variant="ghost" iconAfter="arrowRight" className="-ml-4" onClick={() => onOpen(x.id)} data-testid="wissen-open">
+            {t('wsToTopic')}
+          </Button>
+        </div>
+      </li>
+    ))}
+  </ul>
   );
 }
 

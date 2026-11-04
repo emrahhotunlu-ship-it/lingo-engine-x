@@ -461,6 +461,39 @@
   }
 }
 
+/* Großpaket B (ux-reviewer 04.11.2026 Befund 9): Hat die Spalte nichts zu zeigen (nur den Platzhalter), nimmt sie keinen Platz; die Seite
+   bekommt die Breite. Öffnet sich etwas (Claude, Wort, Erklärung), ist `data-ctx` gesetzt und die Spalte wieder da. */
+@media (min-width: 1024px) {
+  html .lx-frame:not([data-ctx]):has(> .lx-dmain > .lx-ctx[data-blank]) {
+    --lx-ctx-w: 0px;
+    --lx-ctx-gap: 0px;
+    --lx-bar-right: 0px;
+  }
+  html .lx-frame:not([data-ctx]) > .lx-dmain > .lx-ctx[data-blank] {
+    display: none;
+  }
+}
+
+/* Großpaket B (ux-reviewer 04.11.2026 Befund 6): Am sehr breiten Monitor (2.560 px) standen Schiene, Hauptblatt und Spalte als drei Inseln mit
+   großen Lücken. Ab 2.000 px ist der Rahmen EIN zentrierter Block (höchstens 2.000 px): Schiene (sticky im Raster) rückt mit, die Bühne nutzt
+   die Breite zwischen Schiene und Spalte. Feste Teile (Aktionsleiste) rechnen den Randabstand `--lx-frame-off` mit. */
+@media (min-width: 2000px) {
+  .lx-frame {
+    --lx-frame-off: calc((100vw - 2000px) / 2);
+    max-width: 2000px;
+    margin-inline: auto;
+  }
+  .lx-frame,
+  .lx-frame[data-ctx],
+  html .lx-frame[data-wide] {
+    --lx-stage-max: none;
+  }
+  .lx-frame .lx-actionbar {
+    left: calc(var(--lx-side-w) + var(--lx-frame-off));
+    right: calc(var(--lx-bar-right) + var(--lx-frame-off));
+  }
+}
+
 /* „Lesen und Sprechen“ auf Praxis: seit UX-Neuanfang B (vier Reiter, keine Unterpunkte in der Seitenleiste) auf allen Breiten sichtbar. */
 
 /* Unterpunkte und Inhalt der Kontextspalte blenden ruhig ein (Vorschau); bei reduzierter Bewegung oder Effekten „Aus“ sofort da. */

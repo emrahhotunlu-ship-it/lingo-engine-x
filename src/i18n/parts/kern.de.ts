@@ -123,4 +123,8 @@ export const kernDe = {
   shortDayLeft_other: 'Geht diese Woche noch {n}-mal.',
   shortDayOn: 'Kurzer Tag: ca. 10 Minuten. Die Wörter, die du am ehesten vergisst, sind drin, der Rest kommt morgen mit. Schaffst du ihn, hält die Serie.',
   shortDayWhy: 'Du übst die Wörter, die du am ehesten vergisst, 2 neue und eine kleine Grammatik-Runde. Der Rest kommt morgen mit.',
+  lkLead: 'Regel oder Falle suchen, alle Themen auf einen Blick und typische Fehler von Deutsch zu Englisch.',
+  lkTabTopics: 'Themen',
+  lkTabTraps: 'Typische Fallen',
+  lkRowSub: 'Regeln, typische Fallen und Suche auf einer Seite',
 };

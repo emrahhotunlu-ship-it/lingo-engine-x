@@ -19,7 +19,7 @@ export const pxP44En = {
   pxKEv_k3: 'About {n} words (range {lo} to {hi})',
   pxKEvFew_k3: 'No valid vocabulary test yet',
   pxKEvOld_k3: 'Your last vocabulary test is too old',
-  pxKEv_k4: '{n} of 750 words and phrases firm',
+  pxKEv_k4: '{n} of 750 words and phrases solid',
   pxKEvFew_k4: 'No words learned yet',
   pxKEv_k5: '{pts} of 36 points in your last laptop check',
   pxKEvFew_k5: 'No C1 check on a laptop yet',
