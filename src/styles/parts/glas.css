@@ -290,7 +290,7 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     --lx-stage-max: 72rem;
     --lx-dmain-pad: 12px;
     --lx-ctx-gap: 12px;
-    --lx-ctx-w: 380px;
+    --lx-ctx-w: max(380px, min(22vw, 30rem)); /* wächst am großen Monitor mit (UX 04.11. Befund 3: Claude-Kopf ragte bei 2560 aus dem Bild) */
     --lx-bar-right: calc(var(--lx-ctx-w) + 14px + var(--lx-ctx-gap));
   }
   html:not([data-theme='dim']) .lx-frame .lx-dmain {
@@ -617,5 +617,42 @@ html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+  }
+}
+
+/* §16 Spuren (ux-reviewer 04.11.2026, Befund 1): leere Teile von Balken, Reglern und Ringen standen auf --surface-3/--line-2
+   und verschwanden auf Glas/Carbon (≈ 1:1). Eine eigene, durchscheinende Spur mit Kontrast zur Fläche. */
+html:not([data-theme='dim']) {
+  --lx-track: var(--glass-track);
+  --color-track: var(--glass-track);
+}
+html:not([data-theme='dim']) :is(.lx-vg-bar i, .lx-vh-bar, [data-testid='level-scale'] .bg-track, .lx-v-grab) {
+  background: var(--glass-track);
+}
+html:not([data-theme='dim']) .lx-vg-bar i[data-d] { background: var(--act); }
+html:not([data-theme='dim']) .lx-v-ring-trk { stroke: var(--glass-track); }
+html:not([data-theme='dim']) :is(.bg-surface-strong, .bg-surface)[role='img'] { background: var(--glass-track); }
+
+/* §17 Nachtippen und Warum auf Glas (ux-reviewer 04.11.2026, Befund 12): Das Nachtipp-Feld stand grau (--bg = Stein) in einem
+   zweiten Rahmen und wirkte gesperrt; der Warum-Kasten hatte in Hell keine sichtbare Fläche. */
+html:not([data-theme='dim']) .lx-kretype:not([data-ok]) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+html:not([data-theme='dim']) .lx-kretype input {
+  border-color: var(--line-2);
+  background: var(--glass-hi);
+}
+:root[data-theme='light'] .lx-exercise[data-kres] .lx-kleft [data-block='why'] {
+  background: color-mix(in oklch, var(--act) 7%, var(--glass-hi));
+}
+
+/* §18 Unterseiten ohne Kopfleiste (z. B. „So funktioniert's“, ux-reviewer 04.11.2026 Befund 6): das Blatt schwebt wie die Reiter
+   mit 14 px Abstand oben statt am Bildrand zu kleben. */
+@media (min-width: 600px) {
+  html:not([data-theme='dim']) .lx-stage:not(:has(> .lx-vh-head)) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+    min-height: calc(100dvh - 28px);
+    margin-top: 14px;
   }
 }

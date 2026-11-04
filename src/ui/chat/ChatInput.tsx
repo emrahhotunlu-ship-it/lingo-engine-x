@@ -77,7 +77,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(functio
         enterKeyHint="send"
         maxLength={p.maxLength}
         {...(p.lang ? { lang: p.lang } : {})}
-        className="max-h-48 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-fg outline-none focus-visible:outline-none placeholder:text-subtle"
+        className="lx-chat-field max-h-48 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-fg outline-none focus-visible:outline-none placeholder:text-subtle"
         data-testid={p.testIds.input}
       />
       {p.extra}

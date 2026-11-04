@@ -106,6 +106,7 @@
   --glass-soft: oklch(0.285 0.014 257 / 0.55);
   --glass-dense: oklch(0.285 0.014 257 / 0.86);
   --glass-hi: oklch(1 0 0 / 0.08);
+  --glass-track: oklch(1 0 0 / 0.4); /* Spur für Balken/Regler auf Carbon (UX 04.11.: ≥ 3:1 zur Fläche) */
   --kapsel: oklch(1 0 0 / 0.08);
   --glanz: oklch(1 0 0 / 0.1);
   --glass-rim: oklch(1 0 0 / 0.08);
@@ -188,6 +189,7 @@
   --glass-soft: oklch(1 0 0 / 0.52);
   --glass-dense: oklch(1 0 0 / 0.84);
   --glass-hi: oklch(1 0 0);
+  --glass-track: oklch(0.3 0.015 250 / 0.45); /* Spur für Balken/Regler auf Glas (UX 04.11.: ≥ 3:1 zur Fläche) */
   --kapsel: oklch(1 0 0 / 0.55);
   --glanz: oklch(1 0 0 / 0.85);
   --glass-rim: oklch(1 0 0 / 0.55);
@@ -304,6 +306,11 @@ h3 {
 
 /* Programmatischer Fokus (Container mit tabindex=-1) zeigt nie einen Ring; sichtbar nur über :focus-visible an Bedienelementen. */
 [tabindex='-1']:focus {
+  outline: none;
+}
+
+/* Chat-Eingabe: den Ring trägt die Kapsel (focus-within); das Feld selbst zeigt keinen zweiten (UX 04.11.2026 Befund 4). */
+.lx-chat-field:focus-visible {
   outline: none;
 }
 

@@ -108,7 +108,7 @@ export const kernDe = {
   restDayUsed: 'Heute wäre dein Ruhetag, aber diese Woche ist schon ein Tag ausgefallen. Lern heute, damit die Serie hält.',
   restTitle: 'Dein Ruhetag',
   restHint: 'Ein Tag pro Woche darf ohne Lernen bleiben, ohne dass die Serie reißt. Wählst du einen Wochentag, sagt Heute dir an diesem Tag Bescheid.',
-  restFree: 'Frei',
+  restFree: 'Flexibel',
   restDow1: 'Mo',
   restDow2: 'Di',
   restDow3: 'Mi',

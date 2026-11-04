@@ -108,7 +108,7 @@ export const kernEn: Record<keyof typeof kernDe, string> = {
   restDayUsed: 'Today would be your rest day, but you already missed a day this week. Study today to keep your streak.',
   restTitle: 'Your rest day',
   restHint: 'One day per week can go without studying without breaking your streak. Pick a weekday and Today will remind you on that day.',
-  restFree: 'Any',
+  restFree: 'Flexible',
   restDow1: 'Mon',
   restDow2: 'Tue',
   restDow3: 'Wed',
