@@ -9,7 +9,7 @@ import { useTodayPlan } from './store';
 // Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026): ruhiger Zweit-Link unter der Tageskarte, nur solange heute nichts angefasst ist und die
 // Woche noch einen kurzen Tag erlaubt. Nach dem Verkürzen steht statt des Links ein Hinweis (der Plan steht dann fest).
 
-export function ShortDayLink({ view }: { view: { done: number; fills: readonly number[] } }) {
+export function ShortDayLink({ view }: { view: { done: number; fills: readonly number[]; rest?: number } }) {
   const { t } = useT();
   const today = useClock((s) => s.today);
   const plan = useTodayPlan((s) => (s.day === today && s.status === 'ready' ? s.plan : null));
@@ -36,7 +36,8 @@ export function ShortDayLink({ view }: { view: { done: number; fills: readonly n
         }}
         data-testid="short-day-go"
       >
-        {t('shortDayGo')}
+        {/* K12/K13: die 10 Minuten als Alternative zur Zeit des Tages, die oben in der Karte steht („ca. 25 Min.“) – nie zwei Zahlen ohne Bezug. */}
+        {view.rest && view.rest > 10 ? t('shortDayGoVs', { min: view.rest }) : t('shortDayGo')}
       </button>
       <span className="text-xs text-muted">
         {t('shortDayWhy')} {t(left === 1 ? 'shortDayLeft_one' : 'shortDayLeft_other', { n: left })}

@@ -257,9 +257,11 @@ function IntroTeach({ card }: { card: CardModel }) {
  * Wortkarte neben dem Ergebnis (Kern, Vorschau: Monitor rechts, Handy darunter): Wort mit Anhören, Lautschrift · Wortart, Bedeutung,
  * englische Erklärung und Wortpartner – damit nach jeder Abfrage das ganze Wort im Blick ist, nicht nur die Lösung.
  */
-function WordSide({ card, partners }: { card: CardModel; partners: Band['partners'] }) {
+function WordSide({ card, partners: fromCol, examples }: { card: CardModel; partners: Band['partners']; examples: readonly { en: string; de: string | null; mark: readonly [number, number] | null }[] }) {
   const { t } = useT();
   const line = ipaLine(t, card);
+  // K5: Wortpartner aus dem Wort-Dokument (`col`), sonst die geprüften Partner der Lehrer-Charge (`teach.colloc`); nichts erfunden.
+  const partners = fromCol.length ? fromCol : (card.teach.colloc ?? []).slice(0, 3).map((p) => ({ p, de: '' }));
   return (
     <div className="lx-kwordcard" data-testid="vm-wordcard">
       <p className="lx-kintro-label">{t('kernTheWord')}</p>
@@ -291,6 +293,22 @@ function WordSide({ card, partners }: { card: CardModel; partners: Band['partner
               </li>
             ))}
           </ul>
+        </div>
+      )}
+      {/* K5: ein bis zwei weitere echte Beispielsätze aus dem Wort-Dokument (ohne den Satz der Karte); ohne weitere Sätze entfällt der Teil. */}
+      {examples.length > 0 && (
+        <div className="lx-kintro-sec" data-testid="vm-more-examples">
+          <p className="lx-kintro-k">{t('kernMoreExamples')}</p>
+          {examples.map((x) => (
+            <div key={x.en} className="flex flex-col gap-0.5">
+              <EnglishText as="p" className="lx-t-support m-0" text={x.en} area="trainer" source={card.path} title={card.head} highlight={x.mark} />
+              {x.de ? (
+                <p className="lx-kintro-tr" lang="de">
+                  {x.de}
+                </p>
+              ) : null}
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -364,10 +382,18 @@ function taskKey(v: CardView | BandView): MessageKey {
 }
 const wozuKey = (k: MessageKey): MessageKey => k.replace('vmTask_', 'vmWozu_') as MessageKey;
 
-function kindLabel(t: T, v: CardView | BandView): string {
+/**
+ * Art der Karte in der Statuszeile (K4, Emrah 04.11.2026): ein heute eingeführtes Wort heißt nie „Wiederholung“ – seine ersten Abfragen sind
+ * „Erster Abruf“ / „Zweiter Abruf“, nach einem Fehler „Noch einmal“. „Wiederholung“ nur für ein geplantes Wort von früheren Tagen.
+ */
+function kindLabel(t: T, v: CardView | BandView, introToday: boolean): string {
   if (v.kind === 'intro') return t('vmKindNew');
   if (v.kind === 'probe') return t('vmKindProbe');
   if (v.card.form === 'contrast') return t(v.card.contrast?.ff ? 'vmKindContrastFf' : 'vmKindContrast');
+  if (v.task.step === 1) return t('vmKindRecall1');
+  if (v.task.step === 2) return t('vmKindRecall2');
+  if (v.task.step === 3) return t('vmKindAgain');
+  if (introToday) return t(v.task.planned ? 'vmKindRecall1' : 'vmKindPractice');
   return t(v.task.planned ? 'vmKindReview' : 'vmKindPractice');
 }
 
@@ -667,7 +693,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   return (
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
-      status={{ area: 'words', state: null, kindLabel: teachCard ? t('kernKindKnown') : kindLabel(t, view) }}
+      status={{ area: 'words', state: null, kindLabel: teachCard ? t('kernKindKnown') : kindLabel(t, view, run.introducedToday(view.task.path)) }}
       see={see}
       task={{
         text: teachCard ? t('kernTeachTask') : teaching ? t('kernIntroTask') : t(tk),
@@ -682,7 +708,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       barOverride={grades}
       keysHint={null}
       feedback={band ? feedbackOf(band, t, dateShort, run, needRetype ? <Retype answer={card.answer} onDone={setRetyped} onEnter={next} /> : null) : null}
-      side={band && band.kind !== 'intro' ? <WordSide card={card} partners={band.band.partners} /> : null}
+      side={band && band.kind !== 'intro' ? <WordSide card={card} partners={band.band.partners} examples={run.moreExamples(card)} /> : null}
     />
   );
 }

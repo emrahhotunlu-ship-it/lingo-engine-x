@@ -32,6 +32,7 @@ import { requestStart } from './startRun';
 import { flush, usePending } from '../progress/persist';
 import { useToday, type TodayView } from './state';
 import { healToday, retryPlan } from './store';
+import { loadWordsDay } from './wordsDay';
 import { ShortDayLink } from './ShortDayLink';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
@@ -320,6 +321,11 @@ export function TodayScreen() {
   // sobald er steht (`ok`): Die echte Karte ersetzt das Startbild an derselben Stelle und in derselben Höhe.
   const startDoc = useValidTodayDoc();
   useEffect(() => markStart('lx:skeleton'), []);
+  // K11: Wörter-Stand aus dem eingefrorenen `vmod/day` (dieselbe Zählung wie die Runde), beim Öffnen und sobald der Plan steht frisch gelesen.
+  const vocabOn = vocabModuleOn(profile);
+  useEffect(() => {
+    if (vocabOn && ready) void loadWordsDay(today);
+  }, [vocabOn, ready, today]);
 
   // Selbstheilung (Regel 1): alles erledigt, aber `pflicht[heute]` fehlt noch.
   const marked = pflichtMarked(profile, today);

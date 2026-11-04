@@ -2,7 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { create } from 'zustand';
 import { DURATION, EASE_OUT } from './motion';
 
-// Ruhige Meldungen oben am Rand (UX M13: unten verdeckten sie „Weiter“ in der Übungsleiste); werden vorgelesen (aria-live).
+// Ruhige Meldungen oben (UX M13: unten verdeckten sie „Weiter“ in der Übungsleiste); werden vorgelesen (aria-live). Seit dem K-Abgleich
+// (04.11.2026) UNTER der Kopfzeile bzw. Übungsleiste: oben am Rand verdeckten sie am Handy Titel, Zähler und ✕.
 
 type Toast = { id: number; text: string; tone: 'info' | 'error' };
 type ToastState = { items: Toast[] };
@@ -23,7 +24,7 @@ export function Toaster() {
   return (
     <div
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-2 px-4 pt-[max(env(safe-area-inset-top),1rem)]"
+      className="lx-toaster pointer-events-none fixed inset-x-0 top-0 z-50 flex flex-col items-center gap-2 px-4"
     >
       <AnimatePresence>
         {items.map((t) => (

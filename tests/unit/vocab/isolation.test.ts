@@ -231,7 +231,7 @@ describe('Wörter-Modul: Isolation', () => {
   it('Ladezeit: api.ts importiert statisch nur leichte Teile (kein Planer, kein ts-fsrs)', () => {
     const api = moduleFiles.find((f) => f.rel === `${MODULE}/api.ts`)!;
     const statics = [...api.text.matchAll(/^import\s+(type\s+)?[^;]*?from\s*'([^']+)'/gm)].filter((m) => !m[1]).map((m) => m[2]);
-    expect(statics.sort()).toEqual(['./data/lex', './data/schemas', './domain/dupes', './domain/ladder', './domain/types', './shared'].sort());
+    expect(statics.sort()).toEqual(['./data/lex', './data/schemas', './domain/dayCount', './domain/dupes', './domain/ladder', './domain/types', './shared'].sort());
     // Auch nachgezogen (statische Importe und `export … from`, ohne `import type`): kein Planer, keine Runde, kein ts-fsrs.
     const byRel = new Map(moduleFiles.map((f) => [f.rel.replace(/\.tsx?$/, ''), f.text]));
     const seen = new Set<string>();

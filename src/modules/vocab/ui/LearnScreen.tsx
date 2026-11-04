@@ -220,9 +220,10 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
       );
     case 'card':
     case 'band':
-      return run ? frame({ n: run.doneBefore + view.n + 1, total: run.doneBefore + view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
+      // K11/K12/K13: einzelne Wörter aus dem eingefrorenen Tagesplan (dieselbe Quelle wie Heute), nie Karten; Fehler erhöhen die Gesamtzahl nicht.
+      return run ? frame(run.progress(), <LearnCard view={view} run={run} />) : null;
     case 'use':
-      return run ? frame({ n: run.doneBefore + view.n + 1, total: run.doneBefore + view.n + view.left + 1 }, <UseCard view={view} run={run} />) : null;
+      return run ? frame(run.progress(), <UseCard view={view} run={run} />) : null;
   }
 }
 

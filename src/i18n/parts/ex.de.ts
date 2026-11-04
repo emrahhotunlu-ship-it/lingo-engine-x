@@ -14,6 +14,13 @@ export const exDe = {
   exStateSafe: 'Sicher',
   exStateFirm: 'Fest',
   exStateLabel: 'Stand: {state}',
+  // Statuszeile der Übung in Worten (K4, statt Punkten und „Lernt“)
+  exStandLine: 'Dein Stand: {state}',
+  exStandNew: 'neu für dich',
+  exStandLearning: 'lernst du gerade',
+  exStandWobbly: 'wackelt noch',
+  exStandSafe: 'sitzt meistens',
+  exStandFirm: 'sitzt fest',
   // Zeilen der Erklär-Karte
   exLinePattern: 'Muster',
   exLineYours: 'Deine Antwort',

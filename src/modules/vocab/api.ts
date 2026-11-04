@@ -1,6 +1,7 @@
 import { dayKey, dayMinutes, normGoalMin } from './shared';
 import type { Writer } from './shared';
 import { lexOf } from './data/lex';
+import { type DayMark, planCount, type PlanEntry } from './domain/dayCount';
 import { headwordOf } from './domain/dupes';
 import { groupOf } from './domain/ladder';
 import type { SessionKind } from './domain/session';
@@ -68,6 +69,30 @@ export function todayBlock(dayDoc: Doc | null | undefined, nowMs: number, doneOf
   const total = Math.max(1, plan.length);
   const min = typeof dayDoc.min === 'number' ? Math.round((dayDoc.min * open.length) / total) : 0;
   return { min, due: plan.filter((e) => e[1] !== 'n').length, fresh: plan.filter((e) => e[1] === 'n').length, why: typeof dayDoc.why === 'string' ? dayDoc.why : '', done: open.length === 0 };
+}
+
+/** Einträge des heutigen eingefrorenen Wörter-Plans aus `vmod/day` (`null` = kein Plan für diesen Lerntag). */
+export function wordsDayPlan(dayDoc: Doc | null | undefined, day: string): PlanEntry[] | null {
+  if (!dayDoc || dayDoc.d !== day || !Array.isArray(dayDoc.plan)) return null;
+  return (dayDoc.plan as unknown[]).filter((e): e is [string, string, string] => Array.isArray(e) && typeof e[0] === 'string' && typeof e[1] === 'string');
+}
+
+/**
+ * Stand der Wörter für Heute (K11/K12/K13): dieselbe Zählregel wie der Zähler der Runde (`domain/dayCount.ts`), aus dem eingefrorenen
+ * Plan und den Live-Dokumenten. `docOf(path)` liefert das Wort-Dokument; ausgeblendete und zusammengeführte Wörter zählen wie in der Runde nicht.
+ */
+export function wordsDayCount(plan: readonly PlanEntry[], day: string, docOf: (path: string) => Doc | null | undefined): { done: number; total: number } {
+  return planCount(plan, (path) => dayMarkOf(docOf(path)), day);
+}
+
+const dayStr = (v: unknown): string | null => (typeof v === 'string' ? v : null);
+function dayMarkOf(doc: Doc | null | undefined): DayMark | null {
+  if (!doc || doc.hidden === true) return null;
+  const lex = doc.lex;
+  if (!lex || typeof lex !== 'object' || Array.isArray(lex)) return null;
+  const l = lex as Doc;
+  if (typeof l.of === 'string' && l.of) return null;
+  return { day: dayStr(l.day), dayU: dayStr(l.dayU), intro: dayStr(l.intro) };
 }
 
 /** Stand eines Lexems (nur lesen): Stufe, Gruppe und beide Termine. */

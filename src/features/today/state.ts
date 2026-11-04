@@ -14,6 +14,7 @@ import { useUnitRun } from '../unit/runStore';
 import { viewPlan } from './device';
 import { useUnitMarks } from './marks';
 import { useTodayPlan } from './store';
+import { useWordsDay, wordsDayProgress } from './wordsDay';
 
 // Der Stand von „Heute" aus EINER Ableitung (`deriveToday`, phase2-plan §6.2): Statuszeile,
 // Zähler, Häkchen, Tageskarte, Reiter-Zahl und „Weiter: nächster Pflichtschritt" lesen alle
@@ -38,7 +39,16 @@ type Sources = {
   liveEntries: readonly DayEntry[];
   pending: Pending;
   marks: readonly string[];
+  /** Wörter von heute aus `vmod/day` (K11); `undefined` = nicht übergeben. */
+  vocabDay?: { done: number; total: number } | null;
 };
+
+/** Stand der Wörter aus dem eingefrorenen Plan (nur mit eingeschalteter Wörter-App; sonst nicht übergeben). */
+function vocabDayOf(day: string, profile: Obj | null | undefined): { vocabDay?: { done: number; total: number } | null } {
+  if (!vocabModuleOn(profile)) return {};
+  const live = useLive.getState();
+  return { vocabDay: wordsDayProgress(day, useWordsDay.getState(), live.collections.vocab, live.collections.chunk) };
+}
 
 function derive(s: Sources): TodayState {
   const entries = mergeEntries(
@@ -59,6 +69,7 @@ function derive(s: Sources): TodayState {
     pending: { lessonDays: s.pending.lessonDays, rounds },
     // Neue Wörter-App an: „Wörter“ zählt über das Rundenende des Moduls (V3 Schritt 4b), nicht über das Tagesprotokoll.
     vocabMod: vocabModuleOn(s.profile),
+    ...(s.vocabDay !== undefined ? { vocabDay: s.vocabDay } : {}),
   });
 }
 
@@ -82,6 +93,7 @@ export function computeToday(day: string): TodayState {
     liveEntries: liveEntriesOf(day),
     pending: usePending.getState(),
     marks: marksOf(day),
+    ...vocabDayOf(day, live.docs['app/profile']),
   });
 }
 
@@ -102,6 +114,7 @@ export function computeDayWith(i: { day: string; plan: StoredPlan | null; exhaus
     liveEntries: live.day?.key === i.day ? current : (i.entries ?? EMPTY),
     pending: usePending.getState(),
     marks: marksOf(i.day),
+    ...vocabDayOf(i.day, live.docs['app/profile']),
   });
 }
 
@@ -129,6 +142,9 @@ type Inputs = {
   lessonDays: Pending['lessonDays'];
   rounds: Pending['rounds'];
   marks: readonly string[];
+  words: ReturnType<typeof useWordsDay.getState>;
+  vocab: ReturnType<typeof useLive.getState>['collections']['vocab'];
+  chunk: ReturnType<typeof useLive.getState>['collections']['chunk'];
 };
 
 function readInputs(): Inputs {
@@ -150,6 +166,9 @@ function readInputs(): Inputs {
     lessonDays: pend.lessonDays,
     rounds: pend.rounds,
     marks: marksOf(today),
+    words: useWordsDay.getState(),
+    vocab: live.collections.vocab,
+    chunk: live.collections.chunk,
   };
 }
 
@@ -164,6 +183,7 @@ function view(i: Inputs): TodayView {
     liveEntries,
     pending: { entries: i.entries, minutes: i.minutes, lessonDays: i.lessonDays, rounds: i.rounds },
     marks: i.marks,
+    ...(vocabModuleOn(i.profile) ? { vocabDay: wordsDayProgress(i.today, i.words, i.vocab, i.chunk) } : {}),
   });
   return {
     ...state,
@@ -213,6 +233,7 @@ function install(): void {
   useLive.subscribe(refresh);
   usePending.subscribe(refresh);
   useUnitMarks.subscribe(refresh);
+  useWordsDay.subscribe(refresh);
   // Einstellungen (z. B. Sprache): die Ansicht sofort nachziehen.
   useSettings.subscribe(refresh);
 }

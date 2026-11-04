@@ -27,6 +27,7 @@ import { buildUnitStored, unitDraft, withReviewMinutes, type ReviewGoal } from '
 import { prepareDay, vocabCfg, vocabModuleOn } from '../../modules/vocab/api';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
+import { loadWordsDay } from './wordsDay';
 import { getDb, useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
@@ -368,6 +369,8 @@ async function withVocabMinutes(plan: StoredPlan): Promise<StoredPlan> {
       const c = useCapabilities.getState();
       return c.sample !== 'absent' && !c.sampleRevoked;
     });
+    // K11: Heute zählt die Wörter aus dem eben eingefrorenen Plan (dieselbe Quelle wie die Runde).
+    if (min) void loadWordsDay(plan.d);
     return min ? withReviewMinutes(plan, Math.min(vocabCfg(profile).min, min)) : plan;
   } catch (err) {
     logError('today:vocab-day', err);
