@@ -39,7 +39,8 @@ const PAIRS: Pair[] = [
         { name: 'fragen', vorschau: '#ask-open', app: '.lx-v-phead .lx-v-iconbtn', props: ['x', 'y', 'width', 'height', 'borderRadius'] },
         { name: 'tageskarte', vorschau: '.daycard', app: '[data-galerie="heute"] .lx-v-card', props: ['x', 'y', 'width', 'height', 'borderRadius'] },
         { name: 'ring', vorschau: '#ring', app: '[data-testid="g-ring"]', props: ['x', 'y', 'width', 'height'] },
-        { name: 'ringzahl', vorschau: '.ringc b', app: '.lx-v-ringc b', props: ['x', 'y', 'fontSize', 'lineHeight', 'fontWeight'] },
+        // Ohne `x`: Plus Jakarta Sans (Emrah 03.11.2026) ist bei Ziffern ±2 px anders breit als die Schrift der Vorschau.
+        { name: 'ringzahl', vorschau: '.ringc b', app: '.lx-v-ringc b', props: ['y', 'fontSize', 'lineHeight', 'fontWeight'] },
         { name: 'ringtext', vorschau: '.ringc span', app: '.lx-v-ringc span', props: ['fontSize', 'fontWeight'] },
         { name: 'block', vorschau: '.st', app: '.lx-v-st', props: ['x', 'y', 'width', 'height', 'fontSize'] },
         { name: 'blockzeichen', vorschau: '.st .mk', app: '.lx-v-st-mk', props: ['x', 'y', 'width', 'height'] },
@@ -108,7 +109,8 @@ for (const pair of PAIRS) {
     for (const size of SIZES) {
       const side = deskSize(size) ? pair.desk : pair.phone;
       if (!side) continue;
-      for (const mode of MODES) {
+      // Glas/Carbon (Emrah 03.11.2026, Küchenstudio) ersetzt in Hell und Dunkel die Vorschau WBft3…; verglichen wird nur noch „Gedämpft“.
+      for (const mode of MODES.filter((m) => m === 'dim')) {
         for (const lang of LANGS) {
           test(`${size.name} · ${mode} · ${lang}`, async ({ browser }) => {
             const ctx = await browser.newContext({ viewport: { width: size.width, height: size.height }, reducedMotion: 'reduce', locale: lang === 'de' ? 'de-DE' : 'en-US' });

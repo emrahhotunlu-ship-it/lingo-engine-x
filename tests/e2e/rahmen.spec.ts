@@ -363,8 +363,9 @@ for (const [width, height] of [
     const win = await companionSettled(page);
     const col = await boxOf(page, 'context-column');
     expect(Math.abs(win.x - col.x)).toBeLessThanOrEqual(1);
-    expect(Math.abs(win.y)).toBeLessThanOrEqual(1);
-    expect(Math.abs(win.height - height)).toBeLessThanOrEqual(1);
+    // Glas (Emrah 03.11.2026, Küchenstudio): das angedockte Fenster schwebt 14 px vom Rand oben und unten.
+    expect(Math.abs(win.y - 14)).toBeLessThanOrEqual(1);
+    expect(Math.abs(win.height - (height - 28))).toBeLessThanOrEqual(1);
     expect(meets(win, await boxOf(page, 'task'))).toBe(false);
     expect(meets(win, await boxOf(page, 'stage'))).toBe(false);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);

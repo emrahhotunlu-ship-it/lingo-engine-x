@@ -19,7 +19,8 @@ const VIEWPORTS = [
 const THEMES: Theme[] = ['dark', 'dim', 'light'];
 const LANGS: Lang[] = ['de', 'en'];
 // Seit Relaunch P1 S1-TOK stehen die Flächen in OKLCH (src/styles/index.css, --bg je Modus).
-const BG: Record<Theme, string> = { dark: 'oklch(0.197 0.005 145)', dim: 'oklch(0.285 0.01 268)', light: 'oklch(0.964 0.007 89)' };
+// Glas/Carbon (Emrah 03.11.2026, Küchenstudio): Dunkel Graphit, Hell Stein.
+const BG: Record<Theme, string> = { dark: 'oklch(0.237 0.011 254)', dim: 'oklch(0.285 0.01 268)', light: 'oklch(0.854 0.011 244)' };
 
 // Der Browser schreibt dieselbe Farbe je nach Weg als oklch(…) oder lab(…): verglichen wird der gemalte Bildpunkt.
 async function expectBg(page: Page, theme: Theme, name?: string): Promise<void> {

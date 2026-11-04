@@ -97,10 +97,12 @@ for (const accent of ACCENTS) {
       expect(p.spotSelected.shadow).not.toContain(p.tokens.ok);
       expect(p.tileSelected.border).toBe(p.tokens.fg);
       expect(p.tileSelected.bg).toBe(p.tokens.lineStrong);
-      // Falsch ist nie grün (UX-Audit U1): Lösung neben einer falschen Antwort neutral, eigene Antwort rot.
+      // Falsch ist nie grün (UX-Audit U1): Lösung neben einer falschen Antwort neutral, eigene Antwort rot. Ausnahme seit Kern-Rest
+      // (03.11.2026): die richtige Option einer Auswahl trägt nach falscher Wahl einen grünen gestrichelten Rahmen (nie die grüne Fläche).
       const green = [p.tokens.ok, p.tokens.okSoft, p.tokens.okText];
       const w = p.wrongSide;
-      for (const c of [...w.gapReveal, w.revealText, ...w.choiceAnswer, ...w.chipAnswer, ...w.tapAnswer]) for (const g of green) expect(c).not.toContain(g);
+      for (const c of [...w.gapReveal, w.revealText, ...w.chipAnswer, ...w.tapAnswer]) for (const g of green) expect(c).not.toContain(g);
+      for (const c of w.choiceAnswer) expect(c).not.toContain(p.tokens.okSoft);
       expect(w.given).not.toBe(p.tokens.okText);
       expect(w.given).not.toBe(p.tokens.ok);
     });

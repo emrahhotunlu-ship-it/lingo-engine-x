@@ -171,7 +171,7 @@ for (const theme of THEMES) {
       await screen(page, 'checks');
       await openSettings(page);
       await expect(page.getByTestId('work-ctx')).toBeVisible();
-      for (const p of ['Bernstein', 'Grün'] as const) {
+      for (const p of ['Bernstein', 'Petrol'] as const) {
         await page.getByRole('radio', { name: p }).click();
         await page.waitForTimeout(150);
         await scan(`einstellungen-${p}`);

@@ -567,3 +567,55 @@ html:not([data-theme='dim']) [data-testid='companion'] {
       var(--shadow-sm);
   }
 }
+
+/* 15. Unschärfe auf eigener Ebene (Fund 04.11.2026, kwt-Bausteine am Handy): `backdrop-filter` macht ein Element zum Bezugsrahmen für
+   `position: fixed` darin – die am Handy unten angedockte Bausteinleiste rutschte dadurch mitten in die Übungskarte und verdeckte die gelegten
+   Wörter. Bei Blättern, die feste Teile enthalten können (Übungskarte, Seitenblatt), liegt das Glas deshalb auf `::before` hinter dem Inhalt.
+   Die doppelte Klasse hebt die Regel bewusst über die Glasregeln oben (`…[data-kern]:not([data-kres])`). */
+html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise,
+html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+  position: relative;
+  isolation: isolate;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise:not([data-kres]),
+html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+  background: transparent;
+}
+html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise:not([data-kres])::before,
+html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'])::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(1.5);
+  backdrop-filter: blur(28px) saturate(1.5);
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise[data-kres] {
+    background: transparent;
+  }
+  html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise[data-kres]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(28px) saturate(1.5);
+    backdrop-filter: blur(28px) saturate(1.5);
+    pointer-events: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise::before,
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'])::before {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

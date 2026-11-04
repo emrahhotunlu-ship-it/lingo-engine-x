@@ -65,11 +65,12 @@ test('Akzentfarbe: Standard Iris, Bernstein wählen, nach Neuladen bleibt die Wa
   const html = page.locator('html');
   await expect(html).toHaveAttribute('data-theme', 'dark');
   await expect(html).toHaveAttribute('data-accent', 'iris');
-  expect(await tokenDelta(page, '--act', 'oklch(0.762 0.083 166)')).toBeLessThanOrEqual(1);
+  // Glas/Carbon (Emrah 03.11.2026): der Standard-Akzent ist Petrol.
+  expect(await tokenDelta(page, '--act', 'oklch(0.55 0.094 185)')).toBeLessThanOrEqual(1);
 
   await openSettings(page);
   const group = page.getByRole('dialog', { name: 'Einstellungen' }).getByTestId('set-accent');
-  await expect(group.getByRole('radio', { name: 'Grün' })).toHaveAttribute('aria-checked', 'true');
+  await expect(group.getByRole('radio', { name: 'Petrol' })).toHaveAttribute('aria-checked', 'true');
   await group.getByRole('radio', { name: 'Bernstein' }).click();
   await expect(html).toHaveAttribute('data-accent', 'amber');
   expect(await tokenDelta(page, '--act', 'oklch(0.74 0.16 55)')).toBeLessThanOrEqual(1);
