@@ -15,7 +15,7 @@
       { "p": "registered attendees", "de": "angemeldete Teilnehmer", "en": "people who signed up for an event", "gap": "registered", "opts": ["inscribed", "subscribed", "signed"], "ex": "We expect around 200 [registered attendees] at the partner summit in Denver." }
     ] },
     { "word": "attendees", "pos": "noun", "col": [
-      { "p": "registered attendees", "de": "angemeldete Teilnehmer", "en": "people who signed up for an event", "gap": "registered", "opts": ["inscribed", "subscribed", "signed"], "ex": "Only [registered attendees] will receive the slides after the webinar." }
+      { "p": "draw attendees", "de": "Teilnehmer anziehen", "en": "make people come to an event", "gap": "drew", "opts": ["pulled", "towed", "caught"], "ex": "The partner summit [drew attendees] from twelve countries." }
     ] },
     { "word": "attitude", "pos": "noun", "col": [
       { "p": "attitude toward risk", "de": "Einstellung zum Risiko", "en": "how someone thinks about risk", "gap": "toward", "opts": ["against", "for", "at"], "ex": "The new CFO has a much more relaxed [attitude toward risk] than her predecessor." }
@@ -24,7 +24,7 @@
       { "p": "strong balance sheet", "de": "solide Bilanz", "en": "a healthy financial position", "gap": "strong", "opts": ["fat", "thick", "hard"], "ex": "Thanks to a [strong balance sheet], the company kept investing during the downturn." }
     ] },
     { "word": "break even", "pos": "verb", "col": [
-      { "p": "barely break even", "de": "gerade so die Gewinnschwelle erreichen", "en": "only just cover the costs", "gap": "barely", "opts": ["thinly", "lightly", "faintly"], "ex": "In its first year, our reseller program [barely broke even]." }
+      { "p": "barely break even", "de": "gerade so die Gewinnschwelle erreichen", "en": "only just cover the costs", "gap": "barely", "opts": ["slightly", "lightly", "thinly"], "ex": "In its first year, our reseller program [barely broke even]." }
     ] },
     { "word": "bring up", "pos": "verb", "col": [
       { "p": "bring up the subject", "de": "das Thema ansprechen", "en": "start talking about a topic", "gap": "subject", "opts": ["thesis", "object", "motive"], "ex": "I will [bring up the subject] of pricing at the end of the call." }
@@ -137,7 +137,7 @@
       { "p": "cost overrun", "de": "Kostenüberschreitung", "en": "spending more than planned", "gap": "cost", "opts": ["price", "fee", "charge"], "ex": "The [cost overrun] on the office move was almost 30 percent." }
     ] },
     { "word": "pass on", "pos": "verb", "col": [
-      { "p": "pass on the savings", "de": "die Einsparungen weitergeben", "en": "let customers benefit from lower costs", "gap": "savings", "opts": ["spares", "rescues", "thrifts"], "ex": "We will [pass on the savings] to our customers in the next price list." }
+      { "p": "pass on the savings", "de": "die Einsparungen weitergeben", "en": "let customers benefit from lower costs", "gap": "savings", "opts": ["economies", "savers", "spares"], "ex": "We will [pass on the savings] to our customers in the next price list." }
     ] },
     { "word": "peer", "pos": "noun", "col": [
       { "p": "peer pressure", "de": "Gruppenzwang", "en": "pressure to act like the people around you", "gap": "pressure", "opts": ["press", "push", "stress"], "ex": "Many new hires work late because of [peer pressure] on the team." }
@@ -146,25 +146,25 @@
       { "p": "gradually phase out", "de": "schrittweise auslaufen lassen", "en": "stop using something step by step", "gap": "gradually", "opts": ["lightly", "softly", "mildly"], "ex": "The old on-premises licenses will be [gradually phased out] to give clients time." }
     ] },
     { "word": "pour", "pos": "verb", "col": [
-      { "p": "pour money into sth", "de": "Geld in etw. stecken", "en": "invest a lot of money in", "gap": "into", "opts": ["at", "to", "over"], "ex": "Investors [poured money into] AI startups over the last two years." }
+      { "p": "pour money into sth", "de": "Geld in etw. stecken", "en": "invest a lot of money in", "gap": "into", "opts": ["at", "to", "over"], "ex": "Investors [poured money into AI startups] over the last two years." }
     ] },
     { "word": "proceed", "pos": "verb", "col": [
       { "p": "proceed with caution", "de": "vorsichtig vorgehen", "en": "continue carefully", "gap": "caution", "opts": ["attention", "precaution", "carefulness"], "ex": "Given the legal risks, we should [proceed with caution] on this deal." }
     ] },
     { "word": "process", "pos": "verb", "col": [
-      { "p": "process a refund", "de": "eine Rückerstattung bearbeiten", "en": "handle the payment back to a customer", "gap": "refund", "opts": ["payback", "rebound", "reprise"], "ex": "Our billing team will [process a refund] within five business days of the cancellation." }
+      { "p": "process a refund", "de": "eine Rückerstattung bearbeiten", "en": "handle the payment back to a customer", "gap": "refund", "opts": ["payback", "rebound", "refusal"], "ex": "Our billing team will [process a refund] within five business days of the cancellation." }
     ] },
     { "word": "quote", "pos": "noun", "col": [
       { "p": "a quote for sth", "de": "ein Angebot für etw.", "en": "a price offer for", "gap": "for", "opts": ["about", "over", "after"], "ex": "Could you send us [a quote for the cloud archive] by Thursday?" }
     ] },
     { "word": "reassure", "pos": "verb", "col": [
-      { "p": "reassure sb about sth", "de": "jdn. wegen etw. beruhigen", "en": "make someone less worried about something", "gap": "about", "opts": ["for", "at", "around"], "ex": "The CEO tried to [reassure staff about] job security after the merger." }
+      { "p": "reassure sb about sth", "de": "jdn. wegen etw. beruhigen", "en": "make someone less worried about something", "gap": "about", "opts": ["for", "at", "around"], "ex": "We need to [reassure the client about data security] before they move their archive to the cloud." }
     ] },
     { "word": "recap", "pos": "verb", "col": [
       { "p": "recap the key points", "de": "die wichtigsten Punkte zusammenfassen", "en": "briefly repeat the most important points", "gap": "points", "opts": ["dots", "spots", "marks"], "ex": "Let me [recap the key points] before we end the call." }
     ] },
     { "word": "recognize", "pos": "verb", "col": [
-      { "p": "widely recognized", "de": "weithin anerkannt", "en": "accepted by many people as", "gap": "widely", "opts": ["wildly", "vastly", "deeply"], "ex": "She is [widely recognized] as one of the best negotiators in our industry." }
+      { "p": "widely recognized", "de": "weithin anerkannt", "en": "accepted by many people", "gap": "widely", "opts": ["wildly", "vastly", "deeply"], "ex": "She is [widely recognized] as one of the best negotiators in our industry." }
     ] },
     { "word": "resist", "pos": "verb", "col": [
       { "p": "resist the temptation", "de": "der Versuchung widerstehen", "en": "not do something you want to do", "gap": "temptation", "opts": ["seduction", "tempting", "trial"], "ex": "I had to [resist the temptation] to reply to every email right away." }
@@ -176,7 +176,7 @@
       { "p": "revise sth downward", "de": "etw. nach unten korrigieren", "en": "lower a number or plan", "gap": "downward", "opts": ["below", "under", "beneath"], "ex": "We had to [revise our forecast downward] after the second quarter." }
     ] },
     { "word": "satisfied", "pos": "adj", "col": [
-      { "p": "satisfied with sth", "de": "zufrieden mit etw.", "en": "happy with", "gap": "with", "opts": ["of", "about", "from"], "ex": "Most clients are [satisfied with] the new support hours." }
+      { "p": "satisfied with sth", "de": "zufrieden mit etw.", "en": "happy with", "gap": "with", "opts": ["of", "about", "from"], "ex": "Most clients are [satisfied with the new support hours]." }
     ] },
     { "word": "squeeze", "pos": "verb", "col": [
       { "p": "squeeze margins", "de": "die Margen drücken", "en": "make profits per sale smaller", "gap": "margins", "opts": ["edges", "borders", "spans"], "ex": "Rising cloud hosting costs continue to [squeeze margins] this year." }
@@ -224,7 +224,7 @@
       { "p": "top priority", "de": "höchste Priorität", "en": "the most important thing", "gap": "top", "opts": ["upper", "peak", "head"], "ex": "Fixing the billing bug is our [top priority] this week." }
     ] },
     { "word": "risk", "pos": "noun", "col": [
-      { "p": "take a risk", "de": "ein Risiko eingehen", "en": "do something that might go wrong", "gap": "take", "opts": ["make", "do", "go"], "ex": "We should not [take a risk] with the migration two weeks before go-live." }
+      { "p": "take a risk", "de": "ein Risiko eingehen", "en": "do something that might go wrong", "gap": "take", "opts": ["make", "do", "go"], "ex": "With a new partner, we sometimes have to [take a risk] on the first deal." }
     ] },
     { "word": "budget", "pos": "noun", "col": [
       { "p": "tight budget", "de": "knappes Budget", "en": "very little money to spend", "gap": "tight", "opts": ["narrow", "close", "scarce"], "ex": "We are working with a very [tight budget] this quarter." }
@@ -278,7 +278,7 @@
       { "p": "make progress", "de": "Fortschritte machen", "en": "move forward with something", "gap": "made", "opts": ["did", "took", "had"], "ex": "We [made progress] on the SAP integration this week." }
     ] },
     { "word": "commitment", "pos": "noun", "col": [
-      { "p": "honor a commitment", "de": "eine Zusage einhalten", "en": "do what you promised to do", "gap": "honor", "opts": ["fill", "serve", "pay"], "ex": "A vendor that does not [honor a commitment] on delivery dates loses trust quickly." }
+      { "p": "honor a commitment", "de": "eine Zusage einhalten", "en": "do what you promised to do", "gap": "honor", "opts": ["fill", "serve", "pay"], "ex": "Our CEO flew to Munich to [honor a commitment] he had made to the client." }
     ] },
     { "word": "question", "pos": "noun", "col": [
       { "p": "an open question", "de": "eine offene Frage", "en": "something that is not decided yet", "gap": "open", "opts": ["free", "loose", "empty"], "ex": "Whether the client will renew next year is still [an open question]." }
@@ -293,7 +293,7 @@
       { "p": "make an attempt", "de": "einen Versuch unternehmen", "en": "try to do something", "gap": "made", "opts": ["did", "put", "set"], "ex": "We [made an attempt] to save the contract, but the client had already signed elsewhere." }
     ] },
     { "word": "call", "pos": "noun", "col": [
-      { "p": "return a call", "de": "jemanden zurückrufen", "en": "call someone back", "gap": "return", "opts": ["reply", "respond", "repeat"], "ex": "Our sales reps try to [return a call] within two hours." }
+      { "p": "return sb's call", "de": "jemanden zurückrufen", "en": "call someone back", "gap": "return", "opts": ["reply", "respond", "repeat"], "ex": "I'll [return Mark's call] right after the demo." }
     ] },
     { "word": "solution", "pos": "noun", "col": [
       { "p": "find a solution", "de": "eine Lösung finden", "en": "solve a problem", "gap": "find", "opts": ["meet", "catch", "win"], "ex": "We still need to [find a solution] for the scanning backlog." }
