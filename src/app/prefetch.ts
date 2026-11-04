@@ -1,4 +1,4 @@
-import { loadHome, loadOverview, loadScreens, loadWordPage } from '../modules/vocab/api';
+import { loadHome, loadOverview, loadPlace, loadScreens, loadSwitch, loadWordPage } from '../modules/vocab/api';
 import { logWarn } from '../platform/diagnostics';
 
 // Emrah 04.11.2026 („Ladezeiten extrem lange bei den Bildschirmen“): Die Teil-Dateien der häufigen Bildschirme (Wörter-Reiter, Wörter-Runde,
@@ -11,7 +11,10 @@ export function prefetchScreens(): void {
   if (done) return;
   done = true;
   const run = () => {
-    for (const load of [loadHome, loadScreens, loadWordPage, loadOverview]) {
+    // #23 (04.11.2026 abends): auch der Rahmen des Wörter-Reiters (`VocabHome`, eigenes Stück – war nicht vorgeladen, daher der leere Moment
+    // beim ersten Antippen von „Wörter“), die Einstufung und der Umschalter.
+    const loads: Array<() => Promise<unknown>> = [() => import('../features/vocab/hub/VocabHome'), loadHome, loadScreens, loadWordPage, loadOverview, loadPlace, loadSwitch];
+    for (const load of loads) {
       load().catch((err: unknown) => logWarn('prefetch', err));
     }
   };
