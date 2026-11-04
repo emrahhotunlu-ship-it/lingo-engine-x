@@ -1,0 +1,107 @@
+/* UI-Standard Fokus 2.0 (docs/umbau/fokus2/ui-standard.md §1, Emrah 04.11.2026 „Welche Schriftgröße sollte welcher Text haben?“):
+   EINE Größenreihe mit sechs Rollen statt ~40 Einzelgrößen. Diese Datei steht als letzte Teil-Datei und legt die Rollen für die
+   Übungskarte (Wörter, Grammatik) und ihre Leiste fest; `html:root body` hebt sie über die älteren Einzelregeln (v-uebung, kern, glas). */
+
+:root {
+  --t-main: 24px; /* Hauptinhalt: Satz mit Lücke, Stichwort, deutsche Vorgabe, Eingabe */
+  --t-title: 22px; /* Titel: Urteil, Bedeutung auf der Einführung */
+  --t-task: 17px; /* Aufgabe: „Setz das fehlende Wort ein.“ */
+  --t-text: 17px; /* Text: Warum, Beispielsätze, Knöpfe */
+  --t-hint: 15px; /* Hinweis: Gesucht, Übersetzung, Zweck, Kommt-wieder */
+  --t-small: 13px; /* Klein: Statuszeile, Überzeilen, Lautschrift */
+  --t-lh-main: 1.35;
+  --t-lh-text: 1.5;
+}
+@media (min-width: 768px) {
+  :root {
+    --t-main: 28px;
+    --t-title: 24px;
+    --t-task: 18px;
+  }
+}
+
+/* Statuszeile, Überzeilen */
+html:root body .lx-exercise .lx-vu-blockline,
+html:root body .lx-exercise .lx-kintro-k,
+html:root body .lx-exercise .lx-vu-lbl,
+html:root body .lx-exercise .lx-vu-contrast-k {
+  font-size: var(--t-small);
+  line-height: 1.35;
+}
+
+/* Zweck-Zeile und Hinweise */
+html:root body .lx-exercise [data-testid='purpose'],
+html:root body .lx-exercise [data-testid='vm-cue'],
+html:root body .lx-exercise .lx-kintro-ipa,
+html:root body .lx-exercise .lx-kintro-tr,
+html:root body .lx-exercise .lx-t-meta,
+html:root body .lx-exercise .lx-knext {
+  font-size: var(--t-hint);
+  line-height: 1.45;
+}
+
+/* Aufgabe */
+html:root body .lx-exercise .lx-vu-task {
+  font-size: var(--t-task);
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* Hauptinhalt: Satz, Lücke, deutsche Vorgabe ohne Satz, Stichwort, Nachtipp-Feld */
+html:root body .lx-exercise [data-slot='prompt'].lx-t-prompt,
+html:root body .lx-exercise .lx-vu-h5-q,
+html:root body .lx-exercise .lx-kretype input,
+html:root body .lx-exercise[data-ex='vm:nosent'] .lx-gap {
+  font-size: var(--t-main);
+  line-height: var(--t-lh-main);
+}
+html:root body .lx-exercise .lx-kword,
+html:root body .lx-exercise .lx-kword-sm {
+  font-size: var(--t-main);
+  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+/* Titel: Urteil im Streifen, Bedeutung auf der Einführung */
+html:root body .lx-exercise .lx-kstrip [data-testid='verdict'],
+html:root body .lx-exercise .lx-kintro-de,
+html:root body .lx-exercise .lx-kintro-de-sm {
+  font-size: var(--t-title);
+  line-height: 1.3;
+}
+html:root body .lx-exercise .lx-kstrip .lx-vi {
+  font-size: var(--t-hint);
+}
+
+/* Text: Warum, Merke, Beispielsatz der Einführung, Wortkarte, Kontrast */
+html:root body .lx-exercise [data-block='why'],
+html:root body .lx-exercise [data-block='remember'],
+html:root body .lx-exercise .lx-kintro,
+html:root body .lx-exercise .lx-kintro-sec [data-testid='vm-sentence'],
+html:root body .lx-exercise .lx-vu-contrast {
+  font-size: var(--t-text);
+  line-height: var(--t-lh-text);
+}
+html:root body .lx-exercise :is([data-block='why'], [data-block='remember']) > h3 {
+  font-size: var(--t-small);
+}
+
+/* Knöpfe der Leiste: Text-Größe, Hauptknopf 52 px hoch (§3) */
+html:root body :is(.lx-actionbar, .lx-actionbar-column) .lx-actionbar-inner > .lx-actionbar-main {
+  font-size: var(--t-text);
+  font-weight: 600;
+  min-height: 52px;
+}
+html:root body :is(.lx-actionbar, .lx-actionbar-column) .lx-actionbar-inner :is(button:not(.lx-actionbar-main), .lx-kask-about) {
+  font-size: var(--t-hint);
+  min-height: 44px;
+}
+
+/* Übungsleiste oben: Titel mit Zähler in Aufgaben-Größe, Zusatz klein */
+html:root body .lx-kbar-title {
+  font-size: var(--t-task);
+}
+html:root body .lx-kbar-count {
+  font-size: var(--t-small);
+}
