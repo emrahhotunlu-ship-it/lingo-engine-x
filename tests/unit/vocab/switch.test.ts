@@ -301,6 +301,23 @@ describe('Nachholen bei jedem Start (Emrah 04.11.2026: vormittags in der alten A
     expect(h.writes().length).toBe(n);
   });
 
+  it('nach der Umrechnung in der alten App angelegtes Wort wird übernommen, ein altes ohne Lexem nicht', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: lockHolder() });
+    const d = h.dump() as Record<string, Doc>;
+    const mark = (d['app/schema']!.vocabModule as Doc).t as number;
+    const later = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date(mark + 2 * DAY));
+    d['vocab/new-card'] = { id: 'new-card', word: 'leverage', de: 'nutzen', ex: 'We leverage data.', state: 'new', added: later };
+    d['vocab/old-card'] = { id: 'old-card', word: 'tenure', de: 'Amtszeit', ex: 'During her tenure.', state: 'new', added: '2026-01-05' };
+    h.load(d);
+    const r = await startCatchUp(w, readOf(h), mark + 2 * DAY);
+    expect(r).toMatchObject({ added: 1 });
+    const after = h.dump() as Record<string, Doc>;
+    expect(lexOf(after['vocab/new-card'])).not.toBeNull();
+    expect(after['vocab/old-card']!.lex).toBeUndefined();
+  });
+
   it('anderer Tab hält die Sperre → nichts nachgeholt, nichts gebucht (keine Doppelbuchung, data-guard 04.11.2026)', async () => {
     const h = createMemoryDb({ seed: all() });
     const w = createWriter(h.db);

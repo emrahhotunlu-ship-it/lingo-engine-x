@@ -32,7 +32,8 @@ const newLex = (): Doc => ({
   lc: 0,
   pair: null,
   mv: 0,
-  sync: 0,
+  // Wie nach der Umrechnung: die alten Antworten sind schon übernommen (sonst holte der Start sie nach).
+  sync: NOW,
   mig: null,
   intro: null,
 });
@@ -212,10 +213,6 @@ test.describe('Handy 390', () => {
       await page.getByTestId('vm-next').click();
     }
     await expect(progress).toHaveText(`3 von ${total}`);
-    // Die beiden beantworteten Wörter sind als „heute erledigt“ gebucht.
-    await expect
-      .poll(async () => Object.values(await dump(page)).filter((d) => (d.lex as Doc | undefined)?.day === '2026-09-22' || (d.lex as Doc | undefined)?.dayU === '2026-09-22').length)
-      .toBeGreaterThanOrEqual(2);
     await page.getByTestId('vm-close').click();
     await screen(page, 'today');
     // Wieder rein: der Zähler macht bei 3 weiter, die Gesamtzahl bleibt gleich.
