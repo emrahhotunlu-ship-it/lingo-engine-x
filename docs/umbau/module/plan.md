@@ -63,3 +63,24 @@ Datenpfade (keine neuen Sammlungen; neue Felder nur ergänzend, tolerant gelesen
 **Sollte umgesetzt:** P1 zieht `areas/anwenden.tsx` (Tagesweg Schritt 3, Routen-Typen) unverändert um, mit E2E Schritt 3 mit/ohne Claude; Isolationstest für `src/modules/practice` zuerst (Tür heißt `index.ts` wie read; Erlaubnislisten: Übungs-Bildschirme einzeln über `sharedUi`, `features/drills/session`, `ai/scope`, `platform/capabilities` über `shared`); Berührungslisten von read/vocab nachziehen (`modules/vocab/api` in read, `read/shared.ts` und `c1x/lexWrite.ts` in vocab, `app/prefetch.ts` in read). Beleg `used` aus dem Rollenspiel (`speak/persist.ts`). `st.rep`: Feld im vorhandenen Lesestand `read/m-<Monat>` (ergänzend). Monatsindex-Reparatur einmalig und idempotent im Effekt. Hinweis „Erst Wiederholen“ nur über die vocab-`api`.
 
 **Reihenfolge neu:** K (ohne Hub) → M0 nach learning-scientist-Urteil → P1 → K-Hub-Teile → L1 → L2 → T → Prüfer → Test-Link → nach „Ja live nehmen“: Kurs-Routine ergänzen. platform-guard misst Mehr-Datei-Grenzen und `build:single`.
+
+## Nachtrag nach learning-scientist-Prüfung (04.11.2026) – gilt zusätzlich
+**Muss:**
+1. **Ein Fehler bucht nie beide Konten:** kwt und err nur Grammatik, wf nur Wort (Unit-Test).
+2. **Nur freie Produktion bucht BKT aus `ext`:** getipptes kwt/wf und err mit getippter Korrektur; reines Antippen wie `alt`.
+3. **Tempo ehrlich:** darf buchen; falsch nach Ablauf der Zielzeit wie `alt`; schnelle Fehler legen keine Fehlersätze an; der Tagesdeckel gilt gemeinsam für Tempo und c1x (je Thema und Lerntag eine Wirkung).
+4. **Wörter `cued` je Art festgelegt:** kwt (Schlüsselwort sichtbar) und wf (Stamm sichtbar) = `cued` → nur Beleg; Rollenspiel gesprochen = `typed:false`; Rollenspiel-Beleg `ok` nur, wenn die Analyse die korrekte Verwendung bestätigt.
+5. **Widerspruchstest erweitert:** eine `ext`-Buchung auf eine Karte im heute eingefrorenen Pflichtplan macht die Pflicht weder unerfüllbar noch zählt sie als erledigt.
+
+**Sollte (übernommen):** Antippen im Leser = Beleg `seen` mit `ok:false` („beim Lesen nachgeschlagen“, höchstens Schwach-Markierung), gebündelt beim Schließen und bei `pagehide`. Teil A nur mit eindeutig erkanntem Muster, Grundform in Klammern, Lücke = Regelform, Fehler nur Grammatik. Hörübung: Antwort ein Wort/eine Zahl, tolerant (Tippfehler, Synonyme), bei Abweichung „So stand es im Text“ statt Rot, danach Knopf „Nachsprechen“. „Erst Wiederholen“ höchstens 1×/Tag, nur vor Wörter-/Grammatik-Übungen, mit Wozu-Satz und Knopf; neue Wörter fallen nicht weg. „Weitere Fehlersätze“ zieht nur fällige; nicht fällige als Übung ohne Box-Aufstieg. Sprint mit `ext`-Marke. Hub: Titel als Handlung, „Wozu“ + gemessene Dauer (Median); „Heute empfohlen“ mit Grund aus echten Daten, rotierend über Gruppen und Beruf/Alltag; Lesen nicht doppelt (eigener Einstieg „Lesen“ bleibt, im Hub eine Zeile, kein zweites Kartenset). Fragen 3/4 bleiben in den Übungen (Prüfung im Hub-Paket).
+
+## K-Paket (aus `docs/review/k-abgleich-2026-11-04/befund.md`)
+Erledigt und im Kommentar geschlossen: K1, K6, K8, K9, K10. Zu bauen:
+- **K2** Schreibmarke in leerer Lücke (Höhe/Oberkante aus Schrift und Innenabstand, `KineticGap.tsx` `placeCaret`), auch Form „Schreib das auf Englisch“.
+- **K3** Lösung bricht nicht um (`nowrap`, solange sie in die Zeile passt); „Warum“ bei falsch: Unterschied deiner Antwort zur Lösung statt nur Bedeutung.
+- **K4** Statuszeile: Punkt weg, Klartext („Wiederholung · 3 von 10“), „Wiederholung“ nicht für heute eingeführte Wörter („Erster Abruf“), Grammatik „●●●● Lernt“ in Worten.
+- **K5** Wort-Erklärung mit Wortpartnern (`col`) und 1–2 weiteren Beispielsätzen, wo vorhanden.
+- **K7** „Später prüfen lassen“ mit einer Zeile, was passiert; auf der Wortkarte wirklich später prüfen (vorgemerkt), nicht „zählt nicht“.
+- **K11/K12/K13** eine Zählquelle für Heute und Runde (`vmod/day`, einzelne Wörter, Fehler erhöhen die Gesamtzahl nicht); kein „ca. 25 Min.“ neben „Heute nur kurz“ ohne Bezug.
+- **K14** Heute bei 1440/2560 ohne halbleere Karte (keine Streckung auf volle Höhe, „Heute nur kurz“ unter den Schritten), rechte Spalte gefüllt oder schmal.
+- Nebenbefund: Hinweise verdecken am Handy die Kopfzeile → Hinweise unter der Kopfzeile.
