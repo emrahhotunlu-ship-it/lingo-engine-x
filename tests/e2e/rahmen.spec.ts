@@ -341,9 +341,11 @@ test('Fragen am Handy (390 px) in der Übung: keine Leiste, Claude als Blatt unt
   const prompt = await page.locator('[data-testid="exercise"] [data-slot="prompt"]').first().boundingBox();
   expect(prompt).not.toBeNull();
   if (prompt) expect(prompt.y + prompt.height).toBeLessThanOrEqual(sheet.y + 1);
-  // Unterkante: über der Aktionsleiste („Prüfen“), also im unteren Fünftel.
+  // Unterkante im unteren Fünftel. Seit 04.11.2026 (Emrah: Tastatur verdeckte die feste Leiste) stehen die Knöpfe am Touch-Gerät in der
+  // Übungskarte unter der Aufgabe; das Blatt darf sie überdecken, solange es offen ist. Gibt es eine FESTE Leiste, endet es über ihr.
   expect(sheet.y + sheet.height).toBeGreaterThan(844 * 0.8);
-  expect(sheet.y + sheet.height).toBeLessThanOrEqual(await page.getByTestId('actionbar').evaluate((el) => el.getBoundingClientRect().top + 1));
+  const fixedBar = page.locator('.lx-actionbar');
+  if (await fixedBar.count()) expect(sheet.y + sheet.height).toBeLessThanOrEqual(await fixedBar.evaluate((el) => el.getBoundingClientRect().top + 1));
   expect(sheet.height).toBeGreaterThanOrEqual(279);
   expect(errors).toEqual([]);
 });

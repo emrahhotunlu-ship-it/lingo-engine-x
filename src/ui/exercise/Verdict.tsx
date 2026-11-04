@@ -32,9 +32,10 @@ export function Verdict({ verdict, sub = null, title = null, help = false }: { v
   return (
     <div className="flex flex-col gap-0.5" data-testid="verdict-block">
       <p className={`flex items-center gap-3 text-xl leading-7 font-semibold tracking-tight ${TONE[verdict]}`} data-testid="verdict" data-verdict={verdict} role="status">
-        {mark && (
+        {/* Emrah 04.11.2026 (K3): ein leerer Kreis neben „Lösung“ sagt nichts – bei „Weiß ich nicht“ steht nur das Wort. */}
+        {mark && verdict !== 'dontKnow' && (
           <span aria-hidden="true" className="dz-badge lx-vi inline-flex size-7 flex-none items-center justify-center rounded-full text-sm font-bold" data-mark={verdict}>
-            <span className="ee-mark">{verdict === 'dontKnow' ? '' : mark}</span>
+            <span className="ee-mark">{mark}</span>
           </span>
         )}
         <span>{title ?? t(WORD[verdict])}</span>

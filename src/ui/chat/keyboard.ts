@@ -100,7 +100,8 @@ export function useKeepGapVisible(getInput: () => HTMLElement | null, getGap: ()
       if (!keyboardCovers(window.innerHeight, vv.height)) return;
       const spans: Span[] = [gap.getBoundingClientRect()];
       // Steht die feste Aktionsleiste (sie folgt der Tastatur selbst), zählt nur der Bereich darüber; sonst der Prüfen-Knopf im Inhalt.
-      const bar = document.querySelector<HTMLElement>('[data-testid="actionbar"]');
+      // Nur die FESTE Leiste (`.lx-actionbar`); auf Touch-Geräten stehen die Knöpfe im Inhalt (ActionBar), dann zählt der Prüfen-Knopf dort.
+      const bar = document.querySelector<HTMLElement>('.lx-actionbar');
       const btn = bar ? null : checkButtonNear(gap);
       if (btn) spans.push(btn.getBoundingClientRect());
       const d = keepVisibleDelta(spans, { top: vv.offsetTop, height: vv.height - (bar ? bar.offsetHeight : 0) });

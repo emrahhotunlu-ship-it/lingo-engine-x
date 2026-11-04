@@ -121,7 +121,7 @@ const measureFlow = (page: Page): Promise<Flow> =>
     window.scrollTo(0, document.documentElement.scrollHeight);
     await new Promise((r) => setTimeout(r, 250));
     const res = document.querySelector<HTMLElement>('[data-testid="result"]');
-    const bar = document.querySelector<HTMLElement>('.lx-actionbar');
+    const bar = document.querySelector<HTMLElement>('[data-testid="actionbar"]');
     const why = res?.querySelector<HTMLElement>('[data-block="why"]');
     const order = [...(res?.querySelectorAll<HTMLElement>('[data-block="verdict"], [data-block="why"], [data-block="remember"], [data-slot="more"], [data-testid="claude-ask-inline"]') ?? [])].map(
       (el) => el.getAttribute('data-block') ?? el.getAttribute('data-slot') ?? el.getAttribute('data-testid') ?? '',
@@ -160,7 +160,7 @@ async function flowRules(page: Page, label: string): Promise<Flow> {
   ).toBe(true);
   expect(m.whyClipped, 'Warum abgeschnitten').toBe(false);
   // Hilfe ist sichtbar, ohne erst einen Knopf zu suchen (Emrah 02.11.2026): Kern – „Frag Claude dazu“ neben „Weiter“.
-  await expect(page.locator('.lx-actionbar').getByTestId('claude-ask-about')).toBeVisible();
+  await expect(page.getByTestId('actionbar').getByTestId('claude-ask-about')).toBeVisible();
   // Ganz unten gerollt verschwindet nichts hinter der festen Leiste; dort steht nur „Weiter“. Erneut messen, bis das Einrollen nach dem
   // Prüfen und die Erklärung von Claude fertig sind (beide ändern Lage und Höhe noch kurz).
   await expect
@@ -172,7 +172,7 @@ async function flowRules(page: Page, label: string): Promise<Flow> {
       { timeout: 5000 },
     )
     .toBeLessThanOrEqual(1);
-  await expect(page.locator('.lx-actionbar').getByTestId('next')).toBeVisible();
+  await expect(page.getByTestId('actionbar').getByTestId('next')).toBeVisible();
   return m;
 }
 

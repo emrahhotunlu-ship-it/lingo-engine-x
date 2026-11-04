@@ -31,10 +31,10 @@ export function CompanionLayer() {
   return <AnimatePresence>{open && <CompanionOverlay key="companion" />}</AnimatePresence>;
 }
 
-/** Höhe der festen Aktionsleiste und der unteren Reiterleiste, soweit sie das Fenster (Breite `x0`…`x1`) verdecken könnten. */
+/** Höhe der festen Aktionsleiste (nur `.lx-actionbar`; die Leiste im Inhalt auf Touch-Geräten verdeckt nichts) und der unteren Reiterleiste, soweit sie das Fenster (Breite `x0`…`x1`) verdecken könnten. */
 function measureReserve(x0: number, x1: number): number {
   let reserve = 0;
-  for (const el of document.querySelectorAll<HTMLElement>('[data-testid="actionbar"], .dz-tabbar')) {
+  for (const el of document.querySelectorAll<HTMLElement>('.lx-actionbar, .dz-tabbar')) {
     const r = el.getBoundingClientRect();
     if (r.height < 8 || r.width < 8 || r.top < window.innerHeight * 0.4 || r.right <= x0 || r.left >= x1) continue;
     reserve = Math.max(reserve, window.innerHeight - r.top);

@@ -48,8 +48,8 @@ export const vmEn = {
   vmWhyOrder: 'With phrasal verbs, a pronoun (it, them) goes in the middle: set it up, never set up it.',
   vmWhyWrong: 'You needed {answer} = {de} ({pos}).',
   vmWhyWrongNoPos: 'You needed {answer} = {de}.',
-  vmWhyDunno: 'Better than guessing. {answer} = {de} ({pos}). Say the sentence out loud once with it.',
-  vmWhyDunnoNoPos: 'Better than guessing. {answer} = {de}. Say the sentence out loud once with it.',
+  vmWhyDunno: 'Better than guessing. {answer} = {de} ({pos}). Type it once correctly now – that’s what makes it stick.',
+  vmWhyDunnoNoPos: 'Better than guessing. {answer} = {de}. Type it once correctly now – that’s what makes it stick.',
 
   // Word type
   vmPos_noun: 'noun',

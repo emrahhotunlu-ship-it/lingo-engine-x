@@ -206,7 +206,7 @@ test('Handy 390: „Sicher?“ steht vollständig über dem Weiter-Balken, der F
   await expect(sure).toBeVisible();
   await expect(page.getByTestId('override-sure-yes')).toBeFocused();
   // Der Balken (Weiter) liegt fest unten: alle Knöpfe der Rückfrage enden darüber und beginnen unter dem oberen Rand.
-  const bar = page.locator('.lx-actionbar').first();
+  const bar = page.getByTestId('actionbar').first();
   await expect(bar).toBeVisible();
   await expect
     .poll(async () => {

@@ -1046,3 +1046,10 @@ html[data-lx-retyping] .lx-exercise :is(.lx-gap-reveal, .lx-kwordcard) {
 .lx-kh-foot:empty {
   display: none;
 }
+
+/* Emrah 04.11.2026 (iPhone aufgeklappt): „Schreib das auf Englisch“ ohne Satz – die Eingabelinie war schmal und klein links unter dem großen
+   deutschen Wort. Die Antwort ist das Wichtigste der Karte: breite Linie, Schrift fast so groß wie das Stichwort (auch für die aufgedeckte Lösung). */
+:root .lx-exercise[data-ex='vm:nosent'] .lx-gap {
+  min-width: min(100%, 20rem);
+  font-size: clamp(1.375rem, 1.1rem + 1.2vw, 1.875rem);
+}

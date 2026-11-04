@@ -375,6 +375,13 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
         autoComplete="off"
         autoCorrect="off"
         spellCheck={false}
+        // Emrah 04.11.2026: iOS bot „Kontakt autom. ausfüllen“ und den eigenen Nachnamen an. Ein eindeutiger Name und die Kennzeichen der
+        // Passwort-/Formularhelfer sagen dem System, dass hier eine Antwort steht, kein Kontaktfeld.
+        name="lx-answer"
+        aria-autocomplete="none"
+        data-form-type="other"
+        data-lpignore="true"
+        data-1p-ignore=""
         data-testid="gap-input"
         aria-label={meta?.label ?? ''}
         aria-hidden={bound ? undefined : true}

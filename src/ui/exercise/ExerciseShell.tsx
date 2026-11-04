@@ -680,7 +680,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
       </Button>
     ) : null;
   const bar = (
-    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={(feedback ? askAbout : asideSecondary) || undefined}>
+    // Emrah 04.11.2026 (iPhone aufgeklappt ≈ iPad mini): Die feste Leiste am unteren Rand lag hinter der Bildschirmtastatur – im Claude-Rahmen
+    // meldet der Browser die Tastatur nicht zuverlässig, und dazwischen klaffte leere Fläche. Auf Touch-Geräten stehen die Knöpfe deshalb direkt
+    // unter der Aufgabe in der Karte (wie am Monitor); die Tastatur liegt darunter und verdeckt sie nicht.
+    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split || !fine ? 'column' : 'fixed'} aside={(feedback ? askAbout : asideSecondary) || undefined}>
       {barOverride ?? (
         <PrimaryAction
           onClick={feedback ? fire : primary.onClick}

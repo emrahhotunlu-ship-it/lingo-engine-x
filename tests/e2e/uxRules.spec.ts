@@ -58,7 +58,7 @@ async function measure(page: Page): Promise<Measure> {
       .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && inView(b.getBoundingClientRect()))
       .map((b) => ({ id: b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?', bottom: b.getBoundingClientRect().bottom, top: b.getBoundingClientRect().top }));
     const outside = Array.from(document.querySelectorAll('button'))
-      .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && !b.closest('.lx-actionbar'))
+      .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && !b.closest('[data-testid="actionbar"]'))
       .map((b) => b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?');
     // R7: gleicher Text (≥ 12 Zeichen) höchstens einmal je Bild; Reiter und Ränder ausgenommen.
     const counts = new Map<string, number>();
@@ -151,8 +151,11 @@ for (const theme of ['dark', 'light'] as const) {
       // Auswahl-Fragen (Antippen) haben keinen Hauptknopf: dort steht keine Leiste.
       if (name.startsWith('trainer-') && (result || (await page.getByTestId('check').count()) > 0)) {
         await expect(bar, `R2 ${name}: Aktionsleiste steht`).toBeVisible();
+        // Emrah 04.11.2026 (Tastatur verdeckte die feste Leiste): auf Touch-Geräten stehen die Knöpfe direkt unter der Aufgabe in der Karte –
+        // sichtbar im Bild und innerhalb der Übung (ersetzt die alte Regel „Leiste am unteren Rand“).
         const bb = await bar.boundingBox();
-        expect((bb?.y ?? 0) + (bb?.height ?? 0), `R2 ${name}: Leiste am unteren Rand`).toBeGreaterThanOrEqual(843);
+        expect((bb?.y ?? 0) + (bb?.height ?? 0), `R2 ${name}: Leiste ganz im Bild`).toBeLessThanOrEqual(844);
+        expect(await bar.evaluate((el) => !!el.closest('[data-testid="exercise"]')), `R2 ${name}: Leiste in der Übungskarte`).toBe(true);
         // R7: Zustandstexte – vor dem Prüfen „Prüfen“ (oder Auswahl ohne Knopf), danach „Weiter“.
         if (result) await expect(bar.getByTestId('next'), `R7 ${name}: Weiter nach dem Prüfen`).toContainText('Weiter');
         else await expect(page.getByTestId('check'), `R7 ${name}`).toContainText('Prüfen');
