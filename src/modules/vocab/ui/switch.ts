@@ -271,3 +271,19 @@ export async function autoEnable(writer: Writer, read: () => Promise<SwitchRead>
   logWarn('vocab:switch', { message: 'Automatisch übernehmen' }, summaryText(preview(st.input, [], st.skipped).summary, []));
   return enableModule(writer, { ...st.input, confirmedPairs: [] }, { confirmed: true, backupWritten: true, profileValid: st.profileValid, possiblyTruncated: st.truncated, holder: lockHolder() });
 }
+
+/**
+ * Nachholen bei JEDEM App-Start mit eingeschalteter Wörter-App (Emrah 04.11.2026: am Vormittag in der alten App gelernt, die neue App
+ * plante dieselben Wörter noch einmal): Hat der alte Bereich geantwortet (`doc.last > lex.sync`), übernimmt `catchUpAll` genau diese
+ * Antworten (FSRS, „heute erledigt“ über `lex.day`). Dieselben Wächter wie beim Wiedereinschalten (Umrechnung fertig, Profil gültig, nichts
+ * gekappt); ohne Offenes ein Leerlauf (nur Lesen). `null` = nicht gelaufen.
+ */
+export async function startCatchUp(writer: Writer, read: () => Promise<SwitchRead>, nowMs: number): Promise<CatchUpResult | null> {
+  const snap = await read();
+  const profile = snap.raw.get(PROFILE_PATH);
+  const vcfg = profile && isObj(profile.vcfg) ? profile.vcfg : null;
+  if (!vcfg || vcfg.mod !== 1) return null;
+  const st = fromRead(snap, nowMs);
+  if (!migrationDone(st.schema) || !st.profileValid || st.truncated) return null;
+  return catchUpAll(writer, st.input.docs, st.input.logs, nowMs);
+}

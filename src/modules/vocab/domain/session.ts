@@ -75,14 +75,14 @@ export class SessionRun {
         if (!l || !notCarried(path)) continue;
         if (track === 'n') {
           if (l.intro === null) fresh.push({ path, form: 'intro', step: 0, intro: true, why: 'new' });
-        } else if (l.day !== day) reviews.push({ path, form: dueOn(l, day, this.cat.get(path)?.av)?.form ?? form, step: 0, why: 'due' });
+        } else if (!doneToday(l, day)) reviews.push({ path, form: dueOn(l, day, this.cat.get(path)?.av)?.form ?? form, step: 0, why: 'due' });
       }
       this.queue = interleave(reviews, fresh);
       this.queue.push(...this.transferSlot(nowMs));
     } else if (this.kind === 'more5' || this.kind === 'free') {
       const n = this.kind === 'more5' ? 5 : FREE_SIZE;
       const due = items
-        .filter((it) => notCarried(it.path) && !this.seen.has(it.path) && it.lex.day !== day && !this.cat.rests(it.path) && dueOn(it.lex, day, it.av))
+        .filter((it) => notCarried(it.path) && !this.seen.has(it.path) && !doneToday(it.lex, day) && !this.cat.rests(it.path) && dueOn(it.lex, day, it.av))
         .sort((a, b) => danger(a.lex, nowMs) - danger(b.lex, nowMs) || a.path.localeCompare(b.path));
       const out: Slot[] = due.slice(0, n).map((it) => ({ path: it.path, form: dueOn(it.lex, day, it.av)!.form, step: 0, why: 'due' }));
       const introduced = items.filter((it) => it.lex.intro === day).length;
@@ -167,7 +167,7 @@ export class SessionRun {
     const l = this.lex(s.path);
     // Pflicht, „Noch 5“ und freie Runde nehmen nur Fälliges/Geplantes; die anderen Wege buchen nur Fälliges oder Gefährdetes (mayPlan).
     const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes';
-    const planned = !!l && !s.evidence && s.form !== 'contrast' && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : l.day !== this.day));
+    const planned = !!l && !s.evidence && s.form !== 'contrast' && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : !doneToday(l, this.day)));
     const sent = FORM_SPEC[s.form].sent;
     const cue = sent === 's' && FORM_SPEC[s.form].track === 'b' && (l?.lv ?? 1) <= CUE_MAX_LV;
     return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned || s.form === 'contrast' || s.evidence ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };
@@ -245,3 +245,22 @@ export function interleave(reviews: Slot[], fresh: Slot[]): Slot[] {
  * `day` = Lerntag beim Start; `right` = Abfragen mit Note > 1; `activeMs` = aktive Zeit (je Karte gedeckelt).
  */
 export type RoundReport = { kind: SessionKind; day: string; n: number; right: number; activeMs: number; partial: boolean };
+
+/**
+ * Heute schon gebucht? `day` (Abruf-Spur) ODER `dayU` (Erkennen, z. B. Aufdecken im Anki-Modus). Vorher prüfte die Runde nur `day`: im
+ * Anki-Modus kamen schon aufgedeckte Wörter nach dem Verlassen und Wiedereinstieg erneut (Emrah 04.11.2026 „muss von vorne anfangen“).
+ */
+export function doneToday(l: { day: string | null; dayU: string | null }, day: string): boolean {
+  return l.day === day || l.dayU === day;
+}
+
+/** Wie viele Einträge des eingefrorenen Wörter-Plans heute schon erledigt sind (Wiederholung gebucht, neues Wort eingeführt). */
+export function planDoneCount(plan: readonly (readonly [string, string, string])[], lexOf: (path: string) => { day: string | null; dayU: string | null; intro: string | null } | null, day: string): number {
+  let n = 0;
+  for (const [path, track] of plan) {
+    const l = lexOf(path);
+    if (!l) continue;
+    if (track === 'n' ? l.intro === day : doneToday(l, day)) n++;
+  }
+  return n;
+}

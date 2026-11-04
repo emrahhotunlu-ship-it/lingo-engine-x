@@ -183,6 +183,50 @@ test.describe('Handy 390', () => {
     expect(errors).toEqual([]);
   });
 
+  test('Rausgehen und wieder rein (Emrah 04.11.2026): die Wörter-Runde zählt weiter, beantwortete Wörter kommen nicht noch einmal', async ({ page }) => {
+    test.setTimeout(90_000);
+    const base = Date.parse(TUE_9);
+    const { errors } = await boot(page, { migrated: false, now: TUE_9, fake: { capabilities: { sample: false }, patch: patch(true) } });
+    await screen(page, 'today');
+    await expect.poll(async () => !!(await dump(page))['vmod/day']).toBe(true);
+    await page.getByTestId('start').click();
+    await screen(page, 'vlearn');
+    await page.getByTestId('vm-start-go').click();
+    const progress = page.getByTestId('vm-progress');
+    await expect(progress).toHaveText(/^1 von \d+$/);
+    const total = Number(/von (\d+)/.exec((await progress.textContent()) ?? '')![1]);
+    expect(total).toBeGreaterThan(3);
+    // Zwei Karten beantworten (Einführung „Verstanden“ oder Abfrage mit „Weiß ich nicht“).
+    for (let i = 0; i < 2; i++) {
+      await page.clock.setFixedTime(new Date(base + (i + 1) * 60_000));
+      const go = page.getByTestId('vm-intro-go');
+      const check = page.getByTestId('vm-check');
+      await expect(check.or(go).first()).toBeVisible();
+      if (await go.isVisible()) {
+        await go.click();
+        continue;
+      }
+      if ((await check.textContent()) === 'Aufdecken') await check.click();
+      else await page.getByTestId('vm-dunno').click();
+      await retypeIfAsked(page);
+      await page.getByTestId('vm-next').click();
+    }
+    await expect(progress).toHaveText(`3 von ${total}`);
+    // Die beiden beantworteten Wörter sind als „heute erledigt“ gebucht.
+    await expect
+      .poll(async () => Object.values(await dump(page)).filter((d) => (d.lex as Doc | undefined)?.day === '2026-09-22' || (d.lex as Doc | undefined)?.dayU === '2026-09-22').length)
+      .toBeGreaterThanOrEqual(2);
+    await page.getByTestId('vm-close').click();
+    await screen(page, 'today');
+    // Wieder rein: der Zähler macht bei 3 weiter, die Gesamtzahl bleibt gleich.
+    await page.getByTestId('start').click();
+    await screen(page, 'vlearn');
+    const go = page.getByTestId('vm-start-go');
+    if (await go.isVisible().catch(() => false)) await go.click();
+    await expect(progress).toHaveText(`3 von ${total}`);
+    expect(errors).toEqual([]);
+  });
+
   test('Heute (V3 Schritt 4b): Block „Wörter“ startet die neue Runde; Abschluss zählt für Heute und die Serie; „Fertig“ führt in die Einheit weiter', async ({ page }) => {
     test.setTimeout(90_000);
     const DAY = '2026-09-22';

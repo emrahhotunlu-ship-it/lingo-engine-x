@@ -173,6 +173,7 @@ export async function reportEvidence(e: Evidence, o: { writer: Writer; device: s
  * dieselbe Zahl nennt wie der Start der Runde. Nachgeladen wie die Bildschirme. `null` = nicht möglich, dann gilt die gewählte Wörter-Zeit.
  */
 export async function prepareDay(aiReady?: () => boolean): Promise<number | null> {
+  await catchUpDone();
   const { prepareDay: run } = await import('./ui/LearnScreen');
   return run(aiReady);
 }
@@ -217,6 +218,18 @@ export function loadSwitch() {
 export function loadAutoSwitch() {
   return import('./ui/switch');
 }
+
+/**
+ * Nachholen beim Start (Emrah 04.11.2026): Antworten aus dem alten Wörter-Bereich (z. B. die alte App am Vormittag) werden übernommen, bevor
+ * der Wörter-Tagesplan eingefroren wird. `prepareDay` und der Start der Runde warten darauf (`catchUpDone`).
+ */
+let catchUpP: Promise<unknown> | null = null;
+export function startCatchUpOnce(run: () => Promise<unknown>): Promise<unknown> {
+  catchUpP ??= run().catch(() => null);
+  return catchUpP;
+}
+/** Wartet auf das Nachholen dieses Starts (sofort erfüllt, wenn keins läuft). */
+export const catchUpDone = (): Promise<unknown> => catchUpP ?? Promise.resolve(null);
 
 /** Zahl der Fehlwörter der letzten 14 Lerntage (Runde `mistakes`, dieselbe Rechnung wie im Wörter-Reiter). Nachgeladen, nie in der Einstiegsdatei. */
 export async function countMistakes(nowMs: number): Promise<number> {

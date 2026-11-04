@@ -3,7 +3,7 @@ import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
 import { loadSnapshot } from '../../data/snapshot';
 import { translate } from '../../i18n';
-import { loadAutoSwitch } from '../../modules/vocab/api';
+import { loadAutoSwitch, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { toast } from '../../ui/Toast';
@@ -44,11 +44,38 @@ async function run(): Promise<void> {
   }
 }
 
+/** Wörter-App schon an: Antworten aus dem alten Bereich nachholen (einmal je App-Start, Emrah 04.11.2026). */
+function moduleOn(): boolean {
+  const s = useLive.getState();
+  return s.status === 'ready' && vocabModuleOn(s.docs['app/profile']) && !s.invalid['app/profile'];
+}
+
+function catchUp(): void {
+  const writer = getWriter();
+  if (!writer) return;
+  void startCatchUpOnce(async () => {
+    try {
+      const sw = await loadAutoSwitch();
+      return await sw.startCatchUp(writer, read, Date.now());
+    } catch (err) {
+      logError('vocab:catchup', err, 'Start');
+      return null;
+    }
+  });
+}
+
 /** Beim Start des Bereichs Wörter einhängen (`boot`). Läuft höchstens einmal je App-Start. */
 export function installAutoSwitch(): void {
   if (started) return;
   const check = () => {
-    if (started || !undecided()) return;
+    if (started) return;
+    if (moduleOn()) {
+      started = true;
+      unsub();
+      catchUp();
+      return;
+    }
+    if (!undecided()) return;
     started = true;
     unsub();
     void run();

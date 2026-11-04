@@ -122,6 +122,8 @@ type State = {
   repeatAt: number | null;
   startedAt: number;
   activeMs: number;
+  /** Antworten, die schon ein früheres Rundenende (Verlassen mit ✕) gezählt hat; das nächste zählt nur die neuen (Wiedereinstieg, 04.11.2026). */
+  endedN: number;
   lastInteract: number;
   /** Block der Tageseinheit (Grammatik als Block 2 seit 04.10.2026), sonst `null`. */
   block: UnitBlockNo | null;
@@ -167,6 +169,7 @@ export const useGrammarSession = create<State>(() => ({
   repeatAt: null,
   startedAt: 0,
   activeMs: 0,
+  endedN: 0,
   lastInteract: 0,
   block: null,
   intro: null,
@@ -386,6 +389,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     repeatAt: null,
     startedAt: performance.now(),
     activeMs: 0,
+    endedN: 0,
     lastInteract: performance.now(),
     block: o.block ?? tabBlock ?? null,
     before,
@@ -423,7 +427,9 @@ export const cardsDue = (s: Pick<State, 'status' | 'pos' | 'intro'>): boolean =>
 export const inVortest = (s: Pick<State, 'pos' | 'intro' | 'status'>): boolean => s.status === 'running' && !!s.intro && s.pos < s.intro.vtN;
 
 function finish(s: State, aborted0: boolean): void {
-  const n = s.results.length;
+  // Nur Antworten seit dem letzten gezählten Rundenende (nach Verlassen und Wiedereinstieg nichts doppelt).
+  const fresh = s.results.slice(Math.min(s.endedN ?? 0, s.results.length));
+  const n = fresh.length;
   if (n < 1) return;
   // Die Wiederholung am Ende ist freiwillige Übung: Abbruch dort ist kein Abbruch der Runde.
   const aborted = aborted0 && !inRepeat(s);
@@ -433,7 +439,7 @@ function finish(s: State, aborted0: boolean): void {
     ctx: s.ctx,
     partial: gramRoundPartial({ aborted, pos: Math.min(s.pos, s.repeatAt ?? s.tasks.length), tasks: s.repeatAt ?? s.tasks.length, ctx: s.ctx, mode: s.mode, answers: n, dutyMin: DUTY_ROUND.gram }),
     n,
-    right: s.results.filter((r) => r.ok).length,
+    right: fresh.filter((r) => r.ok).length,
     activeMs: s.activeMs,
   });
 }
@@ -647,7 +653,7 @@ export function leaveGrammar(): void {
   const s = useGrammarSession.getState();
   if (!s.active) return;
   if (s.status === 'running') finish(s, true);
-  useGrammarSession.setState({ active: false });
+  useGrammarSession.setState({ active: false, endedN: s.results.length });
 }
 
 /** Stand der Muster am Rundenende: die Einträge vom Start plus alle Antworten der Runde (`patPush`, dieselbe Regel wie beim Schreiben). */
@@ -682,14 +688,15 @@ export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day
   test?: TestState | null;
   fixed?: boolean;
   displaced?: GrammarTask[];
+  endedN?: number;
 };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}) };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}) };
 }
 
 const legacyIntro = (topic: string): IntroState => ({ topic, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 });
@@ -716,6 +723,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),
     activeMs: 0,
+    endedN: typeof snap.endedN === 'number' && snap.endedN >= 0 ? snap.endedN : 0,
     lastInteract: performance.now(),
   });
   if (useTutorSession.getState().day !== snap.day) tutorRoundStart(snap.day, snap.ctx === 'duty');

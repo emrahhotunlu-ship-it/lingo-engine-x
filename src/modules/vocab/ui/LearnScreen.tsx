@@ -1,3 +1,4 @@
+import { catchUpDone } from '../api';
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Button, dictLookup, getDb, getWriter, Icon, isDictWord, local, readDoc, Skeleton, useHiddenInput, useClock, useLive, useNav, useT, type MessageKey } from '../sharedUi';
 import { addDays, logError, toUSText } from '../shared';
@@ -120,7 +121,8 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
     if (!run) return;
     // „Dieses Wort üben“ (Wort-Seite): nur die übergebenen Lexeme; die Liste kommt als Text, damit ein neues Array keinen Neustart auslöst.
     const only = kind === 'word' && pathKey ? pathKey.split('|') : undefined;
-    const begin = (p?: string[]) => run.start({ kind, ...liveLexDocs(), ...(p ? { paths: p } : {}) });
+    // Erst das Nachholen aus dem alten Bereich abwarten (Emrah 04.11.2026), dann die Momentaufnahme: sonst kämen schon gelernte Wörter wieder.
+    const begin = (p?: string[]) => catchUpDone().then(() => run.start({ kind, ...liveLexDocs(), ...(p ? { paths: p } : {}) }));
     // „Deine Fehlwörter“ (Großpaket B3): die Liste kommt aus dem Verlauf, mit derselben Rechnung wie die Zahl im Wörter-Reiter.
     const started = kind === 'mistakes' && !only ? readMistakes(useClock.getState().now).then(begin) : begin(only);
     started.catch((err: unknown) => logError('vocab:learn-start', err));
@@ -218,9 +220,9 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
       );
     case 'card':
     case 'band':
-      return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
+      return run ? frame({ n: run.doneBefore + view.n + 1, total: run.doneBefore + view.n + view.left + 1 }, <LearnCard view={view} run={run} />) : null;
     case 'use':
-      return run ? frame({ n: view.n + 1, total: view.n + view.left + 1 }, <UseCard view={view} run={run} />) : null;
+      return run ? frame({ n: run.doneBefore + view.n + 1, total: run.doneBefore + view.n + view.left + 1 }, <UseCard view={view} run={run} />) : null;
   }
 }
 

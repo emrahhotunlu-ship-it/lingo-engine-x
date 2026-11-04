@@ -127,7 +127,9 @@ describe('Wörter-Modul: Isolation', () => {
     // Großpaket B2 (alte Wege abklemmen): „Üben“-Ziele (actionRoute), Wörter-Pflicht ohne Tageseinheit (learn/flow) und die freiwilligen Zeilen
     // auf Heute (ExtraRow: Schalter und api.countMistakes) fragen den Schalter.
     // Kurzer Tag (2A, 04.11.2026): today/shortDay verkleinert den Wörter-Plan über api.shrinkToday.
+    // Ladezeiten (Emrah 04.11.2026): app/prefetch lädt die Teil-Dateien der Wörter-Bildschirme im Leerlauf vor (api.load*).
     expect(touching.sort()).toEqual([
+      'src/app/prefetch.ts',
       'src/areas/wortschatz.tsx',
       'src/data/paths.ts',
       'src/data/reads.ts',

@@ -18,7 +18,7 @@ import { buildDayPlan, type DayPlan } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
-import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
+import { planDoneCount, type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
 import { type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
@@ -271,6 +271,9 @@ export class LearnRun {
     for (const f of this.subs) f();
   }
 
+  /** Einträge des heutigen Wörter-Plans, die beim Start dieser Runde schon erledigt waren (nur Pflicht; für den Zähler). */
+  doneBefore = 0;
+
   /** Runde starten (einmal): Sperre prüfen, offene Entwürfe nachbuchen, Tagesplan einfrieren (Pflicht), erste Karte. */
   async start(s: LearnStart): Promise<void> {
     if (this.started) return;
@@ -282,6 +285,8 @@ export class LearnRun {
     }
     try {
       const { cat, cfg, plan, nowMs } = await this.setup(s);
+      // Wiedereinstieg (Emrah 04.11.2026): Der Zähler zählt mit, was vom heutigen Plan schon erledigt ist („6 von 20“ statt wieder „1 von 14“).
+      this.doneBefore = s.kind === 'pflicht' && plan && plan.d === dayKey(nowMs) ? planDoneCount(plan.plan, (p) => cat.get(p)?.lex ?? null, plan.d) : 0;
       this.run = new SessionRun(s.kind, cat, plan, nowMs, { cfg, ...(s.paths ? { paths: s.paths } : {}) });
       this.kind = s.kind;
       const info = plan ? this.startInfo(cat, plan, cfg, nowMs) : null;
