@@ -1,0 +1,141 @@
+import { z } from 'zod';
+import { isWrongLang } from '../domain/lang/detect';
+import { keepEdits, keepUsed, normWs, type Edit, type Used } from '../domain/tutor/edits';
+import { patIdsOf } from '../domain/tutor/patList';
+import { asList, keepGood, pointsField, type Good, type PointCheck } from './applyCommon';
+import { toneFit, type ToneFit } from './c1Mail';
+import { block, clip, fenced, header, langName, langOf } from './common';
+import { clipped, intIn } from './tolerant';
+import type { PromptTemplate, UiLang } from './types';
+
+// apply-reply@1 (F3 Anwenden, Disziplin „Auf eine Mail antworten“; Nachtrag learning-scientist Muss 1): wie `c1-mail@1` (GEE: erst atomare Änderungen, dann
+// die Erklärung; nur wörtlich belegte Stellen), dazu die eingegangene Mail als EIGENES Feld (`incoming`, nie in einer gekürzten Situation) und die Pflichtpunkte
+// einzeln (`points`, je Punkt mit wörtlichem Zitat, sonst `no`). `used` meldet die beiden Zielwörter und die Regel des Tages. Nur auf Antippen, Stufe `default`,
+// 24 h zwischengespeichert, nie automatisch wiederholt außer dem einen Neuversuch bei Schemaverletzung (A6.3).
+
+export type ReplyVars = {
+  /** Die eingegangene Mail (Absender, Betreff, Text), ≤ 1.600 Zeichen. */
+  incoming: string;
+  /** Pflichtpunkte auf Englisch (2 bis 4). */
+  must: readonly string[];
+  /** Zielwörter aus der Wörter-App (höchstens 2). */
+  words: readonly string[];
+  /** Regel des Tages (englischer Name und Kurzregel), ≤ 240; leer = keine. */
+  rule: string;
+  /** Emrahs Antwort, ≤ 1.800 Zeichen. */
+  text: string;
+  uiLang: UiLang;
+  /** Berufsprofil-Zeile, ≤ 200. */
+  ctx: string;
+  /** Kurzliste aller Muster (`patListText`). */
+  pats: string;
+};
+
+export type ApplyReply = {
+  points: PointCheck[];
+  edits: Edit[];
+  used: Used[];
+  tone: { fit: ToneFit; why: string };
+  good: Good | null;
+  upgraded: string;
+  summary: string;
+  errorCount: number | null;
+};
+
+export const INCOMING_MAX = 1_600;
+export const APPLY_TEXT_MAX = 1_800;
+export const RULE_MAX = 240;
+export const APPLY_MAX_EDITS = 12;
+export const MUST_MAX = 4;
+export const WORDS_MAX = 2;
+/** Kennung der Regel in `used` (die Zielwörter stehen dort unter ihrem eigenen Wortlaut). */
+export const RULE_ID = 'rule';
+
+const ID = 'apply-reply';
+const VERSION = 1;
+
+export const REPLY_EXAMPLE =
+  '{"points":[{"i":1,"covered":"yes","quote":"…"}],"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"tone":{"fit":"fits","why":"…"},"good":{"quote":"…","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
+
+/** Erlaubte Kennungen in `used`: die Zielwörter und `rule` (nur wenn es eine Regel gibt). */
+export const usedIdsOf = (words: readonly string[], rule: string): Set<string> => new Set([...words.slice(0, WORDS_MAX).map((w) => w.trim()).filter(Boolean), ...(rule.trim() ? [RULE_ID] : [])]);
+
+/** Gemeinsame Regeln der Anwenden-Prüfungen (Antwort und Zusammenfassung). */
+export const APPLY_EDIT_RULES = [
+  'First list every error as an atomic edit: copy the exact wrong span from the text into "from", write the minimal replacement into "to". Only then explain each edit.',
+  'Keep the learner words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
+  'American and British grammar both count as correct (e.g. past simple with already/just/yet, have got, collective nouns with plural verbs).',
+  'List all errors first, then upgrades; never drop an error to make room for an upgrade.',
+];
+
+export const usedLine = (words: readonly string[], rule: string): string =>
+  [words.length ? `Target words: ${words.slice(0, WORDS_MAX).map((w) => clip(w, 40)).join(' | ')}` : '', rule.trim() ? `Target rule (id "${RULE_ID}"): ${clip(rule, RULE_MAX)}` : ''].filter(Boolean).join('\n');
+
+export function replySchema(v: ReplyVars): z.ZodType<ApplyReply> {
+  const allIds = patIdsOf(v.pats);
+  const given = block(v.text, APPLY_TEXT_MAX);
+  const n = Math.min(MUST_MAX, v.must.length);
+  return z
+    .object({
+      points: pointsField(given, n),
+      edits: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepEdits(xs, given, allIds, APPLY_MAX_EDITS, { sevDefault: 'upgrade' })),
+      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepUsed(xs, given, usedIdsOf(v.words, v.rule))),
+      tone: z.object({ fit: z.preprocess(toneFit, z.enum(['fits', 'too-direct', 'too-informal', 'too-stiff']).catch('fits')), why: z.preprocess((x) => x ?? '', clipped(0, 160)) }),
+      good: z.unknown().optional().transform((x) => keepGood(x, given)),
+      upgraded: clipped(20, 2200),
+      summary: clipped(5, 200),
+      errorCount: z.preprocess((x) => (x === undefined || x === null || x === '' ? null : x), intIn(0, 60).nullable()).catch(null),
+    })
+    .superRefine((o, ctx) => {
+      o.edits.forEach((e, i) => {
+        if (isWrongLang(e.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['edits', i, 'why'], message: `must be written in ${langName(v.uiLang)}` });
+        if (isWrongLang(e.to, 'en')) ctx.addIssue({ code: 'custom', path: ['edits', i, 'to'], message: 'must be written in English' });
+      });
+      if (o.tone.why && isWrongLang(o.tone.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['tone', 'why'], message: `must be written in ${langName(v.uiLang)}` });
+      if (o.good && isWrongLang(o.good.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['good', 'why'], message: `must be written in ${langName(v.uiLang)}` });
+      if (isWrongLang(o.upgraded, 'en')) ctx.addIssue({ code: 'custom', path: ['upgraded'], message: 'must be written in English' });
+      if (normWs(o.upgraded) === normWs(given)) ctx.addIssue({ code: 'custom', path: ['upgraded'], message: 'upgraded must be a rewritten version' });
+    })
+    .superRefine(langOf(['summary'], v.uiLang));
+}
+
+export const applyReply: PromptTemplate<ReplyVars, ApplyReply> = {
+  id: ID,
+  version: VERSION,
+  tier: 'default',
+  cache: { gcTime: 86_400_000 },
+  build(v) {
+    const must = v.must.slice(0, MUST_MAX).map((m, k) => `${k + 1}. ${clip(m, 160)}`);
+    return [
+      header({ id: ID, version: VERSION }),
+      'You check a reply to a work email, written by a German-speaking learner (B2 to C1, business English).',
+      ...APPLY_EDIT_RULES,
+      'Do not add facts, names, numbers or product details that are neither in the learner text nor in the incoming email.',
+      'Incoming email (the learner answers this):',
+      ['<<<MAIL', block(v.incoming, INCOMING_MAX), 'MAIL>>>'].join('\n'),
+      `Points the reply must cover:\n${must.join('\n')}`,
+      usedLine(v.words, v.rule),
+      v.ctx ? `Learner work context: ${clip(v.ctx, 200)}` : '',
+      `Explanation language: ${langName(v.uiLang)}`,
+      'Learner reply:',
+      fenced(block(v.text, APPLY_TEXT_MAX)),
+      'Grammar patterns for "pat" in edits (topic: ids). "pat" may only be one of these ids, otherwise null:',
+      v.pats,
+      'Reply with only one JSON object in exactly this shape:',
+      REPLY_EXAMPLE,
+      'Rules:',
+      `- points: one entry for each point above (i = its number, 1 to ${Math.min(MUST_MAX, v.must.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the learner reply that cover the point (empty when "no"). Judge the content, not the language.`,
+      '- edits: at most 12, each with "from" copied EXACTLY from the learner reply (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors (kind register is always sev upgrade).',
+      '- used: for each target word and for the target rule that the learner tried to use, one entry with pat (the word exactly as given, or "rule"), ok (true if used correctly) and a "quote" copied exactly from the reply. Skip what the learner did not try.',
+      '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
+      '- good: one strong span copied exactly from the reply ("quote") and one short sentence in the explanation language why it works ("why").',
+      '- upgraded: the whole reply rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length; it must differ from the learner reply.',
+      '- summary: one short sentence in the explanation language: what works and what to work on next.',
+      '- errorCount: after writing everything, count the mistakes (sev "error") in the learner reply once more, independently of the list, and give the number.',
+      '- Never invent grammar rules. Never use the straight double quote character inside text values.',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  },
+  schema: (v) => replySchema(v),
+};

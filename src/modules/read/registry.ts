@@ -17,3 +17,6 @@ export const readMessages = { de: rdDe, en: rdEn } as const;
 export { readDocCountOf, READ_LAZY_COLLECTION } from './domain/count';
 export { daysFromMonthDocs, docBytes, fitTextBudget, READ_BACKUP_TEXT_BUDGET_BYTES, readBackupPlan, recentMonths, routineBackupPaths } from './domain/backup';
 export { READ_PROGRESS_PATH } from './domain/paths';
+// Anwenden (F3): der neueste Artikel der Routine als Material für „Artikel zusammenfassen“ (nur lesen).
+export { loadRecentArticle, RECENT_DAYS_BACK } from './domain/recent';
+export type { RecentArticle, RecentReader } from './domain/recent';

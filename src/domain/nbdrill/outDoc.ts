@@ -21,7 +21,9 @@ export type OutKind = 'colloc' | 'transform' | 'wordform' | 'register' | 'phrasa
   // Lernplattform 3.0 (§3.4): Verlauf der Lexik-Arten des Aufgabensystems c1x.
   | 'mcc' | 'wf' | 'cnet'
   // Lernplattform 3.0 (KI-Tutor): Satz-Klinik (P46) und Wochen-Mail (P47).
-  | 'clinic' | 'c1mail';
+  | 'clinic' | 'c1mail'
+  // Fokus 2.0 F3 Anwenden (additiv, tolerant gelesen: `outSchema.k` ist ein freier Text): Antwort auf eine Mail, Zusammenfassung, festgelegte Kernpunkte eines Artikels.
+  | 'reply' | 'summary' | 'sumkp';
 
 export type OutItem = {
   id: string;

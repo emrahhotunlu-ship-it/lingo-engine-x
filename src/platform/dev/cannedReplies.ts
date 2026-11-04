@@ -27,6 +27,7 @@ import { registerReadReplies } from './canned/read';
 import { registerCardQualityReplies } from './canned/cardQuality';
 import { registerActReplies } from './canned/act';
 import { registerVocabReplies } from './canned/vocab';
+import { registerApplyReplies } from './canned/apply';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
 // produce-check@1, card-examples@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -319,6 +320,7 @@ export function registerCannedReplies(): void {
   registerLp3P26Replies();
   registerLp3P46Replies();
   registerLp3P47Replies();
+  registerApplyReplies();
   registerLp3P49Replies();
   registerLp3P51Replies();
   registerLp3P52Replies();
