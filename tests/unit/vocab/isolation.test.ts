@@ -124,15 +124,20 @@ describe('Wörter-Modul: Isolation', () => {
     // V3 Schritt 4b: Heute fragt den Schalter (vocabModuleOn) und die Minuten (vocabCfg) über api ab; Block-Namen (learn/ui) fragen den Schalter; unit/labels seit UX-Neuanfang nicht mehr (Block 1 heißt immer „Wörter“).
     // Großpaket A S6: Fortschritt › Wörter (Slot vmod mit api.loadOverview; alte Behaltens-Karte und alte Einstellung „neue Wörter“ fragen den Schalter).
     // 02.11.2026 Wörter-App von selbst an: autoSwitch (api.loadAutoSwitch) und der neue Wörter-Reiter VocabHome (api.loadOverview).
+    // Großpaket B2 (alte Wege abklemmen): „Üben“-Ziele (actionRoute), Wörter-Pflicht ohne Tageseinheit (learn/flow) und die freiwilligen Zeilen
+    // auf Heute (ExtraRow: Schalter und api.countMistakes) fragen den Schalter.
     expect(touching.sort()).toEqual([
       'src/areas/wortschatz.tsx',
       'src/data/paths.ts',
       'src/data/reads.ts',
       'src/data/snapshot.ts',
       'src/data/writer.ts',
+      'src/features/learn/flow.ts',
       'src/features/learn/ui.tsx',
       'src/features/progress/WordsSegment.tsx',
+      'src/features/progress/actionRoute.ts',
       'src/features/settings/LearningSection.tsx',
+      'src/features/today/ExtraRow.tsx',
       'src/features/today/TodayScreen.tsx',
       'src/features/today/state.ts',
       'src/features/today/store.ts',

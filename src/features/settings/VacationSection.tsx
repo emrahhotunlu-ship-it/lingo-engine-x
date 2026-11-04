@@ -84,7 +84,7 @@ export function VacationSection() {
           {list.map((e) => (
             <li key={e.t} className="flex items-center justify-between gap-3 rounded-[var(--radius-control)] border border-line px-3 py-2 text-sm" data-testid="vac-item">
               <span>{t('vacRange', { from: dateLabelOf(e.from, lang), to: dateLabelOf(e.to, lang) })}</span>
-              <Button variant="ghost" onClick={() => void cancelVacation(e.t, useClock.getState().now)} data-testid="vac-cancel">
+              <Button variant="ghost" onClick={() => void cancelVacation(e.t, today, useClock.getState().now)} data-testid="vac-cancel">
                 {t('vacCancel')}
               </Button>
             </li>

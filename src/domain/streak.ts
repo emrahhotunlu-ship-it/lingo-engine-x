@@ -114,25 +114,60 @@ export const VACATION_MAX_DAYS = 31;
 /** Höchstens so viele Urlaubseinträge in `app/profile.vac` (die ältesten vergangenen fallen beim Eintragen heraus). */
 export const VACATION_MAX_ENTRIES = 24;
 
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+type VacLike = { from?: unknown; to?: unknown; t?: unknown; x?: unknown };
+const vacOk = (e: unknown): e is { from: string; to: string } & VacLike => {
+  if (!e || typeof e !== 'object') return false;
+  const { from, to } = e as VacLike;
+  return typeof from === 'string' && typeof to === 'string' && DAY_RE.test(from) && DAY_RE.test(to) && to >= from;
+};
+
 /**
- * Urlaubstage aus `app/profile.vac` (`[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t, x?}]`, Großpaket B10; `x` = aufgehoben). Tolerant: ungültige Einträge, umgedrehte
- * oder zu lange Spannen (> 31 Tage) werden übergangen – nie ein Fehler, der die Serie sperrt.
+ * Urlaubstage aus `app/profile.vac` (`[{from: 'JJJJ-MM-TT', to: 'JJJJ-MM-TT', t, x?, cut?}]`, Großpaket B10; `x` = aufgehoben, `cut` = beim
+ * Aufheben auf gestern gekürzt). Tolerant: ungültige Einträge, umgedrehte oder zu lange Spannen (> 31 Tage) werden übergangen – nie ein Fehler,
+ * der die Serie sperrt. Gelesen werden die 24 jüngsten gültigen Einträge nach Ende (`to`) – dieselbe Reihenfolge, nach der `vacAdd` aussortiert.
  */
 export function vacationDays(vac: unknown): Set<string> {
   const out = new Set<string>();
   if (!Array.isArray(vac)) return out;
-  const day = /^\d{4}-\d{2}-\d{2}$/;
-  for (const e of vac.slice(-VACATION_MAX_ENTRIES)) {
-    if (!e || typeof e !== 'object') continue;
-    const { from, to, x } = e as { from?: unknown; to?: unknown; x?: unknown };
-    if (x) continue;
-    if (typeof from !== 'string' || typeof to !== 'string' || !day.test(from) || !day.test(to) || to < from) continue;
+  const valid = vac.filter(vacOk).filter((e) => !e.x);
+  valid.sort((a, b) => (a.to < b.to ? 1 : a.to > b.to ? -1 : 0));
+  for (const e of valid.slice(0, VACATION_MAX_ENTRIES)) {
     const days: string[] = [];
-    for (let d = from; d <= to && days.length <= VACATION_MAX_DAYS; d = addDays(d, 1)) days.push(d);
+    for (let d = e.from; d <= e.to && days.length <= VACATION_MAX_DAYS; d = addDays(d, 1)) days.push(d);
     if (days.length > VACATION_MAX_DAYS) continue;
     for (const d of days) out.add(d);
   }
   return out;
+}
+
+/**
+ * Urlaub eintragen (rein): neue Liste oder `null` (voll mit laufenden/kommenden Einträgen). Fremde oder ungültige Einträge werden unverändert
+ * durchgereicht; sind es mehr als 24 gültige, fällt der vergangene mit dem frühesten Ende heraus (ein laufender oder kommender nie).
+ */
+export function vacAdd(list: readonly unknown[], entry: { from: string; to: string; t: number }, today: string): unknown[] | null {
+  const out: unknown[] = [...list, entry];
+  for (;;) {
+    const live = out.filter(vacOk).filter((e) => !e.x);
+    if (live.length <= VACATION_MAX_ENTRIES) return out;
+    const past = live.filter((e) => e.to < today).sort((a, b) => (a.to < b.to ? -1 : a.to > b.to ? 1 : 0))[0];
+    if (!past) return null;
+    out.splice(out.indexOf(past), 1);
+  }
+}
+
+/**
+ * Urlaub aufheben (rein, data-guard Sollte 1): ein kommender Urlaub (Beginn ab heute) bekommt `x`; ein laufender wird auf gestern gekürzt
+ * (`cut`), damit schon vergangene Urlaubstage nie rückwirkend zu verpassten werden (Serie nie rückwirkend kürzer, A6.13). `null` = nichts zu tun.
+ */
+export function vacCancel(list: readonly unknown[], t: number, today: string, nowMs: number): unknown[] | null {
+  let changed = false;
+  const out = list.map((e) => {
+    if (!vacOk(e) || e.x || e.t !== t || e.to < today) return e;
+    changed = true;
+    return e.from >= today ? { ...e, x: nowMs } : { ...e, to: addDays(today, -1), cut: nowMs };
+  });
+  return changed ? out : null;
 }
 
 /** Gewählter Ruhetag (`app/profile.restDow`, Großpaket B10): 1 = Montag … 7 = Sonntag, sonst `null` (frei, wie bisher). Ändert die Serienregel nicht. */

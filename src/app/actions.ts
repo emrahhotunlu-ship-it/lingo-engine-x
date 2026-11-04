@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { getWriter } from '../data';
 import { useLive } from '../data/live';
-import { logError } from '../platform/diagnostics';
+import { logError, logWarn } from '../platform/diagnostics';
 import { toast } from '../ui/Toast';
 import { translate } from '../i18n';
 import { useSettings, type Lang, type Accent, type ThemeMode } from './settings';
 import { WORK_MAX } from '../prompts/work';
-import { VACATION_MAX_ENTRIES } from '../domain/streak';
+import { restDowOf, vacAdd, vacCancel } from '../domain/streak';
 
 // Einstellungen ändern: optimistisch sofort anzeigen, in `app/profile` speichern,
 // bei Fehler zurückrollen (Kap. 3.4).
@@ -132,35 +132,48 @@ export async function toggleCanDo(id: string, on: boolean, day: string): Promise
 
 // ------------------------------------------------------------------ Urlaub ankündigen (Großpaket B10)
 
-type VacEntry = { from: string; to: string; t: number; x?: number };
-const vacList = (): VacEntry[] => {
-  const v = useLive.getState().docs['app/profile']?.vac;
-  return Array.isArray(v) ? (v.filter((e) => e && typeof e === 'object') as VacEntry[]) : [];
-};
-
 /**
- * Urlaub eintragen (`app/profile.vac`, nur ergänzend). Höchstens 24 Einträge: ist die Liste voll, fällt der älteste schon vergangene heraus
- * (ein laufender oder kommender Urlaub nie). Prüfen (Spanne, Datum) tut die Oberfläche, die Serienregel liest ohnehin tolerant.
+ * Liest, rechnet und schreibt `app/profile.vac` in EINEM Schritt (`writer.transform`, data-guard Sollte 3: kein Überschreiben zwischen zwei
+ * Geräten). Ist `vac` vorhanden, aber keine Liste, wird nichts geschrieben (Sollte 2: nie fremde Inhalte überschreiben).
  */
-export async function addVacation(from: string, to: string, today: string, nowMs: number): Promise<boolean> {
-  const list = [...vacList(), { from, to, t: nowMs }];
-  while (list.length > VACATION_MAX_ENTRIES) {
-    const i = list.findIndex((e) => typeof e.to === 'string' && e.to < today);
-    if (i < 0) return false;
-    list.splice(i, 1);
+async function writeVac(compute: (list: readonly unknown[]) => unknown[] | null): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  let ok = false;
+  try {
+    await writer.transform('app/profile', (cur) => {
+      if (!cur) return null;
+      const v = cur.vac;
+      if (v !== undefined && v !== null && !Array.isArray(v)) {
+        logWarn('settings:vac', new Error('app/profile.vac ist keine Liste – nichts geschrieben'));
+        return null;
+      }
+      const next = compute(Array.isArray(v) ? v : []);
+      if (!next) return null;
+      ok = true;
+      return { update: { vac: next } };
+    });
+  } catch (err) {
+    ok = false;
+    logError('settings:vac', err);
+    toast(translate(useSettings.getState().lang, 'saveFailed'), 'error');
   }
-  await persist({ vac: list }, () => undefined);
-  return true;
+  return ok;
 }
 
-/** Urlaub aufheben: der Eintrag bleibt stehen und bekommt `x` (nie gelöscht). */
-export async function cancelVacation(t: number, nowMs: number): Promise<void> {
-  const list = vacList().map((e) => (e.t === t && !e.x ? { ...e, x: nowMs } : e));
-  await persist({ vac: list }, () => undefined);
+/** Urlaub eintragen (`app/profile.vac`, nur ergänzend; Regeln in `vacAdd`). `false` = nicht gespeichert (voll oder Fehler). */
+export async function addVacation(from: string, to: string, today: string, nowMs: number): Promise<boolean> {
+  return writeVac((list) => vacAdd(list, { from, to, t: nowMs }, today));
+}
+
+/** Urlaub aufheben: kommender bekommt `x`, laufender wird auf gestern gekürzt (`vacCancel`); nie gelöscht. */
+export async function cancelVacation(t: number, today: string, nowMs: number): Promise<void> {
+  await writeVac((list) => vacCancel(list, t, today, nowMs));
 }
 
 /** Ruhetag wählen (Großpaket B10): 1–7 oder `null` (frei). Nur ergänzend in `app/profile.restDow`. */
 export async function changeRestDow(dow: number | null): Promise<void> {
+  if (dow !== null && restDowOf(dow) === null) return;
   if ((useLive.getState().docs['app/profile']?.restDow ?? null) === dow) return;
   await persist({ restDow: dow }, () => undefined);
 }

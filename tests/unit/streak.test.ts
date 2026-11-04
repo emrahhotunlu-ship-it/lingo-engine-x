@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { addDays, dayKey, legacyDayKey } from '../../src/domain/date';
-import { computeStreak, legacyActive, legacyStreak, vacationDays, weekStrip } from '../../src/domain/streak';
+import { computeStreak, legacyActive, legacyStreak, vacAdd, vacCancel, vacationDays, weekStrip } from '../../src/domain/streak';
 import { berlin, loadSeed, SEED_ANCHOR } from './helpers';
 
 const range = (from: string, n: number) => Array.from({ length: n }, (_, i) => addDays(from, i));
@@ -133,5 +133,30 @@ describe('Serie – Urlaub ankündigen (Großpaket B10, app/profile.vac)', () =>
     expect(vacationDays(null).size).toBe(0);
     expect(vacationDays([{ from: 'x', to: '2026-09-02' }, { from: '2026-09-05', to: '2026-09-01' }, { from: '2026-01-01', to: '2026-12-31' }, 7]).size).toBe(0);
     expect([...vacationDays([{ from: '2026-09-30', to: '2026-10-02' }])]).toEqual(['2026-09-30', '2026-10-01', '2026-10-02']);
+  });
+});
+
+describe('Urlaub eintragen und aufheben (data-guard 04.11.2026)', () => {
+  const pflichtSince = '2026-09-07';
+  it('Aufheben eines laufenden Urlaubs kürzt auf gestern: vergangene Urlaubstage bleiben, die Serie wird nie rückwirkend kürzer', () => {
+    const list = [{ from: '2026-09-10', to: '2026-09-20', t: 5 }];
+    const pflicht = new Set(range('2026-09-07', 3));
+    const before = computeStreak({ pflichtDone: pflicht, pflichtSince, today: '2026-09-14', pauseDays: vacationDays(list) });
+    const cut = vacCancel(list, 5, '2026-09-14', 99)!;
+    expect(cut).toEqual([{ from: '2026-09-10', to: '2026-09-13', t: 5, cut: 99 }]);
+    const after = computeStreak({ pflichtDone: pflicht, pflichtSince, today: '2026-09-14', pauseDays: vacationDays(cut) });
+    expect(after.count).toBe(before.count);
+    // Ein kommender Urlaub wird aufgehoben (x), ein schon vergangener nicht angefasst.
+    expect(vacCancel([{ from: '2026-09-20', to: '2026-09-22', t: 6 }], 6, '2026-09-14', 99)).toEqual([{ from: '2026-09-20', to: '2026-09-22', t: 6, x: 99 }]);
+    expect(vacCancel([{ from: '2026-09-01', to: '2026-09-03', t: 7 }], 7, '2026-09-14', 99)).toBeNull();
+  });
+  it('Eintragen: fremde Einträge bleiben, bei mehr als 24 fällt der vergangene mit dem frühesten Ende heraus, nie ein kommender', () => {
+    const past = Array.from({ length: 24 }, (_, i) => ({ from: addDays('2026-01-01', i * 2), to: addDays('2026-01-01', i * 2), t: i }));
+    const next = vacAdd(['fremd', ...past], { from: '2026-09-20', to: '2026-09-21', t: 100 }, '2026-09-14')!;
+    expect(next[0]).toBe('fremd');
+    expect(next).toHaveLength(25);
+    expect(next.some((e) => typeof e === 'object' && e !== null && (e as { t: number }).t === 0)).toBe(false);
+    const future = Array.from({ length: 24 }, (_, i) => ({ from: addDays('2026-10-01', i), to: addDays('2026-10-01', i), t: i }));
+    expect(vacAdd(future, { from: '2026-12-01', to: '2026-12-02', t: 100 }, '2026-09-14')).toBeNull();
   });
 });
