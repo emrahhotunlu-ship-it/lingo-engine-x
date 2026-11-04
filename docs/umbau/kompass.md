@@ -20,7 +20,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 
 - **Schnell-Modus (Emrah 02.11.2026):** beim Bauen nur schnelle Prüfungen; voller Klicktest/`verify` genau einmal am Ende vor dem Test-Link; Prüfer einmal je Großpaket (siehe `entscheidungen.md`).
 
-## 3. Roadmap (Großpakete, Stand 04.11.2026)
+## 3. Roadmap (Großpakete, Stand 04.11.2026 abends)
 **Emrah 02.11.:** erst die fertige neue App haben und damit lernen → Feedback → dann gemeinsam überlegen, was wie neu entwickelt wird (B/C erst danach). Die Gesamtprüfung aller Bildschirme (Note 5/10) ist bis dahin angehalten; Funktionsliste „fehlt/versteckt“ liegt bereit.
 
 | # | Großpaket | Inhalt | Stand |
@@ -30,9 +30,9 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 | ✓ | **UX-Neuanfang A–D** | Tagesweg 3 Schritte, Design Heute, 4 Reiter, Hilfe/Claude sichtbar, Erklärung bei falsch, Aufgabe melden | **live `JLL8…` v89 `1793658052-a404` (02.11., Rückweg v88 `1793612956-d9f4`)** |
 | G | **Grammatik + Wiederholen neu, gleich im neuen Design** (Emrah 02.11.: Grammatik-/Wiederholen-Übungen „hatten sehr oft Fehler … sollte überarbeitet werden“) | eigene Logik wie die Wörter-App, geprüfte Aufgaben ohne Fehler, Bildschirme nach Vorschau | **live `JLL8…` v90 `1793692316-d0c1` (03.11., Rückweg v89 `1793658052-a404`)** |
 | ✓ | **Kern + Glas** (03./04.11.) | Übungskarte/Heute nach Vorschau 9pdpfT8E, dann Glas/Carbon wie Küchenstudio (Schrift Plus Jakarta Sans, schwebende Schiene/Kopfleiste, Glasblätter) auf allen Reitern und Blättern | in `claude/umbau-fokus`; Test-Link v85 `1793779276-023a` (04.11.), dazu 1B (Hinweis neue Einschätzung) und 2A (kurzer Tag) auf **Test-Link v86 `1793790983-4895`**; nicht live (live = v86-Stand, Artefakt-Version 92) |
-| B | **Design komplett** | D6a, D6b (Praxis/Fortschritt, Fragen-Blatt/Ausfälle), E1–E7, F2–F5 (übrige Bildschirme, fehlende Vorschau-Funktionen) | **im Bau**: B1 ✓, B2 weitgehend ✓ (Grammatik-Nachschlagen als eine Seite offen), B3/B4/B5 im Glas-Stil, B10 ✓ inkl. „kurzer Tag“ (2A, 04.11.). Offen: Raster großer Monitor, leere Kontextspalte, Wörter-Reiter-Kopf, Grammatik-Nachschlagen als eine Seite; Ideen der Prüfer (Folgetag-Hinweis, „Doch voller Tag“, „noch 5 Minuten“) nur auf Emrahs Wunsch. Details `stand.md` (Nacht 03./04.11.) |
-| C | **Schneller Start** | 1b (P9a, P9b, P10: Inhalte nachladen) | Refinement nach B |
-| danach | Grammatik, Praxis, Lesen als eigene Module | gleiches Prinzip wie die Wörter-App | |
+| ✓ | **Design komplett** (B) | D6a, D6b, E1–E7, F2–F5, Glas überall, B2, B10, B-Rest (Raster großer Monitor, leere Kontextspalte, Wörter-Kopf, Grammatik „Nachschlagen“ als eine Seite, EN-Begriffe) | **live** `JLL8…` v93/v94/v95 (04.11.) |
+| ✓ | **Schneller Start** (C) | 1b: Inhalte als `raw-*.txt` nachgeladen, Englisch bei Bedarf, Hinweis „Neu laden“ | **live** `JLL8…` v95 `1793821540-69ed` (04.11., Rückweg v94) |
+| P/L | **Praxis und Lesen als eigene Module** (+ Abgleich Kommentare K1–K14) | gleiches Prinzip wie die Wörter-App (Grammatik ist mit G erledigt) | **in Planung** (04.11. abends): Emrahs „Plan fertigstellen“ = Rest-Roadmap ohne weiteres gemeinsames Planen fertig programmieren (Entscheidung 04.11.); Plan `docs/umbau/module/plan.md`, ein Test-Link am Ende |
 Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Großpakete“ und §4.
 
 ## 4. Ablauf je Großpaket (Hauptchat)

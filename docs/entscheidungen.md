@@ -785,3 +785,6 @@ Emrah: „frag die frage hier im chat .. aber deine fragen sind meistens nicht a
 
 ## 04.11.2026 – Live nehmen und Roadmap fertig programmieren
 Emrah: „Ja live nehmen. Und die gesamte roadmap im Hintergrund abschließen also fertig programmieren“. Live: Stand Test-Link v86 (JLL8 Version 93). Danach Großpaket B fertig (Rest auf Test-Link), dann Großpaket C (schneller Start) und die übrigen Roadmap-Punkte ohne weiteres gemeinsames Planen; Live-Gang weiter nur nach „Ja live nehmen“.
+
+## 04.11.2026 abends – Großpaket C live, „Plan fertigstellen“
+Emrah: „Ja live nehmen und Plan fertigstellen“. Live: Stand Test-Link v88 (JLL8 Version 95 `1793821540-69ed`, Rückweg v94). „Plan fertigstellen“ heißt nach der Entscheidung vom 04.11. („die gesamte roadmap im Hintergrund abschließen also fertig programmieren“, „ohne weiteres gemeinsames Planen“): die restliche Roadmap fertig bauen – Praxis und Lesen als eigene Module (Prinzip 30.10.2026), dazu Abgleich der Live-Kommentare K1–K14. Intern ein Plan (`docs/umbau/module/plan.md`) mit Bestandsliste und architect-Prüfung, dann Bau, Prüfer einmal, ein Test-Link am Ende; live weiter nur nach „Ja live nehmen“. Emrah wird nur bei echten Fragen gefragt.
