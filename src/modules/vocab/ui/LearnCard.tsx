@@ -311,6 +311,15 @@ function Retype({ answer, onDone, onEnter }: { answer: string; onDone: (ok: bool
   useEffect(() => {
     onDone(ok);
   }, [ok, onDone]);
+  // Kern-Rest (03.11.2026, „Lösung beim Nachtippen verdecken“): sobald der erste Buchstabe steht, werden Lösung und Wortkarte unscharf –
+  // aus dem Gedächtnis schreiben statt abschreiben (Abruf). Ist das Wort richtig oder das Feld wieder leer, wird alles wieder klar.
+  const covering = v.length > 0 && !ok;
+  useEffect(() => {
+    const root = document.documentElement;
+    if (covering) root.setAttribute('data-lx-retyping', '');
+    else root.removeAttribute('data-lx-retyping');
+    return () => root.removeAttribute('data-lx-retyping');
+  }, [covering]);
   return (
     <label className="lx-kretype" data-testid="vm-retype" data-ok={ok ? '' : undefined}>
       <span className="lx-kintro-k">{t('kernRetype')}</span>
