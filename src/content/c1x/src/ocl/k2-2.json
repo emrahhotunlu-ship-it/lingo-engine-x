@@ -72,7 +72,7 @@
    "chips": [
     "must",
     "shall",
-    "would"
+    "will"
    ],
    "why": {
     "ok": {
@@ -96,10 +96,10 @@
      },
      {
       "if": [
-       "would"
+       "will"
       ],
-      "de": "would passt zu einer Folgerung (That would mean …) oder einem gedachten Fall. Für eine offene Möglichkeit: might, may, could.",
-      "en": "would fits a conclusion (That would mean …) or an imagined case. For an open possibility: might, may, could."
+      "de": "will stellt es als sicher hin, der Vergleich steht aber noch aus: might, may oder could.",
+      "en": "will states it as certain, but the comparison is still to come: might, may or could."
      }
     ]
    }

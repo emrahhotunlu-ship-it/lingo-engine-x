@@ -4161,49 +4161,49 @@
    "id": "hg-mod-f2",
    "type": "find",
    "pat": "hg.modal",
-   "prompt": "This delay can cost us the Miller account.",
+   "prompt": "It can be that this delay will cost us the Miller account.",
    "err": [
-    2,
-    2
+    1,
+    1
    ],
    "answer": "could",
-   "fixed": "This delay could cost us the Miller account.",
+   "fixed": "It could be that this delay will cost us the Miller account.",
    "accepted": [
-    "might",
     "may",
-    "could well",
+    "might",
+    "may well",
     "might well",
-    "may well"
+    "could well"
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: can nennt, was allgemein möglich ist. Für eine konkrete Gefahr steht could, may oder might.",
-     "en": "The error: can says what is possible in general. For a specific risk use could, may or might."
+     "de": "Der Fehler: „Es kann sein, dass …“ Wort für Wort. Englisch sagt It may/might/could be that … oder kürzer: This delay might cost us …",
+     "en": "The error: “Es kann sein, dass …” word for word. English says It may/might/could be that … or, shorter: This delay might cost us …"
     },
     "wrong": [
      {
       "tap": "none",
       "de": "Doch, hier steckt ein Fehler: Deutsch sagt hier „kann“, Englisch aber nicht can.",
-      "en": "There is an error: this is about one specific case, so can does not fit."
+      "en": "There is an error: German says “kann” here, but English does not use can."
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei „can“: Für eine konkrete Möglichkeit sagt man could cost.",
-      "en": "The error is at “can”: for a specific possibility say could cost."
+      "de": "Der Fehler liegt bei „can“: „It can be that“ sagt man so nicht, richtig ist It could be that.",
+      "en": "The error is at “can”: “It can be that” is not idiomatic; say It could be that."
      },
      {
       "if": [
        "can"
       ],
-      "de": "Dein Ersatz hat noch can. Für diesen einen Fall: could, may oder might.",
-      "en": "Your replacement still has can. For this one case use could, may or might."
+      "de": "Dein Ersatz hat noch can. „It can be that“ sagt man so nicht: may, might oder could.",
+      "en": "Your replacement still has can. “It can be that” is not idiomatic: use may, might or could."
      }
     ]
    },
    "topic": "c1-hedging",
    "hint": {
-    "de": "Es geht um eine konkrete Gefahr, nicht um eine allgemeine Möglichkeit.",
-    "en": "This is about one specific risk, not a general possibility."
+    "de": "Der Satzanfang ist Wort für Wort aus dem Deutschen übersetzt.",
+    "en": "The start of the sentence is translated word for word from German."
    }
   },
   {
@@ -29878,8 +29878,8 @@
      },
      {
       "tap": "*",
-      "de": "Der Fehler liegt bei „has already left“: Es braucht had already left.",
-      "en": "The error is at “has already left”: it needs had already left."
+      "de": "Der Fehler liegt bei „has already left“: richtig ist had already left, im US-Englisch auch left.",
+      "en": "The error is at “has already left”: the correct form is had already left; US English also allows left."
      }
     ]
    },

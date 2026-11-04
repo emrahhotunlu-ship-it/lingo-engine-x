@@ -816,8 +816,8 @@
     },
     {
      "tap": "*",
-     "de": "Der Fehler liegt bei „has already left“: Es braucht had already left.",
-     "en": "The error is at “has already left”: it needs had already left."
+     "de": "Der Fehler liegt bei „has already left“: richtig ist had already left, im US-Englisch auch left.",
+     "en": "The error is at “has already left”: the correct form is had already left; US English also allows left."
     }
    ]
   }

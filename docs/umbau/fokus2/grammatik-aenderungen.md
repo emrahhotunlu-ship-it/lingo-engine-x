@@ -17,3 +17,15 @@ Quelle: `docs/umbau/fokus2/inhalt-audit.md`, Abschnitt „Einzelmängel“, Punk
 Begleitend: `tests/fixtures/quality-exceptions.json` – die zwei alten Schlüssel von hg-mod-f1/f2 aus der Altlasten-Liste `grammar:lint:no_goal` gestrichen (746 → 744), weil die neuen Aufgaben einen Ziel-Hinweis haben.
 
 Nicht geändert: Die alten Erzeuger-Skripte `scripts/c1x/k1/err-2.mjs` und `scripts/c1x/k2/ocl-2.mjs` enthalten noch die alten Texte (sie werden nicht mehr ausgeführt; die Quellen unter `src/content/c1x/src` gelten). Die Falle von `ff.going-to` in `patterns/future-forms.json` („We're going to launching the new app in May.“) bleibt als Beispiel des Musters stehen.
+
+## Nachprüfung durch den Lehrer (04.11.2026, zweite Runde)
+
+Gleicher Weg: `q0-patch.mjs apply`, danach `check` Drift 0 und `grammar:check` ohne Befund. Kein `grammar:build`.
+
+| id | alt | neu | Grund |
+|---|---|---|---|
+| `hg-mod-f2` (c1-hedging) | „This delay **can** cost us the Miller account.“ → could (Stelle `can`, [2,2]) | „**It can be that** this delay will cost us the Miller account.“ → **could** (Stelle `can`, [1,1]) → „It could be that this delay will cost us the Miller account.“; auch richtig: may, might, may well, might well, could well · why.ok: „Der Fehler: „Es kann sein, dass …“ Wort für Wort. Englisch sagt It may/might/could be that … oder kürzer: This delay might cost us …“ · Regel für Ersatz mit „can“: „Dein Ersatz hat noch can. „It can be that“ sagt man so nicht: may, might oder could.“ · Ziel-Hinweis: „Der Satzanfang ist Wort für Wort aus dem Deutschen übersetzt.“ · Tipp-Rückmeldung angepasst: „Der Fehler liegt bei „can“: „It can be that“ sagt man so nicht, richtig ist It could be that.“ | Die alte Fassung („This delay can cost us …“) ist im Englischen vertretbar; „It can be that …“ ist die echte Lehnübersetzung. Englische Fassung von why.ok auf 130 Zeichen gekürzt („… word for word“), weil die Grenze 140 ist. |
+| `pp-rep-f2` (past-perfect) | Tipp-Rückmeldung: „… Es braucht had already left.“ | „Der Fehler liegt bei „has already left“: richtig ist had already left, im US-Englisch auch left.“ (en: „… the correct form is had already left; US English also allows left.“) | Widersprach der Annahme von „left“. |
+| `ocl-0034` (c1x, `ocl/k2-2.json`) | Ablenker `would` | Ablenker **`will`**: „will stellt es als sicher hin, der Vergleich steht aber noch aus: might, may oder could.“ | would ist beim Hedging vertretbar und daher kein sauberer Ablenker. |
+| `err-0030` (c1x, `err/k1-2.json`) | Auswahl `were` | Auswahl **`has been`**: „„has been going to“ gibt es so nicht. Für einen geplatzten Plan: was going to.“ | „were“ prüfte nur die Kongruenz, nicht das Muster. |
+| `mcc-0031` (c1x, `mcc/k2-2.json`) | `shall` mit cat grammar | cat **meaning** | shall ist grammatisch möglich, passt nur inhaltlich nicht. |

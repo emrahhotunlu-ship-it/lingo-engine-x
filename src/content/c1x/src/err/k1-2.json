@@ -118,7 +118,7 @@
      "was"
     ],
     "choices": [
-     "were",
+     "has been",
      "be",
      "was"
     ]
@@ -130,9 +130,9 @@
     },
     "wrong": [
      {
-      "opt": "were",
-      "de": "Zu „the client“ passt was, nicht were.",
-      "en": "With “the client” the form is was, not were."
+      "opt": "has been",
+      "de": "„has been going to“ gibt es so nicht. Für einen geplatzten Plan: was going to.",
+      "en": "“has been going to” is not a valid form. For a plan that fell through: was going to."
      },
      {
       "opt": "be",
