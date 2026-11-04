@@ -167,6 +167,19 @@
       },
       "_day": {
         "basis": 1800,
+        "zuwachs": {
+          "Kurzer Tag 2A": {
+            "bytes": 400,
+            "freigabe": "Hauptsitzung 04.11.2026: shrinkDayPlan und kurzer Tag im Wörter-Planer (Emrahs Entscheidung 2A)"
+          }
+        }
+      },
+      "_balance": {
+        "basis": 3600,
+        "zuwachs": {}
+      },
+      "src/modules/vocab/data/shrink.ts": {
+        "basis": 500,
         "zuwachs": {}
       },
       "src/modules/vocab/ui/mistakes.ts": {
