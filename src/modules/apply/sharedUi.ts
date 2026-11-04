@@ -42,6 +42,7 @@ export { addProd } from '../../domain/c1/prod';
 
 // Browser-Speicher (nur Entwurf) und Eingabeprofil
 export { local, KEY_PREFIX } from '../../platform/storage';
+export { logWarn } from '../../platform/diagnostics';
 export { useInputProfile } from '../../platform/input';
 
 // Tagesweg: heutiger Plan, Pflichtstand, Fehlersätze, eigener Satz, Satzbau (ohne Claude)

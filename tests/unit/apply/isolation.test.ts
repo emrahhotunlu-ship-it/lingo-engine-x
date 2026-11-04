@@ -27,7 +27,7 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/ui\/(Button|Icon|Disclosure|AiRunPanel|AiMark|Skeleton|RowList)$/,
   /^src\/features\/(system\/Chrome|learn\/ui|tutor\/clinicSave|repair\/store|today\/(store|state)|apply\/ComboSentence|drills\/session)$/,
   /^src\/ai\/(useAsk|scope|tutorBudget)$/,
-  /^src\/platform\/(capabilities|storage|input)$/,
+  /^src\/platform\/(capabilities|storage|input|diagnostics)$/,
   /^src\/data(\/(live|reads))?$/,
   /^src\/domain\/(nbdrill\/outDoc|c1\/prod|metrics|content)$/,
   /^src\/modules\/read\/registry$/,

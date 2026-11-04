@@ -55,14 +55,17 @@ for (const size of SIZES) {
   });
 }
 
-test('Neue Grammatik: fällige Fehlersätze stehen nicht zusätzlich als Runde unter Anwenden', async ({ page }) => {
+// Fokus 2.0 F3 (docs/umbau/fokus2/anwenden-plan.md „Seite Anwenden“, ersetzt G5 M12): die Seite „Anwenden“ zeigt fällige Fehlersätze als EINE freiwillige
+// Zeile „Fehler korrigieren“ (auch mit der neuen Grammatik); sie zählt nie zur Pflicht.
+test('Neue Grammatik: fällige Fehlersätze stehen auf Anwenden als eine freiwillige Zeile „Fehler korrigieren“', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const sunPlan = { ...vgPlan(DAY), duty: ['review', 'ch:u-check', 'ch:u-again'] };
   const { errors } = await boot(page, { migrated: true, grammarNew: true, fake: { patch: { ...NO_GRAMMAR_ERRORS, ...profileWith(DAY, sunPlan, ['u-again']), 'app/repair': { items: [A] } } } });
   await screen(page, 'today');
   await openTab(page, 'apply');
   await expect(page.getByTestId('apply-hub')).toBeVisible();
-  await expect(page.getByTestId('hub-repair-round')).toHaveCount(0);
+  await expect(page.getByTestId('hub-repair-round')).toHaveCount(1);
+  await expect(page.getByTestId('hub-repair-round')).toContainText('Freiwillig');
   expect(errors).toEqual([]);
 });
 

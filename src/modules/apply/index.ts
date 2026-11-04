@@ -1,6 +1,6 @@
 import { createElement, lazy, Suspense, type ComponentType } from 'react';
 import { z } from 'zod';
-import { defineArea, Skeleton, type ScreenProps } from './sharedUi';
+import { defineArea, logWarn, Skeleton, type ScreenProps } from './sharedUi';
 
 // Modul Anwenden (F3, docs/umbau/fokus2/anwenden-plan.md), Tür 1: der Bereich `applyArea` (nur von src/areas/index.ts angemeldet), die Seite „Anwenden“
 // (`ApplyPage`, von src/areas/anwenden.tsx unter Fokus 2.0 eingesetzt) und das Ziel von Schritt 3 des Tagesweges (`applyStepRoute`). Die Bildschirme liegen in
@@ -29,13 +29,19 @@ const TaskScreen = lazyScreen<ScreenProps<'applyTask'>>(() => import('./ui/TaskS
 /** Seite „Anwenden“ (Fokus 2.0), nachgeladen. */
 export const ApplyPage = lazyScreen<object>(() => import('./ui/ApplyPage').then((m) => m.ApplyPage));
 
-/** Teil-Dateien im Leerlauf vorladen (wie die Wörter-Bildschirme). */
-export function prefetchApply(): Promise<unknown> {
-  return Promise.all([import('./ui/TaskScreen'), import('./ui/ApplyPage')]);
+/** Teil-Dateien einmal im Leerlauf nach dem Start vorladen (wie die Wörter-Bildschirme, app/prefetch.ts): nur Laden, keine Ausführung, keine Schreibvorgänge. */
+function prefetchApply(): void {
+  const run = (): void => {
+    for (const load of [() => import('./ui/ApplyPage'), () => import('./ui/TaskScreen')]) load().catch((err: unknown) => logWarn('prefetch', err));
+  };
+  const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+  if (typeof w.requestIdleCallback === 'function') w.requestIdleCallback(run, { timeout: 4000 });
+  else setTimeout(run, 2000);
 }
 
 export const applyArea = defineArea({
   id: 'apply',
+  boot: prefetchApply,
   screens: {
     applyTask: {
       kind: 'exercise',
