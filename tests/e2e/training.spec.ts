@@ -5,6 +5,9 @@ import { nbLog, outItems, typeGap } from './trainingHelpers';
 import { dump } from './trainerHelpers';
 import { setInputProfile } from './input';
 import { nextItem, openBandMore } from './learnHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Training: Kollokationen, Satz-Umformung, Register, Überleitungen/Wortbildung und das Einwand-Training
 // (freiwilliges Extra). Posteingang, Nachsprechen und Aussprache entfallen seit dem Umbau (04.10.2026).

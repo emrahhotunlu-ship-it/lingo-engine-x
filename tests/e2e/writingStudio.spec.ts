@@ -3,6 +3,9 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openTab, screen, type BootOptions } from './fixtures';
 import { WED, WED_9, donePatch } from './c1CheckHelpers';
 import { dump } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // P47 (Lernplattform 3.0, KI-Tutor T6): Schreibwerkstatt am Laptop. Die Testlaufzeit antwortet fest (`canned/lp3/p47.ts`). Geprüft: Editor, Wortzähler, Checkliste,
 // genau die erlaubten Aufrufe (ein Aufruf, Neuversuch nur bei Schemaverletzung, bis zu drei Prüfungen je Text), Unterstreichungen, Stelle melden, Fehlersätze

@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, openEntry, screen } from './fixtures';
 import { orderSolution } from './learnHelpers';
 import { TOUR, answerOnly, dump, expected, forcedPatch, planPatch, tourPatch } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // Einheitliche Hilfen in jeder Übung (Emrah 02.10.2026): Tipp (Stufe 1 Wortart und Bedeutung/Erklärung, Stufe 2
 // erster Buchstabe bzw. eine falsche Option weniger), „Mehr Infos" nach der Antwort, deutsche Übersetzung des
@@ -110,6 +111,7 @@ async function openOrder(page: Page) {
 }
 
 test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann die ersten zwei Bausteine), Warum nach dem Prüfen', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   const { errors } = await openOrder(page);
   const item = page.getByTestId('drill-item');
   await expect(page.getByTestId('task')).toContainText('Bau den Satz');
@@ -150,6 +152,7 @@ test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann die erst
 });
 
 test('Satzbau am Rechner: Wörter tippen legt die Bausteine, Enter im leeren Feld prüft, Rücktaste nimmt zurück', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   const { errors } = await openOrder(page);
   const item = page.getByTestId('drill-item');
   const field = item.getByTestId('tiles-type');
@@ -177,6 +180,7 @@ test('Satzbau am Rechner: Wörter tippen legt die Bausteine, Enter im leeren Fel
 });
 
 test('Bausteine am Handy: kein Tastaturfeld (nur Tippen auf die Bausteine)', async ({ browser }) => {
+  test.skip(FOCUS2, RUHT);
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const page = await context.newPage();
   await openOrder(page);
@@ -188,6 +192,7 @@ test.describe('Handy 390 px', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
   test('Bausteine: beim Antippen springt nichts – „Prüfen“ und die übrigen Bausteine bleiben an ihrem Platz (Emrahs Meldung „kein t“)', async ({ page }) => {
+    test.skip(FOCUS2, RUHT);
     const { errors } = await openOrder(page);
     const item = page.getByTestId('drill-item');
     const pos = async () => (await page.getByTestId('check').boundingBox())?.y ?? -1;

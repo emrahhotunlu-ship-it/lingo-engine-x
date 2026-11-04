@@ -3,6 +3,9 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSettings, openTab, screen, type BootOptions } from './fixtures';
 import { WED, WED_9, donePatch } from './c1CheckHelpers';
 import { dump } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // P46 (Lernplattform 3.0, KI-Tutor T4): Satz-Klinik und „Mein Arbeitsalltag“. Die Testlaufzeit antwortet fest (`canned/lp3/p46.ts`). Geprüft: genau die erlaubten
 // Aufrufe (ein Aufruf, Neuversuch nur bei Schemaverletzung), Ergebnis ohne Querscrollen, Fehlersatz erst ab morgen, K7-Eintrag (nicht bei Einfügen),

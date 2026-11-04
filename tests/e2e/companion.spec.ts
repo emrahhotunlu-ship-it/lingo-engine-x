@@ -3,6 +3,7 @@ import { boot, layoutProblems, screen, openSpeak, openTab } from './fixtures';
 import { barAction, skipMiniLesson } from './learnHelpers';
 import { dump, forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
+import { FOCUS2 } from './ruht';
 
 // Phase 5: Claude-Begleiter (Plan §8.1, §10.2 companion.spec.ts, C-01 … C-10).
 // Gegen den Produktions-Build mit eingespieltem Adapter (feste Antworten: cannedCompanion.ts).
@@ -366,7 +367,11 @@ test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht 
     await page.keyboard.press('Escape');
     await page.getByTestId('round-close').click();
 
-    // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+    // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“. Fokus 2.0: Sprechen ausgeblendet – dieser Teil ruht.
+    if (FOCUS2) {
+      expect(errors).toEqual([]);
+      return;
+    }
     await openSpeak(page);
     await expect(page.getByTestId('scene-card').first()).toBeVisible();
     expect(await seeing(page)).toMatchObject({ area: 'speak', text: 'sieht gerade: Sprechen' });

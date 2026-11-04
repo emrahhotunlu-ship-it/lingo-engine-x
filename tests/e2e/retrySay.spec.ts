@@ -2,6 +2,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSpeak, screen } from './fixtures';
 import { DAY, dump, writes } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Rollenspiel+ (Lernplattform 3.0 P51): Kapitelziel im Szenenstart und im Gespräch, turn-analysis@3, „Sag’s nochmal“ (Korrektur verdeckt, genau ein
 // repair-check@1 je Prüfung, ✓ schließt die Stelle ohne Buchung), K7-Eintrag `s: 'talk'` beim Beenden, eingefügter Text zählt nie, Laptop: Analyse

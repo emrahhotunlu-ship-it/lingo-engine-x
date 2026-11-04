@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openProfile, openSpeak, openTab, screen, tabRoot } from './fixtures';
 import { answerCurrent, forcedPatch, planPatch } from './trainerHelpers';
+import { FOCUS2 } from './ruht';
 
 // Emrahs Fehlermeldung am iPhone „Einstellungen nicht überall“ (CLAUDE.md A7, Paket 2):
 // Übersetzer, Claude und Einstellungen auf jeder Seite und in jeder Übung mit einem Tipp. Die
@@ -38,7 +39,12 @@ test('Einstellungen von jeder Reiter-Seite und von jeder Seite in höchstens zwe
     await screen(page, tabRoot('progress'));
   }
   // Seiten (Sprechen, Wochenbericht): Kopf „‹ Herkunft · Fragen“ ohne Zahnrad; die Einstellungen liegen zwei Tipps entfernt (Fortschritt → Zahnrad).
-  await openSpeak(page);
+  if (FOCUS2) {
+    // Fokus 2.0: Sprechen ausgeblendet – die Seite „Anwenden“ (über Heute) hat denselben Seitenkopf.
+    await openTab(page, 'today');
+    await page.getByTestId('today-practice').filter({ visible: true }).first().click();
+    await screen(page, 'apply');
+  } else await openSpeak(page);
   await expect(page.getByTestId('page-bar').getByTestId('open-companion')).toBeVisible();
   await expect(page.getByTestId('page-bar').getByTestId('open-settings')).toHaveCount(0);
   await page.getByTestId('tab-progress').click();

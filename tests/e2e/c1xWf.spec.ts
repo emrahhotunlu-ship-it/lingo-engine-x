@@ -4,6 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openApplyFolds, openTab } from './fixtures';
 import { dump, DAY } from './trainerHelpers';
 import { nextItem, typeInGap } from './learnHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // wf (Wort umbauen), P38: ein Wort in die Lücke tippen (Handy 390 px), Stamm-Chip, Hinweisleiter (Wortart/Vorsilbe, dann Platzhalter),
 // Zerlegung und Wortfamilie nach dem Prüfen, Begründung auch bei richtig, Buchung (Fehlersatz, Karte, Verlauf) und Kachel „Wortbildung“.
@@ -258,6 +259,7 @@ test.describe('Anwenden', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test('die Kachel „Wortbildung“ startet eine wf-Runde', async ({ page }) => {
+    test.skip(FOCUS2, RUHT);
     const { errors } = await boot(page, { migrated: true });
     await openTab(page, 'apply');
     await openApplyFolds(page);

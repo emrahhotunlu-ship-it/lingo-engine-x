@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openApplyFolds, openTab } from './fixtures';
 import { dump, DAY } from './trainerHelpers';
 import { nextItem } from './learnHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // kwt (Umformen), P16: Handy mit Bausteinen (p ≤ 0,7) und mit Teil B getippt (p > 0,7); Laptop mit Zähler und leuchtendem Schlüsselwort.
 // Die Aufgabe kommt über einen Fehlersatz mit `cid` (Pilot `kwt-9001`: „is said to be“).
@@ -112,6 +113,7 @@ test.describe('Anwenden', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test('die Kachel „Satz-Umformung“ startet eine kwt-Runde', async ({ page }) => {
+    test.skip(FOCUS2, RUHT);
     const { errors } = await boot(page, { migrated: true, localStorage: { 'lx:flags': 'kwt' }, fake: { patch: { 'grammar/passive-plus': { ...topicDoc(0.5, OLD), errors: [], pats: { 'pp.personal': { n: 4, c: 2, last: OLD, h: 0, r: 1, k: 1, dd: [], i: '2026-09-01' } } } } } });
     await openTab(page, 'apply');
     await openApplyFolds(page);

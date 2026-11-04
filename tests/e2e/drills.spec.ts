@@ -4,6 +4,9 @@ import { clozeSolution, orderSolution, orderSolutions, typeInGap } from './learn
 import { DAY, dump, writes, type Dump } from './trainerHelpers';
 import { MON, MON_9, WEEK_W39, profileWith, reviewedLog, vgPlan } from './heuteHelpers';
 import { readFileSync } from 'node:fs';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Übungen ohne KI (phase2-plan §5.4–5.7, §9.3): je Übung eine vollständige Runde. Diktat mit
 // nachgebildeter Sprachausgabe; Lückenjagd: Buchstaben landen in der Lücke, Platzhalter per Tipp;

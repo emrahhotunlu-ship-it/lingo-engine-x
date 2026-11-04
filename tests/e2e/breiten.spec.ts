@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openRead, openSpeak, openTab, screen } from './fixtures';
+import { FOCUS2 } from './ruht';
 
 // Relaunch Stufe 1, P2 S1-SHELL (docs/relaunch/stufe1-plan.md §6.2, Abnahme A3/A4): der Rahmen trägt jede Breite vom kleinen Handy
 // bis zum großen Bildschirm. A3: kein waagrechtes Scrollen bei 320 … 2560 px. A4: bei 2560 × 1440 bleibt höchstens ein Viertel der Breite leer.
@@ -19,10 +20,13 @@ for (const width of WIDTHS) {
       await openTab(page, id);
       expect(await overflowX(page), id).toBeLessThanOrEqual(0);
     }
-    await openRead(page);
-    expect(await overflowX(page), 'read').toBeLessThanOrEqual(0);
-    await openSpeak(page);
-    expect(await overflowX(page), 'speak').toBeLessThanOrEqual(0);
+    // Fokus 2.0: Lesen und Sprechen sind ausgeblendet (tests/e2e/ruht.ts).
+    if (!FOCUS2) {
+      await openRead(page);
+      expect(await overflowX(page), 'read').toBeLessThanOrEqual(0);
+      await openSpeak(page);
+      expect(await overflowX(page), 'speak').toBeLessThanOrEqual(0);
+    }
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
     await ctx.close();

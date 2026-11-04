@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openTab, screen } from './fixtures';
 import { DAY, dump, planPatch } from './trainerHelpers';
 import { ankiPatch } from './wortschatzHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // B4 Anki „Rückgängig“ und N35 Hör-Modus + Hörschleife (Paket B, Bereich Wortschatz/Anki).
 
@@ -77,6 +78,7 @@ test('Hör-Modus: Stapel „Hören“ spricht den Satz, getippt wird in die Lüc
 });
 
 test('Hörschleife: aus der Extra-Runde, spricht von selbst, anhalten, Text zeigen, schreibt nichts', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   test.setTimeout(60_000);
   const { patch, ids } = ankiPatch(3);
   // Der Seed enthält am Stichtag (Kap. 3.3) bereits echte Übungseinträge für einzelne Startwörter

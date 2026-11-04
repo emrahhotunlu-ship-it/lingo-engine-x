@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 import { splitWords } from '../../src/domain/answer/align';
 import { errorSpan } from '../../src/domain/grammar/span';
+import { FOCUS2 } from './ruht';
 
 // Hilfen für die Phase-2-Bildschirme (Kurs, Lektion, Grammatik, Übungen). Die richtigen
 // Antworten stammen aus den Testdaten und den Voreinstellungen – nie aus der Oberfläche,
@@ -411,10 +412,11 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   await expect(page.getByTestId('vocab')).toBeVisible();
   await settle();
   await visit('wortschatz');
-  for (const [kind, name] of [
+  // Fokus 2.0: Lückenjagd und Satzbau sind aus der Oberfläche genommen (tests/e2e/ruht.ts) – die Runde entfällt.
+  for (const [kind, name] of FOCUS2 ? [] : ([
     ['cloze', 'lueckenjagd'],
     ['order', 'satzbau'],
-  ] as const) {
+  ] as const)) {
     await openTab(page, 'apply');
     await openApplyFolds(page);
     await settle();

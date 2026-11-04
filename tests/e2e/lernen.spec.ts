@@ -4,6 +4,7 @@ import { setInputProfile } from './input';
 import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { writes } from './trainerHelpers';
 import { openAllChapters, openTopicList, skipMiniLesson } from './learnHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // Paket P2 (docs/neubau/plan.md §4.3), umgebaut zum Grammatik-Pfad (W5): Hub mit Weiter-Karte, Pfad, Fehler und Extra, jede Übung ≤ 2 Tipps ab
 // Grammatik, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
@@ -48,12 +49,14 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   await expect(page.getByTestId('hub-lookup')).toBeVisible();
   for (const id of ['hub-course', 'hub-next-lesson']) await expect(page.getByTestId(id)).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
-  // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“.
-  await openTab(page, 'apply');
-  await openApplyFolds(page);
-  await page.getByTestId('hub-drill-cloze').click();
-  await expect(page.getByTestId('drill-item')).toBeVisible();
-  await page.getByTestId('round-close').click();
+  // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“ (Fokus 2.0: ausgeblendet, tests/e2e/ruht.ts).
+  if (!FOCUS2) {
+    await openTab(page, 'apply');
+    await openApplyFolds(page);
+    await page.getByTestId('hub-drill-cloze').click();
+    await expect(page.getByTestId('drill-item')).toBeVisible();
+    await page.getByTestId('round-close').click();
+  }
   expect(errors).toEqual([]);
 });
 
@@ -262,6 +265,7 @@ test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine dopp
 });
 
 test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort, nicht mehr bei Grammatik; nichts davon ist Pflicht', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'apply');
@@ -281,6 +285,7 @@ test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort
 });
 
 test('Anwenden › Hörübung mit Frage: Text verdeckt, erst Hören, dann Frage, danach Text mit Belegstelle; schreibt nichts', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');

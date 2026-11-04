@@ -2,6 +2,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, openRead as openReadPage, screen, type BootOptions, type Lang, type Theme } from './fixtures';
 import { typeInGap } from './learnHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Kurse im Reiter „Lesen“ (Paket L8, docs/umbau/lesen-kurse.md, docs/umbau/lesen-routine-kurse.md): Kursübersicht, Lektionsliste, Lektion lesen,
 // Fragen, Anwenden mit Musterlösung und „Claude prüfen“, Fortschritt (fertig = Zustand), Karten mitnehmen, Aufwärmen, Sperren, Handy und Desktop,

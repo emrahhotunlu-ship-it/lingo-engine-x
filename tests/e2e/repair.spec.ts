@@ -3,6 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSpeak, openTab, screen } from './fixtures';
 import { NO_GRAMMAR_ERRORS, profileWith, vgPlan } from './heuteHelpers';
 import { DAY, dump, planPatch } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Wiederholung in der
 // Pflichtrunde (lokal richtig, KI-Nachprüfung falsch), Schritt nach dem Rollenspiel-Bericht und
@@ -98,6 +99,7 @@ test('Pflichtrunde Wörter: fällige Fehlersätze kommen nicht vor, sie bleiben 
 });
 
 test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Reparatur-Satz (src talk, erste Wiederholung)', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   test.setTimeout(90_000);
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors, external } = await boot(page, { migrated: true });

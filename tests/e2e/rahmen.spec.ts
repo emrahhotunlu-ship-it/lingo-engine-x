@@ -4,6 +4,7 @@ import { barAction } from './learnHelpers';
 import { openProfileRow } from './profilHelpers';
 import { forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
+import { FOCUS2, RUHT } from './ruht';
 
 // Neubau WP0b – Rahmen (docs/neubau/plan.md §4.1, architektur.md §5.5): Einstieg, Rückweg zur
 // Herkunft, Neuladen/Fortsetzen, Fehlergrenzen per `lx:crash-once`, 390 px, beide Sprachen, drei
@@ -201,6 +202,7 @@ for (const [theme, lang] of [
 }
 
 test('Praxis am Handy: Seite unter Heute (UX-Neuanfang B), Lesen und Sprechen als Hub-Zeilen, Rückweg „‹ Praxis“', async ({ page }) => {
+  test.skip(FOCUS2, RUHT);
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'apply');
@@ -317,9 +319,14 @@ test('Ab 1280 px: schmale Glas-Schiene mit Marke, vier Reiter ohne Unterpunkte, 
   // Praxis über die Kontextspalte von Heute; dort stehen Lesen und Sprechen als Hub-Zeilen (keine Seitenleisten-Unterpunkte mehr).
   await page.getByTestId('ctx-today-practice').click();
   await screen(page, 'apply');
-  await expect(page.getByTestId('practice-more')).toBeVisible();
-  await page.getByTestId('hub-read').click();
-  await screen(page, 'read');
+  if (FOCUS2) {
+    // Fokus 2.0: die neue Seite „Anwenden“ (src/modules/apply) statt Praxis mit Lesen und Sprechen.
+    await expect(page.getByTestId('apply-hub')).toHaveAttribute('data-v', '2');
+  } else {
+    await expect(page.getByTestId('practice-more')).toBeVisible();
+    await page.getByTestId('hub-read').click();
+    await screen(page, 'read');
+  }
   await expect(page.getByTestId('tab-today')).toHaveAttribute('aria-current', 'page');
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);

@@ -3,6 +3,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSpeak, screen, type Lang, type Theme } from './fixtures';
 import { DAY, dump } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Sprechen (Phase 3, Plan §9.2): Übersicht, Einweisung, Rollenspiel mit Analysen, Mitnehmen,
 // Bericht mit Speichern, Fehlerpfade (Analyse fällt aus, ohne KI, langsam/Stopp, gesperrt),

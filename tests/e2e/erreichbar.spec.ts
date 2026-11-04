@@ -1,5 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, screen } from './fixtures';
+import { FOCUS2 } from './ruht';
 
 // Relaunch Stufe 1, P2 S1-SHELL (docs/relaunch/stufe1-plan.md §6.3, Abnahme A5): jeder Bereich und jeder frühere Reiter-Bildschirm
 // (Heute, Wortschatz, Grammatik, Anwenden/Praxis, Lesen, Fortschritt) ist von „Heute“ aus in höchstens zwei Klicks erreichbar –
@@ -27,8 +28,11 @@ const EXERCISE: Goal = { name: 'Übung', clicks: ['start'], done: (page) => page
 const PHONE: Goal[] = [
   ...COMMON,
   { name: 'Praxis (früher Anwenden)', clicks: ['today-practice'], done: onScreen('apply') },
-  { name: 'Lesen (früherer Reiter)', clicks: ['today-practice', 'hub-read'], done: onScreen('read') },
-  { name: 'Sprechen', clicks: ['today-practice', 'hub-speak-page'], done: onScreen('speak') },
+  // Fokus 2.0: Lesen und Sprechen ausgeblendet (tests/e2e/ruht.ts).
+  ...(FOCUS2 ? [] : [
+    { name: 'Lesen (früherer Reiter)', clicks: ['today-practice', 'hub-read'], done: onScreen('read') },
+    { name: 'Sprechen', clicks: ['today-practice', 'hub-speak-page'], done: onScreen('speak') },
+  ]),
   { name: 'Einstellungen', clicks: ['tab-progress', 'open-settings'], done: (page) => page.getByRole('dialog', { name: 'Einstellungen' }) },
   EXERCISE,
 ];
@@ -36,8 +40,11 @@ const PHONE: Goal[] = [
 const DESK: Goal[] = [
   ...COMMON,
   { name: 'Praxis (früher Anwenden)', clicks: ['ctx-today-practice'], done: onScreen('apply') },
-  { name: 'Lesen (früherer Reiter)', clicks: ['ctx-today-practice', 'hub-read'], done: onScreen('read') },
-  { name: 'Sprechen', clicks: ['ctx-today-practice', 'hub-speak-page'], done: onScreen('speak') },
+  // Fokus 2.0: Lesen und Sprechen ausgeblendet (tests/e2e/ruht.ts).
+  ...(FOCUS2 ? [] : [
+    { name: 'Lesen (früherer Reiter)', clicks: ['ctx-today-practice', 'hub-read'], done: onScreen('read') },
+    { name: 'Sprechen', clicks: ['ctx-today-practice', 'hub-speak-page'], done: onScreen('speak') },
+  ]),
   { name: 'Einstellungen', clicks: ['side-settings'], done: (page) => page.getByRole('dialog', { name: 'Einstellungen' }) },
   { name: 'Übersetzer', clicks: ['side-translate'], done: byId('companion') },
   EXERCISE,

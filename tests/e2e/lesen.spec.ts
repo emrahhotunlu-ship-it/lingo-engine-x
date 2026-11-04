@@ -1,6 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openRead as openReadPage, openTab, screen, type BootOptions, type Lang, type Theme } from './fixtures';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Reiter „Lesen“ (Paket L3, docs/umbau/lesen-plan.md §2.1, §3, §6): sechster Reiter, Liste, Artikel holen (Dev-Adapter), Stopp, Fehlerzustände,
 // Themen, Reiterleiste bei 360/390/412 px und am Desktop, Barrierefreiheit in drei Modi. Alle Daten erfunden (seed/sample-data.json, `read/…`).

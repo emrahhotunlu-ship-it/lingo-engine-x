@@ -3,6 +3,7 @@ import { boot, crashOnce, layoutProblems, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { answerGrammar, grammarKey, nextItem, orderSolution } from './learnHelpers';
 import { MON, MON_9, NO_GRAMMAR_ERRORS, SUN_9, TUE_9, TW_DUTY, WEEK_W39, profileWith, reviewedLog, unitStatus, vgPlan } from './heuteHelpers';
+import { FOCUS2 } from './ruht';
 
 // P1 (plan.md §4.2): Heute mit Tageskarte, Tageseinheit mit Ersatzblöcken, Wochenthema.
 // Seit UX-Neuanfang C (02.11.2026) jeden Tag drei Pflicht-Schritte: Wörter · Grammatik · Anwenden. Tests mit gespeichertem
@@ -307,12 +308,19 @@ test('P7 Heute fertig: eine Zeile „Extra ›“ mit Blatt, Sprechen ist erreic
   expect(await page.getByTestId('more-row').count()).toBeLessThanOrEqual(3);
   await expect(page.getByTestId('today-practice')).toBeVisible();
   // „Weitere Extras“ steht nur da, wenn das Blatt mehr zeigt als die Zeilen auf Heute (sonst stünde dasselbe zweimal da, Kap. 15).
-  if ((await page.getByTestId('today-extra').count()) > 0) {
-    await page.getByTestId('today-extra').click();
-    await expect(page.getByTestId('today-extra-sheet')).toBeVisible();
-    await page.locator('[data-testid="today-extra-sheet"] #extra-speak').click();
-  } else await page.locator('#more-speak').click();
-  await screen(page, 'speak');
+  if (FOCUS2) {
+    // Fokus 2.0: kein Sprechen mehr auf Heute (tests/e2e/ruht.ts); weder Zeile noch Blatt nennen es.
+    await expect(page.locator('#more-speak, #extra-speak, #more-read')).toHaveCount(0);
+    await page.getByTestId('today-practice').click();
+    await screen(page, 'apply');
+  } else {
+    if ((await page.getByTestId('today-extra').count()) > 0) {
+      await page.getByTestId('today-extra').click();
+      await expect(page.getByTestId('today-extra-sheet')).toBeVisible();
+      await page.locator('[data-testid="today-extra-sheet"] #extra-speak').click();
+    } else await page.locator('#more-speak').click();
+    await screen(page, 'speak');
+  }
   expect(errors).toEqual([]);
 });
 

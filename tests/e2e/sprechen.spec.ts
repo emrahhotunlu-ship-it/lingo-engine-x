@@ -3,6 +3,9 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openSpeak, screen } from './fixtures';
 import { setInputProfile } from './input';
 import { installGoalCheckReply } from './sprechenHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Freiwilliges Extra „Sprechen“ (Umbau, 04.10.2026): Seite mit Rollenspiel-Szenen und Einwand-Training,
 // Gespräch in ≤ 2 Tipps, Ziel-Checkliste mit Haken (goal-check@1), Fortsetzen nach Neuladen nach Zug 3.

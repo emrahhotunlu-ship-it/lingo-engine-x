@@ -1,6 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, openSpeak, screen } from './fixtures';
 import { dump } from './trainerHelpers';
+import { FOCUS2, RUHT } from './ruht';
+
+test.skip(FOCUS2, RUHT);
 
 // Stimme und Spracheingabe (Phase 3, Plan §9.2).
 

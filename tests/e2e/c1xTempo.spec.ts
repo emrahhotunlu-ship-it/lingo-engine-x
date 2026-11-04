@@ -3,6 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { bootAt } from './fixtures';
 import { dump, DAY } from './trainerHelpers';
 import { nextItem, squash, typeInGap } from './learnHelpers';
+import { FOCUS2, RUHT } from './ruht';
 
 // Tempo-Runde (Lernplattform 3.0 §2.3, P24): Kachel in Anwenden, zwölf Aufgaben aus sicheren Mustern, ruhiger Zielzeit-Balken ohne Zahl und ohne Sperre,
 // `tm` im Protokoll, Ergebnis ohne Rot und ohne „zu langsam“. Die Muster werden über die Datenbank als „Sicher“ gesetzt (Inhalte stammen aus den Inhaltsdateien).
@@ -38,6 +39,7 @@ test.describe('Handy', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
   test('Kachel in Anwenden, 12 Aufgaben, Balken ohne Zahl und Sperre, tm im Protokoll, Ergebnis ohne „zu langsam“', async ({ page }) => {
+    test.skip(FOCUS2, RUHT);
     test.setTimeout(120_000);
     const { errors } = await start(page, { name: 'apply' });
     const tile = page.getByTestId('hub-tempo');
