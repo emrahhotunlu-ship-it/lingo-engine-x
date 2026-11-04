@@ -3,7 +3,7 @@ import { getWriter } from '../data';
 import { useLive } from '../data/live';
 import { logError, logWarn } from '../platform/diagnostics';
 import { toast } from '../ui/Toast';
-import { translate } from '../i18n';
+import { ensureLang, hasLang, translate } from '../i18n';
 import { useSettings, type Lang, type Accent, type ThemeMode } from './settings';
 import { WORK_MAX } from '../prompts/work';
 import { restDowOf, vacAdd, vacCancel } from '../domain/streak';
@@ -36,7 +36,14 @@ export async function changeLang(lang: Lang): Promise<void> {
   const s = useSettings.getState();
   const prev = s.lang;
   if (prev === lang) return;
-  s.setLangLocal(lang);
+  // Großpaket C: Englisch wird erst jetzt geladen. Erst umschalten, wenn die Texte da sind (kein deutscher Zwischenstand); klappt das
+  // Laden nicht, bleibt die Sprache und eine Meldung sagt es.
+  await ensureLang(lang);
+  if (!hasLang(lang)) {
+    toast(translate(prev, 'saveFailed'), 'error');
+    return;
+  }
+  useSettings.getState().setLangLocal(lang);
   await persist({ lang }, () => useSettings.getState().setLangLocal(prev));
 }
 

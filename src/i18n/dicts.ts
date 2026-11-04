@@ -9,6 +9,9 @@ export const dicts: Partial<Record<Lang, Record<MessageKey, string>>> = { de };
 export const useDicts = create<{ v: number }>(() => ({ v: 0 }));
 let enLoading: Promise<void> | null = null;
 
+/** Ist das Wörterbuch dieser Sprache geladen? */
+export const hasLang = (lang: Lang): boolean => !!dicts[lang];
+
 /** Wörterbuch einer Sprache bereitstellen (Englisch nachladen). Wiederholbar; ein Fehler wird protokolliert, dann gilt Deutsch. */
 export function ensureLang(lang: Lang): Promise<void> {
   if (dicts[lang]) return Promise.resolve();

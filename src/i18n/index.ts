@@ -1,11 +1,11 @@
 import { de, type MessageKey } from './de';
 import { useSettings, type Lang } from '../app/settings';
-import { dicts, ensureLang, useDicts } from './dicts';
+import { dicts, ensureLang, hasLang, useDicts } from './dicts';
 
 // Übersetzung mit Platzhaltern {name} und Mehrzahl (_one / _other).
 
 export type { MessageKey, Lang };
-export { ensureLang };
+export { ensureLang, hasLang };
 type Vars = Record<string, string | number>;
 export type PluralBase = MessageKey extends infer K ? (K extends `${infer B}_one` ? B : never) : never;
 

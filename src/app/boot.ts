@@ -16,6 +16,7 @@ import { routeFromHash } from './router/deeplink';
 import type { RouteName } from './router/types';
 import { applyDocumentSettings, isAccent, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
+import { ensureLang, hasLang } from '../i18n/dicts';
 import { useDocTotal } from '../features/capacity/docTotal';
 import { useC1xReady } from '../features/c1x/ready';
 import { loadActs } from '../features/vocab/actStore';
@@ -70,7 +71,9 @@ export function useBoot(): void {
   useEffect(() => {
     if (!profile || settingsWritePending()) return;
     const s = useSettings.getState();
-    if (isLang(profile.lang) && profile.lang !== s.lang) s.setLangLocal(profile.lang);
+    // Sprache aus dem Profil erst umschalten, wenn ihre Texte da sind (Großpaket C: Englisch wird nachgeladen).
+    const lang = profile.lang;
+    if (isLang(lang) && lang !== s.lang) void ensureLang(lang).then(() => hasLang(lang) && useSettings.getState().setLangLocal(lang));
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
     // Akzent (Relaunch P1): `theme.a`; fehlt es, bleibt die lokale Wahl (Standard Iris). Das alte `theme.p` wird nur noch mitgetragen.
