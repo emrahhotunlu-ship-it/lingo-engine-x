@@ -448,11 +448,11 @@ html:not([data-theme='dim']) .lx-exercise [data-slot='secondary'] .lx-btn-quiet 
     var(--shadow-sm);
 }
 
-/* 12. Reiter und Unterseiten (Wörter, Grammatik, Fortschritt, Listen, Einstellungs-Seiten) wie das Küchenstudio: der Inhalt liegt auf EINEM
+/* 12. (Ladezustand „loading“ = Heute-Skelett: wie Heute ohne Blatt, sonst springt die Karte beim Start, perf U2.) Reiter und Unterseiten (Wörter, Grammatik, Fortschritt, Listen, Einstellungs-Seiten) wie das Küchenstudio: der Inhalt liegt auf EINEM
    Glasblatt unter der Kopfleiste, Karten und Tabellen darauf sind deckend hell (--glass-hi, „Platte“), nie Glas auf Glas. Heute hat sein
    eigenes Raster (Tageskarte + Spalte), Übungen ihre Glaskarte. Die Kontextspalte rechts ist ein dichtes Glasblatt (--glass-dense) bis unten. */
 @media (min-width: 600px) {
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) {
     min-height: calc(100dvh - 14px - 64px - 12px - 14px);
     margin-bottom: 14px;
     border-radius: 22px;
@@ -464,7 +464,7 @@ html:not([data-theme='dim']) .lx-exercise [data-slot='secondary'] .lx-btn-quiet 
       inset 0 0 0 1px var(--glass-rim),
       var(--shadow);
   }
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'])
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading'])
     :is(.lx-card, .lx-v-card, .lx-glass, .lx-v-row-card, .lx-vw-card, .lx-kh-tile) {
     border-color: transparent;
     background: var(--glass-hi);
@@ -474,7 +474,7 @@ html:not([data-theme='dim']) .lx-exercise [data-slot='secondary'] .lx-btn-quiet 
       inset 0 1px 0 var(--glanz),
       var(--shadow-sm);
   }
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) > :not(.mx-auto) {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) > :not(.mx-auto) {
     padding: 16px 20px;
   }
   html:not([data-theme='dim']) .lx-ctx > :not(.lx-kh-ctx) {
@@ -493,16 +493,16 @@ html:not([data-theme='dim']) .lx-exercise [data-slot='secondary'] .lx-btn-quiet 
 }
 /* Monitor: der Inhalt nutzt die Breite des Blatts (statt einer schmalen Spalte in der Mitte). */
 @media (min-width: 1024px) {
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) > .mx-auto {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) > .mx-auto {
     max-width: none;
     padding-inline: 32px;
   }
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) > :not(.mx-auto) {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) > :not(.mx-auto) {
     padding: 24px 32px;
   }
 }
 @media (prefers-reduced-transparency: reduce) {
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']),
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']),
   html:not([data-theme='dim']) .lx-ctx > :not(.lx-kh-ctx) {
     background: var(--surface);
     -webkit-backdrop-filter: none;
@@ -573,18 +573,18 @@ html:not([data-theme='dim']) [data-testid='companion'] {
    Wörter. Bei Blättern, die feste Teile enthalten können (Übungskarte, Seitenblatt), liegt das Glas deshalb auf `::before` hinter dem Inhalt.
    Die doppelte Klasse hebt die Regel bewusst über die Glasregeln oben (`…[data-kern]:not([data-kres])`). */
 html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise,
-html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) {
   position: relative;
   isolation: isolate;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
 html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise:not([data-kres]),
-html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) {
   background: transparent;
 }
 html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise:not([data-kres])::before,
-html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'])::before {
+html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading'])::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -613,7 +613,7 @@ html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='
 }
 @media (prefers-reduced-transparency: reduce) {
   html:not([data-theme='dim']) .lx-glass.lx-exercise.lx-exercise.lx-exercise::before,
-  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'])::before {
+  html:not([data-theme='dim']) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading'])::before {
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -651,7 +651,7 @@ html:not([data-theme='dim']) .lx-kretype input {
 /* §18 Unterseiten ohne Kopfleiste (z. B. „So funktioniert's“, ux-reviewer 04.11.2026 Befund 6): das Blatt schwebt wie die Reiter
    mit 14 px Abstand oben statt am Bildrand zu kleben. */
 @media (min-width: 600px) {
-  html:not([data-theme='dim']) .lx-stage:not(:has(> .lx-vh-head)) main.lx-main-nav > [data-screen]:not([data-screen='today']) {
+  html:not([data-theme='dim']) .lx-stage:not(:has(> .lx-vh-head)) main.lx-main-nav > [data-screen]:not([data-screen='today'], [data-screen='loading']) {
     min-height: calc(100dvh - 28px);
     margin-top: 14px;
   }

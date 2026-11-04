@@ -138,20 +138,22 @@ for (const kind of ['Plan von heute vorhanden', 'erster Start des Tages'] as con
 /** Protokolliert je Bild (requestAnimationFrame), wo Karte und Start-Knopf stehen: Start-Bild, Ladeskelett, echte Karte. */
 async function trackLayout(page: Page): Promise<void> {
   await page.addInitScript(() => {
-    const w = window as unknown as { __lay: { t: number; boot: boolean; card: number | null; h: number | null; start: number | null; date: string }[] };
+    const w = window as unknown as { __lay: { t: number; src: string; boot: boolean; card: number | null; h: number | null; start: number | null; date: string }[] };
     w.__lay = [];
     const tick = () => {
       const q = (s: string) => document.querySelector(s)?.getBoundingClientRect() ?? null;
       // Relaunch P6: dazu das Startbild aus `app/today` (`start-card`, Knopf `start-go`) an derselben Stelle.
-      const card = q('[data-testid="today-card"]') ?? q('[data-testid="start-card"]') ?? q('[data-testid="today-skeleton"]') ?? q('#lx-boot .lx-kh-card');
+      const sels = ['[data-testid="today-card"]', '[data-testid="start-card"]', '[data-testid="today-skeleton"]', '#lx-boot .lx-kh'];
+      const hit = sels.find((s) => document.querySelector(s));
+      const card = hit ? q(hit) : null;
       const start = q('[data-testid="start"]') ?? q('[data-testid="start-go"]');
-      w.__lay.push({ t: performance.now(), boot: !!document.getElementById('lx-boot'), card: card ? card.y : null, h: card ? card.height : null, start: start ? start.y : null, date: document.querySelector('h1')?.textContent?.trim() ?? '' });
+      w.__lay.push({ t: performance.now(), src: hit ?? '', boot: !!document.getElementById('lx-boot'), card: card ? card.y : null, h: card ? card.height : null, start: start ? start.y : null, date: document.querySelector('h1')?.textContent?.trim() ?? '' });
       if (performance.now() < 30_000) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
   });
 }
-type Lay = { t: number; boot: boolean; card: number | null; h: number | null; start: number | null; date: string };
+type Lay = { t: number; src: string; boot: boolean; card: number | null; h: number | null; start: number | null; date: string };
 const layoutLog = (page: Page): Promise<Lay[]> => page.evaluate(() => (window as unknown as { __lay: Lay[] }).__lay);
 
 for (const rate of [1, 4] as const) {
@@ -198,6 +200,9 @@ for (const width of [390, 1280] as const) {
       const spread = (xs: number[]): number => Math.max(...xs) - Math.min(...xs);
       test.info().annotations.push({ type: 'Karte oben', description: `${Math.round(Math.min(...tops))}–${Math.round(Math.max(...tops))} px` });
       test.info().annotations.push({ type: 'Start-Knopf', description: `${Math.round(Math.min(...starts))}–${Math.round(Math.max(...starts))} px` });
+      // Je Phase (Start-Bild / App) die Oberkanten, damit ein Sprung sofort zuzuordnen ist.
+      const phases = [...new Set(log.filter((e) => e.card !== null).map((e) => `${e.boot ? 'boot' : 'app'}(${e.src.replace(/\[data-testid="|"\]/g, '')}):${Math.round(e.card as number)}`))];
+      test.info().annotations.push({ type: 'Phasen', description: phases.join(' → ') });
       expect(log.some((e) => e.boot && e.card !== null), 'Start-Bild war zu sehen').toBe(true);
       expect(tops.length).toBeGreaterThan(0);
       expect(spread(tops), 'Oberkante der Karte (Start-Bild, Skelett, Karte)').toBeLessThanOrEqual(2);
