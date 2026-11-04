@@ -4,6 +4,7 @@ import type { DayPlan } from './day';
 import { mayPlan, RETRY_GAP, STEP_A_GAP, STEP_B_GAP, STEP_B_MS } from './planner';
 import { hash32 } from './rand';
 import { CUE_MAX_LV } from './forms';
+import { type DayMark, doneToday, planCount } from './dayCount';
 import { FORM_SPEC } from './grade';
 import type { Form, Lex, VocabCfg } from './types';
 
@@ -38,6 +39,9 @@ export class SessionRun {
   private last: string | null = null;
   private readonly day: string;
   private readonly seen = new Set<string>();
+  /** Wörter dieser Runde und die davon schon beantworteten (Zähler außerhalb der Pflicht, K11: einzelne Wörter, nicht Karten). */
+  private readonly words = new Set<string>();
+  private readonly answered = new Set<string>();
   constructor(
     readonly kind: SessionKind,
     private cat: Catalog,
@@ -48,6 +52,7 @@ export class SessionRun {
     this.day = dayKey(nowMs);
     for (const p of opts.seenToday ?? []) this.seen.add(p);
     this.build(nowMs);
+    for (const sl of [...this.pending, ...this.queue]) this.words.add(sl.path);
   }
 
   private lex(path: string): Lex | undefined {
@@ -201,12 +206,25 @@ export class SessionRun {
   done(task: Task, nowMs: number): void {
     this.cards += 1;
     this.last = task.path;
+    this.words.add(task.path);
+    this.answered.add(task.path);
     const paths = task.group ?? [task.path];
     for (const p of paths) {
       this.seen.add(p);
       const l = this.lex(p);
       if (l && this.stepToday(l) && !this.pending.some((s) => s.path === p) && task.form !== 'transfer') this.pending.push(this.stepSlot(p, l, this.cards, nowMs));
     }
+  }
+
+  /**
+   * Zähler „x von y erledigt“ außerhalb der Pflicht (K11): einzelne Wörter der Runde, je Wort einmal. Lernschritte, Wiederkehr nach einem
+   * Fehler und Kontrastkarten desselben Worts erhöhen die Gesamtzahl nicht; ein Wort zählt als erledigt, sobald es einmal beantwortet ist.
+   */
+  wordCount(): { done: number; total: number } {
+    for (const sl of this.pending) this.words.add(sl.path);
+    let done = 0;
+    for (const p of this.words) if (this.answered.has(p)) done++;
+    return { done, total: this.words.size };
   }
 
   /**
@@ -246,21 +264,10 @@ export function interleave(reviews: Slot[], fresh: Slot[]): Slot[] {
  */
 export type RoundReport = { kind: SessionKind; day: string; n: number; right: number; activeMs: number; partial: boolean };
 
-/**
- * Heute schon gebucht? `day` (Abruf-Spur) ODER `dayU` (Erkennen, z. B. Aufdecken im Anki-Modus). Vorher prüfte die Runde nur `day`: im
- * Anki-Modus kamen schon aufgedeckte Wörter nach dem Verlassen und Wiedereinstieg erneut (Emrah 04.11.2026 „muss von vorne anfangen“).
- */
-export function doneToday(l: { day: string | null; dayU: string | null }, day: string): boolean {
-  return l.day === day || l.dayU === day;
-}
+/** Heute schon gebucht? (Regel in `dayCount.ts`, gemeinsam mit Heute.) */
+export { doneToday };
 
 /** Wie viele Einträge des eingefrorenen Wörter-Plans heute schon erledigt sind (Wiederholung gebucht, neues Wort eingeführt). */
-export function planDoneCount(plan: readonly (readonly [string, string, string])[], lexOf: (path: string) => { day: string | null; dayU: string | null; intro: string | null } | null, day: string): number {
-  let n = 0;
-  for (const [path, track] of plan) {
-    const l = lexOf(path);
-    if (!l) continue;
-    if (track === 'n' ? l.intro === day : doneToday(l, day)) n++;
-  }
-  return n;
+export function planDoneCount(plan: readonly (readonly [string, string, string])[], lexOf: (path: string) => DayMark | null, day: string): number {
+  return planCount(plan, lexOf, day).done;
 }

@@ -192,6 +192,11 @@ export type DeriveInput = {
    * (`act[tag].review ≥ 1`, live ⊕ Puffer). Das Modul schreibt kein Tagesprotokoll; die Kartenzahl des alten Plans gilt dann nicht.
    */
   vocabMod?: boolean;
+  /**
+   * Neue Wörter-App: Stand des eingefrorenen Wörter-Plans (`vmod/day`, einzelne Wörter; dieselbe Zählung wie die Runde, K11). `null` = Plan
+   * noch nicht gelesen (dann nennt Heute keine Wortzahl); fehlt das Feld, gilt die frühere Zahl des Tagesplans.
+   */
+  vocabDay?: { done: number; total: number } | null;
 };
 
 /**
@@ -244,8 +249,13 @@ export function deriveToday(i: DeriveInput): TodayState {
     let progress: DutyState['progress'] = null;
     if (id === 'review' && i.vocabMod) {
       done = actDone('review') || !!i.exhausted;
-      const n = Math.max(1, total);
-      progress = { done: done ? n : 0, total: n };
+      const w = i.vocabDay;
+      if (w === null) progress = null;
+      else if (w) progress = { done: done ? w.total : Math.min(w.done, w.total), total: w.total };
+      else {
+        const n = Math.max(1, total);
+        progress = { done: done ? n : 0, total: n };
+      }
     } else if (id === 'review') {
       done = reviewDone >= total || !!i.exhausted;
       progress = { done: reviewDone, total };

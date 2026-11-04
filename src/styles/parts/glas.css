@@ -380,19 +380,8 @@ html:not([data-theme='dim']) .lx-vh-ask.lx-v-iconbtn {
     background: var(--glass-hi);
   }
 }
-/* Monitor: die Blätter reichen bis unten wie Fenster (Vorschau/Küchenstudio), nichts endet mitten auf dem Stein. „Kurzer Tag“ und „Tagesziel
-   ändern“ stehen unten in der Karte (`.lx-kh-foot`). */
-@media (min-width: 1024px) {
-  html:not([data-theme='dim']) .lx-kh-card {
-    min-height: calc(100dvh - 14px - 64px - 12px - 14px);
-  }
-  html:not([data-theme='dim']) .lx-kh-ctx {
-    min-height: calc(100dvh - 28px);
-  }
-  html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-free {
-    flex: 1 1 auto;
-  }
-}
+/* Monitor (K14, Emrah 04.11.2026 „Karte halb leer, Hinweis klebt unten“): Tageskarte und rechte Spalte sind so hoch wie ihr Inhalt – keine
+   Streckung auf die Fensterhöhe. „Heute nur kurz“ und „Tagesziel ändern“ stehen direkt unter den Schritten (`.lx-kh-foot`). */
 
 /* 11. Die Übungskarte ist ein Glasblatt (kern.css setzt sie mit `:root …[data-kern]` deckend; hier eine Stufe stärker). Nach dem Prüfen
    am Handy/Tablet tragen Rückmeldung und Wortkarte (`.lx-kleft`, `.lx-kside`) das Glas, die Übung selbst ist dann nur der Rahmen. */

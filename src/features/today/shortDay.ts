@@ -12,6 +12,7 @@ import { useGrammarSession } from '../grammar/session';
 import { useUnitRun } from '../unit/runStore';
 import { syncTodayDocForDay } from './startDoc';
 import { saveLocalPlan, useTodayPlan } from './store';
+import { loadWordsDay } from './wordsDay';
 
 // Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026): der Tagesweg von heute einmal auf ca. 10 Minuten – nach dem Muster der Kapitelwahl
 // (`c1/chapterRun.ts refreezeToday`): nur der Plan, den dieses Gerät kennt, nur unberührt, in EINEM `transform` zusammen mit dem
@@ -73,6 +74,8 @@ export async function takeShortDay(today: string, view: { done: number; fills: r
         logError('today:short-day-words', err, k ? 'zweiter Versuch' : undefined);
       }
     }
+    // K11: Heute zählt jetzt den verkleinerten Wörter-Plan.
+    await loadWordsDay(today);
   }
   if (useTodayPlan.getState().day === today) {
     useTodayPlan.setState({ plan: done });

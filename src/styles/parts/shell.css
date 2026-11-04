@@ -551,3 +551,14 @@
 .lx-cmode-cancel { min-height: 36px; padding: 0 12px; border-radius: 10px; background: transparent; box-shadow: 0 0 0 1.5px currentColor inset; color: inherit; font-weight: 650; }
 [data-lx-cmode] body { cursor: crosshair; }
 [data-lx-cmode] body *:hover:not([data-lx-cmode-ui] *):not([data-lx-cmode-ui]) { outline: 2px dashed var(--act); outline-offset: 2px; }
+
+/* Hinweise (Toast) unter der Kopfzeile bzw. Übungsleiste (K-Abgleich 04.11.2026, Nebenbefund): oben am Rand verdeckten sie am Handy Titel,
+   Zähler und ✕. Kopf/Übungsleiste sind am Handy höchstens ~84 px hoch, am Monitor (Glasleiste mit Rand) ~104 px. */
+.lx-toaster {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 5.75rem);
+}
+@media (min-width: 1024px) {
+  .lx-toaster {
+    padding-top: 7rem;
+  }
+}

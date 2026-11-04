@@ -18,7 +18,9 @@ import { buildDayPlan, type DayPlan } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
-import { planDoneCount, type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
+import { planCount } from '../domain/dayCount';
+import { sentencesOf, usableSentences } from '../domain/card';
+import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
 import { type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
@@ -271,8 +273,56 @@ export class LearnRun {
     for (const f of this.subs) f();
   }
 
-  /** Einträge des heutigen Wörter-Plans, die beim Start dieser Runde schon erledigt waren (nur Pflicht; für den Zähler). */
-  doneBefore = 0;
+  /** Der heutige, eingefrorene Wörter-Plan (nur Pflicht): die Zählquelle, die auch Heute nutzt (K11). */
+  private dayPlan: DayPlan | null = null;
+
+  /**
+   * Zähler der Übungsleiste (K11/K12/K13, Emrah 04.11.2026): `n` = erledigte Wörter + 1 (die gezeigte Karte), `total` = Wörter der Runde.
+   * Pflicht: dieselbe Quelle wie Heute – der eingefrorene `vmod/day`, einzelne Wörter (`planCount`); vor der Runde Erledigtes zählt mit.
+   * Sonst: einzelne Wörter der Runde (`wordCount`). Fehler, Lernschritte und Wiederkehr erhöhen die Gesamtzahl nie.
+   */
+  progress(): { n: number; total: number } | null {
+    const cat = this.cat;
+    if (this.dayPlan && cat) {
+      const c = planCount(this.dayPlan.plan, (p) => cat.get(p)?.lex ?? null, this.dayPlan.d);
+      if (c.total > 0) return { n: c.done + 1, total: c.total };
+    }
+    const w = this.run?.wordCount();
+    return w && w.total > 0 ? { n: w.done + 1, total: w.total } : null;
+  }
+
+  /** Heute eingeführt? (Statuszeile: dann nie „Wiederholung“, sondern Abruf, K4.) */
+  introducedToday(path: string): boolean {
+    const lex = this.cat?.get(path)?.lex;
+    return !!lex && lex.intro === dayKey(this.env.now());
+  }
+
+  /**
+   * Weitere Beispielsätze des Worts für die Wortkarte nach der Antwort (K5): nur echte, nutzbare Sätze aus dem Wort-Dokument (wie die Karten
+   * sie wählen), ohne den gerade gezeigten; höchstens `max`. Nichts erfunden – ohne weitere Sätze leer.
+   */
+  moreExamples(card: CardModel, max = 2): { en: string; de: string | null; mark: readonly [number, number] | null }[] {
+    const doc = this.docs.get(card.path);
+    const lex = this.cat?.get(card.path)?.lex;
+    if (!doc || !lex || !card.moreSentences) return [];
+    const shown = card.sentence?.sent.key ?? null;
+    const { ok } = usableSentences(sentencesOf(doc, this.env.now(), this.sbGate), card.head, lex.k === 'pv');
+    return ok
+      .filter((s) => s.sent.key !== shown)
+      .slice(0, max)
+      .map((s) => {
+        // Das Wort im Satz markieren (wie auf der Einführungskarte): Lage aus den Lücken-Teilen.
+        let en = '';
+        let a = -1;
+        let b = -1;
+        for (const seg of s.gap.segs) {
+          if (seg.t === 'gap' && a < 0) a = en.length;
+          en += seg.s;
+          if (seg.t === 'gap') b = en.length;
+        }
+        return { en, de: s.sent.de, mark: a >= 0 ? ([a, b] as const) : null };
+      });
+  }
 
   /** Runde starten (einmal): Sperre prüfen, offene Entwürfe nachbuchen, Tagesplan einfrieren (Pflicht), erste Karte. */
   async start(s: LearnStart): Promise<void> {
@@ -286,7 +336,7 @@ export class LearnRun {
     try {
       const { cat, cfg, plan, nowMs } = await this.setup(s);
       // Wiedereinstieg (Emrah 04.11.2026): Der Zähler zählt mit, was vom heutigen Plan schon erledigt ist („6 von 20“ statt wieder „1 von 14“).
-      this.doneBefore = s.kind === 'pflicht' && plan && plan.d === dayKey(nowMs) ? planDoneCount(plan.plan, (p) => cat.get(p)?.lex ?? null, plan.d) : 0;
+      this.dayPlan = s.kind === 'pflicht' && plan && plan.d === dayKey(nowMs) ? plan : null;
       this.run = new SessionRun(s.kind, cat, plan, nowMs, { cfg, ...(s.paths ? { paths: s.paths } : {}) });
       this.kind = s.kind;
       const info = plan ? this.startInfo(cat, plan, cfg, nowMs) : null;
