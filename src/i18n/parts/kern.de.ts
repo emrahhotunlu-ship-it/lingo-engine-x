@@ -116,4 +116,6 @@ export const kernDe = {
   restDow5: 'Fr',
   restDow6: 'Sa',
   restDow7: 'So',
+  assessNewTitle: 'Claude hat dich am {date} neu eingeschätzt',
+  assessNewNow: '{dim} jetzt {now} (vorher {before})',
 };

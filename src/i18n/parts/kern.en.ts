@@ -116,4 +116,6 @@ export const kernEn: Record<keyof typeof kernDe, string> = {
   restDow5: 'Fri',
   restDow6: 'Sat',
   restDow7: 'Sun',
+  assessNewTitle: 'Claude reassessed you on {date}',
+  assessNewNow: '{dim} now {now} (was {before})',
 };

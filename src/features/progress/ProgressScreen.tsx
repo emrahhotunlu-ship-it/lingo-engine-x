@@ -4,7 +4,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
+import { assessChange } from '../../domain/assessment/change';
 import { readAssess } from '../../domain/assessment/envelope';
+import { dayKeyNoon } from '../../domain/date';
 import { FOCUS_DIMS } from '../../domain/assessment/types';
 import { buildOverview } from '../../domain/overview';
 import { useT, type MessageKey } from '../../i18n';
@@ -63,6 +65,20 @@ function Stat({ label, value, unit, testId }: { label: string; value: string; un
   );
 }
 
+/** Entscheidung 1B (04.11.2026): Eine neue Einschätzung kommt nie kommentarlos – „Claude hat dich am … neu eingeschätzt: Wörter jetzt B2 (vorher B2+)“. */
+function AssessChangeNote({ change }: { change: NonNullable<ReturnType<typeof assessChange>> }) {
+  const { t, lang } = useT();
+  const day = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'long' }).format(dayKeyNoon(change.d));
+  return (
+    <div role="status" className="lx-assess-new flex flex-col gap-0.5 rounded-[var(--radius-control)] bg-accent-soft px-3 py-2.5 text-sm" data-testid="assess-change">
+      <p className="font-semibold text-fg">{t('assessNewTitle', { date: day })}</p>
+      <p className="text-muted">
+        {change.changes.map((c) => t('assessNewNow', { dim: t(c.id === 'vocabulary' ? 'hxStandWords' : 'hxStandGrammar'), now: c.now ?? '–', before: c.before ?? '–' })).join(' · ')}
+      </p>
+    </div>
+  );
+}
+
 export function ProgressScreen() {
   const { t, num, date, lang } = useT();
   const route = useNav((s) => s.route);
@@ -101,6 +117,8 @@ export function ProgressScreen() {
     [now, docs, vocab, grammar, archive],
   );
   const assess = useMemo(() => readAssess(docs['app/assess']), [docs]);
+  const today = useClock((s) => s.today);
+  const change = useMemo(() => assessChange(assess, today), [assess, today]);
   const tabLabel = t(TABS.find((x) => x.id === tab)?.label ?? 'nbProfilSegReview');
   useCompanionSee({
     area: 'overview',
@@ -117,7 +135,8 @@ export function ProgressScreen() {
       <motion.section variants={item} aria-label={t('ovTitle')} aria-busy={status === 'waiting'} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
         {/* UX-Prüfung W7: „Fest · 12 Wörter fest“ sagte „fest“ zweimal – die Einheit trägt es allein. */}
         {fest === 0 ? <FestZero onWay={onWay} testId="stand-fest" /> : <Stat label="" value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />}
-        <div className="border-t border-line pt-4">
+        <div className="flex flex-col gap-3 border-t border-line pt-4">
+          {change && <AssessChangeNote change={change} />}
           <StandLevels dims={(assess?.data.dims ?? []).filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id))} cefr={assess?.data.cefr ?? null} sameLang={!assess || assess.lang === lang} />
         </div>
       </motion.section>

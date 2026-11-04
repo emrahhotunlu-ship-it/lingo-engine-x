@@ -778,3 +778,7 @@ Farben Glas/Carbon sind schon in den Tokens (`eeb4e3c`).
 
 ## 04.11.2026 – Fragen im Chat statt im Frage-Dialog
 Emrah: „frag die frage hier im chat .. aber deine fragen sind meistens nicht aussagekräftig genug also ich versteh meistens nicht was genau du fragst“. Ab jetzt Fragen als Text im Chat, jede mit Beispiel aus der App, Problem, Möglichkeiten (was man danach sieht), Empfehlung mit Grund und einfacher Antwortform (A/B). Ersetzt die Regel vom 31.10.2026 (Frage-Dialog).
+
+## 04.11.2026 – Neue Einschätzung sofort mit Hinweis (1B) und „kurzer Tag“ (2A)
+- **1B:** Eine neue KI-Einschätzung erscheint sofort; auf „Fortschritt“ steht dazu ein deutlicher Hinweis „Claude hat dich am … neu eingeschätzt: Wörter jetzt B2 (vorher B2+)“. Grundlage ist der Verlauf `app/assess.hist` (vorheriger Tag), keine neue Datenstruktur. Hinweis bis 3 Tage nach der Einschätzung.
+- **2A:** „Kurzer Tag“ (ca. 10 Minuten) auf Heute: nur solange an dem Tag noch nichts erledigt ist, danach steht der Tagesweg fest; höchstens zweimal je Kalenderwoche. Die Serie hält, wenn der kurze Tagesweg erledigt ist.

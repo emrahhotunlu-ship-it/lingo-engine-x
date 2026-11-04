@@ -395,9 +395,31 @@ test('P7 Fortschritt: Standardsegment Wörter, Stufe je Bereich mit C1-Marke, B2
   await expect(page.getByTestId('c1-mark')).toHaveCount(2);
   await expect(page.getByTestId('assess-cefr')).toHaveCount(0);
   await expect(page.getByText('Gesamtstufe')).toHaveCount(0);
-  const b2 = await page.locator('main').evaluate((m) => ((m as HTMLElement).innerText.match(/\bB2\b/g) ?? []).length);
+  // Der Hinweis „Claude hat dich neu eingeschätzt: … jetzt B2 (vorher B2+)“ (Entscheidung 1B, 04.11.2026) nennt die Stufen bewusst noch einmal – er zählt nicht mit.
+  const b2 = await page.locator('main').evaluate((m) => {
+    const c = m.cloneNode(true) as HTMLElement;
+    c.querySelectorAll('[data-testid="assess-change"]').forEach((n) => n.remove());
+    document.body.appendChild(c);
+    const n = (c.innerText.match(/\bB2\b/g) ?? []).length;
+    c.remove();
+    return n;
+  });
   expect(b2).toBeLessThanOrEqual(2);
   expect(errors).toEqual([]);
+});
+
+// Entscheidung 1B (Emrah 04.11.2026): Die automatische Einschätzung beim Öffnen ändert Wörter B2+ → B2 (Seed: alte Einschätzung vom 18.09.,
+// Testantwort neu). Die Änderung steht sofort als Hinweis da, mit vorher und jetzt.
+test('1B Fortschritt: neue Einschätzung kommt mit Hinweis „neu eingeschätzt … jetzt … (vorher …)“', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openOverview(page);
+  const note = page.getByTestId('assess-change');
+  await expect(note).toBeVisible({ timeout: 15_000 });
+  await expect(note).toContainText('Claude hat dich am 20. September neu eingeschätzt');
+  await expect(note).toContainText(/Wörter jetzt \S+ \(vorher B2\+\)/);
+  const line = await page.getByTestId('stand-line').innerText();
+  const now = (await note.innerText()).match(/Wörter jetzt (\S+)/)?.[1];
+  expect(line).toContain(`Wörter ${now}`);
 });
 
 test('P7 Fortschritt: unter Verlauf stehen „Messwerte dahinter“ mit fünf Größen, ohne Daten „noch keine Daten“', async ({ page }) => {
