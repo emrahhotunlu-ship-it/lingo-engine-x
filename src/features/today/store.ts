@@ -46,6 +46,7 @@ import { recordProfileFields } from '../progress/persist';
 import { chosenChapterOf, programStartedOf, readC1 } from '../../domain/c1/c1doc';
 import { chapterPlanInput } from '../../domain/c1/cursor';
 import { nextDeskForm } from '../../domain/c1/check/select';
+import { applyOfDay } from '../../modules/apply/registry';
 
 // Tagesplan = Tageseinheit (plan.md §1.5, N10/N12): einmal je Lerntag festgelegt und in
 // app/profile.plan gespeichert, nie neu gewürfelt (Kap. 15). Ein schon gespeicherter Plan von heute
@@ -269,6 +270,8 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     ...(step3 && !mode ? { step3 } : {}),
     ...(c1 && !mode ? { c1 } : {}),
     ...(goal ? { nx: goal.id } : {}),
+    // Fokus 2.0 F3: Disziplin von Schritt 3 aus dem Zähler erledigter Anwenden-Tage, mit dem Plan eingefroren (nie neu gewürfelt).
+    ap: applyOfDay(profile),
   });
   // Neue Wörter-App an (V3 Schritt 4b): Block 1 = die gewählte Wörter-Zeit (F5), wie der Start der Runde sie nennt.
   return vocabOn ? withReviewMinutes(stored, vocabCfg(profile).min) : stored;

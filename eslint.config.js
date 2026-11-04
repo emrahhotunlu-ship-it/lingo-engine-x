@@ -309,6 +309,31 @@ export default defineConfig(
     rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN, { regex: '(^|/)domain/srs(/|$)', message: 'Wörter-Modul: kein Import aus domain/srs (plan.md §2.1).' }] }] },
   },
   {
+    // Modul Anwenden (F3, docs/umbau/fokus2/anwenden-plan.md), Tür nach innen: nur `shared.ts` (Logik) und `sharedUi.ts` (Oberfläche) importieren aus dem Rest
+    // der App; Modulebene ohne `../`, Unterordner höchstens einen Schritt hoch. Die Erlaubnislisten und die Türen nach außen prüft tests/unit/apply/isolation.test.ts.
+    files: ['src/modules/apply/*.ts'],
+    ignores: ['src/modules/apply/shared.ts', 'src/modules/apply/sharedUi.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, { regex: '^\\.\\./', message: 'Anwenden-Modul: Importe von außen nur in modules/apply/shared.ts bzw. sharedUi.ts.' }] },
+      ],
+    },
+  },
+  {
+    files: ['src/modules/apply/*/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, { regex: '^\\.\\./\\.\\./', message: 'Anwenden-Modul: höchstens ein Schritt hoch (../shared, ../sharedUi); Fremdes nur über die Türen.' }] },
+      ],
+    },
+  },
+  {
+    files: ['src/modules/apply/shared.ts', 'src/modules/apply/sharedUi.ts'],
+    rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, DEV_PATTERN, SCREEN_NUMBER_PATTERN, READ_DOOR_PATTERN, VOCAB_DOOR_PATTERN] }] },
+  },
+  {
     // Tests und Simulation des Wörter-Moduls dürfen ins Modul hineinsehen (nicht ins Lesen-Modul, nicht in gelöschte Bereiche).
     files: ['tests/unit/vocab/**/*.ts', 'scripts/vocab/**/*.ts'],
     rules: { 'no-restricted-imports': ['error', { patterns: [GONE_PATTERN, READ_DOOR_PATTERN] }] },

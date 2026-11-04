@@ -84,6 +84,9 @@ export function ComboSentenceScreen() {
   // Tagesweg Schritt 3 (Anwenden): die Blocknummer kommt mit der Route; ohne sie ist es freies Üben.
   const unitBlock = useNav((s) => (s.route.name === 'comboSentence' ? unitBlockOf(s.route.unit) : null));
   const [unit] = useState(() => unitBlock);
+  // Kurzer Tag (F3, Nachtrag learning-scientist Muss 4): der Tagesweg startet den eigenen Satz mit nur einem Satz (`n = 1`).
+  const routeN = useNav((s) => (s.route.name === 'comboSentence' ? s.route.n : undefined));
+  const [limit] = useState(() => comboLimitOf(routeN));
   const today = useClock((s) => s.today);
   const ai = useAiAvailable();
   const live = useComboPairs();
@@ -93,11 +96,11 @@ export function ComboSentenceScreen() {
   const touch = profile === 'touch';
   // Wiedereinstieg (Emrah 04.11.2026: „rausgehen, wieder rein – von vorne“): Sätze, Position und Ergebnisse dieses Lerntags stehen im
   // Browser-Speicher (Bequemlichkeit; Reparatur-Sätze und „Schritt erledigt“ stehen ohnehin in der Datenbank) und werden beim Öffnen übernommen.
-  const saveKey = `${KEY_PREFIX}combo:${today}:${unit ?? 'free'}`;
+  const saveKey = `${KEY_PREFIX}combo:${today}:${unit ?? 'free'}${limit ? `:${limit}` : ''}`;
   const [saved] = useState(() => readCombo(saveKey));
   // Paare erst einfrieren, sobald sie erstmals nicht leer sind (die Daten können nach dem Öffnen eintreffen; Prüfbefund S10).
-  const [fixed, setFixed] = useState<ComboPair[]>(() => saved?.fixed ?? live);
-  if (!fixed.length && live.length) setFixed(live);
+  const [fixed, setFixed] = useState<ComboPair[]>(() => saved?.fixed ?? (limit ? live.slice(0, limit) : live));
+  if (!fixed.length && live.length) setFixed(limit ? live.slice(0, limit) : live);
   const ask = useAsk(comboCheck);
   const [pos, setPos] = useState(() => saved?.pos ?? 0);
   const [text, setText] = useState('');
@@ -253,6 +256,11 @@ export function ComboSentenceScreen() {
       )}
     </div>
   );
+}
+
+/** Satzzahl aus der Route (1 bis 3), sonst `null` (alle Paare der Runde). */
+export function comboLimitOf(v: unknown): number | null {
+  return v === 1 || v === 2 || v === 3 ? v : null;
 }
 
 /** Am Handy ein kurzer Satz (Ersatz `complete`, Matrix §6). */

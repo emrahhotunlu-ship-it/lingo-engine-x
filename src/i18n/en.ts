@@ -25,6 +25,7 @@ import { patternsEn } from './parts/patterns.en';
 import { teacherEn } from './parts/teacher.en';
 import { nbShEn } from './parts/nbSh.en';
 import { readMessages } from '../modules/read/registry';
+import { applyMessages } from '../modules/apply/registry';
 import { nbHeuteEn } from './parts/nbHeute.en';
 import { kernEn } from './parts/kern.en';
 import { nbLernenEn } from './parts/nbLernen.en';
@@ -96,6 +97,8 @@ export const en: Record<MessageKey, string> = {
   ...nbShEn,
   // Lesen (13.10.2026): Texte des Moduls, Präfix `rd`
   ...readMessages.en,
+  // Anwenden (F3, 04.11.2026): Texte des Moduls, Präfix `ax`
+  ...applyMessages.en,
   ...nbHeuteEn,
   ...kernEn,
   ...nbLernenEn,

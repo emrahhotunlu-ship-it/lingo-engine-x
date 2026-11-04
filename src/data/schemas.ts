@@ -203,6 +203,8 @@ export const profileSchema = z.looseObject({
   restDow: loose,
   /** Kurzer Tag (Emrahs Entscheidung 2A, 04.11.2026), additiv: `{ 'JJJJ-MM-TT': 1 }` je Tag mit verkürztem Tagesweg (höchstens zwei je Kalenderwoche). Nur ergänzt, nie gelöscht. */
   kt: loose,
+  /** Fokus 2.0 F3 (Anwenden), additiv: Zähler erledigter (voller) Anwenden-Tage `{n, d}` für die Rotation der Disziplin von Schritt 3; `d` = zuletzt gezählter Lerntag. Tolerant gelesen (`readApplyCount`), nie verkleinert. */
+  apc: loose,
   dk: loose, // S1-DIKTAT: Diktat-Probe (streng: dkSchema)
 });
 

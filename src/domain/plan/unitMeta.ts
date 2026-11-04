@@ -87,5 +87,7 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
   // Lernplattform 3.0 (§2.4), rein ergänzend: C1-Check-Tag und Kennung des nächsten Ziels.
   if (o.c1 === 'check') out.c1 = 'check';
   if (typeof o.nx === 'string' && NX_RE.test(o.nx)) out.nx = o.nx;
+  // Fokus 2.0 F3 (Anwenden), rein ergänzend: Disziplin von Schritt 3; Unbekanntes fällt still weg (dann gilt der eigene Satz).
+  if (o.ap === 'combo' || o.ap === 'reply' || o.ap === 'write' || o.ap === 'summary') out.ap = o.ap;
   return out;
 }

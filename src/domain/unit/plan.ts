@@ -3,7 +3,7 @@ import { fixLimitFor, GRAMMAR_N, unitPlanFor } from './planFor';
 import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs } from './types';
 import { ERRORS_PER_ROUND } from '../grammar/tasks';
 import { AGAIN_OLD } from '../repair/unit';
-import type { DutyId, GrammarDay, PatState, Step3Fmt, Step3Mode, StoredPlan, UnitMeta, UnitMetaBlock } from '../plan/types';
+import type { ApplyDiscipline, DutyId, GrammarDay, PatState, Step3Fmt, Step3Mode, StoredPlan, UnitMeta, UnitMetaBlock } from '../plan/types';
 
 /**
  * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Seit dem Abschluss von Welle 2 `2` (§10.2).
@@ -46,6 +46,8 @@ export type UnitBuildInput = {
   nx?: string;
   /** Tagesweg (UX-Neuanfang C): drei Schritte mit Minuten aus `dayMinutes`. */
   tw?: 1;
+  /** Fokus 2.0 F3: Disziplin von Schritt 3 (nur gespeichert, wenn der Plan einen Schritt „Anwenden“ hat). */
+  ap?: ApplyDiscipline;
 };
 
 /** Plan-Vorstufe ohne Block-1-Umfang: liefert das Budget für die Berechnung von `goal.review`. */
@@ -65,7 +67,7 @@ function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode;
   return p;
 }
 
-function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarDay; ps?: Record<string, PatState>; c1?: 'check'; nx?: string } = {}): UnitMeta {
+function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarDay; ps?: Record<string, PatState>; c1?: 'check'; nx?: string; ap?: ApplyDiscipline } = {}): UnitMeta {
   const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: '', min: up.minutes, b: up.blocks.map((b) => (b.args ? [b.block, b.kind, b.min, b.args] : [b.block, b.kind, b.min])) };
   if (up.comeback) m.cb = up.comeback;
   if (facts.ov !== undefined) m.ov = facts.ov;
@@ -76,6 +78,7 @@ function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarD
   if (facts.ps && Object.keys(facts.ps).length) m.ps = facts.ps;
   if (facts.c1) m.c1 = facts.c1;
   if (facts.nx) m.nx = facts.nx;
+  if (facts.ap && up.blocks.some((b) => b.kind === 'task.apply')) m.ap = facts.ap;
   return m;
 }
 
@@ -92,7 +95,7 @@ export function buildUnitStored(i: UnitBuildInput): StoredPlan {
     goal: hasReview ? { review: i.review.goal, due: i.review.due, new: i.review.fresh, ahead: 0 } : { review: 0, due: 0, new: 0, ahead: 0 },
     lesson: null,
     at: i.nowMs,
-    u: metaOf(up, { ov: i.ov, sure: i.sure, ...(i.gt ? { gt: i.gt } : {}), ...(i.ps ? { ps: i.ps } : {}), ...(i.c1 && up.shape === 'sat' && up.rv === 2 ? { c1: i.c1 } : {}), ...(i.nx && up.rv === 2 ? { nx: i.nx } : {}) }),
+    u: metaOf(up, { ov: i.ov, sure: i.sure, ...(i.gt ? { gt: i.gt } : {}), ...(i.ps ? { ps: i.ps } : {}), ...(i.c1 && up.shape === 'sat' && up.rv === 2 ? { c1: i.c1 } : {}), ...(i.nx && up.rv === 2 ? { nx: i.nx } : {}), ...(i.ap ? { ap: i.ap } : {}) }),
   };
 }
 
