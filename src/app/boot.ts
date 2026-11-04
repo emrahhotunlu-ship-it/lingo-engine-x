@@ -1,3 +1,4 @@
+import { useRawReady } from '../content/store/rawText';
 import { useEffect } from 'react';
 import { getDb, initCapabilities, useCapabilities } from '../platform/capabilities';
 import { startDayLive, startLive, useLive } from '../data/live';
@@ -15,6 +16,7 @@ import { routeFromHash } from './router/deeplink';
 import type { RouteName } from './router/types';
 import { applyDocumentSettings, isAccent, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
+import { ensureLang, hasLang } from '../i18n/dicts';
 import { useDocTotal } from '../features/capacity/docTotal';
 import { useC1xReady } from '../features/c1x/ready';
 import { loadActs } from '../features/vocab/actStore';
@@ -69,7 +71,9 @@ export function useBoot(): void {
   useEffect(() => {
     if (!profile || settingsWritePending()) return;
     const s = useSettings.getState();
-    if (isLang(profile.lang) && profile.lang !== s.lang) s.setLangLocal(profile.lang);
+    // Sprache aus dem Profil erst umschalten, wenn ihre Texte da sind (Großpaket C: Englisch wird nachgeladen).
+    const lang = profile.lang;
+    if (isLang(lang) && lang !== s.lang) void ensureLang(lang).then(() => hasLang(lang) && useSettings.getState().setLangLocal(lang));
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
     // Akzent (Relaunch P1): `theme.a`; fehlt es, bleibt die lokale Wahl (Standard Iris). Das alte `theme.p` wird nur noch mitgetragen.
@@ -125,11 +129,15 @@ export function useScreen(): Screen {
   const overlay = useNav((s) => s.overlay !== null);
   // Gepackte c1x-Inhalte (nur wenn eine Aufgabenart eingeschaltet ist): der Rundenbau ist synchron und liest nur, was geladen ist.
   const c1xReady = useC1xReady();
+  // Großpaket C (P9): Ohne die nachgeladenen Inhalte bleibt der Rahmen beim Startbild (kein Bildschirm, kein Tagesplan – W6).
+  const rawReady = useRawReady((s) => s.ready);
+  // Konnten die Inhalte nicht geladen werden: nicht ewig das Startbild, sondern „Verbindung unterbrochen“ mit Neu laden.
+  const rawFailed = useRawReady((s) => s.failed);
   if (db === 'absent') return 'nodb';
-  if (status === 'error') return 'offline';
+  if (status === 'error' || (rawFailed && !rawReady)) return 'offline';
   // Relaunch P6 (Nr. 6): kein globales Warten mehr auf alles. „Rahmen bereit“ = Datenbank und Abos; die Reiter (Heute zuerst) erscheinen
   // ohne die gepackten c1x-Inhalte. „Bereich bereit“: Nur Übungen und Unterseiten (dort werden Aufgaben gebaut) warten auf sie.
-  if (db === 'pending' || status !== 'ready') return 'loading';
+  if (db === 'pending' || status !== 'ready' || !rawReady) return 'loading';
   if (!c1xReady && (overlay || kindOf(route.name) !== 'tab')) return 'loading';
   const migrated = !!schema && !schemaInvalid && typeof schema.version === 'number' && schema.version >= 1;
   return migrated ? route.name : 'migration';

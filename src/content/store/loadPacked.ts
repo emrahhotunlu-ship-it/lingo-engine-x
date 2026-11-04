@@ -48,6 +48,11 @@ async function fetchBundleText(file: string): Promise<string> {
   }
 }
 
+/** Großpaket C (P9): eine nachgeladene Rohtext-Datei (`raw-*.txt`, Base64 des rohen deflate) über denselben Ladeweg holen und entpacken. */
+export function fetchRawText(file: string): Promise<string> {
+  return fetchBundleText(file);
+}
+
 /* eslint-enable no-restricted-globals */
 
 /** Lädt ein Bündel; bei Fehler oder fehlender Unterstützung `null` (und ein Protokolleintrag, keine Ausnahme). */

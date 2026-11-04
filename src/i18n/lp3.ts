@@ -5,9 +5,9 @@
 export type Lp3Key = `cx${string}` | `px${string}` | `tt${string}` | `mo${string}` | `ee${string}`;
 export const LP3_PREFIXES = ['cx', 'px', 'tt', 'mo', 'ee'] as const;
 
-type Mods = Record<string, Record<string, unknown>>;
+export type Mods = Record<string, Record<string, unknown>>;
 
-function merge(mods: Mods): Record<Lp3Key, string> {
+export function mergeLp3(mods: Mods): Record<Lp3Key, string> {
   const out: Record<string, string> = {};
   for (const file of Object.keys(mods).sort()) {
     for (const part of Object.values(mods[file] ?? {})) {
@@ -18,5 +18,5 @@ function merge(mods: Mods): Record<Lp3Key, string> {
   return out;
 }
 
-export const lp3De = merge(import.meta.glob('./parts/lp3/*.de.ts', { eager: true }));
-export const lp3En = merge(import.meta.glob('./parts/lp3/*.en.ts', { eager: true }));
+export const lp3De = mergeLp3(import.meta.glob('./parts/lp3/*.de.ts', { eager: true }));
+// Englisch steht in `lp3en.ts` (Großpaket C: die zweite Sprache wird erst bei Bedarf nachgeladen).

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { de } from '../../src/i18n/de';
 import { en } from '../../src/i18n/en';
-import { lp3De, lp3En } from '../../src/i18n/lp3';
+import { lp3De } from '../../src/i18n/lp3';
+import { lp3En } from '../../src/i18n/lp3en';
 import { translate, type MessageKey } from '../../src/i18n';
 import { blockWhy } from '../../src/features/unit/labels';
 import { weekdayShort } from '../../src/domain/date';

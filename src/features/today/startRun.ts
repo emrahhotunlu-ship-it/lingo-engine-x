@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { c1xReadyNow } from '../c1x/ready';
+import { rawReadyNow } from '../../content/store/rawText';
 import { startDuty } from '../learn/flow';
 import { startUnit } from '../unit/run';
 import { unlockSpeech } from '../../platform/speech';
@@ -25,7 +26,7 @@ export const usePendingStart = create<Pending>(() => ({ pending: false, started:
 
 /** Kann jetzt sofort eine Aufgabe beginnen? (Plan steht, Tagesprotokoll geladen, gepackte Inhalte bereit.) */
 export function startReady(view: Pick<TodayView, 'ready' | 'dayLoaded'>): boolean {
-  return view.ready && view.dayLoaded && c1xReadyNow();
+  return view.ready && view.dayLoaded && c1xReadyNow() && rawReadyNow();
 }
 
 /** Start nach dem berechneten Plan: Block der Einheit, sonst der erste offene Pflichtpunkt (alter Plan). `false` = nichts zu starten. */

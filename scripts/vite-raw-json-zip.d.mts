@@ -1,2 +1,2 @@
 import type { Plugin } from 'vite';
-export function rawJsonZip(): Plugin;
+export function rawJsonZip(opts?: { multi?: boolean }): Plugin;

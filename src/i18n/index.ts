@@ -1,14 +1,17 @@
 import { de, type MessageKey } from './de';
-import { en } from './en';
 import { useSettings, type Lang } from '../app/settings';
+import { dicts, ensureLang, hasLang, useDicts } from './dicts';
 
 // Übersetzung mit Platzhaltern {name} und Mehrzahl (_one / _other).
 
 export type { MessageKey, Lang };
+export { ensureLang, hasLang };
 type Vars = Record<string, string | number>;
 export type PluralBase = MessageKey extends infer K ? (K extends `${infer B}_one` ? B : never) : never;
 
-const dicts: Record<Lang, Record<MessageKey, string>> = { de, en };
+// Großpaket C „schneller Start“: Wörterbücher und Nachladen stehen in `dicts.ts` (ohne Einstellungen, damit Tests sie vorab laden können).
+useSettings.subscribe((s) => void ensureLang(s.lang));
+
 const locales: Record<Lang, string> = { de: 'de-DE', en: 'en-US' };
 
 export function formatNumber(lang: Lang, n: number): string {
@@ -26,9 +29,10 @@ export function formatShortDate(lang: Lang, ms: number): string {
 
 export function translate(lang: Lang, key: MessageKey, vars?: Vars): string {
   // Ein fehlender Schlüssel zeigt sich als er selbst (nie ein leerer Text); `i18nParts.test.ts` prüft, dass jeder benutzte Schlüssel existiert.
-  const template = dicts[lang][key] ?? key;
+  const dict: Record<MessageKey, string> = dicts[lang] ?? de;
+  const template: string = dict[key] ?? key;
   if (!vars) return template;
-  return template.replace(/\{(\w+)\}/g, (m, name: string) => {
+  return template.replace(/\{(\w+)\}/g, (m: string, name: string) => {
     const v = vars[name];
     if (v === undefined) return m;
     return typeof v === 'number' ? formatNumber(lang, v) : v;
@@ -42,6 +46,8 @@ export function translatePlural(lang: Lang, base: PluralBase, n: number, vars?: 
 
 export function useT() {
   const lang = useSettings((s) => s.lang);
+  // Neu zeichnen, sobald ein nachgeladenes Wörterbuch da ist.
+  useDicts((s) => s.v);
   return {
     lang,
     t: (key: MessageKey, vars?: Vars) => translate(lang, key, vars),
