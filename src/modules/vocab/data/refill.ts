@@ -29,11 +29,17 @@ export const REFILL_DOC_CAP = WARN_2 - 500;
 /** Rohdaten der Quellen (Tests geben sie hinein; die App lädt sie per dynamischem Import). */
 export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[] };
 
+/** Häufigkeitsliste als Quelle neuer Wörter (aus bis zur geprüften Lehrer-Charge, Inhalts-Audit 04.11.2026). */
+export const ATLAS_REFILL = false;
+
 export async function loadSources(): Promise<SourceData> {
   const [{ CHARGE2 }, atlasText, colRaw] = await Promise.all([import('../content'), loadAtlasText(), loadColCharge()]);
   const atlas = JSON.parse(atlasText) as { items?: BandRaw[] };
   const col = (colRaw as { items?: ColRaw[] }).items ?? [];
-  return { job: CHARGE2.reviewed ? CHARGE2.items : [], col, band: atlas.items ?? [] };
+  // Inhalts-Audit 04.11.2026 (english-teacher, Note 3/10): die Häufigkeitsliste trägt ungeprüfte Fremd-Sätze („He's a fan of Klingon opera.“)
+  // und falsche Bedeutungen. Sie füllt keine neuen Wörter mehr nach, bis eine geprüfte Lehrer-Charge mit Business-Sätzen sie ersetzt
+  // (`ATLAS_REFILL`); schon angelegte Wörter bleiben unverändert.
+  return { job: CHARGE2.reviewed ? CHARGE2.items : [], col, band: ATLAS_REFILL ? (atlas.items ?? []) : [] };
 }
 
 const slug = (s: string): string =>
