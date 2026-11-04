@@ -7,7 +7,7 @@ import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { lexOf } from '../../../src/modules/vocab/data/lex';
 import { lexWriteSchema, vcfgSchema } from '../../../src/modules/vocab/data/schemas';
 import { VOCAB_LOCK_PATH } from '../../../src/modules/vocab/registry';
-import { autoEnable, buildInput, catchUpAll, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
+import { autoEnable, buildInput, catchUpAll, startCatchUp, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Eingabe aus vollem Lesen, Wächter, Schalter `vcfg.mod`, Rückweg und Nachholen.
 // Nur erfundene Daten (seed/sample-data.json und Testfälle hier).
@@ -272,5 +272,76 @@ describe('Automatisch einschalten (Emrah 02.11.2026)', () => {
     expect(r.state).toBe('done');
     expect(((h2.dump()['app/profile'] as Doc).vcfg as Doc).mod).toBe(1);
     expect(h2.dump()['app/schema']).toEqual(d['app/schema']);
+  });
+});
+
+describe('Nachholen bei jedem Start (Emrah 04.11.2026: vormittags in der alten App gelernt)', () => {
+  const readOf = (h: ReturnType<typeof createMemoryDb>, truncated: string[] = []) => () => Promise.resolve(snapshotFromRecord(h.dump(), truncated));
+
+  it('Wörter-App an, alte App hat geantwortet → Antwort übernommen, Wort heute erledigt (lex.day); zweiter Start ändert nichts', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    // Gleicher Tab wie die Umrechnung (dieselbe Sperre gehört ihm).
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: lockHolder() });
+    const d = h.dump() as Record<string, Doc>;
+    const lex0 = lexOf(d['vocab/deadline'])!;
+    const t = NOW + 2 * DAY;
+    const old = d['vocab/deadline']!;
+    d['vocab/deadline'] = { ...old, last: t, reps: 5, hist: [...((old.hist as unknown[]) ?? []), { t, g: 3, x: 'type' }] };
+    h.load(d);
+    const r = await startCatchUp(w, readOf(h), t + 1000);
+    expect(r).toMatchObject({ docs: 1, applied: 1 });
+    const lex1 = lexOf((h.dump() as Record<string, Doc>)['vocab/deadline'])!;
+    expect(lex1.sync).toBe(t);
+    expect(lex1.u.reps).toBe(lex0.u.reps + 1);
+    expect(lex1.day).toBe(new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date(t - 4 * 3_600_000)));
+    const n = h.writes().length;
+    // Nichts mehr nachzuholen: nichts gebucht, nichts geschrieben (nicht umrechenbare Altkarten bleiben ein Leerlauf).
+    expect((await startCatchUp(w, readOf(h), t + 2000))?.applied ?? 0).toBe(0);
+    expect(h.writes().length).toBe(n);
+  });
+
+  it('nach der Umrechnung in der alten App angelegtes Wort wird übernommen, ein altes ohne Lexem nicht', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: lockHolder() });
+    const d = h.dump() as Record<string, Doc>;
+    const mark = (d['app/schema']!.vocabModule as Doc).t as number;
+    const later = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date(mark + 2 * DAY));
+    d['vocab/new-card'] = { id: 'new-card', word: 'leverage', de: 'nutzen', ex: 'We leverage data.', state: 'new', added: later };
+    d['vocab/old-card'] = { id: 'old-card', word: 'tenure', de: 'Amtszeit', ex: 'During her tenure.', state: 'new', added: '2026-01-05' };
+    h.load(d);
+    const r = await startCatchUp(w, readOf(h), mark + 2 * DAY);
+    expect(r).toMatchObject({ added: 1 });
+    const after = h.dump() as Record<string, Doc>;
+    expect(lexOf(after['vocab/new-card'])).not.toBeNull();
+    expect(after['vocab/old-card']!.lex).toBeUndefined();
+  });
+
+  it('anderer Tab hält die Sperre → nichts nachgeholt, nichts gebucht (keine Doppelbuchung, data-guard 04.11.2026)', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: 'dother-tab9' });
+    const d = h.dump() as Record<string, Doc>;
+    const t = NOW + 2 * DAY;
+    const old = d['vocab/deadline']!;
+    d['vocab/deadline'] = { ...old, last: t, hist: [...((old.hist as unknown[]) ?? []), { t, g: 3, x: 'type' }] };
+    h.load(d);
+    const before = lexOf((h.dump() as Record<string, Doc>)['vocab/deadline']);
+    expect(await startCatchUp(w, readOf(h), t + 1000)).toBeNull();
+    expect(lexOf((h.dump() as Record<string, Doc>)['vocab/deadline'])).toEqual(before);
+  });
+
+  it('Wörter-App aus, Umrechnung offen oder gekappt → läuft nicht, schreibt nichts', async () => {
+    const off = createMemoryDb({ seed: { ...all(), 'app/profile': { ...(all()['app/profile'] as Doc), vcfg: { min: 15, ret: 0.9, mod: 0 } } } });
+    expect(await startCatchUp(createWriter(off.db), readOf(off), NOW)).toBeNull();
+    expect(off.writes()).toEqual([]);
+    const fresh = createMemoryDb({ seed: { ...all(), 'app/profile': { ...(all()['app/profile'] as Doc), vcfg: { min: 15, ret: 0.9, mod: 1 } } } });
+    expect(await startCatchUp(createWriter(fresh.db), readOf(fresh), NOW)).toBeNull();
+    const h = createMemoryDb({ seed: all() });
+    await enableModule(createWriter(h.db), stateOf(h.dump()).input, guards);
+    const n = h.writes().length;
+    expect(await startCatchUp(createWriter(h.db), readOf(h, ['vocab']), NOW)).toBeNull();
+    expect(h.writes().length).toBe(n);
   });
 });

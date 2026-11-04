@@ -1,4 +1,5 @@
-import { useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
+import { KEY_PREFIX, local } from '../../platform/storage';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useClock } from '../../app/clock';
@@ -43,6 +44,13 @@ export function willRepair(out: ComboCheckOut, given: string): boolean {
 
 type Done = { word: boolean; rule: boolean | null; correct: boolean | null };
 
+/** Gespeicherter Stand einer Anwenden-Runde (nur dieser Lerntag); Ungültiges wird verworfen. */
+function readCombo(key: string): { fixed: ComboPair[]; pos: number; results: Done[] } | null {
+  const v = local.getJson<{ fixed?: unknown; pos?: unknown; results?: unknown }>(key);
+  if (!v || !Array.isArray(v.fixed) || !v.fixed.length || typeof v.pos !== 'number' || v.pos < 0 || v.pos >= v.fixed.length || !Array.isArray(v.results)) return null;
+  return { fixed: v.fixed as ComboPair[], pos: v.pos, results: v.results as Done[] };
+}
+
 /** Wörter aus „Am Laptop vertiefen“ sortieren `pickPairs` (nach Fehlern) vor alle anderen, danach die heute geübten Wörter. */
 const DEEPEN_BOOST = 1000;
 const TODAY_BOOST = 500;
@@ -83,19 +91,29 @@ export function ComboSentenceScreen() {
   // Das Eingabeprofil gilt für die ganze Runde (§4.1): am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop ein freier Satz.
   const [profile] = useState(() => liveProfile);
   const touch = profile === 'touch';
+  // Wiedereinstieg (Emrah 04.11.2026: „rausgehen, wieder rein – von vorne“): Sätze, Position und Ergebnisse dieses Lerntags stehen im
+  // Browser-Speicher (Bequemlichkeit; Reparatur-Sätze und „Schritt erledigt“ stehen ohnehin in der Datenbank) und werden beim Öffnen übernommen.
+  const saveKey = `${KEY_PREFIX}combo:${today}:${unit ?? 'free'}`;
+  const [saved] = useState(() => readCombo(saveKey));
   // Paare erst einfrieren, sobald sie erstmals nicht leer sind (die Daten können nach dem Öffnen eintreffen; Prüfbefund S10).
-  const [fixed, setFixed] = useState<ComboPair[]>(() => live);
+  const [fixed, setFixed] = useState<ComboPair[]>(() => saved?.fixed ?? live);
   if (!fixed.length && live.length) setFixed(live);
   const ask = useAsk(comboCheck);
-  const [pos, setPos] = useState(0);
+  const [pos, setPos] = useState(() => saved?.pos ?? 0);
   const [text, setText] = useState('');
   const [miss, setMiss] = useState(false);
   const [res, setRes] = useState<(Done & { out: ComboCheckOut; given: string }) | null>(null);
-  const [results, setResults] = useState<Done[]>([]);
+  const [results, setResults] = useState<Done[]>(() => saved?.results ?? []);
   const [info, setInfo] = useState(false);
   const infoId = useId();
   const [startedAt] = useState(() => performance.now());
   const [endedAt, setEndedAt] = useState(0);
+
+  useEffect(() => {
+    if (!fixed.length) return;
+    if (pos >= fixed.length) local.remove(saveKey);
+    else local.set(saveKey, JSON.stringify({ fixed, pos, results }));
+  }, [saveKey, fixed, pos, results]);
 
   const cur = fixed[pos] ?? null;
   const topic = cur ? topicById(cur.topicId) : undefined;

@@ -1,4 +1,4 @@
-import { logError, logWarn, type Writer } from '../shared';
+import { dayKey, isDayKey, logError, logWarn, type Writer } from '../shared';
 import { dryRun, runMigration, type MigrationInput, type MigrationReport, type RunGuards, type RunOutcome } from '../data/migrate';
 import { isFutureLex, lexOf, lexPatch } from '../data/lex';
 import { lexWriteSchema, vcfgSchema, vocabModuleMarkSchema } from '../data/schemas';
@@ -7,6 +7,7 @@ import { catchUp, convertDoc, type LogEntry } from '../domain/migrate';
 import type { DupePair } from '../domain/dupes';
 import { DEFAULT_CFG } from '../domain/types';
 import { deviceId } from './device';
+import { VOCAB_LOCK_PATH } from '../registry';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.1–9.4): der Kleber zwischen Einstellungen › Wortschatz und der Umrechnung. Nachgeladen
 // (api.loadSwitch), nie in der Einstiegsdatei. Lesen und Sicherung macht der Aufrufer (src/features/settings), hier wird nur gerechnet und
@@ -270,4 +271,39 @@ export async function autoEnable(writer: Writer, read: () => Promise<SwitchRead>
   if (migrationDone(st.schema)) return reenableModule(writer, st.input, { schema: st.schema, profileValid: st.profileValid, possiblyTruncated: st.truncated });
   logWarn('vocab:switch', { message: 'Automatisch übernehmen' }, summaryText(preview(st.input, [], st.skipped).summary, []));
   return enableModule(writer, { ...st.input, confirmedPairs: [] }, { confirmed: true, backupWritten: true, profileValid: st.profileValid, possiblyTruncated: st.truncated, holder: lockHolder() });
+}
+
+/**
+ * Nachholen bei JEDEM App-Start mit eingeschalteter Wörter-App (Emrah 04.11.2026: am Vormittag in der alten App gelernt, die neue App
+ * plante dieselben Wörter noch einmal): Hat der alte Bereich geantwortet (`doc.last > lex.sync`), übernimmt `catchUpAll` genau diese
+ * Antworten (FSRS, „heute erledigt“ über `lex.day`). Dieselben Wächter wie beim Wiedereinschalten (Umrechnung fertig, Profil gültig, nichts
+ * gekappt); ohne Offenes ein Leerlauf (nur Lesen). `null` = nicht gelaufen.
+ */
+export async function startCatchUp(writer: Writer, read: () => Promise<SwitchRead>, nowMs: number): Promise<CatchUpResult | null> {
+  const snap = await read();
+  const profile = snap.raw.get(PROFILE_PATH);
+  const vcfg = profile && isObj(profile.vcfg) ? profile.vcfg : null;
+  if (!vcfg || vcfg.mod !== 1) return null;
+  const st = fromRead(snap, nowMs);
+  if (!migrationDone(st.schema) || !st.profileValid || st.truncated) return null;
+  // Ohne Lexem nur Karten, die NACH der Umrechnung im alten Bereich dazukamen (angelegt ab dem Umrechnungstag): was die Umrechnung bewusst
+  // ausließ (versteckt, ungültig, …), bleibt draußen und hält keine Sperre bei jedem Start.
+  const mark = st.schema && isObj(st.schema.vocabModule) && typeof st.schema.vocabModule.t === 'number' ? dayKey(st.schema.vocabModule.t) : null;
+  const docs = new Map<string, Doc>();
+  for (const [path, doc] of st.input.docs) {
+    if (!CARD.test(path)) continue;
+    const lex = lexOf(doc);
+    if (isObj(doc.lex)) {
+      if (lex && typeof doc.last === 'number' && doc.last > lex.sync) docs.set(path, doc);
+    } else {
+      // Anlegetag: `added` (Vokabel) oder `created` (Wendung, ms); unbekannt = nicht nachholen (das übernimmt das Wiedereinschalten).
+      const born = isDayKey(doc.added) ? doc.added : typeof doc.created === 'number' && doc.created > 0 ? dayKey(doc.created) : null;
+      if (mark && born && born >= mark && convertDoc(path, doc, nowMs).lex) docs.set(path, doc);
+    }
+  }
+  if (!docs.size) return null;
+  // Kurze Sperre (data-guard 04.11.2026): zwei Tabs/Geräte zugleich buchten dieselben alten Antworten sonst doppelt.
+  const lock = await writer.acquire(VOCAB_LOCK_PATH, { holder: lockHolder(), ttlMs: 30_000 });
+  if (!lock.acquired) return null;
+  return catchUpAll(writer, docs, st.input.logs, nowMs);
 }

@@ -1,9 +1,9 @@
+import { resumeOrStartGrammar } from '../grammar/resume';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import type { DutyId } from '../../domain/plan/types';
 import { unlockSpeech } from '../../platform/speech';
 import { startSession } from '../vocab/session';
-import { startGrammar } from '../grammar/session';
 import { startDrill } from '../drills/session';
 import { startUnitDuty } from '../unit/run';
 import { useLive } from '../../data/live';
@@ -43,10 +43,11 @@ export function startDuty(id: DutyId, api: FocusApi): void {
   const ch = id.slice(3);
   const day = useClock.getState().today;
   if (ch === 'gram') {
-    const first = startGrammar({ mode: 'duty', day });
+    // Wiedereinstieg statt Neustart (Emrah 04.11.2026).
+    const { first, route } = resumeOrStartGrammar({ mode: 'duty', day });
     if (first === 'typed') api.focusNow();
     else api.blur();
-    go({ name: 'grammarSession', mode: 'duty' });
+    go(route);
     return;
   }
   if (ch === 'cloze' || ch === 'order') {

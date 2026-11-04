@@ -1,3 +1,4 @@
+import { resumeOrStartGrammar } from '../grammar/resume';
 import { useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { chapterRunOn, flags } from '../../app/flags';
@@ -12,7 +13,6 @@ import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { VButton, VCard } from '../../ui/v';
 import { chapterBtnKey, cursorPrep, startChapter, useChapterNow } from '../c1/chapterRun';
-import { startGrammar } from '../grammar/session';
 import { topicName } from '../grammar/topicUi';
 import { useToday } from '../today/state';
 import { useFix } from './fix';
@@ -86,10 +86,11 @@ export function HereCard() {
 
   const startNext = () => {
     if (!next) return;
-    const first = startGrammar({ mode: 'topic', topic: next.id });
+    // Wiedereinstieg statt Neustart (Emrah 04.11.2026): eine angefangene Runde zu diesem Thema geht weiter.
+    const { first, route } = resumeOrStartGrammar({ mode: 'topic', topic: next.id });
     // Ein neues Thema beginnt mit der Mini-Lektion, dort gibt es noch keine Tastatur.
     if (first === 'typed' && !next.fresh) api.focusNow();
-    go({ name: 'grammarSession', mode: 'topic', topic: next.id });
+    go(route);
   };
 
   if (cursor) {

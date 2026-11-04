@@ -1,3 +1,4 @@
+import { resumeOrStartGrammar } from '../features/grammar/resume';
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
 import { HubSections } from '../app/shell/Hub';
@@ -19,7 +20,6 @@ import { startAgain } from '../features/repair/again/session';
 import { ensureGrammar, grammarResume } from '../features/grammar/resume';
 import { drillResume, ensureDrill } from '../features/drills/resume';
 import { startDrill } from '../features/drills/session';
-import { startGrammar } from '../features/grammar/session';
 import { patternResume } from '../features/patterns/run';
 
 // Bereich „Lernen“ (Grammatik-Pfad, Fehler korrigieren; der Kurs-Bereich entfällt seit dem Umbau, seine Daten bleiben) – Besitz: Paket P2 (docs/neubau/architektur.md §5.2).
@@ -96,8 +96,8 @@ export const lernen = defineArea({
       kind: 'grammar',
       feasible: () => true,
       start: (ctx) => {
-        startGrammar({ mode: 'duty', day: ctx.day, block: ctx.block, ...(ctx.opts?.n ? { size: ctx.opts.n } : {}) });
-        return { name: 'grammarSession', mode: 'duty' };
+        // Wiedereinstieg statt Neustart (Emrah 04.11.2026): auch eine im Grammatik-Reiter begonnene Pflichtrunde geht hier weiter.
+        return resumeOrStartGrammar({ mode: 'duty', day: ctx.day, block: ctx.block, ...(ctx.opts?.n ? { size: ctx.opts.n } : {}) }).route;
       },
     },
     {

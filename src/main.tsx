@@ -5,6 +5,7 @@ import { App } from './app/App';
 import { initDiagnostics, logContext, logError, logWarn } from './platform/diagnostics';
 import { applyDocumentSettings, resolveTheme, useSettings } from './app/settings';
 import { startC1xPreload } from './features/c1x/ready';
+import { prefetchScreens } from './app/prefetch';
 import { loadRawTexts } from './content/store/rawText';
 import { ensureLang } from './i18n';
 
@@ -45,6 +46,8 @@ async function boot(): Promise<void> {
   // In einem Hintergrund-Tab gibt es kein Bild: dann spätestens nach 1 s (einmalig, `startC1xPreload` lädt nur einmal).
   requestAnimationFrame(() => setTimeout(startC1xPreload, 0));
   setTimeout(startC1xPreload, 1000);
+  // Häufige Bildschirme vorladen (Emrah 04.11.2026: lange Wartezeiten beim ersten Öffnen).
+  requestAnimationFrame(() => setTimeout(prefetchScreens, 0));
 }
 
 boot().catch((err: unknown) => logError('boot', err));
