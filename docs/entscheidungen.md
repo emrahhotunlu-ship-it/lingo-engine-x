@@ -808,3 +808,10 @@ Emrah: „Wenn ich auf der Tastatur auf Enter drücke an Touch-Geräten, soll si
 
 ## 05.11.2026 – Großpaket W „Wörter-Wissen“ freigegeben; Claude-Sätze sofort zum Lesen (Emrah: „A“)
 Plan `docs/umbau/wissen/plan.md` freigegeben. Von Claude ergänzte Wortpartner und Beispielsätze (automatisch geprüft) erscheinen sofort zum **Lesen** (Einführung, Ergebnis, Wortseite) mit Melde-Möglichkeit; als **Abfragesatz** erst nach der bestehenden Satzbank-Regel (`sbGate`, 4 Wochen). Reihenfolge der Großpakete: zuerst Wörter (W), danach großer Bildschirm (K14) und Ladezeiten.
+
+## 05.11.2026 – Fragen immer im Auswahlfenster
+Emrah: „Bitte Fragen immer hier als Kontextfenster stellen!“ Ab jetzt jede Frage über das Auswahlfenster (`AskUserQuestion`), nicht als Text im Chat; Aufbau wie bisher (Beispiel, Problem, Möglichkeiten, Empfehlung). Ersetzt „Fragen im Chat“ vom 04.11.2026.
+
+## 05.11.2026 – Claude-Sätze sofort in den Abfragen („1A“), „Dein Können“ als nächstes Großpaket („2A“)
+1A: Emrah: „das Wort broadly wird immer mit demselben Satz gelernt … ich lerne eigentlich den Satz“. Sätze aus `word-know@1` (vor dem Speichern geprüft, `pv` beginnt mit `word-know@`) dürfen sofort Abfragesatz sein (`sentencesOf` in `src/modules/vocab/domain/card.ts`); gemeldete (`bad`) nie; andere Claude-Sätze weiter erst nach Freigabe und 4 Wochen. Die Satzwahl (`pickSentence`) wechselt ab Tag 2 auf den am längsten nicht gezeigten Satz.
+2A: Eine eigene Seite „Dein Können“ (was ich wie gut beherrsche, wie und warum das System mich einstuft) wird das nächste Großpaket, vorher gemeinsam planen.

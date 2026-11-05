@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
 import { type CheckDict } from '../../../src/modules/vocab/domain/check';
-import { tidySentence, usableSentences } from '../../../src/modules/vocab/domain/card';
+import { sentencesOf, tidySentence, usableSentences } from '../../../src/modules/vocab/domain/card';
+import { pickSentence } from '../../../src/modules/vocab/domain/forms';
+import { dayKey } from '../../../src/domain/date';
 import { cardOf, evaluate } from '../../../src/modules/vocab/domain/flow';
 import { applyAnswer, emptyLex, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
 import { MAX_PER_ROUND, SessionRun, type Task } from '../../../src/modules/vocab/domain/session';
@@ -92,5 +94,33 @@ describe('N8/N11 Sätze: kurz und vollständig', () => {
     const s = (key: string, en: string) => ({ key, en, de: '', src: 'ex' }) as never;
     expect(usableSentences([s('a', long), s('w0', 'They will grant us more time.')], 'grant', false).ok.map((x) => x.sent.key)).toEqual(['w0']);
     expect(usableSentences([s('a', long)], 'grant', false).ok.map((x) => x.sent.key)).toEqual(['a']);
+  });
+});
+
+describe('N4 (Emrah „1A“): geprüfte Claude-Sätze sofort in den Abfragen, Satz wechselt', () => {
+  const doc = {
+    word: 'broadly',
+    ex: 'Broadly speaking, the rollout went well.',
+    sb: [
+      { en: 'The team broadly agreed with the new pricing.', src: 'ai', pv: 'word-know@1', t: T0 },
+      { en: 'Our clients broadly support the change.', src: 'ai', pv: 'word-know@1', t: T0, bad: 1 },
+      { en: 'Other prompts stay gated for broadly four weeks.', src: 'ai', pv: 'other@1', t: T0 },
+    ],
+  };
+  it('word-know ja, gemeldet nein, andere Claude-Sätze erst nach Freigabe', () => {
+    const en = sentencesOf(doc, T0, null).map((s) => s.en);
+    expect(en).toEqual(['Broadly speaking, the rollout went well.', 'The team broadly agreed with the new pricing.']);
+  });
+  it('ein gelerntes Wort bekommt nicht immer den Ankersatz', () => {
+    const keys = sentencesOf(doc, T0, null).map((s) => s.key);
+    let l: Lex = learned(T0 - 20 * D);
+    const seen = new Set<string>();
+    for (let i = 0; i < 4; i++) {
+      const day = dayKey(T0 + i * 3 * D);
+      const k = pickSentence(l, keys, day)!;
+      seen.add(k);
+      l = { ...l, sn: [...l.sn.filter(([x]) => x !== k), [k, day]] };
+    }
+    expect(seen.size).toBe(2);
   });
 });

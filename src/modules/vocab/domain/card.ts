@@ -92,9 +92,11 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
     for (const x of doc.sb) {
       if (!isObj(x) || x.bad === 1 || !str(x.en)) continue;
       const src = x.src;
-      // Emrahs Wahl „A“ (05.11.2026, Großpaket W): Claude-Sätze sind sofort zum LESEN da (`o.read`: Wortkarte, Wortseite), als Abfragesatz erst
-      // nach Freigabe und 4 Wochen (Satzbank-Regel).
-      const ok = src === 'read' || src === 'c1' || (src === 'ai' && (o.read === true || (gate && num(x.t) > 0 && nowMs - num(x.t) >= SB_QUARANTINE_DAYS * DAY_MS)));
+      // Emrahs Wahl „A“ (05.11.2026, Großpaket W): Claude-Sätze sind sofort zum LESEN da (`o.read`: Wortkarte, Wortseite). Emrahs Wahl „1A“
+      // (05.11.2026, „ich lerne den Satz, nicht das Wort“): Sätze aus `word-know` (vor dem Speichern geprüft: Wort, Länge, Sinn, keine Abschrift)
+      // gehen sofort auch in die Abfragen; ein gemeldeter Satz (`bad`) nie. Andere Claude-Sätze weiter erst nach Freigabe und 4 Wochen.
+      const know = typeof x.pv === 'string' && x.pv.startsWith('word-know@');
+      const ok = src === 'read' || src === 'c1' || (src === 'ai' && (o.read === true || know || (gate && num(x.t) > 0 && nowMs - num(x.t) >= SB_QUARANTINE_DAYS * DAY_MS)));
       if (ok) push(str(x.en), x.de, 'sb');
     }
   return out;
