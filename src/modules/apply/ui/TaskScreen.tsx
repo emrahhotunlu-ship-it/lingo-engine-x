@@ -19,12 +19,13 @@ import {
   useLive,
   useNav,
   useT,
+  useTodayPlan,
   type MessageKey,
   type ScreenProps,
 } from '../sharedUi';
 import { applyKeypoints, applyReply, applySummary, c1Mail, mailVars, patListText, tutorCtx } from '../shared';
 import { copyCheck } from '../domain/copy';
-import { countSentences, countWords, joinParts, lengthGoal, lengthState, type Device } from '../domain/kinds';
+import { countSentences, countWords, fitGoal, joinParts, lengthGoal, lengthState, type Device } from '../domain/kinds';
 import { keypointsItem } from '../domain/material';
 import { confirmedWords, fromMail, fromReply, fromSummary, newRunId, selfSpots, spotContext, type ApplyRun, type Feedback } from '../domain/result';
 import { useMaterial, useTargets, type Material } from './hooks';
@@ -193,7 +194,9 @@ type BodyProps = { m: Material; kind: WriteKind; day: string; unit: 1 | 2 | 3 | 
 function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: BodyProps) {
   const { t, lang, num } = useT();
   const profile = useLive((s) => s.docs['app/profile']);
-  const goal = lengthGoal(kind, device);
+  // Entscheidung B (Emrah 05.11.2026): als Schritt 3 passt sich die Länge an die Planminuten an (dieselbe Zahl wie Heute und die Seite Anwenden).
+  const planMin = useTodayPlan((s) => (unit && s.plan?.d === day ? s.plan.u?.b.find(([, k]) => k === 'task.apply')?.[2] : undefined));
+  const goal = useMemo(() => fitGoal(lengthGoal(kind, device), kind, planMin), [kind, device, planMin]);
   const targets = useTargets(m);
   const partsMode = kind === 'reply' && device === 'touch';
   const mustN = m.kind === 'reply' ? m.mail.must.length : 0;

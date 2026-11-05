@@ -25,6 +25,28 @@ export const lengthGoal = (kind: WriteKind, device: Device): LengthGoal => GOALS
 /** Ungefähre Minuten je Disziplin (Zeile auf der Seite „Anwenden“). */
 export const APPLY_MINUTES: Readonly<Record<ApplyKind, number>> = { combo: 5, reply: 8, write: 10, summary: 10 };
 
+/** Kürzeste sinnvolle Fassung: höchstens auf die Hälfte kürzen, nie unter diese Wortzahl (eine Antwort/Zusammenfassung muss noch etwas sagen). */
+const FIT_MIN_RATIO = 0.5;
+const FIT_FLOOR: Readonly<Record<WriteKind, number>> = { reply: 25, write: 25, summary: 20 };
+const round5 = (n: number): number => Math.max(5, Math.round(n / 5) * 5);
+
+/**
+ * Entscheidung B (Emrah 05.11.2026, Prüfbefund L4): Schritt 3 behält die Minuten aus dem Tagesplan (`dayMinutes`); ist die Disziplin länger als
+ * diese Zeit (`APPLY_MINUTES`), wird die AUFGABE kürzer – nicht der Tag länger. Wortziel und Mindestlänge schrumpfen im Verhältnis (höchstens auf
+ * die Hälfte, mit Untergrenze); die Satzzahl der Zusammenfassung bleibt mindestens 3. Ohne Planminuten (freies Üben) gilt das volle Ziel.
+ */
+export function fitGoal(goal: LengthGoal, kind: WriteKind, planMin: number | null | undefined): LengthGoal {
+  const full = APPLY_MINUTES[kind];
+  if (typeof planMin !== 'number' || !Number.isFinite(planMin) || planMin <= 0 || planMin >= full) return goal;
+  const r = Math.max(FIT_MIN_RATIO, planMin / full);
+  const lo = Math.max(FIT_FLOOR[kind], round5(goal.words[0] * r));
+  const hi = Math.max(lo + 15, round5(goal.words[1] * r));
+  const minSubmit = Math.min(lo, Math.max(15, round5(goal.minSubmit * r)));
+  const out: LengthGoal = { words: [lo, hi], minSubmit };
+  if (goal.sentences) out.sentences = [goal.sentences[0], Math.max(goal.sentences[0], Math.round(goal.sentences[1] * r))];
+  return out;
+}
+
 const WORD_RE = /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
 
 /** Wörter eines Textes (Buchstaben- und Zahlfolgen, Apostroph und Bindestrich im Wort). */

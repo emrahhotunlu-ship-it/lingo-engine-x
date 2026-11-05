@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { copyCheck, COPY_RATIO_MAX } from '../../../src/modules/apply/domain/copy';
 import { applyCountPatch, applyOfCount, applyOfDay, readApplyCount } from '../../../src/modules/apply/domain/count';
-import { countSentences, countWords, joinParts, lengthGoal, lengthState } from '../../../src/modules/apply/domain/kinds';
+import { countSentences, countWords, fitGoal, joinParts, lengthGoal, lengthState } from '../../../src/modules/apply/domain/kinds';
 import { findKeypoints, keypointsItem, pickMail } from '../../../src/modules/apply/domain/material';
 import { confirmedWords, doubtPoints, errorsOf, evidenceWords, fromReply, outItemOf, praiseOf, prodOf, repairsOf, selfFixOk, selfSpots, spotContext, wordUses, type ApplyRun } from '../../../src/modules/apply/domain/result';
 import { compactOut, OUT_DOC_MAX_BYTES, OUT_MAX_ITEMS } from '../../../src/domain/nbdrill/outDoc';
@@ -246,5 +246,26 @@ describe('Zusammenfassung: kein Widerspruch zwischen Kernpunkt und „Richtig wi
     expect(doubtPoints(pts, { ok: true, quote: '', why: '' }).doubted).toEqual([]);
     expect(doubtPoints(pts, { ...bad, quote: 'I think' }).doubted).toEqual([]);
     expect(doubtPoints(pts, null).points).toEqual(pts);
+  });
+});
+
+describe('fitGoal: Entscheidung B (Emrah 05.11.2026) – Schritt 3 behält seine Minuten, die Aufgabe wird kürzer', () => {
+  it('ohne Planminuten oder mit genug Zeit: volles Ziel', () => {
+    const g = lengthGoal('reply', 'touch');
+    expect(fitGoal(g, 'reply', undefined)).toBe(g);
+    expect(fitGoal(g, 'reply', 8)).toBe(g);
+    expect(fitGoal(g, 'reply', 12)).toBe(g);
+  });
+  it('5 Minuten (Tagesziel 25): Mail am Handy 25–50 statt 40–80 Wörter, Mindestlänge mitgekürzt', () => {
+    expect(fitGoal(lengthGoal('reply', 'touch'), 'reply', 5)).toEqual({ words: [25, 50], minSubmit: 20 });
+    expect(fitGoal(lengthGoal('write', 'keys'), 'write', 5)).toEqual({ words: [60, 90], minSubmit: 30 });
+  });
+  it('höchstens auf die Hälfte, nie unter die Untergrenze; Zusammenfassung behält mindestens 3 Sätze', () => {
+    expect(fitGoal(lengthGoal('reply', 'touch'), 'reply', 2)).toEqual({ words: [25, 40], minSubmit: 15 });
+    const sum = fitGoal(lengthGoal('summary', 'keys'), 'summary', 5);
+    expect(sum.sentences).toEqual([3, 3]);
+    expect(sum.words[0]).toBeGreaterThanOrEqual(20);
+    expect(sum.minSubmit).toBeLessThanOrEqual(sum.words[0]);
+    expect(fitGoal(lengthGoal('summary', 'touch'), 'summary', 5).sentences).toEqual([3, 3]);
   });
 });

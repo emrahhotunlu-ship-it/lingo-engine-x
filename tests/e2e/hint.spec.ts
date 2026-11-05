@@ -169,3 +169,37 @@ test('Handy 390: Vokabel-Hinweis, Eingabe bleibt in der Lücke, zweiter Versuch 
   expect(overflow).toBeLessThanOrEqual(0);
   await close();
 });
+
+// Emrah 05.11.2026: „Wenn ich auf der Tastatur auf Enter drücke an Touch-Geräten, soll sie einklappen, weil ich sonst nicht auf die Knöpfe komme.“
+// Hinweis (zweiter Versuch): Tastatur bleibt offen, er tippt weiter. Ergebnis da: Enter schließt die Tastatur (Fokus verlässt das Feld), die Knöpfe
+// sind frei. Am Laptop bleibt der Fokus wie bisher in der Lücke (Enter = Weiter).
+test('Handy 390: Enter klappt die Tastatur ein, sobald das Ergebnis da ist; beim Hinweis bleibt sie offen', async ({ browser }) => {
+  const { page, close } = await phone(browser);
+  const { errors } = await startCloze(page);
+  const answer = expected('cloze', 'overcome', null);
+  await typeInGap(page, 'zzzz');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('[data-testid="hint-line"][data-tone="near"]')).toBeVisible();
+  await page.waitForTimeout(400);
+  expect(await focusedTestId(page)).toBe('gap-input');
+  for (let i = 0; i < 4; i++) await page.keyboard.press('Backspace');
+  await page.keyboard.type(answer, { delay: 20 });
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  await expect.poll(() => focusedTestId(page)).not.toBe('gap-input');
+  await expect(page.getByTestId('next')).toBeVisible();
+  expect(errors).toEqual([]);
+  await close();
+});
+
+test('Laptop: nach dem Prüfen mit Enter bleibt der Fokus in der Lücke (Enter = Weiter)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const { errors } = await startCloze(page);
+  const answer = expected('cloze', 'overcome', null);
+  await typeInGap(page, answer);
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  await page.waitForTimeout(400);
+  expect(await focusedTestId(page)).toBe('gap-input');
+  expect(errors).toEqual([]);
+});

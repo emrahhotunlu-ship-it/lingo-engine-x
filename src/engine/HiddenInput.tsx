@@ -1,11 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { useKeepGapVisible } from '../ui/chat/keyboard';
+import { inputProfile } from '../platform/input';
 
 // Ein einziges, dauerhaft eingehängtes, unsichtbares Eingabefeld (Architektur-Entwurf §6.2).
 // Es liegt genau über der aktiven Lücke: Ein Tippen auf die Lücke trifft das echte Feld
 // (nativer Fokus, Tastatur am iPhone). Ohne Tippen auf die Lücke wird es nur synchron in
 // Klick- oder Tasten-Handlern fokussiert (`focusNow`) – der einzige verlässliche Weg auf iOS.
-// Weil es dasselbe Feld bleibt, bleibt am Handy auch die Tastatur von Karte zu Karte offen.
+// Weil es dasselbe Feld bleibt, bleibt am Handy die Tastatur beim Weitertippen offen; die Eingabetaste schließt sie am Touch-Gerät, sobald die
+// Lücke gesperrt ist (Ergebnis da), damit Knöpfe erreichbar sind (Emrah 05.11.2026, siehe unten).
 //
 // Bedienung der Lücke (UX-Neuanfang 02.11.2026, Teil A): Der Cursor ist frei. Pfeile, Pos1/Ende, Shift-Markieren, Strg/Cmd+A,
 // Einfügen, Rücktaste und Entf wirken an der Cursorstelle (das native Feld rechnet, die Lücke zeichnet Cursor und Markierung).
@@ -57,6 +59,11 @@ export function isGapInput(el: EventTarget | null): boolean {
 }
 
 type Box = { top: number; left: number; width: number; height: number };
+
+/** Einzeilige Textfelder, deren Eingabetaste am Touch-Gerät die Tastatur schließt. */
+const TEXT_TYPES: ReadonlySet<string> = new Set(['text', 'search', 'email', 'url', 'tel', '']);
+/** Wartezeit bis zum Schließen: Prüfen und Weiter haben dann den Zustand gesetzt. */
+const ENTER_BLUR_MS = 120;
 
 /** Code-Einheiten-Index → Zeichen-Index (Code-Punkte). */
 function toCp(value: string, unit: number): number {
@@ -217,6 +224,31 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
   const getInput = useCallback(() => input.current, []);
   const getGap = useCallback(() => target.current?.el ?? null, []);
   useKeepGapVisible(getInput, getGap);
+
+  // Emrah 05.11.2026: „Wenn ich auf der Tastatur auf Enter drücke an Touch-Geräten, soll sie einklappen, weil ich sonst nicht auf die Knöpfe
+  // komme.“ Am Touch-Gerät schließt die Eingabetaste nach ihrer Wirkung (Prüfen, Weiter, Absenden) die Bildschirmtastatur – für JEDES
+  // einzeilige Eingabefeld der App. Ausnahmen: die Lücke bleibt offen, solange sie nicht gesperrt ist (Hinweis „noch einmal versuchen“:
+  // weitertippen ohne neues Antippen); ein mehrzeiliges Feld behält Enter als Zeilenumbruch, außer es hat Enter selbst als Absenden genommen.
+  useEffect(() => {
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== 'Enter' || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.isComposing || inputProfile() !== 'touch') return;
+      const el = e.target;
+      if (el instanceof HTMLTextAreaElement) {
+        if (!e.defaultPrevented) return;
+      } else if (!(el instanceof HTMLInputElement) || !TEXT_TYPES.has(el.type)) return;
+      // Erst nach der Wirkung: Prüfen sperrt die Lücke bzw. zeigt das Ergebnis; ein neues Feld (nächste Karte) hat dann schon den Fokus.
+      window.setTimeout(() => {
+        if (document.activeElement !== el) return;
+        if (el === input.current) {
+          const t = target.current;
+          if (t && !t.locked?.()) return;
+        }
+        el.blur();
+      }, ENTER_BLUR_MS);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Beim Wechsel zwischen Bildschirmen bleibt das Feld eingehängt; ohne Ziel ruht es im Bild.
   useEffect(() => {
