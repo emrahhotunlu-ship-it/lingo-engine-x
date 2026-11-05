@@ -267,8 +267,22 @@ html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secon
     font-size: 16px;
     animation: lx-band-up 220ms var(--ease-spring) backwards;
   }
-  html:has(.lx-hintband[data-tone='near']) #main {
+  html:not([data-actionbar-inline]):has(.lx-hintband[data-tone='near']) #main {
     padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 4.5rem);
+  }
+  /* ux-reviewer W7 Nr. 3: Steht die Knopfzeile in der Karte (Touch-Gerät), gehört der Hinweis in die Karte unter den Satz, nicht an den
+     Bildschirmrand (dort lag er unter der Tastatur). */
+  html[data-actionbar-inline] .lx-hintband[data-tone='near'] {
+    position: static;
+    min-height: 0;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 15px;
+    animation: none;
+  }
+  html[data-actionbar-inline] .lx-hintband[data-tone='near'] > [data-testid='hint-line'] {
+    font-size: 15px;
+    line-height: 20px;
   }
 }
 .lx-hintband > [data-testid='hint-line'] {

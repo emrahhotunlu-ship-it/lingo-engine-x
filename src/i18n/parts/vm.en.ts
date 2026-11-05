@@ -19,6 +19,11 @@ export const vmEn = {
   vmLinePracticed: 'practicing:',
 
   // Why
+  vmWhyMeanOk: '{word} ({pos}) means here: {de}.',
+  vmWhyMeanOkNoPos: '{word} means here: {de}.',
+  vmWhyMeanWrong: '“{given}” isn’t it. {word} ({pos}) means here: {de}.',
+  vmWhyMeanWrongNoPos: '“{given}” isn’t it. {word} means here: {de}.',
+  vmWhyMeanDunno: 'No problem: {word} means {de} here. It’ll come back soon.',
   vmWhyMeaning: '{answer} = {de} ({pos}).',
   vmWhyMeaningNoPos: '{answer} = {de}.',
   vmWhyGap: 'Correct. The word next to the gap is already in the sentence. Just type {answer}.',
@@ -178,6 +183,7 @@ export const vmEn = {
   vmRsStageOnly: 'Level {lv} of 7.',
   vmRsTrack_use: 'Use',
   vmRsTrack_know: 'Understand',
+  vmMeaningPh: 'Meaning in German',
   vmUnfairDone: 'Thanks, reported. This answer does not count.',
   vmUnfairAgain: 'Thanks, reported. The word comes back later in a different sentence.',
   vmUnfairCounts: 'Thanks, reported. The answer still counts; the task will be checked.',

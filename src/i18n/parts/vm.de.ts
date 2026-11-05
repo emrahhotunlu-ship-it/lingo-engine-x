@@ -19,6 +19,11 @@ export const vmDe = {
   vmLinePracticed: 'geübt wird:',
 
   // Warum
+  vmWhyMeanOk: '{word} ({pos}) heißt hier: {de}.',
+  vmWhyMeanOkNoPos: '{word} heißt hier: {de}.',
+  vmWhyMeanWrong: '„{given}“ trifft es nicht. {word} ({pos}) heißt hier: {de}.',
+  vmWhyMeanWrongNoPos: '„{given}“ trifft es nicht. {word} heißt hier: {de}.',
+  vmWhyMeanDunno: 'Kein Problem: {word} heißt hier {de}. Es kommt bald wieder.',
   vmWhyMeaning: '{answer} = {de} ({pos}).',
   vmWhyMeaningNoPos: '{answer} = {de}.',
   vmWhyGap: 'Richtig. Das Wort neben der Lücke steht schon im Satz, in die Lücke gehört nur {answer}.',
@@ -178,6 +183,7 @@ export const vmDe = {
   vmRsStageOnly: 'Stufe {lv} von 7.',
   vmRsTrack_use: 'Benutzen',
   vmRsTrack_know: 'Verstehen',
+  vmMeaningPh: 'Bedeutung auf Deutsch',
   vmUnfairDone: 'Danke, gemeldet. Diese Antwort zählt nicht.',
   vmUnfairAgain: 'Danke, gemeldet. Das Wort kommt später in einem anderen Satz wieder.',
   vmUnfairCounts: 'Danke, gemeldet. Die Antwort zählt trotzdem, die Aufgabe wird geprüft.',

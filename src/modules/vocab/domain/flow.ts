@@ -268,6 +268,7 @@ export function previewOf(x: {
     moreSentences: m.moreSentences,
     col: m.col,
     ...(x.meaningOf && m.mode !== 'meaning' ? { meaningOf: x.meaningOf } : {}),
+    ...(m.mode === 'meaning' ? { meaning: true } : {}),
   });
 }
 

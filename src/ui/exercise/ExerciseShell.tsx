@@ -540,12 +540,15 @@ export function ExerciseShell(props: ExerciseShellProps) {
   if (feedback) {
     result = (
       <>
-        <div data-block="verdict" className="flex flex-col gap-3">
-          {feedback.head && <div data-slot="head">{feedback.head}</div>}
-          {feedback.right && <div data-slot="right">{feedback.right}</div>}
-          {comparisonNode}
-          {choiceNode}
-        </div>
+        {/* ux-reviewer W7 Nr. 6: leere Hülle nicht zeichnen (sie kostete einen Abstand ohne Inhalt). */}
+        {(feedback.head || feedback.right || comparisonNode || choiceNode) && (
+          <div data-block="verdict" className="flex flex-col gap-3">
+            {feedback.head && <div data-slot="head">{feedback.head}</div>}
+            {feedback.right && <div data-slot="right">{feedback.right}</div>}
+            {comparisonNode}
+            {choiceNode}
+          </div>
+        )}
         {explainNode}
         {feedback.tail && (
           <div className="flex flex-col gap-1.5" data-slot="tail">
@@ -643,7 +646,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
                 <div data-slot="prompt" className="lx-t-prompt">
                   {prompt}
                 </div>
-                <div ref={answerRef} data-slot="answer">
+                <div ref={answerRef} data-slot="answer" className="empty:hidden">
                   {answer}
                 </div>
               </>,

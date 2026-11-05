@@ -42,6 +42,10 @@ type Props = {
   reveal?: { solution: string; given: string | null } | null | undefined;
   /** Unterdrückt Haptik und Ton der Lücke (das Urteil übernimmt sie). Standard: aus, also wie bisher. */
   silent?: boolean | undefined;
+  /** Eigenes Feld statt Lücke im Satz (Bedeutungskarte, Emrah 05.11.2026): immer volle Breite, die Breite folgt nicht dem Text. */
+  fill?: boolean | undefined;
+  /** Sichtbarer Platzhalter, solange nichts getippt ist (nur mit `fill`; die Lücke im Satz bleibt leer). */
+  placeholder?: string | undefined;
 };
 
 type Flyer = { id: number; cid: number; ch: string; x: number; y: number; dx: number; dy: number; font: string };
@@ -66,7 +70,7 @@ function textWidth(text: string, font: string): number {
   return ctx.measureText(text).width;
 }
 
-export function KineticGap({ label, maxLength, state, busy = false, marks, mask, shown, onChange, onEnter, onKey, reveal, silent = false }: Props) {
+export function KineticGap({ label, maxLength, state, busy = false, marks, mask, shown, onChange, onEnter, onKey, reveal, silent = false, fill = false, placeholder }: Props) {
   const { t } = useT();
   const api = useHiddenInput();
   const reduce = useReducedMotion();
@@ -241,6 +245,13 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
     const i = inner.current;
     if (!g || !i) return;
     const em = parseFloat(getComputedStyle(g).fontSize) || 16;
+    if (fill) {
+      g.style.width = '100%';
+      i.style.flexWrap = 'wrap';
+      i.style.whiteSpace = '';
+      api.remeasure();
+      return;
+    }
     if (masked || revealed) {
       // K3 (Abgleich 04.11.2026): Die aufgedeckte Lösung brach in der Lücke um („trade-/off“), obwohl die Zeile Platz hatte.
       // Passt sie in die Zeile, bleibt sie in einer Zeile; nur zu lange Lösungen dürfen umbrechen.
@@ -277,7 +288,7 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
     if (typeof cur !== 'number' || reduce) width.set(target);
     else if (cur !== target) void animate(width, target, { type: 'spring', stiffness: 520, damping: 40 });
     api.remeasure();
-  }, [value, api, reduce, width, masked, revealed, shown]);
+  }, [value, api, reduce, width, masked, revealed, shown, fill]);
 
   // Sichtbarer Cursor: steht an der Cursorstelle des Felds, nur solange die Lücke den Fokus hat und eingibt.
   const showCaret = focused && !locked && !revealed && sel[0] === sel[1];
@@ -347,7 +358,8 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
         onFocus={() => api.focusNow()}
         data-masked={mask && !revealed ? '' : undefined}
         data-revealed={revealed || undefined}
-        style={{ width: mask || revealed ? 'auto' : width }}
+        style={{ width: fill ? '100%' : mask || revealed ? 'auto' : width }}
+        data-fill={fill || undefined}
         lang="en"
       >
         {rv?.given?.trim() && (
@@ -357,6 +369,11 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
           </span>
         )}
         <span ref={inner} className="lx-gap-inner" data-settled={locked || undefined}>
+          {fill && placeholder && !value && !rv && !locked ? (
+            <span className="lx-gap-ph" aria-hidden="true">
+              {placeholder}
+            </span>
+          ) : null}
           {rv ? (
             <motion.span
               className="lx-gap-reveal"

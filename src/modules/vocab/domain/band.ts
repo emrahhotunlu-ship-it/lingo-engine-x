@@ -65,6 +65,8 @@ export type BandIn = {
   col?: unknown;
   /** Bedeutung des getippten Worts (Wörterbuch von außen), für „anderes Wort“. */
   meaningOf?: (w: string) => string | null;
+  /** Bedeutungskarte: `answer` = deutsche Bedeutung, `de` = englisches Wort. Eigene Warum-Sätze (ux-reviewer W7 Nr. 2). */
+  meaning?: boolean;
 };
 
 const HARD_GRADE = 2;
@@ -124,10 +126,18 @@ const rule = (key: string, vars: Record<string, string>): Why => ({ kind: 'rule'
  * falscher Freund → Lehrer-Zeile der Charge, wenn vorhanden (nur Deutsch); anderes Wort → was das getippte Wort heißt (Kap. 5 Nr. 11);
  * sonst Bedeutungszeile.
  */
-export function whyOf(x: Pick<BandIn, 'check' | 'given' | 'answer' | 'de' | 'pos' | 'teach' | 'lang' | 'meaningOf'>): Why {
+export function whyOf(x: Pick<BandIn, 'check' | 'given' | 'answer' | 'de' | 'pos' | 'teach' | 'lang' | 'meaningOf' | 'meaning'>): Why {
   const { check, answer, de, pos, teach } = x;
   const given = check.hit ?? x.given.trim();
   const v = { answer, de, given, ...(pos ? { pos } : {}) };
+  // Bedeutungskarte (Emrah 05.11.2026 „Erklärung und Logik schlecht“): kein „passt nicht in diesen Satz“ – ein deutsches Wort gehört nie in
+  // den englischen Satz. Gesagt wird, was das englische Wort hier bedeutet.
+  if (x.meaning) {
+    const mv = { word: de, de: answer, given, ...(pos ? { pos } : {}) };
+    if (check.outcome === 'dunno') return rule('vmWhyMeanDunno', mv);
+    if (check.outcome === 'wrong' || check.outcome === 'other') return rule(pos ? 'vmWhyMeanWrong' : 'vmWhyMeanWrongNoPos', mv);
+    return rule(pos ? 'vmWhyMeanOk' : 'vmWhyMeanOkNoPos', mv);
+  }
   const teachWhy = x.lang === 'de' && teach.why ? ({ kind: 'teach', text: teach.why } as const) : null;
   const meaning = pos ? rule('vmWhyMeaning', v) : rule('vmWhyMeaningNoPos', v);
   switch (check.outcome) {

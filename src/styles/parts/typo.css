@@ -67,6 +67,11 @@ html:root body .lx-exercise .lx-kword-sm {
   font-weight: 650;
   letter-spacing: -0.01em;
 }
+/* ux-reviewer W7 Nr. 9: auf der Einführung ist das Stichwort die eine große Größe der Karte (vorher so groß wie Satz und Bedeutung). */
+html:root body .lx-exercise .lx-kword:not(.lx-kword-sm) {
+  font-size: 32px;
+  line-height: 40px;
+}
 
 /* Titel: Urteil im Streifen, Bedeutung auf der Einführung */
 html:root body .lx-exercise .lx-kstrip [data-testid='verdict'],

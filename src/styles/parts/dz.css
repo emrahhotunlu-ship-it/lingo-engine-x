@@ -514,3 +514,27 @@ html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
   border-top: 0;
   padding-top: 0;
 }
+/* Bedeutungskarte (Emrah 05.11.2026 „da wo ich tippen soll ist es am kleinsten“): eigenes Feld in voller Breite, Platzhalter sichtbar,
+   die eigene Antwort steht nach dem Prüfen über der Lösung (nie daneben gequetscht). */
+.lx-gap[data-fill] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 1.8em;
+  margin: 0;
+  padding: 0.15em 0.35em;
+  white-space: normal;
+}
+.lx-gap[data-fill] .lx-gap-inner {
+  width: 100%;
+  max-width: 100%;
+}
+.lx-gap[data-fill] .lx-gap-given {
+  flex-basis: 100%;
+}
+.lx-gap-ph {
+  color: var(--lx-fg-subtle);
+  font-weight: 400;
+  pointer-events: none;
+}

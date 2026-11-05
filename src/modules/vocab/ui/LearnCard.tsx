@@ -130,9 +130,11 @@ function ListenButton({ parts, testId, onSpent }: { parts: readonly string[]; te
   };
   return (
     <div>
-      <Button variant="quiet" icon="speaker" onClick={() => void play()} data-testid={testId} data-parts={parts.length}>
-        {t('vmListen')}
-      </Button>
+      {/* ux-reviewer W7 Nr. 9: dieselbe Kapsel wie „Anhören“ beim Wort (vorher zwei Stile, am Monitor kaum sichtbar). */}
+      <button type="button" className="lx-kspeak" onClick={() => void play()} data-testid={testId} data-parts={parts.length}>
+        <Icon name="speaker" size={18} aria-hidden="true" />
+        <span>{t('vmListen')}</span>
+      </button>
     </div>
   );
 }
@@ -534,6 +536,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       shown={shown}
       reveal={reveal}
       silent
+      fill={card.mode === 'meaning'}
+      placeholder={card.mode === 'meaning' ? t('vmMeaningPh') : undefined}
       onChange={(v, info) => {
         typed.current = v;
         if (info.firstKey && firstKeyAt.current === null) {
@@ -630,7 +634,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     ) : null;
     // Emrah 05.11.2026: „das Eingabefeld ist das kleinste auf der Karte“ – volle Breite, in der Schriftgröße des Satzes.
     answer = (
-      <div className="lx-t-prompt w-full [&_.lx-gap]:flex [&_.lx-gap]:w-full [&_.lx-gap]:min-h-[1.8em] [&_.lx-gap]:items-center [&_.lx-gap-inner]:w-full" data-testid="vm-meaning-field">
+      <div className="lx-t-prompt w-full" data-testid="vm-meaning-field">
         {gap}
       </div>
     );
@@ -732,12 +736,18 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
 function tutorOf(v: BandView, t: T): ReactNode {
   if (v.kind === 'intro' || v.band.tone !== 'no' || !v.given.trim() || v.choice) return null;
   const g = gapText(v.card);
-  const prompt = g ? `${g.text.slice(0, g.start)}___${g.text.slice(g.end)}` : v.card.de || v.card.answer;
+  // Bedeutungskarte (ux-reviewer W7 Nr. 2): Claude bekommt den ganzen Satz und die Frage nach der Bedeutung, nicht einen Lückensatz.
+  const meaning = v.card.mode === 'meaning';
+  const prompt = meaning
+    ? `What does “${v.card.answer}” mean in this sentence? Answer in German. Sentence: ${g?.text ?? v.card.answer}`
+    : g
+      ? `${g.text.slice(0, g.start)}___${g.text.slice(g.end)}`
+      : v.card.de || v.card.answer;
   const why = v.band.why.kind === 'teach' ? v.band.why.text : whyText(t, v.band.why);
   return (
     <TutorButton
       taskKey={`vm:${v.card.path}:${v.n}:${v.given}`}
-      vars={{ topic: v.card.answer, prompt, answer: v.card.answer, given: v.given, pattern: null }}
+      vars={{ topic: v.card.answer, prompt, answer: meaning ? v.card.de : v.card.answer, given: v.given, pattern: null }}
       kind="word"
       word={{ en: v.card.answer, de: v.card.de, pos: v.card.pos ?? '', other: null, falseFriend: v.card.contrast?.ff ?? null }}
       store={{ kind: 'vocab', path: v.card.path }}
@@ -929,7 +939,8 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
     ) : null);
   // Die Lösung steht nur einmal: zeigt die Lücke sie schon (Lösung, anderes Wort), entfällt die Zeile „Richtig: …“ (Kap. 15, UX-Prüfung V3 Nr. 5).
   // Beim Buchstabenvergleich (Fast richtig) steht nur der Vergleich, ohne „→ Richtig: …“: die Lücke zeigt die Lösung schon (UX-Nachprüfung V3).
-  const inGap = b.line.kind === 'answer' || b.line.kind === 'swap';
+  // ux-reviewer W7 Nr. 7: bei richtig zeigt die grüne Lücke die Antwort schon – „Du: … ✓“ wäre die zweite Aussage derselben Sache.
+  const inGap = b.line.kind === 'answer' || b.line.kind === 'swap' || b.line.kind === 'ok';
   return {
     verdict,
     title,

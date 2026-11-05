@@ -145,7 +145,7 @@ function Item({ it, body, labeled }: { it: BlockItem; body: (it: BlockItem) => R
 function Block({ name, title, items, body, before, after }: { name: 'why' | 'remember'; title: string; items: BlockItem[]; body: (it: BlockItem) => ReactNode; before?: ReactNode; after?: ReactNode }) {
   if (!items.length && !before && !after) return null;
   return (
-    <section className="-mx-4 flex flex-col gap-2 border-t border-line px-4 pt-4" data-block={name} aria-label={title}>
+    <section className="flex flex-col gap-2 border-t border-line pt-4" data-block={name} aria-label={title}>
       <h3 className="lx-eyebrow m-0 text-muted">{title}</h3>
       {before}
       {items.length > 0 && (
