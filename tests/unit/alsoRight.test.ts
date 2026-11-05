@@ -101,7 +101,8 @@ describe('„Auch richtig“ (Art other)', () => {
   it('shortWhy: erster Satz, gekürzt', () => {
     expect(shortWhy('Früher so, heute nicht mehr. Dann kommt mehr.')).toBe('Früher so, heute nicht mehr');
     expect(shortWhy('')).toBe('');
-    expect(shortWhy('a '.repeat(100), 40).endsWith('…')).toBe(true);
+    // Nie mit „…“ gekürzt (Emrah 05.11.2026).
+    expect(shortWhy(`${'a '.repeat(100)}b.`)).toBe(`A ${'a '.repeat(99)}b`);
   });
 
   it('Schreibweg: „Auch richtig“ ändert weder p noch Muster, schreibt aber seen und nie einen Fehler', () => {

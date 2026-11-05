@@ -177,6 +177,9 @@ function retire(section: 'today' | 'screens' | 'extra', a: unknown, now: Record<
       const old = typeof e.stand === 'string' ? e.stand.split(' ') : null;
       const now = cur.stand.split(' ');
       if (old === null || (old.length === 4 && now.includes(old[0]!)) || (old.length === 3 && now[1] === '0')) e = { ...e, stand: cur.stand };
+      // K12 (Emrah 05.11.2026): Ohne Serie steht „Heute · beginnt deine Serie“ statt „0 Tage in Folge“. Nur dort, wo die alte Serie 0 war und
+      // alle übrigen Zahlen gleich bleiben, entfällt diese eine 0.
+      else if (old && old[0] === '0' && old.slice(1).join(' ') === cur.stand) e = { ...e, stand: cur.stand };
     }
     out[key] = e;
   }

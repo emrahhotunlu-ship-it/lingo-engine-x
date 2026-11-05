@@ -54,7 +54,7 @@ export const axDe = {
   axTo_colleague: 'Kollegin, die das Meeting verpasst hat',
   axTo_procurement: 'Einkauf',
   axTo_investor: 'Investor',
-  axTo_clientDirector: 'An: Kunde ({name}) · Kopie: deine Direktorin',
+  axTo_clientDirector: 'An: Kundin ({name}) · Kopie: deine Direktorin',
   axBarReply: 'Antworten',
   axBarWrite: 'Neue Mail',
   axBarSummary: 'Kurzfassung',

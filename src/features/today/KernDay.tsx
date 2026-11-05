@@ -123,9 +123,11 @@ export function KernDayCard({
                     <p className="lx-kh-st-s">{t('vhStepDone')}</p>
                   ) : r.sub ? (
                     <p className="lx-kh-st-s lx-v-num">
+                      {/* Grund und Minuten getrennt: `reason` nennt nur den Grund (Kennzahl „rev“ des Golden-Tests), die Minuten stehen daneben. */}
                       <span data-testid={real ? 'reason' : undefined} data-why={r.whyKey}>
-                        {!r.min ? r.sub : t('kernStepSub', { why: r.sub, min: r.min })}
+                        {r.sub}
                       </span>
+                      {r.min ? <span data-testid={real ? 'step-min' : undefined}>{` · ${t('kernAbout', { min: r.min })}`}</span> : null}
                     </p>
                   ) : !now && r.min ? (
                     <p className="lx-kh-st-s lx-v-num">{t('kernAbout', { min: r.min })}</p>

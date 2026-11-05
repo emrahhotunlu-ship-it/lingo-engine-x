@@ -20,17 +20,17 @@ const REPLY: Groups = [
 /** Je Mail-Situation (mail-situations.json) Einstieg, Hauptteil, Schluss – passend zur Aufgabe, ohne ihre Zielmuster und Wendungen. */
 const SITUATION: Readonly<Record<string, readonly [string, string, string]>> = {
   ms01: ["Ahead of Friday's meeting, here is a short update on …", 'The most important result of the archive migration is …', 'If the committee has any questions, …'],
-  ms02: ['Thank you for your message about the onboarding and …', 'The main reason for the delay is …', 'Please let me know which day works best for …'],
+  ms02: ['Thank you for your message about the onboarding …', 'The main reason for the delay is …', 'Please let me know which day works best for …'],
   ms03: ['You asked when the new invoicing system will be ready, so …', 'The part that will take the most time is …', 'The date I can commit to is …'],
-  ms04: ['I would like to invite you to a workshop on …', 'The session itself will cover …', 'To prepare for the workshop, we need …'],
+  ms04: ['I would like to invite you to a workshop on …', 'During the session, …', 'To prepare for the workshop, we need …'],
   ms05: ['Thank you for your request regarding …', 'We have looked carefully at your request, and …', 'We value our partnership and …'],
   ms06: ['As promised, here is my short review of …', 'The biggest problem during the pilot was …', 'For our next project, my main recommendation is …'],
-  ms07: ["Here is a short summary of yesterday's outage, which …", 'Our first step after the outage was to …', 'To avoid a similar outage in the future, …'],
+  ms07: ["Here is a short summary of yesterday's outage, which …", 'Regarding our immediate response, …', 'To avoid a similar outage in the future, …'],
   ms08: ['Since you missed the budget meeting, here is …', 'The first topic on the agenda was …', 'If anything is unclear, just let me know and …'],
-  ms09: ['I want to give you an early warning about …', 'Our vendor has told us that …', "Let's discuss the options briefly before …"],
+  ms09: ['I wanted to give you a heads-up about …', 'Our vendor has told us that …', "Let's discuss the options briefly before …"],
   ms10: ['Thank you for asking me to compare …', 'The main difference between the two offers is …', 'If you agree with my recommendation, …'],
-  ms11: ['I am pleased to share our results for …', 'Our biggest success this quarter was …', 'In the coming quarter, we plan to …'],
-  ms12: ['Thank you for your message, and I am sorry that …', 'Here is what we have done since your message: …', 'I will personally keep you informed about …'],
+  ms11: ['I am pleased to share our results for …', 'Turning to the numbers, …', 'In the coming quarter, we plan to …'],
+  ms12: ['Thank you for your message, and I am sorry that …', 'Regarding the delivery itself, …', 'I will personally keep you informed about …'],
 };
 
 /** Ersatz für eine unbekannte Situation. */
