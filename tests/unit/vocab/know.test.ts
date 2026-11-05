@@ -111,8 +111,8 @@ describe('Reihenfolge und Lauf', () => {
     ['chunk/e', { en: 'epsilon' }],
   ]);
 
-  it('Plan zuerst, dann neue nach order, dann der Rest; ohne Bedarf und Wendungen nicht', () => {
-    expect(knowOrder(docs, ['vocab/a'], T)).toEqual(['vocab/a', 'vocab/c', 'vocab/b']);
+  it('Plan zuerst, dann neue nach order, dann der Rest (Wendungen zuletzt, W4); ohne Bedarf nicht', () => {
+    expect(knowOrder(docs, ['vocab/a'], T)).toEqual(['vocab/a', 'vocab/c', 'vocab/b', 'chunk/e']);
   });
 
   it('fillKnow: fragt im Hintergrund, speichert nur Geprüftes, Marke auch ohne Ergebnis; ohne bg nichts', async () => {
@@ -142,8 +142,10 @@ describe('Reihenfolge und Lauf', () => {
     const n = await fillKnow({ ai, writer: writer as never, docs, planPaths: [], ctx: 'DMS', nowMs: T, calls: 1 });
     expect(prompts).toHaveLength(1);
     expect(prompts[0]).toContain('word=gamma');
-    expect(n).toBe(3);
-    expect(writes.map(([p]) => p).sort()).toEqual(['vocab/a', 'vocab/b', 'vocab/c']);
+    expect(n).toBe(4);
+    expect(writes.map(([p]) => p).sort()).toEqual(['chunk/e', 'vocab/a', 'vocab/b', 'vocab/c']);
+    // Wendung: nur Sätze, nie Wortpartner.
+    expect(writes.find(([p]) => p === 'chunk/e')![1].col).toBeUndefined();
     expect(writes.every(([, u]) => (u.kn as Doc).pv === 'word-know@1')).toBe(true);
     expect(await fillKnow({ ai: { ...ai, bg: undefined }, writer: writer as never, docs, planPaths: [], ctx: '', nowMs: T })).toBe(0);
   });

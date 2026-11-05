@@ -170,7 +170,7 @@ function KnowSection({ path, doc, head, partners, isChunk, ai }: { path: string;
   const sents = useMemo(() => sentencesOf(doc, now, null, { read: true }).filter((x) => x.src !== 'ex'), [doc, now]);
   const aiSents = useMemo(() => new Set((Array.isArray(doc.sb) ? doc.sb : []).filter((x): x is Doc => !!x && typeof x === 'object' && (x as Doc).src === 'ai').map((x) => str(x.en))), [doc]);
   const aiCols = useMemo(() => new Set((Array.isArray(doc.col) ? doc.col : []).filter((x): x is Doc => !!x && typeof x === 'object' && (x as Doc).ai === 1).map((x) => str(x.p).toLowerCase())), [doc]);
-  const canFill = !!ai && !isChunk && ai.ready() && needsKnow(doc);
+  const canFill = !!ai && ai.ready() && needsKnow(doc, isChunk);
   const fill = (): void => {
     const writer = getWriter();
     if (!ai || !writer || busy === 'busy') return;

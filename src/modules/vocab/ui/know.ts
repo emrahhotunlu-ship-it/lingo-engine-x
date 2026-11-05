@@ -23,9 +23,13 @@ export const KNOW_CALLS_PER_RUN = 3;
 
 let inflight = false;
 
-/** Nur `vocab/*` (Wendungen `chunk/*` haben kein `col`/`sb`): ein Wort mit Stichwort, nicht ausgeblendet, mit Bedarf und nicht kürzlich gefragt. */
+const isChunk = (path: string): boolean => path.startsWith('chunk/');
+const headOf = (path: string, doc: Doc): string => str(isChunk(path) ? doc.en : doc.word);
+
+/** Wörter (`vocab/*`) und Wendungen (`chunk/*`, W4: nur Sätze) mit Stichwort, nicht ausgeblendet, mit Bedarf und nicht kürzlich gefragt. */
 function candidate(path: string, doc: Doc | undefined, nowMs: number): boolean {
-  return !!doc && path.startsWith('vocab/') && !!str(doc.word) && doc.hidden !== true && needsKnow(doc) && !knowRecent(doc, nowMs);
+  if (!doc || !(path.startsWith('vocab/') || isChunk(path)) || !headOf(path, doc)) return false;
+  return doc.hidden !== true && needsKnow(doc, isChunk(path)) && !knowRecent(doc, nowMs);
 }
 
 /** Reihenfolge: Plan von heute (wie eingefroren), dann neue Wörter nach `order`, dann der Rest. Jeder Pfad einmal. */
@@ -38,9 +42,10 @@ export function knowOrder(docs: ReadonlyMap<string, Doc>, planPaths: readonly st
     if (candidate(p, docs.get(p), nowMs)) out.push(p);
   };
   for (const p of planPaths) take(p);
-  const rest = [...docs.entries()].filter(([p]) => !seen.has(p) && p.startsWith('vocab/'));
-  const fresh = rest.filter(([, d]) => lexOf(d)?.intro == null).sort((a, b) => (Number(a[1].order) || 0) - (Number(b[1].order) || 0));
+  const rest = [...docs.entries()].filter(([p]) => !seen.has(p) && (p.startsWith('vocab/') || isChunk(p)));
+  const fresh = rest.filter(([p, d]) => !isChunk(p) && lexOf(d)?.intro == null).sort((a, b) => (Number(a[1].order) || 0) - (Number(b[1].order) || 0));
   for (const [p] of fresh) take(p);
+  for (const [p] of rest) if (!isChunk(p)) take(p);
   for (const [p] of rest) take(p);
   return out;
 }
@@ -48,9 +53,9 @@ export function knowOrder(docs: ReadonlyMap<string, Doc>, planPaths: readonly st
 function cardsOf(paths: readonly string[], docs: ReadonlyMap<string, Doc>): { req: KnowReqCard; card: KnowCard; path: string }[] {
   return paths.map((path, i) => {
     const doc = docs.get(path)!;
-    const head = str(doc.word);
+    const head = headOf(path, doc);
     const lex = lexOf(doc);
-    const wrong = teachOf(head).colloc ?? [];
+    const wrong = isChunk(path) ? [] : (teachOf(head).colloc ?? []);
     const ex = plainEx(str(doc.ex));
     const have = [
       ex,
@@ -70,7 +75,7 @@ function cardsOf(paths: readonly string[], docs: ReadonlyMap<string, Doc>): { re
 async function save(writer: Writer, path: string, patchOf: (cur: Doc) => Doc | null): Promise<boolean> {
   let wrote = false;
   await writer.transform(path, (cur) => {
-    if (!cur || typeof cur.word !== 'string') return null;
+    if (!cur || (typeof cur.word !== 'string' && typeof cur.en !== 'string')) return null;
     const patch = patchOf(cur);
     if (!patch) return null;
     wrote = true;
@@ -106,7 +111,8 @@ export async function fillKnow(r: KnowRun): Promise<number> {
       const byId = new Map<string, unknown>();
       for (const it of out.items) if (isObj(it) && typeof it.id === 'string') byId.set(it.id, it);
       for (const x of cards) {
-        const a = acceptKnow(byId.get(x.card.id) ?? null, x.card, r.nowMs, KNOW_PV);
+        const a0 = acceptKnow(byId.get(x.card.id) ?? null, x.card, r.nowMs, KNOW_PV);
+        const a = isChunk(x.path) ? { ...a0, col: [] } : a0;
         try {
           if (await save(r.writer, x.path, (cur) => knowPatch(cur, a, r.nowMs, KNOW_PV)) && (a.col.length || a.sb.length)) saved++;
         } catch (err) {
@@ -123,11 +129,12 @@ export async function fillKnow(r: KnowRun): Promise<number> {
 /** Ein einzelnes Wort sofort ergänzen (Wortseite „Fehlt etwas? Jetzt ergänzen“), über das Nutzer-Tor `ask`. `true` = etwas gespeichert. */
 export async function fillKnowOne(r: Omit<KnowRun, 'planPaths' | 'calls'> & { path: string }): Promise<boolean> {
   const doc = r.docs.get(r.path);
-  if (!doc || !str(doc.word)) return false;
+  if (!doc || !headOf(r.path, doc)) return false;
   const [x] = cardsOf([r.path], r.docs);
   const out = await r.ai.ask(wordKnow, { cards: [x!.req], ctx: r.ctx }, r.signal ?? new AbortController().signal);
   const it = out.items.find((i) => isObj(i) && i.id === x!.card.id) ?? out.items[0] ?? null;
-  const a = acceptKnow(isObj(it) ? { ...it, id: x!.card.id } : null, x!.card, r.nowMs, KNOW_PV);
+  const a0 = acceptKnow(isObj(it) ? { ...it, id: x!.card.id } : null, x!.card, r.nowMs, KNOW_PV);
+  const a = isChunk(r.path) ? { ...a0, col: [] } : a0;
   const wrote = await save(r.writer, r.path, (cur) => knowPatch(cur, a, r.nowMs, KNOW_PV));
   return wrote && (a.col.length > 0 || a.sb.length > 0);
 }

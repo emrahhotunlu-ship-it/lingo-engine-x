@@ -80,6 +80,7 @@ export const wordKnow: PromptTemplate<KnowVars, KnowOut> = {
       'Reply with only one JSON object, no other text, exactly this shape:',
       KNOW_EXAMPLE,
       'Rules:',
+      '- A card whose word is a longer phrase (several words) needs no collocations: give col as an empty list and only the 2 sentences, using the phrase as a whole.',
       '- One item per card, with the same id. Always use the word with the meaning and part of speech given on the card. Never switch to another sense or part of speech, not even in a collocation (for the noun "approach" never use the verb "approach a client").',
       '- The example answer above only shows the format. Never reuse its sentences or collocations for another card.',
       '- col: exactly 3 collocations the learner can reuse in other conversations: fixed combinations such as verb + noun, adjective + noun, adverb + adjective or a fixed phrase (as listed in a collocations dictionary), each 2 to 5 words and containing the card word. Never a random sentence fragment, never a combination that ends with a preposition, never one listed under "never use".',

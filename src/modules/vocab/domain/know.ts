@@ -196,13 +196,14 @@ export function acceptKnow(raw: unknown, card: KnowCard, nowMs: number, pv: stri
 }
 
 /** Braucht das Wort-Dokument Wissen? Ohne Wortpartner oder mit weniger als 3 Sätzen (Ursprung + Claude + Satzbank, auch in Quarantäne). */
-export function needsKnow(doc: Obj): boolean {
+export function needsKnow(doc: Obj, chunk = false): boolean {
   if (doc.hidden === true) return false;
   const col = Array.isArray(doc.col) ? doc.col.filter((c) => isObj(c) && str(c.p)) : [];
   const sb = Array.isArray(doc.sb) ? doc.sb.filter((x) => isObj(x) && x.bad !== 1 && str(x.en)) : [];
   const wx = Array.isArray(doc.wx) ? doc.wx.filter((x) => isObj(x) && x.bad !== 1 && str(x.en)) : [];
   const sentences = (str(doc.ex) ? 1 : 0) + sb.length + wx.length;
-  return col.length === 0 || sentences < 3;
+  // Wendungen (`chunk/*`, W4) brauchen keine Wortpartner, nur Sätze.
+  return (!chunk && col.length === 0) || sentences < 3;
 }
 
 /**
