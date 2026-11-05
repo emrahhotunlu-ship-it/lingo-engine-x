@@ -231,6 +231,11 @@ export type AnswerEvent = {
   ctx: 'rev' | 'duty' | 'xtra';
   /** Lektion, aus deren Wörter-Schritt die Antwort stammt (Phase 2, D17). */
   lesson?: string;
+  /**
+   * M0: Beleg aus einem anderen Bereich bei eingeschaltetem Wörter-Modul (`reportEvidence`): die Karte wurde NICHT gebucht, die Zeile in
+   * `log/<tag>` trägt `ext: true` und wird beim Nachholen des Moduls nie als Antwort nachgespielt.
+   */
+  ext?: true;
   colIndex?: number;
   /** Schlüssel des gezeigten Satzes (`sentKey`, V1): kommt als `s` in `hist`, damit derselbe Satz nicht zweimal in Folge kommt. */
   sx?: string;

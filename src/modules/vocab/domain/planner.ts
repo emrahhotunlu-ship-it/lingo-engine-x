@@ -349,9 +349,12 @@ export function mayPlan(lex: Lex, nowMs: number): boolean {
 }
 
 /** Darf ein Beleg aus einem anderen Bereich den Plan verändern? (plan.md §2.2, `reportEvidence`) */
-export function evidencePlans(lex: Lex | null, e: { kind: 'seen' | 'recalled' | 'used'; typed: boolean; cued: boolean; t: number }): boolean {
+export function evidencePlans(lex: Lex | null, e: { kind: 'seen' | 'recalled' | 'used'; typed: boolean; cued: boolean; t: number }, o: { inPlan?: boolean } = {}): boolean {
   if (!lex || lex.intro === null) return false;
   if (e.kind === 'seen' || !e.typed || e.cued) return false;
+  // M0 (Kap. 15, Widerspruchstest): Steht das Lexem im heute eingefrorenen Pflichtplan (`vmod/day`), bleibt es ein reiner Beleg. Sonst setzte die
+  // Buchung `lex.day` auf heute: die Pflicht zählte es als erledigt (`planDoneCount`), ohne dass es in der Pflichtrunde dran war.
+  if (o.inPlan) return false;
   if (lex.day === dayKey(e.t)) return false;
   const tr = lex.b ?? lex.u;
   return retr(tr, e.t) < 0.95;

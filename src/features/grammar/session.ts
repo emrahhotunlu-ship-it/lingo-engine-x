@@ -141,6 +141,8 @@ type State = {
   fixed?: boolean;
   /** Von `win` verdrängte Aufgaben (Tutor-Engine S3): kommen vorrangig in die freiwillige Wiederholung am Ende. */
   displaced?: GrammarTask[];
+  /** M0: Runde einer c1x-Art aus Praxis (freiwillig): kwt/err/wf-Antworten tragen `ext: 'c1x'` (gedeckelte BKT-Wirkung, `grammarWrite`). */
+  ext?: 'c1x' | null;
 };
 
 export type TestState = { topic: string; n: number; result: { c: number; n: number; ok: boolean } | null };
@@ -201,7 +203,7 @@ export type StartOpts = {
   pats?: readonly string[] | null;
   /** Kapitel-Arbeit: Übung statt Themen-Test (zu wenig Testaufgaben); die Runde zeigt vorn den Hinweis `pxKTestPrep`. */
   prep?: boolean;
-} & { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; /** Fertig gebaute Aufgaben (Kontrast-Runde, P49): freiwillig, nie Pflicht, nie Einführung. */ tasks?: readonly GrammarTask[]; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
+} & { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; /** M0: Herkunft Praxis (nur mit `kind`, nur freiwillig): Antworten tragen `ext`. */ ext?: 'c1x'; /** Fertig gebaute Aufgaben (Kontrast-Runde, P49): freiwillig, nie Pflicht, nie Einführung. */ tasks?: readonly GrammarTask[]; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
 
 /** Lemmata der Karten von heute (Gleichstand-Brecher der Rundenwahl); ohne Karten leer. */
 function safeWords(nowMs: number, plan: ReturnType<typeof useTodayPlan.getState>['plan']): string[] {
@@ -395,7 +397,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     before,
     patLog: [],
   };
-  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind), displaced: [] });
+  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null });
   tutorRoundStart(day, ctx === 'duty');
   return tasks.length ? firstKind({ tasks, intro }) : null;
 }
@@ -464,8 +466,12 @@ type Enriched = { a: GrammarAnswer; intro: State['intro']; tasks: GrammarTask[];
  * letzten Themen-Test-Antwort ebenfalls (`tt`). EINE Stelle für „Weiter“ und für das Buchen beim Verlassen (`bookGrammarLeft`) – sonst gingen
  * `vt`/`tt` verloren, wenn die Antwort beim Verbergen gebucht wurde (der spätere „Weiter“-Weg schreibt dann nicht mehr). Rein: ändert den Zustand nicht.
  */
+/** M0: c1x-Arten, deren Antworten aus einer Praxis-Runde `ext` tragen (kwt/err buchen nur Grammatik, wf nur Wörter). */
+const EXT_KINDS: ReadonlySet<C1Kind> = new Set<C1Kind>(['kwt', 'err', 'wf']);
+
 function enrichGrammar(s: State, a0: GrammarAnswer, repeating: boolean): Enriched {
-  let a = a0;
+  const kind = a0.task.c1?.kind;
+  let a = s.ext && kind && EXT_KINDS.has(kind) ? { ...a0, ext: s.ext } : a0;
   let intro = s.intro;
   let tasks = s.tasks;
   // Vortest: Mit der zweiten Antwort steht das Ergebnis fest und geht als `vt` mit dieser Antwort ins Thema.
@@ -689,14 +695,16 @@ export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day
   fixed?: boolean;
   displaced?: GrammarTask[];
   endedN?: number;
+  /** M0: Herkunft Praxis der c1x-Runde (fehlt bei älteren Ständen = keine). */
+  ext?: 'c1x' | null;
 };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}) };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN, ext } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}), ...(ext ? { ext } : {}) };
 }
 
 const legacyIntro = (topic: string): IntroState => ({ topic, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 });
@@ -719,6 +727,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     prep: false,
     fixed: !!(snap.test && typeof snap.test === 'object') || !!snap.fixed,
     displaced: Array.isArray(snap.displaced) ? snap.displaced : [],
+    ext: snap.ext === 'c1x' && snap.ctx === 'xtra' ? 'c1x' : null,
     active: true,
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),

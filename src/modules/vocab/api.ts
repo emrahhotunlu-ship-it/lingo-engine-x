@@ -177,28 +177,57 @@ export async function startSession(kind: SessionKind, o: { docs: Iterable<readon
 
 export type Evidence = { lexeme: string; kind: 'seen' | 'recalled' | 'used'; src: string; ok: boolean; typed: boolean; cued: boolean; text?: string; t: number };
 
+/** Umgebung eines Belegs: Schreibweg, Gerätekennung, Bestand, Profil und (Pflicht-Schutz) das eingefrorene `vmod/day`. */
+export type EvidenceCtx = { writer: Writer; device: string; docs: Iterable<readonly [string, Doc]>; profile: Doc | null; dayDoc?: Doc | null };
+
+/** Ohne mitgegebene Umgebung: `legacy` = der alte Weg des Aufrufers (z. B. `saveCard`); er läuft nur, wenn das Wörter-Modul aus ist. */
+export type EvidenceOpts = { legacy?: () => Promise<unknown> };
+
+/** Steht das Lexem im heute eingefrorenen Wörter-Plan (`vmod/day`)? */
+function inTodayPlan(dayDoc: Doc | null | undefined, lexeme: string, t: number): boolean {
+  if (!dayDoc || dayDoc.d !== dayKey(t) || !Array.isArray(dayDoc.plan)) return false;
+  return dayDoc.plan.some((x) => Array.isArray(x) && x[0] === lexeme);
+}
+
 /**
  * Die eine Meldefunktion für andere Bereiche (plan.md §2.2). Planwirkung nur, wenn: abgerufen oder benutzt, getippt, das Lexem war NICHT
- * sichtbar, an diesem Lerntag noch keine Planwirkung, Abrufwahrscheinlichkeit < 0,95. Dann richtig → Good, falsch → Again. Sonst nur ein Beleg
- * im Verlauf (N6). Liefert, ob der Plan verändert wurde.
+ * sichtbar, an diesem Lerntag noch keine Planwirkung, Abrufwahrscheinlichkeit < 0,95 und (M0, Kap. 15) das Lexem steht NICHT im heute
+ * eingefrorenen Pflichtplan – ein freiwilliger Beleg zählt nie zur Pflicht. Dann richtig → Good, falsch → Again. Sonst nur ein Beleg im Verlauf
+ * (N6). Jede Verlaufszeile trägt `FLAG.ext`. Liefert, ob der Plan verändert wurde.
+ *
+ * M0: Ohne `EvidenceCtx` holt die Tür Schreibweg, Gerät, Bestand, Profil und `vmod/day` selbst (nachgeladen: `ui/evidenceCtx`, nie statisch).
+ * Ist das Modul aus (`vocabModuleOn`), läuft nur `legacy` (der alte Weg bleibt der Rückweg). Ist es an, läuft `legacy` nie: ein zusätzliches
+ * `saveCard` ließe das Nachholen (`doc.last > lex.sync`) die Antwort ein zweites Mal buchen.
  */
-export async function reportEvidence(e: Evidence, o: { writer: Writer; device: string; docs: Iterable<readonly [string, Doc]>; profile: Doc | null }): Promise<boolean> {
+export async function reportEvidence(e: Evidence, o?: EvidenceCtx | EvidenceOpts): Promise<boolean> {
+  let ctx: EvidenceCtx;
+  if (o && 'writer' in o) ctx = o;
+  else {
+    const { evidenceCtx } = await import('./ui/evidenceCtx');
+    const live = await evidenceCtx();
+    // Ohne Schreibweg oder mit ausgeschaltetem Modul gilt der alte Weg des Aufrufers (er prüft den Schreibweg selbst).
+    if (!live || !vocabModuleOn(live.profile)) {
+      if (o?.legacy) await o.legacy();
+      return false;
+    }
+    ctx = live;
+  }
   const [{ evidencePlans, FLAG }, { Catalog }, { writeAnswer, writeVlog }, { tuple }] = await Promise.all([import('./domain/planner'), import('./domain/catalog'), import('./data/store'), import('./domain/vlog')]);
   const items = [];
   let i = 0;
-  for (const [path, doc] of o.docs) {
+  for (const [path, doc] of ctx.docs) {
     const lex = lexOf(doc);
     if (lex) items.push({ path, lex, order: i++ });
   }
   const cat = new Catalog(items);
   const lex = cat.get(e.lexeme)?.lex ?? null;
-  const deps = { writer: o.writer, device: o.device };
+  const deps = { writer: ctx.writer, device: ctx.device };
   const answer = { t: e.t, form: 'gap' as const, outcome: e.ok ? ('ok' as const) : ('wrong' as const), hint: 0, ms: 0, fk: 0, sentence: null, flags: FLAG.ext };
-  if (lex && evidencePlans(lex, e)) {
-    const r = await writeAnswer(deps, e.lexeme, answer, { cfg: vocabCfg(o.profile), cat, med: {}, planned: true });
+  if (lex && evidencePlans(lex, e, { inPlan: inTodayPlan(ctx.dayDoc, e.lexeme, e.t) })) {
+    const r = await writeAnswer(deps, e.lexeme, answer, { cfg: vocabCfg(ctx.profile), cat, med: {}, planned: true });
     return !!r && r.booked.length > 0;
   }
-  if (lex) await writeVlog(deps, [tuple({ t: e.t, path: e.lexeme, track: 0, form: e.typed ? 'gap' : 'choice', note: 0, outcome: e.ok ? 'ok' : 'wrong', ms: 0, fk: 0, hint: 0, sentence: null, lv: lex.lv, flags: FLAG.ext })], o.device);
+  if (lex) await writeVlog(deps, [tuple({ t: e.t, path: e.lexeme, track: 0, form: e.typed ? 'gap' : 'choice', note: 0, outcome: e.ok ? 'ok' : 'wrong', ms: 0, fk: 0, hint: 0, sentence: null, lv: lex.lv, flags: FLAG.ext })], ctx.device);
   return false;
 }
 

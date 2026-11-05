@@ -11,6 +11,7 @@ import type { NewRepair } from '../repair/repair';
 import { addError, errorSentences, errorsOf, gapFill, hasOpenError, reviewError } from './errors';
 import { answerRight } from '../learn/right';
 import { fitAltPatch, isFitAltPatch } from '../tutor/fitAlt';
+import { c1Account } from '../c1x/lexBook';
 
 // Schreibweg `grammar/<topic>` je bewerteter Antwort (phase2-plan §4.3, 1:1 wie `updateTopic`
 // der alten App, session.js:431–436). Rein; ausgeführt im Writer per `transform` auf dem
@@ -51,6 +52,12 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   // „Auch richtig“ (`alt`, 19.10.2026): richtig und nie ein Fehler, aber kein Beleg für das geübte Muster: kein BKT-Schritt, kein `pats`, kein `recent`.
   if (!claude && a.alt !== true) {
     const pNow = displayP(num(cur.p, p0), p0, typeof cur.last === 'number' && cur.last > 0 ? cur.last : null, t);
+    // M0: Antwort aus Tempo/c1x-Praxis (`ext`) ohne BKT-Wirkung (Deckel erreicht, nur angetippt, Tempo falsch nach der Zielzeit): wie `alt` kein
+    // BKT-Schritt (p, Anker, Fälligkeit, Verlauf bleiben), aber Zähler, `recent`, `pats`, `seen`, Fehlersätze wie bisher.
+    if (a.ext && !extBkt(cur, a, ok)) {
+      noBktPatch(patch, cur, a, ok, pNow, p0);
+      return finishPatch(cur, a, ok, patch);
+    }
     // c1x: ein getippter Anteil ist nicht ratbar (Typ `gap`, GUESS_TYPED), sonst gilt die Ratewahrscheinlichkeit der Art (`nOpt`, z. B. `pair` = 6).
     const c1Typed = !!a.pts && a.free === true;
     const step = bktStep({
@@ -84,7 +91,43 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
     patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
     const pats = patsPatch(cur, a, ok);
     if (pats) patch.pats = pats;
+    // M0: die eine BKT-Wirkung des Lerntags aus `ext` ist verbraucht (Tempo und c1x teilen den Deckel).
+    if (a.ext) patch.xd = a.day;
   }
+  return finishPatch(cur, a, ok, patch);
+}
+
+/**
+ * M0 Deckel: Darf diese `ext`-Antwort einen BKT-Schritt buchen? Nur freie Produktion (getipptes kwt/wf, err mit getippter Korrektur, Tempo
+ * getippt), nicht nach Ablauf der Tempo-Zielzeit falsch, und nur die ERSTE Wirkung je Thema und Lerntag (`xd`, tolerant gelesen).
+ */
+export function extBkt(cur: Readonly<Doc>, a: GrammarAnswer, ok: boolean): boolean {
+  if (!a.ext) return true;
+  if (a.free !== true) return false;
+  if (a.ext === 'tempo' && a.late && !ok) return false;
+  return (typeof cur.xd === 'string' ? cur.xd : null) !== a.day;
+}
+
+/**
+ * Zähler, `recent`, `seenText` und `pats` einer `ext`-Antwort ohne BKT-Schritt. `last` geht mit (Idempotenz-Schlüssel); damit die Anzeige-Beherrschung
+ * dadurch nicht springt, wird `p` auf den angezeigten Wert gesetzt (der Verfall ist gedächtnislos: die Anzeige bleibt jetzt und später gleich).
+ */
+function noBktPatch(patch: Doc, cur: Doc, a: GrammarAnswer, ok: boolean, pNow: number, p0: number): void {
+  if (pNow !== num(cur.p, p0)) patch.p = pNow;
+  patch.n = num(cur.n, 0) + 1;
+  patch.c = num(cur.c, 0) + (ok ? 1 : 0);
+  patch.last = a.t;
+  patch.recent = [...arr(cur.recent), ok ? 1 : 0].slice(-RECENT_MAX);
+  patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
+  const pats = patsPatch(cur, a, ok);
+  if (pats) patch.pats = pats;
+}
+
+/** Was jede Antwort außer dem BKT-Teil schreibt: `seen`, Vortest, Themen-Test, Fehlersätze, gelernte „Auch richtig“-Antwort. */
+function finishPatch(cur: Doc, a: GrammarAnswer, ok: boolean, patch: Doc): { patch: Doc; overflow?: NewRepair } {
+  const topic = a.task.topic;
+  const t = a.t;
+  const claude = a.task.c1?.src === 'ai';
   patch.seen = [...arr(cur.seen), a.task.key].slice(-SEEN_MAX);
   // Ein früher bestandener Vortest bleibt bestanden (path.ts liest `vt.ok`); ein späterer Versuch überschreibt ihn nie.
   const oldVt = cur.vt && typeof cur.vt === 'object' && !Array.isArray(cur.vt) ? (cur.vt as Doc) : null;
@@ -104,6 +147,8 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   } else if (a.task.errorT !== null) {
     const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t, variant: a.task.src !== 'review' });
     if (next) patch.errors = next;
+  } else if (!ok && a.ext === 'tempo' && !a.late) {
+    // M0 Tempo ehrlich: ein schneller Fehler (innerhalb der Zielzeit) legt keinen Fehlersatz an.
   } else if (!ok) {
     // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.
     const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: errorAnswer(a.task), t, src: a.task.src, expl: a.task.expl, pat: a.task.pat ?? null, cid: a.task.c1?.id ?? null, pts: a.pts ?? null, h: a.tj?.h ?? null });
@@ -164,8 +209,8 @@ function overflowRepair(a: GrammarAnswer): NewRepair | undefined {
 
 export function grammarWrite(cur: Readonly<Doc> | undefined, a: GrammarAnswer): GrammarWrite {
   const topic = a.task.topic;
-  // Wortschatz-Aufgaben des Aufgabensystems c1x (area 'lex') gehören zu keinem Grammatikthema: nie nach grammar/<topic> buchen.
-  if (a.task.c1?.area === 'lex') return { kind: 'skip', reason: 'unknown_topic' };
+  // Wortschatz-Aufgaben des Aufgabensystems c1x (area 'lex', und `wf` immer: M0 „nie beide Konten“) gehören zu keinem Grammatikthema: nie nach grammar/<topic> buchen.
+  if (a.task.c1 && c1Account(a.task.c1) === 'word') return { kind: 'skip', reason: 'unknown_topic' };
   const tp = topicById(topic);
   if (!cur) {
     if (!tp) return { kind: 'skip', reason: 'unknown_topic' };
