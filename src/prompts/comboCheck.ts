@@ -33,7 +33,7 @@ export type ComboCheckOut = {
 };
 
 const ID = 'combo-check';
-const VERSION = 1;
+const VERSION = 2;
 export const COMBO_SENTENCE_MAX = 300;
 
 export const COMBO_CHECK_EXAMPLE = '{"ruleOk":false,"correct":false,"fixed":"We have been working on the deadline since March.","why":"…"}';
@@ -58,7 +58,7 @@ export const comboCheck: PromptTemplate<ComboCheckVars, ComboCheckOut> = {
       'Rules:',
       '- ruleOk: true only if the sentence really uses the given rule in the right form. A correct sentence that avoids the rule is ruleOk false.',
       '- correct: true only if there is no grammar, word-choice or spelling mistake anywhere in the sentence.',
-      '- fixed: if correct is false, the corrected sentence in American English that keeps his idea and his word; keep it close to his sentence. If correct is true, an empty string.',
+      '- fixed: if correct is false or ruleOk is false, the corrected sentence in American English that keeps his idea and his word, uses the rule correctly and sounds natural to a native speaker. If the rule needs a context to make sense (e.g. past perfect needs a later past event or time: "By the time we migrated, they had lacked …"), add the shortest natural clause that provides it. Never return a sentence that uses the form without the context it needs. If correct is true and ruleOk is true, an empty string.',
       ...correctionRules(),
       '- why: one or two short sentences in the explanation language: what is right, or what exactly was wrong and why. Name the German habit if it caused the mistake.',
       '- No straight double quotes inside the strings.',

@@ -263,7 +263,7 @@ test('Hörübung: „Gerade kein Ton“ gibt dieselbe Aufgabe als Lücke, ohne H
   expect(errors).toEqual([]);
 });
 
-test('Eigener Satz: am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop frei', async ({ page }) => {
+test('Eigener Satz: am Handy höchstens 20 Wörter (Emrah 05.11.2026: 8 reichten für zwei Teilsätze nicht), Beispiel der Regel sichtbar', async ({ page }) => {
   await setInputProfile(page, 'touch');
   await boot(page, { migrated: true });
   await screen(page, 'today');
@@ -273,8 +273,10 @@ test('Eigener Satz: am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop f
   await page.getByTestId('hub-combo-own').click();
   await expect(page.getByTestId('combo-item')).toHaveAttribute('data-profile', 'touch');
   const input = page.getByTestId('combo-input');
-  await input.fill('one two three four five six seven eight');
-  await expect(input).toHaveValue('one two three four five six seven eight');
-  await input.fill('one two three four five six seven eight nine');
-  await expect(input).toHaveValue('one two three four five six seven eight');
+  const w = (n: number) => Array.from({ length: n }, (_, i) => `w${i + 1}`).join(' ');
+  await input.fill(w(20));
+  await expect(input).toHaveValue(w(20));
+  await input.fill(w(21));
+  await expect(input).toHaveValue(w(20));
+  await expect(page.getByTestId('combo-example')).toBeVisible();
 });

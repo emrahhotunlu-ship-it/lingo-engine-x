@@ -14,7 +14,7 @@ export const fxlDe = {
   fxLListenClozeTask: 'Lies den Text mit der Lücke und beantworte die Frage.',
   fxLNoSound: 'Gerade kein Ton',
   fxLKindOwn: 'Eigener Satz',
-  fxLComboTaskShort: 'Schreibe einen kurzen Satz (höchstens 8 Wörter) mit „{word}“ – Regel: {topic}.',
+  fxLComboTaskShort: 'Schreibe einen Satz mit „{word}“ und der Regel {topic}.',
   // Trainings
   fxLKindHotseat: 'Heißer Stuhl',
   fxLKindBuytime: 'Zeit gewinnen',

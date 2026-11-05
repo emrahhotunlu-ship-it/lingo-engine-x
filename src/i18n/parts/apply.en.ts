@@ -31,6 +31,7 @@ export const applyEn = {
   apListenQEndNotice: 'This was listening with speech output, not a measure of your listening skill.',
   apComboOwn: 'Your own sentence',
   apComboOwnSub: 'One word and one rule in one sentence',
+  apComboExample: 'This is what the rule looks like:',
   apComboTask: 'Write a sentence to a client with “{word}”. Grammar: {topic}.',
   apComboPurpose: 'You use the word and the rule together in your own sentence. That makes both stick.',
   apComboRule: 'Show the rule',

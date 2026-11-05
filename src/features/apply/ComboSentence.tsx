@@ -10,6 +10,7 @@ import { startDrill } from '../drills/session';
 import { useLive } from '../../data/live';
 import { pickPairs, type ComboPair } from '../../domain/apply/combo';
 import { topicById, TOPICS } from '../../domain/content';
+import { ruleExamples } from '../../domain/grammar/rules';
 import { laptopDeepen, practicedToday } from '../../domain/metrics';
 import { useTodayPlan } from '../today/store';
 import { errorsOf } from '../../domain/grammar/errors';
@@ -91,7 +92,7 @@ export function ComboSentenceScreen() {
   const ai = useAiAvailable();
   const live = useComboPairs();
   const liveProfile = useInputProfile();
-  // Das Eingabeprofil gilt für die ganze Runde (§4.1): am Handy ein kurzer Satz (höchstens 8 Wörter), am Laptop ein freier Satz.
+  // Das Eingabeprofil gilt für die ganze Runde (§4.1): am Handy höchstens COMBO_PHONE_WORDS Wörter, am Laptop ein freier Satz.
   const [profile] = useState(() => liveProfile);
   const touch = profile === 'touch';
   // Wiedereinstieg (Emrah 04.11.2026: „rausgehen, wieder rein – von vorne“): Sätze, Position und Ergebnisse dieses Lerntags stehen im
@@ -121,6 +122,7 @@ export function ComboSentenceScreen() {
   const cur = fixed[pos] ?? null;
   const topic = cur ? topicById(cur.topicId) : undefined;
   const topicName = topic ? (lang === 'en' ? (topic.name_en ?? topic.name) : topic.name) : '';
+  const example = cur ? (ruleExamples(cur.topicId, 1)[0] ?? null) : null;
   const finished = pos >= fixed.length;
   const busy = ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'slow' || ask.phase === 'streaming';
 
@@ -238,9 +240,17 @@ export function ComboSentenceScreen() {
                 ) : null
               }
               prompt={
-                <span lang="en" data-testid="combo-prompt">
-                  {cur.word}
-                </span>
+                <div className="flex flex-col gap-2">
+                  <span lang="en" data-testid="combo-prompt">
+                    {cur.word}
+                  </span>
+                  {/* Emrah 05.11.2026: die Aufgabe zeigt, wie die Regel aussieht (ein Beispielsatz der Regel), statt nur Wort und Regelname. */}
+                  {example && (
+                    <p className="lx-t-support m-0 text-muted" data-testid="combo-example">
+                      {t('apComboExample')} <span lang="en">{example}</span>
+                    </p>
+                  )}
+                </div>
               }
               answer={
                 <div className="flex flex-col gap-3">
@@ -269,4 +279,5 @@ export function comboLimitOf(v: unknown): number | null {
 }
 
 /** Am Handy ein kurzer Satz (Ersatz `complete`, Matrix §6). */
-export const COMBO_PHONE_WORDS = 8;
+/** Emrah 05.11.2026 („katastrophale Aufgabenstellung“): 8 Wörter reichten für Regeln mit zwei Teilsätzen (Past Perfect) nicht. */
+export const COMBO_PHONE_WORDS = 20;

@@ -1,4 +1,4 @@
-// Feste Antwort für combo-check@1 (Anwenden, Übung „Eigener Satz“). `zzrule` im Satz → Regel falsch, `zzno` → Satz falsch
+// Feste Antwort für combo-check@2 (Anwenden, Übung „Eigener Satz“). `zzrule` im Satz → Regel falsch, `zzno` → Satz falsch
 // (mit Korrektur), `zzjson` → kein JSON. Nur Entwicklung und Tests – nie Teil des Produktions-Builds.
 
 const line = (input: string, label: string): string => (new RegExp(`^${label}: (.*)$`, 'm').exec(input)?.[1] ?? '').trim();

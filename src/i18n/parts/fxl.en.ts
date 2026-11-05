@@ -14,7 +14,7 @@ export const fxlEn = {
   fxLListenClozeTask: 'Read the text with the gap and answer the question.',
   fxLNoSound: 'No sound right now',
   fxLKindOwn: 'Own sentence',
-  fxLComboTaskShort: 'Write a short sentence (8 words at most) with “{word}” – rule: {topic}.',
+  fxLComboTaskShort: 'Write a sentence with “{word}” using the rule {topic}.',
   // Trainings
   fxLKindHotseat: 'Hot seat',
   fxLKindBuytime: 'Buy time',

@@ -24,7 +24,7 @@ describe('Eigener Satz: Paare und Prüfvorlage', () => {
   });
   it('Vorlage: Kopfzeile, Beispiel und Test-Antwort bestehen das Schema; Korrektur Pflicht bei falschem Satz', () => {
     const v = { word: 'deadline', topic: 'Present perfect', rule: 'have + 3. Form', sentence: 'We have been working on the deadline.', uiLang: 'de' as const };
-    expect(comboCheck.build(v).split('\n')[0]).toBe('[combo-check@1]');
+    expect(comboCheck.build(v).split('\n')[0]).toBe('[combo-check@2]');
     const s = comboCheck.schema(v);
     expect(s.safeParse({ ruleOk: false, correct: false, fixed: 'We have been working on it.', why: 'Hier braucht die Regel eine andere Form.' }).success).toBe(true);
     // Leere Korrektur bei falschem Satz: erlaubt, aber als „nicht sicher geprüft“ markiert (Auswertung 15.10.2026), nie als richtige Fassung.
