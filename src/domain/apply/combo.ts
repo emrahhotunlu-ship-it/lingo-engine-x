@@ -5,9 +5,10 @@ import type { Topic } from '../content';
 // getestet. Wörter: die schwächsten bekannten Karten zuerst; Themen: zuerst die mit offenen Fehlersätzen, nur Themen mit
 // Kurzregel. Je Runde unterschiedliche Wörter und Themen; fest je Tag und Zähler (kein Neuwürfeln beim Neuzeichnen, Kap. 15).
 
-export type ComboPair = { word: string; topicId: string };
+/** `key`: Pfad der Wortkarte (`vocab/…`), damit ein Beleg aus Anwenden (F3) die Karte findet; fehlt bei älteren Aufrufern. */
+export type ComboPair = { word: string; topicId: string; key?: string };
 
-export type ComboWord = { word: string; lapses: number; stage: number };
+export type ComboWord = { word: string; lapses: number; stage: number; key?: string };
 
 export const COMBO_ROUNDS = 3;
 
@@ -32,7 +33,7 @@ export function pickPairs(words: readonly ComboWord[], topics: readonly Topic[],
     if (seenWords.has(key)) continue;
     seenWords.add(key);
     const t = topicOrder[out.length % topicOrder.length];
-    if (t) out.push({ word: w.word, topicId: t.id });
+    if (t) out.push(w.key ? { word: w.word, topicId: t.id, key: w.key } : { word: w.word, topicId: t.id });
   }
   return out;
 }

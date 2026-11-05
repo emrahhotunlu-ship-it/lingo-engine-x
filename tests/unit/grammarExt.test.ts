@@ -91,7 +91,8 @@ describe('M0 Grammatik: eine BKT-Wirkung je Thema und Lerntag aus `ext`', () => 
     const tap = c1(err, { kind: 'err', tap: 5 }, { t: T1, day: D1 }, false);
     expect(tap.free).toBe(false);
     const r = step(base('gerund-inf'), { ...tap, ext: 'c1x' });
-    expect(r.patch.p).toBeUndefined();
+    // Kein BKT-Schritt: `p` übernimmt höchstens den aufgelaufenen Verfall (Anzeige springt nicht), Fälligkeit bleibt.
+    expect(topicP('gerund-inf', r.doc, T1)).toBeCloseTo(topicP('gerund-inf', base('gerund-inf'), T1), 12);
     expect(r.patch.due).toBeUndefined();
     expect(r.patch.xd).toBeUndefined();
     expect(r.patch.n).toBe(1);
@@ -106,7 +107,8 @@ describe('M0 Grammatik: eine BKT-Wirkung je Thema und Lerntag aus `ext`', () => 
   it('Tempo ehrlich: falsch nach der Zielzeit wie `alt` (Fehlersatz bleibt); schneller Fehler bucht BKT, legt aber keinen Fehlersatz an', () => {
     const wrong = c1(kwt, { kind: 'kwt', text: 'is said that it is' }, { t: T1, day: D1 });
     const late = step(base('passive-plus'), { ...wrong, tempo: true, ext: 'tempo', late: true });
-    expect(late.patch.p).toBeUndefined();
+    expect(topicP('passive-plus', late.doc, T1)).toBeCloseTo(topicP('passive-plus', base('passive-plus'), T1), 12);
+    expect(late.patch.due).toBeUndefined();
     expect(late.patch.xd).toBeUndefined();
     expect(late.patch.errors).toEqual([expect.objectContaining({ cid: 'kwt-9001' })]);
     const fast = step(base('passive-plus'), { ...wrong, tempo: true, ext: 'tempo' });
@@ -167,10 +169,10 @@ describe('M0: ein Fehler bucht nie beide Konten (kwt/err nur Grammatik, wf nur W
 
   it('kwt/err: falsch → nur ein Fehlersatz in grammar/<t>, keine Wortbuchung (auch mit `lex[]`)', () => {
     const wrongKwt = { ...kwt, lex: ['say'] } as C1Item;
-    const s = scoreC1(wrongKwt, { kind: 'kwt', text: 'is said that it is', typed: true } as C1Response);
+    const s = scoreC1(wrongKwt, { kind: 'kwt', text: 'is said that it is', typed: true });
     expect(lexBookings(wrongKwt, s, 1, ctx)).toEqual([]);
     const errLex = { ...err, lex: ['hear'] } as C1Item;
-    const se = scoreC1(errLex, { kind: 'err', tap: 5, fix: 'heard', typed: true } as C1Response);
+    const se = scoreC1(errLex, { kind: 'err', tap: 5, fix: 'heard', typed: true });
     expect(lexBookings(errLex, se, 1, ctx)).toEqual([]);
     const r = step(base('gerund-inf'), { ...c1(err, { kind: 'err', tap: 5, fix: 'heard', typed: true }, { t: T1, day: D1 }), ext: 'c1x' });
     expect(r.patch.errors).toEqual([expect.objectContaining({ cid: 'err-9001' })]);

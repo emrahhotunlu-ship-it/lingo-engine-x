@@ -128,6 +128,8 @@ describe('Wörter-Modul: Isolation', () => {
     // auf Heute (ExtraRow: Schalter und api.countMistakes) fragen den Schalter.
     // Kurzer Tag (2A, 04.11.2026): today/shortDay verkleinert den Wörter-Plan über api.shrinkToday.
     // Ladezeiten (Emrah 04.11.2026): app/prefetch lädt die Teil-Dateien der Wörter-Bildschirme im Leerlauf vor (api.load*).
+    // F2 (05.11.2026): c1x-Wortbuchung (lexWrite) und Anwenden melden Belege über api.reportEvidence.
+    // Anwenden meldet bestätigte Zielwörter über api.reportEvidence (Tür in modules/apply/sharedUi).
     // K11 (04.11.2026): today/wordsDay zählt die Wörter von heute aus dem eingefrorenen Plan (api.loadWordsDayPlan, api.wordsDayCount).
     expect(touching.sort()).toEqual([
       'src/app/prefetch.ts',
@@ -136,6 +138,7 @@ describe('Wörter-Modul: Isolation', () => {
       'src/data/reads.ts',
       'src/data/snapshot.ts',
       'src/data/writer.ts',
+      'src/features/c1x/lexWrite.ts',
       'src/features/learn/flow.ts',
       'src/features/learn/ui.tsx',
       'src/features/progress/WordsSegment.tsx',
@@ -150,6 +153,7 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/vocab/autoSwitch.ts',
       'src/features/vocab/hub/VocabHome.tsx',
       'src/features/vocab/vmod.slot.tsx',
+      'src/modules/apply/sharedUi.ts',
       'src/prompts/registry.ts',
     ]);
   });

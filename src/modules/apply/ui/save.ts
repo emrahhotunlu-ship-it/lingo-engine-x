@@ -1,8 +1,8 @@
-import { addProd, getDb, getWriter, outPath, readDoc, saveOutItem, saveRepairs, upsertOut } from '../sharedUi';
+import { addProd, getDb, getWriter, outPath, readDoc, reportEvidence, saveOutItem, saveRepairs, upsertOut } from '../sharedUi';
 import { logError, logWarn } from '../shared';
 import type { OutItem } from '../shared';
 import { findKeypoints, KEYPOINTS_PREFIX } from '../domain/material';
-import { evidenceWords, outItemOf, prodOf, repairsOf, type ApplyRun, type WordUse } from '../domain/result';
+import { outItemOf, prodOf, repairsOf, type ApplyRun } from '../domain/result';
 
 // Schreibwege des Moduls Anwenden (F3). Jeder Teil über den einen Schreibpfad (`writer.transform` auf dem frischen Stand, nur bei Änderung, nie in ein ungültiges
 // Dokument; die vorhandenen Schreiber `saveOutItem`, `saveRepairs`, `addProd` halten das ein). Reihenfolge: Ergebnis zuerst, dann Fehlersätze, dann K7.
@@ -22,17 +22,24 @@ export async function saveRun(run: ApplyRun): Promise<SaveResult> {
       logError('apply:prod', err, run.id);
     }
   }
+  await reportUsed(run);
   return { out, repairs: repairsOk ? repairs.length : 0, repairsOk };
 }
 
 /**
- * Wort-Belege `used` (Nachtrag learning-scientist Muss 3: nur richtig benutzt, nicht aus dem Material, gedämpft).
- * TODO(F2-Wörter-Belege): sobald die Wörter-App eine Tür anbietet, die die Gerätekennung selbst kennt (heute braucht `modules/vocab/api.reportEvidence` sie als
- * Argument und gibt sie nicht heraus), hier je Wort `reportEvidence({kind: 'used', typed: true, cued: false, ok: true, …})` melden. Bis dahin steht der Beleg nur
- * im `out`-Eintrag (`fb.w`), wie der Plan es vorsieht („bis dahin nur Speicherung“).
+ * Wort-Belege `used` an die Wörter-App (F2, Nachtrag learning-scientist Muss 3): nur von Claude als richtig bestätigte Zielwörter, die nicht im Material
+ * stehen (`run.lex`), nur bei der ersten Prüfung. Gedämpft: die Wörter waren als Ziel vorgegeben (`cued`), also nur ein Beleg im Verlauf, nie eine
+ * Planwirkung. Bei ausgeschalteter Wörter-App kein alter Weg (es gibt keinen). Fehler halten das Ergebnis nie auf.
  */
-export function pendingUsedEvidence(uses: readonly WordUse[], material: string): string[] {
-  return evidenceWords(uses, material);
+async function reportUsed(run: ApplyRun): Promise<void> {
+  if (run.check !== 1 || !run.lex?.length) return;
+  for (const lexeme of run.lex) {
+    try {
+      await reportEvidence({ lexeme, kind: 'used', src: 'apply', ok: true, typed: true, cued: true, t: run.now });
+    } catch (err) {
+      logError('apply:evidence', err, lexeme);
+    }
+  }
 }
 
 /**

@@ -58,7 +58,8 @@ export function useMaterial(kind: WriteKind, day: string): MaterialState {
 }
 
 export type Rule = { label: string; text: string; prompt: string; patId: string | null };
-export type Targets = { words: string[]; rule: Rule | null };
+/** `keys`: Wort (klein) → Pfad der Wortkarte, für den Beleg an die Wörter-App (F2). */
+export type Targets = { words: string[]; keys: Record<string, string>; rule: Rule | null };
 
 /**
  * Zwei Zielwörter aus dem eigenen Wortschatz und eine Regel (Nachtrag learning-scientist „Sollte“: kombinierte Aufgabe). Wörter und Regel wie beim eigenen Satz
@@ -69,9 +70,13 @@ export function useTargets(m: Material | null): Targets {
   const pairs = useComboPairs();
   return useMemo(() => {
     const words: string[] = [];
+    const keys: Record<string, string> = {};
     for (const p of pairs) {
       if (words.length >= 2) break;
-      if (!words.some((w) => w.toLowerCase() === p.word.toLowerCase())) words.push(p.word);
+      if (!words.some((w) => w.toLowerCase() === p.word.toLowerCase())) {
+        words.push(p.word);
+        if (p.key) keys[p.word.toLowerCase()] = p.key;
+      }
     }
     let rule: Rule | null = null;
     if (m?.kind === 'write') {
@@ -87,6 +92,6 @@ export function useTargets(m: Material | null): Targets {
         rule = { label: lang === 'en' ? name : topic.name, text: lang === 'en' ? en : topic.rule, prompt: `${name}: ${en}`, patId: null };
       }
     }
-    return { words, rule };
+    return { words, keys, rule };
   }, [pairs, m, lang]);
 }

@@ -170,6 +170,8 @@ export type ApplyRun = {
   words: string[];
   /** Angebotene Zielwörter (unabhängig davon, ob benutzt). */
   offered: string[];
+  /** Pfade der Wortkarten zu `words` (für den Beleg an die Wörter-App; nur die bekannten). */
+  lex?: string[];
 };
 
 const OUT_KIND: Record<WriteKind, OutKind> = { reply: 'reply', write: 'c1mail', summary: 'summary' };

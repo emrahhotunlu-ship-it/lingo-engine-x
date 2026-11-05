@@ -234,6 +234,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       words: confirmedWords(targets.words, fb, given, m.plain),
       offered: targets.words,
     };
+    next.lex = next.words.map((w) => targets.keys[w.toLowerCase()]).filter((k): k is string => !!k);
     const spots = n === 1 ? selfSpots(fb.edits) : [];
     setSelf(spots.length ? { spots, fixes: spots.map((e) => e.from) } : null);
     setRevealed(spots.length === 0);

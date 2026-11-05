@@ -31,6 +31,8 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/data(\/(live|reads))?$/,
   /^src\/domain\/(nbdrill\/outDoc|c1\/prod|metrics|content)$/,
   /^src\/modules\/read\/registry$/,
+  // F2: Wort-Belege an die Wörter-App (eine Tür).
+  /^src\/modules\/vocab\/api$/,
 ];
 const ALLOWED_PACKAGES = new Set(['zod', 'react', 'react/jsx-runtime']);
 const IMPORT_RE = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;

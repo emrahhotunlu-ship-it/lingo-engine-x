@@ -110,10 +110,11 @@ export function extBkt(cur: Readonly<Doc>, a: GrammarAnswer, ok: boolean): boole
 
 /**
  * Zähler, `recent`, `seenText` und `pats` einer `ext`-Antwort ohne BKT-Schritt. `last` geht mit (Idempotenz-Schlüssel); damit die Anzeige-Beherrschung
- * dadurch nicht springt, wird `p` auf den angezeigten Wert gesetzt (der Verfall ist gedächtnislos: die Anzeige bleibt jetzt und später gleich).
+ * dadurch nicht springt, wird der bis jetzt aufgelaufene Verfall in `p` übernommen (gedächtnislos: Anzeige jetzt und später gleich) – nur bei einem
+ * echten Anker und messbarem Verfall; Anker, Fälligkeit und Verlauf bleiben (kein BKT-Schritt).
  */
 function noBktPatch(patch: Doc, cur: Doc, a: GrammarAnswer, ok: boolean, pNow: number, p0: number): void {
-  if (pNow !== num(cur.p, p0)) patch.p = pNow;
+  if (typeof cur.last === 'number' && cur.last > 0 && Math.abs(pNow - num(cur.p, p0)) > 1e-6) patch.p = pNow;
   patch.n = num(cur.n, 0) + 1;
   patch.c = num(cur.c, 0) + (ok ? 1 : 0);
   patch.last = a.t;

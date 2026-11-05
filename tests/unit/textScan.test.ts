@@ -34,6 +34,9 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   /^sh(Speak|SpeakSub|Listen|Read|ReadSub|PracticeMore)$/,
   // Relaunch Stufe 1, P7 S1-DIKTAT: die Erfolgsmeldung der Laptop-Diktat-Probe nennt die Wörter-Übung „Sag es“ (s. o. exName_say_it).
   /^dkOkSub$/,
+  // Fokus 2.0 (Emrah 04.11.2026: „Anwenden … auf E-Mail antworten bzw. eine schreiben, Artikel zusammenfassen“): Texte des Moduls src/modules/apply
+  // (Präfix `ax`) nennen Schreiben und den Artikel als Teil der Aufgabe.
+  /^ax[A-Z]/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,
 ];

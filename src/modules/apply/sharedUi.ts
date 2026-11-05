@@ -56,3 +56,6 @@ export { startDrill } from '../../features/drills/session';
 // Lesen-Modul: der neueste Artikel (nur lesen) als Material für „Artikel zusammenfassen“
 export { loadRecentArticle } from '../read/registry';
 export type { RecentArticle } from '../read/registry';
+
+// Wörter-App: Wort-Belege `used` aus Anwenden (F2, eine Tür `reportEvidence`, Umgebung holt die Wörter-App selbst)
+export { reportEvidence } from '../vocab/api';
