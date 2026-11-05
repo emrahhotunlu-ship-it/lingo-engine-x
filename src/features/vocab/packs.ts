@@ -67,11 +67,19 @@ async function store(card: TrainCard, pack: Pack, replacesT: number | null): Pro
   }
 }
 
+/** Kennung (`t`) eines gespeicherten Pakets, auch wenn es beim Lesen nichts Brauchbares ergab (z. B. Wort geändert). */
+function storedT(card: TrainCard): number | null {
+  const raw = card.doc.xPack;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const r = raw as Record<string, unknown>;
+  return r.v === 1 && typeof r.t === 'number' ? r.t : null;
+}
+
 async function runBatch(batch: readonly TrainCard[], lang: Lang, signal: AbortSignal): Promise<void> {
   const olds = batch.map((c) => packOf(c));
   usePacks.setState((s) => ({ pending: s.pending + 1 }));
   try {
-    const r = await askJson({ template: wordPrep, vars: { cards: batch.map((c, i) => prepCard(c, lang, olds[i] ?? null)), uiLang: lang }, signal });
+    const r = await askJson({ template: wordPrep, vars: { cards: batch.map((c, i) => prepCard(c, lang, olds[i] ?? null)), uiLang: lang }, signal, priority: 'background' });
     const now = Date.now();
     const got: Record<string, Pack> = {};
     for (const out of r.data.cards) {
@@ -81,7 +89,8 @@ async function runBatch(batch: readonly TrainCard[], lang: Lang, signal: AbortSi
       const pack = acceptPack(out, card, lang, { t: now, r0: repsOf(card), prev: old?.prev ?? [] });
       if (!pack) continue;
       got[card.key] = pack;
-      void store(card, pack, old ? old.t : null);
+      // Ersetzt wird nur das eigene Paket dieser Karte (auch ein unbrauchbar gewordenes), nie Unerwartetes.
+      void store(card, pack, old ? old.t : storedT(card));
     }
     const missing = batch.filter((c) => !got[c.key]).length;
     if (missing) logWarn('trainer:packs', { code: 'partial', message: `${missing} of ${batch.length} cards without usable pack` });

@@ -145,6 +145,6 @@ Plan: `docs/ki-paket-plan.md`. Alte Felder bleiben unverändert, es wird nichts 
 
 | Dokument | Neu | Schreibweg |
 |---|---|---|
-| `vocab/<id>`, `chunk/<id>` | `xPack {v:1, t, lang, r0, items[{en, gap, at, ok[], syn[{w, why}], why}] (≤ 4), dis[{w, why}] (≤ 3), prev[] (≤ 12)}` – Kartenpaket von Claude (`word-prep@1`); `why` nur in `lang`; ca. 2–3 KB | `features/vocab/packs.ts` (`writer.transform` → `packPatch`): nur wenn das Dokument existiert; ersetzt nur das eigene, verbrauchte Paket mit derselben `t`, nie Unerwartetes |
+| `vocab/<id>`, `chunk/<id>` | `xPack {v:1, t, lang, r0, items[{en, gap, at, ok[], syn[{w, why}], why}] (≤ 4), dis[{w, why}] (≤ 3), cwhy, prev[] (≤ 12)}` – Kartenpaket von Claude (`word-prep@1`); `why` nur in `lang`; ca. 2–3 KB | `features/vocab/packs.ts` (`writer.transform` → `packPatch`): nur wenn das Dokument existiert; ersetzt nur das eigene, verbrauchte Paket mit derselben `t`, nie Unerwartetes |
 | `app/pool.items[]` | Tagesvorbereitung: frische Grammatik-Aufgaben (`src: 'ai'`) zum Hauptthema der Grammatik-Pflicht | wie „Neue Aufgaben“ (`generateTopicTasks`, `poolIntake` unter `acquire`) |
 | `lesson/<id>` | Tagesvorbereitung: Inhalt der heutigen Lektion, wenn er fehlt | wie „Lektion vorbereiten“ (`generateLesson` → `lessonWrite`, nie überschrieben) |

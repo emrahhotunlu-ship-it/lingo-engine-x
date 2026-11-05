@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { clip, header, langName, langOf, shortenText } from './common';
 import type { PromptTemplate, UiLang } from './types';
 
-// grammar-judge@1 (phase2-plan §7, D13): Urteil über eine frei formulierte Grammatikantwort
+// grammar-judge@2 (phase2-plan §7, D13; v2 KI-Paket: „why“ wiederholt die Lösung nicht): Urteil über eine frei formulierte Grammatikantwort
 // (transform, correct), die die lokale Prüfung abgelehnt hat. Nur nach „Prüfen" (ausdrückliche
 // Handlung, sample.d.ts), `quick`, 24 h zwischengespeichert. Ohne KI oder bei Fehler gilt `near`.
 
@@ -24,7 +24,7 @@ export const JUDGE_WHY_WORDS = 25;
 export const GRAMMAR_JUDGE_EXAMPLE = '{"verdict":"correct","acceptable":true,"corrected":"…","why":"…"}';
 
 const ID = 'grammar-judge';
-const VERSION = 1;
+const VERSION = 2;
 
 const schemaFor = (uiLang: UiLang): z.ZodType<GrammarJudgeOut> =>
   z
@@ -69,7 +69,7 @@ export const grammarJudge: PromptTemplate<GrammarJudgeVars, GrammarJudgeOut> = {
       '  "wrong" = the grammar point is wrong or the answer does not solve the task.',
       '- acceptable: true if the answer is correct English that fits the task, even if it is not the form being practiced.',
       '- corrected: the learner answer with minimal corrections (identical if nothing to fix).',
-      `- why: at most ${JUDGE_WHY_WORDS} words in the explanation language: why it is right, or exactly what is wrong.`,
+      `- why: at most ${JUDGE_WHY_WORDS} words in the explanation language: why it is right, or exactly what is wrong and which rule applies. Do not repeat the corrected sentence (it is shown separately).`,
     ].join('\n');
   },
   schema: (v) => schemaFor(v.uiLang),

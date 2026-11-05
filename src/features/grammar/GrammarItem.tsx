@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useClock } from '../../app/clock';
 import { askJson } from '../../ai/gate';
 import { useAiAvailable } from '../../ai/scope';
@@ -172,10 +174,15 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible));
       if (whole) fieldRef.current?.focus({ preventScroll: true });
       else api.focusNow();
-      // Im Hintergrund: Ist die erste Antwort doch richtig, endet der zweite Versuch sofort damit.
+      // Im Hintergrund: Ist die erste Antwort doch richtig, endet der zweite Versuch sofort damit –
+      // mit Zeit und Hilfe des ersten Versuchs, nicht der Wartezeit auf Claude (A7).
+      const ms0 = elapsed();
+      const timing0 = { submitMs: ms0, firstKeyMs: firstKeyAt.current === null ? ms0 : Math.max(0, Math.round(firstKeyAt.current - shownAt.current)) };
+      const help0: Help = { level: tip >= 2 ? 2 : tip >= 1 ? 1 : 0 };
       void askJudge(given)?.then((out) => {
         if (!out || fbRef.current || !(out.verdict === 'correct' && out.acceptable)) return;
-        setFb({ verdict: 'correct', check, given, dontKnow: false, grade: 3, ms: elapsed(), help: { level: 0 }, judged: 'ai', why: out.why, unsure: false, override: false });
+        const grade = learnGrade(task.type, 'correct', timing0, help0);
+        setFb({ verdict: 'correct', check, given, dontKnow: false, grade, ms: ms0, help: help0, judged: 'ai', why: out.why, unsure: false, override: false });
       });
       return;
     }
@@ -419,17 +426,6 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     result = (
       <ResultArea label={t('trResultLabel')}>
         <VerdictLine verdict={fb.verdict} text={t(key)} />
-        {judgeBusy && !fb.why && (
-          <p className="text-sm text-subtle" data-testid="judging" aria-live="polite">
-            {t('trJudging')}
-          </p>
-        )}
-        {fb.why && (
-          <p className="text-sm" data-testid="judge-why" lang={lang}>
-            <span className="font-semibold">{t('trWhy')}: </span>
-            {fb.why}
-          </p>
-        )}
         {c?.us && (
           <p className="text-sm text-muted" data-testid="us-hint">
             {t('trUsHint', { us: c.us })}
@@ -444,6 +440,18 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
           {...src}
         />
         {solved && task.type !== 'correct' && <EnglishText as="p" className="text-[0.95rem] leading-relaxed text-muted" text={solved} {...src} testId="solved" />}
+        {/* Warum an fester Stelle (Kap. 2.4): nach dem Vergleich, wie im Vokabeltrainer. */}
+        {judgeBusy && !fb.why && !fb.override && (
+          <p className="text-sm text-subtle" data-testid="judging" aria-live="polite">
+            {t('trJudging')}
+          </p>
+        )}
+        {fb.why && !fb.override && (
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="text-sm" data-testid="judge-why" lang={lang}>
+            <span className="font-semibold">{t('trWhy')}: </span>
+            {fb.why}
+          </motion.p>
+        )}
         <FormHint text={formHint(task, lang)} />
         <ExampleList items={examples} {...src} />
         <AlsoRight answers={also.answers} notes={notes} />

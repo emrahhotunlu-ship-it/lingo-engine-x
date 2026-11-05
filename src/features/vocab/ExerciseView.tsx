@@ -773,6 +773,8 @@ export function ExerciseView({
     const fk = e.input === 'typed' && card.kind === 'vocab' && v.verdict !== 'correct' ? formKind(solution, card.lemma, card.pos) : null;
     const col = e.ex === 'colloc' && e.colloc ? e.colloc : null;
     const examples = cardExamples(card, shownSentence, extra?.items ?? []);
+    // Claudes neues Beispiel (Nachprüfung) steht als erstes unter „Beispiele“, nicht als eigener Bereich.
+    const judgeExample = fb.why?.src === 'ai' && fb.why.example && !fb.override && !examples.some((x) => normalize(x.en) === normalize(fb.why?.example ?? '')) ? fb.why.example : null;
     const target = (x: string): readonly [number, number] | null => {
       const hit = card.kind === 'chunk' ? locateChunk(x, card.word) : (locate(x, card.lemma) ?? (card.context ? locate(x, card.context.gap) : null));
       return hit ? [hit.start, hit.end] : null;
@@ -837,17 +839,17 @@ export function ExerciseView({
           </p>
         )}
         {fb.why && !fb.override && (
-          <div className="flex flex-col gap-1" data-testid="why" data-src={fb.why.src}>
-            <p className="text-sm leading-relaxed">
-              <span className="font-semibold">{t(fb.why.trap ? 'trWhyTrap' : 'trWhy')}: </span>
-              <span lang={lang}>{fb.why.text}</span>
-            </p>
-            {fb.why.example && (
-              <p className="text-[0.95rem] leading-relaxed" data-testid="why-example">
-                <EnglishText as="span" text={fb.why.example} {...src} highlight={target(fb.why.example)} />
-              </p>
-            )}
-          </div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: DURATION.base, ease: EASE_OUT }}
+            className="text-sm leading-relaxed"
+            data-testid="why"
+            data-src={fb.why.src}
+          >
+            <span className="font-semibold">{t(fb.why.trap ? 'trWhyTrap' : 'trWhy')}: </span>
+            <span lang={lang}>{fb.why.text}</span>
+          </motion.p>
         )}
         {prod && <ProduceResult given={fb.given} out={prod.out} self={prod.self} />}
         {col ? (
@@ -894,10 +896,15 @@ export function ExerciseView({
             <span className="text-muted">{t('sitThen')}</span> <span lang="en">„{e.situation.then}“</span>
           </p>
         )}
-        {(examples.length > 0 || loadingExamples) && (
+        {(examples.length > 0 || loadingExamples || judgeExample) && (
           <div className="flex flex-col gap-1.5" data-testid="examples">
             <p className="lx-eyebrow">{t('trExamples')}</p>
             <ul className="flex flex-col gap-1.5">
+              {judgeExample && (
+                <motion.li initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="text-[0.95rem] leading-relaxed" data-testid="example" data-src="judge">
+                  <EnglishText as="span" text={judgeExample} {...src} highlight={target(judgeExample)} />
+                </motion.li>
+              )}
               {examples.map((x) => (
                 <li key={x.en} className="text-[0.95rem] leading-relaxed" data-testid="example" data-src={x.src}>
                   <EnglishText as="span" text={x.en} {...src} highlight={target(x.en)} />

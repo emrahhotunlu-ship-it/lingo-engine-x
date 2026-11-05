@@ -52,7 +52,7 @@ test('falsch getippt: erst Hinweis, dann Lösung mit genauem Warum von Claude un
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
   const why = page.locator('[data-testid="why"][data-src="ai"]');
   await expect(why).toContainText('„prevent“ hat eine andere Bedeutung');
-  await expect(page.getByTestId('why-example')).toContainText('avoid');
+  await expect(page.locator('[data-testid="example"][data-src="judge"]')).toContainText('avoid');
   const judge = (await sampleCalls(page)).filter((c) => c.id === 'word-judge');
   expect(judge.length).toBe(2);
   expect(judge.every((c) => c.tier === 'quick' && c.input.includes('Sentence: Try to ___ driving in rush hour.'))).toBe(true);

@@ -17,7 +17,7 @@ import { patternCheckReply, patternsReply } from './canned/patterns';
 import { wordJudgeReply, wordPrepReply } from './canned/wordPack';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
-// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
+// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@2 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
 // Sonderwörter für Fehlerpfade:
 // - `zzqx`: erste Antwort verletzt das Schema, der Neuversuch („did not match") ist gültig,
 // - `zzjson`: gar kein JSON (→ `invalid_json`).
@@ -268,7 +268,7 @@ export function lessonContentReply(input: string): string {
   });
 }
 
-// ---------------------------------------------------------------- grammar-judge@1
+// ---------------------------------------------------------------- grammar-judge@2
 
 const JUDGE_WHY: Record<Lang, { ok: string; wrong: (ans: string) => string }> = {
   de: {
