@@ -225,10 +225,25 @@ export class SessionRun {
       if (l && !this.blocked.has(p) && (this.shown.get(p) ?? 0) < MAX_PER_ROUND && this.stepToday(l) && !this.pending.some((s) => s.path === p) && task.form !== 'transfer') {
         const slot = this.stepSlot(p, l, this.cards, nowMs);
         // Wiederkehr nach Fehler nur mit anderen Karten dazwischen; sonst dasselbe Wort direkt hintereinander (Emrah 05.11.2026) – dann in der nächsten Runde.
-        const others = this.queue.some((s) => s.path !== p) || this.pending.some((s) => s.path !== p);
+        const others = this.othersComing(p);
         if (slot.step !== 3 || others) this.pending.push(slot);
       }
     }
+  }
+
+  /**
+   * Kommen in dieser Runde noch andere Karten als `p`? Ein Schritt B eines anderen Worts zählt nur, wenn seine Kartenzahl bis zum Ende der
+   * Runde erreicht wird (sonst kommt er erst in der nächsten Runde – learning-scientist W7 SOLL 1).
+   */
+  private othersComing(p: string): boolean {
+    return this.queue.some((s) => s.path !== p) || this.pending.some((s) => s.path !== p && (s.step !== 2 || (s.afterCard ?? 0) <= this.cards + this.queue.length));
+  }
+
+  /** Vor dem Band (die Antwort ist noch nicht `done`): holt die Runde dieses Wort nach der Antwort noch einmal zurück? */
+  returnsThisRound(task: Task): boolean {
+    if (task.intro) return true;
+    const p = task.path;
+    return !this.blocked.has(p) && (this.shown.get(p) ?? 0) + 1 < MAX_PER_ROUND && this.othersComing(p);
   }
 
   /** „Aufgabe war unfair“: dieses Wort kommt in dieser Runde nicht mehr, auch nicht als Wiederkehr; offene Lernschritte bleiben im Wort. */

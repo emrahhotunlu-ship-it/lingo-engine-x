@@ -551,13 +551,17 @@ export function ExerciseShell(props: ExerciseShellProps) {
         )}
         {explainNode}
         {feedback.tail && (
-          <div className="flex flex-col gap-1.5" data-slot="tail">
+          <div className="flex flex-col gap-1.5 empty:hidden" data-slot="tail">
             {feedback.tail}
           </div>
         )}
         {(feedback.act || tutorNode) && (
           <div className="flex flex-col gap-2" data-block="act">
-            {feedback.act && <div data-slot="act">{feedback.act}</div>}
+            {feedback.act && (
+              <div data-slot="act" className="empty:hidden">
+                {feedback.act}
+              </div>
+            )}
             {tutorNode}
           </div>
         )}

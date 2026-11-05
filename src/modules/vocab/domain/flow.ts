@@ -196,7 +196,8 @@ export function evaluate(m: CardModel, given: string, dict: CheckDict, dunno = f
     const extra = dict.senses(baseAnswer(m.head)).filter((s) => !pos || s.pos.toLowerCase().startsWith(pos)).map((s) => s.de);
     if (!extra.length) return own;
     const alt = checkMeaning(given, extra.join('; '));
-    return alt.outcome === 'ok' ? alt : own;
+    // learning-scientist W7 SOLL 3: richtig, aber eine andere Bedeutung als die gelernte – das Warum sagt es („stimmt auch, gelernt: …“).
+    return alt.outcome === 'ok' ? { ...alt, note: 'dict' } : own;
   }
   return checkAnswer(given, m.target, dict);
 }
@@ -249,6 +250,7 @@ export function previewOf(x: {
   planned: boolean;
   t: number;
   meaningOf?: (w: string) => string | null;
+  soon?: boolean;
 }): Band | null {
   const m = x.m;
   // Bedeutung: Lösung ist die deutsche Bedeutung; Warum nennt Wort = Bedeutung.
@@ -269,6 +271,7 @@ export function previewOf(x: {
     col: m.col,
     ...(x.meaningOf && m.mode !== 'meaning' ? { meaningOf: x.meaningOf } : {}),
     ...(m.mode === 'meaning' ? { meaning: true } : {}),
+    ...(x.soon === false ? { soon: false } : {}),
   });
 }
 

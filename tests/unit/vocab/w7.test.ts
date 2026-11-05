@@ -30,7 +30,7 @@ describe('N3 Bedeutung: Wörterbuch-Sinne derselben Wortart zählen', () => {
   ];
   const m = cardOf({ task, doc, lex: learned(T0 - 10 * D), teach: {}, nowMs: T0, sbGate: null })!;
   it('„gewähren“ ist richtig, ein Sinn einer anderen Wortart nicht, ohne Wörterbuch wie bisher', () => {
-    expect(evaluate(m, 'gewähren', { ...base, senses }).outcome).toBe('ok');
+    expect(evaluate(m, 'gewähren', { ...base, senses })).toMatchObject({ outcome: 'ok', note: 'dict' });
     expect(evaluate(m, 'Zuschuss', { ...base, senses }).outcome).toBe('wrong');
     expect(evaluate(m, 'gewähren', base).outcome).toBe('wrong');
     expect(evaluate(m, 'bewilligen', { ...base, senses }).outcome).toBe('ok');
@@ -122,5 +122,18 @@ describe('N4 (Emrah „1A“): geprüfte Claude-Sätze sofort in den Abfragen, S
       l = { ...l, sn: [...l.sn.filter(([x]) => x !== k), [k, day]] };
     }
     expect(seen.size).toBe(2);
+  });
+});
+
+describe('learning-scientist W7: Band verspricht nur, was die Runde hält', () => {
+  it('nextOf mit soon=false sagt „heute später“, nie „gleich“', async () => {
+    const { nextOf } = await import('../../../src/modules/vocab/domain/band');
+    const t = T0;
+    let l = introduce(emptyLex('w', 'core', t), t);
+    const r = applyAnswer(l, { t: t + 60_000, form: 'gap_hint', outcome: 'wrong', hint: 0, ms: 9000, fk: 2000, sentence: 'a' }, ctx());
+    l = r.lex;
+    expect(l.step).not.toBeNull();
+    expect(nextOf(r, true, t + 60_000, true, true)).toMatchObject({ kind: 'step' });
+    expect((nextOf(r, true, t + 60_000, true, false) as { mode: string }).mode).toBe('later');
   });
 });

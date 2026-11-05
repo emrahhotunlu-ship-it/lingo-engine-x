@@ -1022,6 +1022,7 @@ export class LearnRun {
       planned: p.task.planned,
       t: p.f.t,
       ...(this.env.meaningOf ? { meaningOf: this.env.meaningOf } : {}),
+      ...(this.run && !this.run.returnsThisRound(p.task) ? { soon: false } : {}),
     });
     if (!band) {
       // Abfrage, die nicht zählt: ohne Band weiter (kommt in V3 mit „Aufgabe war unfair“).
@@ -1048,7 +1049,7 @@ export class LearnRun {
     p.a = a;
     p.result = this.compute(p.kind, p.card, p.task, p.before, a);
     // Urteil und Lösung bleiben, wie geprüft; nur „Kommt wieder“ folgt der neuen Buchung.
-    const band = previewOf({ m: p.card, check: p.check, given: p.given, lang: this.env.lang(), before: p.before, result: p.result, planned: p.task.planned, t: p.f.t });
+    const band = previewOf({ m: p.card, check: p.check, given: p.given, lang: this.env.lang(), before: p.before, result: p.result, planned: p.task.planned, t: p.f.t, ...(this.run && !this.run.returnsThisRound(p.task) ? { soon: false } : {}) });
     this.set({ ...v, choice, band: band ? { ...v.band, next: band.next } : v.band });
   }
 

@@ -67,6 +67,8 @@ export type BandIn = {
   meaningOf?: (w: string) => string | null;
   /** Bedeutungskarte: `answer` = deutsche Bedeutung, `de` = englisches Wort. Eigene Warum-Sätze (ux-reviewer W7 Nr. 2). */
   meaning?: boolean;
+  /** Holt die Runde das Wort noch zurück? `false` → „heute später“ statt „gleich noch einmal“. */
+  soon?: boolean;
 };
 
 const HARD_GRADE = 2;
@@ -136,6 +138,7 @@ export function whyOf(x: Pick<BandIn, 'check' | 'given' | 'answer' | 'de' | 'pos
     const mv = { word: de, de: answer, given, ...(pos ? { pos } : {}) };
     if (check.outcome === 'dunno') return rule('vmWhyMeanDunno', mv);
     if (check.outcome === 'wrong' || check.outcome === 'other') return rule(pos ? 'vmWhyMeanWrong' : 'vmWhyMeanWrongNoPos', mv);
+    if (check.note === 'dict') return rule('vmWhyMeanAlt', mv);
     return rule(pos ? 'vmWhyMeanOk' : 'vmWhyMeanOkNoPos', mv);
   }
   const teachWhy = x.lang === 'de' && teach.why ? ({ kind: 'teach', text: teach.why } as const) : null;
@@ -213,7 +216,7 @@ export function stepMode(n: number, moreSentences: boolean): 'same' | 'sentence'
 }
 
 /** „Kommt wieder“ aus dem gespeicherten Lexem. */
-export function nextOf(r: AnswerResult, planned: boolean, t: number, moreSentences: boolean): Next {
+export function nextOf(r: AnswerResult, planned: boolean, t: number, moreSentences: boolean, soon = true): Next {
   const l = r.lex;
   const day = dayKey(t);
   const tomorrow = addDays(day, 1);
@@ -222,7 +225,9 @@ export function nextOf(r: AnswerResult, planned: boolean, t: number, moreSentenc
   if (l.step && dayKey(l.step.at) === day) {
     const d = r.booked.length ? due(r.booked[0]!) : nextDue();
     // Schritt B kommt mit Abstand (≥ 8 Karten und 3 Min.), oft erst in der nächsten Runde des Lerntags: „heute später“, nicht „gleich“.
-    return { kind: 'step', mode: l.step.n === 2 ? 'later' : stepMode(l.step.n, moreSentences), thenTomorrow: d !== null && dayKey(d) === tomorrow };
+    // `soon === false`: die Runde holt das Wort nicht mehr zurück (höchstens 3 Abfragen je Runde, keine anderen Karten mehr) – dann nie „gleich“
+    // versprechen, sondern „heute später“ (learning-scientist W7, Kap. 2 Nr. 2).
+    return { kind: 'step', mode: l.step.n === 2 || !soon ? 'later' : stepMode(l.step.n, moreSentences), thenTomorrow: d !== null && dayKey(d) === tomorrow };
   }
   if (!planned || !r.booked.length) return { kind: 'practice', day: l.intro === null ? null : dayKey(nextDue()) };
   const d = due(r.booked[0]!) ?? nextDue();
@@ -240,7 +245,7 @@ export function bandOf(x: BandIn): Band | null {
     line: lineOf(x.check.outcome, x.given, x.answer, x.check.hit),
     why: whyOf(x),
     partners: partnersOf(x.col),
-    next: nextOf(x.result, x.planned, x.t, x.moreSentences),
+    next: nextOf(x.result, x.planned, x.t, x.moreSentences, x.soon ?? true),
     alsoRight: verdict !== 'ok' && verdict !== 'syn' && verdict !== 'dunno' && verdict !== 'evade',
     knewIt: notYet && x.planned && mayVoid(x.before, x.t),
   };

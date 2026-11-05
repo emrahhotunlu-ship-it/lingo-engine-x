@@ -24,6 +24,7 @@ export const vmDe = {
   vmWhyMeanWrong: '„{given}“ trifft es nicht. {word} ({pos}) heißt hier: {de}.',
   vmWhyMeanWrongNoPos: '„{given}“ trifft es nicht. {word} heißt hier: {de}.',
   vmWhyMeanDunno: 'Kein Problem: {word} heißt hier {de}. Es kommt bald wieder.',
+  vmWhyMeanAlt: '„{given}“ stimmt auch. Gelernt hast du für {word}: {de}.',
   vmWhyMeaning: '{answer} = {de} ({pos}).',
   vmWhyMeaningNoPos: '{answer} = {de}.',
   vmWhyGap: 'Richtig. Das Wort neben der Lücke steht schon im Satz, in die Lücke gehört nur {answer}.',

@@ -214,7 +214,8 @@ html[data-lx-blockflash] .lx-vu-blockline {
 html:is([data-lx-area], :has([data-testid='intro-flow'])) .lx-actionbar {
   border-top-color: transparent;
   padding-top: 10px;
-  padding-inline: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right));
+  /* ux-reviewer W7 Nr. 8: dieselbe Kante wie der Inhalt (16 px). */
+  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
 }
 html:has([data-testid='intro-flow']) .lx-actionbar-main {
   min-height: 52px;
