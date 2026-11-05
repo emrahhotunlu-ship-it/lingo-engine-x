@@ -30,7 +30,7 @@ import { keypointsItem } from '../domain/material';
 import { startersFor } from '../domain/starters';
 import { confirmedWords, fromMail, fromReply, fromSummary, newRunId, selfSpots, spotContext, type ApplyRun, type Feedback } from '../domain/result';
 import { useMaterial, useTargets, type Material } from './hooks';
-import type { Greet } from '../domain/greet';
+import { greetTone, type Greet } from '../domain/greet';
 import { ApplyResult, kindLabel, type SelfState } from './Result';
 import { knownKeypoints, saveKeypoints, saveRun, type SaveResult } from './save';
 import type { WriteKind } from '../domain/count';
@@ -56,8 +56,10 @@ const TO_KEY: Record<string, MessageKey> = {
   'absent colleague': 'axTo_colleague',
   procurement: 'axTo_procurement',
   investor: 'axTo_investor',
-  'client and director': 'axTo_clientDirector',
+  'client, with your director in cc': 'axTo_clientDirector',
 };
+/** Empfänger, deren Text die ganze Zeile ist (mit Name und Kopie, Lehrer-Prüfung W5b). */
+const TO_LINE: ReadonlySet<MessageKey> = new Set<MessageKey>(['axTo_clientDirector']);
 const TPL: Record<WriteKind, string> = {
   reply: `${applyReply.id}@${applyReply.version}`,
   write: `${c1Mail.id}@${c1Mail.version}`,
@@ -281,8 +283,13 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
   // Die vorbelegte Anrede allein ist noch kein Text (kein „Schreiben begonnen“, keine Wörter vor dem ersten Punkt).
   const body = partsMode ? joinParts(parts) : text;
   const composed = partsMode && body.trim() ? joinParts([greet, ...parts]) : body;
-  const starters = useMemo(() => startersFor(kind, m.id, m.kind === 'write' ? m.situation.sit : ''), [kind, m]);
-  const greetVars = m.kind === 'reply' ? { reader: `${m.mail.from} (${m.mail.role})`, hello: m.greet.hello, close: m.greet.close } : m.kind === 'write' ? { reader: `${m.situation.to}${m.greet.name ? `, ${m.greet.name}` : ''}`, hello: m.greet.hello, close: m.greet.close } : undefined;
+  const starters = useMemo(() => startersFor(kind, m.id), [kind, m.id]);
+  const greetVars =
+    m.kind === 'reply'
+      ? { reader: `${m.mail.from} (${m.mail.role})`, hello: m.greet.hello, close: m.greet.close }
+      : m.kind === 'write'
+        ? { reader: m.greet.reader ?? `${m.situation.to}${m.greet.name ? `, ${m.greet.name}` : ''}`, hello: m.greet.hello, close: m.greet.close }
+        : undefined;
   const chars = Array.from(composed.trim()).length;
   const words = countWords(composed);
   const sentences = countSentences(composed);
@@ -529,7 +536,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
                   autoCapitalize="sentences"
                   autoComplete="off"
                   spellCheck={false}
-                  placeholder={k === mustN ? t('axPartClosePh', { close: m.greet.close }) : t('axPlaceholder')}
+                  placeholder={k === mustN ? t('axPartClosePh') : t('axPlaceholder')}
                   disabled={editorOff}
                   onChange={(e) => {
                     const v = e.target.value;
@@ -658,6 +665,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
           self={self}
           checksLeft={MAX_CHECKS - run.check}
           tpl={TPL[kind]}
+          greet={m.kind === 'summary' ? null : m.greet}
           onRevise={revise}
           onDone={done}
           headRef={resultHead}
@@ -710,7 +718,7 @@ function MaterialCard({ m, open, writing, onToggle }: { m: Material; open: boole
     return (
       <section className="lx-card flex flex-col gap-2 p-4 sm:p-6" aria-label={t('axBrief')} data-testid="ax-brief">
         <p className="lx-ax-small m-0 text-subtle" data-testid="ax-reader">
-          {m.greet.name ? t('axReaderName', { to: readerOf(m.situation.to, t), name: m.greet.name }) : t('axReader', { to: readerOf(m.situation.to, t) })}
+          {readerLine(m.situation.to, m.greet.name, t)}
         </p>
         <p className="lx-ax-text m-0" lang={lang}>
           {m.situation.brief[lang]}
@@ -822,15 +830,20 @@ function SelfFix({ self, text, onChange, onReveal, headRef, onFocus, onBlur }: S
 }
 
 
-/** K7: passende Anrede und passender Gruß für diesen Empfänger (als Hinweis; andere Formen derselben Tonlage gelten auch). */
+/**
+ * K7: Hinweis zu Anrede und Gruß – nur Empfänger und Ton („extern, förmlich“ / „intern, locker“), nicht die fertige Anrede (Lehrer-Prüfung W5b: Emrah
+ * wählt selbst); der Vorschlag steht erst im Ergebnis.
+ */
 function GreetHint({ g }: { g: Greet }) {
   const { t } = useT();
   return (
-    <p className="lx-ax-hint m-0 text-muted" data-testid="ax-greet-hint">
-      {t('axGreetHint', { hello: g.hello, close: g.close })}
+    <p className="lx-ax-hint m-0 text-muted" data-testid="ax-greet-hint" data-tone={greetTone(g.hello)} data-ext={String(g.ext)}>
+      {t('axGreetHint', { where: t(g.ext ? 'axWhere_ext' : 'axWhere_int'), tone: t(TONE_HINT[greetTone(g.hello)]) })}
     </p>
   );
 }
+
+const TONE_HINT: Record<ReturnType<typeof greetTone>, MessageKey> = { formal: 'axTone_formal', polite: 'axTone_polite', informal: 'axTone_informal' };
 
 /**
  * K9 Starthilfe: erst ein Knopf, auf Antippen drei Satzanfänge (Einstieg, Hauptteil, Schluss) aus festen Listen, kein KI-Aufruf. Geöffnet zählt als Hilfe
@@ -861,9 +874,12 @@ function Starters({ items, open, onOpen }: { items: readonly string[]; open: boo
   );
 }
 
-const readerOf = (to: string, t: (k: MessageKey) => string): string => {
+/** Empfänger-Zeile der Aufgabe: Rolle in der Oberflächensprache und Name; manche Empfänger bringen die ganze Zeile mit (ms12: Kunde, Direktorin in Kopie). */
+const readerLine = (to: string, name: string, t: (k: MessageKey, vars?: Record<string, string | number>) => string): string => {
   const key = TO_KEY[to];
-  return key ? t(key) : to;
+  if (key && TO_LINE.has(key)) return t(key, { name });
+  const role = key ? t(key) : to;
+  return name ? t('axReaderName', { to: role, name }) : t('axReader', { to: role });
 };
 
 /** Der geprüfte eigene Text, eingeklappt zu einer Zeile (UX-Befund 3: der Text stand sonst dreimal da). */

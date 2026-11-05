@@ -100,9 +100,10 @@ test.describe('Handy 390 px', () => {
     await expect(first).toHaveAttribute('autocomplete', 'off');
     await expect(first).toHaveAttribute('name', 'lx-apply-text');
     await expect(page.getByTestId('ax-check')).toBeDisabled();
-    // W5 K7: eigenes Anrede-Feld, vorbelegt mit der passenden Anrede aus dem Material; der Gruß nennt den passenden Gruß als Beispiel.
-    await expect(page.getByTestId('ax-part-greet')).toHaveValue(/^(Hi|Hello|Dear|Hey) .+,$/);
-    await expect(page.getByTestId(`ax-part-${n - 1}`)).toHaveAttribute('placeholder', /^z\. B\. .+,$/);
+    // W5 K7: eigenes Anrede-Feld, leer (Anrede wird mitbewertet); Lehrer-Prüfung W5b: weder Feld noch Hinweis nennen die fertige Anrede oder den Gruß.
+    await expect(page.getByTestId('ax-part-greet')).toHaveValue('');
+    await expect(page.getByTestId(`ax-part-${n - 1}`)).toHaveAttribute('placeholder', 'Gruß und dein Name');
+    await expect(page.getByTestId('ax-greet-hint')).toHaveCount(0);
     // W5 K9: Starthilfe erst auf Wunsch, dann drei Satzanfänge (zählt als Hilfe).
     await expect(page.getByTestId('ax-starters')).toHaveCount(0);
     await page.getByTestId('ax-starter').click();
@@ -149,8 +150,9 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('ax-length')).toBeVisible();
     await expect(page.getByTestId('ax-spot-0')).toHaveAttribute('data-self', 'ok');
     await expect(page.getByTestId('ax-spot-0')).toContainText('discussed');
-    // W5 K7: Anrede und Gruß beim Ton bewertet; K1: „So klingt es gehobener“ getrennt von den Fehlern, mit Zitat, besserer Fassung und Warum; K9 vermerkt.
+    // W5 K7: Anrede und Gruß beim Ton bewertet, der Vorschlag erst hier; K1: „So klingt es professioneller“ getrennt von den Fehlern, mit Zitat, besserer Fassung und Warum; K9 vermerkt.
     await expect(page.getByTestId('ax-greet')).toHaveAttribute('data-fit', 'fits');
+    await expect(page.getByTestId('ax-greet-suggest')).toContainText(/Vorschlag: Anrede „(Hi|Hello|Dear|Hey) .+,“ · Gruß „.+,“/);
     await expect(page.getByTestId('ax-style')).toHaveAttribute('data-n', '2');
     await expect(page.getByTestId('ax-style-0')).toContainText('very busy');
     await expect(page.getByTestId('ax-style-0')).toContainText('stretched thin');
@@ -357,7 +359,8 @@ test.describe('Laptop 1440 px', () => {
     await page.getByTestId('ax-row-reply').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-material', 'm07');
-    await expect(page.getByTestId('ax-greet-hint')).toContainText('Passende Anrede: „Hello Ms. Roth,“');
+    // Lehrer-Prüfung W5b: nur Empfänger und Ton, nicht die fertige Anrede.
+    await expect(page.getByTestId('ax-greet-hint')).toHaveText('Anrede und Gruß passend wählen: extern, höflich');
     expect(errors).toEqual([]);
   });
 
@@ -369,7 +372,7 @@ test.describe('Laptop 1440 px', () => {
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-brief')).toContainText('Empfänger');
     // W5 K7: Empfänger mit Namen und passende Anrede als Hinweis.
-    await expect(page.getByTestId('ax-greet-hint')).toContainText(/Passende Anrede: „(Hi|Hello|Dear) .+,“ · Gruß: „.+,“/);
+    await expect(page.getByTestId('ax-greet-hint')).toHaveText(/^Anrede und Gruß passend wählen: (intern|extern), (förmlich|höflich|locker)$/);
     await expect(page.getByTestId('ax-task')).toHaveText('Lies, worum es geht, und schreib deine Mail auf Englisch.');
     await expect(page.getByTestId('ax-target-rule')).toContainText('Regel:');
     const mail = `Dear Ms Weber,

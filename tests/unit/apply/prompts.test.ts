@@ -81,7 +81,7 @@ describe('Vorlagen', () => {
     const rp = applyReply.build(replyVars());
     expect(rp).toContain('Judge whether the point is there, not the grammar. For a point about tone, judge the whole reply');
     expect(rp).toContain('yes = clearly there; partly = mentioned but vague, incomplete or slightly wrong; no = missing.');
-    expect(rp).toContain("it must cover every point above (add one short sentence for a missing point), must not add new facts, and must differ from the learner's reply.");
+    expect(rp).toContain("it must cover every point above (add one short sentence for a missing point), must not add new facts, must keep or add a fitting salutation and sign-off, and must differ from the learner's reply.");
     const sp = applySummary.build(sumVars({ goal: { sentences: [3, 3], maxWords: 70 } }));
     expect(sp).toContain("with 3 sentences and at most 70 words, in the learner's own words");
     expect(sp).toContain('partly = mentioned but vague');
@@ -206,5 +206,13 @@ describe('W5 K1 „So klingt es gehobener“ und K7 Anrede/Gruß', () => {
     const out = c1Mail.schema(v).parse(old);
     expect(out.style).toEqual([{ from: 'tell you', to: 'let you know', why: 'Höflicher.' }]);
     expect(out.greet).toBeNull();
+  });
+
+  it('W5b: die bessere Fassung behält oder ergänzt Anrede und Gruß (Antwort immer, Mail nur mit Vorgabe – die Schreibwerkstatt bleibt unverändert)', () => {
+    const rule = 'keep or add a fitting salutation and sign-off';
+    expect(applyReply.build(replyVars())).toContain(rule);
+    const v = { situation: 'Reader: CFO. Write about the timeline.', patterns: [], phrases: [], text: 'Dear Daniel, I will tell you the timeline next week. Best regards', uiLang: 'de' as const, ctx: '', pats: patListText() };
+    expect(c1Mail.build({ ...v, greet: { reader: 'CFO, Daniel', hello: 'Hi Daniel,', close: 'Best regards,' } })).toContain(rule);
+    expect(c1Mail.build(v)).not.toContain(rule);
   });
 });

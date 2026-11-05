@@ -14,6 +14,7 @@ import type { PromptTemplate, UiLang } from './types';
 // Ein Neuversuch nach A6.3 nur bei Schemaverletzung (fehlende Fassung, falsche Sprache).
 // @2 (W5, Lehrer-Prüfung F3, Anwenden „Eine Mail schreiben“): `style` „So klingt es gehobener“ (K1) und – nur mit Vorgabe `greet` – Anrede und Gruß (K7).
 // Beide tolerant (fehlen sie, gelten die Verbesserungen der Liste bzw. kein Urteil); die Schreibwerkstatt ruft ohne `greet` und zeigt beides nicht.
+// W5b (Lehrer-Prüfung): mit `greet` behält oder ergänzt `upgraded` Anrede und Gruß. Gleiche Version: nur eine Regelzeile, Schema unverändert, @2 war noch nie live.
 
 export type MailVars = {
   /** Anlass und Gegenüber, ≤ 400 Zeichen. */
@@ -148,7 +149,7 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
       v.greet ? GREET_RULE : '',
       v.polish ? STYLE_RULE : '',
-      '- upgraded: the whole email rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length; it must differ from the learner text.',
+      `- upgraded: the whole email rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length${v.greet ? '; keep or add a fitting salutation and sign-off for this reader' : ''}; it must differ from the learner text.`,
       '- summary: one short sentence in the explanation language: what works, whether every point of the task is covered, and what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the learner text once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',

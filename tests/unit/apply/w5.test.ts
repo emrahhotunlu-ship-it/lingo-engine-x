@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { articleStock } from '../../../src/content/nb/stock';
 import { inboxMails } from '../../../src/content/nb/load';
-import { mailSituations } from '../../../src/domain/tutor/mail';
+import { mailSituations, seenPatterns, seenPhrases } from '../../../src/domain/tutor/mail';
 import { FRESH_DAYS, historyDays, lastShown, pickFresh, rotate } from '../../../src/modules/apply/domain/fresh';
-import { mailGreet, situationGreet } from '../../../src/modules/apply/domain/greet';
+import { greetTone, mailGreet, situationGreet } from '../../../src/modules/apply/domain/greet';
 import { mailOrder, pickMail, situationOrder, stockOrder } from '../../../src/modules/apply/domain/material';
 import { countWords } from '../../../src/modules/apply/domain/kinds';
 import { fromReply, outItemOf, type ApplyRun } from '../../../src/modules/apply/domain/result';
@@ -84,7 +84,9 @@ describe('K7: Empfänger, Anrede und Gruß', () => {
       expect(m.reply.startsWith(g.hello), m.id).toBe(true);
     }
     const first = inboxMails()[0];
-    expect(first && mailGreet(first)).toEqual({ name: 'Laura Fischer', hello: 'Hi Laura,', close: 'Best regards,' });
+    expect(first && mailGreet(first)).toEqual({ name: 'Laura Fischer', hello: 'Hi Laura,', close: 'Best regards,', ext: true });
+    const intern = inboxMails().find((m) => m.id === 'm10');
+    expect(intern && mailGreet(intern).ext).toBe(false);
   });
 
   it('jede Situation hat einen Empfänger mit Anrede (US-Schreibweise „Ms.“/„Mr.“) und Gruß; die Anrede nennt den Namen', () => {
@@ -96,6 +98,18 @@ describe('K7: Empfänger, Anrede und Gruß', () => {
       expect(`${g.hello} ${g.name}`, s.id).not.toMatch(/\b(Ms|Mr|Mrs|Dr) /);
     }
     expect(situationGreet('unbekannt').hello).toBe('Hello,');
+  });
+
+  it('Ton der Anrede: „Dear …“ förmlich, mit Titel oder an alle höflich, per Vorname locker; ms12 an den Kunden, Direktorin in Kopie', () => {
+    expect(greetTone('Dear Ms. Becker,')).toBe('formal');
+    expect(greetTone('Hello Ms. Roth,')).toBe('polite');
+    expect(greetTone('Hi Mr. Brandt,')).toBe('polite');
+    expect(greetTone('Hello everyone,')).toBe('polite');
+    expect(greetTone('Hi Tom,')).toBe('informal');
+    expect(greetTone('Hey Mark,')).toBe('informal');
+    expect(situationGreet('ms12')).toMatchObject({ name: 'Ms. Becker', ext: true });
+    expect(situationGreet('ms12').reader).toMatch(/client, Ms\. Becker.*director.*cc/);
+    expect(situationGreet('ms06').ext).toBe(false);
   });
 });
 
@@ -125,16 +139,53 @@ describe('K8: Artikel-Vorrat', () => {
 });
 
 describe('K9: Starthilfe', () => {
-  it('drei Satzanfänge (Einstieg, Hauptteil, Schluss), fest je Material, ohne Anführungszeichen', () => {
-    for (const kind of ['reply', 'write', 'summary'] as const) {
-      const a = startersFor(kind, 'm01', 'status update');
+  const sits = mailSituations();
+  const hits = (x: string, s: (typeof sits)[number]): string[] => [
+    ...seenPatterns(x, s).filter((p) => p.ok).map((p) => p.id),
+    ...seenPhrases(x, s).filter((p) => p.ok).map((p) => p.id),
+    ...s.phrases.filter((p) => x.toLowerCase().includes(p.toLowerCase())),
+  ];
+  const general = (): string[] => [...starterGroups('reply'), ...starterGroups('summary'), ...starterGroups('write', 'unbekannt')].flat();
+
+  it('drei Satzanfänge (Einstieg, Hauptteil, Schluss), fest je Material, ohne Anführungszeichen, alle mit „…“', () => {
+    for (const [kind, id] of [['reply', 'm01'], ['write', 'ms01'], ['write', 'unbekannt'], ['summary', 'av01']] as const) {
+      const a = startersFor(kind, id);
       expect(a).toHaveLength(3);
-      expect(startersFor(kind, 'm01', 'status update')).toEqual(a);
-      a.forEach((x, k) => expect(starterGroups(kind, 'status update')[k]).toContain(x));
+      expect(startersFor(kind, id)).toEqual(a);
+      a.forEach((x, k) => expect(starterGroups(kind, id)[k]).toContain(x));
+      for (const g of starterGroups(kind, id))
+        for (const x of g) {
+          expect(x).not.toMatch(/["“”]/);
+          expect(x).toContain('…');
+        }
     }
-    for (const sit of ['status update', 'client email', 'negotiation', 'escalation', 'unbekannt'])
-      for (const g of starterGroups('write', sit)) for (const x of g) expect(x).not.toMatch(/["“”]/);
-    expect(starterGroups('write', 'Negotiation')).toBe(starterGroups('write', 'negotiation'));
+  });
+
+  it('Mail schreiben: jede Situation ms01–ms12 hat ihre eigenen drei Anfänge', () => {
+    expect(sits).toHaveLength(12);
+    const seen = new Set<string>();
+    for (const s of sits) {
+      const a = startersFor('write', s.id);
+      expect(a, s.id).toHaveLength(3);
+      expect(a, s.id).not.toEqual(startersFor('write', 'unbekannt'));
+      for (const x of a) {
+        expect(seen.has(x), `${s.id}: ${x}`).toBe(false);
+        seen.add(x);
+      }
+    }
+  });
+
+  it('kein Anfang enthält ein Zielmuster oder eine vorgegebene Wendung seiner Situation (Erkennungsmuster des Moduls)', () => {
+    for (const s of sits) for (const x of startersFor('write', s.id)) expect(hits(x, s), `${s.id}: ${x}`).toEqual([]);
+  });
+
+  it('die allgemeinen Anfänge (Antworten, Zusammenfassen, unbekannte Situation) enthalten kein Muster und keine Wendung irgendeiner Situation', () => {
+    for (const x of general()) for (const s of sits) expect(hits(x, s), `${s.id}: ${x}`).toEqual([]);
+  });
+
+  it('Lehrer-Prüfung W5b: keine bekannten Vorwegnahmen', () => {
+    const all = [...sits.flatMap((s) => startersFor('write', s.id)), ...general()].join('\n');
+    for (const bad of [/so far, we have/i, /if you were open to/i, /look forward to/i, /recommend that/i, /walk you through/i, /as soon as we heard/i]) expect(all).not.toMatch(bad);
   });
 });
 
