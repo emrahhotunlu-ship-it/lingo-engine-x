@@ -25,6 +25,8 @@ import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './per
 import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
 import { commitRepairAnswer } from '../repair/review';
+import { pickSentence } from '../../domain/srs/pack';
+import { packOf, preparePacks } from './packs';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
 // gebaut – so kann derselbe Handler die Tastatur öffnen (iPhone). Die Karten sind für die Runde
@@ -122,9 +124,17 @@ function sceneLookup(lang: Lang): SceneLookup {
 function exerciseFor(s: Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env'>, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
-  const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
+  // Kartenpaket (docs/ki-paket-plan.md §2): Satz dieser Abfrage nach der Wechselregel.
+  const pack = packOf(card);
+  const pick = pickSentence(card, pack, s.shown[item.key] ?? 0, item.reason === 'again');
+  const asked = pick.span && pick.span !== card.context ? { ...card, context: pick.span } : card;
+  const ex = chooseExercise(asked, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
-  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[item.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[item.key] ?? 0}`, {
+    sceneOf: sceneLookup(s.lang),
+    context: pick.span,
+    pack: pack ? { item: pick.item, dis: pack.dis, lang: pack.lang, cwhy: pack.cwhy } : null,
+  });
 }
 
 /** Alle Karten der Runde: Vokabeln und Wendungen (`chunk/*`) mit derselben Planung. */
@@ -220,6 +230,8 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   // H1: Pflichtrunde ohne abfragbare Karte (z. B. nach dem Neuladen) – „Wiederholen" ist erschöpft.
   if (round === 'pflicht' && target > 0 && next.status === 'summary') markExhausted(day);
   useSession.setState(next);
+  // Karten der Runde im Hintergrund vorbereiten (Handlung „Starten"; niemand wartet darauf).
+  preparePacks(queue.map((q) => byKey.get(q.key)).filter((c): c is TrainCard => !!c), lang, env.ai);
   if (repairs.length) return 'choice';
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
@@ -335,7 +347,15 @@ function advanceFrom(s: SessionState): FirstKind {
   return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
 }
 
-export type Answer = { grade: Grade; given: string; ms: number; ok: boolean; override?: boolean };
+export type Answer = {
+  grade: Grade;
+  given: string;
+  ms: number;
+  ok: boolean;
+  override?: boolean;
+  /** Passendes Synonym statt Zielwort (docs/ki-paket-plan.md §3): Die Karte kommt in der Runde noch einmal im Ursprungssatz. */
+  recall?: boolean;
+};
 
 /** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
 export function commitAnswer(ans: Answer): FirstKind {
@@ -372,7 +392,7 @@ export function commitAnswer(ans: Answer): FirstKind {
 
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };
   const queue = [...s.queue];
-  const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
+  const again = ((isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS) || !!ans.recall) && (shown[card.key] ?? 0) < MAX_SHOWN;
   if (again) queue.splice(Math.min(queue.length, s.pos + 4), 0, { key: card.key, reason: 'again', phase: 'quiz' });
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
   return advanceFrom({

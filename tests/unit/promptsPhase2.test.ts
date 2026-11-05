@@ -102,7 +102,7 @@ describe('Phase-2-Vorlagen: Kopfzeile, Stufe, Zwischenspeicher', () => {
   it('im Verzeichnis, mit Kopfzeile', () => {
     const ids = TEMPLATES.map((t) => t.id);
     for (const id of ['lesson-content', 'lesson-production', 'grammar-items', 'grammar-judge']) expect(ids).toContain(id);
-    expect(grammarJudge.build(judgeVars).split('\n')[0]).toBe('[grammar-judge@1]');
+    expect(grammarJudge.build(judgeVars).split('\n')[0]).toBe('[grammar-judge@2]');
     expect(grammarItems.build(itemsVars).split('\n')[0]).toBe('[grammar-items@2]');
     expect(lessonContent.build(contentVars).split('\n')[0]).toBe('[lesson-content@2]');
     expect(lessonProduction.build(productionVars).split('\n')[0]).toBe('[lesson-production@2]');
@@ -117,7 +117,7 @@ describe('Phase-2-Vorlagen: Kopfzeile, Stufe, Zwischenspeicher', () => {
 });
 
 describe('Beispiele bestehen das Schema, falsche Sprache nicht', () => {
-  it('grammar-judge@1', () => {
+  it('grammar-judge@2', () => {
     const s = grammarJudge.schema(judgeVars);
     expect(s.safeParse(JSON.parse(GRAMMAR_JUDGE_EXAMPLE)).success).toBe(true);
     // W5: „falsch, aber akzeptabel" wird zu „fast richtig" statt abgelehnt (Kap. 2.2, keine Widersprüche).

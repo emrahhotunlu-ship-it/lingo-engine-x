@@ -2,7 +2,8 @@ import { hash32, mulberry32, shuffle } from '../random';
 import { typedForm } from '../chunks/situation';
 import { meaningOf, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
-import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
+import type { CheckResult, Colloc, ContextSpan, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
+import type { PackAlt, PackItem } from './pack';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
 // dieselbe Karte am selben Tag zeigt dieselben Optionen in derselben Reihenfolge.
@@ -211,12 +212,36 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
 /** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
 
-export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup } = {}): Exercise {
+export type BuildOpts = {
+  sceneOf?: SceneLookup;
+  /** Satz dieser Abfrage (Kartenpaket, docs/ki-paket-plan.md §2); fehlt er, gilt der Ursprungssatz. */
+  context?: ContextSpan | null;
+  /** Paket-Satz der Abfrage (weitere richtige Formen, Synonyme, Warum) und Ablenker des Pakets. */
+  pack?: { item: PackItem | null; dis: readonly PackAlt[]; lang: Lang; cwhy?: string } | null;
+};
+
+/** Ablenker des Pakets (match): in der Form der Lösung, mit „warum nicht". Weniger als zwei → keine. */
+function packDistractors(answer: string, card: TrainCard, dis: readonly PackAlt[], inflect: boolean): Option[] {
+  const out: Option[] = [];
+  for (const d of dis) {
+    const label = inflect ? inflectLike(answer, card.lemma, d.w) : d.w;
+    if (norm(label) === norm(answer) || out.some((o) => norm(o.label) === norm(label))) continue;
+    out.push({ id: `p${out.length}`, label, lang: 'en', correct: false, ...(d.why ? { why: d.why } : {}) });
+  }
+  return out.length >= 2 ? out.slice(0, 3) : [];
+}
+
+export function buildExercise(card0: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: BuildOpts = {}): Exercise {
+  // Der Satz der Abfrage ersetzt nur hier den Ursprungssatz; `exercise.card` bleibt die Karte.
+  const card: TrainCard = opts.context !== undefined && opts.context !== null ? { ...card0, context: opts.context } : card0;
   const def = exerciseDef(ex);
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
   const meaning = meaningOf(card, lang);
   const stage = Math.max(1, card.stage) as Stage;
-  const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
+  const item = opts.pack?.item && card.context && opts.context && card.context.sentence === opts.pack.item.en ? opts.pack.item : null;
+  const base: Exercise = { ex, input: def.input, card: card0, stage, sentence: null, meaning, firstLetter: null, colloc: null, options: [], accepted: [], ...(opts.pack ? { pack: { item, lang: opts.pack.lang, cwhy: opts.pack.cwhy ?? '' } } : {}) };
+  /** Lösung einer Lücke plus weitere richtige Formen aus dem Paket. */
+  const gapAccepted = (gap: string): string[] => [gap, ...(item?.ok ?? [])];
 
   switch (ex) {
     case 'listen_mc':
@@ -234,8 +259,12 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
     case 'match': {
       const answer = card.context?.gap ?? bareAnswer(card);
       const correct: Option = { id: 'ok', label: answer, lang: 'en', correct: true };
-      const ds = wordDistractors(card, pool, lang, rng).map((d) => ({ ...d, label: card.context ? inflectLike(answer, card.lemma, d.label) : d.label }))
-        .filter((d) => norm(d.label) !== norm(answer));
+      const fromPack = item && opts.pack ? packDistractors(answer, card, opts.pack.dis, !!card.context) : [];
+      const ds = fromPack.length
+        ? fromPack
+        : wordDistractors(card, pool, lang, rng)
+            .map((d) => ({ ...d, label: card.context ? inflectLike(answer, card.lemma, d.label) : d.label }))
+            .filter((d) => norm(d.label) !== norm(answer));
       return { ...base, sentence: card.context, options: shuffle([correct, ...ds], rng), accepted: [answer] };
     }
     case 'tiles': {
@@ -249,7 +278,7 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
       return { ...base, sentence: card.context, accepted: [gap], speak: card.context?.sentence ?? gap };
     }
     case 'speed': {
-      if (card.context) return { ...base, sentence: card.context, accepted: [card.context.gap], limitMs: speedLimitMs(card.context.gap) };
+      if (card.context) return { ...base, sentence: card.context, accepted: gapAccepted(card.context.gap), limitMs: speedLimitMs(card.context.gap) };
       const accepted = [bareAnswer(card)];
       if (card.lemma !== accepted[0]) accepted.push(card.lemma);
       return { ...base, accepted, limitMs: speedLimitMs(accepted[0] ?? card.word) };
@@ -275,7 +304,7 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
     case 'cloze_hint':
     case 'cloze': {
       const gap = card.context?.gap ?? card.word;
-      return { ...base, sentence: card.context, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
+      return { ...base, sentence: card.context, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: card.context ? gapAccepted(gap) : [gap] };
     }
     case 'type': {
       const accepted = [bareAnswer(card)];

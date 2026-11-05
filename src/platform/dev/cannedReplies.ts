@@ -14,9 +14,10 @@ import { courseExtendReply } from './canned/courseExtend';
 import { repairCheckReply } from './canned/repairCheck';
 import { registerFluencyMeetingReplies } from './canned/fluencyMeeting';
 import { patternCheckReply, patternsReply } from './canned/patterns';
+import { wordJudgeReply, wordPrepReply } from './canned/wordPack';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
-// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
+// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@2 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
 // Sonderwörter für Fehlerpfade:
 // - `zzqx`: erste Antwort verletzt das Schema, der Neuversuch („did not match") ist gültig,
 // - `zzjson`: gar kein JSON (→ `invalid_json`).
@@ -267,18 +268,30 @@ export function lessonContentReply(input: string): string {
   });
 }
 
-// ---------------------------------------------------------------- grammar-judge@1
+// ---------------------------------------------------------------- grammar-judge@2
 
-const JUDGE_WHY: Record<Lang, string> = {
-  de: 'Deine Antwort ist grammatisch richtig und passt zur Aufgabe, auch wenn sie anders gebaut ist.',
-  en: 'Your answer is grammatical and fits the task, even though it is built differently.',
+const JUDGE_WHY: Record<Lang, { ok: string; wrong: (ans: string) => string }> = {
+  de: {
+    ok: 'Deine Antwort ist grammatisch richtig und passt zur Aufgabe, auch wenn sie anders gebaut ist.',
+    wrong: (ans) => `Hier fehlt die Form des geübten Grammatikpunkts; richtig ist „${ans}“.`,
+  },
+  en: {
+    ok: 'Your answer is grammatical and fits the task, even though it is built differently.',
+    wrong: (ans) => `The form of the grammar point is missing here; the correct answer is "${ans}".`,
+  },
 };
 
-/** Urteil „richtig, auch akzeptabel" über jede frei formulierte Antwort. `zzjson` in der Antwort → kein JSON. */
+/**
+ * Nachprüfung (docs/ki-paket-plan.md §3): `zzok` in der Antwort → „richtig, auch akzeptabel",
+ * sonst „falsch" mit Begründung. `zzjson` in der Antwort → kein JSON.
+ */
 export function grammarJudgeReply(input: string): string {
   const given = line(input, 'Learner answer');
   if (/\bzzjson\b/i.test(given)) return NOT_JSON;
-  return JSON.stringify({ verdict: 'correct', acceptable: true, corrected: given || '—', why: JUDGE_WHY[explanationLang(input)] });
+  const lang = explanationLang(input);
+  if (/zzok/i.test(given)) return JSON.stringify({ verdict: 'correct', acceptable: true, corrected: given || '—', why: JUDGE_WHY[lang].ok });
+  const ans = line(input, 'Expected answer') || '—';
+  return JSON.stringify({ verdict: 'wrong', acceptable: false, corrected: ans, why: JUDGE_WHY[lang].wrong(ans) });
 }
 
 /** Meldet die festen Antworten beim Entwicklungs-Adapter an. */
@@ -288,6 +301,8 @@ export function registerCannedReplies(): void {
   registerCannedReply('card-examples', cardExamplesReply);
   registerCannedReply('lesson-content', lessonContentReply);
   registerCannedReply('grammar-judge', grammarJudgeReply);
+  registerCannedReply('word-prep', wordPrepReply);
+  registerCannedReply('word-judge', wordJudgeReply);
   // Phase 3 – Sprechen und Business
   registerCannedReply('roleplay-turn', roleplayTurnReply);
   registerCannedReply('turn-analysis', turnAnalysisReply);

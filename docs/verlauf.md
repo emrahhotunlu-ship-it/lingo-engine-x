@@ -211,6 +211,21 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - Rückweg: Version `1790536760-1f37`.
 - **Kommentare in der App** sind Emrahs bevorzugter Testweg: an Claude gesendet, mit Ort; nach dem Beheben im Thread antworten und auflösen.
 
+**05.11.2026 – KI-Paket: Aufgaben vorbereiten, Antworten prüfen (Emrahs Wunsch)**
+- Emrahs Kritik: Die Beispielsätze sind immer gleich, nur eine Lösung zählt, und es steht nur „erwartet war“ ohne Warum.
+- Emrahs Wunsch: Claude soll Aufgaben intelligent vorbereiten und Antworten prüfen.
+- Umsetzung nach `english-teacher` (P1–P3) und `learning-scientist`, Plan in `docs/ki-paket-plan.md`:
+  - **Kartenpaket `xPack`:** 4 Sätze je Karte, mit Synonymen samt Unterschied und Ablenkern samt Begründung.
+  - **Satzwechsel:** Der Ursprungssatz bleibt Anker bis Stufe 2 und nach Fehlern, danach kommt jedes Mal ein anderer Satz.
+  - **Nachprüfung durch Claude** (Wörter und Grammatik):
+    - Die feste Prüfung urteilt weiter sofort (Emrahs Wunsch vom 27.09.).
+    - Claude begründet und darf eine Antwort nur auf „richtig“ heben.
+    - Ein Synonym zählt „fast“; die Karte kommt dann in der Runde noch einmal im Ursprungssatz.
+  - **Tagesvorbereitung:** Beim ersten Start einer Pflichtaufgabe bereitet Claude im Hintergrund Lektion und Grammatik vor.
+- Bewusst nicht beim Öffnen der App, damit der Zustimmungsdialog nicht ohne Anlass erscheint.
+- Nächster Schritt: das Tagesthema (P4) als eigenes Paket.
+- Testumgebung: Der vorinstallierte Chromium ist neuer als `@playwright/test` 1.56.1. `playwright.config.ts` nimmt dann `/opt/pw-browsers/chromium`.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.

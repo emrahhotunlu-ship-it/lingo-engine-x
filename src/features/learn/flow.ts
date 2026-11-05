@@ -9,6 +9,7 @@ import { startSession } from '../vocab/session';
 import { startGrammar } from '../grammar/session';
 import { startDrill } from '../drills/session';
 import { useTodayPlan } from '../today/store';
+import { prepareDay } from '../today/dayPrep';
 
 // Pflichtpunkte starten – von der Heldenkarte auf „Heute" und aus jeder Pflicht-Zusammenfassung
 // („Weiter: nächster Pflichtschritt", M11). Die Runden werden synchron im Klick gebaut, damit
@@ -28,6 +29,8 @@ export function startDuty(id: DutyId, api: FocusApi): void {
   const go = useNav.getState().go;
   // iPhone: Sprachausgabe nur in einer Nutzergeste freischalten.
   unlockSpeech();
+  // Den Rest des Tages im Hintergrund vorbereiten (docs/ki-paket-plan.md §4), einmal je Lerntag.
+  prepareDay();
   if (id === 'review') {
     const first = startSession('pflicht');
     if (first === 'typed') api.focusNow();

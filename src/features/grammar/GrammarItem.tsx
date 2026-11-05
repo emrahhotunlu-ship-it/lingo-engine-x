@@ -1,5 +1,12 @@
+import { motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useClock } from '../../app/clock';
+import { askJson } from '../../ai/gate';
+import { useAiAvailable } from '../../ai/scope';
+import { isAiFailure } from '../../ai/types';
+import { logWarn } from '../../platform/diagnostics';
+import { grammarJudge, type GrammarJudgeOut } from '../../prompts/grammarJudge';
 import { useSharedTarget } from '../../engine/shared';
 import { useLive } from '../../data/live';
 import { solvedSentence } from '../../domain/course/baseLesson';
@@ -80,8 +87,18 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const [retry, setRetry] = useState<GrammarRetryHint | null>(null);
   const firstWrong = useRef<string | null>(null);
   const fieldRef = useRef<HTMLTextAreaElement>(null);
-  // Seit 27.09. ohne Claude-Nachprüfung: nie im Wartezustand.
+  // Seit 27.09. bewertet die feste Prüfung sofort (Emrahs Wunsch), nie im Wartezustand. Claude prüft
+  // danach im Hintergrund nach (docs/ki-paket-plan.md §3): Es liefert das Warum und darf eine
+  // falsche bzw. unsichere Antwort zu „richtig" heben – nie zu „fast richtig" (Befund 27.09.).
   const judging = false;
+  const ai = useAiAvailable();
+  const [judgeBusy, setJudgeBusy] = useState(false);
+  const judgeCtl = useRef<AbortController | null>(null);
+  const fbRef = useRef<Fb | null>(null);
+  useEffect(() => {
+    fbRef.current = fb;
+  });
+  useEffect(() => () => judgeCtl.current?.abort(), []);
   const [chosen, setChosen] = useState<string | null>(null);
   const [text, setText] = useState(task.type === 'correct' ? task.prompt : '');
   const typed = useRef('');
@@ -123,6 +140,32 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   // über dem Feld der Umformung)? Dann nennt der Hinweis für den zweiten Versuch das Thema.
   const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || task.type === 'gap' || (whole && task.type === 'transform'));
 
+  /** Claudes Nachprüfung einer getippten Antwort; `null` ohne KI oder bei Fehler (dann gilt die feste Prüfung). */
+  const askJudge = (given: string): Promise<GrammarJudgeOut | null> | null => {
+    if (!ai || task.type === 'mc' || !given.trim()) return null;
+    judgeCtl.current ??= new AbortController();
+    const vars = { topic: topicLabel, type: task.type, prompt: task.prompt, answer: task.answer, accepted: task.accepted, given, uiLang: lang };
+    return askJson({ template: grammarJudge, vars, signal: judgeCtl.current.signal })
+      .then((r) => r.data)
+      .catch((err: unknown) => {
+        if (!isAiFailure(err) || (err.kind !== 'cancelled' && err.kind !== 'unavailable' && err.kind !== 'busy')) logWarn('grammar:judge', err, task.key);
+        return null;
+      });
+  };
+
+  /** Ergebnis der Nachprüfung eintragen (nur, solange noch dieselbe Antwort angezeigt wird). */
+  const applyJudge = (given: string, out: GrammarJudgeOut | null) => {
+    setJudgeBusy(false);
+    if (!out) return;
+    setFb((cur) => {
+      if (!cur || cur.given !== given || cur.override || cur.dontKnow) return cur;
+      const ok = out.verdict === 'correct' && out.acceptable;
+      if (ok) return { ...cur, verdict: 'correct', unsure: false, judged: 'ai', why: out.why, grade: (cur.help.level > 0 ? 2 : 3) as Grade };
+      // Unsicher und Claude sagt nein: klar falsch.
+      return { ...cur, judged: 'ai', why: out.why, ...(cur.unsure ? { verdict: 'wrong' as const, unsure: false, grade: 1 as Grade } : {}) };
+    });
+  };
+
   const finishCheck = (verdict: Verdict, check: GrammarCheck | null, given: string, extra: Partial<Fb> = {}) => {
     // Erster Versuch falsch → Hinweis statt Lösung; die Eingabe bleibt stehen, der Fokus bleibt im
     // Feld. Nicht bei Auswahl, nicht im Wochen-Check, nicht bei „nicht sicher prüfbar".
@@ -131,6 +174,16 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible));
       if (whole) fieldRef.current?.focus({ preventScroll: true });
       else api.focusNow();
+      // Im Hintergrund: Ist die erste Antwort doch richtig, endet der zweite Versuch sofort damit –
+      // mit Zeit und Hilfe des ersten Versuchs, nicht der Wartezeit auf Claude (A7).
+      const ms0 = elapsed();
+      const timing0 = { submitMs: ms0, firstKeyMs: firstKeyAt.current === null ? ms0 : Math.max(0, Math.round(firstKeyAt.current - shownAt.current)) };
+      const help0: Help = { level: tip >= 2 ? 2 : tip >= 1 ? 1 : 0 };
+      void askJudge(given)?.then((out) => {
+        if (!out || fbRef.current || !(out.verdict === 'correct' && out.acceptable)) return;
+        const grade = learnGrade(task.type, 'correct', timing0, help0);
+        setFb({ verdict: 'correct', check, given, dontKnow: false, grade, ms: ms0, help: help0, judged: 'ai', why: out.why, unsure: false, override: false });
+      });
       return;
     }
     // Zeit: Gesamtzeit ab dem Einblenden über beide Versuche (durch die Deckelung auf „Schwer"
@@ -140,6 +193,13 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     const grade = learnGrade(task.type, verdict, { submitMs: ms, firstKeyMs }, help);
     setFb({ verdict, check, given, dontKnow: false, grade, ms, help, judged: 'local', why: null, unsure: false, override: false, ...extra });
     if (typedKind && window.matchMedia('(pointer: coarse)').matches) api.blur();
+    if (verdict === 'wrong' || extra.unsure) {
+      const run = askJudge(given);
+      if (run) {
+        setJudgeBusy(true);
+        void run.then((out) => applyJudge(given, out));
+      }
+    }
   };
 
   const check = (choice?: string) => {
@@ -366,11 +426,6 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     result = (
       <ResultArea label={t('trResultLabel')}>
         <VerdictLine verdict={fb.verdict} text={t(key)} />
-        {fb.why && (
-          <p className="text-sm" data-testid="judge-why" lang={lang}>
-            {fb.why}
-          </p>
-        )}
         {c?.us && (
           <p className="text-sm text-muted" data-testid="us-hint">
             {t('trUsHint', { us: c.us })}
@@ -385,6 +440,18 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
           {...src}
         />
         {solved && task.type !== 'correct' && <EnglishText as="p" className="text-[0.95rem] leading-relaxed text-muted" text={solved} {...src} testId="solved" />}
+        {/* Warum an fester Stelle (Kap. 2.4): nach dem Vergleich, wie im Vokabeltrainer. */}
+        {judgeBusy && !fb.why && !fb.override && (
+          <p className="text-sm text-subtle" data-testid="judging" aria-live="polite">
+            {t('trJudging')}
+          </p>
+        )}
+        {fb.why && !fb.override && (
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="text-sm" data-testid="judge-why" lang={lang}>
+            <span className="font-semibold">{t('trWhy')}: </span>
+            {fb.why}
+          </motion.p>
+        )}
         <FormHint text={formHint(task, lang)} />
         <ExampleList items={examples} {...src} />
         <AlsoRight answers={also.answers} notes={notes} />

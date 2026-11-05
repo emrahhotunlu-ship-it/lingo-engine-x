@@ -138,3 +138,13 @@ Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant ge
 | `lesson/l25…` | Kurs-Erweiterung (Kap. 6.2): `plan {pv: 'course-extend@1', unit {id: 'u7', n, en, de, goal_en, goal_de, kind}, en, de, cando_en, cando_de, situation, grammar, level, words[[en, de]]}`, `lx {pv, lang, ext: true}`, zunächst ohne Inhalt; „Lektion vorbereiten“ ergänzt nur leere Felder (ohne `lx.regen`) | `saveExtension` → `writer.createIfMissing` je Lektion (nie überschrieben), Kennungen nach frischem Lesen aller `lesson/*` |
 | `app/profile.haptic` | Vibration beim Prüfen (Kap. 4.3), Standard an; nur `false` schaltet ab | `changeHaptic` über `app/actions` (optimistisch) |
 | `scene/sc-price`, `scene/sc-pitch` | feste Szenen als Inhalt (`content/speak/scenes.json`); das Dokument entsteht wie bei den alten Szenen erst mit dem ersten Lauf | `saveRun` → `sceneRunOp` |
+
+## KI-Paket (05.11.2026, nur neue, optionale Felder)
+
+Plan: `docs/ki-paket-plan.md`. Alte Felder bleiben unverändert, es wird nichts gelöscht.
+
+| Dokument | Neu | Schreibweg |
+|---|---|---|
+| `vocab/<id>`, `chunk/<id>` | `xPack {v:1, t, lang, r0, items[{en, gap, at, ok[], syn[{w, why}], why}] (≤ 4), dis[{w, why}] (≤ 3), cwhy, prev[] (≤ 12)}` – Kartenpaket von Claude (`word-prep@1`); `why` nur in `lang`; ca. 2–3 KB | `features/vocab/packs.ts` (`writer.transform` → `packPatch`): nur wenn das Dokument existiert; ersetzt nur das eigene, verbrauchte Paket mit derselben `t`, nie Unerwartetes |
+| `app/pool.items[]` | Tagesvorbereitung: frische Grammatik-Aufgaben (`src: 'ai'`) zum Hauptthema der Grammatik-Pflicht | wie „Neue Aufgaben“ (`generateTopicTasks`, `poolIntake` unter `acquire`) |
+| `lesson/<id>` | Tagesvorbereitung: Inhalt der heutigen Lektion, wenn er fehlt | wie „Lektion vorbereiten“ (`generateLesson` → `lessonWrite`, nie überschrieben) |

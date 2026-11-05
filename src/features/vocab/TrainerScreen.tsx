@@ -10,6 +10,7 @@ import { ExerciseView } from './ExerciseView';
 import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
+import { abortPacks } from './packs';
 import { flush } from './persist';
 import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, touch, useSession } from './session';
 import { useShallow } from 'zustand/react/shallow';
@@ -50,7 +51,13 @@ export function TrainerScreen() {
   }, [active, back]);
 
   // Bildschirmwechsel: laufende KI-Anfragen für Beispielsätze abbrechen (A6.2).
-  useEffect(() => () => abortExamples(), []);
+  useEffect(
+    () => () => {
+      abortExamples();
+      abortPacks();
+    },
+    [],
+  );
 
   useEffect(() => {
     const onVis = () => pauseActivity(document.visibilityState === 'hidden');
