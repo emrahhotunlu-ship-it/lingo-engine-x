@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { askJson } from '../../ai/gate';
+import type { AiPriority } from '../../ai/types';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { getWriter } from '../../data';
@@ -105,20 +106,20 @@ export function startBaseLesson(): void {
   useLessonRun.setState({ status: 'ready', content });
 }
 
-/** „Lektion vorbereiten": Inhalt von Claude, gespeichert nach §4.8 (nie überschrieben). */
-export async function prepareLesson(signal: AbortSignal): Promise<void> {
-  const s = useLessonRun.getState();
-  if (!s.meta || !s.lid) return;
-  const meta = s.meta;
-  const lid = s.lid;
+/**
+ * Lektionsinhalt von Claude erzeugen und speichern (§4.8, nie überschrieben). Auch für die
+ * Tagesvorbereitung im Hintergrund (docs/ki-paket-plan.md §4). Rückgabe: gespeicherter Inhalt und
+ * ob er frisch ist (sonst hatte ein anderes Fenster schon einen).
+ */
+export async function generateLesson(lid: string, meta: LessonMeta, lang: Lang, signal: AbortSignal, priority: AiPriority = 'user'): Promise<{ stored: Doc; fresh: boolean }> {
   const tp = topicById(meta.grammar);
   const rule = ruleOf(meta.grammar, 'en');
   const ruleEn = [rule?.core ?? '', ...(rule?.forms ?? []).map((f) => `${f.name}: ${f.pattern} (${f.ex})`)].filter(Boolean).join(' · ').slice(0, 1500);
   const profile = useLive.getState().docs['app/profile'];
   const mixRaw = profile?.mix && typeof profile.mix === 'object' ? (profile.mix as Doc) : null;
   const mix = mixRaw && typeof mixRaw.work === 'number' && typeof mixRaw.life === 'number' ? { work: mixRaw.work, life: mixRaw.life } : null;
-  const r = await askJson({ template: lessonContent, vars: { meta, grammarName: tp?.name_en ?? tp?.name ?? meta.grammar, ruleEn, uiLang: s.lang, mix }, signal });
-  const doc = toLessonDoc(r.data, { uiLang: s.lang }, Date.now());
+  const r = await askJson({ template: lessonContent, vars: { meta, grammarName: tp?.name_en ?? tp?.name ?? meta.grammar, ruleEn, uiLang: lang, mix }, signal, priority });
+  const doc = toLessonDoc(r.data, { uiLang: lang }, Date.now());
   const writer = getWriter();
   let stored: Doc = doc;
   let fresh = true;
@@ -140,6 +141,16 @@ export async function prepareLesson(signal: AbortSignal): Promise<void> {
     }
   }
   rememberLesson(lid, stored);
+  return { stored, fresh };
+}
+
+/** „Lektion vorbereiten": Inhalt von Claude, gespeichert nach §4.8 (nie überschrieben). */
+export async function prepareLesson(signal: AbortSignal): Promise<void> {
+  const s = useLessonRun.getState();
+  if (!s.meta || !s.lid) return;
+  const meta = s.meta;
+  const lid = s.lid;
+  const { stored, fresh } = await generateLesson(lid, meta, s.lang, signal);
   const content = readLesson(stored, s.lang, meta);
   if (useLessonRun.getState().lid !== lid) return;
   useLessonRun.setState(content ? { status: 'ready', content: { ...content, source: fresh ? 'ai' : 'db' } } : { status: 'choose' });

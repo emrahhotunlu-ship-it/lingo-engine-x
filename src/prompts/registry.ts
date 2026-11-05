@@ -1,4 +1,6 @@
 import { cardExamples } from './cardExamples';
+import { wordJudge } from './wordJudge';
+import { wordPrep } from './wordPrep';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { lessonContent } from './lessonContent';
@@ -39,6 +41,9 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   wordLookup,
   produceCheck,
   cardExamples,
+  // KI-Paket (docs/ki-paket-plan.md)
+  wordPrep,
+  wordJudge,
   // Phase 2 (docs/phase2-plan.md §7)
   lessonContent,
   lessonProduction,

@@ -1,4 +1,5 @@
 import { askJson } from '../../ai/gate';
+import type { AiPriority } from '../../ai/types';
 import { useClock } from '../../app/clock';
 import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
@@ -22,7 +23,7 @@ import { loadLearnInputs } from '../learn/inputs';
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
-export async function generateTopicTasks(topic: string, signal: AbortSignal): Promise<GrammarTask[]> {
+export async function generateTopicTasks(topic: string, signal: AbortSignal, priority: AiPriority = 'user'): Promise<GrammarTask[]> {
   const tp = topicById(topic);
   if (!tp) return [];
   const live = useLive.getState();
@@ -41,6 +42,7 @@ export async function generateTopicTasks(topic: string, signal: AbortSignal): Pr
     template: grammarItems,
     vars: { topic, nameEn: tp.name_en ?? tp.name, ruleEn, examples: ruleExamples(topic, 4), p, types: wantTypes(p), seenText, errors, count: 6 },
     signal,
+    priority,
   });
   const tasks = r.data.items.map((it) => normalizeTask(it, 'ai')).filter((t): t is GrammarTask => !!t);
   const writer = getWriter();

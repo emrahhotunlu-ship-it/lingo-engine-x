@@ -171,7 +171,7 @@ export type RoundInput = {
 export const ROUND_SIZE = { duty: 6, xtra: 8, errors: 8, topic: 8 } as const;
 export const ERRORS_PER_ROUND = 3;
 
-const seenOf = (doc: Readonly<Doc> | undefined): Set<string> => new Set(Array.isArray(doc?.seen) ? (doc.seen as unknown[]).map(s) : []);
+export const seenOf = (doc: Readonly<Doc> | undefined): Set<string> => new Set(Array.isArray(doc?.seen) ? (doc.seen as unknown[]).map(s) : []);
 
 /** Themen nach Bedarf: schwach, fällig, wenig geübt zuerst; Gleichstand per Startwert. */
 export function rankTopics(i: Pick<RoundInput, 'grammarDocs' | 'nowMs' | 'seed'>): Array<{ topic: string; p: number; need: number }> {

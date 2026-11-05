@@ -39,6 +39,9 @@ import type { CheckResult, ContextSpan, Exercise, ExerciseId, Grade, Option, Tra
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { produceCheck, type ProduceCheckOut } from '../../prompts/produceCheck';
 import { requestExamples, useExamples } from './examples';
+import { JUDGE_EX, judgeAnswer } from './judge';
+import { packVerdict } from '../../domain/srs/pack';
+import type { WordJudgeOut } from '../../prompts/wordJudge';
 import { commitAnswer, type Answer, type FirstKind } from './session';
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
 import { AiRunPanel } from '../input/AiRunPanel';
@@ -73,6 +76,12 @@ type Feedback = {
   timedOut?: boolean;
   /** produce: Claudes Prüfung bzw. die Prüfung ohne Claude. */
   produce?: { out: ProduceCheckOut | null; self: SelfCheck | null };
+  /** Begründung (docs/ki-paket-plan.md §3): aus dem Kartenpaket oder von Claudes Nachprüfung. */
+  why?: { text: string; example: string; trap: boolean; src: 'pack' | 'ai' } | null;
+  /** Claude prüft die Antwort gerade nach. */
+  judging?: boolean;
+  /** Das Urteil kam von Claudes Nachprüfung (nachträglich geändert). */
+  judged?: boolean;
 };
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
@@ -123,6 +132,21 @@ export function ExerciseView({
   const [left, setLeft] = useState(e.limitMs ?? 0);
   const [confidenceBefore] = useState(() => confidenceOf(card, now));
   const produceAsk = useAsk(produceCheck);
+  /** Claudes Nachprüfung (§3): ein Aufruf je Eingabe, beim Ausblenden abgebrochen. */
+  const judgeCtl = useRef<AbortController | null>(null);
+  const judgeRuns = useRef(new Map<string, Promise<WordJudgeOut | null>>());
+  const alive = useRef(true);
+  const fbRef = useRef<Feedback | null>(null);
+  useEffect(() => {
+    fbRef.current = fb;
+  });
+  useEffect(
+    () => () => {
+      alive.current = false;
+      judgeCtl.current?.abort();
+    },
+    [],
+  );
   const extra = useExamples((s) => s.byCard[card.id]);
   const typed = useRef('');
   const firstKeyAt = useRef<number | null>(null);
@@ -173,36 +197,110 @@ export function ExerciseView({
     return { nowPerf, ms: Math.max(0, Math.round(nowPerf - start - paused)) };
   };
 
-  const finish = (result: CheckResult, given: string, chosen: Option | null, extraFb: Partial<Feedback> = {}, forced?: Grade) => {
+  /** Erklärungen des Pakets nur in der Oberflächensprache (Sprachtreue, Kap. 10). */
+  const packLangOk = !!e.pack && e.pack.lang === lang;
+  const packWhy = (text: string | undefined): Feedback['why'] => (packLangOk && text ? { text, example: '', trap: false, src: 'pack' } : null);
+
+  /** Feste Prüfung plus Kartenpaket: weitere richtige Form → richtig, passendes Synonym → fast richtig mit Unterschied. */
+  const withPack = (r: CheckResult, given: string): { result: CheckResult; why: Feedback['why'] } => {
+    if (r.verdict === 'correct') return { result: r, why: null };
+    const pv = packVerdict(given, e.pack?.item ?? null);
+    if (pv?.kind === 'ok') return { result: { verdict: 'correct' }, why: null };
+    if (pv?.kind === 'syn') return { result: { verdict: 'near', kind: 'synonym', otherWord: pv.alt.w }, why: packWhy(pv.alt.why) };
+    return { result: r, why: null };
+  };
+
+  /** Claudes Nachprüfung starten (einmal je Eingabe); `null` ohne KI oder bei Fehler. */
+  const judge = (given: string): Promise<WordJudgeOut | null> | null => {
+    if (!ai || !JUDGE_EX.has(e.ex) || !given.trim()) return null;
+    const key = normalize(given);
+    const hit = judgeRuns.current.get(key);
+    if (hit) return hit;
+    judgeCtl.current ??= new AbortController();
+    const run = judgeAnswer(e, given, lang, judgeCtl.current.signal);
+    judgeRuns.current.set(key, run);
+    return run;
+  };
+
+  /** Urteil nach Claudes Nachprüfung: richtig bzw. Synonym/Form heben die Note (vor „Weiter"). */
+  const judgedResult = (out: WordJudgeOut): CheckResult | null =>
+    out.verdict === 'correct' ? { verdict: 'correct' } : out.verdict === 'synonym' ? { verdict: 'near', kind: 'synonym' } : out.verdict === 'form' ? { verdict: 'near', kind: 'form' } : null;
+  const judgedWhy = (out: WordJudgeOut): Feedback['why'] => ({ text: out.why, example: out.verdict === 'correct' ? '' : out.example, trap: out.trap && out.verdict === 'wrong', src: 'ai' });
+
+  /** Begründung nachtragen und – wenn Claude die Antwort gelten lässt – die Note anheben. */
+  const applyJudge = (given: string, out: WordJudgeOut | null) => {
+    setFb((cur) => {
+      if (!cur || cur.given !== given || cur.override) return cur;
+      if (!out) return { ...cur, judging: false };
+      const res = judgedResult(out);
+      const base = { ...cur, judging: false, why: judgedWhy(out) };
+      if (!res) return base;
+      // Dieselben Messwerte wie beim Prüfen (Zeit, Hilfe, zweiter Versuch); Synonym bzw. Form ist „fast".
+      const m = lastTiming.current;
+      const grade: Grade = m ? autoGrade(e.ex, res, m.timing) : 2;
+      const t0 = Date.now();
+      const after = reviewFsrs(card.fsrs, grade, t0);
+      return {
+        ...base,
+        result: res,
+        grade,
+        judged: true,
+        dueInMs: Math.max(0, after.due - t0),
+        confidence: confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0),
+      };
+    });
+  };
+
+  /**
+   * Messwerte der Note in diesem Moment (Zeit, erste Taste, Hilfe). Auch für die Note nach Claudes
+   * Nachprüfung: Sie wird aus denselben Werten berechnet wie eine sofort richtige Antwort.
+   * `inRetry`: Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2 (höchstens „Schwer").
+   */
+  const timingNow = (inRetry: boolean, timedOut = false) => {
     const { ms } = measure();
     // Den Begleiter vor dem Prüfen zu öffnen zählt als Hilfe: höchstens „Schwer" (E5-05, A7).
     const companionHelp = companionOpenedSince(shownAt.current);
     const start = LISTEN.has(e.ex) && audioEnd.current !== null ? audioEnd.current : shownAt.current;
     const firstKey = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - start - firstKeyLookup.current));
-    const g =
-      forced ??
-      autoGrade(e.ex, result, {
+    return {
+      ms,
+      companionHelp,
+      timing: {
         submitMs: ms,
         firstKeyMs: firstKey,
         chars: solution.length,
         deletions: deletions.current,
-        // Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2: höchstens „Schwer". Die Zeit ist
-        // die Gesamtzeit ab dem Einblenden (beide Versuche); durch die Deckelung entscheidet sie
-        // nicht mehr über die Note, bleibt aber als ehrliche Antwortzeit gespeichert.
-        hintLevel: companionHelp || retry ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
+        // Die Zeit ist die Gesamtzeit ab dem Einblenden (beide Versuche); durch die Deckelung
+        // entscheidet sie im zweiten Versuch nicht mehr über die Note, bleibt aber ehrlich gespeichert.
+        hintLevel: companionHelp || inRetry ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
         tiles: e.tiles?.length ?? 0,
         replays: Math.max(0, plays.current - 1),
         ...(e.limitMs ? { limitMs: e.limitMs } : {}),
-        ...(extraFb.timedOut ? { timedOut: true } : {}),
-      });
+        ...(timedOut ? { timedOut: true } : {}),
+      },
+    };
+  };
+  /** Messwerte der zuletzt geprüften Antwort (für die Note nach Claudes Nachprüfung). */
+  const lastTiming = useRef<ReturnType<typeof timingNow> | null>(null);
+
+  const finish = (result: CheckResult, given: string, chosen: Option | null, extraFb: Partial<Feedback> = {}, forced?: Grade, measured?: ReturnType<typeof timingNow>) => {
+    const m = measured ?? timingNow(!!retry, !!extraFb.timedOut);
+    lastTiming.current = m;
+    const { ms, companionHelp } = m;
+    const g = forced ?? autoGrade(e.ex, result, m.timing);
     // „Beginnt mit …" hieß: Emrah wusste das Wort nicht – auch ein Treffer danach ist „Nochmal".
-    const g2: Grade = retry?.kind === 'start' && forced === undefined ? 1 : g;
+    const g2: Grade = retry?.kind === 'start' && forced === undefined && !measured ? 1 : g;
     const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g2;
     const t0 = Date.now();
     const after = reviewFsrs(card.fsrs, grade, t0);
     const dueInMs = Math.max(0, after.due - t0);
     const confidence = confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0);
-    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, ...extraFb });
+    const why: Feedback['why'] =
+      extraFb.why ?? (result.verdict === 'correct' ? packWhy(e.pack?.item ? e.pack.item.why : e.pack?.cwhy) : chosen && !chosen.correct ? packWhy(chosen.why) : null);
+    // Falsch getippt: Claude prüft nach, ob die Antwort doch passt, und sagt genau, warum nicht (§3).
+    const pending = result.verdict === 'wrong' && !extraFb.timedOut && (e.input === 'typed') ? judge(given) : null;
+    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, ...extraFb, why, judging: !!pending });
+    if (pending) void pending.then((out) => applyJudge(given, out));
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen").
     if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, shownSentence).length < EXAMPLES_MIN) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -221,6 +319,24 @@ export function ExerciseView({
     setRetry(h);
     api.focusNow();
     return true;
+  };
+
+  /**
+   * Erster Versuch falsch, Hinweis steht: Claude prüft im Hintergrund nach. Passt die Antwort doch
+   * (richtig oder passendes Synonym), endet der zweite Versuch sofort mit diesem Urteil (§3).
+   */
+  const watchRetry = (given: string, res: CheckResult) => {
+    if (res.verdict !== 'wrong') return;
+    const run = judge(given);
+    if (!run) return;
+    // Note aus dem ersten Versuch: seine Zeit und seine Hilfe, nicht die Wartezeit auf Claude.
+    const first = timingNow(false);
+    void run.then((out) => {
+      if (!out || !alive.current || fbRef.current) return;
+      const jr = judgedResult(out);
+      if (!jr || (jr.verdict !== 'correct' && out.verdict !== 'synonym')) return;
+      finish(jr, given, null, { why: judgedWhy(out), judged: true }, undefined, first);
+    });
   };
 
   const check = (chosen: Option | null, opts: { timedOut?: boolean } = {}) => {
@@ -245,7 +361,10 @@ export function ExerciseView({
         if (checkSituation(withHint, { accepted: e.accepted, en: card.word }).verdict !== 'wrong') given = withHint;
       }
       const res = checkSituation(given, { accepted: e.accepted, en: card.word });
-      if (offerRetry(given, res)) return;
+      if (offerRetry(given, res)) {
+        watchRetry(given, res);
+        return;
+      }
       finish(res, given, null);
       return;
     }
@@ -257,9 +376,13 @@ export function ExerciseView({
       return;
     }
     const hint = hintShown ? (maskOf(solution, { firstLetter: true }).find((c) => c.kind === 'slot')?.hint ?? null) : null;
-    const r = checkWithHint(typed.current, e.accepted, { lemma: card.lemma, knownWords }, hint);
-    if (!opts.timedOut && offerRetry(r.effective, r.result)) return;
-    finish(r.result, r.effective, null, opts.timedOut ? { timedOut: true } : {});
+    const r0 = checkWithHint(typed.current, e.accepted, { lemma: card.lemma, knownWords }, hint);
+    const r = { ...r0, ...withPack(r0.result, r0.effective) };
+    if (!opts.timedOut && offerRetry(r.effective, r.result)) {
+      watchRetry(r.effective, r.result);
+      return;
+    }
+    finish(r.result, r.effective, null, { ...(opts.timedOut ? { timedOut: true } : {}), ...(r.why ? { why: r.why } : {}) });
   };
   const checkRef = useRef(check);
   useEffect(() => {
@@ -322,7 +445,9 @@ export function ExerciseView({
 
   const next = () => {
     if (!fb) return;
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1 };
+    const ans: Answer = fb.override
+      ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true }
+      : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, ...(fb.result.kind === 'synonym' && e.input === 'typed' ? { recall: true } : {}) };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -639,7 +764,7 @@ export function ExerciseView({
     // „fast richtig": Buchstaben gold, fehlende eingefügt; falsch: ganze Wörter rot (H2).
     // „to" vor Verben ist beim Tippen freiwillig: für den Vergleich weglassen.
     const bare = (x: string) => x.trim().replace(/^to\s+/i, '');
-    const nearChars = writes && v.verdict === 'near' && !bare(fb.given).includes(' ') && !bare(solution).includes(' ');
+    const nearChars = writes && v.verdict === 'near' && v.kind !== 'synonym' && !bare(fb.given).includes(' ') && !bare(solution).includes(' ');
     const chars = nearChars ? charDiff(bare(fb.given), bare(solution)) : [];
     const diff = writes && !nearChars ? answerDiff(bare(fb.given), bare(solution)) : [];
     // Bedeutung nur, wo sie nicht schon die Frage war (H3).
@@ -706,6 +831,24 @@ export function ExerciseView({
             </p>
           )}
         </div>
+        {fb.judging && !fb.why && (
+          <p className="text-sm text-subtle" data-testid="judging" aria-live="polite">
+            {t('trJudging')}
+          </p>
+        )}
+        {fb.why && !fb.override && (
+          <div className="flex flex-col gap-1" data-testid="why" data-src={fb.why.src}>
+            <p className="text-sm leading-relaxed">
+              <span className="font-semibold">{t(fb.why.trap ? 'trWhyTrap' : 'trWhy')}: </span>
+              <span lang={lang}>{fb.why.text}</span>
+            </p>
+            {fb.why.example && (
+              <p className="text-[0.95rem] leading-relaxed" data-testid="why-example">
+                <EnglishText as="span" text={fb.why.example} {...src} highlight={target(fb.why.example)} />
+              </p>
+            )}
+          </div>
+        )}
         {prod && <ProduceResult given={fb.given} out={prod.out} self={prod.self} />}
         {col ? (
           <p className="text-sm" data-testid="meaning">

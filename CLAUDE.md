@@ -94,6 +94,7 @@ Kurzfassung. Vorgeschichte, Daten und Begründungen stehen in `docs/verlauf.md`.
   - Status statt Erklärtexten (Sicherheit und Abfrageart). Der Zweck steht hinter einem Info-Symbol.
   - Nach dem Prüfen: Bedeutung und Wortart, 2–3 Beispielsätze. Jedes englische Wort ist antippbar (Bedeutung, US-Lautschrift, Aussprache, als Karte speichern, „Claude fragen“).
   - Buchstaben-Platzhalter in Stufen mit Hilfe. In freien Stufen deckt „Tipp“ sie auf und zählt als Hilfe.
+  - **KI-Paket (05.11.2026):** Claude bereitet Wörter (4 Sätze je Karte, `xPack`), Lektion und Grammatik im Hintergrund vor und prüft abweichende Antworten nach (Warum, darf nur heben). Die feste Prüfung urteilt weiter sofort. Details: `docs/ki-paket-plan.md`.
 - **Nicht schlechter als die alte App:** Maßstab ist `docs/altapp-funktionsabgleich.md`.
 - **Vor neuen Funktionen:** `english-teacher` und Lernberatung (`docs/lernberatung.md`) sowie UX-Beratung (`docs/ux-beratung.md`) befragen, dann bauen.
 - **Arbeitsweise:** Ein Problem zur Zeit, funktionierender Code wird nicht nebenbei angefasst. Geprüft wird mit **einem** kombinierten Prüfer (Daten + Plattform + UX) in einem Durchgang. Berichte gibt es nur an Meilensteinen.

@@ -98,7 +98,7 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
   expect(external).toEqual([]);
 });
 
-test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Antwort ist sofort falsch, ohne auf Claude zu warten (27.09.)', async ({ page }) => {
+test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Antwort ist sofort falsch, Claude begründet danach (27.09., KI-Paket)', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openGrammar(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
@@ -114,8 +114,11 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Ant
     const type = (await item.getAttribute('data-type')) ?? '';
     seen.add(type);
     if (type === 'correct' && !judged) {
-      // Emrahs Wunsch 27.09.: Bewertung sofort. Deutlich andere Antwort → Hinweis, dann falsch; kein Claude-Aufruf.
+      // Emrahs Wunsch 27.09.: Bewertung sofort. Deutlich andere Antwort → Hinweis, dann falsch. Danach
+      // prüft Claude im Hintergrund nach (docs/ki-paket-plan.md §3) und ergänzt das Warum, ohne zu heben.
       await answerGrammar(page, solve, { given: 'Getting up early is something I have been used to for many years.' });
+      await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+      await expect(item.getByTestId('judge-why')).toContainText('Warum:');
       await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
       judged = true;
     } else {
@@ -128,7 +131,8 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Ant
   expect([...seen].sort()).toEqual(expect.arrayContaining(['correct', 'gap', 'transform']));
   expect(judged).toBe(true);
   const calls = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; tier: string }> } }).__LINGO_FAKE__.sampleCalls.map((c) => `${c.id}:${c.tier}`));
-  expect(calls).toEqual([]);
+  // Erster und zweiter Versuch der falschen Antwort, je einmal `quick`; richtige Antworten fragen nie.
+  expect(calls).toEqual(['grammar-judge:quick', 'grammar-judge:quick']);
   expect(errors).toEqual([]);
 });
 

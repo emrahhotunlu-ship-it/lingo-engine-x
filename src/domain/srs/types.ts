@@ -1,4 +1,5 @@
 import type { FsrsStored } from '../../data/schemas';
+import type { PackItem } from './pack';
 
 // Gemeinsame Typen des Vokabeltrainers (Architektur-Entwurf §5.0, Daten-Entwurf §1.1).
 
@@ -88,7 +89,7 @@ export type TrainCard = {
   doc: Readonly<Record<string, unknown>>;
 };
 
-export type Option = { id: string; label: string; lang: Lang; correct: boolean; fromWord?: string; fromMeaning?: string };
+export type Option = { id: string; label: string; lang: Lang; correct: boolean; fromWord?: string; fromMeaning?: string; /** Ablenker aus dem Kartenpaket: warum er nicht passt (Sprache `Exercise.pack.lang`). */ why?: string };
 
 export type Exercise = {
   ex: ExerciseId;
@@ -114,6 +115,8 @@ export type Exercise = {
   limitMs?: number;
   /** Szene und Absicht (situation, M15). */
   situation?: SituationTask;
+  /** Kartenpaket (docs/ki-paket-plan.md §2): Paket-Satz dieser Abfrage (sonst null) und Sprache seiner Erklärungen. */
+  pack?: { item: PackItem | null; lang: Lang; /** Warum das Zielwort in den Ursprungssatz passt. */ cwhy: string };
 };
 
 /** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */
