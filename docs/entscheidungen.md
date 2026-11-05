@@ -799,3 +799,9 @@ Festlegung (ersetzt den Plan „Module P/L“ vom 04.11. abends):
 
 ## 04.11.2026 spät – Wörter-Tagesplan passt in die Wörter-Zeit (Emrah: „A“)
 Anlass: Runde zeigte „42 von 88“ (Zählfehler: Wiederholungen derselben Karte mitgezählt – behoben mit einer Zählquelle, einzelne Wörter) und der Plan hatte 43 Wörter. Frage: Plan bis zur doppelten Wörter-Zeit (Rückstand schneller weg) oder immer in der eingestellten Zeit? Emrah: **A** – der Tagesplan passt in die eingestellte Wörter-Zeit (`BACKLOG_BUDGETS = 1`, vorher 2); Rückstand: Randwörter über die nächsten 7 Tage verteilt, Kernwörter nie verschoben (bleiben fällig, morgen zuerst). Gilt ab dem nächsten neu eingefrorenen Tagesplan.
+
+## 05.11.2026 – Schritt 3 „Anwenden“: Zeit bleibt, Aufgabe wird kürzer (Emrah: „B“)
+Frage: Die Planminuten von Schritt 3 (`dayMinutes`, bei 25 Min. Tagesziel 5 Min.) sind kürzer als eine Mail oder Zusammenfassung (`APPLY_MINUTES` 8–10). Emrah wählt **B**: Die Zeit im Tagesplan bleibt, die Aufgabe wird passend kürzer. Umsetzung `fitGoal` (`src/modules/apply/domain/kinds.ts`): Wortziel und Mindestlänge im Verhältnis Planminuten/Disziplin-Minuten, höchstens auf die Hälfte, Untergrenze 25 Wörter (Zusammenfassung 20), Zusammenfassung mindestens 3 Sätze; freies Üben behält die volle Länge. Golden-Kennzahlen (Teil A) unverändert.
+
+## 05.11.2026 – Enter schließt die Tastatur am Touch-Gerät
+Emrah: „Wenn ich auf der Tastatur auf Enter drücke an Touch-Geräten, soll sie einklappen, weil ich sonst nicht auf die Knöpfe komme.“ Umsetzung in `src/engine/HiddenInput.tsx`: am Touch-Gerät schließt Enter nach seiner Wirkung die Tastatur – in der Lücke, sobald sie gesperrt ist (Ergebnis da; beim Hinweis „noch einmal“ bleibt sie offen), in jedem einzeiligen Feld immer, in mehrzeiligen Feldern nur, wenn Enter dort Absenden ist (sonst bleibt es Zeilenumbruch). Laptop unverändert.
