@@ -186,6 +186,8 @@ export function partnersOf(col: unknown, max = 2): { p: string; de: string }[] {
     if (out.length >= max) break;
     if (!c || typeof c !== 'object') continue;
     const r = c as Record<string, unknown>;
+    // Gemeldete Wortpartner (Wortseite „Melden“, Großpaket W) bleiben gespeichert, werden aber nie mehr gezeigt.
+    if (r.bad === 1) continue;
     const p = typeof r.p === 'string' ? r.p.trim() : '';
     if (p) out.push({ p, de: typeof r.de === 'string' ? r.de.trim() : '' });
   }

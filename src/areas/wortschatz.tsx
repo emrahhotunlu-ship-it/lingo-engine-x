@@ -212,7 +212,7 @@ function VwordPage({ route }: ScreenProps<'vword'>) {
   const go = useNav((s) => s.go);
   return (
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
-      <WordPage path={route.path} onPractice={(path) => go({ name: 'vlearn', kind: 'word', path })} onAsk={(text) => openCompanion({ tab: 'chat', text })} />
+      <WordPage path={route.path} onPractice={(path) => go({ name: 'vlearn', kind: 'word', path })} onAsk={(text) => openCompanion({ tab: 'chat', text })} ai={vocabAi} />
     </Suspense>
   );
 }

@@ -31,7 +31,7 @@ const CTX_MAX = 300;
 export const KNOW_EXAMPLE =
   '{"items":[{"id":"w1","col":[' +
   '{"p":"raise an objection","de":"einen Einwand erheben","ex":"The CFO may [raise an objection] to the license costs in the next meeting."},' +
-  '{"p":"handle an objection","de":"auf einen Einwand eingehen","ex":"A good demo helps you [handle an objection] before the client even states it."},' +
+  '{"p":"anticipate an objection","de":"einem Einwand zuvorkommen","ex":"Good sales reps [anticipate an objection] before the client raises it."},' +
   '{"p":"overcome an objection","de":"einen Einwand ausräumen","ex":"We managed to [overcome the objection] about data security with a short audit report."}' +
   '],"sents":[' +
   '{"en":"Her main objection was that the cloud archive would not meet their retention rules.","de":"Ihr Haupteinwand war, dass das Cloud-Archiv ihre Aufbewahrungsregeln nicht erfüllen würde.","sit":"client call"},' +
@@ -80,12 +80,17 @@ export const wordKnow: PromptTemplate<KnowVars, KnowOut> = {
       'Reply with only one JSON object, no other text, exactly this shape:',
       KNOW_EXAMPLE,
       'Rules:',
-      '- One item per card, with the same id. Always use the word with the meaning and part of speech given on the card.',
+      '- One item per card, with the same id. Always use the word with the meaning and part of speech given on the card. Never switch to another sense or part of speech, not even in a collocation (for the noun "approach" never use the verb "approach a client").',
+      '- The example answer above only shows the format. Never reuse its sentences or collocations for another card.',
       '- col: exactly 3 collocations the learner can reuse in other conversations: fixed combinations such as verb + noun, adjective + noun, adverb + adjective or a fixed phrase (as listed in a collocations dictionary), each 2 to 5 words and containing the card word. Never a random sentence fragment, never a combination that ends with a preposition, never one listed under "never use".',
+      '  - Prefer combinations a C1 learner would not produce alone. No generic partners (help, make, get, give, very, really, efforts, things) and no free combinations of a common verb or adjective with the word.',
+      '  - If the word is mainly used with a dependent preposition, give that pattern with sb/sth, for example "complain about sth" or "vulnerable to sth" (at most one such pattern per word). Never end with a bare preposition.',
+      '  - For prepositions and linkers (despite, although, whereas) give their usage patterns instead, for example "despite the fact that", "despite + -ing".',
       '  - p: the collocation in base form. de: its natural German equivalent (2 to 6 words), in the same form (verb phrase as infinitive).',
-      '  - ex: one natural sentence (6 to 20 words) from business life with the collocation (inflected forms are fine) inside exactly ONE pair of square brackets, and nothing else inside the brackets.',
+      '  - ex: one natural sentence (6 to 20 words) from business life with the collocation (inflected forms are fine) inside exactly ONE pair of square brackets. Inside the brackets only the words of the collocation (plus an article or our/your if needed), no extra adjectives or adverbs.',
       '- sents: exactly 2 new, natural sentences from the learner work context (meetings, emails, clients, projects, negotiations), each 8 to 20 words, ending with a period or question mark, each containing the word exactly once with the meaning given. One may be a question or have a subordinate clause.',
-      '  - de: a natural German translation of the sentence. sit: the situation in 1 to 3 English words.',
+      '  - de: a natural German translation of the sentence that uses the German meaning given on the card. sit: the situation in 1 to 3 English words.',
+      '  - Do not copy a collocation sentence (ex) into sents. Use American business usage (two-factor authentication, public-sector clients, an error in judgment).',
       '- Only give what you are sure is natural, idiomatic American English. If a card word has fewer than 3 real collocations, give fewer.',
       '- Do not repeat or closely copy the card sentence or "already has". Invented names only, never facts about real companies or people, no numbers or statistics presented as real.',
       '- No straight double quotes, no brackets except the one pair in col.ex, no British spelling.',

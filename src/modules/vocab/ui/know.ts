@@ -61,7 +61,7 @@ function cardsOf(paths: readonly string[], docs: ReadonlyMap<string, Doc>): { re
     return {
       path,
       req: { id, head, pos: str(doc.pos), de: str(doc.de), ex, avoid: wrong, have: have.filter((s) => s !== ex).slice(0, 3) },
-      card: { id, head, pv: lex?.k === 'pv', wrong, known: have },
+      card: { id, head, pv: lex?.k === 'pv', wrong, known: have, de: str(doc.de), pos: str(doc.pos) },
     };
   });
 }

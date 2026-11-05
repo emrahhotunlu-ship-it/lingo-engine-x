@@ -10,15 +10,45 @@ import type { VocabAi } from '../../../src/modules/vocab/aiPort';
 const T = Date.UTC(2026, 10, 5, 12);
 const card = (over: Partial<KnowCard> = {}): KnowCard => ({ id: 'w1', head: 'objection', pv: false, wrong: [], known: [], ...over });
 type Doc = Record<string, unknown>;
+const GOOD = { en: 'The CFO raised one objection about the hosting costs in our call.', de: 'Der CFO äußerte im Gespräch einen Einwand zu den Hosting-Kosten.', sit: 'client call' };
 
 describe('acceptKnow', () => {
-  it('die Beispielantwort im Prompt besteht die Prüfung vollständig (3 Wortpartner, 2 Sätze)', () => {
+  it('die Beispielantwort im Prompt: Wortpartner bestehen; ihre Sätze gelten als abgeschrieben (Lehrer-Prüfung: nie die Vorlage übernehmen)', () => {
     const raw = (JSON.parse(KNOW_EXAMPLE) as { items: unknown[] }).items[0];
-    const a = acceptKnow(raw, card(), T, 'word-know@1');
-    expect(a.rejected).toEqual([]);
-    expect(a.col.map((c) => c.p)).toEqual(['raise an objection', 'handle an objection', 'overcome an objection']);
-    expect(a.sb).toHaveLength(2);
+    const a = acceptKnow(raw, card({ de: 'Einwand', pos: 'noun' }), T, 'word-know@1');
+    expect(a.col.map((c) => c.p)).toEqual(['raise an objection', 'anticipate an objection', 'overcome an objection']);
+    expect(a.sb).toEqual([]);
+    expect(a.rejected).toEqual(['copy', 'copy']);
+  });
+
+  it('eigene Sätze bestehen: Herkunft ai, Art work, Version, Zeit', () => {
+    const a = acceptKnow({ id: 'w1', sents: [GOOD] }, card({ de: 'Einwand', pos: 'noun' }), T, 'word-know@1');
+    expect(a.sb).toHaveLength(1);
     expect(a.sb.every((s) => s.src === 'ai' && s.k === 'work' && s.pv === 'word-know@1' && s.t === T)).toBe(true);
+  });
+
+  it('Lehrer-Regeln: Bedeutungswechsel (Nomen), Klammer mit Fremdwörtern, Präposition mit Platzhalter einmal erlaubt, Bindestrich', () => {
+    const sense = acceptKnow({ id: 'w1', sents: [{ en: 'We need to keep our retention policy simple for small clients.', de: 'Wir müssen unsere Aufbewahrungsrichtlinie möglichst einfach halten.' }] }, card({ head: 'retention', de: 'Kundenbindung', pos: 'noun' }), T, 'pv');
+    expect(sense.rejected).toEqual(['sent_sense']);
+    const verb = acceptKnow({ id: 'w1', sents: [{ en: 'I assume the IT lead has already tested the new interface.', de: 'Ich gehe davon aus, dass der IT-Leiter die Schnittstelle getestet hat.' }] }, card({ head: 'assume', de: 'annehmen', pos: 'verb' }), T, 'pv');
+    expect(verb.sb).toHaveLength(1);
+    const col = acceptKnow(
+      {
+        id: 'w1',
+        col: [
+          { p: 'require attention', de: 'Aufmerksamkeit erfordern', ex: 'These tickets [require immediate attention] today.' },
+          { p: 'complain about sth', de: 'sich über etw. beschweren', ex: 'Several users [complained about the] slow search today.' },
+          { p: 'object to sth', de: 'gegen etw. Einwände haben', ex: 'The CFO may [object to] the license costs today.' },
+        ],
+      },
+      card({ head: 'complain' }),
+      T,
+      'pv',
+    );
+    expect(col.col.map((c) => c.p)).toEqual(['complain about sth']);
+    expect(col.rejected).toEqual(expect.arrayContaining(['col_word']));
+    const hy = acceptKnow({ id: 'w1', col: [{ p: 'well deserved', de: 'wohlverdient', ex: 'After the launch, the team took a [well-deserved] break.' }] }, card({ head: 'deserve' }), T, 'pv');
+    expect(hy.col).toHaveLength(1);
   });
 
   it('wirft weg: Präposition am Ende, Falschform einer Falle, fehlendes Wort, ohne Klammer, britisch wird angeglichen', () => {
@@ -57,7 +87,7 @@ describe('needsKnow / knowPatch / knowRecent', () => {
   });
 
   it('Wortpartner nur in ein leeres col, Sätze hinten an (≤ 8), nie doppelt, Marke kn', () => {
-    const raw = (JSON.parse(KNOW_EXAMPLE) as { items: unknown[] }).items[0];
+    const raw = { ...((JSON.parse(KNOW_EXAMPLE) as { items: Doc[] }).items[0]!), sents: [GOOD, { en: 'Our partner had a strong objection to the new commission rules.', de: 'Unser Partner hatte einen starken Einwand gegen die neuen Provisionsregeln.' }] };
     const a = acceptKnow(raw, card(), T, 'pv');
     const full = knowPatch({ word: 'objection', col: [{ p: 'old one' }], sb: [{ en: 'X.' }] }, a, T, 'pv')!;
     expect(full.col).toBeUndefined();

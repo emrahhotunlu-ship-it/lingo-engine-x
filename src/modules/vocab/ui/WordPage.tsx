@@ -5,6 +5,10 @@ import { lexOf } from '../data/lex';
 import { writeManage } from '../data/store';
 import { readVlogRange } from '../data/history';
 import { partnersOf } from '../domain/band';
+import { sentencesOf } from '../domain/card';
+import { needsKnow, reportPatch } from '../domain/know';
+import type { VocabAi } from '../aiPort';
+import { fillKnowOne } from './know';
 import { groupOf } from '../domain/ladder';
 import { againTomorrow, restartLex } from '../domain/manage';
 import { attemptsOf, daysUntil, HISTORY_DAYS, timeline, timelineStart, type Attempt, type Cell } from '../domain/stats';
@@ -25,6 +29,8 @@ export type WordPageProps = {
   onPractice: (path: string) => void;
   /** „Claude fragen“: kommt vom Bereich (Begleiter), weil das Modul ihn nicht kennt (Isolation). Fehlt er, kein Knopf. */
   onAsk?: (text: string) => void;
+  /** Claude für „Fehlt etwas? Jetzt ergänzen“ (Großpaket W3); fehlt = kein Knopf. */
+  ai?: VocabAi;
 };
 
 const LOCALES = { de: 'de-DE', en: 'en-US' } as const;
@@ -134,6 +140,114 @@ function fxText(a: Attempt, t: T): string {
 const CELL_CLASS: Record<Cell, string> = { ok: 'bg-ok', help: 'bg-near', wrong: 'bg-wrong', none: 'bg-subtle' };
 const CELL_KEY: Record<Cell, MessageKey> = { ok: 'vmWpCellOk', help: 'vmWpCellHelp', wrong: 'vmWpCellWrong', none: 'vmWpCellNone' };
 
+type Partner = { p: string; de: string };
+
+/** Ein ergänzter Eintrag als „schlecht“ markieren (nie löschen); nur auf dem frischen Stand, nur bei Treffer. */
+async function report(path: string, what: { kind: 'sent' | 'col'; text: string }): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  let hit = false;
+  try {
+    await writer.transform(path, (cur) => {
+      const patch = cur ? reportPatch(cur, what) : null;
+      if (!patch) return null;
+      hit = true;
+      return { update: patch };
+    });
+  } catch (err) {
+    logError('vocab:know-report', err, path);
+    return false;
+  }
+  return hit;
+}
+
+function KnowSection({ path, doc, head, partners, isChunk, ai }: { path: string; doc: Doc; head: string; partners: Partner[]; isChunk: boolean; ai?: VocabAi }) {
+  const { t } = useT();
+  const now = useClock((s) => s.now);
+  const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [busy, setBusy] = useState<'idle' | 'busy' | 'none' | 'error'>('idle');
+  // Alle Sätze zum Lesen (auch Claude-Sätze in der Satzbank-Quarantäne, Emrahs Wahl „A“), ohne den Ursprungssatz (der steht darüber).
+  const sents = useMemo(() => sentencesOf(doc, now, null, { read: true }).filter((x) => x.src !== 'ex'), [doc, now]);
+  const aiSents = useMemo(() => new Set((Array.isArray(doc.sb) ? doc.sb : []).filter((x): x is Doc => !!x && typeof x === 'object' && (x as Doc).src === 'ai').map((x) => str(x.en))), [doc]);
+  const aiCols = useMemo(() => new Set((Array.isArray(doc.col) ? doc.col : []).filter((x): x is Doc => !!x && typeof x === 'object' && (x as Doc).ai === 1).map((x) => str(x.p).toLowerCase())), [doc]);
+  const canFill = !!ai && !isChunk && ai.ready() && needsKnow(doc);
+  const fill = (): void => {
+    const writer = getWriter();
+    if (!ai || !writer || busy === 'busy') return;
+    setBusy('busy');
+    const docs = new Map<string, Doc>([[path, doc]]);
+    const ctx = str(useLive.getState().docs['app/profile']?.ctx);
+    fillKnowOne({ ai, writer, docs, path, ctx, nowMs: Date.now() })
+      .then((ok) => setBusy(ok ? 'idle' : 'none'))
+      .catch((err: unknown) => {
+        logError('vocab:know-one', err, path);
+        setBusy('error');
+      });
+  };
+  const flag = (what: { kind: 'sent' | 'col'; text: string }): void => {
+    void report(path, what).then((ok) => toast(t(ok ? 'vmWpReported' : 'vmWpReportFailed')));
+  };
+  return (
+    <>
+      {partners.length > 0 && (
+        <section className="flex flex-col gap-1.5" data-testid="vw-partners">
+          <Label>{t('vmWpPartners')}</Label>
+          <ul className="m-0 flex list-none flex-col gap-1 p-0">
+            {partners.map((p) => (
+              <li key={p.p} className="lx-t-body flex flex-wrap items-baseline gap-x-2" data-testid="vw-partner">
+                <span lang="en">{p.p}</span>
+                {p.de && <span className="text-muted">({p.de})</span>}
+                {aiCols.has(p.p.toLowerCase()) && (
+                  <button type="button" className="lx-link text-subtle" onClick={() => flag({ kind: 'col', text: p.p })} data-testid="vw-partner-report">
+                    {t('vmWpReport')}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {sents.length > 0 && (
+        <section className="flex flex-col gap-2" data-testid="vw-examples">
+          <Label>{t('vmWpExamples')}</Label>
+          {sents.map((x) => (
+            <div key={x.key} className="flex flex-col gap-1" data-testid="vw-example">
+              <EnglishText as="p" className="lx-t-body m-0" text={x.en} area="lookup" source={path} title={head} highlight={x.mark ?? null} />
+              <div className="flex flex-wrap gap-x-4">
+                {x.de && (
+                  <button type="button" className="lx-link self-start" aria-expanded={!!open[x.key]} onClick={() => setOpen((o) => ({ ...o, [x.key]: !o[x.key] }))} data-testid="vw-example-de-toggle">
+                    {t(open[x.key] ? 'vmWpHideDe' : 'vmWpShowDe')}
+                  </button>
+                )}
+                {aiSents.has(x.en) && (
+                  <button type="button" className="lx-link text-subtle" onClick={() => flag({ kind: 'sent', text: x.en })} data-testid="vw-example-report">
+                    {t('vmWpReport')}
+                  </button>
+                )}
+              </div>
+              {x.de && open[x.key] && (
+                <p className="lx-t-support m-0 text-muted" lang="de" data-testid="vw-example-de">
+                  {x.de}
+                </p>
+              )}
+            </div>
+          ))}
+          {(aiSents.size > 0 || aiCols.size > 0) && <p className="lx-t-meta m-0 text-subtle">{t('vmWpKnowNote')}</p>}
+        </section>
+      )}
+      {canFill && (
+        <div className="flex flex-col items-start gap-1" data-testid="vw-fill">
+          <Button variant="secondary" onClick={fill} disabled={busy === 'busy'} data-testid="vw-fill-btn">
+            {t(busy === 'busy' ? 'vmWpFillBusy' : 'vmWpFill')}
+          </Button>
+          {busy === 'none' && <p className="lx-t-support m-0 text-muted" data-testid="vw-fill-none">{t('vmWpFillNone')}</p>}
+          {busy === 'error' && <p className="lx-t-support m-0 text-muted" data-testid="vw-fill-error">{t('vmWpFillError')}</p>}
+        </div>
+      )}
+    </>
+  );
+}
+
 function Label({ children }: { children: ReactNode }) {
   return <div className="lx-t-label text-muted">{children}</div>;
 }
@@ -219,7 +333,7 @@ function useHistory(path: string, firstDay: string | null, nowMs: number): [Hist
 
 // ---------------------------------------------------------------- Seite
 
-export function WordPage({ path, onPractice, onAsk }: WordPageProps) {
+export function WordPage({ path, onPractice, onAsk, ai }: WordPageProps) {
   const { t } = useT();
   const status = useLive((s) => s.status);
   const doc = useLive((s) => docOf(s, path));
@@ -238,10 +352,10 @@ export function WordPage({ path, onPractice, onAsk }: WordPageProps) {
         <p className="lx-t-support text-muted">{t('vmWpMissing')}</p>
       </section>
     );
-  return <WordBody path={path} doc={doc} lex={lex} onPractice={onPractice} onAsk={onAsk} />;
+  return <WordBody path={path} doc={doc} lex={lex} onPractice={onPractice} onAsk={onAsk} {...(ai ? { ai } : {})} />;
 }
 
-function WordBody({ path, doc, lex, onPractice, onAsk }: { path: string; doc: Doc; lex: Lex } & Omit<WordPageProps, 'path'>) {
+function WordBody({ path, doc, lex, onPractice, onAsk, ai }: { path: string; doc: Doc; lex: Lex } & Omit<WordPageProps, 'path'>) {
   const { t, lang } = useT();
   const isChunk = path.startsWith('chunk/');
   const head = str(isChunk ? doc.en : doc.word);
@@ -352,21 +466,8 @@ function WordBody({ path, doc, lex, onPractice, onAsk }: { path: string; doc: Do
         </section>
       )}
 
-      {/* Wortpartner */}
-      {partners.length > 0 && (
-        <section className="flex flex-col gap-1.5" data-testid="vw-partners">
-          <Label>{t('vmWpPartners')}</Label>
-          <p className="lx-t-body">
-            {partners.map((p, i) => (
-              <span key={p.p}>
-                {i > 0 && <span className="text-subtle"> · </span>}
-                <span lang="en">{p.p}</span>
-                {p.de && <span className="text-muted"> ({p.de})</span>}
-              </span>
-            ))}
-          </p>
-        </section>
-      )}
+      {/* Wortpartner und Beispielsätze (Großpaket W3): von Claude Ergänztes ist automatisch geprüft und lässt sich melden. */}
+      <KnowSection path={path} doc={doc} head={head} partners={partners} isChunk={isChunk} {...(ai ? { ai } : {})} />
 
       {/* Deine Sätze */}
       <section className="flex flex-col gap-2" data-testid="vw-own">
