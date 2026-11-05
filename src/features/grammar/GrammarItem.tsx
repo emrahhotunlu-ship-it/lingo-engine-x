@@ -36,7 +36,6 @@ import { useT, type MessageKey } from '../../i18n';
 import { inputProfile } from '../../platform/input';
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { registerLeaveBook } from '../../ui/exercise/leaveBook';
-import { CHOICE_LETTERS } from '../../engine/choiceKeys';
 import { ExerciseShell, SentenceInput, explainDepth, findHead, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
@@ -1229,13 +1228,9 @@ function LegacyGrammarItem({
         }
       }
     }
-    // Auswahl (LS6): „Du: B · Richtig: C …“ als Lösungszeile im Band.
-    const optTexts: string[] = type === 'mc' ? (task.options ?? []) : type === 'meaning' && task.x?.kind === 'meaning' ? [task.x.a, task.x.b, t('gxMeaningBoth')] : [];
-    const rightIdx = type === 'mc' ? optTexts.indexOf(solution) : type === 'meaning' ? MEANING_KEYS.indexOf(task.answer as 'a' | 'b' | 'both') : -1;
-    const choiceLine =
-      choiceType && rightIdx >= 0 && !fb.override && (fb.verdict === 'wrong' || fb.dontKnow)
-        ? { you: !fb.dontKnow && chosen !== null ? (CHOICE_LETTERS[chosen] ?? null) : null, right: CHOICE_LETTERS[rightIdx] ?? '', text: optTexts[rightIdx] ?? solution }
-        : null;
+    // Emrah 05.11.2026 („die Karte erschlägt mich“): die Optionen zeigen Wahl (rot) und Lösung (grün) schon – keine zweite Zeile „Du: B · Richtig: D“
+    // (früher LS6 „Du: B · Richtig: C …“).
+    const choiceLine: ShellFeedback['choice'] | null = null;
     const wrongTyped = fb.verdict === 'wrong' && !choiceType && !fb.dontKnow && !fb.override;
     // Einspruch auch bei „unsicher“ (gebucht wie „Fast“): die Antwort war vielleicht richtig, die App konnte es nur nicht belegen.
     const disputable = wrongTyped || (fb.verdict === 'near' && fb.tv === 'unsure' && !choiceType && !fb.dontKnow && !fb.override);
@@ -1277,7 +1272,8 @@ function LegacyGrammarItem({
           onRight={menu.override}
           onRewrite={menu.copyOnce}
           // Von selbst nur bei klar falscher, getippter oder gewählter Antwort; nie bei „Fast“/Tippfehler und nie in Tests ohne Hilfe (Prüfung 02.11.).
-          auto={!noHelp && (fb.verdict === 'wrong' || !!fb.dontKnow)}
+          // Steht die Erklärung zur eigenen Wahl schon da (Auswahl), startet Claude nicht von selbst – „Claude fragen“ bleibt (keine dritte gleiche Aussage).
+          auto={!noHelp && (fb.verdict === 'wrong' || !!fb.dontKnow) && !(choiceType && hasYours)}
           shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
           compact={mod}
           label={stepsMode && !hasYours ? stepWrong : null}
@@ -1347,14 +1343,17 @@ function LegacyGrammarItem({
       // Links bleibt nur „Was war falsch“ (deine Antwort) – Regel, Falle und Beispiel stehen nummeriert in der Spalte, nie doppelt.
       explanation = {
         ...shown,
-        lines: shown.lines.filter((l) => l.k === 'yours' || l.k === 'contrast' || l.k === 'note').map((l) => (l.k === 'yours' ? { k: 'yours' as const, given: l.given, text: l.text } : l)),
+        // Auswahl: „Was war falsch“ steht schon unter der gewählten Option – nicht ein zweites Mal als Schritt 1 (Emrah 05.11.2026).
+        lines: shown.lines
+          .filter((l) => (l.k === 'yours' && !choiceType) || l.k === 'contrast' || l.k === 'note')
+          .map((l) => (l.k === 'yours' ? { k: 'yours' as const, given: l.given, text: l.text } : l)),
         examples: [],
       };
-      whyTitle = hasYours ? stepWrong : null;
+      whyTitle = hasYours && !choiceType ? stepWrong : null;
       stepsSide = (
         <RuleSteps
           topic={task.topic}
-          start={hasYours || (tutor && aiOn) ? 2 : 1}
+          start={(hasYours && !choiceType) || (tutor && aiOn && !(choiceType && hasYours)) ? 2 : 1}
           pattern={patLine ? { name: patLine.name, formula: patLine.formula } : null}
           why={whyLine?.text ?? null}
           mistake={

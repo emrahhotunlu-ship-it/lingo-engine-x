@@ -214,6 +214,9 @@ function writeDrafts(s: DraftStore, list: readonly Draft[]): void {
   else s.remove();
 }
 
+/** K10 (03.11.2026) Einführungskarte für übernommene Wörter – aus seit Emrahs Rückmeldung vom 05.11.2026. */
+const TEACH_MIGRATED = false as boolean;
+
 export class LearnRun {
   private view: LearnView = { k: 'loading' };
   private readonly subs = new Set<() => void>();
@@ -566,6 +569,9 @@ export class LearnRun {
    * der Einführung gilt als zuletzt gezeigt, damit die folgende Abfrage einen anderen nimmt.
    */
   private teachFor(task: Task): CardModel | null {
+    // Emrah 05.11.2026 („erst Erklärkarte, dann Übung – macht nur bei brandneuen Wörtern Sinn, kommt bei über 50 % der Bestandswörter“):
+    // übernommene Wörter gehen direkt in die Abfrage. Die Einführungskarte bleibt nur für wirklich neue Wörter (`task.intro`). Ersetzt K10.
+    if (!TEACH_MIGRATED) return null;
     const lex = this.cat?.get(task.path)?.lex;
     if (!lex?.mig || lex.intro === null || this.taught.has(task.path)) return null;
     if (Math.max(lex.u.last ?? 0, lex.b?.last ?? 0) > lex.mig.t) return null;

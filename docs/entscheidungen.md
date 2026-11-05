@@ -815,3 +815,9 @@ Emrah: „Bitte Fragen immer hier als Kontextfenster stellen!“ Ab jetzt jede F
 ## 05.11.2026 – Claude-Sätze sofort in den Abfragen („1A“), „Dein Können“ als nächstes Großpaket („2A“)
 1A: Emrah: „das Wort broadly wird immer mit demselben Satz gelernt … ich lerne eigentlich den Satz“. Sätze aus `word-know@1` (vor dem Speichern geprüft, `pv` beginnt mit `word-know@`) dürfen sofort Abfragesatz sein (`sentencesOf` in `src/modules/vocab/domain/card.ts`); gemeldete (`bad`) nie; andere Claude-Sätze weiter erst nach Freigabe und 4 Wochen. Die Satzwahl (`pickSentence`) wechselt ab Tag 2 auf den am längsten nicht gezeigten Satz.
 2A: Eine eigene Seite „Dein Können“ (was ich wie gut beherrsche, wie und warum das System mich einstuft) wird das nächste Großpaket, vorher gemeinsam planen.
+
+## 05.11.2026 – Keine Einführungskarte mehr für übernommene Wörter (ersetzt K10 vom 03.11.)
+Emrah: „bei den Vokabelübungen kommt so oft das Wort erst als Erklärkarte und dann eine Übung dazu … macht nur bei brandneuen Wörtern Sinn, kommt aber bei mehr als 50 % der Bestandswörter.“ Übernommene Wörter (aus der alten App) gehen beim ersten Auftauchen direkt in die Abfrage (`TEACH_MIGRATED = false` in `src/modules/vocab/ui/learnRun.ts`). Die Einführungskarte gibt es nur noch für wirklich neue Wörter.
+
+## 05.11.2026 – Grammatik-Rückmeldung entschlackt
+Emrah: „kurze Erläuterung ok, aber nicht lange – evtl. zum Aufklappen“, „die Karte erschlägt mich“. Offen steht nur die Regel; „Falle und Beispiel“ klappt auf. Bei Auswahl-Aufgaben steht die Erklärung zur eigenen Wahl nur unter der Option (kein Schritt „Was war falsch“, keine Zeile „Du: B · Richtig: D“), Claude startet dort nicht von selbst. Nach einer Wahl kein „Weiß ich nicht“ mehr. Claude erklärt auch nach „Weiß ich nicht“ (sonst ohne Erklärung). Claude-Texte werden nur noch an Satzenden gekürzt.
