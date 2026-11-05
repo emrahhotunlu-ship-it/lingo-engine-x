@@ -805,3 +805,6 @@ Frage: Die Planminuten von Schritt 3 (`dayMinutes`, bei 25 Min. Tagesziel 5 Min.
 
 ## 05.11.2026 – Enter schließt die Tastatur am Touch-Gerät
 Emrah: „Wenn ich auf der Tastatur auf Enter drücke an Touch-Geräten, soll sie einklappen, weil ich sonst nicht auf die Knöpfe komme.“ Umsetzung in `src/engine/HiddenInput.tsx`: am Touch-Gerät schließt Enter nach seiner Wirkung die Tastatur – in der Lücke, sobald sie gesperrt ist (Ergebnis da; beim Hinweis „noch einmal“ bleibt sie offen), in jedem einzeiligen Feld immer, in mehrzeiligen Feldern nur, wenn Enter dort Absenden ist (sonst bleibt es Zeilenumbruch). Laptop unverändert.
+
+## 05.11.2026 – Großpaket W „Wörter-Wissen“ freigegeben; Claude-Sätze sofort zum Lesen (Emrah: „A“)
+Plan `docs/umbau/wissen/plan.md` freigegeben. Von Claude ergänzte Wortpartner und Beispielsätze (automatisch geprüft) erscheinen sofort zum **Lesen** (Einführung, Ergebnis, Wortseite) mit Melde-Möglichkeit; als **Abfragesatz** erst nach der bestehenden Satzbank-Regel (`sbGate`, 4 Wochen). Reihenfolge der Großpakete: zuerst Wörter (W), danach großer Bildschirm (K14) und Ladezeiten.
