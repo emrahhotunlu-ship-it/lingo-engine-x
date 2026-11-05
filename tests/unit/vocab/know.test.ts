@@ -47,6 +47,10 @@ describe('acceptKnow', () => {
     );
     expect(col.col.map((c) => c.p)).toEqual(['complain about sth']);
     expect(col.rejected).toEqual(expect.arrayContaining(['col_word']));
+    const mid = acceptKnow({ id: 'w1', col: [{ p: 'owe sb an apology', de: 'jdm. eine Entschuldigung schulden', ex: 'I think we [owe the client an apology] for the outage.' }] }, card({ head: 'owe' }), T, 'pv');
+    expect(mid.col).toHaveLength(1);
+    const ing = acceptKnow({ id: 'w1', col: [{ p: 'despite doing sth', de: 'obwohl man etw. tut', ex: 'The client signed [despite having] open questions about pricing.' }] }, card({ head: 'despite' }), T, 'pv');
+    expect(ing.col).toHaveLength(1);
     const hy = acceptKnow({ id: 'w1', col: [{ p: 'well deserved', de: 'wohlverdient', ex: 'After the launch, the team took a [well-deserved] break.' }] }, card({ head: 'deserve' }), T, 'pv');
     expect(hy.col).toHaveLength(1);
   });

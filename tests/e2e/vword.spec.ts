@@ -150,3 +150,45 @@ test.describe('Handy 390 · Wege', () => {
     expect(errors).toEqual([]);
   });
 });
+
+// Großpaket W3 (05.11.2026): Wortpartner und alle Beispielsätze auf der Wortseite; Claude-Ergänztes lässt sich melden (nie gelöscht, nur `bad: 1`),
+// „Fehlt etwas? Jetzt ergänzen“ holt Fehlendes über `word-know@1` und speichert nur Geprüftes.
+const AI_SENT = 'The sales team achieved its quarterly target two weeks early.';
+test.describe('Wort-Wissen', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test('Wortpartner und Beispielsätze mit Übersetzung; Melden markiert nur', async ({ page }) => {
+    const p = patch();
+    p[PATH] = {
+      ...p[PATH],
+      col: [{ p: 'achieve a goal', de: 'ein Ziel erreichen', ex: 'We [achieved our goal] in March.', ai: 1, pv: 'word-know@1', t: NOW }],
+      sb: [{ en: AI_SENT, de: 'Das Vertriebsteam erreichte sein Quartalsziel zwei Wochen früher.', sit: 'sales', k: 'work', src: 'ai', t: NOW, pv: 'word-know@1' }],
+    };
+    const { errors } = await bootAt(page, { name: 'vword', path: PATH }, { migrated: false, fake: { patch: p } });
+    await screen(page, 'vword');
+    await expect(page.getByTestId('vw-partner')).toContainText('achieve a goal');
+    const ex = page.getByTestId('vw-example').filter({ hasText: 'quarterly target' });
+    await expect(ex).toHaveCount(1);
+    await expect(page.getByTestId('vw-example-de')).toHaveCount(0);
+    await ex.getByTestId('vw-example-de-toggle').click();
+    await expect(ex.getByTestId('vw-example-de')).toContainText('Quartalsziel');
+    await ex.getByTestId('vw-example-report').click();
+    await expect.poll(async () => (((await dump(page))[PATH]?.sb as Doc[] | undefined) ?? [])[0]?.bad).toBe(1);
+    await expect(page.getByTestId('vw-example').filter({ hasText: 'quarterly target' })).toHaveCount(0);
+    expect(await layoutProblems(page)).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+
+  test('Jetzt ergänzen: speichert geprüfte Wortpartner und Sätze', async ({ page }) => {
+    const p = patch();
+    p[PATH] = { ...p[PATH], col: [], sb: [] };
+    const { errors } = await bootAt(page, { name: 'vword', path: PATH }, { migrated: false, fake: { patch: p } });
+    await screen(page, 'vword');
+    await page.getByTestId('vw-fill-btn').click();
+    await expect.poll(async () => (((await dump(page))[PATH]?.col as Doc[] | undefined) ?? []).length, { timeout: 15_000 }).toBeGreaterThan(0);
+    await expect(page.getByTestId('vw-partner').first()).toBeVisible();
+    await expect(page.getByTestId('vw-example').first()).toBeVisible();
+    expect((await dump(page))[PATH]?.kn).toMatchObject({ pv: 'word-know@1' });
+    expect(errors).toEqual([]);
+  });
+});

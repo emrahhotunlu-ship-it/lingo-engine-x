@@ -71,8 +71,8 @@ const sameStem = (a0: string, b0: string): boolean => {
   const a = IRREG[a0] ?? a0;
   const b = IRREG[b0] ?? b0;
   if (a === b) return true;
-  const sa = a.replace(/(e|es|s|ed|ing|d)$/, '');
-  const sb = b.replace(/(e|es|s|ed|ing|d)$/, '');
+  const sa = a.replace(/(e|es|s|ed|ing)$/, '');
+  const sb = b.replace(/(e|es|s|ed|ing)$/, '');
   return sa.length >= 3 && (b.startsWith(sa) || a.startsWith(sb)) && Math.abs(a.length - b.length) <= 4;
 };
 /** Fünf gleiche Wörter in Folge (Abschreiben aus Beispielantwort, Wortpartner-Satz oder vorhandenen Sätzen). */
@@ -95,7 +95,8 @@ const BAD_CHARS = /["„“”[\]{}<>]/;
 
 /** Kommt der Kern des Stichworts (ohne Platzhalter) in der Wendung vor? */
 function hasHead(text: string, head: string): boolean {
-  const core = parts(head).filter((w) => !['sb', 'sth', 'someone', 'something', 'one', "one's"].includes(w));
+  // Infinitiv-„to“ am Anfang („to achieve“) gehört nicht zum Kern.
+  const core = parts(head.replace(/^\s*to\s+/i, '')).filter((w) => !['sb', 'sth', 'someone', 'something', 'one', "one's"].includes(w));
   if (!core.length) return false;
   const tw = new Set(parts(text));
   // Gebeugte Formen zählen: Wortanfang (raise → raised, raising) bzw. Wortstamm ohne Endungs-e.
@@ -125,7 +126,12 @@ function colFault(raw: Obj, card: KnowCard, slotUsed: boolean): KnowReject | nul
   // Lehrer-Prüfung 05.11.2026: die Klammer zeigt genau die Wendung – jedes Inhaltswort der Klammer steht (gebeugt) in `p`
   // („[require immediate attention]“ zu „require attention“ fällt weg).
   const pw2 = parts(p).filter((w) => !SLOT.has(w));
-  if (parts(inner).some((w) => !FILLER.has(w) && !pw2.some((x) => sameStem(x, w)))) return 'col_bracket';
+  // „despite doing sth“: jedes Wort auf -ing passt zu „doing“. Steht sb/sth MITTEN in der Wendung („owe sb an apology“), dürfen dort bis zu 3
+  // Wörter für den Platzhalter in der Klammer stehen (Lehrer-Nachprüfung 05.11.2026).
+  const doing = /\bdoing\b/i.test(p);
+  const midSlot = /\b(sb|sth|someone|something)\b(?!\s*$)/i.test(p);
+  const extra = parts(inner).filter((w) => !FILLER.has(w) && !pw2.some((x) => sameStem(x, w)) && !(doing && /ing$/.test(w)));
+  if (extra.length > (midSlot ? 3 : 0)) return 'col_bracket';
   return null;
 }
 
