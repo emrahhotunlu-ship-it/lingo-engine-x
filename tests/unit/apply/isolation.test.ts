@@ -16,9 +16,9 @@ const SHARED = `${MODULE}/shared.ts`;
 const SHARED_UI = `${MODULE}/sharedUi.ts`;
 
 const ALLOWED_SHARED: RegExp[] = [
-  /^src\/domain\/(random|text\/chunkMatch|repair\/(norm|repair)|tutor\/(edits|mail|ctx|ctx2|patList)|nbdrill\/outDoc|c1\/prod|grammar\/patterns)$/,
+  /^src\/domain\/(random|date|text\/chunkMatch|repair\/(norm|repair)|tutor\/(edits|mail|ctx|ctx2|patList)|nbdrill\/outDoc|c1\/prod|grammar\/patterns)$/,
   /^src\/platform\/diagnostics$/,
-  /^src\/content\/nb\/(load|schemas)$/,
+  /^src\/content\/nb\/(load|schemas|stock)$/,
   /^src\/prompts\/(common|applyReply|applySummary|applyKeypoints|applyCommon|c1Mail)$/,
 ];
 const ALLOWED_SHARED_UI: RegExp[] = [

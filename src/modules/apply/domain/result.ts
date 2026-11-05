@@ -1,5 +1,5 @@
 import { errorEdits, locateRaw, normWs, outId, repairNorm, repairsFromEdits, usesChunk } from '../shared';
-import type { ApplyReply, ApplySummary, C1Mail, Edit, EditKind, Good, NewRepair, OutItem, OutKind, PointCheck, ProdInput, Used } from '../shared';
+import type { ApplyReply, ApplySummary, C1Mail, Edit, EditKind, Good, GreetCheck, NewRepair, OutItem, OutKind, PointCheck, ProdInput, StyleTip, Used } from '../shared';
 import type { WriteKind } from './count';
 import type { CopyCheck } from './copy';
 import { countWords, type LengthState } from './kinds';
@@ -20,6 +20,10 @@ export type Feedback = {
   faithful: ApplySummary['faithful'] | null;
   tone: { fit: string; why: string } | null;
   good: Good | null;
+  /** „So klingt es gehobener“ (W5 K1): 0–2 zitierte Stil-Verbesserungen, getrennt von den Fehlern. */
+  style: StyleTip[];
+  /** Anrede und Gruß (W5 K7), `null` ohne Urteil (Zusammenfassung immer). */
+  greet: GreetCheck | null;
   upgraded: string;
   gist: string;
   /** Claudes Nachzählung (oder `null`). */
@@ -28,10 +32,23 @@ export type Feedback = {
   doubted?: number[];
 };
 
-export const fromReply = (o: ApplyReply): Feedback => ({ kind: 'reply', edits: o.edits, used: o.used, points: o.points, faithful: null, tone: o.tone, good: o.good, upgraded: o.upgraded, gist: o.summary, second: o.errorCount });
+export const fromReply = (o: ApplyReply): Feedback => ({
+  kind: 'reply',
+  edits: o.edits,
+  used: o.used,
+  points: o.points,
+  faithful: null,
+  tone: o.tone,
+  good: o.good,
+  style: o.style,
+  greet: o.greet,
+  upgraded: o.upgraded,
+  gist: o.summary,
+  second: o.errorCount,
+});
 export const fromSummary = (o: ApplySummary): Feedback => {
   const { points, doubted } = doubtPoints(o.points, o.faithful);
-  return { kind: 'summary', edits: o.edits, used: o.used, points, faithful: o.faithful, tone: null, good: o.good, upgraded: o.upgraded, gist: o.summary, second: o.errorCount, doubted };
+  return { kind: 'summary', edits: o.edits, used: o.used, points, faithful: o.faithful, tone: null, good: o.good, style: o.style, greet: null, upgraded: o.upgraded, gist: o.summary, second: o.errorCount, doubted };
 };
 
 const quoteKey = (s: string): string =>
@@ -57,7 +74,21 @@ export function doubtPoints(points: readonly PointCheck[], faithful: ApplySummar
   });
   return { points: out, doubted };
 }
-export const fromMail = (o: C1Mail): Feedback => ({ kind: 'write', edits: o.edits, used: o.used, points: null, faithful: null, tone: o.tone, good: null, upgraded: o.upgraded, gist: o.summary, second: o.errorCount });
+export const fromMail = (o: C1Mail): Feedback => ({
+  kind: 'write',
+  edits: o.edits,
+  used: o.used,
+  points: null,
+  faithful: null,
+  tone: o.tone,
+  good: null,
+  // Ältere Antworten ohne die Felder von c1-mail@2 (tolerant): keine Stil-Verbesserung, kein Urteil zu Anrede und Gruß.
+  style: Array.isArray(o.style) ? o.style : [],
+  greet: o.greet ?? null,
+  upgraded: o.upgraded,
+  gist: o.summary,
+  second: o.errorCount,
+});
 
 /**
  * Fehler des Textes (wie `mailErrors`): Liste als Untergrenze, Nachzählung nur nach oben, höchstens Liste + 2. Ohne belegte Fehlerstelle immer 0 (L7): eine
@@ -201,6 +232,8 @@ export type ApplyRun = {
   offered: string[];
   /** Pfade der Wortkarten zu `words` (für den Beleg an die Wörter-App; nur die bekannten). */
   lex?: string[];
+  /** Starthilfe (W5 K9) geöffnet: zählt als Hilfe und wird vermerkt; die Pflicht ändert sich nicht. */
+  helped?: boolean;
 };
 
 const OUT_KIND: Record<WriteKind, OutKind> = { reply: 'reply', write: 'c1mail', summary: 'summary' };
@@ -220,6 +253,10 @@ export function outItemOf(r: ApplyRun): OutItem {
   if (r.peeked) fb.peek = true;
   if (r.words.length) fb.w = r.words;
   if (r.offered.length) fb.tw = r.offered;
+  // W5 (additiv, tolerant gelesen: `fb` ist frei): Stil-Verbesserungen (K1), Anrede und Gruß (K7), Starthilfe benutzt (K9).
+  if (f.style.length) fb.st = f.style.map((x) => [x.from, x.to]);
+  if (f.greet) fb.gr = f.greet.fit;
+  if (r.helped) fb.help = 1;
   // L7: fehlerfrei genau dann, wenn keine Fehlerstelle belegt ist (dann ist auch `err` 0).
   return { id: r.id, k: OUT_KIND[r.kind], d: r.day, t: r.now, theme: r.material, ok: errorEdits(f.edits).length === 0, text: r.text.trim(), fb };
 }

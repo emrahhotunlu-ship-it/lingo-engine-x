@@ -2,8 +2,9 @@
 // Die Erlaubnisliste prüft tests/unit/apply/isolation.test.ts. `registry.ts` importiert diese Datei NICHT (sie wird von Heute und den Texten früh geladen);
 // so bleiben Vorlagen, Inhalte und Speicherformen aus der Einstiegsdatei.
 
-// Zufall, Diagnose
+// Zufall, Datum, Diagnose
 export { hash32 } from '../../domain/random';
+export { addDays, daysBetween } from '../../domain/date';
 export { logError, logWarn } from '../../platform/diagnostics';
 
 // Text
@@ -18,9 +19,11 @@ export { outId } from '../../domain/nbdrill/outDoc';
 export type { OutItem, OutKind } from '../../domain/nbdrill/outDoc';
 export type { ProdInput } from '../../domain/c1/prod';
 
-// Inhalte: Posteingang (Antworten), Mail-Situationen (Schreiben), Berufsprofil
+// Inhalte: Posteingang (Antworten), Artikel-Vorrat (Zusammenfassen), Mail-Situationen (Schreiben), Berufsprofil
 export { inboxMails } from '../../content/nb/load';
 export type { InboxMail } from '../../content/nb/schemas';
+export { articleStock } from '../../content/nb/stock';
+export type { StockArticle } from '../../content/nb/stock';
 export { mailVars, pickSituation } from '../../domain/tutor/mail';
 export type { MailSituation } from '../../domain/tutor/mail';
 export { tutorCtx } from '../../domain/tutor/ctx';
@@ -37,4 +40,4 @@ export type { ApplySummary } from '../../prompts/applySummary';
 export { applyKeypoints } from '../../prompts/applyKeypoints';
 export { c1Mail } from '../../prompts/c1Mail';
 export type { C1Mail } from '../../prompts/c1Mail';
-export type { Good, PointCheck } from '../../prompts/applyCommon';
+export type { Good, GreetCheck, GreetVars, PointCheck, StyleTip } from '../../prompts/applyCommon';

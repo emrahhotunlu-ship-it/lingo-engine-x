@@ -1,15 +1,18 @@
 import { clip, hash32, INCOMING_MAX, pickSituation } from '../shared';
-import type { InboxMail, MailSituation, OutItem } from '../shared';
+import type { InboxMail, MailSituation, OutItem, StockArticle } from '../shared';
+import { rotate } from './fresh';
 
 // Material je Disziplin (F3). Rein: Auswahl fest je Lerntag (Kap. 15: nichts würfelt sich neu), Texte für die Vorlagen, festgelegte Kernpunkte.
 
 type Doc = Readonly<Record<string, unknown>>;
 
+/** Feste Reihenfolge der eingegangenen Mails für einen Lerntag (die erste ist die Mail des Tages, die übrigen kommen nach K14 nachrückend dran). */
+export const mailOrder = (mails: readonly InboxMail[], day: string): InboxMail[] => rotate(mails, mails.length ? hash32(`reply|${day}`) % mails.length : 0);
+
 /** Eingegangene Mail des Tages (fest je Lerntag und Schlüssel). `null` ohne Mails. */
 export function pickMail(mails: readonly InboxMail[], day: string, shift = 0): InboxMail | null {
-  if (!mails.length) return null;
-  const base = hash32(`reply|${day}`) % mails.length;
-  return mails[(base + shift + mails.length * 4) % mails.length] ?? null;
+  const order = mailOrder(mails, day);
+  return order.length ? (order[((shift % order.length) + order.length) % order.length] ?? null) : null;
 }
 
 /** Die eingegangene Mail als ein Block für `apply-reply@1` (Absender, Rolle, Betreff, Text), höchstens 1.600 Zeichen. */
@@ -26,6 +29,30 @@ export const firstName = (m: InboxMail): string => m.from.trim().split(/\s+/)[0]
 export function pickWriteSituation(day: string, chapter: number | null, sit: readonly string[], shift = 0): MailSituation | null {
   return pickSituation({ chapter, sit, week: `day|${day}`, shift });
 }
+
+/** Höchstens so viele Situationen werden durchgezählt (es gibt 12; Vorrat für spätere). */
+const SITUATIONS_SCAN = 48;
+
+/**
+ * Feste Reihenfolge der Situationen für einen Lerntag (K14): zuerst die passenden (Kapitel, Situationsart aus „Mein Arbeitsalltag“) in der Reihenfolge von
+ * `pickWriteSituation`, danach alle übrigen. Die erste ist die bisherige Situation des Tages.
+ */
+export function situationOrder(day: string, chapter: number | null, sit: readonly string[]): MailSituation[] {
+  const out: MailSituation[] = [];
+  const seen = new Set<string>();
+  const add = (s: MailSituation | null): void => {
+    if (s && !seen.has(s.id)) {
+      seen.add(s.id);
+      out.push(s);
+    }
+  };
+  for (let k = 0; k < SITUATIONS_SCAN; k++) add(pickWriteSituation(day, chapter, sit, k));
+  for (let k = 0; k < SITUATIONS_SCAN; k++) add(pickWriteSituation(day, null, [], k));
+  return out;
+}
+
+/** Feste Reihenfolge des Artikel-Vorrats für einen Lerntag (K8). */
+export const stockOrder = (stock: readonly StockArticle[], day: string): StockArticle[] => rotate(stock, stock.length ? hash32(`summary|${day}`) % stock.length : 0);
 
 // ---------------------------------------------------------------- Kernpunkte eines Artikels (einmal festgelegt, `out/<Monat>`, Art `sumkp`)
 

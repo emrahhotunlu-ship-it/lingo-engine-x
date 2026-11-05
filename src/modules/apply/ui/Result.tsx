@@ -1,7 +1,7 @@
 import { useId, useState, type ReactNode, type Ref } from 'react';
 import { AiMark, Button, Icon, retireRepairs, useT, type MessageKey } from '../sharedUi';
 import { errorEdits, RULE_ID } from '../shared';
-import type { Edit, PointCheck } from '../shared';
+import type { Edit, GreetCheck, PointCheck } from '../shared';
 import { selfFixOk, errorsOf, praiseOf, repairsOf, wordUses, type ApplyRun, type WordUse } from '../domain/result';
 import { lengthState, type LengthGoal } from '../domain/kinds';
 import type { SaveResult } from './save';
@@ -12,8 +12,11 @@ import type { Rule, Targets } from './hooks';
 // Jede Fehlerstelle: deins → richtig → warum (ein Satz). Ohne Fehler „Das sitzt“ mit Zitat und Grund (Muss 5, nie Claudes Gesamturteil als Grund). Danach
 // Lernwörter, bessere Fassung, Folgen. Ein Punkt „teilweise“/„fehlt“ trägt sein Warum (Prüfbefund T2).
 // Farbe nie allein: ✓/✕ steht immer mit Wort.
+// W5: Anrede und Gruß stehen beim Ton (K7); „So klingt es gehobener“ (K1) kommt NACH den Fehlerstellen und „Das sitzt“, als eigener Block ohne Durchstreichen
+// (ein Vorschlag, kein Fehler); die Starthilfe (K9) ist unten vermerkt.
 
 const TONE_KEY: Record<string, MessageKey> = { fits: 'axToneFits', 'too-direct': 'axToneDirect', 'too-informal': 'axToneInformal', 'too-stiff': 'axToneStiff' };
+const GREET_KEY: Record<GreetCheck['fit'], MessageKey> = { fits: 'axGreetFits', off: 'axGreetOff', missing: 'axGreetMissing' };
 const COVER_KEY: Record<PointCheck['covered'], MessageKey> = { yes: 'axCovYes', partly: 'axCovPartly', no: 'axCovNo' };
 const KIND_KEY: Record<Edit['kind'], MessageKey> = {
   grammar: 'axKind_grammar',
@@ -153,6 +156,21 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
     </Block>
   );
 
+  const greet = f.greet && (
+    <p className="lx-ax-text m-0 flex items-start gap-2" data-testid="ax-greet" data-fit={f.greet.fit}>
+      <Mark ok={f.greet.fit === 'fits'} partly={f.greet.fit === 'off'} />
+      <span>
+        {t('axGreetLabel')} · {t(GREET_KEY[f.greet.fit])}
+        {f.greet.why ? (
+          <span className="text-muted" lang={lang}>
+            {' '}
+            · {f.greet.why}
+          </span>
+        ) : null}
+      </span>
+    </p>
+  );
+
   const tone = f.tone && (
     <Block title={t('axTone')} testId="ax-tone" data={{ 'data-fit': f.tone.fit }}>
       <p className="lx-ax-text m-0 flex items-start gap-2">
@@ -162,6 +180,30 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
           {f.tone.why ? <span className="text-muted"> · {f.tone.why}</span> : null}
         </span>
       </p>
+      {greet}
+    </Block>
+  );
+
+  const style = f.style.length > 0 && (
+    <Block title={t('axStyle')} testId="ax-style" data={{ 'data-n': f.style.length }}>
+      <ol className="m-0 flex list-none flex-col gap-3 p-0">
+        {f.style.map((x, k) => (
+          <li key={`${x.from}-${k}`} className="lx-card flex flex-col gap-1 p-3" data-testid={`ax-style-${k}`}>
+            <span className="lx-ax-text [overflow-wrap:anywhere]" lang="en">
+              <span className="text-muted">{t('axYours')}: </span>
+              {x.from}
+            </span>
+            <span className="lx-ax-text [overflow-wrap:anywhere]" lang="en">
+              <span className="text-muted">{t('axStyleBetter')}: </span>
+              <strong>{x.to}</strong>
+            </span>
+            <span className="lx-ax-hint" lang={lang}>
+              <span className="text-muted">{t('axWhyLabel')}: </span>
+              {x.why}
+            </span>
+          </li>
+        ))}
+      </ol>
     </Block>
   );
 
@@ -254,6 +296,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
           {f.tone.why ? ` · ${f.tone.why}` : ''}
         </p>
       )}
+      {greet}
     </Block>
   ) : null;
 
@@ -267,6 +310,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
       </h2>
       {order.map((node, k) => (node ? <div key={k}>{node}</div> : null))}
       {sits}
+      {style}
       {(uses.length > 0 || rs) && (
         <Block title={t('axWords')} testId="ax-words">
           <ul className="m-0 flex list-none flex-col gap-1 p-0">
@@ -311,6 +355,11 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
         {save && save.repairs > 0 && !reported && (
           <p className="lx-ax-hint m-0 text-muted" data-testid="ax-repairs">
             {t(save.repairs === 1 ? 'axRepairs_one' : 'axRepairs_other', { n: save.repairs })}
+          </p>
+        )}
+        {run.helped && (
+          <p className="lx-ax-hint m-0 text-subtle" data-testid="ax-helped">
+            {t('axHelped')}
           </p>
         )}
         {run.pasted && (

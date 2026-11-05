@@ -119,6 +119,8 @@ const reply = (edits: Edit[], extra: Partial<ApplyReply> = {}): ApplyReply => ({
   used: [],
   tone: { fit: 'fits', why: '' },
   good: null,
+  style: [],
+  greet: null,
   upgraded: 'Hi Laura, I agree that your team is busy.',
   summary: 'Klar gegliedert.',
   errorCount: null,

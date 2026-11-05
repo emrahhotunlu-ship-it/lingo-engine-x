@@ -100,6 +100,14 @@ test.describe('Handy 390 px', () => {
     await expect(first).toHaveAttribute('autocomplete', 'off');
     await expect(first).toHaveAttribute('name', 'lx-apply-text');
     await expect(page.getByTestId('ax-check')).toBeDisabled();
+    // W5 K7: eigenes Anrede-Feld, vorbelegt mit der passenden Anrede aus dem Material; der Gruß nennt den passenden Gruß als Beispiel.
+    await expect(page.getByTestId('ax-part-greet')).toHaveValue(/^(Hi|Hello|Dear|Hey) .+,$/);
+    await expect(page.getByTestId(`ax-part-${n - 1}`)).toHaveAttribute('placeholder', /^z\. B\. .+,$/);
+    // W5 K9: Starthilfe erst auf Wunsch, dann drei Satzanfänge (zählt als Hilfe).
+    await expect(page.getByTestId('ax-starters')).toHaveCount(0);
+    await page.getByTestId('ax-starter').click();
+    await expect(page.getByTestId('ax-starters').locator('li')).toHaveCount(3);
+    await expect(page.getByTestId('ax-starter-0')).toContainText('…');
     const parts = [
       'Hi, thank you for your message, I fully understand that your team is very busy at the moment.',
       'We discussed about the setup and it really needs only a few hours from your team in total.',
@@ -141,6 +149,14 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('ax-length')).toBeVisible();
     await expect(page.getByTestId('ax-spot-0')).toHaveAttribute('data-self', 'ok');
     await expect(page.getByTestId('ax-spot-0')).toContainText('discussed');
+    // W5 K7: Anrede und Gruß beim Ton bewertet; K1: „So klingt es gehobener“ getrennt von den Fehlern, mit Zitat, besserer Fassung und Warum; K9 vermerkt.
+    await expect(page.getByTestId('ax-greet')).toHaveAttribute('data-fit', 'fits');
+    await expect(page.getByTestId('ax-style')).toHaveAttribute('data-n', '2');
+    await expect(page.getByTestId('ax-style-0')).toContainText('very busy');
+    await expect(page.getByTestId('ax-style-0')).toContainText('stretched thin');
+    await expect(page.getByTestId('ax-style-0')).toContainText('Warum');
+    await expect(page.getByTestId('ax-style-0').locator('s')).toHaveCount(0);
+    await expect(page.getByTestId('ax-helped')).toBeVisible();
     // Feste Reihenfolge: Pflichtpunkte → Ton → Länge → Fehlerstellen.
     const ys = await Promise.all(['ax-points', 'ax-tone', 'ax-length', 'ax-spots'].map(async (id) => (await page.getByTestId(id).boundingBox())?.y ?? 0));
     expect([...ys].sort((a, b) => a - b)).toEqual(ys);
@@ -159,6 +175,7 @@ test.describe('Handy 390 px', () => {
 
     // Gespeichert: `out/2026-09` (Art reply), höchstens 3 Fehlersätze `src: 'write'` mit Situation.
     await expect.poll(async () => (await outItems(page)).filter((i) => i.k === 'reply').length).toBe(1);
+    expect((await outItems(page)).find((i) => i.k === 'reply')?.fb).toMatchObject({ st: [['very busy', 'stretched thin'], ['really needs', 'requires']], gr: 'fits', help: 1 });
     const reps = await writeRepairs(page);
     expect(reps.length).toBeGreaterThan(0);
     expect(reps.length).toBeLessThanOrEqual(3);
@@ -297,7 +314,7 @@ test.describe('Laptop 1440 px', () => {
     expect(external).toEqual([]);
   });
 
-  test('Kein Artikel: im Tagesweg geht es mit eigenen Sätzen weiter', async ({ page }) => {
+  test('W5 K8: Kein Tagesartikel → ein Text aus dem geprüften Vorrat mit festen Kernpunkten (keine Kernpunkt-Anfrage), Stil-Verbesserung nach den Fehlern', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
       now: TUE_9,
@@ -307,19 +324,52 @@ test.describe('Laptop 1440 px', () => {
     await screen(page, 'today');
     await page.getByTestId('start').click();
     await screen(page, 'applyTask');
-    await expect(page.getByTestId('ax-nomaterial')).toBeVisible();
-    await page.getByTestId('ax-combo-instead').click();
-    await screen(page, 'comboSentence');
+    await expect(page.getByTestId('ax-nomaterial')).toHaveCount(0);
+    await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-material', /^av\d{2}$/);
+    await expect(page.getByTestId('ax-article-toggle')).toContainText('Textsammlung');
+    await expect(page.getByTestId('ax-greet-hint')).toHaveCount(0);
+    await page
+      .getByTestId('ax-input')
+      .fill('The article explains a change that many companies are facing. Teams find the old way hard to stop, so they test new tools step by step. In the end, clear rules matter more than the software.');
+    await page.getByTestId('ax-check').click();
+    await expect(page.getByTestId('ax-result')).toBeVisible();
+    expect(await calls(page)).toEqual(['apply-summary:default']);
+    await expect(page.getByTestId('ax-points').locator('li')).toHaveCount(4);
+    await expect(page.getByTestId('ax-style-0')).toContainText('difficult to contain');
+    const ys = await Promise.all(['ax-spots', 'ax-style'].map(async (id) => (await page.getByTestId(id).boundingBox())?.y ?? 0));
+    expect(ys[0]).toBeLessThan(ys[1] ?? 0);
+    await expect(page.getByTestId('ax-greet')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 
-  test('Frei üben „Eine Mail schreiben“: Wochen-Mail-Prüfung (c1-mail@1), Ergebnis mit Urteil, Länge, Fehlerstellen; Eintrag c1mail, Pflicht unberührt', async ({ page }) => {
+  test('W5 K14: dieselbe Mail kommt frühestens nach 14 Tagen wieder (gespeicherte Ergebnisse in out/<Monat>); Empfänger und Anrede beim Schreiben', async ({ page }) => {
+    // Alle Mails außer m07 in den letzten 3 bis 13 Tagen beantwortet → m07 kommt dran, egal welche Mail der Tag sonst wählen würde.
+    const ids = Array.from({ length: 16 }, (_, k) => `m${String(k + 1).padStart(2, '0')}`).filter((id) => id !== 'm07');
+    const items = ids.map((theme, k) => ({ id: `reply-x${k}`, k: 'reply', d: `2026-09-${String(9 + (k % 11)).padStart(2, '0')}`, t: k + 1, theme }));
+    const { errors } = await boot(page, {
+      migrated: true,
+      now: TUE_9,
+      localStorage: { 'lx:input': 'keys' },
+      fake: { patch: { 'out/2026-09': { v: 1, items } } },
+    });
+    await screen(page, 'today');
+    await openTab(page, 'apply');
+    await page.getByTestId('ax-row-reply').click();
+    await screen(page, 'applyTask');
+    await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-material', 'm07');
+    await expect(page.getByTestId('ax-greet-hint')).toContainText('Passende Anrede: „Hello Ms. Roth,“');
+    expect(errors).toEqual([]);
+  });
+
+  test('Frei üben „Eine Mail schreiben“: Wochen-Mail-Prüfung (c1-mail@2), Ergebnis mit Urteil, Länge, Fehlerstellen; Eintrag c1mail, Pflicht unberührt', async ({ page }) => {
     const { errors } = await boot(page, { migrated: true, now: TUE_9, localStorage: { 'lx:input': 'keys' } });
     await screen(page, 'today');
     await openTab(page, 'apply');
     await page.getByTestId('ax-row-write').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-brief')).toContainText('Empfänger');
+    // W5 K7: Empfänger mit Namen und passende Anrede als Hinweis.
+    await expect(page.getByTestId('ax-greet-hint')).toContainText(/Passende Anrede: „(Hi|Hello|Dear) .+,“ · Gruß: „.+,“/);
     await expect(page.getByTestId('ax-task')).toHaveText('Lies, worum es geht, und schreib deine Mail auf Englisch.');
     await expect(page.getByTestId('ax-target-rule')).toContainText('Regel:');
     const mail = `Dear Ms Weber,
@@ -335,6 +385,8 @@ Emrah`;
     await expect(page.getByTestId('ax-result')).toHaveAttribute('data-kind', 'write');
     await expect(page.getByTestId('ax-gist')).toContainText('Gut gegliedert');
     await expect(page.getByTestId('ax-spot-0')).toHaveAttribute('data-self', 'tried');
+    // W5 K1: ohne eigenes Feld der Testantwort gelten die belegten Verbesserungen der Liste („tell you“ → „let you know“).
+    await expect(page.getByTestId('ax-style-0')).toContainText('let you know');
     expect(await calls(page)).toEqual(['c1-mail:default']);
     await expect.poll(async () => (await outItems(page)).filter((i) => i.k === 'c1mail').length).toBe(1);
     await page.getByTestId('ax-done').click();
