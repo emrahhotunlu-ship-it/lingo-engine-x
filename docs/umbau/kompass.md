@@ -33,7 +33,11 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 | ✓ | **Design komplett** (B) | D6a, D6b, E1–E7, F2–F5, Glas überall, B2, B10, B-Rest (Raster großer Monitor, leere Kontextspalte, Wörter-Kopf, Grammatik „Nachschlagen“ als eine Seite, EN-Begriffe) | **live** `JLL8…` v93/v94/v95 (04.11.) |
 | ✓ | **Schneller Start** (C) | 1b: Inhalte als `raw-*.txt` nachgeladen, Englisch bei Bedarf, Hinweis „Neu laden“ | **live** `JLL8…` v95 `1793821540-69ed` (04.11., Rückweg v94) |
 | F | **Fokus 2.0** (Emrah 04.11. spät: nur Wörter, Grammatik, Anwenden, Fehler korrigieren; Rest raus; Sprechen/Hören macht er bei Preply) | F0 Ausblenden, F1 K-Rest, F2 Belege, F3 Anwenden-Modul (Satz, Mail antworten, Mail schreiben, Artikel zusammenfassen), F4 Fehlersätze im Tagesplan | **live `JLL8…` v96 `1793872751-0932` (05.11., Rückweg v95)**; dazu Enter klappt Tastatur ein, Schritt 3 „B“ (Zeit bleibt, Aufgabe kürzer). Kurs-Routine pausiert |
-| N | **Nach Fokus 2.0** | offene Live-Kommentare K3–K14 nachprüfen und beheben (ohne Rückfrage, kommen mit dem nächsten Test-Link); danach nächstes Großpaket mit Emrah planen (Vorschlag im Chat) | läuft |
+| N | **Nach Fokus 2.0** | offene Live-Kommentare K3–K14 nachprüfen und beheben (ohne Rückfrage, kommen mit dem nächsten Test-Link); danach nächstes Großpaket mit Emrah planen (Vorschlag im Chat) | erledigt (mit W) |
+| W | **Wörter-Wissen + Karten-Korrekturen** | W1–W6 (Wortpartner, Beispielsätze, Wortseite, Wendungen, Anwenden-Feinschliff), W7 (12 Live-Kommentare 05.11.), 1A wechselnde geprüfte Sätze | **Test-Link `AXHkh6…` v91 `1793903965-a9a6`** (05.11., Rückweg v90); wartet auf „Ja live nehmen“ |
+| K | **Dein Können** (Emrah 05.11. „2A“) | eigene Seite: was ich bei Wörtern und Grammatik wie gut beherrsche, wie und warum die App mich einstuft | als Nächstes; zuerst gemeinsam planen |
+| L | **Großer Bildschirm + Ladezeiten** | K14 (leere rechte Spalte ab 1440/2560), LIVE-BUG 3 (erstes Laden nach neuer Version ~7 MB) | danach, Reihenfolge nach Emrahs Wahl |
+| R | **Rest** | Lehrer-SOLL (unfair → höchstens „Schwer“ auch am Folgetag; Einführung „Gefunden in“ bei langem Ursprungssatz), Inhaltspflege (Wortarten, Bedeutungs-Zwillinge), Lehrer-Routine E8, Satzbank-Freigabe nach 4 Wochen, Test-Wackler, R4 Messen, R6 Premium, R7 Fülle (nur auf Zuruf) | gesammelt |
 Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Großpakete“ und §4.
 
 ## 4. Ablauf je Großpaket (Hauptchat)
