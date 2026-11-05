@@ -263,7 +263,7 @@ test('Hörübung: „Gerade kein Ton“ gibt dieselbe Aufgabe als Lücke, ohne H
   expect(errors).toEqual([]);
 });
 
-test('Eigener Satz: am Handy höchstens 20 Wörter (Emrah 05.11.2026: 8 reichten für zwei Teilsätze nicht), Beispiel der Regel sichtbar', async ({ page }) => {
+test('Eigener Satz: am Handy höchstens 20 Wörter (Emrah 05.11.2026: 8 reichten für zwei Teilsätze nicht), Situation und Satzanfang in der Aufgabe', async ({ page }) => {
   await setInputProfile(page, 'touch');
   await boot(page, { migrated: true });
   await screen(page, 'today');
@@ -278,5 +278,10 @@ test('Eigener Satz: am Handy höchstens 20 Wörter (Emrah 05.11.2026: 8 reichten
   await expect(input).toHaveValue(w(20));
   await input.fill(w(21));
   await expect(input).toHaveValue(w(20));
-  await expect(page.getByTestId('combo-example')).toBeVisible();
+  // Befund english-teacher 05.11.2026: die Aufgabe nennt eine Situation und einen Satzanfang, der den Zusammenhang der Regel erzwingt;
+  // der Beispielsatz der Regel kommt nur ohne Rahmen.
+  const starter = (await page.getByTestId('combo-item').getAttribute('data-starter')) ?? '';
+  expect(starter).not.toBe('');
+  await expect(page.getByTestId('task')).toContainText(`Fang so an: „${starter}“`);
+  await expect(page.getByTestId('combo-example')).toHaveCount(0);
 });

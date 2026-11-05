@@ -7,6 +7,16 @@ import { foreignSignalPattern, hasSignal, patternNearGap, patternsOf } from '../
 
 type Pat = { id: string; signal: string };
 
+/** @6: `self.plain` = der gelöste Satz, wie man ihn einem Kollegen sagt (hier genau der Satz mit eingesetzter Lösung). */
+function withPlain(it: Record<string, unknown>): void {
+  const prompt = String(it.prompt);
+  const answer = String(it.answer);
+  const target = it.type === 'transform' && prompt.includes('→') ? (prompt.split('→').pop() ?? prompt) : prompt;
+  const plain = it.type === 'correct' ? answer : target.replace(/_{3,}(?:\s*\([^)]*\))?/, answer).replace(/\s+/g, ' ').trim();
+  const self = (it.self && typeof it.self === 'object' ? it.self : { solved: answer, also: [] }) as Record<string, unknown>;
+  it.self = { ...self, plain };
+}
+
 /** `- <id> | <Name> | <Formel> | signals: a, b` aus der Eingabe von `grammar-items@3`. */
 function patternsIn(input: string): Pat[] {
   const out: Pat[] = [];
@@ -18,7 +28,7 @@ function patternsIn(input: string): Pat[] {
 }
 
 /**
- * Feste, realistische Antwort für `grammar-items@3`: wie @1/@2, dazu bei Themen mit Muster je Aufgabe ein `pat` der Liste, ein Signalwort des Musters
+ * Feste, realistische Antwort für `grammar-items@3` bis `@6`: wie @1/@2, dazu bei Themen mit Muster je Aufgabe ein `pat` der Liste, ein Signalwort des Musters
  * im Satz und bei Auswahlaufgaben eine Begründung für eine falsche Option (`why_not`).
  */
 export function grammarItemsReplyV3(input: string): string {
@@ -29,7 +39,10 @@ export function grammarItemsReplyV3(input: string): string {
     if (it.type === 'correct') it.goal = { de: 'Der Bericht ist letzte Woche verschickt worden.', en: 'The report went out last week.' };
   }
   const pats = patternsIn(input);
-  if (!pats.length) return JSON.stringify(base);
+  if (!pats.length) {
+    base.items.forEach(withPlain);
+    return JSON.stringify(base);
+  }
   const topic = base.items[0]?.topic;
   const tp = patternsOf(typeof topic === 'string' ? topic : '');
   // Passt der Satz zu diesem Muster (wie die Prüfung von `grammar-items`: Signal im Satz, ein fremdes Signal nur, wenn das eigene der Lücke näher ist)?
@@ -52,11 +65,17 @@ export function grammarItemsReplyV3(input: string): string {
     const p = hit ?? fallback;
     it.pat = p.id;
     it.prompt = hit && fits(prompt, answer, hit.id) ? prompt : add(p);
+    // @6 (`multi_error`): beim Satz verbessern steht das angehängte Signal auch in der Lösung, sonst wäre es eine zweite Änderung.
+    if (it.type === 'correct' && it.prompt !== prompt) {
+      it.answer = answer.replace(/([.?!])$/, `, ${p.signal}$1`);
+      it.self = { solved: it.answer, also: [] };
+    }
     if (it.type === 'mc' && Array.isArray(it.options)) {
       const wrong = (it.options as string[]).find((o) => o !== it.answer);
       if (wrong) it.why_not = [{ opt: wrong, de: `„${wrong}“ passt nicht zum Signalwort „${p.signal}“.`, en: `“${wrong}” does not fit the signal “${p.signal}”.` }];
     }
   });
+  base.items.forEach(withPlain);
   return JSON.stringify(base);
 }
 

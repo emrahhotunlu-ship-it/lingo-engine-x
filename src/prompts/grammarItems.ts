@@ -5,6 +5,10 @@ import { acceptGrammarItem } from '../domain/tutor/acceptGrammarItem';
 import { clip, header, lenientArray, normalizeTaskRaw, US_SIMPLE_PAST_RULE } from './common';
 import type { PromptTemplate } from './types';
 
+// @6 (Emrahs Live-Rückmeldung 05.11.2026, Befund english-teacher: „Did you tackle our customer success manager for pointing out your issues?“): jeder Satz
+// ist etwas, das ein US Account Executive wirklich sagt; um den Prüfpunkt nur häufige Wörter (B1–B2), nie Idiome, Slang, seltene Bedeutungen oder nur
+// britische Verwendungen als Träger. „Satz verbessern“: genau EIN typischer Fehler Deutschsprachiger zu diesem Thema (App: `multi_error`). Selbstprüfung
+// `self.plain` = wie man den gelösten Satz einem Kollegen sagen würde; weicht er von der Lösung ab, fällt die Aufgabe weg (`unnatural`).
 // @5 (Tutor-Engine v3 §6.3, E5, im Konzept „grammar-items@3“): eingebaute Lösungs-Selbstprüfung. Claude löst jede Aufgabe ein zweites Mal blind
 // (`self.solved`) und nennt jede weitere gültige Antwort (`self.also`); „Satz verbessern“ braucht einen Ziel-Satz (`goal`). Danach prüft die App jede
 // Aufgabe lokal mit `acceptGrammarItem` (`judge` + `lintTask`, ohne KI): ohne eindeutige Lösung oder mit Lint-Befund fällt sie weg. Sind danach zu
@@ -62,10 +66,10 @@ export const ITEMS_SEEN_MAX = 20;
 export const ITEMS_ERRORS_MAX = 5;
 
 export const GRAMMAR_ITEMS_EXAMPLE =
-  '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":["got signed"],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai","self":{"solved":"was signed","also":["got signed"]}},{"topic":"passive","type":"correct","prompt":"The invoices was sent to the client last Friday.","answer":"The invoices were sent to the client last Friday.","accepted":[],"options":null,"hint_de":"","explanation_de":"„invoices“ ist Plural, deshalb steht im Passiv „were“ statt „was“.","explanation_en":"“invoices” is plural, so the passive needs “were”, not “was”.","src":"ai","goal":{"de":"Die Rechnungen gingen letzten Freitag an den Kunden.","en":"The invoices went to the client last Friday."},"self":{"solved":"The invoices were sent to the client last Friday.","also":[]}}]}';
+  '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":["got signed"],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai","self":{"solved":"was signed","also":["got signed"],"plain":"The new contract was signed yesterday."}},{"topic":"passive","type":"correct","prompt":"The invoices was sent to the client last Friday.","answer":"The invoices were sent to the client last Friday.","accepted":[],"options":null,"hint_de":"","explanation_de":"„invoices“ ist Plural, deshalb steht im Passiv „were“ statt „was“.","explanation_en":"“invoices” is plural, so the passive needs “were”, not “was”.","src":"ai","goal":{"de":"Die Rechnungen gingen letzten Freitag an den Kunden.","en":"The invoices went to the client last Friday."},"self":{"solved":"The invoices were sent to the client last Friday.","also":[],"plain":"The invoices were sent to the client last Friday."}}]}';
 
 const ID = 'grammar-items';
-const VERSION = 5;
+const VERSION = 6;
 /** Hintergrund-Nachschub (E5) je Gerät und Tag; die Summe deckelt `BG_PER_DAY` (src/ai/budget.ts). */
 export const GRAMMAR_ITEMS_BG_PER_DAY = 2;
 
@@ -80,6 +84,8 @@ const REJECT_HINT: Readonly<Record<string, string>> = {
   self_missing: 'self check missing',
   self_wrong: 'your blind solution does not match the answer',
   also_uncovered: 'another valid answer is not listed in accepted; list it or change the sentence so only one answer fits',
+  unnatural: 'the solved sentence is not what you would naturally say to a colleague (self.plain differs from it); rewrite the item with common words so the solution is exactly what a native speaker would say',
+  multi_error: 'a sentence to correct must contain exactly ONE error in one place (at most 3 words changed); everything else must already be correct and natural',
 };
 
 const blanks = (s: string) => (s.match(/_{3,}/g) ?? []).length;
@@ -103,7 +109,7 @@ const itemSchema = (topic: string, patterns: NonNullable<GrammarItemsVars['patte
       explanation_en: z.string().trim().min(8).max(400),
       src: z.literal('ai').default('ai'),
       goal: z.object({ de: z.string().trim().min(4).max(200), en: z.string().trim().min(4).max(200) }).optional(),
-      self: z.object({ solved: z.string().trim().min(1).max(300), also: z.array(z.string().trim().min(1).max(300)).max(4).default([]) }),
+      self: z.object({ solved: z.string().trim().min(1).max(300), also: z.array(z.string().trim().min(1).max(300)).max(4).default([]), plain: z.string().trim().min(1).max(300).optional() }),
     })
     .superRefine((it, ctx) => {
       if (it.type === 'mc') {
@@ -192,6 +198,9 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       'Reply with only one JSON object of this shape (two items shown):',
       GRAMMAR_ITEMS_EXAMPLE,
       'Rules:',
+      '- Every sentence is something a US account executive would really say in an email or on a call. First think of a concrete situation (a client call, a follow-up email, a demo, a renewal), then write the sentence.',
+      '- Around the grammar point use only common words and collocations (B1–B2). The grammar point is the only hard part of the sentence.',
+      '- Never build an item on an idiom, slang, a rare meaning or a British-only use (no "tackle someone about", "chase someone up", "table a point"). Verbs keep their usual objects (you tackle a problem, not a person).',
       '- EXACTLY ONE correct answer in this sentence. If another answer also fits this sentence, list it in "accepted" or rewrite the sentence.',
       `- ${US_SIMPLE_PAST_RULE}: list it in "accepted".`,
       '- Tense items (mc and gap): the sentence MUST contain a clear signal (e.g. "yesterday", "right now", "since 2020", "every Monday", "by next June") that rules out every other option. Without such a signal, "is" vs. "was" is ambiguous – never write that.',
@@ -199,11 +208,12 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       '- If there are recent mistakes, write NEW items that test exactly the same confusion with different sentences.',
       '- "mc": prompt with one ___ and 3–4 options, "answer" identical to one option. "gap": one ___, hint_de gives the base form like "(work)".',
       '  "transform": a sentence, then "→" and the new sentence with one ___; answer is only the missing part.',
-      '  "correct": one sentence with exactly one typical error; answer is the full corrected sentence; options null; "goal": {"de","en"} says in plain words what the sentence wants to say.',
+      '  "correct": one sentence with exactly ONE typical mistake German speakers make with THIS topic; everything else in the sentence is correct and natural. answer is the full corrected sentence and sounds 100% natural; the fix is never a question of style or idiom. options null; "goal": {"de","en"} says in plain words what the sentence wants to say.',
       '- Self check for EVERY item: after writing it, solve it again as if you had never seen the answer and put that solution in "self.solved".',
       '  In "self.also" list every OTHER answer a careful native speaker would accept (other tenses, contractions, word order, British forms), max 4.',
       '  Every answer in "self.also" must also be in "accepted" – otherwise rewrite the sentence so that only one answer fits. Good English is never wrong.',
-      '- The app checks every item again and drops items with a second valid answer, a gap without a base-form hint for a verb, or a correct sentence to "correct".',
+      '  In "self.plain" write the whole solved sentence exactly as you would say it to a colleague. If that is not the item\'s solved sentence word for word, the item is unnatural: rewrite it.',
+      '- The app checks every item again and drops items with a second valid answer, a gap without a base-form hint for a verb, a correct sentence to "correct", more than one error in a sentence to "correct", or a "self.plain" that differs from the solved sentence.',
       ...(v.patterns?.length ? ['- Signal words: the sentence may contain only the signal word(s) of the ONE pattern it trains, and that signal must be what forces the gap. Never combine signals of two patterns in one sentence (no contrast sentences like "We ___ it yet, although we sent it on Monday").',
       '- "pat": the id of the pattern the item trains. For "mc" items add "why_not": up to 3 objects {"opt": a WRONG option exactly as written in options, "de": German, "en": English; max 140 characters each} saying why that option does not fit THIS sentence.'] : []),
       '- explanation_de: 1–2 short sentences in simple German: the signal word and the rule it triggers (never just repeat the answer); put English words and phrases in “…”.',

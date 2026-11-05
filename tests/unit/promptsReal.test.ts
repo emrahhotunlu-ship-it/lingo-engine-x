@@ -201,7 +201,7 @@ describe('grammar-items@3 (W8, Lernplattform 2.0)', () => {
 
   it('Prompt: Version 3, englische Wendungen in “…”', () => {
     const p = grammarItems.build(v);
-    expect(p.split('\n')[0]).toBe('[grammar-items@5]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@6]');
     expect(p).toContain('put English words and phrases in “…”');
   });
 });

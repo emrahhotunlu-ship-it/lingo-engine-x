@@ -1,4 +1,6 @@
+import { alignKey, alignWords } from '../answer/align';
 import { legacyNorm } from '../grammar/key';
+import { normText } from '../text/normText';
 import { normalizeTask } from '../grammar/tasks';
 import type { GrammarTask, TaskSrc } from '../learn/types';
 import { judge, type JudgeCtx } from './judge';
@@ -14,11 +16,15 @@ import type { Verdict } from './tutorTypes';
 //   4. Satz verbessern: der gezeigte Satz selbst ist weder richtig noch „fast richtig“ (sonst gilt „nichts geändert“ als Lösung).
 //   5. Selbstprüfung (`self`, von Claude in derselben Antwort, blind gelöst): `self.solved` wird angenommen, und jede weitere gültige Antwort aus
 //      `self.also` ist durch Lösung/`accepted`/britische Form/`alt` gedeckt. Sonst ist die Lösung nicht eindeutig.
+//   7. Natürlichkeit (grammar-items@6, Befund english-teacher 05.11.2026): `self.plain` = wie man den gelösten Satz einem Kollegen sagen würde. Weicht er
+//      (normalisiert) von der Lösung bzw. dem Satz mit eingesetzter Lösung/Variante ab, ist die Lösung nicht natürlich (`unnatural`). Ohne `plain` (ältere
+//      Routinen) entfällt die Regel.
+//   8. Satz verbessern: genau EIN Fehler – mehr als ein geänderter Abschnitt oder mehr als 3 geänderte Wörter zwischen Satz und Lösung → `multi_error`.
 //   6. Optional `solve-check@1` (zweiter, unabhängiger Löser): Lösung unter `answers`, kein `ambiguous`, jede Antwort gedeckt.
 //
 // Was eine Regel verletzt, wird verworfen – mit Grund, damit Tests und Diagnose es zeigen. Kein Neuversuch: die Aufgabe fällt einfach weg.
 
-export type GrammarItemSelf = { solved: string; also: readonly string[] };
+export type GrammarItemSelf = { solved: string; also: readonly string[]; plain?: string };
 export type SolveCheckResult = { answers: readonly string[]; ambiguous: boolean };
 
 export type GrammarItemReject =
@@ -31,6 +37,8 @@ export type GrammarItemReject =
   | 'self_missing'
   | 'self_wrong'
   | 'also_uncovered'
+  | 'unnatural'
+  | 'multi_error'
   | 'solve_missing'
   | 'solve_ambiguous'
   | 'solve_uncovered';
@@ -69,14 +77,66 @@ function goalOf(raw: Record<string, unknown>): { de: string; en: string } | null
   return de && en ? { de, en } : null;
 }
 
-/** Selbstprüfung tolerant lesen (`{solved, also[]}`); `also` höchstens 4. */
+/** Selbstprüfung tolerant lesen (`{solved, also[], plain?}`); `also` höchstens 4. */
 export function selfOf(raw: unknown): GrammarItemSelf | null {
   if (!isObj(raw) || !isObj(raw.self)) return null;
   const solved = str(raw.self.solved);
   if (!solved) return null;
   const also = (Array.isArray(raw.self.also) ? raw.self.also : []).map(str).filter(Boolean).slice(0, 4);
-  return { solved, also };
+  const plain = str(raw.self.plain);
+  return plain ? { solved, also, plain } : { solved, also };
 }
+
+/** Der ganze Satz mit eingesetzter Antwort, ohne Grundform-Hinweis (Umformung: nur der Zielsatz nach „→“; Satz verbessern: die Antwort selbst). */
+export function filledSentence(task: Pick<GrammarTask, 'type' | 'prompt'>, answer: string): string {
+  if (task.type === 'correct') return answer;
+  const target = task.type === 'transform' && task.prompt.includes('→') ? (task.prompt.split('→').pop() ?? task.prompt) : task.prompt;
+  // Der Grundform-Hinweis direkt hinter der Lücke („___ (sign)“) gehört nicht zum Satz.
+  return target.replace(/_{3,}(?:\s*\([^)]*\))?/, answer).replace(/\s+/g, ' ').trim();
+}
+
+/** Ist `plain` derselbe Satz wie die Lösung oder eine Variante (eingesetzt), nach Vereinheitlichung (Groß/klein, Satzzeichen, Kurzformen)? */
+export function plainMatches(task: Pick<GrammarTask, 'type' | 'prompt' | 'answer' | 'accepted'>, plain: string): boolean {
+  const p = normText(plain);
+  return [task.answer, ...task.accepted].some((a) => normText(filledSentence(task, a)) === p);
+}
+
+/**
+ * Geänderte Abschnitte und Wörter zwischen Fehlersatz und Lösung (Wortvergleich). Ein verschobenes Wort (fehlt an einer Stelle, steht an einer anderen)
+ * zählt als ein Wort und alle Verschiebungen zusammen als ein Abschnitt (Wortstellung ist EIN Fehler).
+ */
+export function changedSpans(wrong: string, right: string): { sections: number; words: number } {
+  const ops = alignWords(wrong, right);
+  const ins = ops.map((o, i) => (o.op === 'ins' ? i : -1)).filter((i) => i >= 0);
+  const moved = new Set<number>();
+  for (const i of ins) {
+    const k = alignKey(ops[i]?.given ?? '');
+    const j = ops.findIndex((o, x) => o.op === 'del' && !moved.has(x) && alignKey(o.expected ?? '') === k);
+    if (j >= 0) {
+      moved.add(i);
+      moved.add(j);
+    }
+  }
+  let sections = 0;
+  let words = 0;
+  let open = false;
+  ops.forEach((o, i) => {
+    const changed = o.op !== 'eq' && !moved.has(i);
+    if (changed) {
+      words++;
+      if (!open) sections++;
+    }
+    open = changed || (open && moved.has(i));
+  });
+  if (moved.size) {
+    sections++;
+    words += moved.size / 2;
+  }
+  return { sections, words };
+}
+
+/** Höchstens so viele geänderte Wörter hat EIN Fehler. */
+const ONE_ERROR_WORDS = 3;
 
 /**
  * Prüft EINE erzeugte Aufgabe (Pool-Format der alten App, dazu optional `goal{de,en}` und `self{solved, also[]}`).
@@ -101,6 +161,10 @@ export function acceptGrammarItem(raw: unknown, opts: AcceptGrammarOpts = {}): A
     if ((task.options ?? []).some((o) => legacyNorm(o) !== ans && (covered(task, o) || covered(asGap, o)))) reasons.push('distractor_ok');
   }
   if (task.type === 'correct' && ['correct', 'alt_ok', 'near'].includes(verdictOf(task, task.prompt))) reasons.push('error_kept');
+  if (task.type === 'correct') {
+    const span = changedSpans(task.prompt, task.answer);
+    if (span.sections > 1 || span.words > ONE_ERROR_WORDS) reasons.push('multi_error');
+  }
 
   const self = selfOf(raw);
   if (!self) {
@@ -108,6 +172,7 @@ export function acceptGrammarItem(raw: unknown, opts: AcceptGrammarOpts = {}): A
   } else {
     if (!covered(task, self.solved)) reasons.push('self_wrong');
     if (self.also.some((a) => !covered(task, a))) reasons.push('also_uncovered');
+    if (self.plain && !plainMatches(task, self.plain)) reasons.push('unnatural');
   }
 
   const sc = opts.solve;

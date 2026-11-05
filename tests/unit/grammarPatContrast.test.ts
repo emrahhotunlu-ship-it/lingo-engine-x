@@ -34,7 +34,7 @@ const run = (items: unknown[]) => {
 describe('grammar-items@4: Kontrastsätze', () => {
   it('Prompt verbietet Kontrastsätze', () => {
     const p = grammarItems.build(vars);
-    expect(p.split('\n')[0]).toBe('[grammar-items@5]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@6]');
     expect(p).toContain('Never combine signals of two patterns');
   });
 
