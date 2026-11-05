@@ -35,6 +35,9 @@ for (const vp of [
       await expect(page.getByTestId('vs'), 'Einstellungen der Wörter-App erst nach dem Einschalten').toHaveCount(0);
 
       // Probelauf: Bericht in Alltagsworten, nichts geschrieben.
+      // Der Tagesplan friert beim Start im Hintergrund ein (setzt app/schema.pflichtSince und legt die Wendung des Tages an); am Handy kommt
+      // das manchmal erst nach dem Öffnen der Einstellungen. Erst danach den Vergleichsstand nehmen, sonst zählt dieser Start als „Probelauf schrieb“.
+      await expect.poll(async () => ((await dump(page))['app/schema'] as Doc | undefined)?.pflichtSince ?? null, { timeout: 15_000 }).not.toBeNull();
       const before = await dump(page);
       await page.getByTestId('vsw-dry').click();
       const report = page.getByTestId('vsw-report');

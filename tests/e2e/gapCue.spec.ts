@@ -14,7 +14,7 @@ const SCOUTS = '…technique and [attitude]. Their recommendations were based on
 const CLEAN = 'A positive attitude helps in difficult negotiations.';
 const fresh = (): Doc => ({ word: 'attitude', pos: 'noun', de: 'Einstellung', def: 'the way you think and feel about something', ex: SCOUTS, xEx: [{ en: CLEAN, t: 1 }], state: 'new', stage: 0, S: 0, D: 5, due: 0, last: 0, reps: 0, lapses: 0, src: 'lookup', added: '2026-09-20', order: 0 });
 
-const label = async (page: Page): Promise<string> => (await page.locator('[data-step]').innerText()).split('\n').find((l) => /Abruf/.test(l)) ?? '';
+const label = async (page: Page): Promise<string> => (await page.locator('[data-step]').innerText()).split('\n').find((l) => /Mal selbst/.test(l)) ?? '';
 
 /** Spielt die Runde bis zu Abruf 2 der Testkarte. Einführung: „Weiß ich nicht“ → „Weiter“; Abruf 1 wird richtig getippt, andere Karten wie sonst. */
 async function untilRecall2(page: Page): Promise<void> {
@@ -34,7 +34,7 @@ async function untilRecall2(page: Page): Promise<void> {
     await expect(page.locator('[data-step]')).toHaveCount(1);
     const card = (await page.getByTestId('exercise').getAttribute('data-card')) ?? '';
     seen.push(`${card}:${(await page.getByTestId('exercise').getAttribute('data-ex')) ?? ''}:${await label(page)}`);
-    if (card === 'gc-attitude' && (await label(page)).includes('Abruf 2')) return;
+    if (card === 'gc-attitude' && (await label(page)).includes('2. Mal selbst')) return;
     if (card === 'gc-attitude') {
       await page.getByTestId('gap-input').click();
       await page.keyboard.type('attitude', { delay: 20 });
