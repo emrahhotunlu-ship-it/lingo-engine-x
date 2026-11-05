@@ -86,7 +86,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **Live-Fehler 04.11.** (Fortsetzen nach Verlassen, Antworten der alten App beim Start übernehmen, Bildschirme vorladen) **live** `JLL8…` v94 `1793804819-55c8` (Rückweg v93 `1793794178-00dd`; Test-Link v87 `1793800761-0601`)
   - [x] **Großpaket C schneller Start** (Einstieg 1,09 MB gzip statt 2,8 MB, Inhalte und Englisch nachgeladen, Hinweis „Neu laden“ bei Ladeproblemen) **live** `JLL8…` v95 `1793821540-69ed` (04.11.2026, Emrahs „Ja live nehmen“, Rückweg v94 `1793804819-55c8`; Test-Link v88 `1793817467-f318`)
   - [x] **Kommentar-Knopf** (Stelle antippen → claude.ai-Kommentarfeld, Fähigkeit `comments` nur `openComposer`) **live** `JLL8…` v91 `1793704143-939f` (03.11.2026, Emrahs Auftrag, Rückweg v90 `1793692316-d0c1`)
-  - [ ] **Fokus 2.0** (nur Wörter, Grammatik, Anwenden; Anwenden-Modul F3, Belege F2, UI-Standard) auf Test-Link `AXHkh6…` v90 `1793864229-1b55` (05.11.2026, Rückweg v89 `1793849711-80b4`; dazu Enter klappt Tastatur ein, Schritt 3 „B“), noch nicht live
+  - [x] **Fokus 2.0** (nur Wörter, Grammatik, Anwenden; Anwenden-Modul F3, Belege F2, UI-Standard, Enter klappt Tastatur ein, Schritt 3 „B“) **live** `JLL8…` v96 `1793872751-0932` (05.11.2026, Emrahs „ja passt live nehmen“, Rückweg v95 `1793821540-69ed`; Test-Link v90 `1793864229-1b55`). Kurs-Routine pausiert
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
