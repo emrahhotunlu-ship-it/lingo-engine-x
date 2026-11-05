@@ -176,6 +176,19 @@ const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().
  * Eine Grammatikaufgabe. Aufgaben des Aufgabensystems c1x (`task.c1`, Lernplattform 3.0) zeichnet `C1Item` im selben Gerüst;
  * alle anderen die bisherige Oberfläche (`LegacyGrammarItem`).
  */
+
+/**
+ * Früher gespeicherte Erklärungen endeten teils mitten im Satz mit „…“ (zu lange Claude-Texte wurden so gekürzt). Angezeigt wird dann nur bis zum
+ * letzten vollständigen Satz (Emrah 05.11.2026: „Erklärung abgeschnitten mit …“); ohne vollständigen Satz bleibt der Text, wie er ist.
+ */
+export function wholeSentences(text: string): string {
+  const t = text.trimEnd();
+  if (!/(…|\.\.\.)$/.test(t)) return text;
+  let at = -1;
+  for (const m of t.matchAll(/[.!?]["“”’)]?(?=\s)/g)) at = m.index + m[0].length;
+  return at > 0 ? t.slice(0, at) : text;
+}
+
 export function GrammarItem(props: GrammarItemProps) {
   const { task } = props;
   return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
@@ -1246,14 +1259,15 @@ function LegacyGrammarItem({
     const action: FeedbackAction = held ? 'next' : rawAction;
     // Nur EIN KI-Einstieg je Karte (Kap. 15): steht „Claude fragen“ da (oder läuft „Sicher?“), gibt es „Erklär mir meine Antwort“ erst danach.
     const tutor =
-      fb.dontKnow || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
+      // Emrah 05.11.2026 („Lösung gezeigt … Claude-Erklärung nicht vorhanden“): auch nach „Weiß ich nicht“ erklärt Claude die Lösung (ohne eigene Antwort).
+      fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
         <TutorButton
           taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
           vars={{
             topic: task.topic,
             prompt: mx ? `${mx.q.en}\nA: ${mx.a}\nB: ${mx.b}` : findTask && fixedFull ? `Find the mistake in this sentence: ${task.prompt}` : task.prompt,
             answer: mx ? meaningText(solution) : findTask && fixedFull ? fixedFull : solution,
-            given: mx ? meaningText(pickedKey) : findTask && fixedFull ? findGiven() : (fb.picked ?? fb.given),
+            given: fb.dontKnow ? '' : mx ? meaningText(pickedKey) : findTask && fixedFull ? findGiven() : (fb.picked ?? fb.given),
             pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null,
           }}
           pattern={pattern}
@@ -1261,7 +1275,7 @@ function LegacyGrammarItem({
           onRight={menu.override}
           onRewrite={menu.copyOnce}
           // Von selbst nur bei klar falscher, getippter oder gewählter Antwort; nie bei „Fast“/Tippfehler und nie in Tests ohne Hilfe (Prüfung 02.11.).
-          auto={!noHelp && fb.verdict === 'wrong'}
+          auto={!noHelp && (fb.verdict === 'wrong' || !!fb.dontKnow)}
           shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
           compact={mod}
           label={stepsMode && !hasYours ? stepWrong : null}
@@ -1316,7 +1330,7 @@ function LegacyGrammarItem({
       lines: model.lines.map((l) =>
         // „Richtig, weil“ + „Richtig: …“ wäre doppelt: der Vorspann der Aufgabenbegründung fällt weg.
         l.k === 'why'
-          ? { ...l, text: l.text.replace(/^(?:richtig|right|correct)\s*:\s*/i, '').replace(/^./, (x) => x.toUpperCase()) }
+          ? { ...l, text: wholeSentences(l.text.replace(/^(?:richtig|right|correct)\s*:\s*/i, '').replace(/^./, (x) => x.toUpperCase())) }
           : l.k === 'pattern' && whyHasFormula && !foldWhy
             ? { ...l, formula: null }
             : l,

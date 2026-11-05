@@ -15,6 +15,10 @@ const issues = (r: { success: boolean; error?: { issues: unknown[] } }) => (r.su
 describe('tolerante Bausteine', () => {
   it('cut, firstCefr, inputCat, countSentences', () => {
     expect(cut('abcdef', 4)).toBe('abc…');
+    // Erklärungen (Emrah 05.11.2026): nie mitten im Satz, sondern am letzten Satzende vor der Grenze.
+    const two = `${'a'.repeat(100)}. ${'b'.repeat(100)} c.`;
+    expect(cut(two, 150)).toBe(`${'a'.repeat(100)}.`);
+    expect(cut('x'.repeat(400), 150).endsWith('…')).toBe(true);
     expect(firstCefr('B2 (B2+ in places)', ['B2', 'B2+'])).toBe('B2');
     expect(firstCefr('B2-C1', ['B2', 'C1'])).toBe('B2');
     expect(firstCefr('b2/c1', ['B2', 'C1'])).toBe('B2');

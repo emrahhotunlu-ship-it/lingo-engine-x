@@ -6,10 +6,28 @@ import { ERROR_CAT_VALUES } from './inputCommon';
 // filtern), wird normalisiert statt abgelehnt. Abgelehnt wird nur, was wirklich unbrauchbar ist –
 // jede Ablehnung kostet einen Neuversuch oder endet im Fehlerzustand (A6.3).
 
-/** Kürzt auf höchstens `max` Zeichen (Codepunkte), mit „…" am Ende; Zeilenumbrüche bleiben. */
+/** Ab dieser Grenze ist ein Feld eine Erklärung (Sätze), kein Titel oder Etikett. */
+const PROSE_MIN = 120;
+
+/**
+ * Kürzt auf höchstens `max` Zeichen (Codepunkte); Zeilenumbrüche bleiben.
+ * Erklärungen (`max` ≥ 120) werden nie mitten im Satz mit „…“ abgeschnitten (Emrah 05.11.2026: „Erklärung abgeschnitten mit …“):
+ * sie enden am letzten Satzende vor der Grenze. Nur ein einziger überlanger Satz und kurze Felder (Titel, Etiketten) kürzen wie bisher mit „…“.
+ */
 export function cut(s: string, max: number): string {
   const chars = Array.from(s);
   if (chars.length <= max) return s;
+  if (max >= PROSE_MIN) {
+    // Text bis `limit` Zeichen, endend am letzten Satzende darin (Satzzeichen, ggf. mit schließendem Anführungszeichen); sonst ''.
+    const upToEnd = (limit: number): string => {
+      const head = chars.slice(0, limit).join('');
+      let at = -1;
+      for (const m of head.matchAll(/[.!?]["“”’)]?(?=\s|$)/g)) at = m.index + m[0].length;
+      return at > 0 ? head.slice(0, at).trimEnd() : '';
+    };
+    const inMax = upToEnd(max);
+    if (inMax) return inMax;
+  }
   return chars.slice(0, Math.max(0, max - 1)).join('').trimEnd() + '…';
 }
 
