@@ -389,13 +389,15 @@ const wozuKey = (k: MessageKey): MessageKey => k.replace('vmTask_', 'vmWozu_') a
  * Art der Karte in der Statuszeile (K4, Emrah 04.11.2026): ein heute eingeführtes Wort heißt nie „Wiederholung“ – seine ersten Abfragen sind
  * „Erster Abruf“ / „Zweiter Abruf“, nach einem Fehler „Noch einmal“. „Wiederholung“ nur für ein geplantes Wort von früheren Tagen.
  */
-function kindLabel(t: T, v: CardView | BandView, introToday: boolean): string {
+function kindLabel(t: T, v: CardView | BandView, introToday: boolean, refreshed = false): string {
   if (v.kind === 'intro') return t('vmKindNew');
   if (v.kind === 'probe') return t('vmKindProbe');
   if (v.card.form === 'contrast') return t(v.card.contrast?.ff ? 'vmKindContrastFf' : 'vmKindContrast');
   if (v.task.step === 1) return t('vmKindRecall1');
   if (v.task.step === 2) return t('vmKindRecall2');
   if (v.task.step === 3) return t('vmKindAgain');
+  // Übernommenes Wort, eben mit der Karte „Dieses Wort kennst du schon“ aufgefrischt: die Abfrage danach heißt so, nie „Wiederholung“.
+  if (refreshed) return t('vmKindAfterRefresh');
   if (introToday) return t(v.task.planned ? 'vmKindRecall1' : 'vmKindPractice');
   return t(v.task.planned ? 'vmKindReview' : 'vmKindPractice');
 }
@@ -697,7 +699,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   return (
     <ExerciseShell
       meta={{ ex: `vm:${card.form}`, id: `${card.path}:${view.n}`, kind: card.path.startsWith('chunk/') ? 'chunk' : 'word' }}
-      status={{ area: 'words', state: null, kindLabel: teachCard ? t('kernKindKnown') : kindLabel(t, view, run.introducedToday(view.task.path)) }}
+      status={{ area: 'words', state: null, kindLabel: teachCard ? t('kernKindKnown') : kindLabel(t, view, run.introducedToday(view.task.path), run.refreshedNow(view.task.path)) }}
       see={see}
       task={{
         text: teachCard ? t('kernTeachTask') : teaching ? t('kernIntroTask') : t(tk),
@@ -913,9 +915,10 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
         {t('vmBtnKnewIt')}
       </Button>
     ) : b.alsoRight ? (
-      // Ohne Claude-Prüfung (kommt mit Schritt 3): „Später prüfen lassen“ (Emrah 01.11.2026).
+      // K7 (Emrah 03.11.2026 „was später prüfen lassen? … nicht gut erklärt“): hier prüft niemand später nach – der Knopf sagt, was er tut:
+      // „Meine Antwort passt auch“ → kein Fehler, das Wort kommt gleich in einem neuen Satz, erst diese Antwort zählt (`vmLaterDone`).
       <Button variant="secondary" onClick={() => run.choose('later')} data-testid="vm-later">
-        {t('vmBtnLater')}
+        {t('vmBtnMineToo')}
       </Button>
     ) : null);
   // Die Lösung steht nur einmal: zeigt die Lücke sie schon (Lösung, anderes Wort), entfällt die Zeile „Richtig: …“ (Kap. 15, UX-Prüfung V3 Nr. 5).
@@ -948,7 +951,8 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
       </>
     ),
     // „Kommt … weil …“ (Vorschau): wann das Wort wiederkommt und warum, als ein Satz unter der Karte.
-    nextIn: comeBack(t, b, dateShort),
+    // K7: nach „Das wusste ich eigentlich“ / „Meine Antwort passt auch“ sagt der Hinweis darüber, wie es weitergeht – kein zweiter, widersprechender Satz („weil es noch nicht saß“).
+    nextIn: v.choice ? null : comeBack(t, b, dateShort),
     act,
     tutor: tutorOf(v, t),
     depth: 'min',

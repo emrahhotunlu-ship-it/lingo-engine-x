@@ -1,0 +1,35 @@
+START btn: Los: Wörter⏎
+vm-start: Willkommen zurück Wörter · ca. 9 Min. Warum diese? 16 fällig, die du am ehesten vergisst, zuerst · 3 vorgezogen, damit die nächsten Tage leichter werden · 5 neue, eingestreut 16 fällig 3 vorgezogen 5 neu Los geht’s⏎ Der Plan steht für heute fest. Er ändert sich nicht, wenn du die App neu öffnest.
+#0 bar="Wörter0 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 1 von 24" | purpose="<none>" | progress="1 von 24"
+  INTRO: trade-off Anhören /ˈtreɪdɔf/ · Nomen Zielkonflikt, Abwägung AUF ENGLISCH a balance between two things you cannot have at once IM SATZ There is a trade-off between speed and cost. Satz anhören
+#1 bar="Wörter0 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 1 von 24" | purpose="Selbst abrufen statt wiedererkennen: so wird es aktiv." | progress="1 von 24"
+  card="Wörter Wiederholung Selbst abrufen statt wiedererkennen: so wird es aktiv. Setz das fehlende Wort ein. Gesucht: Zielkonflikt, Abwägung There is a between speed and cost. Satz anhören Tipp Weiß ich nicht Prüfen" input=true
+  WRONG result: ✕ Noch nicht richtig There is a Deine Eingabe: blorp Lösung: trade-off between speed and cost. Satz anhören Warum blorp passt nicht in diesen Satz. Hier gehört trade-off (Nomen) hin. SCHREIB ES EINMAL RICHTIG: Das wusste ich eigentlich Was in deiner Antwort schiefging Deine Antwort „blorp“ passt hier nicht: Die Form drückt etwas anderes aus als der Satz verlangt. Die Regel dahinter Das Signalwort im Satz verlangt die andere Form, weil es um etwas Vergangenes geht. Signalwörter: There Beispiel für dich The team will launch the new archive module after the audit in March. DE von Claude · kann Fehler enthalten Melden Nachfragen › DAS WORT trade-off Anhören /ˈtreɪdɔf/ · Nomen Zielkonflikt, Abwägung a balance between two things you cannot have at once
+  next-in: Kommt gleich noch einmal und dann morgen, weil es noch nicht saß.
+  vm-knewit visible: Das wusste ich eigentlich | result: ✕ Noch nicht richtig There is a Deine Eingabe: blorp Lösung: trade-off between speed and cost. Satz anhören Warum blorp passt nicht in diesen Satz. Hier gehört trade-off (Nomen) hin. SCHREIB ES EINMAL RICHTIG: Das wusste ich eigentlich Was in deiner Antwort schiefging Deine Antwort „blorp“ passt hier nicht: Die Form drückt etwas anderes aus als der Satz verlangt. Die Regel dahinter Das Signalwort im Satz verlangt die andere Form, weil es um etwas Vergangenes geht. Signalwörter: There Beispiel für dich The team will launch the new archive module after the audit in March. DE von Claude · kann Fehler enthalten Melden Nachfragen › DAS WORT trade-off Anhören /ˈtreɪdɔf/ · Nomen Zielkonflikt, Abwägung a balance between two things you cannot have at once
+  after vm-knewit: Zählt nicht. Das Wort kommt gleich in einem neuen Satz wieder, nur dieser Versuch wird gewertet. Rückgängig
+  progress after: 1 von 24
+#2 bar="Wörter0 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 1 von 24" | purpose="<none>" | progress="1 von 24"
+  INTRO: comply with Anhören /kəmˈplaɪ wɪð/ · Verb einhalten, entsprechen AUF ENGLISCH to act according to a rule IM SATZ The archive complies with GoBD requirements. Satz anhören
+#3 bar="Wörter0 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 1 von 24" | purpose="Selbst abrufen statt wiedererkennen: so wird es aktiv." | progress="1 von 24"
+  card="Wörter Wiederholung Selbst abrufen statt wiedererkennen: so wird es aktiv. Setz das fehlende Wort ein. Gesucht: einhalten, entsprechen The archive GoBD requirements. Satz anhören Tipp Weiß ich nicht Prüfen" input=true
+  CHECKED(comply with) result: ≈ Richtiges Wort, falsche Form The archive Deine Eingabe: comply with Lösung: complies with GoBD requirements. Satz anhören Du: complyies with Warum Richtiges Wort, falsche Form: comply with → complies with. Der Satz verlangt genau diese Form. SCHREIB ES EINMAL RICHTIG: Später prüfen lassen DAS WORT comply with Anhören /kəmˈplaɪ wɪð/ · Verb einhalten, entsprechen to act according to a rule
+  progress after: 1 von 24
+#4 bar="Wörter1 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 2 von 24" | purpose="<none>" | progress="2 von 24"
+  INTRO: compliance Anhören /kəmˈplaɪəns/ · Nomen Regelkonformität AUF ENGLISCH following rules, laws or standards IM SATZ Compliance is the main reason they are looking at our archive. Satz anhören
+#5 bar="Wörter1 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 2 von 24" | purpose="Selbst abrufen statt wiedererkennen: so wird es aktiv." | progress="2 von 24"
+  card="Wörter Wiederholung Selbst abrufen statt wiedererkennen: so wird es aktiv. Setz das fehlende Wort ein. Gesucht: Regelkonformität is the main reason they are looking at our archive. Satz anhören Tipp Weiß ich nicht Prüfen" input=true
+  progress after: 2 von 24
+#6 bar="Wörter2 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 3 von 24" | purpose="<none>" | progress="3 von 24"
+  INTRO: to look into something Anhören /lʊk ˈɪntu ˈsʌmθɪŋ/ sich etwas ansehen
+#7 bar="Wörter2 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 3 von 24" | purpose="Ohne Satz als Stütze, wie im echten Gespräch." | progress="3 von 24"
+  card="Wörter Wiederholung Ohne Satz als Stütze, wie im echten Gespräch. Schreib das auf Englisch. sich etwas ansehen Tipp Weiß ich nicht Prüfen" input=true
+  progress after: 3 von 24
+VOR VERLASSEN progress="4 von 24" bar="Wörter3 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 4 von 24"
+HEUTE NACH TEILRUNDE: Schritte: 0 von 3 erledigt DEIN TAG Pflicht: 0 von 3 erledigt ca. 24 Min. 1 Wörter · läuft gerade 3 von 24 erledigt Weiter: Wörter⏎ 2 Grammatik · noch offen Kapitel 1 · Present Simple vs. Continuous · ca. 10 Min. 3 Anwenden · noch offen Drei eigene Sätze mit deinen Wörtern und einer Regel · ca. 5 Min. Tagesziel 25 Min. ändern
+WIEDEREINSTIEG progress="4 von 24" bar="Wörter3 von 24 erledigt Heute · Schritt 1: Wörter Frag Claude 4 von 24"
+GRAM#0 screen=grammarSession bar="Grammatik0 von 6 erledigt Extra Frag Claude 1 von 6" head="Grammatik Ergänzen neu für dich Present Simple vs. Continuous Schreibe in die Lücke, was im Satz fehlt. She usually from home on Fridays. Stichwort: work Weiß ich nicht Prüfen Enter zum Prüfen ? alle Kürzel"
+GRAM#1 screen=grammarSession bar="Grammatik0 von 6 erledigt Extra Frag Claude 1 von 6" head="Grammatik Ergänzen neu für dich Present Simple vs. Continuous Schreibe in die Lücke, was im Satz fehlt. She usually from home on Fridays. Stichwort: work Weiß ich nicht Prüfen Enter zum Prüfen ? alle Kürzel"
+GRAM#2 screen=grammarSession bar="Grammatik0 von 6 erledigt Extra Frag Claude 1 von 6" head="Grammatik Ergänzen neu für dich Present Simple vs. Continuous Schreibe in die Lücke, was im Satz fehlt. She usually from home on Fridays. Stichwort: work Weiß ich nicht Prüfen Enter zum Prüfen ? alle Kürzel"
+GRAM#3 screen=grammarSession bar="Grammatik0 von 6 erledigt Extra Frag Claude 1 von 6" head="Grammatik Ergänzen neu für dich Present Simple vs. Continuous Schreibe in die Lücke, was im Satz fehlt. She usually from home on Fridays. Stichwort: work Weiß ich nicht Prüfen Enter zum Prüfen ? alle Kürzel"
+duty grammar count=0 text=<none>

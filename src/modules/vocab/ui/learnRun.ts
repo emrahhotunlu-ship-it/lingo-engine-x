@@ -291,6 +291,11 @@ export class LearnRun {
     return w && w.total > 0 ? { n: w.done + 1, total: w.total } : null;
   }
 
+  /** Gerade mit der Einführungskarte aufgefrischt (übernommenes Wort, K10)? Statuszeile: nie „Wiederholung“ (K4-Nachprüfung 05.11.2026). */
+  refreshedNow(path: string): boolean {
+    return this.taught.has(path);
+  }
+
   /** Heute eingeführt? (Statuszeile: dann nie „Wiederholung“, sondern Abruf, K4.) */
   introducedToday(path: string): boolean {
     const lex = this.cat?.get(path)?.lex;
@@ -460,7 +465,9 @@ export class LearnRun {
     }
     const sp = Array.isArray(plan.sp) && plan.sp.length ? plan.sp : null;
     return {
-      min: Math.max(1, Math.round(plan.min)),
+      // K12 (Nachprüfung 05.11.2026): füllt die Runde die Wörter-Zeit (Planer passt sie an, Entscheidung „A“), steht hier dieselbe Zahl wie auf Heute
+      // (`cfg.min` = Schritt 1); nur eine deutlich kürzere Runde nennt ihre eigene Dauer.
+      min: plan.min >= cfg.min - 1.5 ? cfg.min : Math.max(1, Math.round(plan.min)),
       due: plan.due,
       ahead: plan.ahead,
       fresh: plan.fresh,

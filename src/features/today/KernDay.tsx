@@ -87,7 +87,8 @@ export function KernDayCard({
             {t('kernDuty', { n: done, total })}
           </h3>
         </div>
-        {rest > 0 && <span className="lx-kh-min lx-v-num">{t('kernAbout', { min: rest })}</span>}
+        {/* K12 (Nachprüfung 05.11.2026): sobald ein Teil geschafft ist, heißt die Zahl „noch ca. …“ – sonst stünde „ca. 24 Min.“ neben „Tagesziel 25 Min.“. */}
+        {rest > 0 && <span className="lx-kh-min lx-v-num">{t(rest < rows.reduce((a, r) => a + (r.min ?? 0), 0) ? 'kernLeft' : 'kernAbout', { min: rest })}</span>}
       </div>
       <Segs fills={fills} />
       <ol className="lx-kh-steps" aria-label={t('vRingBlocks')} data-testid={real ? 'duties' : 'start-duties'}>
@@ -123,7 +124,7 @@ export function KernDayCard({
                   ) : r.sub ? (
                     <p className="lx-kh-st-s lx-v-num">
                       <span data-testid={real ? 'reason' : undefined} data-why={r.whyKey}>
-                        {now || !r.min ? r.sub : t('kernStepSub', { why: r.sub, min: r.min })}
+                        {!r.min ? r.sub : t('kernStepSub', { why: r.sub, min: r.min })}
                       </span>
                     </p>
                   ) : !now && r.min ? (
@@ -187,7 +188,7 @@ export function KernStand({ sw, variant, foot: withFoot = true }: { sw: StreakWe
         <p className="lx-kh-stand-row">
           <span>{t('kernStreak')}</span>
           <b className="lx-v-num" data-testid="stand-streak" data-n={streak}>
-            {tn('kernDays', streak, { n: num(streak) })}
+            {streak === 0 ? t('kernStreakNone') : tn('kernDays', streak, { n: num(streak) })}
           </b>
         </p>
         <p className="lx-kh-stand-row">
@@ -209,10 +210,11 @@ export function KernStand({ sw, variant, foot: withFoot = true }: { sw: StreakWe
     <section className="lx-kh-stand" data-variant="row" aria-label={t('gmStandHead')} data-testid="today-stand">
       {foot}
       <p>
+        {/* K12 (Nachprüfung 05.11.2026): keine nackte „0 Tage in Folge“ vor dem ersten Lerntag – die Serie beginnt heute. */}
         <b className="lx-v-num" data-testid="stand-streak" data-n={streak}>
-          {num(streak)}
+          {streak === 0 ? t('kernStreakStartNum') : num(streak)}
         </b>
-        <span>{tn('kernStreakSm', streak)}</span>
+        <span>{streak === 0 ? t('kernStreakStartSm') : tn('kernStreakSm', streak)}</span>
       </p>
       <p>
         <b className="lx-v-num" data-testid="today-stand-words" data-fest={fest}>
