@@ -127,7 +127,7 @@ export function KernDayCard({
                       <span data-testid={real ? 'reason' : undefined} data-why={r.whyKey}>
                         {r.sub}
                       </span>
-                      {r.min ? <span data-testid={real ? 'step-min' : undefined}>{` · ${t('kernAbout', { min: r.min })}`}</span> : null}
+                      {r.min ? ` · ${t('kernAbout', { min: r.min })}` : null}
                     </p>
                   ) : !now && r.min ? (
                     <p className="lx-kh-st-s lx-v-num">{t('kernAbout', { min: r.min })}</p>
