@@ -8,9 +8,9 @@ Grundlage: Apple Human Interface Guidelines (Typografie/Dynamic Type, Layout, Ta
 |---|---|---|---|---|---|
 | **Hauptinhalt** | der Satz mit Lücke, das Stichwort, die deutsche Vorgabe – das, worum es geht | 24 px | 28 px | 500 (Stichwort 600) | 1.35 |
 | **Titel** | Seitentitel („Heute“, „Wörter“), Lösung im Urteilsstreifen | 22 px | 24 px | 600 | 1.3 |
-| **Aufgabe** | „Setz das fehlende Wort ein.“, Kartenüberschriften | 17 px | 18 px | 600 | 1.4 |
-| **Text** | Erklärung „Warum“, Bedeutung, Beispielsätze, Knöpfe | 17 px | 17 px | 400 | 1.5 |
-| **Hinweis** | „Gesucht: …“, Übersetzung, Zweck-Zeile, Kommt-wieder-Zeile | 15 px | 15 px | 400 | 1.45 |
+| **Aufgabe** | „Setz das fehlende Wort ein.“, Kartenüberschriften | 17 px | 17 px (ux-reviewer 05.11.2026: 18 neben Text 17 wäre eine weitere Rolle) | 600 | 1.4 |
+| **Text** | Erklärung „Warum“, Bedeutung, Beispielsätze, Wortpartner, Kommt-wieder-Zeile, Knöpfe | 17 px | 17 px | 400 | 1.5 |
+| **Hinweis** | „Gesucht: …“, Übersetzung, Zweck-Zeile, eigene Antwort über der Lösung, „Ganze Erklärung“ | 15 px | 15 px | 400 | 1.45 |
 | **Klein** | Statuszeile, Überzeilen („DAS WORT“), Lautschrift/Wortart | 13 px | 13 px | 500 | 1.35 |
 Regeln: nie unter 13 px; höchstens **4 Rollen je Karte**; Großbuchstaben-Überzeilen nur in „Klein“ mit Laufweite; Antwort in der Lücke = Größe des Hauptinhalts; Lösung nie größer als der Satz.
 

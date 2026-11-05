@@ -38,7 +38,7 @@ export const hxEn = {
   hxLearnBrake: 'New topic once fewer than {limit} grammar mistakes are due · now {n}',
   hxLearnAnyway: 'Start anyway: {topic}',
   hxLearnStartNew: 'Start topic',
-  hxLearnFixLine: 'Mistake sentences · {n} due · today {today}',
+  hxLearnFixLine: '{n} due · today {today}',
   hxLearnLookup: 'Look up',
   hxLearnRules: 'Rules',
   hxLearnTraps: 'German traps',

@@ -299,14 +299,11 @@
     background: var(--surface);
     color: var(--fg);
     padding: 0 14px;
-    font-size: 16px;
     white-space: nowrap;
-    min-height: 56px;
     border-radius: 16px;
   }
   html:has(.lx-exercise[data-kres]) .lx-actionbar .lx-actionbar-inner > .lx-actionbar-main {
     flex: 2 1 auto;
-    min-height: 56px;
     border-radius: 16px;
   }
 }
@@ -370,7 +367,6 @@
   :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > .lx-knext {
     grid-column: 1;
     padding: 0 0 28px 36px;
-    font-size: 16px;
     text-align: left;
   }
   :root .lx-exercise[data-kres] .lx-split[data-split] > [data-col='main'] > .lx-actionbar-column {
@@ -393,17 +389,14 @@
     background: var(--surface);
     color: var(--fg);
     white-space: nowrap;
-    min-height: 56px;
     padding: 0 24px;
     border-radius: 16px;
-    font-size: 17px;
   }
+  /* Größe und Höhe aus typo.css (UI-Standard §1/§3: Text 17 px, Hauptknopf 52 px). */
   :root .lx-exercise[data-kres] .lx-actionbar-column .lx-actionbar-inner > .lx-actionbar-main {
-    min-height: 56px;
     min-width: 0;
     padding: 0 48px;
     border-radius: 16px;
-    font-size: 19px;
   }
 }
 
@@ -595,7 +588,7 @@
 }
 .lx-kh-date {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--t-hint);
   color: var(--fg-2);
 }
 .lx-kh-card {
@@ -623,7 +616,7 @@
 /* Glas-Aufbau (Emrah 03.11.2026, Vorschau LmMc6qKNttaAyKRWhuFAC5 `Main`): „DEIN TAG“ als kleine Überzeile in der Karte, darunter groß der Stand. */
 .lx-kh-eye {
   margin: 0;
-  font-size: 12px;
+  font-size: var(--t-small);
   font-weight: 800;
   line-height: 16px;
   letter-spacing: 0.08em;
@@ -632,7 +625,7 @@
 }
 .lx-kh-count {
   margin: 0;
-  font-size: 24px;
+  font-size: var(--t-title);
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -640,7 +633,7 @@
 }
 .lx-kh-min {
   white-space: nowrap;
-  font-size: 15px;
+  font-size: var(--t-hint);
   color: var(--fg-2);
 }
 .lx-kh-segs {
@@ -705,7 +698,7 @@
   height: 32px;
   border: 2px solid var(--line-2);
   border-radius: 999px;
-  font-size: 15px;
+  font-size: var(--t-hint);
   font-weight: 700;
   color: var(--fg-2);
 }
@@ -729,15 +722,16 @@
   gap: 3px;
   min-width: 0;
 }
+/* Heute-Karte in vier Rollen (UI-Standard §1, ux-reviewer 05.11.2026 Nr. 6): Überzeile Klein · Stand Titel · Schritte Aufgabe (der laufende
+   nur kräftiger, nicht größer) · Gründe, Minuten und Links Hinweis · Knopf Text. */
 .lx-kh-st-n {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--t-task);
   font-weight: 700;
   line-height: 1.3;
   color: var(--fg);
 }
 .lx-kh-st[data-st='now'] .lx-kh-st-n {
-  font-size: 20px;
   font-weight: 800;
 }
 .lx-kh-st[data-st='done'] .lx-kh-st-n {
@@ -745,7 +739,7 @@
 }
 .lx-kh-st-s {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--t-hint);
   line-height: 1.4;
   color: var(--fg-2);
 }
@@ -769,7 +763,7 @@
   width: 100%;
   min-height: 52px;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: var(--t-text);
   font-weight: 700;
 }
 .lx-kh-go .lx-vh-sk-go {
@@ -781,13 +775,13 @@
   align-items: center;
   gap: 8px;
   margin: 0;
-  font-size: 15px;
+  font-size: var(--t-hint);
   color: var(--fg-2);
 }
 .lx-kh-lbl,
 .lx-vh-ctx h3.lx-kh-lbl {
   margin: 0;
-  font-size: 12px;
+  font-size: var(--t-small);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -907,10 +901,10 @@
   border-radius: 14px;
 }
 .lx-kh-ctx .lx-kh-tile > b {
-  font-size: 16px;
+  font-size: var(--t-text);
 }
 .lx-kh-ctx .lx-kh-tile > span {
-  font-size: 14px;
+  font-size: var(--t-hint);
   text-align: right;
 }
 
@@ -923,18 +917,12 @@
     gap: 6px;
   }
   .lx-kh-date {
-    font-size: 15px;
+    font-size: var(--t-hint);
   }
   .lx-kh-card {
     gap: 24px;
     padding: 32px 36px;
     border-radius: 22px;
-  }
-  .lx-kh-count {
-    font-size: 30px;
-  }
-  .lx-kh-min {
-    font-size: 16px;
   }
   .lx-kh-segs {
     gap: 8px;
@@ -963,24 +951,13 @@
   .lx-kh-dot {
     width: 40px;
     height: 40px;
-    font-size: 16px;
   }
   .lx-kh-st[data-st='now'] .lx-kh-dot {
     width: 44px;
     height: 44px;
-    font-size: 18px;
   }
   .lx-kh-st-b {
     gap: 4px;
-  }
-  .lx-kh-st-n {
-    font-size: 17px;
-  }
-  .lx-kh-st[data-st='now'] .lx-kh-st-n {
-    font-size: 20px;
-  }
-  .lx-kh-st-s {
-    font-size: 15px;
   }
   .lx-kh-bar {
     max-width: 420px;
@@ -993,7 +970,6 @@
     min-height: 52px;
     padding-inline: 28px;
     border-radius: 999px;
-    font-size: 16px;
   }
   .lx-kh-st .lx-kh-go .lx-vh-sk-go {
     width: 220px;

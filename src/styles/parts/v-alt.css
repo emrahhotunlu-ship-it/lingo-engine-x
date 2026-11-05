@@ -75,8 +75,8 @@ button.lx-btn-primary:hover:not(:disabled) { filter: none; background: var(--act
   color: var(--fg-2);
 }
 .lx-tabtitle {
-  font-size: 30px;
-  line-height: 36px;
+  font-size: var(--t-title);
+  line-height: 1.3;
   font-weight: 700;
   letter-spacing: -0.022em;
 }

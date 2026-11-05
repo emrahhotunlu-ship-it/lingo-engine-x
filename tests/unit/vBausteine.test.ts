@@ -93,10 +93,17 @@ describe('Maße 1:1 aus der Vorschau (Quelle style.css)', () => {
     ['.sheet .sf', '.lx-v-sheet-foot', ['padding-top', 'padding-bottom', 'border-top']],
     ['.sk', '.lx-v-sk', ['border-radius', 'background-size']],
   ];
+  // UI-Standard Fokus 2.0 (docs/umbau/fokus2/ui-standard.md §1, ux-reviewer 05.11.2026): Schriftgrößen aus den sechs Rollen (`var(--t-…)`)
+  // gehen vor den Einzelgrößen der Vorschau; die Zeilenhöhe gehört dann zur Rolle. Alle übrigen Maße bleiben 1:1.
+  const role = (v: string | undefined) => (v ?? '').startsWith('var(--t-');
   it.each(PAIRS)('%s → %s', (pre, app, props) => {
     const a = decls(PREVIEW_CSS, pre);
     const b = decls(V_CSS, app);
-    for (const p of props) expect(`${p}: ${b[p]}`, `${app} ${p}`).toBe(`${p}: ${a[p]}`);
+    for (const p of props) {
+      if (p === 'font-size' && role(b[p])) continue;
+      if (p === 'line-height' && role(b['font-size'])) continue;
+      expect(`${p}: ${b[p]}`, `${app} ${p}`).toBe(`${p}: ${a[p]}`);
+    }
   });
 });
 
@@ -110,9 +117,8 @@ describe('Zielgröße ≥ 44 px und Bewegung', () => {
     expect(px(decls(V_CSS, ".lx-v-btn[data-size='sm']")['min-height'])).toBeGreaterThanOrEqual(44);
     expect(px(decls(V_CSS, '.lx-v-row')['min-height'])).toBeGreaterThanOrEqual(44);
     expect(px(decls(V_CSS, '.lx-v-ring').width)).toBeGreaterThanOrEqual(44);
-    // Bedienbarer Chip: 34 px sichtbar + je 5 px unsichtbar oben und unten = 44 px.
-    expect(px(decls(V_CSS, 'button.lx-v-chip')['min-height'])).toBe(34);
-    expect(decls(V_CSS, 'button.lx-v-chip::before').inset).toBe('-5px 0');
+    // Bedienbarer Chip: sichtbar 44 px hoch (UI-Standard §3; ux-reviewer 05.11.2026 Nr. 10 – vorher 34 px mit unsichtbarem Rand).
+    expect(px(decls(V_CSS, 'button.lx-v-chip')['min-height'])).toBeGreaterThanOrEqual(44);
   });
 
   it('jede Animation hat einen Rückfall bei reduced-motion und bei Effekten „Aus“', () => {

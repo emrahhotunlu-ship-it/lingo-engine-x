@@ -11,7 +11,7 @@ import { useActs } from '../vocab/actStore';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { WK_MIN_N, WK_TARGETS, wordKernStats, type Rate } from '../../domain/metrics/wordKern';
 import type { MessageKey } from '../../i18n';
-import { vocabModuleOn } from '../../modules/vocab/api';
+import { learningCount, vocabModuleOn } from '../../modules/vocab/api';
 import { PathTab } from './PathTab';
 import { StatsTab } from './StatsTab';
 
@@ -26,10 +26,22 @@ const EMPTY = new Map<string, Doc>();
 export function useVocabMetrics() {
   const now = useClock((s) => s.now);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
+  const chunk = useLive((s) => s.collections.chunk) ?? EMPTY;
+  const moduleOn = useLive((s) => vocabModuleOn(s.docs['app/profile']));
   const invalid = useLive((s) => s.invalid);
   const cards = useMemo(() => buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), [vocab, now, invalid]);
   const fest = useMemo(() => festCount(cards, now), [cards, now]);
-  const onWay = useMemo(() => onTheWay(cards, now), [cards, now]);
+  // Mit der Wörter-App zählt „im Lernen“ dieselben Wörter wie der Reiter Wörter (ux-reviewer 05.11.2026 Nr. 14: Heute 124, Wörter 127).
+  const onWay = useMemo(
+    () =>
+      moduleOn
+        ? learningCount([
+            ['vocab', vocab],
+            ['chunk', chunk],
+          ])
+        : onTheWay(cards, now),
+    [moduleOn, vocab, chunk, cards, now],
+  );
   return { cards, fest, onWay, now };
 }
 

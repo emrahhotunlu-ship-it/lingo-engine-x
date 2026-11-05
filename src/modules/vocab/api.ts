@@ -111,6 +111,25 @@ export function lexemeState(doc: Doc | null | undefined): { lv: number; group: '
   return { lv: lex.lv, group: groupOf(lex.lv), u: lex.intro ? lex.u.due : null, b: lex.b?.due ?? null, isNew: lex.intro === null };
 }
 
+/**
+ * „Wörter im Lernen“ aus EINER Quelle (Kap. 2 Nr. 2; ux-reviewer 05.11.2026 Nr. 14): eingeführte, nicht pausierte Wörter und Wendungen der
+ * Wörter-App (`vocab/*`, `chunk/*` mit Lexem, ohne Verweis `of` und ohne leeren Kopf). Heute und der Reiter Wörter zählen damit dasselbe
+ * (dort: Erkennst du + Auf dem Weg + Bildest du selbst).
+ */
+export function learningCount(collections: Iterable<readonly [kind: 'vocab' | 'chunk', docs: Iterable<readonly [string, Doc]>]>): number {
+  let n = 0;
+  for (const [kind, docs] of collections) {
+    for (const [, doc] of docs) {
+      const lex = lexOf(doc);
+      if (!lex || lex.of || lex.intro === null || doc.hidden === true) continue;
+      const head = kind === 'chunk' ? doc.en : doc.word;
+      if (typeof head !== 'string' || !head.trim()) continue;
+      n++;
+    }
+  }
+  return n;
+}
+
 export type LexemeRef = { path: string; head: string };
 
 /** Lexem zu einem Wort oder einer Wendung (Stichwort-Vergleich; Doppel führen zum führenden Lexem). */

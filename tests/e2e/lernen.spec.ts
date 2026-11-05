@@ -400,7 +400,7 @@ test('P7 Grammatik-Reiter: bei aktiver Bremse startet der Hauptknopf die Fehlers
   await expect(page.getByTestId('hub-intro-brake')).toContainText('Neues Thema ab weniger als 10');
   const dueN = Number(await page.getByTestId('hub-errors').getAttribute('data-due'));
   expect(dueN).toBeGreaterThanOrEqual(10);
-  await expect(page.getByTestId('hub-errors')).toContainText(`Fehlersätze · ${dueN} fällig · heute ${n}`);
+  await expect(page.getByTestId('hub-errors')).toContainText(`${dueN} fällig · heute ${n}`);
   await expect(page.getByTestId('hub-errors')).toHaveAttribute('data-today', String(n));
   await main.click();
   // Tagesweg (UX-Neuanfang C): Fehlersätze sind kein Pflicht-Schritt mehr, der Knopf startet die freiwillige Runde.

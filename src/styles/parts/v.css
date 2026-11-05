@@ -22,7 +22,8 @@
 
 /* Seitenkopf (style.css:148–151). */
 .lx-v-phead { display: flex; align-items: center; justify-content: space-between; min-height: 60px; padding-top: 8px; }
-.lx-v-phead h1 { margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; color: var(--fg); }
+/* Seitentitel der Wurzelseiten in der Rolle „Titel“ (UI-Standard §1: 22 / ab 700 px 24; ux-reviewer 05.11.2026 Nr. 6). */
+.lx-v-phead h1 { margin: 0; font-size: var(--t-title); line-height: 1.3; font-weight: 700; color: var(--fg); }
 .lx-v-phead-right { display: flex; align-items: center; gap: 4px; }
 
 /* Symbolknopf (style.css:151–152). */
@@ -35,15 +36,15 @@
 .lx-v-btn {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   min-height: 52px; padding: 0 20px; border-radius: var(--r);
-  font-size: 17px; font-weight: 600; letter-spacing: -0.005em; line-height: 1.2;
+  font-size: var(--t-text); font-weight: 600; letter-spacing: -0.005em; line-height: 1.2;
   transition: transform 140ms var(--ease-soft), background-color 140ms, opacity 140ms;
 }
 .lx-v-btn:active { transform: scale(0.98); }
 .lx-v-btn[data-variant='pri'] { background: var(--act-btn); color: var(--act-btn-fg); }
 .lx-v-btn[data-variant='sec'] { background: var(--surface-2); color: var(--fg); }
-.lx-v-btn[data-variant='ghost'] { color: var(--fg-2); min-height: 44px; font-size: 15px; font-weight: 550; }
+.lx-v-btn[data-variant='ghost'] { color: var(--fg-2); min-height: 44px; font-size: var(--t-hint); font-weight: 550; }
 .lx-v-btn[data-full] { width: 100%; }
-.lx-v-btn[data-size='sm'] { min-height: 44px; font-size: 15px; padding: 0 14px; }
+.lx-v-btn[data-size='sm'] { min-height: 44px; font-size: var(--t-hint); padding: 0 14px; }
 .lx-v-btn:disabled, .lx-v-btn[aria-disabled='true'] { opacity: 0.4; pointer-events: none; }
 .lx-v-btn svg { width: 18px; height: 18px; }
 
@@ -60,19 +61,19 @@
 .lx-v-row-ic { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); color: var(--fg-2); }
 .lx-v-row-ic svg { width: 18px; height: 18px; }
 .lx-v-row-t { display: flex; flex: 1; flex-direction: column; gap: 1px; min-width: 0; }
-.lx-v-row-t b { font-size: 16px; font-weight: 600; }
-.lx-v-row-t span { font-size: 13px; color: var(--fg-2); }
+/* Zeilen der Wurzelseiten (UI-Standard §1): Titel in Text-Größe (600), Unterzeile als Hinweis. */
+.lx-v-row-t b { font-size: var(--t-text); font-weight: 600; }
+.lx-v-row-t span { font-size: var(--t-hint); color: var(--fg-2); }
 .lx-v-row-chev { color: var(--fg-3); }
 .lx-v-row-chev svg { width: 18px; height: 18px; }
 
-/* Chip (style.css:336). Bedienbar: sichtbar 34 px wie die Filterchips der Vorschau (screens.js:856), Trefferfläche 44 px. */
+/* Chip (style.css:336). Bedienbar: 44 px hoch (UI-Standard §3 Tippflächen ≥ 44 × 44; ux-reviewer 05.11.2026 Nr. 10 – vorher sichtbar 34 px). */
 .lx-v-chip {
   position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px;
   border-radius: 8px; background: var(--surface-2); color: var(--fg-2); font-size: 13px; font-weight: 600;
 }
 .lx-v-chip svg { width: 14px; height: 14px; }
-button.lx-v-chip { flex: none; min-height: 34px; }
-button.lx-v-chip::before { content: ''; position: absolute; inset: -5px 0; }
+button.lx-v-chip { flex: none; min-height: 44px; padding: 0 14px; border-radius: 999px; }
 .lx-v-chip[aria-pressed='true'] { background: var(--act-soft); color: var(--act-text); }
 /* Vorschau: Zahl mit opacity .7 (screens.js:856); das fällt unter 4,5:1 (axe). Abweichung: gleiche Farbe, leichteres Gewicht. */
 .lx-v-chip-n { font-weight: 500; }
@@ -119,7 +120,7 @@ button.lx-v-ring { cursor: pointer; }
 /* Wochenstreifen (style.css:186–193). */
 .lx-v-week { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 18px 2px 4px; list-style: none; margin: 0; }
 .lx-v-week-days { display: contents; }
-.lx-v-wd { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 32px; font-size: 11px; font-weight: 550; color: var(--fg-3); }
+.lx-v-wd { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 32px; font-size: var(--t-small); font-weight: 550; color: var(--fg-3); }
 .lx-v-wd i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--surface-2); color: var(--fg-2); }
 .lx-v-wd i svg { width: 14px; height: 14px; }
 .lx-v-wd[data-done] i { background: var(--act-soft); color: var(--act-text); }
@@ -128,7 +129,7 @@ button.lx-v-ring { cursor: pointer; }
 .lx-v-wd[data-rest] i { background: transparent; box-shadow: 0 0 0 1.5px var(--line-2) inset; }
 /* D5 (ux-reviewer D2, kann 7): im Hellmodus heben sich offene Tage auf surface-2 kaum vom Grund ab – feiner Rand wie die Ruhetage. */
 :root[data-theme='light'] .lx-v-wd:not([data-done]):not([data-today]):not([data-rest]) i { box-shadow: 0 0 0 1px var(--line-2) inset; }
-.lx-v-streak { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: 4px; font-size: 11px; font-weight: 550; color: var(--fg-3); }
+.lx-v-streak { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: 4px; font-size: var(--t-small); font-weight: 550; color: var(--fg-3); }
 .lx-v-streak b { font-size: 20px; line-height: 22px; font-weight: 650; color: var(--fg); }
 
 /* Zustandsliste der Blöcke (style.css:201–210): ohne Knöpfe, Zustand über Zeichen + Text. */
@@ -181,9 +182,7 @@ button.lx-v-ring { cursor: pointer; }
 /* Laptop-Maße der Vorschau (style.css:502–518, `.desk …`; Ring L1 desk.js:87 13em). */
 @media (min-width: 600px) {
   .lx-v-card { padding: 1.25rem; }
-  .lx-v-btn,
-  .lx-v-btn[data-variant='ghost'],
-  .lx-v-btn[data-size='sm'] { font-size: 1rem; min-height: 3.1rem; }
+  /* Knöpfe behalten ihre Größe (Text 17 px, Hauptknopf 52 px, UI-Standard §1/§3; ux-reviewer 05.11.2026 Nr. 10 – vorher 16 px / 50 px). */
   .lx-v-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
   .lx-v-tile { padding: 1.25rem; min-height: 13rem; }
   .lx-v-tile-h { font-size: 0.95rem; }

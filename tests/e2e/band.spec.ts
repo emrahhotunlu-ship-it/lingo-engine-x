@@ -159,8 +159,10 @@ async function flowRules(page: Page, label: string): Promise<Flow> {
     'Warum/Merke',
   ).toBe(true);
   expect(m.whyClipped, 'Warum abgeschnitten').toBe(false);
-  // Hilfe ist sichtbar, ohne erst einen Knopf zu suchen (Emrah 02.11.2026): Kern – „Frag Claude dazu“ neben „Weiter“.
-  await expect(page.getByTestId('actionbar').getByTestId('claude-ask-about')).toBeVisible();
+  // Hilfe ist sichtbar, ohne erst einen Knopf zu suchen (Emrah 02.11.2026): „Frag Claude“ oben in der Übungsleiste; unten nur „Weiter“
+  // (ux-reviewer 05.11.2026 Nr. 11: kein zweiter Claude-Zugang neben „Weiter“).
+  await expect(page.getByTestId('claude-explain')).toBeVisible();
+  await expect(page.getByTestId('claude-ask-about')).toHaveCount(0);
   // Ganz unten gerollt verschwindet nichts hinter der festen Leiste; dort steht nur „Weiter“. Erneut messen, bis das Einrollen nach dem
   // Prüfen und die Erklärung von Claude fertig sind (beide ändern Lage und Höhe noch kurz).
   await expect
@@ -260,9 +262,9 @@ test.describe('Handy 390×844: Verhalten', () => {
     await expect(res).toBeVisible();
   });
 
-  test('„Frag Claude dazu“ öffnet den Begleiter zur Aufgabe', async ({ page }) => {
+  test('„Frag Claude“ nach dem Prüfen öffnet den Begleiter zur Aufgabe', async ({ page }) => {
     await word(page, 'wrong', 'de');
-    await page.getByTestId('claude-ask-about').click();
+    await page.getByTestId('claude-explain').click();
     await expect(page.getByTestId('companion')).toBeVisible();
   });
 
@@ -330,7 +332,8 @@ for (const width of [1024, 1440] as const) {
       const res = page.getByTestId('result');
       await expect(res.locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
       await expect(page.locator('[data-col="side"]')).toHaveCount(0);
-      await expect(page.getByTestId('claude-ask-about')).toBeVisible();
+      await expect(page.getByTestId('claude-explain')).toBeVisible();
+      await expect(page.getByTestId('claude-ask-about')).toHaveCount(0);
       await expect(page.getByTestId('next')).toBeVisible();
       const more = res.getByTestId('explanation-more');
       if (await more.count()) {
@@ -359,9 +362,9 @@ for (const width of [1024, 1440] as const) {
       await expect(page.getByTestId('exercise-bar').locator('.lx-kask')).toBeVisible();
     });
 
-    test('Begleiter aus „Frag Claude dazu“: die Erklärung bleibt sichtbar', async ({ page }) => {
+    test('Begleiter aus „Frag Claude“ nach dem Prüfen: die Erklärung bleibt sichtbar', async ({ page }) => {
       const { errors } = await longest(page, 'will sign off');
-      await page.getByTestId('claude-ask-about').click();
+      await page.getByTestId('claude-explain').click();
       await expect(page.getByTestId('companion')).toBeVisible();
       await expect(page.getByTestId('result').locator('[data-block="why"], [data-block="remember"]').first()).toBeVisible();
       expect(errors).toEqual([]);

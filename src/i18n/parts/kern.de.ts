@@ -2,7 +2,6 @@
 
 export const kernDe = {
   kernAsk: 'Frag Claude',
-  kernAskAbout: 'Frag Claude dazu',
   kernAreaWords: 'Wörter',
   kernAreaGrammar: 'Grammatik',
   kernCount: '{n} von {total} erledigt',

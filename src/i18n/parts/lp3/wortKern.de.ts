@@ -2,10 +2,10 @@
 
 export const wortKernDe = {
   // Beschriftung der Abfrage (Kopf der Übung)
-  pxWkRecallDay0a: 'Abruf 1 · mit Anfangsbuchstaben',
-  pxWkRecallDay0b: 'Abruf 2 · frei aus dem Kopf',
+  pxWkRecallDay0a: '1. Mal selbst · mit Anfangsbuchstaben',
+  pxWkRecallDay0b: '2. Mal selbst · frei aus dem Kopf',
   pxWkRecallYesterday: 'Gestern-Check',
-  pxWkRecallFirst: 'Erster Abruf seit dem Lernen',
+  pxWkRecallFirst: 'Zum ersten Mal seit dem Lernen',
   // Messwerte dahinter: Wie gut bleiben Wörter hängen?
   pxWkTitle: 'Wie gut Wörter hängen bleiben',
   pxWkLead: 'Hier zählt nur, was du frei aus dem Kopf getippt hast. Auswahl und Aufdecken zählen nicht, weil Erkennen leichter ist als Abrufen.',

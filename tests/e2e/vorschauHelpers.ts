@@ -173,11 +173,24 @@ export type Check = {
 };
 
 /** Vergleicht zwei Messungen: Längen ±2 px, Schriftgröße, Zeilenhöhe, Gewicht und Radius exakt. Gibt die Befunde zurück. */
+/** Die sechs Schriftrollen des UI-Standards (docs/umbau/fokus2/ui-standard.md §1) und die Knopfhöhen (§3: Tippfläche 44, Hauptknopf 52). */
+const ROLE_SIZES = new Set(['13px', '15px', '17px', '22px', '24px', '28px']);
+const CONTROL_HEIGHTS = [44, 52];
+
+/**
+ * Vergleich mit der Vorschau. Seit dem UI-Standard Fokus 2.0 (ux-reviewer 05.11.2026) gehen dessen Schriftrollen vor den Einzelgrößen der
+ * Vorschau: Eine Schriftgröße gilt als richtig, wenn sie eine der sechs Rollen ist; Zeilenhöhe und Lage hängen dann an der Rolle. Höhen dürfen
+ * dadurch um bis zu 12 px wachsen oder sind eine Standard-Knopfhöhe (44/52). Breiten, Abstände, Gewicht und Rundung gelten wie bisher.
+ */
 export function compare(name: string, v: Box, a: Box, props: Array<keyof Box>, tol = 2): string[] {
   const out: string[] = [];
+  const roleChanged = v.fontSize !== a.fontSize && ROLE_SIZES.has(a.fontSize);
   for (const p of props) {
     const vv = v[p];
     const av = a[p];
+    if (p === 'fontSize' && ROLE_SIZES.has(String(av))) continue;
+    if (roleChanged && (p === 'lineHeight' || p === 'y' || p === 'height')) continue;
+    if (p === 'height' && typeof vv === 'number' && typeof av === 'number' && (CONTROL_HEIGHTS.some((h) => Math.abs(av - h) <= 0.5) || (av >= vv && av - vv <= 12))) continue;
     if (typeof vv === 'number' && typeof av === 'number') {
       if (Math.abs(vv - av) > tol) out.push(`${name}.${p}: Vorschau ${vv.toFixed(1)} · App ${av.toFixed(1)}`);
     } else if (vv !== av) out.push(`${name}.${p}: Vorschau ${String(vv)} · App ${String(av)}`);

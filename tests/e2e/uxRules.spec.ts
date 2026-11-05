@@ -16,7 +16,8 @@ const KNOWN_DUPES: string[] = [];
 const DUE_BADGE = /^\d+ (Fehlersatz|Fehlersätze) fällig$/;
 
 type Measure = {
-  primary: Array<{ id: string; bottom: number; top: number }>;
+  /** `flow`: Hauptknopf im Ergebnis, der im Fluss nach der Erklärung steht (ux-reviewer 05.11.2026 Nr. 17) – erreichbar per Bildlauf. */
+  primary: Array<{ id: string; bottom: number; top: number; flow: boolean }>;
   /** Gefüllte Knöpfe einer Übung außerhalb der ActionBar (Lernplattform 2.0 §10.4 P8). */
   outside: string[];
   exercise: boolean;
@@ -56,7 +57,15 @@ async function measure(page: Page): Promise<Measure> {
     }
     const primary = Array.from(document.querySelectorAll('button'))
       .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && inView(b.getBoundingClientRect()))
-      .map((b) => ({ id: b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?', bottom: b.getBoundingClientRect().bottom, top: b.getBoundingClientRect().top }));
+      .map((b) => {
+        const col = b.closest<HTMLElement>('.lx-exercise[data-kres] .lx-actionbar-column');
+        return {
+          id: b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?',
+          bottom: b.getBoundingClientRect().bottom,
+          top: b.getBoundingClientRect().top,
+          flow: !!col && getComputedStyle(col).position === 'static',
+        };
+      });
     const outside = Array.from(document.querySelectorAll('button'))
       .filter((b) => vis(b) && /(^|\s)bg-accent(\s|$)/.test(b.className) && !b.closest('[data-testid="actionbar"]'))
       .map((b) => b.getAttribute('data-testid') ?? b.textContent?.trim().slice(0, 20) ?? '?');
@@ -89,7 +98,7 @@ async function rules(page: Page, name: string, theme: Theme): Promise<void> {
   const at = `${name} (${theme})`;
   expect(m.primary.map((p) => p.id), `R1 ${at}: gefüllte Hauptknöpfe im Bild`).toHaveLength(Math.min(m.primary.length, 1));
   if (m.exercise) expect(m.outside, `${at}: gefüllter Knopf außerhalb der ActionBar`).toEqual([]);
-  for (const p of m.primary) expect(p.bottom, `R2 ${at}: Hauptknopf „${p.id}“ im sichtbaren Bereich`).toBeLessThanOrEqual(m.vvh + 0.5);
+  for (const p of m.primary.filter((x) => !x.flow)) expect(p.bottom, `R2 ${at}: Hauptknopf „${p.id}“ im sichtbaren Bereich`).toBeLessThanOrEqual(m.vvh + 0.5);
   expect(m.small, `R8 ${at}: Ziele unter 44 pt`).toEqual([]);
   expect(m.dupes.filter((d) => !KNOWN_DUPES.includes(d) && !DUE_BADGE.test(d)), `R7 ${at}: doppelter Text`).toEqual([]);
   expect(m.scrollW, `${at}: waagrechter Bildlauf`).toBeLessThanOrEqual(m.clientW + 1);
@@ -153,9 +162,19 @@ for (const theme of ['dark', 'light'] as const) {
         await expect(bar, `R2 ${name}: Aktionsleiste steht`).toBeVisible();
         // Emrah 04.11.2026 (Tastatur verdeckte die feste Leiste): auf Touch-Geräten stehen die Knöpfe direkt unter der Aufgabe in der Karte –
         // sichtbar im Bild und innerhalb der Übung (ersetzt die alte Regel „Leiste am unteren Rand“).
+        expect(await bar.evaluate((el) => !!el.closest('[data-testid="exercise"]')), `R2 ${name}: Leiste in der Übungskarte`).toBe(true);
+        if (result) {
+          // ux-reviewer 05.11.2026 Nr. 17: im Ergebnis haftet die Leiste nicht, sondern folgt der Erklärung im Fluss (liegt nie über dem Warum).
+          const flow = await bar.evaluate((el) => {
+            const why = el.closest('[data-testid="exercise"]')?.querySelector('[data-testid="result"]')?.getBoundingClientRect();
+            return { pos: getComputedStyle(el).position, top: el.getBoundingClientRect().top, whyBottom: why?.bottom ?? 0 };
+          });
+          expect(flow.pos, `R2 ${name}: Leiste im Ergebnis ohne Haften`).toBe('static');
+          expect(flow.top, `R2 ${name}: Leiste nach der Erklärung`).toBeGreaterThanOrEqual(flow.whyBottom - 1);
+          await bar.scrollIntoViewIfNeeded();
+        }
         const bb = await bar.boundingBox();
         expect((bb?.y ?? 0) + (bb?.height ?? 0), `R2 ${name}: Leiste ganz im Bild`).toBeLessThanOrEqual(844);
-        expect(await bar.evaluate((el) => !!el.closest('[data-testid="exercise"]')), `R2 ${name}: Leiste in der Übungskarte`).toBe(true);
         // R7: Zustandstexte – vor dem Prüfen „Prüfen“ (oder Auswahl ohne Knopf), danach „Weiter“.
         if (result) await expect(bar.getByTestId('next'), `R7 ${name}: Weiter nach dem Prüfen`).toContainText('Weiter');
         else await expect(page.getByTestId('check'), `R7 ${name}`).toContainText('Prüfen');
