@@ -33,6 +33,8 @@ export const applyEn = {
   apComboOwnSub: 'One word and one rule in one sentence',
   apComboExample: 'This is what the rule looks like:',
   apComboTask: 'Write a sentence to a client with “{word}”. Grammar: {topic}.',
+  apComboTaskFrame: 'Write a sentence with “{word}” ({de}). {situation} Start like this: “{starter}”',
+  apComboTaskFrameBare: 'Write a sentence with “{word}”. {situation} Start like this: “{starter}”',
   apComboPurpose: 'You use the word and the rule together in your own sentence. That makes both stick.',
   apComboRule: 'Show the rule',
   apComboInput: 'Your sentence in English',

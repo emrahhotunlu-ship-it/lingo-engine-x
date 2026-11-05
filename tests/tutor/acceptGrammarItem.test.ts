@@ -62,6 +62,35 @@ describe('acceptGrammarItem: verworfen, mit Grund', () => {
     expect(acceptGrammarItem(gap({ prompt: 'The workshop ___ (organize) by ___ last spring.' })).reasons).toEqual(['shape']);
   });
 
+  it('grammar-items@6: self.plain weicht vom gelösten Satz ab → unnatural; ohne plain kein Grund; Kurzformen und Satzzeichen zählen nicht', () => {
+    expect(acceptGrammarItem(gap({ self: { solved: 'was organized', also: [], plain: 'Our team organized the workshop last spring.' } })).reasons).toEqual(['unnatural']);
+    expect(acceptGrammarItem(gap({ self: { solved: 'was organized', also: [], plain: 'the workshop was organized by our team last spring' } })).reasons).toEqual([]);
+    expect(acceptGrammarItem(gap()).reasons).toEqual([]);
+    // Satz verbessern: plain wird mit der Lösung verglichen.
+    expect(acceptGrammarItem(fix({ self: { solved: 'The invoices were sent to the client last Friday.', also: [], plain: 'We sent the invoices to the client last Friday.' } })).reasons).toEqual(['unnatural']);
+    expect(acceptGrammarItem(fix({ self: { solved: 'The invoices were sent to the client last Friday.', also: [], plain: 'The invoices were sent to the client last Friday.' } })).reasons).toEqual([]);
+    // Eine gelistete Variante (eingesetzt) gilt auch.
+    expect(acceptGrammarItem(gap({ accepted: ['got organized'], self: { solved: 'was organized', also: ['got organized'], plain: 'The workshop got organized by our team last spring.' } })).reasons).toEqual([]);
+  });
+
+  it('grammar-items@6: Satz verbessern mit mehr als einem Fehler → multi_error; Wortstellung ist EIN Fehler', () => {
+    // Zwei Stellen geändert (Verb und Präposition).
+    const two = acceptGrammarItem(fix({ prompt: 'The invoices was sent at the client last Friday.' }));
+    expect(two.reasons).toContain('multi_error');
+    // Mehr als drei Wörter an einer Stelle.
+    const many = acceptGrammarItem(fix({ prompt: 'The invoices was being had sent off to the client last Friday.' }));
+    expect(many.reasons).toContain('multi_error');
+    // Ein verschobenes Wort (Wortstellung) ist ein Fehler.
+    const moved = acceptGrammarItem({
+      ...fix(),
+      topic: 'word-order',
+      prompt: 'We sent yesterday the invoices to the client.',
+      answer: 'We sent the invoices to the client yesterday.',
+      self: { solved: 'We sent the invoices to the client yesterday.', also: [] },
+    });
+    expect(moved.reasons).not.toContain('multi_error');
+  });
+
   it('Satz verbessern: gezeigter Satz ist schon richtig → error_kept', () => {
     const r = acceptGrammarItem(fix({ prompt: 'The invoices were sent to the client last Friday.' }));
     expect(r.task).toBeNull();
@@ -95,7 +124,7 @@ describe('grammar-items@5: Selbstprüfung im Schema', () => {
 
   it('Kopfzeile, Hintergrund-Budget, Regeln zur Selbstprüfung im Prompt', () => {
     const p = grammarItems.build(vars);
-    expect(p.split('\n')[0]).toBe('[grammar-items@5]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@6]');
     expect(p).toContain('"self.solved"');
     expect(p).toContain('Good English is never wrong.');
     expect(grammarItems.budget).toEqual({ bgPerDay: 2 });

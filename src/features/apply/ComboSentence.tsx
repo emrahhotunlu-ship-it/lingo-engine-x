@@ -91,6 +91,7 @@ export function ComboSentenceScreen() {
   const today = useClock((s) => s.today);
   const ai = useAiAvailable();
   const live = useComboPairs();
+  const cards = useVocabCards();
   const liveProfile = useInputProfile();
   // Das Eingabeprofil gilt für die ganze Runde (§4.1): am Handy höchstens COMBO_PHONE_WORDS Wörter, am Laptop ein freier Satz.
   const [profile] = useState(() => liveProfile);
@@ -122,7 +123,21 @@ export function ComboSentenceScreen() {
   const cur = fixed[pos] ?? null;
   const topic = cur ? topicById(cur.topicId) : undefined;
   const topicName = topic ? (lang === 'en' ? (topic.name_en ?? topic.name) : topic.name) : '';
-  const example = cur ? (ruleExamples(cur.topicId, 1)[0] ?? null) : null;
+  // Rahmen (Situation + Satzanfang, Emrah 05.11.2026): ohne Rahmen bleibt der Beispielsatz der Regel die Hilfe.
+  const framed = !!(cur?.situation && cur.starter);
+  const example = cur && !framed ? (ruleExamples(cur.topicId, 1)[0] ?? null) : null;
+  // Deutsche Bedeutung der Wortkarte (über den Pfad der Karte, sonst über das Wort); fehlt sie, ohne Klammer.
+  const meaning = useMemo(() => {
+    if (!cur) return '';
+    const w = cur.word.trim().toLowerCase();
+    const card = (cur.key ? cards.find((c) => c.key === cur.key) : undefined) ?? cards.find((c) => c.word.trim().toLowerCase() === w);
+    return card?.de?.trim() ?? '';
+  }, [cur, cards]);
+  const taskText = !cur
+    ? ''
+    : cur.situation && cur.starter
+      ? t(meaning && lang === 'de' ? 'apComboTaskFrame' : 'apComboTaskFrameBare', { word: cur.word, de: meaning, situation: lang === 'en' ? cur.situation.en : cur.situation.de, starter: cur.starter })
+      : t(touch ? 'fxLComboTaskShort' : 'apComboTask', { word: cur.word, topic: topicName });
   const finished = pos >= fixed.length;
   const busy = ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'slow' || ask.phase === 'streaming';
 
@@ -141,7 +156,18 @@ export function ComboSentenceScreen() {
       return;
     }
     setMiss(false);
-    const out = await ask.run({ word: cur.word, topic: topic.name_en ?? topic.name, rule: topic.rule ?? '', sentence: given, uiLang: lang });
+    // Die Regel geht englisch an den Prompt (`rule_en` liegt in den Inhalten, im Typ `Topic` aber nicht: tolerant lesen).
+    const ruleEn: unknown = (topic as Readonly<Record<string, unknown>>).rule_en;
+    const rule = typeof ruleEn === 'string' && ruleEn.trim() ? ruleEn : (topic.rule ?? '');
+    const out = await ask.run({
+      word: cur.word,
+      topic: topic.name_en ?? topic.name,
+      rule,
+      sentence: given,
+      uiLang: lang,
+      topicId: cur.topicId,
+      ...(cur.situation && cur.starter ? { situation: cur.situation.en, starter: cur.starter } : {}),
+    });
     // KI nicht erreichbar oder unlesbar: nicht als falsch werten, „Prüfen“ fragt erneut (Lernwissenschaft 27.09.).
     if (!out) return;
     const done: Done = { word: true, rule: out.ruleOk, correct: out.correct };
@@ -219,11 +245,11 @@ export function ComboSentenceScreen() {
         <SessionEnd right={right} total={Math.max(1, results.length)} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
       ) : (
         cur && (
-          <div data-testid="combo-item" data-word={cur.word} data-topic={cur.topicId} data-profile={profile}>
+          <div data-testid="combo-item" data-word={cur.word} data-topic={cur.topicId} data-profile={profile} data-starter={cur.starter ?? ''}>
             <ExerciseShell
               meta={{ ex: 'combo', id: `${cur.word}|${cur.topicId}`, kind: touch ? 'complete' : 'produce' }}
               status={{ area: 'words', state: null, kindLabel: t('fxLKindOwn'), badge: topicName }}
-              task={{ text: t(touch ? 'fxLComboTaskShort' : 'apComboTask', { word: cur.word, topic: topicName }), purpose: t('apComboPurpose') }}
+              task={{ text: taskText, purpose: t('apComboPurpose') }}
               aid={
                 topic?.rule ? (
                   <div className="flex flex-col gap-1">
@@ -244,6 +270,11 @@ export function ComboSentenceScreen() {
                   <span lang="en" data-testid="combo-prompt">
                     {cur.word}
                   </span>
+                  {meaning && (
+                    <span lang="de" className="lx-t-support text-muted" data-testid="combo-meaning">
+                      {meaning}
+                    </span>
+                  )}
                   {/* Emrah 05.11.2026: die Aufgabe zeigt, wie die Regel aussieht (ein Beispielsatz der Regel), statt nur Wort und Regelname. */}
                   {example && (
                     <p className="lx-t-support m-0 text-muted" data-testid="combo-example">

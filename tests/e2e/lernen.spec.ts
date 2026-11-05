@@ -330,6 +330,8 @@ test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz 
   await expect(item).toBeVisible();
   const word = (await item.getAttribute('data-word')) ?? '';
   expect(word).not.toBe('');
+  // Rahmen (Befund english-teacher 05.11.2026): Situation und Satzanfang stehen in der Aufgabe.
+  await expect(page.getByTestId('task')).toContainText('Fang so an:');
   // 1) Wort fehlt: lokal erkannt, kein Claude-Aufruf.
   await page.getByTestId('combo-input').fill('This sentence has nothing to do with it at all.');
   await page.getByTestId('combo-check').click();

@@ -33,6 +33,8 @@ export const applyDe = {
   apComboOwnSub: 'Ein Wort und eine Regel in einem Satz',
   apComboExample: 'So sieht die Regel aus:',
   apComboTask: 'Schreib einem Kunden einen Satz mit „{word}“. Grammatik: {topic}.',
+  apComboTaskFrame: 'Schreib einen Satz mit „{word}“ ({de}). {situation} Fang so an: „{starter}“',
+  apComboTaskFrameBare: 'Schreib einen Satz mit „{word}“. {situation} Fang so an: „{starter}“',
   apComboPurpose: 'Du benutzt das Wort und die Regel zusammen in deinem eigenen Satz. So bleibt beides hängen.',
   apComboRule: 'Regel ansehen',
   apComboInput: 'Dein Satz auf Englisch',
