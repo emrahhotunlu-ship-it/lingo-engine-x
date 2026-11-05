@@ -146,13 +146,13 @@ describe('Auswahl und Checkliste', () => {
   });
 });
 
-describe('Vorlage c1-mail@1', () => {
+describe('Vorlage c1-mail@2', () => {
   it('Kopfzeile, Stufe default, 24 h Zwischenspeicher, in der Registry; zweistufige Anweisung und minimale Änderungen', () => {
     const p = c1Mail.build(vars());
-    expect(p.split('\n')[0]).toBe('[c1-mail@1]');
+    expect(p.split('\n')[0]).toBe('[c1-mail@2]');
     expect(c1Mail.tier).toBe('default');
     expect(c1Mail.cache).toEqual({ gcTime: 86_400_000 });
-    expect(TEMPLATES.find((t) => t.id === 'c1-mail')?.version).toBe(1);
+    expect(TEMPLATES.find((t) => t.id === 'c1-mail')?.version).toBe(2);
     expect(p).toContain('First list every error as an atomic edit');
     expect(p).toContain('Style improvements are sev "upgrade", never "error"');
     expect(p).toContain('Target patterns (id: name (form)):');

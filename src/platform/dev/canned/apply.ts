@@ -1,4 +1,4 @@
-// Testantworten F3 Anwenden (apply-reply@1, apply-summary@1, apply-keypoints@1). Besitzer: nur dieses Paket.
+// Testantworten F3 Anwenden (apply-reply@2, apply-summary@2, apply-keypoints@1; W5: `style` und `greet`). Besitzer: nur dieses Paket.
 // Nur Entwicklung und Tests – nie Teil des Produktions-Builds.
 
 import { registerCannedReply } from '../fakeSample';
@@ -26,6 +26,31 @@ const targetWords = (input: string): string[] =>
     .split(' | ')
     .map((w) => w.trim())
     .filter(Boolean);
+
+/** W5 K1: Stil-Verbesserungen aus einer festen Tabelle (nur Stellen, die wörtlich im Text stehen; `zzfakestyle` → dazu eine erfundene Stelle, fällt weg). */
+const STYLE_RULES: ReadonlyArray<{ from: string; to: string; de: string; en: string }> = [
+  { from: 'very busy', to: 'stretched thin', de: 'Klingt natürlicher und zeigt mehr Verständnis.', en: 'This sounds more natural and shows more empathy.' },
+  { from: 'really needs', to: 'requires', de: 'Ein Wort statt zwei – knapper und sachlicher.', en: 'One precise word instead of two sounds more professional.' },
+  { from: 'hard to stop', to: 'difficult to contain', de: 'Das passt besser zu einem sachlichen Bericht.', en: 'This fits a factual report better.' },
+  { from: 'we still need', to: 'we are still waiting for', de: 'Klingt in einer Mail an Kunden höflicher.', en: 'This sounds more polite in a client email.' },
+];
+
+function styleOf(clean: string, de: boolean, fake: boolean): Array<Record<string, unknown>> {
+  const out: Array<Record<string, unknown>> = STYLE_RULES.filter((r) => clean.toLowerCase().includes(r.from)).map((r) => {
+    const at = clean.toLowerCase().indexOf(r.from);
+    return { from: clean.slice(at, at + r.from.length), to: r.to, why: de ? r.de : r.en };
+  });
+  if (fake) out.unshift({ from: 'a phrase that is not in the text', to: 'something better', why: de ? 'Erfunden.' : 'Invented.' });
+  return out.slice(0, 3);
+}
+
+/** W5 K7: Anrede und Gruß – fehlt eine Anrede-Zeile am Anfang, `missing`; `zzgreet` → `off`. */
+function greetOf(text: string, de: boolean): Record<string, unknown> {
+  const first = text.trim().split('\n')[0] ?? '';
+  if (/zzgreet/i.test(text)) return { fit: 'off', why: de ? 'Für diese Leserin ist die Anrede zu locker.' : 'The greeting is too casual for this reader.' };
+  if (!/^(dear|hi|hello|hey)\b/i.test(first)) return { fit: 'missing', why: de ? 'Am Anfang fehlt die Anrede.' : 'The greeting at the start is missing.' };
+  return { fit: 'fits', why: de ? 'Anrede und Gruß passen zum Empfänger.' : 'The greeting and closing suit the reader.' };
+}
 
 const sentencesOf = (text: string): string[] => (text.match(/[^.!?\n]+[.!?]?/g) ?? []).map((s) => s.trim()).filter((s) => s.split(/\s+/).length >= 3);
 
@@ -57,7 +82,8 @@ function core(input: string, n: number) {
   }
   if (/^Target rule/m.test(input) && sents[0]) used.push({ pat: 'rule', ok: !/zzrule/i.test(text), quote: sents[0] });
   const good = sents[0] ? { quote: sents[0], why: de ? 'Der Einstieg ist klar und freundlich.' : 'The opening is clear and friendly.' } : null;
-  return { text, de, clean, fixed, edits, points, used, good, errors: hits.length };
+  const style = styleOf(clean, de, /zzfakestyle/i.test(text));
+  return { text, de, clean, fixed, edits, points, used, good, style, errors: hits.length };
 }
 
 export function applyReplyReply(input: string): string {
@@ -70,7 +96,9 @@ export function applyReplyReply(input: string): string {
     edits: c.edits,
     used: c.used,
     tone: { fit: 'fits', why: c.de ? 'Der Ton passt zum Empfänger.' : 'The tone suits the reader.' },
+    ...(/^Reader: /m.test(input) ? { greet: greetOf(c.clean, c.de) } : {}),
     good: c.good,
+    style: c.style,
     // Gruß nur anhängen, wenn der Text noch keinen hat (sonst stünde „Best regards“ doppelt da).
     upgraded: /\b(best|kind) regards\b/i.test(c.fixed) ? c.fixed : `${c.fixed}\n\nBest regards`,
     summary: c.de ? 'Klar gegliedert; achte als Nächstes auf feste Verbindungen.' : 'Clearly structured; next, watch fixed word combinations.',
@@ -91,6 +119,7 @@ export function applySummaryReply(input: string): string {
     edits: c.edits,
     used: c.used,
     good: c.good,
+    style: c.style,
     upgraded: `${c.fixed} In short, the article explains what changes next.`,
     summary: c.de ? 'Die Hauptsache ist getroffen; achte als Nächstes auf feste Verbindungen.' : 'You caught the main point; next, watch fixed word combinations.',
     errorCount: c.errors,

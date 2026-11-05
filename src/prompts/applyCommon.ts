@@ -1,12 +1,18 @@
 import { z } from 'zod';
 import { clip } from './common';
-import { normWs } from '../domain/tutor/edits';
+import { isWrongLang } from '../domain/lang/detect';
+import { normWs, type Edit } from '../domain/tutor/edits';
+import type { UiLang } from './types';
 
 // Gemeinsame Bausteine der Anwenden-Vorlagen (F3, docs/umbau/fokus2/anwenden-plan.md, Nachtrag learning-scientist Muss 1/2/5). Rein.
 // - `keepPoints`: Pflicht- bzw. Kernpunkte einzeln: je Punkt `yes`/`partly`/`no` mit Zitat. Ein Zitat, das nicht WÖRTLICH im Text steht, macht den
 //   Punkt zu `no` (wie `keepUsed`): die App glaubt nur Belegtes. Fehlende Punkte gelten als `no`. Bei `partly`/`no` dazu `why` (ein kurzer Satz in der
 //   Erklärsprache: was fehlt oder unklar ist; Pflichtfrage „Warum“, Prüfbefund T2); bei `yes` leer.
 // - `keepGood`: „Das sitzt“ – eine gelungene Stelle mit Grund, nur mit wörtlichem Zitat (sonst `null`, die Oberfläche nimmt dann ein anderes Zitat).
+// - `styleOf` (W5 K1 „So klingt es gehobener“): 1–2 Stil-Verbesserungen, je mit wörtlichem Zitat (`from`), besserer Fassung (`to`) und einem Satz Warum. Getrennt
+//   von den Fehlern: eine Stelle, die eine Fehlerstelle berührt, fällt weg (kein Fehler ≠ Stil). Fehlt das Feld (ältere Antwort), gelten die belegten
+//   Verbesserungen der Liste (`sev: 'upgrade'`, Wortwahl/Wortpartner/Ton). Falsche Sprache fällt weg statt die Antwort zu verwerfen.
+// - `greetOf` (W5 K7): Anrede und Gruß zusammen bewertet (`fits`/`off`/`missing`) mit einem Satz Warum; fehlt es, `null` (die Oberfläche zeigt dann nichts).
 
 export type Covered = 'yes' | 'partly' | 'no';
 export type PointCheck = { i: number; covered: Covered; quote: string; why: string };
@@ -83,3 +89,88 @@ export const pointWhyIssues = (points: readonly PointCheck[], wrong: (s: string)
 export function pointsScore(points: readonly PointCheck[]): number {
   return points.reduce((s, p) => s + (p.covered === 'yes' ? 1 : p.covered === 'partly' ? 0.5 : 0), 0);
 }
+
+// ---------------------------------------------------------------- So klingt es gehobener (W5 K1)
+
+export type StyleTip = { from: string; to: string; why: string };
+export const STYLE_MAX = 2;
+export const STYLE_TEXT_MAX = 160;
+const STYLE_KINDS = new Set(['word', 'collocation', 'register']);
+
+const lowNorm = (s: string): string =>
+  normWs(s)
+    .toLowerCase()
+    .replace(/[.,;:!?]+$/g, '')
+    .trim();
+
+/**
+ * Stil-Verbesserungen behalten: `from` steht wörtlich im Text, `to` ist anders, `why` vorhanden; keine Überschneidung mit einer Fehlerstelle; keine Doppelten;
+ * `to` auf Englisch, `why` in der Erklärsprache. Höchstens 2.
+ */
+export function keepStyle(xs: readonly unknown[], text: string, edits: readonly Edit[], uiLang: UiLang): StyleTip[] {
+  const hay = normWs(text);
+  const errs = edits.filter((e) => e.sev === 'error').map((e) => lowNorm(e.from)).filter(Boolean);
+  const out: StyleTip[] = [];
+  for (const x of xs) {
+    if (out.length >= STYLE_MAX) break;
+    if (!isObj(x)) continue;
+    const from = typeof x.from === 'string' ? normWs(x.from) : '';
+    const to = typeof x.to === 'string' ? normWs(x.to) : '';
+    const why = typeof x.why === 'string' ? clip(x.why.trim(), STYLE_TEXT_MAX) : '';
+    if (!from || !to || !why || !hay.includes(from)) continue;
+    const f = lowNorm(from);
+    if (!f || f === lowNorm(to)) continue;
+    if (errs.some((e) => e.includes(f) || f.includes(e))) continue;
+    if (out.some((o) => lowNorm(o.from) === f)) continue;
+    if (isWrongLang(to, 'en') || isWrongLang(why, uiLang)) continue;
+    out.push({ from: clip(from, STYLE_TEXT_MAX), to: clip(to, STYLE_TEXT_MAX), why });
+  }
+  return out;
+}
+
+/** `style` der Antwort; fehlt das Feld ganz, die belegten Verbesserungen der Liste (Wortwahl, Wortpartner, Ton). */
+export function styleOf(raw: unknown, text: string, edits: readonly Edit[], uiLang: UiLang): StyleTip[] {
+  if (Array.isArray(raw)) return keepStyle(raw, text, edits, uiLang);
+  if (raw !== undefined && raw !== null) return [];
+  return keepStyle(
+    edits.filter((e) => e.sev === 'upgrade' && STYLE_KINDS.has(e.kind)),
+    text,
+    edits,
+    uiLang,
+  );
+}
+
+export const STYLE_EXAMPLE = '"style":[{"from":"…","to":"…","why":"…"}]';
+export const STYLE_RULE =
+  '- style: 0 to 2 spans of CORRECT wording that could sound more like C1 business English (precise word, collocation, register, hedging, linking phrase): "from" copied EXACTLY from the text and not part of any error in edits, "to" the better American English phrasing, "why" one short sentence in the explanation language.';
+
+// ---------------------------------------------------------------- Anrede und Gruß (W5 K7)
+
+export type GreetFit = 'fits' | 'off' | 'missing';
+export type GreetCheck = { fit: GreetFit; why: string };
+/** Vorgabe der Aufgabe: Leser (Rolle, Name), passende Anrede und passender Gruß (Englisch). */
+export type GreetVars = { reader: string; hello: string; close: string };
+
+const GREET_ALIASES: ReadonlyArray<[RegExp, GreetFit]> = [
+  [/^(fits?|fitting|ok|okay|good|appropriate|right|yes|true)$/, 'fits'],
+  [/^(off|wrong|too[\s_-]?(formal|informal|casual|stiff)|not fitting|unsuitable|partly)$/, 'off'],
+  [/^(missing|none|absent|no|false)$/, 'missing'],
+];
+
+/** Anrede und Gruß tolerant lesen; ohne verwertbares Urteil `null`. */
+export function greetOf(v: unknown, uiLang: UiLang): GreetCheck | null {
+  if (!isObj(v) || typeof v.fit !== 'string') return null;
+  const s = v.fit.trim().toLowerCase();
+  const fit = GREET_ALIASES.find(([re]) => re.test(s))?.[1];
+  if (!fit) return null;
+  const why = typeof v.why === 'string' ? clip(v.why.trim(), STYLE_TEXT_MAX) : '';
+  return { fit, why: why && !isWrongLang(why, uiLang) ? why : '' };
+}
+
+export const GREET_EXAMPLE = '"greet":{"fit":"fits","why":"…"}';
+
+/** Zeilen der Vorlage zur Vorgabe (vor dem Text) und zur Bewertung (in den Regeln). */
+export const greetTaskLine = (g: GreetVars): string =>
+  `Reader: ${clip(g.reader, 120)}. A fitting salutation is ${clip(g.hello, 60)} and a fitting sign-off is ${clip(g.close, 40)}; other forms in the same register are fine too.`;
+export const GREET_RULE =
+  '- greet: the salutation and sign-off together for this reader: "fits", "off" (too formal, too casual, wrong name or title) or "missing"; why is one short sentence in the explanation language. They also count for tone.';
