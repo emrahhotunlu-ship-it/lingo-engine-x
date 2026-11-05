@@ -53,6 +53,7 @@ export const kernEn: Record<keyof typeof kernDe, string> = {
   kernLeft: 'about {min} min left',
   kernStepSub: '{why} · about {min} min',
   kernFreeHead: 'Optional—only if you have time',
+  kernStepsMore: 'Trap and example',
   kernStreak: 'Streak',
   kernStreakNone: 'starts today',
   kernStreakStartNum: 'Start',

@@ -166,14 +166,28 @@ export function RuleSteps({ topic, start, pattern, why, mistake, example, signal
   if (ex) {
     sections.push({ id: 'example', label: t('kernStepExample'), body: <Examples items={[ex]} open={1} area="trainer" label={false} /> });
   }
+  // Emrah 05.11.2026 („kurze Erläuterung ok, aber nicht lange – evtl. zum Aufklappen“): offen steht nur die Regel; Falle und Beispiel
+  // stehen unter „Falle und Beispiel“ zum Aufklappen (dieselbe Nummerierung).
+  const step = (sec: (typeof sections)[number], i: number) => (
+    <section key={sec.id} className="flex flex-col gap-1.5" data-step={sec.id} aria-label={sec.label}>
+      <h3 className="lx-eyebrow m-0 text-muted">{t('kernStep', { n: start + i, label: sec.label })}</h3>
+      {sec.body}
+    </section>
+  );
+  const first = sections[0]?.id === 'rule' ? 1 : 0;
+  const more = sections.slice(first);
   return (
     <div className="lx-vu-card lx-ksteps" data-testid="rule-steps">
-      {sections.map((s, i) => (
-        <section key={s.id} className="flex flex-col gap-1.5" data-step={s.id} aria-label={s.label}>
-          <h3 className="lx-eyebrow m-0 text-muted">{t('kernStep', { n: start + i, label: s.label })}</h3>
-          {s.body}
-        </section>
-      ))}
+      {sections.slice(0, first).map(step)}
+      {more.length > 0 &&
+        (first ? (
+          <details className="lx-ksteps-more" data-testid="rule-steps-more">
+            <summary className="lx-vu-link cursor-pointer">{t('kernStepsMore')}</summary>
+            <div className="mt-3 flex flex-col gap-4">{more.map((sec, i) => step(sec, i + first))}</div>
+          </details>
+        ) : (
+          more.map((sec, i) => step(sec, i))
+        ))}
       <button type="button" className="lx-vu-link" onClick={onWhole} data-testid="rule-side-whole">
         {t('kernRuleWhole')}
       </button>

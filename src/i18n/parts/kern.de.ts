@@ -52,6 +52,7 @@ export const kernDe = {
   kernLeft: 'noch ca. {min} Min.',
   kernStepSub: '{why} · ca. {min} Min.',
   kernFreeHead: 'Freiwillig – nur wenn du Zeit hast',
+  kernStepsMore: 'Falle und Beispiel',
   kernStreak: 'Serie',
   kernStreakNone: 'beginnt heute',
   kernStreakStartNum: 'Start',
