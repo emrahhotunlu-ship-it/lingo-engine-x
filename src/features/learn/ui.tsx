@@ -128,6 +128,7 @@ export function ExerciseTop({
   duty = null,
   middleOverlay = null,
   area = null,
+  title: titleProp,
 }: {
   onClose: () => void;
   closeLabel?: string;
@@ -140,6 +141,8 @@ export function ExerciseTop({
   middleOverlay?: ReactNode;
   /** Kern (Vorschau 9pdpf…): Bereich für die Titelzeile „Wörter · 12 von 38 erledigt“. */
   area?: 'words' | 'grammar' | null;
+  /** Eigene Titelzeile im Kern-Aussehen (z. B. Anwenden: Aufgabe · Pflicht/Extra); geht `area` vor. */
+  title?: ReactNode;
 }) {
   const { t } = useT();
   const player = usePlayer();
@@ -165,12 +168,12 @@ export function ExerciseTop({
   // Ehrlicher Zähler (Kern): „erledigt“ zählt die abgeschlossenen Karten, nicht die gerade gezeigte.
   const areaName = area ? t(area === 'words' ? 'kernAreaWords' : 'kernAreaGrammar') : null;
   // Am Handy steht der Zähler unter dem Bereich (sonst schnitte „… erledigt“ neben „Frag Claude“ ab), ab 480 px in einer Zeile mit „ · “.
-  const title = areaName ? (
+  const title = titleProp ?? (areaName ? (
     <>
       <span className="lx-kbar-area">{areaName}</span>
       {has && <span className="lx-kbar-count lx-tnum">{t('kernCount', { n: Math.max(0, Math.min(progress.total, progress.n - 1)), total: progress.total })}</span>}
     </>
-  ) : undefined;
+  ) : undefined);
   return (
     <ExerciseBar
       {...(title ? { title } : {})}

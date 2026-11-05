@@ -24,7 +24,7 @@ const ALLOWED_SHARED: RegExp[] = [
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav|clock|unit\/done)$/,
   /^src\/i18n$/,
-  /^src\/ui\/(Button|Icon|Disclosure|AiRunPanel|AiMark|Skeleton|RowList)$/,
+  /^src\/ui\/(Button|Icon|Disclosure|AiRunPanel|AiMark|Skeleton|RowList|chat\/keyboard)$/,
   /^src\/features\/(system\/Chrome|learn\/ui|tutor\/clinicSave|repair\/store|today\/(store|state)|apply\/ComboSentence|drills\/session)$/,
   /^src\/ai\/(useAsk|scope|tutorBudget)$/,
   /^src\/platform\/(capabilities|storage|input|diagnostics)$/,

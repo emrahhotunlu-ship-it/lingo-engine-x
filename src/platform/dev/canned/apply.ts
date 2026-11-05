@@ -71,7 +71,8 @@ export function applyReplyReply(input: string): string {
     used: c.used,
     tone: { fit: 'fits', why: c.de ? 'Der Ton passt zum Empfänger.' : 'The tone suits the reader.' },
     good: c.good,
-    upgraded: `${c.fixed}\n\nBest regards`,
+    // Gruß nur anhängen, wenn der Text noch keinen hat (sonst stünde „Best regards“ doppelt da).
+    upgraded: /\b(best|kind) regards\b/i.test(c.fixed) ? c.fixed : `${c.fixed}\n\nBest regards`,
     summary: c.de ? 'Klar gegliedert; achte als Nächstes auf feste Verbindungen.' : 'Clearly structured; next, watch fixed word combinations.',
     errorCount: c.errors,
   });
@@ -99,7 +100,7 @@ export function applySummaryReply(input: string): string {
 export function applyKeypointsReply(input: string): string {
   const title = (/^Article: (.*)$/m.exec(input)?.[1] ?? 'the topic').trim();
   return JSON.stringify({
-    points: [`The article reports on ${title}.`, 'It explains the main reason for the change.', 'It describes what is expected to happen next.'],
+    points: [`It presents the main news: ${title.replace(/[.!?]+$/, '')}.`, 'It explains the main reason for the change.', 'It describes what is expected to happen next.'],
   });
 }
 

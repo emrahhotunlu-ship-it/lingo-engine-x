@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { AiMark, Button, Disclosure, Icon, retireRepairs, useT, type MessageKey } from '../sharedUi';
+import { useId, useState, type ReactNode, type Ref } from 'react';
+import { AiMark, Button, Icon, retireRepairs, useT, type MessageKey } from '../sharedUi';
 import { errorEdits, RULE_ID } from '../shared';
 import type { Edit, PointCheck } from '../shared';
 import { selfFixOk, errorsOf, praiseOf, repairsOf, wordUses, type ApplyRun, type WordUse } from '../domain/result';
@@ -39,6 +39,8 @@ type Props = {
   tpl: string;
   onRevise: () => void;
   onDone: () => void;
+  /** Überschrift (nur für Screenreader) – nach dem Prüfen springt der Fokus hierher, ohne die Tastatur zu öffnen. */
+  headRef?: Ref<HTMLHeadingElement>;
 };
 
 function Mark({ ok, partly }: { ok: boolean; partly?: boolean }) {
@@ -64,7 +66,7 @@ const ruleState = (rule: Rule | null, run: ApplyRun): WordUse['state'] | null =>
   return hit ? (hit.ok ? 'ok' : 'bad') : 'none';
 };
 
-export function ApplyResult({ run, save, targets, pointLabels, goal, self, checksLeft, tpl, onRevise, onDone }: Props) {
+export function ApplyResult({ run, save, targets, pointLabels, goal, self, checksLeft, tpl, onRevise, onDone, headRef }: Props) {
   const { t, lang } = useT();
   const [reported, setReported] = useState(false);
   const f = run.feedback;
@@ -93,7 +95,13 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
               </span>
               {p.quote && (
                 <span className="lx-ax-hint text-muted [overflow-wrap:anywhere]" lang="en">
-                  „{p.quote}“
+                  {t('axQuote', { s: p.quote })}
+                </span>
+              )}
+              {f.doubted?.includes(p.i) && (
+                <span className="lx-ax-hint" lang={lang} data-testid={`ax-point-doubt-${p.i}`}>
+                  <span className="text-muted">{t('axWhyLabel')}: </span>
+                  {t('axCovDoubt')}
                 </span>
               )}
               {p.covered !== 'yes' && p.why && (
@@ -117,7 +125,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
           <span>{f.faithful.ok ? t('axFaithOk') : t('axFaithBad')}</span>
           {!f.faithful.ok && f.faithful.quote && (
             <span className="lx-ax-hint [overflow-wrap:anywhere]" lang="en">
-              „{f.faithful.quote}“
+              {t('axQuote', { s: f.faithful.quote })}
             </span>
           )}
           {f.faithful.why && (
@@ -226,7 +234,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
       <h3 className="lx-ax-task m-0">{t('axSits')}</h3>
       {praise.by !== 'tone' && (
         <p className="lx-ax-text m-0 [overflow-wrap:anywhere]" lang="en">
-          „{praise.quote}“
+          {t('axQuote', { s: praise.quote })}
         </p>
       )}
       <p className="lx-ax-hint m-0 text-muted" lang={lang}>
@@ -253,7 +261,10 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
     run.kind === 'summary' ? [points, faithful, own, length, spots] : run.kind === 'reply' ? [points, tone, length, spots] : [first, length, spots];
 
   return (
-    <div className="flex flex-col gap-6" data-testid="ax-result" data-kind={run.kind} data-errors={errors} data-check={run.check}>
+    <div className="flex scroll-mt-28 flex-col gap-6" data-testid="ax-result" data-kind={run.kind} data-errors={errors} data-check={run.check}>
+      <h2 ref={headRef} tabIndex={-1} className="sr-only" data-testid="ax-result-head">
+        {t('axResultTitle')}
+      </h2>
       {order.map((node, k) => (node ? <div key={k}>{node}</div> : null))}
       {sits}
       {(uses.length > 0 || rs) && (
@@ -278,23 +289,24 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
           </ul>
         </Block>
       )}
-      <Disclosure label={t('axBetter')} testId="ax-better">
+      {/* „Melden“ gehört zur Fassung von Claude: nur mit aufgeklapptem Inhalt (UX-Befund 8). */}
+      <Fold label={t('axBetter')} testId="ax-better">
         <p className="lx-ax-text m-0 whitespace-pre-wrap" lang="en" data-testid="ax-better-text">
           {f.upgraded}
         </p>
-      </Disclosure>
-      <AiMark
-        variant="edit"
-        tpl={tpl}
-        id={`${run.id}:${run.check}`}
-        onReport={() => {
-          if (reported) return;
-          setReported(true);
-          const wrongs = repairsOf(run).map((r) => r.wrong);
-          if (wrongs.length) void retireRepairs(wrongs, 'write');
-        }}
-        data-testid="ax-mark"
-      />
+        <AiMark
+          variant="edit"
+          tpl={tpl}
+          id={`${run.id}:${run.check}`}
+          onReport={() => {
+            if (reported) return;
+            setReported(true);
+            const wrongs = repairsOf(run).map((r) => r.wrong);
+            if (wrongs.length) void retireRepairs(wrongs, 'write');
+          }}
+          data-testid="ax-mark"
+        />
+      </Fold>
       <div className="flex flex-col gap-1" aria-live="polite">
         {save && save.repairs > 0 && !reported && (
           <p className="lx-ax-hint m-0 text-muted" data-testid="ax-repairs">
@@ -313,7 +325,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
         )}
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <Button variant="primary" onClick={onDone} data-testid="ax-done" className="min-h-[52px]">
+        <Button variant="primary" size="lg" onClick={onDone} data-testid="ax-done">
           {t('axDone')}
         </Button>
         {checksLeft > 0 && (
@@ -327,6 +339,25 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
           </span>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Aufklappbarer Abschnitt in den Rollen des Moduls (Beschriftung in Text-Größe, ≥ 44 px Tippfläche); Inhalt nur aufgeklappt im Baum. */
+export function Fold({ label, testId, children }: { label: string; testId: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  return (
+    <div className="flex flex-col gap-2" data-open={String(open)}>
+      <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen((o) => !o)} data-testid={testId} className="lx-ax-text inline-flex min-h-11 items-center gap-2 self-start rounded-lg font-semibold text-muted transition-colors hover:text-fg">
+        <Icon name={open ? 'chevronDown' : 'chevronRight'} size={18} />
+        {label}
+      </button>
+      {open && (
+        <div id={id} className="flex flex-col gap-3">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
