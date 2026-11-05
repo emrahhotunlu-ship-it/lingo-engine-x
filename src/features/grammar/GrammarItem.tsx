@@ -919,7 +919,9 @@ function LegacyGrammarItem({
   const secondary: ShellSecondary[] = [
     ...(findTask && stage === 'locate' ? [{ id: 'noError' as const, label: t('exNoError'), onClick: () => noError(), testId: 'no-error' }] : []),
     ...(canTip ? [{ id: 'hint' as const, label: t('exHint'), onClick: () => moreTip(), testId: 'hint' }] : []),
-    { id: 'dontKnow' as const, label: t('exDontKnow'), onClick: () => dontKnow(), testId: 'dont-know' },
+    // Emrah 05.11.2026 („Aufgabe richtig – warum ‚Lösung gezeigt‘?“): Ist eine Option gewählt, gibt es kein „Weiß ich nicht“ mehr direkt über
+    // „Prüfen“ (am Handy liegt es genau dort, ein Fehltipp machte die richtige Wahl zu „Lösung gezeigt“). Wählt man nichts, bleibt es.
+    ...(choiceType && chosen !== null ? [] : [{ id: 'dontKnow' as const, label: t('exDontKnow'), onClick: () => dontKnow(), testId: 'dont-know' }]),
   ];
   function moreTip(): void {
     setTip((v) => Math.min(3, v + 1) as 1 | 2 | 3);
