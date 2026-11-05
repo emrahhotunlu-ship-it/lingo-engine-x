@@ -45,7 +45,7 @@ const ID = 'combo-check';
 const VERSION = 3;
 export const COMBO_SENTENCE_MAX = 300;
 
-export const COMBO_CHECK_EXAMPLE = '{"ruleOk":false,"correct":false,"fixed":"We have been working on the deadline since March.","why":"…"}';
+export const COMBO_CHECK_EXAMPLE = '{"ruleOk":false,"correct":false,"fixed":"We have been working on the proposal since March.","why":"…"}';
 
 export const comboCheck: PromptTemplate<ComboCheckVars, ComboCheckOut> = {
   id: ID,
@@ -86,10 +86,10 @@ export const comboCheck: PromptTemplate<ComboCheckVars, ComboCheckOut> = {
 
 /** Past Perfect braucht ein späteres Ereignis oder einen Zeitpunkt im selben Satz. */
 const PAST_PERFECT = /\bhad(?:\s+(?:not|never|already|just|also|always|only|recently))?\s+(?:been|done|gone|made|had|got|gotten|sent|lost|spent|built|bought|brought|thought|told|sold|left|met|paid|found|kept|held|run|begun|come|become|seen|known|taken|given|written|chosen|heard|felt|won|set|put|cut|[a-z]+ed|[a-z]+en)\b/i;
-const PAST_ANCHOR = /\b(by the time|by the end of|by that time|before|after|when|until|by then|already|earlier|previously|because|for (years|months|weeks)|for \d+)\b/i;
+const PAST_ANCHOR = /\b(by the time|by the end of|by that time|before|after|when|until|by then|already|earlier|previously|because|prior to|once|by (january|february|march|april|may|june|july|august|september|october|november|december|\d{4})|for (years|months|weeks)|for \d+)\b/i;
 /** Present Perfect Continuous braucht for/since/how long/lately/recently/all day … */
 const PPC = /\b(?:have|has|'ve|'s)(?:\s+(?:not|never|just|also|always))?\s+been\s+[a-z]+ing\b/i;
-const PPC_ANCHOR = /\b(for|since|how long|lately|recently|all (day|week|month))\b/i;
+const PPC_ANCHOR = /\b(for|since|how long|lately|recently|these days|over the (past|last)|all (day|week|month|morning|afternoon|year)|this (morning|week|month|quarter|year))\b/i;
 
 /** Fehlt der Korrektur der Zusammenhang, den die Regel braucht? Dann die Meldung (englisch, geht beim einen Neuversuch an Claude). */
 export function comboContextProblem(topicId: string | undefined, fixed: string): string | null {
@@ -110,7 +110,8 @@ function schemaFor(v: ComboCheckVars, lenient: boolean): z.ZodType<ComboCheckOut
         why: clipped(1, 400),
       })
       .superRefine(langOf(['why'], v.uiLang)),
-    { needs: (o) => !o.correct, lenient },
+    // english-teacher 05.11.2026: auch „Satz richtig, Regel vermieden“ braucht eine Korrektur, die die Regel zeigt.
+    { needs: (o) => !o.correct || !o.ruleOk, lenient },
   ));
 }
 

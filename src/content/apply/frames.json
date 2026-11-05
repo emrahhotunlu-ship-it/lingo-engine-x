@@ -14,7 +14,7 @@
     "pres-perf-cont": [
       { "de": "Der Kunde fragt, warum die Einführung länger dauert als geplant.", "en": "The client asks why the rollout is taking longer than planned.", "starter": "Since the kickoff in March, our team has been …" },
       { "de": "Du erklärst deiner Chefin, warum der Vertrag noch nicht unterschrieben ist.", "en": "You explain to your manager why the contract is not signed yet.", "starter": "For the past three weeks, their legal team has been …" },
-      { "de": "Ein Kunde wundert sich, warum du so schnell antwortest.", "en": "A client is surprised that you reply so quickly.", "starter": "I have been …" }
+      { "de": "Ein Kunde fragt, warum du in letzter Zeit so schwer zu erreichen bist.", "en": "A client asks why you are so hard to reach these days.", "starter": "Sorry about that. Lately, I've been …" }
     ],
     "past-perfect": [
       { "de": "Du erklärst einem Interessenten, wie es bei einem Kunden vor der Umstellung auf euer System aussah.", "en": "You explain to a prospect what things looked like at a client before they moved to your system.", "starter": "By the time we migrated their data, …" },
@@ -32,12 +32,12 @@
     ],
     "used-to": [
       { "de": "Du erzählst einem Interessenten, wie ein Kunde früher mit Papierakten gearbeitet hat.", "en": "You tell a prospect how a client used to work with paper files.", "starter": "Before they switched to us, the client used to …" },
-      { "de": "Der neue Kunde tut sich mit der Cloud noch schwer. Du beruhigst deine Kollegin.", "en": "The new client still finds the cloud hard. You reassure your colleague.", "starter": "Their team isn't used to …" },
-      { "de": "Du machst einem Kunden Mut, dass sich sein Team an das neue System gewöhnt.", "en": "You encourage a client that his team will adjust to the new system.", "starter": "Once your team gets used to …" }
+      { "de": "Der neue Kunde tut sich mit der Cloud noch schwer. Du beruhigst deine Kollegin.", "en": "The new client is still struggling with the cloud. You reassure your colleague.", "starter": "Their team isn't used to …" },
+      { "de": "Du machst einem Kunden Mut, dass sich sein Team an das neue System gewöhnt.", "en": "You reassure a client that his team will adjust to the new system.", "starter": "Once your team gets used to …" }
     ],
     "conditionals": [
       { "de": "Du bietest einem Kunden einen Rabatt an, wenn er bald unterschreibt.", "en": "You offer a client a discount if he signs soon.", "starter": "If you sign by Friday, we will …" },
-      { "de": "Du überlegst mit deinem Team, was ihr mit mehr Budget anders machen würdet.", "en": "You think with your team about what you would do differently with a bigger budget.", "starter": "If we had a bigger budget, we would …" },
+      { "de": "Du überlegst mit deinem Team, was ihr mit mehr Budget anders machen würdet.", "en": "You and your team discuss what you would do differently with a bigger budget.", "starter": "If we had a bigger budget, we would …" },
       { "de": "Nach einem verlorenen Deal sprichst du mit deiner Chefin darüber, was anders gelaufen wäre.", "en": "After losing a deal, you talk to your manager about what would have gone differently.", "starter": "If we had called them earlier, …" }
     ],
     "mixed-cond": [
@@ -48,7 +48,7 @@
     "passive": [
       { "de": "Du informierst einen Kunden, was mit seinem Vertrag passiert ist, ohne zu sagen, wer es getan hat.", "en": "You tell a client what happened to his contract without saying who did it.", "starter": "Last week, your contract was …" },
       { "de": "Der Kunde fragt, was gerade mit seinen Daten während der Migration passiert.", "en": "The client asks what is happening to his data during the migration.", "starter": "Right now, your data is being …" },
-      { "de": "Ein Interessent fragt, wo die Dokumente gespeichert werden.", "en": "A prospect asks where the documents are stored.", "starter": "All your documents are …" }
+      { "de": "Ein Interessent fragt, wo seine Dokumente bei euch landen.", "en": "A prospect asks where his documents will end up.", "starter": "All your documents are …" }
     ],
     "reported": [
       { "de": "Du berichtest deiner Chefin, was der Finanzchef des Kunden im Call gesagt hat.", "en": "You tell your manager what the client's CFO said on the call.", "starter": "Their CFO told me that …" },
@@ -61,7 +61,7 @@
     ],
     "modals-deduction": [
       { "de": "Ein Interessent meldet sich seit zwei Wochen nicht. Du überlegst mit einer Kollegin, warum.", "en": "A prospect has not replied for two weeks. You and a colleague wonder why.", "starter": "They haven't replied in two weeks, so they must …" },
-      { "de": "Der Kunde behauptet, er habe das Angebot nie bekommen. Du hältst das für unmöglich.", "en": "The client says he never got the offer. You think that is impossible.", "starter": "He can't have …" },
+      { "de": "Der Kunde behauptet, er habe das Angebot nie bekommen. Du hältst das für unmöglich.", "en": "The client says he never got the proposal. You think that is impossible.", "starter": "He can't have …" },
       { "de": "Du vermutest, warum die Demo beim Kunden so langsam lief.", "en": "You guess why the demo ran so slowly at the client.", "starter": "Their network might …" }
     ],
     "gerund-inf": [
@@ -70,12 +70,12 @@
       { "de": "Du gibst deinem Team einen Tipp für die nächste Verhandlung.", "en": "You give your team a tip for the next negotiation.", "starter": "In the next round, we should avoid …" }
     ],
     "prepositions": [
-      { "de": "Der Kunde fragt, wann die Entscheidung fällt.", "en": "The client asks when the decision will be made.", "starter": "The final decision depends on …" },
-      { "de": "Du erklärst einem Kunden, wer in eurem Team was macht.", "en": "You explain to a client who does what in your team.", "starter": "Our solutions engineer is responsible for …" },
-      { "de": "Du erzählst deiner Chefin, was den Interessenten am meisten anspricht.", "en": "You tell your manager what appeals most to the prospect.", "starter": "They are very interested in …" }
+      { "de": "Deine Chefin fragt, wann der Kunde sich endlich entscheidet.", "en": "Your manager asks when the client will finally make a decision.", "starter": "Their final decision depends …" },
+      { "de": "Du erklärst einem Kunden, wer in eurem Team was macht.", "en": "You explain to a client who does what on your team.", "starter": "Our solutions engineer is responsible …" },
+      { "de": "Du erzählst deiner Chefin, was den Interessenten am meisten anspricht.", "en": "You tell your manager what appeals most to the prospect.", "starter": "They are very interested …" }
     ],
     "articles": [
-      { "de": "Du erzählst deiner Chefin, was mit dem Angebot passiert ist, das ihr gestern geschickt habt.", "en": "You tell your manager what happened to the offer you sent yesterday.", "starter": "Yesterday we sent them an offer, and the offer …" },
+      { "de": "Du erzählst deiner Chefin, was der Kunde vor der Unterschrift noch braucht.", "en": "You tell your manager what the client still needs before signing.", "starter": "Before they sign, they need …" },
       { "de": "Du erklärst einem neuen Kollegen, worauf es im Vertrieb ankommt.", "en": "You explain to a new colleague what matters in sales.", "starter": "In our business, trust …" },
       { "de": "Du beschreibst deinen neuen Ansprechpartner beim Kunden.", "en": "You describe your new contact at the client.", "starter": "Our new contact is an engineer who …" }
     ],
@@ -84,7 +84,7 @@
       { "de": "Du deutest im Call vorsichtig an, dass das jetzige System des Kunden Schwächen hat.", "en": "On a call, you gently suggest that the client's current system has weaknesses.", "starter": "It seems that your current setup …" }
     ],
     "c1-diplomacy": [
-      { "de": "Du bittest einen Kunden höflich um eine Woche mehr Zeit für das Angebot.", "en": "You politely ask a client for one more week for the offer.", "starter": "I was wondering whether …" },
+      { "de": "Du bittest einen Kunden höflich um eine Woche mehr Zeit für das Angebot.", "en": "You politely ask a client for one more week to finish the proposal.", "starter": "I was wondering whether …" },
       { "de": "Du bittest den Kunden, den Termin zu verschieben.", "en": "You ask the client to move the meeting.", "starter": "Would it be possible to …" },
       { "de": "Der Kunde will 30 Prozent Rabatt. Du lehnst höflich ab.", "en": "The client wants a 30 percent discount. You politely say no.", "starter": "That could be a bit tricky for us, because …" }
     ],
@@ -94,7 +94,7 @@
       { "de": "Du betonst in einer Mail, was ihr für den Kunden alles erreicht habt.", "en": "In an email, you stress everything you achieved for the client.", "starter": "Not only did we …" }
     ],
     "c1-discourse": [
-      { "de": "Du gibst einem Kunden recht, schränkst aber ein.", "en": "You agree with a client but add a limit.", "starter": "That said, …" },
+      { "de": "Du gibst einem Kunden recht, schränkst aber ein.", "en": "You agree with a client but add a caveat.", "starter": "You have a point. That said, …" },
       { "de": "Nach einem Abschweifen im Call kommst du auf die Frage des Kunden zurück.", "en": "After a detour on the call, you come back to the client's question.", "starter": "Coming back to your question about …" },
       { "de": "Du fasst am Ende des Calls zusammen.", "en": "You sum up at the end of the call.", "starter": "All in all, …" }
     ],
@@ -103,9 +103,9 @@
       { "de": "Du schreibst einem Kunden, was für den Zeitplan entscheidend ist.", "en": "You write to a client about what is key for the timeline.", "starter": "The implementation of …" }
     ],
     "c1-participle": [
-      { "de": "Du antwortest einem Kunden, nachdem ihr seine Anforderungen geprüft habt.", "en": "You reply to a client after reviewing his requirements.", "starter": "Having reviewed your requirements, we …" },
+      { "de": "Du antwortest einem Kunden, nachdem ihr seine Anforderungen geprüft habt.", "en": "You reply to a client after your team has reviewed his requirements.", "starter": "Having reviewed your requirements, …" },
       { "de": "Ein Interessent fragt nach dem Datenschutz.", "en": "A prospect asks about data protection.", "starter": "Stored in our data center in Frankfurt, …" },
-      { "de": "Du zeigst in der Demo, wie das Team des Kunden Zeit spart.", "en": "In the demo, you show how the client's team saves time.", "starter": "Using our new search, your team …" }
+      { "de": "Du zeigst in der Demo, wie das Team des Kunden mit der neuen Suche Zeit spart.", "en": "In the demo, you show how the client's team saves time with the new search.", "starter": "Using our new search, …" }
     ],
     "c1-precision": [
       { "de": "Der Kunde fragt, wie schnell ihr einrichten könnt.", "en": "The client asks how fast you can set things up.", "starter": "We can complete the setup within …" },
@@ -118,7 +118,7 @@
       { "de": "Du erklärst, worauf ihr vor dem Start der Migration wartet.", "en": "You explain what you are waiting for before the migration starts.", "starter": "We won't start the migration until …" }
     ],
     "cond-alt": [
-      { "de": "Du setzt einem Kunden freundlich eine Frist für das Angebot.", "en": "You give a client a friendly deadline for the offer.", "starter": "Unless we hear from you by Friday, …" },
+      { "de": "Du setzt einem Kunden freundlich eine Frist für das Angebot.", "en": "You give a client a friendly deadline to accept your proposal.", "starter": "Unless we hear from you by Friday, …" },
       { "de": "Du erklärst, unter welcher Bedingung der Zeitplan hält.", "en": "You explain under which condition the schedule will hold.", "starter": "As long as your team …" },
       { "de": "Du nennst die Bedingung für einen Rabatt.", "en": "You state the condition for a discount.", "starter": "Provided that you …" }
     ],
@@ -129,47 +129,47 @@
     ],
     "report-verbs": [
       { "de": "Du berichtest, was der Finanzchef des Kunden im Call vorgeschlagen hat.", "en": "You report what the client's CFO suggested on the call.", "starter": "Their CFO suggested …" },
-      { "de": "Du erzählst, was der Kunde nach dem Fehlstart zugegeben hat.", "en": "You tell what the client admitted after the bad start.", "starter": "The client admitted …" },
+      { "de": "Du erzählst, was der Kunde nach dem Fehlstart zugegeben hat.", "en": "You describe what the client admitted after the rocky start.", "starter": "The client admitted …" },
       { "de": "Du gibst den Rat eurer Rechtsabteilung weiter.", "en": "You pass on the advice of your legal team.", "starter": "Our legal team advised us …" }
     ],
     "questions": [
       { "de": "Du fragst den Kunden höflich nach dem Zeitplan seiner Entscheidung.", "en": "You politely ask the client about the timing of his decision.", "starter": "Could you tell me when …" },
       { "de": "Du fragst nach, wer beim Kunden den Vertrag unterschreibt.", "en": "You ask who signs the contract on the client's side.", "starter": "Who on your side …" },
-      { "de": "Du willst wissen, ob der Kunde das Angebot schon gelesen hat.", "en": "You want to know if the client has already read the offer.", "starter": "Do you know whether …" }
+      { "de": "Du willst wissen, ob der Kunde das Angebot schon gelesen hat.", "en": "You want to know if the client has already read the proposal.", "starter": "Do you know whether …" }
     ],
     "modals-advice": [
       { "de": "Du gibst einem neuen Kollegen einen Rat vor seinem ersten großen Termin.", "en": "You give a new colleague advice before his first big meeting.", "starter": "Before the meeting, you should …" },
-      { "de": "Du warnst dein Team: Wenn das Angebot nicht heute rausgeht, ist der Deal weg.", "en": "You warn your team: if the offer does not go out today, the deal is gone.", "starter": "We had better …" },
+      { "de": "Du warnst dein Team: Wenn das Angebot nicht heute rausgeht, ist der Deal weg.", "en": "You warn your team: if the proposal does not go out today, the deal is gone.", "starter": "We had better …" },
       { "de": "Du beruhigst einen Kunden, dass er nicht alles selbst machen muss.", "en": "You reassure a client that he does not have to do everything himself.", "starter": "You don't have to …" }
     ],
     "verb-patterns": [
       { "de": "Du erinnerst den Kunden daran, vor dem Termin etwas zu erledigen.", "en": "You remind the client to do something before the meeting.", "starter": "Please remember …" },
       { "de": "Du denkst mit dem Kunden an euer erstes Gespräch vor einem Jahr zurück.", "en": "You and the client look back at your first conversation a year ago.", "starter": "I still remember …" },
-      { "de": "Du erzählst, was ihr ausprobiert habt, um das Problem zu lösen.", "en": "You tell what you tried in order to solve the problem.", "starter": "To fix the issue, we tried …" }
+      { "de": "Du erzählst, was ihr ausprobiert habt, um das Problem zu lösen.", "en": "You explain what you tried in order to solve the problem.", "starter": "To fix the issue, we tried …" }
     ],
     "mandative": [
       { "de": "Du schreibst dem Kunden, was vor dem Go-live unbedingt passieren muss.", "en": "You write to the client about what absolutely has to happen before go-live.", "starter": "It is essential that your IT team …" },
       { "de": "Du berichtest, worauf eure Rechtsabteilung besteht.", "en": "You report what your legal team insists on.", "starter": "Our legal team insists that the client …" },
-      { "de": "Du empfiehlst, dass eine Kollegin den Kunden übernimmt.", "en": "You recommend that a colleague take over the client.", "starter": "I recommend that she …" }
+      { "de": "Du findest, dass eine Kollegin besser zum Kunden passt, und sagst das deiner Chefin.", "en": "You think a colleague is a better fit for the client and tell your manager so.", "starter": "I recommend that she …" }
     ],
     "countable": [
       { "de": "Du bedankst dich für die Unterlagen, die der Kunde geschickt hat.", "en": "You thank the client for the material he sent.", "starter": "Thanks for all the information you sent; it …" },
-      { "de": "Du bittest eine erfahrene Kollegin um einen Rat.", "en": "You ask an experienced colleague for advice.", "starter": "Could you give me some advice on …" },
+      { "de": "Du bittest eine erfahrene Kollegin um einen Rat für die Preisverhandlung.", "en": "You ask an experienced colleague what she would do in the pricing negotiation.", "starter": "Before the pricing call, could you give me …" },
       { "de": "Du antwortest auf die Rückmeldung des Kunden zur Demo.", "en": "You reply to the client's feedback on the demo.", "starter": "Thank you for your feedback on the demo; it …" }
     ],
     "prep-noun": [
-      { "de": "Du erklärst, warum der Kunde wechseln will.", "en": "You explain why the client wants to switch.", "starter": "The main reason for …" },
-      { "de": "Du berichtest von einer Entwicklung bei euren Zahlen.", "en": "You report on a trend in your numbers.", "starter": "This quarter, we have seen an increase in …" },
-      { "de": "Du erzählst deiner Chefin, was der Interessent wirklich will.", "en": "You tell your manager what the prospect really wants.", "starter": "Their interest in …" }
+      { "de": "Du erklärst, warum der Kunde wechseln will.", "en": "You explain why the client wants to switch.", "starter": "The main reason …" },
+      { "de": "Du berichtest, dass die Zahl der Testkunden in diesem Quartal gestiegen ist.", "en": "You report that the number of trial customers went up this quarter.", "starter": "This quarter, we have seen an increase …" },
+      { "de": "Du erzählst deiner Chefin, was der Interessent wirklich will.", "en": "You tell your manager what the prospect really wants.", "starter": "They have shown real interest …" }
     ],
     "prep-time": [
-      { "de": "Du nennst dem Kunden eine Frist für den unterschriebenen Vertrag.", "en": "You give the client a deadline for the signed contract.", "starter": "We need the signed contract by …" },
-      { "de": "Du erklärst, wie lange die Testphase läuft.", "en": "You explain how long the trial runs.", "starter": "The trial runs until …" },
-      { "de": "Du erzählst, seit wann ihr mit dem Kunden zusammenarbeitet.", "en": "You say how long you have worked with the client.", "starter": "We have worked with them since …" }
+      { "de": "Du nennst dem Kunden eine Frist für den unterschriebenen Vertrag: spätestens Freitag.", "en": "You give the client a deadline for the signed contract: Friday at the latest.", "starter": "We need the signed contract …" },
+      { "de": "Du erklärst, wie lange die Testphase läuft: bis Ende Juni.", "en": "You explain how long the trial lasts: it ends on June 30.", "starter": "The trial runs …" },
+      { "de": "Du erzählst, seit wann ihr mit dem Kunden zusammenarbeitet: seit 2021.", "en": "You say how long you have worked with the client: the partnership started in 2021.", "starter": "We have worked with them …" }
     ],
     "compound-mod": [
-      { "de": "Du berichtest nach einem langen Call, was herauskam.", "en": "After a long call, you report what came out of it.", "starter": "After a two-hour …" },
-      { "de": "Du beschreibst dem Kunden euer Angebot für den Einstieg.", "en": "You describe your starter offer to the client.", "starter": "We are offering a three-month …" }
+      { "de": "Du berichtest nach einem Call, der zwei Stunden gedauert hat, was herauskam.", "en": "After a call that lasted two hours, you report what came out of it.", "starter": "After a …" },
+      { "de": "Du beschreibst dem Kunden euer Einstiegsangebot: drei Monate Testphase zum halben Preis.", "en": "You describe your introductory deal to the client: a trial of three months at half price.", "starter": "We are offering you a …" }
     ],
     "phrasal-syntax": [
       { "de": "Du bedankst dich für den Vertragsentwurf und sagst, dass du ihn dir bis morgen ansiehst.", "en": "You thank the client for the draft contract and say you will look at it by tomorrow.", "starter": "Thanks for sending the draft; I'll …" },
@@ -201,13 +201,13 @@
       { "de": "Du berichtest begeistert von einer Demo.", "en": "You report on a demo with enthusiasm.", "starter": "The demo was such a success that …" }
     ],
     "ellipsis": [
-      { "de": "Du vergleichst das alte und das neue Dashboard für einen Kunden.", "en": "You compare the old and the new dashboard for a client.", "starter": "The old dashboard was slow, but the new one …" },
-      { "de": "Du vergleichst eure Preise mit denen der Konkurrenz.", "en": "You compare your prices with the competition's.", "starter": "Our prices are lower than those of …" }
+      { "de": "Du vergleichst das alte und das neue Dashboard für einen Kunden.", "en": "You compare the old and the new dashboard for a client.", "starter": "The old dashboard was slow, but …" },
+      { "de": "Du vergleichst eure Preise mit denen der Konkurrenz.", "en": "You compare your prices with the competition's.", "starter": "Our prices are lower than …" }
     ],
     "noun-phrase": [
-      { "de": "Du berichtest dem Kunden vom Ergebnis eines Tests.", "en": "You tell the client the result of a test.", "starter": "The system we tested last month …" },
-      { "de": "Du erklärst, was mit den alten Dateien des Kunden passiert.", "en": "You explain what happens to the client's old files.", "starter": "The files stored in your old archive …" },
-      { "de": "Du erzählst stolz von einem Kunden, der früh dabei war.", "en": "You proudly talk about a client who joined early.", "starter": "They were the first company to …" }
+      { "de": "Du berichtest dem Kunden vom Ergebnis des Tests, den ihr letzten Monat gemacht habt.", "en": "You tell the client how last month's test went.", "starter": "The test …" },
+      { "de": "Du erklärst, was mit den Dateien passiert, die noch im alten Archiv des Kunden liegen.", "en": "You explain what will happen to the client's old archive files.", "starter": "All the files …" },
+      { "de": "Du erzählst stolz, dass dieser Kunde als erste Firma in seiner Branche umgestiegen ist.", "en": "You proudly say that this client switched before anyone else in its industry.", "starter": "They were the first …" }
     ],
     "modals-prob": [
       { "de": "Du schätzt für deine Chefin ein, wie der Kunde entscheiden wird.", "en": "You tell your manager how you think the client will decide.", "starter": "The client is likely to …" },
@@ -220,13 +220,13 @@
     ],
     "future-past": [
       { "de": "Du erklärst, warum ein Plan nicht geklappt hat.", "en": "You explain why a plan did not work out.", "starter": "We were going to …, but …" },
-      { "de": "Du erzählst, was gerade passieren sollte, als der Kunde anrief.", "en": "You tell what was just about to happen when the client called.", "starter": "I was about to …" },
+      { "de": "Du erzählst, was gerade passieren sollte, als der Kunde anrief.", "en": "You say what you were just about to do when the client called.", "starter": "I was about to …" },
       { "de": "Du blickst auf den Projektstart zurück.", "en": "You look back at the start of the project.", "starter": "At the kickoff, nobody knew that the project would …" }
     ],
     "quant-neg": [
       { "de": "Du beruhigst einen Interessenten wegen eines Risikos.", "en": "You reassure a prospect about a risk.", "starter": "None of our customers …" },
-      { "de": "Du erklärst, was sich seit dem Umstieg geändert hat.", "en": "You explain what has changed since the switch.", "starter": "Since the switch, your team no longer …" },
-      { "de": "Du erklärst, warum ein Problem kaum vorkommt.", "en": "You explain why a problem hardly ever happens.", "starter": "We hardly ever …" }
+      { "de": "Du erklärst, was das Team des Kunden seit dem Umstieg nicht mehr machen muss.", "en": "You explain what the client's team stopped doing after the switch.", "starter": "Since the switch, your team …" },
+      { "de": "Du erklärst einem Interessenten, dass Ausfälle bei euch fast nie vorkommen.", "en": "You tell a prospect that outages are very rare on your platform.", "starter": "On our platform, outages …" }
     ]
   }
 }
