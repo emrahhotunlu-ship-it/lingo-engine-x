@@ -20,7 +20,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 
 - **Schnell-Modus (Emrah 02.11.2026):** beim Bauen nur schnelle Prüfungen; voller Klicktest/`verify` genau einmal am Ende vor dem Test-Link; Prüfer einmal je Großpaket (siehe `entscheidungen.md`).
 
-## 3. Roadmap (Großpakete, Stand 04.11.2026 abends)
+## 3. Roadmap (Großpakete, Stand 05.11.2026)
 **Emrah 02.11.:** erst die fertige neue App haben und damit lernen → Feedback → dann gemeinsam überlegen, was wie neu entwickelt wird (B/C erst danach). Die Gesamtprüfung aller Bildschirme (Note 5/10) ist bis dahin angehalten; Funktionsliste „fehlt/versteckt“ liegt bereit.
 
 | # | Großpaket | Inhalt | Stand |
@@ -32,7 +32,8 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 | ✓ | **Kern + Glas** (03./04.11.) | Übungskarte/Heute nach Vorschau 9pdpfT8E, dann Glas/Carbon wie Küchenstudio (Schrift Plus Jakarta Sans, schwebende Schiene/Kopfleiste, Glasblätter) auf allen Reitern und Blättern | in `claude/umbau-fokus`; Test-Link v85 `1793779276-023a` (04.11.), dazu 1B (Hinweis neue Einschätzung) und 2A (kurzer Tag) auf **Test-Link v86 `1793790983-4895`**; nicht live (live = v86-Stand, Artefakt-Version 92) |
 | ✓ | **Design komplett** (B) | D6a, D6b, E1–E7, F2–F5, Glas überall, B2, B10, B-Rest (Raster großer Monitor, leere Kontextspalte, Wörter-Kopf, Grammatik „Nachschlagen“ als eine Seite, EN-Begriffe) | **live** `JLL8…` v93/v94/v95 (04.11.) |
 | ✓ | **Schneller Start** (C) | 1b: Inhalte als `raw-*.txt` nachgeladen, Englisch bei Bedarf, Hinweis „Neu laden“ | **live** `JLL8…` v95 `1793821540-69ed` (04.11., Rückweg v94) |
-| F | **Fokus 2.0** (Emrah 04.11. spät: nur Wörter, Grammatik, Anwenden, Fehler korrigieren; Rest raus; Sprechen/Hören macht er bei Preply) | F0 Ausblenden, F1 K-Rest, F2 Belege, F3 Anwenden-Modul (Satz, Mail antworten, Mail schreiben, Artikel zusammenfassen), F4 Fehlersätze im Tagesplan | **im Bau**, Plan `docs/umbau/fokus2/plan.md` (ersetzt Module P/L) |
+| F | **Fokus 2.0** (Emrah 04.11. spät: nur Wörter, Grammatik, Anwenden, Fehler korrigieren; Rest raus; Sprechen/Hören macht er bei Preply) | F0 Ausblenden, F1 K-Rest, F2 Belege, F3 Anwenden-Modul (Satz, Mail antworten, Mail schreiben, Artikel zusammenfassen), F4 Fehlersätze im Tagesplan | **live `JLL8…` v96 `1793872751-0932` (05.11., Rückweg v95)**; dazu Enter klappt Tastatur ein, Schritt 3 „B“ (Zeit bleibt, Aufgabe kürzer). Kurs-Routine pausiert |
+| N | **Nach Fokus 2.0** | offene Live-Kommentare K3–K14 nachprüfen und beheben (ohne Rückfrage, kommen mit dem nächsten Test-Link); danach nächstes Großpaket mit Emrah planen (Vorschlag im Chat) | läuft |
 Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Großpakete“ und §4.
 
 ## 4. Ablauf je Großpaket (Hauptchat)
