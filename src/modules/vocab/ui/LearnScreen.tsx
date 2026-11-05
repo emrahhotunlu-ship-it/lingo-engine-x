@@ -12,6 +12,7 @@ import { LearnCard } from './LearnCard';
 import { sitKey, UseCard } from './UseCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
 import { readMistakes } from './mistakes';
+import { fillKnow } from './know';
 
 // Wörter-Modul V3 Schritt 2b-2: Bildschirm der neuen Lernrunde (Route `vlearn`, nur bei `vcfg.mod = 1`). Liest die Live-Daten einmal beim
 // Start (die Runde rechnet danach mit ihrem eigenen Bestand), bucht jede Antwort beim Weiter und beim Verlassen genau einmal.
@@ -37,6 +38,9 @@ async function readOr(path: string): Promise<Record<string, unknown> | null> {
   const d = await readDoc(db, path);
   return d.status === 'valid' ? d.doc : null;
 }
+
+/** Wartezeit bis zum Hintergrundlauf (die erste Karte steht dann längst). */
+const KNOW_DELAY_MS = 4000;
 
 function createRun(ai?: VocabAi): LearnRun | null {
   const writer = getWriter();
@@ -127,6 +131,26 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
     const started = kind === 'mistakes' && !only ? readMistakes(useClock.getState().now).then(begin) : begin(only);
     started.catch((err: unknown) => logError('vocab:learn-start', err));
   }, [run, kind, pathKey]);
+
+  // Großpaket W2 „Wörter-Wissen“: wenige Sekunden nach dem Start im Hintergrund Wortpartner und Beispielsätze ergänzen (zuerst die Wörter des
+  // heutigen Plans; Hintergrund-Budget der Vorlage, still). Die Runde selbst wartet nie darauf; Ergebnisse zeigen sich ab der nächsten Runde.
+  useEffect(() => {
+    if (!run || !ai?.bg) return;
+    const timer = window.setTimeout(() => {
+      const writer = getWriter();
+      if (!writer) return;
+      const live = liveLexDocs();
+      readOr(VMOD_DAY_PATH)
+        .then((day) => {
+          const plan = day && Array.isArray(day.plan) ? (day.plan as unknown[]).map((e) => (Array.isArray(e) && typeof e[0] === 'string' ? e[0] : '')).filter(Boolean) : [];
+          const ctx = typeof live.profile?.ctx === 'string' ? live.profile.ctx : '';
+          return fillKnow({ ai, writer, docs: new Map(live.docs), planPaths: plan, ctx, nowMs: Date.now() });
+        })
+        .catch((err: unknown) => logError('vocab:know', err));
+    }, KNOW_DELAY_MS);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- einmal je Runde
+  }, [run]);
 
   // Beim Verlassen (Bildschirmwechsel, Tab im Hintergrund, Seite zu): offene Antwort sofort buchen.
   useEffect(() => {

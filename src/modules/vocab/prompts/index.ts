@@ -1,4 +1,5 @@
 import type { PromptTemplate } from '../shared';
+import { wordKnow } from './know';
 import { meaning } from './meaning';
 import { ownSentence } from './ownSentence';
 import { transfer } from './transfer';
@@ -9,4 +10,5 @@ export const VOCAB_TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   transfer,
   ownSentence,
   meaning,
+  wordKnow,
 ];

@@ -82,7 +82,35 @@ export function meaningReply(input: string): string {
   });
 }
 
+/**
+ * Feste Antwort für `word-know@1` (Großpaket W2): je Karte 3 Wortpartner und 2 Sätze, das Wort genau einmal. Marker im Wort: `zzbad` → die
+ * Wortpartner enden mit einer Präposition und der erste Satz enthält das Wort nicht (beides fällt bei der Prüfung weg).
+ */
+export function wordKnowReply(input: string): string {
+  const items = [...input.matchAll(/^- id=([^|]+?) \| word=([^|]+?) \|.*$/gm)].map((m) => {
+    const id = (m[1] ?? '').trim();
+    const w = (m[2] ?? '').trim().replace(/^to\s+/i, '');
+    const bad = /zzbad/i.test(w);
+    return {
+      id,
+      col: bad
+        ? [{ p: `${w} with`, de: 'mit', ex: `We [${w} with] them.` }]
+        : [
+            { p: `clear ${w}`, de: 'klar', ex: `The client asked for a [clear ${w}] before the contract review.` },
+            { p: `${w} in detail`, de: 'ausführlich', ex: `Our team lead explained the [${w} in detail] during the kickoff call.` },
+            { p: `key ${w}`, de: 'zentral', ex: `The [key ${w}] for the pilot is a stable cloud archive.` },
+          ],
+      sents: [
+        { en: bad ? 'This sentence has none of the words we need.' : `In the client call, Maria mentioned the ${w} twice before the demo.`, de: 'Im Kundentermin erwähnte Maria es zweimal vor der Vorführung.', sit: 'client call' },
+        { en: `Our IT lead wants to discuss the ${w} with the vendor next week.`, de: 'Unser IT-Leiter möchte es nächste Woche mit dem Anbieter besprechen.', sit: 'vendor meeting' },
+      ],
+    };
+  });
+  return JSON.stringify({ items });
+}
+
 export function registerVocabReplies(): void {
+  registerCannedReply('word-know', wordKnowReply);
   registerCannedReply('vocab-transfer', transferReply);
   registerCannedReply('vocab-own-sentence', ownSentenceReply);
   registerCannedReply('vocab-meaning', meaningReply);

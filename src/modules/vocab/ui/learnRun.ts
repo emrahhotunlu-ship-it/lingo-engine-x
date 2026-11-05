@@ -309,9 +309,11 @@ export class LearnRun {
   moreExamples(card: CardModel, max = 2): { en: string; de: string | null; mark: readonly [number, number] | null }[] {
     const doc = this.docs.get(card.path);
     const lex = this.cat?.get(card.path)?.lex;
-    if (!doc || !lex || !card.moreSentences) return [];
+    // Nicht an `card.moreSentences` (zählt nur Abfragesätze) binden: zum Lesen zählen auch Claude-Sätze der Satzbank (Großpaket W).
+    if (!doc || !lex) return [];
     const shown = card.sentence?.sent.key ?? null;
-    const { ok } = usableSentences(sentencesOf(doc, this.env.now(), this.sbGate), card.head, lex.k === 'pv');
+    // Nur zum Lesen: auch Claude-Sätze in der Satzbank-Quarantäne (Emrahs Wahl „A“, 05.11.2026); abgefragt werden sie erst nach der Freigabe.
+    const { ok } = usableSentences(sentencesOf(doc, this.env.now(), this.sbGate, { read: true }), card.head, lex.k === 'pv');
     return ok
       .filter((s) => s.sent.key !== shown)
       .slice(0, max)

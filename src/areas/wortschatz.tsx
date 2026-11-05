@@ -160,6 +160,8 @@ function onVlearnFinish(): void {
 const vocabAi: VocabAi = {
   ready: () => selectAiAvailable(useCapabilities.getState()),
   ask: async (template, vars, signal) => (await askJson({ template, vars, signal, priority: 'user' })).data,
+  // Großpaket W2: Wortpartner und Sätze im Hintergrund (Tagesdeckel der Vorlage, still).
+  bg: async (template, vars, signal) => (await askJson({ template, vars, signal, priority: 'background' })).data,
   fail: (err) => {
     if (!isAiFailure(err)) return { kind: 'retry', key: null };
     if (err.kind === 'cancelled') return { kind: 'cancelled', key: null };

@@ -62,7 +62,7 @@ export function sbGateOn(raw: unknown): boolean {
  * Alle Sätze eines Wort-Dokuments in fester Reihenfolge (= Schlüsselliste für `pickSentence`): Ankersatz `ex` → Claude-Sätze `wx` ohne `bad`
  * → Satzbank `sb` (aus Lesen/C1 sofort; von Claude nur bei wirksamer Freigabe und 4 Wochen nach Erzeugung). Doppelte Sätze einmal.
  */
-export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate: unknown): Sent[] {
+export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate: unknown, o: { read?: boolean } = {}): Sent[] {
   const exDe = isObj(doc.exDe) ? doc.exDe : {};
   const deOf = (en: string, own: unknown): string | null => str(own) || str(exDe[exDeKey(en)]) || null;
   const out: Sent[] = [];
@@ -92,7 +92,9 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
     for (const x of doc.sb) {
       if (!isObj(x) || x.bad === 1 || !str(x.en)) continue;
       const src = x.src;
-      const ok = src === 'read' || src === 'c1' || (src === 'ai' && gate && num(x.t) > 0 && nowMs - num(x.t) >= SB_QUARANTINE_DAYS * DAY_MS);
+      // Emrahs Wahl „A“ (05.11.2026, Großpaket W): Claude-Sätze sind sofort zum LESEN da (`o.read`: Wortkarte, Wortseite), als Abfragesatz erst
+      // nach Freigabe und 4 Wochen (Satzbank-Regel).
+      const ok = src === 'read' || src === 'c1' || (src === 'ai' && (o.read === true || (gate && num(x.t) > 0 && nowMs - num(x.t) >= SB_QUARANTINE_DAYS * DAY_MS)));
       if (ok) push(str(x.en), x.de, 'sb');
     }
   return out;
