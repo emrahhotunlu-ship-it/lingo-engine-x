@@ -2,8 +2,8 @@
 
 export const wortKernDe = {
   // Beschriftung der Abfrage (Kopf der Übung)
-  pxWkRecallDay0a: '1. Mal selbst · mit Anfangsbuchstaben',
-  pxWkRecallDay0b: '2. Mal selbst · frei aus dem Kopf',
+  pxWkRecallDay0a: '1. Mal selbst tippen · Anfangsbuchstabe steht da',
+  pxWkRecallDay0b: '2. Mal selbst tippen · frei aus dem Kopf',
   pxWkRecallYesterday: 'Gestern-Check',
   pxWkRecallFirst: 'Zum ersten Mal seit dem Lernen',
   // Messwerte dahinter: Wie gut bleiben Wörter hängen?

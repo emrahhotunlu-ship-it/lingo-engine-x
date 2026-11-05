@@ -48,8 +48,8 @@ export const vmDe = {
   vmWhyOrder: 'Bei Phrasal Verbs steht ein Pronomen (it, them) in der Mitte: set it up, nie set up it.',
   vmWhyWrong: '{given} passt nicht in diesen Satz. Hier gehört {answer} ({pos}) hin.',
   vmWhyWrongNoPos: '{given} passt nicht in diesen Satz. Hier gehört {answer} hin.',
-  vmWhyDunno: 'Kein Problem – jetzt lernst du es: {answer} ({pos}). Schreib es einmal richtig, dann bleibt es hängen.',
-  vmWhyDunnoNoPos: 'Kein Problem – jetzt lernst du es: {answer}. Schreib es einmal richtig, dann bleibt es hängen.',
+  vmWhyDunno: 'Kein Problem – hier ist es: {answer} ({pos}). Schreib es jetzt einmal richtig, es kommt bald wieder.',
+  vmWhyDunnoNoPos: 'Kein Problem – hier ist es: {answer}. Schreib es jetzt einmal richtig, es kommt bald wieder.',
 
   // Wortart
   vmPos_noun: 'Nomen',

@@ -1,10 +1,10 @@
 // Word learning 2, package "Core" (docs/umbau/wort-fest-plan.md, 10/21/2026): recall labels and the measures under "Numbers behind it". Prefix `px`, English (US).
 
 export const wortKernEn = {
-  pxWkRecallDay0a: '1st time on your own · with first letter',
-  pxWkRecallDay0b: '2nd time on your own · from memory',
-  pxWkRecallYesterday: 'Yesterday check',
-  pxWkRecallFirst: 'First time since learning',
+  pxWkRecallDay0a: '1st try on your own · first letter shown',
+  pxWkRecallDay0b: '2nd try on your own · from memory',
+  pxWkRecallYesterday: 'Yesterday’s words: check',
+  pxWkRecallFirst: 'First review since you learned it',
   pxWkTitle: 'How well words stick',
   pxWkLead: 'Only what you typed from memory counts here. Choices and flipping do not count, because recognizing is easier than recalling.',
   pxWkNextDayLabel: 'Recalled from memory 1–2 days after learning (new words)',
