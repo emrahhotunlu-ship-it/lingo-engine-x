@@ -179,7 +179,7 @@ export const vmDe = {
   vmRsTrack_use: 'Benutzen',
   vmRsTrack_know: 'Verstehen',
   vmUnfairDone: 'Danke, gemeldet. Diese Antwort zählt nicht.',
-  vmUnfairAgain: 'Danke, gemeldet. Das Wort kommt gleich in einem anderen Satz.',
+  vmUnfairAgain: 'Danke, gemeldet. Das Wort kommt später in einem anderen Satz wieder.',
   vmUnfairCounts: 'Danke, gemeldet. Die Antwort zählt trotzdem, die Aufgabe wird geprüft.',
   vmLeft: 'noch {n}',
   vmGapLabel: 'Lücke im Satz: {sentence}',

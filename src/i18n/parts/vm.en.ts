@@ -179,7 +179,7 @@ export const vmEn = {
   vmRsTrack_use: 'Use',
   vmRsTrack_know: 'Understand',
   vmUnfairDone: 'Thanks, reported. This answer does not count.',
-  vmUnfairAgain: 'Thanks, reported. The word comes back shortly in a different sentence.',
+  vmUnfairAgain: 'Thanks, reported. The word comes back later in a different sentence.',
   vmUnfairCounts: 'Thanks, reported. The answer still counts; the task will be checked.',
   vmLeft: '{n} left',
   vmGapLabel: 'Gap in the sentence: {sentence}',

@@ -9,7 +9,7 @@ import type { ExplainDepth, ExplainLine, ExplanationModel, ResultVerdict } from 
 import type { WordOp } from '../../domain/learn/types';
 import type { UnitState } from '../../domain/metrics';
 import { useT } from '../../i18n';
-import { useMediaQuery, useSplitLayout } from '../../platform/input';
+import { useInputProfile, useMediaQuery, useSplitLayout } from '../../platform/input';
 import { ActionBar, PrimaryAction } from '../ActionBar';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
@@ -187,6 +187,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const state = deriveShellState(props);
   const keyRange = typeof choiceCount === 'number' ? choiceKeyRange(choiceCount) : null;
   const profileSplit = useSplitLayout();
+  // Emrah 05.11.2026: Tastenzeichen T/W/⏎ nur mit Tastatur; am Touch-Gerät (auch Tablet mit feinem Zeiger) nie.
+  const keys = useInputProfile() === 'keys';
   const split = layout === 'split' || (layout === 'auto' && profileSplit);
   const band = !split;
   const tablet = useMediaQuery('(min-width: 768px)');
@@ -407,7 +409,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
     showSecondary.length > 0 && !feedback ? (
       <div className="flex flex-wrap items-center gap-2" data-slot="secondary" role="group" aria-label={t('exSecondaryLabel')}>
         {showSecondary.map((s) => (
-          <Button key={s.id} variant={s.variant ?? 'quiet'} onClick={s.onClick} disabled={s.disabled} data-testid={s.testId} data-secondary={s.id} data-kbd={KBD[s.id]} aria-keyshortcuts={KBD[s.id]}>
+          <Button key={s.id} variant={s.variant ?? 'quiet'} onClick={s.onClick} disabled={s.disabled} data-testid={s.testId} data-secondary={s.id} data-kbd={keys ? KBD[s.id] : undefined} aria-keyshortcuts={keys ? KBD[s.id] : undefined}>
             {s.label}
           </Button>
         ))}
@@ -688,7 +690,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           iconAfter={feedback || primary.arrow ? 'arrowRight' : undefined}
           testId={primary.testId}
           data-auto={running ? '' : undefined}
-          data-kbd="⏎"
+          data-kbd={keys ? '⏎' : undefined}
           className="overflow-hidden"
         >
           {primary.label}

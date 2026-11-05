@@ -44,6 +44,8 @@ export type CheckDict = {
   confusable: ReadonlyMap<string, readonly string[]>;
   /** britische Schreibweise → US (`toUSText`). */
   toUS: (s: string) => string;
+  /** Deutsche Bedeutungen des Stichworts aus dem Wörterbuch (Emrah 05.11.2026: „grant“ = „gewähren“ galt als falsch), je Wortart. Fehlt = nur `de`. */
+  senses?: (head: string) => ReadonlyArray<{ pos: string; de: string }>;
 };
 
 export type Check = {

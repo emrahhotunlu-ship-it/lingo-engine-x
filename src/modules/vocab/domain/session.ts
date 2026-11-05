@@ -23,6 +23,11 @@ export const TRANSFER_MIN = 3;
 export const TRANSFER_MAX = 5;
 /** Höchstens so viele offene Kontrastkarten je Runde (M14). */
 export const CONTRAST_MAX = 2;
+/**
+ * Höchstens so viele Abfragen je Wort in EINER Runde (ohne Einführung; Emrah 05.11.2026: „diese Karte kommt zum 4. oder 5. Mal“).
+ * Weitere offene Lernschritte bleiben im Wort und kommen in der nächsten Runde des Lerntags oder am nächsten Tag.
+ */
+export const MAX_PER_ROUND = 3;
 
 /** `step`: 0 kein Lernschritt · 1 Schritt A · 2 Schritt B · 3 Wiederkehr nach Fehler. */
 /** V2: `sent` mit/ohne englischen Satz, `cue` „Gesucht: …“ an der Lücke (M25, bis Stufe 4). */
@@ -37,6 +42,10 @@ export class SessionRun {
   private pending: Slot[] = [];
   private cards = 0;
   private last: string | null = null;
+  /** Abfragen je Wort in dieser Runde (ohne Einführung). */
+  private readonly shown = new Map<string, number>();
+  /** In dieser Runde als unfair gemeldet: kommt in dieser Runde nicht mehr. */
+  private readonly blocked = new Set<string>();
   private readonly day: string;
   private readonly seen = new Set<string>();
   /** Wörter dieser Runde und die davon schon beantworteten (Zähler außerhalb der Pflicht, K11: einzelne Wörter, nicht Karten). */
@@ -211,9 +220,22 @@ export class SessionRun {
     const paths = task.group ?? [task.path];
     for (const p of paths) {
       this.seen.add(p);
+      if (!task.intro) this.shown.set(p, (this.shown.get(p) ?? 0) + 1);
       const l = this.lex(p);
-      if (l && this.stepToday(l) && !this.pending.some((s) => s.path === p) && task.form !== 'transfer') this.pending.push(this.stepSlot(p, l, this.cards, nowMs));
+      if (l && !this.blocked.has(p) && (this.shown.get(p) ?? 0) < MAX_PER_ROUND && this.stepToday(l) && !this.pending.some((s) => s.path === p) && task.form !== 'transfer') {
+        const slot = this.stepSlot(p, l, this.cards, nowMs);
+        // Wiederkehr nach Fehler nur mit anderen Karten dazwischen; sonst dasselbe Wort direkt hintereinander (Emrah 05.11.2026) – dann in der nächsten Runde.
+        const others = this.queue.some((s) => s.path !== p) || this.pending.some((s) => s.path !== p);
+        if (slot.step !== 3 || others) this.pending.push(slot);
+      }
     }
+  }
+
+  /** „Aufgabe war unfair“: dieses Wort kommt in dieser Runde nicht mehr, auch nicht als Wiederkehr; offene Lernschritte bleiben im Wort. */
+  block(path: string): void {
+    this.blocked.add(path);
+    this.pending = this.pending.filter((s) => s.path !== path);
+    this.queue = this.queue.filter((s) => s.path !== path);
   }
 
   /**

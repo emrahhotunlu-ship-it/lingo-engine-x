@@ -182,10 +182,22 @@ export function checkMeaning(given: string, de: string): Check {
   return { outcome: 'wrong' };
 }
 
+/** Wortart der Karte → Anfang der Wortart im Wörterbuch („noun“, „verb“, „adj“, „adv“). */
+const POS_DICT: Readonly<Record<string, string>> = { noun: 'n', verb: 'v', adj: 'adj', adv: 'adv' };
+
 /** Antwort werten. `dunno` = „Weiß ich nicht“. */
 export function evaluate(m: CardModel, given: string, dict: CheckDict, dunno = false): Check {
   if (dunno) return { outcome: 'dunno' };
-  if (m.mode === 'meaning') return checkMeaning(given, m.de);
+  if (m.mode === 'meaning') {
+    // Erst die gelernte Bedeutung; dann die Wörterbuch-Bedeutungen derselben Wortart (Emrah 05.11.2026: „grant“ → „gewähren“ war richtig).
+    const own = checkMeaning(given, m.de);
+    if (own.outcome !== 'wrong' || !dict.senses) return own;
+    const pos = m.pos ? POS_DICT[m.pos] : null;
+    const extra = dict.senses(baseAnswer(m.head)).filter((s) => !pos || s.pos.toLowerCase().startsWith(pos)).map((s) => s.de);
+    if (!extra.length) return own;
+    const alt = checkMeaning(given, extra.join('; '));
+    return alt.outcome === 'ok' ? alt : own;
+  }
   return checkAnswer(given, m.target, dict);
 }
 

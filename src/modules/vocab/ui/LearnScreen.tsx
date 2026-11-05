@@ -47,7 +47,7 @@ function createRun(ai?: VocabAi): LearnRun | null {
   if (!writer) return null;
   return new LearnRun({
     deps: { writer, device: deviceId() },
-    dict: checkDict(isDictWord, toUSText),
+    dict: checkDict(isDictWord, toUSText, (w) => dictLookup(w)?.senses ?? []),
     lang: () => uiLang,
     drafts,
     readDay: () => readOr(VMOD_DAY_PATH),

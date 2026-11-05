@@ -231,16 +231,26 @@ export const bracketed = (g: Gap): string => g.segs.map((s) => (s.t === 'gap' ? 
 
 export type CardSentence = { sent: Sent; gap: Gap };
 
-/** Nutzbare Sätze: Lücke gefunden und der Satz verrät das Ziel nicht. `skipped` = Sätze ohne gefundene Lücke (Meldung an die Inhaltsprüfung). */
+/** Längster Satz, der in einer Abfrage noch ruhig lesbar ist (Wörter). Emrah 05.11.2026: „ein ganzer Roman“. */
+export const SENT_MAX_WORDS = 22;
+const ELLIPSIS = /^\s*(…|\.\.\.)|(…|\.\.\.)\s*$/;
+/** Kurzer, vollständiger Satz: höchstens `SENT_MAX_WORDS` Wörter, kein Ausschnitt mit „…“ am Anfang oder Ende (Emrah 05.11.2026). */
+export const tidySentence = (en: string): boolean => !ELLIPSIS.test(en) && en.trim().split(/\s+/).length <= SENT_MAX_WORDS;
+
+/**
+ * Nutzbare Sätze: Lücke gefunden und der Satz verrät das Ziel nicht. `skipped` = Sätze ohne gefundene Lücke (Meldung an die Inhaltsprüfung).
+ * Lange Sätze und Ausschnitte („… gilt das …“) kommen nur, wenn das Wort sonst keinen nutzbaren Satz hat (`tidySentence`).
+ */
 export function usableSentences(sents: readonly Sent[], head: string, pv: boolean): { ok: CardSentence[]; skipped: Sent[] } {
   const ok: CardSentence[] = [];
+  const rough: CardSentence[] = [];
   const skipped: Sent[] = [];
   for (const s of sents) {
     const gap = locateGap(s.en, head, { pv }) ?? (s.mark ? gapFromMark(s.en, s.mark, head) : null);
     if (!gap) skipped.push(s);
-    else if (!leaks(bracketed(gap), gap.answer)) ok.push({ sent: s, gap });
+    else if (!leaks(bracketed(gap), gap.answer)) (tidySentence(s.en) ? ok : rough).push({ sent: s, gap });
   }
-  return { ok, skipped };
+  return { ok: ok.length ? ok : rough, skipped };
 }
 
 /**

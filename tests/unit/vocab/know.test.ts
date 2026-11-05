@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { acceptKnow, knowPatch, knowRecent, needsKnow, type KnowCard } from '../../../src/modules/vocab/domain/know';
-import { KNOW_EXAMPLE, wordKnow } from '../../../src/modules/vocab/prompts/know';
+import { KNOW_EXAMPLE, type wordKnow } from '../../../src/modules/vocab/prompts/know';
 import { fillKnow, knowOrder } from '../../../src/modules/vocab/ui/know';
 import { wordKnowReply } from '../../../src/platform/dev/canned/vocab';
 import type { VocabAi } from '../../../src/modules/vocab/aiPort';
@@ -123,23 +123,23 @@ describe('Reihenfolge und Lauf', () => {
     const writes: Array<[string, Doc]> = [];
     const store = new Map(docs);
     const writer = {
-      transform: async (path: string, fn: (cur: Doc | undefined) => { update: Doc } | null) => {
+      transform: (path: string, fn: (cur: Doc | undefined) => { update: Doc } | null) => {
         const r = fn(store.get(path));
         if (r) {
           store.set(path, { ...store.get(path), ...r.update });
           writes.push([path, r.update]);
         }
-        return null;
+        return Promise.resolve(null);
       },
     };
     const prompts: string[] = [];
     const ai: VocabAi = {
       ready: () => true,
       ask: () => Promise.reject(new Error('nein')),
-      bg: async (tpl, vars) => {
+      bg: (tpl, vars) => {
         const p = (tpl as typeof wordKnow).build(vars as never);
         prompts.push(p);
-        return JSON.parse(wordKnowReply(p)) as never;
+        return Promise.resolve(JSON.parse(wordKnowReply(p)) as never);
       },
       fail: () => ({ kind: 'retry', key: null }),
     };

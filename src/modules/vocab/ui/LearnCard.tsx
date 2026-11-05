@@ -628,7 +628,12 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         {listen}
       </div>
     ) : null;
-    answer = gap;
+    // Emrah 05.11.2026: „das Eingabefeld ist das kleinste auf der Karte“ – volle Breite, in der Schriftgröße des Satzes.
+    answer = (
+      <div className="lx-t-prompt w-full [&_.lx-gap]:flex [&_.lx-gap]:w-full [&_.lx-gap]:min-h-[1.8em] [&_.lx-gap]:items-center [&_.lx-gap-inner]:w-full" data-testid="vm-meaning-field">
+        {gap}
+      </div>
+    );
   } else if (teaching) {
     prompt = <IntroTeach card={card} />;
   } else if (g && (card.mode === 'gap' || card.mode === 'intro')) {

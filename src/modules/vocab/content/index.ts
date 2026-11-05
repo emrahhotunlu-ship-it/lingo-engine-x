@@ -126,8 +126,12 @@ export const LEX_INFO: ReadonlyMap<string, { k: GrEntry['k']; reg: GrEntry['reg'
 })();
 
 /** Wörterbuch für die Auswertung (`check.ts`): Listen aus Charge 1, britisch → US aus der App. `isWord` liefert der Aufrufer. */
-export function checkDict(isWord: (w: string) => boolean, toUS: (s: string) => string): { isWord: (w: string) => boolean; misspell: ReadonlyMap<string, string>; confusable: ReadonlyMap<string, readonly string[]>; toUS: (s: string) => string } {
-  return { isWord, misspell: MISSPELL, confusable: CONFUSABLE, toUS };
+export function checkDict(
+  isWord: (w: string) => boolean,
+  toUS: (s: string) => string,
+  senses?: (head: string) => ReadonlyArray<{ pos: string; de: string }>,
+): { isWord: (w: string) => boolean; misspell: ReadonlyMap<string, string>; confusable: ReadonlyMap<string, readonly string[]>; toUS: (s: string) => string; senses?: (head: string) => ReadonlyArray<{ pos: string; de: string }> } {
+  return { isWord, misspell: MISSPELL, confusable: CONFUSABLE, toUS, ...(senses ? { senses } : {}) };
 }
 
 /**

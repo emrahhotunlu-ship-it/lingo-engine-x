@@ -1107,6 +1107,8 @@ export class LearnRun {
         p.result = this.compute(p.kind, p.card, p.task, p.before, p.a);
       }
     }
+    // Emrah 05.11.2026: Was als unfair gemeldet ist, kommt in dieser Runde nicht noch einmal (der Lernschritt bleibt für später).
+    this.run?.block(v.task.path);
     logWarn('vocab:unfair', 'Aufgabe als unfair gemeldet (Inhaltsprüfung)', `${p.card.path} · ${p.card.form} · ${p.card.sentence?.sent.key ?? '-'} · ${res}`);
     this.next();
     return res;
