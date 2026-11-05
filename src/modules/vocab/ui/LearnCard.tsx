@@ -260,8 +260,9 @@ function IntroTeach({ card }: { card: CardModel }) {
 function WordSide({ card, partners: fromCol, examples }: { card: CardModel; partners: Band['partners']; examples: readonly { en: string; de: string | null; mark: readonly [number, number] | null }[] }) {
   const { t } = useT();
   const line = ipaLine(t, card);
-  // K5: Wortpartner aus dem Wort-Dokument (`col`), sonst die geprüften Partner der Lehrer-Charge (`teach.colloc`); nichts erfunden.
-  const partners = fromCol.length ? fromCol : (card.teach.colloc ?? []).slice(0, 3).map((p) => ({ p, de: '' }));
+  // K5 / Großpaket W1 (05.11.2026): nur echte Wortpartner aus dem Wort-Dokument (`col`). `teach.colloc` ist die FALSCH-Liste einer Falle
+  // (z. B. „hold a presentation“, `content/index.ts` aus `trap.wrong`) und darf nie als „Oft zusammen mit“ erscheinen.
+  const partners = fromCol;
   return (
     <div className="lx-kwordcard" data-testid="vm-wordcard">
       <p className="lx-kintro-label">{t('kernTheWord')}</p>

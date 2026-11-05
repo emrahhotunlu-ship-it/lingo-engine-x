@@ -68,15 +68,13 @@ export function shownOf(cs: CardSentence): Shown {
   return { text, start: Math.max(0, start), end: Math.max(0, end) };
 }
 
-const strList = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string' && !!x.trim()).map((x) => x.trim()) : []);
-
-/** Wortpartner fürs Muster: geprüfte Partner des Dokuments (`col`), sonst die Lehrer-Liste. */
-function partnersOf(doc: Doc, teach: Teach): string[] {
+/** Wortpartner fürs Muster: nur die Partner des Dokuments (`col`). Nie `teach.colloc` – das sind die FALSCHEN Verbindungen einer Falle (W1, 05.11.2026). */
+function partnersOf(doc: Doc): string[] {
   const col = doc.col;
   const fromDoc = Array.isArray(col)
     ? col.map((c) => (typeof c === 'string' ? c : c && typeof c === 'object' && typeof (c as Doc).p === 'string' ? ((c as Doc).p as string) : '')).filter(Boolean)
     : [];
-  return [...new Set([...fromDoc, ...strList(teach.colloc)])].slice(0, 3);
+  return [...new Set(fromDoc)].slice(0, 3);
 }
 
 export function targetFor(x: { path: string; doc: Doc; lex: Lex; teach: Teach; nowMs: number; sbGate: unknown; i: number }): UseTarget | null {
@@ -94,7 +92,7 @@ export function targetFor(x: { path: string; doc: Doc; lex: Lex; teach: Teach; n
     lv: x.lex.lv,
     example: ok[0]?.sent.en ?? null,
     shows: ok.slice(0, SHOW_MAX).map(shownOf),
-    partners: partnersOf(x.doc, x.teach),
+    partners: partnersOf(x.doc),
   };
 }
 

@@ -34,14 +34,15 @@ const lookup = (p: string) => (docs[p] ? { doc: docs[p], lex: learned(5), teach:
 const use = (over: Partial<UseInput> = {}): UseInput => ({ t: T0, form: 'own', v: 'ok', err: null, at: '', evade: false, spoken: false, lvAt: 5, evidenceOnly: false, ...over });
 
 describe('modelOfUse', () => {
-  it('Anwenden: Gruppe ohne fehlende Wörter, Kennungen w1…, Grundform, Partner aus Dokument und Lehrer', () => {
+  it('Anwenden: Gruppe ohne fehlende Wörter, Kennungen w1…, Grundform, Partner nur aus dem Dokument (nie die Falschformen einer Falle, W1)', () => {
     const m = modelOfUse({ task: task(), lookup, nowMs: T0, sbGate: null, lastLife: null })!;
     expect(m.form).toBe('transfer');
     expect(m.targets.map((t) => [t.key, t.path, t.word])).toEqual([
       ['w1', 'vocab/scope', 'scope'],
       ['w2', 'vocab/rely', 'rely on'],
     ]);
-    expect(m.targets[0]!.partners).toEqual(['define the scope', 'narrow the scope', 'scope of work']);
+    // `teach.colloc` sind die FALSCHEN Verbindungen einer Falle – sie dürfen nie als Muster-Partner erscheinen (W1, 05.11.2026).
+    expect(m.targets[0]!.partners).toEqual(['define the scope', 'narrow the scope']);
     expect(m.targets[0]!.example).toBeTruthy();
     const sh = m.targets[0]!.shows[0]!;
     expect(sh.text.slice(sh.start, sh.end).toLowerCase()).toContain('scope');
