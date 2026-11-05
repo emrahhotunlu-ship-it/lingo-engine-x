@@ -18,7 +18,7 @@ const fresh = (id: string, order: number): Doc => ({ ...WORDS[id], pos: 'verb', 
 
 type Seen = { ex: string; card: string; label: string; verdict: string };
 
-const recallLabel = async (page: Page): Promise<string> => (await page.locator('[data-step]').innerText()).split('\n').find((l) => /Abruf|Gestern-Check|Erster Abruf/.test(l)) ?? '';
+const recallLabel = async (page: Page): Promise<string> => (await page.locator('[data-step]').innerText()).split('\n').find((l) => /Mal selbst|Gestern-Check|Zum ersten Mal/.test(l)) ?? '';
 
 /** Spielt die Runde bis zum Ende. Einführungen: „Weiß ich nicht“ → „Weiter“ → „Weiter“. Testwörter werden getippt, Seed-Karten wie sonst beantwortet. */
 async function playRound(page: Page, max = 40): Promise<Seen[]> {
@@ -74,8 +74,8 @@ test('Tag 0 in der Pflichtrunde: keine Aufdeckkarte; neue Wörter mit Abruf 1 (A
     const mine = seen.filter((s) => s.card === id);
     // Abruf 1: Lücke mit Anfangsbuchstaben; Abruf 2: frei getippt. Nur getippte Arten, beschriftet.
     expect(mine.map((s) => s.ex), info).toEqual(['cloze_hint', 'cloze']);
-    expect(mine[0]!.label, info).toContain('Abruf 1');
-    expect(mine[1]!.label, info).toContain('Abruf 2');
+    expect(mine[0]!.label, info).toContain('1. Mal selbst');
+    expect(mine[1]!.label, info).toContain('2. Mal selbst');
     expect(mine.every((s) => s.verdict === 'ok'), info).toBe(true);
   }
   // Abruf 2 kommt nicht direkt nach Abruf 1: dazwischen liegt mindestens eine andere Aufgabe.

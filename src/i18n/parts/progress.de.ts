@@ -96,7 +96,7 @@ export const progressDe = {
   vgMark: 'Strich = C1-Marke bei {mark} (eine Orientierung, keine offizielle Grenze)',
   vgFest: 'Fest gelernte Karten: {n}',
   atTitle: 'Atlas',
-  atSub: 'Das C1-Paket nach Bändern',
+  atSub: 'Die wichtigsten C1-Wörter, die häufigsten zuerst',
   atLead: '{known} von {total} Atlas-Einträgen ({words} Wörter, {pack} aus dem C1-Paket) sind schon in deinem Wortschatz',
   atBandColloc: 'Wortpartner',
   atBandFrame: 'Rahmen und Überleitungen',

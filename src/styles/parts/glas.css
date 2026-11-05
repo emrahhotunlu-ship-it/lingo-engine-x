@@ -133,8 +133,8 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
       var(--shadow);
   }
   html:not([data-theme='dim']) .lx-vh-head.lx-v-phead h1 {
-    font-size: 22px;
-    line-height: 28px;
+    font-size: var(--t-title);
+    line-height: 1.3;
     letter-spacing: -0.01em;
   }
   html:not([data-theme='dim']) .lx-vh-head .lx-v-phead-right {
@@ -196,7 +196,7 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     width: 72px;
     min-height: 0;
     padding: 10px 0;
-    font-size: 12px;
+    font-size: var(--t-small);
     line-height: 16px;
     font-weight: 600;
   }
@@ -244,14 +244,15 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     padding-top: 0;
   }
   html:not([data-theme='dim']) .lx-vh-ask.lx-v-iconbtn {
-    min-height: 40px;
+    /* Tippfläche ≥ 44 px (UI-Standard §3; ux-reviewer 05.11.2026 Nr. 10). */
+    min-height: 44px;
     padding: 0 16px;
     border-radius: 999px;
     background: var(--glass-soft);
     box-shadow:
       inset 0 1px 0 var(--glanz),
       inset 0 0 0 1px var(--glass-rim);
-    font-size: 14px;
+    font-size: var(--t-hint);
     font-weight: 600;
   }
 }
@@ -276,7 +277,7 @@ html:not([data-theme='dim']) .lx-kh-ctx .lx-kh-tile {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 14px;
+    font-size: var(--t-hint);
     color: var(--fg-2);
   }
   /* Das Datum steht in der Kopfleiste; über der Karte nicht noch einmal (Kap. 15). */
@@ -345,7 +346,6 @@ html:not([data-theme='dim']) .lx-kask:hover {
 }
 @media (min-width: 1024px) {
   html:not([data-theme='dim']) .lx-exercise[data-kern] .lx-t-prompt[data-slot='prompt'] {
-    font-size: 30px;
     line-height: 1.35;
     letter-spacing: -0.01em;
   }
@@ -535,8 +535,9 @@ html:not([data-theme='dim']) [data-testid='companion'] {
 }
 
 /* 14. Monitor nach dem Prüfen (Kern-Rest „Weiter ohne Scrollen“): bei langer Rückmeldung bleibt die Knopfzeile unten im Bild stehen – als
-   Glaskapsel über dem Text (wie die Maskenfußzeile im Küchenstudio). `overflow: clip` statt `hidden`, damit `sticky` greift. */
-@media (min-width: 1024px) {
+   Glaskapsel über dem Text (wie die Maskenfußzeile im Küchenstudio). `overflow: clip` statt `hidden`, damit `sticky` greift. Nur mit Maus/Trackpad:
+   auf Touch-Geräten folgt die Leiste im Ergebnis der Erklärung (ux-reviewer 05.11.2026 Nr. 17, Regel am Dateiende). */
+@media (min-width: 1024px) and (pointer: fine) {
   html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern][data-kres] {
     overflow: clip;
   }
@@ -665,4 +666,19 @@ html[data-actionbar-inline] .lx-actionbar-column {
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
   backdrop-filter: blur(24px) saturate(1.4);
   box-shadow: var(--shadow);
+}
+/* ux-reviewer 05.11.2026 Nr. 17: haften nur während der Beantwortung. Im Ergebnis steht die Leiste im Fluss nach der Erklärung („Weiter“ folgt
+   dem Gelesenen) und legt sich nicht über das Warum; ohne Haften braucht sie auch keine eigene Glasfläche. */
+@media (pointer: coarse) {
+  .lx-exercise[data-kres] .lx-actionbar-column {
+    position: static;
+  }
+  html[data-actionbar-inline] .lx-exercise[data-kres] .lx-actionbar-column {
+    margin-inline: 0;
+    padding: 8px 0 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
 }

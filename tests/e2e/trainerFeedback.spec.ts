@@ -36,7 +36,7 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   await expect(page.getByTestId('status')).toBeVisible();
   await expect(page.getByTestId('status').locator('.lx-dot')).toHaveCount(0);
   await expect(page.getByTestId('ex-stand')).toHaveText('lernst du gerade');
-  await expect(page.getByTestId('ex-kind')).toContainText('Lücke mit Hilfe');
+  await expect(page.getByTestId('ex-kind')).toContainText('Ergänzen mit Hilfe');
   await expect(page.getByTestId('task')).toHaveText('Ergänze die Lücke.');
   // „Wozu" nur hinter dem Info-Symbol.
   await expect(page.getByTestId('purpose')).toHaveCount(0);

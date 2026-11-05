@@ -445,7 +445,9 @@ function Actions({ path, lex, head, de, hidden, due, onPractice, onAsk }: { path
   const [busy, setBusy] = useState<null | 'pause' | 'tomorrow' | 'restart'>(null);
   const [manage, setManage] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const fail = () => toast(t('vmWpSaveError'), 'error');
+  const fail = (): void => {
+    toast(t('vmWpSaveError'), 'error');
+  };
 
   const togglePause = async () => {
     const w = getWriter();

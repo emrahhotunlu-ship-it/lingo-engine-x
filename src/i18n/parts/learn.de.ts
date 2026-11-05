@@ -113,7 +113,7 @@ export const learnDe = {
   grVerdictAlt: 'Richtig – auch so möglich',
   grVerdictForm: 'Die Form stimmt nicht',
   grKind_mc: 'Auswahl',
-  grKind_gap: 'Lücke',
+  grKind_gap: 'Ergänzen',
   grKind_transform: 'Umformen',
   grKind_correct: 'Verbessern',
   grTask_mc: 'Wähle die Form, die in die Lücke passt.',

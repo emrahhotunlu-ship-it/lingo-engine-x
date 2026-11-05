@@ -17,6 +17,7 @@ import { usePlaceSub } from './Overview';
 
 type Doc = Record<string, unknown>;
 type Group = 'all' | 'produce' | 'onway' | 'recognize' | 'fresh' | 'paused';
+const GROUP_LABEL = { produce: 'vmOvProduce', onway: 'vmOvOnway', recognize: 'vmOvRecognize' } as const satisfies Record<ReturnType<typeof groupOf>, MessageKey>;
 type Sort = 'stage' | 'az';
 type Word = { path: string; head: string; de: string; lex: Lex; paused: boolean; order: number };
 const EMPTY = new Map<string, Doc>();
@@ -266,8 +267,9 @@ export function WordsHome({ duty, onRound, onWord, onStats, onPlace, onAdd, onAt
                       <Icon name="lock" size={14} />
                     </span>
                   ) : (
-                    <span className="lx-vw-pill" aria-label={w.lex.intro === null ? t('vmWhFresh') : t('vmWhStageAria', { n: w.lex.lv })}>
-                      {w.lex.intro === null ? t('vmWhFresh') : `S${w.lex.lv}`}
+                    // ux-reviewer 05.11.2026 Nr. 9: kein „S6“ ohne Erklärung – die Pille nennt die Gruppe in denselben Worten wie die Filter.
+                    <span className="lx-vw-pill" data-lv={w.lex.intro === null ? undefined : w.lex.lv}>
+                      {w.lex.intro === null ? t('vmWhFresh') : t(GROUP_LABEL[groupOf(w.lex.lv)])}
                     </span>
                   )}
                 </button>

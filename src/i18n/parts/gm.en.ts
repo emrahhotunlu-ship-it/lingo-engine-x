@@ -10,7 +10,7 @@ export const gmEn = {
   gmPathNext: 'Up next',
   gmPathSafe: 'Already solid ({n})',
   gmPathAll: 'See all {n} chapters',
-  gmErrorsHead: 'Sentences to fix',
+  gmErrorsHead: 'Review and look up',
   gmBtnTest: 'Finish topic',
   gmUnfairLink: 'Was this task unfair?',
   gmPathSteps: '{n} of 5 steps',

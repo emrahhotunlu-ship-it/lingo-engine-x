@@ -91,7 +91,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   vgMark: 'Line = C1 mark at {mark} (a guide, not an official threshold)',
   vgFest: 'Firmly learned cards: {n}',
   atTitle: 'Atlas',
-  atSub: 'The C1 pack by band',
+  atSub: 'The key C1 words, most common first',
   atLead: '{known} of {total} atlas entries ({words} words, {pack} from the C1 pack) are already in your vocabulary',
   atBandColloc: 'Word partners',
   atBandFrame: 'Frames and transitions',

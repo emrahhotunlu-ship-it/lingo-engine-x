@@ -672,18 +672,13 @@ export function ExerciseShell(props: ExerciseShellProps) {
     </>
   );
 
-  // Kern: nach dem Prüfen steht „Frag Claude dazu“ neben „Weiter“ (Vorschau: Handy 1 : 2, Monitor rechts unten in der Karte).
-  const askAbout =
-    feedback && claudeAsk ? (
-      <Button variant="secondary" onClick={claudeAsk} data-testid="claude-ask-about" className="lx-kask-about">
-        {t('kernAskAbout')}
-      </Button>
-    ) : null;
+  // ux-reviewer 05.11.2026 Nr. 11: nach dem Prüfen kein zweites „Frag Claude dazu“ neben „Weiter“ – Claude bleibt EINMAL oben in der Übungsleiste
+  // („Frag Claude“, fragt nach dem Prüfen mit Lösung und eigener Antwort) und als „Nachfragen“ an Claudes Erklärung. Unten steht nur „Weiter“.
   const bar = (
     // Emrah 04.11.2026 (iPhone aufgeklappt ≈ iPad mini): Die feste Leiste am unteren Rand lag hinter der Bildschirmtastatur – im Claude-Rahmen
     // meldet der Browser die Tastatur nicht zuverlässig, und dazwischen klaffte leere Fläche. Auf Touch-Geräten stehen die Knöpfe deshalb direkt
     // unter der Aufgabe in der Karte (wie am Monitor); die Tastatur liegt darunter und verdeckt sie nicht.
-    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={(feedback ? askAbout : asideSecondary) || undefined}>
+    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={(feedback ? null : asideSecondary) || undefined}>
       {barOverride ?? (
         <PrimaryAction
           onClick={feedback ? fire : primary.onClick}

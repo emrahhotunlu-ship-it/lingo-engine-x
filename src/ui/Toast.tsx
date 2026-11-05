@@ -11,12 +11,19 @@ type ToastState = { items: Toast[] };
 const useToasts = create<ToastState>(() => ({ items: [] }));
 let nextId = 1;
 
-export function toast(text: string, tone: Toast['tone'] = 'info'): void {
+/** Zeigt einen Hinweis für 5 s; liefert seine Kennung (für `dismissToast`), bei einem schon sichtbaren gleichen Hinweis `null`. */
+export function toast(text: string, tone: Toast['tone'] = 'info'): number | null {
   // Derselbe Hinweis zweimal zugleich (z. B. ✕ der Übungsleiste und Rückkehr nach Heute melden beide „Gespeichert“, Befund ux 4b Nr. 3): nur einmal.
-  if (useToasts.getState().items.some((x) => x.text === text && x.tone === tone)) return;
+  if (useToasts.getState().items.some((x) => x.text === text && x.tone === tone)) return null;
   const id = nextId++;
   useToasts.setState((s) => ({ items: [...s.items.slice(-2), { id, text, tone }] }));
-  window.setTimeout(() => useToasts.setState((s) => ({ items: s.items.filter((t) => t.id !== id) })), 5000);
+  window.setTimeout(() => dismissToast(id), 5000);
+  return id;
+}
+
+/** Hinweis vorzeitig schließen (z. B. beim Wechsel des Bildschirms, auf dem er erschien). */
+export function dismissToast(id: number): void {
+  useToasts.setState((s) => (s.items.some((t) => t.id === id) ? { items: s.items.filter((t) => t.id !== id) } : s));
 }
 
 export function Toaster() {

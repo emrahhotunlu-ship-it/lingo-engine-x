@@ -10,7 +10,7 @@ export const gmDe = {
   gmPathNext: 'Als Nächstes',
   gmPathSafe: 'Sitzt schon ({n})',
   gmPathAll: 'Alle {n} Kapitel ansehen',
-  gmErrorsHead: 'Deine Fehlersätze',
+  gmErrorsHead: 'Wiederholen und nachschlagen',
   gmBtnTest: 'Thema abschließen',
   gmUnfairLink: 'Aufgabe war unfair?',
   gmPathSteps: '{n} von 5 Schritten',

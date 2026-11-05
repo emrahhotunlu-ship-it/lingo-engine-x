@@ -38,7 +38,7 @@ export const hxDe = {
   hxLearnBrake: 'Neues Thema ab weniger als {limit} fälligen Grammatikfehlern · jetzt {n}',
   hxLearnAnyway: 'Trotzdem: {topic}',
   hxLearnStartNew: 'Thema starten',
-  hxLearnFixLine: 'Fehlersätze · {n} fällig · heute {today}',
+  hxLearnFixLine: '{n} fällig · heute {today}',
   hxLearnLookup: 'Nachschlagen',
   hxLearnRules: 'Regeln',
   hxLearnTraps: 'Deutsch-Fallen',

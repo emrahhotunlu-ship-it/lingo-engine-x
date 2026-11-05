@@ -8,7 +8,7 @@ import { useT } from '../../i18n';
 import { Disclosure } from '../../ui/Disclosure';
 import { Icon } from '../../ui/Icon';
 import { chapterNodes, type TopicNode } from '../grammar/chapters';
-import { Dots, topicName } from '../grammar/topicUi';
+import { topicName } from '../grammar/topicUi';
 
 // Großpaket G5 (Entscheidung 4, Emrah 02.11.2026): EIN Weg durch die Themen statt Kapitelliste plus zweiter Themenliste (M12).
 // „Jetzt dran“ ist die Karte darüber (`HereCard`, nicht wiederholt); hier stehen „Als Nächstes“ (höchstens 3 Themen nach dem aktuellen) und
@@ -47,12 +47,9 @@ function TopicRow({ r, onOpen, points }: { r: Row; onOpen: (id: string) => void;
             {r.due > 0 ? ` · ${tn('grDueBadge', r.due)}` : ''}
           </span>
         </span>
-        {/* G7 (K9): Punkte nicht ohne Legende – daneben steht klein, was sie zählen (auch für Vorlese-Programme). */}
-        <span className="flex flex-none flex-col items-end gap-0.5 text-muted">
-          <Dots n={points} />
-          <span className="lx-tnum text-xs" data-testid="gpath-steps">
-            {t('gmPathSteps', { n: points })}
-          </span>
+        {/* ux-reviewer 05.11.2026 Nr. 13: der Fortschritt steht EINMAL – als „x von 5 Schritten“ (vorher zusätzlich fünf Punkte). */}
+        <span className="lx-tnum flex-none text-xs text-muted" data-testid="gpath-steps">
+          {t('gmPathSteps', { n: points })}
         </span>
         <span className="lx-v-row-chev" aria-hidden="true">
           <Icon name="chevronRight" size={18} />

@@ -545,8 +545,9 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     />
   );
 
+  // Nach dem Prüfen entfällt „Gesucht: …“ (ux-reviewer 05.11.2026 Nr. 12): die Bedeutung steht dann in der Wortkarte, nicht dreimal.
   const cue =
-    card.cue && card.mode !== 'meaning' ? (
+    card.cue && card.mode !== 'meaning' && !band ? (
       <p className="lx-t-support text-muted" data-testid="vm-cue" lang={lang}>
         {t(card.cue.ff ? 'vmCueFf' : 'vmCue', { de: card.cue.de })}
       </p>

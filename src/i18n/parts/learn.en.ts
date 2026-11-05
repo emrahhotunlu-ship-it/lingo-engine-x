@@ -111,7 +111,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   grVerdictAlt: 'Correct – this works too',
   grVerdictForm: 'The form is off',
   grKind_mc: 'Choice',
-  grKind_gap: 'Gap',
+  grKind_gap: 'Fill in',
   grKind_transform: 'Transform',
   grKind_correct: 'Correct it',
   grTask_mc: 'Choose the form that fits the gap.',

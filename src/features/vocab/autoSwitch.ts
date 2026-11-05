@@ -3,10 +3,13 @@ import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
 import { loadSnapshot } from '../../data/snapshot';
 import { translate } from '../../i18n';
-import { loadAutoSwitch, registerCatchUp, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
-import { getDb } from '../../platform/capabilities';
+import { loadAutoSwitch, prepareDay, registerCatchUp, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
+import { useClock } from '../../app/clock';
+import { loadWordsDay } from '../today/wordsDay';
+import { getDb, useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
-import { toast } from '../../ui/Toast';
+import { dismissToast, toast } from '../../ui/Toast';
+import { useNav } from '../../app/nav';
 
 // Neue Wörter-App von selbst an (Emrah 02.11.2026: „warum muss ich da noch manuell was machen“). Einmal je App-Start: sobald die Live-Daten
 // stehen und `app/profile` kein `vcfg` hat (Modul nie entschieden), lädt die Teil-Datei `modules/vocab/ui/switch` nach und übernimmt die
@@ -35,7 +38,26 @@ async function run(): Promise<void> {
     const sw = await loadAutoSwitch();
     const r = await sw.autoEnable(writer, read, Date.now());
     if (r.state === 'done' || r.state === 'already') {
-      toast(translate(useSettings.getState().lang, 'vmSwOnState'));
+      // ux-reviewer 05.11.2026 Nr. 20: der Hinweis gilt dem Bildschirm, auf dem er erscheint – beim nächsten Bildschirm verschwindet er
+      // (sonst lag er bis zu 5 s über Überzeile und Filtern der nächsten Seite).
+      const id = toast(translate(useSettings.getState().lang, 'vmSwOnState'));
+      if (id !== null) {
+        const at = useNav.getState().route;
+        const off = useNav.subscribe((s) => {
+          if (s.route === at) return;
+          dismissToast(id);
+          off();
+        });
+      }
+      // ux-reviewer 05.11.2026 Nr. 14: Heute wurde vor dem Einschalten mit dem alten Wörter-Bereich gerechnet. Den Wörter-Plan jetzt einfrieren
+      // und lesen, damit Heute sofort dieselbe Wortzahl nennt wie die Runde (vorher fehlte die Zeile „0 von n erledigt“ bis zum nächsten Start).
+      if (getDb()) {
+        const min = await prepareDay(() => {
+          const c = useCapabilities.getState();
+          return c.sample !== 'absent' && !c.sampleRevoked;
+        });
+        if (min) await loadWordsDay(useClock.getState().today);
+      }
       return;
     }
     if (r.state !== 'skipped') logWarn('vocab:switch', { message: `Automatisch nicht eingeschaltet: ${r.state}` }, r.why ?? '');

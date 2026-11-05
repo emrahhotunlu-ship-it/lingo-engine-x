@@ -17,11 +17,12 @@
   :root {
     --t-main: 28px;
     --t-title: 24px;
-    --t-task: 18px;
+    /* Aufgabe bleibt 17 px (ux-reviewer 05.11.2026: 18 neben Text 17 wäre eine fünfte Rolle in der Karte). */
   }
 }
 
-/* Statuszeile, Überzeilen */
+/* Statuszeile, Überzeilen, Lautschrift · Wortart */
+html:root body .lx-exercise .lx-kintro-ipa,
 html:root body .lx-exercise .lx-vu-blockline,
 html:root body .lx-exercise .lx-kintro-k,
 html:root body .lx-exercise .lx-vu-lbl,
@@ -33,11 +34,15 @@ html:root body .lx-exercise .lx-vu-contrast-k {
 /* Zweck-Zeile und Hinweise */
 html:root body .lx-exercise [data-testid='purpose'],
 html:root body .lx-exercise [data-testid='vm-cue'],
-html:root body .lx-exercise .lx-kintro-ipa,
 html:root body .lx-exercise .lx-kintro-tr,
-html:root body .lx-exercise .lx-knext {
+html:root body .lx-gap-given,
+html:root body .lx-exercise .lx-vu-link {
   font-size: var(--t-hint);
   line-height: 1.45;
+}
+/* Die eigene (durchgestrichene) Antwort über der Lösung trägt keine eigene Zeilenhöhe der Lücke. */
+html:root body .lx-gap-given {
+  line-height: 1.3;
 }
 
 /* Aufgabe */
@@ -79,28 +84,45 @@ html:root body .lx-exercise [data-block='why'],
 html:root body .lx-exercise [data-block='remember'],
 html:root body .lx-exercise .lx-kintro,
 html:root body .lx-exercise .lx-kintro-sec [data-testid='vm-sentence'],
-html:root body .lx-exercise .lx-vu-contrast {
+html:root body .lx-exercise .lx-vu-contrast,
+html:root body .lx-exercise [data-testid='vm-why'],
+html:root body .lx-exercise .lx-kpairs,
+html:root body .lx-exercise .lx-kwordcard > .lx-t-support,
+html:root body .lx-exercise .lx-knext {
   font-size: var(--t-text);
   line-height: var(--t-lh-text);
+}
+/* Erklärung nach dem Prüfen (Grammatik, Fehlersätze): „Warum“, Regel und Beispiel in Text-Größe wie das Warum der Wörter (§1 „Text“);
+   Hinweis-Größe bleibt für Stichwort, „Mehr“ und Links. */
+html:root body .lx-exercise :is([data-testid='explanation'], [data-testid='rule-steps']) :is(.lx-t-support, [data-testid='explanation-yours']) {
+  font-size: var(--t-text);
+  line-height: var(--t-lh-text);
+}
+/* Höchstens vier Rollen je Karte (ux-reviewer 05.11.2026 Nr. 5): Übersetzung auf der Einführung in Text-Größe (gedämpft), Anhören-Knöpfe in
+   Text-Größe wie alle Knöpfe – die Einführung zeigt so Klein 13 · Text 17 · Titel · Hauptinhalt. */
+html:root body .lx-exercise .lx-kintro .lx-kintro-tr,
+html:root body .lx-exercise [data-testid$='listen'] {
+  font-size: var(--t-text);
 }
 html:root body .lx-exercise :is([data-block='why'], [data-block='remember']) > h3 {
   font-size: var(--t-small);
 }
 
-/* Knöpfe der Leiste: Text-Größe, Hauptknopf 52 px hoch (§3) */
-html:root body :is(.lx-actionbar, .lx-actionbar-column) .lx-actionbar-inner > .lx-actionbar-main {
+/* Knöpfe der Leiste: Text-Größe, 52 px hoch (§3) – Handy, Touch und die feste Laptop-Leiste gleich (ux-reviewer 05.11.2026 Nr. 4).
+   Ältere Größen in v-uebung/kern (16/19 px, 48/56 px) sind gestrichen; hier steht die eine Regel. */
+html:root body :is(.lx-actionbar, .lx-actionbar-column) .lx-actionbar-inner > .lx-actionbar-main,
+html:root body :is(.lx-actionbar, .lx-actionbar-column) .lx-actionbar-inner :is(button:not(.lx-actionbar-main), .lx-kask-about) {
   font-size: var(--t-text);
   font-weight: 600;
   min-height: 52px;
 }
-html:root body :is(.lx-actionbar, .lx-actionbar-column) .lx-actionbar-inner :is(button:not(.lx-actionbar-main), .lx-kask-about) {
-  font-size: var(--t-hint);
-  min-height: 44px;
-}
 
-/* Übungsleiste oben: Titel mit Zähler in Aufgaben-Größe, Zusatz klein */
+/* Übungsleiste oben: Titel mit Zähler in Aufgaben-Größe, Zusatz klein, „Frag Claude“ als Hinweis-Knopf (vorher 14/16 px) */
 html:root body .lx-kbar-title {
   font-size: var(--t-task);
+}
+html:root body .lx-kask {
+  font-size: var(--t-hint);
 }
 html:root body .lx-kbar-count {
   font-size: var(--t-small);

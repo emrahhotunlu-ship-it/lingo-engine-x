@@ -3,7 +3,6 @@ import type { kernDe } from './kern.de';
 
 export const kernEn: Record<keyof typeof kernDe, string> = {
   kernAsk: 'Ask Claude',
-  kernAskAbout: 'Ask Claude about this',
   kernAreaWords: 'Words',
   kernAreaGrammar: 'Grammar',
   kernCount: '{n} of {total} done',
