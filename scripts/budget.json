@@ -194,11 +194,22 @@
         "basis": 80000,
         "zuwachs": {},
         "paket": "Großpaket C: Englisch erst bei Bedarf"
+      },
+      "src/modules/apply/ui/ApplyPage.tsx": {
+        "basis": 2000,
+        "zuwachs": {},
+        "paket": "Fokus 2.0 F3: Seite Anwenden"
+      },
+      "src/modules/apply/ui/TaskScreen.tsx": {
+        "basis": 19000,
+        "zuwachs": {},
+        "paket": "Fokus 2.0 F3: Schreibaufgabe Anwenden"
       }
     },
     "lazyNeu": 150000,
     "bin": 500000,
-    "files": 99,
+    "files": 105,
+    "filesFreigabe": "Hauptsitzung 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege bringen 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
     "binEinzeln": {
       "raw-atlas": {
         "bytes": 560000,
