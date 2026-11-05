@@ -17,13 +17,14 @@ export type { MessageKey } from '../../i18n';
 export { Button } from '../../ui/Button';
 export { Icon } from '../../ui/Icon';
 export type { IconName } from '../../ui/Icon';
-export { Disclosure } from '../../ui/Disclosure';
 export { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 export { AiMark } from '../../ui/AiMark';
 export { Skeleton } from '../../ui/Skeleton';
 export { Row, RowList } from '../../ui/RowList';
 export { TabTitle } from '../../features/system/Chrome';
 export { ExerciseTop } from '../../features/learn/ui';
+// Bildschirmtastatur: Feld und Prüfen-Knopf über der Tastatur halten (dieselbe Rechnung wie die Lücke, Kap. 4.1)
+export { keepVisibleDelta, keyboardCovers } from '../../ui/chat/keyboard';
 
 // KI: Anfrage, Verfügbarkeit, Tagesbremse
 export { useAsk } from '../../ai/useAsk';

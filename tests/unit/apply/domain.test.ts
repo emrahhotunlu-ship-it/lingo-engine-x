@@ -3,7 +3,7 @@ import { copyCheck, COPY_RATIO_MAX } from '../../../src/modules/apply/domain/cop
 import { applyCountPatch, applyOfCount, applyOfDay, readApplyCount } from '../../../src/modules/apply/domain/count';
 import { countSentences, countWords, joinParts, lengthGoal, lengthState } from '../../../src/modules/apply/domain/kinds';
 import { findKeypoints, keypointsItem, pickMail } from '../../../src/modules/apply/domain/material';
-import { confirmedWords, errorsOf, evidenceWords, fromReply, outItemOf, praiseOf, prodOf, repairsOf, selfFixOk, selfSpots, spotContext, wordUses, type ApplyRun } from '../../../src/modules/apply/domain/result';
+import { confirmedWords, doubtPoints, errorsOf, evidenceWords, fromReply, outItemOf, praiseOf, prodOf, repairsOf, selfFixOk, selfSpots, spotContext, wordUses, type ApplyRun } from '../../../src/modules/apply/domain/result';
 import { compactOut, OUT_DOC_MAX_BYTES, OUT_MAX_ITEMS } from '../../../src/domain/nbdrill/outDoc';
 import { resolveStep } from '../../../src/modules/apply/domain/step';
 import { inboxMails } from '../../../src/content/nb/load';
@@ -222,5 +222,29 @@ describe('Kernpunkte im Monatsdokument (D1)', () => {
     expect(out.find((x) => x.id === kp.id)?.fb).toEqual(kp.fb);
     expect(findKeypoints([{ items: out }], 'r-2026-09-01-1')).toHaveLength(3);
     expect(JSON.stringify({ v: 1, month: '2026-09', items: out }).length).toBeLessThanOrEqual(OUT_DOC_MAX_BYTES);
+  });
+});
+
+describe('Zusammenfassung: kein Widerspruch zwischen Kernpunkt und „Richtig wiedergegeben“ (UX-Befund 5)', () => {
+  const bad = { ok: false, quote: 'I think this is the biggest danger of our time', why: 'Meinung' };
+  const pts = [
+    { i: 1, covered: 'yes' as const, quote: 'A team warns that tiny AI programs might copy themselves.', why: '' },
+    { i: 2, covered: 'yes' as const, quote: 'I think this is the biggest danger of our time.', why: '' },
+    { i: 3, covered: 'no' as const, quote: '', why: 'fehlt' },
+  ];
+
+  it('stuft einen Kernpunkt herab, dessen Beleg genau die erfundene Stelle ist (ohne Zitat), die anderen bleiben', () => {
+    const { points, doubted } = doubtPoints(pts, bad);
+    expect(doubted).toEqual([2]);
+    expect(points[1]).toEqual({ i: 2, covered: 'partly', quote: '', why: '' });
+    expect(points[0]).toEqual(pts[0]);
+    expect(points[2]).toEqual(pts[2]);
+  });
+
+  it('greift auch, wenn das Zitat nur ein Teil des Satzes ist, aber nie bei treuer Zusammenfassung oder zu kurzem Zitat', () => {
+    expect(doubtPoints(pts, { ...bad, quote: 'the biggest danger' }).doubted).toEqual([2]);
+    expect(doubtPoints(pts, { ok: true, quote: '', why: '' }).doubted).toEqual([]);
+    expect(doubtPoints(pts, { ...bad, quote: 'I think' }).doubted).toEqual([]);
+    expect(doubtPoints(pts, null).points).toEqual(pts);
   });
 });

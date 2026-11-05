@@ -23,6 +23,33 @@ const axe = async (page: Page): Promise<string[]> => {
   return (await new AxeBuilder({ page }).withTags(AXE).analyze()).violations.map((v) => v.id);
 };
 
+/** Hauptknopf nach ui-standard §3: mindestens 52 px hoch. */
+const tall = async (page: Page, id: string): Promise<void> => {
+  expect((await page.getByTestId(id).boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(52);
+};
+
+/** Nachgebildetes `visualViewport` (Chromium hat keine Bildschirmtastatur), wie stand-gaps.spec.ts „Kap. 4.1“. */
+const fakeViewport = (page: Page): Promise<void> =>
+  page.addInitScript(() => {
+    const vv = Object.assign(new EventTarget(), { height: window.innerHeight, width: window.innerWidth, offsetTop: 0, offsetLeft: 0, pageTop: 0, pageLeft: 0, scale: 1 });
+    Object.defineProperty(window, 'visualViewport', { value: vv, configurable: true });
+  });
+
+/** Tastatur „öffnet sich“: nur noch die obersten `h` px sind sichtbar. */
+const openKeyboard = (page: Page, h: number): Promise<void> =>
+  page.evaluate((height) => {
+    const vv = window.visualViewport as unknown as EventTarget & { height: number };
+    vv.height = height;
+    vv.dispatchEvent(new Event('resize'));
+  }, h);
+
+/** Liegt das Element ganz im Bereich [0, h] des Fensters? */
+const within = (page: Page, id: string, h: number): Promise<boolean> =>
+  page.getByTestId(id).evaluate((el, max) => {
+    const r = el.getBoundingClientRect();
+    return r.top >= -1 && r.bottom <= max + 1 && r.height > 0;
+  }, h);
+
 /** Tagesweg-Plan vom Dienstag mit eingefrorener Disziplin (`u.ap`). */
 function twPlan(ap: string): Doc {
   return {
@@ -48,14 +75,17 @@ test.describe('Handy 390 px', () => {
     await openTab(page, 'apply');
     await expect(page.getByTestId('apply-hub')).toHaveAttribute('data-v', '2');
     await expect(page.getByTestId('ax-today-start')).toHaveAttribute('data-kind', 'reply');
-    await expect(page.getByTestId('ax-all').locator('button')).toHaveCount(4);
-    for (const id of ['hub-combo-own', 'ax-row-reply', 'ax-row-write', 'ax-row-summary']) await expect(page.getByTestId(id)).toBeEnabled();
+    // UX-Befund 4: Die Art von heute steht nicht noch einmal unter „Frei üben“ (der einzige Weg zur Pflicht ist Schritt 3).
+    await expect(page.getByTestId('ax-all').locator('button')).toHaveCount(3);
+    await expect(page.getByTestId('ax-row-reply')).toHaveCount(0);
+    for (const id of ['hub-combo-own', 'ax-row-write', 'ax-row-summary']) await expect(page.getByTestId(id)).toBeEnabled();
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe(page)).toEqual([]);
 
     await page.getByTestId('ax-today-start').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-device', 'touch');
+    await expect(page.getByTestId('ax-bar-title')).toHaveText('Antworten');
     await expect(page.getByTestId('ax-task')).toContainText('Antworte auf die Mail von');
     await expect(page.getByTestId('ax-purpose')).toContainText('Wozu:');
     await expect(page.getByTestId('ax-mail')).toBeVisible();
@@ -79,10 +109,19 @@ test.describe('Handy 390 px', () => {
     for (let k = 0; k < n - 1; k++) await page.getByTestId(`ax-part-${k}`).fill(parts[k] ?? 'It depends of your plans for the next quarter, of course.');
     await page.getByTestId(`ax-part-${n - 1}`).fill('Best regards');
     await expect(page.getByTestId('ax-check')).toBeEnabled();
+    await tall(page, 'ax-check');
     await page.getByTestId('ax-check').click();
 
-    // Erst selbst verbessern: Stellen mit Fehlerart, ohne Lösung.
+    // Erst selbst verbessern: Stellen mit Fehlerart, ohne Lösung. UX-Befund 3: die Seite springt dorthin, der eigene Text ist zu einer Zeile eingeklappt.
     await expect(page.getByTestId('ax-self')).toBeVisible();
+    await expect(page.getByTestId('ax-self')).toBeInViewport();
+    await expect(page.getByTestId('ax-parts')).toHaveCount(0);
+    await expect(page.getByTestId('ax-yourtext')).toHaveAttribute('data-open', 'false');
+    await tall(page, 'ax-reveal');
+    // Der Sprung setzt den Fokus auf die Überschrift, nicht in ein Feld: die Leiste bleibt ohne Knopf, keine Tastatur.
+    await expect(page.getByTestId('ax-dock')).toHaveCount(0);
+    await page.getByTestId('ax-self-input-0').focus();
+    await expect(page.getByTestId('ax-dock-reveal')).toBeVisible();
     expect(await calls(page)).toEqual(['apply-reply:default']);
     await expect(page.getByTestId('ax-self-0')).toHaveAttribute('data-kind', 'grammar');
     await expect(page.getByTestId('ax-self-input-0')).toHaveValue('discussed about');
@@ -95,6 +134,8 @@ test.describe('Handy 390 px', () => {
 
     const result = page.getByTestId('ax-result');
     await expect(result).toHaveAttribute('data-kind', 'reply');
+    await expect(result).toBeInViewport();
+    await expect(page.getByTestId('ax-result-head')).toBeFocused();
     await expect(page.getByTestId('ax-point-1')).toHaveAttribute('data-covered', 'yes');
     await expect(page.getByTestId('ax-tone')).toHaveAttribute('data-fit', 'fits');
     await expect(page.getByTestId('ax-length')).toBeVisible();
@@ -103,8 +144,15 @@ test.describe('Handy 390 px', () => {
     // Feste Reihenfolge: Pflichtpunkte → Ton → Länge → Fehlerstellen.
     const ys = await Promise.all(['ax-points', 'ax-tone', 'ax-length', 'ax-spots'].map(async (id) => (await page.getByTestId(id).boundingBox())?.y ?? 0));
     expect([...ys].sort((a, b) => a - b)).toEqual(ys);
+    // UX-Befund 8: „Melden“ nur mit aufgeklappter Fassung; der Gruß steht darin genau einmal (Befund 9).
+    await expect(page.getByTestId('ax-mark')).toHaveCount(0);
     await page.getByTestId('ax-better').click();
     await expect(page.getByTestId('ax-better-text')).toContainText('Best regards');
+    expect(((await page.getByTestId('ax-better-text').textContent()) ?? '').match(/Best regards/g)?.length).toBe(1);
+    await expect(page.getByTestId('ax-mark')).toBeVisible();
+    await page.getByTestId('ax-yourtext-toggle').click();
+    await expect(page.getByTestId('ax-yourtext-text')).toContainText('Shall we talk again');
+    await tall(page, 'ax-done');
     await expect(page.getByTestId('ax-repairs')).toBeVisible();
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe(page)).toEqual([]);
@@ -122,6 +170,37 @@ test.describe('Handy 390 px', () => {
     await expect.poll(async () => (await profile(page)).apc).toEqual({ n: 2, d: TUE });
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
+  });
+
+  test('Tastatur (UX-Befund 1): Aufgabe, aktives Feld und Prüfen-Knopf bleiben über der Tastatur; der Knopf in der Leiste prüft', async ({ page }) => {
+    await fakeViewport(page);
+    const { errors } = await boot(page, { migrated: true, now: TUE_9, localStorage: { 'lx:input': 'touch' } });
+    await screen(page, 'today');
+    await openTab(page, 'apply');
+    await page.getByTestId('ax-row-summary').click();
+    await screen(page, 'applyTask');
+    await expect(page.getByTestId('ax-dock')).toHaveCount(0);
+    const input = page.getByTestId('ax-input');
+    await input.focus();
+    await expect(page.getByTestId('ax-dock-check')).toBeVisible();
+    await input.pressSequentially('A security team warns that tiny AI programs might soon copy themselves onto cheap home gadgets.');
+    // iPhone 390 × 844: die Tastatur nimmt rund 364 px, sichtbar bleiben die obersten 480 px.
+    await openKeyboard(page, 480);
+    // Feld zwischen Leiste und Tastatur, Kurztitel und Knopf in der klebenden Leiste.
+    await expect.poll(() => within(page, 'ax-input', 480)).toBe(true);
+    for (const id of ['ax-bar-title', 'ax-dock-check']) expect(await within(page, id, 480)).toBe(true);
+    const barBottom = (await page.getByTestId('exercise-bar').boundingBox())?.y ?? 0;
+    const inputTop = (await input.boundingBox())?.y ?? 0;
+    expect(inputTop).toBeGreaterThanOrEqual(barBottom);
+    await expect(input).toBeFocused();
+    await expect(page.getByTestId('ax-dock-check')).toBeDisabled();
+    await input.pressSequentially(' Such devices rarely get updates, so a network of them would be hard to stop. In tests, the models ran even on weak TV boxes.');
+    await expect(page.getByTestId('ax-dock-check')).toBeEnabled();
+    // Tippen auf den Knopf in der Leiste prüft; danach ist die Leiste wieder ohne Knopf.
+    await page.getByTestId('ax-dock-check').click();
+    await expect(page.getByTestId('ax-result')).toBeVisible();
+    await expect(page.getByTestId('ax-dock')).toHaveCount(0);
+    expect(errors).toEqual([]);
   });
 
   test('Kurzer Tag: Schritt 3 ist ein eigener Satz mit EINEM Satz; der Zähler zählt nicht (die Disziplin wandert)', async ({ page }) => {
@@ -193,6 +272,10 @@ test.describe('Laptop 1440 px', () => {
     await expect(page.getByTestId('ax-faithful')).toContainText('I think this is the biggest danger of our time');
     await expect(page.getByTestId('ax-own')).toHaveAttribute('data-hint', 'false');
     await expect(page.getByTestId('ax-point-1')).toBeVisible();
+    // UX-Befund 5: Der Kernpunkt, der genau die erfundene Stelle zitiert, ist nicht „getroffen“ und zeigt das Zitat nicht noch einmal.
+    await expect(page.getByTestId('ax-point-2')).toHaveAttribute('data-covered', 'partly');
+    await expect(page.getByTestId('ax-point-2')).not.toContainText('I think');
+    await expect(page.getByTestId('ax-point-doubt-2')).toBeVisible();
     // Feste Reihenfolge: Kernpunkte → richtig wiedergegeben → eigene Worte → Länge → Fehlerstellen; ohne Fehler „Das sitzt“ mit Zitat.
     const ys = await Promise.all(['ax-points', 'ax-faithful', 'ax-own', 'ax-length', 'ax-spots'].map(async (id) => (await page.getByTestId(id).boundingBox())?.y ?? 0));
     expect([...ys].sort((a, b) => a - b)).toEqual(ys);
@@ -237,6 +320,7 @@ test.describe('Laptop 1440 px', () => {
     await page.getByTestId('ax-row-write').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-brief')).toContainText('Empfänger');
+    await expect(page.getByTestId('ax-task')).toHaveText('Lies, worum es geht, und schreib deine Mail auf Englisch.');
     await expect(page.getByTestId('ax-target-rule')).toContainText('Regel:');
     const mail = `Dear Ms Weber,
 

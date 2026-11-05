@@ -6,7 +6,8 @@ import { applyStepRoute } from './route';
 
 // Seite „Anwenden“ (F3, anwenden-plan.md „Seite Anwenden“; ersetzt unter Fokus 2.0 den Praxis-Hub):
 // 1. „Heute dran“: die Disziplin des Tages aus dem eingefrorenen Plan (Pflicht, Schritt 3). Erledigt = Zustand, kein Knopf (Kap. 2.2).
-// 2. Die vier Disziplinen als Zeilen (Handlung, Wozu, Dauer), frei geübt (Extra, zählt nie zur Pflicht).
+// 2. Die Disziplinen als Zeilen (Handlung, Wozu, Dauer), frei geübt (Extra, zählt nie zur Pflicht). Solange „Heute dran“ offen ist, fehlt dort dessen Art
+//    (nichts doppelt, Kap. 2 Nr. 6 und Kap. 15; der einzige Weg zur Pflicht ist Schritt 3).
 // 3. „Fehler korrigieren“: fällige Fehlersätze, freiwillig.
 // Test-Kennungen `apply-hub`, `hub-combo-own` und `hub-repair-round` bleiben wie im bisherigen Hub.
 
@@ -48,17 +49,15 @@ export function ApplyPage() {
     const r = applyStepRoute({ ap: plan?.u?.ap, short, ai, day: today, block: 3 });
     if (r) go(r);
   };
+  // Prüfbefund L8 / UX-Befund 4: Die Disziplin des Tages zählt nur über Schritt 3; solange er offen ist, steht sie nicht noch einmal unter „Frei üben“.
+  const stepOpen = hasStep && !stepDone;
+  const freeKinds = stepOpen ? KINDS.filter((k) => k !== todayKind) : KINDS;
   const startFree = (kind: ApplyKind): void => {
-    // Prüfbefund L8: Die Disziplin des Tages zählt nur über Schritt 3. Solange er offen ist, führt auch die freie Zeile dorthin (sonst bliebe die Pflicht offen).
-    if (hasStep && step && !stepDone && kind === todayKind) {
-      startToday();
-      return;
-    }
     if (kind === 'combo') go({ name: 'comboSentence' });
     else go({ name: 'applyTask', kind });
   };
   const blocked = (kind: ApplyKind): MessageKey | null => (!ai ? 'axNeedsAi' : kind === 'combo' && pairs.length === 0 ? 'axNeedsWords' : null);
-  const min = (kind: ApplyKind): string => t('axMin', { n: kind === todayKind && hasStep && !stepDone && typeof planMin === 'number' ? planMin : APPLY_MINUTES[kind] });
+  const min = (kind: ApplyKind): string => t('axMin', { n: kind === todayKind && stepOpen && typeof planMin === 'number' ? planMin : APPLY_MINUTES[kind] });
 
   return (
     <div className="lx-ax mx-auto flex w-full max-w-[47.5rem] flex-col gap-8 px-4 py-6 sm:py-10" data-testid="apply-hub" data-v="2" data-profile={device}>
@@ -85,7 +84,7 @@ export function ApplyPage() {
       )}
 
       <RowList title={t('axAll')} testId="ax-all">
-        {KINDS.map((kind) => {
+        {freeKinds.map((kind) => {
           const why = blocked(kind);
           return (
             <Row

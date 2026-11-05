@@ -24,10 +24,39 @@ export type Feedback = {
   gist: string;
   /** Claudes Nachzählung (oder `null`). */
   second: number | null;
+  /** Zusammenfassung: Kernpunkte (`i`), deren Zitat genau die Stelle enthält, die „Richtig wiedergegeben“ als „steht so nicht im Artikel“ markiert (herabgestuft). */
+  doubted?: number[];
 };
 
 export const fromReply = (o: ApplyReply): Feedback => ({ kind: 'reply', edits: o.edits, used: o.used, points: o.points, faithful: null, tone: o.tone, good: o.good, upgraded: o.upgraded, gist: o.summary, second: o.errorCount });
-export const fromSummary = (o: ApplySummary): Feedback => ({ kind: 'summary', edits: o.edits, used: o.used, points: o.points, faithful: o.faithful, tone: null, good: o.good, upgraded: o.upgraded, gist: o.summary, second: o.errorCount });
+export const fromSummary = (o: ApplySummary): Feedback => {
+  const { points, doubted } = doubtPoints(o.points, o.faithful);
+  return { kind: 'summary', edits: o.edits, used: o.used, points, faithful: o.faithful, tone: null, good: o.good, upgraded: o.upgraded, gist: o.summary, second: o.errorCount, doubted };
+};
+
+const quoteKey = (s: string): string =>
+  normWs(s)
+    .toLowerCase()
+    .replace(/[“”„"'‘’]/g, '')
+    .replace(/[.,;:!?]+$/g, '')
+    .trim();
+
+/**
+ * Kein Widerspruch im Ergebnis (UX-Befund 5): Belegt ein Kernpunkt sein „getroffen“ mit genau dem Satz, den „Richtig wiedergegeben“ als „steht so nicht im
+ * Artikel“ zitiert (gleich, oder das eine enthält das andere), ist er kein Beleg: `yes` wird `partly`, das Zitat entfällt, der Punkt steht in `doubted`.
+ */
+export function doubtPoints(points: readonly PointCheck[], faithful: ApplySummary['faithful'] | null): { points: PointCheck[]; doubted: number[] } {
+  const bad = faithful && !faithful.ok ? quoteKey(faithful.quote) : '';
+  if (bad.length < 8) return { points: [...points], doubted: [] };
+  const doubted: number[] = [];
+  const out = points.map((p) => {
+    const q = quoteKey(p.quote);
+    if (p.covered === 'no' || !q || !(q.includes(bad) || bad.includes(q))) return p;
+    doubted.push(p.i);
+    return { ...p, covered: 'partly' as const, quote: '', why: '' };
+  });
+  return { points: out, doubted };
+}
 export const fromMail = (o: C1Mail): Feedback => ({ kind: 'write', edits: o.edits, used: o.used, points: null, faithful: null, tone: o.tone, good: null, upgraded: o.upgraded, gist: o.summary, second: o.errorCount });
 
 /**

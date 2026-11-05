@@ -1,10 +1,13 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type FocusEvent, type ReactNode, type Ref } from 'react';
 import {
   AiRunPanel,
   Button,
   ExerciseTop,
+  Icon,
   isBusy,
+  keepVisibleDelta,
   KEY_PREFIX,
+  keyboardCovers,
   local,
   Skeleton,
   takeTutorCall,
@@ -16,6 +19,7 @@ import {
   useLive,
   useNav,
   useT,
+  type MessageKey,
   type ScreenProps,
 } from '../sharedUi';
 import { applyKeypoints, applyReply, applySummary, c1Mail, mailVars, patListText, tutorCtx } from '../shared';
@@ -36,6 +40,21 @@ import type { WriteKind } from '../domain/count';
 const MAX_CHECKS = 3;
 const TEXT_MAX = 1_800;
 const WHY: Record<WriteKind, 'axWhyReply' | 'axWhyWrite' | 'axWhySummary'> = { reply: 'axWhyReply', write: 'axWhyWrite', summary: 'axWhySummary' };
+const SHORT: Record<WriteKind, MessageKey> = { reply: 'axBarReply', write: 'axBarWrite', summary: 'axBarSummary' };
+/** Empfänger der Situationen (mail-situations.json `to`) in der Oberflächensprache; Unbekanntes bleibt wie geliefert. */
+const TO_KEY: Record<string, MessageKey> = {
+  'steering committee': 'axTo_steering',
+  'key client': 'axTo_keyClient',
+  CFO: 'axTo_cfo',
+  'client IT lead': 'axTo_clientIt',
+  client: 'axTo_client',
+  manager: 'axTo_manager',
+  management: 'axTo_management',
+  'absent colleague': 'axTo_colleague',
+  procurement: 'axTo_procurement',
+  investor: 'axTo_investor',
+  'client and director': 'axTo_clientDirector',
+};
 const TPL: Record<WriteKind, string> = {
   reply: `${applyReply.id}@${applyReply.version}`,
   write: `${c1Mail.id}@${c1Mail.version}`,
@@ -60,6 +79,58 @@ const unitOf = (v: unknown): 1 | 2 | 3 | 4 | 5 | null => (v === 1 || v === 2 || 
 /** Zeitstempel einer Prüfung (nur im Klick, nie beim Zeichnen). */
 const stamp = (): number => Date.now();
 
+const reducedMotion = (): boolean => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+/**
+ * Übungsleiste der Schreibübung: ✕ · Aufgabe (Kurztitel) mit „Pflicht“/„Extra“ darunter · Frag Claude. Solange ein Textfeld den Fokus hat, steht darunter
+ * der Hauptknopf (`dock`) – die Leiste klebt oben, also bleiben Aufgabe und Knopf über der Bildschirmtastatur (ui-standard §3, UX-Befund 1).
+ */
+function ApplyTop({ kind, unit, onClose, dock = null }: { kind: WriteKind; unit: number | null; onClose: () => void; dock?: ReactNode }) {
+  const { t } = useT();
+  const title = (
+    <>
+      <span className="lx-kbar-area" data-testid="ax-bar-title">
+        {t(SHORT[kind])}
+      </span>
+      <span className="lx-kbar-count">{t(unit ? 'axBarDuty' : 'axBarExtra')}</span>
+    </>
+  );
+  return <ExerciseTop onClose={onClose} ctx={unit ? 'duty' : 'xtra'} title={title} middleOverlay={dock} />;
+}
+
+/**
+ * Bildschirmtastatur (wie die Lücke, Kap. 4.1): Hat ein Feld den Fokus und verdeckt die Tastatur den unteren Teil (`visualViewport`), rollt die Seite so,
+ * dass das Feld zwischen klebender Leiste und Tastatur steht. Ohne `visualViewport` (oder wenn der Rahmen ihn nicht meldet) bleibt es beim Rollen des
+ * Browsers; die Leiste mit Aufgabe und Knopf klebt ohnehin oben.
+ */
+function useKeepFieldVisible(active: boolean): void {
+  useEffect(() => {
+    const vv = typeof window !== 'undefined' ? window.visualViewport : null;
+    if (!active || !vv) return;
+    let timer: number | null = null;
+    const keep = () => {
+      const el = document.activeElement;
+      if (!(el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) || !el.closest('[data-testid="ax-flow"]')) return;
+      if (!keyboardCovers(window.innerHeight, vv.height)) return;
+      const bar = document.querySelector<HTMLElement>('[data-testid="exercise-bar"]');
+      const top = Math.max(vv.offsetTop, bar ? bar.getBoundingClientRect().bottom : 0);
+      const d = keepVisibleDelta([el.getBoundingClientRect()], { top, height: vv.offsetTop + vv.height - top });
+      if (Math.abs(d) > 1) window.scrollBy({ top: d });
+    };
+    const later = () => {
+      if (timer !== null) window.clearTimeout(timer);
+      // Safari meldet die endgültige Höhe erst nach der Tastatur-Animation.
+      timer = window.setTimeout(keep, 120);
+    };
+    vv.addEventListener('resize', later);
+    later();
+    return () => {
+      if (timer !== null) window.clearTimeout(timer);
+      vv.removeEventListener('resize', later);
+    };
+  }, [active]);
+}
+
 export function ApplyTaskScreen({ route }: ScreenProps<'applyTask'>) {
   const kind = route.kind;
   const { t } = useT();
@@ -80,7 +151,7 @@ export function ApplyTaskScreen({ route }: ScreenProps<'applyTask'>) {
     if (unit) go({ name: 'comboSentence', unit });
     else go({ name: 'comboSentence' });
   };
-  const header = <ExerciseTop onClose={close} ctx={unit ? 'duty' : 'xtra'} />;
+  const header = <ApplyTop kind={kind} unit={unit} onClose={close} />;
 
   if (!ai && !started) {
     return (
@@ -110,7 +181,7 @@ export function ApplyTaskScreen({ route }: ScreenProps<'applyTask'>) {
     );
   }
   return (
-    <Frame top={header} kind={kind} materialId={m.id} device={device}>
+    <Frame top={null} kind={kind} materialId={m.id} device={device}>
       <TaskBody key={m.id} m={m} kind={kind} day={day} unit={unit} device={device} onStarted={() => setStarted(true)} onBack={close} onCombo={comboInstead} />
     </Frame>
   );
@@ -151,6 +222,43 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
   const [keyPoints, setKeyPoints] = useState<string[] | null>(null);
   const textId = useRef<string | null>(null);
   const editorId = useId();
+  /** Welches Feld hat gerade den Fokus: der eigene Text (`edit`) oder eine Stelle zum Selbst-Verbessern (`self`)? */
+  const [focusOn, setFocusOn] = useState<'edit' | 'self' | null>(null);
+  const [textOpen, setTextOpen] = useState(false);
+  const selfHead = useRef<HTMLHeadingElement>(null);
+  const resultHead = useRef<HTMLHeadingElement>(null);
+  useKeepFieldVisible(focusOn !== null);
+  // Platz unter dem Inhalt für das Rollen über die Tastatur (`room`): verschwindet erst kurz nach dem Fokus, sonst verschöbe sich die Seite zwischen
+  // Drücken und Loslassen eines Knopfes und das Tippen ginge daneben.
+  const [room, setRoom] = useState(false);
+  const roomTimer = useRef<number | null>(null);
+  const keepRoom = (on: boolean): void => {
+    if (roomTimer.current !== null) window.clearTimeout(roomTimer.current);
+    roomTimer.current = null;
+    if (on) setRoom(true);
+    else roomTimer.current = window.setTimeout(() => setRoom(false), 400);
+  };
+  useEffect(() => () => {
+    if (roomTimer.current !== null) window.clearTimeout(roomTimer.current);
+  }, []);
+  // Nur Eingabefelder zählen (nicht die Überschrift, auf die der Fokus nach dem Prüfen springt).
+  const isField = (el: EventTarget): boolean => el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement;
+  const onEditFocus = (e: FocusEvent<HTMLElement>): void => {
+    if (!isField(e.target)) return;
+    setFocusOn('edit');
+    keepRoom(true);
+  };
+  const onSelfFocus = (e: FocusEvent<HTMLElement>): void => {
+    if (!isField(e.target)) return;
+    setFocusOn('self');
+    keepRoom(true);
+  };
+  const onFieldBlur = (e: FocusEvent<HTMLElement>): void => {
+    // Wechsel zwischen den Feldern derselben Gruppe (Punkt 1 → Punkt 2) lässt die Leiste stehen.
+    if (e.relatedTarget instanceof Node && e.currentTarget.contains(e.relatedTarget)) return;
+    setFocusOn(null);
+    keepRoom(false);
+  };
 
   // Entwurf im Browser-Speicher (Bequemlichkeit, Fortsetzen nach Verlassen); leer = entfernt.
   useEffect(() => {
@@ -175,6 +283,10 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
     }
     setLimited(false);
     onStarted();
+    // Tastatur zu, Leiste zurück: das Ergebnis braucht den Platz.
+    setFocusOn(null);
+    keepRoom(false);
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     const given = composed.trim();
     const ctx = tutorCtx(profile);
     const rulePrompt = targets.rule?.prompt ?? '';
@@ -254,15 +366,52 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
     setRun(null);
     setSelf(null);
     setRevealed(false);
+    setTextOpen(false);
   };
+  const reveal = (): void => {
+    setFocusOn(null);
+    keepRoom(false);
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    setRevealed(true);
+  };
+
+  // UX-Befund 3: Nach dem Prüfen (und nach „Lösung zeigen“) springt die Seite zum Ergebnis; der Fokus geht auf die Überschrift (öffnet keine Tastatur).
+  const shown = run ? (revealed ? `r${run.check}` : `s${run.check}`) : '';
+  useEffect(() => {
+    if (!shown) return;
+    const head = (shown.startsWith('r') ? resultHead : selfHead).current;
+    const box = head?.closest<HTMLElement>('[data-testid="ax-result"], [data-testid="ax-self"]');
+    if (!head || !box) return;
+    box.scrollIntoView({ block: 'start', behavior: reducedMotion() ? 'auto' : 'smooth' });
+    head.focus({ preventScroll: true });
+  }, [shown]);
 
   const title = m.kind === 'reply' ? t('axTaskReply', { name: m.mail.from }) : m.kind === 'write' ? t('axTaskWrite') : t(device === 'touch' ? 'axTaskSummary3' : 'axTaskSummary35');
   const sentGoal = goal.sentences ? (goal.sentences[0] === goal.sentences[1] ? String(goal.sentences[0]) : `${goal.sentences[0]}–${goal.sentences[1]}`) : '';
   const pointLabels = m.kind === 'reply' ? m.mail.must.map((x) => x[lang]) : (keyPoints ?? []);
   const editorOff = busy || !!run;
+  const countText = `${t('axCount', { n: num(words), min: goal.words[0], max: goal.words[1] })}${goal.sentences ? ` · ${t('axCountSent', { n: num(sentences), goal: sentGoal })}` : ''}`;
+  const checkOff = tooLong || tooShort || checks >= MAX_CHECKS;
+  // Knopf in der klebenden Leiste, solange ein Feld den Fokus hat (Tippen darauf nimmt dem Feld den Fokus nicht: `mousedown` ohne Standard).
+  const dock =
+    focusOn === 'edit' && !editorOff ? (
+      <div className="flex items-center justify-between gap-3" data-testid="ax-dock">
+        <span className="lx-ax-small text-subtle lx-tnum">{countText}</span>
+        <Button variant="primary" className="flex-none" onMouseDown={(e) => e.preventDefault()} onClick={() => void check()} disabled={checkOff} data-testid="ax-dock-check">
+          {t('axCheck')}
+        </Button>
+      </div>
+    ) : focusOn === 'self' && run && self && !revealed ? (
+      <div className="flex items-center justify-end gap-3" data-testid="ax-dock">
+        <Button variant="primary" className="flex-none" onMouseDown={(e) => e.preventDefault()} onClick={reveal} data-testid="ax-dock-reveal">
+          {t('axReveal')}
+        </Button>
+      </div>
+    ) : null;
 
   return (
     <>
+      <ApplyTop kind={kind} unit={unit} onClose={onBack} dock={dock} />
       <header className="flex flex-col gap-2">
         <h1 className="lx-ax-title m-0" data-testid="ax-task">
           {title}
@@ -317,7 +466,12 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
         </section>
       )}
 
-      <section className="flex flex-col gap-2">
+      {run ? (
+        <section className="lx-card px-4 py-1" data-testid="ax-yourtext" data-open={String(textOpen)}>
+          <FoldText label={t('axYourText')} open={textOpen} onToggle={setTextOpen} text={run.text} />
+        </section>
+      ) : (
+      <section className="flex flex-col gap-2" onFocus={onEditFocus} onBlur={onFieldBlur}>
         {partsMode && m.kind === 'reply' ? (
           <div className="flex flex-col gap-4" data-testid="ax-parts">
             {[...m.mail.must.map((x, k) => t('axPartLabel', { n: k + 1, point: x[lang] })), t('axPartClose')].map((label, k) => (
@@ -349,7 +503,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
                   onPaste={() => setPasted(true)}
                   onDrop={() => setPasted(true)}
                   data-testid={`ax-part-${k}`}
-                  className="lx-ax-input lx-glass w-full resize-y rounded-[var(--radius-control)] px-4 py-3 text-fg placeholder:text-subtle"
+                  className="lx-ax-input lx-glass w-full scroll-mt-40 resize-y rounded-[var(--radius-control)] px-4 py-3 text-fg placeholder:text-subtle"
                 />
               </div>
             ))}
@@ -390,14 +544,13 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
                 } else setPasted(true);
               }}
               data-testid="ax-input"
-              className="lx-ax-input lx-glass w-full resize-y rounded-[var(--radius-control)] px-4 py-3 text-fg placeholder:text-subtle"
+              className="lx-ax-input lx-glass w-full scroll-mt-40 resize-y rounded-[var(--radius-control)] px-4 py-3 text-fg placeholder:text-subtle"
             />
           </>
         )}
         <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <span className="lx-ax-small text-subtle lx-tnum" data-testid="ax-count" data-words={words} data-sentences={sentences}>
-            {t('axCount', { n: num(words), min: goal.words[0], max: goal.words[1] })}
-            {goal.sentences ? ` · ${t('axCountSent', { n: num(sentences), goal: sentGoal })}` : ''}
+            {countText}
           </span>
           {tooLong ? (
             <span className="lx-ax-small text-wrong-text" role="status" data-testid="ax-toolong">
@@ -417,12 +570,13 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
             {t('axNoPaste')}
           </p>
         )}
-        {live?.hint && !run && (
+        {live?.hint && (
           <p className="lx-ax-hint m-0 text-muted" role="status" data-testid="ax-copyhint">
             {t('axCopyHint')}
           </p>
         )}
       </section>
+      )}
 
       {limited && (
         <p className="lx-ax-hint m-0 text-muted" role="status" data-testid="ax-limit">
@@ -432,7 +586,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       <AiRunPanel phase={ask.phase} error={ask.error} onStop={ask.stop} onRetry={() => void check()} />
       {!run && !busy && (
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="primary" className="min-h-[52px]" onClick={() => void check()} disabled={tooLong || tooShort || checks >= MAX_CHECKS} data-testid="ax-check">
+          <Button variant="primary" size="lg" onClick={() => void check()} disabled={checkOff} data-testid="ax-check">
             {t('axCheck')}
           </Button>
           {unit && ask.error && (
@@ -448,7 +602,10 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
           self={self}
           text={run.text}
           onChange={(fixes) => setSelf({ ...self, fixes })}
-          onReveal={() => setRevealed(true)}
+          onReveal={reveal}
+          headRef={selfHead}
+          onFocus={onSelfFocus}
+          onBlur={onFieldBlur}
         />
       )}
       {run && revealed && (
@@ -463,8 +620,11 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
           tpl={TPL[kind]}
           onRevise={revise}
           onDone={done}
+          headRef={resultHead}
         />
       )}
+      {/* Touch mit Fokus im Feld: Platz unter dem Inhalt (liegt hinter der Tastatur), damit die Seite das Feld über die Tastatur rollen kann. */}
+      {device === 'touch' && room && <div aria-hidden="true" className="h-[50vh] flex-none" data-testid="ax-kb-room" />}
     </>
   );
 }
@@ -509,7 +669,7 @@ function MaterialCard({ m, open, writing, onToggle }: { m: Material; open: boole
   if (m.kind === 'write') {
     return (
       <section className="lx-card flex flex-col gap-2 p-4 sm:p-6" aria-label={t('axBrief')} data-testid="ax-brief">
-        <p className="lx-ax-small m-0 text-subtle">{t('axReader', { to: m.situation.to })}</p>
+        <p className="lx-ax-small m-0 text-subtle">{t('axReader', { to: readerOf(m.situation.to, t) })}</p>
         <p className="lx-ax-text m-0" lang={lang}>
           {m.situation.brief[lang]}
         </p>
@@ -541,14 +701,26 @@ function MaterialCard({ m, open, writing, onToggle }: { m: Material; open: boole
   );
 }
 
-function SelfFix({ self, text, onChange, onReveal }: { self: NonNullable<SelfState>; text: string; onChange: (fixes: string[]) => void; onReveal: () => void }) {
+type SelfProps = {
+  self: NonNullable<SelfState>;
+  text: string;
+  onChange: (fixes: string[]) => void;
+  onReveal: () => void;
+  headRef: Ref<HTMLHeadingElement>;
+  onFocus: (e: FocusEvent<HTMLElement>) => void;
+  onBlur: (e: FocusEvent<HTMLElement>) => void;
+};
+
+function SelfFix({ self, text, onChange, onReveal, headRef, onFocus, onBlur }: SelfProps) {
   const { t } = useT();
   const id = useId();
   const n = self.spots.length;
   return (
-    <section className="lx-card flex flex-col gap-4 p-4 sm:p-6" data-testid="ax-self">
+    <section className="lx-card flex scroll-mt-28 flex-col gap-4 p-4 sm:p-6" data-testid="ax-self" onFocus={onFocus} onBlur={onBlur}>
       <header className="flex flex-col gap-1">
-        <h2 className="lx-ax-task m-0">{t('axSelfTitle')}</h2>
+        <h2 ref={headRef} tabIndex={-1} className="lx-ax-task m-0 outline-none">
+          {t('axSelfTitle')}
+        </h2>
         <p className="lx-ax-hint m-0 text-muted">{t(n === 1 ? 'axSelfLead_one' : 'axSelfLead_other', { n })}</p>
       </header>
       <ol className="m-0 flex list-none flex-col gap-3 p-0">
@@ -593,16 +765,39 @@ function SelfFix({ self, text, onChange, onReveal }: { self: NonNullable<SelfSta
                   onChange(next);
                 }}
                 data-testid={`ax-self-input-${k}`}
-                className="lx-ax-input lx-glass min-h-11 w-full rounded-[var(--radius-control)] px-4 py-2 text-fg"
+                className="lx-ax-input lx-glass min-h-11 w-full scroll-mt-40 rounded-[var(--radius-control)] px-4 py-2 text-fg"
               />
             </li>
           );
         })}
       </ol>
-      <Button variant="primary" className="min-h-[52px] self-start" onClick={onReveal} data-testid="ax-reveal">
+      <Button variant="primary" size="lg" className="self-start" onClick={onReveal} data-testid="ax-reveal">
         {t('axReveal')}
       </Button>
     </section>
   );
 }
 
+
+const readerOf = (to: string, t: (k: MessageKey) => string): string => {
+  const key = TO_KEY[to];
+  return key ? t(key) : to;
+};
+
+/** Der geprüfte eigene Text, eingeklappt zu einer Zeile (UX-Befund 3: der Text stand sonst dreimal da). */
+function FoldText({ label, open, onToggle, text }: { label: string; open: boolean; onToggle: (open: boolean) => void; text: string }) {
+  const id = useId();
+  return (
+    <div className="flex flex-col gap-2 pb-1">
+      <button type="button" aria-expanded={open} aria-controls={id} onClick={() => onToggle(!open)} className="lx-ax-text inline-flex min-h-11 w-full items-center justify-between gap-2 text-left font-semibold" data-testid="ax-yourtext-toggle">
+        {label}
+        <Icon name={open ? 'chevronDown' : 'chevronRight'} size={18} className="flex-none text-subtle" />
+      </button>
+      {open && (
+        <p id={id} className="lx-ax-text m-0 whitespace-pre-wrap pb-2 [overflow-wrap:anywhere]" lang="en" data-testid="ax-yourtext-text">
+          {text}
+        </p>
+      )}
+    </div>
+  );
+}
