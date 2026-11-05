@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { coveredOf, keepGood, keepPoints } from '../../../src/prompts/applyCommon';
+import { coveredOf, greetOf, keepGood, keepPoints, keepStyle, styleOf } from '../../../src/prompts/applyCommon';
+import { c1Mail, mailExample } from '../../../src/prompts/c1Mail';
+import type { Edit } from '../../../src/domain/tutor/edits';
 import { applyKeypoints } from '../../../src/prompts/applyKeypoints';
 import { applyReply, type ReplyVars } from '../../../src/prompts/applyReply';
 import { applySummary, faithfulOf, type SummaryVars } from '../../../src/prompts/applySummary';
@@ -71,8 +73,8 @@ describe('Pflicht- und Kernpunkte einzeln (Nachtrag learning-scientist Muss 1/2)
 describe('Vorlagen', () => {
   it('sind registriert, mit Kopfzeile, Stufe und Zwischenspeicher', () => {
     for (const tpl of [applyReply, applySummary, applyKeypoints]) expect(TEMPLATES).toContain(tpl);
-    expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@1]');
-    expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@1]');
+    expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@2]');
+    expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@2]');
     expect(applyKeypoints.build({ title: 'x', article: ARTICLE }).split('\n')[0]).toBe('[apply-keypoints@1]');
     expect([applyReply.tier, applySummary.tier, applyKeypoints.tier]).toEqual(['default', 'default', 'default']);
     // T2–T4: Bewertungsstufen, Ton über die ganze Antwort, bessere Fassung deckt alle Punkte, Ziel als Wert.
@@ -122,5 +124,87 @@ describe('Vorlagen', () => {
     expect(applyReply.schema(v).safeParse({ ...base, points: badWhy }).success).toBe(false);
     expect(applyReply.schema(v).safeParse({ ...base, points: [{ ...badWhy[0], why: 'This point is still missing from your reply.' }] }).success).toBe(true);
     expect(applyKeypoints.schema({ title: 'x', article: '' }).safeParse({ points: ['Der Rat hat ein neues Budget für den Verkehr beschlossen.', 'Forty electric buses are added.', 'Night service grows on six lines.'] }).success).toBe(false);
+  });
+});
+
+describe('W5 K1 „So klingt es gehobener“ und K7 Anrede/Gruß', () => {
+  const err = (from: string): Edit => ({ from, to: 'x', kind: 'grammar', sev: 'error', pat: null, why: 'Weil.' });
+  it('Stil nur mit wörtlichem Zitat, nicht auf einer Fehlerstelle, anders als vorher, höchstens 2, ohne Doppelte; falsche Sprache fällt weg', () => {
+    const tips = keepStyle(
+      [
+        { from: 'your team is busy', to: 'your team is stretched thin', why: 'Klingt natürlicher.' },
+        { from: 'not in the text', to: 'better', why: 'Erfunden.' },
+        { from: 'We discussed about', to: 'We talked about', why: 'Überschneidet den Fehler.' },
+        { from: 'about two hours', to: 'about two hours', why: 'Gleich.' },
+        { from: 'your team is busy', to: 'swamped', why: 'Doppelt.' },
+        { from: 'The setup takes', to: 'Die Einrichtung dauert nur kurz für dein ganzes Team', why: 'Falsche Sprache der Fassung.' },
+        { from: 'The setup takes', to: 'Setting things up takes', why: 'Klingt flüssiger.' },
+        { from: 'year-end closing', to: 'year-end close', why: 'Dritte Stelle.' },
+      ],
+      TEXT,
+      [err('discussed about')],
+      'de',
+    );
+    expect(tips.map((x) => x.from)).toEqual(['your team is busy', 'The setup takes']);
+    expect(tips[1]?.to).toBe('Setting things up takes');
+  });
+
+  it('fehlt `style` (ältere Antwort), gelten die belegten Verbesserungen der Liste; eine leere Liste bleibt leer', () => {
+    const edits: Edit[] = [err('discussed about'), { from: 'is busy', to: 'is swamped', kind: 'word', sev: 'upgrade', pat: null, why: 'Lebendiger.' }, { from: 'Hi', to: 'Dear', kind: 'spelling', sev: 'upgrade', pat: null, why: 'x' }];
+    expect(styleOf(undefined, TEXT, edits, 'de').map((x) => x.to)).toEqual(['is swamped']);
+    expect(styleOf([], TEXT, edits, 'de')).toEqual([]);
+    expect(styleOf('nonsense', TEXT, edits, 'de')).toEqual([]);
+  });
+
+  it('Anrede und Gruß tolerant: Kurzformen, unbekannt → kein Urteil, Grund in falscher Sprache fällt weg', () => {
+    expect(greetOf({ fit: 'OK', why: 'Passt.' }, 'de')).toEqual({ fit: 'fits', why: 'Passt.' });
+    expect(greetOf({ fit: 'too casual', why: '' }, 'de')?.fit).toBe('off');
+    expect(greetOf({ fit: 'missing', why: 'The greeting is missing at the very start of your reply.' }, 'de')).toEqual({ fit: 'missing', why: '' });
+    expect(greetOf({ fit: 'maybe' }, 'de')).toBeNull();
+    expect(greetOf(undefined, 'de')).toBeNull();
+  });
+
+  it('Vorlagen: Leser, Anrede und Gruß nur mit Vorgabe; Stil-Regel in Antwort/Zusammenfassung, bei der Mail nur auf Wunsch (Schreibwerkstatt unverändert kurz)', () => {
+    const g = { reader: 'Laura Fischer (Head of Accounting)', hello: 'Hi Laura,', close: 'Best regards,' };
+    const withG = applyReply.build(replyVars({ greet: g }));
+    expect(withG).toContain('Reader: Laura Fischer (Head of Accounting). A fitting salutation is Hi Laura, and a fitting sign-off is Best regards,');
+    expect(withG).toContain('- greet:');
+    expect(withG).toContain('"greet":{"fit":"fits","why":"…"}');
+    expect(applyReply.build(replyVars())).not.toContain('- greet:');
+    for (const p of [withG, applySummary.build(sumVars())]) expect(p).toContain('- style: 0 to 2 spans of CORRECT wording');
+    expect(mailExample({})).not.toMatch(/style|greet/);
+    expect(mailExample({ polish: true, greet: g })).toMatch(/"tone":\{[^}]*\},"greet":\{[^}]*\},.*"style":\[/);
+    const parses = (s: string): boolean => {
+      JSON.parse(s);
+      return true;
+    };
+    expect(parses(mailExample({ polish: true, greet: g }))).toBe(true);
+    expect(parses(applyReply.build(replyVars()).split('\n').find((l) => l.startsWith('{"points"')) ?? '')).toBe(true);
+  });
+
+  it('Testantworten: Stil und Anrede kommen durch das Schema; erfundene Stellen fallen weg; die Zusammenfassung urteilt nie über eine Anrede', () => {
+    const g = { reader: 'Laura Fischer (Head of Accounting)', hello: 'Hi Laura,', close: 'Best regards,' };
+    const text = 'Hi Laura, I fully understand that your team is very busy. The setup really needs only a short workshop. We discussed about a summary zzfakestyle.';
+    const v = replyVars({ text, greet: g });
+    const r = applyReply.schema(v).parse(JSON.parse(applyReplyReply(applyReply.build(v))));
+    expect(r.style.map((x) => x.to)).toEqual(['stretched thin', 'requires']);
+    expect(r.greet).toEqual({ fit: 'fits', why: 'Anrede und Gruß passen zum Empfänger.' });
+    const noGreet = replyVars({ text: text.replace('Hi Laura, ', ''), greet: g });
+    expect(applyReply.schema(noGreet).parse(JSON.parse(applyReplyReply(applyReply.build(noGreet)))).greet?.fit).toBe('missing');
+    // Ohne Vorgabe kein Urteil, auch wenn Claude eines liefert.
+    const plain = replyVars({ text });
+    expect(applyReply.schema(plain).parse({ ...JSON.parse(applyReplyReply(applyReply.build(plain))), greet: { fit: 'fits', why: 'x' } }).greet).toBeNull();
+    const sv = sumVars({ text: 'The council approved more money for buses, so night service is hard to stop now. Night buses will run on more lines.' });
+    const s = applySummary.schema(sv).parse(JSON.parse(applySummaryReply(applySummary.build(sv))));
+    expect(s.style.map((x) => x.from)).toEqual(['hard to stop']);
+    expect('greet' in s).toBe(false);
+  });
+
+  it('c1-mail@2: alte Antwort ohne `style`/`greet` bleibt gültig (Verbesserungen der Liste gelten als Stil)', () => {
+    const v = { situation: 'Reader: CFO. Write about the timeline.', patterns: [], phrases: [], text: 'Dear Daniel, I will tell you the timeline next week. Best regards', uiLang: 'de' as const, ctx: '', pats: patListText(), polish: true };
+    const old = { edits: [{ from: 'tell you', to: 'let you know', kind: 'word', sev: 'upgrade', pat: null, why: 'Höflicher.' }], used: [], tone: { fit: 'fits', why: '' }, upgraded: 'Dear Daniel, I will let you know the timeline next week. Best regards', summary: 'Gut gegliedert.', errorCount: 0 };
+    const out = c1Mail.schema(v).parse(old);
+    expect(out.style).toEqual([{ from: 'tell you', to: 'let you know', why: 'Höflicher.' }]);
+    expect(out.greet).toBeNull();
   });
 });

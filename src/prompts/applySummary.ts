@@ -2,16 +2,17 @@ import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { keepEdits, keepUsed, normWs, type Edit, type Used } from '../domain/tutor/edits';
 import { patIdsOf } from '../domain/tutor/patList';
-import { asList, keepGood, POINT_SCALE, POINT_WHY_RULE, pointsField, pointWhyIssues, type Good, type PointCheck } from './applyCommon';
+import { asList, keepGood, POINT_SCALE, POINT_WHY_RULE, pointsField, pointWhyIssues, STYLE_EXAMPLE, STYLE_RULE, styleOf, type Good, type PointCheck, type StyleTip } from './applyCommon';
 import { APPLY_EDIT_RULES, APPLY_MAX_EDITS, APPLY_TEXT_MAX, usedIdsOf, usedLine } from './applyReply';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { clipped, intIn } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// apply-summary@1 (F3 Anwenden, Disziplin „Artikel zusammenfassen“; Nachtrag learning-scientist Muss 2): Kernpunkte EINMAL je Artikel festgelegt (apply-keypoints@1,
+// apply-summary@2 (F3 Anwenden, Disziplin „Artikel zusammenfassen“; Nachtrag learning-scientist Muss 2): Kernpunkte EINMAL je Artikel festgelegt (apply-keypoints@1,
 // gespeichert) und hier als fester Maßstab übergeben. Geprüft werden: Kernpunkte getroffen (je Punkt mit wörtlichem Zitat), richtig wiedergegeben (`faithful`: nichts
 // erfunden, keine eigene Meinung), Fehlerstellen (`keepEdits`), Zielwörter und Regel (`keepUsed`), eine bessere Fassung. Ob in eigenen Worten geschrieben, misst
 // die App selbst (domain/copy im Modul Anwenden), nicht Claude. Stufe `default`, 24 h zwischengespeichert, Neuversuch nur bei Schemaverletzung (A6.3).
+// @2 (W5 K1): `style` „So klingt es gehobener“ (1–2 zitierte Stil-Verbesserungen, getrennt von den Fehlern; tolerant wie in apply-reply@2).
 
 export type SummaryVars = {
   /** Titel des Artikels, ≤ 160. */
@@ -37,6 +38,8 @@ export type ApplySummary = {
   edits: Edit[];
   used: Used[];
   good: Good | null;
+  /** „So klingt es gehobener“ (K1). */
+  style: StyleTip[];
   upgraded: string;
   summary: string;
   errorCount: number | null;
@@ -47,10 +50,9 @@ export const TITLE_MAX = 160;
 export const KEYPOINTS_MAX = 4;
 
 const ID = 'apply-summary';
-const VERSION = 1;
+const VERSION = 2;
 
-export const SUMMARY_EXAMPLE =
-  '{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"good":{"quote":"…","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
+export const SUMMARY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
@@ -69,17 +71,20 @@ export function summarySchema(v: SummaryVars): z.ZodType<ApplySummary> {
   const allIds = patIdsOf(v.pats);
   const given = block(v.text, APPLY_TEXT_MAX);
   const n = Math.min(KEYPOINTS_MAX, v.keyPoints.length);
-  return z
+  const base = z
     .object({
       points: pointsField(given, n),
       faithful: z.unknown().optional().transform((x) => faithfulOf(x, given)),
       edits: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepEdits(xs, given, allIds, APPLY_MAX_EDITS, { sevDefault: 'upgrade' })),
       used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepUsed(xs, given, usedIdsOf(v.words, v.rule))),
       good: z.unknown().optional().transform((x) => keepGood(x, given)),
+      style: z.unknown().optional(),
       upgraded: clipped(20, 1400),
       summary: clipped(5, 200),
       errorCount: z.preprocess((x) => (x === undefined || x === null || x === '' ? null : x), intIn(0, 60).nullable()).catch(null),
     })
+    .transform((o): ApplySummary => ({ ...o, style: styleOf(o.style, given, o.edits, v.uiLang) }));
+  return base
     .superRefine((o, ctx) => {
       o.edits.forEach((e, i) => {
         if (isWrongLang(e.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['edits', i, 'why'], message: `must be written in ${langName(v.uiLang)}` });
@@ -125,6 +130,7 @@ export const applySummary: PromptTemplate<SummaryVars, ApplySummary> = {
       '- edits: at most 12, each with "from" copied EXACTLY from the summary (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Register is never an error.',
       '- used: for each target word and for the target rule that the learner tried to use, one entry with pat (the word exactly as given, or "rule"), ok (true if used correctly) and a "quote" copied exactly from the summary. Skip what the learner did not try.',
       '- good: one strong span copied exactly from the summary ("quote") and one short sentence in the explanation language why it works ("why").',
+      STYLE_RULE,
       `- upgraded: a better summary in American English with ${sentences} sentences and at most ${v.goal.maxWords} words, in the learner's own words where they are correct; it must cover every key point, must not copy long phrases from the article and must differ from the learner's summary.`,
       '- summary: one short sentence in the explanation language: what works and what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the summary once more, independently of the list, and give the number.',

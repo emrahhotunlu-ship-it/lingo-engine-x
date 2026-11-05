@@ -27,8 +27,10 @@ import { applyKeypoints, applyReply, applySummary, c1Mail, mailVars, patListText
 import { copyCheck } from '../domain/copy';
 import { countSentences, countWords, fitGoal, joinParts, lengthGoal, lengthState, type Device } from '../domain/kinds';
 import { keypointsItem } from '../domain/material';
+import { startersFor } from '../domain/starters';
 import { confirmedWords, fromMail, fromReply, fromSummary, newRunId, selfSpots, spotContext, type ApplyRun, type Feedback } from '../domain/result';
 import { useMaterial, useTargets, type Material } from './hooks';
+import type { Greet } from '../domain/greet';
 import { ApplyResult, kindLabel, type SelfState } from './Result';
 import { knownKeypoints, saveKeypoints, saveRun, type SaveResult } from './save';
 import type { WriteKind } from '../domain/count';
@@ -62,7 +64,8 @@ const TPL: Record<WriteKind, string> = {
   summary: `${applySummary.id}@${applySummary.version}`,
 };
 
-type Draft = { text: string; parts: string[]; pasted: boolean; peeked: boolean };
+/** Entwurf; `greet` = Anrede-Feld am Handy (fehlt = noch nicht angefasst, dann vorbelegt), `helped` = Starthilfe geöffnet (W5 K9). */
+type Draft = { text: string; parts: string[]; pasted: boolean; peeked: boolean; greet?: string; helped: boolean };
 
 function readDraft(key: string): Draft | null {
   const v = local.getJson<Partial<Draft>>(key);
@@ -72,6 +75,8 @@ function readDraft(key: string): Draft | null {
     parts: Array.isArray(v.parts) ? v.parts.filter((p): p is string => typeof p === 'string') : [],
     pasted: v.pasted === true,
     peeked: v.peeked === true,
+    ...(typeof v.greet === 'string' ? { greet: v.greet } : {}),
+    helped: v.helped === true,
   };
 }
 
@@ -214,6 +219,9 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
   const [parts, setParts] = useState<string[]>(() => draft?.parts ?? []);
   const [pasted, setPasted] = useState(() => draft?.pasted ?? false);
   const [peeked, setPeeked] = useState(() => draft?.peeked ?? false);
+  // K7: am Handy ein eigenes Anrede-Feld, vorbelegt mit der passenden Anrede (änderbar). K9: Starthilfe geöffnet?
+  const [greet, setGreet] = useState(() => draft?.greet ?? (m.kind === 'reply' ? m.greet.hello : ''));
+  const [helped, setHelped] = useState(() => draft?.helped ?? false);
   const [pasteBlocked, setPasteBlocked] = useState(false);
   const [articleOpen, setArticleOpen] = useState(() => !(draft && (draft.text.trim() || draft.parts.some((p) => p.trim()))));
   const [limited, setLimited] = useState(false);
@@ -265,11 +273,15 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
 
   // Entwurf im Browser-Speicher (Bequemlichkeit, Fortsetzen nach Verlassen); leer = entfernt.
   useEffect(() => {
-    if (!text.trim() && !parts.some((p) => p.trim())) local.remove(draftKey);
-    else local.set(draftKey, JSON.stringify({ text, parts, pasted, peeked }));
-  }, [draftKey, text, parts, pasted, peeked]);
+    if (!text.trim() && !parts.some((p) => p.trim()) && !helped) local.remove(draftKey);
+    else local.set(draftKey, JSON.stringify({ text, parts, pasted, peeked, greet, helped }));
+  }, [draftKey, text, parts, pasted, peeked, greet, helped]);
 
-  const composed = partsMode ? joinParts(parts) : text;
+  // Die vorbelegte Anrede allein ist noch kein Text (kein „Schreiben begonnen“, keine Wörter vor dem ersten Punkt).
+  const body = partsMode ? joinParts(parts) : text;
+  const composed = partsMode && body.trim() ? joinParts([greet, ...parts]) : body;
+  const starters = useMemo(() => startersFor(kind, m.id, m.kind === 'write' ? m.situation.sit : ''), [kind, m]);
+  const greetVars = m.kind === 'reply' ? { reader: `${m.mail.from} (${m.mail.role})`, hello: m.greet.hello, close: m.greet.close } : m.kind === 'write' ? { reader: `${m.situation.to}${m.greet.name ? `, ${m.greet.name}` : ''}`, hello: m.greet.hello, close: m.greet.close } : undefined;
   const chars = Array.from(composed.trim()).length;
   const words = countWords(composed);
   const sentences = countSentences(composed);
@@ -296,15 +308,16 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
     let fb: Feedback | null = null;
     let kps: string[] | null = keyPoints;
     if (m.kind === 'reply') {
-      const out = await askReply.run({ incoming: m.incoming, must: m.mail.must.map((x) => x.en), words: targets.words, rule: rulePrompt, text: given, uiLang: lang, ctx, pats: patListText() });
+      const out = await askReply.run({ incoming: m.incoming, must: m.mail.must.map((x) => x.en), words: targets.words, rule: rulePrompt, text: given, uiLang: lang, ctx, pats: patListText(), greet: greetVars });
       if (out) fb = fromReply(out);
     } else if (m.kind === 'write') {
       // T7: Claude prüft, was Emrah sieht – die Regel ist das erste Muster der Situation, die Wendungen sind die beiden Zielwörter.
       const v = mailVars({ situation: m.situation, text: given, ctx, uiLang: lang });
-      const out = await askMail.run({ ...v, patterns: v.patterns.slice(0, 1), phrases: targets.words });
+      const out = await askMail.run({ ...v, patterns: v.patterns.slice(0, 1), phrases: targets.words, greet: greetVars, polish: true });
       if (out) fb = fromMail(out);
     } else {
-      kps ??= await knownKeypoints(m.id, [useClock.getState().today, m.article.day]);
+      // K8: Texte aus dem Vorrat bringen ihre geprüften Kernpunkte mit (keine Anfrage, derselbe Maßstab bei jeder Prüfung).
+      kps ??= m.keyPoints ?? (await knownKeypoints(m.id, [useClock.getState().today, m.article.day]));
       if (!kps) {
         const r = await askKp.run({ title: m.article.title, article: m.article.text });
         if (!r) return;
@@ -348,6 +361,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       // L1: Beleg nur für Zielwörter, die Claude als richtig bestätigt hat und die nicht im Material stehen; angeboten waren `offered`.
       words: confirmedWords(targets.words, fb, given, m.plain),
       offered: targets.words,
+      helped,
     };
     next.lex = next.words.map((w) => targets.keys[w.toLowerCase()]).filter((k): k is string => !!k);
     const spots = n === 1 ? selfSpots(fb.edits) : [];
@@ -437,6 +451,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
               <li key={k}>{x[lang]}</li>
             ))}
           </ol>
+          <GreetHint g={m.greet} />
         </section>
       )}
       {m.kind === 'summary' && (
@@ -469,6 +484,8 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
         </section>
       )}
 
+      {!run && <Starters items={starters} open={helped} onOpen={() => setHelped(true)} />}
+
       {run ? (
         <section className="lx-card px-4 py-1" data-testid="ax-yourtext" data-open={String(textOpen)}>
           <FoldText label={t('axYourText')} open={textOpen} onToggle={setTextOpen} text={run.text} />
@@ -477,6 +494,25 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       <section className="flex flex-col gap-2" onFocus={onEditFocus} onBlur={onFieldBlur}>
         {partsMode && m.kind === 'reply' ? (
           <div className="flex flex-col gap-4" data-testid="ax-parts">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={`${editorId}-greet`} className="lx-ax-hint font-semibold">
+                {t('axPartGreet')}
+              </label>
+              <input
+                id={`${editorId}-greet`}
+                value={greet}
+                lang="en"
+                name="lx-apply-greet"
+                autoCorrect="off"
+                autoCapitalize="sentences"
+                autoComplete="off"
+                spellCheck={false}
+                disabled={editorOff}
+                onChange={(e) => setGreet(e.target.value)}
+                data-testid="ax-part-greet"
+                className="lx-ax-input lx-glass min-h-11 w-full scroll-mt-40 rounded-[var(--radius-control)] px-4 py-2 text-fg"
+              />
+            </div>
             {[...m.mail.must.map((x, k) => t('axPartLabel', { n: k + 1, point: x[lang] })), t('axPartClose')].map((label, k) => (
               <div key={k} className="flex flex-col gap-1.5">
                 <label htmlFor={`${editorId}-${k}`} className="lx-ax-hint font-semibold">
@@ -492,7 +528,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
                   autoCapitalize="sentences"
                   autoComplete="off"
                   spellCheck={false}
-                  placeholder={k === mustN ? t('axPartClosePh') : t('axPlaceholder')}
+                  placeholder={k === mustN ? t('axPartClosePh', { close: m.greet.close }) : t('axPlaceholder')}
                   disabled={editorOff}
                   onChange={(e) => {
                     const v = e.target.value;
@@ -672,10 +708,13 @@ function MaterialCard({ m, open, writing, onToggle }: { m: Material; open: boole
   if (m.kind === 'write') {
     return (
       <section className="lx-card flex flex-col gap-2 p-4 sm:p-6" aria-label={t('axBrief')} data-testid="ax-brief">
-        <p className="lx-ax-small m-0 text-subtle">{t('axReader', { to: readerOf(m.situation.to, t) })}</p>
+        <p className="lx-ax-small m-0 text-subtle" data-testid="ax-reader">
+          {m.greet.name ? t('axReaderName', { to: readerOf(m.situation.to, t), name: m.greet.name }) : t('axReader', { to: readerOf(m.situation.to, t) })}
+        </p>
         <p className="lx-ax-text m-0" lang={lang}>
           {m.situation.brief[lang]}
         </p>
+        <GreetHint g={m.greet} />
       </section>
     );
   }
@@ -683,7 +722,7 @@ function MaterialCard({ m, open, writing, onToggle }: { m: Material; open: boole
     <section className="lx-card flex flex-col gap-2 p-4 sm:p-6" data-testid="ax-article" data-open={String(open)}>
       <button type="button" className="flex min-h-11 w-full items-center justify-between gap-2 text-left" aria-expanded={open} onClick={() => onToggle(!open)} data-testid="ax-article-toggle">
         <span className="flex min-w-0 flex-col">
-          <span className="lx-ax-small text-subtle">{t('axArticle')}</span>
+          <span className="lx-ax-small text-subtle">{t(m.stock ? 'axArticleStock' : 'axArticle')}</span>
           <span className="lx-ax-task" lang="en">
             {m.article.title}
           </span>
@@ -781,6 +820,45 @@ function SelfFix({ self, text, onChange, onReveal, headRef, onFocus, onBlur }: S
   );
 }
 
+
+/** K7: passende Anrede und passender Gruß für diesen Empfänger (als Hinweis; andere Formen derselben Tonlage gelten auch). */
+function GreetHint({ g }: { g: Greet }) {
+  const { t } = useT();
+  return (
+    <p className="lx-ax-hint m-0 text-muted" data-testid="ax-greet-hint">
+      {t('axGreetHint', { hello: g.hello, close: g.close })}
+    </p>
+  );
+}
+
+/**
+ * K9 Starthilfe: erst ein Knopf, auf Antippen drei Satzanfänge (Einstieg, Hauptteil, Schluss) aus festen Listen, kein KI-Aufruf. Geöffnet zählt als Hilfe
+ * (im Ergebnis vermerkt); die Aufgabe und die Pflicht bleiben gleich. Die Anfänge stehen zum Abschreiben da, eingefügt wird nichts.
+ */
+function Starters({ items, open, onOpen }: { items: readonly string[]; open: boolean; onOpen: () => void }) {
+  const { t } = useT();
+  if (!items.length) return null;
+  if (!open) {
+    return (
+      <Button variant="secondary" className="self-start" onClick={onOpen} data-testid="ax-starter">
+        {t('axStarter')}
+      </Button>
+    );
+  }
+  return (
+    <section className="flex flex-col gap-2" data-testid="ax-starters">
+      <h2 className="lx-ax-small m-0 text-subtle">{t('axStarterTitle')}</h2>
+      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+        {items.map((x, k) => (
+          <li key={x} className="lx-chip lx-ax-text self-start" lang="en" data-testid={`ax-starter-${k}`}>
+            {x}
+          </li>
+        ))}
+      </ul>
+      <p className="lx-ax-hint m-0 text-muted">{t('axStarterNote')}</p>
+    </section>
+  );
+}
 
 const readerOf = (to: string, t: (k: MessageKey) => string): string => {
   const key = TO_KEY[to];

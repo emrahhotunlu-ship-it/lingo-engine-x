@@ -1,0 +1,150 @@
+{
+  "v": 1,
+  "_note": "Artikel-Vorrat für „Einen Artikel zusammenfassen“ (W5 K8): kommt, wenn kein Tagesartikel da ist. Je 180–260 Wörter, US-Englisch, Beruf (Dokumente, Cloud, Software als Abo), Wirtschaft, Technik. Keine erfundenen Zahlen, Zitate oder Firmen; Beispiele sind allgemein oder hypothetisch formuliert. Kernpunkte (3–4) fest je Text: derselbe Maßstab bei jeder Prüfung, ohne zusätzliche Anfrage.",
+  "items": [
+    {
+      "id": "av01",
+      "topic": "dms",
+      "title": "Paper archives are moving to the cloud",
+      "text": "Many mid-sized companies still keep years of contracts, invoices and personnel files in paper folders or on old file servers. For a long time, this seemed good enough. Today, more and more of them are moving these archives into cloud-based document management systems.\n\nThe reasons are practical. A paper archive takes up office space, and finding a single contract can take a long time, especially when the person who filed it has left the company. Old file servers create a different problem: they have to be maintained, backed up and protected, and the IT team often lacks the time to do this properly.\n\nA cloud system stores documents in one central place and makes them searchable. Employees can find a file by customer name, by date or even by a word inside the document. Access rights control who can see what, and every change is logged, which helps during audits.\n\nHowever, the move is not only a technical project. Companies first have to decide which documents to digitize, how to name and sort them and how long to keep them. Many project teams start with one department, such as accounting, before they roll the system out across the whole company. In the end, success depends less on the software than on clear rules that everyone follows.",
+      "points": [
+        "Many mid-sized companies are moving paper and file-server archives into cloud document management systems.",
+        "Paper archives and old servers waste space and time and are hard to maintain and protect.",
+        "A cloud system makes documents searchable, controls access and logs every change.",
+        "Success depends on clear rules and a step-by-step rollout, not only on the software."
+      ]
+    },
+    {
+      "id": "av02",
+      "topic": "dms",
+      "title": "Electronic invoices are becoming the rule",
+      "text": "For decades, many businesses sent invoices as paper letters or as PDF files attached to emails. In a growing number of European countries, this is changing. Governments are gradually making structured electronic invoices mandatory for transactions between companies.\n\nA structured e-invoice is not simply a PDF. It is a data file that software can read automatically, without anyone typing in amounts, dates or tax numbers. The receiving company's system can check the invoice, match it with the order and prepare it for payment.\n\nSupporters say the change will save time and reduce errors. When nobody has to retype invoice data, typing mistakes disappear, and invoices can be approved much faster. Tax authorities also hope that digital data will make tax fraud more difficult.\n\nFor smaller companies, the transition can be a challenge. They need software that can send and receive the required formats, and their accounting staff have to learn new processes. Many of them rely on their tax advisors or software providers for guidance.\n\nCompanies that prepare early tend to have an advantage. Instead of treating e-invoicing only as a legal duty, they can use it as a chance to automate their whole invoice process, from receipt to approval and archiving.",
+      "points": [
+        "More European countries are gradually making structured e-invoices mandatory between companies.",
+        "A structured e-invoice is a data file that software can read and process automatically.",
+        "The change should save time, reduce errors and make tax fraud more difficult.",
+        "Smaller companies face challenges, but those that prepare early can automate their whole invoice process."
+      ]
+    },
+    {
+      "id": "av03",
+      "topic": "work",
+      "title": "The hidden cost of searching for files",
+      "text": "Ask office workers how they spend their day, and few of them will mention searching for files. Yet if you watched a typical office team for a week, you would probably notice how much time disappears this way: looking for the latest version of a contract, asking a colleague where a report is saved or digging through old emails for an attachment.\n\nEach search may only take a few minutes. The problem is that these minutes add up across a whole team and a whole year. Searching also interrupts concentration. Someone who stops a task to find a document often needs extra time to get back into the work.\n\nThe causes are usually familiar. Files are stored in too many places: personal drives, shared folders, email inboxes and chat tools. Different people name files in different ways, and there are often several versions of the same document with no clear sign of which one is final.\n\nCompanies that want to reduce this hidden cost often start with simple steps. They agree on one central place for important documents, introduce clear naming rules and use software that can search the content of files, not just their names. Small changes like these can give teams back time for the work that really matters.",
+      "points": [
+        "Office teams lose a lot of time searching for files, contracts and attachments.",
+        "Short searches add up over time and also break people's concentration.",
+        "The main causes are too many storage places, inconsistent file names and several versions of a document.",
+        "One central place, clear naming rules and full-text search can win back time."
+      ]
+    },
+    {
+      "id": "av04",
+      "topic": "saas",
+      "title": "Subscription software and the renewal conversation",
+      "text": "Software used to be sold like a product: a company paid once for a license and then used the program for years. Today, most business software is sold as a subscription. Customers pay every month or every year, and they can cancel when the contract ends.\n\nFor software providers, this model brings regular, predictable income. It also changes how they work. Winning a new customer is only the first step. The real test comes at renewal time, when the customer decides whether the software has delivered enough value to justify another year.\n\nThat is why many providers now have customer success teams. Their job is to make sure that customers actually use the product and reach their goals. A customer who rarely logs in, or who uses only a small part of the features, is more likely to cancel or to ask for a lower price.\n\nRenewal talks often include requests for discounts. Experienced account managers prepare for this by collecting evidence well in advance: how much time the customer has saved, how many users are active and which problems have been solved. With these facts, the conversation shifts from price to value. A discount may still be part of the deal, but usually in exchange for something, such as a longer contract.",
+      "points": [
+        "Most business software is now sold as a subscription that customers can cancel when the contract ends.",
+        "For providers, the real test comes at renewal, when customers judge whether the software was worth it.",
+        "Customer success teams make sure customers use the product, because low use often leads to cancellations.",
+        "Good account managers bring evidence of value to renewal talks and give discounts only in exchange for something."
+      ]
+    },
+    {
+      "id": "av05",
+      "topic": "dms",
+      "title": "How long should a company keep its documents?",
+      "text": "Every company produces documents that it is legally required to keep: invoices, contracts, tax records and personnel files. Laws define minimum retention periods for many of them, and these periods differ from country to country and from one type of document to another.\n\nKeeping documents for too short a time can be risky. If a company deletes an invoice before the end of its retention period, it may run into problems during a tax audit. However, keeping everything forever is not a safe solution either. Data protection rules in Europe require companies to delete personal data once there is no longer a valid reason to store it.\n\nThis creates a balancing act. A job application, for example, should not stay in the system for years after the position has been filled. A customer contract, on the other hand, may need to be kept long after the business relationship has ended.\n\nModern document management systems can help. They allow companies to attach a retention rule to each type of document. When the period ends, the system can flag the document for review or delete it automatically, and it records what happened. This makes the process consistent and easier to explain to auditors. Still, someone in the company has to define the rules, and that requires close cooperation between legal, finance and IT.",
+      "points": [
+        "Laws require companies to keep many documents for minimum periods that vary by country and document type.",
+        "Deleting too early is risky, but keeping personal data forever breaks European data protection rules.",
+        "Companies have to find the right balance for each type of document.",
+        "Document systems can apply retention rules automatically, but legal, finance and IT have to define the rules together."
+      ]
+    },
+    {
+      "id": "av06",
+      "topic": "work",
+      "title": "Hybrid work and the shared-file problem",
+      "text": "When offices emptied during the pandemic, many teams had to find new ways to work together almost overnight. Files that used to sit on an office server suddenly had to be available at home, on laptops and sometimes on private devices.\n\nSeveral years later, hybrid work has become normal in many office jobs. Employees spend some days at home and some in the office, and they expect to reach their files from anywhere. This has pushed many companies toward cloud storage and online collaboration tools.\n\nThe shift has clear benefits. Colleagues can edit the same document at the same time, comments replace long email threads, and nobody has to send attachments back and forth. However, it also creates new risks. When it is easy to share a link, it is also easy to share it with the wrong person. Some employees even save work files in private cloud accounts because they find the company tools too complicated.\n\nIT departments are responding with a mix of technology and training. They set safe default sharing rules, require two-step login and offer short guides on how to share files safely. In the end, the best protection may be a tool that is easy to use. If the official solution is simple, employees have little reason to look for workarounds.",
+      "points": [
+        "Hybrid work means employees expect to reach their files from anywhere, which pushes companies to the cloud.",
+        "Cloud tools make teamwork easier, with shared editing and comments instead of attachments.",
+        "Easy sharing also brings risks, such as links sent to the wrong person or files in private accounts.",
+        "IT responds with sharing rules, two-step login and training, and easy official tools reduce workarounds."
+      ]
+    },
+    {
+      "id": "av07",
+      "topic": "tech",
+      "title": "When software reads the invoices",
+      "text": "In many accounting departments, a large part of the day is still spent on routine data entry. Someone opens an incoming invoice, reads the supplier name, the amount and the due date, and types this information into the accounting system. The work is simple, but it is slow and prone to errors.\n\nNew tools based on artificial intelligence promise to change this. They can read scanned documents and PDF files, recognize which number is the total and which is the tax, and fill in the right fields automatically. Over time, these systems learn from corrections, so they make fewer mistakes with familiar suppliers.\n\nFor finance teams, the main benefit is speed. Invoices can be processed on the day they arrive, which makes it easier to pay on time and avoid late fees. Staff can spend more time on tasks that require judgment, such as checking unusual payments or talking to suppliers about disputes.\n\nStill, the technology is not perfect. Poor scans, handwritten notes and unusual layouts can confuse the software. For this reason, many companies keep a person in the loop who checks uncertain cases before anything is paid. Introducing such a tool also means rethinking the approval process, so that automation and human review work well together.",
+      "points": [
+        "Accounting teams still spend a lot of time typing invoice data by hand, which is slow and error-prone.",
+        "AI tools can read invoices, fill in the fields automatically and learn from corrections.",
+        "Faster processing helps companies pay on time and frees staff for tasks that need judgment.",
+        "The software still makes mistakes, so a person checks uncertain cases and the approval process has to change."
+      ]
+    },
+    {
+      "id": "av08",
+      "topic": "economy",
+      "title": "Why interest rates matter to ordinary businesses",
+      "text": "Interest rates are often discussed as a topic for central banks and financial markets. In reality, they affect almost every company, including those that never borrow large amounts of money.\n\nWhen interest rates rise, loans become more expensive. A company that wants to buy new machines, open a new location or invest in software has to pay more for the money it borrows. Some projects that looked attractive at lower rates suddenly no longer pay off, so they are postponed or canceled.\n\nHigher rates also affect customers. Households spend less on large purchases, and other companies become more careful with their budgets. As a result, sales cycles can become longer, and customers ask more questions before they sign a contract.\n\nWhen rates fall, the effect usually reverses, but not immediately. Companies first want to see whether the change will last before they commit to new investments.\n\nFor managers, this means that the economic environment should be part of every plan. A sales forecast that ignores financing costs may be too optimistic. At the same time, a careful company can use difficult periods to strengthen customer relationships and prepare for the moment when demand returns.",
+      "points": [
+        "Interest rates affect almost every company, not only banks and financial markets.",
+        "Higher rates make loans more expensive, so some investments are postponed or canceled.",
+        "Customers also spend more carefully, which makes sales cycles longer, and falling rates help only slowly.",
+        "Managers should include the economic environment in their plans and use slow periods to prepare."
+      ]
+    },
+    {
+      "id": "av09",
+      "topic": "tech",
+      "title": "The energy question behind the cloud",
+      "text": "Every email, video call and saved document has to be stored and processed somewhere. For most companies today, that place is a data center run by a cloud provider. These buildings are full of servers that work around the clock, and they need a lot of electricity, both to run the machines and to keep them cool.\n\nAs more companies move to the cloud and use demanding applications such as artificial intelligence, the energy needs of data centers are growing. This has turned energy into a strategic issue for the industry. Providers look for locations with a reliable power supply, and many are investing in renewable energy to reduce their carbon footprint.\n\nNew technologies also play a role. Modern cooling systems use less power, and in some places the waste heat from servers is used to heat nearby buildings. Software can help, too: by moving workloads to times or places where clean energy is available, providers can lower their emissions.\n\nFor business customers, these developments matter more and more. Large companies increasingly have to report on their environmental impact, and the emissions of their IT services are part of that picture. As a result, questions about energy use and sustainability now regularly appear when companies choose a cloud provider.",
+      "points": [
+        "Data centers run around the clock and need a lot of electricity for their servers and for cooling.",
+        "Growing cloud and AI use increases energy needs, so providers look for reliable power and invest in renewables.",
+        "Better cooling, reusing waste heat and moving workloads to clean energy can reduce emissions.",
+        "Business customers have to report their environmental impact, so energy use now matters when they choose a provider."
+      ]
+    },
+    {
+      "id": "av10",
+      "topic": "tech",
+      "title": "Ransomware: why backups alone are not enough",
+      "text": "Ransomware is one of the most serious threats for companies of every size. Attackers get into a company's network, often through a fake email, and encrypt its files. Then they demand money in exchange for the key that unlocks the data.\n\nFor years, the standard advice was simple: make regular backups. If the files are encrypted, the company can restore them and refuse to pay. This advice is still important, but attackers have adapted. Many of them now try to find and destroy backups before they start the encryption. Others steal sensitive data first and threaten to publish it if the company does not pay.\n\nAs a result, security experts now recommend several layers of protection. Backups should be stored in a way that cannot be changed or deleted, not even by an administrator account. Access to important systems should require more than a password. Employees need regular training to recognize suspicious emails, because one click can be enough to let attackers in.\n\nJust as important is a clear plan for an emergency. Companies should know who makes decisions, how to inform customers and how quickly critical systems can be restored. Practicing this plan before an attack happens can save days of confusion when it really matters.",
+      "points": [
+        "Ransomware attackers encrypt a company's files and demand money for the key.",
+        "Backups are still important, but attackers now destroy backups or steal data and threaten to publish it.",
+        "Several layers of protection are needed: backups that cannot be changed, stronger login and staff training.",
+        "Companies also need an emergency plan that they practice in advance."
+      ]
+    },
+    {
+      "id": "av11",
+      "topic": "economy",
+      "title": "Supply chains: from cheapest to most reliable",
+      "text": "For a long time, many companies organized their supply chains around one main goal: low cost. They bought from the cheapest suppliers, often far away, and kept their warehouses as empty as possible to save money.\n\nRecent years have shown the weaknesses of this approach. Closed factories, blocked shipping routes and sudden shortages of parts left many businesses unable to deliver their products. Customers waited for months, and some orders went to competitors.\n\nSince then, many companies have changed their priorities. Reliability now matters as much as price. Some firms work with several suppliers instead of one, so that a problem in one place does not stop production. Others keep larger stocks of critical parts or move part of their production closer to their main markets.\n\nThese changes come at a cost. Holding more stock ties up money, and suppliers closer to home are often more expensive. Managers therefore have to decide which parts and products are truly critical and where extra security is worth the price.\n\nDigital tools support these decisions. With better data on orders, stock levels and delivery times, companies can spot risks earlier and react before a delay turns into a crisis.",
+      "points": [
+        "Many companies used to build their supply chains mainly around low cost.",
+        "Closed factories, blocked routes and shortages showed how risky this approach was.",
+        "Reliability now matters as much as price: more suppliers, larger stocks or production closer to the main markets.",
+        "These changes cost money, so managers must decide what is critical, and better data helps them spot risks early."
+      ]
+    },
+    {
+      "id": "av12",
+      "topic": "dms",
+      "title": "Replacing an old system without stopping the business",
+      "text": "Many companies rely on software that was introduced decades ago. These legacy systems often still work, but they are expensive to maintain, difficult to connect to modern tools and understood by fewer and fewer employees. At some point, replacing them becomes unavoidable.\n\nThe challenge is that the business cannot simply stop while the change happens. Orders still have to be processed, invoices still have to be paid and customers still expect answers. A failed migration can therefore cause serious damage.\n\nProject managers usually reduce this risk in several ways. First, they analyze which data really needs to be moved and clean it up before the migration. Old systems often contain duplicates, outdated records and fields that nobody uses anymore. Second, they move to the new system in stages instead of all at once, starting with a smaller department or a single location. Third, they run tests with real data and give key users time to try the new system before the old one is switched off.\n\nCommunication is just as important as technology. Employees need to know what will change, when it will happen and where to get help. When people understand the reasons for the change, they are more willing to accept a few weeks of extra effort.",
+      "points": [
+        "Old legacy systems are expensive to maintain and hard to connect, so they eventually have to be replaced.",
+        "The business has to keep running during the change, so a failed migration can cause serious damage.",
+        "Project teams reduce the risk by cleaning up data, moving in stages and testing with real data.",
+        "Clear communication helps employees understand and accept the change."
+      ]
+    }
+  ]
+}
