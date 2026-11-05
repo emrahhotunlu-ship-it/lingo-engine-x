@@ -219,8 +219,9 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
   const [parts, setParts] = useState<string[]>(() => draft?.parts ?? []);
   const [pasted, setPasted] = useState(() => draft?.pasted ?? false);
   const [peeked, setPeeked] = useState(() => draft?.peeked ?? false);
-  // K7: am Handy ein eigenes Anrede-Feld, vorbelegt mit der passenden Anrede (änderbar). K9: Starthilfe geöffnet?
-  const [greet, setGreet] = useState(() => draft?.greet ?? (m.kind === 'reply' ? m.greet.hello : ''));
+  // K7: am Handy ein eigenes Anrede-Feld – LEER (learning-scientist 05.11.2026: die Anrede wird mitbewertet, also schreibt Emrah sie selbst;
+  // der Hinweis darüber nennt Empfänger und Ton). K9: Starthilfe geöffnet?
+  const [greet, setGreet] = useState(() => draft?.greet ?? '');
   const [helped, setHelped] = useState(() => draft?.helped ?? false);
   const [pasteBlocked, setPasteBlocked] = useState(false);
   const [articleOpen, setArticleOpen] = useState(() => !(draft && (draft.text.trim() || draft.parts.some((p) => p.trim()))));

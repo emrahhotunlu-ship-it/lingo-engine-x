@@ -204,7 +204,8 @@ export function acceptKnow(raw: unknown, card: KnowCard, nowMs: number, pv: stri
 /** Braucht das Wort-Dokument Wissen? Ohne Wortpartner oder mit weniger als 3 Sätzen (Ursprung + Claude + Satzbank, auch in Quarantäne). */
 export function needsKnow(doc: Obj, chunk = false): boolean {
   if (doc.hidden === true) return false;
-  const col = Array.isArray(doc.col) ? doc.col.filter((c) => isObj(c) && str(c.p)) : [];
+  // Gemeldete (`bad: 1`) zählen nicht: sind alle gemeldet, kommt Ersatz (learning-scientist 05.11.2026).
+  const col = Array.isArray(doc.col) ? doc.col.filter((c) => isObj(c) && c.bad !== 1 && str(c.p)) : [];
   const sb = Array.isArray(doc.sb) ? doc.sb.filter((x) => isObj(x) && x.bad !== 1 && str(x.en)) : [];
   const wx = Array.isArray(doc.wx) ? doc.wx.filter((x) => isObj(x) && x.bad !== 1 && str(x.en)) : [];
   const sentences = (str(doc.ex) ? 1 : 0) + sb.length + wx.length;
@@ -219,8 +220,10 @@ export function needsKnow(doc: Obj, chunk = false): boolean {
  */
 export function knowPatch(cur: Obj, a: KnowAccepted, nowMs: number, pv: string): Obj | null {
   const patch: Obj = {};
-  const col = Array.isArray(cur.col) ? cur.col.filter((c) => isObj(c) && str(c.p)) : [];
-  if (col.length === 0 && a.col.length) patch.col = a.col;
+  const all: unknown[] = Array.isArray(cur.col) ? (cur.col as unknown[]) : [];
+  const col = all.filter((c) => isObj(c) && c.bad !== 1 && str(c.p));
+  // Gemeldete bleiben gespeichert (nie löschen); neue kommen nur dazu, wenn kein brauchbarer mehr da ist.
+  if (col.length === 0 && a.col.length) patch.col = [...all, ...a.col];
   const sb: unknown[] = Array.isArray(cur.sb) ? (cur.sb as unknown[]) : [];
   const wx: unknown[] = Array.isArray(cur.wx) ? (cur.wx as unknown[]) : [];
   const have = new Set<string>([str(cur.ex), ...sb.map((x) => (isObj(x) ? str(x.en) : '')), ...wx.map((x) => (isObj(x) ? str(x.en) : ''))].filter(Boolean).map(exampleKey));

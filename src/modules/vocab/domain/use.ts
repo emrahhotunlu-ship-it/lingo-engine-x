@@ -72,7 +72,7 @@ export function shownOf(cs: CardSentence): Shown {
 function partnersOf(doc: Doc): string[] {
   const col = doc.col;
   const fromDoc = Array.isArray(col)
-    ? col.map((c) => (typeof c === 'string' ? c : c && typeof c === 'object' && typeof (c as Doc).p === 'string' ? ((c as Doc).p as string) : '')).filter(Boolean)
+    ? col.map((c) => (typeof c === 'string' ? c : c && typeof c === 'object' && (c as Doc).bad !== 1 && typeof (c as Doc).p === 'string' ? ((c as Doc).p as string) : '')).filter(Boolean)
     : [];
   return [...new Set(fromDoc)].slice(0, 3);
 }
