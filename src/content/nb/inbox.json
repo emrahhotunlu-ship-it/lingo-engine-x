@@ -13,11 +13,11 @@
   "must": [
    {
     "de": "Verständnis für die stressige Zeit zeigen",
-    "en": "Show understanding for the busy period"
+    "en": "Show that you understand how busy her team is"
    },
    {
     "de": "zeigen, wie wenig Aufwand ihr Team hätte",
-    "en": "Show how little effort it means for her team"
+    "en": "Show how little work it would take for her team"
    },
    {
     "de": "eine Kurzfassung für den Geschäftsführer anbieten",
@@ -36,15 +36,15 @@
   "from": "Peter Wolf",
   "role": "Managing Director, Wolf Metallbau",
   "subject": "Cloud archive?",
-  "body": "Hello,\n\nMy IT partner told me we should move our archive to the cloud. To be honest, I don't really understand what we would gain. We have a server in the basement, and it has worked for twelve years. Can you explain in simple words why we should spend money on this?\n\nRegards,\nPeter Wolf",
+  "body": "Hello,\n\nMy IT partner told me we should move our archive to the cloud. To be honest, I don't really understand what we would gain. We have a server in the basement, and it has worked for twelve years. Can you explain in simple terms why we should spend money on this?\n\nRegards,\nPeter Wolf",
   "hidden": {
    "de": "Er fühlt sich von Technik überfordert und will nicht dumm dastehen. Außerdem hängt er am Bewährten.",
    "en": "He feels overwhelmed by the technology and does not want to look foolish. He is also attached to what has always worked."
   },
   "must": [
    {
-    "de": "in einfachen Worten ohne Fachbegriffe antworten",
-    "en": "Answer in plain words without technical terms"
+    "de": "in zwei, drei einfachen Sätzen erklären, was ein Cloud-Archiv ist",
+    "en": "Explain in two or three simple sentences what a cloud archive is"
    },
    {
     "de": "den Nutzen für seinen Betrieb nennen, nicht Produktmerkmale",
@@ -105,12 +105,12 @@
     "en": "Name concrete documents and a date"
    },
    {
-    "de": "nichts versprechen, was nicht sicher ist",
-    "en": "Do not promise anything that is not certain"
+    "de": "offen sagen, was noch geprüft werden muss",
+    "en": "Say openly what still needs to be checked"
    },
    {
     "de": "Hilfe für seine Präsentation vor der Geschäftsführung anbieten",
-    "en": "Offer help for his presentation to the board"
+    "en": "Offer to help him present it to the board"
    }
   ],
   "reply": "Hi Mr. Brandt,\n\nThank you for the questionnaire. Given your board's experience, it makes complete sense to check everything carefully.\n\nOur security officer will complete the questionnaire by next Friday. I've already attached our ISO 27001 certificate and the list of subcontractors. For three of the questions, about penetration tests, we will need to double-check the latest results, so I will send those answers separately rather than guess.\n\nIf it helps, we can also join a short call with your board to answer their questions directly. Just let me know.\n\nBest regards"
@@ -128,8 +128,8 @@
   },
   "must": [
    {
-    "de": "seine Frage respektvoll beantworten",
-    "en": "Answer his question respectfully"
+    "de": "seine Frage als berechtigt anerkennen",
+    "en": "Acknowledge that his question is a fair one"
    },
    {
     "de": "den Unterschied zwischen PDF und E-Rechnung einfach erklären",
@@ -152,7 +152,7 @@
   "from": "Claudia Weber",
   "role": "Assistant to the CEO, Weber Group",
   "subject": "Presentation on Thursday",
-  "body": "Dear all,\n\nJust a quick note for Thursday: Mr. Weber has only 20 minutes instead of the planned 45, because of an urgent board call. He also asked me to tell you that he is not interested in technical details. He wants to know one thing: what does it cost, and what does it bring?\n\nBest regards,\nClaudia Weber",
+  "body": "Dear all,\n\nJust a quick note for Thursday: Mr. Weber has only 20 minutes instead of the planned 45, because of an urgent board call. He also asked me to tell you that he is not interested in technical details. He wants to know one thing: what will it cost, and what will we get out of it?\n\nBest regards,\nClaudia Weber",
   "hidden": {
    "de": "Der Chef hat wenig Zeit und wenig Geduld. Wer jetzt nicht auf den Punkt kommt, verliert ihn.",
    "en": "The boss has little time and little patience. If you do not get to the point, you will lose him."
@@ -186,12 +186,12 @@
   },
   "must": [
    {
-    "de": "ruhig und höflich bleiben",
-    "en": "Stay calm and polite"
+    "de": "für die klare Rückmeldung danken",
+    "en": "Thank her for being clear"
    },
    {
-    "de": "nicht einfach den Preis senken",
-    "en": "Do not simply lower the price"
+    "de": "erklären, was in eurem Preis steckt",
+    "en": "Explain what your price includes"
    },
    {
     "de": "ein Zugeständnis nur gegen eine Gegenleistung anbieten",
@@ -217,8 +217,8 @@
   },
   "must": [
    {
-    "de": "die Antwort richtig einordnen und keinen Druck machen",
-    "en": "Read the answer correctly and do not push"
+    "de": "Verständnis zeigen, dass gerade keine Zeit ist",
+    "en": "Show that you understand he is busy right now"
    },
    {
     "de": "einen kleinen, konkreten Anlass bieten",
@@ -257,7 +257,7 @@
    },
    {
     "de": "Hilfe für das Gespräch mit dem Chef anbieten",
-    "en": "Offer help for the conversation with his CEO"
+    "en": "Offer to help him prepare for the talk with his CEO"
    }
   ],
   "reply": "Hello Mr. Schulz,\n\nI owe you an apology. You should not have had to write twice, and I understand how difficult this is for you.\n\nWe've identified the root cause: about 80,000 older files use a format our import tool did not recognize. Here's what we're doing about it: two additional engineers are working on the remaining files, and we expect everything to be complete by October 2. Until then, all contracts are still available in the old system.\n\nI'll send you a one-page summary tonight that you can share with your CEO. I'll keep you posted every Friday.\n\nBest regards"
@@ -315,7 +315,7 @@
    },
    {
     "de": "Unterstützung für das interne Gespräch anbieten",
-    "en": "Offer support for the internal conversation"
+    "en": "Offer to support her in the internal discussion"
    }
   ],
   "reply": "Hi Anna,\n\nYes, the contract renews automatically on November 1, so there's nothing you need to do.\n\nSince your new CFO is reviewing costs, I was wondering if a short summary of your results would help. Over the past year, your team has processed more than 30,000 invoices in the system, and the approval time has dropped from nine days to three. I'd be happy to put this on one page for you.\n\nIf it's useful, I could also join a short meeting with your CFO. No pressure at all, of course.\n\nBest regards"
@@ -333,12 +333,12 @@
   },
   "must": [
    {
-    "de": "locker und freundlich antworten",
-    "en": "Reply in a relaxed, friendly tone"
+    "de": "an das Treffen auf der Messe anknüpfen",
+    "en": "Refer back to meeting at the trade show"
    },
    {
-    "de": "den Kontakt ohne Druck halten",
-    "en": "Keep in touch without pushing"
+    "de": "sagen, wann du dich wieder meldest",
+    "en": "Say when you will get back in touch"
    },
    {
     "de": "einen nützlichen Mehrwert anbieten",
@@ -360,8 +360,8 @@
   },
   "must": [
    {
-    "de": "höflich, aber bestimmt bleiben",
-    "en": "Stay polite but firm"
+    "de": "das Angebot höflich ablehnen",
+    "en": "Politely turn down the discount"
    },
    {
     "de": "das Problem genau beschreiben",
@@ -391,8 +391,8 @@
     "en": "Agree and confirm the deadline"
    },
    {
-    "de": "eine kurze Geschichte mit Anfang, Wendepunkt und Ende liefern oder skizzieren",
-    "en": "Deliver or outline a short story with a beginning, a turning point, and an end"
+    "de": "die Geschichte in drei Sätzen skizzieren (Anfang, Wendepunkt, Ende)",
+    "en": "Outline the story in three sentences: beginning, turning point, end"
    }
   ],
   "reply": "Hi Sarah,\n\nHappy to help, and Friday works. Here's a first draft:\n\nLast spring, a food company called us because their auditor had found 400 missing invoices. So there I was, in a basement full of boxes, wondering where to start. It turned out that most invoices had simply been filed under the wrong supplier. Long story short, we scanned everything in two weeks, and the system now finds any invoice in seconds. In the end, the auditor was the happiest person in the room.\n\nLet me know if you'd like any changes.\n\nBest"
@@ -437,8 +437,8 @@
   },
   "must": [
    {
-    "de": "höflich bleiben, aber klar widersprechen",
-    "en": "Stay polite but disagree clearly"
+    "de": "höflich sagen, dass drei Wochen zu lang sind",
+    "en": "Say politely that three weeks is too long"
    },
    {
     "de": "auf das Leck und mögliche Schäden hinweisen",

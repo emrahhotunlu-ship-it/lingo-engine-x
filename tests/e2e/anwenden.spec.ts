@@ -86,6 +86,9 @@ test.describe('Handy 390 px', () => {
     expect(await calls(page)).toEqual(['apply-reply:default']);
     await expect(page.getByTestId('ax-self-0')).toHaveAttribute('data-kind', 'grammar');
     await expect(page.getByTestId('ax-self-input-0')).toHaveValue('discussed about');
+    // T8: darüber der ganze Satz aus dem eigenen Text, die Stelle markiert.
+    await expect(page.getByTestId('ax-self-mark-0')).toHaveText('discussed about');
+    await expect(page.getByTestId('ax-self-sentence-0')).toContainText(/\S+ discussed about \S+/);
     await expect(page.getByTestId('ax-result')).toHaveCount(0);
     await page.getByTestId('ax-self-input-0').fill('discussed');
     await page.getByTestId('ax-reveal').click();
@@ -185,7 +188,7 @@ test.describe('Laptop 1440 px', () => {
     await expect(page.getByTestId('ax-copyhint')).toHaveCount(0);
     await page.getByTestId('ax-check').click();
     await expect(page.getByTestId('ax-result')).toBeVisible();
-    expect(await calls(page)).toEqual(['apply-keypoints:quick', 'apply-summary:default']);
+    expect(await calls(page)).toEqual(['apply-keypoints:default', 'apply-summary:default']);
     await expect(page.getByTestId('ax-faithful')).toHaveAttribute('data-ok', 'false');
     await expect(page.getByTestId('ax-faithful')).toContainText('I think this is the biggest danger of our time');
     await expect(page.getByTestId('ax-own')).toHaveAttribute('data-hint', 'false');
@@ -201,7 +204,7 @@ test.describe('Laptop 1440 px', () => {
     await input.fill(`${own} Experts now ask for better update rules.`);
     await page.getByTestId('ax-check').click();
     await expect(page.getByTestId('ax-result')).toHaveAttribute('data-check', '2');
-    expect(await calls(page)).toEqual(['apply-keypoints:quick', 'apply-summary:default', 'apply-summary:default']);
+    expect(await calls(page)).toEqual(['apply-keypoints:default', 'apply-summary:default', 'apply-summary:default']);
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe(page)).toEqual([]);
     await page.getByTestId('ax-done').click();

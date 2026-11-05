@@ -123,6 +123,33 @@ describe('Befund 1: Block über 04:00 zählt für den Lerntag, an dem er begann'
   });
 });
 
+describe('Fokus 2.0 F3 (Prüfbefund L2): Zähler der Anwenden-Tage nur, wenn die Disziplin des Tages erledigt ist', () => {
+  const D = '2026-10-06';
+
+  it('withApplyCount: ohne Kennzeichen bleibt der Patch unverändert, mit Kennzeichen zählt der Tag einmal', () => {
+    const patch = { act: { [D]: { 'u-task': 1 } } };
+    expect(run.withApplyCount({}, D, 'u-task', patch)).toBe(patch);
+    expect(run.withApplyCount({}, D, 'u-task', patch, true)).toEqual({ ...patch, apc: { n: 1, d: D } });
+    expect(run.withApplyCount({}, D, 'u-focus', patch, true)).toBe(patch);
+    expect(run.withApplyCount({ apc: { n: 3, d: D } }, D, 'u-task', patch, true)).toBe(patch);
+  });
+
+  it('Ersatzweg (kein Kennzeichen): Schritt erledigt, Zähler bleibt; Disziplin erledigt: Zähler +1', async () => {
+    setup({ 'app/profile': { ...baseProfile(), apc: { n: 1, d: '2026-10-05' } } });
+    store.useTodayPlan.setState({ day: D, plan: plan(D, ['ch:u-task']), status: 'ready', exhausted: null });
+    useClock.setState({ today: D, now: berlin(D, 10, 0) });
+    useUnitRun.setState({ ...EMPTY_RUN, day: D, block: 3, duty: 'ch:u-task', kind: 'task.apply' }, true);
+    run.handleUnitDone(3);
+    await vi.waitFor(() => expect(actOf(D)).toEqual({ 'u-task': 1 }));
+    expect(profile().apc).toEqual({ n: 1, d: '2026-10-05' });
+
+    setup({ 'app/profile': { ...baseProfile(), apc: { n: 1, d: '2026-10-05' } } });
+    useUnitRun.setState({ ...EMPTY_RUN, day: D, block: 3, duty: 'ch:u-task', kind: 'task.apply' }, true);
+    run.handleUnitDone(3, undefined, { apDone: true });
+    await vi.waitFor(() => expect(profile().apc).toEqual({ n: 2, d: D }));
+  });
+});
+
 describe('Älterer gespeicherter Plan (Sprechaufgabe in Block 3, Block 2 = Input)', () => {
   const MON = '2026-09-28';
 

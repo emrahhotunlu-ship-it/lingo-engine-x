@@ -51,6 +51,7 @@ export function isShortDayOf(profile: Doc | null | undefined, day: string): bool
 export function applyCountPatch(cur: Doc, day: string): { apc: { n: number; d: string } } | null {
   if (!DAY_RE.test(day) || isShortDayOf(cur, day)) return null;
   const c = readApplyCount(cur);
-  if (!c || c.d === day) return null;
+  // D2: nur vorwärts – ein späterer Abschluss eines früheren Lerntags (anderes Gerät, Block über 04:00) setzt `d` nie zurück.
+  if (!c || (c.d !== null && day <= c.d)) return null;
   return { apc: { n: c.n + 1, d: day } };
 }

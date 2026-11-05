@@ -136,7 +136,7 @@
       "to": "CFO",
       "sit": "status update",
       "brief": {
-        "en": "Your vendor may miss the delivery date. Write a careful risk assessment for your CFO: how likely a delay is, what it might be worth doing now, and what you would lean toward.",
+        "en": "Your vendor may miss the delivery date. Write a careful risk assessment for your CFO: how likely a delay is, what might be worth doing now, and what you would lean toward.",
         "de": "Dein Lieferant verpasst vielleicht den Liefertermin. Schreib deinem Finanzchef eine vorsichtige Risikoeinschätzung: wie wahrscheinlich eine Verzögerung ist, was sich jetzt lohnen könnte und wozu du neigst."
       },
       "patterns": [

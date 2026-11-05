@@ -32,6 +32,8 @@ export type UnitRun = {
   at: number;
   /** Entwurf im Ersatzschritt „Nochmal, aber besser“. */
   draft: string;
+  /** Fokus 2.0 F3 (L2): Schritt 3 hat die Disziplin des Tages wirklich erledigt (gemeldet über `unitDone(…, {apDone: true})`). */
+  apDone: boolean;
 };
 
 export const EMPTY_RUN: UnitRun = {
@@ -49,6 +51,7 @@ export const EMPTY_RUN: UnitRun = {
   offline: false,
   at: 0,
   draft: '',
+  apDone: false,
 };
 
 export const useUnitRun = create<UnitRun>(() => EMPTY_RUN);

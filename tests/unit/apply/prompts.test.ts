@@ -27,6 +27,7 @@ const sumVars = (over: Partial<SummaryVars> = {}): SummaryVars => ({
   title: 'More buses for the city',
   article: ARTICLE,
   keyPoints: ['The council approved a new transport budget.', 'Forty electric buses are added.', 'Night service is extended on six lines.'],
+  goal: { sentences: [3, 5], maxWords: 120 },
   words: ['council'],
   rule: '',
   text: 'The council approved more money for buses. I think this is a great idea. Night buses will run on more lines.',
@@ -49,10 +50,12 @@ describe('Pflicht- und Kernpunkte einzeln (Nachtrag learning-scientist Muss 1/2)
       3,
     );
     expect(pts).toEqual([
-      { i: 1, covered: 'yes', quote: 'your team is busy' },
-      { i: 2, covered: 'no', quote: '' },
-      { i: 3, covered: 'no', quote: '' },
+      { i: 1, covered: 'yes', quote: 'your team is busy', why: '' },
+      { i: 2, covered: 'no', quote: '', why: '' },
+      { i: 3, covered: 'no', quote: '', why: '' },
     ]);
+    // T2: `why` nur bei „partly“/„no“.
+    expect(keepPoints([{ i: 1, covered: 'partly', quote: 'two hours', why: 'Zu allgemein.' }, { i: 2, covered: 'yes', quote: 'two hours', why: 'x' }], TEXT, 2).map((p) => p.why)).toEqual(['Zu allgemein.', '']);
     expect(['Yes', 'partial', 'missing', true, 7].map(coveredOf)).toEqual(['yes', 'partly', 'no', 'yes', 'no']);
   });
 
@@ -71,7 +74,17 @@ describe('Vorlagen', () => {
     expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@1]');
     expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@1]');
     expect(applyKeypoints.build({ title: 'x', article: ARTICLE }).split('\n')[0]).toBe('[apply-keypoints@1]');
-    expect([applyReply.tier, applySummary.tier, applyKeypoints.tier]).toEqual(['default', 'default', 'quick']);
+    expect([applyReply.tier, applySummary.tier, applyKeypoints.tier]).toEqual(['default', 'default', 'default']);
+    // T2–T4: Bewertungsstufen, Ton über die ganze Antwort, bessere Fassung deckt alle Punkte, Ziel als Wert.
+    const rp = applyReply.build(replyVars());
+    expect(rp).toContain('Judge whether the point is there, not the grammar. For a point about tone, judge the whole reply');
+    expect(rp).toContain('yes = clearly there; partly = mentioned but vague, incomplete or slightly wrong; no = missing.');
+    expect(rp).toContain("it must cover every point above (add one short sentence for a missing point), must not add new facts, and must differ from the learner's reply.");
+    const sp = applySummary.build(sumVars({ goal: { sentences: [3, 3], maxWords: 70 } }));
+    expect(sp).toContain("with 3 sentences and at most 70 words, in the learner's own words");
+    expect(sp).toContain('partly = mentioned but vague');
+    expect(applySummary.build(sumVars())).toContain('with 3 to 5 sentences and at most 120 words');
+    for (const p of [rp, sp]) expect(p).not.toMatch(/learner own|learner words|learner ideas/);
   });
 
   it('die eingegangene Mail steht als eigenes Feld (bis 1.600 Zeichen), der Artikel bis 6.000 Zeichen; Prompts bleiben unter dem Deckel', () => {
@@ -104,6 +117,10 @@ describe('Vorlagen', () => {
     expect(applyReply.schema(v).safeParse({ ...base, upgraded: TEXT }).success).toBe(false);
     expect(applyReply.schema(v).safeParse({ ...base, summary: 'Das ist eine deutsche Zusammenfassung mit vielen Wörtern und nicht englisch.' }).success).toBe(false);
     expect(applyReply.schema(v).safeParse({ ...base, points: [] }).success).toBe(false);
+    // T2: das Warum je Punkt in der Erklärsprache.
+    const badWhy = [{ i: 1, covered: 'no', quote: '', why: 'Dieser Punkt fehlt in deiner Antwort noch ganz und gar.' }];
+    expect(applyReply.schema(v).safeParse({ ...base, points: badWhy }).success).toBe(false);
+    expect(applyReply.schema(v).safeParse({ ...base, points: [{ ...badWhy[0], why: 'This point is still missing from your reply.' }] }).success).toBe(true);
     expect(applyKeypoints.schema({ title: 'x', article: '' }).safeParse({ points: ['Der Rat hat ein neues Budget für den Verkehr beschlossen.', 'Forty electric buses are added.', 'Night service grows on six lines.'] }).success).toBe(false);
   });
 });

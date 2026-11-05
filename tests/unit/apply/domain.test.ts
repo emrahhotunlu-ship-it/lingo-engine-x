@@ -3,7 +3,8 @@ import { copyCheck, COPY_RATIO_MAX } from '../../../src/modules/apply/domain/cop
 import { applyCountPatch, applyOfCount, applyOfDay, readApplyCount } from '../../../src/modules/apply/domain/count';
 import { countSentences, countWords, joinParts, lengthGoal, lengthState } from '../../../src/modules/apply/domain/kinds';
 import { findKeypoints, keypointsItem, pickMail } from '../../../src/modules/apply/domain/material';
-import { errorsOf, evidenceWords, fromReply, outItemOf, praiseOf, prodOf, repairsOf, selfFixOk, selfSpots, wordUses, type ApplyRun } from '../../../src/modules/apply/domain/result';
+import { confirmedWords, errorsOf, evidenceWords, fromReply, outItemOf, praiseOf, prodOf, repairsOf, selfFixOk, selfSpots, spotContext, wordUses, type ApplyRun } from '../../../src/modules/apply/domain/result';
+import { compactOut, OUT_DOC_MAX_BYTES, OUT_MAX_ITEMS } from '../../../src/domain/nbdrill/outDoc';
 import { resolveStep } from '../../../src/modules/apply/domain/step';
 import { inboxMails } from '../../../src/content/nb/load';
 import type { Edit } from '../../../src/domain/tutor/edits';
@@ -30,6 +31,13 @@ describe('Abschreib-Schutz (lokal)', () => {
     expect(copyCheck('a new budget for public money', ARTICLE).runs).toEqual([]);
   });
 
+  it('4-Wort-Folgen nur aus Namen, Zahlen und Funktionswörtern zählen nicht (T10)', () => {
+    const art = 'In 2025 the European Central Bank raised rates again. Analysts expect slower growth next year.';
+    const c = copyCheck('In 2025 the European Central Bank acted. Experts now see weaker growth ahead.', art);
+    expect(c.hint).toBe(false);
+    expect(copyCheck('Analysts expect slower growth next year, they say.', art).hint).toBe(true);
+  });
+
   it('ohne Groß-/Kleinschreibung und Satzzeichen; leerer Text ist 0', () => {
     expect(copyCheck('THE CITY COUNCIL APPROVED A NEW BUDGET!', ARTICLE).runs.length).toBe(1);
     expect(copyCheck('', ARTICLE)).toEqual({ runs: [], ratio: 0, hint: false });
@@ -52,6 +60,8 @@ describe('Disziplin des Tages: Zähler statt Datum', () => {
     expect(applyCountPatch({ apc: { n: 1, d: '2026-09-21' } }, '2026-09-22')).toEqual({ apc: { n: 2, d: '2026-09-22' } });
     expect(applyCountPatch({ apc: { n: 1, d: '2026-09-21' }, kt: { '2026-09-22': 1 } }, '2026-09-22')).toBeNull();
     expect(applyCountPatch({ apc: [] }, '2026-09-22')).toBeNull();
+    // D2: nie zurück – ein früherer Lerntag zählt nicht mehr, wenn schon ein späterer gezählt ist.
+    expect(applyCountPatch({ apc: { n: 2, d: '2026-09-22' } }, '2026-09-21')).toBeNull();
   });
 
   it('Schritt 3: ohne Claude Satzbau, kurzer Tag ein eigener Satz, sonst die eingefrorene Disziplin', () => {
@@ -74,6 +84,8 @@ describe('Längen', () => {
   it('Wörter, Sätze, Zustand; Felder der Handy-Antwort werden Absätze', () => {
     expect(countWords("We're on track, aren't we?")).toBe(5);
     expect(countSentences('One two. Three four! Five six?\nSeven eight')).toBe(4);
+    // T10: Abkürzungen sind kein Satzende.
+    expect(countSentences('Prices in the U.S. rose, e.g. for food. Mr. Smith and Dr. Lee agree.')).toBe(2);
     const goal = lengthGoal('summary', 'touch');
     const ok = 'The city council approved forty more electric buses for the city. Night service grows on six busy lines this winter. Prices stay the same until next summer, but critics fear rising costs.';
     expect(lengthState(ok, goal).state).toBe('ok');
@@ -100,8 +112,8 @@ const edit = (from: string, to: string, kind: Edit['kind'], sev: Edit['sev'] = '
 const TEXT = 'Hi Laura, I am agree that your team is busy. We discussed about the price and I send you more informations next week. It depends of the setup.';
 const reply = (edits: Edit[], extra: Partial<ApplyReply> = {}): ApplyReply => ({
   points: [
-    { i: 1, covered: 'yes', quote: 'your team is busy' },
-    { i: 2, covered: 'no', quote: '' },
+    { i: 1, covered: 'yes', quote: 'your team is busy', why: '' },
+    { i: 2, covered: 'no', quote: '', why: 'Fehlt.' },
   ],
   edits,
   used: [],
@@ -127,6 +139,7 @@ const runOf = (fbEdits: Edit[], check = 1, extra: Partial<ApplyRun> = {}): Apply
   copy: null,
   peeked: false,
   words: ['setup'],
+  offered: ['setup', 'invoice'],
   ...extra,
 });
 
@@ -150,19 +163,42 @@ describe('Ergebnis', () => {
     expect(repairsOf(runOf(ERRS, 2))).toEqual([]);
   });
 
-  it('Fehlerzahl wie die Wochen-Mail; „Das sitzt“ ohne Fehler mit Zitat und Grund', () => {
+  it('Fehlerzahl wie die Wochen-Mail; ohne belegte Fehlerstelle immer 0 (L7)', () => {
     expect(errorsOf({ edits: ERRS, second: null })).toBe(4);
     expect(errorsOf({ edits: ERRS, second: 10 })).toBe(6);
-    const f = fromReply(reply([], { good: { quote: 'your team is busy', why: 'Zeigt Verständnis.' } }));
-    expect(praiseOf(f, TEXT)).toEqual({ quote: 'your team is busy', why: 'Zeigt Verständnis.' });
-    expect(praiseOf(fromReply(reply([])), TEXT)?.why).toBe('Klar gegliedert.');
+    // Claudes Nachzählung ohne Beleg macht den Text nicht fehlerhaft: „Keine Fehler gefunden“ und `ok: true` passen zusammen.
+    expect(errorsOf({ edits: [], second: 3 })).toBe(0);
+    const clean = runOf([]);
+    clean.feedback = { ...clean.feedback, second: 3 };
+    expect(outItemOf(clean)).toMatchObject({ ok: true, fb: { err: 0 } });
   });
 
-  it('Lernwörter: Claudes Urteil, sonst lokal; Beleg nur, wenn richtig benutzt und nicht im Material', () => {
+  it('„Das sitzt“ (L3): gelungene Stelle, sonst bestätigtes Wort mit festem Grund, sonst Ton-Grund ohne Zitat; nie das Gesamturteil, nie der erste Satz', () => {
+    const f = fromReply(reply([], { good: { quote: 'your team is busy', why: 'Zeigt Verständnis.' } }));
+    expect(praiseOf(f)).toEqual({ by: 'good', quote: 'your team is busy', why: 'Zeigt Verständnis.' });
+    expect(praiseOf(fromReply(reply([], { used: [{ pat: 'busy', ok: true, quote: 'busy' }] })))).toEqual({ by: 'used', quote: 'busy', item: 'busy' });
+    expect(praiseOf(fromReply(reply([], { tone: { fit: 'fits', why: 'Freundlich und klar.' } })))).toEqual({ by: 'tone', why: 'Freundlich und klar.' });
+    expect(praiseOf(fromReply(reply([], { tone: { fit: 'too-direct', why: 'Etwas knapp.' } })))).toBeNull();
+    // Ohne gelungene Stelle, Wort oder Ton-Grund: kein Zitat, kein Gesamturteil („Klar gegliedert.“) als Grund.
+    expect(praiseOf(fromReply(reply([])))).toBeNull();
+  });
+
+  it('Lernwörter (L1): richtig nur mit Claudes Bestätigung; „steht im Text“ ist nie ein Beleg; Beleg nicht aus dem Material', () => {
     const f = fromReply(reply([edit('depends of', 'depends on', 'collocation')], { used: [{ pat: 'busy', ok: true, quote: 'busy' }] }));
     const uses = wordUses(['busy', 'setup', 'depends', 'invoice'], f, TEXT);
-    expect(uses.map((u) => u.state)).toEqual(['ok', 'ok', 'bad', 'none']);
-    expect(evidenceWords(uses, 'my team is busy right now')).toEqual(['setup']);
+    expect(uses.map((u) => u.state)).toEqual(['ok', 'open', 'bad', 'none']);
+    expect(evidenceWords(uses, 'my team is busy right now')).toEqual([]);
+    expect(confirmedWords(['busy', 'setup'], f, TEXT, 'nothing here')).toEqual(['busy']);
+    expect(confirmedWords(['busy', 'setup'], f, TEXT, 'my team is busy right now')).toEqual([]);
+    const item = outItemOf(runOf([], 1, { words: ['busy'], offered: ['busy', 'setup'] }));
+    expect(item.fb).toMatchObject({ w: ['busy'], tw: ['busy', 'setup'] });
+  });
+
+  it('Selbst verbessern (T8): der ganze Satz um die Stelle, die Stelle getrennt', () => {
+    const e = edit('discussed about', 'discussed', 'grammar');
+    expect(spotContext(TEXT, e)).toEqual({ before: 'We ', hit: 'discussed about', after: ' the price and I send you more informations next week.' });
+    expect(spotContext('Hi Laura,\nI am agree with you. Thanks.', edit('I am agree', 'I agree', 'grammar'))).toEqual({ before: '', hit: 'I am agree', after: ' with you.' });
+    expect(spotContext(TEXT, edit('not there', 'x', 'word'))).toBeNull();
   });
 
   it('Speicherform `out/<Monat>`: Art reply, Punkte kompakt, Text; K7 nur erste Prüfung, nie bei der Zusammenfassung', () => {
@@ -173,5 +209,18 @@ describe('Ergebnis', () => {
     expect(prodOf(runOf(ERRS, 2))).toBeNull();
     expect(prodOf(runOf(ERRS, 1, { kind: 'summary' }))).toBeNull();
     expect(outItemOf(runOf(ERRS, 1, { kind: 'write' })).k).toBe('c1mail');
+  });
+});
+
+describe('Kernpunkte im Monatsdokument (D1)', () => {
+  it('festgelegte Kernpunkte (`sumkp`) werden nie verdichtet und nie entfernt', () => {
+    const big = (i: number) => ({ id: `e${i}`, k: 'colloc', d: '2026-09-01', t: i + 10, text: 'x'.repeat(1_500), fb: { verdict: 'y'.repeat(400) } });
+    const kp = keypointsItem('r-2026-09-01-1', 'Buses', ['Point one is long enough.', 'Point two is long enough.', 'Point three is long enough.'], '2026-09-01', 1);
+    const list = [kp, ...Array.from({ length: OUT_MAX_ITEMS + 20 }, (_, i) => big(i))];
+    const out = compactOut(list, '2026-09') as Array<Record<string, unknown>>;
+    expect(out.length).toBeLessThanOrEqual(OUT_MAX_ITEMS);
+    expect(out.find((x) => x.id === kp.id)?.fb).toEqual(kp.fb);
+    expect(findKeypoints([{ items: out }], 'r-2026-09-01-1')).toHaveLength(3);
+    expect(JSON.stringify({ v: 1, month: '2026-09', items: out }).length).toBeLessThanOrEqual(OUT_DOC_MAX_BYTES);
   });
 });

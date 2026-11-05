@@ -159,7 +159,12 @@ export function ComboSentenceScreen() {
     // Tagesweg: nach dem letzten Satz ist Schritt 3 erledigt; die Einheit führt zur Abschlusskarte (zählt zum Tagesziel, Kap. 2.6).
     if (unit && pos + 1 >= fixed.length) {
       api.blur();
-      unitDone(unit);
+      // Fokus 2.0 F3 (Prüfbefund L2): Nur wenn der eigene Satz die Disziplin des Tages ist (`u.ap`, ältere Pläne ohne `ap` laufen als eigener Satz) und
+      // mindestens ein Satz geprüft wurde, ist sie erledigt; als Ersatz für eine Mail oder Zusammenfassung zählt er nicht (die Disziplin wandert weiter).
+      const plan = useTodayPlan.getState().plan;
+      const ap = plan && plan.d === today ? plan.u?.ap : undefined;
+      const checked = !!res || results.some((r) => r.correct !== null);
+      unitDone(unit, undefined, { apDone: (ap === undefined || ap === 'combo') && checked });
     }
   };
   const right = results.filter((r) => r.word && r.rule && r.correct).length;

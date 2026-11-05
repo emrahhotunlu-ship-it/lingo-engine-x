@@ -41,17 +41,24 @@ export function ApplyPage() {
   const short = isShortDayOf(profile, today);
   const todayKind: ApplyKind = short ? 'combo' : (plan?.u?.ap ?? 'combo');
   const stepDone = step?.state === 'done';
+  // Prüfbefund L4: Minuten von Schritt 3 aus dem eingefrorenen Plan (dieselbe Zahl wie Startkarte und Heute; am kurzen Tag die verkleinerten).
+  const planMin = plan?.u?.b.find(([, kind]) => kind === 'task.apply')?.[2];
 
   const startToday = (): void => {
     const r = applyStepRoute({ ap: plan?.u?.ap, short, ai, day: today, block: 3 });
     if (r) go(r);
   };
   const startFree = (kind: ApplyKind): void => {
+    // Prüfbefund L8: Die Disziplin des Tages zählt nur über Schritt 3. Solange er offen ist, führt auch die freie Zeile dorthin (sonst bliebe die Pflicht offen).
+    if (hasStep && step && !stepDone && kind === todayKind) {
+      startToday();
+      return;
+    }
     if (kind === 'combo') go({ name: 'comboSentence' });
     else go({ name: 'applyTask', kind });
   };
   const blocked = (kind: ApplyKind): MessageKey | null => (!ai ? 'axNeedsAi' : kind === 'combo' && pairs.length === 0 ? 'axNeedsWords' : null);
-  const min = (kind: ApplyKind): string => t('axMin', { n: APPLY_MINUTES[kind] });
+  const min = (kind: ApplyKind): string => t('axMin', { n: kind === todayKind && hasStep && !stepDone && typeof planMin === 'number' ? planMin : APPLY_MINUTES[kind] });
 
   return (
     <div className="lx-ax mx-auto flex w-full max-w-[47.5rem] flex-col gap-8 px-4 py-6 sm:py-10" data-testid="apply-hub" data-v="2" data-profile={device}>

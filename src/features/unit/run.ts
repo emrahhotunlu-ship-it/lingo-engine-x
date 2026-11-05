@@ -4,7 +4,7 @@ import { useNav } from '../../app/nav';
 import { resumables, unitBlockFor, type FocusApi } from '../../app/registry';
 import { loadResume } from '../../app/resume';
 import type { Route } from '../../app/router/types';
-import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
+import type { UnitBlockNo, UnitCtx, UnitDoneOpts, UnitTaskResult } from '../../app/unit/types';
 import { invalidIdsOf, useLive } from '../../data/live';
 import type { DutyId, StoredPlan, UnitMeta } from '../../domain/plan/types';
 import { checkDayDuties } from '../../domain/c1/check/day';
@@ -191,7 +191,7 @@ export function startRow(u: UnitNow, row: UnitRow, api: FocusApi): void {
   const env = envNow();
   const rb = resolveBlock(block, env);
   const ctx = ctxFor(u, block);
-  const base: Partial<UnitRun> = { day: u.day, block: block.block, duty: row.id, kind: rb.kind, offline: rb.offline, at: Date.now(), phrases: ctx.phrases ?? [] };
+  const base: Partial<UnitRun> = { day: u.day, block: block.block, duty: row.id, kind: rb.kind, offline: rb.offline, at: Date.now(), phrases: ctx.phrases ?? [], apDone: false };
   // Plan 3.0 (P23): Schritt 3 an einem Format-Tag. Nicht machbar (zu wenig Aufgaben, Art aus) → weiter mit dem Satzbau. Die Tempo-Runde (`mode: 'tempo'`) folgt mit P24.
   const fmt = block.block === 3 && rb.kind === 'task.order' && block.args?.mode === 'format' ? block.args.fmt : undefined;
   const fr = fmt ? startFormatRound({ fmt, day: u.day, block: block.block }) : null;
@@ -262,21 +262,22 @@ let fieldsChain: Promise<unknown> = Promise.resolve();
 
 /** Block als erledigt zählen: sofort sichtbar, dann `act[tag]['u-…'] = 1` und Selbstheilung der Pflicht. */
 /**
- * Fokus 2.0 F3 (Nachtrag learning-scientist Muss 4): Schritt 3 „Anwenden“ zum ersten Mal an diesem Tag erledigt → Zähler `apc` der Anwenden-Tage +1 (im
- * selben Patch wie `act[Tag]['u-task']`, auf dem frischen Stand). Ein kurzer Tag zählt nicht (die Disziplin wandert zum nächsten vollen Tag).
+ * Fokus 2.0 F3 (Nachtrag learning-scientist Muss 4, Prüfbefund L2): Schritt 3 „Anwenden“ zum ersten Mal an diesem Tag erledigt UND die eingefrorene Disziplin
+ * wirklich gemacht (`apDone`) → Zähler `apc` der Anwenden-Tage +1 (im selben Patch wie `act[Tag]['u-task']`, auf dem frischen Stand). Ohne Kennzeichen
+ * (Ersatzweg: eigener Satz statt Aufgabe, Satzbau ohne Claude, C1-Check) und an einem kurzen Tag zählt nichts: die Disziplin wandert zum nächsten Tag.
  */
-function withApplyCount(cur: Readonly<Record<string, unknown>>, day: string, key: string, patch: Record<string, unknown> | null): Record<string, unknown> | null {
-  if (!patch || key !== 'u-task') return patch;
+export function withApplyCount(cur: Readonly<Record<string, unknown>>, day: string, key: string, patch: Record<string, unknown> | null, apDone = false): Record<string, unknown> | null {
+  if (!patch || key !== 'u-task' || !apDone) return patch;
   const apc = applyCountPatch(cur, day);
   return apc ? { ...patch, ...apc } : patch;
 }
 
-export function markBlockDone(day: string, duty: string): void {
+export function markBlockDone(day: string, duty: string, apDone = false): void {
   const key = unitActKey(duty);
   if (!key) return;
   markUnitLocal(day, key);
   fieldsChain = fieldsChain
-    .then(() => recordProfileFields('unit:done', (cur) => withApplyCount(cur, day, key, unitDonePatch(cur, day, key))))
+    .then(() => recordProfileFields('unit:done', (cur) => withApplyCount(cur, day, key, unitDonePatch(cur, day, key), apDone)))
     .then((ok) => {
       if (!ok) logWarn('unit:done', { code: 'not_saved', message: `${key} nicht gespeichert – wird nachgeholt` }, 'app/profile');
       return healDay(day);
@@ -303,9 +304,11 @@ function dutyOfBlock(block: UnitBlockNo): { day: string; duty: string } | null {
  * Block 4/5 und führt zur Zwischenkarte. Ein spätes Ergebnis von Block 3 (KI verzögert, M4d) wird nur
  * gemerkt; Block 4 hat dann schon ohne gewartet begonnen.
  */
-export function handleUnitDone(block: UnitBlockNo, result?: UnitTaskResult): void {
+export function handleUnitDone(block: UnitBlockNo, result?: UnitTaskResult, opts?: UnitDoneOpts): void {
   const target = dutyOfBlock(block);
   if (result) setRun({ task: result });
+  // L2: das Kennzeichen „Disziplin erledigt“ im Lauf merken (ein mehrschrittiger Block zählt erst mit seinem letzten Schritt).
+  if (opts?.apDone) setRun({ apDone: true });
   if (!target) {
     logWarn('unit:done', `Block ${block} gehört zu keiner Einheit von heute`);
     return;
@@ -313,7 +316,10 @@ export function handleUnitDone(block: UnitBlockNo, result?: UnitTaskResult): voi
   const run = useUnitRun.getState();
   const late = run.block !== null && run.block > block;
   if (!late && startNextStep(block)) return;
-  if (target.duty !== 'review') markBlockDone(target.day, target.duty);
+  const run2 = useUnitRun.getState();
+  const apDone = opts?.apDone === true || (run2.apDone && run2.block === block);
+  if (apDone) setRun({ apDone: false });
+  if (target.duty !== 'review') markBlockDone(target.day, target.duty, apDone);
   if (late) return;
   setRun({ via: null, watch: null, routeName: 'unitCard', route: { name: 'unitCard', step: 'next' } });
   useNav.getState().go({ name: 'unitCard', step: 'next' });

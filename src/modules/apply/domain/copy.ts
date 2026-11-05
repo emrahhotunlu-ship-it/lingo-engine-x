@@ -2,17 +2,30 @@
 // - Wortfolgen von mindestens 6 Wörtern, die wörtlich im Artikel stehen, werden markiert (Zeichenbereiche im eigenen Text).
 // - Mehr als 25 % der 4-Wort-Folgen des eigenen Textes stehen im Artikel → Hinweis „in eigenen Worten“.
 // Vergleich ohne Groß-/Kleinschreibung und ohne Satzzeichen; typografische Apostrophe gelten wie gerade. Rein, ohne Importe.
+// - 4-Wort-Folgen nur aus Namen (groß geschrieben), Zahlen und Funktionswörtern zählen nicht (Prüfbefund T10): „the European Central Bank“ oder
+//   „in 2025 and the“ lassen sich in eigenen Worten kaum vermeiden.
 
 export const COPY_RUN_MIN = 6;
 export const COPY_GRAM = 4;
 export const COPY_RATIO_MAX = 0.25;
 
-type Tok = { w: string; start: number; end: number };
+type Tok = { w: string; start: number; end: number; plain: boolean };
+
+/** Funktionswörter (Artikel, Präpositionen, Hilfsverben, Pronomen, Bindewörter). */
+const FUNCTION_WORDS = new Set(
+  'a an the of in on at to for by with from into onto over under about after before during since until up out off and or but nor so yet if than then as is are was were be been being am do does did has have had will would shall should can could may might must it its this that these those there here he she they we i you me him her us them his their our my your which who whom whose what when where why how not no also very more most'.split(' '),
+);
+
+/** Name, Zahl oder Funktionswort (für die 4-Wort-Folgen kein Zeichen von Abschreiben). */
+const plainWord = (raw: string, w: string): boolean => /^\p{N}/u.test(raw) || /^\p{Lu}/u.test(raw) || FUNCTION_WORDS.has(w);
 
 const TOKEN_RE = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
 
 export function tokens(text: string): Tok[] {
-  return [...text.matchAll(TOKEN_RE)].map((m) => ({ w: m[0].toLowerCase().replace(/’/g, "'"), start: m.index, end: m.index + m[0].length }));
+  return [...text.matchAll(TOKEN_RE)].map((m) => {
+    const w = m[0].toLowerCase().replace(/’/g, "'");
+    return { w, start: m.index, end: m.index + m[0].length, plain: plainWord(m[0], w) };
+  });
 }
 
 function grams(ws: readonly string[], n: number): Set<string> {
@@ -50,9 +63,13 @@ export function copyCheck(own: string, article: string): CopyCheck {
     i = j;
   }
   const srcGrams = grams(src, COPY_GRAM);
-  const total = Math.max(0, words.length - COPY_GRAM + 1);
+  let total = 0;
   let hit = 0;
-  for (let i = 0; i < total; i++) if (srcGrams.has(words.slice(i, i + COPY_GRAM).join(' '))) hit++;
+  for (let i = 0; i + COPY_GRAM <= words.length; i++) {
+    if (mine.slice(i, i + COPY_GRAM).every((t) => t.plain)) continue;
+    total++;
+    if (srcGrams.has(words.slice(i, i + COPY_GRAM).join(' '))) hit++;
+  }
   const ratio = total > 0 ? hit / total : 0;
   return { runs, ratio, hint: ratio > COPY_RATIO_MAX };
 }

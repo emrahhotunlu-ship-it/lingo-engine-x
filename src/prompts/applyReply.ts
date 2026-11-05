@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { keepEdits, keepUsed, normWs, type Edit, type Used } from '../domain/tutor/edits';
 import { patIdsOf } from '../domain/tutor/patList';
-import { asList, keepGood, pointsField, type Good, type PointCheck } from './applyCommon';
+import { asList, keepGood, POINT_SCALE, POINT_WHY_RULE, pointsField, pointWhyIssues, type Good, type PointCheck } from './applyCommon';
 import { toneFit, type ToneFit } from './c1Mail';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { clipped, intIn } from './tolerant';
@@ -55,7 +55,7 @@ const ID = 'apply-reply';
 const VERSION = 1;
 
 export const REPLY_EXAMPLE =
-  '{"points":[{"i":1,"covered":"yes","quote":"…"}],"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"tone":{"fit":"fits","why":"…"},"good":{"quote":"…","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
+  '{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"tone":{"fit":"fits","why":"…"},"good":{"quote":"…","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
 
 /** Erlaubte Kennungen in `used`: die Zielwörter und `rule` (nur wenn es eine Regel gibt). */
 export const usedIdsOf = (words: readonly string[], rule: string): Set<string> => new Set([...words.slice(0, WORDS_MAX).map((w) => w.trim()).filter(Boolean), ...(rule.trim() ? [RULE_ID] : [])]);
@@ -63,7 +63,7 @@ export const usedIdsOf = (words: readonly string[], rule: string): Set<string> =
 /** Gemeinsame Regeln der Anwenden-Prüfungen (Antwort und Zusammenfassung). */
 export const APPLY_EDIT_RULES = [
   'First list every error as an atomic edit: copy the exact wrong span from the text into "from", write the minimal replacement into "to". Only then explain each edit.',
-  'Keep the learner words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
+  'Keep the learner\'s words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
   'American and British grammar both count as correct (e.g. past simple with already/just/yet, have got, collective nouns with plural verbs).',
   'List all errors first, then upgrades; never drop an error to make room for an upgrade.',
 ];
@@ -91,6 +91,7 @@ export function replySchema(v: ReplyVars): z.ZodType<ApplyReply> {
         if (isWrongLang(e.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['edits', i, 'why'], message: `must be written in ${langName(v.uiLang)}` });
         if (isWrongLang(e.to, 'en')) ctx.addIssue({ code: 'custom', path: ['edits', i, 'to'], message: 'must be written in English' });
       });
+      for (const k of pointWhyIssues(o.points, (s) => isWrongLang(s, v.uiLang))) ctx.addIssue({ code: 'custom', path: ['points', k, 'why'], message: `must be written in ${langName(v.uiLang)}` });
       if (o.tone.why && isWrongLang(o.tone.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['tone', 'why'], message: `must be written in ${langName(v.uiLang)}` });
       if (o.good && isWrongLang(o.good.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['good', 'why'], message: `must be written in ${langName(v.uiLang)}` });
       if (isWrongLang(o.upgraded, 'en')) ctx.addIssue({ code: 'custom', path: ['upgraded'], message: 'must be written in English' });
@@ -124,12 +125,12 @@ export const applyReply: PromptTemplate<ReplyVars, ApplyReply> = {
       'Reply with only one JSON object in exactly this shape:',
       REPLY_EXAMPLE,
       'Rules:',
-      `- points: one entry for each point above (i = its number, 1 to ${Math.min(MUST_MAX, v.must.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the learner reply that cover the point (empty when "no"). Judge the content, not the language.`,
+      `- points: one entry for each point above (i = its number, 1 to ${Math.min(MUST_MAX, v.must.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the learner reply that cover the point (empty when "no"). Judge whether the point is there, not the grammar. For a point about tone, judge the whole reply and quote the sentence that shows it best. ${POINT_SCALE} ${POINT_WHY_RULE}`,
       '- edits: at most 12, each with "from" copied EXACTLY from the learner reply (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors (kind register is always sev upgrade).',
       '- used: for each target word and for the target rule that the learner tried to use, one entry with pat (the word exactly as given, or "rule"), ok (true if used correctly) and a "quote" copied exactly from the reply. Skip what the learner did not try.',
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
       '- good: one strong span copied exactly from the reply ("quote") and one short sentence in the explanation language why it works ("why").',
-      '- upgraded: the whole reply rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length; it must differ from the learner reply.',
+      "- upgraded: the whole reply rewritten at C1 level in American English, keeping the learner's ideas, facts and structure and roughly the same length; it must cover every point above (add one short sentence for a missing point), must not add new facts, and must differ from the learner's reply.",
       '- summary: one short sentence in the explanation language: what works and what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the learner reply once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',

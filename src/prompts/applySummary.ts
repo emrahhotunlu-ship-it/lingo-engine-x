@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { keepEdits, keepUsed, normWs, type Edit, type Used } from '../domain/tutor/edits';
 import { patIdsOf } from '../domain/tutor/patList';
-import { asList, keepGood, pointsField, type Good, type PointCheck } from './applyCommon';
+import { asList, keepGood, POINT_SCALE, POINT_WHY_RULE, pointsField, pointWhyIssues, type Good, type PointCheck } from './applyCommon';
 import { APPLY_EDIT_RULES, APPLY_MAX_EDITS, APPLY_TEXT_MAX, usedIdsOf, usedLine } from './applyReply';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { clipped, intIn } from './tolerant';
@@ -20,6 +20,8 @@ export type SummaryVars = {
   article: string;
   /** Die festgelegten Kernpunkte (3 bis 4, Englisch). */
   keyPoints: readonly string[];
+  /** Ziel der Länge (Prüfbefund T4): Sätze (von–bis) und höchstens so viele Wörter, wie die Aufgabe sie nennt. */
+  goal: { sentences: readonly [number, number]; maxWords: number };
   words: readonly string[];
   rule: string;
   text: string;
@@ -48,7 +50,7 @@ const ID = 'apply-summary';
 const VERSION = 1;
 
 export const SUMMARY_EXAMPLE =
-  '{"points":[{"i":1,"covered":"yes","quote":"…"}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"good":{"quote":"…","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
+  '{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"good":{"quote":"…","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
@@ -83,6 +85,7 @@ export function summarySchema(v: SummaryVars): z.ZodType<ApplySummary> {
         if (isWrongLang(e.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['edits', i, 'why'], message: `must be written in ${langName(v.uiLang)}` });
         if (isWrongLang(e.to, 'en')) ctx.addIssue({ code: 'custom', path: ['edits', i, 'to'], message: 'must be written in English' });
       });
+      for (const k of pointWhyIssues(o.points, (s) => isWrongLang(s, v.uiLang))) ctx.addIssue({ code: 'custom', path: ['points', k, 'why'], message: `must be written in ${langName(v.uiLang)}` });
       if (o.faithful.why && isWrongLang(o.faithful.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['faithful', 'why'], message: `must be written in ${langName(v.uiLang)}` });
       if (o.good && isWrongLang(o.good.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['good', 'why'], message: `must be written in ${langName(v.uiLang)}` });
       if (isWrongLang(o.upgraded, 'en')) ctx.addIssue({ code: 'custom', path: ['upgraded'], message: 'must be written in English' });
@@ -98,6 +101,8 @@ export const applySummary: PromptTemplate<SummaryVars, ApplySummary> = {
   cache: { gcTime: 86_400_000 },
   build(v) {
     const kps = v.keyPoints.slice(0, KEYPOINTS_MAX).map((p, k) => `${k + 1}. ${clip(p, 200)}`);
+    const [s0, s1] = v.goal.sentences;
+    const sentences = s0 === s1 ? String(s0) : `${s0} to ${s1}`;
     return [
       header({ id: ID, version: VERSION }),
       'You check a short English summary of a news article, written by a German-speaking learner (B2 to C1).',
@@ -115,12 +120,12 @@ export const applySummary: PromptTemplate<SummaryVars, ApplySummary> = {
       'Reply with only one JSON object in exactly this shape:',
       SUMMARY_EXAMPLE,
       'Rules:',
-      `- points: one entry for each key point (i = its number, 1 to ${Math.min(KEYPOINTS_MAX, v.keyPoints.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the summary that cover it (empty when "no"). Judge the content, not the language.`,
-      '- faithful: ok is false if the summary states something the article does not say (an invented fact, a wrong number, a wrong cause) or adds the learner own opinion; then quote copies EXACTLY that span and why says in one short sentence in the explanation language what is wrong. Otherwise ok is true, quote is empty and why is one short sentence why it is accurate.',
+      `- points: one entry for each key point (i = its number, 1 to ${Math.min(KEYPOINTS_MAX, v.keyPoints.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the summary that cover it (empty when "no"). Judge whether the point is there, not the grammar. ${POINT_SCALE} ${POINT_WHY_RULE}`,
+      '- faithful: ok is false if the summary states something the article does not say (an invented fact, a wrong number, a wrong cause) or adds the learner\'s own opinion; then quote copies EXACTLY that span and why says in one short sentence in the explanation language what is wrong. Otherwise ok is true, quote is empty and why is one short sentence why it is accurate.',
       '- edits: at most 12, each with "from" copied EXACTLY from the summary (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Register is never an error.',
       '- used: for each target word and for the target rule that the learner tried to use, one entry with pat (the word exactly as given, or "rule"), ok (true if used correctly) and a "quote" copied exactly from the summary. Skip what the learner did not try.',
       '- good: one strong span copied exactly from the summary ("quote") and one short sentence in the explanation language why it works ("why").',
-      '- upgraded: a better summary in American English with the same length and sentence count, in the learner own words where they are correct; it must cover every key point, must not copy long phrases from the article and must differ from the learner summary.',
+      `- upgraded: a better summary in American English with ${sentences} sentences and at most ${v.goal.maxWords} words, in the learner's own words where they are correct; it must cover every key point, must not copy long phrases from the article and must differ from the learner's summary.`,
       '- summary: one short sentence in the explanation language: what works and what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the summary once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',

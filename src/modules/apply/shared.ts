@@ -10,7 +10,7 @@ export { logError, logWarn } from '../../platform/diagnostics';
 export { usesChunk } from '../../domain/text/chunkMatch';
 export { repairNorm } from '../../domain/repair/norm';
 export type { NewRepair } from '../../domain/repair/repair';
-export { errorEdits, normWs, repairsFromEdits } from '../../domain/tutor/edits';
+export { errorEdits, locateRaw, normWs, repairsFromEdits } from '../../domain/tutor/edits';
 export type { Edit, EditKind, Used } from '../../domain/tutor/edits';
 
 // Speicherformen

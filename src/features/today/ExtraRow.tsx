@@ -216,7 +216,7 @@ export function MoreRows({ today, done, idp = '', tiles = false }: { today: stri
           </button>
         )}
         <button type="button" className="lx-vh-link" onClick={() => go({ name: 'apply' })} data-testid={`${idp}today-practice`}>
-          {t('vhPracticeAll')}
+          {t(FOCUS2 ? 'vhApplyAll' : 'vhPracticeAll')}
         </button>
       </div>
       {open && <ExtraSheet today={today} done={done} onClose={() => setOpen(false)} />}

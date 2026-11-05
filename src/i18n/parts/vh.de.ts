@@ -15,6 +15,8 @@ export const vhDe = {
   vhMore: 'Wenn du mehr willst',
   vhMoreAll: 'Weitere Extras',
   vhPracticeAll: 'Praxis: Sprechen, Satzbau und mehr',
+  /** Fokus 2.0 F3: derselbe Link führt zur Seite „Anwenden“. */
+  vhApplyAll: 'Anwenden: Mail, Zusammenfassung, eigene Sätze',
   vhWordsPractice: 'Wörter üben',
   vhWordsPracticeSub: '{n} fällig, zählt als Extra',
   vhWeekDone: 'erledigt',

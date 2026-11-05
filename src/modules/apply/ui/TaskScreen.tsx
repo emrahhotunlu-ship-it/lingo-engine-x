@@ -22,7 +22,7 @@ import { applyKeypoints, applyReply, applySummary, c1Mail, mailVars, patListText
 import { copyCheck } from '../domain/copy';
 import { countSentences, countWords, joinParts, lengthGoal, lengthState, type Device } from '../domain/kinds';
 import { keypointsItem } from '../domain/material';
-import { fromMail, fromReply, fromSummary, newRunId, selfSpots, type ApplyRun, type Feedback } from '../domain/result';
+import { confirmedWords, fromMail, fromReply, fromSummary, newRunId, selfSpots, spotContext, type ApplyRun, type Feedback } from '../domain/result';
 import { useMaterial, useTargets, type Material } from './hooks';
 import { ApplyResult, kindLabel, type SelfState } from './Result';
 import { knownKeypoints, saveKeypoints, saveRun, type SaveResult } from './save';
@@ -184,7 +184,9 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       const out = await askReply.run({ incoming: m.incoming, must: m.mail.must.map((x) => x.en), words: targets.words, rule: rulePrompt, text: given, uiLang: lang, ctx, pats: patListText() });
       if (out) fb = fromReply(out);
     } else if (m.kind === 'write') {
-      const out = await askMail.run(mailVars({ situation: m.situation, text: given, ctx, uiLang: lang }));
+      // T7: Claude prüft, was Emrah sieht – die Regel ist das erste Muster der Situation, die Wendungen sind die beiden Zielwörter.
+      const v = mailVars({ situation: m.situation, text: given, ctx, uiLang: lang });
+      const out = await askMail.run({ ...v, patterns: v.patterns.slice(0, 1), phrases: targets.words });
       if (out) fb = fromMail(out);
     } else {
       kps ??= await knownKeypoints(m.id, [useClock.getState().today, m.article.day]);
@@ -194,7 +196,18 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
         kps = await saveKeypoints(keypointsItem(m.id, m.article.title, r.points, useClock.getState().today, stamp()), r.points);
       }
       setKeyPoints(kps);
-      const out = await askSum.run({ title: m.article.title, article: m.article.text, keyPoints: kps, words: targets.words, rule: rulePrompt, text: given, uiLang: lang, ctx, pats: patListText() });
+      const out = await askSum.run({
+        title: m.article.title,
+        article: m.article.text,
+        keyPoints: kps,
+        goal: { sentences: goal.sentences ?? [3, 5], maxWords: goal.words[1] },
+        words: targets.words,
+        rule: rulePrompt,
+        text: given,
+        uiLang: lang,
+        ctx,
+        pats: patListText(),
+      });
       if (out) fb = fromSummary(out);
     }
     if (!fb) return;
@@ -217,7 +230,9 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       length: lengthState(given, goal).state,
       copy: m.kind === 'summary' ? copyCheck(given, m.article.text) : null,
       peeked,
-      words: targets.words,
+      // L1: Beleg nur für Zielwörter, die Claude als richtig bestätigt hat und die nicht im Material stehen; angeboten waren `offered`.
+      words: confirmedWords(targets.words, fb, given, m.plain),
+      offered: targets.words,
     };
     const spots = n === 1 ? selfSpots(fb.edits) : [];
     setSelf(spots.length ? { spots, fixes: spots.map((e) => e.from) } : null);
@@ -230,7 +245,8 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
 
   const done = (): void => {
     local.remove(draftKey);
-    if (unit) unitDone(unit);
+    // L2: Mit `unit` läuft genau die eingefrorene Disziplin des Tages (Route aus `u.ap`), und „Fertig“ gibt es erst nach einer Prüfung: erledigt.
+    if (unit) unitDone(unit, undefined, { apDone: true });
     else onBack();
   };
   const revise = (): void => {
@@ -429,6 +445,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
       {run && self && !revealed && (
         <SelfFix
           self={self}
+          text={run.text}
           onChange={(fixes) => setSelf({ ...self, fixes })}
           onReveal={() => setRevealed(true)}
         />
@@ -523,7 +540,7 @@ function MaterialCard({ m, open, writing, onToggle }: { m: Material; open: boole
   );
 }
 
-function SelfFix({ self, onChange, onReveal }: { self: NonNullable<SelfState>; onChange: (fixes: string[]) => void; onReveal: () => void }) {
+function SelfFix({ self, text, onChange, onReveal }: { self: NonNullable<SelfState>; text: string; onChange: (fixes: string[]) => void; onReveal: () => void }) {
   const { t } = useT();
   const id = useId();
   const n = self.spots.length;
@@ -534,30 +551,52 @@ function SelfFix({ self, onChange, onReveal }: { self: NonNullable<SelfState>; o
         <p className="lx-ax-hint m-0 text-muted">{t(n === 1 ? 'axSelfLead_one' : 'axSelfLead_other', { n })}</p>
       </header>
       <ol className="m-0 flex list-none flex-col gap-3 p-0">
-        {self.spots.map((e, k) => (
-          <li key={`${e.from}-${k}`} className="flex flex-col gap-1.5" data-testid={`ax-self-${k}`} data-kind={e.kind}>
-            <label htmlFor={`${id}-${k}`} className="lx-ax-small text-subtle">
-              {t('axSelfSpot', { n: k + 1, kind: t(kindLabel(e.kind)) })}
-            </label>
-            <input
-              id={`${id}-${k}`}
-              value={self.fixes[k] ?? ''}
-              lang="en"
-              name={`lx-apply-fix-${k}`}
-              autoCorrect="off"
-              autoCapitalize="off"
-              autoComplete="off"
-              spellCheck={false}
-              onChange={(ev) => {
-                const next = [...self.fixes];
-                next[k] = ev.target.value;
-                onChange(next);
-              }}
-              data-testid={`ax-self-input-${k}`}
-              className="lx-ax-input lx-glass min-h-11 w-full rounded-[var(--radius-control)] px-4 py-2 text-fg"
-            />
-          </li>
-        ))}
+        {self.spots.map((e, k) => {
+          // T8: der ganze Satz aus dem eigenen Text, die falsche Stelle darin markiert.
+          const at = spotContext(text, e);
+          return (
+            <li key={`${e.from}-${k}`} className="flex flex-col gap-1.5" data-testid={`ax-self-${k}`} data-kind={e.kind}>
+              <label htmlFor={`${id}-${k}`} className="lx-ax-small text-subtle">
+                {t('axSelfSpot', { n: k + 1, kind: t(kindLabel(e.kind)) })}
+              </label>
+              <p className="lx-ax-text m-0 [overflow-wrap:anywhere]" data-testid={`ax-self-sentence-${k}`}>
+                <span className="sr-only">{t('axSelfIn')} </span>
+                <span lang="en">
+                  {at ? (
+                    <>
+                      {at.before}
+                      <mark className="rounded bg-wrong-soft px-0.5 text-wrong-text" data-testid={`ax-self-mark-${k}`}>
+                        {at.hit}
+                      </mark>
+                      {at.after}
+                    </>
+                  ) : (
+                    <mark className="rounded bg-wrong-soft px-0.5 text-wrong-text" data-testid={`ax-self-mark-${k}`}>
+                      {e.from}
+                    </mark>
+                  )}
+                </span>
+              </p>
+              <input
+                id={`${id}-${k}`}
+                value={self.fixes[k] ?? ''}
+                lang="en"
+                name={`lx-apply-fix-${k}`}
+                autoCorrect="off"
+                autoCapitalize="off"
+                autoComplete="off"
+                spellCheck={false}
+                onChange={(ev) => {
+                  const next = [...self.fixes];
+                  next[k] = ev.target.value;
+                  onChange(next);
+                }}
+                data-testid={`ax-self-input-${k}`}
+                className="lx-ax-input lx-glass min-h-11 w-full rounded-[var(--radius-control)] px-4 py-2 text-fg"
+              />
+            </li>
+          );
+        })}
       </ol>
       <Button variant="primary" className="min-h-[52px] self-start" onClick={onReveal} data-testid="ax-reveal">
         {t('axReveal')}

@@ -9,7 +9,8 @@ import type { Rule, Targets } from './hooks';
 
 // Ergebnis einer Prüfung (F3). Feste Reihenfolge (Nachtrag learning-scientist Muss 2, ui-standard §4): Zusammenfassung: Kernpunkte → richtig wiedergegeben →
 // eigene Worte → Länge → Fehlerstellen; Antwort: Pflichtpunkte → Ton → Länge → Fehlerstellen; Mail schreiben: Gesamturteil und Ton → Länge → Fehlerstellen.
-// Jede Fehlerstelle: deins → richtig → warum (ein Satz). Ohne Fehler „Das sitzt“ mit Zitat und Grund (Muss 5). Danach Lernwörter, bessere Fassung, Folgen.
+// Jede Fehlerstelle: deins → richtig → warum (ein Satz). Ohne Fehler „Das sitzt“ mit Zitat und Grund (Muss 5, nie Claudes Gesamturteil als Grund). Danach
+// Lernwörter, bessere Fassung, Folgen. Ein Punkt „teilweise“/„fehlt“ trägt sein Warum (Prüfbefund T2).
 // Farbe nie allein: ✓/✕ steht immer mit Wort.
 
 const TONE_KEY: Record<string, MessageKey> = { fits: 'axToneFits', 'too-direct': 'axToneDirect', 'too-informal': 'axToneInformal', 'too-stiff': 'axToneStiff' };
@@ -72,9 +73,13 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
   const len = lengthState(run.text, goal);
   const uses = wordUses(targets.words, f, run.text);
   const rs = ruleState(targets.rule, run);
-  const praise = errs.length === 0 ? praiseOf(f, run.text) : null;
+  // L7: „Das sitzt“ und „Keine Fehler gefunden“ hängen an der belegten Fehlerliste, wie `ok` im gespeicherten Eintrag.
+  const praise = errs.length === 0 ? praiseOf(f) : null;
   const sentGoal = goal.sentences ? (goal.sentences[0] === goal.sentences[1] ? String(goal.sentences[0]) : `${goal.sentences[0]}–${goal.sentences[1]}`) : '';
-  const useKey: Record<WordUse['state'], MessageKey> = { ok: 'axWordOk', bad: 'axWordBad', none: 'axWordNone' };
+  const useKey: Record<WordUse['state'], MessageKey> = { ok: 'axWordOk', bad: 'axWordBad', none: 'axWordNone', open: 'axWordOpen' };
+  const wordsOk = len.words >= goal.words[0] && len.words <= goal.words[1];
+  const sentState: 'ok' | 'short' | 'long' = !goal.sentences ? 'ok' : len.sentences < goal.sentences[0] ? 'short' : len.sentences > goal.sentences[1] ? 'long' : 'ok';
+  const praiseItem = praise?.by === 'used' ? (praise.item === RULE_ID ? (targets.rule?.label ?? '') : praise.item) : '';
 
   const points = f.points && (
     <Block title={t(run.kind === 'summary' ? 'axPointsSummary' : 'axPointsReply')} testId="ax-points">
@@ -89,6 +94,12 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
               {p.quote && (
                 <span className="lx-ax-hint text-muted [overflow-wrap:anywhere]" lang="en">
                   „{p.quote}“
+                </span>
+              )}
+              {p.covered !== 'yes' && p.why && (
+                <span className="lx-ax-hint" lang={lang} data-testid={`ax-point-why-${p.i}`}>
+                  <span className="text-muted">{t('axWhyLabel')}: </span>
+                  {p.why}
                 </span>
               )}
             </span>
@@ -151,8 +162,20 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
       <p className="lx-ax-text m-0 flex items-start gap-2">
         <Mark ok={len.state === 'ok'} partly={len.state !== 'ok'} />
         <span>
-          {len.state === 'ok' ? t('axLenOk', { n: len.words }) : t(len.state === 'short' ? 'axLenShort' : 'axLenLong', { n: len.words, min: goal.words[0], max: goal.words[1] })}
-          {goal.sentences ? <span className="text-muted"> · {t('axLenSent', { n: len.sentences, goal: sentGoal })}</span> : null}
+          {/* T6: Wörter zuerst; passen sie, aber die Sätze nicht, sagt der Satz genau das (nie „passt“ neben einem gelben Zeichen). */}
+          {!wordsOk ? (
+            <>
+              {t(len.words < goal.words[0] ? 'axLenShort' : 'axLenLong', { n: len.words, min: goal.words[0], max: goal.words[1] })}
+              {goal.sentences ? <span className="text-muted"> · {t('axLenSent', { n: len.sentences, goal: sentGoal })}</span> : null}
+            </>
+          ) : sentState !== 'ok' ? (
+            t(sentState === 'short' ? 'axLenSentShort' : 'axLenSentLong', { n: len.sentences, goal: sentGoal })
+          ) : (
+            <>
+              {t('axLenOk', { n: len.words })}
+              {goal.sentences ? <span className="text-muted"> · {t('axLenSent', { n: len.sentences, goal: sentGoal })}</span> : null}
+            </>
+          )}
         </span>
       </p>
     </Block>
@@ -198,14 +221,16 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
     </Block>
   );
 
-  const sits = praise && (
-    <section className="lx-card flex flex-col gap-1 p-4" data-testid="ax-sits">
+  const sits = praise && (praise.by !== 'used' || praiseItem) && (
+    <section className="lx-card flex flex-col gap-1 p-4" data-testid="ax-sits" data-by={praise.by}>
       <h3 className="lx-ax-task m-0">{t('axSits')}</h3>
-      <p className="lx-ax-text m-0 [overflow-wrap:anywhere]" lang="en">
-        „{praise.quote}“
-      </p>
+      {praise.by !== 'tone' && (
+        <p className="lx-ax-text m-0 [overflow-wrap:anywhere]" lang="en">
+          „{praise.quote}“
+        </p>
+      )}
       <p className="lx-ax-hint m-0 text-muted" lang={lang}>
-        {praise.why}
+        {praise.by === 'used' ? t('axSitsUsed', { item: praiseItem }) : praise.why}
       </p>
     </section>
   );
@@ -236,7 +261,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
           <ul className="m-0 flex list-none flex-col gap-1 p-0">
             {uses.map((u, k) => (
               <li key={u.word} className="lx-ax-text flex items-center gap-2" data-testid={`ax-word-${k}`} data-state={u.state}>
-                <Mark ok={u.state === 'ok'} partly={u.state === 'none'} />
+                <Mark ok={u.state === 'ok'} partly={u.state === 'none' || u.state === 'open'} />
                 <span lang="en" className="font-semibold">
                   {u.word}
                 </span>

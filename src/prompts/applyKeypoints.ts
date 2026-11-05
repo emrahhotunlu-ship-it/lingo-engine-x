@@ -6,7 +6,7 @@ import { cut } from './tolerant';
 import type { PromptTemplate } from './types';
 
 // apply-keypoints@1 (F3 Anwenden, Nachtrag learning-scientist Muss 2): die 3 bis 4 Kernpunkte eines Artikels, EINMAL je Artikel festgelegt und gespeichert
-// (`out/<Monat>`, Art `sumkp`). Jede spätere Prüfung einer Zusammenfassung nimmt dieselben Punkte (gleicher Maßstab). Stufe `quick`, 24 h zwischengespeichert,
+// (`out/<Monat>`, Art `sumkp`). Jede spätere Prüfung einer Zusammenfassung nimmt dieselben Punkte (gleicher Maßstab). Stufe `default` (Prüfbefund L5: der Maßstab jeder späteren Prüfung), 24 h zwischengespeichert,
 // nur auf Antippen („Prüfen“ der ersten Zusammenfassung), nie automatisch wiederholt außer dem einen Neuversuch bei Schemaverletzung (A6.3).
 
 export type KeypointsVars = { title: string; article: string };
@@ -32,7 +32,7 @@ export const keypointsSchema = (): z.ZodType<ApplyKeypoints> =>
 export const applyKeypoints: PromptTemplate<KeypointsVars, ApplyKeypoints> = {
   id: ID,
   version: VERSION,
-  tier: 'quick',
+  tier: 'default',
   cache: { gcTime: 86_400_000 },
   build(v) {
     return [

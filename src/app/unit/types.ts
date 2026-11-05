@@ -54,4 +54,10 @@ export type UnitBlockProvider = {
  * Abschluss eines Blocks: Die Übung ruft `unitDone(ctx.block, result?)`; P1 zählt `act['u-…']`
  * über `recordProfileFields` und führt zur Zwischenkarte.
  */
-export type UnitDone = (block: UnitBlockNo, result?: UnitTaskResult) => void;
+export type UnitDone = (block: UnitBlockNo, result?: UnitTaskResult, opts?: UnitDoneOpts) => void;
+
+/**
+ * Kennzeichen beim Abschluss. `apDone` (Fokus 2.0 F3, Prüfbefund L2): Schritt 3 hat die eingefrorene Disziplin des Tages (`u.ap`) wirklich erledigt.
+ * Nur dann zählt der Zähler der Anwenden-Tage weiter; Ersatzwege (eigener Satz statt Aufgabe, Satzbau ohne Claude) melden es nicht.
+ */
+export type UnitDoneOpts = { apDone?: boolean };

@@ -30,9 +30,13 @@ const WORD_RE = /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
 /** Wörter eines Textes (Buchstaben- und Zahlfolgen, Apostroph und Bindestrich im Wort). */
 export const countWords = (text: string): number => (text.match(WORD_RE) ?? []).length;
 
-/** Sätze eines Textes: Abschnitte mit mindestens zwei Wörtern, getrennt durch . ! ? oder Zeilenumbruch. */
+/** Abkürzungen, deren Punkt kein Satzende ist (Prüfbefund T10): U.S., e.g., i.e. und Anreden/Titel wie Mr., Dr. */
+const ABBR_RE = /\b(?:\p{L}\.){2,}|\b(?:Mr|Mrs|Ms|Dr|Prof|St|vs|Inc|Ltd|Jr|Sr)\./gu;
+
+/** Sätze eines Textes: Abschnitte mit mindestens zwei Wörtern, getrennt durch . ! ? oder Zeilenumbruch (Punkte in Abkürzungen zählen nicht). */
 export function countSentences(text: string): number {
   return text
+    .replace(ABBR_RE, (m) => m.replace(/\./g, ''))
     .split(/[.!?]+(?:\s|$)|\n+/)
     .map((s) => s.trim())
     .filter((s) => countWords(s) >= 2).length;

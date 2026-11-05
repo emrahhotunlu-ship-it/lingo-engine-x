@@ -46,8 +46,9 @@ function core(input: string, n: number) {
   const none = /zznopoint/i.test(text);
   const points = Array.from({ length: n }, (_, k) => {
     const s = none ? undefined : sents[k];
-    if (!s) return { i: k + 1, covered: 'no', quote: '' };
-    return { i: k + 1, covered: k === 1 && /zzpartly/i.test(text) ? 'partly' : 'yes', quote: s };
+    if (!s) return { i: k + 1, covered: 'no', quote: '', why: de ? 'Dazu steht noch nichts in deinem Text.' : 'Your text does not say anything about this yet.' };
+    const partly = k === 1 && /zzpartly/i.test(text);
+    return { i: k + 1, covered: partly ? 'partly' : 'yes', quote: s, why: partly ? (de ? 'Das klingt noch zu allgemein; nenne es konkret.' : 'This is still too general; say it more concretely.') : '' };
   });
   const used: Array<Record<string, unknown>> = [];
   for (const w of targetWords(input)) {

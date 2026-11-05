@@ -7,7 +7,7 @@ import { jsonBytes, monthOf, upsertById } from '../monthDoc';
 // idempotent über `id`. Grenzen (data-guard, plan.md §8 00:35):
 // - höchstens 400 Einträge (die ältesten fallen weg, nie still),
 // - `text` und `fb` je höchstens 2 KB,
-// - das Dokument bleibt unter 200 KiB: verdichtet wird zuerst `fb`, dann `text` der ältesten,
+// - das Dokument bleibt unter 200 KiB: verdichtet wird zuerst `fb`, dann `text` der ältesten (festgelegte Kernpunkte `sumkp` nie),
 // - der Monat kommt aus dem Lerntag (`d.slice(0, 7)`, Tagesgrenze 04:00),
 // - in ein ungültiges Dokument wird nie geschrieben (Regel 6).
 
@@ -90,6 +90,12 @@ const dropField =
   };
 const STEPS: ReadonlyArray<(i: Doc) => Doc | null> = [dropField('fb'), dropField('text')];
 
+/**
+ * Festgelegte Kernpunkte eines Artikels (Fokus 2.0 F3, Art `sumkp`): klein (≤ 4 kurze Sätze) und Maßstab jeder späteren Prüfung derselben Zusammenfassung.
+ * Sie werden nie verdichtet und nie entfernt (data-guard D1); sonst legte die nächste Prüfung neue Punkte fest und der Maßstab wechselte.
+ */
+const isPinned = (i: Doc): boolean => i.k === 'sumkp';
+
 const objOf = (x: unknown): Doc => (x && typeof x === 'object' && !Array.isArray(x) ? { ...(x as Doc) } : {});
 
 /**
@@ -101,8 +107,15 @@ const objOf = (x: unknown): Doc => (x && typeof x === 'object' && !Array.isArray
 export function compactOut(items: readonly unknown[], month = '0000-00', keepId?: string): unknown[] {
   let list = items.map(objOf);
   if (list.length > OUT_MAX_ITEMS) {
-    logWarn('compact:drop', new Error(`${list.length - OUT_MAX_ITEMS} oldest out entries removed (max ${OUT_MAX_ITEMS})`), month);
-    list = list.slice(list.length - OUT_MAX_ITEMS);
+    // Die ältesten fallen weg, festgelegte Kernpunkte nie (sie zählen trotzdem zur Höchstzahl).
+    let over = list.length - OUT_MAX_ITEMS;
+    const before = list.length;
+    list = list.filter((x) => {
+      if (over <= 0 || isPinned(x) || (keepId !== undefined && x.id === keepId)) return true;
+      over--;
+      return false;
+    });
+    logWarn('compact:drop', new Error(`${before - list.length} oldest out entries removed (max ${OUT_MAX_ITEMS})`), month);
   }
   const sizes = list.map((x) => jsonBytes(x));
   const base = jsonBytes({ v: 1, month, items: [] });
@@ -110,7 +123,7 @@ export function compactOut(items: readonly unknown[], month = '0000-00', keepId?
   for (const step of STEPS) {
     for (let i = 0; i < list.length && total > OUT_DOC_MAX_BYTES; i++) {
       const cur = list[i];
-      if (!cur || (keepId !== undefined && cur.id === keepId)) continue;
+      if (!cur || (keepId !== undefined && cur.id === keepId) || isPinned(cur)) continue;
       const next = step(cur);
       if (!next) continue;
       const size = jsonBytes(next);
@@ -122,7 +135,7 @@ export function compactOut(items: readonly unknown[], month = '0000-00', keepId?
   // Letzte Rettung: älteste Einträge entfernen (nie den neuen) – nie still.
   let dropped = 0;
   while (total > OUT_DOC_MAX_BYTES && list.length > 1) {
-    const i = list.findIndex((x) => keepId === undefined || x.id !== keepId);
+    const i = list.findIndex((x) => (keepId === undefined || x.id !== keepId) && !isPinned(x));
     if (i < 0) break;
     total -= (sizes[i] ?? 0) + 1;
     list.splice(i, 1);
