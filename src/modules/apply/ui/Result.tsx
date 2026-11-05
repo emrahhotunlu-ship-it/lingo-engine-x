@@ -6,13 +6,14 @@ import { selfFixOk, errorsOf, praiseOf, repairsOf, wordUses, type ApplyRun, type
 import { lengthState, type LengthGoal } from '../domain/kinds';
 import type { SaveResult } from './save';
 import type { Rule, Targets } from './hooks';
+import type { Greet } from '../domain/greet';
 
 // Ergebnis einer Prüfung (F3). Feste Reihenfolge (Nachtrag learning-scientist Muss 2, ui-standard §4): Zusammenfassung: Kernpunkte → richtig wiedergegeben →
 // eigene Worte → Länge → Fehlerstellen; Antwort: Pflichtpunkte → Ton → Länge → Fehlerstellen; Mail schreiben: Gesamturteil und Ton → Länge → Fehlerstellen.
 // Jede Fehlerstelle: deins → richtig → warum (ein Satz). Ohne Fehler „Das sitzt“ mit Zitat und Grund (Muss 5, nie Claudes Gesamturteil als Grund). Danach
 // Lernwörter, bessere Fassung, Folgen. Ein Punkt „teilweise“/„fehlt“ trägt sein Warum (Prüfbefund T2).
 // Farbe nie allein: ✓/✕ steht immer mit Wort.
-// W5: Anrede und Gruß stehen beim Ton (K7); „So klingt es gehobener“ (K1) kommt NACH den Fehlerstellen und „Das sitzt“, als eigener Block ohne Durchstreichen
+// W5: Anrede und Gruß stehen beim Ton (K7); „So klingt es professioneller“ (K1) kommt NACH den Fehlerstellen und „Das sitzt“, als eigener Block ohne Durchstreichen
 // (ein Vorschlag, kein Fehler); die Starthilfe (K9) ist unten vermerkt.
 
 const TONE_KEY: Record<string, MessageKey> = { fits: 'axToneFits', 'too-direct': 'axToneDirect', 'too-informal': 'axToneInformal', 'too-stiff': 'axToneStiff' };
@@ -40,6 +41,8 @@ type Props = {
   self: SelfState;
   checksLeft: number;
   tpl: string;
+  /** Passende Anrede und passender Gruß als Vorschlag (erst im Ergebnis, Lehrer-Prüfung W5b); `null` beim Zusammenfassen. */
+  greet?: Greet | null;
   onRevise: () => void;
   onDone: () => void;
   /** Überschrift (nur für Screenreader) – nach dem Prüfen springt der Fokus hierher, ohne die Tastatur zu öffnen. */
@@ -69,7 +72,7 @@ const ruleState = (rule: Rule | null, run: ApplyRun): WordUse['state'] | null =>
   return hit ? (hit.ok ? 'ok' : 'bad') : 'none';
 };
 
-export function ApplyResult({ run, save, targets, pointLabels, goal, self, checksLeft, tpl, onRevise, onDone, headRef }: Props) {
+export function ApplyResult({ run, save, targets, pointLabels, goal, self, checksLeft, tpl, greet: suggest = null, onRevise, onDone, headRef }: Props) {
   const { t, lang } = useT();
   const [reported, setReported] = useState(false);
   const f = run.feedback;
@@ -156,7 +159,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
     </Block>
   );
 
-  const greet = f.greet && (
+  const verdict = f.greet && (
     <p className="lx-ax-text m-0 flex items-start gap-2" data-testid="ax-greet" data-fit={f.greet.fit}>
       <Mark ok={f.greet.fit === 'fits'} partly={f.greet.fit === 'off'} />
       <span>
@@ -169,6 +172,17 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
         ) : null}
       </span>
     </p>
+  );
+  // Der Vorschlag (Anrede + Gruß) steht erst hier, nicht in der Aufgabe (Lehrer-Prüfung W5b).
+  const greet = (verdict || suggest) && (
+    <>
+      {verdict}
+      {suggest && (
+        <p className="lx-ax-hint m-0 text-muted" data-testid="ax-greet-suggest">
+          {t('axGreetSuggest', { hello: suggest.hello, close: suggest.close })}
+        </p>
+      )}
+    </>
   );
 
   const tone = f.tone && (

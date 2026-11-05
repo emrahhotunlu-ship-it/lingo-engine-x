@@ -33,6 +33,7 @@ import type { PromptTemplate, UiLang } from './types';
 // 24 h zwischengespeichert, nie automatisch wiederholt außer dem einen Neuversuch bei Schemaverletzung (A6.3).
 // @2 (W5, Lehrer-Prüfung F3): `style` „So klingt es gehobener“ (K1, 1–2 zitierte Stil-Verbesserungen, getrennt von den Fehlern) und `greet` (K7: Anrede und
 // Gruß für den genannten Leser). Beide tolerant: fehlen sie, gelten die Verbesserungen der Liste bzw. kein Urteil.
+// W5b (Lehrer-Prüfung): `upgraded` behält oder ergänzt Anrede und Gruß. Gleiche Version: nur eine Regelzeile, Schema unverändert, @2 war noch nie live.
 
 export type ReplyVars = {
   /** Die eingegangene Mail (Absender, Betreff, Text), ≤ 1.600 Zeichen. */
@@ -163,7 +164,7 @@ export const applyReply: PromptTemplate<ReplyVars, ApplyReply> = {
       v.greet ? GREET_RULE : '',
       '- good: one strong span copied exactly from the reply ("quote") and one short sentence in the explanation language why it works ("why").',
       STYLE_RULE,
-      "- upgraded: the whole reply rewritten at C1 level in American English, keeping the learner's ideas, facts and structure and roughly the same length; it must cover every point above (add one short sentence for a missing point), must not add new facts, and must differ from the learner's reply.",
+      "- upgraded: the whole reply rewritten at C1 level in American English, keeping the learner's ideas, facts and structure and roughly the same length; it must cover every point above (add one short sentence for a missing point), must not add new facts, must keep or add a fitting salutation and sign-off, and must differ from the learner's reply.",
       '- summary: one short sentence in the explanation language: what works and what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the learner reply once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',

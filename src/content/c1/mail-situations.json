@@ -89,7 +89,7 @@
       "sit": "status update",
       "brief": {
         "en": "Your pilot project missed its goals. Write a short lessons-learned email to your manager: what you wish the team had done differently, what would have happened with another month of testing, and what would be different today if the team had started earlier.",
-        "de": "Dein Pilotprojekt hat die Ziele verfehlt. Schreib deiner Chefin oder deinem Chef eine kurze Lessons-Learned-Mail: was du dir anders gewünscht hättest, was mit einem weiteren Testmonat passiert wäre und was heute anders wäre, wenn das Team früher begonnen hätte."
+        "de": "Dein Pilotprojekt hat die Ziele verfehlt. Schreib deinem Chef eine kurze Lessons-Learned-Mail: was du dir anders gewünscht hättest, was mit einem weiteren Testmonat passiert wäre und was heute anders wäre, wenn das Team früher begonnen hätte."
       },
       "patterns": [
         { "id": "mc.wish-past", "re": "\\bwish(?:ed)?\\b[^.!?]{0,60}\\bhad\\s+\\w+", "ex": "I wish we had involved the IT team earlier.", "no": "I wish you a good week." },
@@ -121,7 +121,7 @@
       "sit": "status update",
       "brief": {
         "en": "A colleague missed the budget meeting. Summarize it for them: what people said, what they wanted to know, and what someone insisted on or recommended for the next quarter.",
-        "de": "Ein Kollege hat das Budgetmeeting verpasst. Fass es für ihn zusammen: was gesagt wurde, was die Leute wissen wollten und was jemand für das nächste Quartal verlangt oder empfohlen hat."
+        "de": "Eine Kollegin hat das Budgetmeeting verpasst. Fass es für sie zusammen: was gesagt wurde, was die Leute wissen wollten und was jemand für das nächste Quartal verlangt oder empfohlen hat."
       },
       "patterns": [
         { "id": "rs.backshift", "re": "\\b(?:said|mentioned|explained|stated|told us)\\b[^.!?]{0,25}\\b(?:it|they|he|she|we|the(?:\\s+\\w+){1,2})\\s+(?:had|would|could|was|were)\\b", "ex": "The CFO said that the budget had already been approved.", "no": "The CFO approved the budget." },
@@ -181,7 +181,7 @@
     {
       "id": "ms12",
       "ch": 7,
-      "to": "client and director",
+      "to": "client, with your director in cc",
       "sit": "escalation",
       "brief": {
         "en": "A client has escalated a delayed delivery to your director. Write the reply: apologize briefly, show what you did after hearing about it, show that you genuinely understand the frustration, and come back to the original commitment.",
