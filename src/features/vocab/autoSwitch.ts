@@ -3,7 +3,7 @@ import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
 import { loadSnapshot } from '../../data/snapshot';
 import { translate } from '../../i18n';
-import { loadAutoSwitch, prepareDay, registerCatchUp, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
+import { catchUpDone, loadAutoSwitch, prepareDay, registerCatchUp, startCatchUpOnce, vocabModuleOn } from '../../modules/vocab/api';
 import { useClock } from '../../app/clock';
 import { loadWordsDay } from '../today/wordsDay';
 import { getDb, useCapabilities } from '../../platform/capabilities';
@@ -38,6 +38,7 @@ async function run(): Promise<void> {
     const sw = await loadAutoSwitch();
     const r = await sw.autoEnable(writer, read, Date.now());
     if (r.state === 'done' || r.state === 'already') {
+      watchFresh();
       // ux-reviewer 05.11.2026 Nr. 20: der Hinweis gilt dem Bildschirm, auf dem er erscheint – beim nächsten Bildschirm verschwindet er
       // (sonst lag er bis zu 5 s über Überzeile und Filtern der nächsten Seite).
       const id = toast(translate(useSettings.getState().lang, 'vmSwOnState'));
@@ -87,6 +88,56 @@ async function runCatchUp(): Promise<unknown> {
 function catchUp(): void {
   if (!getWriter()) return;
   void startCatchUpOnce(runCatchUp);
+  void catchUpDone().then(watchFresh);
+}
+
+// Neue Karten sofort übernehmen (Emrah 06.11.2026): legt ein anderer Bereich eine Karte ohne Lexem an (Lehrer-Feedback, „Merken“ …), bekommt
+// sie ihr Lexem gleich, nicht erst beim nächsten Start. Je Pfad höchstens ein Versuch je App-Start (keine Schleife); kurz gebündelt, weil
+// „Alle übernehmen“ viele Karten nacheinander schreibt.
+type Doc = Record<string, unknown>;
+const ADOPT_WAIT_MS = 800;
+const tried = new Set<string>();
+let watching = false;
+
+function watchFresh(): void {
+  if (watching) return;
+  watching = true;
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  let seen: unknown[] = [];
+  const kick = () => {
+    const s = useLive.getState();
+    const now = [s.collections.vocab, s.collections.chunk, s.docs['app/schema']];
+    if (now.every((x, i) => x === seen[i])) return;
+    seen = now;
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      timer = null;
+      void adopt();
+    }, ADOPT_WAIT_MS);
+  };
+  useLive.subscribe(kick);
+  kick();
+}
+
+async function adopt(): Promise<void> {
+  const writer = getWriter();
+  if (!writer || !moduleOn()) return;
+  const s = useLive.getState();
+  const docs = new Map<string, Doc>();
+  for (const kind of ['vocab', 'chunk'] as const) for (const [id, doc] of s.collections[kind] ?? []) docs.set(`${kind}/${id}`, doc);
+  try {
+    const sw = await loadAutoSwitch();
+    const todo = new Map<string, Doc>();
+    for (const path of sw.freshCandidates(docs, s.docs['app/schema'], Date.now())) {
+      if (tried.has(path)) continue;
+      tried.add(path);
+      const doc = docs.get(path);
+      if (doc) todo.set(path, doc);
+    }
+    if (todo.size) await sw.adoptFresh(writer, todo, Date.now());
+  } catch (err) {
+    logError('vocab:adopt', err, 'Neue Karten');
+  }
 }
 
 /** Beim Start des Bereichs Wörter einhängen (`boot`). Läuft höchstens einmal je App-Start. */

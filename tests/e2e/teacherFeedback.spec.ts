@@ -99,3 +99,27 @@ test('Alle übernehmen speichert alle Kartenvorschläge auf einmal; schon vorhan
     .toBe(true);
   expect(errors).toEqual([]);
 });
+
+// Emrah 06.11.2026: „Wörter über das Lehrer-Feedback hinzugefügt – wo sind sie im Wörter-Bereich?“ Mit eingeschalteter Wörter-App
+// bekommt die neue Karte sofort ihr Lexem und steht ohne Neuladen in der Wortliste.
+test('Wörter-App an: übernommene Wendung steht sofort in der Wortliste (ohne Neuladen)', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, vocabAuto: true });
+  await screen(page, 'today');
+  await expect.poll(async () => ((await dump(page))['app/profile']?.vcfg as Record<string, unknown> | undefined)?.mod, { timeout: 20_000 }).toBe(1);
+  await openTab(page, 'vocab');
+  await expect(page.getByTestId('vocab-home')).toBeVisible();
+  await page.getByTestId('vocab-add').click();
+  await page.getByTestId('add-teacher-feedback').click();
+  await page.getByTestId('tf-input').fill('New phrases from today: would rather, phase out. zzmulti');
+  await page.getByTestId('tf-go').click();
+  await expect(page.getByTestId('tf-words')).toBeVisible();
+  await page.getByTestId('tf-words-take-all').click();
+  await expect(page.getByTestId('tf-word-take').first()).toHaveText('In deinen Karten');
+  await expect
+    .poll(async () => Object.entries(await dump(page)).some(([k, d]) => k.startsWith('vocab/') && (d as Record<string, unknown>).word === 'would rather' && !!(d as Record<string, unknown>).lex), { timeout: 10_000 })
+    .toBe(true);
+  await openTab(page, 'vocab');
+  await page.getByTestId('vocab-search').fill('would rather');
+  await expect(page.getByTestId('vw-word').filter({ hasText: 'would rather' })).toBeVisible();
+  expect(errors).toEqual([]);
+});

@@ -288,22 +288,55 @@ export async function startCatchUp(writer: Writer, read: () => Promise<SwitchRea
   if (!migrationDone(st.schema) || !st.profileValid || st.truncated) return null;
   // Ohne Lexem nur Karten, die NACH der Umrechnung im alten Bereich dazukamen (angelegt ab dem Umrechnungstag): was die Umrechnung bewusst
   // ausließ (versteckt, ungültig, …), bleibt draußen und hält keine Sperre bei jedem Start.
-  const mark = st.schema && isObj(st.schema.vocabModule) && typeof st.schema.vocabModule.t === 'number' ? dayKey(st.schema.vocabModule.t) : null;
+  const mark = markDay(st.schema);
   const docs = new Map<string, Doc>();
   for (const [path, doc] of st.input.docs) {
     if (!CARD.test(path)) continue;
     const lex = lexOf(doc);
     if (isObj(doc.lex)) {
       if (lex && typeof doc.last === 'number' && doc.last > lex.sync) docs.set(path, doc);
-    } else {
-      // Anlegetag: `added` (Vokabel) oder `created` (Wendung, ms); unbekannt = nicht nachholen (das übernimmt das Wiedereinschalten).
-      const born = isDayKey(doc.added) ? doc.added : typeof doc.created === 'number' && doc.created > 0 ? dayKey(doc.created) : null;
-      if (mark && born && born >= mark && convertDoc(path, doc, nowMs).lex) docs.set(path, doc);
-    }
+    } else if (bornSince(doc, mark) && convertDoc(path, doc, nowMs).lex) docs.set(path, doc);
   }
   if (!docs.size) return null;
   // Kurze Sperre (data-guard 04.11.2026): zwei Tabs/Geräte zugleich buchten dieselben alten Antworten sonst doppelt.
   const lock = await writer.acquire(VOCAB_LOCK_PATH, { holder: lockHolder(), ttlMs: 30_000 });
   if (!lock.acquired) return null;
   return catchUpAll(writer, docs, st.input.logs, nowMs);
+}
+
+/** Umrechnungstag (`app/schema.vocabModule.t`) als Tagesschlüssel, sonst `null`. */
+function markDay(schema: Doc | null | undefined): string | null {
+  return schema && isObj(schema.vocabModule) && typeof schema.vocabModule.t === 'number' ? dayKey(schema.vocabModule.t) : null;
+}
+
+/** Anlegetag: `added` (Vokabel) oder `created` (Wendung, ms); unbekannt = nicht nachholen (das übernimmt das Wiedereinschalten). */
+function bornSince(doc: Doc, mark: string | null): boolean {
+  const born = isDayKey(doc.added) ? doc.added : typeof doc.created === 'number' && doc.created > 0 ? dayKey(doc.created) : null;
+  return !!mark && !!born && born >= mark;
+}
+
+/**
+ * Neue Karten sofort übernehmen (Emrah 06.11.2026: „Wörter aus dem Lehrer-Feedback hinzugefügt – wo sind sie?“): Karten, die ein anderer
+ * Bereich OHNE `lex` anlegt (Lehrer-Feedback, „Merken“ im Wort-Fenster, Übersetzer, Pakete …), bekamen ihr Lexem bisher erst beim nächsten
+ * App-Start (`startCatchUp`) und fehlten bis dahin in der Wörter-App. Nur noch nie geübte Karten (nichts nachzuspielen; geübte ohne `lex`
+ * bleiben beim Start-Nachholen mit Verlauf), nur seit dem Umrechnungstag, nur bei fertiger Umrechnung. Schreibt nur `lex`, nie Neueres
+ * (`catchUpAll` prüft auf dem frischen Dokument). Liefert die Pfade, die übernommen werden sollten.
+ */
+export function freshCandidates(docs: Iterable<readonly [string, Doc]>, schema: Doc | null | undefined, nowMs: number): string[] {
+  if (!migrationDone(schema)) return [];
+  const mark = markDay(schema);
+  const out: string[] = [];
+  for (const [path, doc] of docs) {
+    if (!CARD.test(path) || isObj(doc.lex) || doc.hidden === true) continue;
+    const reps = typeof doc.reps === 'number' ? doc.reps : 0;
+    if (reps > 0 || (Array.isArray(doc.hist) && doc.hist.length > 0)) continue;
+    if (bornSince(doc, mark) && convertDoc(path, doc, nowMs).lex) out.push(path);
+  }
+  return out;
+}
+
+export async function adoptFresh(writer: Writer, docs: ReadonlyMap<string, Doc>, nowMs: number): Promise<number> {
+  if (!docs.size) return 0;
+  const r = await catchUpAll(writer, docs, new Map(), nowMs);
+  return r.added;
 }

@@ -7,7 +7,7 @@ import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { lexOf } from '../../../src/modules/vocab/data/lex';
 import { lexWriteSchema, vcfgSchema } from '../../../src/modules/vocab/data/schemas';
 import { VOCAB_LOCK_PATH } from '../../../src/modules/vocab/registry';
-import { autoEnable, buildInput, catchUpAll, startCatchUp, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
+import { adoptFresh, autoEnable, buildInput, catchUpAll, freshCandidates, startCatchUp, enableModule, fromRead, lockHolder, migrationDone, preview, proposedOnly, reenableModule, setModuleSwitch, summaryText } from '../../../src/modules/vocab/ui/switch';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.3/9.4): Eingabe aus vollem Lesen, Wächter, Schalter `vcfg.mod`, Rückweg und Nachholen.
 // Nur erfundene Daten (seed/sample-data.json und Testfälle hier).
@@ -316,6 +316,38 @@ describe('Nachholen bei jedem Start (Emrah 04.11.2026: vormittags in der alten A
     const after = h.dump() as Record<string, Doc>;
     expect(lexOf(after['vocab/new-card'])).not.toBeNull();
     expect(after['vocab/old-card']!.lex).toBeUndefined();
+  });
+
+  it('neue Karte aus dem Lehrer-Feedback wird sofort übernommen (Emrah 06.11.2026), geübte/alte/versteckte nicht', async () => {
+    const h = createMemoryDb({ seed: all() });
+    const w = createWriter(h.db);
+    await enableModule(w, stateOf(h.dump()).input, { ...guards, holder: lockHolder() });
+    const d = h.dump() as Record<string, Doc>;
+    const mark = (d['app/schema']!.vocabModule as Doc).t as number;
+    const later = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date(mark + DAY));
+    // Aufbau wie `newVocabDoc` (Lehrer-Feedback „Alle übernehmen“), erfundene Wendung.
+    const teacher = { id: 'on-the-whole', word: 'On the whole', de: 'Im Großen und Ganzen', def: '', ex: '[On the whole], the call went well.', pos: 'phrase', col: [], level: 'B2', state: 'new', S: 0, D: 5, last: 0, due: 0, reps: 0, lapses: 0, modes: {}, order: 900, src: 'teacher', added: later, origin: { v: 1, kind: 'teacher', t: mark + DAY } };
+    d['vocab/on-the-whole'] = teacher;
+    d['vocab/practised'] = { id: 'practised', word: 'wrap up', de: 'abschließen', ex: 'Let us wrap up.', state: 'review', reps: 2, last: mark + DAY, added: later, hist: [{ t: mark + DAY, g: 3, x: 'type' }] };
+    d['vocab/old-card'] = { id: 'old-card', word: 'tenure', de: 'Amtszeit', ex: 'During her tenure.', state: 'new', added: '2026-01-05' };
+    d['vocab/paused'] = { ...teacher, id: 'paused', word: 'by and large', hidden: true };
+    h.load(d);
+    const docs = new Map(Object.entries(h.dump() as Record<string, Doc>).filter(([p]) => /^(vocab|chunk)\//.test(p)));
+    const schema = (h.dump() as Record<string, Doc>)['app/schema'];
+    expect(freshCandidates(docs, schema, mark + DAY)).toEqual(['vocab/on-the-whole']);
+    // Ohne fertige Umrechnung: nichts.
+    expect(freshCandidates(docs, { version: 1 }, mark + DAY)).toEqual([]);
+    const n = await adoptFresh(w, new Map([['vocab/on-the-whole', docs.get('vocab/on-the-whole')!]]), mark + DAY);
+    expect(n).toBe(1);
+    const after = h.dump() as Record<string, Doc>;
+    const lex = lexOf(after['vocab/on-the-whole'])!;
+    expect(lex).not.toBeNull();
+    expect(lex.intro).toBeNull();
+    expect(lex.pri).toBe('core');
+    expect(after['vocab/on-the-whole']!.word).toBe('On the whole');
+    expect(after['vocab/practised']!.lex).toBeUndefined();
+    // Zweiter Lauf: schon übernommen, nichts mehr zu tun.
+    expect(freshCandidates(new Map(Object.entries(after).filter(([p]) => /^(vocab|chunk)\//.test(p))), after['app/schema'], mark + DAY)).toEqual([]);
   });
 
   it('anderer Tab hält die Sperre → nichts nachgeholt, nichts gebucht (keine Doppelbuchung, data-guard 04.11.2026)', async () => {

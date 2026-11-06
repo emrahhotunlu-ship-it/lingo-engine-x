@@ -991,3 +991,8 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - 05.11.2026 Lehrer-Nachprüfung Rahmen: 37 von 133 Situationen ersetzt/verbessert (Satzanfang endet vor der Regelstelle, keine verratene Lösung, „proposal“ statt „offer“, Lehnübersetzungen); combo-check: Korrektur auch bei ruleOk false, mehr Bezugspunkte (Past Perfect, Present Perfect Continuous), besseres Beispiel. Offen (SOLL): self.plain bei grammar-items@6 nicht Pflicht (viele Test-Fixtures), Prüfung nur für Past Perfect/PPC.\n
 - 05.11.2026 **Live** `JLL8` v98 `1793920483-b280` (Emrahs „du kannst es direkt live schalten“, ohne Test-Link; Rückweg v97 `1793906332-d9d3`): Bugfix-Sammlung 1–9. E2E 1025 grün + 4 Wackler einzeln grün; Plattform-Prüfung FREIGABE, Budget grün.
 - 06.11.2026 **Live** `JLL8` v99 `1793952019-4f9a` (Emrahs „Nimm live“, Rückweg v98 `1793920483-b280`): Link auf Heute heißt „Anwenden – mehr schreiben üben“ (Emrah fand Anwenden nicht).\n
+
+## 06.11.2026 – Neue Karten sofort in der Wörter-App
+- Emrah: 16 Wendungen aus „Feedback der Lehrkraft“ übernommen, in Wörter nicht zu sehen. Ursache: alte Schreibwege (`addWord`, „Merken“, Pakete …) legen Karten ohne `lex` an; die Wörter-App übernahm sie erst beim nächsten App-Start (`startCatchUp`).
+- Neu: `freshCandidates`/`adoptFresh` (`modules/vocab/ui/switch.ts`) + `watchFresh` (`features/vocab/autoSwitch.ts`): bei eingeschalteter Wörter-App bekommt jede neue, nie geübte Karte sofort ihr Lexem (nur `lex`, je Pfad ein Versuch je Start). data-guard: OK (zwei vernachlässigbare Warnungen).
+- Tests: Unit 7664 grün; E2E teacherFeedback (neuer Fall), autoswitch, vswitch, vlearn, vword, vuse, training grün. `wortKern.spec:60` ist auch OHNE diese Änderung rot (vorbestehend, offen).
