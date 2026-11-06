@@ -996,3 +996,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Emrah: 16 Wendungen aus „Feedback der Lehrkraft“ übernommen, in Wörter nicht zu sehen. Ursache: alte Schreibwege (`addWord`, „Merken“, Pakete …) legen Karten ohne `lex` an; die Wörter-App übernahm sie erst beim nächsten App-Start (`startCatchUp`).
 - Neu: `freshCandidates`/`adoptFresh` (`modules/vocab/ui/switch.ts`) + `watchFresh` (`features/vocab/autoSwitch.ts`): bei eingeschalteter Wörter-App bekommt jede neue, nie geübte Karte sofort ihr Lexem (nur `lex`, je Pfad ein Versuch je Start). data-guard: OK (zwei vernachlässigbare Warnungen).
 - Tests: Unit 7664 grün; E2E teacherFeedback (neuer Fall), autoswitch, vswitch, vlearn, vword, vuse, training grün. `wortKern.spec:60` ist auch OHNE diese Änderung rot (vorbestehend, offen).
+- **Live** `JLL8…` v100 `1793975925-edca` (Emrahs „Direkt live“ im Auswahlfenster), Rückweg v99 `1793952019-4f9a`.
