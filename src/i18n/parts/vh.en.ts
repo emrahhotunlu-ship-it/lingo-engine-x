@@ -17,7 +17,7 @@ export const vhEn: Record<keyof typeof vhDe, string> = {
   vhMoreAll: 'More extras',
   vhPracticeAll: 'Practice: speaking, sentence building, and more',
   /** Focus 2.0 F3: the same link opens the Apply page. */
-  vhApplyAll: 'More writing practice',
+  vhApplyAll: 'Apply – more writing practice',
   vhWordsPractice: 'Practice words',
   vhWordsPracticeSub: '{n} due, counts as extra',
   vhWeekDone: 'done',
