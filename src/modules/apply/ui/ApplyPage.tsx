@@ -19,6 +19,8 @@ const TEST_ID: Record<ApplyKind, string> = { combo: 'hub-combo-own', reply: 'ax-
 
 export function ApplyPage() {
   const { t } = useT();
+  // Wörter-App an: „Text mit deinen Wörtern“ (vorher am Ende der Wörter-Pflicht, Emrah 07.11.2026 „A“).
+  const wordsOn = useLive((s) => (s.docs['app/profile']?.vcfg as { mod?: unknown } | undefined)?.mod === 1);
   const go = useNav((s) => s.go);
   const today = useClock((s) => s.today);
   const now = useClock((s) => s.now);
@@ -102,6 +104,7 @@ export function ApplyPage() {
             />
           );
         })}
+        {wordsOn && <Row icon="sparkle" channel="grammar" title={t('axUseTitle')} sub={t('axUseSub')} value={t('axMin', { n: 5 })} chevron onClick={() => go({ name: 'vlearn', kind: 'use' })} testId="ax-row-use" />}
       </RowList>
 
       {moreFix > 0 && (

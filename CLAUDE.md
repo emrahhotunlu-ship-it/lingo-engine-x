@@ -156,6 +156,7 @@ Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **n
 | `npm run typecheck` · `npm run lint` | TypeScript strict (App ohne Node-Typen und gesamt) · ESLint mit Typinformationen |
 | `npm test` | Unit-Tests (Vitest, `TZ=Europe/Berlin`) |
 | `npm run test:e2e` | baut App und Test-Laufzeit, dann Playwright gegen `dist/index.html` |
+| `npm run test:ui` | UI-Stichprobe (Wort, Grammatik, Anwenden × iPad/iPhone/Laptop gegen die Touch-Prüfliste, ~30 s) – bei UI/UX-Änderungen statt der vollen Suite (`docs/umbau/arbeitsweise.md` §10 1b) |
 | `npm run check:platform` | eine Datei, < 16 MB, keine Ladeziele, kein Entwicklungs-Adapter |
 | `npm run verify` | alles zusammen: vor jeder Auslieferung |
 | `npm run seed` | erzeugt `seed/sample-data.json` neu (deterministisch, Stichtag 20.09.2026) |

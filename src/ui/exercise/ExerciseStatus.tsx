@@ -1,6 +1,7 @@
 import type { UnitState } from '../../domain/metrics';
 import { useT, type MessageKey } from '../../i18n';
 import type { ShellStatus } from './ExerciseShell';
+import { useBand } from './bandStore';
 
 // Blockzeile (Relaunch Teil 1c, D3 V-UEBUNG; Vorschau `blockline`): Bereich · Übungsart · Stand in Worten · Plakette, 13 px in --fg-2.
 // K4 (Emrah 04.11.2026): kein farbiger Kanalpunkt mehr (sagte nichts), und statt „●●●● Lernt“ steht der Stand in Worten („
@@ -16,9 +17,13 @@ export const isUnsure = (state: UnitState | null | undefined): boolean => state 
 export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, badgeTone = 'near', badgeTestId = 'again-badge' }: ShellStatus) {
   const { t } = useT();
   const where = [topic, pattern].filter((x): x is string => !!x).join(' · ');
+  // Großpaket T: Steht die Übungsleiste („Wörter · 3 von 37“), ist der Bereich hier nur noch für Vorleseprogramme da.
+  const inBar = useBand((s) => s.hosts) > 0;
   return (
     <p className="lx-vu-blockline" data-testid="status" data-area={area} data-state={state ?? undefined}>
-      <span data-testid="ex-area">{t(AREA[area])}</span>
+      <span data-testid="ex-area" className={inBar ? 'sr-only' : undefined}>
+        {t(AREA[area])}
+      </span>
       {/* Trennpunkt als ::before des folgenden Elements: bricht die Zeile, hängt nie ein Punkt am Zeilenende. */}
       <span data-testid="ex-kind" className="lx-vu-sep">
         {kindLabel}

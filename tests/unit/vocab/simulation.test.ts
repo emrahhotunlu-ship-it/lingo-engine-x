@@ -38,8 +38,9 @@ describe('Simulation des neuen Planers (Kurzlauf)', () => {
     expect(b.cvDutySteady).toBeLessThanOrEqual(0.15);
     expect(b.dutyAfterExtra).toBeLessThanOrEqual(b.dutyMean + 0.5);
   });
-  it('Anwenden an jedem Lerntag, sobald es Lexeme ab Stufe 4 gibt; nichts bleibt unbegrenzt liegen', () => {
-    expect(a.transferDays).toBe(100);
+  // Emrah 07.11.2026 („Text“ A): die Schreibaufgabe mit mehreren Wörtern steht nicht mehr in der Wörter-Pflicht (sondern unter Anwenden).
+  it('Wörter-Pflicht ohne Schreibaufgabe; nichts bleibt unbegrenzt liegen', () => {
+    expect(a.transferDays).toBe(0);
     expect(a.overdueEnd).toBeLessThanOrEqual(3);
   });
   it('V2: ≥ 50 % aktive Abfragen ab Stufe 3, 30–40 % ohne Satz ab Stufe 4, Auswahl nur in Lernschritten (plan.md §10 V2)', () => {

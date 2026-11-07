@@ -36,7 +36,7 @@ export { EnglishText } from '../../engine/EnglishText';
 export { Choices } from '../../engine/Choices';
 export { KineticGap } from '../../engine/KineticGap';
 export type { GapState } from '../../engine/KineticGap';
-export { useHiddenInput } from '../../engine/HiddenInput';
+export { tapLeadMs, useHiddenInput } from '../../engine/HiddenInput';
 export { useHotkeys } from '../../engine/useHotkeys';
 export { MicButton } from '../../engine/MicButton';
 export { lookupOpenMs } from '../../engine/wordTap';

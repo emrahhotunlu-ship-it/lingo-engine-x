@@ -27,6 +27,7 @@ import {
   TutorButton,
   companionOpenedSince,
   inputProfile,
+  tapLeadMs,
 } from '../sharedUi';
 import { addDays, dayKey } from '../shared';
 import { type Band, type Line, type Next, partnersOf, type Why } from '../domain/band';
@@ -450,7 +451,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   const measure = () => {
     const now = performance.now();
     const ms = Math.max(0, Math.round(now - shownAt.current - (lookupOpenMs() - lookupAtStart.current) - listenMs.current));
-    const fk = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current - firstKeyLookup.current - firstKeyListen.current));
+    // Großpaket T: am Touch-Gerät zählt das Antippen der Lücke (bis 1,5 s) nicht als Zögern.
+    const fk = Math.max(0, (firstKeyAt.current === null ? ms : Math.round(firstKeyAt.current - shownAt.current - firstKeyLookup.current - firstKeyListen.current)) - tapLeadMs(shownAt.current));
     return { ms, fk };
   };
   const check = (dunno = false) => {

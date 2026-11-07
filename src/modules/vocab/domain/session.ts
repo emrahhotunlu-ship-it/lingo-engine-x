@@ -92,7 +92,8 @@ export class SessionRun {
         } else if (!doneToday(l, day)) reviews.push({ path, form: dueOn(l, day, this.cat.get(path)?.av)?.form ?? form, step: 0, why: 'due' });
       }
       this.queue = interleave(reviews, fresh);
-      this.queue.push(...this.transferSlot(nowMs));
+      // Emrah 07.11.2026 („Text“ A): die Schreibaufgabe mit mehreren Wörtern gehört nicht mehr in die Wörter-Pflicht (sie allein kostete
+      // 3–5 Minuten), sondern zu Schritt 3 „Anwenden“ (Runde `use`, Anwenden › „Text mit deinen Wörtern“).
     } else if (this.kind === 'more5' || this.kind === 'free') {
       const n = this.kind === 'more5' ? 5 : FREE_SIZE;
       const due = items

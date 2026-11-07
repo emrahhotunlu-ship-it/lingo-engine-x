@@ -122,6 +122,16 @@ export const vmodStatsWriteSchema = z
   })
   .strict();
 
+/** `vmod/pace` (Emrah 07.11.2026, Tageszeit „A“): echte Kosten je geplanter Karte und Form in ms (gleitend), Zahl der letzten Beobachtungen, Zeitpunkt. */
+export const vmodPaceWriteSchema = z
+  .object({
+    v: z.literal(1),
+    med: z.partialRecord(formEnum, int.min(5_000).max(300_000)),
+    n: z.partialRecord(formEnum, int.min(0)),
+    t: int.positive(),
+  })
+  .strict();
+
 /** Großpaket A S5c: höchstens so viele Texte warten auf „Später prüfen lassen“ (die ältesten fallen weg). */
 export const USE_LATER_MAX = 6;
 const useFrame = z.enum(['mail', 'slack', 'call', 'pitch', 'life']);

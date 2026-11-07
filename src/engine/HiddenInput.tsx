@@ -61,6 +61,21 @@ export function isGapInput(el: EventTarget | null): boolean {
   return el instanceof HTMLElement && el.dataset.testid === 'gap-input';
 }
 
+/** Großpaket T: Zeitpunkt (performance.now) des letzten Fokus auf das Lückenfeld. */
+let lastFocusAt = -1;
+/** Höchstens so viel Zeit fürs Antippen der Lücke und das Aufgehen der Tastatur wird am Touch-Gerät nicht als Zögern gezählt. */
+export const TAP_ALLOW_MS = 1500;
+
+/**
+ * Großpaket T (learning-scientist 07.11.2026): Am Touch-Gerät öffnet nur ein Tipp auf die Lücke die Tastatur. Die Zeit vom Erscheinen der
+ * Karte bis zu diesem Tipp ist zum Teil Bedienung (Antippen, Tastatur fährt hoch) – sie wird bis {@link TAP_ALLOW_MS} von der Zeit bis zur
+ * ersten Taste abgezogen. Nicht ab dem Fokus messen: das Nachdenken vor dem Antippen zählt weiter. Laptop: 0.
+ */
+export function tapLeadMs(shownAt: number): number {
+  if (inputProfile() !== 'touch' || lastFocusAt < shownAt) return 0;
+  return Math.min(TAP_ALLOW_MS, Math.round(lastFocusAt - shownAt));
+}
+
 type Box = { top: number; left: number; width: number; height: number };
 
 /** Einzeilige Textfelder, deren Eingabetaste am Touch-Gerät die Tastatur schließt. */
@@ -265,6 +280,7 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
     const el = input.current;
     if (!el) return;
     const onFocus = () => {
+      lastFocusAt = performance.now();
       target.current?.onFocusChange?.(true);
       syncSel(true);
     };

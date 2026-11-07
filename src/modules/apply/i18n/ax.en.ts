@@ -11,6 +11,8 @@ export const axEn: Record<keyof typeof axDe, string> = {
   axTodayShort: 'Short day: one sentence of your own',
   axTodaySub: 'Required · {why}',
   axAll: 'Practice freely',
+  axUseTitle: 'A text with your words',
+  axUseSub: 'A short text with 3–5 words you already know well – this makes them active.',
   axFixTitle: 'Fix mistakes',
   axFixSub_one: 'Optional: {n} sentence due',
   axFixSub_other: 'Optional: {n} sentences due',

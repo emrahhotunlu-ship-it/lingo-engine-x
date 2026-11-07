@@ -94,7 +94,15 @@ Gemessen auf der Cloud-Maschine (4 Kerne): Gesamtlauf `npm run verify` am 26.10.
    Gemessen 27.10.2026 (unter Last anderer Agenten): eine Datei in `src/features/today/` geändert → **2:38 Min.** (Typprüfung+Lint 0:39,
    Unit 0:15, Build 0:07, 7 E2E-Specs 1:37). Schlimmster Fall (package.json/Test-Konfiguration geändert → alle Unit-Tests, volle Typprüfung,
    Rauch-Auswahl) → 11:43 Min.; dann lieber gleich den Gesamtlauf planen.
-2. **Vor einem Test-Link: genau einmal `npm run verify`** (Gesamtlauf, unverändert) auf dem Endstand, nicht je Paket (G4 in §4).
+1b. **UI/UX-Änderungen (Emrah 07.11.2026: „als Framework bauen … Stichproben statt kompletter Suite“): `npm run test:ui`.**
+   Alle Übungskarten laufen durch EINEN Rahmen (`src/ui/exercise/ExerciseShell.tsx`, Stile `kern.css`/`glas.css`/`v-uebung.css`). Eine
+   Änderung wird dort einmal gebaut und wirkt überall. Geprüft wird mit der Stichprobe `tests/e2e/uiStichprobe.spec.ts`:
+   - Inhalt: Wort-Lücke, Grammatik-Lücke und Anwenden, je vor und nach dem Prüfen, auf iPad hochkant, iPhone und Laptop.
+   - Regeln: die automatischen Regeln der Prüfliste `docs/umbau/touch/pruefliste.md`: Tastatur, Kanten, Überlappung, Tippflächen, Knopfzeile, geschlossene Rückmeldekarte, nichts doppelt, axe.
+   - Dauer: rund 30 s plus Build.
+
+   Eine neue Kartenart bekommt dort EINE Zeile, keine eigene Suite. Für Test-Links gilt: Stichprobe grün, dazu die Specs der geänderten Bereiche.
+2. **Vor dem Live-Gang: genau einmal `npm run verify`** (Gesamtlauf) auf dem Endstand, nicht je Paket und nicht vor jedem Test-Link bei reinen UI/UX-Änderungen (Emrah 07.11.2026).
    Die Leistungstests (`perf.spec.ts`) laufen dort als eigenes Projekt `perf` **zuletzt und allein** (Messungen unter Last der
    anderen Testprozesse waren wertlos). Ist ein anderer Test rot, laufen sie nicht („did not run“) – erst den Rest grün machen.
 3. **Keine Wiederholung ohne Änderung.** `verify:fast` merkt sich einen Fingerabdruck aus Basis, HEAD und Inhalt der Änderungen

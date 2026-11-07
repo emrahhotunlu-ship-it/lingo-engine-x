@@ -20,7 +20,7 @@ import type { Ctx, GrammarAnswer } from '../../domain/learn/types';
 import type { AttemptTiming } from '../../domain/progress/logPatch';
 import type { AttemptInput, AttemptMeta } from '../../domain/srs/types';
 import { patsOf, patternState } from '../../domain/metrics/pattern';
-import { useHiddenInput } from '../../engine/HiddenInput';
+import { tapLeadMs, useHiddenInput } from '../../engine/HiddenInput';
 import { bindInputKind, createAttemptTracker, pickAttempt, promptChars } from '../../engine/inputKind';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
@@ -198,7 +198,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
 
   const finish = (score: C1Score, response: C1Response, meta: ResponseMeta, extra: Partial<Fb> = {}): void => {
     const ms = elapsed();
-    const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
+    // Großpaket T: am Touch-Gerät zählt das Antippen der Lücke (bis 1,5 s) nicht als Zögern.
+    const firstKeyMs = Math.max(0, (firstKeyAt.current === null ? ms : Math.round(firstKeyAt.current - shownAt.current)) - tapLeadMs(shownAt.current));
     const given = givenOf(item, response);
     setFb({ score, response, meta, given, dontKnow: false, override: false, ms, firstKeyMs, help: helpAt(), ...timing(score, meta, given), ...extra });
     if (profile === 'touch') api.blur();

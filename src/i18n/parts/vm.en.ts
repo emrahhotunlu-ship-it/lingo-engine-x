@@ -52,10 +52,13 @@ export const vmEn = {
   vmWhyPrep: "Wrong, extra, or missing preposition. It's tied to the word. Learn the pattern: {answer}.",
   vmWhyPlural: 'Uncountable in English: no a/an, no -s (often unlike German). Correct: {answer}.',
   vmWhyOrder: 'With phrasal verbs, a pronoun (it, them) goes in the middle: set it up, never set up it.',
-  vmWhyWrong: "{given} doesn't fit this sentence. It needs {answer} ({pos}).",
-  vmWhyWrongNoPos: "{given} doesn't fit this sentence. It needs {answer}.",
-  vmWhyDunno: 'No problem – here it is: {answer} ({pos}). Type it once now; it’ll come back soon for practice.',
-  vmWhyDunnoNoPos: 'No problem – here it is: {answer}. Type it once now; it’ll come back soon for practice.',
+  vmCappedLine: "Your word time for today is up. {n} words come tomorrow – the most important first.",
+  vmCappedTitle: 'Word time done for today',
+  vmCappedBody: "You've already practiced as long as planned for words today. {n} words come tomorrow – the most important first.",
+  vmWhyWrong: "{given} doesn't fit this sentence. It needs {answer} ({pos}): {de}.",
+  vmWhyWrongNoPos: "{given} doesn't fit this sentence. It needs {answer}: {de}.",
+  vmWhyDunno: 'No problem – here it is: {answer} ({pos}) = {de}. Type it once now; it’ll come back soon for practice.',
+  vmWhyDunnoNoPos: 'No problem – here it is: {answer} = {de}. Type it once now; it’ll come back soon for practice.',
 
   // Word type
   vmPos_noun: 'noun',

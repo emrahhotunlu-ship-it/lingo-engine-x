@@ -40,6 +40,7 @@ const vlogEntries = (d: Record<string, Doc>): number =>
     .filter(([p]) => /^vlog\/\d/.test(p))
     .reduce((n, [, doc]) => n + Object.values((doc.e as Doc | undefined) ?? {}).filter(Boolean).length, 0);
 
+// Emrah 07.11.2026 („Text“ A): die Schreibaufgabe mit mehreren Wörtern kommt nicht mehr in der Wörter-Pflicht, sondern über Anwenden (Runde `use`).
 async function toUse(page: Page): Promise<void> {
   await screen(page, 'vlearn');
   const go = page.getByTestId('vm-start-go');
@@ -52,7 +53,7 @@ test.describe('Handy 390', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
   test('mit Claude: Lage, Wörter leuchten beim Schreiben, Prüfen → je Wort richtig, Weiter bucht je Wort einmal', async ({ page }) => {
-    const { errors, external } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch() } });
+    const { errors, external } = await bootAt(page, { name: 'vlearn', kind: 'use' }, { migrated: false, fake: { patch: patch() } });
     await toUse(page);
     await expect(page.getByTestId('vm-use-chip')).toHaveCount(3);
     await expect(page.getByTestId('vm-use-check')).toBeDisabled();
@@ -83,7 +84,7 @@ test.describe('Handy 390', () => {
   });
 
   test('fast richtig: Warum offen, Selbst verbessern zeigt danach Korrektur und bessere Fassung', async ({ page }) => {
-    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch() } });
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'use' }, { migrated: false, fake: { patch: patch() } });
     await toUse(page);
     await page.getByTestId('vm-use-input').fill(`${TEXT} #odd`);
     await page.getByTestId('vm-use-check').click();
@@ -103,7 +104,7 @@ test.describe('Handy 390', () => {
   });
 
   test('ohne Claude: Muster zum Vergleich, „Später prüfen lassen“ merkt den Text', async ({ page }) => {
-    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch(), capabilities: { sample: false } } });
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'use' }, { migrated: false, fake: { patch: patch(), capabilities: { sample: false } } });
     await toUse(page);
     await page.getByTestId('vm-use-input').fill(TEXT);
     await page.getByTestId('vm-use-check').click();

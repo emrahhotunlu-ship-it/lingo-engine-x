@@ -232,10 +232,21 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
         )
       );
     case 'done':
-      if (view.n === 0 || !view.sum) return frame(null, <Notice title={t('vmEmptyTitle')} body={t('vmEmpty')} onBack={back} back={t('vmBack')} testId="vm-done" />);
+      if (view.n === 0 || !view.sum)
+        return frame(
+          null,
+          <Notice
+            title={view.capped ? t('vmCappedTitle') : t('vmEmptyTitle')}
+            body={view.capped ? t('vmCappedBody', { n: view.capped }) : t('vmEmpty')}
+            onBack={back}
+            back={t('vmBack')}
+            testId="vm-done"
+          />,
+        );
       return frame(
         null,
         <Done
+          capped={view.capped ?? null}
           sum={view.sum}
           review={view.review + view.extra}
           onMore={() => setRound((r) => ({ ...r, kind: 'more5', n: r.n + 1 }))}
@@ -383,7 +394,7 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
 /** Namen je Tag-Gruppe im Abschluss (der Rest als „+n“). */
 const SLIP_NAMES = 2;
 
-function Done({ sum, review, onMore, onToday }: { sum: DoneSummary; review: number; onMore: () => void; onToday: () => void }) {
+function Done({ sum, review, onMore, onToday, capped }: { sum: DoneSummary; review: number; onMore: () => void; onToday: () => void; capped: number | null }) {
   const { t, lang } = useT();
   useEnterGo(onToday);
   const W = '\u0000';
@@ -455,6 +466,11 @@ function Done({ sum, review, onMore, onToday }: { sum: DoneSummary; review: numb
         <p className="lx-t-support text-muted" data-testid="vm-done-min">
           {t(sum.duty ? 'vmDoneMinDuty' : 'vmDoneMinExtra', { min: sum.min })}
         </p>
+        {capped ? (
+          <p className="lx-t-support text-muted" data-testid="vm-done-capped">
+            {t('vmCappedLine', { n: capped })}
+          </p>
+        ) : null}
       </div>
       <dl className="lx-card flex flex-col px-4 py-1">
         {rows.map((r, i) => (

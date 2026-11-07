@@ -282,13 +282,15 @@ export function ExerciseShell(props: ExerciseShellProps) {
     return () => window.removeEventListener('keydown', onKey);
   }, [claudeAsk]);
 
-  const firstOfKind = useMemo(() => {
-    const first = !PURPOSE_SEEN.has(meta.ex);
-    PURPOSE_SEEN.add(meta.ex);
-    return first;
-    // Je Karte (meta.id) einmal entscheiden: die erste Karte einer Art zeigt den Zweck offen, die nächsten nicht.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meta.id]);
+  // Schlüssel = der Zwecktext selbst (learning-scientist 07.11.2026: dieselbe Form kann verschiedene Zwecke haben). Im Zeichnen nur lesen,
+  // gemerkt wird nach dem Zeichnen; je Karte (meta.id) einmal entschieden.
+  const purposeKey = `${meta.ex}|${task.purpose}`;
+  const [firstOfKind] = useState(() => !PURPOSE_SEEN.has(purposeKey));
+  const [firstFor, setFirstFor] = useState({ id: meta.id, first: firstOfKind });
+  if (firstFor.id !== meta.id) setFirstFor({ id: meta.id, first: !PURPOSE_SEEN.has(purposeKey) });
+  useEffect(() => {
+    PURPOSE_SEEN.add(purposeKey);
+  }, [purposeKey, meta.id]);
   const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.title ?? ''}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
   const auto = feedback
     ? shouldAutoAdvance({
@@ -420,7 +422,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   // Großpaket T (B6, Emrah 07.11.2026 „man sieht nicht mehr alles“): Ohne Seitenspalte steht der offene Zweck („Selbst abrufen statt
   // wiedererkennen …“) nur bei der ERSTEN Karte einer Übungsart in dieser Sitzung; danach liegt er hinter „Wozu?“ an derselben Stelle
   // (Kap. 2 Nr. 4: an fester Stelle erreichbar). Am Laptop (Seitenspalte) unverändert.
-  const openPurpose = !!task.open && (split || firstOfKind);
+  const openPurpose = !!task.open && (split || firstFor.first);
   const learning = status.state === 'new' || status.state === 'learning' || status.state === 'wobbly';
   const showSecondary = secondary.slice(0, 2);
   const KBD: Partial<Record<ShellSecondary['id'], string>> = { hint: 'T', dontKnow: 'W' };
@@ -543,7 +545,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
           data-testid="explanation-more"
           onClick={() => setBandMoreOpen(!moreOpen)}
         >
-          <span>{moreOpen ? t('exLess') : t(status.area === 'words' ? 'exMoreWord' : 'exMore')}</span>
+          {/* learning-scientist 07.11.2026: die Beschriftung sagt, dass Claudes Erklärung zur eigenen Antwort dahinter liegt. */}
+          <span>{moreOpen ? t('exLess') : t(status.area === 'words' ? (tutorInMore ? 'exMoreWordTutor' : 'exMoreWord') : tutorInMore ? 'exMoreTutor' : 'exMore')}</span>
           <span aria-hidden="true" className="inline-block transition-transform" style={{ transform: moreOpen ? 'rotate(90deg)' : undefined }}>
             ▸
           </span>

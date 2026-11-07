@@ -47,6 +47,8 @@ export const exEn = {
   exLineMistakeArrow: '{bad} → {good}',
   exMore: 'More',
   exMoreWord: 'More about the word',
+  exMoreWordTutor: 'More about the word · Claude explains your answer',
+  exMoreTutor: 'More · Claude explains your answer',
   exLess: 'Less',
   exExampleLabel: 'Example',
   exMoreExamples: 'More examples',

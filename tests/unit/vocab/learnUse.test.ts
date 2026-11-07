@@ -88,7 +88,7 @@ function setup(o: { ai?: FakeAi | null; lv?: number; seed?: Record<string, Doc> 
     readUse: () => Promise.resolve((h.dump()['vmod/use']) ?? null),
   });
   const start = async () => {
-    await run.start({ kind: 'pflicht', docs, profile: PROFILE, schema: SCHEMA });
+    await run.start({ kind: 'use', docs, profile: PROFILE, schema: SCHEMA });
     if (run.get().k === 'start') run.begin();
   };
   const use = (): Extract<LearnView, { k: 'use' }> => {
@@ -300,7 +300,7 @@ describe('LearnRun Anwenden', () => {
     const docs = PATHS.map((p) => [p, { ...DOCS[p], lex: { ...learned(p, 5), b: { ...learned(p, 5).b!, due: T0 + 20 * D } } }] as const);
     const h = createMemoryDb({ seed: Object.fromEntries(docs) });
     const run = new LearnRun({ deps: { writer: createWriter(h.db), device: 'phone' }, dict, lang: () => 'de', drafts: memStore(), readDay: () => Promise.resolve(null), now: () => T0, ai: fakeAi() });
-    await run.start({ kind: 'pflicht', docs, profile: PROFILE, schema: SCHEMA });
+    await run.start({ kind: 'use', docs, profile: PROFILE, schema: SCHEMA });
     if (run.get().k === 'start') run.begin();
     const v = run.get();
     if (v.k !== 'use') throw new Error(v.k);

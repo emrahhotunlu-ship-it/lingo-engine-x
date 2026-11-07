@@ -184,7 +184,8 @@ export async function nextItem(page: Page): Promise<void> {
 
 /** Handy: Merke, Tutor und Wortkopf stehen seit dem UX-Neuanfang B offen in der Rückmeldung; Beispiele und Weiteres unter „Mehr“ – klappt es auf. Laptop: nichts zu tun. */
 export async function openBandMore(page: Page): Promise<void> {
-  const more = page.locator('[data-testid="result"][data-flow] [data-testid="explanation-more"]');
+  // Großpaket T: ohne Seitenspalte steht Claudes Erklärung unter „Mehr“ (ExerciseShell `tutorInMore`).
+  const more = page.locator('[data-testid="result"] [data-testid="explanation-more"]');
   if (!(await more.isVisible().catch(() => false))) return;
   if ((await more.getAttribute('aria-expanded')) === 'true') return;
   await more.click();

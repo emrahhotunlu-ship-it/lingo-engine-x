@@ -210,3 +210,22 @@ describe('Anwenden frei gestartet (Großpaket B3, Art `use`)', () => {
     expect(run.next(T0)).toBeNull();
   });
 });
+
+describe('Wörter-Pflicht ohne Schreibaufgabe (Emrah 07.11.2026, „Text“ A)', () => {
+  it('die Pflicht-Runde enthält nie die Anwenden-Aufgabe, auch wenn Lexeme der Stufen 4–6 bereitstehen', () => {
+    const ripe = (i: number) => {
+      const it = learned(i, 2);
+      return { ...it, lex: { ...it.lex, lv: 5 } };
+    };
+    const cat = new Catalog([ripe(1), ripe(2), ripe(3), ripe(4), ripe(5), ripe(6)]);
+    const run = new SessionRun('pflicht', cat, null, T0, { cfg: DEFAULT_CFG });
+    const forms: string[] = [];
+    for (let i = 0; i < 40; i++) {
+      const t = run.next(T0);
+      if (!t) break;
+      forms.push(t.form);
+      run.done(t, T0);
+    }
+    expect(forms).not.toContain('transfer');
+  });
+});

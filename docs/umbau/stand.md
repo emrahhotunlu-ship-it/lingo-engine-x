@@ -1006,3 +1006,10 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
   - T3 Rückmeldung unter 1024 px als EINE Karte. Ursache war `display: contents` aus W7 Nr. 10. Die Knopfzeile ist kein Glas-Kasten mehr. Der Bereichsname steht nicht doppelt, die Zweckzeile nur bei der ersten Karte einer Art.
   - T4 `sideFold`/„Mehr zum Wort“ (Wortkarte + Claude erst beim Aufklappen). Die Grammatik-Regel steht direkt nach „Was war falsch“.
 - Fotos: `/dev/shm/lx/shots` (iPad 704 × 1000, iPhone 390 × 844). Fotoskripte liegen außerhalb des Repos.
+- Nachtrag 07.11. (Emrahs zweite Rückmeldung, 2× „A“):
+  - Tageszeit: echte Zeit je Karte (`vmod/pace`, `domain/pace.ts`, Startwerte × 3) und Zeitdeckel der Wörter-Pflicht (`capToday`, „Deine Wörter-Zeit ist um …“).
+  - Die Schreibaufgabe (`transfer`) ist raus aus der Pflicht und steht jetzt unter Anwenden › „Text mit deinen Wörtern“.
+  - learning-scientist: 3 MUSS behoben (Bedeutung im Warum, Grammatik-Schritte ab 1, Tipp-Zeit-Abzug `tapLeadMs`), dazu SOLL Zweck-Schlüssel und „Mehr · Claude erklärt deine Antwort“.
+  - data-guard: 3 Warnungen behoben (Deckel nur auf denselben Plan und Tag, Tests der Schreibwege).
+  - Neue Prüfweise `npm run test:ui` (`tests/e2e/uiStichprobe.spec.ts`, 9 Stichproben, ~30 s).
+  - Ergebnisse: Unit 7672 grün, Stichprobe 9/9, betroffene E2E grün. Der volle Lauf vom Nachmittag war bis auf angepasste Erwartungen grün; `wortKern.spec:60` ist ein vorbestehender, offener Befund.

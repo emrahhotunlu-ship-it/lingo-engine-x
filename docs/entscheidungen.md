@@ -829,3 +829,12 @@ Emrah (iPad/„iPhone Duo“ hochkant, Fotos): „jedes Mal geht die Tastatur au
 - **Reihenfolge A:** Paket T vor „Dein Können“. Alle Übungskarten (Wörter, Grammatik, Anwenden) nach einer Prüfliste aus Apple HIG, Material 3 und Nielsen Norman umbauen; ein Test-Link am Ende.
 - Mit drin: Übungssätze mit Lücke/Hinweis („He ? (feel) tired lately.“) werden nie Abfragesatz; beim Speichern aus einer Übung wird der vollständige Satz genommen.
 Plan: `docs/umbau/touch/plan.md`.
+
+## 07.11.2026 – Tageszeit einhalten: echte Zeit + Zeitdeckel; Schreibaufgabe nach Anwenden (Emrah: „A“, „A“)
+Emrah: „Ich habe als Tageszeit 25 min, aber nur der erste Teil dauert schon 30 min – 35 Wörter plus ein Text schreiben.“ Ursache: Der Wörter-Plan rechnet mit den Startwerten `DEFAULT_FORM_MS` (Lücke 14 s), echte Zeiten wurden nie gemessen (kein `vmod/stats`). Mit Rückmeldung, Nachtippen und Wiederholung braucht Emrah eher 40–50 s je Wort. Heute: 37 Wörter in einem 10-Minuten-Plan.
+- **Zeit A:**
+  - Die App misst die echte Zeit je Karte (Anzeige bis „Weiter“, mit Rückmeldung und Wiederholung) und plant damit.
+  - Bis genug Messwerte da sind, gelten realistische Startwerte.
+  - Zusätzlich endet die Wörter-Pflichtrunde spätestens nach ihren Minuten mit „Fertig für heute“. Was offen bleibt, kommt morgen (die gefährdetsten zuerst).
+- **Text A:** Die Schreibaufgabe mit mehreren Wörtern (`transfer`, 3–5 Wörter, „Text“) gehört nicht mehr in den Wörter-Teil, sondern zu Schritt 3 „Anwenden“ (Anwenden › Frei üben › „Text mit deinen Wörtern“, Runde `use`). Der eigene Satz zu EINEM Wort (`own`, Stufe 5/6) bleibt eine normale Wort-Abfrage.
+- **Prüfweise (Emrah 07.11.):** Bei UI/UX-Änderungen keine komplette Testsuite je Schritt. Die Übungsseite ist ein gemeinsamer Rahmen (`ExerciseShell`); Änderungen dort wirken überall. Geprüft wird mit einer schnellen Stichprobe (`npm run test:ui`: wenige typische Karten, iPad und iPhone, automatische Regeln aus der Prüfliste). Die volle Suite läuft nur vor dem Live-Gang.

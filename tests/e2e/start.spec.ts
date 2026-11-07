@@ -40,7 +40,9 @@ async function focusStart(page: Page, tap: boolean): Promise<void> {
   // Sofort: Rahmen-Skelett, und das (versteckte) Eingabefeld hat im Tippen den Fokus bekommen (iPhone-Tastatur).
   await expect(page.getByTestId('start-waiting')).toBeVisible();
   const focused = await page.evaluate(() => document.activeElement?.tagName ?? '');
-  expect(['INPUT', 'TEXTAREA']).toContain(focused);
+  // Großpaket T (Emrah 07.11.2026): am Touch-Gerät öffnet der Start keine Tastatur mehr – erst ein Tipp auf die Lücke.
+  if (tap) expect(['INPUT', 'TEXTAREA']).not.toContain(focused);
+  else expect(['INPUT', 'TEXTAREA']).toContain(focused);
   // Danach beginnt die erste Aufgabe von selbst – nach dem BERECHNETEN Plan (Wiederholen), nicht nach `go` (Grammatik).
   await screen(page, 'trainer');
   await expect(page.getByTestId('start-waiting')).toHaveCount(0);

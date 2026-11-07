@@ -252,7 +252,8 @@ test.describe('Handy mit Touch', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Wörter-App: nach „Weiter“ steht der Fokus sofort in der neuen Lücke (Tastatur bleibt offen)', async ({ page }) => {
+  // Großpaket T (Emrah 07.11.2026, Tastatur „A“): am Touch-Gerät öffnet nach „Weiter“ keine Tastatur von selbst – erst ein Tipp auf die Lücke.
+  test('Wörter-App: nach „Weiter“ keine Tastatur von selbst; ein Tipp auf die Lücke öffnet sie', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: vocabPatch() } });
     await screen(page, 'vlearn');
     await pastIntros(page, true);
@@ -262,6 +263,9 @@ test.describe('Handy mit Touch', () => {
     await retypeIfAsked(page);
     await page.getByTestId('vm-next').tap();
     await expect(page.getByTestId('vm-check')).toBeVisible();
+    await expect(page.getByTestId('gap-input')).not.toBeFocused();
+    await expect(page.getByTestId('gap')).toHaveAttribute('data-idle', '');
+    await page.getByTestId('gap-input').tap();
     await expect(page.getByTestId('gap-input')).toBeFocused();
     await page.keyboard.type('ab');
     await expect.poll(() => gapText(page)).toBe('ab');

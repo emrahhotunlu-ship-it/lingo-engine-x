@@ -52,10 +52,14 @@ export const vmDe = {
   vmWhyPrep: 'Präposition falsch, zu viel oder fehlt. Sie gehört fest zum Wort, als Muster merken: {answer}.',
   vmWhyPlural: 'Im Englischen nicht zählbar: kein a/an, kein -s (oft anders als im Deutschen). Richtig: {answer}.',
   vmWhyOrder: 'Bei Phrasal Verbs steht ein Pronomen (it, them) in der Mitte: set it up, nie set up it.',
-  vmWhyWrong: '{given} passt nicht in diesen Satz. Hier gehört {answer} ({pos}) hin.',
-  vmWhyWrongNoPos: '{given} passt nicht in diesen Satz. Hier gehört {answer} hin.',
-  vmWhyDunno: 'Kein Problem – hier ist es: {answer} ({pos}). Schreib es jetzt einmal richtig, es kommt bald wieder.',
-  vmWhyDunnoNoPos: 'Kein Problem – hier ist es: {answer}. Schreib es jetzt einmal richtig, es kommt bald wieder.',
+  // Emrah 07.11.2026 (Tageszeit „A“): Zeitdeckel der Wörter-Pflicht.
+  vmCappedLine: 'Deine Wörter-Zeit für heute ist um. {n} Wörter kommen morgen – die wichtigsten zuerst.',
+  vmCappedTitle: 'Wörter-Zeit für heute geschafft',
+  vmCappedBody: 'Du hast heute schon so lange geübt, wie für die Wörter geplant war. {n} Wörter kommen morgen – die wichtigsten zuerst.',
+  vmWhyWrong: '{given} passt nicht in diesen Satz. Hier gehört {answer} ({pos}) hin: {de}.',
+  vmWhyWrongNoPos: '{given} passt nicht in diesen Satz. Hier gehört {answer} hin: {de}.',
+  vmWhyDunno: 'Kein Problem – hier ist es: {answer} ({pos}) = {de}. Schreib es jetzt einmal richtig, es kommt bald wieder.',
+  vmWhyDunnoNoPos: 'Kein Problem – hier ist es: {answer} = {de}. Schreib es jetzt einmal richtig, es kommt bald wieder.',
 
   // Wortart
   vmPos_noun: 'Nomen',

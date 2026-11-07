@@ -52,6 +52,8 @@ export const exDe = {
   exLineMistakeArrow: '{bad} → {good}',
   exMore: 'Mehr',
   exMoreWord: 'Mehr zum Wort',
+  exMoreWordTutor: 'Mehr zum Wort · Claude erklärt deine Antwort',
+  exMoreTutor: 'Mehr · Claude erklärt deine Antwort',
   exLess: 'Weniger',
   exExampleLabel: 'Beispiel',
   exMoreExamples: 'Weitere Beispiele',

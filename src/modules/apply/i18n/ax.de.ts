@@ -9,6 +9,9 @@ export const axDe = {
   axTodayShort: 'Kurzer Tag: ein eigener Satz',
   axTodaySub: 'Pflicht · {why}',
   axAll: 'Frei üben',
+  // Emrah 07.11.2026 („Text“ A): die Schreibaufgabe mit gut bekannten Wörtern kommt nicht mehr im Wörter-Teil, sondern hier.
+  axUseTitle: 'Text mit deinen Wörtern',
+  axUseSub: 'Ein kurzer Text mit 3–5 Wörtern, die du schon gut kannst – so werden sie aktiv.',
   axFixTitle: 'Fehler korrigieren',
   axFixSub_one: 'Freiwillig: {n} fälliger Satz',
   axFixSub_other: 'Freiwillig: {n} fällige Sätze',

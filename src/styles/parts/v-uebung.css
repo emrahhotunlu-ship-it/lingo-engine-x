@@ -733,16 +733,8 @@ html[data-lx-area] .lx-actionbar-inner :is(.lx-actionbar-main, [data-slot='secon
   }
 }
 
-/* Großpaket T (Nielsen „nichts doppelt“): Steht oben die Übungsleiste („Wörter · 3 von 37 erledigt“), nennt die Statuszeile den Bereich nicht
-   noch einmal – nur die Art („Wiederholung“). Für Vorleseprogramme bleibt er stehen. */
-html:has([data-testid='exercise-bar']) .lx-vu-blockline > [data-testid='ex-area'] {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
+/* Großpaket T (Nielsen „nichts doppelt“): Steht oben die Übungsleiste, nennt die Statuszeile den Bereich nicht noch einmal (ExerciseStatus
+   setzt ihn dann `sr-only`); der Trennpunkt davor entfällt. */
 html:has([data-testid='exercise-bar']) .lx-vu-blockline > [data-testid='ex-area'] + .lx-vu-sep::before {
   content: none;
   margin: 0;

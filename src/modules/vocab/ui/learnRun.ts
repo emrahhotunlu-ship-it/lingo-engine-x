@@ -9,20 +9,22 @@ import { openWhys, answerOfUse, type UseModel, modelOfUse } from '../domain/use'
 import { type FirstVerdict, milder } from '../prompts/common';
 import { type ExtraFix, isEvade, type WordJudgement } from '../prompts/judge';
 import type { Band } from '../domain/band';
-import { Catalog, type Item } from '../domain/catalog';
+import { Catalog, formMs, type Item } from '../domain/catalog';
 import { srcOf, weightsOf } from '../domain/sources';
 import type { SourceData } from '../data/refill';
-import { VMOD_PLACE_PATH } from '../registry';
+import { VMOD_PACE_PATH, VMOD_PLACE_PATH } from '../registry';
 import type { Check, CheckDict } from '../domain/check';
-import { buildDayPlan, type DayPlan } from '../domain/day';
+import { buildDayPlan, type DayPlan, newCostMs } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, introduce } from '../domain/planner';
-import { planCount } from '../domain/dayCount';
+import { doneToday, planCount } from '../domain/dayCount';
+import { planMed } from '../domain/pace';
+import { capToday, readPace, writePace } from '../data/shrink';
 import { sentencesOf, usableSentences } from '../domain/card';
 import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
-import { type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
+import { type Form, type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
 import { type ReadDoc, readVlogRecent } from '../data/history';
 import { retention, RET_WINDOW_DAYS, youngBoost } from '../domain/stats';
@@ -52,7 +54,7 @@ export type LearnView =
   /** Anwenden oder eigener Satz (Großpaket A S5c, Bilder s2-07 … s2-12); `later` = Nachprüfung eines gemerkten Textes (nur Belege). */
   | { k: 'use'; m: UseModel; task: Task; n: number; left: number; text: string; spoken: boolean; spokenKeys: readonly string[] | null; st: UseState; later: UseLater | null }
   /** `fresh` neue Wörter, `review` geplante Wiederholungen, `extra` Übung ohne Planwirkung (je Wort einmal gezählt); `sum` = Abschluss-Übersicht. */
-  | { k: 'done'; n: number; fresh: number; review: number; extra: number; sum: DoneSummary | null };
+  | { k: 'done'; n: number; fresh: number; review: number; extra: number; sum: DoneSummary | null; /** Zeitdeckel: so viele geplante Wörter kommen morgen. */ capped?: number | null };
 
 /**
  * Start-Bildschirm: Zahlen aus dem eingefrorenen Plan. `back` = letzter Lerntag liegt ≥ 2 Tage zurück („Willkommen zurück“);
@@ -244,6 +246,13 @@ export class LearnRun {
   /** Falsch beantwortet in dieser Runde (für „Gestolpert“). */
   private readonly slips = new Set<string>();
   private activeMs = 0;
+  /** Emrah 07.11.2026 (Tageszeit „A“): echte Kosten je Lexem in dieser Runde (alle Auftritte zusammen) – für `vmod/pace`. */
+  private spent = new Map<string, number>();
+  /** Zeitdeckel erreicht: so viele geplante Wörter kommen morgen (`null` = nicht gedeckelt). */
+  private capped: number | null = null;
+  private paceDone = false;
+  /** Geschätzte Wörter-Zeit, die heute schon vor dieser Runde lief (erledigte Planeinträge × Planungszeit) – der Deckel gilt für den ganzen Tag. */
+  private priorMs = 0;
   private shownAt: number | null = null;
   private right = 0;
   private day: string | null = null;
@@ -347,8 +356,21 @@ export class LearnRun {
       const { cat, cfg, plan, nowMs } = await this.setup(s);
       // Wiedereinstieg (Emrah 04.11.2026): Der Zähler zählt mit, was vom heutigen Plan schon erledigt ist („6 von 20“ statt wieder „1 von 14“).
       this.dayPlan = s.kind === 'pflicht' && plan && plan.d === dayKey(nowMs) ? plan : null;
+      if (this.dayPlan) {
+        const d = this.dayPlan.d;
+        for (const [path, track, form] of this.dayPlan.plan) {
+          const l = cat.get(path)?.lex;
+          if (!l || !(track === 'n' ? l.intro === d : doneToday(l, d))) continue;
+          this.priorMs += track === 'n' ? newCostMs(this.med) : formMs(form, this.med);
+        }
+      }
       this.run = new SessionRun(s.kind, cat, plan, nowMs, { cfg, ...(s.paths ? { paths: s.paths } : {}) });
       this.kind = s.kind;
+      // Zeitdeckel schon erreicht (heute vorher gelernt, z. B. auf einem anderen Gerät): gleich kürzen und abschließen.
+      if (this.dayPlan && this.priorMs >= cfg.min * 60_000 && this.run.remaining() > 0) {
+        await this.capNow();
+        return;
+      }
       const info = plan ? this.startInfo(cat, plan, cfg, nowMs) : null;
       if (info) this.set({ k: 'start', s: info });
       else this.advance();
@@ -379,6 +401,13 @@ export class LearnRun {
   private async setup(s: LearnStart): Promise<{ cat: Catalog; cfg: VocabCfg; plan: DayPlan | null; nowMs: number }> {
     const cfg = vocabCfg(s.profile);
     this.cfg = cfg;
+    // Emrah 07.11.2026 (Tageszeit „A“): geplant wird mit der echten Zeit je Karte (`vmod/pace`), ohne Messwerte mit realistischen Startwerten.
+    try {
+      this.med = planMed(this.env.read ? readPace(await this.env.read(VMOD_PACE_PATH)) : null);
+    } catch (err) {
+      logError('vocab:pace-read', err);
+      this.med = planMed(null);
+    }
     this.sbGate = s.profile?.sbGate ?? null;
     const items = [];
     let i = 0;
@@ -1135,7 +1164,11 @@ export class LearnRun {
     this.book(p);
     this.pending = null;
     const now = this.env.now();
-    if (this.shownAt !== null) this.activeMs += Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
+    if (this.shownAt !== null) {
+      const d = Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
+      this.activeMs += d;
+      this.spent.set(p.card.path, (this.spent.get(p.card.path) ?? 0) + d);
+    }
     this.shownAt = now;
     if (!this.lv0.has(p.card.path)) this.lv0.set(p.card.path, p.before.lv);
     if (p.kind === 'answer' && p.result.grade === 1) this.slips.add(p.card.path);
@@ -1154,14 +1187,56 @@ export class LearnRun {
       }
     }
     run.done(p.task, this.env.now());
+    // Zeitdeckel (Emrah 07.11.2026, Wahl „A“): Ist die Wörter-Zeit der Pflicht um, endet die Runde nach dieser Karte; der Rest kommt morgen.
+    if (this.kind === 'pflicht' && this.dayPlan && this.cfg && this.capped === null && this.priorMs + this.activeMs >= this.cfg.min * 60_000 && run.remaining() > 0) {
+      void this.capNow();
+      return;
+    }
     this.advance();
   }
 
+  /** Wörter-Zeit um: Plan auf das Erledigte kürzen (Heute zeigt „erledigt“), Messwerte speichern, Abschluss zeigen. */
+  private async capNow(): Promise<void> {
+    const cat = this.cat;
+    const plan = this.dayPlan;
+    if (!cat || !plan) return;
+    const day = plan.d;
+    const isDone = (path: string, track: string): boolean => {
+      const l = cat.get(path)?.lex;
+      return !!l && (track === 'n' ? l.intro === day : doneToday(l, day));
+    };
+    const dropped = plan.plan.filter((e) => !isDone(e[0], e[1])).length;
+    this.capped = dropped;
+    try {
+      const next = await capToday(this.env.deps.writer, plan, isDone);
+      if (next) this.dayPlan = next;
+    } catch (err) {
+      logError('vocab:cap-day', err);
+    }
+    this.set(this.doneView());
+  }
+
+  /** Echte Kosten je geplanter Wiederholung dieser Runde → `vmod/pace` (einmal je Runde; neue Wörter zählen nicht, ihre Schritte laufen über Tage). */
+  private savePace(): void {
+    if (this.paceDone || this.kind !== 'pflicht' || !this.dayPlan) return;
+    this.paceDone = true;
+    const obs = new Map<Form, number[]>();
+    for (const [path, track, form] of this.dayPlan.plan) {
+      if (track === 'n') continue;
+      const ms = this.spent.get(path);
+      if (!ms) continue;
+      const f = form;
+      obs.set(f, [...(obs.get(f) ?? []), ms]);
+    }
+    void writePace(this.env.deps.writer, this.env.now(), obs).catch((err: unknown) => logError('vocab:pace', err));
+  }
+
   private doneView(): LearnView {
+    this.savePace();
     const { fresh, review, extra } = this.tally;
     // Ein neues Wort zählt nur als neu, auch wenn es heute schon seine Lernschritte hatte; eine Wiederholung zählt nicht zusätzlich als Übung.
     const rev = [...review].filter((x) => !fresh.has(x));
-    return { k: 'done', n: this.n, fresh: fresh.size, review: rev.length, extra: [...extra].filter((x) => !fresh.has(x) && !review.has(x)).length, sum: this.summary() };
+    return { k: 'done', n: this.n, fresh: fresh.size, review: rev.length, extra: [...extra].filter((x) => !fresh.has(x) && !review.has(x)).length, sum: this.summary(), capped: this.capped };
   }
 
   private head(path: string): string {

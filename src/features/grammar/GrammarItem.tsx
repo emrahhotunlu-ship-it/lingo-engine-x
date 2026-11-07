@@ -32,8 +32,9 @@ import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { SpotSentence } from '../../engine/SpotSentence';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
+import { tapLeadMs } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
-import { inputProfile } from '../../platform/input';
+import { inputProfile, useSplitLayout } from '../../platform/input';
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { registerLeaveBook } from '../../ui/exercise/leaveBook';
 import { ExerciseShell, SentenceInput, explainDepth, findHead, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
@@ -217,6 +218,8 @@ function LegacyGrammarItem({
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
   const [profile] = useState<InputProfile>(() => profileProp ?? inputProfile());
+  // Großpaket T: Seitenspalte (Laptop) – sonst liegt Claudes Erklärung unter „Mehr“ (ExerciseShell `tutorInMore`).
+  const splitNow = useSplitLayout();
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const [pStart] = useState(() => topicP(task.topic, doc, now));
   const p = topicP(task.topic, doc, now);
@@ -358,7 +361,8 @@ function LegacyGrammarItem({
     }
     // Zeit: Gesamtzeit ab dem Einblenden über beide Versuche; bei „Fehler finden“ ab dem Fund der Stelle (§4.10).
     const ms = elapsed();
-    const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
+    // Großpaket T: am Touch-Gerät zählt das Antippen der Lücke (bis 1,5 s) nicht als Zögern.
+    const firstKeyMs = Math.max(0, (firstKeyAt.current === null ? ms : Math.round(firstKeyAt.current - shownAt.current)) - tapLeadMs(shownAt.current));
     const helpNow = helpAt();
     const grade = learnGrade(type, verdict, { submitMs: ms, firstKeyMs }, helpNow, profile);
     const tv: TutorVerdict = verdict === 'correct' ? (check?.kind === 'other' ? 'alt_ok' : 'correct') : verdict;
@@ -1277,7 +1281,7 @@ function LegacyGrammarItem({
           auto={!noHelp && (fb.verdict === 'wrong' || !!fb.dontKnow) && !(choiceType && hasYours)}
           shownWhy={model?.lines.find((l) => l.k === 'why')?.text ?? null}
           compact={mod}
-          label={stepsMode && !hasYours ? stepWrong : null}
+          label={stepsMode && !hasYours && splitNow ? stepWrong : null}
         />
       );
     // Rückmeldung 7 (Fehler finden): Kopf „Richtig erkannt“ / „Nicht ganz“ mit dem getippten Wort, darunter der korrigierte Satz mit sichtbarer
@@ -1354,7 +1358,8 @@ function LegacyGrammarItem({
       stepsSide = (
         <RuleSteps
           topic={task.topic}
-          start={(hasYours && !choiceType) || (tutor && aiOn && !(choiceType && hasYours)) ? 2 : 1}
+          // Großpaket T (learning-scientist 07.11.2026): ohne Seitenspalte steht Claude unter „Mehr“ – die offenen Schritte beginnen dann bei 1.
+          start={(hasYours && !choiceType) || (tutor && aiOn && !(choiceType && hasYours) && splitNow) ? 2 : 1}
           pattern={patLine ? { name: patLine.name, formula: patLine.formula } : null}
           why={whyLine?.text ?? null}
           mistake={
