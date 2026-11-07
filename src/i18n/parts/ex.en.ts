@@ -46,6 +46,7 @@ export const exEn = {
   exFindMissingSomeMany: 'But some words are missing from the sentence.',
   exLineMistakeArrow: '{bad} → {good}',
   exMore: 'More',
+  exMoreWord: 'More about the word',
   exLess: 'Less',
   exExampleLabel: 'Example',
   exMoreExamples: 'More examples',

@@ -154,6 +154,11 @@ export type ExerciseShellProps = {
   barOverride?: ReactNode;
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
+  /**
+   * Großpaket T (Emrah 07.11.2026, Wahl „A“: Rückmeldung kurz + Aufklappen): Ohne Seitenspalte (Handy, Tablet) steht `side` (Wörter: die
+   * Wortkarte) nicht offen, sondern unter „Mehr zum Wort“. Grammatik lässt die Regel offen (sie IST dort das Warum).
+   */
+  sideFold?: boolean;
   /** Was Claude gerade sieht (Begleiter, „Claude erklärt“) – für Übungen, die es nicht selbst anmelden (Wörter-App). Vor dem Prüfen ohne Lösung. */
   see?: Seeing | null;
   /** Text der ruhigen Seitenkarte am Laptop vor dem Prüfen (Standard: „Die Regel kommt nach dem Prüfen“ – passt nur, wo es eine Regel gibt; UX-Prüfung S9). */
@@ -179,8 +184,11 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
   return p.state ?? 'answering';
 }
 
+/** Übungsarten, deren Zweck in dieser Sitzung schon offen stand (Großpaket T, B6). */
+const PURPOSE_SEEN = new Set<string>();
+
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, choiceCount, wrapCard } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint, choiceCount, wrapCard, sideFold = false } = props;
   const { t } = useT();
   const ai = useAiAvailable();
   useCompanionSee(props.see ?? null);
@@ -274,6 +282,13 @@ export function ExerciseShell(props: ExerciseShellProps) {
     return () => window.removeEventListener('keydown', onKey);
   }, [claudeAsk]);
 
+  const firstOfKind = useMemo(() => {
+    const first = !PURPOSE_SEEN.has(meta.ex);
+    PURPOSE_SEEN.add(meta.ex);
+    return first;
+    // Je Karte (meta.id) einmal entscheiden: die erste Karte einer Art zeigt den Zweck offen, die nächsten nicht.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meta.id]);
   const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.title ?? ''}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
   const auto = feedback
     ? shouldAutoAdvance({
@@ -402,6 +417,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
     );
   }
 
+  // Großpaket T (B6, Emrah 07.11.2026 „man sieht nicht mehr alles“): Ohne Seitenspalte steht der offene Zweck („Selbst abrufen statt
+  // wiedererkennen …“) nur bei der ERSTEN Karte einer Übungsart in dieser Sitzung; danach liegt er hinter „Wozu?“ an derselben Stelle
+  // (Kap. 2 Nr. 4: an fester Stelle erreichbar). Am Laptop (Seitenspalte) unverändert.
+  const openPurpose = !!task.open && (split || firstOfKind);
   const learning = status.state === 'new' || status.state === 'learning' || status.state === 'wobbly';
   const showSecondary = secondary.slice(0, 2);
   const KBD: Partial<Record<ShellSecondary['id'], string>> = { hint: 'T', dontKnow: 'W' };
@@ -434,7 +453,14 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const plan: ResultPlan = feedback?.explanation ? planResult(feedback.explanation, feedback.depth, { learning, fold: FOLD, unfold: UNFOLD }) : { why: [], remember: [], more: [], example: null };
   // Der offene Beispielsatz (Merke-Block) steht nicht noch einmal unter „Mehr“.
   const examples = (feedback?.explanation?.examples ?? []).slice(plan.example ? 1 : 0);
-  const hasMore = !!feedback && (plan.more.length > 0 || examples.length > 0 || !!feedback.after || !!feedback.foot);
+  // Großpaket T (Wahl „A“): ohne Seitenspalte stehen Claudes Erklärung (startet erst beim Aufklappen, weil sie erst dann eingehängt wird) und
+  // – wo die Übung es will – die Wortkarte unter „Mehr“. Sofort sichtbar bleiben Urteil, Lösung, Warum, Nachtippen und der Hauptknopf.
+  const tutorInMore = !split && !!feedback?.tutor;
+  const sideInMore = !split && sideFold && !!feedback && !!side;
+  // Ohne Seitenspalte steht eine offene Seite (Grammatik: die Regel) IN der Rückmeldung direkt nach dem Warum – vor Handlungen und „Mehr“
+  // (Großpaket T: feste Reihenfolge Urteil → Lösung → Warum → Regel → Handlung → Mehr; vorher stand sie unter „Mehr“).
+  const sideInline = !split && !sideFold && !!feedback && !!side;
+  const hasMore = !!feedback && (plan.more.length > 0 || examples.length > 0 || !!feedback.after || !!feedback.foot || tutorInMore || sideInMore);
   const blocksSource = feedback?.explanation ? { source: feedback.explanation.source } : {};
   const whyBefore = feedback?.why ? { before: <div data-slot="why">{feedback.why}</div> } : {};
   const verdictNode = feedback ? <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} help={!!feedback.helped} /> : null;
@@ -482,6 +508,12 @@ export function ExerciseShell(props: ExerciseShellProps) {
   // Inhalt hinter „Mehr“ (Seitenspalte: Aufklappbereich bzw. Kontextspalte).
   const foldContent = feedback ? (
     <div className="flex flex-col gap-4 pb-2">
+      {sideInMore && (
+        <section className="lx-kside" data-testid="ex-rule" data-in-more="" aria-label={t('vuSideRule')}>
+          {side}
+        </section>
+      )}
+      {tutorInMore && feedback.tutor ? <div data-slot="tutor">{feedback.tutor}</div> : null}
       <MoreItems items={plan.more} />
       {feedback.after && <div data-slot="after">{feedback.after}</div>}
       {examples.length > 0 && (
@@ -511,7 +543,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           data-testid="explanation-more"
           onClick={() => setBandMoreOpen(!moreOpen)}
         >
-          <span>{moreOpen ? t('exLess') : t('exMore')}</span>
+          <span>{moreOpen ? t('exLess') : t(status.area === 'words' ? 'exMoreWord' : 'exMore')}</span>
           <span aria-hidden="true" className="inline-block transition-transform" style={{ transform: moreOpen ? 'rotate(90deg)' : undefined }}>
             ▸
           </span>
@@ -521,7 +553,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </div>
       </div>
     ) : null;
-  const tutorNode = feedback?.tutor ? <div data-slot="tutor">{feedback.tutor}</div> : null;
+  const tutorNode = feedback?.tutor && !tutorInMore ? <div data-slot="tutor">{feedback.tutor}</div> : null;
   // Kern: der Urteilsstreifen oben auf der Karte (Vorschau `Handy-Falsch`, `Monitor-Falsch`) – Zeichen, Urteil, rechts das Menü „…“.
   const stripNode = feedback ? (
     <div key={resultKey} data-slot="verdict" className="lx-kstrip" data-verdict={feedback.verdict}>
@@ -555,6 +587,11 @@ export function ExerciseShell(props: ExerciseShellProps) {
             {feedback.tail}
           </div>
         )}
+        {sideInline && (
+          <section className="lx-kside" data-testid="ex-rule" data-inline="" aria-label={t('vuSideRule')}>
+            {side}
+          </section>
+        )}
         {(feedback.act || tutorNode) && (
           <div className="flex flex-col gap-2" data-block="act">
             {feedback.act && (
@@ -585,7 +622,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         <ExerciseStatus {...status} />
       </div>
       <div ref={taskRef} data-slot="task" className="flex scroll-mt-4 flex-col gap-1">
-        {task.open && (
+        {openPurpose && (
           // UX-Prüfung WL2 K1: offener Zweck mit etwas Abstand zum Titel.
           <p className="lx-t-meta m-0 pb-1.5 text-muted" data-testid="purpose" data-open="">
             {task.purpose}
@@ -602,7 +639,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             )}
           </p>
         )}
-        {info && !task.open && (
+        {info && !openPurpose && (
           <p id={infoId} className="lx-t-support m-0 text-muted" data-testid="purpose">
             {[status.topic, status.pattern].filter(Boolean).length > 0 && <span className="block text-fg">{[status.topic, status.pattern].filter(Boolean).join(' · ')}</span>}
             {status.state && status.detail && (
@@ -624,7 +661,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             {task.text}
           </h2>
           {claudeAsk && !claudeInBar && <ClaudeExplain onClick={claudeAsk} />}
-          {!status.noInfo && !task.open && (
+          {!status.noInfo && !openPurpose && (
             <button type="button" className="lx-vu-why" aria-expanded={info || infoCtx} aria-controls={info ? infoId : undefined} onClick={() => showWhy(true)} data-testid="purpose-info">
               <span className="lx-vu-why-face">{t('vuWhy')}</span>
             </button>
@@ -643,7 +680,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         aria-label={feedback ? t('exExplanationLabel') : undefined}
       >
         {stripNode}
-        <div className="lx-kbody" data-side={feedback && side ? '' : undefined}>
+        <div className="lx-kbody" data-side={feedback && side && !sideInMore && !sideInline ? '' : undefined}>
           <div className="lx-kleft">
             {(wrapCard ?? ((c: ReactNode) => c))(
               <>
@@ -666,7 +703,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
             {errorNode}
             {result}
           </div>
-          {feedback && side && (
+          {feedback && side && !sideInMore && !sideInline && (
             <section className="lx-kside" data-testid="ex-rule" aria-label={t('vuSideRule')}>
               {side}
             </section>

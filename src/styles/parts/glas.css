@@ -408,7 +408,8 @@ html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern]:not([data-kres]) {
   }
 }
 @media (max-width: 1023.98px) {
-  html:not([data-theme='dim']) .lx-exercise[data-kres] :is(.lx-kleft, .lx-kside) {
+  /* Großpaket T: das Glas trägt die EINE Rückmeldekarte (nicht mehr linke Spalte und Wortkarte einzeln). */
+  html:not([data-theme='dim']) .lx-exercise[data-kres] .lx-kcard.lx-result {
     border-color: transparent;
     background: var(--glass);
     -webkit-backdrop-filter: blur(28px) saturate(1.5);
@@ -421,7 +422,7 @@ html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern]:not([data-kres]) {
 }
 @media (prefers-reduced-transparency: reduce) {
   html:not([data-theme='dim']) .lx-glass.lx-exercise[data-kern],
-  html:not([data-theme='dim']) .lx-exercise[data-kres] :is(.lx-kleft, .lx-kside) {
+  html:not([data-theme='dim']) .lx-exercise[data-kres] .lx-kcard.lx-result {
     background: var(--surface);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -659,14 +660,16 @@ html:not([data-theme='dim']) .lx-kretype input {
 /* Touch-Geräte: die Knopfleiste in der Karte haftet beim Scrollen unten im Bild (sticky). Damit nichts durchscheint, trägt sie eine eigene
    dichte Glasfläche wie die Kapsel am Monitor (kern.css); ohne Glas eine deckende Fläche. */
 html[data-actionbar-inline] .lx-actionbar-column {
-  /* ux-reviewer W7 Nr. 8: Kanten auf der Inhaltskante (vorher 8 px darüber hinaus – weder Karte noch Inhalt). */
+  /* Großpaket T (Emrah 07.11.2026 „Weiß ich nicht berührt den Rahmen“): die Knopfzeile ist KEIN eigener Kasten in der Karte mehr – keine Fläche,
+     kein Schatten, nicht haftend. Die Tastatur öffnet nur auf Tipp, die Eingabetaste prüft und schließt sie; danach steht alles im Bild. */
+  position: static;
   margin-inline: 0;
-  padding: 8px 0;
-  border-radius: 24px;
-  background: var(--glass-dense, var(--surface));
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
-  backdrop-filter: blur(24px) saturate(1.4);
-  box-shadow: var(--shadow);
+  padding: 4px 0 0;
+  border-radius: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 /* ux-reviewer 05.11.2026 Nr. 17: haften nur während der Beantwortung. Im Ergebnis steht die Leiste im Fluss nach der Erklärung („Weiter“ folgt
    dem Gelesenen) und legt sich nicht über das Warum; ohne Haften braucht sie auch keine eigene Glasfläche. */

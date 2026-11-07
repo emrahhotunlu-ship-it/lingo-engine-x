@@ -351,7 +351,8 @@ function LegacyGrammarItem({
     if (verdict === 'wrong' && !retry && !noHelp && !choiceType && !extra.unsure) {
       firstWrong.current = given;
       setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible, { task, given, lang, ...(extra.tapped ? { tapped: extra.tapped } : {}) }));
-      if (whole || type === 'correct') root.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
+      // Großpaket T: am Touch-Gerät kein automatisches Öffnen der Tastatur (`focusNow` tut dort ebenfalls nichts).
+      if ((whole || type === 'correct') && profile === 'keys') root.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
       else api.focusNow();
       return;
     }
@@ -1573,7 +1574,7 @@ function CopyOnceField({ solution }: { solution: string }) {
         onChange={(e) => setValue(e.target.value)}
         data-testid="copy-input"
         data-state={ok ? 'correct' : undefined}
-        autoFocus
+        autoFocus={inputProfile() === 'keys'}
       />
       {ok && (
         <span className="lx-t-support text-ok-text" data-testid="copy-ok">

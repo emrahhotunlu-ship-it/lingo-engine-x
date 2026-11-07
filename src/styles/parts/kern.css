@@ -1036,30 +1036,42 @@ html[data-lx-retyping] .lx-exercise :is([data-block='why'] > ul, [data-slot='why
   font-size: clamp(1.375rem, 1.1rem + 1.2vw, 1.875rem);
 }
 
-/* ux-reviewer W7 Nr. 10 (Emrah 05.11.2026 „was ist das für ’ne Erläuterung“): am Handy stand die Erklärung zerrissen – „1 · Was war falsch“
-   (Claude), dann alle Handlungen, erst darunter „2 · Regel / 3 · Falle / 4 · Beispiel“. Jetzt folgen die Schritte direkt aufeinander; Knöpfe,
-   Melden und „Mehr“ kommen danach. Nur mit Seitenteil (Regel/Wortkarte), nur unter 1024 px (am Monitor stehen beide Spalten nebeneinander). */
+/* Großpaket T (Emrah 07.11.2026, Fotos iPad hochkant: „Noch nicht richtig“ wie abgeschnitten, Inhalt ohne Rahmen): Der frühere Block
+   (ux-reviewer W7 Nr. 10) machte die linke Spalte unter 1024 px zu `display: contents` – damit fehlte der Rückmeldung ihre Karte. Jetzt ist die
+   Rückmeldung unter 1024 px EINE Karte: Urteilsstreifen oben IN der Karte, darunter Satz, Warum, Nachtippen; Wortkarte und Claude unter
+   „Mehr zum Wort“ (ExerciseShell `sideFold`, Wahl „A“). Die Regel der Grammatik bleibt offen und folgt in derselben Karte. */
 @media (max-width: 1023.98px) {
-  .lx-exercise[data-kres] .lx-kbody[data-side] {
-    padding-top: 18px;
+  :root .lx-exercise[data-kres] .lx-kcard.lx-result {
+    overflow: clip;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--surface);
   }
-  .lx-exercise[data-kres] .lx-kbody[data-side] > .lx-kleft,
-  .lx-exercise[data-kres] .lx-kbody[data-side] > .lx-kleft > [data-block='act'] {
-    display: contents;
+  :root .lx-exercise[data-kres] .lx-kcard.lx-result > .lx-kstrip {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
   }
-  .lx-exercise[data-kres] .lx-kbody[data-side] [data-slot='tutor'] {
-    order: 1;
+  .lx-exercise[data-kres] .lx-kbody {
+    padding: 18px 20px 20px;
+  }
+  :root .lx-exercise[data-kres] .lx-kbody .lx-kleft,
+  :root .lx-exercise[data-kres] .lx-kbody .lx-kside {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
   .lx-exercise[data-kres] .lx-kbody[data-side] > .lx-kside {
-    order: 2;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
   }
-  .lx-exercise[data-kres] .lx-kbody[data-side] [data-slot='act'] {
-    order: 3;
-  }
-  .lx-exercise[data-kres] .lx-kbody[data-side] [data-slot='late'] {
-    order: 4;
-  }
-  .lx-exercise[data-kres] .lx-kbody[data-side] [data-slot='more'] {
-    order: 5;
-  }
+}
+/* „Mehr zum Wort“: die Wortkarte steht im Aufklappbereich ohne eigenen Rahmen (keine Karte in der Karte). */
+.lx-exercise [data-slot='more'] .lx-kside[data-in-more] {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
 }

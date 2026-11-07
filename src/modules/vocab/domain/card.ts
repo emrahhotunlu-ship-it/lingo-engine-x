@@ -1,4 +1,4 @@
-import { lemmaCandidates } from '../shared';
+import { isDrillSentence, lemmaCandidates } from '../shared';
 import { inflections, normalize, type Target } from './check';
 import { CUE_MAX_LV, leaks, pickSentence } from './forms';
 import { hash32 } from './rand';
@@ -72,6 +72,8 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
     // Die Schlüssel ändern sich dadurch nicht (`exampleKey` entfernt Klammern ohnehin).
     const norm = raw.replace(/\s+/g, ' ').trim();
     const en = norm.replace(/\[([^\]]*)\]/g, '$1');
+    // Großpaket T (Emrah 07.11.2026, „He ? (feel) tired lately.“): Übungssatz mit Lücke oder Verb-Hinweis – nie ein Abfrage- oder Lesesatz.
+    if (isDrillSentence(en)) return;
     const k = exampleKey(en);
     if (!k || seen.has(k)) return;
     seen.add(k);

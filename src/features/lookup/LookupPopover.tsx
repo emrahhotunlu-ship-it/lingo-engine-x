@@ -1,3 +1,4 @@
+import { isDrillSentence } from '../../domain/text/drillSentence';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useAiAvailable } from '../../ai/scope';
@@ -226,7 +227,8 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
 
   // „Als Karte speichern": nur mit Bedeutung und Ursprungssatz (Kap. 15).
   // Ein Bruchstück (z. B. ein fettes Wort in einer Claude-Antwort) ist kein Ursprungssatz: mindestens drei Wörter.
-  const sentenceOk = req.text.trim().split(/\s+/).length >= 3;
+  // Großpaket T (07.11.2026): ein Satz mit Lücke (Übung) oder Verb-Hinweis wird nie der Kartensatz – dann Claudes Beispielsatz.
+  const sentenceOk = req.text.trim().split(/\s+/).length >= 3 && !isDrillSentence(req.text);
   const exSentence = sentenceOk && bracketExample(req.text, req.surface, headword) ? req.text : aiData?.ex && bracketExample(aiData.ex, req.surface, headword) ? aiData.ex : null;
   const canSave = !exists && !!de && !!exSentence;
 

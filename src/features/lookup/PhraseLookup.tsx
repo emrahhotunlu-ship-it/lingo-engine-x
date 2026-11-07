@@ -1,3 +1,4 @@
+import { isDrillSentence } from '../../domain/text/drillSentence';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { takeTutorCall } from '../../ai/tutorBudget';
@@ -85,7 +86,8 @@ export function PhraseBody({ req, cards, cache }: { req: WordTapRequest; cards: 
   const card = resolved.card;
   const exists = !!card || !!savedIds[slug(headword)];
   const busy = ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'streaming' || ask.phase === 'slow';
-  const sentenceOk = req.text.trim().split(/\s+/).length >= 3;
+  // Großpaket T (07.11.2026): ein Satz mit Lücke (Übung) oder Verb-Hinweis wird nie der Kartensatz – dann Claudes Beispielsatz.
+  const sentenceOk = req.text.trim().split(/\s+/).length >= 3 && !isDrillSentence(req.text);
   const exSentence = sentenceOk && bracketExample(req.text, phrase, headword) ? req.text : aiData?.ex && bracketExample(aiData.ex, phrase, headword) ? aiData.ex : null;
   const canSave = !exists && !!de && !!exSentence;
   // Einzelwörter aus dem Wörterbuch, wenn Claude keine Bedeutung im Zusammenhang liefern kann.

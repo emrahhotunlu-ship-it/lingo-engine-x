@@ -26,6 +26,7 @@ import {
   toast,
   TutorButton,
   companionOpenedSince,
+  inputProfile,
 } from '../sharedUi';
 import { addDays, dayKey } from '../shared';
 import { type Band, type Line, type Next, partnersOf, type Why } from '../domain/band';
@@ -327,6 +328,8 @@ function Retype({ answer, onDone, onEnter }: { answer: string; onDone: (ok: bool
   const ok = sameWord(v, answer);
   const ref = useRef<HTMLInputElement>(null);
   useEffect(() => {
+    // Großpaket T (Emrah 07.11.2026, Wahl „A“): am Touch-Gerät öffnet sich die Tastatur erst, wenn Emrah ins Feld tippt.
+    if (inputProfile() === 'touch') return;
     ref.current?.focus({ preventScroll: true });
   }, []);
   useEffect(() => {
@@ -725,6 +728,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       keysHint={null}
       feedback={band ? feedbackOf(band, t, dateShort, run, needRetype ? <Retype answer={card.answer} onDone={setRetyped} onEnter={next} /> : null) : null}
       side={band && band.kind !== 'intro' ? <WordSide card={card} partners={band.band.partners} examples={run.moreExamples(card)} /> : null}
+      sideFold
     />
   );
 }

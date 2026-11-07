@@ -2,6 +2,7 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useHiddenInput } from './HiddenInput';
+import { useInputProfile } from '../platform/input';
 import { emit } from './fx';
 import { useT } from '../i18n';
 import type { MaskCell } from '../domain/answer/mask';
@@ -85,6 +86,8 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
   const [sel, setSel] = useState<[number, number]>([0, 0]);
   const width = useMotionValue<number | string>('3.5em');
   const locked = state !== 'input' || busy;
+  // Großpaket T (07.11.2026): am Touch-Gerät öffnet nur ein Tipp auf die Lücke die Tastatur – die leere Lücke lädt dazu ein (sanft pulsierende Linie).
+  const touch = useInputProfile() === 'touch';
   // Ton und Vibration zur Rückmeldung (Kap. 4.7, 4.3) melden wir nur als Lernereignis; der Dirigent (`engine/fx`) spielt sie, einmal je Prüfen.
   useEffect(() => {
     if (state === 'input' || silent) return;
@@ -355,11 +358,12 @@ export function KineticGap({ label, maxLength, state, busy = false, marks, mask,
         data-focused={focused || undefined}
         // Tab-Halt an der Lücke selbst: das unsichtbare Feld ist nicht in der Tab-Reihe, die Lücke reicht den Fokus weiter.
         tabIndex={!locked && !focused ? 0 : -1}
-        onFocus={() => api.focusNow()}
+        onFocus={() => api.focusTap()}
         data-masked={mask && !revealed ? '' : undefined}
         data-revealed={revealed || undefined}
         style={{ width: fill ? '100%' : mask || revealed ? 'auto' : width }}
         data-fill={fill || undefined}
+        data-idle={touch && !focused && !locked && !value && !revealed ? '' : undefined}
         lang="en"
       >
         {rv?.given?.trim() && (

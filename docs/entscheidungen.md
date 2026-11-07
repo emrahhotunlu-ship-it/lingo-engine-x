@@ -821,3 +821,11 @@ Emrah: „bei den Vokabelübungen kommt so oft das Wort erst als Erklärkarte un
 
 ## 05.11.2026 – Grammatik-Rückmeldung entschlackt
 Emrah: „kurze Erläuterung ok, aber nicht lange – evtl. zum Aufklappen“, „die Karte erschlägt mich“. Offen steht nur die Regel; „Falle und Beispiel“ klappt auf. Bei Auswahl-Aufgaben steht die Erklärung zur eigenen Wahl nur unter der Option (kein Schritt „Was war falsch“, keine Zeile „Du: B · Richtig: D“), Claude startet dort nicht von selbst. Nach einer Wahl kein „Weiß ich nicht“ mehr. Claude erklärt auch nach „Weiß ich nicht“ (sonst ohne Erklärung). Claude-Texte werden nur noch an Satzenden gekürzt.
+
+## 07.11.2026 – Großpaket T „Touch-Bedienung nach Richtlinien“ (Emrah: 3× „A“)
+Emrah (iPad/„iPhone Duo“ hochkant, Fotos): „jedes Mal geht die Tastatur auf und man sieht nicht mehr alles … Objekte ragen aus Objekten raus … da gibt es doch bestimmt Richtlinien“. Entscheidungen:
+- **Tastatur A:** Am Touch-Gerät öffnet eine Karte OHNE Tastatur; erst ein Tipp auf die Lücke öffnet sie. Dann rückt die Karte zusammen und der Hauptknopf sitzt direkt über der Tastatur (inkl. iOS-Leiste). Laptop/Tastatur-Geräte bleiben sofort tippbereit.
+- **Rückmeldung A:** Nach der Antwort sofort nur Urteil, Lösung im Satz, ein Satz „Warum“, Hauptknopf. Wortkarte, weitere Beispiele und Claude-Erklärung zum Aufklappen; Claude startet erst beim Aufklappen.
+- **Reihenfolge A:** Paket T vor „Dein Können“. Alle Übungskarten (Wörter, Grammatik, Anwenden) nach einer Prüfliste aus Apple HIG, Material 3 und Nielsen Norman umbauen; ein Test-Link am Ende.
+- Mit drin: Übungssätze mit Lücke/Hinweis („He ? (feel) tired lately.“) werden nie Abfragesatz; beim Speichern aus einer Übung wird der vollständige Satz genommen.
+Plan: `docs/umbau/touch/plan.md`.

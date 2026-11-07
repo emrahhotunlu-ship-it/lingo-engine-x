@@ -11,6 +11,8 @@ export { dayMinutes } from '../../domain/plan/dayMinutes';
 export { normGoalMin } from '../../domain/progress/settings';
 // V3: Grundformen einer Wortform (*brought* → *bring*), um die Lücke im Satz zu finden (domain/card.ts). Rein, dieselbe Liste wie im Rest der App.
 export { lemmaCandidates } from '../../domain/text/lemma';
+// Großpaket T (07.11.2026): Übungssätze mit Lücke/Verb-Hinweis sind nie ein Wort-Satz (rein).
+export { isDrillSentence } from '../../domain/text/drillSentence';
 // V4 (Großpaket A Schritt 5): Bausteine der drei Claude-Vorlagen (prompts/): Kopfzeile, Kürzen, Sprachtreue, tolerantes Lesen,
 // Nachprüfung der korrigierten Fassung (britisch → US, Selbstprüfung). Nur reine Funktionen und Typen; der Aufruf selbst (KI-Tor) kommt von außen.
 export { block, clip, fenced, header, langName } from '../../prompts/common';

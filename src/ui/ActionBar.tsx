@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Button } from './Button';
 import type { IconName } from './Icon';
 import { useKeyboardInset } from './chat/keyboard';
-import { useMediaQuery } from '../platform/input';
+import { useInputProfile, useMediaQuery } from '../platform/input';
 
 // Feste Aktionsleiste unten (Gesamtkonzept 3.6, R1/R2): ein Hauptknopf, Zustand gedimmt statt ausgeblendet
 // (Prüfen), danach Weiter; Beschriftung blendet in 150 ms um (CSS `lx-bar-in`, bei reduzierter Bewegung abgeschaltet).
@@ -39,7 +39,9 @@ export function ActionBar({ children, stateKey = 'main', aside, testId = 'action
   // Emrah 04.11.2026 (iPhone aufgeklappt ≈ iPad mini, Handy): Eine feste Leiste am unteren Rand liegt hinter der Bildschirmtastatur – im
   // Claude-Rahmen meldet `visualViewport` die Tastatur nicht verlässlich – und lässt dazwischen leere Fläche. Auf Touch-Geräten steht die
   // Leiste deshalb immer direkt unter dem Inhalt (wie `column`).
-  const coarse = useMediaQuery('(pointer: coarse)');
+  // Großpaket T: auch das Eingabeprofil zählt (Einstellung „Touch“ bzw. erkanntes Touch-Gerät) – die Leiste wechselt nie mitten in der Übung.
+  const touchProfile = useInputProfile() === 'touch';
+  const coarse = useMediaQuery('(pointer: coarse)') || touchProfile;
   const fixed = placement === 'fixed' && !coarse;
   // Leiste im Inhalt auf Touch-Geräten: die Reiterleiste bleibt trotzdem verborgen, solange eine Übung läuft (wie bei der festen Leiste).
   const inlineOnTouch = placement === 'fixed' && coarse;

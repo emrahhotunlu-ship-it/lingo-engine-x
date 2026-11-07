@@ -51,6 +51,7 @@ export const exDe = {
   exFindMissingSomeMany: 'Im Satz fehlen aber Wörter.',
   exLineMistakeArrow: '{bad} → {good}',
   exMore: 'Mehr',
+  exMoreWord: 'Mehr zum Wort',
   exLess: 'Weniger',
   exExampleLabel: 'Beispiel',
   exMoreExamples: 'Weitere Beispiele',

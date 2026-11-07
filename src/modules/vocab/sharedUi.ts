@@ -57,4 +57,6 @@ export { useLive } from '../../data/live';
 export { getWriter } from '../../data';
 export { readDoc } from '../../data/reads';
 export { getDb } from '../../platform/capabilities';
+// Großpaket T (07.11.2026): Touch oder Tastatur – am Touch-Gerät öffnet sich kein Feld von selbst (Tastatur nur auf Tipp).
+export { inputProfile, useInputProfile } from '../../platform/input';
 export { local } from '../../platform/storage';

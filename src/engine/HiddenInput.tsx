@@ -38,7 +38,10 @@ export type InputTarget = {
 
 type Api = {
   bind: (t: InputTarget) => () => void;
+  /** Fokus aus dem Ablauf (neue Karte, Weiter): am Touch-Gerät nichts (Tastatur nur auf Tipp, Großpaket T). */
   focusNow: () => void;
+  /** Fokus auf ausdrücklichen Wunsch (Tipp/Tab auf die Lücke): immer. */
+  focusTap: () => void;
   blur: () => void;
   reset: (value?: string) => void;
   isInput: (el: EventTarget | null) => boolean;
@@ -189,6 +192,13 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
         };
       },
       focusNow() {
+        // Großpaket T (Emrah 07.11.2026, Wahl „A“): Am Touch-Gerät öffnet NUR ein Tipp auf die Lücke die Tastatur. Automatisches Fokussieren
+        // (neue Karte, Start, Weiter, Tipp-Knopf) öffnete sie bei jeder Karte und verdeckte die halbe Aufgabe samt Prüfen-Knopf. Am Laptop
+        // bleibt die Lücke sofort tippbereit.
+        if (inputProfile() === 'touch') return;
+        input.current?.focus({ preventScroll: true });
+      },
+      focusTap() {
         input.current?.focus({ preventScroll: true });
       },
       blur() {

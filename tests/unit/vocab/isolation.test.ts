@@ -15,7 +15,7 @@ const SHARED = `${MODULE}/shared.ts`;
 const SHARED_UI = `${MODULE}/sharedUi.ts`;
 const PROMPT_REGISTRY = 'src/prompts/registry.ts';
 
-const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/, /^src\/content\/falseFriends$/, /^src\/content\/atlas\/atlas\.json\?raw$/, /^src\/content\/col\/charge1\.json$/, /^src\/domain\/plan\/dayMinutes$/, /^src\/domain\/progress\/settings$/];
+const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/domain\/text\/drillSentence$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/, /^src\/content\/falseFriends$/, /^src\/content\/atlas\/atlas\.json\?raw$/, /^src\/content\/col\/charge1\.json$/, /^src\/domain\/plan\/dayMinutes$/, /^src\/domain\/progress\/settings$/];
 // V3 Schritt 2b-2: zweite Tür nur für die Oberfläche (Lernkarte, Band, Runde); nie von registry.ts/api.ts statisch erreichbar.
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav|clock)$/,
@@ -30,7 +30,7 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/ui\/v$/,
   /^src\/domain\/lexicon\/(dict|pron)$/,
   /^src\/data(\/live|\/reads)?$/,
-  /^src\/platform\/(capabilities|storage|speech|sound)$/,
+  /^src\/platform\/(capabilities|storage|speech|sound|input)$/,
 ];
 const ALLOWED_PACKAGES = new Set(['zod', 'ts-fsrs', 'react', 'react/jsx-runtime']);
 const IMPORT_RE = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;
