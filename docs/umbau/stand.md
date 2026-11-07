@@ -1015,3 +1015,12 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
   - Ergebnisse: Unit 7672 grün, Stichprobe 9/9, betroffene E2E grün. Der volle Lauf vom Nachmittag war bis auf angepasste Erwartungen grün; `wortKern.spec:60` ist ein vorbestehender, offener Befund.
 - **Test-Link** `AXHkh6…` v92 `1794057978-bc2a` (Touch-Paket T + Tageszeit), Rückweg v91 `1793903965-a9a6`.
 - **Live** `JLL8…` v101 `1794061208-82dc` (Emrahs „Live nehmen“), Rückweg v100 `1793975925-edca`. Voller E2E-Lauf vorher: 1034 grün, 5 rot → einzeln 3 grün, 2 Wackler (progress.spec:73, wortschatz.spec:248 Atlas-Zählung unter Last); Lint und Typprüfung grün.
+
+## 07.11.2026 – Live-Kommentar „Ist doch eigentlich auch richtig?!“ (Karte ohne Satz)
+- Karte `vocab/sturdier` (de „robuster“, ohne Satz): eine gleichwertige Übersetzung wie „more robust“ galt als falsch, und „Meine Antwort passt auch“ war hinter „Das wusste ich eigentlich“ verdeckt.
+- Behoben (Commit 643dc076):
+  - `evaluate` bei `nosent`: Ein anderes Wort, dessen Wörterbuch-Bedeutung (gleiche Wortart) die deutsche Vorgabe trifft, zählt als `syn` (note `dict`, „passt hier auch“). Fallen mit `note` (falsche Freunde, Paare, Partikel) bleiben Fehler, Karten mit Satz bleiben streng.
+  - Claudes Erklärung bekommt die Aufgabe als Übersetzung; sagt Claude „passt auch“, führt der Knopf zu „Meine Antwort passt auch“.
+  - Beide Einspruch-Knöpfe stehen nebeneinander.
+- Unit-Tests in `tests/unit/vocab/w7.test.ts`. Kommentar im Faden beantwortet und erledigt.
+- **Live** `JLL8…` v102 `1794083815-25a8` (Emrahs „A: Direkt live“), Rückweg v101 `1794061208-82dc`. Volle Prüfung vorher: 7677 Unit grün; E2E 1035 grün, 4 rot → einzeln alle grün (Wackler unter Last: c1xErr:53, hint:115, r6aFx:155, wortschatz:248).
