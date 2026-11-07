@@ -1014,3 +1014,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
   - Neue Prüfweise `npm run test:ui` (`tests/e2e/uiStichprobe.spec.ts`, 9 Stichproben, ~30 s).
   - Ergebnisse: Unit 7672 grün, Stichprobe 9/9, betroffene E2E grün. Der volle Lauf vom Nachmittag war bis auf angepasste Erwartungen grün; `wortKern.spec:60` ist ein vorbestehender, offener Befund.
 - **Test-Link** `AXHkh6…` v92 `1794057978-bc2a` (Touch-Paket T + Tageszeit), Rückweg v91 `1793903965-a9a6`.
+- **Live** `JLL8…` v101 `1794061208-82dc` (Emrahs „Live nehmen“), Rückweg v100 `1793975925-edca`. Voller E2E-Lauf vorher: 1034 grün, 5 rot → einzeln 3 grün, 2 Wackler (progress.spec:73, wortschatz.spec:248 Atlas-Zählung unter Last); Lint und Typprüfung grün.
