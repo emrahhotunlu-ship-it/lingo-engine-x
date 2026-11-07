@@ -1013,3 +1013,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
   - data-guard: 3 Warnungen behoben (Deckel nur auf denselben Plan und Tag, Tests der Schreibwege).
   - Neue Prüfweise `npm run test:ui` (`tests/e2e/uiStichprobe.spec.ts`, 9 Stichproben, ~30 s).
   - Ergebnisse: Unit 7672 grün, Stichprobe 9/9, betroffene E2E grün. Der volle Lauf vom Nachmittag war bis auf angepasste Erwartungen grün; `wortKern.spec:60` ist ein vorbestehender, offener Befund.
+- **Test-Link** `AXHkh6…` v92 `1794057978-bc2a` (Touch-Paket T + Tageszeit), Rückweg v91 `1793903965-a9a6`.
