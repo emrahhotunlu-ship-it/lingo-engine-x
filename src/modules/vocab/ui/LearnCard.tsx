@@ -739,7 +739,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
  * Claude erklärt bei falscher getippter Antwort von selbst, was an DIESER Antwort schiefging (learning-scientist 02.11.2026, Befund 8:
  * wie im alten Trainer). Nicht in der Einführung (dort ist ein Fehlversuch kein Fehler), nicht ohne Eingabe, nicht nach „Wusste ich“/„Später“.
  */
-function tutorOf(v: BandView, t: T): ReactNode {
+function tutorOf(v: BandView, t: T, run: LearnRun): ReactNode {
   if (v.kind === 'intro' || v.band.tone !== 'no' || !v.given.trim() || v.choice) return null;
   const g = gapText(v.card);
   // Bedeutungskarte (ux-reviewer W7 Nr. 2): Claude bekommt den ganzen Satz und die Frage nach der Bedeutung, nicht einen Lückensatz.
@@ -748,7 +748,8 @@ function tutorOf(v: BandView, t: T): ReactNode {
     ? `What does “${v.card.answer}” mean in this sentence? Answer in German. Sentence: ${g?.text ?? v.card.answer}`
     : g
       ? `${g.text.slice(0, g.start)}___${g.text.slice(g.end)}`
-      : v.card.de || v.card.answer;
+      : // Emrah 07.11.2026 („robuster“ → „more robust“: „Ist doch eigentlich auch richtig?!“): ohne Satz ist es eine Übersetzung, gleichwertige Wörter passen.
+        `Translate into English (no sentence given): ${v.card.de || v.card.answer}`;
   const why = v.band.why.kind === 'teach' ? v.band.why.text : whyText(t, v.band.why);
   return (
     <TutorButton
@@ -759,6 +760,8 @@ function tutorOf(v: BandView, t: T): ReactNode {
       store={{ kind: 'vocab', path: v.card.path }}
       auto
       shownWhy={why || null}
+      // Sagt Claude „passt auch“, wird daraus derselbe Einspruch wie „Meine Antwort passt auch“ (kein Fehler, das Wort kommt gleich in einem neuen Satz).
+      {...(v.band.alsoRight ? { onRight: () => run.choose('later') } : {})}
     />
   );
 }
@@ -932,16 +935,23 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
   ) : null;
   const act =
     done ??
-    (b.knewIt ? (
-      <Button variant="secondary" onClick={() => run.choose('knewIt')} data-testid="vm-knewit">
-        {t('vmBtnKnewIt')}
-      </Button>
-    ) : b.alsoRight ? (
-      // K7 (Emrah 03.11.2026 „was später prüfen lassen? … nicht gut erklärt“): hier prüft niemand später nach – der Knopf sagt, was er tut:
-      // „Meine Antwort passt auch“ → kein Fehler, das Wort kommt gleich in einem neuen Satz, erst diese Antwort zählt (`vmLaterDone`).
-      <Button variant="secondary" onClick={() => run.choose('later')} data-testid="vm-later">
-        {t('vmBtnMineToo')}
-      </Button>
+    (b.knewIt || b.alsoRight ? (
+      // Emrah 07.11.2026 („Ist doch eigentlich auch richtig?!“): beide Einsprüche stehen nebeneinander – „Das wusste ich eigentlich“ (vertippt,
+      // gewusst) und „Meine Antwort passt auch“ (anderes richtiges Wort). Vorher verdeckte der erste den zweiten.
+      <div className="flex flex-wrap gap-2">
+        {b.knewIt ? (
+          <Button variant="secondary" onClick={() => run.choose('knewIt')} data-testid="vm-knewit">
+            {t('vmBtnKnewIt')}
+          </Button>
+        ) : null}
+        {b.alsoRight ? (
+          // K7 (Emrah 03.11.2026 „was später prüfen lassen? … nicht gut erklärt“): hier prüft niemand später nach – der Knopf sagt, was er tut:
+          // „Meine Antwort passt auch“ → kein Fehler, das Wort kommt gleich in einem neuen Satz, erst diese Antwort zählt (`vmLaterDone`).
+          <Button variant="secondary" onClick={() => run.choose('later')} data-testid="vm-later">
+            {t('vmBtnMineToo')}
+          </Button>
+        ) : null}
+      </div>
     ) : null);
   // Die Lösung steht nur einmal: zeigt die Lücke sie schon (Lösung, anderes Wort), entfällt die Zeile „Richtig: …“ (Kap. 15, UX-Prüfung V3 Nr. 5).
   // Beim Buchstabenvergleich (Fast richtig) steht nur der Vergleich, ohne „→ Richtig: …“: die Lücke zeigt die Lösung schon (UX-Nachprüfung V3).
@@ -977,7 +987,7 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
     // K7: nach „Das wusste ich eigentlich“ / „Meine Antwort passt auch“ sagt der Hinweis darüber, wie es weitergeht – kein zweiter, widersprechender Satz („weil es noch nicht saß“).
     nextIn: v.choice ? null : comeBack(t, b, dateShort),
     act,
-    tutor: tutorOf(v, t),
+    tutor: tutorOf(v, t, run),
     depth: 'min',
     explanation: null,
   };

@@ -137,3 +137,27 @@ describe('learning-scientist W7: Band verspricht nur, was die Runde hält', () =
     expect((nextOf(r, true, t + 60_000, true, false) as { mode: string }).mode).toBe('later');
   });
 });
+
+describe('Emrah 07.11.2026: ohne Satz zählt ein gleichwertiges Wort („robuster“ → „more robust“)', () => {
+  const doc = { word: 'sturdier', de: 'robuster', pos: 'adj', ex: '' };
+  const task: Task = { path: 'vocab/sturdier', form: 'nosent', step: 0, intro: false, planned: true, why: 'due', sent: '-', cue: false };
+  const base: CheckDict = { isWord: (w) => ['robust', 'stable', 'tough', 'more'].includes(w), misspell: new Map(), confusable: new Map(), toUS: (w) => w };
+  const dict: Record<string, { pos: string; de: string }[]> = {
+    robust: [{ pos: 'adj', de: 'robust, widerstandsfähig' }],
+    tough: [{ pos: 'adj', de: 'hart, zäh' }],
+    stable: [{ pos: 'adj', de: 'stabil, beständig' }],
+  };
+  const senses = (w: string) => dict[w] ?? [];
+  const m = cardOf({ task, doc, lex: learned(T0 - 10 * D), teach: {}, nowMs: T0, sbGate: null })!;
+  it('„more robust“ passt auch, „tough“ nicht, ohne Wörterbuch wie bisher', () => {
+    expect(m.mode).toBe('nosent');
+    expect(evaluate(m, 'more robust', { ...base, senses })).toMatchObject({ outcome: 'syn', note: 'dict', hit: 'more robust' });
+    expect(['other', 'wrong']).toContain(evaluate(m, 'tough', { ...base, senses }).outcome);
+    expect(['other', 'wrong']).toContain(evaluate(m, 'more robust', base).outcome);
+  });
+  it('mit Satz bleibt es streng: dort ist genau das Wort gesucht', () => {
+    const gap = cardOf({ task: { ...task, form: 'gap', sent: 's' }, doc: { ...doc, ex: 'My old laptop has proved sturdier than I feared.' }, lex: learned(T0 - 10 * D), teach: {}, nowMs: T0, sbGate: null })!;
+    expect(gap.mode).toBe('gap');
+    expect(evaluate(gap, 'more robust', { ...base, senses }).outcome).not.toBe('syn');
+  });
+});

@@ -199,7 +199,37 @@ export function evaluate(m: CardModel, given: string, dict: CheckDict, dunno = f
     // learning-scientist W7 SOLL 3: richtig, aber eine andere Bedeutung als die gelernte – das Warum sagt es („stimmt auch, gelernt: …“).
     return alt.outcome === 'ok' ? { ...alt, note: 'dict' } : own;
   }
-  return checkAnswer(given, m.target, dict);
+  const c = checkAnswer(given, m.target, dict);
+  // Verwechslungspaare, falsche Freunde und andere Partikel (note gesetzt) bleiben Fehler: das sind gewollte Fallen.
+  if (m.mode !== 'nosent' || (c.outcome !== 'other' && c.outcome !== 'wrong') || c.note || !dict.senses) return c;
+  // Emrah 07.11.2026 („robuster“ → „more robust“: „Ist doch eigentlich auch richtig?!“): ohne Satz ist es eine Übersetzung. Ein anderes
+  // englisches Wort, dessen Wörterbuch-Bedeutung (gleiche Wortart) die deutsche Vorgabe trifft, passt auch (`syn`, Warum: „passt hier auch“).
+  const hit = sameMeaningWord(given, m.de, m.pos, dict.senses);
+  return hit ? { outcome: 'syn', hit, note: 'dict' } : c;
+}
+
+/** Deutscher Wortstamm ohne Beugungs- und Steigerungsendung (*robuster* → *robust*, *stabile* → *stabil*), nur bei genug Rest. */
+function deStem(w: string): string {
+  for (const end of ['eren', 'erer', 'ere', 'er', 'en', 'es', 'em', 'e']) if (w.endsWith(end) && w.length - end.length >= 4) return w.slice(0, -end.length);
+  return w;
+}
+
+/** Englische Eingabe (ohne *more/most*, Artikel, *to*) mit Wörterbuch-Bedeutung, deren Stamm dem einer Vorgabe-Bedeutung gleicht. */
+export function sameMeaningWord(given: string, de: string, pos: string | null | undefined, senses: NonNullable<CheckDict['senses']>): string | null {
+  const g = given.trim().toLowerCase().replace(/\s+/g, ' ');
+  const comparative = /^(more|most) /.test(g);
+  const head = g.replace(/^(more|most|the|a|an|to) /, '');
+  if (!head || head.split(' ').length > 3) return null;
+  const want = new Set(meaningVariants(de).flatMap((v) => [v, deStem(v)]));
+  if (!want.size) return null;
+  const wantPos = pos ? POS_DICT[pos] : comparative ? 'adj' : null;
+  const cands = [head, ...(head.endsWith('ier') ? [`${head.slice(0, -3)}y`] : []), ...(head.endsWith('er') ? [head.slice(0, -2), head.slice(0, -1)] : [])];
+  for (const w of cands)
+    for (const s of senses(w)) {
+      if (wantPos && !s.pos.toLowerCase().startsWith(wantPos)) continue;
+      if (meaningVariants(s.de).some((v) => want.has(v) || want.has(deStem(v)))) return given.trim();
+    }
+  return null;
 }
 
 // ---------------------------------------------------------------- Buchung und Band
