@@ -1,5 +1,5 @@
 import { useAiAvailable } from '../../ai/scope';
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { companionOpenedSince } from '../companion/store';
 import { useSharedTarget } from '../../engine/shared';
@@ -91,6 +91,11 @@ export type GrammarItemProps = {
   noHelp?: boolean;
   /** G8 (LS-B2): Themen-Test, in dem eine gemeldete Aufgabe noch aus dem Ergebnis genommen werden kann (Mindestzahl bleibt). */
   testVoid?: boolean;
+  /**
+   * Klausur des Grammatik-Buchs (Emrah 08.11.2026): ohne Rückmeldung je Aufgabe – nach dem Prüfen geht es sofort weiter, Urteil und Lösung
+   * stehen erst in der Auswertung am Ende. Nie Claude (auch nicht „Auch richtig?“), nie ein zweiter Versuch (zusammen mit `noHelp`).
+   */
+  blind?: boolean;
   /** Eingabeprofil der Runde (einmal eingefroren). Ohne Angabe das des Geräts. */
   profile?: InputProfile;
   /** Themenrunde oder Einführung: die Musterkarte steht offen. */
@@ -207,6 +212,7 @@ function LegacyGrammarItem({
   badgeTestId,
   noHelp = false,
   testVoid = false,
+  blind = false,
   profile: profileProp,
   topicRound = false,
   tutor: tutorOn = false,
@@ -481,7 +487,7 @@ function LegacyGrammarItem({
     }
     if (j.v === 'unsure') {
       const local = (r: FitResult | null): void => finishCheck('near', res, given, { ...jx, ...at, judged: 'noai', unsure: true, ...aiNotYes(r, j.askAi !== 'no') });
-      if (j.askAi === 'auto') {
+      if (j.askAi === 'auto' && !blind) {
         // S1-ZEIT (P4-Nacharbeit): Antwortzeit beim Tippen auf „Prüfen“, ohne das Warten auf Claude.
         attempt.send(elapsed(), promptChars(root.current));
         runFit(fit.ctl, fit.judge(`${task.topic}|${task.key}`, fitVars(given)), (out) => finishCheck('correct', asAlsoRight(res), given, { ...jx, ...at, ...aiYes(out, given) }), local);
@@ -805,6 +811,12 @@ function LegacyGrammarItem({
     if (kind === 'typed') api.focusNow();
     else api.blur();
   };
+
+  // Klausur: das Ergebnis steht fest → sofort weiter, bevor die Rückmeldung gezeichnet wird (kein Aufblitzen der Lösung).
+  useLayoutEffect(() => {
+    if (blind && fb) next();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blind, fb]);
 
   const primaryGo = () => {
     if (fb) next();
@@ -1536,7 +1548,7 @@ function LegacyGrammarItem({
         primary={primary}
         feedback={feedback}
         // D3 V-UEBUNG (Vorschau L3): nach dem Prüfen steht am Laptop die Karte „Regel“ in der Spalte (vorher nie, s. o.).
-        side={stepsSide ?? (fb && !dxOn && (!!pattern || hasRule(task.topic, lang)) ? <RuleSide topic={task.topic} pattern={pattern} onWhole={() => setSheet(true)} /> : null)}
+        side={stepsSide ?? (fb && !dxOn && fb.verdict !== 'correct' && (!!pattern || hasRule(task.topic, lang)) ? <RuleSide topic={task.topic} pattern={pattern} onWhole={() => setSheet(true)} /> : null)}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
       <ReportSheet

@@ -107,16 +107,17 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
   const wide = useMediaQuery('(min-width: 768px)');
   // Kern (Emrah 03.11.2026, Vorschau 9pdpf…): oben rechts EIN beschrifteter Knopf „Frag Claude“. In einer Aufgabe fragt er Claude zu genau
   // dieser Aufgabe (vorher ohne Lösung, danach mit Antwort), sonst öffnet er den Begleiter. Der freie Chat bleibt im Menü „…“ erreichbar.
-  const explain = useBand((s) => s.explain);
-  const ask = explain ?? (ai ? () => openCompanion() : null);
-  const lead: MenuEntry[] = [
+  const noAi = useBand((s) => s.noAi === true);
+  const explain = useBand((s) => (s.noAi ? null : s.explain));
+  const ask = noAi ? null : (explain ?? (ai ? () => openCompanion() : null));
+  const lead: MenuEntry[] = noAi ? [] : [
     ...(ai && explain ? [{ id: 'companion', label: t('openCompanion'), onClick: () => openCompanion(), testId: 'open-companion' }] : []),
     ...(ai && !wide ? [{ id: 'translate', label: t('cmpTabTranslate'), onClick: () => openCompanion({ tab: 'translate' }), testId: 'open-translate' }] : []),
   ];
   const tail: MenuEntry[] = [{ id: 'settings', label: t('openSettings'), onClick: openSettings, testId: 'open-settings' }];
   return (
     <div className="flex flex-none items-center gap-1" data-testid="exercise-actions">
-      {wide && <TranslateButton />}
+      {wide && !noAi && <TranslateButton />}
       {ask && (
         <button type="button" className="lx-kask" onClick={ask} data-testid={explain ? 'claude-explain' : 'open-companion'} data-ai="">
           {t('kernAsk')}

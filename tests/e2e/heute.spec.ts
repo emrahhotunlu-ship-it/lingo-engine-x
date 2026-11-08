@@ -30,8 +30,8 @@ test('Morgen-Journey: Tagesweg mit 3 Schritten (Wörter · Grammatik · Anwenden
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-focus"]')).toContainText('Grammatik');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Anwenden');
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
-  // Tagesziel 25 → Wörter 10 Min. (40 %, mindestens 10), Grammatik 10, Anwenden 5.
-  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['10', '10', '5']);
+  // Tagesziel 25 → Wörter 15 Min. (60 %, Emrah 08.11.2026 Wörter-Tempo), Grammatik 7, Anwenden 3.
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['15', '7', '3']);
   // Kern e (03.11.2026): Kopf der Pflicht-Karte „Pflicht: 0 von 3 erledigt“, ein Balken je Schritt (statt Minutenbalken).
   await expect(page.getByTestId('today-title')).toHaveText('Pflicht: 0 von 3 erledigt');
   await expect(page.getByTestId('day-segs')).toHaveAttribute('data-fills', '0,0,0');

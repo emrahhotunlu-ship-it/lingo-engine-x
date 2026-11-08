@@ -42,6 +42,8 @@ function collectTasks(extra: readonly Doc[]): Known[] {
   walk(json('../../src/content/legacy/grammar.json'));
   walk(json('../../src/content/grammar-extra.json'));
   walk(json('../../src/content/grammar-bank.json'));
+  // Grammatik-Buch (08.11.2026): Übung A/B.
+  walk(json('../../src/content/grammar/book.json'));
   // C1-Werkzeugkasten (Lernberatung 27.09.): Aufgaben und Beispielsätze fließen auch in den Satzbau.
   walk(json('../../src/content/c1/toolkit.json'));
   walk(json('../../src/content/legacy/rules.json'));

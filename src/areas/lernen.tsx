@@ -7,6 +7,11 @@ import { DrillScreen } from '../features/drills/DrillScreen';
 import { GrammarScreen } from '../features/grammar/GrammarScreen';
 import { GrammarSessionScreen } from '../features/grammar/SessionScreen';
 import { WissenScreen } from '../features/grammar/WissenScreen';
+import { BookLessonScreen, BookScreen } from '../features/grammar/BookScreen';
+import { bookView } from '../features/grammar/bookStore';
+import { bookNext } from '../domain/grammar/book';
+import { useLive } from '../data/live';
+import { grammarModuleOn } from '../modules/grammar/api';
 import { LearnHub } from '../features/learn/LearnHub';
 import { ChapterPage } from '../features/learn/ChapterPage';
 import { JourneyPage } from '../features/learn/JourneyPage';
@@ -35,6 +40,10 @@ declare module '../app/router/types' {
     /** C1-Reise als Seite (D5): von der Wurzel des Reiters ins Kapitel-Detail verlegt. */
     journey: NoParams;
     wissen: NoParams;
+    /** Grammatik-Buch (Emrah 08.11.2026): alle Kapitel, Lektionen und Klausuren. */
+    book: NoParams;
+    /** Eine Lektion des Buchs (Regel, Übung A/B/C, Lektionstest). */
+    bookLesson: { topic: string };
     patterns: { id?: string };
     grammarSession: { mode: 'duty' | 'xtra' | 'errors' | 'topic'; topic?: string };
     drill: { kind: 'dictate' | 'cloze' | 'order' | 'sprint'; ctx: 'duty' | 'xtra' };
@@ -64,6 +73,8 @@ export const lernen = defineArea({
     chapter: { kind: 'page', chrome: 'shell', component: ChapterPage, title: 'lhTitle', params: z.object({ id: z.string() }) },
     journey: { kind: 'page', chrome: 'shell', component: JourneyPage, title: 'pxMapTitle' },
     wissen: { kind: 'page', component: WissenScreen, title: 'wsTraps', keepScroll: true },
+    book: { kind: 'page', component: BookScreen, title: 'bkTitle', keepScroll: true },
+    bookLesson: { kind: 'page', component: BookLessonScreen, title: 'bkTitle', params: z.object({ topic: z.string() }) },
     patterns: { kind: 'page', component: PatternsScreen, title: 'ptTitle', params: z.object({ id: z.string().optional() }) },
     grammarSession: {
       kind: 'exercise',
@@ -97,7 +108,17 @@ export const lernen = defineArea({
       feasible: () => true,
       start: (ctx) => {
         // Wiedereinstieg statt Neustart (Emrah 04.11.2026): auch eine im Grammatik-Reiter begonnene Pflichtrunde geht hier weiter.
-        return resumeOrStartGrammar({ mode: 'duty', day: ctx.day, block: ctx.block, ...(ctx.opts?.n ? { size: ctx.opts.n } : {}) }).route;
+        // Grammatik-Buch (Emrah 08.11.2026, „Buch A: Buch + Tagesvorschlag“): Hat Emrah das Buch begonnen, ist der Grammatik-Schritt die nächste
+        // offene Buch-Seite im zuletzt bearbeiteten Kapitel (bzw. dessen Klausur). Fehlersätze laufen über „Fehler“ und den Wiederholen-Schritt weiter.
+        const live = useLive.getState();
+        const v = bookView(live.docs['app/book']);
+        const next = grammarModuleOn(live.docs['app/profile']) && v.recent ? bookNext(v.page, v.examPassed, v.recent) : null;
+        const book = !next
+          ? null
+          : next.kind === 'exam'
+            ? { part: 'X' as const, topic: null, chapter: next.chapter, attempt: v.exams(next.chapter).length }
+            : { part: next.part, topic: next.topic, chapter: next.chapter, attempt: v.page(next.topic, next.part)?.k ?? 0 };
+        return resumeOrStartGrammar({ mode: 'duty', day: ctx.day, block: ctx.block, ...(ctx.opts?.n && !book ? { size: ctx.opts.n } : {}), ...(book ? { book, topic: book.topic } : {}) }).route;
       },
     },
     {

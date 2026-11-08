@@ -1,5 +1,6 @@
 import type { GrammarAnswer } from '../../domain/learn/types';
 import { CardStack } from '../../ui/CardStack';
+import { useBand } from '../../ui/exercise/bandStore';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { leaveBack, useNav } from '../../app/nav';
 import { patternById } from '../../domain/grammar/patterns';
@@ -31,7 +32,9 @@ import { grammarModuleOn } from '../../modules/grammar/api';
 import { useWhyReason, useWinOn } from '../tutor/WhyLine';
 import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
-import { bookGrammarLeft, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
+import { examGrade, LESSON_PASS } from '../../domain/grammar/book';
+import { pageLabel, startBookStep } from './BookScreen';
+import { bookGrammarLeft, bookTesting, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt. Vorn steht bei einem neuen Muster der Vortest und die Einführung
@@ -77,10 +80,18 @@ export function GrammarSessionScreen() {
   const vortest = inVortest(s);
   // Themen-Test (K4): die ersten Aufgaben sind der Test, ohne Hilfe.
   const inTest = s.status === 'running' && !!s.test && s.pos < s.test.n;
-  const tutorOn = !vortest && !inTest && !inRepeat(s);
+  // Grammatik-Buch: Lektionstest und Klausur ohne Hilfe; die Klausur ohne Rückmeldung je Aufgabe (`blind`).
+  const bookTest = s.status === 'running' && bookTesting(s.book) && !inRepeat(s);
+  const blind = bookTest && s.book?.part === 'X';
+  const tutorOn = !vortest && !inTest && !bookTest && !inRepeat(s);
+  // Klausur ohne Claude: die Übungsleiste zeigt dann weder „Frag Claude“ noch Begleiter oder Übersetzer.
+  useEffect(() => {
+    useBand.setState({ noAi: blind });
+    return () => useBand.setState({ noAi: false });
+  }, [blind]);
   const reason = useWhyReason(task ?? null, tutorOn && s.status === 'running');
   const win = useWinOn(task ?? null, tutorOn);
-  const badge = win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
+  const badge = bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" area="grammar" />
@@ -106,11 +117,11 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">
-            <GrammarEnd lang={lang} />
+            {s.book ? <BookEnd lang={lang} /> : <GrammarEnd lang={lang} />}
           </div>
         )}
       </CardStack>
@@ -243,6 +254,78 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
       mistakes={mistakes}
       next={main}
       {...(!s.block && next ? { secondary: { label: t('sumBack'), run: back } } : {})}
+    />
+  );
+}
+
+/**
+ * Ende einer Buch-Seite bzw. Klausur (Emrah 08.11.2026): Ergebnis als Zahl bzw. Note + Prozent; in der Klausur je Lektion „x von n“ und die
+ * schwachen Lektionen; darunter JEDER Fehler mit Lösung und Begründung (in der Klausur kamen sie während der Aufgaben nicht).
+ */
+function BookEnd({ lang }: { lang: 'de' | 'en' }) {
+  const { t } = useT();
+  const s = useGrammarSession((x) => x);
+  const api = useHiddenInput();
+  const go = useNav((x) => x.go);
+  const b = s.book;
+  if (!b) return null;
+  const rows = s.results.filter((r) => !r.xt);
+  const c = rows.filter((r) => r.ok).length;
+  const n = rows.length;
+  const exam = b.part === 'X';
+  const g = examGrade(c, n);
+  const title = exam
+    ? t('bkEndExam', { g: g.grade, p: g.pct })
+    : b.part === 'T'
+      ? t(c >= Math.min(LESSON_PASS, n) ? 'bkEndTestPass' : 'bkEndTestFail', { c, n, pass: LESSON_PASS })
+      : t('bkEndPage', { page: b.part === 'X' ? '' : pageLabel(b.part, t), c, n });
+  const taskOf = (key: string) => s.tasks.find((x) => x.key === key);
+  const mistakes = rows
+    .filter((r) => !r.ok)
+    .map((r) => {
+      const task = taskOf(r.key);
+      const why = task ? ((lang === 'de' ? task.expl.de : task.expl.en) ?? '') : '';
+      return { wrong: (r.given ?? '').trim() || '…', right: r.right ?? '', rule: why || topicName(r.topic, lang), when: t('gxEndTomorrow') };
+    });
+  const byTopic = new Map<string, { c: number; n: number }>();
+  for (const r of rows) {
+    const e = byTopic.get(r.topic) ?? { c: 0, n: 0 };
+    e.n++;
+    if (r.ok) e.c++;
+    byTopic.set(r.topic, e);
+  }
+  const weak = [...byTopic.entries()].filter(([, e]) => e.c * 2 < e.n).map(([tp]) => tp);
+  const lead = exam ? (
+    <div className="flex flex-col gap-2" data-testid="book-exam-result" data-grade={g.grade} data-pct={g.pct}>
+      <p className="lx-t-body m-0">{t(g.passed ? 'bkEndExamPass' : 'bkEndExamFail', { c, n })}</p>
+      <ul className="m-0 flex list-none flex-col gap-1 p-0 lx-t-support">
+        {[...byTopic.entries()].map(([tp, e]) => (
+          <li key={tp} className={weak.includes(tp) ? 'text-wrong-text' : ''}>
+            {t('bkEndLesson', { topic: topicName(tp, lang), c: e.c, n: e.n })}
+          </li>
+        ))}
+      </ul>
+      <p className="lx-t-meta m-0 text-muted">{weak.length ? `${t('bkEndWeak')}: ${weak.map((tp) => topicName(tp, lang)).join(', ')}` : t('bkEndWeakNone')}</p>
+    </div>
+  ) : null;
+  const again = () => {
+    leaveGrammar();
+    const step = b.part === 'X' ? { kind: 'exam' as const, chapter: b.chapter ?? '' } : { kind: 'page' as const, chapter: b.chapter ?? '', topic: b.topic ?? '', part: b.part };
+    startBookStep(step, b.attempt + 1, api, go);
+  };
+  const back = () => leaveBack(leaveGrammar);
+  return (
+    <SessionEnd
+      mode="growth"
+      title={title}
+      hideScore
+      right={c}
+      total={n}
+      ms={s.activeMs}
+      {...(lead ? { lead } : {})}
+      mistakes={mistakes}
+      next={s.block ? { label: t('nbShNext'), run: reportGrammarDone } : { label: t('bkEndBack'), run: back }}
+      secondary={{ label: t('bkEndAgain'), run: again }}
     />
   );
 }

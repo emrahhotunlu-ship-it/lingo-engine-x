@@ -20,6 +20,9 @@ import { ChapterList } from './ChapterList';
 import { useFix } from './fix';
 import { HereCard } from './HereCard';
 import { TopicPath } from './TopicPath';
+import { useBookNext } from '../grammar/BookScreen';
+import { bookChapters } from '../../domain/grammar/book';
+import { topicName } from '../grammar/topicUi';
 
 // Reiter „Grammatik“ (Relaunch Teil 1c, D5 V-GRAMMATIK; Vorschau H6 `path` screens.js:468–480, L4 desk.js:238–248). Aufbau wie die Vorschau:
 // Kopf „Grammatik“ (vom Rahmen, `LearnHead`), Karte „Du bist hier“ mit dem EINEN Hauptknopf, die Kapitelliste „Dein Weg zu C1“ und leise
@@ -45,7 +48,14 @@ function ForeignRows() {
 }
 
 export function LearnHub() {
-  const { t } = useT();
+  const { t, lang } = useT();
+  const bookNext = useBookNext();
+  const chN = (id: string) => bookChapters().find((c) => c.id === id)?.n ?? 1;
+  const bookSub = !bookNext
+    ? t('bkRowSub')
+    : bookNext.kind === 'exam'
+      ? t('bkNextExam', { ch: chN(bookNext.chapter) })
+      : t('bkNextPage', { ch: chN(bookNext.chapter), topic: topicName(bookNext.topic, lang), page: t(bookNext.part === 'A' ? 'bkPartShortA' : bookNext.part === 'B' ? 'bkPartShortB' : bookNext.part === 'C' ? 'bkPartShortC' : 'bkPartShortT') });
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
   const [open, setOpen] = useState<string | null>(null);
@@ -69,6 +79,11 @@ export function LearnHub() {
   return (
     <div className="lx-vg" data-testid="learn-hub">
       <HereCard />
+
+      {/* Grammatik-Buch (Emrah 08.11.2026): Kapitel, Lektionen, Übungen und Klausuren; die Zeile nennt den nächsten Schritt. */}
+      <div className="lx-vg-rows" data-testid="hub-book-list">
+        <VRow icon="book" title={t('bkRow')} sub={bookSub} onClick={() => go({ name: 'book' })} data-testid="hub-book" />
+      </div>
 
       {gmod ? <TopicPath current={highlight} onOpen={setOpen} /> : program && <ChapterList />}
 

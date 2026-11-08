@@ -177,3 +177,28 @@ export function weakTopics(rows: ReadonlyArray<{ topic: string; ok: boolean }>):
   }
   return [...by.entries()].filter(([, e]) => e.c * 2 < e.n).map(([t]) => t);
 }
+
+export type PageState = { best: number; n: number; k: number } | null;
+export type BookStep = { kind: 'page'; chapter: string; topic: string; part: BookPart } | { kind: 'exam'; chapter: string };
+
+/** Ist die Seite erledigt? Übungen: einmal gemacht. Lektionstest: bestanden (mindestens `LESSON_PASS` richtig). */
+export function pageDone(part: BookPart, st: PageState): boolean {
+  if (!st || st.k < 1) return false;
+  return part === 'T' ? st.best >= Math.min(LESSON_PASS, st.n) : true;
+}
+
+/**
+ * Nächster Schritt im Buch (Tagesvorschlag, „Weiter im Buch“): ab dem zuletzt bearbeiteten Kapitel das erste, dessen Klausur noch nicht bestanden ist; darin die erste
+ * Lektion mit offener Seite (Reihenfolge A, B, C, Test); sind alle Lektionen erledigt, die Klausur. `null`, wenn das ganze Buch geschafft ist.
+ */
+export function bookNext(page: (topic: string, part: BookPart) => PageState, examPassed: (chapter: string) => boolean, from: string | null = null): BookStep | null {
+  // Emrah wählt selbst, wo er im Buch arbeitet: weiter geht es im zuletzt bearbeiteten Kapitel (`from`), danach in den folgenden, zuletzt vorn.
+  const all = bookChapters();
+  const at = from ? Math.max(0, all.findIndex((c) => c.id === from)) : 0;
+  for (const c of [...all.slice(at), ...all.slice(0, at)]) {
+    if (examPassed(c.id)) continue;
+    for (const topic of c.topics) for (const part of BOOK_PARTS) if (!pageDone(part, page(topic, part))) return { kind: 'page', chapter: c.id, topic, part };
+    return { kind: 'exam', chapter: c.id };
+  }
+  return null;
+}

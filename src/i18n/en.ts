@@ -27,6 +27,7 @@ import { nbShEn } from './parts/nbSh.en';
 import { readMessages } from '../modules/read/registry';
 import { applyMessages } from '../modules/apply/registry';
 import { nbHeuteEn } from './parts/nbHeute.en';
+import { bookEn } from './parts/book.en';
 import { kernEn } from './parts/kern.en';
 import { nbLernenEn } from './parts/nbLernen.en';
 import { nbWsEn } from './parts/nbWs.en';
@@ -101,6 +102,7 @@ export const en: Record<MessageKey, string> = {
   ...applyMessages.en,
   ...nbHeuteEn,
   ...kernEn,
+  ...bookEn,
   ...nbLernenEn,
   ...nbWsEn,
   ...nbSprechenEn,

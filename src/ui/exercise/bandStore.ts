@@ -24,6 +24,8 @@ export type BandState = {
    * (`ExerciseActions`), nicht im Menü. `null` = keine KI oder kein Knopf für diese Aufgabe.
    */
   explain: (() => void) | null;
+  /** Klausur des Grammatik-Buchs (Emrah 08.11.2026): ohne Claude – „Frag Claude“, Begleiter und Übersetzer stehen nicht in der Leiste. */
+  noAi?: boolean;
 };
 
 export const useBand = create<BandState>(() => ({ items: {}, why: null, hosts: 0, shells: 0, menuOpen: false, moreOpen: false, keysOpen: false, explain: null }));

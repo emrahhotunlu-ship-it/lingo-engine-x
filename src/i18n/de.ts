@@ -29,6 +29,7 @@ import { nbShDe } from './parts/nbSh.de';
 import { readMessages } from '../modules/read/registry';
 import { applyMessages } from '../modules/apply/registry';
 import { nbHeuteDe } from './parts/nbHeute.de';
+import { bookDe } from './parts/book.de';
 import { kernDe } from './parts/kern.de';
 import { nbLernenDe } from './parts/nbLernen.de';
 import { nbWsDe } from './parts/nbWs.de';
@@ -103,6 +104,7 @@ export const de = {
   ...applyMessages.de,
   ...nbHeuteDe,
   ...kernDe,
+  ...bookDe,
   ...nbLernenDe,
   ...nbWsDe,
   ...nbSprechenDe,
