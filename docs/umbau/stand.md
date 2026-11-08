@@ -1024,3 +1024,9 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
   - Beide Einspruch-Knöpfe stehen nebeneinander.
 - Unit-Tests in `tests/unit/vocab/w7.test.ts`. Kommentar im Faden beantwortet und erledigt.
 - **Live** `JLL8…` v102 `1794083815-25a8` (Emrahs „A: Direkt live“), Rückweg v101 `1794061208-82dc`. Volle Prüfung vorher: 7677 Unit grün; E2E 1035 grün, 4 rot → einzeln alle grün (Wackler unter Last: c1xErr:53, hint:115, r6aFx:155, wortschatz:248).
+
+## 08.11.2026 – Zwei Grammatik-Kommentare
+- „Passt die Erläuterung zu dieser Übung“ (pp.reported, „The recruiter told us that the offer will be ready the following week.“): Die Karte „Regel“ zeigte bei richtiger Antwort die erste Falle des Themas („… the film had already started“). Jetzt zeigt `RuleSide` Name, Form, Gebrauch, Falle und Signalwörter des Aufgaben-Musters (Commit 9fea4c61, Test `tests/unit/ruleSidePattern.test.ts`).
+- „Verstehe ich net die Aufgabe“ (pp.first-time, „it was the first time she ___ (close) a major deal alone“): Die Begründung sagte, „she closed“ höre man auch, obwohl falsch gewertet. Neue Texte vom english-teacher: Begründung, Zeile für „closed“, Muster-Name/Form/Gebrauch mit „is → has, was → had“ (Commit 697cf78a). „closed“ bleibt ein Fehler.
+- Offen: Emrahs gespeicherter Fehlereintrag (`grammar/past-perfect`.errors) trägt noch den alten `expl`. Ersetzen nur mit seinem OK.
+- **Live** `JLL8…` v103 `1794164803-2e10` (Emrahs „A: Direkt live“), Rückweg v102 `1794083815-25a8`. Volle Prüfung: 7679 Unit grün; E2E 1037 grün, 2 rot → einzeln grün (c1xFrame:139, settings:62).

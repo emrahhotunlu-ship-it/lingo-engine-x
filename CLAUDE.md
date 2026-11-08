@@ -92,6 +92,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **Neue Wörter sofort in der Wörter-App** (Lehrer-Feedback, „Merken“ … ohne Neuladen) **live** `JLL8…` v100 `1793975925-edca` (06.11.2026, Emrahs „Direkt live“, Rückweg v99 `1793952019-4f9a`, davor v98 `1793920483-b280`)
   - [x] **Großpaket T Touch-Bedienung + Tageszeit** (Tastatur nur auf Tipp, eine Rückmeldekarte, „Mehr zum Wort“, Übungssätze nie als Wort-Satz, echte Zeit + Zeitdeckel Wörter, Schreibaufgabe nach Anwenden, `npm run test:ui`) **live** `JLL8…` v101 `1794061208-82dc` (07.11.2026, Emrahs „Live nehmen“, Rückweg v100 `1793975925-edca`; Test-Link v92 `1794057978-bc2a`)
   - [x] **Wörter ohne Satz: gleichwertige Übersetzung zählt** (Live-Kommentar „robuster“ → „more robust“; Wörterbuch-Bedeutung, Claude-„passt auch“, beide Einspruch-Knöpfe) **live** `JLL8…` v102 `1794083815-25a8` (07.11.2026, Emrahs „Direkt live“, Rückweg v101 `1794061208-82dc`; ohne Test-Link)
+  - [x] **Grammatik-Erklärungen passen zur Aufgabe** (Karte „Regel“ folgt dem Muster; „It was the first time“: is → has, was → had) **live** `JLL8…` v103 `1794164803-2e10` (08.11.2026, Emrahs „Direkt live“, Rückweg v102 `1794083815-25a8`; ohne Test-Link)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
