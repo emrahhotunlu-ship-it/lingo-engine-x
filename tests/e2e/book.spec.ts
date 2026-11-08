@@ -57,7 +57,7 @@ test('Klausur: ohne Rückmeldung je Aufgabe, am Ende Note und Fehler mit Erklär
     // Die ersten 4 falsch, der Rest richtig (wo die Lösung bekannt ist).
     const wrong = i < 4;
     if (type === 'mc' || type === 'meaning' || type === 'find') {
-      await answerGrammarBlind(page, wrong);
+      await answerGrammarBlind(page);
     } else {
       await typeInGap(page, wrong ? 'zzz' : (solve.full?.(await item.innerText())?.answer ?? solveShown(await item.innerText()) ?? 'zzz'));
       await page.getByTestId('check').click();
@@ -80,7 +80,7 @@ function solveShown(text: string): string | null {
 }
 
 /** Auswahl, Bedeutungspaar oder Fehler finden in der Klausur: irgendeine Antwort geben (ohne auf ein Urteil zu warten). */
-async function answerGrammarBlind(page: Page, _wrong: boolean): Promise<void> {
+async function answerGrammarBlind(page: Page): Promise<void> {
   const item = page.getByTestId('gr-item');
   const type = (await item.getAttribute('data-type')) ?? '';
   if (type === 'find') {
