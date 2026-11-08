@@ -848,3 +848,12 @@ Emrah: „Ich habe als Tageszeit 25 min, aber nur der erste Teil dauert schon 30
   - Übungsarten Wörter: **Hören + Schreiben (Diktat), Spiele (Zuordnen, Schnellrunde, Karteikarten), Wortwissen (Wortfamilie, Wortpartner, Synonyme/Gegenteile, beide Richtungen)**. Sprechen nicht gewählt.
   - Funktionen: **Wortliste (Suche, Filter, eigene Wörter, Wortseite), Themen-Stapel mit Fortschritt, Statistik + Prognose, Runde selbst wählen (neu, Wiederholung, schwierig, 5 Minuten, Thema)**.
   - Grammatik: **Buch-Kapitel (wie English Grammar in Use), viele Übungsarten, Fehlerheft**. Einstufung/Tests nicht gewählt.
+
+## 08.11.2026 abends – Jetzige App verbessern statt Neubau; Erklärungen, Wörter-Tempo, Grammatik-Buch (Emrah)
+- Emrah zur Neubau-Vorschau: „Die jetzige App ist besser … Vergiss es“. Die bestehende App bleibt die Grundlage; `docs/umbau/neustart/plan.md` ist nur noch Ideensammlung.
+- **Erklärungen A:** Bei falscher Antwort steht „Du: X → richtig: Y“, EIN Satz, warum genau diese Antwort nicht passt, und „Gleich nochmal“ mit einem neuen Satz. Die allgemeine Regel kommt nur auf Tipp. Zuerst Grammatik (E1, Claude-Vorlage `mistake-why@1`), danach Wörter.
+- Emrah: „Bitte alles verbessern? Auch Pace Vokabel learning. Gezielte Grammatik Übungen wie im Buch wo man dann auch ne Klausur schreibt.“ Auswahl im Fenster:
+  - **Wörter-Tempo A:** 10 neue Wörter pro Tag, auch an Tagen mit vielen Wiederholungen. Wörter bekommen dafür mehr Tageszeit (etwa 15–20 statt 10 Minuten).
+  - **Buch A:** Grammatik-Buch mit Kapitel → Lektion → Regel-Seite, Übung A (Form bilden), B (Unterscheiden), C (Umformen/Fehler), Lektionstest. Am Kapitelende eine Klausur. Du wählst selbst; der Tagesplan schlägt die nächste Seite vor, Fehler-Wiederholung läuft nebenbei weiter.
+  - **Klausur A:** etwa 20 Aufgaben, ohne Hilfe und ohne Claude, Bewertung als Schulnote 1–6 plus Prozent. Bestanden ab Note 3 (70 %). Schwache Lektionen werden zum Nachüben markiert; danach jeder Fehler mit Erklärung.
+  - **Testen A:** Die Fehler-Karte (E1) kommt sofort auf einen eigenen Test-Link. Das große Paket folgt mit eigenem Test-Link.
