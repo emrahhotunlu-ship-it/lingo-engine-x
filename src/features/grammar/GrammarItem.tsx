@@ -1478,7 +1478,7 @@ function LegacyGrammarItem({
         primary={primary}
         feedback={feedback}
         // D3 V-UEBUNG (Vorschau L3): nach dem Prüfen steht am Laptop die Karte „Regel“ in der Spalte (vorher nie, s. o.).
-        side={stepsSide ?? (fb && hasRule(task.topic, lang) ? <RuleSide topic={task.topic} onWhole={() => setSheet(true)} /> : null)}
+        side={stepsSide ?? (fb && (!!pattern || hasRule(task.topic, lang)) ? <RuleSide topic={task.topic} pattern={pattern} onWhole={() => setSheet(true)} /> : null)}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
       <ReportSheet

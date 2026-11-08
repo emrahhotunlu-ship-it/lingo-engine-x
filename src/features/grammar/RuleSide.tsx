@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { ExplainExample } from '../../domain/explain/types';
+import type { Pattern } from '../../domain/grammar/patternTypes';
 import { ruleOf } from '../../domain/grammar/rules';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
@@ -15,17 +16,26 @@ export function hasRule(topic: string, lang: 'de' | 'en'): boolean {
   return !!rule && (!!rule.core || rule.traps.length > 0);
 }
 
-export function RuleSide({ topic, onWhole }: { topic: string; onWhole: () => void }) {
+export function RuleSide({ topic, pattern = null, onWhole }: { topic: string; pattern?: Pattern | null; onWhole: () => void }) {
   const { t, lang } = useT();
   const rule = ruleOf(topic, lang);
-  if (!rule || (!rule.core && !rule.traps.length)) return null;
-  const trap = rule.traps[0] ?? null;
-  const signals = rule.signals.slice(0, 5).map((s) => s.signal);
+  if (!pattern && (!rule || (!rule.core && !rule.traps.length))) return null;
+  // Emrah 08.11.2026 („Passt die Erläuterung zu dieser Übung“): bei „said … will → would“ stand die erste Falle des ganzen Themas
+  // (*the film had already started*). Hat die Aufgabe ein Muster, zeigt die Karte dessen Regel, Falle und Signalwörter.
+  const core = pattern ? pattern.use[lang] : (rule?.core ?? '');
+  const trap = pattern ? pattern.trap : (rule?.traps[0] ?? null);
+  const signals = (pattern ? pattern.signals : (rule?.signals ?? []).map((s) => s.signal)).slice(0, 5);
   return (
     <div className="lx-vu-card" data-testid="rule-side">
-      {rule.core && (
+      {pattern && (
+        <p className="lx-t-support m-0 font-semibold" data-testid="rule-side-pattern">
+          {pattern.name[lang]}
+          <span className="font-normal text-muted"> · {pattern.form[lang]}</span>
+        </p>
+      )}
+      {core && (
         <p className="lx-t-support m-0" lang={lang}>
-          {rule.core}
+          {core}
         </p>
       )}
       {trap && (
