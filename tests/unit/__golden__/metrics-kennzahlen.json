@@ -10,7 +10,7 @@
    ]
   },
   "seed 2026-09-14 halb": {
-   "min": "20",
+   "min": "18",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.5,0,0 closed=false",
@@ -18,7 +18,7 @@
    ]
   },
   "seed 2026-09-14 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -42,7 +42,7 @@
    ]
   },
   "seed 2026-09-15 halb": {
-   "min": "20",
+   "min": "18",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.5,0,0 closed=false",
@@ -50,7 +50,7 @@
    ]
   },
   "seed 2026-09-15 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -74,7 +74,7 @@
    ]
   },
   "seed 2026-09-16 halb": {
-   "min": "21",
+   "min": "19",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.4,0,0 closed=false",
@@ -82,7 +82,7 @@
    ]
   },
   "seed 2026-09-16 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -106,7 +106,7 @@
    ]
   },
   "seed 2026-09-17 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.38,0,0 closed=false",
@@ -114,7 +114,7 @@
    ]
   },
   "seed 2026-09-17 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -138,7 +138,7 @@
    ]
   },
   "seed 2026-09-18 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.35,0,0 closed=false",
@@ -146,7 +146,7 @@
    ]
   },
   "seed 2026-09-18 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -170,7 +170,7 @@
    ]
   },
   "seed 2026-09-19 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.36,0,0 closed=false",
@@ -178,7 +178,7 @@
    ]
   },
   "seed 2026-09-19 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -194,7 +194,7 @@
    ]
   },
   "seed 2026-09-20 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -234,7 +234,7 @@
    ]
   },
   "seed 2026-09-21 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -242,7 +242,7 @@
    ]
   },
   "seed 2026-09-21 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -266,7 +266,7 @@
    ]
   },
   "seed 2026-09-22 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -274,7 +274,7 @@
    ]
   },
   "seed 2026-09-22 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -298,7 +298,7 @@
    ]
   },
   "seed 2026-09-23 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -306,7 +306,7 @@
    ]
   },
   "seed 2026-09-23 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -331,7 +331,7 @@
    ]
   },
   "seed 2026-09-24 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -340,7 +340,7 @@
    ]
   },
   "seed 2026-09-24 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -367,7 +367,7 @@
    ]
   },
   "seed 2026-09-25 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -376,7 +376,7 @@
    ]
   },
   "seed 2026-09-25 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -403,7 +403,7 @@
    ]
   },
   "seed 2026-09-26 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -412,7 +412,7 @@
    ]
   },
   "seed 2026-09-26 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -430,7 +430,7 @@
    ]
   },
   "seed 2026-09-27 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -476,7 +476,7 @@
    ]
   },
   "seed 2026-09-28 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -486,7 +486,7 @@
    ]
   },
   "seed 2026-09-28 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -516,7 +516,7 @@
    ]
   },
   "seed 2026-09-29 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -526,7 +526,7 @@
    ]
   },
   "seed 2026-09-29 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -556,7 +556,7 @@
    ]
   },
   "seed 2026-09-30 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -566,7 +566,7 @@
    ]
   },
   "seed 2026-09-30 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -596,7 +596,7 @@
    ]
   },
   "seed 2026-10-01 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -606,7 +606,7 @@
    ]
   },
   "seed 2026-10-01 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -636,7 +636,7 @@
    ]
   },
   "seed 2026-10-02 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -646,7 +646,7 @@
    ]
   },
   "seed 2026-10-02 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -676,7 +676,7 @@
    ]
   },
   "seed 2026-10-03 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -686,7 +686,7 @@
    ]
   },
   "seed 2026-10-03 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -706,7 +706,7 @@
    ]
   },
   "seed 2026-10-04 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -1042,7 +1042,7 @@
    ]
   },
   "gross 2026-09-14 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -1050,7 +1050,7 @@
    ]
   },
   "gross 2026-09-14 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1074,7 +1074,7 @@
    ]
   },
   "gross 2026-09-15 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -1082,7 +1082,7 @@
    ]
   },
   "gross 2026-09-15 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1106,7 +1106,7 @@
    ]
   },
   "gross 2026-09-16 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1114,7 +1114,7 @@
    ]
   },
   "gross 2026-09-16 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1138,7 +1138,7 @@
    ]
   },
   "gross 2026-09-17 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1146,7 +1146,7 @@
    ]
   },
   "gross 2026-09-17 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1170,7 +1170,7 @@
    ]
   },
   "gross 2026-09-18 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1178,7 +1178,7 @@
    ]
   },
   "gross 2026-09-18 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1202,7 +1202,7 @@
    ]
   },
   "gross 2026-09-19 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1210,7 +1210,7 @@
    ]
   },
   "gross 2026-09-19 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1226,7 +1226,7 @@
    ]
   },
   "gross 2026-09-20 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -1266,7 +1266,7 @@
    ]
   },
   "gross 2026-09-21 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1274,7 +1274,7 @@
    ]
   },
   "gross 2026-09-21 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1298,7 +1298,7 @@
    ]
   },
   "gross 2026-09-22 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1306,7 +1306,7 @@
    ]
   },
   "gross 2026-09-22 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1330,7 +1330,7 @@
    ]
   },
   "gross 2026-09-23 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1338,7 +1338,7 @@
    ]
   },
   "gross 2026-09-23 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1363,7 +1363,7 @@
    ]
   },
   "gross 2026-09-24 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1372,7 +1372,7 @@
    ]
   },
   "gross 2026-09-24 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1399,7 +1399,7 @@
    ]
   },
   "gross 2026-09-25 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1408,7 +1408,7 @@
    ]
   },
   "gross 2026-09-25 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1435,7 +1435,7 @@
    ]
   },
   "gross 2026-09-26 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1444,7 +1444,7 @@
    ]
   },
   "gross 2026-09-26 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1462,7 +1462,7 @@
    ]
   },
   "gross 2026-09-27 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -1508,7 +1508,7 @@
    ]
   },
   "gross 2026-09-28 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1518,7 +1518,7 @@
    ]
   },
   "gross 2026-09-28 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1548,7 +1548,7 @@
    ]
   },
   "gross 2026-09-29 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1558,7 +1558,7 @@
    ]
   },
   "gross 2026-09-29 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1588,7 +1588,7 @@
    ]
   },
   "gross 2026-09-30 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1598,7 +1598,7 @@
    ]
   },
   "gross 2026-09-30 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1628,7 +1628,7 @@
    ]
   },
   "gross 2026-10-01 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1638,7 +1638,7 @@
    ]
   },
   "gross 2026-10-01 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1668,7 +1668,7 @@
    ]
   },
   "gross 2026-10-02 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1678,7 +1678,7 @@
    ]
   },
   "gross 2026-10-02 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1708,7 +1708,7 @@
    ]
   },
   "gross 2026-10-03 halb": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -1718,7 +1718,7 @@
    ]
   },
   "gross 2026-10-03 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -1738,7 +1738,7 @@
    ]
   },
   "gross 2026-10-04 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2082,7 +2082,7 @@
    ]
   },
   "leer 2026-09-14 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2114,7 +2114,7 @@
    ]
   },
   "leer 2026-09-15 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2146,7 +2146,7 @@
    ]
   },
   "leer 2026-09-16 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2178,7 +2178,7 @@
    ]
   },
   "leer 2026-09-17 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2210,7 +2210,7 @@
    ]
   },
   "leer 2026-09-18 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2242,7 +2242,7 @@
    ]
   },
   "leer 2026-09-19 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2258,7 +2258,7 @@
    ]
   },
   "leer 2026-09-20 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2266,7 +2266,7 @@
    ]
   },
   "leer 2026-09-20 halb": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2306,7 +2306,7 @@
    ]
   },
   "leer 2026-09-21 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2338,7 +2338,7 @@
    ]
   },
   "leer 2026-09-22 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2370,7 +2370,7 @@
    ]
   },
   "leer 2026-09-23 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2402,7 +2402,7 @@
    ]
   },
   "leer 2026-09-24 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2434,7 +2434,7 @@
    ]
   },
   "leer 2026-09-25 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2466,7 +2466,7 @@
    ]
   },
   "leer 2026-09-26 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2482,7 +2482,7 @@
    ]
   },
   "leer 2026-09-27 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2490,7 +2490,7 @@
    ]
   },
   "leer 2026-09-27 halb": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2530,7 +2530,7 @@
    ]
   },
   "leer 2026-09-28 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2562,7 +2562,7 @@
    ]
   },
   "leer 2026-09-29 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2594,7 +2594,7 @@
    ]
   },
   "leer 2026-09-30 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2626,7 +2626,7 @@
    ]
   },
   "leer 2026-10-01 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2658,7 +2658,7 @@
    ]
   },
   "leer 2026-10-02 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2690,7 +2690,7 @@
    ]
   },
   "leer 2026-10-03 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2706,7 +2706,7 @@
    ]
   },
   "leer 2026-10-04 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2714,7 +2714,7 @@
    ]
   },
   "leer 2026-10-04 halb": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2754,7 +2754,7 @@
    ]
   },
   "leer 2026-10-05 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2786,7 +2786,7 @@
    ]
   },
   "leer 2026-10-06 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2818,7 +2818,7 @@
    ]
   },
   "leer 2026-10-07 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2850,7 +2850,7 @@
    ]
   },
   "leer 2026-10-08 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2882,7 +2882,7 @@
    ]
   },
   "leer 2026-10-09 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2914,7 +2914,7 @@
    ]
   },
   "leer 2026-10-10 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -2930,7 +2930,7 @@
    ]
   },
   "leer 2026-10-11 leer": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2938,7 +2938,7 @@
    ]
   },
   "leer 2026-10-11 halb": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -2978,7 +2978,7 @@
    ]
   },
   "leer 2026-10-12 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -3010,7 +3010,7 @@
    ]
   },
   "leer 2026-10-13 zwei": {
-   "min": "5",
+   "min": "3",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=2 fills=1,1,0 closed=false",
@@ -3061,7 +3061,7 @@
    ]
   },
   "seed 2026-10-04 leer en": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -3277,7 +3277,7 @@
    ],
    "vocab": [
     "ws-counts total=90 new=5 learning=64 due=21",
-    "ws-behind n=74 due=85 planned=66",
+    "ws-behind n=74 due=85 planned=84",
     "ws-goal-now now=6415",
     "ws-new-left n=2 cap=5"
    ],
@@ -3374,7 +3374,7 @@
    ],
    "vocab": [
     "ws-counts total=105 new=5 learning=65 due=35",
-    "ws-behind n=98 due=100 planned=67",
+    "ws-behind n=98 due=100 planned=94",
     "ws-goal-now now=6415",
     "ws-new-left n=2 cap=5"
    ],
@@ -3422,7 +3422,7 @@
    ],
    "vocab": [
     "ws-counts total=110 new=5 learning=65 due=40",
-    "ws-behind n=103 due=105 planned=68",
+    "ws-behind n=103 due=105 planned=93",
     "ws-goal-now now=6415",
     "ws-new-left n=2 cap=5"
    ],
@@ -3470,7 +3470,7 @@
    ],
    "vocab": [
     "ws-counts total=120 new=5 learning=65 due=50",
-    "ws-behind n=114 due=115 planned=68",
+    "ws-behind n=114 due=115 planned=92",
     "ws-goal-now now=6415",
     "ws-new-left n=2 cap=5"
    ],
@@ -3760,7 +3760,7 @@
    ],
    "vocab": [
     "ws-counts total=299 new=0 learning=239 due=60",
-    "ws-behind n=214 due=299 planned=75",
+    "ws-behind n=214 due=299 planned=112",
     "ws-goal-now now=6550",
     "ws-new-left n=0 cap=0",
     "ws-evening n=8"
@@ -3858,7 +3858,7 @@
    ],
    "vocab": [
     "ws-counts total=594 new=5 learning=434 due=155",
-    "ws-behind n=489 due=589 planned=68",
+    "ws-behind n=489 due=589 planned=106",
     "ws-goal-now now=6550",
     "ws-new-left n=2 cap=5"
    ],
@@ -3906,7 +3906,7 @@
    ],
    "vocab": [
     "ws-counts total=872 new=5 learning=597 due=270",
-    "ws-behind n=779 due=867 planned=68",
+    "ws-behind n=779 due=867 planned=106",
     "ws-goal-now now=6550",
     "ws-new-left n=2 cap=5"
    ],
@@ -3954,7 +3954,7 @@
    ],
    "vocab": [
     "ws-counts total=1028 new=5 learning=649 due=374",
-    "ws-behind n=982 due=1023 planned=68",
+    "ws-behind n=982 due=1023 planned=106",
     "ws-goal-now now=6550",
     "ws-new-left n=2 cap=5"
    ],
@@ -4051,7 +4051,7 @@
    ],
    "vocab": [
     "ws-counts total=1112 new=5 learning=650 due=457",
-    "ws-behind n=1084 due=1107 planned=68",
+    "ws-behind n=1084 due=1107 planned=106",
     "ws-goal-now now=6550",
     "ws-new-left n=2 cap=5"
    ],
@@ -4099,7 +4099,7 @@
    ],
    "vocab": [
     "ws-counts total=1172 new=5 learning=650 due=517",
-    "ws-behind n=1148 due=1167 planned=68",
+    "ws-behind n=1148 due=1167 planned=106",
     "ws-goal-now now=6550",
     "ws-new-left n=2 cap=5"
    ],
@@ -4147,7 +4147,7 @@
    ],
    "vocab": [
     "ws-counts total=1212 new=5 learning=650 due=557",
-    "ws-behind n=1198 due=1207 planned=68",
+    "ws-behind n=1198 due=1207 planned=106",
     "ws-goal-now now=6550",
     "ws-new-left n=2 cap=5"
    ],
@@ -5161,7 +5161,7 @@
    "streak": "6 1 6"
   },
   "seed 2026-09-14 fast": {
-   "min": "20",
+   "min": "18",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.5,0,0 closed=false",
@@ -5202,7 +5202,7 @@
    "streak": "7 2 6"
   },
   "seed 2026-09-15 fast": {
-   "min": "20",
+   "min": "18",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.5,0,0 closed=false",
@@ -5243,7 +5243,7 @@
    "streak": "8 3 6"
   },
   "seed 2026-09-16 fast": {
-   "min": "17",
+   "min": "13",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.8,0,0 closed=false",
@@ -5284,7 +5284,7 @@
    "streak": "9 4 6"
   },
   "seed 2026-09-17 fast": {
-   "min": "17",
+   "min": "12",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.88,0,0 closed=false",
@@ -5325,7 +5325,7 @@
    "streak": "10 5 6"
   },
   "seed 2026-09-18 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.94,0,0 closed=false",
@@ -5366,7 +5366,7 @@
    "streak": "11 6 6"
   },
   "seed 2026-09-19 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5407,7 +5407,7 @@
    "streak": "12 7"
   },
   "seed 2026-09-20 fast": {
-   "min": "16",
+   "min": "13",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5448,7 +5448,7 @@
    "streak": "12"
   },
   "seed 2026-09-21 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5489,13 +5489,13 @@
    "streak": null
   },
   "seed 2026-09-22 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "63 64",
+   "rev": "72 73",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5530,13 +5530,13 @@
    "streak": null
   },
   "seed 2026-09-23 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "65 66",
+   "rev": "83 84",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5571,14 +5571,14 @@
    "streak": null
   },
   "seed 2026-09-24 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "65 66",
+   "rev": "90 91",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5613,14 +5613,14 @@
    "streak": null
   },
   "seed 2026-09-25 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "66 67",
+   "rev": "94 95",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5655,14 +5655,14 @@
    "streak": null
   },
   "seed 2026-09-26 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "66 67",
+   "rev": "93 94",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5697,14 +5697,14 @@
    "streak": null
   },
   "seed 2026-09-27 fast": {
-   "min": "16",
+   "min": "13",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "67 68",
+   "rev": "93 94",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5739,7 +5739,7 @@
    "streak": null
   },
   "seed 2026-09-28 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5747,7 +5747,7 @@
     "comeback-band band=long",
     "still-there known=104 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "93 94",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5782,7 +5782,7 @@
    "streak": null
   },
   "seed 2026-09-29 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5790,7 +5790,7 @@
     "comeback-band band=long",
     "still-there known=103 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "92 93",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5825,7 +5825,7 @@
    "streak": null
   },
   "seed 2026-09-30 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5833,7 +5833,7 @@
     "comeback-band band=long",
     "still-there known=102 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "92 93",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5868,7 +5868,7 @@
    "streak": null
   },
   "seed 2026-10-01 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5876,7 +5876,7 @@
     "comeback-band band=long",
     "still-there known=101 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "92 93",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5911,7 +5911,7 @@
    "streak": null
   },
   "seed 2026-10-02 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5919,7 +5919,7 @@
     "comeback-band band=long",
     "still-there known=100 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "91 92",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5954,7 +5954,7 @@
    "streak": null
   },
   "seed 2026-10-03 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -5962,7 +5962,7 @@
     "comeback-band band=long",
     "still-there known=99 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "90 91",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -5997,7 +5997,7 @@
    "streak": null
   },
   "seed 2026-10-04 fast": {
-   "min": "16",
+   "min": "13",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -6005,7 +6005,7 @@
     "comeback-band band=long",
     "still-there known=99 learned=124"
    ],
-   "rev": "67 68",
+   "rev": "90 91",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6400,13 +6400,13 @@
    "streak": "6 1 6"
   },
   "gross 2026-09-14 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "74 75",
+   "rev": "111 112",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6441,13 +6441,13 @@
    "streak": "9 4 6"
   },
   "gross 2026-09-17 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "67 68",
+   "rev": "105 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6482,13 +6482,13 @@
    "streak": "12 7"
   },
   "gross 2026-09-20 fast": {
-   "min": "16",
+   "min": "13",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "67 68",
+   "rev": "105 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6523,13 +6523,13 @@
    "streak": null
   },
   "gross 2026-09-23 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "67 68",
+   "rev": "105 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6564,14 +6564,14 @@
    "streak": null
   },
   "gross 2026-09-26 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "67 68",
+   "rev": "105 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6606,7 +6606,7 @@
    "streak": null
   },
   "gross 2026-09-29 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -6614,7 +6614,7 @@
     "comeback-band band=long",
     "still-there known=991 learned=1240"
    ],
-   "rev": "67 68",
+   "rev": "105 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6649,7 +6649,7 @@
    "streak": null
   },
   "gross 2026-10-02 fast": {
-   "min": "16",
+   "min": "11",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -6657,7 +6657,7 @@
     "comeback-band band=long",
     "still-there known=970 learned=1240"
    ],
-   "rev": "67 68",
+   "rev": "105 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6818,7 +6818,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6845,7 +6845,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6866,13 +6866,13 @@
    "streak": null
   },
   "leer 2026-09-20 fast": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6899,7 +6899,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6926,7 +6926,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6953,7 +6953,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -6980,7 +6980,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7007,7 +7007,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7034,7 +7034,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7055,13 +7055,13 @@
    "streak": null
   },
   "leer 2026-10-11 fast": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7074,7 +7074,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "2",
+   "rev": "",
    "stand": "124 1 0 7",
    "truth": null,
    "goal": null,
@@ -7101,7 +7101,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "22",
+   "rev": "",
    "stand": "124 1 0 7",
    "truth": null,
    "goal": null,
@@ -7129,7 +7129,7 @@
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "66",
+   "rev": "",
    "stand": "124 1 0 7",
    "truth": null,
    "goal": null,
@@ -7158,7 +7158,7 @@
     "comeback-band band=long",
     "still-there known=103 learned=124"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": "124 1 0 7",
    "truth": null,
    "goal": null,
@@ -7179,7 +7179,7 @@
    "streak": null
   },
   "seed 2026-10-04 leer breit": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -7187,7 +7187,7 @@
     "comeback-band band=long",
     "still-there known=99 learned=124"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": "124 1 0 7",
    "truth": null,
    "goal": null,
@@ -7240,20 +7240,20 @@
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "23 68",
+   "rev": "36 106",
    "stand": "1.240 1 0 7",
    "truth": null,
    "goal": null,
    "streak": "12 7"
   },
   "leer 2026-09-20 leer breit": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": "1 0 7",
    "truth": null,
    "goal": null,
@@ -7266,14 +7266,14 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "2",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": "7 1 6"
   },
   "seed 2026-09-14 halb 02:30": {
-   "min": "20",
+   "min": "18",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.5,0,0 closed=false",
@@ -7292,14 +7292,14 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "8",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": "10 4 6"
   },
   "seed 2026-09-17 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.38,0,0 closed=false",
@@ -7312,13 +7312,13 @@
    "streak": "10 4 6"
   },
   "seed 2026-09-20 leer 02:30": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "46",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7344,20 +7344,20 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "66",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "seed 2026-09-23 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "22 66",
+   "rev": "28 84",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7371,21 +7371,21 @@
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "67",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "seed 2026-09-26 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "23 67",
+   "rev": "32 94",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7400,14 +7400,14 @@
     "comeback-band band=long",
     "still-there known=102 learned=124"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "seed 2026-09-29 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -7415,7 +7415,7 @@
     "comeback-band band=long",
     "still-there known=102 learned=124"
    ],
-   "rev": "23 68",
+   "rev": "31 93",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7430,14 +7430,14 @@
     "comeback-band band=long",
     "still-there known=99 learned=124"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "seed 2026-10-02 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -7445,7 +7445,7 @@
     "comeback-band band=long",
     "still-there known=99 learned=124"
    ],
-   "rev": "23 68",
+   "rev": "31 91",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7530,20 +7530,20 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "75",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": "7 1 6"
   },
   "gross 2026-09-14 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "25 75",
+   "rev": "38 112",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7556,20 +7556,20 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": "12 6 6"
   },
   "gross 2026-09-19 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "23 68",
+   "rev": "36 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7583,21 +7583,21 @@
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "gross 2026-09-24 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
     "today-status status=open done=0 total=3",
     "comeback-band band=short"
    ],
-   "rev": "23 68",
+   "rev": "36 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7612,14 +7612,14 @@
     "comeback-band band=long",
     "still-there known=984 learned=1240"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "gross 2026-09-29 halb 02:30": {
-   "min": "22",
+   "min": "20",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -7627,14 +7627,14 @@
     "comeback-band band=long",
     "still-there known=984 learned=1240"
    ],
-   "rev": "23 68",
+   "rev": "36 106",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "gross 2026-10-04 leer 02:30": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -7642,7 +7642,7 @@
     "comeback-band band=long",
     "still-there known=953 learned=1240"
    ],
-   "rev": "68",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7657,7 +7657,7 @@
     "comeback-band band=long",
     "still-there known=953 learned=1240"
    ],
-   "rev": "23 68",
+   "rev": "36 106",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7694,7 +7694,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7707,7 +7707,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7720,7 +7720,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7733,7 +7733,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7746,7 +7746,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7759,7 +7759,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7772,7 +7772,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7785,33 +7785,33 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "leer 2026-10-04 leer 02:30": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
    "streak": null
   },
   "leer 2026-10-04 halb 02:30": {
-   "min": "25",
+   "min": "27",
    "restart": null,
    "k": [
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7824,7 +7824,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,
@@ -7837,7 +7837,7 @@
     "today-ring segments=3 filled=0 fills=0,0,0 closed=false",
     "today-status status=open done=0 total=3"
    ],
-   "rev": "5",
+   "rev": "",
    "stand": null,
    "truth": null,
    "goal": null,

@@ -12,6 +12,7 @@ import { toTask } from '../c1x/runtime';
 import { errorsByPat, patInfos } from './slotInput';
 import { slotPlan } from './slotPlan';
 import { hash32, mulberry32, shuffle } from '../random';
+import { bookTasks, bookToTask } from './bookContent';
 import { lemmaOf } from '../srs/context';
 import { topicP } from './bkt';
 import { dueErrors, type ErrorEntry } from './errors';
@@ -205,6 +206,14 @@ export function allSeedTasks(): readonly GrammarTask[] {
       out.push(t);
     }
   }
+  // Grammatik-Buch (Emrah 08.11.2026): Übung A (Lücke) und B (Auswahl) aller 47 Themen auch in den Tagesrunden.
+  for (const b of bookTasks()) {
+    const t = bookToTask(b);
+    if (!keys.has(`${t.topic}|${t.key}`)) {
+      keys.add(`${t.topic}|${t.key}`);
+      out.push(t);
+    }
+  }
   allCache = out;
   return out;
 }
@@ -214,15 +223,18 @@ export function allSeedTasks(): readonly GrammarTask[] {
  * `touch`: nie ein ganzer Satz (kein `correct`, keine Ganzsatz-Umformung), `keys` darf sie.
  */
 export function wantTypes(p: number, profile: InputProfile = 'keys'): GrammarTaskType[] {
+  // Emrah 08.11.2026 („Sau schwer – woher soll ich das wissen?“, Schlüsselwort-Umformung bei p > 0,7 fast nur noch kwt): Lücke und Auswahl
+  // (seit dem Grammatik-Buch für alle 47 Themen) zuerst, Fehlersätze danach, Umformungen nur als letzte Wunschform.
+  // Die Stufen bleiben Schwierigkeitsstufen (Tutor-Engine „freier“/„gestützter“): unsicher erkennen, mittel ergänzen und finden, sicher selbst bauen.
   if (p < 0.4) return ['meaning', 'mc', 'gap'];
-  if (p <= 0.7) return ['gap', 'find', 'kwt'];
-  return profile === 'touch' ? ['kwt', 'find'] : ['correct', 'kwt', 'find'];
+  if (p <= 0.7) return ['gap', 'find', 'mc'];
+  return profile === 'touch' ? ['find', 'gap', 'kwt'] : ['correct', 'find', 'kwt'];
 }
 
 /** Rückfall, wenn die gewünschten Formen fehlen (ersetzt `anySeed` ohne Typfilter): Reihenfolge nach Profil. */
 const FALLBACK: Readonly<Record<InputProfile, readonly GrammarTaskType[]>> = {
-  touch: ['kwt', 'find', 'gap', 'mc', 'meaning'],
-  keys: ['correct', 'transform', 'kwt', 'find', 'gap', 'mc', 'meaning'],
+  touch: ['find', 'gap', 'mc', 'kwt', 'meaning'],
+  keys: ['correct', 'transform', 'find', 'gap', 'mc', 'kwt', 'meaning'],
 };
 
 /** Stufe mit Hilfe (Platzhalter von Anfang an sichtbar): p < .40. */

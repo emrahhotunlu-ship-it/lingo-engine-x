@@ -48,7 +48,10 @@ function findings(): Record<string, string[]> {
   const add = (check: string, id: string) => (out[check] ??= new Set()).add(id);
 
   // 1. Grammatik-Aufgaben durch das Tor (lintTask + Eindeutigkeit + Einfehler + Denglisch)
-  for (const t of tasks) for (const i of gateTask(t)) add(`grammar:${i}`, taskId(t));
+  // Grammatik-Buch (08.11.2026): `foreign_signal` ist bei den Lehrer-geprüften Buch-Aufgaben gewollt (Übung B und Lücken üben gerade den
+  // Kontrast, z. B. „for two days last month“ → Past Simple). Diese Fälle stehen fest in tests/unit/grammarBook.test.ts (Liste darf nur schrumpfen).
+  const isBook = (t: { ref: string | null }) => !!t.ref?.startsWith('content/grammar/book#');
+  for (const t of tasks) for (const i of gateTask(t)) if (!(isBook(t) && i === 'lint:foreign_signal')) add(`grammar:${i}`, taskId(t));
 
   // 2. c1x-Fehlersätze: Einfehler-Regel (Satz gegen Satz mit erster Korrektur)
   for (const it of c1x) {

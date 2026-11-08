@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { bookChapters, bookTasks, examGrade, examTasks, EXAM_N, LESSON_TEST_N, pageTasks, weakTopics } from '../../src/domain/grammar/book';
 import { patternsOf, whyFor } from '../../src/domain/grammar/patterns';
 import { checkGrammar } from '../../src/domain/grammar/check';
+import { lintTask } from '../../src/domain/tutor/lintTask';
+import { bookToTask } from '../../src/domain/grammar/bookContent';
 
 // Grammatik-Buch (Emrah 08.11.2026): Inhalte A/B, Seiten, Lektionstest, Klausur, Note.
 
@@ -38,6 +40,17 @@ describe('Buch-Inhalte (content/grammar/book.json)', () => {
   it('Auswahl: jeder Ablenker trifft genau seine Erklärung (für die Fehler-Karte ohne Claude)', () => {
     for (const t of chapters.flatMap((c) => c.topics).flatMap((tp) => pageTasks(tp, 'B')))
       for (const o of (t.options ?? []).filter((x) => x !== t.answer)) expect(whyFor(t, { given: o, picked: o }).rule?.opt, `${t.ref} ${o}`).toBe(o);
+  });
+});
+
+describe('Qualitätstor für Buch-Aufgaben', () => {
+  // Signalwort eines Nachbarmusters im Satz: hier gewollt (Kontrast), von Lehrern geprüft. Die Liste darf nur kleiner werden.
+  const FOREIGN_OK = ['psp-a1', 'pc-a2', 'pc-a3', 'pc-a6', 'ff-a2', 'fpc-a6', 'tc-a5', 'cn-a5', 'mc-a1', 'mc-a5', 'pv-a1', 'pv-a5', 'rc-a3', 'np-a5', 'cmp-a4'];
+  it('foreign_signal nur bei den geprüften Kontrast-Sätzen', () => {
+    const hits = bookTasks()
+      .filter((b) => lintTask(bookToTask(b)).includes('foreign_signal'))
+      .map((b) => b.id);
+    for (const id of hits) expect(FOREIGN_OK, id).toContain(id);
   });
 });
 

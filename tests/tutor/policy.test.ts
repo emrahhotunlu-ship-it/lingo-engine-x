@@ -229,11 +229,11 @@ describe('decideMove', () => {
 describe('Formstufen', () => {
   it('levelOf und formsFor mit Verschiebung (geklemmt)', () => {
     expect([levelOf(0.1), levelOf(0.4), levelOf(0.7), levelOf(0.71)]).toEqual([0, 1, 1, 2]);
-    expect(formsFor(0.5, 0)).toEqual(['gap', 'find', 'kwt']);
-    expect(formsFor(0.5, 1)).toEqual(['correct', 'kwt', 'find']);
+    expect(formsFor(0.5, 0)).toEqual(['gap', 'find', 'mc']);
+    expect(formsFor(0.5, 1)).toEqual(['correct', 'find', 'kwt']);
     expect(formsFor(0.5, -1)).toEqual(['meaning', 'mc', 'gap']);
     expect(formsFor(0.1, -2)).toEqual(formsFor(0.1, 0));
-    expect(formsFor(0.9, 5, 'touch')).toEqual(['kwt', 'find']);
+    expect(formsFor(0.9, 5, 'touch')).toEqual(['find', 'gap', 'kwt']);
   });
 });
 

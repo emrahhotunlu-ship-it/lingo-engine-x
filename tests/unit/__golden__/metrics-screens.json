@@ -4,7 +4,7 @@
    "quota left=2 per-day=5"
   ],
   "vocab": {
-   "n": "2 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 3 2 152 25 0 0 0 0 0 6.780 6.337 443 1",
+   "n": "2 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 3 2 152 25 0 0 0 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=2 new=2 learning=0 due=0",
@@ -502,7 +502,7 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "8 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 5 152 25 3 0 0 3 0 6.780 6.337 443 1",
+   "n": "8 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 5 152 25 3 0 0 3 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=8 new=5 learning=3 due=0",
@@ -641,7 +641,7 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "46 2 46 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 37 9 0 37 3 6.780 6.337 443 1",
+   "n": "46 2 46 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 37 9 0 37 3 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=51 new=5 learning=37 due=9",
@@ -781,11 +781,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "85 66 2 66 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 64 21 0 64 9 6.780 6.337 443 1",
+   "n": "85 84 2 84 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 64 21 0 64 9 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=90 new=5 learning=64 due=21",
-    "ws-behind n=74 due=85 planned=66",
+    "ws-behind n=74 due=85 planned=84",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -1276,11 +1276,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "100 67 2 67 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 65 35 0 65 16 6.780 6.337 443 1",
+   "n": "100 94 2 94 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 65 35 0 65 16 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=105 new=5 learning=65 due=35",
-    "ws-behind n=98 due=100 planned=67",
+    "ws-behind n=98 due=100 planned=94",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -1415,11 +1415,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "105 68 2 68 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 65 40 0 65 20 6.780 6.337 443 1",
+   "n": "105 93 2 93 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 65 40 0 65 20 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=110 new=5 learning=65 due=40",
-    "ws-behind n=103 due=105 planned=68",
+    "ws-behind n=103 due=105 planned=93",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -1554,11 +1554,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "115 68 2 68 10 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 65 50 0 65 22 6.780 6.337 443 1",
+   "n": "115 92 2 92 15 1 6.415 8.000 1 4.500 30. 2026 0 1 4.500 2 152 25 65 50 0 65 22 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=120 new=5 learning=65 due=50",
-    "ws-behind n=114 due=115 planned=68",
+    "ws-behind n=114 due=115 planned=92",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -2821,11 +2821,11 @@
    "quota left=0 per-day=5"
   ],
   "vocab": {
-   "n": "299 75 2 75 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 0 8 2 1.430 160 239 60 0 239 23 6.780 6.337 443 1",
+   "n": "299 112 2 112 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 0 8 2 1.430 160 239 60 0 239 23 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=299 new=0 learning=239 due=60",
-    "ws-behind n=214 due=299 planned=75",
+    "ws-behind n=214 due=299 planned=112",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -3320,11 +3320,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "589 68 2 68 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 434 155 0 434 67 6.780 6.337 443 1",
+   "n": "589 106 2 106 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 434 155 0 434 67 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=594 new=5 learning=434 due=155",
-    "ws-behind n=489 due=589 planned=68",
+    "ws-behind n=489 due=589 planned=106",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -3460,11 +3460,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "867 68 2 68 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 597 270 0 597 124 6.780 6.337 443 1",
+   "n": "867 106 2 106 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 597 270 0 597 124 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=872 new=5 learning=597 due=270",
-    "ws-behind n=779 due=867 planned=68",
+    "ws-behind n=779 due=867 planned=106",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -3600,11 +3600,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "1.023 68 2 68 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 649 374 0 649 175 6.780 6.337 443 1",
+   "n": "1.023 106 2 106 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 649 374 0 649 175 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=1028 new=5 learning=649 due=374",
-    "ws-behind n=982 due=1023 planned=68",
+    "ws-behind n=982 due=1023 planned=106",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -4095,11 +4095,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "1.107 68 2 68 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 650 457 0 650 209 6.780 6.337 443 1",
+   "n": "1.107 106 2 106 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 650 457 0 650 209 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=1112 new=5 learning=650 due=457",
-    "ws-behind n=1084 due=1107 planned=68",
+    "ws-behind n=1084 due=1107 planned=106",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -4234,11 +4234,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "1.167 68 2 68 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 650 517 0 650 228 6.780 6.337 443 1",
+   "n": "1.167 106 2 106 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 650 517 0 650 228 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=1172 new=5 learning=650 due=517",
-    "ws-behind n=1148 due=1167 planned=68",
+    "ws-behind n=1148 due=1167 planned=106",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -4373,11 +4373,11 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "1.207 68 2 68 10 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 650 557 0 650 237 6.780 6.337 443 1",
+   "n": "1.207 106 2 106 15 1 6.550 8.000 1 4.500 30. 2026 0 1 4.500 2 1.430 160 650 557 0 650 237 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=1212 new=5 learning=650 due=557",
-    "ws-behind n=1198 due=1207 planned=68",
+    "ws-behind n=1198 due=1207 planned=106",
     "ws-mode-hint mode=auto",
     "size=lg ws-review",
     "ws-goal tone=default",
@@ -5640,7 +5640,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -6090,7 +6090,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -6209,7 +6209,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -6328,7 +6328,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -6778,7 +6778,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -6897,7 +6897,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -7016,7 +7016,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -7466,7 +7466,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -7585,7 +7585,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -7704,7 +7704,7 @@
    "quota left=5 per-day=undefined"
   ],
   "vocab": {
-   "n": "5 10 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
+   "n": "5 15 1 0 8.000 1 4.500 0 5 40 40 0 0 6.780 6.337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=5 new=5 learning=0 due=0",
@@ -8154,7 +8154,7 @@
    "quota left=5 per-day=5"
   ],
   "vocab": {
-   "n": "46 2 46 10 1 6,415 8,000 1 4,500 30, 2026 0 1 4,500 27 2 152 25 37 9 0 37 3 6,780 6,337 443 1",
+   "n": "46 2 46 15 1 6,415 8,000 1 4,500 30, 2026 0 1 4,500 27 2 152 25 37 9 0 37 3 6,780 6,337 443 1",
    "s": [
     "ws-due tone=default",
     "ws-counts total=51 new=5 learning=37 due=9",

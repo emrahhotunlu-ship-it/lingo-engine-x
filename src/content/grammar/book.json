@@ -59,8 +59,8 @@
        "isn't",
        "reviewing"
       ],
-      "de": "„isn't reviewing“ gilt nur für jetzt. „on weekends“ meint jedes Wochenende: doesn't review.",
-      "en": "“Isn't reviewing” is only about now. “On weekends” means every weekend: doesn't review."
+      "de": "„isn't reviewing“ beschreibt den Moment jetzt. „on weekends“ meint jedes Wochenende: doesn't review.",
+      "en": "“Isn't reviewing” describes the moment now. “On weekends” means every weekend: doesn't review."
      },
      {
       "if": [
@@ -189,8 +189,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„I'm tired of it“ zeigt Ärger. Dafür is always + -ing: is always changing.",
-     "en": "“I'm tired of it” shows annoyance. For that use is always + -ing: is always changing."
+     "de": "„I'm tired of it“ zeigt Ärger. Dafür „is always“ + -ing: „is always changing“.",
+     "en": "“I'm tired of it” shows annoyance. For that use “is always” + -ing: “is always changing”."
     },
     "wrong": [
      {
@@ -298,8 +298,8 @@
     "wrong": [
      {
       "opt": "leads",
-      "de": "„leads“ klingt nach fester Rolle. Hier ist es nur auf Zeit („until June“).",
-      "en": "“Leads” sounds like a fixed role. Here it is only for a while (“until June”)."
+      "de": "„leads“ klingt nach fester Rolle. Hier ist es eine Rolle auf Zeit („until June“).",
+      "en": "“Leads” sounds like a fixed role. Here it is a temporary role (“until June”)."
      },
      {
       "opt": "has led",
@@ -364,8 +364,8 @@
     "wrong": [
      {
       "opt": "is having",
-      "de": "„is having“ geht nur bei Tätigkeiten (having a call). Eine Aussicht hat man einfach: has.",
-      "en": "“Is having” only works for activities (having a call). A view is simply something you have: has."
+      "de": "„is having“ passt zu Tätigkeiten (having a call). Eine Aussicht hat man einfach: has.",
+      "en": "“Is having” fits activities (having a call). A view is simply something you have: has."
      },
      {
       "opt": "have",
@@ -391,19 +391,19 @@
    ],
    "why": {
     "ok": {
-     "de": "„It drives me crazy“ zeigt Ärger: is always + -ing. always steht zwischen is und -ing.",
-     "en": "“It drives me crazy” shows annoyance: is always + -ing. Always goes between is and the -ing form."
+     "de": "„It drives me crazy“ zeigt Ärger: „is always“ + -ing. „always“ steht zwischen „is“ und der -ing-Form.",
+     "en": "“It drives me crazy” shows annoyance: “is always” + -ing. “Always” goes between “is” and the -ing form."
     },
     "wrong": [
      {
       "opt": "is leaving always",
-      "de": "always steht nicht am Ende, sondern zwischen is und leaving.",
-      "en": "Always does not go at the end but between is and leaving."
+      "de": "„always“ steht nicht am Ende, sondern zwischen „is“ und „leaving“.",
+      "en": "“Always” does not go at the end but between “is” and “leaving”."
      },
      {
       "opt": "always is leaving",
-      "de": "always kommt nach is, nicht davor: is always leaving.",
-      "en": "Always comes after is, not before it: is always leaving."
+      "de": "„always“ kommt nach „is“, nicht davor: „is always leaving“.",
+      "en": "“Always” comes after “is”, not before it: “is always leaving”."
      }
     ]
    }
@@ -530,24 +530,24 @@
    ],
    "why": {
     "ok": {
-     "de": "„but I'd love to visit next year“: Es geht um dein Leben bis jetzt, ohne Zeitpunkt. Present Perfect: have never been.",
-     "en": "“But I'd love to visit next year”: this is about your life so far, no time named. Present Perfect: have never been."
+     "de": "„but I'd love to visit next year“: Es geht um dein Leben bis jetzt, ohne Zeitpunkt. Present Perfect: „have never been“.",
+     "en": "“But I'd love to visit next year”: this is about your life so far, no time named. Present Perfect: “have never been”."
     },
     "wrong": [
      {
       "if": [
        "was"
       ],
-      "de": "„never was“ klingt nach abgeschlossener Zeit. Erfahrung bis jetzt: have never been.",
-      "en": "“Never was” sounds like a finished time. Experience up to now: have never been."
+      "de": "„never was“ klingt nach abgeschlossener Zeit. Erfahrung bis jetzt: „have never been“.",
+      "en": "“Never was” sounds like a finished time. Experience up to now: “have never been”."
      },
      {
       "if": [
        "never",
        "went"
       ],
-      "de": "„never went“ blickt auf eine abgeschlossene Zeit. Für Erfahrung bis jetzt: have never been.",
-      "en": "“Never went” looks at a finished time. For experience up to now: have never been."
+      "de": "„never went“ blickt auf eine abgeschlossene Zeit. Für Erfahrung bis jetzt: „have never been“.",
+      "en": "“Never went” looks at a finished time. For experience up to now: “have never been”."
      }
     ]
    }
@@ -686,8 +686,8 @@
     "wrong": [
      {
       "opt": "has received",
-      "de": "Mit „ago“ steht nie das Present Perfect, auch wenn es im Deutschen „hat bekommen“ heißt.",
-      "en": "Never use the Present Perfect with “ago”, even if German says “hat bekommen”."
+      "de": "Mit „ago“ steht das Past Simple, nicht das Present Perfect, auch wenn es im Deutschen „hat bekommen“ heißt.",
+      "en": "With “ago”, use the Past Simple, not the Present Perfect, even if German says “hat bekommen”."
      },
      {
       "opt": "receives",
@@ -952,7 +952,7 @@
    ],
    "why": {
     "ok": {
-     "de": "„lately“ meint: in letzter Zeit bis jetzt, immer wieder. Dafür has been + -ing.",
+     "de": "„lately“ meint: in letzter Zeit bis jetzt, wiederholt. Dafür has been + -ing.",
      "en": "“Lately” means again and again up to now. Use has been + -ing."
     },
     "wrong": [
@@ -968,8 +968,8 @@
        "is",
        "crashing"
       ],
-      "de": "„is crashing“ nennt nur jetzt. „lately“ reicht von früher bis jetzt: has been crashing.",
-      "en": "“Is crashing” only covers now. “Lately” runs from earlier until now: has been crashing."
+      "de": "„is crashing“ beschreibt den Moment jetzt. „lately“ reicht von früher bis jetzt: has been crashing.",
+      "en": "“Is crashing” describes the moment now. “Lately” runs from earlier until now: has been crashing."
      }
     ]
    }
@@ -1041,8 +1041,8 @@
        "am",
        "checking"
       ],
-      "de": "„am checking“ nennt nur jetzt. „all afternoon“ reicht bis jetzt: have been checking.",
-      "en": "“Am checking” only covers now. “All afternoon” runs until now: have been checking."
+      "de": "„am checking“ beschreibt den Moment jetzt. „all afternoon“ reicht bis jetzt: have been checking.",
+      "en": "“Am checking” describes the moment now. “All afternoon” runs until now: have been checking."
      }
     ]
    }
@@ -1239,8 +1239,8 @@
      },
      {
       "opt": "are you making",
-      "de": "„are you making“ nennt nur jetzt. „so far“ zählt bis jetzt: have you made.",
-      "en": "“Are you making” only covers now. “So far” counts up to now: have you made."
+      "de": "„are you making“ beschreibt den Moment jetzt. „so far“ zählt bis jetzt: have you made.",
+      "en": "“Are you making” describes the moment now. “So far” counts up to now: have you made."
      }
     ]
    }
@@ -1971,14 +1971,14 @@
    ],
    "why": {
     "ok": {
-     "de": "„Before the merger“: ein früherer Zustand. Bei have (besitzen) geht nur used to, nicht would.",
-     "en": "“Before the merger”: a past state. With have (own) only used to works, not would."
+     "de": "„Before the merger“: ein früherer Zustand. Bei have (besitzen) passt used to, nicht would.",
+     "en": "“Before the merger”: a past state. With have (own), used to works, not would."
     },
     "wrong": [
      {
       "opt": "would have",
-      "de": "would geht nur für wiederholte Handlungen. Ein Budget haben ist ein Zustand.",
-      "en": "Would only works for repeated actions. Having a budget is a state."
+      "de": "would passt zu wiederholten Handlungen. Ein Budget haben ist ein Zustand.",
+      "en": "Would fits repeated actions. Having a budget is a state."
      },
      {
       "opt": "were used to have",
@@ -2081,8 +2081,8 @@
      },
      {
       "opt": "use to",
-      "de": "„use to“ steht nur nach did oder didn't. Für das Gewöhnen braucht es get used to.",
-      "en": "“Use to” only follows did or didn't. For adapting you need get used to."
+      "de": "„use to“ (ohne d) steht nach did oder didn't. Für das Gewöhnen braucht es get used to.",
+      "en": "“Use to” (no d) follows did or didn't. For adapting you need get used to."
      }
     ]
    }
@@ -2171,8 +2171,8 @@
       "if": [
        "in"
       ],
-      "de": "„in the night“ sagt man im Englischen kaum. Ohne the heißt es immer at night.",
-      "en": "English rarely says “in the night”. Without the, it is always at night."
+      "de": "„in the night“ sagt man im Englischen kaum. Ohne the heißt es at night.",
+      "en": "English rarely says “in the night”. Without the, it is at night."
      },
      {
       "if": [
@@ -2340,8 +2340,8 @@
      },
      {
       "opt": "in",
-      "de": "„in the morning“ geht nur ohne Tag. Mit „Wednesday“ steht on.",
-      "en": "“In the morning” only works without a day. With “Wednesday” use on."
+      "de": "„in the morning“ passt ohne Wochentag. Mit „Wednesday“ steht on.",
+      "en": "“In the morning” works without a day. With “Wednesday” use on."
      }
     ]
    }
@@ -2816,19 +2816,19 @@
    ],
    "why": {
     "ok": {
-     "de": "„It's annoying“ zeigt Ärger: is always + -ing. always steht zwischen is und closing.",
-     "en": "“It's annoying” shows annoyance: is always + -ing. Always goes between is and closing."
+     "de": "„It's annoying“ zeigt Ärger: „is always“ + -ing. „always“ steht zwischen „is“ und „closing“.",
+     "en": "“It's annoying” shows annoyance: “is always” + -ing. “Always” goes between “is” and “closing”."
     },
     "wrong": [
      {
       "opt": "always is closing",
-      "de": "always steht nach is, nicht davor: is always closing.",
-      "en": "Always goes after is, not before it: is always closing."
+      "de": "„always“ steht nach „is“, nicht davor: „is always closing“.",
+      "en": "“Always” goes after “is”, not before it: “is always closing”."
      },
      {
       "opt": "is closing always",
-      "de": "always steht nicht am Ende, sondern zwischen is und closing.",
-      "en": "Always does not go at the end but between is and closing."
+      "de": "„always“ steht nicht am Ende, sondern zwischen „is“ und „closing“.",
+      "en": "“Always” does not go at the end but between “is” and “closing”."
      }
     ]
    }
@@ -3083,8 +3083,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „Once“ steht für die Zukunft das Präsens. will kommt nur in den Hauptsatz („I'll send“).",
-     "en": "After “Once”, use the present for the future. Will goes only in the main clause (“I'll send”)."
+     "de": "Nach „Once“ steht für die Zukunft das Präsens. will gehört in den Hauptsatz („I'll send“).",
+     "en": "After “Once”, use the present for the future. Will goes in the main clause (“I'll send”)."
     },
     "wrong": [
      {
@@ -3165,7 +3165,7 @@
      {
       "opt": "am lending",
       "de": "am lending klingt nach fester Verabredung. Hier entscheidest du gerade erst („No worries“).",
-      "en": "am lending sounds like a fixed arrangement. Here you decide only now (“No worries”)."
+      "en": "am lending sounds like a fixed arrangement. Here you decide right now (“No worries”)."
      }
     ]
    }
@@ -3192,7 +3192,7 @@
     "wrong": [
      {
       "opt": "meet",
-      "de": "Deutsch: „ich treffe morgen“. Englisch nimmt das Present Simple nur für Fahrpläne, nicht für Verabredungen.",
+      "de": "Deutsch: „ich treffe morgen“. Englisch nimmt das Present Simple für Fahrpläne, nicht für Verabredungen.",
       "en": "German says “ich treffe morgen”. English uses the Present Simple for timetables, not arrangements."
      },
      {
@@ -3285,7 +3285,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „before“ steht für die Zukunft das Präsens. will steht nur im Hauptsatz („We'll place“).",
+     "de": "Nach „before“ steht für die Zukunft das Präsens. will steht im Hauptsatz („We'll place“).",
      "en": "After “before”, use the present for the future. Will stays in the main clause (“We'll place”)."
     },
     "wrong": [
@@ -3336,8 +3336,8 @@
        "will",
        "explain"
       ],
-      "de": "will explain nennt nur das Ereignis. „This time tomorrow“ fragt, was dann gerade abläuft → will be explaining.",
-      "en": "will explain only names the event. “This time tomorrow” asks what is in progress then: will be explaining."
+      "de": "will explain nennt das Ereignis. „This time tomorrow“ fragt, was dann gerade abläuft → will be explaining.",
+      "en": "will explain names the event. “This time tomorrow” asks what is in progress then: will be explaining."
      }
     ]
    }
@@ -3406,8 +3406,8 @@
        "will",
        "roll"
       ],
-      "de": "will roll out nennt nur das Ereignis. „By the end of next month“ verlangt das Ergebnis bis dahin → will have rolled out.",
-      "en": "will roll out only names the event. “By the end of next month” needs the result by then: will have rolled out."
+      "de": "will roll out nennt das Ereignis. „By the end of next month“ verlangt das Ergebnis bis dahin → will have rolled out.",
+      "en": "will roll out names the event. “By the end of next month” needs the result by then: will have rolled out."
      },
      {
       "if": [
@@ -3444,8 +3444,8 @@
        "will",
        "submit"
       ],
-      "de": "will submit sagt nur, dass es passiert. „by then“ verlangt, dass es bis dahin fertig ist → will have submitted.",
-      "en": "will submit only says it happens. “by then” needs it finished by that time: will have submitted."
+      "de": "will submit sagt, dass es passiert. „by then“ verlangt, dass es bis dahin fertig ist → will have submitted.",
+      "en": "will submit says it happens. “by then” needs it finished by that time: will have submitted."
      },
      {
       "if": [
@@ -3491,8 +3491,8 @@
        "be",
        "negotiating"
       ],
-      "de": "will be negotiating zeigt nur, was dann läuft. „for a full year“ verlangt die Dauer bis dahin: will have been.",
-      "en": "will be negotiating only shows what is in progress. “for a full year” needs the duration up to then: will have been."
+      "de": "will be negotiating zeigt, was dann läuft. „for a full year“ verlangt die Dauer bis dahin: will have been.",
+      "en": "will be negotiating shows what is in progress. “for a full year” needs the duration up to then: will have been."
      }
     ]
    }
@@ -3526,8 +3526,8 @@
        "be",
        "waiting"
       ],
-      "de": "will be waiting zeigt nur, was dann läuft. „for three weeks“ verlangt die Dauer bis dahin → will have been waiting.",
-      "en": "will be waiting only shows what is going on. “for three weeks” needs the duration up to then: will have been waiting."
+      "de": "will be waiting zeigt, was dann läuft. „for three weeks“ verlangt die Dauer bis dahin → will have been waiting.",
+      "en": "will be waiting shows what is going on. “for three weeks” needs the duration up to then: will have been waiting."
      },
      {
       "if": [
@@ -3535,8 +3535,8 @@
        "been",
        "waiting"
       ],
-      "de": "has been waiting reicht nur bis jetzt. „By Friday“ liegt aber in der Zukunft → will have been waiting.",
-      "en": "has been waiting only reaches up to now. But “By Friday” is in the future: will have been waiting."
+      "de": "has been waiting reicht bis jetzt. „By Friday“ liegt aber in der Zukunft → will have been waiting.",
+      "en": "has been waiting reaches up to now. But “By Friday” is in the future: will have been waiting."
      }
     ]
    }
@@ -3662,8 +3662,8 @@
     "wrong": [
      {
       "opt": "will move",
-      "de": "will move nennt nur das Ereignis. „By the time …“ verlangt das Ergebnis bis dahin → will have moved.",
-      "en": "will move only names the event. “By the time …” needs the result by then: will have moved."
+      "de": "will move nennt das Ereignis. „By the time …“ verlangt das Ergebnis bis dahin → will have moved.",
+      "en": "will move names the event. “By the time …” needs the result by then: will have moved."
      },
      {
       "opt": "moved",
@@ -3695,13 +3695,13 @@
     "wrong": [
      {
       "opt": "will be testing",
-      "de": "will be testing zeigt nur, was dann läuft. „for six weeks“ verlangt die Dauer bis dahin.",
-      "en": "will be testing only shows what is in progress. “for six weeks” needs the duration up to then."
+      "de": "will be testing zeigt, was dann läuft. „for six weeks“ verlangt die Dauer bis dahin.",
+      "en": "will be testing shows what is in progress. “for six weeks” needs the duration up to then."
      },
      {
       "opt": "have tested",
-      "de": "have tested reicht nur bis jetzt. „By the end of the month“ liegt aber in der Zukunft.",
-      "en": "have tested only reaches up to now. But “By the end of the month” is in the future."
+      "de": "have tested reicht bis jetzt. „By the end of the month“ liegt aber in der Zukunft.",
+      "en": "have tested reaches up to now. But “By the end of the month” is in the future."
      }
     ]
    }
@@ -3733,8 +3733,8 @@
      },
      {
       "opt": "have you worked",
-      "de": "have you worked reicht nur bis heute. „by the end of this year“ liegt aber in der Zukunft.",
-      "en": "have you worked only reaches up to today. But “by the end of this year” is in the future."
+      "de": "have you worked reicht bis heute. „by the end of this year“ liegt aber in der Zukunft.",
+      "en": "have you worked reaches up to today. But “by the end of this year” is in the future."
      }
     ]
    }
@@ -3753,8 +3753,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „before“ steht für die Zukunft das Präsens. Die Zukunft gehört nur in den Hauptsatz.",
-     "en": "After “before”, use the present for the future. The future belongs only in the main clause."
+     "de": "Nach „before“ steht für die Zukunft das Präsens. Die Zukunft (will) gehört in den Hauptsatz.",
+     "en": "After “before”, use the present for the future. The future (will) belongs in the main clause."
     },
     "wrong": [
      {
@@ -3788,8 +3788,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„When“ leitet hier einen Zeitsatz ein. Für die Zukunft steht dort das Präsens, will nur im Hauptsatz.",
-     "en": "“When” starts a time clause here. It takes the present for the future; will goes only in the main clause."
+     "de": "„When“ leitet hier einen Zeitsatz ein. Für die Zukunft steht dort das Präsens, will steht im Hauptsatz.",
+     "en": "“When” starts a time clause here. It takes the present for the future; will goes in the main clause."
     },
     "wrong": [
      {
@@ -3975,7 +3975,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „as soon as“ steht für die Zukunft das Präsens. will steht nur im Hauptsatz („I'll call“).",
+     "de": "Nach „as soon as“ steht für die Zukunft das Präsens. will steht im Hauptsatz („I'll call“).",
      "en": "After “as soon as”, use the present for the future. Will stays in the main clause (“I'll call”)."
     },
     "wrong": [
@@ -4113,8 +4113,8 @@
     "wrong": [
      {
       "opt": "will sell",
-      "de": "will sell nennt nur das Ereignis. „By the time …“ verlangt das Ergebnis bis dahin → will have sold.",
-      "en": "will sell only names the event. “By the time …” needs the result by then: will have sold."
+      "de": "will sell nennt das Ereignis. „By the time …“ verlangt das Ergebnis bis dahin → will have sold.",
+      "en": "will sell names the event. “By the time …” needs the result by then: will have sold."
      },
      {
       "opt": "sell",
@@ -4185,8 +4185,8 @@
       "if": [
        "built"
       ],
-      "de": "built hieße, das Werk steht. „was shelved“ zeigt aber, dass es nie gebaut wurde.",
-      "en": "built would mean the plant exists. But “was shelved” shows it was never built."
+      "de": "built hieße, das Werk steht. „was shelved“ zeigt aber, dass es nicht gebaut wurde.",
+      "en": "built would mean the plant exists. But “was shelved” shows it was not built."
      }
     ]
    }
@@ -4212,7 +4212,7 @@
        "texted"
       ],
       "de": "texted hieße, du hast geschrieben. Das „but …“ zeigt aber, dass es nicht dazu kam.",
-      "en": "texted would mean you did write. But the “but …” shows it never happened."
+      "en": "texted would mean you did write. But the “but …” shows it didn't happen."
      },
      {
       "if": [
@@ -4289,7 +4289,7 @@
       "if": [
        "became"
       ],
-      "de": "became erzählt nur das Ereignis. „nobody knew … one day“ blickt aber von damals nach vorn → would become.",
+      "de": "became erzählt das Ereignis selbst. „nobody knew … one day“ blickt aber von damals nach vorn → would become.",
       "en": "became just reports the event. “nobody knew … one day” looks ahead from back then: would become."
      }
     ]
@@ -4363,7 +4363,7 @@
        "gave"
       ],
       "de": "gave hieße, sie hielt die Rede. „but she fell ill“ zeigt, dass es nicht dazu kam.",
-      "en": "gave would mean she gave the talk. “but she fell ill” shows it never happened."
+      "en": "gave would mean she gave the talk. “but she fell ill” shows it didn't happen."
      }
     ]
    }
@@ -4456,8 +4456,8 @@
     "wrong": [
      {
       "opt": "would start",
-      "de": "would erzählt, was später wirklich geschah. Hier stand der Start nur kurz bevor → was about to start.",
-      "en": "would tells what really happened later. Here the start was only moments away: was about to start."
+      "de": "would erzählt, was später wirklich geschah. Hier stand der Start kurz bevor → was about to start.",
+      "en": "would tells what really happened later. Here the start was moments away: was about to start."
      },
      {
       "opt": "is about to start",
@@ -4653,8 +4653,8 @@
       "if": [
        "in"
       ],
-      "de": "in 24 hours meint den Zeitpunkt nach 24 Stunden. Mit „of receipt“ geht nur within.",
-      "en": "in 24 hours means the point after 24 hours. With “of receipt”, only within works."
+      "de": "in 24 hours meint den Zeitpunkt nach 24 Stunden. Mit „of receipt“ passt within.",
+      "en": "in 24 hours means the point after 24 hours. With “of receipt”, use within."
      }
     ]
    }
@@ -4694,7 +4694,8 @@
       "en": "until names the end of a duration. But “must go through the new portal” starts on that day."
      }
     ]
-   }
+   },
+   "hint": "(ab dem …)"
   },
   {
    "id": "cp-a5",
@@ -4753,8 +4754,8 @@
       "if": [
        "half"
       ],
-      "de": "half as many hieße: nur halb so viel. „has doubled“ zeigt aber das Doppelte.",
-      "en": "half as many would mean only half. But “has doubled” shows two times as many."
+      "de": "half as many hieße: halb so viel. „has doubled“ zeigt aber das Doppelte.",
+      "en": "half as many would mean half the number. But “has doubled” shows two times as many."
      }
     ]
    }
@@ -4907,8 +4908,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„a fraction“ heißt: ein kleiner Teil davon. Nach a fraction steht immer of.",
-     "en": "“a fraction” means a small part of something. A fraction is always followed by of."
+     "de": "„a fraction“ heißt: ein kleiner Teil davon. Danach folgt hier of: a fraction of.",
+     "en": "“a fraction” means a small part of something. Here it is followed by of: a fraction of."
     },
     "wrong": [
      {
@@ -5045,7 +5046,7 @@
       "if": [
        "would"
       ],
-      "de": "Deutsch „wenn … fallen würde“ verleitet zu would. would steht nur im Hauptsatz, im if-Satz: fell.",
+      "de": "Deutsch „wenn … fallen würde“ verleitet zu would. would gehört in den Hauptsatz, im if-Satz: fell.",
       "en": "German “wenn … fallen würde” suggests would. would stays in the main clause; the if-clause takes fell."
      },
      {
@@ -5080,7 +5081,7 @@
       "if": [
        "would"
       ],
-      "de": "Deutsch „wenn ich … wäre“ verleitet zu would be. would steht nur im Hauptsatz („I'd ask“).",
+      "de": "Deutsch „wenn ich … wäre“ verleitet zu would be. would gehört in den Hauptsatz („I'd ask“).",
       "en": "German “wenn ich … wäre” suggests would be. would stays in the main clause (“I'd ask”)."
      },
      {
@@ -5116,8 +5117,8 @@
        "would",
        "have"
       ],
-      "de": "would have gehört nur in den Hauptsatz. Im if-Satz steht das Past Perfect: If we had checked.",
-      "en": "would have belongs only in the main clause. The if-clause takes the Past Perfect: If we had checked."
+      "de": "would have gehört in den Hauptsatz. Im if-Satz steht das Past Perfect: If we had checked.",
+      "en": "would have belongs in the main clause. The if-clause takes the Past Perfect: If we had checked."
      },
      {
       "if": [
@@ -5223,7 +5224,7 @@
     "wrong": [
      {
       "opt": "will confirm",
-      "de": "Deutsch „wenn … wird“ verleitet zu will. will steht aber nur im Hauptsatz („we'll have to“).",
+      "de": "Deutsch „wenn … wird“ verleitet zu will. will gehört aber in den Hauptsatz („we'll have to“).",
       "en": "German “wenn … wird” suggests will. But will stays in the main clause (“we'll have to”)."
      },
      {
@@ -5289,7 +5290,7 @@
     "wrong": [
      {
       "opt": "would be",
-      "de": "Deutsch „wenn es … wäre“ verleitet zu would be. would steht nur im Hauptsatz („I'd cut“).",
+      "de": "Deutsch „wenn es … wäre“ verleitet zu would be. would gehört in den Hauptsatz („I'd cut“).",
       "en": "German “wenn es … wäre” suggests would be. would stays in the main clause (“I'd cut”)."
      },
      {
@@ -5349,14 +5350,14 @@
    ],
    "why": {
     "ok": {
-     "de": "Du präsentierst nur unter einer Bedingung („approve them by Friday“). Das heißt provided that.",
-     "en": "You present only on one condition (“approve them by Friday”). That's provided that."
+     "de": "Du präsentierst unter einer klaren Bedingung („approve them by Friday“). Dafür steht provided that.",
+     "en": "You present on one condition (“approve them by Friday”). That's provided that."
     },
     "wrong": [
      {
       "opt": "unless",
-      "de": "unless heißt „außer wenn“. Dann würdest du nur ohne Freigabe präsentieren, das ergibt keinen Sinn.",
-      "en": "unless means “except if”. You'd present only without approval, which makes no sense."
+      "de": "unless heißt „außer wenn“. Dann würdest du präsentieren, wenn es keine Freigabe gibt; das ergibt keinen Sinn.",
+      "en": "unless means “except if”. You'd present if there were no approval, which makes no sense."
      },
      {
       "opt": "otherwise",
@@ -5393,7 +5394,7 @@
       "if": [
        "will"
       ],
-      "de": "will gehört nicht hinter unless. Dort steht das Präsens, will nur im Hauptsatz („we'll have to“).",
+      "de": "will gehört nicht hinter unless. Dort steht das Präsens, will gehört in den Hauptsatz („we'll have to“).",
       "en": "will doesn't go after unless. Use the present there; will stays in the main clause (“we'll have to”)."
      }
     ]
@@ -5414,8 +5415,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„as long as“ nennt die Bedingung: nur wenn. Danach folgt das Präsens, auch wenn es um die Zukunft geht.",
-     "en": "“as long as” names the condition: only if. The present follows, even for the future."
+     "de": "„as long as“ nennt die Bedingung, etwa „nur wenn“. Danach folgt das Präsens, auch wenn es um die Zukunft geht.",
+     "en": "“as long as” names the condition, like “only if”. The present follows, even for the future."
     },
     "wrong": [
      {
@@ -5458,8 +5459,8 @@
       "if": [
        "unless"
       ],
-      "de": "unless braucht einen Nebensatz (unless you confirm). Als Satzanfang mit Komma passt nur Otherwise.",
-      "en": "unless needs a clause (unless you confirm). At the start of a sentence with a comma, only Otherwise works."
+      "de": "unless braucht einen Nebensatz (unless you confirm). Als Satzanfang mit Komma passt Otherwise.",
+      "en": "unless needs a clause (unless you confirm). At the start of a sentence with a comma, use Otherwise."
      }
     ]
    }
@@ -5500,7 +5501,8 @@
       "en": "unless needs a full clause with a verb. Before a noun like “the quick response”, use But for."
      }
     ]
-   }
+   },
+   "hint": "(ohne …)"
   },
   {
    "id": "ca-a5",
@@ -5619,8 +5621,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Kunde wartet nur unter einer Bedingung („keep them updated“). Dafür steht as long as.",
-     "en": "The client waits only on one condition (“keep them updated”). That takes as long as."
+     "de": "Der Kunde wartet unter einer Bedingung („keep them updated“). Dafür steht as long as.",
+     "en": "The client waits on one condition (“keep them updated”). That takes as long as."
     },
     "wrong": [
      {
@@ -5630,8 +5632,8 @@
      },
      {
       "opt": "unless",
-      "de": "unless heißt „außer wenn“. Dann würde der Kunde nur warten, wenn ihr ihn nicht informiert.",
-      "en": "unless means “except if”. The client would only wait if you didn't update them."
+      "de": "unless heißt „außer wenn“. Dann würde der Kunde gerade dann warten, wenn ihr ihn nicht informiert.",
+      "en": "unless means “except if”. The client would wait exactly when you didn't update them."
      }
     ]
    }
@@ -5757,8 +5759,8 @@
     "wrong": [
      {
       "opt": "unless",
-      "de": "unless heißt „außer wenn“. Dann sollte man die Nummer nur nehmen, wenn nichts schiefgeht.",
-      "en": "unless means “except if”. You'd take the number only if nothing went wrong."
+      "de": "unless heißt „außer wenn“. Dann sollte man die Nummer gerade dann nehmen, wenn nichts schiefgeht.",
+      "en": "unless means “except if”. You'd take the number exactly when nothing went wrong."
      },
      {
       "opt": "otherwise",
@@ -5915,7 +5917,7 @@
       "if": [
        "stop"
       ],
-      "de": "stop beschreibt nur die Wirklichkeit. Nach wish steht für den Wunsch nach Änderung would stop.",
+      "de": "stop beschreibt die Wirklichkeit. Nach wish steht für den Wunsch nach Änderung would stop.",
       "en": "stop just describes reality. After wish, a wish for change takes would stop.",
       "not": [
        "would",
@@ -6115,7 +6117,7 @@
     "wrong": [
      {
       "opt": "gives",
-      "de": "gives beschreibt nur die Wirklichkeit. Nach wish steht für den Wunsch nach Änderung would give.",
+      "de": "gives beschreibt die Wirklichkeit. Nach wish steht für den Wunsch nach Änderung would give.",
       "en": "gives just describes reality. After wish, a wish for change takes would give."
      },
      {
@@ -6148,7 +6150,7 @@
     "wrong": [
      {
       "opt": "would be",
-      "de": "Deutsch „wenn ich … wäre“ verleitet zu would be. would steht nur im Hauptsatz.",
+      "de": "Deutsch „wenn ich … wäre“ verleitet zu would be. would gehört in den Hauptsatz.",
       "en": "German “wenn ich … wäre” suggests would be. would stays in the main clause."
      },
      {
@@ -6579,7 +6581,7 @@
     "wrong": [
      {
       "opt": "could be a bit of tricky",
-      "de": "a bit of steht vor Nomen (a bit of a stretch). Vor dem Adjektiv tricky steht nur a bit.",
+      "de": "a bit of steht vor Nomen (a bit of a stretch). Vor dem Adjektiv tricky steht a bit allein.",
       "en": "a bit of goes before nouns (a bit of a stretch). Before the adjective tricky, use just a bit."
      },
      {
@@ -7397,8 +7399,8 @@
     "wrong": [
      {
       "opt": "to be pulled",
-      "de": "Nach avoid steht nie to: „avoid to be“ ist falsch. Richtig: avoid being pulled.",
-      "en": "avoid is never followed by to: “avoid to be” is wrong. Say avoid being pulled."
+      "de": "Nach avoid steht -ing, kein to: „avoid to be“ ist falsch. Richtig: avoid being pulled.",
+      "en": "avoid takes -ing, not to: “avoid to be” is wrong. Say avoid being pulled."
      },
      {
       "opt": "pulling",
@@ -7436,7 +7438,7 @@
      {
       "opt": "to be asked",
       "de": "Nach without steht kein to. Das deutsche „ohne gefragt zu werden“ wird zu without being asked.",
-      "en": "without is never followed by to. German “ohne gefragt zu werden” becomes without being asked."
+      "en": "without takes -ing, not to. German “ohne gefragt zu werden” becomes without being asked."
      }
     ]
    }
@@ -7802,13 +7804,13 @@
     "wrong": [
      {
       "opt": "told",
-      "de": "tell steht ohne to: told everyone. Mit „to everyone“ passt nur said.",
-      "en": "tell takes no to: told everyone. With “to everyone” only said fits."
+      "de": "tell steht ohne to: told everyone. Mit „to everyone“ passt said.",
+      "en": "tell takes no to: told everyone. With “to everyone”, said fits."
      },
      {
       "opt": "told to",
-      "de": "„told to“ ergäbe „told to to everyone“. tell steht ohne to; mit „to everyone“ passt nur said.",
-      "en": "“told to” would give “told to to everyone”. tell takes no to; with “to everyone” only said fits."
+      "de": "„told to“ ergäbe „told to to everyone“. tell steht ohne to; mit „to everyone“ passt said.",
+      "en": "“told to” would give “told to to everyone”. tell takes no to; with “to everyone”, said fits."
      }
     ]
    }
@@ -7962,8 +7964,8 @@
       "if": [
        "signing"
       ],
-      "de": "Es fehlt on. Nach insist steht immer on + -ing: insisted on signing.",
-      "en": "on is missing. insist always takes on + -ing: insisted on signing.",
+      "de": "Es fehlt on. Nach insist steht on + -ing: insisted on signing.",
+      "en": "on is missing. insist takes on + -ing: insisted on signing.",
       "not": [
        "on"
       ]
@@ -8448,7 +8450,8 @@
       "en": "The auxiliary in the sentence is have (“haven't received”), so: have we."
      }
     ]
-   }
+   },
+   "hint": "(Frageanhängsel: oder?)"
   },
   {
    "id": "qu-a6",
@@ -8461,8 +8464,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Nach „Let's“ ist das Anhängsel immer shall we.",
-     "en": "After “Let's” the tag is always shall we."
+     "de": "Nach „Let's“ ist das Anhängsel shall we.",
+     "en": "After “Let's” the tag is shall we."
     },
     "wrong": [
      {
@@ -8480,7 +8483,8 @@
       "en": "“don't we” doesn't fit “Let's”. The suggestion takes shall we."
      }
     ]
-   }
+   },
+   "hint": "(Frageanhängsel: ja?)"
   },
   {
    "id": "qu-b1",
@@ -8575,8 +8579,8 @@
      },
      {
       "opt": "did won",
-      "de": "Nach did steht nie die Vergangenheitsform. Und hier fällt did ganz weg: won.",
-      "en": "did is never followed by a past form. And here did isn't needed at all: won."
+      "de": "Nach did steht die Grundform, keine Vergangenheitsform. Und hier fällt did ganz weg: won.",
+      "en": "did takes the base form, not a past form. And here did isn't needed at all: won."
      }
     ]
    }
@@ -8709,8 +8713,8 @@
       "if": [
        "will"
       ],
-      "de": "Nach „demands that“ steht kein will. Die Forderung braucht nur die Grundform: send.",
-      "en": "No will after “demands that”. The demand needs only the base form: send."
+      "de": "Nach „demands that“ steht kein will. Die Forderung braucht die Grundform: send.",
+      "en": "No will after “demands that”. The demand needs the base form: send."
      }
     ]
    }
@@ -8744,7 +8748,7 @@
       "if": [
        "will"
       ],
-      "de": "Nach „vital that“ steht kein will, auch wenn es um später geht. Nur die Grundform: complete.",
+      "de": "Nach „vital that“ steht kein will, auch wenn es um später geht. Hier steht die Grundform: complete.",
       "en": "No will after “vital that”, even when it's about later. Just the base form: complete."
      }
     ]
@@ -8812,7 +8816,7 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „recommends that“ steht bei Verneinung nur not + Grundform, ohne does: not speak.",
+     "de": "Nach „recommends that“ steht bei Verneinung not + Grundform, ohne does: not speak.",
      "en": "After “recommends that”, the negative is just not + base form, no does: not speak."
     },
     "wrong": [
@@ -8895,8 +8899,8 @@
       "if": [
        "confuse"
       ],
-      "de": "Die Grundform steht nur bei einer Forderung. Die Umfrage zeigt eine Tatsache („last quarter“): confused.",
-      "en": "The base form is only for demands. The survey shows a fact (“last quarter”): confused."
+      "de": "Die Grundform passt zu Forderungen. Die Umfrage zeigt eine Tatsache („last quarter“): confused.",
+      "en": "The base form goes with demands. The survey shows a fact (“last quarter”): confused."
      },
      {
       "if": [
@@ -9062,8 +9066,8 @@
     "wrong": [
      {
       "opt": "be",
-      "de": "Die Grundform steht nur bei Forderungen. Die Zahlen zeigen eine Tatsache: is working.",
-      "en": "The base form is only for demands. The results show a fact: is working."
+      "de": "Die Grundform passt zu Forderungen. Die Zahlen zeigen eine Tatsache: is working.",
+      "en": "The base form goes with demands. The results show a fact: is working."
      },
      {
       "opt": "being",
@@ -9217,8 +9221,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„Prior“ braucht immer to: Prior to the launch = vor dem Start.",
-     "en": "“Prior” always takes to: Prior to the launch = before the launch."
+     "de": "„Prior“ steht hier mit to: Prior to the launch = vor dem Start.",
+     "en": "“Prior” takes to here: Prior to the launch = before the launch."
     },
     "wrong": [
      {
@@ -9291,8 +9295,8 @@
       "if": [
        "of"
       ],
-      "de": "„need of“ steht nur in „in need of“. Nach „an urgent need“ folgt for.",
-      "en": "“need of” only appears in “in need of”. After “an urgent need” use for."
+      "de": "„need of“ kennt man aus „in need of“. Nach „an urgent need“ folgt for.",
+      "en": "“need of” belongs in “in need of”. After “an urgent need” use for."
      },
      {
       "if": [
@@ -9594,8 +9598,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„but I'm not sure“ zeigt: nur möglich. Für eine Vermutung über jetzt: might be + -ing.",
-     "en": "“but I'm not sure” shows it's only possible. For a guess about now: might be + -ing."
+     "de": "„but I'm not sure“ zeigt: möglich, nicht sicher. Für eine Vermutung über jetzt: might be + -ing.",
+     "en": "“but I'm not sure” shows it's possible, not certain. For a guess about now: might be + -ing."
     },
     "wrong": [
      {
@@ -9655,8 +9659,8 @@
        "must",
        "had"
       ],
-      "de": "Nach must steht immer have, nie had: must have read.",
-      "en": "After must you always use have, never had: must have read."
+      "de": "Nach must steht have, nicht had: must have read.",
+      "en": "After must, use have, not had: must have read."
      }
     ]
    }
@@ -9831,8 +9835,8 @@
     "wrong": [
      {
       "opt": "must be",
-      "de": "„must be“ hieße „ganz sicher“. Mit „or maybe“ ist es nur eine Möglichkeit.",
-      "en": "“must be” means you're almost sure. With “or maybe” it's only a possibility."
+      "de": "„must be“ hieße „ganz sicher“. Mit „or maybe“ ist es eine Möglichkeit.",
+      "en": "“must be” means you're almost sure. With “or maybe” it's a possibility."
      },
      {
       "opt": "can't be",
@@ -9864,8 +9868,8 @@
     "wrong": [
      {
       "opt": "must",
-      "de": "Nach must steht nie die Vergangenheitsform. Für Vergangenes: must have restarted.",
-      "en": "must is never followed by a past form. For the past: must have restarted."
+      "de": "Nach must steht die Grundform, keine Vergangenheitsform. Für Vergangenes: must have restarted.",
+      "en": "must takes the base form, not a past form. For the past: must have restarted."
      },
      {
       "opt": "can't have",
@@ -9930,8 +9934,8 @@
     "wrong": [
      {
       "opt": "must have missed",
-      "de": "„must have“ hieße „ganz sicher“. Mit „or it may be“ ist es nur eine Möglichkeit.",
-      "en": "“must have” means almost sure. With “or it may be” it's only one possibility."
+      "de": "„must have“ hieße „ganz sicher“. Mit „or it may be“ ist es eine Möglichkeit.",
+      "en": "“must have” means almost sure. With “or it may be” it's one possibility."
      },
      {
       "opt": "can't have missed",
@@ -10088,8 +10092,8 @@
       "if": [
        "that"
       ],
-      "de": "„the office is unlikely that“ geht nicht. that steht nur nach „It is unlikely“. Hier: is unlikely to be.",
-      "en": "“the office is unlikely that” doesn't work. that only follows “It is unlikely”. Here: is unlikely to be."
+      "de": "„the office is unlikely that“ geht nicht. that passt nach „It is unlikely“. Hier: is unlikely to be.",
+      "en": "“the office is unlikely that” doesn't work. that follows “It is unlikely”. Here: is unlikely to be."
      },
      {
       "if": [
@@ -10213,7 +10217,8 @@
       "en": "“It is a good chance” isn't natural. To say a chance exists: There is."
      }
     ]
-   }
+   },
+   "hint": "(es gibt)"
   },
   {
    "id": "mp-b1",
@@ -10275,8 +10280,8 @@
      },
      {
       "opt": "likely that it causes",
-      "de": "„the rollout is likely that“ geht nicht. that steht nur nach „It is likely“.",
-      "en": "“the rollout is likely that” doesn't work. that only follows “It is likely”."
+      "de": "„the rollout is likely that“ geht nicht. that passt nach „It is likely“.",
+      "en": "“the rollout is likely that” doesn't work. that follows “It is likely”."
      }
     ]
    }
@@ -10303,8 +10308,8 @@
     "wrong": [
      {
       "opt": "is unlikely that it closes",
-      "de": "that steht nur nach „It is unlikely“. Mit „the merger“ vorn: is unlikely to close.",
-      "en": "that only follows “It is unlikely”. With “the merger” first: is unlikely to close."
+      "de": "that passt nach „It is unlikely“. Mit „the merger“ vorn: is unlikely to close.",
+      "en": "that follows “It is unlikely”. With “the merger” first: is unlikely to close."
      },
      {
       "opt": "is unlikely closing",
@@ -10341,8 +10346,8 @@
      },
      {
       "opt": "unlikely that",
-      "de": "„Our CFO is unlikely that“ geht nicht. that steht nur nach „It is unlikely“.",
-      "en": "“Our CFO is unlikely that” doesn't work. that only follows “It is unlikely”."
+      "de": "„Our CFO is unlikely that“ geht nicht. that passt nach „It is unlikely“.",
+      "en": "“Our CFO is unlikely that” doesn't work. that follows “It is unlikely”."
      }
     ]
    }
@@ -10425,8 +10430,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Ein Rat zu „before you change the delivery date“. ought braucht immer to: ought to call.",
-     "en": "Advice about “before you change the delivery date”. ought always needs to: ought to call."
+     "de": "Ein Rat zu „before you change the delivery date“. ought steht mit to: ought to call.",
+     "en": "Advice about “before you change the delivery date”. ought needs to: ought to call."
     },
     "wrong": [
      {
@@ -10434,8 +10439,8 @@
        "ought",
        "call"
       ],
-      "de": "Nach ought fehlt to. Anders als should steht ought immer mit to: ought to call.",
-      "en": "to is missing after ought. Unlike should, ought always takes to: ought to call.",
+      "de": "Nach ought fehlt to. Anders als should steht ought mit to: ought to call.",
+      "en": "to is missing after ought. Unlike should, ought takes to: ought to call.",
       "not": [
        "to"
       ]
@@ -10627,8 +10632,8 @@
        "should",
        "had"
       ],
-      "de": "Nach should steht immer have, nie had: should have read.",
-      "en": "After should you always use have, never had: should have read."
+      "de": "Nach should steht have, nicht had: should have read.",
+      "en": "After should, use have, not had: should have read."
      },
      {
       "if": [
@@ -10667,13 +10672,13 @@
     "wrong": [
      {
       "opt": "ought",
-      "de": "ought braucht immer to: ought to apologize. Allein ist es falsch.",
-      "en": "ought always needs to: ought to apologize. On its own it's wrong."
+      "de": "ought braucht to: ought to apologize. Allein ist es falsch.",
+      "en": "ought needs to: ought to apologize. On its own it's wrong."
      },
      {
       "opt": "should to",
-      "de": "Nach should steht nie to: should apologize.",
-      "en": "should is never followed by to: should apologize."
+      "de": "Nach should steht kein to: should apologize.",
+      "en": "should is not followed by to: should apologize."
      }
     ]
    }
@@ -10799,7 +10804,7 @@
     "wrong": [
      {
       "opt": "mustn't",
-      "de": "„mustn't“ hieße „darf nicht“. Drucken ist erlaubt, nur nicht nötig: don't need to.",
+      "de": "„mustn't“ hieße „darf nicht“. Drucken ist erlaubt, aber nicht nötig: don't need to.",
       "en": "“mustn't” means it's forbidden. Printing is allowed, just not needed: don't need to."
      },
      {
@@ -10832,8 +10837,8 @@
     "wrong": [
      {
       "opt": "should had done",
-      "de": "Nach should steht immer have, nie had: should have done.",
-      "en": "After should you always use have, never had: should have done."
+      "de": "Nach should steht have, nicht had: should have done.",
+      "en": "After should, use have, not had: should have done."
      },
      {
       "opt": "should do",
@@ -11014,8 +11019,8 @@
       "if": [
        "has"
       ],
-      "de": "Nach to steht immer die Grundform have, nie has: seems to have forgotten.",
-      "en": "After to you always use have, never has: seems to have forgotten."
+      "de": "Nach to steht die Grundform have, nicht has: seems to have forgotten.",
+      "en": "After to, use the base form have, not has: seems to have forgotten."
      },
      {
       "if": [
@@ -11223,8 +11228,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Kontrast „but it's much faster“ zeigt: nur ein kleiner Preisunterschied. Abgeschwächt: slightly more expensive.",
-     "en": "The contrast “but it's much faster” shows only a small price gap. Softened: slightly more expensive."
+     "de": "Der Kontrast „but it's much faster“ zeigt: ein kleiner Preisunterschied. Abgeschwächt: slightly more expensive.",
+     "en": "The contrast “but it's much faster” shows a small price gap. Softened: slightly more expensive."
     },
     "wrong": [
      {
@@ -11234,8 +11239,8 @@
      },
      {
       "opt": "a few",
-      "de": "„a few“ steht nur vor zählbaren Nomen („a few days“), nicht vor „more expensive“.",
-      "en": "“a few” only goes before countable nouns (“a few days”), not before “more expensive”."
+      "de": "„a few“ steht vor zählbaren Nomen („a few days“), nicht vor „more expensive“.",
+      "en": "“a few” goes before countable nouns (“a few days”), not before “more expensive”."
      }
     ]
    }
@@ -11256,8 +11261,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„we still need the final figures“: Es fehlt nur wenig. not quite ready = noch nicht ganz fertig.",
-     "en": "“we still need the final figures”: only a little is missing. not quite ready = almost, but not yet."
+     "de": "„we still need the final figures“: Es fehlt wenig. not quite ready = noch nicht ganz fertig.",
+     "en": "“we still need the final figures”: just a little is missing. not quite ready = almost, but not yet."
     },
     "wrong": [
      {
@@ -11287,16 +11292,16 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „finish“ folgt immer die -ing-Form: finish analyzing. Ein to steht nach finish nie.",
-     "en": "“finish” is always followed by the -ing form: finish analyzing. It never takes to."
+     "de": "Nach „finish“ folgt die -ing-Form: finish analyzing. Ein to passt nach finish nicht.",
+     "en": "“finish” is followed by the -ing form: finish analyzing. It doesn't take to."
     },
     "wrong": [
      {
       "if": [
        "to"
       ],
-      "de": "„to analyze“ passt nicht: Nach „finish“ steht immer -ing, nie to + Verb.",
-      "en": "“to analyze” doesn't work: “finish” always takes -ing, never to + verb."
+      "de": "„to analyze“ passt nicht: Nach „finish“ steht -ing, kein to + Verb.",
+      "en": "“to analyze” doesn't work: “finish” takes -ing, not to + verb."
      },
      {
       "if": [
@@ -11328,8 +11333,8 @@
       "if": [
        "to"
       ],
-      "de": "„to extend“ ist falsch: Nach „consider“ steht nie to + Verb, sondern die -ing-Form.",
-      "en": "“to extend” is wrong: “consider” is never followed by to + verb, only by the -ing form."
+      "de": "„to extend“ ist falsch: Nach „consider“ steht nicht to + Verb, sondern die -ing-Form.",
+      "en": "“to extend” is wrong: “consider” takes the -ing form, not to + verb."
      }
     ]
    }
@@ -11390,8 +11395,8 @@
       "if": [
        "to"
       ],
-      "de": "„by to send“ geht nicht: Nach einer Präposition wie „by“ folgt nie to + Verb.",
-      "en": "“by to send” is impossible: after a preposition like “by”, to + verb never follows."
+      "de": "„by to send“ geht nicht: Nach einer Präposition wie „by“ folgt -ing, kein to + Verb.",
+      "en": "“by to send” is impossible: after a preposition like “by”, use -ing, not to + verb."
      },
      {
       "if": [
@@ -11481,7 +11486,7 @@
    "why": {
     "ok": {
      "de": "„postpone“ verlangt die -ing-Form: postpone onboarding. Wie bei finish oder avoid folgt kein to.",
-     "en": "“postpone” takes the -ing form: postpone onboarding. Like finish or avoid, it's never followed by to."
+     "en": "“postpone” takes the -ing form: postpone onboarding. Like finish or avoid, it isn't followed by to."
     },
     "wrong": [
      {
@@ -11552,8 +11557,8 @@
     "wrong": [
      {
       "opt": "to update",
-      "de": "„for to update“ geht nicht: Nach einer Präposition steht nie to + Verb.",
-      "en": "“for to update” is impossible: after a preposition, to + verb never follows."
+      "de": "„for to update“ geht nicht: Nach einer Präposition folgt -ing, kein to + Verb.",
+      "en": "“for to update” is impossible: after a preposition, use -ing, not to + verb."
      },
      {
       "opt": "update",
@@ -11651,8 +11656,8 @@
     "wrong": [
      {
       "opt": "to scan",
-      "de": "„made us to scan“ ist falsch: Nach make fällt to weg; nur im Passiv kommt es zurück (we were made to scan).",
-      "en": "“made us to scan” is wrong: make drops the to; only the passive brings it back (we were made to scan)."
+      "de": "„made us to scan“ ist falsch: Nach make fällt to weg; im Passiv kommt es zurück (we were made to scan).",
+      "en": "“made us to scan” is wrong: make drops the to; the passive brings it back (we were made to scan)."
      },
      {
       "opt": "scanning",
@@ -11674,8 +11679,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„avoid“ verlangt die -ing-Form: avoid announcing. Ein to folgt nach avoid nie.",
-     "en": "“avoid” takes the -ing form: avoid announcing. It is never followed by to."
+     "de": "„avoid“ verlangt die -ing-Form: avoid announcing. Ein to folgt nach avoid nicht.",
+     "en": "“avoid” takes the -ing form: avoid announcing. It isn't followed by to."
     },
     "wrong": [
      {
@@ -11753,15 +11758,15 @@
    "why": {
     "ok": {
      "de": "„forgot to tell“ = die Aufgabe nicht erledigt. „so she was surprised“ zeigt: Sie wusste es noch nicht.",
-     "en": "“forgot to tell” = the task never got done. “so she was surprised” shows she didn't know yet."
+     "en": "“forgot to tell” = the task didn't get done. “so she was surprised” shows she didn't know yet."
     },
     "wrong": [
      {
       "if": [
        "telling"
       ],
-      "de": "„forgot telling“ hieße „vergessen, dass ich es gesagt habe“. Hier wurde es aber nie gesagt.",
-      "en": "“forgot telling” would mean “forgot that I told her”. Here, she was never told."
+      "de": "„forgot telling“ hieße „vergessen, dass ich es gesagt habe“. Hier wurde es aber gar nicht gesagt.",
+      "en": "“forgot telling” would mean “forgot that I told her”. Here, she wasn't told at all."
      }
     ]
    }
@@ -11846,14 +11851,14 @@
    ],
    "why": {
     "ok": {
-     "de": "„finished“ verlangt die -ing-Form: finished running. Ein to steht nach finish nie.",
-     "en": "“finished” takes the -ing form: finished running. It is never followed by to."
+     "de": "„finished“ verlangt die -ing-Form: finished running. Ein to passt nach finish nicht.",
+     "en": "“finished” takes the -ing form: finished running. It isn't followed by to."
     },
     "wrong": [
      {
       "opt": "to run",
-      "de": "„finished to run“ ist falsch: Nach „finish“ steht immer -ing, nie to + Verb.",
-      "en": "“finished to run” is wrong: “finish” always takes -ing, never to + verb."
+      "de": "„finished to run“ ist falsch: Nach „finish“ steht -ing, kein to + Verb.",
+      "en": "“finished to run” is wrong: “finish” takes -ing, not to + verb."
      },
      {
       "opt": "run",
@@ -12018,7 +12023,7 @@
      {
       "opt": "saying",
       "de": "„regret saying“ hieße „bedauern, es gesagt zu haben“. Hier wird die Nachricht aber gerade erst mitgeteilt.",
-      "en": "“regret saying” means “be sorry you said it earlier”. Here the news is only being shared now."
+      "en": "“regret saying” means “be sorry you said it earlier”. Here the news is being shared right now."
      },
      {
       "opt": "say",
@@ -12071,8 +12076,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„take care“ steht immer mit „of“: take care of the hotel booking.",
-     "en": "“take care” always goes with “of”: take care of the hotel booking."
+     "de": "„take care“ steht mit „of“, wenn etwas folgt: take care of the hotel booking.",
+     "en": "“take care” takes “of” before an object: take care of the hotel booking."
     },
     "wrong": [
      {
@@ -12118,8 +12123,8 @@
       "if": [
        "to"
       ],
-      "de": "„afraid to“ ginge nur mit Grundform (afraid to ask). Vor „asking“ steht „of“.",
-      "en": "“afraid to” only works with a base form (afraid to ask). Before “asking”, use “of”."
+      "de": "„afraid to“ ginge mit der Grundform (afraid to ask). Vor „asking“ steht „of“.",
+      "en": "“afraid to” works with a base form (afraid to ask). Before “asking”, use “of”."
      }
     ]
    }
@@ -12202,8 +12207,8 @@
       "if": [
        "to"
       ],
-      "de": "„for to make“ geht nicht: Nach einer Präposition steht nie to + Verb.",
-      "en": "“for to make” is impossible: after a preposition, to + verb never follows."
+      "de": "„for to make“ geht nicht: Nach einer Präposition folgt -ing, kein to + Verb.",
+      "en": "“for to make” is impossible: after a preposition, use -ing, not to + verb."
      },
      {
       "if": [
@@ -12308,8 +12313,8 @@
      },
      {
       "opt": "of",
-      "de": "„dependent of“ ist falsch: Nur „independent“ steht mit „of“.",
-      "en": "“dependent of” is wrong: only “independent” takes “of”."
+      "de": "„dependent of“ ist falsch: „independent“ steht mit „of“, „dependent“ mit „on“.",
+      "en": "“dependent of” is wrong: “independent” takes “of”, “dependent” takes “on”."
      }
     ]
    }
@@ -12402,8 +12407,8 @@
     "wrong": [
      {
       "opt": "to sign",
-      "de": "„After to sign“ geht nicht: Nach einer Präposition steht nie to + Verb.",
-      "en": "“After to sign” is impossible: after a preposition, to + verb never follows."
+      "de": "„After to sign“ geht nicht: Nach einer Präposition folgt -ing, kein to + Verb.",
+      "en": "“After to sign” is impossible: after a preposition, use -ing, not to + verb."
      },
      {
       "opt": "sign",
@@ -12449,16 +12454,16 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Veränderungen wie „jump“ stehen mit „in“: a jump in orders. „of“ stünde nur vor einer Zahl.",
-     "en": "Changes like “jump” take “in”: a jump in orders. “of” would only go before a number."
+     "de": "Veränderungen wie „jump“ stehen mit „in“: a jump in orders. „of“ stünde vor einer Zahl.",
+     "en": "Changes like “jump” take “in”: a jump in orders. “of” would go before a number."
     },
     "wrong": [
      {
       "if": [
        "of"
       ],
-      "de": "„jump of“ passt nur vor einen Betrag (a jump of 20%). Vor „repeat orders“ steht „in“.",
-      "en": "“jump of” only fits before an amount (a jump of 20%). Before “repeat orders”, use “in”."
+      "de": "„jump of“ passt vor einen Betrag (a jump of 20%). Vor „repeat orders“ steht „in“.",
+      "en": "“jump of” fits before an amount (a jump of 20%). Before “repeat orders”, use “in”."
      }
     ]
    }
@@ -12657,7 +12662,7 @@
    "why": {
     "ok": {
      "de": "„a lack“ steht fest mit „of“: a lack of clear priorities.",
-     "en": "“a lack” always takes “of”: a lack of clear priorities."
+     "en": "“a lack” takes “of”: a lack of clear priorities."
     },
     "wrong": [
      {
@@ -12667,8 +12672,8 @@
      },
      {
       "opt": "from",
-      "de": "„lack from“ ist falsch: Nach „a lack“ steht immer „of“.",
-      "en": "“lack from” is wrong: “a lack” is always followed by “of”."
+      "de": "„lack from“ ist falsch: Nach „a lack“ steht „of“.",
+      "en": "“lack from” is wrong: “a lack” is followed by “of”."
      }
     ]
    }
@@ -12700,8 +12705,8 @@
      },
      {
       "opt": "for",
-      "de": "„worried for“ geht nur mit Personen (worried for her). Für ein Thema steht „about“.",
-      "en": "“worried for” only works with people (worried for her). For a topic, use “about”."
+      "de": "„worried for“ passt zu Personen (worried for her). Für ein Thema steht „about“.",
+      "en": "“worried for” works with people (worried for her). For a topic, use “about”."
      }
     ]
    }
@@ -12800,8 +12805,8 @@
        "back",
        "them"
       ],
-      "de": "„sent back them“ ist falsch: Ein Pronomen wie them steht nie hinter der Partikel.",
-      "en": "“sent back them” is wrong: a pronoun like them never goes after the particle."
+      "de": "„sent back them“ ist falsch: Ein Pronomen wie them steht nicht hinter der Partikel.",
+      "en": "“sent back them” is wrong: a pronoun like them doesn't go after the particle."
      }
     ]
    }
@@ -12827,8 +12832,8 @@
        "up",
        "it"
       ],
-      "de": "„set up it“ ist falsch: Ein Pronomen steht immer zwischen Verb und Partikel.",
-      "en": "“set up it” is wrong: a pronoun always goes between the verb and the particle."
+      "de": "„set up it“ ist falsch: Ein Pronomen steht zwischen Verb und Partikel.",
+      "en": "“set up it” is wrong: a pronoun goes between the verb and the particle."
      }
     ]
    }
@@ -12855,8 +12860,8 @@
        "it",
        "with"
       ],
-      "de": "„deal it with“ ist falsch: „deal with“ wird nie getrennt, auch nicht mit Pronomen.",
-      "en": "“deal it with” is wrong: “deal with” never splits, not even with a pronoun."
+      "de": "„deal it with“ ist falsch: „deal with“ wird nicht getrennt, auch nicht mit Pronomen.",
+      "en": "“deal it with” is wrong: “deal with” doesn't split, not even with a pronoun."
      }
     ]
    }
@@ -12883,8 +12888,8 @@
        "it",
        "up"
       ],
-      "de": "„put it up with“ ist falsch: Dreiteilige Verben wie „put up with“ werden nie getrennt.",
-      "en": "“put it up with” is wrong: three-word verbs like “put up with” never split."
+      "de": "„put it up with“ ist falsch: Dreiteilige Verben wie „put up with“ werden nicht getrennt.",
+      "en": "“put it up with” is wrong: three-word verbs like “put up with” don't split."
      }
     ]
    }
@@ -12935,8 +12940,8 @@
       "if": [
        "up"
       ],
-      "de": "„turned up“ heißt auftauchen oder lauter stellen; hier passt nur „ablehnen“: turned down.",
-      "en": "“turned up” means appeared or made louder; only “reject” fits here: turned down."
+      "de": "„turned up“ heißt auftauchen oder lauter stellen; hier passt „ablehnen“: turned down.",
+      "en": "“turned up” means appeared or made louder; here “reject” fits: turned down."
      },
      {
       "if": [
@@ -12970,8 +12975,8 @@
     "wrong": [
      {
       "opt": "look over it",
-      "de": "„look over it“ ist falsch: Bei trennbaren Verben steht ein Pronomen nie hinter der Partikel.",
-      "en": "“look over it” is wrong: with separable verbs, a pronoun never goes after the particle."
+      "de": "„look over it“ ist falsch: Bei trennbaren Verben steht ein Pronomen nicht hinter der Partikel.",
+      "en": "“look over it” is wrong: with separable verbs, a pronoun doesn't go after the particle."
      },
      {
       "opt": "look it up",
@@ -13003,8 +13008,8 @@
     "wrong": [
      {
       "opt": "looking it into",
-      "de": "„looking it into“ ist falsch: „look into“ wird nie getrennt, auch nicht mit Pronomen.",
-      "en": "“looking it into” is wrong: “look into” never splits, not even with a pronoun."
+      "de": "„looking it into“ ist falsch: „look into“ wird nicht getrennt, auch nicht mit Pronomen.",
+      "en": "“looking it into” is wrong: “look into” doesn't split, not even with a pronoun."
      },
      {
       "opt": "looking into",
@@ -13165,8 +13170,8 @@
       "if": [
        "the"
       ],
-      "de": "„as the data analyst“ klänge, als gäbe es nur eine Stelle. Für den Beruf steht a/an.",
-      "en": "“as the data analyst” sounds like there's only one post. For a job, use a/an."
+      "de": "„as the data analyst“ klänge, als gäbe es eine einzige Stelle. Für den Beruf steht a/an.",
+      "en": "“as the data analyst” sounds like there's a single post. For a job, use a/an."
      },
      {
       "if": [
@@ -13241,16 +13246,16 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Vor „highest“ (der höchste) steht immer „the“: Den höchsten Wert gibt es nur einmal.",
-     "en": "“highest” always takes “the”: there's only one highest value."
+     "de": "Vor „highest“ (der höchste) steht „the“: Es gibt genau einen höchsten Wert.",
+     "en": "“highest” takes “the”: there's a single highest value."
     },
     "wrong": [
      {
       "if": [
        "a"
       ],
-      "de": "„a highest“ ist falsch: Den höchsten Wert gibt es nur einmal, deshalb „the“.",
-      "en": "“a highest” is wrong: there's only one highest value, so use “the”."
+      "de": "„a highest“ ist falsch: Es gibt genau einen höchsten Wert, deshalb „the“.",
+      "en": "“a highest” is wrong: there's a single highest value, so use “the”."
      }
     ]
    }
@@ -13328,8 +13333,8 @@
     "wrong": [
      {
       "opt": "so",
-      "de": "„so productive workshop“ ist falsch: „so“ steht nur vor dem Adjektiv allein (so productive).",
-      "en": "“so productive workshop” is wrong: “so” only goes before an adjective alone (so productive)."
+      "de": "„so productive workshop“ ist falsch: „so“ steht vor dem Adjektiv allein (so productive).",
+      "en": "“so productive workshop” is wrong: “so” goes before an adjective on its own (so productive)."
      },
      {
       "opt": "such",
@@ -13394,8 +13399,8 @@
     "wrong": [
      {
       "opt": "a",
-      "de": "„a files“ ist falsch: „a“ steht nie vor einem Plural.",
-      "en": "“a files” is wrong: “a” never goes before a plural."
+      "de": "„a files“ ist falsch: „a“ steht nicht vor einem Plural.",
+      "en": "“a files” is wrong: “a” doesn't go before a plural."
      },
      {
       "opt": "–",
@@ -13421,19 +13426,19 @@
    ],
    "why": {
     "ok": {
-     "de": "Vor „first“ (der erste) steht immer „the“: the first time.",
-     "en": "“first” always takes “the”: the first time."
+     "de": "Vor „first“ (der erste) steht „the“: the first time.",
+     "en": "“first” takes “the”: the first time."
     },
     "wrong": [
      {
       "opt": "–",
-      "de": "Ohne Artikel geht es nicht: Vor „first time“ steht immer „the“.",
-      "en": "No article won't work: “first time” always takes “the”."
+      "de": "Ohne Artikel geht es nicht: Vor „first time“ steht „the“.",
+      "en": "No article won't work: “first time” takes “the”."
      },
      {
       "opt": "a",
-      "de": "„a first time“ ist falsch: Das erste Mal gibt es nur einmal, deshalb „the“.",
-      "en": "“a first time” is wrong: there's only one first time, so use “the”."
+      "de": "„a first time“ ist falsch: Es gibt genau ein erstes Mal, deshalb „the“.",
+      "en": "“a first time” is wrong: there's a single first time, so use “the”."
      }
     ]
    }
@@ -13465,8 +13470,8 @@
      },
      {
       "opt": "a",
-      "de": "„a contracts“ ist falsch: „a“ steht nie vor einem Plural.",
-      "en": "“a contracts” is wrong: “a” never goes before a plural."
+      "de": "„a contracts“ ist falsch: „a“ steht nicht vor einem Plural.",
+      "en": "“a contracts” is wrong: “a” doesn't go before a plural."
      }
     ]
    }
@@ -13575,8 +13580,8 @@
       "if": [
        "many"
       ],
-      "de": "„many“ steht nur vor zählbaren Wörtern im Plural. „time“ als Zeitmenge ist nicht zählbar.",
-      "en": "“many” only goes before countable plurals. “time” as an amount is uncountable."
+      "de": "„many“ steht vor zählbaren Wörtern im Plural. „time“ als Zeitmenge ist nicht zählbar.",
+      "en": "“many” goes before countable plurals. “time” as an amount is uncountable."
      }
     ]
    }
@@ -13603,8 +13608,8 @@
       "if": [
        "little"
       ],
-      "de": "„a little“ steht nur vor nicht zählbaren Wörtern. Vor „questions“ heißt es „a few“.",
-      "en": "“a little” only goes before uncountable words. Before “questions”, use “a few”."
+      "de": "„a little“ steht vor nicht zählbaren Wörtern. Vor „questions“ heißt es „a few“.",
+      "en": "“a little” goes before uncountable words. Before “questions”, use “a few”."
      },
      {
       "if": [
@@ -13617,7 +13622,8 @@
       ]
      }
     ]
-   }
+   },
+   "hint": "(ein paar)"
   },
   {
    "id": "cnt-a5",
@@ -13657,8 +13663,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„three“ zählt Anlässe: three times = dreimal. Nur als Zeitmenge ist time nicht zählbar.",
-     "en": "“three” counts occasions: three times. Only as an amount of time is time uncountable."
+     "de": "„three“ zählt Anlässe: three times = dreimal. Als Zeitmenge ist time nicht zählbar.",
+     "en": "“three” counts occasions: three times. As an amount of time, time is uncountable."
     },
     "wrong": [
      {
@@ -13698,8 +13704,8 @@
      },
      {
       "opt": "many",
-      "de": "„many“ steht nur vor zählbaren Wörtern im Plural; „feedback“ ist nicht zählbar.",
-      "en": "“many” only goes before countable plurals; “feedback” is uncountable."
+      "de": "„many“ steht vor zählbaren Wörtern im Plural; „feedback“ ist nicht zählbar.",
+      "en": "“many” goes before countable plurals; “feedback” is uncountable."
      }
     ]
    }
@@ -13759,8 +13765,8 @@
     "wrong": [
      {
       "opt": "fewer",
-      "de": "„fewer“ steht nur vor zählbaren Wörtern im Plural (fewer days), nicht vor „time“.",
-      "en": "“fewer” only goes before countable plurals (fewer days), not before “time”."
+      "de": "„fewer“ steht vor zählbaren Wörtern im Plural (fewer days), nicht vor „time“.",
+      "en": "“fewer” goes before countable plurals (fewer days), not before “time”."
      },
      {
       "opt": "little",
@@ -13792,8 +13798,8 @@
     "wrong": [
      {
       "opt": "a few",
-      "de": "„a few“ steht nur vor zählbaren Wörtern im Plural; „information“ ist nicht zählbar.",
-      "en": "“a few” only goes before countable plurals; “information” is uncountable."
+      "de": "„a few“ steht vor zählbaren Wörtern im Plural; „information“ ist nicht zählbar.",
+      "en": "“a few” goes before countable plurals; “information” is uncountable."
      },
      {
       "opt": "many",
@@ -13890,8 +13896,8 @@
       "if": [
        "neither"
       ],
-      "de": "„Neither“ gilt nur bei genau zwei. Bei „three suppliers“ steht None.",
-      "en": "“Neither” is only for exactly two. With “three suppliers”, use None."
+      "de": "„Neither“ gilt für genau zwei. Bei „three suppliers“ steht None.",
+      "en": "“Neither” is for exactly two. With “three suppliers”, use None."
      },
      {
       "if": [
@@ -13976,8 +13982,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„maybe once a quarter“ zeigt: fast nie. „hardly ever“ ist schon verneinend, ohne don't.",
-     "en": "“maybe once a quarter” means almost never. “hardly ever” is already negative, with no don't."
+     "de": "„maybe once a quarter“ zeigt: sehr selten. „hardly ever“ ist schon verneinend, ohne don't.",
+     "en": "“maybe once a quarter” means very rarely. “hardly ever” is already negative, with no don't."
     },
     "wrong": [
      {
@@ -13985,21 +13991,21 @@
        "don't"
       ],
       "de": "„don't ever“ hieße „nie“, doch „maybe once a quarter“ zeigt „fast nie“: hardly ever, ohne don't.",
-      "en": "“don't ever” means never, but “maybe once a quarter” means almost never: hardly ever, with no don't."
+      "en": "“don't ever” means not at all, but “maybe once a quarter” means very rarely: hardly ever, with no don't."
      },
      {
       "if": [
        "not"
       ],
       "de": "„not“ passt nicht: „hardly ever“ heißt schon „fast nie“, eine zweite Verneinung ist zu viel.",
-      "en": "“not” doesn't fit: “hardly ever” already means almost never, so a second negative is one too many."
+      "en": "“not” doesn't fit: “hardly ever” already means very rarely, so a second negative is one too many."
      },
      {
       "if": [
        "never"
       ],
-      "de": "„never ever“ hieße „absolut nie“. „maybe once a quarter“ zeigt aber: fast nie, also hardly.",
-      "en": "“never ever” means not at all. But “maybe once a quarter” shows almost never, so use hardly."
+      "de": "„never ever“ hieße „absolut nie“. „maybe once a quarter“ zeigt aber: sehr selten, also hardly.",
+      "en": "“never ever” means not at all. But “maybe once a quarter” shows very rarely, so use hardly."
      }
     ]
    }
@@ -14088,8 +14094,8 @@
     "wrong": [
      {
       "opt": "neither of them",
-      "de": "„neither“ gilt nur bei genau zwei; hier sind es „five candidates“.",
-      "en": "“neither” is only for exactly two; here there are “five candidates”."
+      "de": "„neither“ gilt für genau zwei; hier sind es „five candidates“.",
+      "en": "“neither” is for exactly two; here there are “five candidates”."
      },
      {
       "opt": "no one of them",
@@ -14258,8 +14264,8 @@
      },
      {
       "opt": "a little",
-      "de": "„a little“ steht nur vor nicht zählbaren Wörtern; „people“ ist zählbar.",
-      "en": "“a little” only goes before uncountable words; “people” is countable."
+      "de": "„a little“ steht vor nicht zählbaren Wörtern; „people“ ist zählbar.",
+      "en": "“a little” goes before uncountable words; “people” is countable."
      }
     ]
    }
@@ -14285,8 +14291,8 @@
       "if": [
        "which"
       ],
-      "de": "„which“ steht nur für Dinge. Für eine Person wie „a project lead“ steht who.",
-      "en": "“which” is only for things. For a person like “a project lead”, use who."
+      "de": "„which“ steht für Dinge. Für eine Person wie „a project lead“ steht who.",
+      "en": "“which” is for things. For a person like “a project lead”, use who."
      }
     ]
    }
@@ -14334,16 +14340,16 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Die Kommas zeigen eine Zusatzinfo über „The quarterly report“. Dann steht which, nie that.",
-     "en": "The commas mark extra information about “The quarterly report”. Then use which, never that."
+     "de": "Die Kommas zeigen eine Zusatzinfo über „The quarterly report“. Dann steht which, nicht that.",
+     "en": "The commas mark extra information about “The quarterly report”. Then use which, not that."
     },
     "wrong": [
      {
       "if": [
        "that"
       ],
-      "de": "„that“ steht nie zwischen Kommas. Bei Zusatzinfos heißt es which (Dinge) oder who (Personen).",
-      "en": "“that” never goes between commas. For extra information, use which (things) or who (people)."
+      "de": "„that“ steht nicht zwischen Kommas. Bei Zusatzinfos heißt es which (Dinge) oder who (Personen).",
+      "en": "“that” doesn't go between commas. For extra information, use which (things) or who (people)."
      },
      {
       "if": [
@@ -14403,16 +14409,16 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "Direkt nach einer Präposition wie „for“ steht bei Dingen which, nie that.",
-     "en": "Directly after a preposition like “for”, use which for things, never that."
+     "de": "Direkt nach einer Präposition wie „for“ steht bei Dingen which, nicht that.",
+     "en": "Directly after a preposition like “for”, use which for things, not that."
     },
     "wrong": [
      {
       "if": [
        "that"
       ],
-      "de": "„for that“ ist falsch: that steht nie direkt nach einer Präposition.",
-      "en": "“for that” is wrong: that never comes directly after a preposition."
+      "de": "„for that“ ist falsch: that steht nicht direkt nach einer Präposition.",
+      "en": "“for that” is wrong: that doesn't come directly after a preposition."
      },
      {
       "if": [
@@ -14537,8 +14543,8 @@
     "wrong": [
      {
       "opt": "that",
-      "de": "„that“ steht nie zwischen Kommas. Bei Zusatzinfos zu Personen heißt es who.",
-      "en": "“that” never goes between commas. For extra information about people, use who."
+      "de": "„that“ steht nicht zwischen Kommas. Bei Zusatzinfos zu Personen heißt es who.",
+      "en": "“that” doesn't go between commas. For extra information about people, use who."
      },
      {
       "opt": "which",
@@ -14564,14 +14570,14 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „the reason“ steht why: the reason why. Nie „the reason because“.",
-     "en": "After “the reason”, use why: the reason why. Never “the reason because”."
+     "de": "Nach „the reason“ steht why: the reason why. Nicht „the reason because“.",
+     "en": "After “the reason”, use why: the reason why. Not “the reason because”."
     },
     "wrong": [
      {
       "opt": "because",
-      "de": "„the reason because“ ist falsch: Nach „the reason“ steht why (oder that), nie because.",
-      "en": "“the reason because” is wrong: after “the reason”, use why (or that), never because."
+      "de": "„the reason because“ ist falsch: Nach „the reason“ steht why (oder that), nicht because.",
+      "en": "“the reason because” is wrong: after “the reason”, use why (or that), not because."
      },
      {
       "opt": "where",
@@ -14608,8 +14614,8 @@
      },
      {
       "opt": "that",
-      "de": "„on that“ ist falsch: that steht nie direkt nach einer Präposition.",
-      "en": "“on that” is wrong: that never comes directly after a preposition."
+      "de": "„on that“ ist falsch: that steht nicht direkt nach einer Präposition.",
+      "en": "“on that” is wrong: that doesn't come directly after a preposition."
      }
     ]
    }
@@ -14731,8 +14737,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach der Lücke folgt nur ein Nomen („the heavy snow“), kein Satz, deshalb Despite.",
-     "en": "Only a noun follows (“the heavy snow”), not a clause, so use Despite."
+     "de": "Nach der Lücke folgt ein Nomen („the heavy snow“), kein Satz, deshalb Despite.",
+     "en": "A noun follows (“the heavy snow”), not a clause, so use Despite."
     },
     "wrong": [
      {
@@ -15242,7 +15248,7 @@
        "having",
        "developed"
       ],
-      "de": "„Having developed“ hieße: Das Tool hat etwas entwickelt. Es wurde entwickelt, also nur Developed.",
+      "de": "„Having developed“ hieße: Das Tool hat etwas entwickelt. Es wurde entwickelt, also Developed.",
       "en": "“Having developed” means the tool developed something. It was developed, so just: Developed."
      }
     ]
@@ -15533,8 +15539,8 @@
       "if": [
        "though"
       ],
-      "de": "„even though“ leitet einen Nebensatz mit Subjekt und Verb ein. Allein vor dem Komma passt nur even so.",
-      "en": "“even though” must start a clause with subject and verb. Alone before a comma, only even so works."
+      "de": "„even though“ leitet einen Nebensatz mit Subjekt und Verb ein. Allein vor dem Komma passt even so.",
+      "en": "“even though” must start a clause with subject and verb. Alone before a comma, use even so."
      },
      {
       "if": [
@@ -15584,7 +15590,7 @@
    ],
    "why": {
     "ok": {
-     "de": "„To build … what Sam said“ knüpft an einen Punkt an. Nach build steht nur on: to build on.",
+     "de": "„To build … what Sam said“ knüpft an einen Punkt an. Nach build steht hier on: to build on.",
      "en": "“To build … what Sam said” extends a point. After build comes just on: to build on."
     },
     "wrong": [
@@ -15592,7 +15598,7 @@
       "if": [
        "up"
       ],
-      "de": "„build up on“ kommt von „darauf aufbauen“. Englisch sagt nur to build on.",
+      "de": "„build up on“ kommt von „darauf aufbauen“. Englisch sagt to build on.",
       "en": "“build up on” comes from German “darauf aufbauen”. English just says to build on."
      }
     ]
@@ -15788,7 +15794,7 @@
      },
      {
       "opt": "Building up on",
-      "de": "„building up on“ kommt von „darauf aufbauen“. Englisch sagt nur building on.",
+      "de": "„building up on“ kommt von „darauf aufbauen“. Englisch sagt building on.",
       "en": "“building up on” comes from German “darauf aufbauen”. English just says building on."
      }
     ]
@@ -15854,7 +15860,7 @@
      },
      {
       "opt": "on the other hand",
-      "de": "„on the other hand“ zeigt eine Gegenseite. Hier gibt es keinen Gegensatz, nur ein Fazit.",
+      "de": "„on the other hand“ zeigt eine Gegenseite. Hier gibt es keinen Gegensatz, sondern ein Fazit.",
       "en": "“on the other hand” shows another side. There's no contrast here, just a conclusion."
      }
     ]
@@ -16224,8 +16230,8 @@
    ],
    "why": {
     "ok": {
-     "de": "„No sooner“ ist ein Vergleich („früher als“). Dazu gehört immer than.",
-     "en": "“No sooner” is a comparison (“sooner than”). It always takes than."
+     "de": "„No sooner“ ist ein Vergleich („früher als“). Dazu gehört than.",
+     "en": "“No sooner” is a comparison (“sooner than”). It takes than."
     },
     "wrong": [
      {
@@ -16482,7 +16488,7 @@
       "if": [
        "will"
       ],
-      "de": "Nach Should steht kein will, nur die Grundform: Should you have.",
+      "de": "Nach Should steht kein will, sondern die Grundform: Should you have.",
       "en": "After Should, no will, just the base form: Should you have."
      },
      {
@@ -16687,8 +16693,8 @@
      },
      {
       "opt": "Have we known",
-      "de": "„would have sent“ blickt zurück. Dazu passt nur Had, nicht Have.",
-      "en": "“would have sent” looks back. Only Had fits, not Have."
+      "de": "„would have sent“ blickt zurück. Dazu passt Had, nicht Have.",
+      "en": "“would have sent” looks back. Had fits, not Have."
      }
     ]
    }
@@ -17484,8 +17490,8 @@
     "wrong": [
      {
       "opt": "can't to",
-      "de": "Nach can't steht nie to. Allein reicht: I can't.",
-      "en": "can't is never followed by to. On its own: I can't."
+      "de": "Nach can't steht kein to. Allein reicht: I can't.",
+      "en": "can't is not followed by to. On its own: I can't."
      },
      {
       "opt": "don't",
@@ -17667,7 +17673,7 @@
       "if": [
        "for"
       ],
-      "de": "„for test“ kommt von „um zu“. Nach „the first“ steht nur to: to test.",
+      "de": "„for test“ kommt von „um zu“. Nach „the first“ steht to: to test.",
       "en": "“for test” mirrors German “um zu”. After “the first”, just use to: to test."
      }
     ]
@@ -17686,8 +17692,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „the way“ steht in which oder that, nie how.",
-     "en": "After “the way”, use in which or that, never how."
+     "de": "Nach „the way“ steht in which oder that, nicht how.",
+     "en": "After “the way”, use in which or that, not how."
     },
     "wrong": [
      {
@@ -17708,7 +17714,8 @@
       ]
      }
     ]
-   }
+   },
+   "hint": "(in der)"
   },
   {
    "id": "np-b1",
@@ -17803,7 +17810,7 @@
      },
      {
       "opt": "the clients",
-      "de": "„the clients“ ohne Apostroph ist nur Mehrzahl. Es fehlt das 's, und „she“ zeigt eine Person.",
+      "de": "„the clients“ ohne Apostroph ist die Mehrzahl. Es fehlt das 's, und „she“ zeigt eine Person.",
       "en": "“the clients” is just a plural with no 's, and “she” shows it's one person."
      }
     ]
@@ -17869,8 +17876,8 @@
      },
      {
       "opt": "These",
-      "de": "„These who“ geht nicht. Für „diejenigen, die“ steht immer Those who.",
-      "en": "“These who” isn't English. For “the people who”, always use Those who."
+      "de": "„These who“ geht nicht. Für „diejenigen, die“ steht Those who.",
+      "en": "“These who” isn't English. For “the people who”, use Those who."
      }
     ]
    }
@@ -17937,8 +17944,8 @@
       "if": [
        "days"
       ],
-      "de": "„30 days“ ohne Bindestrich passt nur nach dem Verb. Vor „trial“: 30-day.",
-      "en": "“30 days” without a hyphen only works after a verb. Before “trial”: 30-day."
+      "de": "„30 days“ ohne Bindestrich passt nach dem Verb. Vor „trial“: 30-day.",
+      "en": "“30 days” without a hyphen works after a verb. Before “trial”: 30-day."
      },
      {
       "if": [
@@ -17972,8 +17979,8 @@
       "if": [
        "80-page"
       ],
-      "de": "„80-page“ steht nur vor einem Nomen. Nach „is … long“: 80 pages.",
-      "en": "“80-page” only goes before a noun. After “is … long”: 80 pages."
+      "de": "„80-page“ steht vor einem Nomen. Nach „is … long“: 80 pages.",
+      "en": "“80-page” goes before a noun. After “is … long”: 80 pages."
      },
      {
       "if": [
@@ -18174,8 +18181,8 @@
     "wrong": [
      {
       "opt": "ten-minute",
-      "de": "„ten-minute“ steht nur vor einem Nomen (a ten-minute video). Hier: ten minutes long.",
-      "en": "“ten-minute” only goes before a noun (a ten-minute video). Here: ten minutes long."
+      "de": "„ten-minute“ steht vor einem Nomen (a ten-minute video). Hier: ten minutes long.",
+      "en": "“ten-minute” goes before a noun (a ten-minute video). Here: ten minutes long."
      },
      {
       "opt": "ten minute",
@@ -18207,8 +18214,8 @@
     "wrong": [
      {
       "opt": "leather small black",
-      "de": "Das Material („leather“) steht immer direkt vor dem Nomen, nicht vorn.",
-      "en": "Material (“leather”) always goes right before the noun, not first."
+      "de": "Das Material („leather“) steht direkt vor dem Nomen, nicht vorn.",
+      "en": "Material (“leather”) goes right before the noun, not first."
      },
      {
       "opt": "black leather small",
@@ -18425,7 +18432,7 @@
    "why": {
     "ok": {
      "de": "„Scarcely … when“: Ich war gerade weg, da rief der Kunde an. had vor I: had I left.",
-     "en": "“Scarcely … when”: I had only just left when the client called. had goes before I: had I left."
+     "en": "“Scarcely … when”: I had just left when the client called. had goes before I: had I left."
     },
     "wrong": [
      {
@@ -18585,8 +18592,8 @@
      },
      {
       "opt": "should you to share",
-      "de": "Nach should steht nie to: should you share.",
-      "en": "should is never followed by to: should you share."
+      "de": "Nach should steht kein to: should you share.",
+      "en": "should is not followed by to: should you share."
      }
     ]
    }
@@ -18774,8 +18781,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„faster“ vergleicht zwei Dinge. Nach -er steht immer than.",
-     "en": "“faster” compares two things. After -er, always use than."
+     "de": "„faster“ vergleicht zwei Dinge. Nach -er steht than.",
+     "en": "“faster” compares two things. After -er, use than."
     },
     "wrong": [
      {
@@ -18848,7 +18855,7 @@
       "if": [
        "more"
       ],
-      "de": "„more easy“ oder „more easier“: Kurze Wörter bekommen nur -er: easier.",
+      "de": "„more easy“ oder „more easier“: Kurze Wörter bekommen -er: easier.",
       "en": "“more easy” or “more easier”: short words just take -er: easier."
      },
      {
@@ -18873,8 +18880,8 @@
    "accepted": [],
    "why": {
     "ok": {
-     "de": "„about two percent“: nur ein kleiner Unterschied. Dafür slightly + -er-Form: slightly higher.",
-     "en": "“about two percent”: only a small difference. So slightly + -er form: slightly higher."
+     "de": "„about two percent“: ein kleiner Unterschied. Dafür slightly + -er-Form: slightly higher.",
+     "en": "“about two percent”: a small difference. So slightly + -er form: slightly higher."
     },
     "wrong": [
      {
@@ -19014,13 +19021,13 @@
    ],
    "why": {
     "ok": {
-     "de": "„cheap“ ist kurz und bekommt nur -er: cheaper. Nie more und -er zusammen.",
-     "en": "“cheap” is short and just takes -er: cheaper. Never use more and -er together."
+     "de": "„cheap“ ist kurz und bekommt -er: cheaper. Nicht more und -er zusammen.",
+     "en": "“cheap” is short and just takes -er: cheaper. Don't use more and -er together."
     },
     "wrong": [
      {
       "opt": "more cheaper",
-      "de": "„more cheaper“ steigert doppelt. Kurze Wörter bekommen nur -er: cheaper.",
+      "de": "„more cheaper“ steigert doppelt. Kurze Wörter bekommen -er: cheaper.",
       "en": "“more cheaper” doubles up. Short words just take -er: cheaper."
      },
      {
@@ -19053,8 +19060,8 @@
     "wrong": [
      {
       "opt": "very",
-      "de": "„very“ steht nur vor der Grundform (very clear). Vor clearer: much.",
-      "en": "“very” only goes with the base form (very clear). Before clearer: much."
+      "de": "„very“ steht vor der Grundform (very clear). Vor clearer: much.",
+      "en": "“very” goes with the base form (very clear). Before clearer: much."
      },
      {
       "opt": "more",
