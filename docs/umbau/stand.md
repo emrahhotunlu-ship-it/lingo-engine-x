@@ -1030,3 +1030,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - „Verstehe ich net die Aufgabe“ (pp.first-time, „it was the first time she ___ (close) a major deal alone“): Die Begründung sagte, „she closed“ höre man auch, obwohl falsch gewertet. Neue Texte vom english-teacher: Begründung, Zeile für „closed“, Muster-Name/Form/Gebrauch mit „is → has, was → had“ (Commit 697cf78a). „closed“ bleibt ein Fehler.
 - Offen: Emrahs gespeicherter Fehlereintrag (`grammar/past-perfect`.errors) trägt noch den alten `expl`. Ersetzen nur mit seinem OK.
 - **Live** `JLL8…` v103 `1794164803-2e10` (Emrahs „A: Direkt live“), Rückweg v102 `1794083815-25a8`. Volle Prüfung: 7679 Unit grün; E2E 1037 grün, 2 rot → einzeln grün (c1xFrame:139, settings:62).
+- Emrahs OK („A: Ersetzen“): im Live-Dokument `grammar/past-perfect` nur `errors[3].expl` („major deal alone“) durch die neue Begründung ersetzt (Version 22 → 23, sonst unverändert).
