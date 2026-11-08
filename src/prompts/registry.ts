@@ -6,6 +6,7 @@ import { diagnoseV2 } from './diagnoseV2';
 import { solveCheck } from './solveCheck';
 import { wordBank } from './wordBank';
 import { explainAnswerV2 } from './explainAnswerV2';
+import { mistakeWhy } from './mistakeWhy';
 import { sentenceClinic } from './sentenceClinic';
 import { c1Mail } from './c1Mail';
 import { applyReply } from './applyReply';
@@ -57,6 +58,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Lernplattform 2.0 P2: „Erklär mir meine Antwort“
   // `explain-answer@1` (LP2 P2, `explainAnswer.ts`) bleibt als Datei erhalten, wird nicht mehr aufgerufen; die Kennung ist je Vorlage einmalig.
   explainAnswerV2,
+  // Neustart E1 (08.11.2026): ein Satz, warum genau DIESE falsche Antwort nicht passt, plus „Gleich nochmal“
+  mistakeWhy,
   // Lernplattform 3.0 P49: Wochen-Diagnose „Was du verwechselst“; seit Tutor-Engine S4 diagnose@2 mit Annahmen (`diagnose.ts` @1 bleibt als Datei und
   // wird von `features/tutor/diagnoseStore.ts` weiter aufgerufen, bis der Bildschirm umgestellt ist).
   diagnoseV2,

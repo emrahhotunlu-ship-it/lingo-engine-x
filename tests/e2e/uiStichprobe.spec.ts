@@ -139,12 +139,20 @@ for (const d of DEVICES) {
       await expect(page.getByTestId('exercise')).toBeVisible();
       expect(await uiRules(page, d, 'task')).toEqual([]);
       expect(await layoutProblems(page)).toEqual([]);
-      if (await page.getByTestId('gap-input').isVisible()) {
+      const typed = await page.getByTestId('gap-input').isVisible();
+      if (typed) {
         if (d.touch) await page.getByTestId('gap-input').tap();
         await page.keyboard.type('zzz');
         await press(page, d, 'check');
       } else await press(page, d, 'choice-0');
       await expect(page.getByTestId('result')).toBeVisible();
+      // Neustart E1: bei klar falscher Antwort „Du → richtig“, EIN Satz warum, „Gleich nochmal“; die Regel erst auf Tipp.
+      if (typed) {
+        await expect(page.getByTestId('mistake-spot')).toContainText('zzz');
+        await expect(page.getByTestId('mistake-why')).toBeVisible();
+        await expect(page.getByTestId('rule-side')).toHaveCount(0);
+        if (d.touch) expect(await page.evaluate(() => document.activeElement?.getAttribute('data-testid'))).not.toBe('mistake-again-input');
+      }
       if (process.env.SHOT) await page.screenshot({ path: `/dev/shm/lx/shots/ui-${d.w}-gram.png`, fullPage: true });
       expect(await uiRules(page, d, 'result')).toEqual([]);
       expect(await layoutProblems(page)).toEqual([]);
