@@ -843,3 +843,8 @@ Emrah: „Ich habe als Tageszeit 25 min, aber nur der erste Teil dauert schon 30
 - Emrah: „Ich will dedizierte Grammatik Übungen wie aus einem Buch und einen dedizierten Vokabel Trainer wie es andere Apps machen mit verschiedenen Stufen“ und „Ich bin ein Mensch der anwenden muss um zu lernen nicht nur lesen“. Leitvorgabe für alle weiteren Pakete.
 - Keine Einzelfixes mehr ohne Bezug zum Neustart. Bestandsaufnahme und Planvorschlag liegen als private Seite vor (Artefakt `LGZ4jU3z3tWpKUhCbzQ8BV`, enthält echte Lerndaten und kommt deshalb nicht ins Repository). Der Plan wartet auf Emrahs OK.
 - 08.11.2026 (Emrah zur Musterseite): „Nein, ich will nicht bei jedem Wort einen Satz schreiben müssen, dann ist mein Tempo zu langsam.“ → Vokabeltrainer: pro Wort nur das Wort in die Lücke (Auswahl → mit Hilfe → frei → fest). Eigene Sätze nur im Block Anwenden.
+- 08.11.2026 (Emrah: „Die App ist zu dünn in Funktionen und Features und Lernmethodik“) – Auswahl im Fenster:
+  - Vorbilder Vokabeltrainer: **Anki, Babbel, Quizlet**.
+  - Übungsarten Wörter: **Hören + Schreiben (Diktat), Spiele (Zuordnen, Schnellrunde, Karteikarten), Wortwissen (Wortfamilie, Wortpartner, Synonyme/Gegenteile, beide Richtungen)**. Sprechen nicht gewählt.
+  - Funktionen: **Wortliste (Suche, Filter, eigene Wörter, Wortseite), Themen-Stapel mit Fortschritt, Statistik + Prognose, Runde selbst wählen (neu, Wiederholung, schwierig, 5 Minuten, Thema)**.
+  - Grammatik: **Buch-Kapitel (wie English Grammar in Use), viele Übungsarten, Fehlerheft**. Einstufung/Tests nicht gewählt.
