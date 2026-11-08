@@ -1420,6 +1420,7 @@ function LegacyGrammarItem({
             answer: solution,
             accepted: task.accepted,
             pattern: pattern ? { name: pattern.name.en, form: pattern.form.en } : null,
+            clues: [...(pattern?.signals ?? []), ...(kwtKey ? [kwtKey] : [])],
           }}
           form={pattern ? pattern.form[lang] : null}
           ai={!noHelp}

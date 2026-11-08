@@ -22,6 +22,8 @@ export type MistakeWhyVars = {
   /** Hinterlegte Erklärung zu genau dieser falschen Antwort (Deutsch), sonst null. */
   known: string | null;
   pattern: { name: string; form: string } | null;
+  /** Signalwörter des Musters und das Schlüsselwort (KWT): nur gegen diese prüft das Schema den „Hinweis im Satz“ (english-teacher 08.11.2026). */
+  clues?: readonly string[];
   uiLang: UiLang;
 };
 
@@ -42,15 +44,12 @@ const words = (s: string): number => s.trim().split(/\s+/).filter(Boolean).lengt
 const ABBR = /\b(?:z\.\s?B|u\.\s?a|d\.\s?h|bzw|ca|etc|e\.g|i\.e|vs)\./gi;
 const sentences = (s: string): number => (s.replace(ABBR, '').trim().match(/[.!?](?=\s|$)/g) ?? []).length;
 const low = (s: string): string => s.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, ' ').trim();
-// Zweibuchstabige Wörter zählen nur als Hinweis, wenn sie ein echtes Signal sind („if“); Füllwörter nie.
-const STOP = new Set(['on', 'in', 'at', 'to', 'of', 'we', 'it', 'is', 'an', 'he', 'me', 'my', 'us', 'be', 'do', 'so', 'or', 'by', 'up', 'as', 'no', 'go', 'am', 'the', 'and', 'you', 'your', 'that', 'this', 'with', 'for', 'are', 'was', 'were', 'has', 'have', 'had', 'will', 'would', 'not', 'from', 'but', 'our', 'their', 'they', 'she', 'his', 'her', 'its', 'key', 'word']);
-/** Inhaltswörter der Aufgabe außer der eigenen und der richtigen Form: der „Hinweis im Satz“ (Signalwort, Zeit, Bedeutung). */
+/** Die Signalwörter bzw. das Schlüsselwort, die in der Aufgabe wirklich vorkommen. Ohne solche entfällt die Prüfung (sonst fielen gute Sätze wie „h in hour wird nicht gesprochen“ durch). */
 function clueWords(v: MistakeWhyVars): string[] {
-  const own = new Set(`${v.du} ${v.richtig}`.toLowerCase().split(/[^a-z']+/));
-  return [...new Set(v.task.toLowerCase().replace(/\([^)]*\)/g, ' ').split(/[^a-z']+/))].filter((w) => w.length >= 2 && !STOP.has(w) && !own.has(w));
+  const task = ` ${low(v.task).replace(/[^a-z' ]+/g, ' ')} `;
+  return (v.clues ?? []).map(low).filter((c) => c.length > 0 && task.includes(` ${c} `));
 }
 
-/** Ein Satz, höchstens 26 Wörter; nennt die eigene Form oder die richtige (sonst wäre es wieder eine allgemeine Regel). */
 const oneSentence = (lang: 'de' | 'en', v: MistakeWhyVars) =>
   z
     .string()
@@ -73,7 +72,7 @@ const oneSentence = (lang: 'de' | 'en', v: MistakeWhyVars) =>
 function hasClue(w: { de: string; en: string }, v: MistakeWhyVars): boolean {
   const clues = clueWords(v);
   if (!clues.length) return true;
-  const t = ` ${low(w.de)} ${low(w.en)} `.replace(/[^a-z' ]+/g, ' ');
+  const t = ` ${low(w.de)} ${low(w.en)} `.replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ');
   return clues.some((c) => t.includes(` ${c} `));
 }
 
@@ -101,7 +100,7 @@ export function mistakeWhySchema(v: MistakeWhyVars): z.ZodType<MistakeWhyOut> {
     })
     .superRefine((o, ctx) => {
       if (!o.alsoOk && !hasClue(o.warum, v))
-        ctx.addIssue({ code: 'custom', path: ['warum'], message: 'name the concrete clue word from the task sentence that rules out the learner form ("the sentence needs X" is not a reason)' });
+        ctx.addIssue({ code: 'custom', path: ['warum'], message: `name the clue in the task sentence that rules out the learner form (${clueWords(v).join(', ')}); "the sentence needs X" is not a reason` });
     })
     .transform((o) => ({ ...o, nochmal: o.alsoOk ? null : o.nochmal }));
 }
@@ -125,15 +124,16 @@ export const mistakeWhy: PromptTemplate<MistakeWhyVars, MistakeWhyOut> = {
       v.accepted.length > 1 ? line('Also accepted', v.accepted.slice(0, 4).map((a) => clip(a, 80)).join(' | ')) : '',
       line('Wrong part (learner)', clip(v.du, 80)),
       line('Correct part', clip(v.richtig, 80)),
+      clueWords(v).length ? line('Clue words in this sentence', clueWords(v).join(', ')) : '',
       v.pattern ? line('Grammar point', `${clip(v.pattern.name, 100)} (${clip(v.pattern.form, 120)})`) : '',
       v.known ? line('Known explanation for exactly this mistake (German; keep its content)', clip(v.known, 240)) : '',
       'Reply with only one JSON object in exactly this shape:',
       MISTAKE_WHY_EXAMPLE_JSON,
       'Rules:',
       // Wortlaut nach english-teacher 08.11.2026. Das Schema erlaubt 26 Wörter als Puffer für die 22 im Prompt.
-      `- warum: ONE sentence, max 22 words, German "de" and English "en". Start with the learner form in quotes ("${clip(v.du || v.richtig, 60)}"), say what it signals or means, then quote the word in THIS sentence that rules it out (signal word, key word, meaning); "the sentence needs X" is not a reason. Name the German habit only if this is a real German transfer (seit + Präsens, gestern habe ich …, Wenn … wird, Informationen); never invent one. Tense names (Past Simple) are fine; no other grammar terms, no abbreviations, no "always/never" rules.`,
+      `- warum: ONE sentence, max 22 words, German "de" and English "en". Start with the learner form in „…“ (de) and “…” (en) (${clip(v.du || v.richtig, 60)}), say what it signals or means, then quote the word in THIS sentence that rules it out (signal word, key word, meaning); "the sentence needs X" is not a reason. Name the German habit only if this is a real German transfer (seit + Präsens, gestern habe ich …, Wenn … wird, Informationen); never invent one. Tense names (Past Simple) are fine; no other grammar terms, no abbreviations, no "always/never" rules.`,
       '- If the learner form is only a typo, say so and nothing else.',
-      '- nochmal: ONE new business sentence (8 to 18 words). Keep the SAME trigger (same signal word, conjunction or key word) and the same answer form; change only the topic. Exactly one gap ___; exactly one natural solution; base verb in English in brackets. "answer" is the gap text; put contractions or other equally correct gap texts in "accepted" (at most 3).',
+      '- nochmal: ONE new business sentence (8 to 18 words). Keep the SAME trigger (same signal word, conjunction or key word) and the same answer form; change only the topic. Exactly one gap ___; exactly one natural solution; base verb in brackets if the point is a verb form, otherwise no hint. "answer" is the gap text; put contractions or other equally correct gap texts in "accepted" (at most 3).',
       '- Key word transformation task: nochmal is again a transformation in one line: "<new source sentence> → <frame with ___> (KEYWORD)". In warum, say what the learner version changes (meaning, missing word around the key word, key word changed).',
       '- Choice task: nochmal is a gap to type, not a choice. Never reuse the task sentence.',
       '- If alsoOk is true, nochmal is null.',

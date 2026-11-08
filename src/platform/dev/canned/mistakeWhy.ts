@@ -17,7 +17,7 @@ export function mistakeWhyReply(input: string): string {
   }
   // Der Hinweis im Satz: das erste längere Wort der Aufgabe, das weder die eigene noch die richtige Form ist (wie es das Schema verlangt).
   const own = new Set(`${du} ${richtig}`.toLowerCase().split(/[^a-z']+/));
-  const clue = line(input, 'Task').toLowerCase().replace(/\([^)]*\)/g, ' ').split(/[^a-z']+/).find((w) => w.length >= 4 && !own.has(w)) ?? 'here';
+  const clue = (line(input, 'Clue words in this sentence').split(',')[0]?.trim() || line(input, 'Task').toLowerCase().replace(/\([^)]*\)/g, ' ').split(/[^a-z']+/).find((w) => w.length >= 4 && !own.has(w))) ?? 'here';
   return JSON.stringify({
     warum: {
       de: `„${du}“ passt hier nicht, weil „${clue}“ im Satz „${richtig}“ verlangt.`,

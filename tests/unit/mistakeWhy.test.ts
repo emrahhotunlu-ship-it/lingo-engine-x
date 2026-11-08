@@ -14,6 +14,7 @@ const vars: MistakeWhyVars = {
   richtig: 'signs',
   known: null,
   pattern: { name: 'First conditional', form: 'if + present, will + base verb' },
+  clues: ['if', 'unless'],
   uiLang: 'de',
 };
 
@@ -72,6 +73,11 @@ describe('mistake-why@1', () => {
   it('kurze eigene Form muss genannt sein (nur die Lösung reicht nicht)', () => {
     const r = mistakeWhySchema(vars).safeParse({ ...ok, warum: { de: 'Nach „if“ steht für heute die einfache Form „signs“.', en: 'After “if” today takes the simple form “signs”.' } });
     expect(r.success).toBe(false);
+  });
+  it('ohne Signalwort im Satz keine Hinweis-Pflicht (h in hour)', () => {
+    const v2 = { ...vars, task: 'We waited for ___ hour.', given: 'a', answer: 'an', du: 'a', richtig: 'an', clues: ['an'] };
+    const r = mistakeWhySchema({ ...v2, clues: [] }).safeParse({ ...ok, warum: { de: '„a“ passt nicht: das h in hour wird nicht gesprochen, also an.', en: '“a” does not fit: the h in hour is silent, so an.' } });
+    expect(r.success).toBe(true);
   });
   it('Abkürzung „z. B.“ zählt nicht als zweiter Satz', () => {
     const r = mistakeWhySchema(vars).safeParse({ ...ok, warum: { ...ok.warum, de: '„will sign“ passt nach „if“ nicht, dort steht z. B. „signs“ für heute.' } });
