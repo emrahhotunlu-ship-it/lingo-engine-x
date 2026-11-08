@@ -36,18 +36,20 @@ Etwa 75 Dokumente pro Jahr. Schreibvorgänge nur bei einer Antwort oder einem Bl
 - Beim Wieder-Einschalten gewinnt je Wort die neuere Spur, eine Stufe sinkt dabei nie.
 
 ## Vokabeltrainer
+Emrah 08.11.2026: „Ich will nicht bei jedem Wort einen Satz schreiben müssen, dann ist mein Tempo zu langsam.“ Deshalb tippt er pro Wort **nur das Wort in die Lücke**. Eigene Sätze gibt es nur im Block Anwenden (2 Wörter pro Tag).
+
 | Stufe | Aufgabe | Aufstieg |
 |---|---|---|
-| 1 Kennenlernen | Bedeutung, Satz EN+DE, Vorlesen | sofort; erster Abruf in derselben Runde |
-| 2 Mit Hilfe | DE-Satz → EN-Satz mit Lücke und Anfangsbuchstaben | richtig → 3 |
-| 3 Frei | anderer DE-Satz → ganzer EN-Satz, gewertet wird das Zielwort | richtig an 2 Tagen → 4 |
-| 4 Anwenden | Situation → eigener Satz, Claude prüft (`lk-apply@1`) | angenommen und s ≥ 7 → 5 |
-| 5 Fest | wie 3 mit neuem Satz, jeder 3. Termin wie 4 | – |
+| 1 Kennenlernen | Bedeutung, Satz, Merksatz zur deutschen Falle, ein Tipp | sofort |
+| 2 Erkennen | Lückensatz (mit DE-Übersetzung), 4 Wörter zur Auswahl, Ablenker sicher falsch | richtig → 3 |
+| 3 Erinnern | neuer Lückensatz, Wort tippen, Anfangsbuchstaben als Hilfe | richtig → 4 |
+| 4 Frei | neuer Lückensatz, Wort tippen ohne Hilfe | richtig an 2 Tagen → 5 |
+| 5 Fest | jedes Mal ein neuer Lückensatz, große Abstände | – |
 
-- Zwei Fehler in Folge → eine Stufe zurück. Ein Tippfehler zählt als richtig mit Hinweis.
+- Je Karte 4 geprüfte Lückensätze, eine Liste `auch_richtig` je Satz („Passt auch. Gesucht war: …“) und 3 Ablenker.
+- Zwei Fehler in Folge → eine Stufe zurück. Ein Tippfehler zählt als „fast richtig“.
 - Abstands-Deckel je Stufe: 2, 7, 21 und 365 Tage.
 - Fest 5 neue Wörter pro Tag, eigene zuerst (Standard bis 3), Rest aus einer geprüften C1-Business-Liste.
-- Rückstau wird abgebaut, neue Wörter kommen trotzdem.
 - Die Stufenleiste mit der Zahl je Stufe ist überall sichtbar.
 
 ## Grammatik-Einheiten (wie ein Buchkapitel)

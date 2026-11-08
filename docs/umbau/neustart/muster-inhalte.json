@@ -1213,7 +1213,61 @@
       "loesung": "addressed"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "Our security lead will join Thursday's call to [address] the concerns your IT team raised, so they have answers before the board meeting.",
+     "de": "Unser Sicherheitsverantwortlicher kommt am Donnerstag mit in den Call, um auf die Bedenken einzugehen, die Ihr IT-Team geäußert hat, damit es vor der Vorstandssitzung Antworten hat.",
+     "auch_richtig": [
+      "deal with",
+      "respond to",
+      "tackle",
+      "handle",
+      "answer",
+      "discuss",
+      "go over"
+     ]
+    },
+    {
+     "en": "We [addressed] every one of their data-privacy concerns in our follow-up email, and they signed the next day.",
+     "de": "Wir sind in unserer Nachfass-E-Mail auf jede einzelne ihrer Datenschutz-Bedenken eingegangen, und am nächsten Tag haben sie unterschrieben.",
+     "auch_richtig": [
+      "dealt with",
+      "responded to",
+      "tackled",
+      "handled",
+      "resolved"
+     ]
+    },
+    {
+     "en": "If we don't [address] their concerns about user adoption now, they'll come up again during contract negotiations.",
+     "de": "Wenn wir jetzt nicht auf ihre Bedenken zur Nutzerakzeptanz eingehen, kommen sie in den Vertragsverhandlungen wieder auf den Tisch.",
+     "auch_richtig": [
+      "deal with",
+      "respond to",
+      "tackle",
+      "handle",
+      "resolve"
+     ]
+    },
+    {
+     "en": "That's a fair concern, and I'd rather [address] it now than after go-live.",
+     "de": "Diese Sorge ist berechtigt, und ich würde lieber jetzt darauf eingehen als nach dem Go-live.",
+     "auch_richtig": [
+      "deal with",
+      "respond to",
+      "tackle",
+      "handle",
+      "discuss"
+     ]
+    }
+   ],
+   "ablenker": [
+    "raise",
+    "voice",
+    "express"
+   ],
+   "hilfe3": "a________"
   },
   {
    "en": "push back on (something)",
@@ -1264,7 +1318,54 @@
       "loesung": "pushed back on"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "When we proposed annual prepayment, their CFO [pushed back on] it right away — she wants quarterly billing instead.",
+     "de": "Als wir jährliche Vorauszahlung vorgeschlagen haben, hat ihre Finanzchefin sofort Einwände dagegen erhoben – sie will stattdessen quartalsweise Abrechnung.",
+     "auch_richtig": [
+      "objected to",
+      "challenged",
+      "pushed back against"
+     ]
+    },
+    {
+     "en": "Their IT director [pushed back on] our timeline because his team is busy with an ERP upgrade until June.",
+     "de": "Ihr IT-Leiter hat Einwände gegen unseren Zeitplan erhoben, weil sein Team bis Juni mit einem ERP-Upgrade beschäftigt ist.",
+     "auch_richtig": [
+      "objected to",
+      "challenged",
+      "questioned",
+      "pushed back against"
+     ]
+    },
+    {
+     "en": "Don't be afraid to [push back on] unrealistic deadlines — customers respect a vendor who's honest about what's possible.",
+     "de": "Hab keine Angst, Einwände gegen unrealistische Termine zu erheben – Kunden respektieren einen Anbieter, der ehrlich sagt, was möglich ist.",
+     "auch_richtig": [
+      "challenge",
+      "question",
+      "object to",
+      "push back against"
+     ]
+    },
+    {
+     "en": "They're not [pushing back on] the product itself; they're worried about the cost of training 300 users.",
+     "de": "Gegen das Produkt an sich haben sie keine Einwände; sie machen sich Sorgen wegen der Kosten, 300 Nutzer zu schulen.",
+     "auch_richtig": [
+      "objecting to",
+      "questioning",
+      "challenging",
+      "pushing back against"
+     ]
+    }
+   ],
+   "ablenker": [
+    "signed off on",
+    "went along with",
+    "pushed back"
+   ],
+   "hilfe3": "p_____ b___ o_"
   },
   {
    "en": "a deal-breaker",
@@ -1309,7 +1410,55 @@
       "loesung": "deal-breaker"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "Without a German data center, they won't sign at all — for them, it's a [deal-breaker].",
+     "de": "Ohne ein Rechenzentrum in Deutschland unterschreiben sie überhaupt nicht – für sie ist das ein K.-o.-Kriterium.",
+     "auch_richtig": [
+      "dealbreaker",
+      "deal breaker",
+      "no-go",
+      "showstopper",
+      "must-have"
+     ]
+    },
+    {
+     "en": "We can live without the mobile app, but a contract term longer than two years would be a [deal-breaker] for our CFO.",
+     "de": "Ohne die mobile App kommen wir aus, aber eine Vertragslaufzeit von mehr als zwei Jahren wäre für unsere Finanzchefin ein K.-o.-Kriterium.",
+     "auch_richtig": [
+      "dealbreaker",
+      "deal breaker",
+      "no-go",
+      "showstopper"
+     ]
+    },
+    {
+     "en": "Ask early whether on-premises hosting is a [deal-breaker] — finding out in the final round is too late.",
+     "de": "Frag früh, ob Hosting im eigenen Rechenzentrum ein K.-o.-Kriterium ist – das erst in der letzten Runde herauszufinden ist zu spät.",
+     "auch_richtig": [
+      "dealbreaker",
+      "deal breaker",
+      "no-go",
+      "showstopper",
+      "must-have"
+     ]
+    },
+    {
+     "en": "The price wasn't the [deal-breaker]; they walked away because we couldn't integrate with their ERP.",
+     "de": "Nicht der Preis war das K.-o.-Kriterium; sie sind abgesprungen, weil wir uns nicht an ihr ERP anbinden konnten.",
+     "auch_richtig": [
+      "dealbreaker",
+      "deal breaker"
+     ]
+    }
+   ],
+   "ablenker": [
+    "selling point",
+    "nice-to-have",
+    "door opener"
+   ],
+   "hilfe3": "d___-b______"
   },
   {
    "en": "get buy-in from (someone)",
@@ -1359,7 +1508,51 @@
       "loesung": "buy-in from"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "Our contact loves the product, but before we send the contract, we need to [get buy-in from] their CFO.",
+     "de": "Unser Ansprechpartner ist vom Produkt begeistert, aber bevor wir den Vertrag schicken, brauchen wir die Rückendeckung ihrer Finanzchefin.",
+     "auch_richtig": [
+      "secure buy-in from",
+      "get sign-off from",
+      "get approval from",
+      "get the green light from"
+     ]
+    },
+    {
+     "en": "We finally [got buy-in from] the head of HR, so the rollout can start in March.",
+     "de": "Wir haben endlich die Rückendeckung der Personalleiterin bekommen, also kann der Rollout im März starten.",
+     "auch_richtig": [
+      "secured buy-in from",
+      "got support from",
+      "got backing from"
+     ]
+    },
+    {
+     "en": "[Getting buy-in from] end users early makes adoption much easier after go-live.",
+     "de": "Wer die Endanwender früh ins Boot holt, hat es nach dem Go-live mit der Akzeptanz viel leichter.",
+     "auch_richtig": [
+      "Securing buy-in from"
+     ]
+    },
+    {
+     "en": "Our champion is excited, but we haven't [gotten buy-in from] their security team yet.",
+     "de": "Unser Fürsprecher ist begeistert, aber die Rückendeckung ihres Sicherheitsteams haben wir noch nicht.",
+     "auch_richtig": [
+      "got buy-in from",
+      "secured buy-in from",
+      "gotten support from",
+      "got support from"
+     ]
+    }
+   ],
+   "ablenker": [
+    "get buy-in of",
+    "get pushback from",
+    "get a buy-out from"
+   ],
+   "hilfe3": "g__ b__-i_ f___"
   },
   {
    "en": "be on track (for something)",
@@ -1416,7 +1609,46 @@
       ]
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "Good news: despite the holiday break, the data cleanup is still [on track] for the end of the month.",
+     "de": "Gute Nachricht: Trotz der Feiertagspause liegt die Datenbereinigung für Ende des Monats noch im Plan.",
+     "auch_richtig": [
+      "on schedule",
+      "on target"
+     ]
+    },
+    {
+     "en": "Can you confirm that the user training is [on track], or should I warn the client about a delay?",
+     "de": "Kannst du bestätigen, dass die Anwenderschulung im Plan liegt, oder soll ich den Kunden vor einer Verzögerung warnen?",
+     "auch_richtig": [
+      "on schedule",
+      "on target"
+     ]
+    },
+    {
+     "en": "With two big renewals closed this week, we're [on track] to hit our Q4 number.",
+     "de": "Mit zwei großen Vertragsverlängerungen diese Woche liegen wir im Plan, unser Q4-Ziel zu erreichen.",
+     "auch_richtig": [
+      "on course",
+      "on target"
+     ]
+    },
+    {
+     "en": "As long as the client sends the user list by Friday, everything stays [on track].",
+     "de": "Solange der Kunde die Nutzerliste bis Freitag schickt, bleibt alles im Plan.",
+     "auch_richtig": [
+      "on schedule"
+     ]
+    }
+   ],
+   "ablenker": [
+    "in plan",
+    "off track",
+    "on hold"
+   ],
+   "hilfe3": "o_ t____"
   },
   {
    "en": "be behind schedule",
@@ -1471,7 +1703,46 @@
       "loesung": "behind schedule"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "Because the client's IT team sent the data late, the project is now two weeks [behind schedule].",
+     "de": "Weil das IT-Team des Kunden die Daten zu spät geschickt hat, ist das Projekt jetzt zwei Wochen im Verzug.",
+     "auch_richtig": [
+      "behind",
+      "late"
+     ]
+    },
+    {
+     "en": "We're running a little [behind schedule], so I'll send you the updated plan by Thursday.",
+     "de": "Wir sind etwas im Verzug, deshalb schicke ich Ihnen den aktualisierten Plan bis Donnerstag.",
+     "auch_richtig": [
+      "behind",
+      "late"
+     ]
+    },
+    {
+     "en": "If the integration falls any further [behind schedule], we'll have to move the training sessions to June.",
+     "de": "Wenn die Schnittstelle noch weiter in Verzug gerät, müssen wir die Schulungen auf Juni verschieben.",
+     "auch_richtig": [
+      "behind"
+     ]
+    },
+    {
+     "en": "The rollout is slightly [behind schedule] — here's what we're doing to catch up.",
+     "de": "Der Rollout ist leicht im Verzug – so holen wir die Zeit wieder auf.",
+     "auch_richtig": [
+      "behind",
+      "delayed"
+     ]
+    }
+   ],
+   "ablenker": [
+    "in delay",
+    "in default",
+    "ahead of schedule"
+   ],
+   "hilfe3": "b_____ s_______"
   },
   {
    "en": "meet someone halfway",
@@ -1532,7 +1803,45 @@
       ]
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "We can't drop the price by 20%, but we're happy to [meet you halfway] at 10% if you sign this quarter.",
+     "de": "Um 20 % können wir nicht runtergehen, aber wir kommen Ihnen gern auf halbem Weg entgegen – mit 10 %, wenn Sie in diesem Quartal unterschreiben.",
+     "auch_richtig": [
+      "meet you in the middle"
+     ]
+    },
+    {
+     "en": "We've already lowered the setup fee — now it's their turn to [meet us halfway] on the number of licenses.",
+     "de": "Wir haben die Einrichtungsgebühr schon gesenkt – jetzt sind sie dran, uns bei der Zahl der Lizenzen auf halbem Weg entgegenzukommen.",
+     "auch_richtig": [
+      "meet us in the middle"
+     ]
+    },
+    {
+     "en": "I understand you need flexibility, so I'm willing to [meet you halfway]: a two-year term with an exit option after twelve months.",
+     "de": "Ich verstehe, dass Sie Flexibilität brauchen, deshalb komme ich Ihnen gern auf halbem Weg entgegen: zwei Jahre Laufzeit mit Ausstiegsoption nach zwölf Monaten.",
+     "auch_richtig": [
+      "meet you in the middle"
+     ]
+    },
+    {
+     "en": "In the end, we [met each other halfway] and signed at 7% instead of the 15% they had asked for.",
+     "de": "Am Ende sind wir uns auf halbem Weg entgegengekommen und haben mit 7 % statt der geforderten 15 % unterschrieben.",
+     "auch_richtig": [
+      "met halfway",
+      "met in the middle",
+      "met each other in the middle"
+     ]
+    }
+   ],
+   "ablenker": [
+    "meet you on half the way",
+    "come against you",
+    "let you down"
+   ],
+   "hilfe3": "m___ u_ h______"
   },
   {
    "en": "a sticking point",
@@ -1575,7 +1884,52 @@
       "loesung": "sticking point"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "We agree on price and scope; the only remaining [sticking point] is who owns the data after the contract ends.",
+     "de": "Bei Preis und Umfang sind wir uns einig; der einzige verbleibende Knackpunkt ist, wem die Daten nach Vertragsende gehören.",
+     "auch_richtig": [
+      "point of contention",
+      "bone of contention",
+      "issue",
+      "open issue"
+     ]
+    },
+    {
+     "en": "The auto-renewal clause turned out to be a bigger [sticking point] than we expected.",
+     "de": "Die Klausel zur automatischen Verlängerung hat sich als größerer Knackpunkt herausgestellt als erwartet.",
+     "auch_richtig": [
+      "point of contention",
+      "bone of contention"
+     ]
+    },
+    {
+     "en": "Let's park the SLA for now and come back to it — I don't want one [sticking point] to hold up the whole contract.",
+     "de": "Lass uns das SLA erst mal zurückstellen und später darauf zurückkommen – ich will nicht, dass ein einziger Knackpunkt den ganzen Vertrag aufhält.",
+     "auch_richtig": [
+      "point of contention",
+      "bone of contention",
+      "issue",
+      "open issue"
+     ]
+    },
+    {
+     "en": "Before Thursday's call, can you list the main [sticking points] from their redline?",
+     "de": "Kannst du vor dem Call am Donnerstag die wichtigsten Knackpunkte aus ihren Vertragsänderungen auflisten?",
+     "auch_richtig": [
+      "points of contention",
+      "issues",
+      "open issues"
+     ]
+    }
+   ],
+   "ablenker": [
+    "breaking point",
+    "problem point",
+    "selling point"
+   ],
+   "hilfe3": "s_______ p____"
   },
   {
    "en": "a ballpark figure",
@@ -1626,7 +1980,63 @@
       ]
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "I don't need an exact quote yet — just a [ballpark figure] so I can put it in next year's budget.",
+     "de": "Ich brauche noch kein genaues Angebot – nur einen groben Richtwert, damit ich ihn fürs Budget nächstes Jahr einplanen kann.",
+     "auch_richtig": [
+      "ballpark",
+      "ballpark estimate",
+      "rough estimate",
+      "rough figure",
+      "ballpark number",
+      "rough number"
+     ]
+    },
+    {
+     "en": "Our CFO wants a [ballpark figure] for the implementation costs before she agrees to a second meeting.",
+     "de": "Unsere Finanzchefin will einen groben Richtwert für die Einführungskosten, bevor sie einem zweiten Termin zustimmt.",
+     "auch_richtig": [
+      "ballpark",
+      "ballpark estimate",
+      "rough estimate",
+      "rough figure",
+      "ballpark number",
+      "rough number"
+     ]
+    },
+    {
+     "en": "Most companies your size end up somewhere between $25,000 and $40,000 a year — but that's just a [ballpark figure], not a quote.",
+     "de": "Die meisten Firmen Ihrer Größe landen irgendwo zwischen 25.000 und 40.000 Dollar pro Jahr – aber das ist nur ein grober Richtwert, kein Angebot.",
+     "auch_richtig": [
+      "ballpark",
+      "ballpark estimate",
+      "rough estimate",
+      "rough figure",
+      "ballpark number",
+      "rough number"
+     ]
+    },
+    {
+     "en": "I'd rather not throw out a [ballpark figure] until we know how many documents you need to migrate.",
+     "de": "Ich möchte ungern einen groben Richtwert nennen, bevor wir wissen, wie viele Dokumente Sie migrieren müssen.",
+     "auch_richtig": [
+      "ballpark",
+      "ballpark estimate",
+      "rough estimate",
+      "rough figure",
+      "ballpark number",
+      "rough number"
+     ]
+    }
+   ],
+   "ablenker": [
+    "orientation value",
+    "fixed price",
+    "final offer"
+   ],
+   "hilfe3": "b_______ f_____"
   },
   {
    "en": "follow up (with someone) on (something)",
@@ -1680,7 +2090,48 @@
       "loesung": "following up on"
      }
     }
-   ]
+   ],
+   "luecken": [
+    {
+     "en": "Thanks again for your time on Tuesday — I wanted to [follow up on] the two questions your IT lead asked about single sign-on.",
+     "de": "Nochmals danke für Ihre Zeit am Dienstag – ich wollte zu den zwei Fragen Ihres IT-Leiters zum Single Sign-on nachfassen.",
+     "auch_richtig": [
+      "follow up about",
+      "circle back on",
+      "get back to you on"
+     ]
+    },
+    {
+     "en": "She hasn't replied to the proposal yet, so I'm going to [follow up on] it tomorrow morning.",
+     "de": "Sie hat noch nicht auf das Angebot geantwortet, deshalb fasse ich morgen früh dazu nach.",
+     "auch_richtig": [
+      "follow up about"
+     ]
+    },
+    {
+     "en": "After the demo, [follow up with] each attendee within 24 hours — not just the decision-maker.",
+     "de": "Fass nach der Demo innerhalb von 24 Stunden bei jedem Teilnehmer nach – nicht nur bei der Entscheiderin.",
+     "auch_richtig": [
+      "reach out to",
+      "get in touch with",
+      "check in with"
+     ]
+    },
+    {
+     "en": "Thanks for the reminder — I [followed up on] the open invoice yesterday, and they've promised to pay by Friday.",
+     "de": "Danke für die Erinnerung – ich habe gestern wegen der offenen Rechnung nachgefasst, und sie haben versprochen, bis Freitag zu zahlen.",
+     "auch_richtig": [
+      "followed up about",
+      "chased up"
+     ]
+    }
+   ],
+   "ablenker": [
+    "give up on",
+    "put up with",
+    "make up for"
+   ],
+   "hilfe3": "f_____ u_ o_"
   }
  ]
 }
