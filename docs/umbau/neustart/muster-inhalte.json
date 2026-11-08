@@ -1,0 +1,1686 @@
+{
+ "einheit": {
+  "titel": "Bedingungssätze (if)",
+  "niveau": "B2 → C1",
+  "a_verstehen": {
+   "regel": [
+    "Typ 1: Etwas kann realistisch passieren – im if-Teil steht die Gegenwart, im Hauptteil will + Grundform.",
+    "Typ 2: Etwas ist jetzt nicht so oder eher unwahrscheinlich – im if-Teil steht die einfache Vergangenheit, im Hauptteil would + Grundform.",
+    "Typ 3: Du stellst dir die Vergangenheit anders vor, als sie war – ändern kannst du nichts mehr. Im if-Teil had + 3. Form, im Hauptteil would have + 3. Form.",
+    "Im if-Teil steht kein will und kein would.",
+    "Statt will/would geht auch can/could/might, wenn du eine Möglichkeit meinst.",
+    "Sicher → when, unsicher → if; auch nach when kein will."
+   ],
+   "tabelle": [
+    {
+     "typ": "1",
+     "if_teil": "Gegenwart: If it works …",
+     "hauptteil": "will + Grundform: … we'll expand.",
+     "bedeutung": "realistisch, kann gut passieren"
+    },
+    {
+     "typ": "2",
+     "if_teil": "Vergangenheit: If it worked …",
+     "hauptteil": "would + Grundform: … we'd expand.",
+     "bedeutung": "jetzt nicht so oder unwahrscheinlich, nur gedacht"
+    },
+    {
+     "typ": "3",
+     "if_teil": "had + 3. Form: If it had worked …",
+     "hauptteil": "would have + 3. Form: … we would have expanded.",
+     "bedeutung": "früher, war in Wirklichkeit anders"
+    }
+   ],
+   "beispiele": [
+    {
+     "typ": "1",
+     "en": "If the pilot goes well, we'll roll it out to all twelve locations.",
+     "de": "Der Pilot kann gut laufen – realistisch."
+    },
+    {
+     "typ": "2",
+     "en": "If our pricing were more flexible, we'd win more mid-market deals.",
+     "de": "Unsere Preise sind nicht flexibel – nur gedacht."
+    },
+    {
+     "typ": "3",
+     "en": "If we had sent the proposal on Monday, we would have made it into their Q3 budget.",
+     "de": "Wir haben es am Montag nicht geschickt – zu spät."
+    }
+   ],
+   "zusaetze": [
+    "were gilt für alle Personen: If I were you; im Gespräch ist was okay.",
+    "Typ 2 eignet sich beim Verhandeln als vorsichtiges Angebot: Du legst dich nicht fest.",
+    "C1: Should you have … = If you have …, formeller (E-Mail)."
+   ],
+   "deutsche_falle": "Deutsch sagt „Wenn der Kunde zustimmen würde …“ und „Wenn wir das früher gemerkt hätten …“. Englisch: If the client agreed … und If we had noticed that earlier … – würde/would kommt nicht in den if-Teil (Ausnahme unten).",
+   "ausnahme": "If you'd like, I can send you the slides. Das ist höflich („möchten“), kein „würde“. Auch richtig: If you could send me the numbers, that would be great. (could = könnten)",
+   "am_rand_gemischt": {
+    "erklaerung": "Früher nicht passiert, Folge heute: if-Teil wie Typ 3, Hauptteil wie Typ 2.",
+    "beispiel": "If we had hired another engineer last year, we wouldn't be so short-staffed now."
+   }
+  },
+  "bewertung_allgemein": [
+   "Kurzformen wertet die App selbst. Ausnahme: 'd have + 3. Form im if-Teil ist falsch (= would have).",
+   "Groß-/Kleinschreibung und Satzzeichen nicht werten.",
+   "Britische Schreibweise gilt als richtig, angezeigt wird US-Englisch.",
+   "was statt were zählt nur, wo es unter auch_richtig mit Hinweis steht.",
+   "could/might statt would im Hauptteil zählt, wo es unter auch_richtig steht.",
+   "D: Gewertet wird nur das pruefmerkmal, andere Wortwahl ist egal.",
+   "D: Eine Übersetzung, die die geübte Form umgeht (ohne if-Satz), ist fast, Hinweis: „Bitte mit if-Satz.“",
+   "Should you … / Had I … / Were we to … zählen als if-Satz (keine Wertung „fast“)."
+  ],
+  "b_form_bilden": [
+   {
+    "id": "B1",
+    "typ": "1",
+    "kontext": "Der Kunde hat zugesagt, bis Freitag zu unterschreiben.",
+    "satz": "If the client ___ (sign) by Friday, we ___ (start) the rollout on Monday.",
+    "loesung": [
+     "signs",
+     "will start"
+    ],
+    "loesung_satz": "If the client signs by Friday, we will start the rollout on Monday.",
+    "auch_richtig": [
+     [
+      "signs",
+      "has signed"
+     ],
+     [
+      "will start",
+      "are going to start",
+      "can start",
+      "could start",
+      "might start",
+      "will be able to start"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "will sign",
+      "richtig": "signs",
+      "warum": "Im if-Teil steht kein will – auch wenn es um die Zukunft geht, nimmst du die Gegenwart.",
+      "nochmal": {
+       "satz": "If the demo ___ (go) well, they'll ask for a quote.",
+       "loesung": "goes"
+      }
+     },
+     {
+      "du": "sign",
+      "richtig": "signs",
+      "warum": "The client ist eine Person (er/sie), deshalb braucht das Verb hier ein -s.",
+      "nochmal": {
+       "satz": "If the CFO ___ (approve) the budget, we'll move forward.",
+       "loesung": "approves"
+      }
+     },
+     {
+      "du": "would start",
+      "richtig": "will start",
+      "warum": "Zu signs (Typ 1) passt im Hauptteil will – would passt nur zu signed.",
+      "nochmal": {
+       "satz": "If they accept the offer, we ___ (send) the contract today.",
+       "loesung": "will send",
+       "auch_richtig": [
+        "are going to send",
+        "can send",
+        "could send"
+       ]
+      }
+     },
+     {
+      "du": "signed / would start",
+      "richtig": "signs / will start",
+      "wertung": "fast",
+      "warum": "Richtig gebaut, aber der Kunde hat zugesagt – das ist realistisch: signs … will start.",
+      "nochmal": {
+       "satz": "If the CFO ___ (like) the demo, we'll send a quote.",
+       "loesung": "likes"
+      }
+     },
+     {
+      "du": "start",
+      "richtig": "will start",
+      "wertung": "fast",
+      "warum": "Geht im Gespräch, aber will ist sicherer: we will start.",
+      "nochmal": {
+       "satz": "If the CFO approves it, we ___ (order) the licenses next week.",
+       "loesung": "will order",
+       "auch_richtig": [
+        "are going to order",
+        "can order",
+        "could order",
+        "might order"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "B2",
+    "typ": "1",
+    "kontext": "Ab Januar gilt die neue Preisliste. Du warnst den Kunden.",
+    "satz": "If we ___ (not / get) the PO by Friday, your price ___ (go) up in January.",
+    "loesung": [
+     "don't get",
+     "will go"
+    ],
+    "loesung_satz": "If we don't get the PO by Friday, your price will go up in January.",
+    "auch_richtig": [
+     [
+      "don't get"
+     ],
+     [
+      "will go",
+      "is going to go",
+      "goes",
+      "could go",
+      "might go"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "won't get",
+      "richtig": "don't get",
+      "warum": "Auch verneint steht im if-Teil kein will: don't get, nicht won't get.",
+      "nochmal": {
+       "satz": "If they ___ (not / reply) by Monday, I'll call them.",
+       "loesung": "don't reply"
+      }
+     },
+     {
+      "du": "not get",
+      "richtig": "don't get",
+      "warum": "Verneinen in der Gegenwart geht mit don't: we don't get, nicht we not get.",
+      "nochmal": {
+       "satz": "If the numbers ___ (not / look) good, we'll pause the pilot.",
+       "loesung": "don't look"
+      }
+     },
+     {
+      "du": "didn't get / would go",
+      "richtig": "don't get / will go",
+      "wertung": "fast",
+      "warum": "Richtig gebaut, aber als klare Warnung passt Typ 1: don't get … will go.",
+      "nochmal": {
+       "satz": "If they ___ (not / sign) by the 15th, they'll lose the discount.",
+       "loesung": "don't sign"
+      }
+     }
+    ]
+   },
+   {
+    "id": "B3",
+    "typ": "2",
+    "kontext": "Ihr habt im Gesundheitswesen keinen Referenzkunden.",
+    "satz": "If we ___ (have) a reference customer in healthcare, the deal ___ (be) much easier.",
+    "loesung": [
+     "had",
+     "would be"
+    ],
+    "loesung_satz": "If we had a reference customer in healthcare, the deal would be much easier.",
+    "auch_richtig": [
+     [
+      "had"
+     ],
+     [
+      "would be",
+      "could be",
+      "might be"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "would have",
+      "richtig": "had",
+      "warum": "Für „hätten“ steht im if-Teil had – would gehört nur in den Hauptteil.",
+      "nochmal": {
+       "satz": "If we ___ (know) their budget, we'd make a better offer.",
+       "loesung": "knew"
+      }
+     },
+     {
+      "du": "have / will be",
+      "richtig": "had / would be",
+      "wertung": "fast",
+      "warum": "Richtig gebaut, aber ihr habt die Referenz nicht – das ist nur gedacht: had … would be.",
+      "nochmal": {
+       "satz": "If our tool ___ (support) SAP, they would buy it tomorrow.",
+       "loesung": "supported"
+      }
+     },
+     {
+      "du": "had / will be",
+      "richtig": "had / would be",
+      "warum": "Ist der if-Teil gedacht (had), braucht der Hauptteil would, nicht will.",
+      "nochmal": {
+       "satz": "If we had a partner in Texas, we ___ (win) more deals there.",
+       "loesung": "would win",
+       "auch_richtig": [
+        "could win",
+        "might win"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "B4",
+    "typ": "2",
+    "kontext": "Du gibst dem Kunden einen persönlichen Rat.",
+    "satz": "If I ___ (be) you, I ___ (lock) in the current price with a three-year term.",
+    "loesung": [
+     "were",
+     "would lock"
+    ],
+    "loesung_satz": "If I were you, I would lock in the current price with a three-year term.",
+    "auch_richtig": [
+     [
+      "were",
+      {
+       "text": "was",
+       "hinweis": "Im Gespräch okay, in E-Mails besser were."
+      }
+     ],
+     [
+      "would lock",
+      "might lock"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "am",
+      "richtig": "were",
+      "warum": "Du bist nicht der Kunde – das ist gedacht, also Vergangenheit: If I were you.",
+      "nochmal": {
+       "satz": "If she ___ (be) here, she'd explain the pricing better.",
+       "loesung": "were",
+       "auch_richtig": [
+        {
+         "text": "was",
+         "hinweis": "Im Gespräch okay, in E-Mails besser were."
+        }
+       ]
+      }
+     },
+     {
+      "du": "would be",
+      "richtig": "were",
+      "warum": "„Wenn ich du wäre“: dieses wäre wird im if-Teil zu were, nicht would be.",
+      "nochmal": {
+       "satz": "If it ___ (be) my decision, I'd sign today.",
+       "loesung": "were",
+       "auch_richtig": [
+        {
+         "text": "was",
+         "hinweis": "Im Gespräch okay, in E-Mails besser were."
+        }
+       ]
+      }
+     },
+     {
+      "du": "will lock",
+      "richtig": "would lock",
+      "warum": "Der if-Teil ist gedacht (were), also braucht der Hauptteil would, nicht will.",
+      "nochmal": {
+       "satz": "If I were in your position, I ___ (wait) until Q1.",
+       "loesung": "would wait",
+       "auch_richtig": [
+        "might wait"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "B5",
+    "typ": "2",
+    "kontext": "Der Kunde hat klar gesagt: Wir wechseln dieses Jahr nicht. Du zeigst ihm trotzdem, was ihm entgeht.",
+    "satz": "If your team ___ (not / have) to search for paper files, they ___ (save) about five hours a week.",
+    "loesung": [
+     "didn't have",
+     "would save"
+    ],
+    "loesung_satz": "If your team didn't have to search for paper files, they would save about five hours a week.",
+    "auch_richtig": [
+     [
+      "didn't have"
+     ],
+     [
+      "would save",
+      "could save",
+      "might save"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "wouldn't have",
+      "richtig": "didn't have",
+      "warum": "Im if-Teil steht kein would, auch nicht verneint: didn't have.",
+      "nochmal": {
+       "satz": "If we ___ (not / offer) support, nobody would buy it.",
+       "loesung": "didn't offer"
+      }
+     },
+     {
+      "du": "doesn't have / will save",
+      "richtig": "didn't have / would save",
+      "wertung": "fast",
+      "warum": "Er wechselt ja nicht – das ist nur gedacht: didn't have, would save.",
+      "nochmal": {
+       "satz": "If the files ___ (be) in the cloud, your team would find them faster.",
+       "loesung": "were"
+      }
+     },
+     {
+      "du": "hadn't",
+      "richtig": "didn't have",
+      "warum": "have to verneinst du mit didn't: didn't have to, nicht hadn't to.",
+      "nochmal": {
+       "satz": "If they ___ (not / have) to wait for IT, they'd start today.",
+       "loesung": "didn't have"
+      }
+     }
+    ]
+   },
+   {
+    "id": "B6",
+    "typ": "3",
+    "kontext": "Der Deal ist letzte Woche verloren gegangen. Ihr habt die IT erst sehr spät eingebunden.",
+    "satz": "If we ___ (involve) IT earlier, we ___ (not / lose) the deal.",
+    "loesung": [
+     "had involved",
+     "wouldn't have lost"
+    ],
+    "loesung_satz": "If we had involved IT earlier, we wouldn't have lost the deal.",
+    "auch_richtig": [
+     [
+      "had involved"
+     ],
+     [
+      "wouldn't have lost",
+      "might not have lost"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "would have involved",
+      "richtig": "had involved",
+      "warum": "„Hätten wir eingebunden“ heißt im if-Teil had involved – would have gehört nur in den Hauptteil.",
+      "nochmal": {
+       "satz": "If they ___ (read) the proposal, they would have seen the discount.",
+       "loesung": "had read"
+      }
+     },
+     {
+      "du": "involved / wouldn't lose",
+      "richtig": "had involved / wouldn't have lost",
+      "warum": "Es geht um letzte Woche und ist vorbei – also had involved und wouldn't have lost.",
+      "nochmal": {
+       "satz": "If we ___ (call) them back on Monday, we would have won the deal.",
+       "loesung": "had called"
+      }
+     },
+     {
+      "du": "wouldn't have lose",
+      "richtig": "wouldn't have lost",
+      "warum": "Nach have kommt die 3. Form: lost, nicht lose.",
+      "nochmal": {
+       "satz": "If they had signed, we ___ (meet) the target.",
+       "loesung": "would have met",
+       "auch_richtig": [
+        "could have met",
+        "might have met"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "B7",
+    "typ": "3",
+    "kontext": "Die Finanzchefin hat das Budget abgelehnt. Den ROI-Bericht hatte sie nie gesehen.",
+    "satz": "If the CFO ___ (see) the ROI report, she ___ (approve) the budget.",
+    "loesung": [
+     "had seen",
+     "would have approved"
+    ],
+    "loesung_satz": "If the CFO had seen the ROI report, she would have approved the budget.",
+    "auch_richtig": [
+     [
+      "had seen"
+     ],
+     [
+      "would have approved",
+      "might have approved",
+      "could have approved"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "would approve",
+      "richtig": "would have approved",
+      "warum": "Die Absage ist vorbei – im Hauptteil brauchst du would have approved, nicht would approve.",
+      "nochmal": {
+       "satz": "If you had asked me, I ___ (help) you.",
+       "loesung": "would have helped",
+       "auch_richtig": [
+        "could have helped",
+        "might have helped"
+       ]
+      }
+     },
+     {
+      "du": "saw",
+      "richtig": "had seen",
+      "warum": "Für „hätte gesehen“ reicht saw nicht – im if-Teil steht had seen.",
+      "nochmal": {
+       "satz": "If we ___ (send) the quote on time, we would have won.",
+       "loesung": "had sent"
+      }
+     },
+     {
+      "du": "had saw",
+      "richtig": "had seen",
+      "warum": "Nach had kommt die 3. Form: seen, nicht saw.",
+      "nochmal": {
+       "satz": "If the client had ___ (choose) the annual plan, they would have saved 20%.",
+       "loesung": "chosen"
+      }
+     }
+    ]
+   },
+   {
+    "id": "B8",
+    "typ": "3",
+    "kontext": "Das Projekt ist pünktlich live gegangen, weil die Daten sauber waren.",
+    "satz": "If the data ___ (not / be) clean, the migration ___ (take) much longer.",
+    "loesung": [
+     "hadn't been",
+     "would have taken"
+    ],
+    "loesung_satz": "If the data hadn't been clean, the migration would have taken much longer.",
+    "auch_richtig": [
+     [
+      "hadn't been"
+     ],
+     [
+      "would have taken",
+      "might have taken",
+      "could have taken"
+     ]
+    ],
+    "falsch_typisch": [
+     {
+      "du": "wasn't",
+      "richtig": "hadn't been",
+      "warum": "Das Projekt ist vorbei – „wären nicht gewesen“ heißt hadn't been.",
+      "nochmal": {
+       "satz": "If the server ___ (not / be) down, we would have finished the demo.",
+       "loesung": "hadn't been"
+      }
+     },
+     {
+      "du": "wouldn't have been",
+      "richtig": "hadn't been",
+      "warum": "Kein would im if-Teil: „Wären die Daten nicht gewesen“ wird hadn't been.",
+      "nochmal": {
+       "satz": "If the contract ___ (not / be) stuck in legal for three weeks, we would have closed in Q3.",
+       "loesung": "hadn't been"
+      }
+     },
+     {
+      "du": "would take",
+      "richtig": "would have taken",
+      "warum": "Die Migration ist vorbei – im Hauptteil brauchst du would have taken.",
+      "nochmal": {
+       "satz": "If we hadn't tested early, the launch ___ (be) a disaster.",
+       "loesung": "would have been",
+       "auch_richtig": [
+        "could have been",
+        "might have been"
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "c_unterscheiden": [
+   {
+    "id": "C1",
+    "situation": "Der Kunde hat gesagt: „Der Vertrag geht diese Woche raus.“ Du schreibst deinem Team.",
+    "frage": "Welcher Satz passt?",
+    "a": "If they sign this week, we'll start in May.",
+    "b": "If they signed this week, we'd start in May.",
+    "c": "If they will sign this week, we'll start in May.",
+    "richtig": "a",
+    "warum_richtig": "Die Unterschrift ist realistisch – also if + Gegenwart und will.",
+    "warum_falsch": {
+     "b": "B (signed … would) klingt, als würdest du selbst nicht daran glauben.",
+     "c": "Im if-Teil steht kein will – auch wenn es um diese Woche geht."
+    }
+   },
+   {
+    "id": "C2",
+    "satz": "If we had offered a discount, they would have signed.",
+    "frage": "Was ist wirklich passiert?",
+    "a": "Wir haben einen Rabatt angeboten, und sie haben unterschrieben.",
+    "b": "Wir haben keinen Rabatt angeboten, und sie haben nicht unterschrieben.",
+    "c": "Wir haben einen Rabatt angeboten, aber sie haben nicht unterschrieben.",
+    "richtig": "b",
+    "warum_richtig": "had offered … would have signed beschreibt das Gegenteil von dem, was passiert ist.",
+    "warum_falsch": {
+     "a": "A wäre einfach: We offered a discount, and they signed – ohne if.",
+     "c": "Der Satz meint: beides ist nicht passiert – weder Rabatt noch Unterschrift."
+    }
+   },
+   {
+    "id": "C3",
+    "situation": "Der Einkäufer will Rabatt. Du willst nichts versprechen, nur vorsichtig eine Möglichkeit andeuten.",
+    "frage": "Welcher Satz passt besser?",
+    "a": "If you commit to three years, we'll give you 10% off.",
+    "b": "If you committed to three years, we could give you 10% off.",
+    "richtig": "b",
+    "warum_richtig": "Gleicher Inhalt, aber committed … could stellt das Angebot nur in den Raum.",
+    "warum_falsch": {
+     "a": "A ist ein festes Versprechen – gleicher Inhalt, aber du legst dich fest."
+    }
+   },
+   {
+    "id": "C4",
+    "situation": "Ihr habt letztes Jahr nicht migriert. Heute sucht das Team immer noch Papierakten.",
+    "frage": "Welcher Satz ist richtig?",
+    "a": "If we had migrated last year, we would be faster now.",
+    "b": "If we had migrated last year, we would have been faster now.",
+    "c": "If we migrated last year, we would be faster now.",
+    "richtig": "a",
+    "warum_richtig": "Früher nicht passiert (had migrated), Folge heute (now): would be.",
+    "warum_falsch": {
+     "b": "would have been passt nicht zu now – es spricht von der Vergangenheit.",
+     "c": "Für letztes Jahr brauchst du im if-Teil had migrated, nicht migrated."
+    }
+   },
+   {
+    "id": "C5",
+    "situation": "Ihr habt keine SAP-Schnittstelle. Du schreibst dem Produktteam.",
+    "frage": "Welcher Satz passt?",
+    "a": "If our tool integrates with SAP, we'll win more manufacturing deals.",
+    "b": "If our tool integrated with SAP, we'd win more manufacturing deals.",
+    "c": "If our tool would integrate with SAP, we'd win more manufacturing deals.",
+    "richtig": "b",
+    "warum_richtig": "Die Schnittstelle gibt es nicht – das ist nur gedacht: integrated … would.",
+    "warum_falsch": {
+     "a": "A klingt, als wüsstest du nicht, ob euer Tool SAP kann – du weißt aber: es kann es nicht.",
+     "c": "Im if-Teil steht kein would: integrated, nicht would integrate."
+    }
+   }
+  ],
+  "d_uebersetzen": [
+   {
+    "id": "D1",
+    "typ": "1",
+    "de": "Wenn der Kunde morgen anruft, schicke ich ihm das Angebot.",
+    "muster": "If the client calls tomorrow, I'll send him the proposal.",
+    "auch_richtig": [
+     "If the customer calls tomorrow, I'll send them the proposal.",
+     "If the client calls me tomorrow, I'll send him the quote.",
+     "If the client calls tomorrow, I'm going to send her the proposal.",
+     "If the client calls tomorrow, I'll email him the quote.",
+     "If the client calls tomorrow, I'll send the proposal over.",
+     {
+      "text": "When the client calls tomorrow, I'll send him the proposal.",
+      "hinweis": "when heißt: Du weißt sicher, dass er anruft."
+     }
+    ],
+    "pruefmerkmal": {
+     "if_teil": "Gegenwart, bei client/customer mit -s (calls); kein will.",
+     "hauptteil": "will oder be going to + Grundform.",
+     "nicht_werten": "client/customer, proposal/quote, him/her/them, send/email/forward/send over, if/when, me ja oder nein."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If the client will call tomorrow",
+      "richtig": "If the client calls tomorrow",
+      "warum": "Im if-Teil steht kein will, auch bei morgen: If the client calls.",
+      "nochmal": {
+       "satz": "If the prospect ___ (reply) today, I'll set up a demo.",
+       "loesung": "replies"
+      }
+     },
+     {
+      "du": "I send him the proposal",
+      "richtig": "I'll send him the proposal",
+      "warum": "Deutsch sagt „schicke ich“, Englisch braucht für die Folge will: I'll send.",
+      "nochmal": {
+       "satz": "If the PO arrives today, we ___ (activate) your accounts tomorrow.",
+       "loesung": "will activate",
+       "auch_richtig": [
+        "can activate",
+        "are going to activate"
+       ]
+      }
+     },
+     {
+      "du": "If the client call tomorrow",
+      "richtig": "If the client calls tomorrow",
+      "warum": "Bei the client (er/sie) braucht das Verb ein -s: calls.",
+      "nochmal": {
+       "satz": "If the IT lead ___ (agree), we'll start the pilot.",
+       "loesung": "agrees"
+      }
+     },
+     {
+      "du": "offer",
+      "richtig": "proposal",
+      "wertung": "fast",
+      "warum": "Verständlich, aber im Vertrieb sagt man meist proposal oder quote.",
+      "nochmal": {
+       "satz": "I'll send you the ___ (Angebot) by Friday.",
+       "loesung": "proposal",
+       "auch_richtig": [
+        "quote"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "D2",
+    "typ": "1",
+    "de": "Wenn ich morgen wieder im Büro bin, schicke ich Ihnen die Zahlen. (Du bist morgen sicher zurück.)",
+    "muster": "When I'm back in the office tomorrow, I'll send you the numbers.",
+    "auch_richtig": [
+     "When I get back to the office tomorrow, I'll send you the figures.",
+     "Once I'm back at the office tomorrow, I'll send over the numbers.",
+     "As soon as I'm back in the office tomorrow, I'll get you the numbers.",
+     "When I'm back in the office tomorrow, I'm going to send you the numbers."
+    ],
+    "pruefmerkmal": {
+     "if_teil": "when, once oder as soon as + Gegenwart (I'm back / I get back); kein will. if gilt als fast.",
+     "hauptteil": "will oder be going to + Grundform.",
+     "nicht_werten": "numbers/figures, in/at the office, send/send over/get you."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If I'm back in the office tomorrow",
+      "richtig": "When I'm back in the office tomorrow",
+      "wertung": "fast",
+      "warum": "Richtig gebaut. Du kommst aber sicher zurück – dann ist when natürlicher.",
+      "nochmal": {
+       "satz": "___ (wenn – es ist sicher) the contract arrives, I'll forward it to legal.",
+       "loesung": "When",
+       "auch_richtig": [
+        "Once",
+        "As soon as"
+       ]
+      }
+     },
+     {
+      "du": "When I will be back",
+      "richtig": "When I'm back",
+      "warum": "Auch nach when steht kein will: When I'm back.",
+      "nochmal": {
+       "satz": "When the new version ___ (go) live, I'll let you know.",
+       "loesung": "goes"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D3",
+    "typ": "2",
+    "de": "Wenn wir den Preis senken würden, würde der Kunde sofort unterschreiben.",
+    "muster": "If we lowered the price, the client would sign right away.",
+    "auch_richtig": [
+     "If we reduced the price, the customer would sign immediately.",
+     "If we cut the price, the client would sign right away.",
+     "If we dropped the price, the client would sign on the spot.",
+     "If we brought the price down, the client would sign immediately.",
+     "If we were to lower the price, the client would sign right away."
+    ],
+    "pruefmerkmal": {
+     "if_teil": "Vergangenheitsform (lowered/reduced/cut/dropped/brought down) oder were to + Grundform; kein would.",
+     "hauptteil": "would + Grundform (sign).",
+     "nicht_werten": "lower/reduce/cut/drop/bring down, client/customer, right away/immediately/on the spot."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If we would lower the price",
+      "richtig": "If we lowered the price",
+      "warum": "„senken würden“ wird im if-Teil zur Vergangenheit: lowered – would steht nur im Hauptteil.",
+      "nochmal": {
+       "satz": "If we ___ (offer) a longer trial, more prospects would sign.",
+       "loesung": "offered"
+      }
+     },
+     {
+      "du": "If we lower the price, the client would sign",
+      "richtig": "If we lowered the price, the client would sign",
+      "warum": "Mit would im Hauptteil muss der if-Teil in der Vergangenheit stehen: lowered.",
+      "nochmal": {
+       "satz": "If they ___ (reduce) the budget, we would lose the project.",
+       "loesung": "reduced"
+      }
+     },
+     {
+      "du": "If we lowered the price, the client will sign",
+      "richtig": "If we lowered the price, the client would sign",
+      "warum": "Nach einem gedachten if-Teil (lowered) braucht der Hauptteil would, nicht will.",
+      "nochmal": {
+       "satz": "If we lowered the price, they ___ (sign) today.",
+       "loesung": "would sign",
+       "auch_richtig": [
+        "could sign",
+        "might sign"
+       ]
+      }
+     },
+     {
+      "du": "If we lower the price, the client will sign right away",
+      "richtig": "If we lowered the price, the client would sign right away",
+      "wertung": "fast",
+      "warum": "Richtig gebaut, aber das Deutsche sagt „würden“ – nur gedacht: lowered … would.",
+      "nochmal": {
+       "satz": "If we ___ (add) a mobile app, more field teams would use the system.",
+       "loesung": "added"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D4",
+    "typ": "2",
+    "de": "Wenn ich an Ihrer Stelle wäre, würde ich mit dem Pilotprojekt anfangen.",
+    "muster": "If I were you, I'd start with the pilot.",
+    "auch_richtig": [
+     "If I were you, I would start with the pilot project.",
+     "If I were in your position, I'd begin with the pilot.",
+     "If I were in your shoes, I'd start with a pilot.",
+     "If I were in your place, I'd start with the pilot.",
+     {
+      "text": "If I was you, I'd start with the pilot.",
+      "hinweis": "Im Gespräch okay, in E-Mails besser were."
+     }
+    ],
+    "pruefmerkmal": {
+     "if_teil": "were (was nur mit Hinweis); kein would be, kein am.",
+     "hauptteil": "would + Grundform (start/begin).",
+     "nicht_werten": "you/your position/your shoes/your place, start/begin, pilot/pilot project, a/the."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If I would be you",
+      "richtig": "If I were you",
+      "warum": "„wäre“ heißt im if-Teil were – nicht would be.",
+      "nochmal": {
+       "satz": "If I ___ (be) in your shoes, I'd ask for a pilot.",
+       "loesung": "were",
+       "auch_richtig": [
+        {
+         "text": "was",
+         "hinweis": "Im Gespräch okay, in E-Mails besser were."
+        }
+       ]
+      }
+     },
+     {
+      "du": "If I am you",
+      "richtig": "If I were you",
+      "warum": "Du bist nicht der Kunde – das ist gedacht, also Vergangenheit: If I were you.",
+      "nochmal": {
+       "satz": "If he ___ (be) the decision-maker, we'd have a deal by now.",
+       "loesung": "were",
+       "auch_richtig": [
+        {
+         "text": "was",
+         "hinweis": "Im Gespräch okay, in E-Mails besser were."
+        }
+       ]
+      }
+     },
+     {
+      "du": "I will start with the pilot",
+      "richtig": "I'd start with the pilot",
+      "warum": "„würde ich“ heißt im Hauptteil would, nicht will.",
+      "nochmal": {
+       "satz": "If I were you, I ___ (talk) to IT first.",
+       "loesung": "would talk",
+       "auch_richtig": [
+        "might talk"
+       ]
+      }
+     },
+     {
+      "du": "In your position, I'd start with the pilot.",
+      "richtig": "If I were in your position, I'd start with the pilot.",
+      "wertung": "fast",
+      "warum": "Richtig, übt aber nicht die Form – bitte mit if-Satz: If I were …",
+      "nochmal": {
+       "satz": "If I ___ (be) in your position, I'd test it with one department first.",
+       "loesung": "were",
+       "auch_richtig": [
+        {
+         "text": "was",
+         "hinweis": "Im Gespräch okay, in E-Mails besser were."
+        }
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "D5",
+    "typ": "3",
+    "de": "Wenn ich das gewusst hätte, hätte ich Sie früher angerufen.",
+    "muster": "If I had known that, I would have called you earlier.",
+    "auch_richtig": [
+     "If I'd known that, I'd have called you sooner.",
+     "If I had known, I would have called you earlier.",
+     {
+      "text": "Had I known that, I would have called you earlier.",
+      "hinweis": "Richtig, sehr formell."
+     }
+    ],
+    "pruefmerkmal": {
+     "if_teil": "had + 3. Form (had known) oder Had I known; kein would, kein 'd have.",
+     "hauptteil": "would have + 3. Form (would have called).",
+     "nicht_werten": "earlier/sooner, called/phoned/reached out to, that ja oder nein."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If I would have known that",
+      "richtig": "If I had known that",
+      "warum": "„gewusst hätte“ heißt im if-Teil had known – would have kommt nur in den Hauptteil.",
+      "nochmal": {
+       "satz": "If we ___ (know) about the budget freeze, we would have waited.",
+       "loesung": "had known"
+      }
+     },
+     {
+      "du": "If I knew that, I would have called",
+      "richtig": "If I had known that, I would have called",
+      "warum": "Es geht um früher: „gewusst hätte“ braucht had known; knew passt nur für jetzt.",
+      "nochmal": {
+       "satz": "If we ___ (hear) about the RFP, we would have submitted a proposal.",
+       "loesung": "had heard"
+      }
+     },
+     {
+      "du": "I would have call you",
+      "richtig": "I would have called you",
+      "warum": "Nach would have kommt die 3. Form: called, nicht call.",
+      "nochmal": {
+       "satz": "If they had asked, we ___ (send) more data.",
+       "loesung": "would have sent",
+       "auch_richtig": [
+        "could have sent"
+       ]
+      }
+     },
+     {
+      "du": "If I'd have known that",
+      "richtig": "If I'd known that",
+      "warum": "'d have heißt would have – das gehört nicht in den if-Teil.",
+      "nochmal": {
+       "satz": "If we ___ (realize) the risk, we would have acted sooner.",
+       "loesung": "had realized"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D6",
+    "typ": "3",
+    "de": "Wenn wir die Demo nicht verschoben hätten, hätten wir den Deal gewonnen.",
+    "muster": "If we hadn't postponed the demo, we would have won the deal.",
+    "auch_richtig": [
+     "If we had not postponed the demo, we'd have won the deal.",
+     "If we hadn't pushed back the demo, we would have closed the deal.",
+     "If we hadn't moved the demo, we would have won the deal.",
+     "If we hadn't rescheduled the demo, we would have gotten the deal."
+    ],
+    "pruefmerkmal": {
+     "if_teil": "hadn't + 3. Form; kein would, kein didn't.",
+     "hauptteil": "would have + 3. Form (won/closed/gotten).",
+     "nicht_werten": "postpone/push back/move/delay/reschedule, win/close/get the deal."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If we wouldn't have postponed the demo",
+      "richtig": "If we hadn't postponed the demo",
+      "warum": "„nicht verschoben hätten“ heißt im if-Teil hadn't postponed – ohne would.",
+      "nochmal": {
+       "satz": "If we ___ (not / miss) the deadline, we would have won the contract.",
+       "loesung": "hadn't missed"
+      }
+     },
+     {
+      "du": "we would win the deal",
+      "richtig": "we would have won the deal",
+      "warum": "Der Deal ist vorbei – im Hauptteil brauchst du would have won.",
+      "nochmal": {
+       "satz": "If they had signed in June, we ___ (hit) our Q2 target.",
+       "loesung": "would have hit",
+       "auch_richtig": [
+        "could have hit",
+        "might have hit"
+       ]
+      }
+     },
+     {
+      "du": "If we didn't postpone the demo",
+      "richtig": "If we hadn't postponed the demo",
+      "warum": "Die Demo liegt hinter euch: „nicht verschoben hätten“ heißt hadn't postponed, nicht didn't postpone.",
+      "nochmal": {
+       "satz": "If we ___ (not / change) the project lead, the client would have stayed.",
+       "loesung": "hadn't changed"
+      }
+     }
+    ]
+   },
+   {
+    "id": "D7",
+    "typ": "1",
+    "de": "Sollten Sie Fragen haben, melden Sie sich gern.",
+    "muster": "If you have any questions, please let me know.",
+    "auch_richtig": [
+     "Should you have any questions, please feel free to reach out.",
+     "If you have any questions, feel free to get in touch.",
+     "If you have any questions, please don't hesitate to contact me.",
+     "Please let me know if you have any questions.",
+     {
+      "text": "If you should have any questions, please let me know.",
+      "hinweis": "Richtig, klingt aber etwas steif."
+     }
+    ],
+    "pruefmerkmal": {
+     "if_teil": "If you have … oder Should you have …; kein will, kein would.",
+     "hauptteil": "Nicht prüfen; Reihenfolge der Satzteile egal.",
+     "nicht_werten": "let me know/reach out/get in touch/contact me, any ja oder nein."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If you will have any questions",
+      "richtig": "If you have any questions",
+      "warum": "Auch bei Fragen in der Zukunft steht im if-Teil die Gegenwart: If you have.",
+      "nochmal": {
+       "satz": "If your team ___ (need) more training, just let me know.",
+       "loesung": "needs"
+      }
+     },
+     {
+      "du": "If you would have any questions",
+      "richtig": "If you have any questions",
+      "warum": "„Sollten Sie haben“ ist kein würde – nimm If you have oder Should you have.",
+      "nochmal": {
+       "satz": "___ you have any concerns about the contract, please call me.",
+       "loesung": "Should",
+       "auch_richtig": [
+        "If"
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "id": "D8",
+    "typ": "2",
+    "de": "Wenn wir mehr Zeit hätten, könnten wir eine ausführliche Demo machen.",
+    "muster": "If we had more time, we could do an in-depth demo.",
+    "auch_richtig": [
+     "If we had more time, we could give you a detailed demo.",
+     "If we had more time, we'd be able to run a full demo.",
+     "If there were more time, we could do a detailed demo."
+    ],
+    "pruefmerkmal": {
+     "if_teil": "Vergangenheit (had / there were); kein would, kein have.",
+     "hauptteil": "could + Grundform oder would be able to + Grundform.",
+     "nicht_werten": "do/give/run, in-depth/detailed/full."
+    },
+    "falsch_typisch": [
+     {
+      "du": "If we would have more time",
+      "richtig": "If we had more time",
+      "warum": "„hätten“ heißt im if-Teil had – would gehört nicht hinein.",
+      "nochmal": {
+       "satz": "If we ___ (have) a bigger budget, we could hire a consultant.",
+       "loesung": "had"
+      }
+     },
+     {
+      "du": "If we have more time, we could",
+      "richtig": "If we had more time, we could",
+      "warum": "„hätten“ ist nur gedacht – deshalb had, nicht have.",
+      "nochmal": {
+       "satz": "If the client ___ (have) a test system, we could start today.",
+       "loesung": "had"
+      }
+     },
+     {
+      "du": "we could have done an in-depth demo",
+      "richtig": "we could do an in-depth demo",
+      "warum": "Es geht um jetzt: could do; could have done hieße „hätten machen können“.",
+      "nochmal": {
+       "satz": "If we had more time, we ___ (show) you the workflow module.",
+       "loesung": "could show",
+       "auch_richtig": [
+        "would show",
+        "would be able to show"
+       ]
+      }
+     },
+     {
+      "du": "If we have more time, we can do an in-depth demo",
+      "richtig": "If we had more time, we could do an in-depth demo",
+      "wertung": "fast",
+      "warum": "Richtig gebaut, aber das Deutsche sagt „hätten“ – nur gedacht: had … could.",
+      "nochmal": {
+       "satz": "If we ___ (have) a reference in banking, we could show it to them.",
+       "loesung": "had"
+      }
+     },
+     {
+      "du": "we could make an in-depth demo",
+      "richtig": "we could do an in-depth demo",
+      "warum": "make a demo heißt eine Demo herstellen. Vorführen: give, run oder do a demo.",
+      "nochmal": {
+       "satz": "Could you ___ (vorführen) a quick demo for our IT team?",
+       "loesung": "give",
+       "auch_richtig": [
+        "run",
+        "do"
+       ]
+      }
+     },
+     {
+      "du": "we would do",
+      "richtig": "we could do",
+      "wertung": "fast",
+      "warum": "Richtig gebaut, aber „könnten“ heißt could: we could do an in-depth demo.",
+      "nochmal": {
+       "satz": "If we had a bigger budget, we ___ (hire) two more engineers.",
+       "loesung": "could hire",
+       "auch_richtig": [
+        "would be able to hire"
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "e_anwenden": [
+   {
+    "id": "E1",
+    "typ": "1",
+    "situation": "Ein Interessent zögert, weil er Angst vor einer langen Einführung hat.",
+    "auftrag": "Schreib 1–2 Sätze mit if: Was passiert konkret, wenn er diesen Monat startet?",
+    "satzanfang": null,
+    "pruefpunkte": [
+     "if-Teil in der Gegenwart, kein will",
+     "Hauptteil mit will, can oder Aufforderung",
+     "konkrete Folge (Datum, Zahl, Leistung)"
+    ],
+    "beispiel": "If you sign this month, we'll have you live by the end of Q1. And if anything goes wrong during the migration, our team will fix it within 24 hours."
+   },
+   {
+    "id": "E2",
+    "typ": "2",
+    "situation": "Der Einkäufer will 20 % Rabatt. Du willst nichts versprechen, aber andeuten, was du im Gegenzug vom Kunden brauchst.",
+    "auftrag": "Schreib 1–2 Sätze mit if. Leg dich nicht fest.",
+    "satzanfang": "If you …",
+    "pruefpunkte": [
+     "if-Teil in der Vergangenheit (committed, signed, were able to)",
+     "Hauptteil mit would/could/might + Grundform",
+     "Gegenleistung des Kunden im if-Teil, kein festes Versprechen"
+    ],
+    "beispiel": "If you were able to sign before the end of the quarter, I could talk to my manager about the onboarding fee."
+   },
+   {
+    "id": "E3",
+    "typ": "3",
+    "situation": "Im Team-Rückblick besprecht ihr einen Deal, den die Konkurrenz gewonnen hat.",
+    "auftrag": "Schreib 1–2 Sätze mit if: Was hättet ihr anders machen können, und was wäre dann passiert?",
+    "satzanfang": null,
+    "pruefpunkte": [
+     "if-Teil mit had + 3. Form",
+     "Hauptteil mit would/might/could have + 3. Form",
+     "konkrete Ursache und Folge"
+    ],
+    "beispiel": "If we had run a proper discovery call, we would have understood their compliance needs. We might have won if we had brought our CTO to the final pitch."
+   }
+  ]
+ },
+ "karten": [
+  {
+   "en": "address a concern",
+   "wortart": "Verb + Nomen (Wortpartner)",
+   "de": "auf Bedenken eingehen",
+   "satz_en": "Before we talk about pricing, I'd like to address your concerns about data security.",
+   "stufe1": {
+    "bedeutung": "auf Bedenken eingehen (sie ernst nehmen und beantworten)",
+    "satz": "Before we talk about pricing, I'd like to address your concerns about data security.",
+    "merksatz": "address schreibt man mit dd – „Adresse“ nur mit einem d. Und ohne to: address a concern."
+   },
+   "stufe2": {
+    "de_satz": "Ich möchte zuerst auf Ihre Bedenken zur Datenmigration eingehen.",
+    "hilfe": "a___ … c___",
+    "loesung_en": "I'd like to address your concerns about the data migration first.",
+    "loesung_auch_richtig": [
+     "First, I'd like to address your concerns about the data migration."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Wir sind gestern auf alle Bedenken der IT-Abteilung eingegangen.",
+    "loesung_en": "We addressed all of the IT department's concerns yesterday.",
+    "zielwort_auch_richtig": [
+     "dealt with … concerns",
+     "responded to … concerns",
+     "tackled … concerns"
+    ]
+   },
+   "stufe4": {
+    "situation": "Ein Kunde sagt im Call: „Wir haben Angst, dass unsere Mitarbeiter das neue System nicht annehmen.“",
+    "auftrag": "Antworte in 1–2 Sätzen und benutze address … concern."
+   },
+   "falsch_typisch": [
+    {
+     "du": "adress",
+     "richtig": "address",
+     "warum": "Englisch schreibt address mit zwei d – „Adresse“ nur mit einem.",
+     "nochmal": {
+      "aufgabe": "Let me ___ (eingehen auf) that concern right away.",
+      "loesung": "address"
+     }
+    },
+    {
+     "du": "address to your concerns",
+     "richtig": "address your concerns",
+     "warum": "Nach address kommt das Bedenken direkt, ohne to.",
+     "nochmal": {
+      "aufgabe": "We need to ___ their ___ (auf ihre Bedenken eingehen) before Friday.",
+      "loesung": [
+       "address",
+       "concerns"
+      ]
+     }
+    },
+    {
+     "du": "went into the concerns",
+     "richtig": "addressed the concerns",
+     "warum": "go into heißt ausführlich besprechen, nicht darauf eingehen und lösen.",
+     "nochmal": {
+      "aufgabe": "In yesterday's call, we ___ (eingehen auf und lösen) all of their concerns.",
+      "loesung": "addressed"
+     }
+    }
+   ]
+  },
+  {
+   "en": "push back on (something)",
+   "wortart": "Phrasal Verb + on",
+   "de": "Einwände gegen etwas erheben, nicht einfach zustimmen",
+   "satz_en": "Their procurement team pushed back on the three-year term.",
+   "stufe1": {
+    "bedeutung": "Einwände gegen etwas erheben, nicht einfach zustimmen",
+    "satz": "Their procurement team pushed back on the three-year term.",
+    "merksatz": "Mit on erhebst du Einwände: push back on the price. Ohne on heißt push back the demo „die Demo verschieben“."
+   },
+   "stufe2": {
+    "de_satz": "Der Einkauf hat Einwände gegen die Zahlungsbedingungen erhoben.",
+    "hilfe": "p___ b___ on",
+    "loesung_en": "Procurement pushed back on the payment terms."
+   },
+   "stufe3": {
+    "de_satz": "Wenn der Kunde Einwände gegen den Preis erhebt, bleib ruhig.",
+    "loesung_en": "If the client pushes back on the price, stay calm.",
+    "loesung_auch_richtig": [
+     "If the client pushes back on pricing, stay calm."
+    ],
+    "zielwort_auch_richtig": [
+     "objects to",
+     "challenges"
+    ]
+   },
+   "stufe4": {
+    "situation": "Du berichtest deiner Chefin, dass der Kunde mit dem Starttermin nicht einverstanden war.",
+    "auftrag": "Schreib 1–2 Sätze mit push back on."
+   },
+   "falsch_typisch": [
+    {
+     "du": "pushed back the price",
+     "richtig": "pushed back on the price",
+     "warum": "Ohne on heißt push back verschieben – für Widerstand brauchst du push back on.",
+     "nochmal": {
+      "aufgabe": "Legal ___ (erhob Einwände gegen) the liability clause.",
+      "loesung": "pushed back on"
+     }
+    },
+    {
+     "du": "made resistance against",
+     "richtig": "pushed back on",
+     "warum": "„Widerstand leisten“ wörtlich klingt hölzern; im Business sagt man push back on.",
+     "nochmal": {
+      "aufgabe": "The CFO ___ (erhob Einwände gegen) the extra license costs.",
+      "loesung": "pushed back on"
+     }
+    }
+   ]
+  },
+  {
+   "en": "a deal-breaker",
+   "wortart": "Nomen",
+   "de": "ein K.-o.-Kriterium",
+   "satz_en": "For many hospitals, hosting outside the EU is a deal-breaker.",
+   "stufe1": {
+    "bedeutung": "ein Punkt, an dem der ganze Deal scheitert",
+    "satz": "For many hospitals, hosting outside the EU is a deal-breaker.",
+    "merksatz": "„Knock-out criterion“ klingt nach deutscher Ausschreibung; im Gespräch sagt man deal-breaker."
+   },
+   "stufe2": {
+    "de_satz": "Für den Kunden ist die fehlende SAP-Schnittstelle ein K.-o.-Kriterium.",
+    "hilfe": "a d___-b___",
+    "loesung_en": "For the client, the missing SAP integration is a deal-breaker.",
+    "loesung_auch_richtig": [
+     "The missing SAP integration is a deal-breaker for the client."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Ist der Preis für Sie ein K.-o.-Kriterium?",
+    "loesung_en": "Is the price a deal-breaker for you?",
+    "loesung_auch_richtig": [
+     "Is price a deal-breaker for you?"
+    ],
+    "zielwort_auch_richtig": [
+     "dealbreaker",
+     "deal breaker"
+    ]
+   },
+   "stufe4": {
+    "situation": "Ein Interessent fragt, ob ihr auch in einem deutschen Rechenzentrum hostet.",
+    "auftrag": "Frag in 1–2 Sätzen nach, ob das für ihn ein K.-o.-Kriterium ist – mit deal-breaker."
+   },
+   "falsch_typisch": [
+    {
+     "du": "a knock-out criterion",
+     "richtig": "a deal-breaker",
+     "warum": "Knock-out criterion klingt nach deutscher Ausschreibung; im Gespräch sagen Muttersprachler deal-breaker.",
+     "nochmal": {
+      "aufgabe": "Missing single sign-on is a ___ (K.-o.-Kriterium) for them.",
+      "loesung": "deal-breaker"
+     }
+    }
+   ]
+  },
+  {
+   "en": "get buy-in from (someone)",
+   "wortart": "Verb + Nomen + from",
+   "de": "die Rückendeckung von jemandem bekommen",
+   "satz_en": "We need to get buy-in from IT before we can start the pilot.",
+   "stufe1": {
+    "bedeutung": "die Rückendeckung oder Zustimmung von jemandem bekommen",
+    "satz": "We need to get buy-in from IT before we can start the pilot.",
+    "merksatz": "buy-in kommt von buy into an idea – Zustimmung, nicht Kauf. Von wem: from IT, nicht of IT."
+   },
+   "stufe2": {
+    "de_satz": "Wir brauchen die Rückendeckung der Geschäftsführung.",
+    "hilfe": "get b___-i___ from",
+    "loesung_en": "We need to get buy-in from senior management.",
+    "loesung_auch_richtig": [
+     "We need buy-in from senior management.",
+     "We need to get buy-in from leadership.",
+     "We need to get buy-in from the executive team.",
+     "We need to get buy-in from upper management."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Hast du schon die Rückendeckung vom Betriebsrat bekommen?",
+    "loesung_en": "Have you gotten buy-in from the works council yet?",
+    "loesung_auch_richtig": [
+     "Did you get buy-in from the works council yet?"
+    ],
+    "zielwort_auch_richtig": [
+     "get buy-in from",
+     "got buy-in from",
+     "secured buy-in from",
+     "got support from"
+    ]
+   },
+   "stufe4": {
+    "situation": "Dein Ansprechpartner beim Kunden ist begeistert, aber der IT-Leiter war noch bei keinem Termin dabei.",
+    "auftrag": "Schreib ihm 1–2 Sätze, warum ihr die IT früh ins Boot holen solltet – mit get buy-in from."
+   },
+   "falsch_typisch": [
+    {
+     "du": "buy-in of IT",
+     "richtig": "buy-in from IT",
+     "warum": "Bei buy-in sagst du, von wem es kommt: from, nicht of.",
+     "nochmal": {
+      "aufgabe": "We still need ___ (Rückendeckung von) finance.",
+      "loesung": "buy-in from"
+     }
+    }
+   ]
+  },
+  {
+   "en": "be on track (for something)",
+   "wortart": "feste Wendung",
+   "de": "im Zeitplan liegen",
+   "satz_en": "The migration is on track for go-live on March 1.",
+   "stufe1": {
+    "bedeutung": "im Zeitplan liegen, alles läuft wie geplant",
+    "satz": "The migration is on track for go-live on March 1.",
+    "merksatz": "„Im Plan“ heißt nicht in plan, sondern on track – ohne the."
+   },
+   "stufe2": {
+    "de_satz": "Wir liegen mit dem Rollout im Plan.",
+    "hilfe": "o___ t___",
+    "loesung_en": "The rollout is on track.",
+    "loesung_auch_richtig": [
+     "We're on track with the rollout."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Liegen wir für den Go-live im April noch im Plan?",
+    "loesung_en": "Are we still on track for the April go-live?",
+    "zielwort_auch_richtig": [
+     "on schedule",
+     "on target"
+    ]
+   },
+   "stufe4": {
+    "situation": "Der Kunde fragt nervös per E-Mail, ob die Einführung pünktlich fertig wird. Bisher läuft alles gut.",
+    "auftrag": "Antworte in 1–2 Sätzen mit on track."
+   },
+   "falsch_typisch": [
+    {
+     "du": "in plan",
+     "richtig": "on track",
+     "warum": "„Im Plan“ übersetzt man nicht wörtlich; auf Englisch ist ein Projekt on track.",
+     "nochmal": {
+      "aufgabe": "Phase two is ___ (im Plan) for May.",
+      "loesung": "on track",
+      "auch_richtig": [
+       "on schedule"
+      ]
+     }
+    },
+    {
+     "du": "We're in time with the rollout",
+     "richtig": "The rollout is on track",
+     "warum": "in time heißt rechtzeitig, nicht im Plan.",
+     "nochmal": {
+      "aufgabe": "Don't worry, the project is ___ (im Plan).",
+      "loesung": "on track",
+      "auch_richtig": [
+       "on schedule"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "en": "be behind schedule",
+   "wortart": "feste Wendung",
+   "de": "im Verzug sein (zeitlich)",
+   "satz_en": "The data migration is two weeks behind schedule.",
+   "stufe1": {
+    "bedeutung": "später dran sein als geplant",
+    "satz": "The data migration is two weeks behind schedule.",
+    "merksatz": "„Im Verzug“ heißt nicht in delay, sondern behind schedule. Die Zeit steht davor: two weeks behind schedule."
+   },
+   "stufe2": {
+    "de_satz": "Wir sind mit der Datenmigration im Verzug.",
+    "hilfe": "b___ s___",
+    "loesung_en": "We're behind schedule with the data migration.",
+    "loesung_auch_richtig": [
+     "We're behind schedule on the data migration.",
+     "The data migration is behind schedule."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Das Projekt ist drei Wochen im Verzug, weil die Schnittstelle noch nicht fertig ist.",
+    "loesung_en": "The project is three weeks behind schedule because the integration isn't ready yet.",
+    "zielwort_auch_richtig": [
+     "three weeks behind",
+     "running three weeks behind",
+     "running three weeks behind schedule",
+     "delayed by three weeks",
+     "three weeks late"
+    ]
+   },
+   "stufe4": {
+    "situation": "Das IT-Team des Kunden hat die Daten zu spät geliefert, der Go-live verschiebt sich.",
+    "auftrag": "Schreib dem Kunden 1–2 diplomatische Sätze mit behind schedule, ohne ihm direkt die Schuld zu geben."
+   },
+   "falsch_typisch": [
+    {
+     "du": "in delay",
+     "richtig": "behind schedule",
+     "warum": "„In delay“ sagt man so nicht; ein Projekt ist behind schedule oder delayed.",
+     "nochmal": {
+      "aufgabe": "Sorry, we're a few days ___ (im Verzug).",
+      "loesung": "behind schedule"
+     }
+    },
+    {
+     "du": "We're in default with the migration",
+     "richtig": "We're behind schedule with the migration",
+     "warum": "in default heißt Zahlungs- oder Vertragsverzug, nicht zeitlich im Verzug.",
+     "nochmal": {
+      "aufgabe": "The rollout is two weeks ___ (im Verzug) because of the holidays.",
+      "loesung": "behind schedule"
+     }
+    }
+   ]
+  },
+  {
+   "en": "meet someone halfway",
+   "wortart": "feste Wendung (Verb + Person + halfway)",
+   "de": "jemandem auf halbem Weg entgegenkommen (Kompromiss)",
+   "satz_en": "If you can commit to three years, we can meet you halfway on the price.",
+   "stufe1": {
+    "bedeutung": "sich in der Mitte einigen – beide geben etwas nach",
+    "satz": "If you can commit to three years, we can meet you halfway on the price.",
+    "merksatz": "„Entgegenkommen“ heißt nicht come toward you. Man sagt meet you halfway, das Thema mit on."
+   },
+   "stufe2": {
+    "de_satz": "Beim Preis können wir Ihnen auf halbem Weg entgegenkommen.",
+    "hilfe": "m___ you h___ on",
+    "loesung_en": "We can meet you halfway on the price.",
+    "auch_richtig": [
+     "We can meet you halfway on pricing."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Wenn Sie uns bei der Laufzeit auf halbem Weg entgegenkommen, verzichten wir auf die Einrichtungsgebühr.",
+    "loesung_en": "If you meet us halfway on the contract term, we'll waive the setup fee.",
+    "loesung_auch_richtig": [
+     "If you can meet us halfway on the contract term, we'll waive the setup fee.",
+     "If you meet us halfway on the contract length, we'll waive the setup fee.",
+     "If you meet us halfway on the term, we'll waive the setup fee."
+    ],
+    "zielwort_auch_richtig": [
+     "meet us in the middle on"
+    ]
+   },
+   "stufe4": {
+    "situation": "Du hattest keinen Rabatt angeboten, der Kunde will 10 %. Ihr einigt euch in der Mitte.",
+    "auftrag": "Schreib 1–2 Sätze, in denen du den Kompromiss vorschlägst – mit meet … halfway."
+   },
+   "falsch_typisch": [
+    {
+     "du": "come toward you",
+     "richtig": "meet you halfway",
+     "warum": "„Entgegenkommen“ wörtlich versteht niemand als Kompromiss; man sagt meet you halfway.",
+     "nochmal": {
+      "aufgabe": "We're happy to ___ you ___ (entgegenkommen, in der Mitte) on the payment terms.",
+      "loesung": [
+       "meet",
+       "halfway"
+      ]
+     }
+    },
+    {
+     "du": "meet you on half the way",
+     "richtig": "meet you halfway",
+     "warum": "Die Wendung heißt meet you halfway – halfway ist ein Wort, ohne on und the.",
+     "nochmal": {
+      "aufgabe": "Could you ___ us ___ (entgegenkommen, in der Mitte) on the start date?",
+      "loesung": [
+       "meet",
+       "halfway"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "en": "a sticking point",
+   "wortart": "Nomen",
+   "de": "ein Knackpunkt (strittiger Punkt in einer Verhandlung)",
+   "satz_en": "The liability cap is still the main sticking point in the contract.",
+   "stufe1": {
+    "bedeutung": "ein Punkt, über den man sich noch nicht einig ist",
+    "satz": "The liability cap is still the main sticking point in the contract.",
+    "merksatz": null,
+    "abgrenzung": "sticking point = strittig, aber verhandelbar; deal-breaker = daran scheitert der Deal."
+   },
+   "stufe2": {
+    "de_satz": "Der größte Knackpunkt ist die Haftung.",
+    "hilfe": "s___ p___",
+    "loesung_en": "The biggest sticking point is liability.",
+    "loesung_auch_richtig": [
+     "The main sticking point is liability."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Die Kündigungsfrist war bis zum Schluss ein Knackpunkt.",
+    "loesung_en": "The notice period was a sticking point until the very end.",
+    "zielwort_auch_richtig": [
+     "point of contention",
+     "bone of contention"
+    ]
+   },
+   "stufe4": {
+    "situation": "Dein Chef fragt, warum der Vertrag mit einem Kunden noch nicht unterschrieben ist.",
+    "auftrag": "Erkläre in 1–2 Sätzen, woran es hängt – mit sticking point."
+   },
+   "falsch_typisch": [
+    {
+     "du": "problem point",
+     "richtig": "sticking point",
+     "warum": "„Problempunkt“ gibt es so nicht; in Verhandlungen sagt man sticking point.",
+     "nochmal": {
+      "aufgabe": "Data residency could become a ___ (Knackpunkt) with this client.",
+      "loesung": "sticking point"
+     }
+    }
+   ]
+  },
+  {
+   "en": "a ballpark figure",
+   "wortart": "Nomen (feste Verbindung)",
+   "de": "ein grober Richtwert (Zahl)",
+   "satz_en": "Can you give me a ballpark figure for 200 users?",
+   "stufe1": {
+    "bedeutung": "eine grobe Zahl, ohne sich festzulegen",
+    "satz": "Can you give me a ballpark figure for 200 users?",
+    "merksatz": "„Richtwert“ oder „Orientierungswert“ ist nicht orientation value – man sagt ballpark figure."
+   },
+   "stufe2": {
+    "de_satz": "Können Sie mir einen groben Richtwert für die Lizenzkosten geben?",
+    "hilfe": "a b___ f___",
+    "loesung_en": "Can you give me a ballpark figure for the license costs?",
+    "auch_richtig": [
+     "Could you give me a ballpark figure for the licensing costs?"
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Nur als grober Richtwert: Rechnen Sie mit etwa 40 Dollar pro Nutzer und Monat.",
+    "loesung_en": "Just as a ballpark, you're looking at about $40 per user per month.",
+    "loesung_auch_richtig": [
+     "Just as a ballpark figure, you're looking at about $40 per user per month.",
+     "To give you a ballpark figure, you're looking at about $40 per user per month."
+    ],
+    "zielwort_auch_richtig": [
+     "ballpark figure",
+     "ballpark estimate",
+     "rough estimate",
+     "rough figure"
+    ]
+   },
+   "stufe4": {
+    "situation": "Ein Interessent will schon im ersten Call wissen, was das System ungefähr kostet; du willst dich nicht festlegen.",
+    "auftrag": "Gib ihm in 1–2 Sätzen eine grobe Zahl, ohne dich festzulegen – mit ballpark."
+   },
+   "falsch_typisch": [
+    {
+     "du": "orientation value",
+     "richtig": "ballpark figure",
+     "warum": "„Orientierungswert“ wörtlich versteht kein Kunde; für eine grobe Zahl sagt man ballpark figure.",
+     "nochmal": {
+      "aufgabe": "Just to give you a ___ (grober Richtwert): about $30,000 a year.",
+      "loesung": "ballpark figure",
+      "auch_richtig": [
+       "ballpark"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "en": "follow up (with someone) on (something)",
+   "wortart": "Phrasal Verb + with + on",
+   "de": "nachfassen (zu etwas)",
+   "satz_en": "I'm following up on the proposal I sent you last Tuesday.",
+   "stufe1": {
+    "bedeutung": "nachfassen, freundlich nachhaken",
+    "satz": "I'm following up on the proposal I sent you last Tuesday.",
+    "merksatz": "Als Verb ohne Bindestrich: I'll follow up. Mit Bindestrich ist es ein Nomen: a follow-up call. Mit Person: follow up with procurement."
+   },
+   "stufe2": {
+    "de_satz": "Ich wollte zu unserem Gespräch von letzter Woche nachfassen.",
+    "hilfe": "f___ u___ on",
+    "loesung_en": "I wanted to follow up on our conversation from last week.",
+    "auch_richtig": [
+     "I'm following up on our conversation from last week."
+    ]
+   },
+   "stufe3": {
+    "de_satz": "Kannst du morgen beim Einkauf wegen der Bestellung nachfassen?",
+    "loesung_en": "Can you follow up with procurement on the PO tomorrow?",
+    "zielwort_auch_richtig": [
+     "follow up on the PO with",
+     "follow up with … about",
+     "follow up with … regarding",
+     "check in with … about",
+     "touch base with … about"
+    ]
+   },
+   "stufe4": {
+    "situation": "Ein Interessent hat seit zehn Tagen nicht auf dein Angebot reagiert.",
+    "auftrag": "Schreib den ersten Satz deiner E-Mail mit follow up on – freundlich, nicht drängelnd."
+   },
+   "falsch_typisch": [
+    {
+     "du": "I'll follow-up on",
+     "richtig": "I'll follow up on",
+     "warum": "Als Verb schreibst du follow up ohne Bindestrich; follow-up ist das Nomen.",
+     "nochmal": {
+      "aufgabe": "I'll ___ (nachfassen) with their CFO next week.",
+      "loesung": "follow up"
+     }
+    },
+    {
+     "du": "I come back to my offer",
+     "richtig": "I'm following up on my offer",
+     "warum": "„Ich komme auf mein Angebot zurück“ klingt auf Englisch schief; man sagt I'm following up on.",
+     "nochmal": {
+      "aufgabe": "I'm ___ (nachfassen zu) the demo we did on Monday.",
+      "loesung": "following up on"
+     }
+    }
+   ]
+  }
+ ]
+}
