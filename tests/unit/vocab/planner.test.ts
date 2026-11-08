@@ -6,7 +6,7 @@ import { addDays, dayKey, dayStartOf } from '../../../src/domain/date';
 import { dayWeight, pickDay } from '../../../src/modules/vocab/domain/balance';
 import { capDays } from '../../../src/modules/vocab/domain/cap';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
-import { buildDayPlan, minNewFor } from '../../../src/modules/vocab/domain/day';
+import { BRAKE_NEW, buildDayPlan, minNewFor } from '../../../src/modules/vocab/domain/day';
 import { corridor, fuzzRange } from '../../../src/modules/vocab/domain/fuzz';
 import { FORM_SPEC, gradeOf } from '../../../src/modules/vocab/domain/grade';
 import { type Answer, applyAnswer, emptyLex, evidencePlans, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
@@ -244,18 +244,20 @@ describe('Tagesplan (M12, M13, M21)', () => {
     });
   const fresh = (n: number) => Array.from({ length: n }, (_, i) => ({ path: `vocab/new-${i}`, lex: emptyLex('w', 'edge', T0), order: 1000 + i }));
 
-  it('das Kontingent kommt auch bei großem Rückstand (Emrah 08.11.2026, „A: 10 pro Tag“)', () => {
+  it('das Kontingent kommt auch bei großem Rückstand, wenn die Wörter genug Zeit haben (Emrah 08.11.2026, „A: 10 pro Tag“, Tagesziel 35)', () => {
     const cat = new Catalog([...mk(200, -3), ...fresh(12)]);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 10 }, {}).plan.fresh).toBe(10);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 5 }, {}).plan.fresh).toBe(5);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 10 }, {}).plan.fresh).toBe(10);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 5 }, {}).plan.fresh).toBe(5);
   });
-  it('minNewFor = restliches Kontingent; ohne Rückstand ebenso', () => {
-    expect(minNewFor(10)).toBe(10);
-    expect(minNewFor(2)).toBe(2);
-    expect(minNewFor(0)).toBe(0);
-    const cat = new Catalog([...mk(3, -1), ...fresh(10)]);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 10 }, {}).plan.fresh).toBe(10);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, newPerDay: 2 }, {}).plan.fresh).toBe(2);
+  it('Bremse: unter 20 Wörter-Minuten höchstens 5 neue (learning-scientist 08.11.2026)', () => {
+    expect(minNewFor(10, 15 * 60_000)).toBe(BRAKE_NEW);
+    expect(minNewFor(10, 21 * 60_000)).toBe(10);
+    expect(minNewFor(2, 15 * 60_000)).toBe(2);
+    expect(minNewFor(0, 21 * 60_000)).toBe(0);
+    const cat = new Catalog([...mk(3, -1), ...fresh(12)]);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 15, newPerDay: 10 }, {}).plan.fresh).toBe(BRAKE_NEW);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 10 }, {}).plan.fresh).toBe(10);
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 2 }, {}).plan.fresh).toBe(2);
   });
   it('Kontingent 0 → keine neuen', () => {
     const cat = new Catalog([...mk(5, -1), ...fresh(10)]);

@@ -3,7 +3,7 @@ import { CardStack } from '../../ui/CardStack';
 import { useBand } from '../../ui/exercise/bandStore';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { leaveBack, useNav } from '../../app/nav';
-import { patternById } from '../../domain/grammar/patterns';
+import { patternById, whyFor } from '../../domain/grammar/patterns';
 import { patternState, type PatternState } from '../../domain/metrics/pattern';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -34,7 +34,7 @@ import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
 import { examGrade, LESSON_PASS } from '../../domain/grammar/book';
 import { pageLabel, startBookStep } from './BookScreen';
-import { bookGrammarLeft, bookTesting, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
+import { bookGrammarLeft, bookKeys, bookTesting, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt. Vorn steht bei einem neuen Muster der Vortest und die Einführung
@@ -269,7 +269,8 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
   const go = useNav((x) => x.go);
   const b = s.book;
   if (!b) return null;
-  const rows = s.results.filter((r) => !r.xt);
+  const keys = bookKeys(s);
+  const rows = s.results.filter((r) => !r.xt && keys.has(r.key));
   const c = rows.filter((r) => r.ok).length;
   const n = rows.length;
   const exam = b.part === 'X';
@@ -284,7 +285,9 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
     .filter((r) => !r.ok)
     .map((r) => {
       const task = taskOf(r.key);
-      const why = task ? ((lang === 'de' ? task.expl.de : task.expl.en) ?? '') : '';
+      // Erklärungen A (Emrah): zuerst die Erklärung zu genau dieser falschen Antwort (`why.wrong`), sonst die Begründung der Lösung.
+      const hit = task ? whyFor(task, { given: r.given ?? '', picked: r.given ?? '' }).rule : null;
+      const why = hit ? hit[lang] : task ? ((lang === 'de' ? task.expl.de : task.expl.en) ?? '') : '';
       return { wrong: (r.given ?? '').trim() || '…', right: r.right ?? '', rule: why || topicName(r.topic, lang), when: t('gxEndTomorrow') };
     });
   const byTopic = new Map<string, { c: number; n: number }>();

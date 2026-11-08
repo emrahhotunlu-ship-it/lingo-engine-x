@@ -1277,7 +1277,7 @@
       "if": [
        "chose"
       ],
-      "de": "„chose“ klingt, als geschah beides zugleich. „By the time“ zeigt: Die Wahl war früher, had chosen.",
+      "de": "„chose“ klingt, als wäre beides gleichzeitig passiert. „By the time“ zeigt: Die Wahl war früher, had chosen.",
       "en": "“Chose” sounds as if both happened at once. “By the time” shows the choice came first: had chosen."
      }
     ]
@@ -1295,11 +1295,13 @@
    "accepted": [
     "'d already canceled",
     "had already cancelled",
-    "'d already cancelled"
+    "'d already cancelled",
+    "already canceled",
+    "already cancelled"
    ],
    "why": {
     "ok": {
-     "de": "„When I called“ ist der spätere Moment, „already“ zeigt: Die Absage kam vorher. Past Perfect: had already canceled.",
+     "de": "„When I called“ ist der spätere Moment, „already“ zeigt: Die Absage kam vorher. Am klarsten: had already canceled.",
      "en": "“When I called” is the later moment, and “already” shows the cancellation came first: had already canceled."
     },
     "wrong": [
@@ -1309,30 +1311,6 @@
       ],
       "de": "„have already canceled“ ist Gegenwart. Der Anruf liegt in der Vergangenheit („When I called“).",
       "en": "“Have already canceled” is present. The call was in the past (“When I called”)."
-     },
-     {
-      "if": [
-       "already",
-       "canceled"
-      ],
-      "de": "Ohne had wirkt es, als käme die Absage nach dem Anruf. Mit „already“: had already canceled.",
-      "en": "Without had it sounds as if they canceled after the call. With “already”: had already canceled.",
-      "not": [
-       "had",
-       "'d"
-      ]
-     },
-     {
-      "if": [
-       "already",
-       "cancelled"
-      ],
-      "not": [
-       "had",
-       "'d"
-      ],
-      "de": "Ohne had wirkt es, als käme die Absage nach dem Anruf. Mit „already“: had already cancelled.",
-      "en": "Without had it sounds as if they cancelled after the call. With “already”: had already cancelled."
      }
     ]
    }
@@ -2362,7 +2340,7 @@
    ],
    "why": {
     "ok": {
-     "de": "„September“ ist ein Monat. Vor Monaten und Jahren steht in.",
+     "de": "„September“ ist ein Monat. Vor Monaten und Jahren steht „in“.",
      "en": "“September” is a month. Before months and years use in."
     },
     "wrong": [
@@ -4008,8 +3986,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „until“ muss die Prüfung fertig sein, bevor du teilst. Dafür steht das Present Perfect: has reviewed.",
-     "en": "After “until”, the review must be done before you share. That takes the Present Perfect: has reviewed."
+     "de": "Nach „until“ steht kein will. Das Present Perfect betont, dass die Prüfung erst fertig sein muss: has reviewed (auch „reviews“ geht).",
+     "en": "No will after “until”. The present perfect stresses that the review must be finished first: has reviewed (“reviews” also works)."
     },
     "wrong": [
      {
@@ -4695,7 +4673,7 @@
      }
     ]
    },
-   "hint": "(ab dem …)"
+   "hint": "(Stichtag)"
   },
   {
    "id": "cp-a5",
@@ -4842,7 +4820,7 @@
    ],
    "why": {
     "ok": {
-     "de": "„two days“ ist eine Zeitspanne, an deren Ende spätestens gemeldet wird. Dafür steht within.",
+     "de": "„two days“ ist eine Zeitspanne. Gemeldet wird irgendwann darin, spätestens an ihrem Ende: „within“.",
      "en": "“two days” is a span by whose end you report at the latest. That takes within."
     },
     "wrong": [
@@ -5053,7 +5031,7 @@
       "if": [
        "falls"
       ],
-      "de": "falls passt zu will im Hauptsatz. Hier steht aber „would become“ → Past Simple: fell.",
+      "de": "„falls“ (If the dollar falls) passt zu will im Hauptsatz. Hier steht aber „would become“, also Past Simple: fell.",
       "en": "falls goes with will in the main clause. But here it's “would become”, so use the Past Simple: fell."
      }
     ]
@@ -5502,7 +5480,7 @@
      }
     ]
    },
-   "hint": "(ohne …)"
+   "hint": "(förmlich für „ohne“)"
   },
   {
    "id": "ca-a5",
@@ -7644,7 +7622,7 @@
       "if": [
        "should"
       ],
-      "de": "„told all visitors should leave“ fehlt that/they. Kurz und richtig: told all visitors to leave.",
+      "de": "In „told all visitors should leave“ fehlt „that they“. Üblicher: „told all visitors to leave“.",
       "en": "“told all visitors should leave” lacks a subject. Short and correct: told all visitors to leave."
      }
     ]
@@ -10218,7 +10196,7 @@
      }
     ]
    },
-   "hint": "(es gibt)"
+   "hint": "(Es besteht …)"
   },
   {
    "id": "mp-b1",
@@ -11989,7 +11967,7 @@
     "wrong": [
      {
       "opt": "having",
-      "de": "„stopped having lunch“ hieße „aßen nie mehr zu Mittag“. „then continued“ passt dazu nicht.",
+      "de": "„stopped having lunch“ hieße „hörten auf, zu Mittag zu essen“. „then continued“ zeigt aber eine Pause mit Zweck.",
       "en": "“stopped having lunch” means “gave up lunch for good”. That clashes with “then continued”."
      },
      {
@@ -13623,7 +13601,7 @@
      }
     ]
    },
-   "hint": "(ein paar)"
+   "hint": "(zählbar, kleine Menge)"
   },
   {
    "id": "cnt-a5",
@@ -17715,7 +17693,7 @@
      }
     ]
    },
-   "hint": "(in der)"
+   "hint": "(Präposition + Relativwort)"
   },
   {
    "id": "np-b1",

@@ -1,6 +1,6 @@
 import { addDays, dayKey } from '../shared';
 import { type Catalog, forecastMinutes, isNewLex } from './catalog';
-import { minNewFor, newCostMs } from './day';
+import { BRAKE_MIN, minNewFor, newCostMs } from './day';
 import type { FormStats, VocabCfg } from './types';
 
 // Großpaket A S6 (Bild s2-04, Übersicht): „Die nächsten 14 Tage · Minuten Wörter“. Wiederholungen aus den Terminen (forecastMinutes),
@@ -21,9 +21,9 @@ export function outlook(cat: Catalog, med: FormStats, nowMs: number, cfg: Pick<V
   const today = dayKey(nowMs);
   const days = review.map((r, i): OutlookDay => {
     const quota = cfg.newPerDay;
-    const minNew = minNewFor(quota);
+    const minNew = minNewFor(quota, budget);
     const room = Math.max(0, budget - r * 60_000);
-    const want = quota === 0 ? 0 : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
+    const want = quota === 0 ? 0 : budget < BRAKE_MIN * 60_000 ? minNew : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
     const nFresh = Math.min(want, left);
     left -= nFresh;
     return { d: addDays(today, i + 1), review: r, fresh: round1((nFresh * nc) / 60_000), nFresh };

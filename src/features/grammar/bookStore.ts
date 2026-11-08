@@ -1,6 +1,7 @@
 import { getWriter } from '../../data';
 import { bookSchema } from '../../data/schemas';
-import { chapterOfTopic, type BookPart } from '../../domain/grammar/book';
+import { bookNext, chapterOfTopic, type BookPart, type BookStep } from '../../domain/grammar/book';
+import { dayKey } from '../../domain/date';
 import { logError } from '../../platform/diagnostics';
 
 // Grammatik-Buch: Ergebnisse in `app/book` (docs/umbau/buch/plan.md). Nur ergänzend: ein Ergebnis wird angehängt bzw. hochgezählt, nie gelöscht.
@@ -52,8 +53,10 @@ export async function recordPage(topic: string, part: BookPart, c: number, n: nu
       const prev = isObj(lesson[part]) ? (lesson[part]) : null;
       const best = Math.max(c, typeof prev?.best === 'number' ? prev.best : typeof prev?.c === 'number' ? prev.c : 0);
       const k = (typeof prev?.k === 'number' ? prev.k : 0) + 1;
-      const next = { ...(cur ?? {}), v: 1, ls: { ...ls, [topic]: { ...lesson, [part]: { c, n, t, k, best } } } };
-      return cur ? { update: { v: 1, ls: next.ls } } : { set: next };
+      const page = { c, n, t, k, best };
+      // data-guard 08.11.2026: nur genau diese Seite schreiben (`update` mischt verschachtelte Objekte), damit ein zweites Gerät, das zur
+      // selben Zeit eine andere Seite speichert, nichts überschreibt.
+      return cur ? { update: { v: 1, ls: { [topic]: { [part]: page } } } } : { set: { v: 1, ls: { ...ls, [topic]: { ...lesson, [part]: page } } } };
     });
     return ok;
   } catch (err) {
@@ -89,9 +92,10 @@ export async function recordExam(chapter: string, e: ExamResult): Promise<boolea
 
 /** Stand des Buchs aus `app/book` für `bookNext` und die Anzeige. */
 export function bookView(doc: Doc | null | undefined): {
-  page: (topic: string, part: BookPart) => { best: number; n: number; k: number } | null;
+  page: (topic: string, part: BookPart) => { best: number; n: number; k: number; t: number } | null;
   exams: (chapter: string) => ExamResult[];
   examPassed: (chapter: string) => boolean;
+  lastExam: (chapter: string) => { t: number; passed: boolean; w: string[] } | null;
   /** Kapitel der letzten Buch-Aktivität (Seite oder Klausur); `null` = Buch nie begonnen. */
   recent: string | null;
 } {
@@ -107,9 +111,21 @@ export function bookView(doc: Doc | null | undefined): {
     recent,
     page: (topic, part) => {
       const r = pageResult(doc, topic, part);
-      return r ? { best: r.best, n: r.n, k: r.k } : null;
+      return r ? { best: r.best, n: r.n, k: r.k, t: r.t } : null;
+    },
+    lastExam: (chapter) => {
+      const list = examResults(doc, chapter);
+      const e = list[list.length - 1];
+      return e ? { t: e.t, passed: e.g <= 3, w: e.w } : null;
     },
     exams: (chapter) => examResults(doc, chapter),
     examPassed: (chapter) => examResults(doc, chapter).some((e) => e.g <= 3),
   };
+}
+
+/** Nächster Schritt im Buch mit allen Regeln (zuletzt bearbeitetes Kapitel, Lektionstest erst am nächsten Lerntag, schwache Lektionen vor der Klausur). */
+export function bookNextOf(doc: Doc | null | undefined, nowMs: number): BookStep | null {
+  const v = bookView(doc);
+  const today = dayKey(nowMs);
+  return bookNext(v.page, v.examPassed, v.recent, { today: (t) => t > 0 && dayKey(t) === today, lastExam: v.lastExam });
 }

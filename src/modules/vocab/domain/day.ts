@@ -18,8 +18,14 @@ export const BACKLOG_BUDGETS = 1;
 export const SPREAD_DAYS = 7;
 /** Höchstens so viele neue behält der kurze Tag beim nachträglichen Verkleinern (`shrinkDayPlan`). */
 export const MIN_NEW = 2;
-/** Mindestzahl neuer Wörter für einen Lerntag: das ganze restliche Kontingent (Emrah 08.11.2026, „A: 10 pro Tag“), unabhängig vom Rückstand. */
-export const minNewFor = (quota: number): number => Math.max(0, quota);
+/** Unter so vielen Wörter-Minuten kommen höchstens `BRAKE_NEW` neue (learning-scientist 08.11.2026: 10 neue in 15 Minuten → Behalten ≈ 66 %). */
+export const BRAKE_MIN = 20;
+export const BRAKE_NEW = 5;
+/**
+ * Mindestzahl neuer Wörter für einen Lerntag: das ganze restliche Kontingent (Emrah 08.11.2026, „A: 10 pro Tag“), unabhängig vom Rückstand –
+ * aber nur, wenn die Wörter genug Zeit haben (Tagesziel 35 → 21 Minuten). Mit weniger als `BRAKE_MIN` Minuten höchstens `BRAKE_NEW`.
+ */
+export const minNewFor = (quota: number, budgetMs: number = BRAKE_MIN * 60_000): number => Math.max(0, budgetMs < BRAKE_MIN * 60_000 ? Math.min(quota, BRAKE_NEW) : quota);
 /** Vorgezogen (M15): bis zu dieser Zahl Lerntage voraus, nur solange der Plan unter AHEAD_FILL × Zielzeit liegt. */
 export const AHEAD_DAYS = 2;
 export const AHEAD_FILL = 0.9;
@@ -58,7 +64,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   due.sort((a, b) => mustOf(a) - mustOf(b) || a.r - b.r || a.path.localeCompare(b.path));
 
   const quota = Math.max(0, cfg.newPerDay - introducedToday);
-  const minNew = minNewFor(quota);
+  const minNew = minNewFor(quota, budgetMs);
   const nc = newCostMs(med);
   // Kurzer Tag (2A, learning-scientist 6): Rückstand höchstens ein Tagesbudget, nichts verschieben, nichts vorziehen (wie `shrinkDayPlan`).
   const short = cfg.short === true;
@@ -85,7 +91,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   }
   // Neue Lexeme.
   const room = Math.max(0, budgetMs - used);
-  const nFresh = quota === 0 ? 0 : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
+  const nFresh = quota === 0 ? 0 : budgetMs < BRAKE_MIN * 60_000 ? minNew : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
   const fresh: string[] = [];
   const blocked = new Set<string>();
   for (const it of cat.items()) if (it.lex.intro === day) for (const s of cat.siblingsOf(it.path)) blocked.add(s);

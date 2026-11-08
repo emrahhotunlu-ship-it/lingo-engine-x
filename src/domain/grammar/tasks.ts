@@ -456,7 +456,7 @@ export function selectVortest(i: Pick2 & { topic: string; pats: readonly string[
   const pats = i.pats.length ? i.pats : [null];
   for (let k = 0; k < (i.n ?? 2); k++) {
     const pat = pats[k % pats.length] ?? null;
-    const t = pk.take(pk.fresh({ topic: i.topic, prefer: k % 2 === 0 ? ['gap', 'kwt'] : ['kwt', 'gap'], strict: true, pats: pat ? [pat] : null, allowSeen: true })) ?? pk.take(pk.fresh({ topic: i.topic, prefer: ['gap', 'kwt'], strict: true, pats: i.pats.length ? i.pats : null, allowSeen: true }));
+    const t = pk.take(pk.fresh({ topic: i.topic, prefer: ['gap', 'kwt'], strict: true, pats: pat ? [pat] : null, allowSeen: true })) ?? pk.take(pk.fresh({ topic: i.topic, prefer: ['gap', 'kwt'], strict: true, pats: i.pats.length ? i.pats : null, allowSeen: true }));
     if (t) out.push(t);
   }
   return out;
@@ -470,7 +470,8 @@ export function selectTopicTest(i: Pick2 & { topic: string; pats: readonly strin
   const pk = picker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
   const out: GrammarTask[] = [];
   const pats = i.pats.length ? i.pats : [null];
-  const forms: readonly (readonly GrammarTaskType[])[] = [['gap', 'kwt', 'transform'], ['kwt', 'transform', 'gap'], ['transform', 'gap', 'find', 'kwt']];
+  // Emrah 08.11.2026: Umformungen (kwt) nur noch als letzte Wunschform, auch im Themen-Test.
+  const forms: readonly (readonly GrammarTaskType[])[] = [['gap', 'transform', 'kwt'], ['gap', 'find', 'kwt'], ['transform', 'gap', 'find', 'kwt']];
   for (let k = 0; k < i.n; k++) {
     const pat = pats[k % pats.length] ?? null;
     const prefer = [...(forms[k % forms.length] ?? []), 'find', 'correct', 'mc', 'meaning'] as GrammarTaskType[];

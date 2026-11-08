@@ -155,7 +155,7 @@ export type TestState = { topic: string; n: number; result: { c: number; n: numb
  * Grammatik-Buch (Emrah 08.11.2026, docs/umbau/buch/plan.md): eine Seite einer Lektion (A/B/C Übung, T Lektionstest) oder die Klausur eines
  * Kapitels (X). Feste Aufgabenfolge; im Test und in der Klausur ohne Hilfe, in der Klausur ohne Rückmeldung je Aufgabe. `saved`: Ergebnis gespeichert.
  */
-export type BookRun = { part: BookPart | 'X'; topic: string | null; chapter: string | null; attempt: number; saved?: boolean };
+export type BookRun = { part: BookPart | 'X'; topic: string | null; chapter: string | null; attempt: number; saved?: boolean; /** Zahl der Buch-Aufgaben vorn (dahinter fällige Fehlersätze, nicht gezählt). */ n?: number };
 /** Läuft gerade ein Buch-Test (Lektionstest oder Klausur)? Dann ohne Hilfe, ohne Claude und ohne Wiederholung am Ende. */
 export const bookTesting = (b: BookRun | null | undefined): boolean => !!b && (b.part === 'T' || b.part === 'X');
 
@@ -311,6 +311,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}), ...(chapterTopics ? { chapter: chapterTopics } : {}), ...(repairs.length ? { repairs } : {}) };
 
   let tasks: GrammarTask[];
+  let bookN = 0;
   let intro: IntroState | null = null;
   let test: TestState | null = null;
   const size = o.size ?? (tabBlock ? unitGrammarArgs(plan).n : ROUND_SIZE[mode]);
@@ -320,8 +321,13 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
 
   if (o.book) {
     // Grammatik-Buch: feste Aufgaben der Seite bzw. der Klausur (pageTasks/examTasks), ohne Einführung, ohne Fehlersätze.
-    tasks = o.book.part === 'X' ? (o.book.chapter ? examTasks(o.book.chapter, o.book.attempt) : []) : o.book.topic ? pageTasks(o.book.topic, o.book.part, o.book.attempt) : [];
-    if (!tasks.length) return null;
+    const own = o.book.part === 'X' ? (o.book.chapter ? examTasks(o.book.chapter, o.book.attempt) : []) : o.book.topic ? pageTasks(o.book.topic, o.book.part, o.book.attempt) : [];
+    if (!own.length) return null;
+    // learning-scientist 08.11.2026: Ist die Buch-Seite der Grammatik-Schritt des Tages, kommen die fälligen Fehlersätze danach als Wiederholung
+    // (nicht im Lektionstest und nicht in der Klausur); sie zählen nicht ins Seitenergebnis.
+    const due = ctx === 'duty' && o.book.part !== 'T' && o.book.part !== 'X' ? selectRound({ ...common, mode: 'errors', size: errorsMax ?? 2 }).filter((t) => t.errorT !== null || !!t.rep) : [];
+    tasks = [...own, ...due.filter((t) => !own.some((x) => x.key === t.key))];
+    bookN = own.length;
   } else if (o.test && o.topic) {
     // Themen-Test (K4): 6 Aufgaben über alle Muster des Themas; weniger als 4 → „in Vorbereitung“, keine Runde.
     const picked = pickTopicTest(base, o.topic);
@@ -417,7 +423,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     before,
     patLog: [],
   };
-  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind || o.book), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null, book: o.book ? { ...o.book, saved: false } : null });
+  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind || o.book), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null, book: o.book ? { ...o.book, saved: false, n: bookN } : null });
   tutorRoundStart(day, ctx === 'duty');
   return tasks.length ? firstKind({ tasks, intro }) : null;
 }
@@ -600,7 +606,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   const done = pos >= tasks.length;
   const next: State = { ...s, tasks, intro, test, repeatAt, results, patLog, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
   // Grammatik-Buch: Ergebnis speichern, sobald die Seite (ohne die freiwillige Wiederholung am Ende) fertig ist – genau einmal.
-  if (s.book && !s.book.saved && pos >= (repeatAt ?? tasks.length)) next.book = saveBook(s.book, results, s.activeMs);
+  if (s.book && !s.book.saved && pos >= Math.min(s.book.n ?? Infinity, repeatAt ?? tasks.length)) next.book = saveBook(s.book, results, s.activeMs, bookKeys(s));
   // Im Themen-Test bleibt jede Aufgabe, wie sie ist (keine Rückstufung).
   // Tutor-Engine (S3): Zug nach der Antwort (bekannte Aufgabe nach 3 Fehlern, Mini-Lektion, Stufenwechsel). Nie im Vortest, Themen-Test, in der
   // Wiederholung am Ende oder in einer festen Aufgabenfolge; ersetzt wird an Ort und Stelle, die Runde wird nie kürzer.
@@ -627,15 +633,28 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
 }
 
 /** Ergebnis einer Buch-Seite bzw. Klausur speichern (im Hintergrund) und als gespeichert markieren. Gemeldete Aufgaben zählen nicht. */
-function saveBook(b: BookRun, rows: readonly GrammarRow[], activeMs: number): BookRun {
-  const counted = rows.filter((r) => !r.xt);
+/** Schlüssel der Buch-Aufgaben einer Runde (ohne angehängte Fehlersätze). */
+export function bookKeys(s: Pick<State, 'tasks' | 'book'>): ReadonlySet<string> {
+  return new Set(s.tasks.slice(0, s.book?.n ?? s.tasks.length).map((t) => t.key));
+}
+
+function saveBook(b: BookRun, rows: readonly GrammarRow[], activeMs: number, keys: ReadonlySet<string>): BookRun {
+  const counted = rows.filter((r) => !r.xt && keys.has(r.key));
   const c = counted.filter((r) => r.ok).length;
   const n = counted.length;
   const t = Date.now();
+  // data-guard 08.11.2026: ein fehlgeschlagenes Speichern wird genau einmal wiederholt (danach steht der Fehler im Protokoll).
+  const once = (run: () => Promise<boolean>): void => void run().then((ok) => (ok ? true : run()));
   if (b.part === 'X' && b.chapter) {
     const g = examGrade(c, n);
-    void recordExam(b.chapter, { t, c, n, p: g.pct, g: g.grade, w: weakTopics(counted) });
-  } else if (b.topic && b.part !== 'X') void recordPage(b.topic, b.part, c, n, t);
+    const ch = b.chapter;
+    const e = { t, c, n, p: g.pct, g: g.grade, w: weakTopics(counted) };
+    once(() => recordExam(ch, e));
+  } else if (b.topic && b.part !== 'X') {
+    const topic = b.topic;
+    const part = b.part;
+    once(() => recordPage(topic, part, c, n, t));
+  }
   void activeMs;
   return { ...b, saved: true };
 }

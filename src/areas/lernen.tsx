@@ -8,8 +8,8 @@ import { GrammarScreen } from '../features/grammar/GrammarScreen';
 import { GrammarSessionScreen } from '../features/grammar/SessionScreen';
 import { WissenScreen } from '../features/grammar/WissenScreen';
 import { BookLessonScreen, BookScreen } from '../features/grammar/BookScreen';
-import { bookView } from '../features/grammar/bookStore';
-import { bookNext } from '../domain/grammar/book';
+import { bookNextOf, bookView } from '../features/grammar/bookStore';
+import { useClock } from '../app/clock';
 import { useLive } from '../data/live';
 import { grammarModuleOn } from '../modules/grammar/api';
 import { LearnHub } from '../features/learn/LearnHub';
@@ -112,7 +112,7 @@ export const lernen = defineArea({
         // offene Buch-Seite im zuletzt bearbeiteten Kapitel (bzw. dessen Klausur). Fehlersätze laufen über „Fehler“ und den Wiederholen-Schritt weiter.
         const live = useLive.getState();
         const v = bookView(live.docs['app/book']);
-        const next = grammarModuleOn(live.docs['app/profile']) && v.recent ? bookNext(v.page, v.examPassed, v.recent) : null;
+        const next = grammarModuleOn(live.docs['app/profile']) && v.recent ? bookNextOf(live.docs['app/book'], useClock.getState().now) : null;
         const book = !next
           ? null
           : next.kind === 'exam'

@@ -64,17 +64,13 @@ export function pageTasks(topic: string, part: BookPart, attempt = 0): GrammarTa
   if (part === 'C') return c;
   const seed = `${topic}|T|${attempt}`;
   const used = new Set([...own.map((b) => legacyTaskKey(b.prompt)), ...c.map((t) => t.key)]);
-  const fresh = shuffleBy(testPool(topic, used), seed, (t) => t.key);
-  const a = shuffleBy(own.filter((b) => b.part === 'A'), seed, (b) => b.id).slice(0, 1).map(bookToTask);
-  const b = shuffleBy(own.filter((x) => x.part === 'B'), seed, (x) => x.id).slice(0, 1).map(bookToTask);
-  const rest = fresh.slice(0, LESSON_TEST_N - a.length - b.length);
-  // Zu wenig frische Aufgaben: mit weiteren A/B-Aufgaben auffüllen (dann kennt Emrah sie aus der Übung – besser als ein kürzerer Test).
-  const fill = shuffleBy(own, `${seed}|fill`, (x) => x.id)
-    .map(bookToTask)
-    .filter((t) => ![...a, ...b].some((x) => x.key === t.key));
-  const out = [...a, ...rest.slice(0, 3), ...b, ...rest.slice(3)];
-  for (const t of fill) if (out.length < LESSON_TEST_N) out.push(t);
-  return out.slice(0, LESSON_TEST_N);
+  // learning-scientist 08.11.2026: der Test prüft Übertragen, nicht Wiedererkennen – zuerst Aufgaben, die in den Übungen nicht vorkamen;
+  // nur wenn sie fehlen, mit A/B-Aufgaben auffüllen (abwechselnd A und B).
+  const out = shuffleBy(testPool(topic, used), seed, (t) => t.key).slice(0, LESSON_TEST_N);
+  const A = shuffleBy(own.filter((b) => b.part === 'A'), `${seed}|fill`, (b) => b.id).map(bookToTask);
+  const B = shuffleBy(own.filter((b) => b.part === 'B'), `${seed}|fill`, (b) => b.id).map(bookToTask);
+  for (let i = 0; out.length < LESSON_TEST_N && i < Math.max(A.length, B.length); i++) for (const t of [A[i], B[i]]) if (t && out.length < LESSON_TEST_N) out.push(t);
+  return shuffleBy(out, `${seed}|order`, (t) => t.key);
 }
 
 /**
@@ -91,12 +87,9 @@ export function examTasks(chapterId: string, attempt = 0): GrammarTask[] {
     const A = shuffleBy(own.filter((b) => b.part === 'A'), seed, (b) => b.id).map(bookToTask);
     const B = shuffleBy(own.filter((b) => b.part === 'B'), seed, (b) => b.id).map(bookToTask);
     const T = shuffleBy(testPool(topic, new Set()), seed, (t) => t.key);
-    const out: GrammarTask[] = [];
-    for (let i = 0; out.length < per && i < 12; i++) {
-      const src = [A, B, T][i % 3]!;
-      const t = src[Math.floor(i / 3)];
-      if (t && !out.some((x) => x.key === t.key)) out.push(t);
-    }
+    // Zuerst Aufgaben, die in den Übungen nicht vorkamen (Übertragen statt Wiedererkennen), dann abwechselnd A und B.
+    const out: GrammarTask[] = T.slice(0, per);
+    for (let i = 0; out.length < per && i < 6; i++) for (const t of [A[i], B[i]]) if (t && out.length < per && !out.some((x) => x.key === t.key)) out.push(t);
     return out;
   });
   // Reihum je Lektion, damit Kürzen auf EXAM_N kein Thema ganz streicht.
@@ -124,7 +117,9 @@ export function weakTopics(rows: ReadonlyArray<{ topic: string; ok: boolean }>):
   return [...by.entries()].filter(([, e]) => e.c * 2 < e.n).map(([t]) => t);
 }
 
-export type PageState = { best: number; n: number; k: number } | null;
+export type PageState = { best: number; n: number; k: number; t?: number } | null;
+/** Letzte Klausur eines Kapitels für `bookNext`: Zeitpunkt, bestanden, schwache Lektionen. */
+export type LastExam = { t: number; passed: boolean; w: readonly string[] } | null;
 export type BookStep = { kind: 'page'; chapter: string; topic: string; part: BookPart } | { kind: 'exam'; chapter: string };
 
 /** Ist die Seite erledigt? Übungen: einmal gemacht. Lektionstest: bestanden (mindestens `LESSON_PASS` richtig). */
@@ -137,13 +132,34 @@ export function pageDone(part: BookPart, st: PageState): boolean {
  * Nächster Schritt im Buch (Tagesvorschlag, „Weiter im Buch“): ab dem zuletzt bearbeiteten Kapitel das erste, dessen Klausur noch nicht bestanden ist; darin die erste
  * Lektion mit offener Seite (Reihenfolge A, B, C, Test); sind alle Lektionen erledigt, die Klausur. `null`, wenn das ganze Buch geschafft ist.
  */
-export function bookNext(page: (topic: string, part: BookPart) => PageState, examPassed: (chapter: string) => boolean, from: string | null = null): BookStep | null {
+export function bookNext(
+  page: (topic: string, part: BookPart) => PageState,
+  examPassed: (chapter: string) => boolean,
+  from: string | null = null,
+  opts: { today?: (t: number) => boolean; lastExam?: (chapter: string) => LastExam } = {},
+): BookStep | null {
   // Emrah wählt selbst, wo er im Buch arbeitet: weiter geht es im zuletzt bearbeiteten Kapitel (`from`), danach in den folgenden, zuletzt vorn.
   const all = bookChapters();
   const at = from ? Math.max(0, all.findIndex((c) => c.id === from)) : 0;
+  // learning-scientist 08.11.2026: Lektionstest frühestens am nächsten Lerntag nach der letzten Übung dieser Lektion (sonst massiert);
+  // bis dahin geht es mit der nächsten Lektion weiter. Gibt es keine andere offene Seite, kommt der Test trotzdem.
+  const practicedToday = (topic: string): boolean => !!opts.today && (['A', 'B', 'C'] as const).some((p) => opts.today!(page(topic, p)?.t ?? -1));
   for (const c of [...all.slice(at), ...all.slice(0, at)]) {
     if (examPassed(c.id)) continue;
-    for (const topic of c.topics) for (const part of BOOK_PARTS) if (!pageDone(part, page(topic, part))) return { kind: 'page', chapter: c.id, topic, part };
+    let later: BookStep | null = null;
+    for (const topic of c.topics)
+      for (const part of BOOK_PARTS) {
+        if (pageDone(part, page(topic, part))) continue;
+        if (part === 'T' && practicedToday(topic)) {
+          later ??= { kind: 'page', chapter: c.id, topic, part };
+          break;
+        }
+        return { kind: 'page', chapter: c.id, topic, part };
+      }
+    if (later) return later;
+    // Nach einer nicht bestandenen Klausur: zuerst die schwachen Lektionen neu testen (neue Mischung), dann die Klausur.
+    const last = opts.lastExam?.(c.id) ?? null;
+    if (last && !last.passed) for (const topic of last.w) if (c.topics.includes(topic) && (page(topic, 'T')?.t ?? 0) < last.t) return { kind: 'page', chapter: c.id, topic, part: 'T' };
     return { kind: 'exam', chapter: c.id };
   }
   return null;

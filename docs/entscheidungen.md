@@ -858,3 +858,9 @@ Emrah: „Ich habe als Tageszeit 25 min, aber nur der erste Teil dauert schon 30
   - **Klausur A:** etwa 20 Aufgaben, ohne Hilfe und ohne Claude, Bewertung als Schulnote 1–6 plus Prozent. Bestanden ab Note 3 (70 %). Schwache Lektionen werden zum Nachüben markiert; danach jeder Fehler mit Erklärung.
   - **Testen A:** Die Fehler-Karte (E1) kommt sofort auf einen eigenen Test-Link. Das große Paket folgt mit eigenem Test-Link.
 - 08.11.2026 (Emrah, Auswahlfenster): **Tageszeit A:** Tagesziel 35 Minuten (Wörter 21, Grammatik 9, Anwenden 5), damit 10 neue Wörter am Tag tragbar sind. Simulation: mit nur 15 Wörter-Minuten fiele das Behalten auf etwa 67 %, mit 21 bleibt es bei etwa 79 %. Wörter bekommen 60 % der Tageszeit. Das Tagesziel stellt Emrah selbst ein (35 ist neu wählbar).
+- 08.11.2026 Prüfer-Nachgang (learning-scientist, data-guard, english-teacher) zum Großpaket Buch + Tempo:
+  - **Wörter-Bremse:** Unter 20 Wörter-Minuten kommen höchstens 5 neue Wörter. Laut Simulation fiele das Behalten sonst auf etwa 66 %. Die 10 neuen gelten mit Tagesziel 35 (21 Minuten). Standard `newPerDay` 10 ist eine bewusste Abweichung von Kap. 5 (Standard 5), weil Emrah es gewählt hat.
+  - **Buch als Grammatik-Schritt:** Fällige Fehlersätze stehen hinter der Übungsseite als Wiederholung und zählen nicht ins Seitenergebnis. Im Lektionstest und in der Klausur gibt es keine.
+  - **Lektionstest und Klausur:** zuerst Aufgaben, die in den Übungen nicht vorkamen. Der Lektionstest wird erst am nächsten Lerntag nach der Übung vorgeschlagen. Nach einer nicht bestandenen Klausur kommen zuerst die schwachen Lektionen neu getestet, dann die Klausur.
+  - **Klausur-Fehlerliste:** Sie erklärt die eigene falsche Antwort (`why.wrong`), sonst die Lösung.
+  - **Speichern im Buch:** Nur die eine Seite wird geschrieben, damit zwei Geräte sich nicht überschreiben. Ein fehlgeschlagenes Speichern wird einmal wiederholt.
