@@ -26,7 +26,7 @@ describe('api.ts', () => {
   it('Schalter: Standard aus; ungültige Einstellungen fallen auf den Standard (Wörter-Zeit aus dem Tagesziel, 90 %)', () => {
     expect(vocabModuleOn(null)).toBe(false);
     expect(vocabModuleOn({ vcfg: { min: 15, ret: 0.9, mod: 1 } })).toBe(true);
-    expect(vocabCfg({ vcfg: { min: 17, ret: 0.9, mod: 1 } })).toMatchObject({ min: 10, ret: 0.9, mod: 0 });
+    expect(vocabCfg({ vcfg: { min: 17, ret: 0.9, mod: 1 } })).toMatchObject({ min: 15, ret: 0.9, mod: 0 });
     expect(vocabCfg({ newPerDay: 10 }).newPerDay).toBe(10);
   });
   it('todayBlock liest nur das eingefrorene vmod/day (anderer Tag → null)', () => {

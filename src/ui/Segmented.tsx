@@ -16,11 +16,11 @@ type Props<T extends string> = {
   options: ReadonlyArray<Option<T>>;
   onChange: (value: T) => void;
   /** Spalten (Phase 6: Zahlenauswahl in einer Reihe); Standard wie bisher 3 bzw. 2. */
-  columns?: 4 | 6;
+  columns?: 4 | 6 | 8;
   testId?: string;
 };
 
-const COLS: Record<4 | 6, string> = { 4: 'grid-cols-4', 6: 'grid-cols-3 sm:grid-cols-6' };
+const COLS: Record<4 | 6 | 8, string> = { 4: 'grid-cols-4', 6: 'grid-cols-3 sm:grid-cols-6', 8: 'grid-cols-4 sm:grid-cols-8' };
 
 /** Auswahl als Radiogruppe: Pfeiltasten wechseln, gemeinsames Hervorhebungs-Element gleitet mit. */
 export function Segmented<T extends string>({ label, value, options, onChange, columns, testId }: Props<T>) {

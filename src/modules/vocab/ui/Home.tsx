@@ -294,6 +294,7 @@ export function WordsHome({ duty, onRound, onWord, onStats, onPlace, onAdd, onAt
 
       <h2 className="lx-vg-lbl lx-vw-sec">{t('vmWhMoreHead')}</h2>
       <div className="lx-vg-rows" data-testid="vw-rounds">
+        <VRow icon="plus" title={t('vmWhNew5')} sub={t('vmWhNew5Sub')} onClick={() => onRound('new5')} data-testid="vw-new5" />
         <VRow icon="cards" title={t('vmWhFree')} sub={t('vmWhFreeSub')} onClick={() => onRound('free')} data-testid="vw-free" />
         {introducedToday > 0 && <VRow icon="refresh" title={t('vmWhEvening')} sub={tn('vmWhEveningSub', Math.min(introducedToday, 8))} onClick={() => onRound('evening')} data-testid="vw-evening" />}
         {mistakes > 0 && <VRow icon="target" title={t('vmWhMistakes')} sub={tn('vmWhMistakesSub', mistakes)} onClick={() => onRound('mistakes')} data-testid="vw-mistakes" />}

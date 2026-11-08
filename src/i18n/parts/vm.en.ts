@@ -705,4 +705,8 @@ export const vmEn = {
   vmWhStats: "Overview",
   vmWhStatsSub: "You produce {produce} of {total} · next 14 days, how much you remember",
   vmWhAddSub: "Your own word, from a text, or suggestions from Claude",
+  // Word pace (Emrah 08.11.2026): extra round with new words only.
+  vmWhNew5: "5 more new words",
+  vmWhNew5Sub: "Beyond your daily goal · extra",
+  vmDoneNew5: "5 new words",
 };

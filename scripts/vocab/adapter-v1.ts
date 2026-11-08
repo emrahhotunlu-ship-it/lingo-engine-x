@@ -20,7 +20,9 @@ import type { InputKind, LegacyDoc, Outcome, PlannerAdapter, PlannerSession, Sim
 
 // Zielzeit für Vergleichsläufe: `VOCAB_MIN=10 node scripts/vocab/simulate.mjs --adapter v1` (Standard 15, F5).
 // Vergleich bei gleicher Zahl neuer Wörter: `VOCAB_NEW=3` (Kontingent je Tag; Standard 5).
-const cfg = { ...DEFAULT_CFG, min: Number(process.env.VOCAB_MIN ?? DEFAULT_CFG.min), newPerDay: Number(process.env.VOCAB_NEW ?? DEFAULT_CFG.newPerDay) };
+// Wächter-Grundeinstellung der Messreihe V2 (5 neue, 15 Minuten): die Grenzen in tests/unit/vocab/simulation.test.ts sind darauf geeicht.
+// Emrahs Einstellung seit 08.11.2026 (10 neue, Tagesziel 35 → 21 Wörter-Minuten) mit VOCAB_NEW=10 VOCAB_MIN=21 messen (docs/umbau/buch/plan.md).
+const cfg = { ...DEFAULT_CFG, min: Number(process.env.VOCAB_MIN ?? 15), newPerDay: Number(process.env.VOCAB_NEW ?? 5) };
 let cat = new Catalog([]);
 const plans = new Map<string, DayPlan>();
 const samples = new Map<Form, number[]>();

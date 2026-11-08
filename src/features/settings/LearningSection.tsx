@@ -63,7 +63,7 @@ export function LearningSection() {
       <Segmented
         label={t('setGoalMin')}
         value={String(goal)}
-        columns={6}
+        columns={8}
         testId="set-goalmin"
         options={GOAL_MIN_OPTIONS.map((n) => ({ value: String(n), label: String(n) }))}
         onChange={(v) => void changeGoalMin(Number(v))}

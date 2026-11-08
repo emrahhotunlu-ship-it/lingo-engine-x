@@ -9,18 +9,17 @@ import type { Form, FormStats, Lex, TrackKey, VocabCfg } from './types';
 //  - Rückstand: höchstens 1 Tagesbudget je Tag (Emrah 04.11.2026, Wahl A: „88 Wörter in einem Durchgang“ – der Plan passt in die eingestellte
 //    Wörter-Zeit; vorher 2 Budgets). Der Rest: Randwörter werden nach Gefährdung auf die nächsten 7 Tage verteilt (Lastausgleich),
 //    jedes höchstens 3-mal (`lex.mv`); Kernwörter und dreimal verschobene bleiben fällig und kommen am nächsten Tag zuerst.
-//  - Neue: mindestens 2 an jedem Lerntag (auch bei Rückstand), ohne Rückstand (alle Fälligen passen ins Tagesbudget) mindestens 5
-//    (Emrah 02.11.2026; der Wörter-Schritt darf dafür 1–3 Minuten länger dauern); darüber so viele, wie das Minutenbudget erlaubt, höchstens das Kontingent;
-//    bei Kontingent 0 keine (Emrahs Antwort 5). Nie zwei verwechselbare neue am selben Tag, nie eine Kollokation am Einführungstag ihres Kernworts.
+//  - Neue: das eingestellte Kontingent (`newPerDay`) kommt an JEDEM Lerntag, auch bei Rückstand (Emrah 08.11.2026, Wörter-Tempo „A: 10 pro Tag“:
+//    vorher fiel es bei Rückstand auf 2, ohne Rückstand auf 5 – Emrah bekam trotz Einstellung 10 meist nur 2). Die Fälligen teilen sich die übrige
+//    Wörter-Zeit; was nicht passt, wird wie bisher verteilt. Bei Kontingent 0 keine (Emrahs Antwort 5); am kurzen Tag höchstens SHORT_DAY_NEW (api.ts). Nie zwei verwechselbare neue am selben Tag, nie eine Kollokation am Einführungstag ihres Kernworts.
 
 export const MOVE_MAX = 3;
 export const BACKLOG_BUDGETS = 1;
 export const SPREAD_DAYS = 7;
+/** Höchstens so viele neue behält der kurze Tag beim nachträglichen Verkleinern (`shrinkDayPlan`). */
 export const MIN_NEW = 2;
-/** Mindestzahl neuer Wörter, wenn kein Rückstand besteht (Emrah 02.11.2026: „Mind. 5 neue, wenn kein Rückstand“). */
-export const MIN_NEW_CLEAR = 5;
-/** Mindestzahl neuer Wörter für einen Lerntag: ohne Rückstand (Fällige ≤ Tagesbudget) 5, sonst 2; nie über dem Kontingent. */
-export const minNewFor = (quota: number, dueMs: number, budgetMs: number): number => Math.min(dueMs <= budgetMs ? MIN_NEW_CLEAR : MIN_NEW, quota);
+/** Mindestzahl neuer Wörter für einen Lerntag: das ganze restliche Kontingent (Emrah 08.11.2026, „A: 10 pro Tag“), unabhängig vom Rückstand. */
+export const minNewFor = (quota: number): number => Math.max(0, quota);
 /** Vorgezogen (M15): bis zu dieser Zahl Lerntage voraus, nur solange der Plan unter AHEAD_FILL × Zielzeit liegt. */
 export const AHEAD_DAYS = 2;
 export const AHEAD_FILL = 0.9;
@@ -59,7 +58,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   due.sort((a, b) => mustOf(a) - mustOf(b) || a.r - b.r || a.path.localeCompare(b.path));
 
   const quota = Math.max(0, cfg.newPerDay - introducedToday);
-  const minNew = minNewFor(quota, due.reduce((a, x) => a + x.ms, 0), budgetMs);
+  const minNew = minNewFor(quota);
   const nc = newCostMs(med);
   // Kurzer Tag (2A, learning-scientist 6): Rückstand höchstens ein Tagesbudget, nichts verschieben, nichts vorziehen (wie `shrinkDayPlan`).
   const short = cfg.short === true;

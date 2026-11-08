@@ -13,8 +13,10 @@ import type { Form, Lex, VocabCfg } from './types';
 // (`planned: false`, N2), außer es ist ein Lernschritt. So holt kein Weg der App ein Wort am Planer vorbei.
 
 // Großpaket B3 (03.11.2026): `use` = Anwenden frei gestartet (Wörter-Reiter „Anwenden“): dieselbe Anwenden-Aufgabe wie am Ende der Pflicht.
-export type SessionKind = 'pflicht' | 'more5' | 'free' | 'evening' | 'week' | 'word' | 'mistakes' | 'use';
-export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'free', 'evening', 'week', 'word', 'mistakes', 'use'];
+export type SessionKind = 'pflicht' | 'more5' | 'new5' | 'free' | 'evening' | 'week' | 'word' | 'mistakes' | 'use';
+export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'new5', 'free', 'evening', 'week', 'word', 'mistakes', 'use'];
+/** „Noch 5 neue Wörter“ (Emrah 08.11.2026, Wörter-Tempo „A“): Extra-Runde nur mit neuen Wörtern, über das Tageskontingent hinaus. */
+export const NEW5_SIZE = 5;
 export const EVENING_MAX = 8;
 export const WEEK_MAX = 10;
 export const FREE_SIZE = 20;
@@ -106,6 +108,18 @@ export class SessionRun {
       for (const it of fresh) {
         if (out.length >= n || out.filter((s) => s.intro).length >= quota) break;
         out.push({ path: it.path, form: 'intro', step: 0, intro: true, why: 'new' });
+      }
+      this.queue = out;
+    } else if (this.kind === 'new5') {
+      // Nur neue Wörter (Reihenfolge wie im Bestand), nie zwei verwechselbare am selben Tag (Geschwister heute eingeführter Wörter gesperrt).
+      const blocked = new Set<string>();
+      for (const it of items) if (it.lex.intro === day) for (const sib of this.cat.siblingsOf(it.path)) blocked.add(sib);
+      const out: Slot[] = [];
+      for (const it of items.filter((x) => isNewLex(x.lex) && notCarried(x.path)).sort((a, b) => a.order - b.order || a.path.localeCompare(b.path))) {
+        if (out.length >= NEW5_SIZE) break;
+        if (blocked.has(it.path)) continue;
+        out.push({ path: it.path, form: 'intro', step: 0, intro: true, why: 'new' });
+        for (const sib of this.cat.siblingsOf(it.path)) blocked.add(sib);
       }
       this.queue = out;
     } else if (this.kind === 'use') {

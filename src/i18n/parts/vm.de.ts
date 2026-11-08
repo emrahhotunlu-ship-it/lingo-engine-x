@@ -706,4 +706,8 @@ export const vmDe = {
   vmWhStats: "Überblick",
   vmWhStatsSub: "{produce} von {total} bildest du selbst · nächste 14 Tage, wie viel du behältst",
   vmWhAddSub: "Eigenes Wort, aus einem Text oder Vorschläge von Claude",
+  // Wörter-Tempo (Emrah 08.11.2026, „A: 10 pro Tag“): Extra-Runde nur mit neuen Wörtern.
+  vmWhNew5: "Noch 5 neue Wörter",
+  vmWhNew5Sub: "Über dein Tagesziel hinaus · Extra",
+  vmDoneNew5: "5 neue Wörter",
 };

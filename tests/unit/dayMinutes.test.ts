@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { dayMinutes, grammarTasksFor, mixedErrorsFor } from '../../src/domain/plan/dayMinutes';
 
 describe('dayMinutes (Tagesweg, eine Quelle)', () => {
-  it('Wörter = max(10, 40 % des Tagesziels), Rest ⅔ Grammatik, ⅓ Anwenden', () => {
-    expect(dayMinutes(25)).toEqual({ words: 10, grammar: 10, apply: 5, total: 25 });
-    expect(dayMinutes(30)).toEqual({ words: 12, grammar: 12, apply: 6, total: 30 });
-    expect(dayMinutes(40)).toEqual({ words: 16, grammar: 16, apply: 8, total: 40 });
-    expect(dayMinutes(20)).toEqual({ words: 10, grammar: 7, apply: 3, total: 20 });
+  it('Wörter = max(10, 60 % des Tagesziels) (Emrah 08.11.2026, Wörter-Tempo „A“), Rest ⅔ Grammatik, ⅓ Anwenden', () => {
+    expect(dayMinutes(25)).toEqual({ words: 15, grammar: 7, apply: 3, total: 25 });
+    expect(dayMinutes(30)).toEqual({ words: 18, grammar: 8, apply: 4, total: 30 });
+    expect(dayMinutes(40)).toEqual({ words: 24, grammar: 10, apply: 6, total: 40 });
+    expect(dayMinutes(20)).toEqual({ words: 12, grammar: 5, apply: 3, total: 20 });
     expect(dayMinutes(15)).toEqual({ words: 10, grammar: 3, apply: 2, total: 15 });
   });
   it('kleines Tagesziel: immer drei echte Schritte, Wörter nie unter 10', () => {
@@ -35,16 +35,16 @@ describe('Tagesweg (tw: 1)', () => {
     const p = unitPlanFor(day, null, { goalMin: 25, tw: 1, reviewCount: 20, fixDue: 5 });
     expect(p.tw).toBe(1);
     expect(p.blocks.map((b) => [b.block, b.kind, b.min])).toEqual([
-      [1, 'review', 10],
-      [2, 'grammar', 10],
-      [3, 'task.apply', 5],
+      [1, 'review', 15],
+      [2, 'grammar', 7],
+      [3, 'task.apply', 3],
     ]);
-    expect(p.blocks[1]!.opts.n).toBe(8);
+    expect(p.blocks[1]!.opts.n).toBe(6);
     expect(p.blocks.some((b) => b.kind === 'task.order')).toBe(false);
   });
   it('Samstag und kleines Tagesziel: weiterhin drei Schritte, Wörter mindestens 10 Minuten', () => {
     const sat = unitPlanFor('2026-11-07', null, { goalMin: 40, tw: 1, reviewCount: 20 });
-    expect(sat.blocks.map((b) => b.min)).toEqual([16, 16, 8]);
+    expect(sat.blocks.map((b) => b.min)).toEqual([24, 10, 6]);
     const small = unitPlanFor(day, null, { goalMin: 10, tw: 1, reviewCount: 20 });
     expect(small.blocks.map((b) => b.kind)).toEqual(['review', 'grammar', 'task.apply']);
     expect(small.blocks[0]!.min).toBe(10);
@@ -52,8 +52,8 @@ describe('Tagesweg (tw: 1)', () => {
   it('Sonntag: Schritt 3 ist der Wochen-Check (ca. 5 Min.) statt Anwenden (Emrah 02.11.2026); Neustart-Woche bleibt bei Anwenden', () => {
     const sun = unitPlanFor('2026-11-08', null, { goalMin: 25, tw: 1, reviewCount: 20 });
     expect(sun.blocks.map((b) => [b.block, b.kind, b.channel, b.min])).toEqual([
-      [1, 'review', 'review', 10],
-      [2, 'grammar', 'ch:u-focus', 10],
+      [1, 'review', 'review', 15],
+      [2, 'grammar', 'ch:u-focus', 7],
       [3, 'task.check', 'ch:u-check', 5],
     ]);
     const restart = unitPlanFor('2026-11-08', null, { goalMin: 25, tw: 1, reviewCount: 20, comeback: 'restart' });

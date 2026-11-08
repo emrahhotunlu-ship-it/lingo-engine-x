@@ -21,7 +21,7 @@ export function outlook(cat: Catalog, med: FormStats, nowMs: number, cfg: Pick<V
   const today = dayKey(nowMs);
   const days = review.map((r, i): OutlookDay => {
     const quota = cfg.newPerDay;
-    const minNew = minNewFor(quota, r * 60_000, budget);
+    const minNew = minNewFor(quota);
     const room = Math.max(0, budget - r * 60_000);
     const want = quota === 0 ? 0 : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
     const nFresh = Math.min(want, left);

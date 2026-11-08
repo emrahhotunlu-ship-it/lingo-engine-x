@@ -1,7 +1,8 @@
 // Einstellungen normalisieren (Plan §9, E11–E13): gelesene Werte können aus der alten App, von
 // einem anderen Gerät oder unvollständig sein – angezeigt und verwendet wird immer ein gültiger Wert.
 
-export const GOAL_MIN_OPTIONS = [10, 15, 20, 25, 30, 40] as const;
+// Emrah 08.11.2026 (Tageszeit „A: 35 Minuten“ für 10 neue Wörter am Tag): 35 und 45 dazu.
+export const GOAL_MIN_OPTIONS = [10, 15, 20, 25, 30, 35, 40, 45] as const;
 export const GOAL_MIN_DEFAULT = 25;
 export const NEW_PER_DAY_OPTIONS = [0, 2, 5, 10] as const;
 export const RATE_OPTIONS = [0.8, 0.9, 1, 1.1] as const;

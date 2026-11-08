@@ -9,7 +9,7 @@ import { openWhys, answerOfUse, type UseModel, modelOfUse } from '../domain/use'
 import { type FirstVerdict, milder } from '../prompts/common';
 import { type ExtraFix, isEvade, type WordJudgement } from '../prompts/judge';
 import type { Band } from '../domain/band';
-import { Catalog, formMs, type Item } from '../domain/catalog';
+import { Catalog, formMs, isNewLex, type Item } from '../domain/catalog';
 import { srcOf, weightsOf } from '../domain/sources';
 import type { SourceData } from '../data/refill';
 import { VMOD_PACE_PATH, VMOD_PLACE_PATH } from '../registry';
@@ -22,7 +22,7 @@ import { doneToday, planCount } from '../domain/dayCount';
 import { planMed } from '../domain/pace';
 import { capToday, readPace, writePace } from '../data/shrink';
 import { sentencesOf, usableSentences } from '../domain/card';
-import { type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
+import { NEW5_SIZE, type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
 import { type Form, type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
 import { vocabCfg } from '../api';
@@ -431,8 +431,10 @@ export class LearnRun {
     // Großpaket A S7: Vor dem ersten Pflicht-Plan des Lerntags fehlende neue Wörter aus den Quellen anlegen (Wortpartner, Beruf, Häufigkeitsliste).
     const dayNow = this.env.now();
     const cur = await this.env.readDay();
-    if (s.kind === 'pflicht' && this.env.loadSources && !(cur && cur.d === dayKey(dayNow))) {
-      for (const [path, doc] of await this.refill(s.docs, items, cfg, dayNow)) {
+    // „Noch 5 neue Wörter“ (Emrah 08.11.2026): fehlen Kandidaten, legt das Nachfüllen bis zu 5 an (sonst bliebe die Runde nach ein paar Tagen leer).
+    const refillNow = (s.kind === 'pflicht' && !(cur && cur.d === dayKey(dayNow))) || (s.kind === 'new5' && items.filter((x) => isNewLex(x.lex)).length < NEW5_SIZE);
+    if (refillNow && this.env.loadSources) {
+      for (const [path, doc] of await this.refill(s.docs, items, s.kind === 'new5' ? { ...cfg, newPerDay: NEW5_SIZE } : cfg, dayNow)) {
         const lex = lexOf(doc);
         if (!lex) continue;
         this.docs.set(path, doc);

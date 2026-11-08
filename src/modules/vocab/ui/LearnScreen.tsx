@@ -250,6 +250,7 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
           sum={view.sum}
           review={view.review + view.extra}
           onMore={() => setRound((r) => ({ ...r, kind: 'more5', n: r.n + 1 }))}
+          onNew5={() => setRound((r) => ({ ...r, kind: 'new5', n: r.n + 1 }))}
           onToday={() => (onFinish ? onFinish() : switchTab('today'))}
         />,
       );
@@ -394,7 +395,7 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
 /** Namen je Tag-Gruppe im Abschluss (der Rest als „+n“). */
 const SLIP_NAMES = 2;
 
-function Done({ sum, review, onMore, onToday, capped }: { sum: DoneSummary; review: number; onMore: () => void; onToday: () => void; capped: number | null }) {
+function Done({ sum, review, onMore, onNew5, onToday, capped }: { sum: DoneSummary; review: number; onMore: () => void; onNew5: () => void; onToday: () => void; capped: number | null }) {
   const { t, lang } = useT();
   useEnterGo(onToday);
   const W = '\u0000';
@@ -485,7 +486,10 @@ function Done({ sum, review, onMore, onToday, capped }: { sum: DoneSummary; revi
           </div>
         ))}
       </dl>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
+        <Button variant="secondary" className="flex-1" onClick={onNew5} data-testid="vm-new5">
+          {t('vmDoneNew5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
+        </Button>
         <Button variant="secondary" className="flex-1" onClick={onMore} data-testid="vm-more5">
           {t('vmDoneMore5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
         </Button>

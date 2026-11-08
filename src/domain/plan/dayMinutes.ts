@@ -1,11 +1,12 @@
 // Tagesweg (UX-Neuanfang C, Emrahs Entscheidung 02.11.2026): genau EINE Quelle für die Minuten der drei Pflicht-Schritte.
-// Wortlaut: „mindestens 10 Minuten und immer 40 % vom Tagesziel“ für die Wörter. Der Rest teilt sich ⅔ Grammatik, ⅓ Anwenden.
+// Wortlaut: „mindestens 10 Minuten und immer 40 % vom Tagesziel“ für die Wörter. Seit 08.11.2026 (Emrah, Wörter-Tempo „A: 10 pro Tag“, „Wörter
+// brauchen dann etwa 15–20 Minuten statt 10“) 60 %. Der Rest teilt sich ⅔ Grammatik, ⅓ Anwenden.
 // Rein. Heute, die Kopfzeile der Übung, der Start der Wörter-Runde und die Einstellungen lesen alle diese Funktion.
 
 /** Untergrenze der Wörter-Minuten (Emrah: „mindestens 10 Minuten“). */
 export const WORDS_MIN = 10;
-/** Anteil der Wörter am Tagesziel (Emrah: „immer 40 %“). */
-export const WORDS_SHARE = 0.4;
+/** Anteil der Wörter am Tagesziel (Emrah 02.11.: 40 %; 08.11.2026 Wörter-Tempo „A“: 60 %, bei 25 Minuten also 15). */
+export const WORDS_SHARE = 0.6;
 /** Anteil der Grammatik am Rest; Anwenden bekommt den Rest. */
 export const GRAMMAR_SHARE = 0.65;
 /** Untergrenzen, damit auch ein kleines Tagesziel drei echte Schritte hat (der Tag wird dann etwas länger als das Ziel). */

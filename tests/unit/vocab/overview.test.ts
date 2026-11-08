@@ -21,14 +21,14 @@ describe('Übersicht: 14-Tage-Vorschau', () => {
     expect(o.days[0]!.fresh).toBeCloseTo((5 * newCostMs({})) / 60_000, 1);
     expect(o.days[0]!.review).toBe(0);
   });
-  it('Kontingent 0: keine neuen; volle Wiederholungstage bekommen trotzdem die Mindestzahl', () => {
+  it('Kontingent 0: keine neuen; volle Wiederholungstage bekommen trotzdem das ganze Kontingent (Emrah 08.11.2026)', () => {
     const many = Array.from({ length: 80 }, (_, i) => ({ path: `vocab/r${i}`, lex: learned(T0 + D), order: i }));
     const news = Array.from({ length: 5 }, (_, i) => ({ path: `vocab/n${i}`, lex: fresh(), order: 100 + i }));
     const cat = new Catalog([...many, ...news]);
     expect(outlook(cat, {}, T0, { min: 15, newPerDay: 0 }, 2).days.map((d) => d.nFresh)).toEqual([0, 0]);
     const o = outlook(cat, {}, T0, { min: 15, newPerDay: 5 }, 2);
     expect(o.days[0]!.review).toBeGreaterThan(15);
-    expect(o.days[0]!.nFresh).toBe(2);
+    expect(o.days[0]!.nFresh).toBe(5);
     expect(o.peak).toBeGreaterThanOrEqual(Math.round(o.days[0]!.review));
     expect(o.avg).toBe(Math.round((o.days[0]!.review + o.days[0]!.fresh + o.days[1]!.review + o.days[1]!.fresh) / 2));
   });

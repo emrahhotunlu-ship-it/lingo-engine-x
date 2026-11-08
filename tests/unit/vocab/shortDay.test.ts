@@ -34,8 +34,8 @@ describe('Wörter-Minuten am kurzen Tag', () => {
     const now = new Date('2026-11-04T10:00:00+01:00').getTime();
     expect(SHORT_DAY_WORDS_MIN).toBe(SHORT_DAY_MIN);
     expect(wordsMinutes({ goalMin: 25, kt: { '2026-11-04': 1 } }, now)).toBe(5);
-    expect(wordsMinutes({ goalMin: 25, kt: { '2026-11-03': 1 } }, now)).toBe(10);
-    expect(wordsMinutes({ goalMin: 40 }, now)).toBe(16);
+    expect(wordsMinutes({ goalMin: 25, kt: { '2026-11-03': 1 } }, now)).toBe(15);
+    expect(wordsMinutes({ goalMin: 40 }, now)).toBe(24);
   });
   it('höchstens 2 neue Wörter am kurzen Tag, sonst die Einstellung', () => {
     const day = (ms: number) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin' }).format(new Date(ms - 4 * 3_600_000));
