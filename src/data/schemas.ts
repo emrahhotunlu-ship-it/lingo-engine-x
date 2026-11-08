@@ -1037,6 +1037,18 @@ export const actSchema = z.looseObject({
 });
 
 /**
+ * Grammatik-Buch (Emrah 08.11.2026, docs/umbau/buch/plan.md): EIN Dokument `app/book`. `ls[thema][A|B|C|T]` = bestes und letztes Ergebnis je Seite
+ * (`c` richtig von `n`, `t` Zeit, `k` Versuche); `ex[kapitel]` = Klausur-Versuche (höchstens 10 je Kapitel, `g` Note, `p` Prozent, `w` schwache
+ * Lektionen). Etwa 47 × 4 kleine Einträge + 70 Klausuren: weit unter 256 KiB. Tolerant gelesen.
+ */
+const bookPage = z.looseObject({ c: num, n: num, t: num, k: num, best: num });
+export const bookSchema = z.looseObject({
+  v: num,
+  ls: z.record(z.string(), z.looseObject({ A: bookPage.nullish(), B: bookPage.nullish(), C: bookPage.nullish(), T: bookPage.nullish() })).nullish(),
+  ex: z.record(z.string(), z.array(z.looseObject({ t: num, c: num, n: num, p: num, g: num, w: strArr }))).nullish(),
+});
+
+/**
  * C1-Programm (Lernplattform 3.0 §4.8, P31): `{v: 1, place?, checks[], gates[], prod[], bad[]}`. Höchstwerte stehen in `domain/c1/c1doc.ts`
  * (checks ≤ 24, gates ≤ 35, prod ≤ 150, bad ≤ 300; Dokument < 30 KB). Der Kapitelstand steht hier NIE, er wird abgeleitet. Tolerant gelesen.
  */

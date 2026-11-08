@@ -21,6 +21,8 @@ import { SKIP_TEST_N, SKIP_TEST_PASS, skipTopicsOf } from '../../domain/c1/place
 import { patternsOf } from '../../domain/grammar/patterns';
 import { fillGap } from '../../domain/grammar/explain';
 import { TT_MIN, TT_N, ttPassed } from '../../domain/grammar/topicTest';
+import { examGrade, examTasks, pageTasks, weakTopics, type BookPart } from '../../domain/grammar/book';
+import { recordExam, recordPage } from './bookStore';
 import { programChapters } from '../../domain/c1/chapters';
 import {
   allSeedTasks,
@@ -143,9 +145,19 @@ type State = {
   displaced?: GrammarTask[];
   /** M0: Runde einer c1x-Art aus Praxis (freiwillig): kwt/err/wf-Antworten tragen `ext: 'c1x'` (gedeckelte BKT-Wirkung, `grammarWrite`). */
   ext?: 'c1x' | null;
+  /** Grammatik-Buch: Seite oder Klausur (sonst `null`). */
+  book?: BookRun | null;
 };
 
 export type TestState = { topic: string; n: number; result: { c: number; n: number; ok: boolean } | null };
+
+/**
+ * Grammatik-Buch (Emrah 08.11.2026, docs/umbau/buch/plan.md): eine Seite einer Lektion (A/B/C Übung, T Lektionstest) oder die Klausur eines
+ * Kapitels (X). Feste Aufgabenfolge; im Test und in der Klausur ohne Hilfe, in der Klausur ohne Rückmeldung je Aufgabe. `saved`: Ergebnis gespeichert.
+ */
+export type BookRun = { part: BookPart | 'X'; topic: string | null; chapter: string | null; attempt: number; saved?: boolean };
+/** Läuft gerade ein Buch-Test (Lektionstest oder Klausur)? Dann ohne Hilfe, ohne Claude und ohne Wiederholung am Ende. */
+export const bookTesting = (b: BookRun | null | undefined): boolean => !!b && (b.part === 'T' || b.part === 'X');
 
 /** G8 (LS-B2): Läuft der Themen-Test und darf eine weitere gemeldete Aufgabe noch aus dem Ergebnis fallen (danach bleiben mindestens `TT_MIN`)? */
 export function testVoidOpen(s: { test: TestState | null; pos: number; results: readonly GrammarRow[] }): boolean {
@@ -203,6 +215,9 @@ export type StartOpts = {
   pats?: readonly string[] | null;
   /** Kapitel-Arbeit: Übung statt Themen-Test (zu wenig Testaufgaben); die Runde zeigt vorn den Hinweis `pxKTestPrep`. */
   prep?: boolean;
+} & {
+  /** Grammatik-Buch: diese Seite (`topic` + A/B/C/T) bzw. die Klausur (`chapter` + X); `attempt` = Zahl der bisherigen Versuche (mischt neu). */
+  book?: BookRun;
 } & { /** Nur Anwenden: eine Runde nur dieser c1x-Art (freiwillig, nie Pflicht). */ kind?: C1Kind; /** M0: Herkunft Praxis (nur mit `kind`, nur freiwillig): Antworten tragen `ext`. */ ext?: 'c1x'; /** Fertig gebaute Aufgaben (Kontrast-Runde, P49): freiwillig, nie Pflicht, nie Einführung. */ tasks?: readonly GrammarTask[]; mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number; pat?: string | null };
 
 /** Lemmata der Karten von heute (Gleichstand-Brecher der Rundenwahl); ohne Karten leer. */
@@ -255,7 +270,8 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   // und das heutige Thema bliebe ungeübt (learning-scientist 02.11.2026, Befund 4).
   const gtToday = useTodayPlan.getState().plan?.u?.gt?.topics ?? [];
   const todayTopic = !o.topic || gtToday.includes(o.topic);
-  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && o.mode === 'topic' && todayTopic ? openGrammarBlock(day) : null;
+  // Grammatik-Buch (Emrah 08.11.2026, „Buch A“): eine Buch-Seite oder Klausur erledigt den offenen Grammatik-Schritt des Tages.
+  const tabBlock = !o.block && !o.kind && !o.tasks?.length && !o.test && !o.pat && ((o.mode === 'topic' && todayTopic) || !!o.book) ? openGrammarBlock(day) : null;
   const ctx: Ctx = o.block || tabBlock ? 'duty' : o.kind || o.tasks?.length || o.test ? 'xtra' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
@@ -302,7 +318,11 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const introSrc = o.intro && topicById(o.intro.topic) ? { topic: o.intro.topic, pats: [...o.intro.pats] } : gt?.intro ? { topic: gt.intro, pats: gt.pats } : null;
   const introTopicId = introSrc ? introSrc.topic : null;
 
-  if (o.test && o.topic) {
+  if (o.book) {
+    // Grammatik-Buch: feste Aufgaben der Seite bzw. der Klausur (pageTasks/examTasks), ohne Einführung, ohne Fehlersätze.
+    tasks = o.book.part === 'X' ? (o.book.chapter ? examTasks(o.book.chapter, o.book.attempt) : []) : o.book.topic ? pageTasks(o.book.topic, o.book.part, o.book.attempt) : [];
+    if (!tasks.length) return null;
+  } else if (o.test && o.topic) {
     // Themen-Test (K4): 6 Aufgaben über alle Muster des Themas; weniger als 4 → „in Vorbereitung“, keine Runde.
     const picked = pickTopicTest(base, o.topic);
     if (picked.length < TT_MIN) return null;
@@ -397,7 +417,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     before,
     patLog: [],
   };
-  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null });
+  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind || o.book), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null, book: o.book ? { ...o.book, saved: false } : null });
   tutorRoundStart(day, ctx === 'duty');
   return tasks.length ? firstKind({ tasks, intro }) : null;
 }
@@ -551,7 +571,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   const pos = s.pos + 1;
   let repeatAt = s.repeatAt;
   // Themen-Test: keine „Nochmal“-Runde, das Ergebnis kommt sofort; die schwachen Stellen übt die nächste Runde (Cursor-Phase „Üben“).
-  if (pos >= tasks.length && repeatAt === null && !test) {
+  if (pos >= tasks.length && repeatAt === null && !test && !bookTesting(s.book)) {
     const wrong = new Set(results.filter((r) => !r.ok).map((r) => r.key));
     const used = new Set(tasks.map((t) => t.key));
     const again: GrammarTask[] = [];
@@ -579,13 +599,15 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   }
   const done = pos >= tasks.length;
   const next: State = { ...s, tasks, intro, test, repeatAt, results, patLog, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
+  // Grammatik-Buch: Ergebnis speichern, sobald die Seite (ohne die freiwillige Wiederholung am Ende) fertig ist – genau einmal.
+  if (s.book && !s.book.saved && pos >= (repeatAt ?? tasks.length)) next.book = saveBook(s.book, results, s.activeMs);
   // Im Themen-Test bleibt jede Aufgabe, wie sie ist (keine Rückstufung).
   // Tutor-Engine (S3): Zug nach der Antwort (bekannte Aufgabe nach 3 Fehlern, Mini-Lektion, Stufenwechsel). Nie im Vortest, Themen-Test, in der
   // Wiederholung am Ende oder in einer festen Aufgabenfolge; ersetzt wird an Ort und Stelle, die Runde wird nie kürzer.
-  const acted = !repeating && !voided && !inVortest(s) && !(s.test && s.pos < s.test.n) ? tutorStep(s, next, a, done) : false;
+  const acted = !repeating && !voided && !s.book && !inVortest(s) && !(s.test && s.pos < s.test.n) ? tutorStep(s, next, a, done) : false;
   // Hat die Tutor-Engine die Runde schon eine Stufe gestützter gestellt (−1), greift die alte Rückstufung nicht zusätzlich (nicht doppelt erleichtern).
   const eased = !next.fixed && useTutorSession.getState().s.shift === -1;
-  if (!acted && !eased && !done && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
+  if (!acted && !eased && !done && !s.book && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
     // Rückstufung: zwei Fehlschläge in Folge im Thema der nächsten Aufgabe → eine Form leichter (nur in dieser Runde), gleiches Muster.
     const live = useLive.getState();
     const nextTask = tasks[pos];
@@ -602,6 +624,20 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   if (!t || done) return null;
   if (cardsDue(next)) return null;
   return kindOf(t);
+}
+
+/** Ergebnis einer Buch-Seite bzw. Klausur speichern (im Hintergrund) und als gespeichert markieren. Gemeldete Aufgaben zählen nicht. */
+function saveBook(b: BookRun, rows: readonly GrammarRow[], activeMs: number): BookRun {
+  const counted = rows.filter((r) => !r.xt);
+  const c = counted.filter((r) => r.ok).length;
+  const n = counted.length;
+  const t = Date.now();
+  if (b.part === 'X' && b.chapter) {
+    const g = examGrade(c, n);
+    void recordExam(b.chapter, { t, c, n, p: g.pct, g: g.grade, w: weakTopics(counted) });
+  } else if (b.topic && b.part !== 'X') void recordPage(b.topic, b.part, c, n, t);
+  void activeMs;
+  return { ...b, saved: true };
 }
 
 /** Kandidaten für Ersatzaufgaben (dieselbe Quelle wie die Rückstufung). */
@@ -697,14 +733,15 @@ export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day
   endedN?: number;
   /** M0: Herkunft Praxis der c1x-Runde (fehlt bei älteren Ständen = keine). */
   ext?: 'c1x' | null;
+  book?: BookRun | null;
 };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN, ext } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}), ...(ext ? { ext } : {}) };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN, ext, book } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}), ...(ext ? { ext } : {}), ...(book ? { book } : {}) };
 }
 
 const legacyIntro = (topic: string): IntroState => ({ topic, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 });
@@ -728,6 +765,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     fixed: !!(snap.test && typeof snap.test === 'object') || !!snap.fixed,
     displaced: Array.isArray(snap.displaced) ? snap.displaced : [],
     ext: snap.ext === 'c1x' && snap.ctx === 'xtra' ? 'c1x' : null,
+    book: snap.book && typeof snap.book === 'object' && ['A', 'B', 'C', 'T', 'X'].includes(String(snap.book.part)) ? snap.book : null,
     active: true,
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),

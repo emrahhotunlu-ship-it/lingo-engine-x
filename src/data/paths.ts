@@ -39,6 +39,7 @@ import {
   memorySchema,
   compareSchema,
   c1Schema,
+  bookSchema,
   teacherSchema,
   actSchema,
   todaySchema,
@@ -75,6 +76,8 @@ export const APP_DOCS = {
   'app/compare': compareSchema,
   // Lernplattform 3.0 (P31): C1-Programm (Einstufung, Checks, Kapitelprüfungen, Produktion, gemeldete Aufgaben).
   'app/c1': c1Schema,
+  // Großpaket Buch (08.11.2026): Ergebnisse der Buch-Seiten und Klausuren.
+  'app/book': bookSchema,
   // Relaunch Stufe 1 (P6): Startbild des Tages (abgeleitet, ersetzbar, nie live abonniert; stufe1-plan §4.3).
   'app/today': todaySchema,
 } as const satisfies Record<string, ZodType>;
