@@ -1037,3 +1037,19 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Offene Kommentare „Ganze Karte viel zu komplex“ und „Sau schwer …“ gehen im Neustart auf. Wartet auf Emrahs Antwort zu den 4 Fragen der Seite.
 - 08.11. abends: Musterinhalte (Einheit Bedingungssätze A–E, 10 Wortkarten in 4 Stufen) vom english-teacher geschrieben, unabhängig gegengelesen (13 Pflichtbefunde → eingearbeitet, Nachprüfung: 4 Restpunkte → eingearbeitet). Datei `docs/umbau/neustart/muster-inhalte.json`. Probierseite mit Claude-Prüfung: Artefakt `J6JWvWRjy8id8YbmmcoWCG`. Bauplan `docs/umbau/neustart/plan.md`. Wartet auf Emrahs Urteil zu den Mustern.
 - 08.11. spät: Emrah „Die App ist zu dünn in Funktionen und Features und Lernmethodik“ → Auswahl (Anki/Babbel/Quizlet; Hören+Schreiben, Spiele, Wortwissen; Wortliste, Themen-Stapel, Statistik+Prognose, Runde wählen; Grammatik als Buch, viele Übungsarten, Fehlerheft; `docs/entscheidungen.md`). Durchklickbare Vorschau beider Trainer: Artefakt `JFLraq9V12B8qVkRagAqg2` (Beispielzahlen, Wörter aus `charge2-business.json` + 10 Musterkarten, Kapitel Bedingungssätze mit 7 Abschnitten, Fehlerheft). Wartet auf Emrahs Urteil.
+- 08.11.2026 **E1 Erklärungen (Grammatik)** – Emrah: „A: Erklärungen“.
+  - Neu bei falscher eigener Antwort in der neuen Grammatik: Fehler-Karte „Dein Fehler“ mit „Du: X → richtig: Y“, EIN Satz warum und „Gleich nochmal“ mit neuem Satz (zählt nicht).
+  - Die Erklärung kommt aus der hinterlegten Erklärung zu genau dieser Antwort, sonst von Claude über `mistake-why@1`. Das Schema verlangt genau einen Satz, die eigene Form, ein Signal- oder Schlüsselwort und kennt `alsoOk`.
+  - Die Regel gibt es nur auf Tipp; Muster, Begründung und Falle stehen unter „Mehr“; kein zweiter Claude-Weg.
+  - Im Vortest/Themen-Test läuft kein Claude.
+  - Prüfer: english-teacher und learning-scientist, je eine Prüfung und eine Nachprüfung; Befunde eingebaut.
+  - Tests: Unit 7693 + 20 grün; E2E Grammatik-Bereich 129 grün, `mistakeCard.spec` und `uiStichprobe` grün.
+  - Commits `a3f04211`, `434158fe`.
+- 08.11.2026 **Test-Link** `AXHkh6…` v93 `1794173718-f9e2` (E1 Fehler-Karte Grammatik), Rückweg v92 `1794057978-bc2a`.
+  - Nicht live. Enthält auch die Live-Stände v102/v103.
+- 08.11.2026 Emrahs Entscheidungen für das nächste Großpaket (siehe `docs/entscheidungen.md`):
+  - Wörter-Tempo: 10 neue Wörter pro Tag.
+  - Grammatik-Buch: Kapitel → Lektion → Regel, Übungen A/B/C, Lektionstest, Klausur am Kapitelende mit Schulnote und Prozent; Tagesvorschlag.
+  - Fehler-Karte auch bei Wörtern.
+  - KWT-Umformungen erst nach Einführung und seltener.
+  - Offen aus Prüfung: `alsoOk` blendet „Kommt morgen wieder“ noch nicht aus; `again`-Protokoll für „Gleich nochmal“.
