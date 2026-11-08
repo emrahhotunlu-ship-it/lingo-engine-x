@@ -198,16 +198,16 @@
   {
    "id": "pp.first-time",
    "name": {
-    "de": "the first time + had + Partizip",
-    "en": "the first time + had + participle"
+    "de": "Es war das erste Mal …",
+    "en": "It was the first time …"
    },
    "form": {
-    "de": "It was the first time + had + 3. Form",
-    "en": "It was the first time + had + past participle"
+    "de": "It was the first time + had + 3. Form (jetzt: It is … + has/have)",
+    "en": "It was the first time + had + past participle (now: It is … + has/have)"
    },
    "use": {
-    "de": "Eine Erfahrung, die vor einem Zeitpunkt der Vergangenheit lag: It was the first time …, I had never … before. Die Erfahrung steht eine Stufe hinter dem „was“.",
-    "en": "An experience that came before a past moment: It was the first time …, I had never … before. The experience sits one step behind “was”."
+    "de": "Gilt es jetzt: It is the first time I have led the meeting. Erzählst du von früher: It was the first time I had led the meeting. Kurz: is → has, was → had.",
+    "en": "True now: It is the first time I have led the meeting. Telling a past story: It was the first time I had led the meeting. In short: is → has, was → had."
    },
    "signals": [
     "the first time",
