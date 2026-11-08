@@ -1031,3 +1031,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Offen: Emrahs gespeicherter Fehlereintrag (`grammar/past-perfect`.errors) trägt noch den alten `expl`. Ersetzen nur mit seinem OK.
 - **Live** `JLL8…` v103 `1794164803-2e10` (Emrahs „A: Direkt live“), Rückweg v102 `1794083815-25a8`. Volle Prüfung: 7679 Unit grün; E2E 1037 grün, 2 rot → einzeln grün (c1xFrame:139, settings:62).
 - Emrahs OK („A: Ersetzen“): im Live-Dokument `grammar/past-perfect` nur `errors[3].expl` („major deal alone“) durch die neue Begründung ersetzt (Version 22 → 23, sonst unverändert).
+
+## 08.11.2026 – Neustart Lernkern: Bestandsaufnahme
+- Emrahs Grundsatzkritik (Qualität „2/10“, kein Fortschritt, letzter Relaunch eher schlechter) → Bestandsaufnahme mit Live-Daten (nur gelesen), Lehrer-Stichprobe von 100 Aufgaben und Rückblick. Ergebnis und Plan als private Seite `LGZ4jU3z3tWpKUhCbzQ8BV`, nicht im Repository (echte Daten). Leitvorgaben siehe `docs/entscheidungen.md` 08.11.
+- Offene Kommentare „Ganze Karte viel zu komplex“ und „Sau schwer …“ gehen im Neustart auf. Wartet auf Emrahs Antwort zu den 4 Fragen der Seite.

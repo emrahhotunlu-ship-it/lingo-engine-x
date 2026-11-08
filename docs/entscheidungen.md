@@ -838,3 +838,7 @@ Emrah: „Ich habe als Tageszeit 25 min, aber nur der erste Teil dauert schon 30
   - Zusätzlich endet die Wörter-Pflichtrunde spätestens nach ihren Minuten mit „Fertig für heute“. Was offen bleibt, kommt morgen (die gefährdetsten zuerst).
 - **Text A:** Die Schreibaufgabe mit mehreren Wörtern (`transfer`, 3–5 Wörter, „Text“) gehört nicht mehr in den Wörter-Teil, sondern zu Schritt 3 „Anwenden“ (Anwenden › Frei üben › „Text mit deinen Wörtern“, Runde `use`). Der eigene Satz zu EINEM Wort (`own`, Stufe 5/6) bleibt eine normale Wort-Abfrage.
 - **Prüfweise (Emrah 07.11.):** Bei UI/UX-Änderungen keine komplette Testsuite je Schritt. Die Übungsseite ist ein gemeinsamer Rahmen (`ExerciseShell`); Änderungen dort wirken überall. Geprüft wird mit einer schnellen Stichprobe (`npm run test:ui`: wenige typische Karten, iPad und iPhone, automatische Regeln aus der Prüfliste). Die volle Suite läuft nur vor dem Live-Gang.
+
+## 08.11.2026 – Neustart Lernkern (Emrah)
+- Emrah: „Ich will dedizierte Grammatik Übungen wie aus einem Buch und einen dedizierten Vokabel Trainer wie es andere Apps machen mit verschiedenen Stufen“ und „Ich bin ein Mensch der anwenden muss um zu lernen nicht nur lesen“. Leitvorgabe für alle weiteren Pakete.
+- Keine Einzelfixes mehr ohne Bezug zum Neustart. Bestandsaufnahme und Planvorschlag liegen als private Seite vor (Artefakt `LGZ4jU3z3tWpKUhCbzQ8BV`, enthält echte Lerndaten und kommt deshalb nicht ins Repository). Der Plan wartet auf Emrahs OK.
