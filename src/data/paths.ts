@@ -41,6 +41,7 @@ import {
   c1Schema,
   bookSchema,
   teacherSchema,
+  penSchema,
   actSchema,
   todaySchema,
 } from './schemas';
@@ -121,6 +122,8 @@ export const COLLECTIONS = {
   // Stehen hier, damit Sicherung, Export und Dokumentzählung sie kennen; nur das Modul schreibt sie.
   vlog: vlogSchema,
   vmod: vmodSchema,
+  // Stift-Werkzeug (09.11.2026): Rückmeldungen mit Bildschirmfoto, je Dokument eine; träge (große Bilder), nur Claude Code liest sie.
+  pen: penSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;
@@ -135,7 +138,7 @@ export const COLLECTION_NAMES = Object.keys(COLLECTIONS) as CollectionName[];
  * (`countDocuments`, `loadLazyBackup`, `loadVlogBackup`). Plan `docs/umbau/lesen-plan.md` §11 Nachtrag L3.
  * Wörter-Verlauf `vlog` (V3 Schritt 1, data-guard V1 B2): ≈ 1,8 MB je Jahr; Zählung und Sicherung über das Verlaufsverzeichnis (VLOG_INDEX_PATH).
  */
-export const LAZY_COLLECTIONS: readonly CollectionName[] = [READ_LAZY_COLLECTION, 'vlog'];
+export const LAZY_COLLECTIONS: readonly CollectionName[] = [READ_LAZY_COLLECTION, 'vlog', 'pen'];
 /** Sammlungen, die Start, Zählung und Umstellung vollständig lesen. */
 export const EAGER_COLLECTION_NAMES: readonly CollectionName[] = COLLECTION_NAMES.filter((n) => !LAZY_COLLECTIONS.includes(n));
 export const APP_DOC_PATHS = Object.keys(APP_DOCS) as AppDocPath[];

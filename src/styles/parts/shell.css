@@ -551,6 +551,10 @@
 }
 .lx-cmode-cancel { min-height: 36px; padding: 0 12px; border-radius: 10px; background: transparent; box-shadow: 0 0 0 1.5px currentColor inset; color: inherit; font-weight: 650; }
 [data-lx-cmode] body { cursor: crosshair; }
+/* Stift-Werkzeug (09.11.2026): Auswahl wie der Kommentar-Modus, dazu Rahmen ziehen (kein Wischen im Modus). */
+[data-lx-pen] body { cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none; }
+[data-lx-pen] body *:hover:not([data-lx-pen-ui] *):not([data-lx-pen-ui]) { outline: 2px dashed var(--act); outline-offset: 2px; }
+.lx-pen-rect { position: fixed; z-index: 79; border: 2px solid #ff3b30; border-radius: 6px; background: rgb(255 59 48 / 0.08); pointer-events: none; }
 [data-lx-cmode] body *:hover:not([data-lx-cmode-ui] *):not([data-lx-cmode-ui]) { outline: 2px dashed var(--act); outline-offset: 2px; }
 
 /* Hinweise (Toast) unter der Kopfzeile bzw. Übungsleiste (K-Abgleich 04.11.2026, Nebenbefund): oben am Rand verdeckten sie am Handy Titel,

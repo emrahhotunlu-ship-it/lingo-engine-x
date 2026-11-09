@@ -23,6 +23,7 @@ Emrahs persönliche Business-Englisch-App (B2 → C1), live als Claude-Artefakt 
 ## ⏸ PAUSE seit 09.11.2026 (Emrah)
 Nichts bauen, nichts veröffentlichen. Emrahs Kommentare in der App nur sammeln (`docs/umbau/kommentare-sammlung.md`), kurz bestätigen, nicht umsetzen. In 1–2 Wochen gemeinsam einen Gesamtplan machen. Live bleibt `JLL8…` v104 `1794207575-38a1`.
 - **Stimme (Emrah 09.11., Ausnahme von der Pause):** Kokoro ersetzt die Gerätestimme in der App (`docs/umbau/stimme.md`, Entscheidung in `docs/entscheidungen.md`). Erst Test-Link `AXHkh6…`, live nur nach „Ja live nehmen“. Stimmen-Paket wird je Artefakt einmal hochgeladen und steht in `docs/relaunch/publish/<link>.json` unter `voice`.
+- **Rückmeldungen (Stift, 09.11.):** Emrahs Hinweise kommen über das Stift-Werkzeug als `pen/<id>` (Bild + Art + Text) in die Datenbank des Links. Zu Beginn jeder Sitzung und auf Zuruf mit ArtifactData `list` der Sammlung `pen` lesen, in `docs/umbau/kommentare-sammlung.md` übernehmen, `done: true` setzen. Kommentare in claude.ai gibt es weiter (alte Threads), der Knopf dafür ist ersetzt.
 
 ## 3. Roadmap (Großpakete, Stand 05.11.2026)
 **Emrah 02.11.:** erst die fertige neue App haben und damit lernen → Feedback → dann gemeinsam überlegen, was wie neu entwickelt wird (B/C erst danach). Die Gesamtprüfung aller Bildschirme (Note 5/10) ist bis dahin angehalten; Funktionsliste „fehlt/versteckt“ liegt bereit.

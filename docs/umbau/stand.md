@@ -1076,3 +1076,6 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 
 ## 09.11.2026 – LIVE v108: Neue Stimme
 - Emrahs „Ja passt live nehmen“ → **live `JLL8…` v108 `1794251438-40db`** (Rückweg v104 `1794207575-38a1`; v105 App + Teile 0–2, v106/v107 Teile 3–10, v108 Teile 11–13 + `voice-manifest.json`), Stand `7c927fe9` (Programm gleich Test-Link v98). Enthält auch I0 (`763e47df`). `js/`/`css/` der alten App unberührt; Fähigkeiten übernommen. Dateiliste `docs/relaunch/publish/JLL8.json` (Stimme unter `voice`).
+
+## 09.11.2026 – Stift-Werkzeug (Ausnahme von der Pause, Emrahs „A“)
+- `src/features/system/pen/` (PenMode, shot, save) ersetzt `CommentMode` + `platform/comments.ts`. Rückmeldungen liegen in `pen/<id>` (Schema `penSchema`, träge Sammlung). Lesen: ArtifactData `list` Sammlung `pen` auf `JLL8…`/`AXHkh6…`; erledigte mit `done: true` markieren. E2E `tests/e2e/pen.spec.ts` (ersetzt `comments.spec.ts`).

@@ -1081,3 +1081,17 @@ export const todaySchema = z.looseObject({
   go: z.looseObject({ k: str, id: str }).nullish(),
   at: num,
 });
+
+/**
+ * Stift-Werkzeug (Emrah 09.11.2026, ersetzt das Kommentarfeld von claude.ai): eine Rückmeldung je Dokument `pen/<id>` mit Art
+ * (Funktion/Design/Fehler), Text, Stelle und Bildschirmfoto (JPEG als data-URL, < 180 KB). Claude Code liest die Sammlung.
+ */
+export const penSchema = z.looseObject({
+  t: num,
+  kind: str,
+  text: str,
+  img: str,
+  screen: loose,
+  target: loose,
+  done: loose,
+});

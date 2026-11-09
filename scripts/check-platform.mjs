@@ -182,6 +182,8 @@ export function checkMulti(files) {
       if (HTML_REF_LABELS.has(label)) continue;
       if (label === 'fetch()' && text.includes(FETCH_MARKER)) continue;
       if (VOICE_LABELS.has(label) && text.includes(VOICE_MARKER)) continue;
+      // Stift-Werkzeug (09.11.2026): html-to-image liest Bilder der eigenen Seite per fetch() (nur eigene Dateien, Schriften ausgelassen).
+      if (label === 'fetch()' && text.includes('lx:pen-shot')) continue;
       if (re.test(text)) problems.push(`${f.name}: Ladeziel gefunden: ${label}`);
     }
     for (const m of removedTemplates) if (text.includes(m)) problems.push(`${f.name}: Kennung einer entfernten Vorlage im Build: "${m}"`);
