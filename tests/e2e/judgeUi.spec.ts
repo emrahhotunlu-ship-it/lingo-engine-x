@@ -63,7 +63,14 @@ test('had → Zielform „used to have“: die App prüft selbst und bucht halb'
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'topic', topic: 'used-to' }, { fake: { patch: { 'grammar/used-to': begun('used-to') } } });
   await skipMiniLesson(page);
   await toPrompt(page, ARCHIVE);
-  const n0 = Number((await dump(page))['grammar/used-to']?.n);
+  // Der Zähler der vorigen Aufgabe kann unter Last noch unterwegs sein: erst lesen, wenn er sich nicht mehr ändert (sonst n0 eins zu klein).
+  const nNow = async () => Number((await dump(page))['grammar/used-to']?.n);
+  let n0 = await nNow();
+  for (let prev = -1; prev !== n0; ) {
+    prev = n0;
+    await page.waitForTimeout(400);
+    n0 = await nNow();
+  }
   await typeInGap(page, 'had');
   await page.getByTestId('check').click();
   // Das Feld kommt erst auf Wunsch (UX-Audit U1).
