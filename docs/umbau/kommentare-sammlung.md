@@ -6,3 +6,4 @@ Je Kommentar: Datum · Stelle in der App · Wortlaut (kurz) · was es vermutlich
 
 | Datum | Stelle | Kommentar | Einordnung |
 |---|---|---|---|
+| 09.11.2026 | Wörter, „Schreib das auf Englisch“ (Thread `bbbb9874`) | „Ufer“ abgefragt, „shore“ als falsch gewertet, verlangt „shores“ | **Fehler (Bewertung):** deutsches Wort mit gleicher Einzahl/Mehrzahl → beide englischen Formen zählen lassen; allgemein Singular/Plural bei mehrdeutigem DE nie „falsch“ |
