@@ -116,8 +116,19 @@ function AgainGap({ en, answer, accepted }: { en: string; answer: string; accept
       </p>
       <p className="lx-t-body m-0" lang="en">
         {before && <EnglishText as="span" text={before} area="trainer" />}
+        {/* UX-Prüfung 09.11.2026 K4: eine Linie wie die Lücke der Aufgabe, kein Kasten (Inline-Stil, kein neues CSS). */}
         <input
-          className="lx-field mx-1 inline-block w-36 align-baseline"
+          className="mx-1 inline-block w-36 align-baseline"
+          style={{
+            border: 0,
+            borderBottom: `2px solid ${done === null ? 'var(--line-2)' : done ? 'var(--ok)' : 'var(--bad)'}`,
+            background: 'transparent',
+            padding: '0 4px',
+            font: 'inherit',
+            color: 'inherit',
+            outline: 'none',
+            borderRadius: 0,
+          }}
           lang="en"
           aria-label={t('dxAgainLabel')}
           autoCapitalize="off"
@@ -148,7 +159,7 @@ function AgainGap({ en, answer, accepted }: { en: string; answer: string; accept
           <span className="lx-t-meta text-muted">{t('dxAgainNote')}</span>
         </div>
       ) : (
-        <p className={`lx-t-support m-0 ${done ? 'text-ok-text' : 'text-muted'}`} role="status" data-testid="mistake-again-result" data-ok={done ? '1' : '0'}>
+        <p className={`lx-t-support m-0 ${done ? 'text-ok-text' : 'text-wrong-text'}`} role="status" data-testid="mistake-again-result" data-ok={done ? '1' : '0'}>
           {done ? t('dxAgainOk') : t('dxAgainNo', { a: answer })}
         </p>
       )}

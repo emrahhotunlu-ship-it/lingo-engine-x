@@ -8,6 +8,8 @@ Auftrag (Emrah, 09.11.2026): Die App soll beim Wörter-Tempo, beim Grammatik-Ler
 - Klausur-Fehlerliste: das Bedeutungs-Warum spricht nicht von „a/b“ (N3).
 - Heute springt kurz nach dem Öffnen auf „Wörter erledigt“: Ursache klären (nur Testdaten oder echt).
 
+**Stand I0 (09.11.2026):** Fehlerkarte „Gleich nochmal“ als Linie wie die Lücke, Urteil grün/rot (K4); Klausur-Fehlerliste bei Bedeutungspaaren mit „a)“/„b)“ vor dem Satz, passend zum Warum (N3). „Weiter“ am Rundenende bleibt wie in allen Grammatik-Runden (K7, einheitlich mit GrammarEnd). Doppelter Vergleich in der Fehlerkarte bleibt (E1-Vorgabe „Du: X → richtig: Y“). Heute-Sprung: nur Testdaten – die Wörter-App schaltet sich dort beim ersten Öffnen selbst ein (`vocabAuto`, legt `vlog/*` an) und zählt erst danach das schon erledigte `act.review` des Tages; live ist sie seit v88 an, kein Fehler.
+
 ## Teil I1 → Test-Link
 1. **Messen (R4):** wöchentlich zwei Werte mit Vorwoche, nämlich „Wörter sicher behalten“ (frei richtig nach ≥ 7 Tagen Pause) und „Fehler je Grammatik-Thema“. Gespeichert als Monats-Dokument (A6 Nr. 6). Grundlage für I1.2 und das Wochenbild.
 2. **Wörter-Tempo nach Behalten:** neue Wörter pro Tag 5–15, gesteuert aus der Behaltensquote der letzten 7–14 Tage und der echten Zeit je Karte. Zielwert ≈ 90 % Behalten. Die Bremse unter 20 Wörter-Minuten bleibt. Der Satz im Wörter-Reiter erklärt die Zahl. Vorher Simulation (wie GB2) und learning-scientist.

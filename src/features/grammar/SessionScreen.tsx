@@ -317,7 +317,8 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
       const why = hit ? hit[lang] : task ? ((lang === 'de' ? task.expl.de : task.expl.en) ?? '') : '';
       // UX-Prüfung 09.11.2026 S1: keine Rohwerte („none“, „a → b“), sondern Wortlaut.
       const mx = task?.x?.kind === 'meaning' ? task.x : null;
-      const shown = (v: string): string => (v === 'none' ? t('exNoError') : mx ? (v === 'a' ? mx.a : v === 'b' ? mx.b : v === 'both' ? t('gxMeaningBoth') : v) : v);
+      // Bedeutungspaar: mit Buchstaben, weil das Warum von „a“ und „b“ spricht (Nachprüfung 09.11.2026 N3).
+      const shown = (v: string): string => (v === 'none' ? t('exNoError') : mx ? (v === 'a' ? `a) ${mx.a}` : v === 'b' ? `b) ${mx.b}` : v === 'both' ? t('gxMeaningBoth') : v) : v);
       return { wrong: shown((r.given ?? '').trim()) || '…', right: shown(r.right ?? ''), rule: why || topicName(r.topic, lang), when: '' };
     });
   const byTopic = new Map<string, { c: number; n: number }>();
