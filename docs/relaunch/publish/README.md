@@ -67,3 +67,7 @@ zusätzlich mit `null` in den Aufruf.
 4. Das neue Manifest wieder als `<link>.json` ablegen.
 
 Die Rückweg-Probe auf dem Test-Link (einmal nach G4 von 1a) läuft genau so.
+
+## Stimmen-Paket (seit 09.11.2026)
+
+Die neue Stimme braucht zusätzlich das Stimmen-Paket (`voice-manifest.json`, `voice-p00.txt` …). Es wird je Link einmal mit hochgeladen und steht im Manifest unter `voice`, nie unter `files` (sonst würde es beim nächsten Mal gelöscht). Ablauf und Reihenfolge: `docs/umbau/stimme.md`, Abschnitt „Veröffentlichen“.
