@@ -96,7 +96,9 @@ test('„Warum diese Aufgabe?“: ein Satz aus den Daten im ⓘ der Übung (eine
   await expect(page.getByTestId('purpose').locator('span.text-fg')).not.toContainText(' · ');
   const lines = await page.getByTestId('purpose').evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)));
   // Kern: die Übung steht in einer Karte mit Innenabstand (schmalere Zeile) – höchstens vier Zeilen.
-  expect(lines).toBeLessThanOrEqual(4);
+  // Mit Datenbeleg („Passt dazu: …“, kommt, sobald das Lernmodell geladen ist) zwei Zeilen mehr.
+  const extra = (await page.getByTestId('purpose').innerText()).includes('Passt dazu');
+  expect(lines).toBeLessThanOrEqual(extra ? 6 : 4);
   await btn.click();
   await expect(page.getByTestId('why-line')).toHaveCount(0);
   expect(errors).toEqual([]);

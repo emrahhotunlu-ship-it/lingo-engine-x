@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { bootAt } from './fixtures';
-import { answerGrammar, grammarKey, nextItem, shownPrompt, skipMiniLesson, typeInGap } from './learnHelpers';
+import { answerGrammar, gapsSeenExcept, grammarKey, nextItem, shownPrompt, skipMiniLesson, typeInGap } from './learnHelpers';
 
 // Tutor-Engine v3 in der Übung (docs/umbau/tutor-engine-v3.md §2.1, §4.1, §6.4): Urteil über `judge`, „Auch richtig“ mit Zielform-Angebot,
 // andere gültige Korrektur bei „Fehler finden“, unsicher ohne Claude, Knopf „Claude fragen“ ohne Zustimmung, Einspruch „Ich lag richtig“.
@@ -12,7 +12,8 @@ const fitCalls = (page: Page): Promise<number> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string }> } }).__LINGO_FAKE__.sampleCalls.filter((c) => c.id.startsWith('grammar-fit')).length);
 
 const solve = grammarKey();
-const begun = (id: string) => ({ id, p: 0.5, n: 14, c: 10, last: Date.parse('2026-09-18T10:00:00+02:00'), hist: [{ d: '2026-09-10', p: 0.4 }], recent: [1, 1, 1], seen: [], seenText: [], errors: [] });
+const ARCHIVE = 'paper archive';
+const begun = (id: string) => ({ id, p: 0.5, n: 14, c: 10, last: Date.parse('2026-09-18T10:00:00+02:00'), hist: [{ d: '2026-09-10', p: 0.4 }], recent: [1, 1, 1], seen: gapsSeenExcept(id, ARCHIVE), seenText: [], errors: [] });
 
 /** Bis zur Aufgabe mit diesem Wortlaut (andere werden richtig gelöst und weitergeklickt). */
 async function toPrompt(page: Page, needle: string): Promise<void> {
@@ -25,8 +26,6 @@ async function toPrompt(page: Page, needle: string): Promise<void> {
   }
   throw new Error(`Aufgabe „${needle}“ nicht in der Runde`);
 }
-
-const ARCHIVE = 'paper archive';
 
 /** Prüfen; ein erster Fehlversuch zeigt erst einen Hinweis, dann zählt der zweite Klick (unverändert) als Ergebnis. */
 async function checkToVerdict(page: Page): Promise<void> {

@@ -3,7 +3,7 @@ import { legacyTaskKey } from '../../src/domain/grammar/key';
 import bank from '../../src/content/grammar-bank.json' with { type: 'json' };
 import { expect, test, type Page } from '@playwright/test';
 import { boot, screen, openTab } from './fixtures';
-import { openTopicList, skipMiniLesson } from './learnHelpers';
+import { bookSeen, openTopicList, skipMiniLesson } from './learnHelpers';
 import { dump } from './trainerHelpers';
 
 // KI-Wege, die bisher ohne feste Testantwort waren (Prüfbericht): „Mit Claude ergänzen",
@@ -82,6 +82,8 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
     ...(bank.tasks as Array<{ topic: string; prompt: string }>).filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.prompt)),
     // Schlüssel der neuen Aufgabenarten: Rahmensatz (kwt), Satz (find), Satz a (meaning).
     ...v2.filter((x) => x.topic === 'passive').map((x) => legacyTaskKey((x.type === 'kwt' ? x.frame : x.type === 'find' ? x.prompt : x.a) ?? '')),
+    // Grammatik-Buch (GB4): Übung A und B laufen in den Themenrunden mit.
+    ...bookSeen('passive'),
   ];
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { seen } } } });
   await screen(page, 'today');

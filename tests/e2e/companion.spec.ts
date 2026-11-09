@@ -207,11 +207,12 @@ test.describe('Desktop 1440', () => {
     // Neubau: 7 Live-Dokumente (profile, course, assess, schema, repair, memory – „Claude merkt sich“
     // liest app/memory synchron aus dem Live-Stand, prompts/work.ts –, levels – Lernpfad der Einwände, LIVE_DOCS)
     // + 4 Sammlungen (vocab, grammar, archive, chunk) + Tagesprotokoll log/<heute> + app/week (Wochenplan)
-    // + app/decks (Stapel) = 14, weit unter der Vertragsgrenze von 64 je Ansicht (db.d.ts). Früher (Phase 5) waren es ≤ 10.
+    // + app/decks (Stapel) + app/book (Grammatik-Buch, 08.11.2026: „Weiter im Buch“ auf Lernen und im Grammatik-Schritt) = 15,
+    // weit unter der Vertragsgrenze von 64 je Ansicht (db.d.ts). Früher (Phase 5) waren es ≤ 10.
     const paths = await subPaths(page);
     expect(paths).toHaveLength(base);
     expect(paths.filter((p, i) => paths.indexOf(p) !== i), 'doppelte Abos').toEqual([]);
-    expect(base, paths.join(', ')).toBeLessThanOrEqual(14);
+    expect(base, paths.join(', ')).toBeLessThanOrEqual(15);
     await expect.poll(async () => (await chatDoc(page)).msgs.length, { timeout: 15_000 }).toBe(6);
     expect((await chatDoc(page)).msgs.at(-1)?.stopped).toBeUndefined();
   });

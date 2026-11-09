@@ -146,7 +146,12 @@ test.describe('Handy 390', () => {
   test('Handy 360: kein Querscrollen und axe 0 in allen Schritten', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 740 });
     const { errors } = await start(page);
-    const axe = async (): Promise<string[]> => (await new AxeBuilder({ page }).include('[data-testid="placement"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations.map((v) => v.id);
+    // Kontrast erst nach dem Einblenden prüfen: mitten in der Animation ist der Text noch halb durchsichtig (unter Last meldete axe dann `color-contrast`).
+    const settled = () => page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== 'running'));
+    const axe = async (): Promise<string[]> => {
+      await settled();
+      return (await new AxeBuilder({ page }).include('[data-testid="placement"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations.map((v) => v.id);
+    };
     await page.getByTestId('place-start').click();
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe()).toEqual([]);

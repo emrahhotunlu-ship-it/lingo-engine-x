@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 import { splitWords } from '../../src/domain/answer/align';
 import { errorSpan } from '../../src/domain/grammar/span';
+import { legacyTaskKey } from '../../src/domain/grammar/key';
 import { FOCUS2 } from './ruht';
 
 // Hilfen für die Phase-2-Bildschirme (Kurs, Lektion, Grammatik, Übungen). Die richtigen
@@ -465,4 +466,23 @@ export async function retypeIfAsked(page: Page): Promise<void> {
   const label = (await input.getAttribute('aria-label')) ?? '';
   const word = /[„“"]([^“”"]+)[“”"]/.exec(label)?.[1] ?? '';
   await input.fill(word);
+}
+
+/**
+ * Schlüssel der Buch-Aufgaben eines Themas (content/grammar/book.json) für `grammar/<topic>.seen`: seit GB4 laufen die Buch-Aufgaben in den
+ * Themenrunden mit. Tests, die eine bestimmte ältere Aufgabe in der Runde suchen, schließen sie so aus (gesehene Aufgaben wählt die Runde nicht).
+ */
+export function bookSeen(topic: string): string[] {
+  const book = json('../../src/content/grammar/book.json') as { tasks: Array<{ topic: string; prompt: string }> };
+  return book.tasks.filter((t) => t.topic === topic).map((t) => legacyTaskKey(t.prompt));
+}
+
+/**
+ * Wie `bookSeen`, dazu alle Lücken der Aufgabenbank des Themas außer der mit `needle`: seit GB4 (Lücke und Auswahl vor Umformungen,
+ * Buch-Aufgaben in den Runden) kommt eine bestimmte Bank-Lücke nicht mehr sicher in die ersten Runden. So ist sie die einzige ungesehene Lücke.
+ */
+export function gapsSeenExcept(topic: string, needle: string): string[] {
+  const read = (rel: string) => (json(rel) as { tasks: Array<{ topic: string; type?: string; prompt: string }> }).tasks;
+  const gaps = [...read('../../src/content/grammar-bank.json'), ...read('../../src/content/grammar-extra.json')].filter((t) => t.topic === topic && t.type === 'gap' && !t.prompt.includes(needle));
+  return [...bookSeen(topic), ...gaps.map((t) => legacyTaskKey(t.prompt))];
 }

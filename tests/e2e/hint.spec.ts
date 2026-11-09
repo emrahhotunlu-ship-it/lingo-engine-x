@@ -154,7 +154,8 @@ test.describe('Desktop', () => {
     await expect(item.getByTestId('explanation')).toBeVisible();
     await page.getByTestId('next').click();
     const logged = async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g' && e.topic === topic && e.given !== 'zzzz wrong' && e.ok === true && e.g === 2);
-    await expect.poll(async () => (await logged()).length).toBe(1);
+    // Unter voller Testlast (1.000 Tests parallel) braucht das gebündelte Schreiben ins Tagesprotokoll länger als 10 s.
+    await expect.poll(async () => (await logged()).length, { timeout: 20_000 }).toBe(1);
     const all = (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.given === 'zzzz wrong');
     expect(all).toHaveLength(0);
     expect(((await dump(page))[`grammar/${topic}`]?.errors as unknown[] | undefined)?.length ?? 0).toBe(errorsBefore);
