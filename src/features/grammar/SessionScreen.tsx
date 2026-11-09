@@ -13,7 +13,7 @@ import { STATE_DOTS } from '../../ui/exercise';
 import { flush } from '../progress/persist';
 import { RoundTop, dutyLabel } from '../learn/ui';
 import { startDuty } from '../learn/flow';
-import { firstOpenDuty, useToday } from '../today/state';
+import { firstOpenDuty, grammarDutyId, useToday } from '../today/state';
 import { GrammarItem } from './GrammarItem';
 import { IntroFlow } from './IntroFlow';
 import { StepBoundary } from '../../app/shell/Boundary';
@@ -101,11 +101,13 @@ export function GrammarSessionScreen() {
   }, [blind]);
   const reason = useWhyReason(task ?? null, tutorOn && s.status === 'running');
   const win = useWinOn(task ?? null, tutorOn);
-  const badge = bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
+  // Buch-Seite: nach den Seiten-Aufgaben angehängte Fehlersätze bzw. Wiederholung sichtbar zählen (Nachprüfung 09.11.2026 N1).
+  const bookExtra = !!s.book?.n && s.status === 'running' && s.pos >= s.book.n ? { n: s.pos - s.book.n + 1, total: s.tasks.length - s.book.n } : null;
+  const badge = bookExtra ? t('bkExtraBadge', bookExtra) : bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       {/* Grammatik-Buch (UX-Prüfung 09.11.2026 S3): der Kopf nennt Lektion und Seite bzw. die Klausur statt nur „Grammatik“. */}
-      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" area="grammar" areaLabel={bookHead(s.book, t, lang)} />
+      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty={grammarDutyId(s.day) ?? 'ch:gram'} area="grammar" areaLabel={bookHead(s.book, t, lang)} />
       {/* Kapitel-Arbeit: Themen-Test noch in Vorbereitung (zu wenig Testaufgaben), stattdessen Übung: kurzer Hinweis vor der ersten Aufgabe. */}
       {s.prep && s.status === 'running' && s.pos === 0 && !showCards && (
         <p className="m-0 text-sm text-muted" role="status" data-testid="tt-prep">
@@ -134,7 +136,7 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest || bookExtra ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">
@@ -279,7 +281,8 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
 function bookHead(b: ReturnType<typeof useGrammarSession.getState>['book'], t: ReturnType<typeof useT>['t'], lang: 'de' | 'en'): string | undefined {
   if (!b) return undefined;
   if (b.part === 'X') return t('bkExam', { n: bookChapters().find((c) => c.id === b.chapter)?.n ?? 1 });
-  return b.topic ? `${topicName(b.topic, lang)} · ${t(b.part === 'A' ? 'bkPartShortA' : b.part === 'B' ? 'bkPartShortB' : b.part === 'C' ? 'bkPartShortC' : 'bkPartT')}` : undefined;
+  // Seite zuerst: am iPhone wird der Kopf gekürzt, dann bleibt „Übung A“ stehen (Nachprüfung 09.11.2026).
+  return b.topic ? `${t(b.part === 'A' ? 'bkPartShortA' : b.part === 'B' ? 'bkPartShortB' : b.part === 'C' ? 'bkPartShortC' : 'bkPartT')} · ${topicName(b.topic, lang)}` : undefined;
 }
 
 /**

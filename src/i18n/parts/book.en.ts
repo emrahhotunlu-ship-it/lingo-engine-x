@@ -43,6 +43,7 @@ export const bookEn = {
   bkExamReady: 'All lessons done – ready for the exam',
   bkExamBadge: 'Exam {n}/{total}',
   bkTestBadge: 'Lesson test',
+  bkExtraBadge: 'Review {n}/{total}',
   bkExamIntro: 'Exam · {n} tasks without help · result, grade and answers only at the end.',
   bkTestIntro: 'Lesson test · {n} tasks without help · pass with {pass} right.',
   bkEndExam: 'Grade {g} (1 = best) · {p}%',

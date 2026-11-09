@@ -281,6 +281,15 @@ export function openGrammarBlock(day: string): UnitBlockNo | null {
   return row ? row.block : null;
 }
 
+/** Pflichtpunkt des Grammatik-Schritts von heute (`ch:u-in`, `ch:u-focus` …) für den Abschnittsbalken der Übung; `null` ohne Tageseinheit. */
+export function grammarDutyId(day: string): DutyId | null {
+  const p = useTodayPlan.getState();
+  const plan = viewPlan(p.day === day ? p.plan : null);
+  if (!plan?.u) return null;
+  const st = computeToday(day);
+  return (unitRows(plan, st.duties.items) ?? []).find((r) => r.kind === 'grammar')?.id ?? null;
+}
+
 /** Erster offener Pflichtpunkt (Tageskarte, „Weiter: …", M11). */
 export function firstOpenDuty(st: Pick<TodayState, 'duties'>): DutyId | null {
   return st.duties.items.find((d) => d.state === 'open')?.id ?? null;

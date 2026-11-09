@@ -55,10 +55,13 @@ export function PatternSheetBody({ topic, tp, onPractice, readOnly = false, book
             <span className="rounded-[var(--radius-inline)] bg-hint-soft px-1.5 text-hint-text" lang="en" data-testid="pattern-formula">
               {pick(p.form)}
             </span>
-            <span className="lx-t-meta flex items-center gap-1.5 text-muted">
-              <Dots state={state} />
-              {t(WORD[state])}
-            </span>
+            {/* Grammatik-Buch: kein Lernstand im Regelblatt, der Stand steht auf der Lektionsseite (Nachprüfung 09.11.2026). */}
+            {!book && (
+              <span className="lx-t-meta flex items-center gap-1.5 text-muted">
+                <Dots state={state} />
+                {t(WORD[state])}
+              </span>
+            )}
           </p>
         </header>
         <p className="lx-t-support" lang={lang}>

@@ -43,6 +43,7 @@ export const bookDe = {
   bkExamReady: 'Alle Lektionen fertig – bereit für die Klausur',
   bkExamBadge: 'Klausur {n}/{total}',
   bkTestBadge: 'Lektionstest',
+  bkExtraBadge: 'Wiederholung {n}/{total}',
   bkExamIntro: 'Klausur · {n} Aufgaben ohne Hilfe · Ergebnis, Note und Lösungen erst am Ende.',
   bkTestIntro: 'Lektionstest · {n} Aufgaben ohne Hilfe · bestanden ab {pass} richtig.',
   bkEndExam: 'Note {g} · {p} %',

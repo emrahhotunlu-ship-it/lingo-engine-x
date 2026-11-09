@@ -1528,6 +1528,8 @@ function LegacyGrammarItem({
     >
       <ExerciseShell
         meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
+        // Klausur: Enter geht nur weiter, es wird nicht geprüft (Nachprüfung 09.11.2026 N2).
+        {...(blind ? { keysHint: t('exKeysHintNext') } : {})}
         status={{
           area: 'grammar',
           state,
