@@ -1053,3 +1053,11 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
   - Fehler-Karte auch bei Wörtern.
   - KWT-Umformungen erst nach Einführung und seltener.
   - Offen aus Prüfung: `alsoOk` blendet „Kommt morgen wieder“ noch nicht aus; `again`-Protokoll für „Gleich nochmal“.
+
+## 09.11.2026 – Test-Link v94: Großpaket Buch + Tempo (GB5)
+- **Test-Link `AXHkh6…` v94 `1794194147-cc2b`** (Rückweg v93 `1794173718-f9e2`), Stand `423a8343`, Dateiliste `docs/relaunch/publish/AXHkh6.json`. Live `JLL8…` unverändert v103.
+- Prüfung: Typen, Lint, 7709 Unit grün; voller E2E-Lauf 1042 grün, 2 Wackler unter Last (judgeUi:62 – Testfehler behoben, Zähler erst nach der vorigen Buchung lesen; vswitch:28 – Zeitgrenze, allein 2× grün), danach betroffene Dateien grün; Plattform FREIGABE, Budget im Rahmen (Dateien 106, Freigabe in `scripts/budget.json`), Einzeldatei-Rückfall grün.
+- Tests an Buch + Tempo angepasst (Buch-Aufgaben als gesehen, Wörter 15 Min. bei Tagesziel 25, Abo `app/book` = 15 von 64, Datenbeleg im Warum, Kontrast nach dem Einblenden, Protokoll-Wartezeit unter Last).
+- platform-guard: Dateizahl 106 > 105 (Grenze angehoben, begründet); Hinweis: Buch-Inhalte laden beim Start mit (≈150 KB gepackt, parallel) → für LIVE-BUG 3 (Ladezeiten) vorgemerkt; Fehler-Karte fragt Claude ohne Klick (E1-Entwurf, 24 h Zwischenspeicher).
+- ux-reviewer (eine Runde + eine Nachprüfung): B1 Heute-Zeile nennt die Buch-Seite, die startet (über `useBookDuty`, ohne Buch-Inhalte im Heute-Bildschirm – sonst verzögerte sich das Tagesbild, gate.spec); B2 Klausur/Lektionstest mit Plakette, Startzeile, „Weiter“; S1 Fehlerliste mit Wortlaut; S2 Zähler = Buch-Seite, angehängte Karten „Wiederholung n/m“; S3 Kopf „Übung A · Thema“; S4 Balken füllt nur erledigte Schritte (Grammatik-Schritt des Tages per `grammarDutyId`); S5 Regelblatt im Buch nur Regel + Beispiele; S6 Marken A B C T; S7 schwache Lektionen nur markiert; S8 Tagesziel nach Blattbreite; S9 Knopf „Weiter: Übung X“; K2/K3/K8/K9.
+- Offen (Rest-Stapel, Emrah entscheidet): Fehlerkarte „Gleich nochmal“-Feld und Doppelungen (K4/K5), „Weiter“ nennt nicht das Ziel (K7), Bedeutungs-Warum spricht von „a/b“ (N3), schwebender Weiter-Knopf am Laptop (K6), Häkchen-Farbe (K1); Nebenbefund: Heute springt mit Wörter-App ~3 s nach dem Öffnen auf „Wörter erledigt“ (Testdaten? prüfen).
