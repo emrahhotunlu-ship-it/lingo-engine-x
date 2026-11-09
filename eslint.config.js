@@ -362,6 +362,12 @@ export default defineConfig(
     },
   },
   {
+    // Neue Stimme (Emrah 09.11.2026, docs/entscheidungen.md): nur der Lader des eigenen Stimmen-Pakets liest Dateien des Artefakts
+    // (voice-manifest.json, voice-pNN.txt) und beantwortet die Anfragen der Sprach-KI-Bibliothek aus dem Paket – nie von außen.
+    files: ['src/platform/voice/engine.ts'],
+    rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
+  },
+  {
     files: ['scripts/**/*.mjs', 'eslint.config.js'],
     ...tseslint.configs.disableTypeChecked,
     languageOptions: {

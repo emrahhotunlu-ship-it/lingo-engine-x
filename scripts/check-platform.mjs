@@ -125,6 +125,11 @@ export const MULTI_WARN_TOTAL = WARN_TOTAL_BYTES;
 export const MULTI_EXT = new Set(['.html', '.js', '.css', '.json', '.woff2', '.png', '.jpg', '.webp', '.svg', '.mp4', '.webm', '.txt']);
 const TEXT_EXT = new Set(['.js', '.css', '.json', '.svg']);
 const FETCH_MARKER = 'lx:content-fetch';
+// Neue Stimme (Emrah 09.11.2026, docs/entscheidungen.md): nur die Stücke mit dieser Kennung dürfen WebAssembly, fetch() und Worker
+// enthalten (Modell und Rechenkern kommen aus dem eigenen Stimmen-Paket, nichts von außen; src/platform/voice/engine.ts).
+const VOICE_MARKER = 'lx:voice-engine';
+// XMLHttpRequest und importScripts stehen als ungenutzte Zweige im Rechenkern (Node/Worker-Wege von Emscripten).
+const VOICE_LABELS = new Set(['fetch()', 'Worker', 'WebAssembly', 'XMLHttpRequest', 'importScripts']);
 // Verweise, die in der HTML separat geprüft werden (flach-relativ + vorhanden) und deshalb nicht als Ladeziel zählen.
 const HTML_REF_LABELS = new Set(['externes <script src>', '<link href> (Stylesheet/Preload)']);
 /** Lokaler, flacher, relativer Verweis (kein Host, kein `/`-Anfang, kein Unterordner, kein data:). */
@@ -176,6 +181,7 @@ export function checkMulti(files) {
     for (const [re, label] of loaders) {
       if (HTML_REF_LABELS.has(label)) continue;
       if (label === 'fetch()' && text.includes(FETCH_MARKER)) continue;
+      if (VOICE_LABELS.has(label) && text.includes(VOICE_MARKER)) continue;
       if (re.test(text)) problems.push(`${f.name}: Ladeziel gefunden: ${label}`);
     }
     for (const m of removedTemplates) if (text.includes(m)) problems.push(`${f.name}: Kennung einer entfernten Vorlage im Build: "${m}"`);

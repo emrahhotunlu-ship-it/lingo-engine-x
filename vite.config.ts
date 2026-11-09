@@ -6,6 +6,7 @@ import { execSync } from 'node:child_process';
 import { rawJsonZip } from './scripts/vite-raw-json-zip.mjs';
 import { contentStore } from './scripts/content/vite-plugin.mjs';
 import { bootFirst } from './scripts/vite-boot-first.mjs';
+import { voiceOrt } from './scripts/vite-voice.mjs';
 
 // Versionskennung für die Diagnose (Emrah sieht, ob er den neuesten Stand offen hat).
 const commit = (() => {
@@ -31,7 +32,7 @@ export default defineConfig(({ command }) => {
   return {
     define: { __LX_BUILD__: JSON.stringify(BUILD_ID) },
     // bootFirst (U2) steht NACH viteSingleFile: es schiebt das eingebettete Skript hinter das Start-Bild (scripts/vite-boot-first.mjs).
-    plugins: [contentStore({ multi: MULTI }), rawJsonZip({ multi: MULTI }), react(), tailwindcss(), ...(MULTI ? [] : [viteSingleFile({ removeViteModuleLoader: true }), bootFirst()])],
+    plugins: [contentStore({ multi: MULTI }), rawJsonZip({ multi: MULTI }), voiceOrt({ multi: MULTI }), react(), tailwindcss(), ...(MULTI ? [] : [viteSingleFile({ removeViteModuleLoader: true }), bootFirst()])],
     build: {
       target: ['es2022', 'safari16'],
       outDir: 'dist',

@@ -17,3 +17,6 @@ tests/tutor/lint-report.txt
 
 # Bau-Manifest (scripts/check-budget.mjs liest es nach jedem Bau); wird nicht veröffentlicht. dist/ selbst bleibt im Repository.
 dist/.vite/
+
+# Stimmen-Paket (scripts/voice/build-pack.mjs, ~210 MB), wird separat veröffentlicht
+.voice-pack/

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { logWarn } from './diagnostics';
+import { isNeuralVoice, neuralWanted, scheduleNeuralVoice, speakNeural, stopNeural, unlockNeural } from './voice/neural';
 
 // Sprachausgabe (A7.4, Kap. 15 „Sprachausgabe am Handy abgehackt", Architektur-Entwurf §10.3).
 // iPhone/Safari zuerst:
@@ -309,6 +310,8 @@ export function initSpeech(p?: SpeechPrefs): void {
     return;
   }
   initialized = true;
+  // Neue Stimme (Emrah 09.11.2026): im Hintergrund laden; bis dahin und als Notlösung bleibt die Gerätestimme.
+  scheduleNeuralVoice();
   const e = env();
   if (!e) {
     useSpeech.setState({ status: 'unsupported', voiceName: null });
@@ -367,6 +370,7 @@ function finishCurrent(outcome: SpeakOutcome): void {
   if (startTimer !== null) clearTimeout(startTimer);
   startTimer = null;
   stopWake();
+  stopNeural();
   if (c) {
     useSpeech.setState({ speaking: false });
     c.finish(outcome);
@@ -457,7 +461,76 @@ export function speechChunks(text: string): string[] {
   return chunkText(text);
 }
 
+/** Neue Stimme für diese Ausgabe? Ja, wenn sie bereit ist oder lädt – außer beim Probehören einer Gerätestimme. */
+const wantsNeural = (opts: SpeakOptions): boolean => neuralWanted() && (!opts.voice || isNeuralVoice(opts.voice));
+
+/** Sprecher der neuen Stimme: die gespeicherte Wahl, wenn sie einer ist, sonst „Heart“. */
+const neuralVoice = (opts: SpeakOptions): string => (isNeuralVoice(opts.voice) ? (opts.voice as string) : isNeuralVoice(prefs.voice) ? (prefs.voice as string) : 'af_heart');
+
+function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome> {
+  const chunks = chunkText(text);
+  if (chunks.length === 0) return Promise.resolve('done');
+  const from = Math.min(chunks.length - 1, Math.max(0, Math.floor(opts.startAt ?? 0)));
+  const e = env();
+  const busy = e !== null && (current !== null || e.synth.speaking || e.synth.pending);
+  finishCurrent('stopped');
+  if (e && busy) {
+    try {
+      e.synth.cancel();
+    } catch (err) {
+      logWarn('speech:cancel', err);
+    }
+    lastCancelAt = Date.now();
+  }
+  const id = ++session;
+  const rate = clampRate(opts.rate ?? prefs.rate);
+  return new Promise<SpeakOutcome>((resolve) => {
+    let settled = false;
+    current = {
+      id,
+      utterance: null,
+      onChunk: opts.onChunk,
+      onBoundary: opts.onBoundary,
+      finish: (o) => {
+        if (settled) return;
+        settled = true;
+        resolve(o);
+      },
+    };
+    useSpeech.setState({ speaking: true });
+    const alive = () => id === session && current?.id === id;
+    void speakNeural({
+      chunks,
+      from,
+      rate,
+      voice: neuralVoice(opts),
+      alive,
+      onChunk: (i) => {
+        const listener = current?.onChunk;
+        if (!listener || !alive()) return;
+        try {
+          listener(i, chunks.length, chunks[i] as string);
+        } catch (err) {
+          logWarn('speech:onChunk', err);
+        }
+      },
+    }).then((o) => {
+      if (!alive()) return;
+      const dev = env();
+      const st = useSpeech.getState().status;
+      if (o === 'unavailable' && dev && st !== 'unsupported' && st !== 'novoice') {
+        // Neue Stimme läuft hier nicht: dieselbe Ausgabe mit der Gerätestimme.
+        voiceOverride = opts.voice && !isNeuralVoice(opts.voice) ? opts.voice : null;
+        speakChunk(dev, chunks, from, id, rate);
+        return;
+      }
+      finishCurrent(o === 'unavailable' ? 'unavailable' : o);
+    });
+  });
+}
+
 export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutcome> {
+  if (wantsNeural(opts)) return speakWithNeural(text, opts);
   const e = env();
   const status = useSpeech.getState().status;
   if (!e || status === 'unsupported' || status === 'novoice') return Promise.resolve('unavailable');
@@ -516,6 +589,7 @@ export function stopSpeech(): void {
   session += 1;
   const hadWork = current !== null;
   finishCurrent('stopped');
+  stopNeural();
   const e = env();
   if (!e) return;
   if (hadWork || e.synth.speaking || e.synth.pending) {
@@ -533,6 +607,8 @@ export function stopSpeech(): void {
  * Sprachausgabe am iPhone frei. Danach darf die App ohne weiteren Klick sprechen.
  */
 export function unlockSpeech(): void {
+  // Neue Stimme: Wiedergabe in jedem Tippen freigeben (am iPhone nötig, sonst bleibt der Ton stumm).
+  unlockNeural();
   const e = env();
   if (!e || unlocked) return;
   unlocked = true;
