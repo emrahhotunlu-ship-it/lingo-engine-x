@@ -5,6 +5,7 @@ import type { MessageKey } from '../../i18n';
 import { grammarModuleOn } from '../../modules/grammar/api';
 import { bookNextOf, bookView } from './bookStore';
 import { topicName } from './topicUi';
+import { useBookDuty, type BookDuty } from '../today/bookDuty';
 
 // Grammatik-Buch: EIN nächster Schritt für alle Stellen, die ihn nennen oder starten (Heute-Zeile, Lernen, „Weiter im Buch“, Grammatik-Schritt),
 // damit Untertitel und Klickziel dasselbe sagen (Kap. 2 Nr. 2; UX-Prüfung 09.11.2026 B1).
@@ -30,3 +31,26 @@ export function useBookDutyStep(): BookStep | null {
   const now = useClock((s) => s.now);
   return bookDutyStep({ 'app/book': book, 'app/profile': profile }, now);
 }
+
+/** Heute-Zeile (src/features/today/bookDuty.ts): den nächsten Buch-Schritt als einfache Werte eintragen, sobald sich Buch, Profil oder Tag ändern. */
+function syncBookDuty(): void {
+  const live = useLive.getState();
+  const step = bookDutyStep(live.docs, useClock.getState().now);
+  const next: BookDuty = !step
+    ? null
+    : step.kind === 'exam'
+      ? { kind: 'exam', ch: bookChapters().find((c) => c.id === step.chapter)?.n ?? 1 }
+      : { kind: 'page', ch: bookChapters().find((c) => c.id === step.chapter)?.n ?? 1, topic: step.topic, part: step.part };
+  const cur = useBookDuty.getState().step;
+  if (JSON.stringify(cur) !== JSON.stringify(next)) useBookDuty.setState({ step: next });
+}
+let lastBook: unknown = undefined;
+let lastProfile: unknown = undefined;
+useLive.subscribe((s) => {
+  if (s.docs['app/book'] === lastBook && s.docs['app/profile'] === lastProfile) return;
+  lastBook = s.docs['app/book'];
+  lastProfile = s.docs['app/profile'];
+  syncBookDuty();
+});
+useClock.subscribe(syncBookDuty);
+syncBookDuty();

@@ -90,3 +90,17 @@ async function answerGrammarBlind(page: Page): Promise<void> {
   await item.getByTestId('choice').first().click();
   await page.getByTestId('check').click();
 }
+
+test('Heute: begonnenes Buch – die Grammatik-Zeile nennt genau die nächste Buch-Seite (Untertitel = Klickziel)', async ({ page }) => {
+  const t = Date.parse('2026-09-01T10:00:00+02:00');
+  const { errors } = await boot(page, {
+    migrated: true,
+    grammarNew: true,
+    fake: { patch: { 'app/book': { v: 1, ls: { 'pres-simple-cont': { A: { c: 5, n: 6, t, k: 1, best: 5 } } } } } },
+  });
+  await screen(page, 'today');
+  const row = page.getByTestId('duty').filter({ hasText: 'Buch ·' });
+  await expect(row).toHaveCount(1);
+  await expect(row).toContainText('Übung B');
+  expect(errors).toEqual([]);
+});

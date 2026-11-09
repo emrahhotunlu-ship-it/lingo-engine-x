@@ -10,7 +10,7 @@ import { Icon } from '../../ui/Icon';
 import { VButton, VRow } from '../../ui/v';
 import { noteDayOpen } from './dayMoment';
 import { topicName } from '../grammar/topicUi';
-import { bookStepText, useBookDutyStep } from '../grammar/bookStep';
+import { useBookDuty } from './bookDuty';
 import type { GrammarDay } from '../../domain/plan/types';
 import { ExtraRow, MoreRows } from './ExtraRow';
 import { DURATION, EASE_OUT } from '../../ui/motion';
@@ -168,8 +168,13 @@ function UnitCard({ view, rows, sum, fixNone, settled, sub }: { view: TodayView;
   const started = done > 0 || sum.fills.some((f) => f > 0);
   const gt = view.plan?.u?.gt ?? null;
   // Grammatik-Buch begonnen: der Grammatik-Schritt startet die nächste Buch-Seite, also nennt die Zeile genau diese (UX-Prüfung 09.11.2026 B1).
-  const bookStep = useBookDutyStep();
-  const topic = bookStep ? bookStepText(bookStep, t, lang, 'today') : gt && (gt.intro ?? gt.topics[0]) ? dayTitle(gt, t, lang) : null;
+  const bookStep = useBookDuty((s) => s.step);
+  const bookText = !bookStep
+    ? null
+    : bookStep.kind === 'exam'
+      ? t('bkTodayExam', { ch: bookStep.ch })
+      : t('bkTodayPage', { topic: topicName(bookStep.topic, lang), page: t(bookStep.part === 'A' ? 'bkPartShortA' : bookStep.part === 'B' ? 'bkPartShortB' : bookStep.part === 'C' ? 'bkPartShortC' : 'bkPartShortT') });
+  const topic = bookText ?? (gt && (gt.intro ?? gt.topics[0]) ? dayTitle(gt, t, lang) : null);
   const shown: KernRow[] = rows.map((r) => {
     // Stand nur beim Wort-Schritt („12 von 38 erledigt“, Vorschau); Grammatik nennt das Thema.
     const prog = r.kind === 'review' && r.progress && r.progress.total > 0 ? r.progress : null;
