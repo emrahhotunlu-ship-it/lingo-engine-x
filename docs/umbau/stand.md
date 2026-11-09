@@ -1080,3 +1080,6 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 09.11.2026 – Stift-Werkzeug (Ausnahme von der Pause, Emrahs „A“)
 - `src/features/system/pen/` (PenMode, shot, save) ersetzt `CommentMode` + `platform/comments.ts`. Rückmeldungen liegen in `pen/<id>` (Schema `penSchema`, träge Sammlung). Lesen: ArtifactData `list` Sammlung `pen` auf `JLL8…`/`AXHkh6…`; erledigte mit `done: true` markieren. E2E `tests/e2e/pen.spec.ts` (ersetzt `comments.spec.ts`).
 - **Test-Link `AXHkh6…` v99 `1794256864-b9a4`** (Rückweg v98 `1794250971-d204`), Stand `29717390`: Stift-Werkzeug. Geprüft: Typprüfung, Lint, alle Unit-Tests, `pen.spec`/`settings.spec`/`today.spec`, Plattform-/Budget-Prüfung. Stimmen-Paket bleibt stehen.
+
+## 09.11.2026 – LIVE v109: Stift-Werkzeug
+- Emrahs „Live nehmen“ → **live `JLL8…` v109 `1794258277-46d7`** (Rückweg v108 `1794251438-40db`), Stand `886e3a70` (Programm gleich Test-Link v99). Stimmen-Paket bleibt stehen; `js/`/`css/` unberührt.

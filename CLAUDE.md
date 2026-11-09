@@ -95,6 +95,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **Grammatik-Erklärungen passen zur Aufgabe** (Karte „Regel“ folgt dem Muster; „It was the first time“: is → has, was → had) **live** `JLL8…` v103 `1794164803-2e10` (08.11.2026, Emrahs „Direkt live“, Rückweg v102 `1794083815-25a8`; ohne Test-Link)
   - [x] **Großpaket Buch + Tempo** (E1 Fehler-Karte, GB1–GB5: 564 Buch-Aufgaben, 10 neue Wörter/Tag, Grammatik-Buch mit Lektionstest und Klausur, KWT seltener, Prüfer- und Bildschirm-Korrekturen) **live** `JLL8…` v104 `1794207575-38a1` (09.11.2026, Emrahs „Ja live nehmen“, Rückweg v103 `1794164803-2e10`; Test-Link v94 `1794194147-cc2b`); Plan `docs/umbau/buch/plan.md`
   - [x] **Neue Stimme** (Kokoro ersetzt die Gerätestimme, `docs/umbau/stimme.md`) **live** `JLL8…` v108 `1794251438-40db` (09.11.2026, Emrahs „Ja passt live nehmen“, Rückweg v104 `1794207575-38a1`; Test-Link v98 `1794250971-d204`)
+  - [x] **Stift-Werkzeug** (eigenes Rückmelden mit Bild statt claude.ai-Kommentarfeld, `pen/<id>`) **live** `JLL8…` v109 `1794258277-46d7` (09.11.2026, Emrahs „Live nehmen“, Rückweg v108 `1794251438-40db`; Test-Link v99 `1794256864-b9a4`)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
