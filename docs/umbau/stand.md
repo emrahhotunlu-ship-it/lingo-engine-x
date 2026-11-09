@@ -1068,3 +1068,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 
 ## 09.11.2026 – Pause (Emrah)
 - Emrah: erst einmal nichts mehr machen, er hinterlässt Kommentare; Gesamtplan in 1–2 Wochen. Live bleibt v104. Kommentare werden in `docs/umbau/kommentare-sammlung.md` gesammelt, nicht umgesetzt. I0 (`763e47df`) und der Plan Großpaket I liegen bereit, nicht live.
+
+## 09.11.2026 – Neue Stimme (Ausnahme von der Pause, Emrahs Auftrag)
+- Kokoro ersetzt die Gerätestimme (`src/platform/voice/`, Stand `d7639bd3`ff.). Stimmen-Paket `.voice-pack/` (nicht im Repository) aus `scripts/voice/build-pack.mjs`, Version `0887f78af2b7`, 14 Teile, 208 MB Text. Im Testbrowser hier geprüft: Laden 7,3 s, aus dem Speicher 4,7 s, Satz ohne Fehlwerte.
+- Test-Link `AXHkh6…` folgt (enthält auch die I0-Korrekturen `763e47df`). Live erst nach „Ja live nehmen“.
