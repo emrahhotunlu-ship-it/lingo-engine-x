@@ -18,8 +18,11 @@ export function voiceOrt({ multi }) {
       const out = code.replaceAll(/new URL\((["'`])ort-wasm-simd-threaded\.jsep\.wasm\1,\s*import\.meta\.url\)/g, 'new URL("ort-wasm-simd-threaded.jsep.wasm",self.location.href)');
       return out === code ? null : { code: out, map: null };
     },
-    generateBundle() {
+    // Die Bibliothek enthält das Ersatzzeichen U+FFFD wörtlich (in Zeichenketten/Mustern); das Artefakt-Werkzeug nimmt
+    // Dateien damit nicht an. Als Escape-Folge ist es gleichbedeutend.
+    generateBundle(_opts, bundle) {
       if (!multi) return;
+      for (const c of Object.values(bundle)) if (c.type === 'chunk' && c.code.includes('\uFFFD')) c.code = c.code.replaceAll('\uFFFD', '\\uFFFD');
       const src = readFileSync(fileURLToPath(new URL('../node_modules/@huggingface/transformers/dist/ort-wasm-simd-threaded.jsep.mjs', import.meta.url)), 'utf8');
       this.emitFile({ type: 'asset', fileName: VOICE_ORT_FILE, source: `/* lx:voice-engine onnxruntime-web 1.22 (MIT) */\n${src}` });
     },
