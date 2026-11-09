@@ -166,8 +166,9 @@ export function PenMode() {
 
   return (
     <div data-lx-pen-ui="" data-uncommentable="">
+      {/* tabIndex -1: der Griff liegt über allem und darf die Tab-Reihenfolge offener Fenster nicht verlassen (settings.spec „Tab bleibt im Dialog“). */}
       {phase === 'idle' && (
-        <button type="button" className="lx-cmode-btn" onClick={() => setPhase('pick')} aria-label={t('penOpen')} title={t('penOpen')} data-testid="pen-open">
+        <button type="button" tabIndex={-1} className="lx-cmode-btn" onClick={() => setPhase('pick')} aria-label={t('penOpen')} title={t('penOpen')} data-testid="pen-open">
           <Icon name="pen" size={20} />
         </button>
       )}

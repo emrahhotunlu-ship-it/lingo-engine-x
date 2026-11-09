@@ -218,8 +218,8 @@
     },
     "lazyNeu": 150000,
     "bin": 500000,
-    "files": 108,
-    "filesFreigabe": "Hauptsitzung 09.11.2026 (Stimme): neue Stimme bringt zwei Dateien (engine-*.js Sprach-KI-Bibliothek, voice-ort.js Rechenkern-Lader), 108 Dateien. Davor 09.11.2026: Grammatik-Buch (106). 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege, 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
+    "files": 109,
+    "filesFreigabe": "Hauptsitzung 09.11.2026 (Stift): Bild-Stück des Stift-Werkzeugs (html-to-image, nur beim Rückmelden nachgeladen), 109 Dateien. Hauptsitzung 09.11.2026 (Stimme): neue Stimme bringt zwei Dateien (engine-*.js Sprach-KI-Bibliothek, voice-ort.js Rechenkern-Lader), 108 Dateien. Davor 09.11.2026: Grammatik-Buch (106). 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege, 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
     "binEinzeln": {
       "raw-atlas": {
         "bytes": 560000,

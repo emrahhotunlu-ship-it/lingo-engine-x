@@ -71,10 +71,10 @@ describe('Entfernungs-Audit', () => {
     expect(read(join(ROOT, 'src/domain/unit/types.ts'))).not.toMatch(/confirmTheme|themeBy/);
   });
 
-  // (a) Daten bleiben vollständig (Gesamtkonzept „Daten bleiben“, Kap. 9 des Auftrags): das Register der Pfade ist Stand `pre-fokus` plus `read` (Lesen-Modul, 13.10.2026) und `act` (Sammelakte der Aktivierungen, Wörter aktivieren Stufe 2).
+  // (a) Daten bleiben vollständig (Gesamtkonzept „Daten bleiben“, Kap. 9 des Auftrags): das Register der Pfade ist Stand `pre-fokus` plus `read` (Lesen-Modul, 13.10.2026) und `act` (Sammelakte der Aktivierungen, Wörter aktivieren Stufe 2) und `pen` (Stift-Werkzeug, 09.11.2026).
   it('Datenregister unverändert: alle Sammlungen und App-Dokumente sind noch eingetragen', () => {
     expect([...COLLECTION_NAMES].sort()).toEqual(
-      ['act', 'archive', 'articles', 'biz', 'chunk', 'daily', 'feed', 'fluency', 'grammar', 'lesson', 'log', 'lpool', 'meeting', 'out', 'preply', 'read', 'reading', 'say', 'scene', 'talk', 'teacher', 'tones', 'vlog', 'vmod', 'vocab', 'writing', 'wprompt'].sort(),
+      ['act', 'archive', 'articles', 'biz', 'chunk', 'daily', 'feed', 'fluency', 'grammar', 'lesson', 'log', 'lpool', 'meeting', 'out', 'pen', 'preply', 'read', 'reading', 'say', 'scene', 'talk', 'teacher', 'tones', 'vlog', 'vmod', 'vocab', 'writing', 'wprompt'].sort(),
     );
     expect([...APP_DOC_PATHS].sort()).toEqual(
       ['app/assess', 'app/book', 'app/c1', 'app/chat', 'app/compare', 'app/course', 'app/decks', 'app/levels', 'app/lookup', 'app/memory', 'app/patterns', 'app/pool', 'app/profile', 'app/radar', 'app/repair', 'app/schema', 'app/today', 'app/week', 'app/weekly'].sort(),
