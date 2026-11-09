@@ -1072,3 +1072,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 09.11.2026 – Neue Stimme (Ausnahme von der Pause, Emrahs Auftrag)
 - Kokoro ersetzt die Gerätestimme (`src/platform/voice/`, Stand `8c7d5ef0`). Stimmen-Paket `.voice-pack/` (nicht im Repository) aus `scripts/voice/build-pack.mjs`, Version `0887f78af2b7`, 14 Teile, 208 MB Text. Im Testbrowser hier geprüft: Laden 7,3 s, aus dem Speicher 4,7 s, Satz ohne Fehlwerte.
 - Test-Link `AXHkh6…` folgt (enthält auch die I0-Korrekturen `763e47df`). Live erst nach „Ja live nehmen“.
+- **Test-Link `AXHkh6…` v98 `1794250971-d204`** (Rückweg v94 `1794194147-cc2b`; v95 App + Teile 0–2, v96/v97 Teile 3–10, v98 Teile 11–13 + `voice-manifest.json`), Stand `d0b07b04`. Auf Emrahs Wunsch ohne Gesamttest (Typprüfung, Lint, Plattform-/Budget-Prüfung, Sprach-Tests und Probelauf der Stimme im Testbrowser grün). Live erst nach „Ja live nehmen“.
