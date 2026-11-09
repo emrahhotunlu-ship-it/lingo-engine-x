@@ -1065,3 +1065,6 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 09.11.2026 – LIVE v104: Großpaket Buch + Tempo
 - Emrahs „Ja live nehmen“ → **live `JLL8…` v104 `1794207575-38a1`** (Rückweg v103 `1794164803-2e10`), Stand `65765875` (Programm gleich Test-Link v94 `423a8343`, nur der eingebaute Versionsstempel unterscheidet sich). Dateiliste `docs/relaunch/publish/JLL8.json`; `js/`/`css/` der alten App unberührt; Fähigkeiten übernommen (comments composer_only, db, downloads, sample).
 - Erinnerung an Emrah: Tagesziel 35 selbst einstellen (Einstellungen › Lernen › Tagesziel).
+
+## 09.11.2026 – Pause (Emrah)
+- Emrah: erst einmal nichts mehr machen, er hinterlässt Kommentare; Gesamtplan in 1–2 Wochen. Live bleibt v104. Kommentare werden in `docs/umbau/kommentare-sammlung.md` gesammelt, nicht umgesetzt. I0 (`763e47df`) und der Plan Großpaket I liegen bereit, nicht live.
