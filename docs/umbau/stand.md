@@ -1085,3 +1085,6 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Emrahs „Live nehmen“ → **live `JLL8…` v109 `1794258277-46d7`** (Rückweg v108 `1794251438-40db`), Stand `886e3a70` (Programm gleich Test-Link v99). Stimmen-Paket bleibt stehen; `js/`/`css/` unberührt.
 - **Test-Link `AXHkh6…` v100 `1794260365-4e56`** (Rückweg v99), Stand `d675ea75`: Stift – Tastatur klappte am iPhone nach jedem Buchstaben ein (Ursache: `onClose` je Tastendruck neu → Blatt setzte den Fokus neu). Behoben mit `useCallback`, E2E tippt jetzt Buchstabe für Buchstabe (rot ohne, grün mit Behebung).
 - **Test-Link `AXHkh6…` v101 `1794261267-428f`** (Rückweg v100), Stand `289447dd`: Live-Fehler „Grammatik-Übung dreimal von vorne“ – „Weiter“ im Buch startete jede Buch-Seite neu; jetzt Wiedereinstieg an derselben Aufgabe (Sitzung oder Momentaufnahme). E2E `bookResume.spec` (rot ohne, grün mit Behebung; 4× wiederholt grün), `book`/`grammar`/`grammarNew`/`heute`/`uebungRahmen` grün. Enthält auch die Stift-Tastatur (v100).
+
+## 09.11.2026 – LIVE v110: Buch-Seite geht weiter + Stift-Tastatur
+- Emrahs „Live“ → **live `JLL8…` v110 `1794261485-6886`** (Rückweg v109 `1794258277-46d7`), Stand `d2d40679` (Programm gleich Test-Link v101).
