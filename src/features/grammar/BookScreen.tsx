@@ -14,7 +14,9 @@ import { ScreenHeader } from '../learn/ui';
 import { bookNextOf, bookView, pageResult } from './bookStore';
 import { useClock } from '../../app/clock';
 import { TopicSheet } from './GrammarScreen';
-import { startGrammar } from './session';
+import { restoreGrammar, startGrammar, useGrammarSession, type GrammarSnap } from './session';
+import { freshSnapshot } from './resumeKit';
+import { grammarResume } from './resume';
 import { topicName } from './topicUi';
 
 // Grammatik-Buch (Emrah 08.11.2026: „Gezielte Grammatik-Übungen wie im Buch, wo man dann auch eine Klausur schreibt“; docs/umbau/buch/plan.md).
@@ -69,6 +71,14 @@ function PartMarks({ page }: { page: (p: BookPart) => { best: number; n: number;
 
 /** Eine Seite bzw. die Klausur starten. `attempt` = bisherige Versuche (ein neuer Versuch mischt den Test bzw. die Klausur neu). */
 export function startBookStep(step: BookStep, attempt: number, api: Api, go: Go): boolean {
+  // Live-Fehler 09.11.2026 (Emrah: „zweimal gestartet, muss zum dritten Mal von vorne anfangen“): Eine angefangene Runde derselben
+  // Buch-Seite (bzw. Klausur) vom selben Lerntag geht an derselben Aufgabe weiter – aus der laufenden Sitzung oder der Momentaufnahme.
+  const route = { name: 'grammarSession' as const, mode: 'topic' as const, ...(step.kind === 'page' ? { topic: step.topic } : {}) };
+  if (resumeBook(step)) {
+    api.blur();
+    go(route);
+    return true;
+  }
   const first =
     step.kind === 'exam'
       ? startGrammar({
@@ -88,12 +98,22 @@ export function startBookStep(step: BookStep, attempt: number, api: Api, go: Go)
         });
   if (first === null && step.kind === 'page' && !pageTasks(step.topic, step.part, attempt).length) return false;
   if (first === 'typed') api.focusNow();
-  go({
-    name: 'grammarSession',
-    mode: 'topic',
-    ...(step.kind === 'page' ? { topic: step.topic } : {}),
-  });
+  go(route);
   return true;
+}
+
+/** Passt eine laufende Runde (oder die heutige Momentaufnahme) zu diesem Buch-Schritt? Dann herstellen statt neu beginnen. */
+function resumeBook(step: BookStep): boolean {
+  const today = useClock.getState().today;
+  const same = (x: Pick<GrammarSnap, 'status' | 'day' | 'book' | 'tasks' | 'pos'>): boolean => {
+    const b = x.book;
+    if (!b || x.status !== 'running' || x.day !== today || !x.tasks.length || x.pos >= x.tasks.length) return false;
+    return step.kind === 'exam' ? b.part === 'X' && b.chapter === step.chapter : b.part === step.part && b.topic === step.topic;
+  };
+  const s = useGrammarSession.getState();
+  if (s.active && same(s)) return true;
+  const snap = freshSnapshot<GrammarSnap>(grammarResume);
+  return !!snap && same(snap) && restoreGrammar(snap);
 }
 
 /** Name einer Seite für Zeilen und Hinweise („Übung B · Unterscheiden“). */
