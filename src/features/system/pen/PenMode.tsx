@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useT } from '../../../i18n';
 import { Icon } from '../../../ui/Icon';
 import { Button } from '../../../ui/Button';
@@ -148,10 +148,12 @@ export function PenMode() {
     };
   }, []);
 
-  const close = () => {
+  // Stabil (useCallback): das Blatt setzt den Fokus neu, sobald sich `onClose` ändert – mit einer neuen Funktion je Tastendruck
+  // klappte am iPhone nach jedem Buchstaben die Tastatur ein (Emrah 09.11.2026).
+  const close = useCallback(() => {
     setPhase('idle');
     setDraft(null);
-  };
+  }, []);
 
   const send = async () => {
     if (!draft || busy) return;

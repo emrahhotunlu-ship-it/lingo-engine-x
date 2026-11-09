@@ -24,7 +24,11 @@ test('Tipp auf eine Stelle: Bild, Art und Text landen in pen/*, der Reiter wechs
   await expect(page.getByTestId('pen-img')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.getAttribute('data-lx-tab'))).toBe(tab);
   await page.getByTestId('pen-kind').getByRole('button', { name: 'Design' }).click();
-  await page.getByTestId('pen-text').fill('Der Reiter ist zu klein.');
+  // Buchstabe für Buchstabe: der Fokus bleibt im Textfeld (sonst klappt am iPhone nach jedem Buchstaben die Tastatur ein).
+  await page.getByTestId('pen-text').click();
+  await page.keyboard.type('Der Reiter ist zu klein.', { delay: 60 });
+  await expect(page.getByTestId('pen-text')).toBeFocused();
+  await expect(page.getByTestId('pen-text')).toHaveValue('Der Reiter ist zu klein.');
   await page.getByTestId('pen-send').click();
   await expect.poll(async () => (await pens(page)).length).toBe(1);
   const [d] = await pens(page);
