@@ -14,7 +14,7 @@ let lastSeg: number | null = null;
 export type SegBarProps = {
   progress: { n: number; total: number; extra?: number };
   /** Blöcke des Tages; `current` 0-basiert. `null` = ein Abschnitt. */
-  segments?: { count: number; current: number } | null;
+  segments?: { count: number; current: number; done?: readonly boolean[] } | null;
   label?: string | undefined;
   testId?: string | undefined;
   /** Kern (03.11.2026, ehrlicher Zähler): Füllung nach erledigten Karten (n − 1) wie der Text „x von N erledigt“, nicht nach der gezeigten. */
@@ -61,7 +61,7 @@ export function SegBar({ progress, segments = null, label, testId = 'round-progr
         aria-label={label ?? (count > 1 ? t('bandBar', { n: cur + 1, total: count }) : undefined)}
       >
         {Array.from({ length: count }, (_, i) => (
-          <i key={i} data-done={i < cur ? '' : undefined} data-cur={i === cur ? '' : undefined} data-pulse={i === cur && pulse ? '' : undefined}>
+          <i key={i} data-done={(segments?.done ? !!segments.done[i] && i !== cur : i < cur) ? '' : undefined} data-cur={i === cur ? '' : undefined} data-pulse={i === cur && pulse ? '' : undefined}>
             {i === cur && <b style={{ width: `${frac}%` }} />}
           </i>
         ))}

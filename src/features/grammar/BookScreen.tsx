@@ -8,6 +8,7 @@ import { useT, type MessageKey } from '../../i18n';
 import { toast } from '../../ui/Toast';
 import { VButton } from '../../ui/v/VButton';
 import { VRow } from '../../ui/v/VRow';
+import { Icon } from '../../ui/Icon';
 import { useCompanionSee } from '../companion/seeing';
 import { ScreenHeader } from '../learn/ui';
 import { bookNextOf, bookView, pageResult } from './bookStore';
@@ -34,6 +35,37 @@ const PART_SHORT: Record<BookPart, MessageKey> = {
   C: 'bkPartShortC',
   T: 'bkPartShortT',
 };
+
+/**
+ * Marken A B C T einer Lektion (UX-Prüfung 09.11.2026 S6): gefüllt = erledigt, Umriss = offen, roter Umriss = Test nicht bestanden.
+ * Inline-Stile über die Farb-Token (kein neues CSS); bricht nie um.
+ */
+function PartMarks({ page }: { page: (p: BookPart) => { best: number; n: number; k: number } | null }) {
+  const { t } = useT();
+  return (
+    <span className="inline-flex gap-1 whitespace-nowrap" data-testid="book-marks">
+      {BOOK_PARTS.map((p) => {
+        const st = page(p);
+        const done = pageDone(p, st);
+        const fail = !done && p === 'T' && !!st && st.k > 0;
+        const state = done ? t('bkMarkDone') : fail ? t('bkMarkFail') : t('bkStateOpen');
+        return (
+          <span
+            key={p}
+            data-part={p}
+            data-state={done ? 'done' : fail ? 'fail' : 'open'}
+            aria-label={`${t(PART_SHORT[p])}: ${state}`}
+            title={`${t(PART_SHORT[p])}: ${state}`}
+            className="inline-flex h-5 min-w-5 items-center justify-center rounded px-1 text-xs font-semibold"
+            style={done ? { background: 'var(--ok-soft)', color: 'var(--ok)' } : { boxShadow: `inset 0 0 0 1px ${fail ? 'var(--bad)' : 'var(--line-2)'}`, color: fail ? 'var(--bad)' : undefined }}
+          >
+            {p}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
 
 /** Eine Seite bzw. die Klausur starten. `attempt` = bisherige Versuche (ein neuer Versuch mischt den Test bzw. die Klausur neu). */
 export function startBookStep(step: BookStep, attempt: number, api: Api, go: Go): boolean {
@@ -159,7 +191,7 @@ export function BookScreen() {
                     transform: open.has(c.id) ? 'rotate(90deg)' : undefined,
                   }}
                 >
-                  ›
+                  <Icon name="chevronRight" size={18} />
                 </span>
               </button>
             </h2>
@@ -170,7 +202,7 @@ export function BookScreen() {
                     key={tp}
                     icon={BOOK_PARTS.every((p) => pageDone(p, v.page(tp, p))) ? 'check' : 'book'}
                     title={topicName(tp, lang)}
-                    sub={BOOK_PARTS.map((p) => `${t(PART_SHORT[p])} ${pageDone(p, v.page(tp, p)) ? '✓' : '·'}`).join('  ')}
+                    sub={<PartMarks page={(p) => v.page(tp, p)} />}
                     onClick={() => go({ name: 'bookLesson', topic: tp })}
                     data-testid={`book-lesson-${tp}`}
                   />
@@ -208,6 +240,7 @@ export function BookLessonScreen() {
   });
   if (!topic || !ch) return null;
   const goal = patternsOf(topic)?.canDo?.[lang] ?? null;
+  const nextPart = BOOK_PARTS.find((p) => !pageDone(p, v.page(topic, p))) ?? null;
   const subOf = (p: BookPart): string => {
     const st = v.page(topic, p);
     const n = p === 'T' ? LESSON_TEST_N : pageTasks(topic, p).length;
@@ -225,6 +258,14 @@ export function BookLessonScreen() {
   return (
     <div className="lx-vg mx-auto flex w-full max-w-3xl flex-col gap-5 py-4" data-testid="book-lesson" data-topic={topic}>
       <ScreenHeader eyebrow={t('bkChapter', { n: ch.n, name: ch.name[lang] })} title={topicName(topic, lang)} lead={goal ?? undefined} back={back} />
+      {/* UX-Prüfung 09.11.2026 S9: EIN Knopf für das, was als Nächstes dran ist (Kap. 2 Nr. 1). */}
+      {nextPart && (
+        <div>
+          <VButton variant="pri" icon="play" onClick={() => startBookStep({ kind: 'page', chapter: ch.id, topic, part: nextPart }, v.page(topic, nextPart)?.k ?? 0, api, go) || toast(t('grNothing'))} data-testid="book-lesson-next" data-part={nextPart}>
+            {t('bkEndNext', { page: t(PART_SHORT[nextPart]) })}
+          </VButton>
+        </div>
+      )}
       <div className="lx-vg-rows">
         <VRow icon="book" title={t('bkRule')} sub={t('bkRuleSub')} onClick={() => setSheet(true)} data-testid="book-rule" />
         {BOOK_PARTS.map((p) => (
@@ -238,10 +279,7 @@ export function BookLessonScreen() {
           />
         ))}
       </div>
-      <button type="button" className="lx-vg-quiet" onClick={() => go({ name: 'book' })} data-testid="book-lesson-all">
-        {t('bkTitle')}
-      </button>
-      <TopicSheet topic={sheet ? topic : null} onClose={() => setSheet(false)} />
+      <TopicSheet topic={sheet ? topic : null} onClose={() => setSheet(false)} book />
     </div>
   );
 }

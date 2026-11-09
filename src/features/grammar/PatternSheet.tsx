@@ -26,7 +26,7 @@ function Dots({ state }: { state: PatternState }) {
   );
 }
 
-export function PatternSheetBody({ topic, tp, onPractice, readOnly = false }: { topic: string; tp?: TopicPatterns | null; onPractice?: (patId: string) => void; readOnly?: boolean }) {
+export function PatternSheetBody({ topic, tp, onPractice, readOnly = false, book = false }: { topic: string; tp?: TopicPatterns | null; onPractice?: (patId: string) => void; readOnly?: boolean; book?: boolean }) {
   const { t, lang } = useT();
   const day = useClock((s) => s.today);
   const doc = useLive((s) => s.collections.grammar?.get(topic));
@@ -129,6 +129,8 @@ export function PatternSheetBody({ topic, tp, onPractice, readOnly = false }: { 
 
   return (
     <div className="flex flex-col gap-5" data-testid="pattern-sheet" data-topic={topic}>
+      {/* Grammatik-Buch (UX-Prüfung 09.11.2026 S5): nur Regel und Beispiele – Ziel und Stand stehen schon auf der Lektionsseite. */}
+      {!book && (
       <section className="flex flex-col gap-2">
         <h3 className="lx-eyebrow">{t('gxSheetCanDo')}</h3>
         <p className="lx-t-body font-medium" lang={lang}>
@@ -146,6 +148,7 @@ export function PatternSheetBody({ topic, tp, onPractice, readOnly = false }: { 
           ))}
         </ul>
       </section>
+      )}
       {data.patterns.map(card)}
       {loose.length > 0 && (
         <section className="flex flex-col gap-2" data-testid="own-errors">

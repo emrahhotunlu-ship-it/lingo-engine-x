@@ -98,16 +98,17 @@ export function GrammarScreen() {
 const WEG_KEYS = ['nbLernenWeg1', 'nbLernenWeg2', 'nbLernenWeg3', 'nbLernenWeg4', 'nbLernenWeg5'] as const;
 
 /** `inRound`: aus einer laufenden Runde geöffnet („Ganzes Thema ansehen“) – nur lesen, nichts Neues starten. */
-export function TopicSheet({ topic, onClose, inRound = false }: { topic: string | null; onClose: () => void; inRound?: boolean }) {
+export function TopicSheet({ topic, onClose, inRound = false, book = false }: { topic: string | null; onClose: () => void; inRound?: boolean; book?: boolean }) {
   const { t, lang } = useT();
   return (
     <Sheet open={!!topic} onClose={onClose} title={topic ? topicName(topic, lang) : t('grTitle')} closeLabel={t('close')}>
-      {topic && <RuleSheet key={topic} topic={topic} onStarted={onClose} inRound={inRound} />}
+      {topic && <RuleSheet key={topic} topic={topic} onStarted={onClose} inRound={inRound || book} book={book} />}
     </Sheet>
   );
 }
 
-function RuleSheet({ topic, onStarted, inRound = false }: { topic: string; onStarted: () => void; inRound?: boolean }) {
+/** `book`: Regelblatt im Grammatik-Buch – ohne Übungsknopf, Lernstand und „Das kannst du danach“ (das steht auf der Lektionsseite). */
+function RuleSheet({ topic, onStarted, inRound = false, book = false }: { topic: string; onStarted: () => void; inRound?: boolean; book?: boolean }) {
   const { t, tn, lang, num } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -166,6 +167,7 @@ function RuleSheet({ topic, onStarted, inRound = false }: { topic: string; onSta
           </Button>
         </div>
       )}
+      {!book && (
       <div className="flex flex-col gap-2" data-testid="rule-certainty">
         <p className="flex items-center gap-2 text-sm text-muted">
           <Dots n={cert.dots} />
@@ -180,7 +182,8 @@ function RuleSheet({ topic, onStarted, inRound = false }: { topic: string; onSta
           ))}
         </ol>
       </div>
-      {tpats && <PatternSheetBody topic={topic} tp={tpats} onPractice={practicePattern} readOnly={inRound} />}
+      )}
+      {tpats && <PatternSheetBody topic={topic} tp={tpats} onPractice={practicePattern} readOnly={inRound} book={book} />}
       {!tpats && rule && (
         <>
           <section className="flex flex-col gap-2">

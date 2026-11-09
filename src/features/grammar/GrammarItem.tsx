@@ -1501,7 +1501,8 @@ function LegacyGrammarItem({
   const primary = fb
     ? { label: t('exNext'), onClick: () => next(), testId: 'next' }
     : {
-        label: fit.busy ? t('exChecking') : t('exCheck'),
+        // Klausur (`blind`): kein Urteil je Aufgabe, der Knopf geht nur weiter (UX-Prüfung 09.11.2026).
+        label: fit.busy ? t('exChecking') : blind ? t('exNext') : t('exCheck'),
         onClick: () => submit(),
         testId: 'check',
         disabled: fit.busy || (choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false),

@@ -69,6 +69,8 @@ export type SessionEndProps = SessionEndPropsAlt & {
   lead?: ReactNode;
   /** Keine Zeile „a von b richtig“ unter der Überschrift (wenn die Überschrift die Zahl schon nennt). */
   hideScore?: boolean;
+  /** Eine Zeile über der Fehlerliste (z. B. „Diese Sätze kommen morgen wieder.“) statt „kommt … wieder“ an jedem Fehler (`when` leer). */
+  mistakesNote?: string;
 };
 
 export type EndMistake = {
@@ -247,6 +249,7 @@ function GrowthEnd({
   total,
   lead,
   hideScore = false,
+  mistakesNote,
 }: SessionEndProps) {
   const { t } = useT();
   return (
@@ -345,6 +348,11 @@ function GrowthEnd({
           data-testid="session-end-mistakes"
         >
           <Eyebrow>{t("exEndMistakes")}</Eyebrow>
+          {mistakesNote && (
+            <p className="lx-t-meta m-0 text-muted" data-testid="session-end-mistakes-note">
+              {mistakesNote}
+            </p>
+          )}
           <ul className="m-0 flex list-none flex-col gap-2 p-0">
             {mistakes.map((m) => (
               <li
@@ -354,7 +362,7 @@ function GrowthEnd({
               >
                 <WrongRight m={m} />
                 <span className="lx-t-meta text-muted">
-                  {m.rule} · {t("exEndWhen", { when: m.when })}
+                  {m.when ? `${m.rule} · ${t("exEndWhen", { when: m.when })}` : m.rule}
                 </span>
               </li>
             ))}

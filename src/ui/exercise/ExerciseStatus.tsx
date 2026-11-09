@@ -34,7 +34,8 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge, 
         </span>
       )}
       {/* UX-Prüfung W1: „dein Fehler“ nie zusammen mit „Neu“ (ein neues Thema hat keinen alten Fehler). */}
-      {badge && state !== 'new' && (
+      {/* Buch-Test und Klausur (Ton `hint`): die Plakette steht auch bei neuen Aufgaben (UX-Prüfung 09.11.2026, sonst fehlt „das ist die Klausur“). */}
+      {badge && (state !== 'new' || badgeTone === 'hint') && (
         <span className="lx-vu-badge" data-testid={badgeTestId} data-tone={badgeTone}>
           {badge}
         </span>

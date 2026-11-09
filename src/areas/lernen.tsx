@@ -8,10 +8,10 @@ import { GrammarScreen } from '../features/grammar/GrammarScreen';
 import { GrammarSessionScreen } from '../features/grammar/SessionScreen';
 import { WissenScreen } from '../features/grammar/WissenScreen';
 import { BookLessonScreen, BookScreen } from '../features/grammar/BookScreen';
-import { bookNextOf, bookView } from '../features/grammar/bookStore';
+import { bookView } from '../features/grammar/bookStore';
+import { bookDutyStep } from '../features/grammar/bookStep';
 import { useClock } from '../app/clock';
 import { useLive } from '../data/live';
-import { grammarModuleOn } from '../modules/grammar/api';
 import { LearnHub } from '../features/learn/LearnHub';
 import { ChapterPage } from '../features/learn/ChapterPage';
 import { JourneyPage } from '../features/learn/JourneyPage';
@@ -112,7 +112,8 @@ export const lernen = defineArea({
         // offene Buch-Seite im zuletzt bearbeiteten Kapitel (bzw. dessen Klausur). Fehlersätze laufen über „Fehler“ und den Wiederholen-Schritt weiter.
         const live = useLive.getState();
         const v = bookView(live.docs['app/book']);
-        const next = grammarModuleOn(live.docs['app/profile']) && v.recent ? bookNextOf(live.docs['app/book'], useClock.getState().now) : null;
+        // Derselbe Schritt, den die Heute-Zeile nennt (bookStep.ts).
+        const next = bookDutyStep(live.docs, useClock.getState().now);
         const book = !next
           ? null
           : next.kind === 'exam'

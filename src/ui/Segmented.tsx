@@ -20,7 +20,7 @@ type Props<T extends string> = {
   testId?: string;
 };
 
-const COLS: Record<4 | 6 | 8, string> = { 4: 'grid-cols-4', 6: 'grid-cols-3 sm:grid-cols-6', 8: 'grid-cols-4 sm:grid-cols-8' };
+const COLS: Record<4 | 6 | 8, string> = { 4: 'grid-cols-4', 6: 'grid-cols-3 sm:grid-cols-6', 8: 'grid-cols-4 @md:grid-cols-8' };
 
 /** Auswahl als Radiogruppe: Pfeiltasten wechseln, gemeinsames Hervorhebungs-Element gleitet mit. */
 export function Segmented<T extends string>({ label, value, options, onChange, columns, testId }: Props<T>) {
@@ -39,7 +39,9 @@ export function Segmented<T extends string>({ label, value, options, onChange, c
     refs.current[next]?.focus();
   };
 
-  return (
+  // 8 Wahlen (Tagesziel): nach der Breite des Blatts umbrechen, nicht nach der Bildschirmbreite – im 366 px breiten Blatt am iPad wären
+  // 8 Spalten nur 41 px breit (UX-Prüfung 09.11.2026 S8, Tippfläche ≥ 44 px).
+  const group = (
     <div
       role="radiogroup"
       aria-label={label}
@@ -83,4 +85,5 @@ export function Segmented<T extends string>({ label, value, options, onChange, c
       })}
     </div>
   );
+  return columns === 8 ? <div className="@container w-full">{group}</div> : group;
 }

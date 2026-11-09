@@ -32,7 +32,17 @@ import { grammarModuleOn } from '../../modules/grammar/api';
 import { useWhyReason, useWinOn } from '../tutor/WhyLine';
 import { proofText, sureNote } from '../tutor/whyText';
 import { scheduleLearner, useLearner } from '../tutor/learnerLive';
-import { examGrade, LESSON_PASS } from '../../domain/grammar/book';
+import { bookChapters, examGrade, LESSON_PASS } from '../../domain/grammar/book';
+
+/** Stelle einer Lektion im Buch (Kapitel, dann Lektion), für die Reihenfolge im Klausur-Ergebnis. */
+const bookOrder = (topic: string): number => {
+  let i = 0;
+  for (const c of bookChapters()) for (const tp of c.topics) {
+    if (tp === topic) return i;
+    i++;
+  }
+  return i;
+};
 import { pageLabel, startBookStep } from './BookScreen';
 import { bookGrammarLeft, bookKeys, bookTesting, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
 
@@ -94,11 +104,18 @@ export function GrammarSessionScreen() {
   const badge = bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
-      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" area="grammar" />
+      {/* Grammatik-Buch (UX-Prüfung 09.11.2026 S3): der Kopf nennt Lektion und Seite bzw. die Klausur statt nur „Grammatik“. */}
+      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" area="grammar" areaLabel={bookHead(s.book, t, lang)} />
       {/* Kapitel-Arbeit: Themen-Test noch in Vorbereitung (zu wenig Testaufgaben), stattdessen Übung: kurzer Hinweis vor der ersten Aufgabe. */}
       {s.prep && s.status === 'running' && s.pos === 0 && !showCards && (
         <p className="m-0 text-sm text-muted" role="status" data-testid="tt-prep">
           {t('pxKTestPrep')}
+        </p>
+      )}
+      {/* Grammatik-Buch: vor der ersten Aufgabe sagen, dass dies der Lektionstest bzw. die Klausur ist (UX-Prüfung 09.11.2026). */}
+      {bookTest && s.pos === 0 && (
+        <p className="m-0 text-sm text-muted" role="status" data-testid="book-test-intro">
+          {blind ? t('bkExamIntro', { n: s.tasks.length }) : t('bkTestIntro', { n: s.tasks.length, pass: LESSON_PASS })}
         </p>
       )}
       {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da und rückt aus dem Kartenstapel nach vorn (P54, ≤ 300 ms). */}
@@ -258,6 +275,13 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
   );
 }
 
+/** Kopfzeile einer Buch-Runde: „used to · Übung A“ bzw. „Klausur Kapitel 1“. */
+function bookHead(b: ReturnType<typeof useGrammarSession.getState>['book'], t: ReturnType<typeof useT>['t'], lang: 'de' | 'en'): string | undefined {
+  if (!b) return undefined;
+  if (b.part === 'X') return t('bkExam', { n: bookChapters().find((c) => c.id === b.chapter)?.n ?? 1 });
+  return b.topic ? `${topicName(b.topic, lang)} · ${t(b.part === 'A' ? 'bkPartShortA' : b.part === 'B' ? 'bkPartShortB' : b.part === 'C' ? 'bkPartShortC' : 'bkPartT')}` : undefined;
+}
+
 /**
  * Ende einer Buch-Seite bzw. Klausur (Emrah 08.11.2026): Ergebnis als Zahl bzw. Note + Prozent; in der Klausur je Lektion „x von n“ und die
  * schwachen Lektionen; darunter JEDER Fehler mit Lösung und Begründung (in der Klausur kamen sie während der Aufgaben nicht).
@@ -279,7 +303,7 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
     ? t('bkEndExam', { g: g.grade, p: g.pct })
     : b.part === 'T'
       ? t(c >= Math.min(LESSON_PASS, n) ? 'bkEndTestPass' : 'bkEndTestFail', { c, n, pass: LESSON_PASS })
-      : t('bkEndPage', { page: b.part === 'X' ? '' : pageLabel(b.part, t), c, n });
+      : t('bkEndPage', { page: `${b.topic ? `${topicName(b.topic, lang)} · ` : ''}${b.part === 'X' ? '' : pageLabel(b.part, t)}`, c, n });
   const taskOf = (key: string) => s.tasks.find((x) => x.key === key);
   const mistakes = rows
     .filter((r) => !r.ok)
@@ -288,7 +312,10 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
       // Erklärungen A (Emrah): zuerst die Erklärung zu genau dieser falschen Antwort (`why.wrong`), sonst die Begründung der Lösung.
       const hit = task ? whyFor(task, { given: r.given ?? '', picked: r.given ?? '' }).rule : null;
       const why = hit ? hit[lang] : task ? ((lang === 'de' ? task.expl.de : task.expl.en) ?? '') : '';
-      return { wrong: (r.given ?? '').trim() || '…', right: r.right ?? '', rule: why || topicName(r.topic, lang), when: t('gxEndTomorrow') };
+      // UX-Prüfung 09.11.2026 S1: keine Rohwerte („none“, „a → b“), sondern Wortlaut.
+      const mx = task?.x?.kind === 'meaning' ? task.x : null;
+      const shown = (v: string): string => (v === 'none' ? t('exNoError') : mx ? (v === 'a' ? mx.a : v === 'b' ? mx.b : v === 'both' ? t('gxMeaningBoth') : v) : v);
+      return { wrong: shown((r.given ?? '').trim()) || '…', right: shown(r.right ?? ''), rule: why || topicName(r.topic, lang), when: '' };
     });
   const byTopic = new Map<string, { c: number; n: number }>();
   for (const r of rows) {
@@ -301,14 +328,18 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
   const lead = exam ? (
     <div className="flex flex-col gap-2" data-testid="book-exam-result" data-grade={g.grade} data-pct={g.pct}>
       <p className="lx-t-body m-0">{t(g.passed ? 'bkEndExamPass' : 'bkEndExamFail', { c, n })}</p>
-      <ul className="m-0 flex list-none flex-col gap-1 p-0 lx-t-support">
-        {[...byTopic.entries()].map(([tp, e]) => (
-          <li key={tp} className={weak.includes(tp) ? 'text-wrong-text' : ''}>
-            {t('bkEndLesson', { topic: topicName(tp, lang), c: e.c, n: e.n })}
-          </li>
-        ))}
+      {/* UX-Prüfung 09.11.2026 S7: Lektionen in Buch-Reihenfolge, schwache mit Marke – keine zweite Liste derselben Lektionen. */}
+      <ul className="m-0 flex list-none flex-col gap-1 p-0 lx-t-support" data-testid="book-exam-lessons">
+        {[...byTopic.entries()]
+          .sort(([a], [b]) => bookOrder(a) - bookOrder(b))
+          .map(([tp, e]) => (
+            <li key={tp} className={weak.includes(tp) ? 'text-wrong-text' : ''} data-weak={weak.includes(tp) ? '1' : undefined}>
+              {t('bkEndLesson', { topic: topicName(tp, lang), c: e.c, n: e.n })}
+              {weak.includes(tp) ? ` · ${t('bkEndWeakMark')}` : ''}
+            </li>
+          ))}
       </ul>
-      <p className="lx-t-meta m-0 text-muted">{weak.length ? `${t('bkEndWeak')}: ${weak.map((tp) => topicName(tp, lang)).join(', ')}` : t('bkEndWeakNone')}</p>
+      {!weak.length && <p className="lx-t-meta m-0 text-muted">{t('bkEndWeakNone')}</p>}
     </div>
   ) : null;
   const again = () => {
@@ -327,6 +358,7 @@ function BookEnd({ lang }: { lang: 'de' | 'en' }) {
       ms={s.activeMs}
       {...(lead ? { lead } : {})}
       mistakes={mistakes}
+      {...(mistakes.length ? { mistakesNote: t('bkEndMistakesNote') } : {})}
       next={s.block ? { label: t('nbShNext'), run: reportGrammarDone } : { label: t('bkEndBack'), run: back }}
       secondary={{ label: t('bkEndAgain'), run: again }}
     />

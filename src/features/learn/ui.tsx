@@ -128,6 +128,7 @@ export function ExerciseTop({
   duty = null,
   middleOverlay = null,
   area = null,
+  areaLabel,
   title: titleProp,
 }: {
   onClose: () => void;
@@ -143,6 +144,8 @@ export function ExerciseTop({
   area?: 'words' | 'grammar' | null;
   /** Eigene Titelzeile im Kern-Aussehen (z. B. Anwenden: Aufgabe · Pflicht/Extra); geht `area` vor. */
   title?: ReactNode;
+  /** Name statt „Wörter“/„Grammatik“ vor dem Zähler (Grammatik-Buch: „used to · Übung A“). */
+  areaLabel?: string | undefined;
 }) {
   const { t } = useT();
   const player = usePlayer();
@@ -163,10 +166,18 @@ export function ExerciseTop({
     useRunCtx.setState({ ctx, duty });
     return () => useRunCtx.setState({ ctx: null, duty: null });
   }, [ctx, duty]);
-  const segments = ctx === 'duty' && today.duties.total >= 2 ? { count: today.duties.total, current: dutyStep(today.duties, duty) - 1 } : null;
+  // UX-Prüfung 09.11.2026 S4: Abschnitt je Tagesschritt an seiner Stelle, voll nur, wenn genau dieser Schritt erledigt ist (nicht „alle davor“:
+  // über das Grammatik-Buch beginnt Grammatik oft vor den Wörtern).
+  const at = duty ? today.duties.items.findIndex((i) => i.id === duty) : -1;
+  const segments =
+    ctx === 'duty' && today.duties.total >= 2
+      ? at >= 0 && today.duties.items.length === today.duties.total
+        ? { count: today.duties.total, current: at, done: today.duties.items.map((i) => i.state === 'done') }
+        : { count: today.duties.total, current: dutyStep(today.duties, duty) - 1 }
+      : null;
   const label = has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined;
   // Ehrlicher Zähler (Kern): „erledigt“ zählt die abgeschlossenen Karten, nicht die gerade gezeigte.
-  const areaName = area ? t(area === 'words' ? 'kernAreaWords' : 'kernAreaGrammar') : null;
+  const areaName = area ? (areaLabel ?? t(area === 'words' ? 'kernAreaWords' : 'kernAreaGrammar')) : null;
   // Am Handy steht der Zähler unter dem Bereich (sonst schnitte „… erledigt“ neben „Frag Claude“ ab), ab 480 px in einer Zeile mit „ · “.
   const title = titleProp ?? (areaName ? (
     <>
@@ -198,6 +209,7 @@ export function RoundTop({
   closeLabel,
   duty = null,
   area = null,
+  areaLabel,
 }: {
   onClose: () => void;
   progress: { n: number; total: number } | null;
@@ -205,8 +217,9 @@ export function RoundTop({
   closeLabel?: string;
   duty?: DutyId | null;
   area?: 'words' | 'grammar' | null;
+  areaLabel?: string | undefined;
 }) {
-  return <ExerciseTop onClose={onClose} progress={progress} ctx={ctx} duty={duty} area={area} {...(closeLabel ? { closeLabel } : {})} />;
+  return <ExerciseTop onClose={onClose} progress={progress} ctx={ctx} duty={duty} area={area} areaLabel={areaLabel} {...(closeLabel ? { closeLabel } : {})} />;
 }
 
 /** Soll nach grün ohne Hilfe automatisch weitergehen? (`app/profile.autoNext`, Standard an wie in der alten App.) */

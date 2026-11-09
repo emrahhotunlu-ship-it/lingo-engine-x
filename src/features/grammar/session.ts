@@ -733,9 +733,11 @@ export function patternGrowth(s: Pick<State, 'before' | 'patLog' | 'day'>): Arra
 // ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
 
 /** Zähler der Grammatik-Runde (R4): Nenner = geplante Runde, Wiederholungen falscher Aufgaben getrennt als `extra`. */
-export function grammarProgress(s: Pick<State, 'status' | 'tasks' | 'pos' | 'repeatAt'>): { n: number; total: number; extra: number } | null {
+export function grammarProgress(s: Pick<State, 'status' | 'tasks' | 'pos' | 'repeatAt'> & { book?: State['book'] }): { n: number; total: number; extra: number } | null {
   if (s.status !== 'running') return null;
-  const total = s.repeatAt ?? s.tasks.length;
+  // Buch-Seite (UX-Prüfung 09.11.2026 S2): der Zähler zählt die Seite („6 Lücken“); angehängte fällige Fehlersätze laufen danach als Wiederholung.
+  const bookN = s.book?.n && s.book.n < s.tasks.length ? s.book.n : null;
+  const total = bookN ?? s.repeatAt ?? s.tasks.length;
   return { n: Math.min(total, s.pos + 1), total, extra: Math.max(0, s.tasks.length - total) };
 }
 
