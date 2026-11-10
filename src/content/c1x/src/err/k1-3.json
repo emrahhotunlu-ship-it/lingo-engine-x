@@ -503,12 +503,13 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "That was the first time our CEO has presented to a client in Spanish.",
+   "text": "When our CEO visited Madrid in 2022, it was the first time she has presented to a client in Spanish.",
    "bad": {
     "span": "has presented",
     "fix": [
      "had presented",
-     "presented"
+     "presented",
+     "had ever presented"
     ],
     "choices": [
      "have presented",
@@ -518,8 +519,8 @@
    },
    "why": {
     "ok": {
-     "de": "„That was the first time …“ verlangt das Past Perfect: had presented. (Bei „This is the first time“ steht has presented.) Presented geht im US-Alltag auch.",
-     "en": "“That was the first time …” takes the past perfect: had presented. (“This is the first time” takes has presented.) Presented also works in everyday US English."
+     "de": "„it was the first time …“ (Vergangenheit: 2022) verlangt das Past Perfect: had presented. (Bei „it is the first time“ steht has presented.) Presented geht im US-Alltag auch.",
+     "en": "“it was the first time …” (past: 2022) takes the past perfect: had presented. (“it is the first time” takes has presented.) Presented also works in everyday US English."
     },
     "wrong": [
      {
@@ -795,7 +796,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "We used to holding weekly all-hands meetings in the Cologne office.",
+   "text": "We used to holding weekly all-hands meetings in the Cologne office, but now we meet monthly.",
    "bad": {
     "span": "used to holding",
     "fix": [
@@ -809,7 +810,7 @@
    },
    "why": {
     "ok": {
-     "de": "Nach used to steht die Grundform: used to hold. -ing gehört zu be used to. Das -ing kommt von be used to („ich bin es gewohnt, … zu halten“), das man mit used to verwechselt.",
+     "de": "Nach used to steht die Grundform: used to hold. Das -ing kommt von be used to („ich bin es gewohnt, … zu halten“), das man mit used to verwechselt.",
      "en": "After used to comes the base form: used to hold. -ing belongs to be used to, which is easily confused."
     },
     "wrong": [
@@ -849,7 +850,8 @@
    "bad": {
     "span": "would own",
     "fix": [
-     "used to own"
+     "used to own",
+     "owned"
     ],
     "choices": [
      "would owning",
@@ -859,8 +861,8 @@
    },
    "why": {
     "ok": {
-     "de": "would geht nur mit Handlungen, die sich wiederholen. own als Besitz ist ein Zustand, dafür used to.",
-     "en": "Would only works with repeated actions. Own is a state, so used to."
+     "de": "would geht nur mit Handlungen, die sich wiederholen. own als Besitz ist ein Zustand, dafür used to. (Oder einfach: owned.)",
+     "en": "Would only works with repeated actions. Own is a state, so used to. (Or simply: owned.)"
     },
     "wrong": [
      {
@@ -946,7 +948,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "I am used to work across several time zones at the same time.",
+   "text": "I am now used to work across several time zones, so late calls no longer bother me.",
    "bad": {
     "span": "to work",
     "fix": [

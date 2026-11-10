@@ -390,41 +390,42 @@
    "pat": "ep.do-emph",
    "why": {
     "ok": {
-     "de": "Nach does steht die Grundform: does send.",
-     "en": "After does the base form follows: does send."
+     "de": "Nach does steht die Grundform: does send (oder ohne Betonung einfach: sends).",
+     "en": "After does the base form follows: does send (or, without emphasis, simply: sends)."
     },
     "wrong": [
      {
-      "opt": "sent",
+      "opt": "does sent",
       "de": "Nach does steht die Grundform, nicht die Vergangenheit: does send.",
       "en": "After does comes the base form, not the past: does send."
      },
      {
-      "opt": "sending",
-      "de": "Nach does steht die Grundform, keine -ing-Form: does send.",
-      "en": "After does comes the base form, not the -ing form: does send."
+      "opt": "do sends",
+      "de": "Zu he passt does, und danach steht die Grundform: does send.",
+      "en": "He takes does, followed by the base form: does send."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „sends“, nicht hier.",
-      "en": "The mistake is at “sends”, not here."
+      "de": "Der Fehler steckt bei „does sends“, nicht hier.",
+      "en": "The mistake is at “does sends”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „sends“. Richtig ist send.",
-      "en": "There is a mistake: “sends”. The right form is send."
+      "de": "Doch, hier steckt ein Fehler: „does sends“. Richtig ist does send.",
+      "en": "There is a mistake: “does sends”. The right form is does send."
      }
     ]
    },
    "bad": {
-    "span": "sends",
+    "span": "does sends",
     "fix": [
-     "send"
+     "does send",
+     "sends"
     ],
     "choices": [
-     "send",
-     "sent",
-     "sending"
+     "does send",
+     "does sent",
+     "do sends"
     ]
    },
    "text": "He does sends the weekly report on time, so please stop worrying."
@@ -721,7 +722,8 @@
    "bad": {
     "span": "does loves",
     "fix": [
-     "does love"
+     "does love",
+     "loves"
     ],
     "choices": [
      "does love",
@@ -1272,7 +1274,8 @@
    "bad": {
     "span": "a new",
     "fix": [
-     "a new one"
+     "a new one",
+     "a new phone"
     ],
     "choices": [
      "a new one",

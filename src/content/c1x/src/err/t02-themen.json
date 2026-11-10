@@ -709,7 +709,7 @@
      "is to join"
     ]
    },
-   "text": "The new director should join us in January, but she took another job."
+   "text": "The new director should join us last January, but she took another job."
   },
   {
    "id": "err-0617",
@@ -801,7 +801,8 @@
    "bad": {
     "span": "No one of",
     "fix": [
-     "None of"
+     "None of",
+     "Not one of"
     ],
     "choices": [
      "None of",
@@ -852,7 +853,9 @@
     "span": "did not hardly change",
     "fix": [
      "hardly changed",
-     "barely changed"
+     "barely changed",
+     "didn’t change",
+     "did not change"
     ],
     "choices": [
      "hardly changed",

@@ -15,7 +15,9 @@
     "span": "I order",
     "fix": [
      "I will order",
-     "I’ll order"
+     "I’ll order",
+     "I’m going to order",
+     "I’m ordering"
     ],
     "choices": [
      "I will order",
@@ -25,8 +27,8 @@
    },
    "why": {
     "ok": {
-     "de": "Ein spontaner Entschluss im Moment des Sprechens braucht will: I’ll order. Deutsch „ich bestelle“ nutzt das Präsens.",
-     "en": "A spontaneous decision made while speaking needs will: I’ll order. German “ich bestelle” uses the present."
+     "de": "Ein spontaner Entschluss im Moment des Sprechens braucht will: I’ll order. Deutsch „ich bestelle“ nutzt das Präsens. (I’m going to order / I’m ordering geht auch.)",
+     "en": "A spontaneous decision made while speaking needs will: I’ll order. German “ich bestelle” uses the present. (I’m going to order / I’m ordering also work.)"
     },
     "wrong": [
      {
@@ -217,7 +219,8 @@
     "span": "about starting",
     "fix": [
      "about to start",
-     "about to begin"
+     "about to begin",
+     "starting"
     ],
     "choices": [
      "about start",

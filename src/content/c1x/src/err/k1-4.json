@@ -457,7 +457,7 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "Under our policy, if an invoice arrives after the cutoff, it would be processed on the next business day.",
+   "text": "Under our policy, if an invoice arrives after the cutoff, it would be processed on the next business day – that happens almost every week.",
    "bad": {
     "span": "would be processed",
     "fix": [
@@ -906,41 +906,42 @@
    "src": "seed",
    "text": "Unless you don’t sign the contract today, the offer will expire tonight.",
    "bad": {
-    "span": "don’t sign",
+    "span": "Unless you don’t sign",
     "fix": [
-     "sign"
+     "Unless you sign",
+     "If you don’t sign"
     ],
     "choices": [
-     "didn’t sign",
-     "won’t sign",
-     "sign"
+     "Unless you sign",
+     "Unless you didn’t sign",
+     "Unless you won’t sign"
     ]
    },
    "why": {
     "ok": {
-     "de": "Unless bedeutet schon „wenn nicht“. Eine zweite Verneinung dreht den Sinn um: Unless you sign. Deutsch „wenn du nicht unterschreibst“ legt die Verneinung nahe, aber unless enthält sie schon.",
-     "en": "Unless already means “if not”. A second negation reverses the meaning: Unless you sign."
+     "de": "Unless bedeutet schon „wenn nicht“. Eine zweite Verneinung dreht den Sinn um: Unless you sign (oder: If you don’t sign). Deutsch „wenn du nicht unterschreibst“ legt die Verneinung nahe, aber unless enthält sie schon.",
+     "en": "Unless already means “if not”. A second negation reverses the meaning: Unless you sign (or: If you don’t sign)."
     },
     "wrong": [
      {
-      "opt": "didn’t sign",
+      "opt": "Unless you didn’t sign",
       "de": "„didn’t sign“ verneint ein zweites Mal und ist Vergangenheit.",
       "en": "“didn’t sign” negates a second time and is past."
      },
      {
-      "opt": "won’t sign",
+      "opt": "Unless you won’t sign",
       "de": "„won’t sign“ ist ebenfalls verneint.",
       "en": "“won’t sign” is also negated."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „don’t sign“, nicht hier.",
-      "en": "The mistake is at “don’t sign”, not here."
+      "de": "Der Fehler steckt bei „Unless you don’t sign“, nicht hier.",
+      "en": "The mistake is at “Unless you don’t sign”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „don’t sign“ ist falsch.",
-      "en": "There is a mistake: “don’t sign” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „Unless you don’t sign“ ist doppelt verneint.",
+      "en": "There is a mistake: “Unless you don’t sign” is a double negative."
      }
     ]
    }
@@ -1058,7 +1059,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "But for your help last week, we would miss yesterday’s launch.",
+   "text": "But for your help last week, we would miss yesterday’s launch, which went perfectly.",
    "bad": {
     "span": "would miss",
     "fix": [
@@ -1451,7 +1452,7 @@
    "level": "B2+",
    "dom": "biz",
    "src": "seed",
-   "text": "I wish our colleagues will update the shared calendar every day.",
+   "text": "I wish our colleagues will update the shared calendar every day, but they never do.",
    "bad": {
     "span": "will update",
     "fix": [
@@ -1606,41 +1607,42 @@
    "src": "seed",
    "text": "It’s high time we replace the old server before it fails again.",
    "bad": {
-    "span": "replace",
+    "span": "we replace",
     "fix": [
-     "replaced"
+     "we replaced",
+     "to replace"
     ],
     "choices": [
-     "replacing",
-     "will replace",
-     "replaced"
+     "we replacing",
+     "we will replace",
+     "we replaced"
     ]
    },
    "why": {
     "ok": {
-     "de": "Nach It’s high time steht die Past-Form, obwohl es um jetzt geht: we replaced. Deutsch „es ist höchste Zeit, dass wir ersetzen“ nutzt das Präsens.",
-     "en": "After It’s high time comes the past form, although it is about now: we replaced. German uses the present."
+     "de": "Nach It’s high time steht die Past-Form, obwohl es um jetzt geht: we replaced (oder kürzer: It’s high time to replace). Deutsch „es ist höchste Zeit, dass wir ersetzen“ nutzt das Präsens.",
+     "en": "After It’s high time comes the past form, although it is about now: we replaced (or shorter: It’s high time to replace). German uses the present."
     },
     "wrong": [
      {
-      "opt": "replacing",
+      "opt": "we replacing",
       "de": "„replacing“ allein ist kein Prädikat.",
       "en": "“replacing” alone is no predicate."
      },
      {
-      "opt": "will replace",
+      "opt": "we will replace",
       "de": "„will replace“ ist Zukunft, aber die Wendung verlangt die Past-Form.",
       "en": "“will replace” is future, but the phrase takes the past form."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „replace“, nicht hier.",
-      "en": "The mistake is at “replace”, not here."
+      "de": "Der Fehler steckt bei „we replace“, nicht hier.",
+      "en": "The mistake is at “we replace”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „replace“ ist falsch.",
-      "en": "There is a mistake: “replace” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „we replace“ ist falsch.",
+      "en": "There is a mistake: “we replace” is wrong."
      }
     ]
    }
