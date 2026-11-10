@@ -7,10 +7,12 @@ import { vcfgSchema } from './schemas';
 
 export const PROFILE_PATH = 'app/profile';
 export const MIN_OPTIONS = [10, 15, 20, 30] as const;
-export const NEW_OPTIONS = [0, 2, 5, 10] as const;
+export const NEW_OPTIONS = [0, 2, 5, 10, 15] as const;
+/** Großpaket WT: Tagesziel in Wörtern (0 = nach Minuten). */
+export const CNT_OPTIONS = [30, 40, 50, 60] as const;
 export const RET_OPTIONS = [0.85, 0.9, 0.95] as const;
 
-export type SettingsPatch = { min?: (typeof MIN_OPTIONS)[number]; ret?: (typeof RET_OPTIONS)[number]; newPerDay?: (typeof NEW_OPTIONS)[number]; anki?: 0 | 1; pre?: 0 | 1 };
+export type SettingsPatch = { cnt?: (typeof CNT_OPTIONS)[number] | 0; min?: (typeof MIN_OPTIONS)[number]; ret?: (typeof RET_OPTIONS)[number]; newPerDay?: (typeof NEW_OPTIONS)[number]; anki?: 0 | 1; pre?: 0 | 1 };
 
 /** Liefert, ob der Wert jetzt gespeichert ist (auch: war schon so). `false` bei Fehler oder fehlendem/ungültigem Profil. */
 export async function writeVocabSettings(writer: Writer, patch: SettingsPatch): Promise<boolean> {
@@ -19,7 +21,7 @@ export async function writeVocabSettings(writer: Writer, patch: SettingsPatch): 
     await writer.transform(PROFILE_PATH, (cur) => {
       if (!cur) return null;
       const update: Record<string, unknown> = {};
-      const keys = (['min', 'ret', 'anki', 'pre'] as const).filter((k) => patch[k] !== undefined);
+      const keys = (['min', 'ret', 'anki', 'pre', 'cnt'] as const).filter((k) => patch[k] !== undefined);
       if (keys.length) {
         const base = vcfgSchema.safeParse(cur.vcfg);
         // Ohne gültiges vcfg ist das Modul nie eingeschaltet worden: dann gibt es hier nichts einzustellen.

@@ -1,10 +1,11 @@
 import { z } from 'zod';
-import { dayKey, loadAtlasText, loadColCharge, logError, logWarn, type Writer } from '../shared';
+import { dayKey, loadAtlasText, loadColCharge, loadWtBank, logError, logWarn, type Writer } from '../shared';
+import { exDeKey } from '../domain/card';
 import { isNewLex, type Item } from '../domain/catalog';
 import { headwordOf } from '../domain/dupes';
 import { emptyLex } from '../domain/planner';
 import { WARN_2 } from '../domain/capacity';
-import { bandPool, type BandRaw, type ColRaw, colPool, DEFAULT_EDGE, type Fresh, jobPool, type JobRaw, refillNeed, type Src, V5_SRC, type Weights } from '../domain/sources';
+import { bandPool, type BandRaw, type ColRaw, colPool, DEFAULT_EDGE, type Fresh, jobPool, type JobRaw, refillNeed, type Src, V5_SRC, type Weights, type WtRaw, wtPool } from '../domain/sources';
 
 // Großpaket A Schritt 7 (V5, vokabeln/s7-bau.md): Nachfüllen neuer Wörter aus den Quellen Wortpartner, Beruf und Häufigkeitsliste, bevor der
 // Tagesplan eingefroren wird. Nur ergänzend (`createIfMissing`, nie überschreiben); jedes neue Dokument hat Ursprungssatz und Herkunft
@@ -27,19 +28,20 @@ export function readPlace(doc: Doc | null): Place | null {
 export const REFILL_DOC_CAP = WARN_2 - 500;
 
 /** Rohdaten der Quellen (Tests geben sie hinein; die App lädt sie per dynamischem Import). */
-export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[] };
+export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[]; /** Großpaket WT: geprüfte Wortliste (vor der Häufigkeitsliste). */ wt?: readonly WtRaw[] };
 
 /** Häufigkeitsliste als Quelle neuer Wörter (aus bis zur geprüften Lehrer-Charge, Inhalts-Audit 04.11.2026). */
 export const ATLAS_REFILL = false;
 
 export async function loadSources(): Promise<SourceData> {
-  const [{ CHARGE2 }, atlasText, colRaw] = await Promise.all([import('../content'), loadAtlasText(), loadColCharge()]);
+  const [{ CHARGE2 }, atlasText, colRaw, wtRaw] = await Promise.all([import('../content'), loadAtlasText(), loadColCharge(), loadWtBank()]);
   const atlas = JSON.parse(atlasText) as { items?: BandRaw[] };
   const col = (colRaw as { items?: ColRaw[] }).items ?? [];
   // Inhalts-Audit 04.11.2026 (english-teacher, Note 3/10): die Häufigkeitsliste trägt ungeprüfte Fremd-Sätze („He's a fan of Klingon opera.“)
   // und falsche Bedeutungen. Sie füllt keine neuen Wörter mehr nach, bis eine geprüfte Lehrer-Charge mit Business-Sätzen sie ersetzt
   // (`ATLAS_REFILL`); schon angelegte Wörter bleiben unverändert.
-  return { job: CHARGE2.reviewed ? CHARGE2.items : [], col, band: ATLAS_REFILL ? (atlas.items ?? []) : [] };
+  const wt = (wtRaw as { items?: WtRaw[] }).items ?? [];
+  return { job: CHARGE2.reviewed ? CHARGE2.items : [], col, band: ATLAS_REFILL ? (atlas.items ?? []) : [], wt };
 }
 
 const slug = (s: string): string =>
@@ -60,7 +62,7 @@ export function freshDoc(f: Fresh, nowMs: number, order: number): { path: string
   const doc: Doc =
     f.kind === 'chunk'
       ? { id, en: f.word, de: f.de, src, ref: f.ref, created: nowMs, order, ex: f.ex, lex }
-      : { id, word: f.word, de: f.de, ex: f.ex, pos: f.pos, src, ref: f.ref, added: dayKey(nowMs), order, state: 'new', col: [], lex };
+      : { id, word: f.word, de: f.de, ex: f.ex, pos: f.pos, src, ref: f.ref, added: dayKey(nowMs), order, state: 'new', col: [], lex, ...(f.exDe ? { exDe: { [exDeKey(f.ex)]: f.exDe } } : {}), ...(f.def ? { def: f.def } : {}) };
   return { path: `${f.kind}/${id}`, doc };
 }
 
@@ -105,7 +107,8 @@ export async function refillFresh(
   const pools = {
     col: colPool(data.col, base, have, today),
     job: jobPool(data.job, have),
-    band: o.place === 'skip' ? [] : bandPool(data.band, o.place?.edge ?? DEFAULT_EDGE, have, new Set((o.place?.ok ?? []).map(headwordOf))),
+    // Großpaket WT: zuerst die geprüfte Wortliste (unabhängig von der Einstufungsgrenze), danach – falls eingeschaltet – die Häufigkeitsliste.
+    band: [...wtPool(data.wt ?? [], have, new Set((o.place && o.place !== 'skip' ? o.place.ok : []).map(headwordOf))), ...(o.place === 'skip' ? [] : bandPool(data.band, o.place?.edge ?? DEFAULT_EDGE, have, new Set((o.place?.ok ?? []).map(headwordOf))))],
   };
   const need = refillNeed(o.quota, stock, { col: pools.col.length, job: pools.job.length, band: pools.band.length }, o.w);
   const out: [string, Doc][] = [];

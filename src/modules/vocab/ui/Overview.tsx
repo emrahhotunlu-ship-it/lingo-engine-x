@@ -3,14 +3,14 @@ import { getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switch, toast, us
 import { dayMinutes, logError, normGoalMin } from '../shared';
 import { lexOf } from '../data/lex';
 import { readVlogRecent } from '../data/history';
-import { NEW_OPTIONS, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
+import { CNT_OPTIONS, NEW_OPTIONS, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
 import { vcfgSchema } from '../data/schemas';
 import { Catalog, forecastMinutes, type Item } from '../domain/catalog';
 import { outlook, type Outlook } from '../domain/overview';
 import { YOUNG_MAX_LV } from '../domain/planner';
 import { PLACE_FLOOR } from '../domain/place';
 import { avg, boostExtraMinutes, groupCounts, rateOf, RET_GAP, RET_MIN_SAMPLE, RET_WINDOW_DAYS, retention, retentionGap, safetyMinutes, youngBoost, type Retention } from '../domain/stats';
-import { DEFAULT_CFG, type Lex, type VocabCfg } from '../domain/types';
+import { countCfg, DEFAULT_CFG, type Lex, type VocabCfg } from '../domain/types';
 import { readPlace, type Place } from '../data/refill';
 import { VMOD_PLACE_PATH } from '../registry';
 
@@ -33,7 +33,8 @@ function cfgOf(profile: Doc | null | undefined): VocabCfg {
   const npd = profile && typeof profile.newPerDay === 'number' && (NEW_OPTIONS as readonly number[]).includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
   const min = dayMinutes(normGoalMin(profile?.goalMin)).words;
   if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay: npd };
-  return { min, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0 };
+  const c = countCfg(raw.data.cnt, min, false);
+  return { min: c.min, cnt: c.cnt, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0 };
 }
 
 /** Alle sichtbaren Lexeme (pausierte zählen nicht), live. */
@@ -323,6 +324,18 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
   return (
     <section className="flex flex-col gap-5" data-testid="vs">
       <h3 className="lx-eyebrow m-0">{t('vmSetTitle')}</h3>
+      <div className="flex flex-col gap-2">
+        <p className="m-0 text-sm font-medium">{t('vmSetCnt')}</p>
+        <Segmented
+          label={t('vmSetCnt')}
+          value={String(cfg.cnt ?? 0)}
+          columns={4}
+          testId="vs-cnt"
+          options={CNT_OPTIONS.map((n) => ({ value: String(n), label: String(n), testId: `vs-cnt-${n}` }))}
+          onChange={(v) => save({ cnt: Number(v) as SettingsPatch['cnt'] })}
+        />
+        <p className="m-0 text-sm text-muted">{t('vmSetCntHint')}</p>
+      </div>
       <div className="flex flex-col gap-2">
         <p className="m-0 text-sm font-medium">{t('vmSetMin')}</p>
         {/* UX-Neuanfang C (Emrah 02.11.2026): die Wörter-Zeit folgt dem Tagesziel (40 %, mindestens 10 Min.), keine eigene Wahl mehr. */}

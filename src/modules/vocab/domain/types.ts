@@ -136,9 +136,18 @@ export type Grade = 1 | 2 | 3 | 4;
  * Wörter (Stufe ≤ 4), solange ihre echte Rate deutlich unter dem Ziel liegt; steht je Lerntag fest in `vmod/day.ry`. Fehlt sie: `ret`.
  */
 /** `w` (Großpaket A S7): Gewichte der Quellen neuer Wörter aus `vcfg.w`; fehlt = Startgewichte (domain/sources.ts). */
-export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null; retY?: number | null; anki?: boolean; pre?: boolean; w?: { col: number; job: number; own: number; band: number }; /** Kurzer Tag (2A): Rückstand höchstens ein Budget, nichts verschieben, nichts vorziehen. */ short?: boolean };
+export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null; /** Tagesziel in Wörtern (Großpaket WT); 0/fehlt = nach Minuten. */ cnt?: number; retY?: number | null; anki?: boolean; pre?: boolean; w?: { col: number; job: number; own: number; band: number }; /** Kurzer Tag (2A): Rückstand höchstens ein Budget, nichts verschieben, nichts vorziehen. */ short?: boolean };
 // Emrah 08.11.2026 (Wörter-Tempo „A“): Standard 10 neue Wörter pro Tag.
 export const DEFAULT_CFG: VocabCfg = { min: 15, ret: 0.9, newPerDay: 10, mod: 0, restDow: null };
+/** Großpaket WT (Emrah 10.11.2026: „am Ende des Tages immer so 50 Wörter abgefragt“): Standard-Tagesziel in Wörtern. */
+export const WORDS_PER_DAY = 50;
+/** Zeit-Notbremse im Wörter-Modus: so viele Minuten je Wort im Plan (50 Wörter → 40 Minuten), mindestens die Wörter-Zeit aus dem Tagesziel. */
+export const CAP_MIN_PER_WORD = 0.8;
+/** Tagesziel in Wörtern aus `vcfg.cnt` (fehlt → WORDS_PER_DAY, 0 → nach Minuten) und die Zeit-Notbremse dazu. Am kurzen Tag immer nach Minuten. */
+export function countCfg(cnt: number | undefined, minutes: number, short: boolean): { cnt: number; min: number } {
+  const n = short ? 0 : (cnt ?? WORDS_PER_DAY);
+  return { cnt: n, min: n > 0 ? Math.max(minutes, Math.ceil(n * CAP_MIN_PER_WORD)) : minutes };
+}
 
 /** Median-Zeiten je Form in ms (vmod/stats.med); Startwerte, bis echte Antworten da sind. */
 export type FormStats = Partial<Record<Form, number>>;

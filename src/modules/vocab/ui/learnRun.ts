@@ -2,7 +2,7 @@ import { addDays, dayKey, dayStartOf, daysBetween, logError, logWarn } from '../
 import { teachOf } from '../content';
 import { lexOf } from '../data/lex';
 import { vocabModuleMarkSchema } from '../data/schemas';
-import { addLater, dropLater, freezeDay, markLife, replayDraft, type UseDoc, readUseDoc, type VocabDeps, writeAnswer, writeIntro, writeProbe, writeUse } from '../data/store';
+import { addLater, dropLater, freezeDay, markLife, replayDraft, type UseDoc, readUseDoc, type VocabDeps, writeAnswer, writeIntro, writeProbe, writeUse, writeVlog } from '../data/store';
 import type { UseLater } from '../data/schemas';
 import { applyUse, EV_MIN_LV, sentenceWith, type UseInput, type UseResult } from '../domain/apply';
 import { openWhys, answerOfUse, type UseModel, modelOfUse } from '../domain/use';
@@ -17,7 +17,9 @@ import type { Check, CheckDict } from '../domain/check';
 import { buildDayPlan, type DayPlan, newCostMs } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
-import { type Answer, type AnswerResult, introduce } from '../domain/planner';
+import { type Answer, type AnswerResult, FLAG, introduce } from '../domain/planner';
+import { type PickCand, type PickModel, pickOptions } from '../domain/pick';
+import { tuple } from '../domain/vlog';
 import { doneToday, planCount } from '../domain/dayCount';
 import { planMed } from '../domain/pace';
 import { capToday, readPace, writePace } from '../data/shrink';
@@ -49,6 +51,11 @@ export type LearnView =
   /** `teach`: übernommenes Wort zum ersten Mal in der neuen App – erst einmal die Einführungskarte (nur Anzeige), dann diese Karte (K10). */
   | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null; teach?: CardModel | null }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
+  /**
+   * Großpaket WT: Wiedererkennen gleich nach der Einführung – die richtige Bedeutung aus vier wählen (keine Planwirkung, im Verlauf als
+   * `choice`). `chosen` = getippte Möglichkeit (danach Lösung sichtbar, „Weiter“).
+   */
+  | { k: 'pick'; path: string; head: string; options: string[]; right: number; chosen: number | null; n: number; left: number; shownAt: number }
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
   /** Anwenden oder eigener Satz (Großpaket A S5c, Bilder s2-07 … s2-12); `later` = Nachprüfung eines gemerkten Textes (nur Belege). */
@@ -1035,7 +1042,49 @@ export class LearnRun {
     if (v.k !== 'card' || v.kind !== 'intro') return;
     this.check('', m, true);
     const after = this.view;
-    if (after.k === 'band' && after.kind === 'intro' && this.pending?.kind === 'intro') this.next();
+    if (after.k !== 'band' || after.kind !== 'intro' || this.pending?.kind !== 'intro') return;
+    const pick = this.pickFor(after.card);
+    if (pick) this.set({ k: 'pick', path: after.card.path, head: after.card.head, ...pick, chosen: null, n: after.n, left: after.left, shownAt: this.env.now() });
+    else this.next();
+  }
+
+  /** Großpaket WT: vier Bedeutungen für ein neues Einzelwort (Ablenker aus dem Bestand); `null` = keine Auswahl möglich. */
+  private pickFor(card: CardModel): PickModel | null {
+    const cat = this.cat;
+    const lex = cat?.get(card.path)?.lex;
+    if (!cat || !lex || lex.k !== 'w' || !card.de) return null;
+    const pool: PickCand[] = [];
+    for (const it of cat.items()) {
+      if (it.path === card.path || !it.path.startsWith('vocab/')) continue;
+      const d = this.docs.get(it.path);
+      if (d && typeof d.de === 'string' && d.de) pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null });
+    }
+    return pickOptions({ path: card.path, de: card.de, pos: card.pos ?? null }, pool, `${card.path}|${dayKey(this.env.now())}`);
+  }
+
+  /** Auswahl getippt: Lösung zeigen, im Verlauf festhalten (Form `choice`, ohne Planwirkung). */
+  pickChoose(i: number): void {
+    const v = this.view;
+    if (v.k !== 'pick' || v.chosen !== null) return;
+    const now = this.env.now();
+    this.set({ ...v, chosen: i });
+    const lex = this.cat?.get(v.path)?.lex;
+    if (!lex) return;
+    const deps = this.env.deps;
+    const t = tuple({ t: now, path: v.path, track: 0, form: 'choice', note: 0, outcome: i === v.right ? 'ok' : 'wrong', ms: Math.max(0, now - v.shownAt), fk: 0, hint: 0, sentence: null, lv: lex.lv, flags: FLAG.step });
+    this.chain = this.chain.then(async () => {
+      try {
+        await writeVlog(deps, [t], deps.device);
+      } catch (err) {
+        logWarn('vocab:pick-log', err);
+      }
+    });
+  }
+
+  /** Nach der Auswahl weiter (bucht die Einführung, nächste Karte). */
+  pickNext(): void {
+    if (this.view.k !== 'pick' || this.view.chosen === null) return;
+    this.next();
   }
 
   /** Rein gerechnetes Ergebnis je Art (gebucht wird dasselbe auf dem frischen Dokument). */

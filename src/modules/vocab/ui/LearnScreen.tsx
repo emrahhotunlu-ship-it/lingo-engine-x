@@ -9,6 +9,7 @@ import { VMOD_DAY_PATH, VMOD_USE_PATH } from '../registry';
 import { makeUseAi } from './aiCheck';
 import { deviceId } from './device';
 import { LearnCard } from './LearnCard';
+import { PickCard } from './PickCard';
 import { sitKey, UseCard } from './UseCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
 import { readMistakes } from './mistakes';
@@ -260,6 +261,8 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
       return run ? frame(run.progress(), <LearnCard view={view} run={run} />) : null;
     case 'use':
       return run ? frame(run.progress(), <UseCard view={view} run={run} />) : null;
+    case 'pick':
+      return run ? frame(run.progress(), <PickCard view={view} run={run} />) : null;
   }
 }
 

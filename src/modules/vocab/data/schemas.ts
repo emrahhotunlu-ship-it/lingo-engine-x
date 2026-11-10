@@ -167,6 +167,8 @@ export const vcfgSchema = z
     anki: z.union([z.literal(0), z.literal(1)]).optional(),
     /** Satz vor dem Prüfen anhören (Lücke als kurzer Ton, Bild s2-13). Fehlt = an. */
     pre: z.union([z.literal(0), z.literal(1)]).optional(),
+    /** Großpaket WT (Emrah 10.11.2026): Tagesziel in Wörtern (Abfragen) statt Minuten; 0 = nach Minuten wie bisher. Fehlt = WORDS_PER_DAY. */
+    cnt: z.union([z.literal(0), z.literal(30), z.literal(40), z.literal(50), z.literal(60)]).optional(),
   })
   .strict();
 

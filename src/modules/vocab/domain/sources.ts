@@ -11,7 +11,8 @@ export type Src = 'col' | 'job' | 'own' | 'band';
 /** Feste Reihenfolge bei Gleichstand (Tiefe vor Breite, plan.md §8). */
 export const SRC_ORDER: readonly Src[] = ['col', 'job', 'own', 'band'];
 export type Weights = Record<Src, number>;
-export const SRC_WEIGHTS: Readonly<Weights> = { col: 0.3, job: 0.3, own: 0.25, band: 0.15 };
+// Großpaket WT (Emrah 10.11.2026): die geprüfte Wortliste (Quelle `band`) trägt den Großteil der neuen Wörter.
+export const SRC_WEIGHTS: Readonly<Weights> = { col: 0.15, job: 0.15, own: 0.2, band: 0.5 };
 /** Herkunft (`doc.src`) der vom Modul angelegten Lexeme. */
 export const V5_SRC: Readonly<Record<Exclude<Src, 'own'>, string>> = { col: 'v5:col', job: 'v5:job', band: 'v5:band' };
 /** Ohne Einstufung beginnt die Häufigkeitsliste hier (Ende des Atlas-Kernbands, B2-Grenze). */
@@ -92,7 +93,7 @@ export function refillNeed(quota: number, stock: Readonly<Record<Src, number>>, 
 // --- Kandidaten je Quelle (rein, aus den Rohdaten) ---
 
 /** Neuer Eintrag, wie er als Lexem angelegt wird. `core` = Pfad des Kernworts (nur Wortpartner). */
-export type Fresh = { src: Exclude<Src, 'own'>; word: string; de: string; ex: string; pos: string; kind: 'vocab' | 'chunk'; core: string | null; ref: string };
+export type Fresh = { src: Exclude<Src, 'own'>; word: string; de: string; ex: string; pos: string; kind: 'vocab' | 'chunk'; core: string | null; ref: string; /** Übersetzung des Beispielsatzes (geprüfte Wortliste). */ exDe?: string; /** Englische Kurz-Erklärung. */ def?: string };
 
 /** Zielmarkierung `[…]` aus Lehrer-Sätzen entfernen. */
 export const plainEx = (s: string): string => s.replace(/\[([^\]]+)\]/g, '$1').replace(/\s+/g, ' ').trim();
@@ -139,6 +140,16 @@ export function colPool(items: readonly ColRaw[], base: ReadonlyMap<string, { pa
     }
   });
   return rows.sort((a, b) => (a.intro < b.intro ? -1 : a.intro > b.intro ? 1 : a.i - b.i)).map((r) => r.f);
+}
+
+/** Großpaket WT: geprüfte Wortkarte (`src/content/wt/*.json`): Wort, Wortart, Bedeutung, Erklärung, Business-Satz + Übersetzung, Niveau, Rang in der Liste. */
+export type WtRaw = { w: string; p: string; d: string; g: string; x: string; xd: string; lvl: 'B1' | 'B2' | 'C1' | 'C2'; r: number };
+/** Geprüfte Wortliste in Listenreihenfolge, ohne Grundwortschatz (B1, kennt ein B2-Lerner), Vorhandenes und im Test Gekonntes. */
+export function wtPool(items: readonly WtRaw[], have: ReadonlySet<string>, ok: ReadonlySet<string>): Fresh[] {
+  return items
+    .filter((e) => e.lvl !== 'B1' && e.w && e.d && e.x && !have.has(headwordOf(e.w)) && !ok.has(headwordOf(e.w)))
+    .sort((a, b) => a.r - b.r)
+    .map((e) => ({ src: 'band' as const, word: e.w, de: e.d, ex: e.x, pos: e.p, kind: 'vocab' as const, core: null, ref: `wt/bsl#${e.r}`, exDe: e.xd, def: e.g }));
 }
 
 export type BandRaw = { w: string; p: string; d: string; x: string; r: number; hidden?: 1; basic?: 1; exWeak?: 1 };

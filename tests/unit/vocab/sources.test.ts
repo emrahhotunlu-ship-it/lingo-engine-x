@@ -18,6 +18,8 @@ const T0 = Date.parse('2026-11-02T18:00:00Z');
 const D = 86_400_000;
 const ZERO: Record<Src, number> = { col: 0, job: 0, own: 0, band: 0 };
 const ALL = (n: number): Record<Src, number> => ({ col: n, job: n, own: n, band: n });
+/** Gewichte vor Großpaket WT (30/30/25/15): die Misch-Mechanik wird damit weiter geprüft; die neuen Standardgewichte prüft ein eigener Test. */
+const OLD = { col: 0.3, job: 0.3, own: 0.25, band: 0.15 };
 
 function learned(t: number): Lex {
   const ctx = { cfg: DEFAULT_CFG, path: 'vocab/x', planned: true, load: () => 0, siblings: new Set<number>() };
@@ -50,18 +52,22 @@ describe('Herkunft und Gewichte', () => {
   it('srcOf: nur v5-Herkünfte zählen als Modul-Quelle, alles andere ist ein eigener Fund', () => {
     expect([srcOf('v5:col'), srcOf('v5:job'), srcOf('v5:band'), srcOf('lookup'), srcOf(undefined), srcOf('teacher')]).toEqual(['col', 'job', 'band', 'own', 'own', 'own']);
   });
-  it('weightsOf: Startgewichte 30/30/25/15; gesetzte Gewichte gelten, alle 0 → Start', () => {
+  it('Großpaket WT: Standardgewichte 15/15/20/50 – die geprüfte Wortliste trägt die Hälfte der neuen Wörter', () => {
+    expect(SRC_WEIGHTS).toEqual({ col: 0.15, job: 0.15, own: 0.2, band: 0.5 });
+    expect(splitQuota(10, ALL(99))).toEqual({ col: 2, job: 1, own: 2, band: 5 });
+  });
+  it('weightsOf: Startgewichte; gesetzte Gewichte gelten, alle 0 → Start', () => {
     expect(weightsOf(null)).toEqual(SRC_WEIGHTS);
     expect(weightsOf({ col: 0, job: 1, own: 0, band: 0 })).toEqual({ col: 0, job: 1, own: 0, band: 0 });
     expect(weightsOf({ col: 0, job: 0, own: 0, band: 0 })).toEqual(SRC_WEIGHTS);
   });
   it('splitQuota: 10 Plätze → 3/3/3/1 bzw. nach größtem Rest; leere Quelle gibt ihren Anteil ab; nie mehr als n', () => {
-    const a = splitQuota(10, ALL(99));
+    const a = splitQuota(10, ALL(99), OLD);
     expect(a.col + a.job + a.own + a.band).toBe(10);
     expect(a.col).toBe(3);
     expect(a.job).toBe(3);
     expect(a.band).toBeGreaterThanOrEqual(1);
-    const b = splitQuota(10, { col: 0, job: 99, own: 1, band: 99 });
+    const b = splitQuota(10, { col: 0, job: 99, own: 1, band: 99 }, OLD);
     expect(b.col).toBe(0);
     expect(b.own).toBe(1);
     expect(b.job + b.band).toBe(9);
@@ -73,7 +79,7 @@ describe('Herkunft und Gewichte', () => {
     const open = new Set<Src>(['col', 'job', 'own', 'band']);
     const seq: Src[] = [];
     for (let i = 0; i < 20; i++) {
-      const s = nextSrc(n, open)!;
+      const s = nextSrc(n, open, OLD)!;
       seq.push(s);
       n[s]++;
     }
@@ -84,10 +90,10 @@ describe('Herkunft und Gewichte', () => {
     expect(nextSrc(ZERO, new Set<Src>(['band']))).toBe('band');
   });
   it('refillNeed: Bestand zählt mit, nur Fehlendes wird nachgefüllt', () => {
-    expect(refillNeed(10, { ...ZERO, own: 9 }, { col: 99, job: 99, band: 99 })).toEqual({ col: 3, job: 3, band: 1 });
-    expect(refillNeed(10, { col: 5, job: 5, own: 5, band: 5 }, { col: 99, job: 99, band: 99 })).toEqual({ col: 0, job: 0, band: 0 });
+    expect(refillNeed(10, { ...ZERO, own: 9 }, { col: 99, job: 99, band: 99 }, OLD)).toEqual({ col: 3, job: 3, band: 1 });
+    expect(refillNeed(10, { col: 5, job: 5, own: 5, band: 5 }, { col: 99, job: 99, band: 99 }, OLD)).toEqual({ col: 0, job: 0, band: 0 });
     // Keine eigenen Funde: ihr Anteil geht an die Modul-Quellen.
-    expect(refillNeed(10, ZERO, { col: 99, job: 99, band: 99 })).toEqual({ col: 4, job: 4, band: 2 });
+    expect(refillNeed(10, ZERO, { col: 99, job: 99, band: 99 }, OLD)).toEqual({ col: 4, job: 4, band: 2 });
   });
 });
 
@@ -125,7 +131,7 @@ describe('Kandidaten je Quelle', () => {
 
 describe('Tagesplan mischt nach Herkunft (day.ts)', () => {
   const fresh = (src: Src, n: number, from: number): Item[] => Array.from({ length: n }, (_, i) => ({ path: `vocab/${src}-${i}`, lex: emptyLex('w', 'edge', T0), order: from + i, src }));
-  const ids = (cat: Catalog, cfg = { ...DEFAULT_CFG, min: 60, newPerDay: 10 }) => buildDayPlan(cat, T0, cfg, {}).plan.plan.filter((e) => e[1] === 'n').map((e) => e[0]);
+  const ids = (cat: Catalog, cfg = { ...DEFAULT_CFG, min: 60, newPerDay: 10, w: OLD }) => buildDayPlan(cat, T0, cfg, {}).plan.plan.filter((e) => e[1] === 'n').map((e) => e[0]);
 
   it('10 neue aus vier vollen Quellen: 3 Wortpartner, 3 Beruf, Rest eigene Funde und Liste; gemischt', () => {
     const cat = new Catalog([...fresh('own', 10, 0), ...fresh('col', 10, 100), ...fresh('job', 10, 200), ...fresh('band', 10, 300)]);

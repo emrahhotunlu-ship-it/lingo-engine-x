@@ -3,7 +3,7 @@ import { getWriter, Icon, toast, useClock, useLive, useT, VButton, VChip, VRow, 
 import { logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { groupOf } from '../domain/ladder';
-import type { SessionKind } from '../domain/session';
+import { FREE_KINDS, type SessionKind } from '../domain/session';
 import { groupCounts } from '../domain/stats';
 import type { Lex } from '../domain/types';
 import { readMistakes } from './mistakes';
@@ -180,6 +180,20 @@ export function WordsHome({ duty, onRound, onWord, onStats, onPlace, onAdd, onAt
             {t('vmWhGo')}
           </VButton>
         )}
+      </section>
+
+      {/* Großpaket WT (Emrah 10.11.2026): schnell 10, 20 oder 30 Wörter üben – fällige und wackelige zuerst, neue nur, wenn nichts ansteht. Extra, nie Pflicht. */}
+      <section className="lx-vw-quick" aria-labelledby="vw-quick-t" data-testid="vw-quick">
+        <span className="lx-vw-quick-t" id="vw-quick-t">
+          {t('vmWhQuick')}
+        </span>
+        <div className="lx-vw-quick-row">
+          {(['free10', 'free20', 'free30'] as const).map((k) => (
+            <VButton key={k} variant="sec" size="sm" onClick={() => onRound(k)} data-testid={`vw-quick-${FREE_KINDS[k]}`}>
+              {t('vmWhQuickN', { n: FREE_KINDS[k] ?? 20 })}
+            </VButton>
+          ))}
+        </div>
       </section>
 
       <div className="lx-vw-search">

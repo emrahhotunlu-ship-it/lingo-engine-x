@@ -1,4 +1,4 @@
-import { dayKey, learningDayEnd } from '../shared';
+import { addDays, dayKey, dayStartOf, learningDayEnd } from '../shared';
 import { type Catalog, danger, dueOn, formFor, isNewLex } from './catalog';
 import type { DayPlan } from './day';
 import { mayPlan, RETRY_GAP, STEP_A_GAP, STEP_B_GAP, STEP_B_MS } from './planner';
@@ -13,8 +13,10 @@ import type { Form, Lex, VocabCfg } from './types';
 // (`planned: false`, N2), außer es ist ein Lernschritt. So holt kein Weg der App ein Wort am Planer vorbei.
 
 // Großpaket B3 (03.11.2026): `use` = Anwenden frei gestartet (Wörter-Reiter „Anwenden“): dieselbe Anwenden-Aufgabe wie am Ende der Pflicht.
-export type SessionKind = 'pflicht' | 'more5' | 'new5' | 'free' | 'evening' | 'week' | 'word' | 'mistakes' | 'use';
-export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'new5', 'free', 'evening', 'week', 'word', 'mistakes', 'use'];
+export type SessionKind = 'pflicht' | 'more5' | 'new5' | 'free' | 'free10' | 'free20' | 'free30' | 'evening' | 'week' | 'word' | 'mistakes' | 'use';
+export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'new5', 'free', 'free10', 'free20', 'free30', 'evening', 'week', 'word', 'mistakes', 'use'];
+/** Großpaket WT (Emrah 10.11.2026: „oben drücken: 10, 20 oder 30 Wörter üben“): Größe der freien Runde je Art. */
+export const FREE_KINDS: Readonly<Partial<Record<SessionKind, number>>> = { free10: 10, free20: 20, free30: 30 };
 /** „Noch 5 neue Wörter“ (Emrah 08.11.2026, Wörter-Tempo „A“): Extra-Runde nur mit neuen Wörtern, über das Tageskontingent hinaus. */
 export const NEW5_SIZE = 5;
 export const EVENING_MAX = 8;
@@ -35,7 +37,7 @@ export const MAX_PER_ROUND = 3;
 /** V2: `sent` mit/ohne englischen Satz, `cue` „Gesucht: …“ an der Lücke (M25, bis Stufe 4). */
 export type Task = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro: boolean; planned: boolean; why: string; group?: string[]; sent: 's' | 'n' | '-'; cue: boolean };
 
-type Slot = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro?: boolean; why: string; group?: string[]; afterCard?: number; afterMs?: number; evidence?: boolean };
+type Slot = { path: string; form: Form; step: 0 | 1 | 2 | 3; intro?: boolean; why: string; group?: string[]; afterCard?: number; afterMs?: number; evidence?: boolean; /** Großpaket WT: freies Üben eines nicht fälligen Wortes – zählt als Übung, verschiebt den Plan nicht. */ practice?: boolean };
 
 export type SessionOpts = { cfg: VocabCfg; paths?: string[]; seenToday?: ReadonlySet<string> };
 
@@ -96,12 +98,25 @@ export class SessionRun {
       this.queue = interleave(reviews, fresh);
       // Emrah 07.11.2026 („Text“ A): die Schreibaufgabe mit mehreren Wörtern gehört nicht mehr in die Wörter-Pflicht (sie allein kostete
       // 3–5 Minuten), sondern zu Schritt 3 „Anwenden“ (Runde `use`, Anwenden › „Text mit deinen Wörtern“).
-    } else if (this.kind === 'more5' || this.kind === 'free') {
-      const n = this.kind === 'more5' ? 5 : FREE_SIZE;
-      const due = items
-        .filter((it) => notCarried(it.path) && !this.seen.has(it.path) && !doneToday(it.lex, day) && !this.cat.rests(it.path) && dueOn(it.lex, day, it.av))
-        .sort((a, b) => danger(a.lex, nowMs) - danger(b.lex, nowMs) || a.path.localeCompare(b.path));
+    } else if (this.kind === 'more5' || this.kind === 'free' || FREE_KINDS[this.kind] !== undefined) {
+      const n = this.kind === 'more5' ? 5 : (FREE_KINDS[this.kind] ?? FREE_SIZE);
+      const open = (it: (typeof items)[number]) => notCarried(it.path) && !this.seen.has(it.path) && !doneToday(it.lex, day) && !this.cat.rests(it.path);
+      const due = items.filter((it) => open(it) && dueOn(it.lex, day, it.av)).sort((a, b) => danger(a.lex, nowMs) - danger(b.lex, nowMs) || a.path.localeCompare(b.path));
       const out: Slot[] = due.slice(0, n).map((it) => ({ path: it.path, form: dueOn(it.lex, day, it.av)!.form, step: 0, why: 'due' }));
+      // Großpaket WT: reicht das Fällige nicht, kommen die wackeligsten schon gelernten Wörter (niedrigste Abrufwahrscheinlichkeit) vor neuen dran.
+      if (FREE_KINDS[this.kind] !== undefined && out.length < n) {
+        // Nie ein Wort aus dem heutigen Plan (das kommt noch geplant dran).
+        const calm = dayStartOf(addDays(day, 4));
+        const taken = new Set([...out.map((s) => s.path), ...(this.plan?.d === day ? this.plan.plan.map((e) => e[0]) : [])]);
+        const shaky = items
+          // Nur Wörter, die nicht in den nächsten Tagen ohnehin geplant drankommen (sonst zweimal am Tag bzw. vorgezogen).
+          .filter((it) => open(it) && !taken.has(it.path) && !isNewLex(it.lex) && !(it.lex.step && dayKey(it.lex.step.at) === day) && Math.min(it.lex.u.due, it.lex.b?.due ?? Infinity) >= calm)
+          .sort((a, b) => danger(a.lex, nowMs) - danger(b.lex, nowMs) || a.path.localeCompare(b.path));
+        for (const it of shaky) {
+          if (out.length >= n) break;
+          out.push({ path: it.path, form: formFor(it.lex, it.av), step: 0, why: 'practice', practice: true });
+        }
+      }
       const introduced = items.filter((it) => it.lex.intro === day).length;
       const quota = Math.max(0, this.opts.cfg.newPerDay - introduced);
       const fresh = items.filter((it) => isNewLex(it.lex)).sort((a, b) => a.order - b.order || a.path.localeCompare(b.path));
@@ -196,7 +211,7 @@ export class SessionRun {
     const l = this.lex(s.path);
     // Pflicht, „Noch 5“ und freie Runde nehmen nur Fälliges/Geplantes; die anderen Wege buchen nur Fälliges oder Gefährdetes (mayPlan).
     const sideRoute = this.kind === 'week' || this.kind === 'word' || this.kind === 'mistakes';
-    const planned = !!l && !s.evidence && s.form !== 'contrast' && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : !doneToday(l, this.day)));
+    const planned = !!l && !s.evidence && !s.practice && s.form !== 'contrast' && (s.intro || s.step > 0 || (sideRoute ? mayPlan(l, nowMs) : !doneToday(l, this.day)));
     const sent = FORM_SPEC[s.form].sent;
     const cue = sent === 's' && FORM_SPEC[s.form].track === 'b' && (l?.lv ?? 1) <= CUE_MAX_LV;
     return { path: s.path, form: s.form, step: s.step, intro: !!s.intro, planned, why: planned || s.form === 'contrast' || s.evidence ? s.why : 'practice', ...(s.group ? { group: s.group } : {}), sent, cue };

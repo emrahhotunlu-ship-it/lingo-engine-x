@@ -24,4 +24,6 @@ export { FALSE_FRIEND_NOTE, falseFriendLines } from '../../content/falseFriends'
 // Großpaket A S7 (V5): Rohdaten der Quellen neuer Wörter, nur per dynamischem Import (schwer; nie in der Einstiegsdatei). Wort-Atlas als Text
 // wie im Atlas selbst (`domain/atlas/atlas.ts`, ohne dessen Kartencode aus domain/srs), Wortpartner-Charge als JSON. Lizenzen: content/LICENSE-wordlists.md.
 export const loadAtlasText = (): Promise<string> => import('../../content/atlas/atlas.json?raw').then((m: { default: string }) => m.default);
+/** Großpaket WT: geprüfte Wortkarten (Business Service List, Lehrer-geprüft), `src/content/wt/bsl.json`. */
+export const loadWtBank = (): Promise<unknown> => import('../../content/wt/bsl.json').then((m: { default: unknown }) => m.default);
 export const loadColCharge = (): Promise<unknown> => import('../../content/col/charge1.json').then((m: { default: unknown }) => m.default);

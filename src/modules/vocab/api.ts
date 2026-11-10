@@ -6,7 +6,7 @@ import { headwordOf } from './domain/dupes';
 import { groupOf } from './domain/ladder';
 import type { SessionKind } from './domain/session';
 import type { DayPlan } from './domain/day';
-import { DEFAULT_CFG, type Lex, type VocabCfg } from './domain/types';
+import { countCfg, DEFAULT_CFG, type Lex, type VocabCfg } from './domain/types';
 import { vcfgSchema } from './data/schemas';
 export type { RoundReport } from './domain/session';
 export type { VocabAi } from './aiPort';
@@ -42,13 +42,14 @@ export const SHORT_DAY_WORDS_MIN = 5;
 /** Einstellungen aus `app/profile` (vcfg + newPerDay), tolerant: Ungültiges fällt auf den Standard zurück. `min` = Wörter-Minuten aus dem Tagesziel. */
 export function vocabCfg(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
-  const npd = profile && typeof profile.newPerDay === 'number' && [0, 2, 5, 10].includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
+  const npd = profile && typeof profile.newPerDay === 'number' && [0, 2, 5, 10, 15].includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
   const min = wordsMinutes(profile);
   const short = isShortDay(profile);
   const newPerDay = short ? Math.min(npd, SHORT_DAY_NEW) : npd;
   const sh = short ? { short: true } : {};
   if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay, ...sh };
-  return { ...sh, min, ret: raw.data.ret, mod: raw.data.mod, newPerDay, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
+  const c = countCfg(raw.data.cnt, min, short);
+  return { ...sh, min: c.min, cnt: c.cnt, ret: raw.data.ret, mod: raw.data.mod, newPerDay, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
 }
 
 /** Ist das neue Modul eingeschaltet? (Rückweg-Schalter in der Datenbank, gilt auf allen Geräten.) */

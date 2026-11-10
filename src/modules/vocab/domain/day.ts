@@ -49,7 +49,11 @@ export function newCostMs(med: FormStats): number {
 
 export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: FormStats): { plan: DayPlan; moves: Move[] } {
   const day = dayKey(nowMs);
-  const budgetMs = cfg.min * 60_000;
+  // Großpaket WT (Emrah 10.11.2026): mit Tagesziel in Wörtern (`cfg.cnt`) zählt jedes Wort im Plan 1 statt seiner Minuten; die Zeit bleibt Notbremse
+  // (`cfg.min`, im Lauf). Die Bremse „unter 20 Minuten höchstens 5 neue“ gilt dann nicht.
+  const byCount = (cfg.cnt ?? 0) > 0;
+  const costOf = (f: Form): number => (byCount ? 1 : formMs(f, med));
+  const budgetMs = byCount ? (cfg.cnt as number) : cfg.min * 60_000;
   type Due = { path: string; lex: Lex; track: TrackKey; form: Form; ms: number; r: number };
   const due: Due[] = [];
   let introducedToday = 0;
@@ -58,14 +62,14 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
     if (it.lex.day === day) continue; // heute schon gebucht
     if (cat.rests(it.path)) continue; // Paar-Regel (M14)
     const d = dueOn(it.lex, day, it.av);
-    if (d) due.push({ path: it.path, lex: it.lex, ...d, ms: formMs(d.form, med), r: danger(it.lex, nowMs) });
+    if (d) due.push({ path: it.path, lex: it.lex, ...d, ms: costOf(d.form), r: danger(it.lex, nowMs) });
   }
   const mustOf = (x: Due) => (x.lex.pri === 'core' || x.lex.mv >= MOVE_MAX ? 0 : 1);
   due.sort((a, b) => mustOf(a) - mustOf(b) || a.r - b.r || a.path.localeCompare(b.path));
 
   const quota = Math.max(0, cfg.newPerDay - introducedToday);
-  const minNew = minNewFor(quota, budgetMs);
-  const nc = newCostMs(med);
+  const minNew = byCount ? quota : minNewFor(quota, budgetMs);
+  const nc = byCount ? 1 : newCostMs(med);
   // Kurzer Tag (2A, learning-scientist 6): Rückstand höchstens ein Tagesbudget, nichts verschieben, nichts vorziehen (wie `shrinkDayPlan`).
   const short = cfg.short === true;
   const cap = (short ? 1 : BACKLOG_BUDGETS) * budgetMs - minNew * nc;
@@ -91,7 +95,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   }
   // Neue Lexeme.
   const room = Math.max(0, budgetMs - used);
-  const nFresh = quota === 0 ? 0 : budgetMs < BRAKE_MIN * 60_000 ? minNew : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
+  const nFresh = quota === 0 ? 0 : !byCount && budgetMs < BRAKE_MIN * 60_000 ? minNew : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
   const fresh: string[] = [];
   const blocked = new Set<string>();
   for (const it of cat.items()) if (it.lex.intro === day) for (const s of cat.siblingsOf(it.path)) blocked.add(s);
@@ -137,14 +141,16 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
     for (const { it } of cands) {
       const track: TrackKey = it.lex.b ? 'b' : 'u';
       const form: Form = it.lex.b ? formForLex(it.lex, it.av) : 'gap';
-      const ms = formMs(form, med);
+      const ms = costOf(form);
       if (total + ms > budgetMs) break;
       ahead.push({ path: it.path, lex: it.lex, track, form, ms, r: 1 });
       total += ms;
     }
   }
   const plan: PlanEntry[] = [...taken.map((x): PlanEntry => [x.path, x.track, x.form]), ...ahead.map((x): PlanEntry => [x.path, x.track, x.form]), ...fresh.map((p): PlanEntry => [p, 'n', 'intro'])];
-  const minutes = Math.round((total / 60_000) * 10) / 10;
+  // Minuten immer als echte Schätzung (Anzeige), auch im Wörter-Modus.
+  const estMs = byCount ? [...taken, ...ahead].reduce((a, x) => a + formMs(x.form, med), 0) + fresh.length * newCostMs(med) : total;
+  const minutes = Math.round((estMs / 60_000) * 10) / 10;
   const why = `${taken.length} due, most at risk first · ${fresh.length} new${ahead.length ? ` · ${ahead.length} ahead` : ''}${moves.length ? ` · ${moves.length} spread` : ''}`;
   // Verteilung des Rückstands für den Start-Bildschirm (ruhige Rückkehr): Verschobene am Zieltag, Kernwörter bleiben fällig und kommen morgen.
   const spread = new Map<string, number>();

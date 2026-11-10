@@ -48,6 +48,7 @@ export { dictLookup, isDictWord } from '../../domain/lexicon/dict';
 export { ipaOf } from '../../domain/lexicon/pron';
 export { speak, stopSpeech, useSpeech } from '../../platform/speech';
 export { usePrefetchSpeech } from '../../engine/usePrefetchSpeech';
+export { SpeakButton } from '../../engine/SpeakButton';
 // „Satz vor dem Prüfen anhören“ (S6b-3): die Lücke als kurzer Ton.
 export { playGapTone, primeGapTone } from '../../platform/sound';
 // Uhr der App (alle 30 s, Tageswechsel 04:00): Zeit im Zeichnen nur über sie, nie `Date.now()`.

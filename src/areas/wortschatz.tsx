@@ -64,7 +64,7 @@ declare module '../app/router/types' {
   }
 }
 
-const VLEARN_KINDS = ['pflicht', 'more5', 'new5', 'free', 'evening', 'week', 'word', 'mistakes', 'use'] as const;
+const VLEARN_KINDS = ['pflicht', 'more5', 'new5', 'free', 'free10', 'free20', 'free30', 'evening', 'week', 'word', 'mistakes', 'use'] as const;
 type VlearnKind = (typeof VLEARN_KINDS)[number];
 const LEX_PATH = z.string().max(160).regex(/^(vocab|chunk)\/[^/]+$/);
 const vlearnParams = z.object({ kind: z.enum(VLEARN_KINDS), path: LEX_PATH.optional() });
