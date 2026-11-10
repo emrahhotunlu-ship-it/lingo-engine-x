@@ -24,7 +24,7 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/ui\/exercise\/TutorButton$/,
   /^src\/features\/companion\/store$/,
   /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented|GradeButtons|Switch)$/,
-  /^src\/engine\/(EnglishText|Choices|KineticGap|HiddenInput|MicButton|useHotkeys|wordTap)$/,
+  /^src\/engine\/(EnglishText|Choices|KineticGap|HiddenInput|MicButton|useHotkeys|usePrefetchSpeech|wordTap)$/,
   /^src\/domain\/answer\/mask$/,
   // Großpaket B3 (03.11.2026): Reiter Wörter im neuen Aussehen.
   /^src\/ui\/v$/,
