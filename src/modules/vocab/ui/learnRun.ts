@@ -57,7 +57,7 @@ export type LearnView =
    * Großpaket WT: Wiedererkennen gleich nach der Einführung – die richtige Bedeutung aus vier wählen (keine Planwirkung, im Verlauf als
    * `choice`). `chosen` = getippte Möglichkeit (danach Lösung sichtbar, „Weiter“).
    */
-  | { k: 'pick'; path: string; head: string; sentence: string | null; pos: string | null; options: string[]; right: number; from: (string | null)[]; chosen: number | null; n: number; left: number; shownAt: number }
+  | { k: 'pick'; path: string; head: string; sentence: string | null; mark: string | null; pos: string | null; options: string[]; right: number; from: (string | null)[]; chosen: number | null; n: number; left: number; shownAt: number }
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
   /** Anwenden oder eigener Satz (Großpaket A S5c, Bilder s2-07 … s2-12); `later` = Nachprüfung eines gemerkten Textes (nur Belege). */
@@ -244,7 +244,7 @@ export class LearnRun {
   private justTaught: string | null = null;
   private pending: Pending | null = null;
   /** Großpaket WT: wartende Auswahlen (Wiedererkennen) neuer Wörter, je mit Kartenzahl, ab der sie kommen. */
-  private pickQ: (PickModel & { path: string; head: string; sentence: string | null; pos: string | null; at: number })[] = [];
+  private pickQ: (PickModel & { path: string; head: string; sentence: string | null; mark: string | null; pos: string | null; at: number })[] = [];
   /** Anki-Modus: eingefrorene Zeit beim Aufdecken (Antwortzeit = Zeit bis zum Aufdecken). */
   private flipF: Frozen | null = null;
   private chain: Promise<void> = Promise.resolve();
@@ -1063,7 +1063,7 @@ export class LearnRun {
     if (after.k !== 'band' || after.kind !== 'intro' || this.pending?.kind !== 'intro') return;
     // learning-scientist WT1 Befund 2: die Auswahl kommt nicht sofort (Kurzzeitgedächtnis), sondern nach zwei anderen Karten, vor Schritt A.
     const pick = this.pickFor(after.card);
-    if (pick) this.pickQ.push({ ...pick, path: after.card.path, head: after.card.head, sentence: after.card.sentence?.sent.en ?? null, pos: after.card.pos ?? null, at: this.n + 1 + PICK_AFTER });
+    if (pick) this.pickQ.push({ ...pick, path: after.card.path, head: after.card.head, sentence: after.card.sentence?.sent.en ?? null, mark: after.card.sentence ? after.card.answer : null, pos: after.card.pos ?? null, at: this.n + 1 + PICK_AFTER });
     this.next();
   }
 
@@ -1072,7 +1072,7 @@ export class LearnRun {
     const i = this.pickQ.findIndex((q) => force || q.at <= this.n);
     if (i < 0) return false;
     const q = this.pickQ.splice(i, 1)[0]!;
-    this.set({ k: 'pick', path: q.path, head: q.head, sentence: q.sentence, pos: q.pos, options: q.options, right: q.right, from: q.from, chosen: null, n: this.n, left: (this.run?.remaining() ?? 0) + this.pickQ.length + 1, shownAt: this.env.now() });
+    this.set({ k: 'pick', path: q.path, head: q.head, sentence: q.sentence, mark: q.mark, pos: q.pos, options: q.options, right: q.right, from: q.from, chosen: null, n: this.n, left: (this.run?.remaining() ?? 0) + this.pickQ.length + 1, shownAt: this.env.now() });
     return true;
   }
 

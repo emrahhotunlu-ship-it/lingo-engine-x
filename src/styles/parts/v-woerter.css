@@ -21,7 +21,7 @@
 /* Großpaket WT: Schnellstart 10 · 20 · 30 Wörter. */
 .lx-vw-quick { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
 .lx-vw-quick-t { font-size: var(--t-hint); font-weight: 600; color: var(--fg-2); }
-.lx-vw-quick-row { display: flex; gap: 8px; flex: 1; justify-content: flex-end; }
+.lx-vw-quick-row { display: flex; gap: 8px; flex: 1 1 100%; justify-content: flex-start; }
 .lx-vw-quick-row > * { flex: 1; max-width: 140px; }
 
 /* Suchfeld (Vorschau `.field`, min-height 46). */

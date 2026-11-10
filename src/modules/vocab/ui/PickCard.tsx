@@ -1,19 +1,22 @@
-import { Button, Choices, SpeakButton, useHotkeys, useT } from '../sharedUi';
+import { Choices, ExerciseShell, SpeakButton, useT } from '../sharedUi';
 import type { LearnRun, LearnView } from './learnRun';
 
 // Großpaket WT (Emrah 10.11.2026): Wiedererkennen – die richtige Bedeutung aus vier wählen, zwei Karten nach der Einführung (echter Abruf,
 // nicht Kurzzeitgedächtnis; learning-scientist WT1). Zählt nicht für den Plan (Form `choice`); danach folgen die getippten Abrufe (Schritt A, B).
-// Pflichtfragen (Kap. 2 Nr. 4): Was tun (Aufgabe), wozu (Zeile „Wozu“), was hatte ich / was ist richtig (Auswahl + Urteil), warum (Satz, „… heißt …“).
+// Pflichtfragen (Kap. 2 Nr. 4): Was tun (Aufgabe), wozu (ⓘ), was hatte ich / was ist richtig (Auswahl + Urteil), warum (Satz, „… heißt …“).
+// Gleiche Übungsfläche wie alle Karten (ExerciseShell, UX-Prüfung WT1: Kartenrahmen, Rückmeldekarte, Hauptknopf in voller Größe).
 
-/** Satz mit dem Wort fett (erste Fundstelle, Groß-/Kleinschreibung egal). */
-function Marked({ text, word }: { text: string; word: string }) {
-  const i = text.toLowerCase().indexOf(word.toLowerCase());
-  if (i < 0) return <>{text}</>;
+const LETTERS = ['A', 'B', 'C', 'D'] as const;
+
+/** Satz mit der Wortform fett (Fundstelle wie auf der Einführungskarte, z. B. „achieved“ für „to achieve“). */
+function Marked({ text, mark }: { text: string; mark: string | null }) {
+  const i = mark ? text.toLowerCase().indexOf(mark.toLowerCase()) : -1;
+  if (!mark || i < 0) return <>{text}</>;
   return (
     <>
       {text.slice(0, i)}
-      <b>{text.slice(i, i + word.length)}</b>
-      {text.slice(i + word.length)}
+      <b>{text.slice(i, i + mark.length)}</b>
+      {text.slice(i + mark.length)}
     </>
   );
 }
@@ -22,14 +25,10 @@ export function PickCard({ view, run }: { view: Extract<LearnView, { k: 'pick' }
   const { t } = useT();
   const done = view.chosen !== null;
   const ok = done && view.chosen === view.right;
-  const wrongFrom = done && !ok && view.chosen !== null ? view.from[view.chosen] : null;
-  useHotkeys({ enter: () => done && run.pickNext() }, () => false);
-  return (
-    <section className="lx-vm-pick flex flex-col gap-4" data-testid="vm-pick" data-state={done ? (ok ? 'ok' : 'wrong') : 'open'}>
-      <div className="flex flex-col gap-1">
-        <p className="lx-eyebrow m-0">{t('vmPickTask')}</p>
-        <p className="m-0 text-sm text-muted">{t('vmPickWhy')}</p>
-      </div>
+  const right = view.options[view.right] ?? '';
+  const other = done && !ok && view.chosen !== null ? view.from[view.chosen] : null;
+  const prompt = (
+    <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
         <p className="m-0 text-3xl font-semibold" lang="en" data-testid="vm-pick-word">
           {view.head}
@@ -38,26 +37,28 @@ export function PickCard({ view, run }: { view: Extract<LearnView, { k: 'pick' }
       </div>
       {view.sentence && (
         <p className="m-0 text-base" lang="en" data-testid="vm-pick-sentence">
-          <Marked text={view.sentence} word={view.head} />
+          <Marked text={view.sentence} mark={view.mark} />
         </p>
       )}
-      <Choices options={view.options} chosen={view.chosen} correct={done ? view.right : null} revealed={done} onPick={(i) => run.pickChoose(i)} lang="de" label={t('vmPickLabel', { w: view.head })} testId="vm-pick-choices" />
-      {done && (
-        <div className="flex flex-col gap-1" role="status" data-testid="vm-pick-verdict">
-          <p className="m-0 text-sm">{ok ? t('vmPickOk', { w: view.head, de: view.options[view.right] ?? '' }) : t('vmPickWrong', { w: view.head, de: view.options[view.right] ?? '' })}</p>
-          {wrongFrom && view.chosen !== null && (
-            <p className="m-0 text-sm text-muted" data-testid="vm-pick-other">
-              {t('vmPickOther', { de: view.options[view.chosen] ?? '', w: wrongFrom })}
-            </p>
-          )}
-          <p className="m-0 text-sm text-muted">{t('vmPickThen')}</p>
-        </div>
-      )}
-      {done && (
-        <Button variant="primary" onClick={() => run.pickNext()} data-testid="vm-pick-next">
-          {t('vmPickNext')}
-        </Button>
-      )}
-    </section>
+    </div>
+  );
+  const answer = <Choices options={view.options} chosen={view.chosen} correct={done ? view.right : null} revealed={done} onPick={(i) => run.pickChoose(i)} lang="de" label={t('vmPickLabel', { w: view.head })} testId="vm-pick-choices" />;
+  const sub = [ok ? t('vmPickOk', { w: view.head, de: right }) : t('vmPickWrong', { w: view.head, de: right }), other && view.chosen !== null ? t('vmPickOther', { de: view.options[view.chosen] ?? '', w: other }) : null, t('vmPickThen')]
+    .filter((x): x is string => !!x)
+    .join(' ');
+  return (
+    <div data-testid="vm-pick" data-state={done ? (ok ? 'ok' : 'wrong') : 'open'}>
+      <ExerciseShell
+        meta={{ ex: 'vm:pick', id: `pick:${view.path}`, kind: 'word' }}
+        status={{ area: 'words', state: null, kindLabel: t('vmPickKind') }}
+        task={{ text: t('vmPickTask'), purpose: t('vmPickWhy'), open: false }}
+        prompt={prompt}
+        answer={answer}
+        primary={{ label: t('vmPickNext'), onClick: () => run.pickNext(), testId: 'vm-pick-next', disabled: !done, arrow: true }}
+        feedback={done ? { verdict: ok ? 'ok' : 'wrong', title: ok ? t('vmPickOkTitle') : t('vmPickWrongTitle'), sub, depth: 'min', choice: { you: view.chosen !== null ? (LETTERS[view.chosen] ?? null) : null, right: LETTERS[view.right] ?? 'A', text: right } } : null}
+        keysHint={null}
+        choiceCount={view.options.length}
+      />
+    </div>
   );
 }

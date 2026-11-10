@@ -47,7 +47,8 @@ export function vocabCfg(profile: Doc | null | undefined): VocabCfg {
   const short = isShortDay(profile);
   const newPerDay = short ? Math.min(npd, SHORT_DAY_NEW) : npd;
   const sh = short ? { short: true } : {};
-  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay, ...sh };
+  // Großpaket WT: auch ohne gespeicherte Wörter-Einstellungen gilt das Standard-Tagesziel in Wörtern (50), mit Zeit-Notbremse.
+  if (!raw?.success) return { ...DEFAULT_CFG, ...countCfg(undefined, min, short), newPerDay, ...sh };
   const c = countCfg(raw.data.cnt, min, short);
   return { ...sh, min: c.min, cnt: c.cnt, ret: raw.data.ret, mod: raw.data.mod, newPerDay, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0, ...(raw.data.w ? { w: raw.data.w } : {}) };
 }

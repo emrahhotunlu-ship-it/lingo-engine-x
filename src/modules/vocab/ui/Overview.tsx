@@ -32,7 +32,7 @@ function cfgOf(profile: Doc | null | undefined): VocabCfg {
   const raw = profile && typeof profile.vcfg === 'object' ? vcfgSchema.safeParse(profile.vcfg) : null;
   const npd = profile && typeof profile.newPerDay === 'number' && (NEW_OPTIONS as readonly number[]).includes(profile.newPerDay) ? profile.newPerDay : DEFAULT_CFG.newPerDay;
   const min = dayMinutes(normGoalMin(profile?.goalMin)).words;
-  if (!raw?.success) return { ...DEFAULT_CFG, min, newPerDay: npd };
+  if (!raw?.success) return { ...DEFAULT_CFG, ...countCfg(undefined, min, false), newPerDay: npd };
   const c = countCfg(raw.data.cnt, min, false);
   return { min: c.min, cnt: c.cnt, ret: raw.data.ret, mod: raw.data.mod, newPerDay: npd, restDow: raw.data.rd ?? null, anki: raw.data.anki === 1, pre: raw.data.pre !== 0 };
 }
@@ -340,7 +340,7 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
         <p className="m-0 text-sm font-medium">{t('vmSetMin')}</p>
         {/* UX-Neuanfang C (Emrah 02.11.2026): die Wörter-Zeit folgt dem Tagesziel (40 %, mindestens 10 Min.), keine eigene Wahl mehr. */}
         <p className="m-0 text-sm text-muted" data-testid="vs-min" data-min={cfg.min}>
-          {t('vmSetMinAuto', { n: cfg.min })}
+          {cfg.cnt ? t('vmSetMinCap', { n: cfg.min, cnt: cfg.cnt }) : t('vmSetMinAuto', { n: cfg.min })}
         </p>
       </div>
       <div className="flex flex-col gap-2">
