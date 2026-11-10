@@ -82,7 +82,8 @@ export function scheduleNeuralVoice(delayMs = 300): void {
  */
 export function neuralWanted(): boolean {
   const s = useNeuralVoice.getState().status;
-  if (s === 'ready') return true;
+  // Nach dem Hintergrund wird die Stimme erst kurz geprüft (`checkAfterReturn`); so lange spricht die Gerätestimme.
+  if (s === 'ready') return !checking;
   // Alle geplanten Versuche vorbei: höchstens alle 5 Minuten beim Vorlesen einen neuen anstoßen.
   if (s === 'failed' && !loading && failures > RETRY_MS.length && Date.now() - lastTry > 300_000) void loadNeuralVoice();
   return false;
@@ -90,12 +91,37 @@ export function neuralWanted(): boolean {
 
 /** Die App war im Hintergrund (iPhone: App minimiert): die Tonausgabe danach im nächsten Tipp frisch aufbauen. */
 let wasHidden = false;
+let hiddenAt = 0;
+/** Läuft gerade die Prüfung nach dem Zurückkehren? Dann spricht die Gerätestimme (Emrah 10.11.2026: „nach einer Zeit gar keine Sprachausgabe“). */
+let checking = false;
 if (typeof document !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') wasHidden = true;
+    if (document.visibilityState === 'hidden') {
+      wasHidden = true;
+      hiddenAt = Date.now();
+      return;
+    }
     // Zurück in der App und die Stimme fehlt noch: gleich neu versuchen.
-    else if (!engine && !loading && useNeuralVoice.getState().status === 'failed') void loadNeuralVoice();
+    if (!engine && !loading && useNeuralVoice.getState().status === 'failed') void loadNeuralVoice();
+    // Länger weg (iPhone räumt dann oft Grafikchip und Speicher): kurz prüfen, ob die Stimme noch rechnet.
+    else if (engine && Date.now() - hiddenAt > 20_000) void checkAfterReturn(engine);
   });
+}
+
+/** Ein kurzes Wort rechnen (höchstens 8 s); klappt das nicht, die Stimme neu laden. Bis dahin spricht die Gerätestimme. */
+async function checkAfterReturn(e: Engine): Promise<void> {
+  if (checking) return;
+  checking = true;
+  try {
+    if (e.lost()) throw new Error('gpu lost');
+    await withLimit(e.generate('Hi.', 'af_heart', 1), 8_000);
+    logInfo('voice:check', 'Stimme nach dem Zurückkehren in Ordnung');
+  } catch (err) {
+    logWarn('voice:check', err);
+    await rebuild(e);
+  } finally {
+    checking = false;
+  }
 }
 
 function newCtx(): AudioContext | null {
@@ -193,59 +219,59 @@ export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 
   if (!supported()) return 'unavailable';
   const c = ensureCtx();
   if (!c) return 'unavailable';
-  let e = engine ?? (await loadNeuralVoice());
+  const e = engine ?? (await loadNeuralVoice());
   if (!run.alive()) return 'stopped';
   if (!e) return 'unavailable';
-  // Grafikchip verloren (iPhone nach dem Minimieren): einmal neu laden (aus dem Speicher, ohne Herunterladen).
-  if (e.lost()) e = await rebuild(e);
-  if (!run.alive()) return 'stopped';
-  if (!e) return 'unavailable';
-  if (c.state !== 'running') await c.resume().catch((err: unknown) => logWarn('voice:resume', err));
-  let retried = false;
-  let cur: Engine = e;
-  const gen = (i: number) => withLimit(cur.generate(run.chunks[i] as string, run.voice, run.rate));
-  for (let i = run.from; i < run.chunks.length; ) {
-    try {
-      let next = gen(i);
-      for (; i < run.chunks.length; i++) {
-        const out = await next;
-        if (!run.alive()) return 'stopped';
-        if (i + 1 < run.chunks.length) next = gen(i + 1);
-        run.onChunk(i);
-        const buf = c.createBuffer(1, out.audio.length, out.rate);
-        buf.copyToChannel(out.audio as Float32Array<ArrayBuffer>, 0);
-        const src = c.createBufferSource();
-        src.buffer = buf;
-        src.connect(c.destination);
-        const ended = new Promise<void>((res) => {
-          src.onended = () => res();
-        });
-        stopNeural();
-        playing = src;
-        src.start(0);
-        await ended;
-        if (playing === src) playing = null;
-        if (!run.alive()) return 'stopped';
-      }
-      return 'done';
-    } catch (err) {
-      logWarn('voice:speak', err);
-      if (!run.alive()) return 'stopped';
-      // Einmal mit frisch geladener Stimme weiter (z. B. Grafikchip nach dem Minimieren weg); sonst die Gerätestimme.
-      if (retried) return 'unavailable';
-      retried = true;
-      const fresh = await rebuild(cur);
-      if (!fresh || !run.alive()) return run.alive() ? 'unavailable' : 'stopped';
-      cur = fresh;
+  // Grafikchip verloren (iPhone nach dem Minimieren): diesmal die Gerätestimme, die neue lädt im Hintergrund neu (aus dem Speicher).
+  if (e.lost()) {
+    void rebuild(e);
+    return 'unavailable';
+  }
+  if (c.state !== 'running') {
+    await Promise.race([c.resume().catch((err: unknown) => logWarn('voice:resume', err)), new Promise((r) => setTimeout(r, 800))]);
+    // Tonausgabe springt nicht an (iPhone nach langer Pause): lieber gleich die Gerätestimme als Stille.
+    if ((c.state as string) !== 'running') {
+      logWarn('voice:ctx-state', new Error(`audio ${c.state}`));
+      return 'unavailable';
     }
   }
-  return 'done';
+  const gen = (i: number) => withLimit(e.generate(run.chunks[i] as string, run.voice, run.rate), 12_000);
+  try {
+    let next = gen(run.from);
+    for (let i = run.from; i < run.chunks.length; i++) {
+      const out = await next;
+      if (!run.alive()) return 'stopped';
+      if (i + 1 < run.chunks.length) next = gen(i + 1);
+      run.onChunk(i);
+      const buf = c.createBuffer(1, out.audio.length, out.rate);
+      buf.copyToChannel(out.audio as Float32Array<ArrayBuffer>, 0);
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      src.connect(c.destination);
+      const ended = new Promise<void>((res) => {
+        src.onended = () => res();
+      });
+      stopNeural();
+      playing = src;
+      src.start(0);
+      await ended;
+      if (playing === src) playing = null;
+      if (!run.alive()) return 'stopped';
+    }
+    return 'done';
+  } catch (err) {
+    logWarn('voice:speak', err);
+    if (!run.alive()) return 'stopped';
+    // Diese Ausgabe spricht sofort die Gerätestimme weiter (nie Stille); die neue Stimme lädt im Hintergrund neu.
+    void rebuild(e);
+    return 'unavailable';
+  }
 }
 
-/** Rechnen hängt (z. B. Grafikchip weg, ohne Fehlermeldung): nach 25 s als Fehler werten. */
-function withLimit<T>(p: Promise<T>): Promise<T> {
+/** Rechnen hängt (z. B. Grafikchip weg, ohne Fehlermeldung): nach `ms` als Fehler werten. */
+function withLimit<T>(p: Promise<T>, ms: number): Promise<T> {
   return new Promise<T>((res, rej) => {
-    const t = setTimeout(() => rej(new Error('voice: generate timeout')), 25_000);
+    const t = setTimeout(() => rej(new Error('voice: generate timeout')), ms);
     p.then(
       (v) => {
         clearTimeout(t);
@@ -277,5 +303,6 @@ export function resetNeural(): void {
   loading = null;
   failures = 0;
   lastTry = 0;
+  checking = false;
   useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null });
 }

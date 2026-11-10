@@ -499,6 +499,8 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
     };
     useSpeech.setState({ speaking: true });
     const alive = () => id === session && current?.id === id;
+    // Zuletzt angesagtes Stück der neuen Stimme: fällt sie aus, spricht die Gerätestimme ab dem nächsten weiter.
+    let said = from - 1;
     void speakNeural({
       chunks,
       from,
@@ -506,6 +508,7 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
       voice: neuralVoice(opts),
       alive,
       onChunk: (i) => {
+        said = i;
         const listener = current?.onChunk;
         if (!listener || !alive()) return;
         try {
@@ -518,10 +521,10 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
       if (!alive()) return;
       const dev = env();
       const st = useSpeech.getState().status;
-      if (o === 'unavailable' && dev && st !== 'unsupported' && st !== 'novoice') {
-        // Neue Stimme läuft hier nicht: dieselbe Ausgabe mit der Gerätestimme.
+      if ((o === 'unavailable' || o === 'error') && dev && st !== 'unsupported' && st !== 'novoice' && said + 1 < chunks.length) {
+        // Neue Stimme läuft (gerade) nicht: dieselbe Ausgabe mit der Gerätestimme weiter – nie Stille.
         voiceOverride = opts.voice && !isNeuralVoice(opts.voice) ? opts.voice : null;
-        speakChunk(dev, chunks, from, id, rate);
+        speakChunk(dev, chunks, Math.max(from, said + 1), id, rate);
         return;
       }
       finishCurrent(o === 'unavailable' ? 'unavailable' : o);
