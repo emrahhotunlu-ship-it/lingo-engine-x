@@ -1,4 +1,5 @@
 import { retypeIfAsked } from './learnHelpers';
+import { passPick } from './wortschatzHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, MIGRATED, SEED_EVENING, screen } from './fixtures';
 import { forcedPatch, planPatch, TYPE_MODE } from './trainerHelpers';
@@ -39,8 +40,10 @@ async function startTypeCard(page: Page, tap = false): Promise<string[]> {
 /** Kern (03.11.2026): neue Wörter kommen erst mit der Einführungskarte – durchtippen bis zur ersten Lücke. */
 async function pastIntros(page: Page, tap = false): Promise<void> {
   const go = page.getByTestId('vm-intro-go');
+  const pick = page.getByTestId('vm-pick');
   await expect(go.or(page.getByTestId('vm-check')).first()).toBeVisible();
-  for (let i = 0; i < 5 && (await go.isVisible()); i++) {
+  for (let i = 0; i < 8 && (await go.or(pick).first().isVisible()); i++) {
+    if (await passPick(page)) continue;
     if (tap) await go.tap();
     else await go.click();
     await page.waitForTimeout(150);
@@ -220,6 +223,8 @@ test.describe('Laptop', () => {
     await page.getByTestId('vm-check').click();
     await retypeIfAsked(page);
     await page.getByTestId('vm-next').click();
+    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-pick')).first()).toBeVisible();
+    await passPick(page);
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('gap-input')).toBeFocused();
     // Fokus weg (z. B. nach einem Klick ins Leere): ein Buchstabe landet trotzdem in der Lücke.
@@ -262,6 +267,8 @@ test.describe('Handy mit Touch', () => {
     await page.getByTestId('vm-check').tap();
     await retypeIfAsked(page);
     await page.getByTestId('vm-next').tap();
+    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-pick')).first()).toBeVisible();
+    await passPick(page);
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('gap-input')).not.toBeFocused();
     await expect(page.getByTestId('gap')).toHaveAttribute('data-idle', '');

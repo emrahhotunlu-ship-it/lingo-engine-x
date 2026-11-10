@@ -59,3 +59,15 @@ export function bigVocab(n: number): Record<string, Doc> {
   }
   return out;
 }
+
+/**
+ * Großpaket WT (10.11.2026): steht die Auswahl „Was bedeutet das Wort?“ da (zwei Karten nach einer Einführung), die erste Möglichkeit wählen und
+ * weiter. Liefert, ob eine Auswahl da war.
+ */
+export async function passPick(page: Page): Promise<boolean> {
+  const pick = page.getByTestId('vm-pick');
+  if (!(await pick.isVisible())) return false;
+  await pick.getByTestId('vm-pick-choices').getByRole('button').first().click();
+  await page.getByTestId('vm-pick-next').click();
+  return true;
+}

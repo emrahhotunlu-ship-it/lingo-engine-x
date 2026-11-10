@@ -1,4 +1,5 @@
 import { retypeIfAsked } from './learnHelpers';
+import { passPick } from './wortschatzHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, MIGRATED, SEED_EVENING, screen } from './fixtures';
 import { TUE_9 } from './heuteHelpers';
@@ -52,8 +53,9 @@ async function playRound(page: Page, base: number): Promise<void> {
   for (let i = 0; i < 60; i++) {
     const check = page.getByTestId('vm-check');
     const go = page.getByTestId('vm-intro-go');
-    await expect(check.or(go).or(page.getByTestId('vm-done')).first()).toBeVisible();
+    await expect(check.or(go).or(page.getByTestId('vm-done')).or(page.getByTestId('vm-pick')).first()).toBeVisible();
     if (await page.getByTestId('vm-done').isVisible()) return;
+    if (await passPick(page)) continue;
     await page.clock.setFixedTime(new Date(base + (i + 1) * 60_000));
     // Kern (03.11.2026): neue Wörter zeigen erst die Einführungskarte – „Verstanden – weiter“ bucht sie und geht direkt weiter.
     if (await go.isVisible()) {
@@ -123,9 +125,9 @@ test.describe('Handy 390', () => {
     await list.getByTestId('menu-whyTask').click();
     await expect(page.getByTestId('why-line').first()).toContainText('Neues Wort für heute.');
     // Bis zur ersten echten Abfrage (Lernschritt A): Einführungen aufdecken und weiter.
-    for (let i = 0; i < 10 && (await page.getByTestId('vm-intro-go').isVisible()); i++) {
-      await page.getByTestId('vm-intro-go').click();
-      await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).first()).toBeVisible();
+    for (let i = 0; i < 10 && (await page.getByTestId('vm-intro-go').or(page.getByTestId('vm-pick')).first().isVisible()); i++) {
+      if (!(await passPick(page))) await page.getByTestId('vm-intro-go').click();
+      await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).or(page.getByTestId('vm-pick')).first()).toBeVisible();
     }
     await expect(page.getByTestId('vm-check')).toHaveText('Prüfen');
     // Die Uhr steht in den E2E-Tests (setFixedTime); eine Minute weiter, damit der Verlaufseintrag einen eigenen Zeitschlüssel hat.
@@ -161,8 +163,9 @@ test.describe('Handy 390', () => {
       if (await page.getByTestId('vm-done').isVisible()) break;
       const check = page.getByTestId('vm-check');
       const go = page.getByTestId('vm-intro-go');
-      await expect(check.or(go).or(page.getByTestId('vm-done')).first()).toBeVisible();
+      await expect(check.or(go).or(page.getByTestId('vm-done')).or(page.getByTestId('vm-pick')).first()).toBeVisible();
       if (await page.getByTestId('vm-done').isVisible()) break;
+      if (await passPick(page)) continue;
       await page.clock.setFixedTime(new Date(NOW + (i + 1) * 60_000));
       if (await go.isVisible()) {
         await go.click();
