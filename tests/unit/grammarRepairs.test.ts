@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { selectRound } from '../../src/domain/grammar/tasks';
 import type { Fehlersatz } from '../../src/domain/repair/fehlersaetze';
 import { grammarModuleOn } from '../../src/modules/grammar/api';
-import { REPAIR_TOPIC, repairTasks } from '../../src/modules/grammar/domain/repairTasks';
+import { checkGap, REPAIR_TOPIC, repairTasks } from '../../src/modules/grammar/domain/repairTasks';
 import { berlin } from './helpers';
 
 // Großpaket G4: eigene Fehlersätze aus `app/repair` im Grammatik-Schritt (Entscheidung 2: bis zu 3 vorn, Runde wird nicht länger).
@@ -88,5 +88,33 @@ describe('grammarModuleOn (Schalter gcfg.mod)', () => {
     expect(grammarModuleOn({ gcfg: { mod: 1 } })).toBe(true);
     expect(grammarModuleOn({ gcfg: { mod: 7 } })).toBe(true);
     expect(grammarModuleOn({ gcfg: { mod: 0 } })).toBe(false);
+  });
+});
+
+describe('Fehlersätze aus dem Einstufungstest (Emrahs Stift-Meldungen 09./10.11.2026)', () => {
+  const check = (id: string, wrong: string, right: string, fix: string[], ctx: string): Fehlersatz => ({ id, wrong, right, fix, ctx, due: t0, store: 'repair', src: 'check' });
+
+  it('kommen als eindeutige Lücke statt als mehrdeutiges „Fehler finden“', () => {
+    const [ship, only, key] = repairTasks([
+      check('s', 'If the shipment arrive damaged, please send us photos.', 'Should the shipment arrive damaged, please send us photos.', ['Should'], 'ca.inversion'),
+      check('o', 'Only after the system had crashed twice time we realize how outdated our backups were.', 'Only after the system had crashed twice did we realize how outdated our backups were.', ['did'], 'inv.only'),
+      check('k', 'I clearly remember to give the spare key to our neighbor.', 'I clearly remember giving the spare key to our neighbor.', ['giving'], 'gi.meaning'),
+    ]);
+    expect(ship).toMatchObject({ key: 'rep:s', rep: 's', type: 'gap', prompt: '___ the shipment arrive damaged, please send us photos.', answer: 'Should' });
+    expect(only).toMatchObject({ type: 'gap', prompt: 'Only after the system had crashed twice ___ we realize how outdated our backups were.', answer: 'did' });
+    expect(key).toMatchObject({ type: 'gap', prompt: 'I clearly remember ___ the spare key to our neighbor.', answer: 'giving' });
+  });
+
+  it('Wortschatz (lx.*) kommt nicht in die Grammatik', () => {
+    const out = repairTasks([check('c', 'we want to make a short survey', 'we want to conduct a short survey', ['conduct'], 'lx.conduct-survey'), rep('p', { pat: 'lx.colloc' })]);
+    expect(out).toEqual([]);
+  });
+
+  it('Korrektur nicht genau einmal im Satz: bleibt Korrektur-Aufgabe', () => {
+    expect(checkGap({ right: 'a cat and a dog', fix: ['a'] })).toBeNull();
+    expect(checkGap({ right: 'No change here.', fix: ['did'] })).toBeNull();
+    expect(checkGap({ right: 'No sooner had we launched the update than …', fix: ['sooner had we launched'] })).toEqual({ prompt: 'No ___ the update than …', answer: 'sooner had we launched', accepted: [] });
+    const out = repairTasks([check('x', 'a cat and dog', 'a cat and a dog', ['a'], 'art.indefinite')]);
+    expect(out[0]).toMatchObject({ type: 'correct', prompt: 'a cat and dog', answer: 'a cat and a dog' });
   });
 });
