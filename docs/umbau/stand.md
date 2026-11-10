@@ -1100,3 +1100,8 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 10.11.2026 – Stimme nach langer Pause (Emrahs Meldung: „nach einer Zeit gar keine Sprachausgabe“)
 - Behebung `ae377a19`: nach >20 s Hintergrund kurze Probe (8 s), bis dahin/bei Fehler Gerätestimme + Neuladen im Hintergrund; Tonausgabe startet nicht / Grafikchip weg / Rechnen hängt (12 s) → Gerätestimme ab dem nächsten Satz. **Test-Link `AXHkh6…` v103 `1794336908-7b81`** (Rückweg v102); enthält auch v112-Stand. Wartet auf Emrahs „live“.
 - Emrahs „direkt live nehmen!“ → **live `JLL8…` v113 `1794337969-93c7`** (Rückweg v112 `1794335668-caef`), Stand `df364e29` (Programm gleich Test-Link v103).
+
+## 10.11.2026 – Stimme schnell und robust (Emrahs Meldung: „auf einmal ging es nicht mehr, Handy laggy, immer eine Sekunde Wartezeit“)
+- Ursache: Jedes Zeitlimit (12 s) und jeder Rechenfehler lud die Stimme neu (~190 MB aus dem Speicher), während die alte noch im Speicher lag und rechnete → Speicher doppelt, Gerät ruckelt, danach Stille; zusätzlich rechneten Vorab-Stück und neue Tipps gleichzeitig auf dem Grafikchip; jeder Tipp rechnete den Satz neu (~1 s).
+- Behebung `e3cc1084`: ein Satz nach dem anderen (Warteschlange, Tipps vor Vorab-Rechnen, veraltete Aufträge fallen weg), Gedächtnis der letzten Sätze (≤ 60 / ≈ 16 MB), Vorab-Rechnen des sichtbaren Satzes (`usePrefetchSpeech` an SpeakButton, „Satz anhören“, Wort anhören, Wortseite), zu langsam (> 4 s) → diesmal Gerätestimme ohne Neuladen; Neuladen nur bei Grafikchip-Verlust, Hängen > 20 s oder zwei Fehlern in Folge (höchstens alle 2 min), immer erst nach dem Freigeben der alten. Test `tests/unit/neuralVoice.test.ts`.
+- **Test-Link `AXHkh6…` v104 `1794341715-c2bd`** (Rückweg v103 `1794336908-7b81`). Wartet auf Emrahs „live“.
