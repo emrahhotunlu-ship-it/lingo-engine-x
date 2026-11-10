@@ -98,6 +98,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **Stift-Werkzeug** (eigenes Rückmelden mit Bild statt claude.ai-Kommentarfeld, `pen/<id>`) **live** `JLL8…` v109 `1794258277-46d7` (09.11.2026, Emrahs „Live nehmen“, Rückweg v108 `1794251438-40db`; Test-Link v99 `1794256864-b9a4`)
   - [x] **Live-Fehler 09.11.** (Buch-Seite geht nach Verlassen an derselben Aufgabe weiter, Stift-Tastatur bleibt offen) **live** `JLL8…` v110 `1794261485-6886` (09.11.2026, Emrahs „Live“, Rückweg v109 `1794258277-46d7`; Test-Link v101 `1794261267-428f`)
   - [x] **Stimme nach Minimieren** (Tonausgabe nach dem Hintergrund neu, Neuladen bei Grafikchip-Verlust, Ladezeit in Einstellungen) **live** `JLL8…` v111 `1794332984-e537` (10.11.2026, Emrahs „ja live“, Rückweg v110 `1794261485-6886`; Test-Link v102 `1794330892-28fb`)
+  - [x] **Stimme übernimmt automatisch** (bis zum Laden Gerätestimme, danach von selbst die neue; neue Versuche bei Ladefehler; Prozessor statt Grafikchip als Rückfall) **live** `JLL8…` v112 `1794335668-caef` (10.11.2026, Emrahs „direkt live setzen“, ohne Test-Link, Rückweg v111 `1794332984-e537`)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
