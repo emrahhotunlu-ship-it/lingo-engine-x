@@ -1088,3 +1088,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 
 ## 09.11.2026 – LIVE v110: Buch-Seite geht weiter + Stift-Tastatur
 - Emrahs „Live“ → **live `JLL8…` v110 `1794261485-6886`** (Rückweg v109 `1794258277-46d7`), Stand `d2d40679` (Programm gleich Test-Link v101).
+
+## 10.11.2026 – Stimme nach dem Minimieren (Emrahs Meldung)
+- Meldung: Stimme lädt bei jedem Öffnen; nach Minimieren am iPhone stumm bis zum Neustart. Behebung (`6e4f9e72`): Tonausgabe nach dem Hintergrund im nächsten Tipp neu, Grafikchip-Verlust/hängendes Rechnen → einmal aus dem Speicher neu laden, `storage.persist()`, paralleles Lesen, Ladezeit und Herkunft in Einstellungen › Stimme. Laden beim Öffnen (aus dem Speicher, ohne Download) bleibt technisch nötig.
+- **Test-Link `AXHkh6…` v102 `1794330892-28fb`** (Rückweg v101). Geprüft: Typprüfung, Lint, Sprach-Tests, Probelauf der Stimme mit Neuladen im Testbrowser, `settings`/`pen`/`heute`, Plattform/Budget.
