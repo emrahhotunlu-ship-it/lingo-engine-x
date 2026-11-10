@@ -29,3 +29,6 @@ Emrah ist deutscher Muttersprachler, Business-Englisch B2 → C1, arbeitet in Ve
 Schreibe sonst nichts, lösche nichts.
 
 **Schritt 7: Antwort.** Kurz: Datum, Anzahl Karten, die Wörter, übersprungene mit Grund.
+
+---
+**Stand 10.11.2026 (Emrahs OK „A: ab sofort echte App“):** Die Routine `trig_01Dm3geze3VmgT6GkP7YxWMg` läuft mit `JLL8…` als Haupt-Artefakt und spiegelt `wtq/m-<monat>` in den Test-Link `AXHkh6…` (Schritt 6b). Die gespeicherte Fassung des Auftrags steht in der Routine selbst.
