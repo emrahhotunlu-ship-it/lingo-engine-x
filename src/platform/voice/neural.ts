@@ -35,16 +35,23 @@ function supported(): boolean {
   return typeof w.indexedDB === 'object' && typeof w.DecompressionStream === 'function' && (typeof w.AudioContext === 'function' || typeof w.webkitAudioContext === 'function');
 }
 
-/** Startet das Laden (einmal). Liefert die Maschine oder `null`, wenn die neue Stimme hier nicht läuft. */
+/** Fehlversuche beim Laden; danach neuer Versuch nach 15 s, 1 min, 3 min (Emrah 10.11.2026: die neue Stimme soll von selbst übernehmen). */
+let failures = 0;
+let lastTry = 0;
+const RETRY_MS = [15_000, 60_000, 180_000];
+
+/** Startet das Laden (einmal). Liefert die Maschine oder `null`, wenn die neue Stimme hier (noch) nicht läuft. */
 export function loadNeuralVoice(): Promise<Engine | null> {
   if (engine) return Promise.resolve(engine);
   if (loading) return loading;
   if (!supported()) return Promise.resolve(null);
+  lastTry = Date.now();
   useNeuralVoice.setState({ status: 'loading', pct: 0, phase: null });
-  loading = import('./engine')
+  const run: Promise<Engine | null> = import('./engine')
     .then((m) => m.loadEngine((p) => useNeuralVoice.setState({ phase: p.phase, pct: p.pct })))
     .then((e) => {
       engine = e;
+      failures = 0;
       useNeuralVoice.setState({ status: 'ready', device: e.device, fromCache: e.fromCache, loadMs: e.loadMs, pct: 100 });
       logInfo('voice:ready', `${e.device}, ${e.fromCache ? 'aus dem Speicher' : 'heruntergeladen'}, ${(e.loadMs / 1000).toFixed(1)} s`);
       return e;
@@ -52,21 +59,33 @@ export function loadNeuralVoice(): Promise<Engine | null> {
     .catch((err: unknown) => {
       logWarn('voice:load', err);
       useNeuralVoice.setState({ status: 'failed' });
+      // Nicht aufgeben: später von selbst noch einmal (bis dahin spricht die Gerätestimme).
+      const wait = RETRY_MS[failures];
+      failures += 1;
+      if (loading === run) loading = null;
+      if (wait !== undefined) setTimeout(() => void loadNeuralVoice(), wait);
       return null;
     });
+  loading = run;
   return loading;
 }
 
-/** Nach dem Start im Hintergrund laden, ohne den ersten Bildschirm aufzuhalten. */
-export function scheduleNeuralVoice(delayMs = 1500): void {
+/** Gleich nach dem Start im Hintergrund laden (kurz warten, damit der erste Bildschirm zuerst steht). */
+export function scheduleNeuralVoice(delayMs = 300): void {
   if (!supported() || loading || engine) return;
   setTimeout(() => void loadNeuralVoice(), delayMs);
 }
 
-/** Soll `speak` die neue Stimme nehmen (bereit oder gerade beim Laden)? */
+/**
+ * Soll `speak` die neue Stimme nehmen? Nur, wenn sie fertig geladen ist (Emrah 10.11.2026: bis dahin sofort die Gerätestimme,
+ * danach automatisch die neue). Eine abgebrochene Ladung wird beim nächsten Vorlesen wieder angestoßen.
+ */
 export function neuralWanted(): boolean {
   const s = useNeuralVoice.getState().status;
-  return s === 'ready' || s === 'loading';
+  if (s === 'ready') return true;
+  // Alle geplanten Versuche vorbei: höchstens alle 5 Minuten beim Vorlesen einen neuen anstoßen.
+  if (s === 'failed' && !loading && failures > RETRY_MS.length && Date.now() - lastTry > 300_000) void loadNeuralVoice();
+  return false;
 }
 
 /** Die App war im Hintergrund (iPhone: App minimiert): die Tonausgabe danach im nächsten Tipp frisch aufbauen. */
@@ -74,6 +93,8 @@ let wasHidden = false;
 if (typeof document !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') wasHidden = true;
+    // Zurück in der App und die Stimme fehlt noch: gleich neu versuchen.
+    else if (!engine && !loading && useNeuralVoice.getState().status === 'failed') void loadNeuralVoice();
   });
 }
 
@@ -254,5 +275,7 @@ export function resetNeural(): void {
   stopNeural();
   engine = null;
   loading = null;
+  failures = 0;
+  lastTry = 0;
   useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null });
 }

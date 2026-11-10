@@ -209,8 +209,17 @@ export async function loadEngine(onProgress: EngineProgress): Promise<Engine> {
     onnx.wasm.numThreads = 1;
   }
   onProgress({ phase: 'start', pct: 0 });
-  const device = (await hasGpu()) ? 'webgpu' : 'wasm';
-  const tts = await KokoroTTS.from_pretrained(MODEL_ID, { dtype: 'fp32', device });
+  let device: 'webgpu' | 'wasm' = (await hasGpu()) ? 'webgpu' : 'wasm';
+  let tts: KokoroTTS;
+  try {
+    tts = await KokoroTTS.from_pretrained(MODEL_ID, { dtype: 'fp32', device });
+  } catch (err) {
+    // Grafikchip verweigert (z. B. zu wenig Speicher, während eine Übung läuft): dann auf dem Prozessor rechnen.
+    if (device !== 'webgpu') throw err;
+    logWarn('voice:webgpu-start', err);
+    device = 'wasm';
+    tts = await KokoroTTS.from_pretrained(MODEL_ID, { dtype: 'fp32', device });
+  }
   // Grafikchip beobachten: iOS nimmt ihn beim Minimieren manchmal weg; danach rechnet die Sitzung nicht mehr.
   let lost = false;
   if (device === 'webgpu') {
