@@ -9,6 +9,8 @@ export const voiceEn: Record<keyof typeof voiceDe, string> = {
   voiceAutoplay: 'Read replies aloud in role-play',
   voiceNone: 'No English voice found',
   voiceNeuralReady: 'New voice ready',
+  voiceNeuralCache: 'loaded from storage in {s} s',
+  voiceNeuralDown: 'downloaded in {s} s',
   voiceNeuralLoading: 'Loading the new voice…',
   voiceNeuralFailed: "The new voice doesn't run on this device. The device voice speaks instead.",
   voiceNeuralHeart: 'Heart · female, US',

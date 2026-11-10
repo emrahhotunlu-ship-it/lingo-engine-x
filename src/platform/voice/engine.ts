@@ -26,7 +26,12 @@ export type EngineProgress = (p: { phase: 'download' | 'cache' | 'start'; pct: n
 export type Engine = {
   device: 'webgpu' | 'wasm';
   fromCache: boolean;
+  /** Ladezeit in ms (aus dem Speicher bzw. mit Herunterladen). */
+  loadMs: number;
+  /** Grafikchip verloren (iPhone: nach dem Minimieren möglich) – dann neu laden. */
+  lost(): boolean;
   generate(text: string, voice: string, speed: number): Promise<{ audio: Float32Array; rate: number }>;
+  dispose(): Promise<void>;
 };
 
 // ---------------------------------------------------------------- Browser-Speicher (IndexedDB)
@@ -61,8 +66,9 @@ function idbWrite(db: IDBDatabase, fn: (s: IDBObjectStore) => void): Promise<voi
 async function readCache(db: IDBDatabase, man: PackManifest): Promise<Uint8Array | null> {
   const n = Math.ceil(man.total / SLICE);
   const all = new Uint8Array(man.total);
+  const parts = await Promise.all(Array.from({ length: n }, (_, i) => idbGet(db, `${man.v}-${i}`)));
   for (let i = 0; i < n; i++) {
-    const part = await idbGet(db, `${man.v}-${i}`);
+    const part = parts[i];
     if (!(part instanceof Uint8Array) || part.length !== Math.min(SLICE, man.total - i * SLICE)) return null;
     all.set(part, i * SLICE);
   }
@@ -156,6 +162,10 @@ async function hasGpu(): Promise<boolean> {
 
 /** Lädt Paket und Modell; wirft bei jedem Fehler (der Aufrufer bleibt dann bei der Gerätestimme). */
 export async function loadEngine(onProgress: EngineProgress): Promise<Engine> {
+  const t0 = performance.now();
+  // Bitte an den Browser, den Speicher nicht von selbst zu räumen (sonst lädt die Stimme wieder 210 MB herunter).
+  const st = (navigator as unknown as { storage?: { persist?: () => Promise<boolean> } }).storage;
+  if (st?.persist) void st.persist().catch((err: unknown) => logWarn('voice:persist', err));
   const mr = await fetch('voice-manifest.json');
   if (!mr.ok) throw new Error(`voice manifest: ${mr.status}`);
   const man = (await mr.json()) as PackManifest;
@@ -201,13 +211,37 @@ export async function loadEngine(onProgress: EngineProgress): Promise<Engine> {
   onProgress({ phase: 'start', pct: 0 });
   const device = (await hasGpu()) ? 'webgpu' : 'wasm';
   const tts = await KokoroTTS.from_pretrained(MODEL_ID, { dtype: 'fp32', device });
+  // Grafikchip beobachten: iOS nimmt ihn beim Minimieren manchmal weg; danach rechnet die Sitzung nicht mehr.
+  let lost = false;
+  if (device === 'webgpu') {
+    try {
+      const gpu = (hfEnv.backends.onnx as { webgpu?: { device?: unknown } }).webgpu;
+      const d = (await Promise.resolve(gpu?.device)) as { lost?: Promise<unknown> } | undefined;
+      void d?.lost?.then((info) => {
+        lost = true;
+        logWarn('voice:gpu-lost', info);
+      });
+    } catch (err) {
+      logWarn('voice:gpu-watch', err);
+    }
+  }
   // Großes Modell und Rechenkern sind jetzt geladen: nur die kleinen Dateien (Stimmen, Einstellungen) bleiben in der Weiche.
   const keep = new Map<string, Uint8Array>();
   for (const [p, b] of files) if (!p.startsWith('onnx/') && p !== WASM_NAME) keep.set(p, b.slice());
   shimmed = keep;
+  const loadMs = Math.round(performance.now() - t0);
   return {
     device,
     fromCache,
+    loadMs,
+    lost: () => lost,
+    async dispose() {
+      try {
+        await (tts.model as unknown as { dispose?: () => Promise<unknown> }).dispose?.();
+      } catch (err) {
+        logWarn('voice:dispose', err);
+      }
+    },
     async generate(text, voice, speed) {
       const v: 'af_heart' | 'am_michael' = voice === 'am_michael' ? 'am_michael' : 'af_heart';
       const out = await tts.generate(text, { voice: v, speed });

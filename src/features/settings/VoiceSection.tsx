@@ -30,7 +30,7 @@ async function saveProfile(patch: Record<string, unknown>, rollback: () => void,
 }
 
 export function VoiceSection() {
-  const { t } = useT();
+  const { t, lang } = useT();
   const status = useSpeech((s) => s.status);
   // Befund 30.09.: die en-US-Einschränkung vom Vortag blendete auch echte, von Emrah bewusst
   // heruntergeladene Premium-Stimmen aus (z. B. „Jamie", keine en-US-Stimme) – genau die Stimmen,
@@ -45,6 +45,8 @@ export function VoiceSection() {
   // Neue Stimme (Emrah 09.11.2026): ersetzt die Gerätestimmen; die Liste der Gerätestimmen erscheint nur, wenn sie hier nicht läuft.
   const neural = useNeuralVoice((s) => s.status);
   const neuralPct = useNeuralVoice((s) => s.pct);
+  const neuralMs = useNeuralVoice((s) => s.loadMs);
+  const neuralCache = useNeuralVoice((s) => s.fromCache);
   const neuralOn = neural === 'ready' || neural === 'loading';
   const neuralCurrent = isNeuralVoice(typeof profile?.voice === 'string' ? profile.voice : null) ? (profile?.voice as string) : 'af_heart';
   const [rate, setRate] = useState(savedRate);
@@ -115,7 +117,9 @@ export function VoiceSection() {
       {neuralOn ? (
         <>
           <p className="text-sm text-muted" role="status" data-testid="voice-neural-status">
-            {neural === 'ready' ? t('voiceNeuralReady') : `${t('voiceNeuralLoading')}${neuralPct > 0 ? ` ${neuralPct} %` : ''}`}
+            {neural === 'ready'
+              ? `${t('voiceNeuralReady')}${neuralMs !== null ? ` · ${t(neuralCache ? 'voiceNeuralCache' : 'voiceNeuralDown', { s: (neuralMs / 1000).toFixed(1).replace('.', lang === 'de' ? ',' : '.') })}` : ''}`
+              : `${t('voiceNeuralLoading')}${neuralPct > 0 ? ` ${neuralPct} %` : ''}`}
           </p>
           <div role="radiogroup" aria-label={t('voiceTitle')} className="flex flex-col gap-1" data-testid="voice-neural-select">
             {NEURAL_VOICES.map((v) => {

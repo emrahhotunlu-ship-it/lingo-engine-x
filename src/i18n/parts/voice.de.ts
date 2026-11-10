@@ -7,6 +7,8 @@ export const voiceDe = {
   voiceAutoplay: 'Antworten im Rollenspiel vorlesen',
   voiceNone: 'Keine englische Stimme gefunden',
   voiceNeuralReady: 'Neue Stimme bereit',
+  voiceNeuralCache: 'aus dem Speicher geladen in {s} s',
+  voiceNeuralDown: 'heruntergeladen in {s} s',
   voiceNeuralLoading: 'Neue Stimme wird geladen …',
   voiceNeuralFailed: 'Die neue Stimme läuft auf diesem Gerät nicht. Es spricht die Gerätestimme.',
   voiceNeuralHeart: 'Heart · Frau, US',
