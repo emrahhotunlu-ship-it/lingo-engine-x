@@ -1092,3 +1092,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 10.11.2026 – Stimme nach dem Minimieren (Emrahs Meldung)
 - Meldung: Stimme lädt bei jedem Öffnen; nach Minimieren am iPhone stumm bis zum Neustart. Behebung (`6e4f9e72`): Tonausgabe nach dem Hintergrund im nächsten Tipp neu, Grafikchip-Verlust/hängendes Rechnen → einmal aus dem Speicher neu laden, `storage.persist()`, paralleles Lesen, Ladezeit und Herkunft in Einstellungen › Stimme. Laden beim Öffnen (aus dem Speicher, ohne Download) bleibt technisch nötig.
 - **Test-Link `AXHkh6…` v102 `1794330892-28fb`** (Rückweg v101). Geprüft: Typprüfung, Lint, Sprach-Tests, Probelauf der Stimme mit Neuladen im Testbrowser, `settings`/`pen`/`heute`, Plattform/Budget.
+- Emrahs „ja live“ → **live `JLL8…` v111 `1794332984-e537`** (Rückweg v110 `1794261485-6886`), Stand `72f3d3ca` (Programm gleich Test-Link v102).

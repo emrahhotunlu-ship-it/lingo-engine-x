@@ -97,6 +97,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **Neue Stimme** (Kokoro ersetzt die Gerätestimme, `docs/umbau/stimme.md`) **live** `JLL8…` v108 `1794251438-40db` (09.11.2026, Emrahs „Ja passt live nehmen“, Rückweg v104 `1794207575-38a1`; Test-Link v98 `1794250971-d204`)
   - [x] **Stift-Werkzeug** (eigenes Rückmelden mit Bild statt claude.ai-Kommentarfeld, `pen/<id>`) **live** `JLL8…` v109 `1794258277-46d7` (09.11.2026, Emrahs „Live nehmen“, Rückweg v108 `1794251438-40db`; Test-Link v99 `1794256864-b9a4`)
   - [x] **Live-Fehler 09.11.** (Buch-Seite geht nach Verlassen an derselben Aufgabe weiter, Stift-Tastatur bleibt offen) **live** `JLL8…` v110 `1794261485-6886` (09.11.2026, Emrahs „Live“, Rückweg v109 `1794258277-46d7`; Test-Link v101 `1794261267-428f`)
+  - [x] **Stimme nach Minimieren** (Tonausgabe nach dem Hintergrund neu, Neuladen bei Grafikchip-Verlust, Ladezeit in Einstellungen) **live** `JLL8…` v111 `1794332984-e537` (10.11.2026, Emrahs „ja live“, Rückweg v110 `1794261485-6886`; Test-Link v102 `1794330892-28fb`)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
