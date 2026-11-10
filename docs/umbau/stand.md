@@ -1099,3 +1099,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 
 ## 10.11.2026 – Stimme nach langer Pause (Emrahs Meldung: „nach einer Zeit gar keine Sprachausgabe“)
 - Behebung `ae377a19`: nach >20 s Hintergrund kurze Probe (8 s), bis dahin/bei Fehler Gerätestimme + Neuladen im Hintergrund; Tonausgabe startet nicht / Grafikchip weg / Rechnen hängt (12 s) → Gerätestimme ab dem nächsten Satz. **Test-Link `AXHkh6…` v103 `1794336908-7b81`** (Rückweg v102); enthält auch v112-Stand. Wartet auf Emrahs „live“.
+- Emrahs „direkt live nehmen!“ → **live `JLL8…` v113 `1794337969-93c7`** (Rückweg v112 `1794335668-caef`), Stand `df364e29` (Programm gleich Test-Link v103).
