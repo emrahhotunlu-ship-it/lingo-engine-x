@@ -146,11 +146,26 @@ export function colPool(items: readonly ColRaw[], base: ReadonlyMap<string, { pa
 /** Großpaket WT: geprüfte Wortkarte (`src/content/wt/*.json`): Wort, Wortart, Bedeutung, Erklärung, Business-Satz + Übersetzung, Niveau, Rang in der Liste. */
 export type WtRaw = { w: string; p: string; d: string; g: string; x: string; xd: string; lvl: 'B1' | 'B2' | 'C1' | 'C2'; r: number };
 /** Geprüfte Wortliste in Listenreihenfolge, ohne Grundwortschatz (B1, kennt ein B2-Lerner), Vorhandenes und im Test Gekonntes. */
-export function wtPool(items: readonly WtRaw[], have: ReadonlySet<string>, ok: ReadonlySet<string>): Fresh[] {
+export function wtPool(items: readonly WtRaw[], have: ReadonlySet<string>, ok: ReadonlySet<string>, tag = 'bsl'): Fresh[] {
   return items
     .filter((e) => e.lvl !== 'B1' && e.w && e.d && e.x && !have.has(headwordOf(e.w)) && !ok.has(headwordOf(e.w)))
     .sort((a, b) => a.r - b.r)
-    .map((e) => ({ src: 'band' as const, word: e.w, de: e.d, ex: e.x, pos: e.p, kind: 'vocab' as const, core: null, ref: `wt/bsl#${e.r}`, exDe: e.xd, def: e.g }));
+    .map((e) => ({ src: 'band' as const, word: e.w, de: e.d, ex: e.x, pos: e.p, kind: 'vocab' as const, core: null, ref: `wt/${tag}#${e.r}`, exDe: e.xd, def: e.g }));
+}
+
+/** Zwei Listen im Wechsel (Business-Liste und täglich aufbereitete Atlas-Wörter), ohne doppelte Stichwörter. */
+export function alternate(a: readonly Fresh[], b: readonly Fresh[]): Fresh[] {
+  const out: Fresh[] = [];
+  const seen = new Set<string>();
+  for (let i = 0; i < Math.max(a.length, b.length); i++)
+    for (const f of [b[i], a[i]]) {
+      if (!f) continue;
+      const h = headwordOf(f.word);
+      if (seen.has(h)) continue;
+      seen.add(h);
+      out.push(f);
+    }
+  return out;
 }
 
 export type BandRaw = { w: string; p: string; d: string; x: string; r: number; hidden?: 1; basic?: 1; exWeak?: 1 };

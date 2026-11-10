@@ -121,3 +121,23 @@ describe('Schnellstart 10 · 20 · 30 (freie Runde)', () => {
     expect(tasks.slice(1).every((t) => !t.planned && t.why === 'practice')).toBe(true);
   });
 });
+
+describe('täglich aufbereitete Atlas-Wörter (wtq/m-JJJJ-MM)', () => {
+  it('wtqPaths: von November 2026 bis zum aktuellen Monat', async () => {
+    const { wtqPaths } = await import('../../../src/modules/vocab/data/refill');
+    expect(wtqPaths(Date.parse('2026-11-20T10:00:00Z'))).toEqual(['wtq/m-2026-11']);
+    expect(wtqPaths(Date.parse('2027-02-03T10:00:00Z'))).toEqual(['wtq/m-2026-11', 'wtq/m-2026-12', 'wtq/m-2027-01', 'wtq/m-2027-02']);
+  });
+  it('readWtq: tolerant, ungültige Einträge fallen weg', async () => {
+    const { readWtq } = await import('../../../src/modules/vocab/data/refill');
+    const ok = { w: 'earnings', p: 'noun', d: 'Gewinn, Ertrag', g: 'money a company makes', x: 'Our quarterly earnings beat the forecast by ten percent.', xd: 'Unser Quartalsgewinn übertraf die Prognose um zehn Prozent.', lvl: 'B2', r: 4521 };
+    expect(readWtq({ v: 1, items: [ok, { w: 'x' }, null] })).toEqual([ok]);
+    expect(readWtq(null)).toEqual([]);
+    expect(readWtq({ items: 'kaputt' })).toEqual([]);
+  });
+  it('alternate: Atlas und Business-Liste im Wechsel, ohne Doppelte', async () => {
+    const { alternate } = await import('../../../src/modules/vocab/domain/sources');
+    const f = (w: string) => ({ src: 'band' as const, word: w, de: 'x', ex: 'x', pos: 'noun', kind: 'vocab' as const, core: null, ref: w });
+    expect(alternate([f('a1'), f('a2'), f('same')], [f('b1'), f('same')]).map((x) => x.word)).toEqual(['b1', 'a1', 'same', 'a2']);
+  });
+});

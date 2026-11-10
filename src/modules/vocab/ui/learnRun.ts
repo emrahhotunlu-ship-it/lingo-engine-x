@@ -10,7 +10,7 @@ import { type FirstVerdict, milder } from '../prompts/common';
 import { type ExtraFix, isEvade, type WordJudgement } from '../prompts/judge';
 import type { Band } from '../domain/band';
 import { Catalog, formMs, isNewLex, type Item } from '../domain/catalog';
-import { srcOf, weightsOf } from '../domain/sources';
+import { srcOf, weightsOf, type WtRaw } from '../domain/sources';
 import type { SourceData } from '../data/refill';
 import { VMOD_PACE_PATH, VMOD_PLACE_PATH } from '../registry';
 import type { Check, CheckDict } from '../domain/check';
@@ -472,12 +472,24 @@ export class LearnRun {
     const load = this.env.loadSources;
     if (!load) return [];
     try {
-      const { refillFresh, readPlace } = await import('../data/refill');
+      const { refillFresh, readPlace, readWtq, wtqPaths } = await import('../data/refill');
       // Einstufung: fehlt = Grenze 4.500; vorhanden, aber nicht lesbar = Häufigkeitsliste heute auslassen; ein Lesefehler wirft und lässt das
       // Nachfüllen heute ganz aus (unten protokolliert, data-guard S7b).
       const raw = this.env.read ? await this.env.read(VMOD_PLACE_PATH) : null;
       const place = raw === null ? null : (readPlace(raw) ?? 'skip');
-      return await refillFresh(this.env.deps.writer, { docs: new Map(docs), items, quota: cfg.newPerDay, nowMs, place, w: weightsOf(cfg.w), load });
+      // Großpaket WT (Emrah 10.11.2026: „jeden Tag aus dem Atlas Wörter aufbereiten“): täglich gelieferte, Lehrer-geprüfte Wörter je Monat.
+      const read = this.env.read;
+      const wtDb: WtRaw[] = [];
+      if (read)
+        for (const p of wtqPaths(nowMs)) {
+          try {
+            wtDb.push(...readWtq(await read(p)));
+          } catch (err) {
+            logWarn('vocab:wtq-read', err);
+          }
+        }
+      const withDb = async () => ({ ...(await load()), wtDb });
+      return await refillFresh(this.env.deps.writer, { docs: new Map(docs), items, quota: cfg.newPerDay, nowMs, place, w: weightsOf(cfg.w), load: withDb });
     } catch (err) {
       logError('vocab:refill', err);
       return [];

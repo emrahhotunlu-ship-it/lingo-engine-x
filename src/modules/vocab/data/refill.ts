@@ -5,7 +5,7 @@ import { isNewLex, type Item } from '../domain/catalog';
 import { headwordOf } from '../domain/dupes';
 import { emptyLex } from '../domain/planner';
 import { WARN_2 } from '../domain/capacity';
-import { bandPool, type BandRaw, type ColRaw, colPool, DEFAULT_EDGE, type Fresh, jobPool, type JobRaw, refillNeed, type Src, V5_SRC, type Weights, type WtRaw, wtPool } from '../domain/sources';
+import { alternate, bandPool, type BandRaw, type ColRaw, colPool, DEFAULT_EDGE, type Fresh, jobPool, type JobRaw, refillNeed, type Src, V5_SRC, type Weights, type WtRaw, wtPool } from '../domain/sources';
 
 // Großpaket A Schritt 7 (V5, vokabeln/s7-bau.md): Nachfüllen neuer Wörter aus den Quellen Wortpartner, Beruf und Häufigkeitsliste, bevor der
 // Tagesplan eingefroren wird. Nur ergänzend (`createIfMissing`, nie überschreiben); jedes neue Dokument hat Ursprungssatz und Herkunft
@@ -28,10 +28,35 @@ export function readPlace(doc: Doc | null): Place | null {
 export const REFILL_DOC_CAP = WARN_2 - 500;
 
 /** Rohdaten der Quellen (Tests geben sie hinein; die App lädt sie per dynamischem Import). */
-export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[]; /** Großpaket WT: geprüfte Wortliste (vor der Häufigkeitsliste). */ wt?: readonly WtRaw[] };
+export type SourceData = { job: readonly JobRaw[]; col: readonly ColRaw[]; band: readonly BandRaw[]; /** Großpaket WT: geprüfte Wortliste (vor der Häufigkeitsliste). */ wt?: readonly WtRaw[]; /** Täglich aufbereitete Atlas-Wörter (`wtq/m-JJJJ-MM`, Lehrer-geprüft; eigene, nie beim Start geladene Sammlung). */ wtDb?: readonly WtRaw[] };
 
 /** Häufigkeitsliste als Quelle neuer Wörter (aus bis zur geprüften Lehrer-Charge, Inhalts-Audit 04.11.2026). */
 export const ATLAS_REFILL = false;
+
+/** Monatsdokumente der täglich aufbereiteten Wörter seit Beginn (November 2026) bis zum Monat von `nowMs`. */
+export function wtqPaths(nowMs: number): string[] {
+  const out: string[] = [];
+  const end = dayKey(nowMs).slice(0, 7);
+  for (let y = 2026, m = 11; out.length < 60; m === 12 ? ((y += 1), (m = 1)) : (m += 1)) {
+    const k = `${y}-${String(m).padStart(2, '0')}`;
+    out.push(`wtq/m-${k}`);
+    if (k >= end) break;
+  }
+  return out;
+}
+
+const wtItemSchema = z.object({ w: z.string().min(1).max(60), p: z.string().max(20), d: z.string().min(1).max(120), g: z.string().max(160), x: z.string().min(10).max(220), xd: z.string().min(5).max(260), lvl: z.enum(['B1', 'B2', 'C1', 'C2']), r: z.number().int().min(0) });
+
+/** Einträge eines Monatsdokuments (tolerant: ungültige Einträge fallen still weg, ein ungültiges Dokument liefert nichts). */
+export function readWtq(doc: Doc | null): WtRaw[] {
+  const items = doc && Array.isArray(doc.items) ? (doc.items as unknown[]) : [];
+  const out: WtRaw[] = [];
+  for (const it of items.slice(0, 1000)) {
+    const r = wtItemSchema.safeParse(it);
+    if (r.success) out.push(r.data);
+  }
+  return out;
+}
 
 export async function loadSources(): Promise<SourceData> {
   const [{ CHARGE2 }, atlasText, colRaw, wtRaw] = await Promise.all([import('../content'), loadAtlasText(), loadColCharge(), loadWtBank()]);
@@ -104,11 +129,12 @@ export async function refillFresh(
     const head = d ? (it.path.startsWith('chunk/') ? d.en : d.word) : null;
     if (typeof head === 'string' && it.lex.intro) base.set(headwordOf(head), { path: it.path, intro: it.lex.intro });
   }
+  const okSet = new Set((o.place && o.place !== 'skip' ? o.place.ok : []).map(headwordOf));
   const pools = {
     col: colPool(data.col, base, have, today),
     job: jobPool(data.job, have),
     // Großpaket WT: zuerst die geprüfte Wortliste (unabhängig von der Einstufungsgrenze), danach – falls eingeschaltet – die Häufigkeitsliste.
-    band: [...wtPool(data.wt ?? [], have, new Set((o.place && o.place !== 'skip' ? o.place.ok : []).map(headwordOf))), ...(o.place === 'skip' ? [] : bandPool(data.band, o.place?.edge ?? DEFAULT_EDGE, have, new Set((o.place?.ok ?? []).map(headwordOf))))],
+    band: [...alternate(wtPool(data.wt ?? [], have, okSet), wtPool(data.wtDb ?? [], have, okSet, 'atlas')), ...(o.place === 'skip' ? [] : bandPool(data.band, o.place?.edge ?? DEFAULT_EDGE, have, new Set((o.place?.ok ?? []).map(headwordOf))))],
   };
   const need = refillNeed(o.quota, stock, { col: pools.col.length, job: pools.job.length, band: pools.band.length }, o.w);
   const out: [string, Doc][] = [];
