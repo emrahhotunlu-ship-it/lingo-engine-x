@@ -60,8 +60,9 @@ describe('geprüfte Wortliste (src/content/wt/bsl.json)', () => {
 describe('Tagesziel in Wörtern', () => {
   it('countCfg: Standard 50, Zeit-Notbremse 0,8 min je Wort (mindestens die Wörter-Zeit), kurzer Tag nach Minuten', () => {
     expect(WORDS_PER_DAY).toBe(50);
-    expect(countCfg(undefined, 21, false)).toEqual({ cnt: 50, min: 40 });
+    expect(countCfg(undefined, 21, false)).toEqual({ cnt: 50, min: 36 });
     expect(countCfg(30, 21, false)).toEqual({ cnt: 30, min: 24 });
+    expect(countCfg(60, 30, false)).toEqual({ cnt: 60, min: 45 });
     expect(countCfg(0, 21, false)).toEqual({ cnt: 0, min: 21 });
     expect(countCfg(50, 5, true)).toEqual({ cnt: 0, min: 5 });
   });

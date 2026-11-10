@@ -12,7 +12,8 @@ export type Src = 'col' | 'job' | 'own' | 'band';
 export const SRC_ORDER: readonly Src[] = ['col', 'job', 'own', 'band'];
 export type Weights = Record<Src, number>;
 // Großpaket WT (Emrah 10.11.2026): die geprüfte Wortliste (Quelle `band`) trägt den Großteil der neuen Wörter.
-export const SRC_WEIGHTS: Readonly<Weights> = { col: 0.15, job: 0.15, own: 0.2, band: 0.5 };
+// learning-scientist WT1 Befund 5: Wortverbindungen und Beruf behalten ihr Gewicht (Chunks vor Einzelwörtern), die Liste trägt gut ein Drittel.
+export const SRC_WEIGHTS: Readonly<Weights> = { col: 0.25, job: 0.2, own: 0.2, band: 0.35 };
 /** Herkunft (`doc.src`) der vom Modul angelegten Lexeme. */
 export const V5_SRC: Readonly<Record<Exclude<Src, 'own'>, string>> = { col: 'v5:col', job: 'v5:job', band: 'v5:band' };
 /** Ohne Einstufung beginnt die Häufigkeitsliste hier (Ende des Atlas-Kernbands, B2-Grenze). */

@@ -19,6 +19,8 @@ import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
 import { type Answer, type AnswerResult, FLAG, introduce } from '../domain/planner';
 import { type PickCand, type PickModel, pickOptions } from '../domain/pick';
+/** Auswahl nach so vielen anderen Karten (vor Schritt A, der nach ≥ 3 kommt). */
+const PICK_AFTER = 2;
 import { tuple } from '../domain/vlog';
 import { doneToday, planCount } from '../domain/dayCount';
 import { planMed } from '../domain/pace';
@@ -55,7 +57,7 @@ export type LearnView =
    * Großpaket WT: Wiedererkennen gleich nach der Einführung – die richtige Bedeutung aus vier wählen (keine Planwirkung, im Verlauf als
    * `choice`). `chosen` = getippte Möglichkeit (danach Lösung sichtbar, „Weiter“).
    */
-  | { k: 'pick'; path: string; head: string; options: string[]; right: number; chosen: number | null; n: number; left: number; shownAt: number }
+  | { k: 'pick'; path: string; head: string; sentence: string | null; pos: string | null; options: string[]; right: number; from: (string | null)[]; chosen: number | null; n: number; left: number; shownAt: number }
   /** Start der Pflicht-Runde (V3 Schritt 4, Bild B8/B11): einmal am Lerntag vor der ersten Karte. */
   | { k: 'start'; s: StartInfo }
   /** Anwenden oder eigener Satz (Großpaket A S5c, Bilder s2-07 … s2-12); `later` = Nachprüfung eines gemerkten Textes (nur Belege). */
@@ -241,6 +243,8 @@ export class LearnRun {
   /** Pfad, dessen Einführungskarte gerade gelesen wurde: die nächste Antwort darauf zählt wie mit Hilfe (siehe `check`). */
   private justTaught: string | null = null;
   private pending: Pending | null = null;
+  /** Großpaket WT: wartende Auswahlen (Wiedererkennen) neuer Wörter, je mit Kartenzahl, ab der sie kommen. */
+  private pickQ: (PickModel & { path: string; head: string; sentence: string | null; pos: string | null; at: number })[] = [];
   /** Anki-Modus: eingefrorene Zeit beim Aufdecken (Antwortzeit = Zeit bis zum Aufdecken). */
   private flipF: Frozen | null = null;
   private chain: Promise<void> = Promise.resolve();
@@ -570,10 +574,12 @@ export class LearnRun {
     const cat = this.cat;
     if (!run || !cat) return;
     while (this.laterQ.length) if (this.showLater(this.laterQ.shift()!)) return;
+    if (this.showPick(false)) return;
     for (let i = 0; i < SKIP_MAX; i++) {
       const nowMs = this.env.now();
       const task = run.next(nowMs);
       if (!task) {
+        if (this.showPick(true)) return;
         this.set(this.doneView());
         return;
       }
@@ -1043,9 +1049,19 @@ export class LearnRun {
     this.check('', m, true);
     const after = this.view;
     if (after.k !== 'band' || after.kind !== 'intro' || this.pending?.kind !== 'intro') return;
+    // learning-scientist WT1 Befund 2: die Auswahl kommt nicht sofort (Kurzzeitgedächtnis), sondern nach zwei anderen Karten, vor Schritt A.
     const pick = this.pickFor(after.card);
-    if (pick) this.set({ k: 'pick', path: after.card.path, head: after.card.head, ...pick, chosen: null, n: after.n, left: after.left, shownAt: this.env.now() });
-    else this.next();
+    if (pick) this.pickQ.push({ ...pick, path: after.card.path, head: after.card.head, sentence: after.card.sentence?.sent.en ?? null, pos: after.card.pos ?? null, at: this.n + 1 + PICK_AFTER });
+    this.next();
+  }
+
+  /** Fällige Auswahl zeigen (nach PICK_AFTER anderen Karten, spätestens vor dem Abschluss). */
+  private showPick(force: boolean): boolean {
+    const i = this.pickQ.findIndex((q) => force || q.at <= this.n);
+    if (i < 0) return false;
+    const q = this.pickQ.splice(i, 1)[0]!;
+    this.set({ k: 'pick', path: q.path, head: q.head, sentence: q.sentence, pos: q.pos, options: q.options, right: q.right, from: q.from, chosen: null, n: this.n, left: (this.run?.remaining() ?? 0) + this.pickQ.length + 1, shownAt: this.env.now() });
+    return true;
   }
 
   /** Großpaket WT: vier Bedeutungen für ein neues Einzelwort (Ablenker aus dem Bestand); `null` = keine Auswahl möglich. */
@@ -1057,7 +1073,7 @@ export class LearnRun {
     for (const it of cat.items()) {
       if (it.path === card.path || !it.path.startsWith('vocab/')) continue;
       const d = this.docs.get(it.path);
-      if (d && typeof d.de === 'string' && d.de) pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null });
+      if (d && typeof d.de === 'string' && d.de) pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null, head: typeof d.word === 'string' ? d.word : undefined });
     }
     return pickOptions({ path: card.path, de: card.de, pos: card.pos ?? null }, pool, `${card.path}|${dayKey(this.env.now())}`);
   }
@@ -1081,10 +1097,11 @@ export class LearnRun {
     });
   }
 
-  /** Nach der Auswahl weiter (bucht die Einführung, nächste Karte). */
+  /** Nach der Auswahl weiter (nächste Karte). */
   pickNext(): void {
     if (this.view.k !== 'pick' || this.view.chosen === null) return;
-    this.next();
+    this.n += 1;
+    this.advance();
   }
 
   /** Rein gerechnetes Ergebnis je Art (gebucht wird dasselbe auf dem frischen Dokument). */

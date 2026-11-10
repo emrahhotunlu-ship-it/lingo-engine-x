@@ -6,7 +6,8 @@ import { hash32 } from './rand';
 import { CUE_MAX_LV } from './forms';
 import { type DayMark, doneToday, planCount } from './dayCount';
 import { FORM_SPEC } from './grade';
-import type { Form, Lex, VocabCfg } from './types';
+import { FREE_KINDS, type Form, type Lex, type VocabCfg } from './types';
+export { FREE_KINDS } from './types';
 
 // Wörter-Modul V1: Ablauf einer Runde (plan.md §2.2 `startSession`, §4.3 Lernschritte, §4.4; M9 Regel, M12, M72 Grundform, N2).
 // Jede Art läuft durch dieselbe Tagesmarke (`lex.day`): Ein heute schon gebuchtes Lexem zählt in jeder weiteren Runde nur als Übung
@@ -15,8 +16,6 @@ import type { Form, Lex, VocabCfg } from './types';
 // Großpaket B3 (03.11.2026): `use` = Anwenden frei gestartet (Wörter-Reiter „Anwenden“): dieselbe Anwenden-Aufgabe wie am Ende der Pflicht.
 export type SessionKind = 'pflicht' | 'more5' | 'new5' | 'free' | 'free10' | 'free20' | 'free30' | 'evening' | 'week' | 'word' | 'mistakes' | 'use';
 export const SESSION_KINDS: readonly SessionKind[] = ['pflicht', 'more5', 'new5', 'free', 'free10', 'free20', 'free30', 'evening', 'week', 'word', 'mistakes', 'use'];
-/** Großpaket WT (Emrah 10.11.2026: „oben drücken: 10, 20 oder 30 Wörter üben“): Größe der freien Runde je Art. */
-export const FREE_KINDS: Readonly<Partial<Record<SessionKind, number>>> = { free10: 10, free20: 20, free30: 30 };
 /** „Noch 5 neue Wörter“ (Emrah 08.11.2026, Wörter-Tempo „A“): Extra-Runde nur mit neuen Wörtern, über das Tageskontingent hinaus. */
 export const NEW5_SIZE = 5;
 export const EVENING_MAX = 8;
@@ -120,9 +119,15 @@ export class SessionRun {
       const introduced = items.filter((it) => it.lex.intro === day).length;
       const quota = Math.max(0, this.opts.cfg.newPerDay - introduced);
       const fresh = items.filter((it) => isNewLex(it.lex)).sort((a, b) => a.order - b.order || a.path.localeCompare(b.path));
+      // Großpaket WT (learning-scientist Befund 8): im Schnellstart nie zwei verwechselbare neue am selben Tag und nie die neuen des heutigen Plans.
+      const quick = FREE_KINDS[this.kind] !== undefined;
+      const blocked = new Set<string>(quick && this.plan?.d === day ? this.plan.plan.map((e) => e[0]) : []);
+      if (quick) for (const it of items) if (it.lex.intro === day) for (const sib of this.cat.siblingsOf(it.path)) blocked.add(sib);
       for (const it of fresh) {
         if (out.length >= n || out.filter((s) => s.intro).length >= quota) break;
+        if (blocked.has(it.path)) continue;
         out.push({ path: it.path, form: 'intro', step: 0, intro: true, why: 'new' });
+        if (quick) for (const sib of this.cat.siblingsOf(it.path)) blocked.add(sib);
       }
       this.queue = out;
     } else if (this.kind === 'new5') {

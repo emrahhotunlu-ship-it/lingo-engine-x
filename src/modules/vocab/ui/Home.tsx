@@ -3,7 +3,8 @@ import { getWriter, Icon, toast, useClock, useLive, useT, VButton, VChip, VRow, 
 import { logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { groupOf } from '../domain/ladder';
-import { FREE_KINDS, type SessionKind } from '../domain/session';
+import type { SessionKind } from '../domain/session';
+import { FREE_KINDS } from '../domain/types';
 import { groupCounts } from '../domain/stats';
 import type { Lex } from '../domain/types';
 import { readMistakes } from './mistakes';

@@ -141,12 +141,16 @@ export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1
 export const DEFAULT_CFG: VocabCfg = { min: 15, ret: 0.9, newPerDay: 10, mod: 0, restDow: null };
 /** Großpaket WT (Emrah 10.11.2026: „am Ende des Tages immer so 50 Wörter abgefragt“): Standard-Tagesziel in Wörtern. */
 export const WORDS_PER_DAY = 50;
+/** Großpaket WT (Emrah 10.11.2026: „oben drücken: 10, 20 oder 30 Wörter üben“): Größe der freien Runde je Art (Schlüssel = `SessionKind`). */
+export const FREE_KINDS: Readonly<Partial<Record<string, number>>> = { free10: 10, free20: 20, free30: 30 };
 /** Zeit-Notbremse im Wörter-Modus: so viele Minuten je Wort im Plan (50 Wörter → 40 Minuten), mindestens die Wörter-Zeit aus dem Tagesziel. */
 export const CAP_MIN_PER_WORD = 0.8;
+export const CAP_EXTRA_MIN = 15;
 /** Tagesziel in Wörtern aus `vcfg.cnt` (fehlt → WORDS_PER_DAY, 0 → nach Minuten) und die Zeit-Notbremse dazu. Am kurzen Tag immer nach Minuten. */
 export function countCfg(cnt: number | undefined, minutes: number, short: boolean): { cnt: number; min: number } {
   const n = short ? 0 : (cnt ?? WORDS_PER_DAY);
-  return { cnt: n, min: n > 0 ? Math.max(minutes, Math.ceil(n * CAP_MIN_PER_WORD)) : minutes };
+  // learning-scientist WT1 Befund 7: die Notbremse liegt höchstens 15 Minuten über der Wörter-Zeit aus dem Tagesziel.
+  return { cnt: n, min: n > 0 ? Math.max(minutes, Math.min(Math.ceil(n * CAP_MIN_PER_WORD), minutes + CAP_EXTRA_MIN)) : minutes };
 }
 
 /** Median-Zeiten je Form in ms (vmod/stats.med); Startwerte, bis echte Antworten da sind. */

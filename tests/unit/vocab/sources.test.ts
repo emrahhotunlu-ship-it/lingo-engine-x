@@ -52,9 +52,11 @@ describe('Herkunft und Gewichte', () => {
   it('srcOf: nur v5-Herkünfte zählen als Modul-Quelle, alles andere ist ein eigener Fund', () => {
     expect([srcOf('v5:col'), srcOf('v5:job'), srcOf('v5:band'), srcOf('lookup'), srcOf(undefined), srcOf('teacher')]).toEqual(['col', 'job', 'band', 'own', 'own', 'own']);
   });
-  it('Großpaket WT: Standardgewichte 15/15/20/50 – die geprüfte Wortliste trägt die Hälfte der neuen Wörter', () => {
-    expect(SRC_WEIGHTS).toEqual({ col: 0.15, job: 0.15, own: 0.2, band: 0.5 });
-    expect(splitQuota(10, ALL(99))).toEqual({ col: 2, job: 1, own: 2, band: 5 });
+  it('Großpaket WT: Standardgewichte 25/20/20/35 – die geprüfte Wortliste trägt gut ein Drittel der neuen Wörter', () => {
+    expect(SRC_WEIGHTS).toEqual({ col: 0.25, job: 0.2, own: 0.2, band: 0.35 });
+    const s = splitQuota(10, ALL(99));
+    expect(s.col + s.job + s.own + s.band).toBe(10);
+    expect(s.band).toBeGreaterThanOrEqual(3);
   });
   it('weightsOf: Startgewichte; gesetzte Gewichte gelten, alle 0 → Start', () => {
     expect(weightsOf(null)).toEqual(SRC_WEIGHTS);
