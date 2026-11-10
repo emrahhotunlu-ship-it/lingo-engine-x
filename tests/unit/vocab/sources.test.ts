@@ -6,7 +6,7 @@ import { Catalog, type Item } from '../../../src/modules/vocab/domain/catalog';
 import { buildDayPlan } from '../../../src/modules/vocab/domain/day';
 import { applyAnswer, emptyLex, introduce } from '../../../src/modules/vocab/domain/planner';
 import { bandPool, colPool, jobPool, nextSrc, plainEx, refillNeed, type Src, SRC_WEIGHTS, splitQuota, srcOf, weightsOf } from '../../../src/modules/vocab/domain/sources';
-import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
+import { DEFAULT_CFG, type Lex, type VocabCfg } from '../../../src/modules/vocab/domain/types';
 import { readPlace, REFILL_DOC_CAP, refillFresh, type SourceData } from '../../../src/modules/vocab/data/refill';
 import { LearnRun } from '../../../src/modules/vocab/ui/learnRun';
 import { dayKey } from '../../../src/domain/date';
@@ -131,7 +131,7 @@ describe('Kandidaten je Quelle', () => {
 
 describe('Tagesplan mischt nach Herkunft (day.ts)', () => {
   const fresh = (src: Src, n: number, from: number): Item[] => Array.from({ length: n }, (_, i) => ({ path: `vocab/${src}-${i}`, lex: emptyLex('w', 'edge', T0), order: from + i, src }));
-  const ids = (cat: Catalog, cfg = { ...DEFAULT_CFG, min: 60, newPerDay: 10, w: OLD }) => buildDayPlan(cat, T0, cfg, {}).plan.plan.filter((e) => e[1] === 'n').map((e) => e[0]);
+  const ids = (cat: Catalog, cfg: VocabCfg = { ...DEFAULT_CFG, min: 60, newPerDay: 10, w: OLD }) => buildDayPlan(cat, T0, cfg, {}).plan.plan.filter((e) => e[1] === 'n').map((e) => e[0]);
 
   it('10 neue aus vier vollen Quellen: 3 Wortpartner, 3 Beruf, Rest eigene Funde und Liste; gemischt', () => {
     const cat = new Catalog([...fresh('own', 10, 0), ...fresh('col', 10, 100), ...fresh('job', 10, 200), ...fresh('band', 10, 300)]);
