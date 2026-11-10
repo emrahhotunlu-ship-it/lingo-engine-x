@@ -17,6 +17,7 @@ import {
   useHiddenInput,
   useHotkeys,
   useSpeech,
+  usePrefetchSpeech,
   useClock,
   useT,
   type GapState,
@@ -98,6 +99,7 @@ const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 function ListenButton({ parts, testId, onSpent }: { parts: readonly string[]; testId: string; onSpent?: (ms: number) => void }) {
   const { t } = useT();
   const status = useSpeech((x) => x.status);
+  usePrefetchSpeech(parts);
   const run = useRef(0);
   const mine = useRef(false);
   useEffect(
@@ -175,6 +177,7 @@ function partnersNode(t: T, partners: Band['partners']): ReactNode {
 function SpeakWord({ text, testId }: { text: string; testId: string }) {
   const { t } = useT();
   const status = useSpeech((x) => x.status);
+  usePrefetchSpeech(text);
   if (status === 'unsupported' || status === 'novoice' || !text) return null;
   return (
     <button type="button" className="lx-kspeak" onClick={() => void speak(text)} aria-label={t('kernListenWord', { word: text })} data-testid={testId}>

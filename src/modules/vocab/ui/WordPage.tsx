@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Button, EnglishText, getDb, useClock, getWriter, Icon, ipaOf, readDoc, Skeleton, speak, toast, useLive, useSpeech, useT, type MessageKey } from '../sharedUi';
+import { Button, EnglishText, getDb, useClock, getWriter, Icon, ipaOf, readDoc, Skeleton, speak, toast, useLive, useSpeech, usePrefetchSpeech, useT, type MessageKey } from '../sharedUi';
 import { addDays, dayKey, logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { writeManage } from '../data/store';
@@ -292,6 +292,7 @@ function Timeline({ cells, start }: { cells: (Cell | null)[]; start: string }) {
 function SpeakRow({ text, testId }: { text: string; testId: string }) {
   const { t } = useT();
   const status = useSpeech((s) => s.status);
+  usePrefetchSpeech(text);
   if (status === 'unsupported' || status === 'novoice' || !text) return null;
   return (
     <div className="flex items-center gap-2">

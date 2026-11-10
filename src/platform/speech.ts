@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { logWarn } from './diagnostics';
-import { isNeuralVoice, neuralWanted, scheduleNeuralVoice, speakNeural, stopNeural, unlockNeural } from './voice/neural';
+import { isNeuralVoice, neuralWanted, prefetchNeural, scheduleNeuralVoice, speakNeural, stopNeural, unlockNeural } from './voice/neural';
 
 // Sprachausgabe (A7.4, Kap. 15 „Sprachausgabe am Handy abgehackt", Architektur-Entwurf §10.3).
 // iPhone/Safari zuerst:
@@ -530,6 +530,15 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
       finishCurrent(o === 'unavailable' ? 'unavailable' : o);
     });
   });
+}
+
+/**
+ * Text, der gleich vorgelesen werden könnte (sichtbare Karte, Anhören-Knopf): die neue Stimme rechnet ihn schon vorab,
+ * damit der Tipp sofort spielt (Emrah 10.11.2026: „es dauert immer so eine Sekunde“). Ohne neue Stimme passiert nichts.
+ */
+export function prefetchSpeech(text: string, opts: Pick<SpeakOptions, 'rate'> = {}): void {
+  if (!text.trim() || !neuralWanted()) return;
+  prefetchNeural(chunkText(text), neuralVoice({}), clampRate(opts.rate ?? prefs.rate));
 }
 
 export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutcome> {

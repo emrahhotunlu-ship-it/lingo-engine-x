@@ -47,6 +47,7 @@ export { dictLookup, isDictWord } from '../../domain/lexicon/dict';
 // Wort-Seite (Großpaket A S6): Lautschrift und Vorlesen (Wort und Satz, normal und langsam).
 export { ipaOf } from '../../domain/lexicon/pron';
 export { speak, stopSpeech, useSpeech } from '../../platform/speech';
+export { usePrefetchSpeech } from '../../engine/usePrefetchSpeech';
 // „Satz vor dem Prüfen anhören“ (S6b-3): die Lücke als kurzer Ton.
 export { playGapTone, primeGapTone } from '../../platform/sound';
 // Uhr der App (alle 30 s, Tageswechsel 04:00): Zeit im Zeichnen nur über sie, nie `Date.now()`.

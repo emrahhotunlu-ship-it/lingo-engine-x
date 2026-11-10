@@ -83,7 +83,7 @@ export function scheduleNeuralVoice(delayMs = 300): void {
 export function neuralWanted(): boolean {
   const s = useNeuralVoice.getState().status;
   // Nach dem Hintergrund wird die Stimme erst kurz geprüft (`checkAfterReturn`); so lange spricht die Gerätestimme.
-  if (s === 'ready') return !checking;
+  if (s === 'ready') return !checking && !busyTooLong();
   // Alle geplanten Versuche vorbei: höchstens alle 5 Minuten beim Vorlesen einen neuen anstoßen.
   if (s === 'failed' && !loading && failures > RETRY_MS.length && Date.now() - lastTry > 300_000) void loadNeuralVoice();
   return false;
@@ -108,17 +108,21 @@ if (typeof document !== 'undefined') {
   });
 }
 
-/** Ein kurzes Wort rechnen (höchstens 8 s); klappt das nicht, die Stimme neu laden. Bis dahin spricht die Gerätestimme. */
+/** Ein kurzes Wort rechnen (höchstens 8 s); bei Fehler oder Grafikchip-Verlust neu laden. Bis dahin spricht die Gerätestimme. */
 async function checkAfterReturn(e: Engine): Promise<void> {
   if (checking) return;
   checking = true;
   try {
-    if (e.lost()) throw new Error('gpu lost');
-    await withLimit(e.generate('Hi.', 'af_heart', 1), 8_000);
-    logInfo('voice:check', 'Stimme nach dem Zurückkehren in Ordnung');
+    if (e.lost()) {
+      await rebuild(e, 'gpu lost');
+      return;
+    }
+    const ok = await within(synth('Hi.', 'af_heart', 1, true, () => true), 8_000);
+    // Noch keine Antwort: der Wächter (`HANG_MS`) lädt neu, falls der Grafikchip wirklich hängt.
+    logInfo('voice:check', ok ? 'Stimme nach dem Zurückkehren in Ordnung' : 'Stimme antwortet langsam');
   } catch (err) {
     logWarn('voice:check', err);
-    await rebuild(e);
+    if (!(err instanceof StaleError)) await rebuild(e, 'check');
   } finally {
     checking = false;
   }
@@ -210,23 +214,202 @@ export type NeuralRun = {
   onChunk: (i: number) => void;
 };
 
+// ---------------------------------------------------------------- Rechnen: eins nach dem anderen, mit Gedächtnis
+// Emrah 10.11.2026 („auf einmal ging es nicht mehr und das Handy wurde laggy … es dauert immer so eine Sekunde“):
+// - Der Grafikchip rechnet immer nur EINEN Satz; neue Tipps überholen das Vorab-Rechnen, veraltete Aufträge fallen weg.
+// - Fertig gerechnete Sätze bleiben im Gedächtnis (zuletzt benutzte zuerst): nochmal anhören kommt sofort.
+// - Der Satz der sichtbaren Karte wird vorab gerechnet (`prefetchNeural`), der Tipp spielt dann ohne Wartezeit.
+// - Dauert ein Satz zu lange, spricht diesmal die Gerätestimme; die neue Stimme wird dafür NICHT neu geladen
+//   (früher: jedes Zeitlimit lud ~190 MB nach, während die alte noch im Speicher lag → Ruckeln, dann Stille).
+
+export type Clip = { audio: Float32Array; rate: number };
+
+/** Gedächtnis: höchstens so viele Abtastwerte (≈ 16 MB) und Einträge. */
+const CACHE_SAMPLES = 4_000_000;
+const CACHE_MAX = 60;
+const cache = new Map<string, Clip>();
+let cacheSamples = 0;
+const clipKey = (text: string, voice: string, speed: number) => `${voice}|${speed.toFixed(2)}|${text}`;
+
+function cacheGet(k: string): Clip | undefined {
+  const v = cache.get(k);
+  if (v) {
+    cache.delete(k);
+    cache.set(k, v);
+  }
+  return v;
+}
+
+function cachePut(k: string, v: Clip): void {
+  if (cache.has(k)) return;
+  cache.set(k, v);
+  cacheSamples += v.audio.length;
+  for (const [old, clip] of cache) {
+    if (cache.size <= CACHE_MAX && cacheSamples <= CACHE_SAMPLES) break;
+    if (old === k) continue;
+    cache.delete(old);
+    cacheSamples -= clip.audio.length;
+  }
+}
+
+type Job = { key: string; text: string; voice: string; speed: number; urgent: boolean; wanted: () => boolean; promise: Promise<Clip>; resolve: (c: Clip) => void; reject: (e: Error) => void };
+
+const queue: Job[] = [];
+const pending = new Map<string, Job>();
+/** Der Auftrag, den der Grafikchip gerade rechnet. */
+let running: { job: Job; since: number; engine: Engine } | null = null;
+/** Ab hier gilt ein Satz als hängend (Grafikchip antwortet nicht mehr): dann, und nur dann, neu laden. */
+const HANG_MS = 20_000;
+/** So lange wartet ein Tipp auf den ersten Satz, sonst spricht diesmal die Gerätestimme. */
+const FIRST_WAIT_MS = 4_000;
+/** So lange wartet der nächste Satz nach dem Ende des vorigen. */
+const NEXT_WAIT_MS = 6_000;
+/** Vorab gerechnet wird höchstens so viel. */
+const PREFETCH_MAX = 6;
+
+class StaleError extends Error {
+  constructor() {
+    super('voice: not needed any more');
+  }
+}
+
+function synth(text: string, voice: string, speed: number, urgent: boolean, wanted: () => boolean): Promise<Clip> {
+  const key = clipKey(text, voice, speed);
+  const hit = cacheGet(key);
+  if (hit) return Promise.resolve(hit);
+  const known = pending.get(key);
+  if (known) {
+    if (urgent && !known.urgent) known.urgent = true;
+    const before = known.wanted;
+    known.wanted = () => before() || wanted();
+    return known.promise;
+  }
+  let resolve!: (c: Clip) => void;
+  let reject!: (e: Error) => void;
+  const promise = new Promise<Clip>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  // Nicht abgeholte Ablehnungen (Vorab-Rechnen) sind gewollt still.
+  promise.catch(() => undefined);
+  const job: Job = { key, text, voice, speed, urgent, wanted, promise, resolve, reject };
+  pending.set(key, job);
+  queue.push(job);
+  // Zu viel Vorab-Rechnen: die ältesten Vorab-Aufträge fallen weg.
+  const pre = queue.filter((j) => !j.urgent);
+  for (const j of pre.slice(0, Math.max(0, pre.length - PREFETCH_MAX))) drop(j, new StaleError());
+  pump();
+  return promise;
+}
+
+function drop(job: Job, err: Error): void {
+  const i = queue.indexOf(job);
+  if (i >= 0) queue.splice(i, 1);
+  if (pending.get(job.key) === job) pending.delete(job.key);
+  job.reject(err);
+}
+
+function pump(): void {
+  const e = engine;
+  if (running || !e) return;
+  let job: Job | undefined;
+  while (!job && queue.length) {
+    const i = queue.findIndex((j) => j.urgent);
+    const next = queue.splice(i >= 0 ? i : 0, 1)[0] as Job;
+    if (next.wanted()) job = next;
+    else drop(next, new StaleError());
+  }
+  if (!job) return;
+  const mine = { job, since: Date.now(), engine: e };
+  running = mine;
+  const hang = setTimeout(() => {
+    if (running !== mine) return;
+    logWarn('voice:hang', new Error(`generate > ${HANG_MS} ms`));
+    void rebuild(e, 'hang');
+  }, HANG_MS);
+  const j = job;
+  e.generate(j.text, j.voice, j.speed).then(
+    (out) => {
+      if (running !== mine) return;
+      genErrors = 0;
+      cachePut(j.key, out);
+      finish(mine, hang);
+      j.resolve(out);
+    },
+    (err: unknown) => {
+      if (running !== mine) return;
+      finish(mine, hang);
+      j.reject(err instanceof Error ? err : new Error(String(err)));
+      onGenError(e, err);
+    },
+  );
+}
+
+function finish(mine: NonNullable<typeof running>, hang: ReturnType<typeof setTimeout>): void {
+  clearTimeout(hang);
+  if (pending.get(mine.job.key) === mine.job) pending.delete(mine.job.key);
+  if (running === mine) running = null;
+  pump();
+}
+
+/** Rechnet der Grafikchip schon zu lange an einem Satz? Dann spricht sofort die Gerätestimme statt zu warten. */
+const busyTooLong = (): boolean => running !== null && !cache.has(running.job.key) && Date.now() - running.since > FIRST_WAIT_MS;
+
+/** Fehler beim Rechnen: Grafikchip weg → neu laden; sonst erst beim zweiten Fehler in Folge (und höchstens alle 2 Minuten). */
+let genErrors = 0;
+function onGenError(e: Engine, err: unknown): void {
+  logWarn('voice:generate', err);
+  genErrors += 1;
+  if (e.lost() || genErrors >= 2) void rebuild(e, e.lost() ? 'gpu lost' : 'errors');
+}
+
+/**
+ * Den Satz der sichtbaren Karte schon einmal rechnen (nur, wenn die neue Stimme bereit ist und die App sichtbar).
+ * Kurz verzögert, damit der Kartenwechsel zuerst flüssig abläuft.
+ */
+export function prefetchNeural(chunks: readonly string[], voice: string, speed: number): void {
+  if (!engine || checking || chunks.length === 0) return;
+  setTimeout(() => {
+    if (!engine || checking || (typeof document !== 'undefined' && document.visibilityState === 'hidden')) return;
+    for (const c of chunks.slice(0, 2)) void synth(c, voice, speed, false, () => true).catch(() => undefined);
+  }, 350);
+}
+
+/** Wartet höchstens `ms` auf einen Satz; danach `null` (der Auftrag rechnet weiter und landet im Gedächtnis). */
+function within(p: Promise<Clip>, ms: number): Promise<Clip | null> {
+  return new Promise<Clip | null>((res, rej) => {
+    const t = setTimeout(() => res(null), ms);
+    p.then(
+      (v) => {
+        clearTimeout(t);
+        res(v);
+      },
+      (err: unknown) => {
+        clearTimeout(t);
+        rej(err instanceof Error ? err : new Error(String(err)));
+      },
+    );
+  });
+}
+
 /**
  * Spricht die Stücke nacheinander; das nächste Stück wird schon erzeugt, während das aktuelle läuft.
- * Liefert `done`, `stopped` oder `unavailable` (Maschine fehlt → der Aufrufer nimmt die Gerätestimme).
+ * Liefert `done`, `stopped` oder `unavailable` (diesmal nicht möglich → der Aufrufer nimmt ab dem nächsten Stück die Gerätestimme).
  */
 export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 'unavailable' | 'error'> {
   // Zuerst (noch im Tippen, vor jedem await) die Tonausgabe sichern.
   if (!supported()) return 'unavailable';
   const c = ensureCtx();
   if (!c) return 'unavailable';
-  const e = engine ?? (await loadNeuralVoice());
-  if (!run.alive()) return 'stopped';
+  const e = engine;
   if (!e) return 'unavailable';
   // Grafikchip verloren (iPhone nach dem Minimieren): diesmal die Gerätestimme, die neue lädt im Hintergrund neu (aus dem Speicher).
   if (e.lost()) {
-    void rebuild(e);
+    void rebuild(e, 'gpu lost');
     return 'unavailable';
   }
+  const gen = (i: number) => synth(run.chunks[i] as string, run.voice, run.rate, true, run.alive);
+  let next = gen(run.from);
   if (c.state !== 'running') {
     await Promise.race([c.resume().catch((err: unknown) => logWarn('voice:resume', err)), new Promise((r) => setTimeout(r, 800))]);
     // Tonausgabe springt nicht an (iPhone nach langer Pause): lieber gleich die Gerätestimme als Stille.
@@ -235,12 +418,14 @@ export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 
       return 'unavailable';
     }
   }
-  const gen = (i: number) => withLimit(e.generate(run.chunks[i] as string, run.voice, run.rate), 12_000);
   try {
-    let next = gen(run.from);
     for (let i = run.from; i < run.chunks.length; i++) {
-      const out = await next;
+      const out = await within(next, i === run.from ? FIRST_WAIT_MS : NEXT_WAIT_MS);
       if (!run.alive()) return 'stopped';
+      if (!out) {
+        logInfo('voice:slow', `Satz ${i + 1} dauert zu lange – diesmal die Gerätestimme`);
+        return 'unavailable';
+      }
       if (i + 1 < run.chunks.length) next = gen(i + 1);
       run.onChunk(i);
       const buf = c.createBuffer(1, out.audio.length, out.rate);
@@ -260,40 +445,59 @@ export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 
     }
     return 'done';
   } catch (err) {
-    logWarn('voice:speak', err);
     if (!run.alive()) return 'stopped';
-    // Diese Ausgabe spricht sofort die Gerätestimme weiter (nie Stille); die neue Stimme lädt im Hintergrund neu.
-    void rebuild(e);
+    logWarn('voice:speak', err);
+    // Diese Ausgabe spricht sofort die Gerätestimme weiter (nie Stille).
     return 'unavailable';
   }
 }
 
-/** Rechnen hängt (z. B. Grafikchip weg, ohne Fehlermeldung): nach `ms` als Fehler werten. */
-function withLimit<T>(p: Promise<T>, ms: number): Promise<T> {
-  return new Promise<T>((res, rej) => {
-    const t = setTimeout(() => rej(new Error('voice: generate timeout')), ms);
+let lastRebuild = 0;
+const REBUILD_GAP_MS = 120_000;
+
+/**
+ * Alte Maschine erst vollständig freigeben, dann neu laden (aus dem Browser-Speicher). Nie zwei auf einmal: sonst liegt das
+ * Modell doppelt im Speicher und das Gerät ruckelt. Wegen Fehlern höchstens alle 2 Minuten; bei Grafikchip-Verlust immer.
+ */
+async function rebuild(old: Engine, why: 'gpu lost' | 'hang' | 'errors' | 'check'): Promise<Engine | null> {
+  if (engine !== old) return loading ?? engine;
+  if (why === 'errors' && Date.now() - lastRebuild < REBUILD_GAP_MS) return engine;
+  lastRebuild = Date.now();
+  engine = null;
+  loading = null;
+  genErrors = 0;
+  const r = running;
+  running = null;
+  if (r) r.job.reject(new StaleError());
+  for (const j of [...queue]) drop(j, new StaleError());
+  pending.clear();
+  logInfo('voice:rebuild', `neue Stimme wird neu geladen (${why})`);
+  useNeuralVoice.setState({ status: 'loading', pct: 0, phase: null });
+  // Während des Freigebens gilt die Stimme schon als „lädt“: kein zweites Laden von anderer Stelle.
+  const run: Promise<Engine | null> = withTimeout(old.dispose(), 3_000).then(() => {
+    if (loading === run) loading = null;
+    return loadNeuralVoice();
+  });
+  loading = run;
+  return run;
+}
+
+/** Wartet höchstens `ms` (Freigeben darf das Neuladen nicht ewig aufhalten). */
+function withTimeout(p: Promise<unknown>, ms: number): Promise<void> {
+  return new Promise<void>((res) => {
+    const t = setTimeout(res, ms);
     p.then(
-      (v) => {
+      () => {
         clearTimeout(t);
-        res(v);
+        res();
       },
       (err: unknown) => {
         clearTimeout(t);
-        rej(err instanceof Error ? err : new Error(String(err)));
+        logWarn('voice:dispose', err);
+        res();
       },
     );
   });
-}
-
-/** Alte Maschine freigeben und neu laden (aus dem Browser-Speicher). */
-async function rebuild(old: Engine): Promise<Engine | null> {
-  if (engine === old) {
-    engine = null;
-    loading = null;
-    void old.dispose();
-  }
-  logInfo('voice:rebuild', 'neue Stimme wird neu geladen');
-  return loadNeuralVoice();
 }
 
 /** Nur für Tests: Modulzustand verwerfen. */
@@ -304,5 +508,12 @@ export function resetNeural(): void {
   failures = 0;
   lastTry = 0;
   checking = false;
+  cache.clear();
+  cacheSamples = 0;
+  queue.length = 0;
+  pending.clear();
+  running = null;
+  genErrors = 0;
+  lastRebuild = 0;
   useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null });
 }
