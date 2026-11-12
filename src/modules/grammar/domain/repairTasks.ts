@@ -1,6 +1,7 @@
 import { patternById } from '../../../domain/grammar/patterns';
 import type { Fehlersatz } from '../../../domain/repair/fehlersaetze';
 import type { GrammarTask } from '../../../domain/learn/types';
+import type { RepairKwt } from '../../../domain/c1/check/repairKwt';
 
 // Großpaket G4 (Entscheidung 2, 02.11.2026): Eigene Fehlersätze aus `app/repair` (Anwenden, Sprechen, Schreiben …) kommen im
 // Grammatik-Schritt zurück, zusammen mit den Grammatik-Fehlersätzen und innerhalb derselben Höchstzahl. Rein, schreibt nichts.
@@ -35,18 +36,26 @@ export function checkGap(f: Pick<Fehlersatz, 'right' | 'fix'>): { prompt: string
 
 /**
  * Eigene, sichtbare Fehlersätze als Korrektur-Aufgabe (`correct`; am Handy macht `forProfile` daraus „Fehler antippen“).
- * Ausnahmen: Wortschatz-Sätze kommen nicht in die Grammatik; Sätze aus dem Einstufungstest kommen als eindeutige Lücke.
+ * Ausnahmen: Wortschatz-Sätze kommen nicht in die Grammatik; Sätze aus dem Einstufungstest kommen als eindeutige Lücke, Umformungen (kwt)
+ * wieder als Umformung mit Ausgangssatz und Schlüsselwort (`kwtOf`, Emrah 12.11.2026). Eine Lücke aus mehreren Wörtern ohne Ausgangssatz
+ * wäre nicht lösbar und bleibt weg, bis die Original-Aufgabe geladen ist.
  */
-export function repairTasks(list: readonly Fehlersatz[]): GrammarTask[] {
+export function repairTasks(list: readonly Fehlersatz[], kwtOf?: (f: Fehlersatz) => RepairKwt | null): GrammarTask[] {
   const out: GrammarTask[] = [];
   for (const f of list) {
     if (f.store !== 'repair' || f.hidden || !f.wrong.trim() || !f.right.trim() || isLexical(f)) continue;
     const pat = f.pat ? patternById(f.pat) : null;
-    const gap = f.src === 'check' ? checkGap(f) : null;
+    const kwt = f.src === 'check' ? (kwtOf?.(f) ?? null) : null;
+    const gap = f.src === 'check' && !kwt ? checkGap(f) : null;
+    if (gap && gap.answer.trim().split(/\s+/).length > 1) continue;
     out.push({
       key: `rep:${f.id}`,
       topic: pat?.topic ?? REPAIR_TOPIC,
-      ...(gap ? { type: 'gap' as const, prompt: gap.prompt, answer: gap.answer, accepted: gap.accepted } : { type: 'correct' as const, prompt: f.wrong, answer: f.right, accepted: [] }),
+      ...(kwt
+        ? { type: 'kwt' as const, prompt: kwt.frame, answer: kwt.answer, accepted: kwt.accepted, x: { kind: 'kwt' as const, from: kwt.from, key: kwt.key, words: kwt.words } }
+        : gap
+          ? { type: 'gap' as const, prompt: gap.prompt, answer: gap.answer, accepted: gap.accepted }
+          : { type: 'correct' as const, prompt: f.wrong, answer: f.right, accepted: [] }),
       options: null,
       hint: null,
       expl: { de: f.why ?? null, en: f.why ?? null },

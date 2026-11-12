@@ -3,6 +3,7 @@ import { kindEnabled } from '../../app/flags';
 import { preloadC1x } from '../../domain/c1x/preload';
 import { C1_KINDS } from '../../domain/c1x/types';
 import { logWarn } from '../../platform/diagnostics';
+import { preloadCheckRepairs } from '../grammar/checkRepairItems';
 
 // Die gepackten c1x-Inhalte sind geladen, bevor die App „bereit“ ist (Lernplattform 3.0 P14): der Rundenbau ist synchron und liest nur, was im Speicher
 // steht. Ist keine Art eingeschaltet, ist die App sofort bereit (kein Mehraufwand). Ein Ladefehler hält den Start nie auf (die Arten fehlen dann, Meldung im Protokoll).
@@ -19,12 +20,14 @@ const set = (v: boolean): void => {
 export function startC1xPreload(): void {
   if (started) return;
   started = true;
+  // Emrah 12.11.2026: Umformungs-Fehler aus dem Einstufungstest brauchen ihre Original-Aufgabe (Ausgangssatz, Schlüsselwort).
+  const check = preloadCheckRepairs();
   const kinds = C1_KINDS.filter((k) => kindEnabled(k));
   if (!kinds.length) {
     ready = true;
     return;
   }
-  void preloadC1x(kinds)
+  void Promise.all([preloadC1x(kinds), check])
     .catch((err: unknown) => logWarn('c1x:preload', err))
     .finally(() => set(true));
 }

@@ -1,4 +1,8 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { kwtForRepair } from '../../src/domain/c1/check/repairKwt';
+import type { C1Item } from '../../src/domain/c1x/types';
 import { selectRound } from '../../src/domain/grammar/tasks';
 import type { Fehlersatz } from '../../src/domain/repair/fehlersaetze';
 import { grammarModuleOn } from '../../src/modules/grammar/api';
@@ -116,5 +120,33 @@ describe('Fehlersätze aus dem Einstufungstest (Emrahs Stift-Meldungen 09./10.11
     expect(checkGap({ right: 'No sooner had we launched the update than …', fix: ['sooner had we launched'] })).toEqual({ prompt: 'No ___ the update than …', answer: 'sooner had we launched', accepted: [] });
     const out = repairTasks([check('x', 'a cat and dog', 'a cat and a dog', ['a'], 'art.indefinite')]);
     expect(out[0]).toMatchObject({ type: 'correct', prompt: 'a cat and dog', answer: 'a cat and a dog' });
+  });
+});
+
+describe('Umformung aus dem Einstufungstest kommt als Umformung zurück (Emrahs Stift 12.11.2026)', () => {
+  const item = JSON.parse(readFileSync(join(import.meta.dirname, '../../src/content/c1x/src/check/a.json'), 'utf8')) as unknown;
+  const items = (Array.isArray(item) ? item : (item as { items: C1Item[] }).items) as C1Item[];
+  const f: Fehlersatz = {
+    id: 'r1',
+    wrong: 'No sooner we had launched the update than customers started reporting bugs.',
+    right: 'No sooner had we launched the update than customers started reporting bugs.',
+    due: 0,
+    store: 'repair',
+    src: 'check',
+    ctx: 'inv.sooner',
+    fix: ['sooner had we launched'],
+  };
+  it('mit Original: Ausgangssatz, Schlüsselwort, Rahmen und alle gültigen Lösungen', () => {
+    const k = kwtForRepair(items, f)!;
+    expect(k).toMatchObject({ from: 'As soon as we had launched the update, customers started reporting bugs.', key: 'SOONER', frame: 'No ___ the update than customers started reporting bugs.', answer: 'sooner had we launched' });
+    expect(k.accepted).toEqual(['sooner had we released', 'sooner had we rolled out']);
+    const [t] = repairTasks([f], (x) => kwtForRepair(items, x));
+    expect(t).toMatchObject({ type: 'kwt', prompt: k.frame, rep: 'r1', x: { kind: 'kwt', from: k.from, key: 'SOONER' } });
+  });
+  it('ohne Original keine nackte Lücke aus mehreren Wörtern (nicht lösbar); einzelne Wörter bleiben Lücke', () => {
+    expect(repairTasks([f])).toEqual([]);
+    expect(repairTasks([f], () => null)).toEqual([]);
+    const one = { ...f, id: 'r2', wrong: 'If the shipment arrive damaged, call us.', right: 'Should the shipment arrive damaged, call us.', ctx: 'inv.should', fix: ['Should'] } as Fehlersatz;
+    expect(repairTasks([one])[0]).toMatchObject({ type: 'gap', answer: 'Should' });
   });
 });

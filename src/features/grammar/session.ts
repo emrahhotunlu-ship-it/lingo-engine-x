@@ -15,6 +15,7 @@ import { useLive } from '../../data/live';
 import { dueFehlersaetze } from '../../domain/repair/fehlersaetze';
 import { grammarModuleOn } from '../../modules/grammar/api';
 import { repairTasks } from '../../modules/grammar/domain/repairTasks';
+import { checkKwtOf, preloadCheckRepairs } from './checkRepairItems';
 import { topicById } from '../../domain/content';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
 import { SKIP_TEST_N, SKIP_TEST_PASS, skipTopicsOf } from '../../domain/c1/placement/run';
@@ -300,13 +301,14 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     reported,
   } as const;
   ensureC1xLoaded();
+  void preloadCheckRepairs();
   const c1 = c1ErrorResolver({ grammarDocs: docs, nowMs, seed, profile });
   // Kapitel-Arbeit (K3): Im Kapitel-Plan stehen Fehlersätze aus dem Kapitel vorn.
   const chapterTopics = mode === 'duty' && gt?.ch ? (programChapters()[gt.ch - 1]?.topics ?? null) : null;
   // Großpaket G4 (Entscheidung 2): Mit der neuen Grammatik kommen eigene Fehlersätze (`app/repair`) im Grammatik-Schritt und in der
   // Fehlersatz-Runde zurück, innerhalb derselben Höchstzahl. Der alte Weg (`gcfg.mod = 0`) bleibt unverändert.
   const repairs = (mode === 'duty' || mode === 'errors') && grammarModuleOn(live.docs['app/profile'])
-    ? repairTasks(dueFehlersaetze({ grammarDocs: docs, repairDoc: live.docs['app/repair'], nowMs, today: day, lang }).filter((f) => f.store === 'repair' && !isReportedTask(reported, `rep:${f.id}`)))
+    ? repairTasks(dueFehlersaetze({ grammarDocs: docs, repairDoc: live.docs['app/repair'], nowMs, today: day, lang }).filter((f) => f.store === 'repair' && !isReportedTask(reported, `rep:${f.id}`)), checkKwtOf)
     : [];
   const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}), ...(chapterTopics ? { chapter: chapterTopics } : {}), ...(repairs.length ? { repairs } : {}) };
 
