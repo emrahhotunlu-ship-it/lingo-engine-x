@@ -1121,3 +1121,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 
 ## 11.11.2026 – LIVE v116: WT Schritt 1 Wörter-Trainer
 - Emrahs „live nehmen“ → **live `JLL8…` v116 `1794354453-df29`** (Rückweg v115 `1794343352-17f5`), Stand `ad888451` (Programm gleich Test-Link v106; nur die Startdatei `index-*.js` trägt eine neue Bau-Kennung). Die tägliche Routine liefert ab 11.11. 04:47 Atlas-Wörter nach `wtq/m-2026-11`.
+
+## 12.11.2026 – Tagesaufteilung 70/20/10 (Emrahs Vorgabe „50 Wörter sind doch zu viel … 70 % Vokabel, 20 % Grammatik, 10 % Anwenden“)
+- `dayMinutes`: Wörter 70 % des Tagesziels (mind. 10 Min.), Rest ⅔ Grammatik, ⅓ Anwenden (bei 30 Min.: 21/6/3, bei 25 Min.: 18/5/2). Wörter-Menge wieder nach Zeit (`WORDS_PER_DAY = 0`), feste Zahl nur auf eigene Wahl (Einstellungen „Nach Zeit · 30 · 40 · 50“). Kennzahlen-Golden: nur Minuten/geplante Wörter/Wiederholungen nachgezogen (Diff geprüft, alte Einträge `k`/`stand` unverändert).
+- **Test-Link `AXHkh6…` v107 `1794522972-d53a`** (Rückweg v106 `1794353939-fd49`), Stand `3b98b290`+E2E-Anpassung. Geprüft: alle Unit-Tests (7.730), Typprüfung, Lint, Plattform/Budget, E2E Heute/Lernen/Wörter/Einstellungen 62/63 (rot nur `wortschatz.spec:90` unter Last, allein grün – Zeitproblem eines Hintergrund-Speicherns, nicht diese Änderung). Wartet auf Emrahs „live“.
