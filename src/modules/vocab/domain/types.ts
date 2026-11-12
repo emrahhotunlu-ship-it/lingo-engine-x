@@ -139,8 +139,8 @@ export type Grade = 1 | 2 | 3 | 4;
 export type VocabCfg = { min: number; ret: number; newPerDay: number; mod: 0 | 1; restDow: number | null; /** Tagesziel in Wörtern (Großpaket WT); 0/fehlt = nach Minuten. */ cnt?: number; retY?: number | null; anki?: boolean; pre?: boolean; w?: { col: number; job: number; own: number; band: number }; /** Kurzer Tag (2A): Rückstand höchstens ein Budget, nichts verschieben, nichts vorziehen. */ short?: boolean };
 // Emrah 08.11.2026 (Wörter-Tempo „A“): Standard 10 neue Wörter pro Tag.
 export const DEFAULT_CFG: VocabCfg = { min: 15, ret: 0.9, newPerDay: 10, mod: 0, restDow: null };
-/** Großpaket WT (Emrah 10.11.2026: „am Ende des Tages immer so 50 Wörter abgefragt“): Standard-Tagesziel in Wörtern. */
-export const WORDS_PER_DAY = 50;
+/** Standard-Tagesziel in Wörtern: 0 = nach der Wörter-Zeit (Emrah 12.11.2026: „50 Wörter sind doch zu viel“, 70 % Wörter der Tageszeit). Zahl nur auf eigene Wahl. */
+export const WORDS_PER_DAY = 0;
 /** Großpaket WT (Emrah 10.11.2026: „oben drücken: 10, 20 oder 30 Wörter üben“): Größe der freien Runde je Art (Schlüssel = `SessionKind`). */
 export const FREE_KINDS: Readonly<Partial<Record<string, number>>> = { free10: 10, free20: 20, free30: 30 };
 /** Zeit-Notbremse im Wörter-Modus: so viele Minuten je Wort im Plan (50 Wörter → 40 Minuten), mindestens die Wörter-Zeit aus dem Tagesziel. */

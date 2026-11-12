@@ -9,7 +9,7 @@ export const PROFILE_PATH = 'app/profile';
 export const MIN_OPTIONS = [10, 15, 20, 30] as const;
 export const NEW_OPTIONS = [0, 2, 5, 10, 15] as const;
 /** Großpaket WT: Tagesziel in Wörtern (0 = nach Minuten). */
-export const CNT_OPTIONS = [30, 40, 50, 60] as const;
+export const CNT_OPTIONS = [0, 30, 40, 50] as const;
 export const RET_OPTIONS = [0.85, 0.9, 0.95] as const;
 
 export type SettingsPatch = { cnt?: (typeof CNT_OPTIONS)[number] | 0; min?: (typeof MIN_OPTIONS)[number]; ret?: (typeof RET_OPTIONS)[number]; newPerDay?: (typeof NEW_OPTIONS)[number]; anki?: 0 | 1; pre?: 0 | 1 };

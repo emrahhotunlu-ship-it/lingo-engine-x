@@ -331,7 +331,7 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
           value={String(cfg.cnt ?? 0)}
           columns={4}
           testId="vs-cnt"
-          options={CNT_OPTIONS.map((n) => ({ value: String(n), label: String(n), testId: `vs-cnt-${n}` }))}
+          options={CNT_OPTIONS.map((n) => ({ value: String(n), label: n === 0 ? t('vmSetCntTime') : String(n), testId: `vs-cnt-${n}` }))}
           onChange={(v) => save({ cnt: Number(v) as SettingsPatch['cnt'] })}
         />
         <p className="m-0 text-sm text-muted">{t('vmSetCntHint')}</p>

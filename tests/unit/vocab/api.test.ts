@@ -23,10 +23,10 @@ function learnedDoc(word: string): Doc {
 }
 
 describe('api.ts', () => {
-  it('Schalter: Standard aus; ungültige Einstellungen fallen auf den Standard (50 Wörter, Zeit-Notbremse aus dem Tagesziel, 90 %)', () => {
+  it('Schalter: Standard aus; ungültige Einstellungen fallen auf den Standard (nach Zeit: 70 % des Tagesziels, 90 %)', () => {
     expect(vocabModuleOn(null)).toBe(false);
     expect(vocabModuleOn({ vcfg: { min: 15, ret: 0.9, mod: 1 } })).toBe(true);
-    expect(vocabCfg({ vcfg: { min: 17, ret: 0.9, mod: 1 } })).toMatchObject({ min: 30, cnt: 50, ret: 0.9, mod: 0 });
+    expect(vocabCfg({ vcfg: { min: 17, ret: 0.9, mod: 1 } })).toMatchObject({ min: 18, cnt: 0, ret: 0.9, mod: 0 });
     expect(vocabCfg({ newPerDay: 10 }).newPerDay).toBe(10);
   });
   it('todayBlock liest nur das eingefrorene vmod/day (anderer Tag → null)', () => {
