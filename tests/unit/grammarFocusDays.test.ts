@@ -215,6 +215,22 @@ describe('„Gleich nochmal“ aus dem Vorrat (againFromPool)', () => {
     expect(cn.filter((t) => againFromPool(t)).length / cn.length).toBeGreaterThan(0.9);
   });
 
+  it('mit Warum (Prüfbefund 13.11.2026): die geprüfte Erklärung der Vorrat-Aufgabe kommt mit, für die Zeile nach dem Prüfen', () => {
+    let withWhy = 0;
+    let all = 0;
+    for (const t of cn) {
+      const a = againFromPool(t);
+      if (!a) continue;
+      all++;
+      const src = allSeedTasks().find((x) => x.prompt === a.en)!;
+      expect(a.expl).toEqual({ de: src.expl.de?.trim() || null, en: src.expl.en?.trim() || null });
+      if (a.expl.de && a.expl.en) withWhy++;
+    }
+    expect(all).toBeGreaterThan(0);
+    // Fast jeder Vorrat-Satz hat ein Warum in beiden Sprachen.
+    expect(withWhy / all).toBeGreaterThan(0.9);
+  });
+
   it('ungesehene zuerst, Aufgaben der laufenden Runde nie; ohne Muster nichts', () => {
     const t = cn.find((x) => x.pat === 'cn.second')!;
     const first = againFromPool(t)!;

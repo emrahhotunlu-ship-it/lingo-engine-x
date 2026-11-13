@@ -107,6 +107,33 @@ describe('Lauf eines Fokus-Themas (focusStep)', () => {
     expect(focusStep(done.next, fact({ day: addDays(TODAY, 30) })).next).toMatchObject({ s: 1, k: 1, n: 1 });
   });
 
+  it('ab „Umformen“ (Prüfbefund 13.11.2026): Fehler finden und Bausteine zählen nicht; den Aufstieg löst nur eine saubere getippte Umformung aus', () => {
+    const s3: FocusState = { v: 1, s: 3, k: 0, d0: addDays(TODAY, -2), d: TODAY, n: 3 };
+    // Nur „Fehler finden“ und Bausteine: kein Aufstieg, die Serie bleibt bei 0.
+    const easy = run(s3, [{ type: 'find' }, { type: 'kwt', tiles: true }, { type: 'find' }, { type: 'find' }, { type: 'kwt', tiles: true }]);
+    expect(easy).toMatchObject({ s: 3, k: 0 });
+    // Ganze Sätze korrigieren zählt in der Serie, löst aber nicht aus.
+    const corr = run(s3, [{ type: 'correct' }, { type: 'correct' }, { type: 'correct' }, { type: 'correct' }]);
+    expect(corr).toMatchObject({ s: 3, k: 3 });
+    // … erst die getippte Umformung steigt auf.
+    const up = focusStep(corr, fact({ stage: 3, type: 'transform' }));
+    expect(up.move).toBe('up');
+    expect(up.next).toMatchObject({ s: 4, k: 0 });
+    // Drei getippte kwt in Folge (Fehler finden dazwischen ändert nichts): Aufstieg.
+    const mixed = [{ type: 'kwt' }, { type: 'find' }, { type: 'kwt' }, { type: 'kwt', tiles: true }] as Partial<FocusFact>[];
+    const m = run(s3, mixed);
+    expect(m).toMatchObject({ s: 3, k: 2 });
+    expect(focusStep(m, fact({ stage: 3, type: 'kwt' })).move).toBe('up');
+    // Ein Fehler beim Fehler-Finden unterbricht die Serie weiterhin.
+    expect(run(s3, [{ type: 'kwt' }, { type: 'find', clean: false, wrong: true }])).toMatchObject({ k: 0 });
+    // Stufe „Mischen“: „bestanden“ ebenfalls nur über eine getippte Umformung.
+    const s4: FocusState = { v: 1, s: 4, k: 0, d0: addDays(TODAY, -3), d: TODAY, n: 4 };
+    expect(run(s4, [{ type: 'gap' }, { type: 'gap' }, { type: 'find' }, { type: 'gap' }]).m).toBeUndefined();
+    expect(run(s4, [{ type: 'gap' }, { type: 'gap' }, { type: 'kwt' }]).m).toBe(1);
+    // Stufe 1–2 unverändert: jede saubere Antwort zählt.
+    expect(focusStep(run(null, [{ type: 'mc' }, { type: 'mc' }]), fact({ type: 'mc' })).move).toBe('up');
+  });
+
   it('Thema mit mehreren Einführungsschritten: „Verstehen“ bleibt, bis jeder Schritt saß', () => {
     const a = run(null, [{ more: true }, { more: true }]);
     const r = focusStep(a, fact({ more: true }));

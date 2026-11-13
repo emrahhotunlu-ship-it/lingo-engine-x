@@ -16,8 +16,8 @@ import { Button } from '../../ui/Button';
 /** Links der Wege-Zeile: ohne eigenen negativen Rand (den trägt die Zeile). */
 const LINK = { margin: 0 } as const;
 
-/** `hint`: Stichwort der Vorrat-Aufgabe (z. B. „(sign)“), wenn es nicht im Satz steht. */
-export type MistakeAgain = { en: string; answer: string; accepted: readonly string[]; hint?: string | null };
+/** `hint`: Stichwort der Vorrat-Aufgabe (z. B. „(sign)“), wenn es nicht im Satz steht. `expl`: geprüftes Warum der Vorrat-Aufgabe. */
+export type MistakeAgain = { en: string; answer: string; accepted: readonly string[]; hint?: string | null; expl?: { de: string | null; en: string | null } | null };
 
 export type MistakeCardProps = {
   taskKey: string;
@@ -112,15 +112,17 @@ export function MistakeCard({ taskKey, why, spot, vars, form, rule, again = null
           </button>
         )}
       </div>
-      {open === 'again' && again && <AgainGap key={`${taskKey}:${again.en}`} en={again.en} answer={again.answer} accepted={again.accepted} hint={again.hint ?? null} />}
+      {open === 'again' && again && <AgainGap key={`${taskKey}:${again.en}`} en={again.en} answer={again.answer} accepted={again.accepted} hint={again.hint ?? null} expl={again.expl ?? null} />}
       {open === 'rule' && rule}
     </div>
   );
 }
 
 /** „Gleich nochmal“: der neue Satz mit einem Eingabefeld in der Lücke; geprüft wird nur hier, gebucht wird nichts. */
-function AgainGap({ en, answer, accepted, hint }: MistakeAgain) {
-  const { t } = useT();
+function AgainGap({ en, answer, accepted, hint, expl }: MistakeAgain) {
+  const { t, lang } = useT();
+  // Warum nach dem Prüfen (bei richtig und falsch, Kap. 2 Nr. 4): die geprüfte Erklärung der Vorrat-Aufgabe in der Sprache der Oberfläche.
+  const why = expl?.[lang] ?? null;
   const [value, setValue] = useState('');
   const [done, setDone] = useState<null | boolean>(null);
   const m = /_{3,}(\s*\([^)]*\))?/.exec(en);
@@ -181,9 +183,16 @@ function AgainGap({ en, answer, accepted, hint }: MistakeAgain) {
           <span className="lx-t-meta text-muted">{t('dxAgainNote')}</span>
         </div>
       ) : (
-        <p className={`lx-t-support m-0 ${done ? 'text-ok-text' : 'text-wrong-text'}`} role="status" data-testid="mistake-again-result" data-ok={done ? '1' : '0'}>
-          {done ? t('dxAgainOk') : t('dxAgainNo', { a: answer })}
-        </p>
+        <>
+          <p className={`lx-t-support m-0 ${done ? 'text-ok-text' : 'text-wrong-text'}`} role="status" data-testid="mistake-again-result" data-ok={done ? '1' : '0'}>
+            {done ? t('dxAgainOk') : t('dxAgainNo', { a: answer })}
+          </p>
+          {why && (
+            <p className="lx-t-support m-0" lang={lang} data-testid="mistake-again-why">
+              {why}
+            </p>
+          )}
+        </>
       )}
     </section>
   );

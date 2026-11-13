@@ -97,7 +97,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
       const known = pats ?? patsOf(cur);
       const legacy = !Object.keys(known).length && num(cur.n, 0) > 0;
       const more = groupsLeft(topic, (id) => legacy || known[id]?.i !== undefined);
-      patch.fo = focusDoc(focusStep(readFocus(cur), { day: a.day, clean: ok && a.help.level === 0, wrong: !ok, pat: a.task.pat ?? null, p: pNew, stage: a.task.fo, more }).next);
+      patch.fo = focusDoc(focusStep(readFocus(cur), { day: a.day, clean: ok && a.help.level === 0, wrong: !ok, pat: a.task.pat ?? null, p: pNew, stage: a.task.fo, more, type: a.task.type, tiles: a.task.ease === 'tiles' }).next);
     }
     // M0: die eine BKT-Wirkung des Lerntags aus `ext` ist verbraucht (Tempo und c1x teilen den Deckel).
     if (a.ext) patch.xd = a.day;

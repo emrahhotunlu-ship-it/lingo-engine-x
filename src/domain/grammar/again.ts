@@ -8,8 +8,11 @@ import { allSeedTasks } from './tasks';
 // dieser Runde noch kommt. Das Muster ist `task.pat`, bei älteren Aufgaben ohne `pat` das eindeutig erkannte (`patternOf`: Zuordnungstabelle,
 // sonst Signalwörter; lieber keins als ein falsches). Rein und für dieselbe Aufgabe stabil. Die kleine Übung zählt nicht und wird nicht gebucht.
 
-/** `hint`: das Stichwort der Vorrat-Aufgabe (z. B. „(sign)“), wenn es nicht schon im Satz steht; sonst `null`. */
-export type AgainTask = { en: string; answer: string; accepted: readonly string[]; hint: string | null };
+/**
+ * `hint`: das Stichwort der Vorrat-Aufgabe (z. B. „(sign)“), wenn es nicht schon im Satz steht; sonst `null`. `expl`: die geprüfte
+ * Erklärung der Vorrat-Aufgabe – nach dem Prüfen eine Zeile Warum, bei richtig und bei falsch (Kap. 2 Nr. 4; Prüfbefund 13.11.2026).
+ */
+export type AgainTask = { en: string; answer: string; accepted: readonly string[]; hint: string | null; expl: { de: string | null; en: string | null } };
 
 const oneGap = (prompt: string): boolean => (prompt.match(/_{3,}/g)?.length ?? 0) === 1 && !prompt.includes('→');
 
@@ -46,5 +49,6 @@ export function againFromPool(task: Pick<GrammarTask, 'key' | 'topic' | 'prompt'
   const pick = [...cands].sort((a, b) => rank(a) - rank(b) || hash32(`${task.key}|${a.key}`) - hash32(`${task.key}|${b.key}`))[0];
   if (!pick) return null;
   const hint = pick.hint?.trim() && !pick.prompt.includes(pick.hint.trim()) ? pick.hint.trim() : null;
-  return { en: pick.prompt, answer: pick.answer, accepted: pick.accepted, hint };
+  const text = (v: string | null | undefined): string | null => (typeof v === 'string' && v.trim() ? v.trim() : null);
+  return { en: pick.prompt, answer: pick.answer, accepted: pick.accepted, hint, expl: { de: text(pick.expl?.de), en: text(pick.expl?.en) } };
 }

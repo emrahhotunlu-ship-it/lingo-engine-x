@@ -348,7 +348,7 @@ function focusAnswer(s: State, f: FocusRun, a: GrammarAnswer, tasks: GrammarTask
   const add = pat ? (stage === 1 ? groupOf(f.topic, pat) : [pat]) : [];
   const introduced: string[] | 'all' = f.introduced === 'all' ? 'all' : [...new Set([...f.introduced, ...add])];
   const has = (id: string): boolean => introduced === 'all' || introduced.includes(id);
-  const r = focusStepLive(f.topic, docs.get(f.topic), f.st, { day: s.day, clean: ok && a.help.level === 0, wrong: !ok, pat, stage, more: groupsLeft(f.topic, has) }, nowMs);
+  const r = focusStepLive(f.topic, docs.get(f.topic), f.st, { day: s.day, clean: ok && a.help.level === 0, wrong: !ok, pat, stage, more: groupsLeft(f.topic, has), type: a.task.type, tiles: a.task.ease === 'tiles' }, nowMs);
   let next: FocusRun = { ...f, st: r.next, stage: r.next.s, introduced, moved: r.move === 'none' ? f.moved : r.move };
   const end = s.repeatAt ?? tasks.length;
   if ((r.move !== 'up' && r.move !== 'down') || pos >= end) return { focus: next, tasks };

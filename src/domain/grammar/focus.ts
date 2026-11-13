@@ -118,7 +118,23 @@ export type FocusFact = {
   stage: FocusStage;
   /** Nach dieser Antwort sind noch Einführungsschritte des Themas offen (`groupsLeft`): „Verstehen“ geht dann mit dem nächsten Schritt weiter. */
   more?: boolean;
+  /** Aufgabenart (für die Aufstiegsregel ab Stufe „Umformen“, `liftRole`); fehlt = wie bisher (jede saubere Antwort zählt). */
+  type?: GrammarTaskType;
+  /** Umformung mit Bausteinen statt getippt (`task.ease === 'tiles'`). */
+  tiles?: boolean;
 };
+
+/**
+ * Prüfbefund learning-scientist 13.11.2026 (Aufstieg aus „Umformen“ fast ohne freie Umformung): Ab Stufe 3 zählen „Fehler finden“ und die
+ * Bausteine-Umformung NICHT für den Aufstieg (`none`: die Serie bleibt, wie sie ist); ausgelöst wird der Aufstieg (bzw. „Mischen bestanden“)
+ * nur von einer sauberen GETIPPTEN Umformung (`kwt`/`transform`, `lift`). Andere saubere Antworten zählen in der Serie mit (`count`), lösen
+ * aber nicht aus – so steckt in jedem Aufstieg mindestens eine freie Umformung.
+ */
+export function liftRole(stage: FocusStage, a: Pick<FocusFact, 'type' | 'tiles'>): 'lift' | 'count' | 'none' {
+  if (stage < 3 || a.type === undefined) return 'lift';
+  if (a.type === 'find' || a.tiles) return 'none';
+  return a.type === 'kwt' || a.type === 'transform' ? 'lift' : 'count';
+}
 
 /** Was die Antwort am Lauf geändert hat (für die Runde: Rest neu wählen, Abschluss-Zeile). */
 export type FocusMove = 'none' | 'up' | 'down' | 'sits';
@@ -149,9 +165,9 @@ export function focusStep(cur: FocusState | null, a: FocusFact): { next: FocusSt
       delete st.m;
       move = 'down';
     }
-  } else if (a.clean && a.stage >= st.s) {
+  } else if (a.clean && a.stage >= st.s && liftRole(st.s, a) !== 'none') {
     st.k = Math.min(STAGE_UP_CLEAN, st.k + 1);
-    if (st.k >= STAGE_UP_CLEAN) {
+    if (st.k >= STAGE_UP_CLEAN && liftRole(st.s, a) === 'lift') {
       if (st.s === 1 && a.more) {
         // Der Einführungsschritt sitzt, aber das Thema hat noch weitere: „Verstehen“ bleibt, morgen kommt der nächste Schritt mit seiner Regel.
         st.k = 0;

@@ -74,6 +74,8 @@ test('Gleich nochmal: neuer Satz desselben Musters aus dem Vorrat, falsch und ri
   await input.fill(answer ?? '');
   await card.getByTestId('mistake-again-check').click();
   await expect(card.getByTestId('mistake-again-result')).toHaveAttribute('data-ok', '1');
+  // Auch bei richtig eine Zeile Warum aus dem Vorrat (Kap. 2 Nr. 4, Prüfbefund 13.11.2026).
+  await expect(card.getByTestId('mistake-again-why')).not.toBeEmpty();
   // Die Karte bleibt (Enter/Prüfen geht nicht zur nächsten Aufgabe), die Aufgabe ist dieselbe.
   await expect(page.getByTestId('mistake-card')).toBeVisible();
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-type', shown ?? '');
