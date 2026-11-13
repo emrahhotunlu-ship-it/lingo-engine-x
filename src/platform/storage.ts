@@ -113,3 +113,22 @@ export const local = {
 
 /** Schlüssel-Präfix der neuen App; die alte App nutzt `sw2:`. */
 export const KEY_PREFIX = 'lx:';
+
+const DAY_AT = /^(\d{4}-\d{2}-\d{2})(?::|$)/;
+
+/**
+ * Bequemlichkeits-Schlüssel eines Lerntags (`<prefix><JJJJ-MM-TT>` oder `<prefix><JJJJ-MM-TT>:…`) älterer Tage entfernen; der heutige und
+ * spätere bleiben, Schlüssel ohne Datum an dieser Stelle werden nie angefasst. Sonst wächst der Browser-Speicher je Lerntag um Einträge
+ * (data-guard 13.11.2026, Brücken-Sätze). Liefert die Zahl der entfernten Schlüssel.
+ */
+export function removeOlderDayKeys(prefix: string, today: string): number {
+  let n = 0;
+  for (const k of local.keys()) {
+    if (!k.startsWith(prefix)) continue;
+    const day = DAY_AT.exec(k.slice(prefix.length))?.[1];
+    if (!day || day >= today) continue;
+    local.remove(k);
+    n++;
+  }
+  return n;
+}

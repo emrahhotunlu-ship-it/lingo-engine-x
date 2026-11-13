@@ -1,6 +1,6 @@
 import { reportBridgeUse, saveFreeUse, saveOutItem, saveRepairs, useLive, type BridgeUseResult } from '../sharedUi';
 import { logError } from '../shared';
-import { bridgeOutItem, bridgeRepair, flowbackOn, reportsWord, type BridgeRun } from '../domain/bridgeResult';
+import { bridgeOutItem, bridgeRepair, countsFreeUse, flowbackOn, reportsWord, type BridgeRun } from '../domain/bridgeResult';
 
 // Schreibwege eines geprüften Brücken-Satzes (P4). Aufgerufen genau einmal je Prüfung, auf eine Handlung hin (nie aus Render oder Timer).
 // Reihenfolge: Ergebnis zuerst (`out/<Monat>`), dann der Fehlersatz (`app/repair`), dann der Rückfluss – ein Absturz dazwischen verliert nur die
@@ -9,7 +9,8 @@ import { bridgeOutItem, bridgeRepair, flowbackOn, reportsWord, type BridgeRun } 
 //  - Ergebnis über die Kennung (Art + Zeit der Prüfung),
 //  - Fehlersatz über den Satz selbst (`repairId`),
 //  - Wort-Beleg über die Zeit der Prüfung (`sync ≥ t`) und „höchstens ein eigener Satz je Wort und Lerntag“ (Wörter-App, `writeBridgeUse`),
-//  - Muster-Beleg über den Lerntag (`fu[muster].d`).
+//  - Muster-Beleg über den Lerntag (`fu[muster].d`); nie, wenn der vorgeschlagene Satzanfang übernommen wurde (`starterUsed`, das Muster stand
+//    dann schon im vorgegebenen Teil).
 // Der Rückfluss ist abschaltbar (`app/profile.acfg.rf = 0`); Ergebnis und Fehlersatz bleiben dann.
 
 export type BridgeSaved = {
@@ -22,7 +23,7 @@ export type BridgeSaved = {
   pat: boolean;
 };
 
-export async function saveBridge(run: BridgeRun, ctx: string | null): Promise<BridgeSaved> {
+export async function saveBridge(run: BridgeRun, ctx: string | null, o: { starterUsed?: boolean } = {}): Promise<BridgeSaved> {
   const out = await saveOutItem(bridgeOutItem(run));
   const rep = bridgeRepair(run, ctx);
   const repair = rep ? await saveRepairs([rep]) : false;
@@ -38,7 +39,7 @@ export async function saveBridge(run: BridgeRun, ctx: string | null): Promise<Br
         logError('apply:bridge-word', err, w.path);
       }
     }
-    if (run.out.pat.v === 'ok') pat = await saveFreeUse(run.target.topic, run.target.pat, run.day);
+    if (countsFreeUse(run.out, o)) pat = await saveFreeUse(run.target.topic, run.target.pat, run.day);
   }
   return { out, repair, word, pat };
 }

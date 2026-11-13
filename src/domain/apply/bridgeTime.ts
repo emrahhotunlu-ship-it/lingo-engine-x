@@ -4,7 +4,8 @@
 // Die Minuten von Schritt 3 nennen, was die Aufgabe wirklich braucht – nicht das 10-%-Budget des Tagesziels: zwei Sätze mit Prüfung und Rückmeldung
 // dauern rund 3 Minuten. Sobald genug echte Sätze gemessen sind, gilt der Messwert (`app/profile.abm`):
 //
-//   app/profile.abm = { n: 12, ms: 84000 }     n = gemessene Sätze (≤ 99) · ms = gleitender Mittelwert je Satz in Millisekunden
+//   app/profile.abm = { n: 12, ms: 84000, r: "…" }     n = gemessene Sätze (≤ 99) · ms = gleitender Mittelwert je Satz in Millisekunden
+//                                                     r = Marke der zuletzt übernommenen Runde (data-guard 13.11.2026: dieselbe Runde zählt nur einmal)
 //
 // Geschrieben einmal je beendeter Runde (`bridgeStatPatch`), gelesen beim Einfrieren des Tagesplans (`bridgeMinutesOf`). Additiv und tolerant:
 // fehlt das Feld oder ist es unlesbar, gilt der Standard; ein unerwarteter Aufbau wird nie überschrieben.
@@ -27,6 +28,8 @@ const WINDOW = 8;
 export const BRIDGE_MS_RANGE = [10_000, 600_000] as const;
 
 export type BridgeStat = { n: number; ms: number };
+/** Länge der Rundenmarke `abm.r` höchstens. */
+export const BRIDGE_ROUND_MAX = 40;
 
 const isObj = (v: unknown): v is Doc => !!v && typeof v === 'object' && !Array.isArray(v);
 
@@ -52,12 +55,15 @@ export function bridgeMinutesOf(profile: Doc | null | undefined): number | undef
 }
 
 /**
- * Profil-Patch nach einer Runde: jede gültige Satzdauer geht in das gleitende Mittel. `null` = nichts zu schreiben (keine gültige Messung, oder
- * `abm` hat einen unerwarteten Aufbau).
+ * Profil-Patch nach einer Runde: jede gültige Satzdauer geht in das gleitende Mittel. `null` = nichts zu schreiben (keine gültige Messung,
+ * `abm` hat einen unerwarteten Aufbau, oder diese Runde – `round`, die Marke der Runde – ist schon übernommen: idempotent bei doppeltem
+ * „Fertig“ oder zwei Geräten; data-guard 13.11.2026). Ohne `round` wie vorher.
  */
-export function bridgeStatPatch(cur: Doc | null | undefined, durations: readonly number[]): { abm: BridgeStat } | null {
+export function bridgeStatPatch(cur: Doc | null | undefined, durations: readonly number[], round?: string): { abm: BridgeStat & { r?: string } } | null {
   const s = readBridgeStat(cur);
   if (!s) return null;
+  const r = round ? round.slice(0, BRIDGE_ROUND_MAX) : null;
+  if (r && isObj(cur?.abm) && cur.abm.r === r) return null;
   let { n, ms } = s;
   let took = 0;
   for (const d of durations) {
@@ -67,5 +73,5 @@ export function bridgeStatPatch(cur: Doc | null | undefined, durations: readonly
     n = Math.min(BRIDGE_STAT_MAX, n + 1);
     took++;
   }
-  return took ? { abm: { n, ms: Math.round(ms) } } : null;
+  return took ? { abm: { n, ms: Math.round(ms), ...(r ? { r } : {}) } } : null;
 }

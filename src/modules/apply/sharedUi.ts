@@ -42,7 +42,7 @@ export { retireRepairs, saveRepairs } from '../../features/repair/store';
 export { addProd } from '../../domain/c1/prod';
 
 // Browser-Speicher (nur Entwurf) und Eingabeprofil
-export { local, KEY_PREFIX } from '../../platform/storage';
+export { local, KEY_PREFIX, removeOlderDayKeys } from '../../platform/storage';
 export { logWarn } from '../../platform/diagnostics';
 export { useInputProfile } from '../../platform/input';
 

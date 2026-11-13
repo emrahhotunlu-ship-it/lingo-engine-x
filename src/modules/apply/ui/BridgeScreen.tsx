@@ -27,7 +27,7 @@ import {
 } from '../sharedUi';
 import { alignWords, applyBridge, BRIDGE_N, bridgeNeedsFix, bridgeWordInText, patternById, tutorCtx } from '../shared';
 import type { BridgeOut, BridgeTarget, PatVerdict, PatWhy, WordWhy } from '../shared';
-import { bridgeVerdict, hasFix, patMark, wordMark, type Mark } from '../domain/bridgeResult';
+import { bridgeVerdict, hasFix, patMark, starterUsed, wordMark, type Mark } from '../domain/bridgeResult';
 import { useBridgeTargets } from './bridgeData';
 import { saveBridge, type BridgeSaved } from './bridgeSave';
 import { startOrderRound } from './route';
@@ -183,6 +183,8 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
   const durations = useRef<number[]>([]);
   const lastNow = useRef(0);
   const [startedAt] = useState(() => performance.now());
+  /** Marke dieser Runde für `app/profile.abm` (dieselbe Runde zählt höchstens einmal, auch bei doppeltem „Fertig“). */
+  const [round] = useState(() => `${saveKey.slice(KEY_PREFIX.length)}:${Date.now().toString(36)}`.slice(-40));
   const [endedAt, setEndedAt] = useState(0);
 
   useEffect(() => {
@@ -235,7 +237,8 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
     setRes({ out, given, now });
     setResults((l) => [...l, { w: wordMark(out.word.v), p: patMark(out.pat.v), ok: bridgeVerdict(out) === 'ok' }]);
     setSaved(null);
-    const s = await saveBridge({ day: useClock.getState().today, now, target: cur, sentence: given, out, ms }, situation ?? pat.name[lang]);
+    // Übernommener Satzanfang: das Muster stand schon im vorgegebenen Teil – kein Beleg „frei verwendet“ (Prüfbefund 13.11.2026).
+    const s = await saveBridge({ day: useClock.getState().today, now, target: cur, sentence: given, out, ms }, situation ?? pat.name[lang], { starterUsed: starterUsed(given, starterHead) });
     setSaved((prev) => prev ?? s);
   };
 
@@ -255,7 +258,7 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
     setEndedAt(performance.now());
     if (!last) return;
     blur();
-    if (durations.current.length) void saveBridgeStat(durations.current);
+    if (durations.current.length) void saveBridgeStat(durations.current, round);
     // Tagesweg: nach dem letzten Satz ist Schritt 3 erledigt; als Anwenden-Tag zählt er nur, wenn mindestens ein Satz geprüft wurde.
     if (unit) unitDone(unit, undefined, { apDone: !!res || results.length > 0 });
   };

@@ -30,8 +30,11 @@ export async function saveFreeUse(topic: string, pat: string, day: string): Prom
   return done;
 }
 
-/** Satzdauern einer Runde in das gleitende Mittel `app/profile.abm` übernehmen; `true` = geschrieben. */
-export async function saveBridgeStat(durations: readonly number[]): Promise<boolean> {
+/**
+ * Satzdauern einer Runde in das gleitende Mittel `app/profile.abm` übernehmen; `true` = geschrieben. `round` = Marke der Runde: dieselbe
+ * Runde wird höchstens einmal übernommen (auf dem frischen Stand geprüft, `bridgeStatPatch`).
+ */
+export async function saveBridgeStat(durations: readonly number[], round?: string): Promise<boolean> {
   const writer = getWriter();
   if (!writer || !durations.length) return false;
   const path = 'app/profile';
@@ -39,7 +42,7 @@ export async function saveBridgeStat(durations: readonly number[]): Promise<bool
   try {
     await writer.transform(path, (cur) => {
       if (!cur || !validateDoc(path, cur).ok) return null;
-      const patch = bridgeStatPatch(cur, durations);
+      const patch = bridgeStatPatch(cur, durations, round);
       if (!patch) return null;
       done = true;
       return { update: patch };

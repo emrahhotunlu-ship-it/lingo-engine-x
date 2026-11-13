@@ -20,6 +20,14 @@ export const V86_MARK = 'Live v86';
 export const V86_DIR = join(ROOT, '.cache', 'v86');
 /** Was aus dem v86-Stand geholt wird. */
 export const V86_PATHS = ['src', 'dist/index.html'];
+/**
+ * Live-Stand v118 (`JLL8…` v118 `1794525659-3aa7`, 12.11.2026; Stand von `claude/umbau-fokus` bei 255c555f, dem letzten Commit vor Großpaket P):
+ * nur `src/` nach .cache/v118/, für den Rückweg-Test der Politur-Felder (tests/unit/rueckwegV118.test.ts, data-guard 13.11.2026).
+ */
+export const V118_COMMIT = '255c555f';
+export const V118_MARK = 'Kompass: Großpaket P Politur statt Pause';
+export const V118_DIR = join(ROOT, '.cache', 'v118');
+export const V118_PATHS = ['src'];
 
 const git = (args, opts = {}) => execFileSync('git', args, { cwd: ROOT, maxBuffer: 1024 * 1024 * 1024, ...opts });
 
@@ -29,6 +37,21 @@ const git = (args, opts = {}) => execFileSync('git', args, { cwd: ROOT, maxBuffe
  * @returns {{ dir: string, commit: string, subject: string, fresh: boolean }}
  */
 export function checkoutV86({ dir = V86_DIR, commit = V86_COMMIT } = {}) {
+  return checkoutLive({ dir, commit, mark: V86_MARK, paths: V86_PATHS });
+}
+
+/** Holt den Live-Stand v118 (nur `src/`) nach `dir` (Standard .cache/v118/); sonst wie `checkoutV86`. */
+export function checkoutV118({ dir = V118_DIR, commit = V118_COMMIT } = {}) {
+  return checkoutLive({ dir, commit, mark: V118_MARK, paths: V118_PATHS });
+}
+
+/**
+ * Gemeinsamer Weg: prüft die Commit-Nachricht (`mark`), holt `paths` per `git archive` und benennt erst am Ende um.
+ * @param {{ dir: string, commit: string, mark: string, paths: string[] }} opts
+ * @returns {{ dir: string, commit: string, subject: string, fresh: boolean }}
+ */
+function checkoutLive({ dir, commit, mark, paths }) {
+  const label = mark === V86_MARK ? 'v86' : 'v118';
   let full;
   let subject;
   try {
@@ -36,23 +59,23 @@ export function checkoutV86({ dir = V86_DIR, commit = V86_COMMIT } = {}) {
     subject = git(['log', '-1', '--format=%s', full], { encoding: 'utf8' }).trim();
   } catch (err) {
     throw new Error(
-      `Commit ${commit} (v86) fehlt in diesem Repository – vermutlich ein flacher Klon. Abhilfe: \`git fetch --unshallow origin claude/umbau-fokus\`. (${err instanceof Error ? err.message.split('\n')[0] : err})`,
+      `Commit ${commit} (${label}) fehlt in diesem Repository – vermutlich ein flacher Klon. Abhilfe: \`git fetch --unshallow origin claude/umbau-fokus\`. (${err instanceof Error ? err.message.split('\n')[0] : err})`,
       { cause: err },
     );
   }
-  if (!subject.includes(V86_MARK)) throw new Error(`Commit ${full.slice(0, 9)} ist nicht der Live-Stand: Nachricht „${subject}“ enthält nicht „${V86_MARK}“`);
+  if (!subject.includes(mark)) throw new Error(`Commit ${full.slice(0, 9)} ist nicht der Live-Stand: Nachricht „${subject}“ enthält nicht „${mark}“`);
 
   const stamp = join(dir, 'COMMIT');
-  if (existsSync(stamp) && readFileSync(stamp, 'utf8').split('\n')[0] === full && existsSync(join(dir, 'dist', 'index.html')) && existsSync(join(dir, 'src'))) {
+  if (existsSync(stamp) && readFileSync(stamp, 'utf8').split('\n')[0] === full && paths.every((p) => existsSync(join(dir, p)))) {
     return { dir, commit: full, subject, fresh: false };
   }
   const tmp = `${dir}.tmp-${process.pid}`;
   rmSync(tmp, { recursive: true, force: true });
   mkdirSync(tmp, { recursive: true });
   try {
-    const tar = git(['archive', '--format=tar', full, ...V86_PATHS]);
+    const tar = git(['archive', '--format=tar', full, ...paths]);
     execFileSync('tar', ['-x', '-C', tmp], { input: tar, maxBuffer: 1024 * 1024 * 1024 });
-    if (!existsSync(join(tmp, 'dist', 'index.html'))) throw new Error('dist/index.html fehlt im v86-Stand');
+    for (const p of paths) if (!existsSync(join(tmp, p))) throw new Error(`${p} fehlt im ${label}-Stand`);
     writeFileSync(join(tmp, 'COMMIT'), `${full}\n${subject}\n`);
     mkdirSync(dirname(dir), { recursive: true });
     rmSync(dir, { recursive: true, force: true });

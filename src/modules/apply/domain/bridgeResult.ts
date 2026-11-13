@@ -92,3 +92,15 @@ export function flowbackOn(profile: Doc | null | undefined): boolean {
 
 /** Soll das Wort-Urteil an die Wörter-App gehen? Nicht, wenn das Wort gar nicht vorkam (kein Versuch, kein Ersatzwort). */
 export const reportsWord = (o: BridgeOut['word']): boolean => o.v !== 'unused' || !!o.at.trim();
+
+/**
+ * Hat Emrah den vorgeschlagenen Satzanfang übernommen (der Satz beginnt mit ihm, Groß-/Kleinschreibung egal)? Dann steht das Muster schon im
+ * vorgegebenen Teil – der Satz zählt nicht als freie Verwendung des Musters (Prüfbefund learning-scientist 13.11.2026).
+ */
+export function starterUsed(given: string, starterHead: string | null | undefined): boolean {
+  const head = starterHead?.trim();
+  return !!head && given.trim().toLowerCase().startsWith(head.toLowerCase());
+}
+
+/** Zählt der Satz für „frei verwendet“ beim Muster (`grammar/<thema>.fu`)? Nur ein richtig benutztes Muster ohne übernommenen Satzanfang. */
+export const countsFreeUse = (o: Pick<BridgeOut, 'pat'>, opts: { starterUsed?: boolean } = {}): boolean => o.pat.v === 'ok' && !opts.starterUsed;

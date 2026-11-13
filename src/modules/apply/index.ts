@@ -1,6 +1,6 @@
 import { createElement, lazy, Suspense, type ComponentType } from 'react';
 import { z } from 'zod';
-import { defineArea, logWarn, Skeleton, type ScreenProps } from './sharedUi';
+import { defineArea, KEY_PREFIX, logWarn, removeOlderDayKeys, Skeleton, useClock, type ScreenProps } from './sharedUi';
 
 // Modul Anwenden (F3, docs/umbau/fokus2/anwenden-plan.md), Tür 1: der Bereich `applyArea` (nur von src/areas/index.ts angemeldet), die Seite „Anwenden“
 // (`ApplyPage`, von src/areas/anwenden.tsx unter Fokus 2.0 eingesetzt) und das Ziel von Schritt 3 des Tagesweges (`applyStepRoute`). Die Bildschirme liegen in
@@ -45,9 +45,20 @@ function prefetchApply(): void {
   else setTimeout(run, 2000);
 }
 
+/**
+ * Beim Start: gemerkte Runden der Brücken-Sätze (`lx:bridge:<Tag>:…`, BridgeScreen) älterer Lerntage aus dem Browser-Speicher entfernen – sie
+ * gelten nur für ihren Lerntag (data-guard 13.11.2026). Nur Bequemlichkeit, nie Lernstand.
+ */
+export function pruneBridgeKeys(today: string = useClock.getState().today): number {
+  return removeOlderDayKeys(`${KEY_PREFIX}bridge:`, today);
+}
+
 export const applyArea = defineArea({
   id: 'apply',
-  boot: prefetchApply,
+  boot: () => {
+    pruneBridgeKeys();
+    prefetchApply();
+  },
   screens: {
     applyTask: {
       kind: 'exercise',

@@ -17,6 +17,7 @@ import { useTodayPlan } from '../today/store';
 //
 // Reihenfolge (die erste Regel, die ein bekanntes Muster liefert, gilt):
 //  1. Das heute in der Grammatikrunde zuletzt geübte Muster der Themen von heute (Buch-Seite bzw. `u.gt`): `pats[muster].last` liegt am heutigen Lerntag.
+//     Mit Fokus-Thema (`u.gt.fo === 1`) nur Muster von `u.gt.topics[0]` (Aufwärm-/Partner-Themen nie).
 //  2. Buch-Schritt (`useBookDuty`): das Muster des Themas der Seite, an dem gerade gearbeitet wird.
 //  3. Eingefrorener Plan `u.gt`: die Muster des Tages (`pats`), sonst Einführungsthema und Rundenthemen.
 //  4. Sonst: das schwächste begonnene Thema (kleinstes `p` mit mindestens einer Antwort).
@@ -41,9 +42,12 @@ export function todayPatternOf(i: { book: BookDuty; gt: GrammarDay | null | unde
   const docs = i.grammar ?? new Map<string, Doc>();
   const bookTopic = i.book?.kind === 'page' ? i.book.topic : null;
   const planTopics = i.gt ? [...(i.gt.intro ? [i.gt.intro] : []), ...i.gt.topics] : [];
-  const todayTopics = [...new Set([...(bookTopic ? [bookTopic] : []), ...planTopics])];
+  // Plan mit Fokus-Thema (`gt.fo === 1`): Satz 1 nimmt sicher das Muster des Fokus-Themas (`gt.topics[0]`) – ein heute zuletzt geübtes Muster
+  // eines Aufwärm- oder Partner-Themas zählt dann nicht (Prüfbefund learning-scientist 13.11.2026).
+  const focusTopic = i.gt?.fo === 1 ? (i.gt.topics[0] ?? null) : null;
+  const todayTopics = i.gt?.fo === 1 ? (focusTopic ? [focusTopic] : []) : [...new Set([...(bookTopic ? [bookTopic] : []), ...planTopics])];
 
-  // 1. Heute schon geübt: das zuletzt beantwortete Muster der Themen von heute.
+  // 1. Heute schon geübt: das zuletzt beantwortete Muster der Themen von heute (mit Fokus-Thema nur dessen Muster).
   let done: { id: string; topic: string; last: number } | null = null;
   for (const topic of todayTopics) {
     for (const [id, e] of Object.entries(patsOf(docs.get(topic)))) {

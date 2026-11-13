@@ -332,4 +332,20 @@ describe('Adapter: Muster des heutigen Grammatik-Schritts', () => {
     expect(todayPatternOf({ book: null, gt: null, grammar, today: '2026-11-14' })).toMatchObject({ topic: 'passive', src: 'weak' });
     expect(todayPatternOf({ book: null, gt: null, grammar: new Map(), today: TODAY })).toBeNull();
   });
+  it('Plan mit Fokus-Thema (gt.fo = 1): Regel 1 nimmt nur Muster von topics[0], nie ein zuletzt geübtes Aufwärm-Thema (Prüfbefund 13.11.2026)', () => {
+    // Heute: zuerst das Fokus-Thema geübt (cn.third), zuletzt eine Aufwärm-Aufgabe aus „passive“.
+    const grammar = new Map<string, Doc>([
+      ['conditionals', { p: 0.55, n: 20, pats: { 'cn.third': entry(at(TODAY) - 3_600_000), 'cn.first': entry(at(YESTERDAY)) } }],
+      ['passive', { p: 0.4, n: 8, pats: { 'pv.simple': entry(at(TODAY)) } }],
+    ]);
+    const gt = { intro: null, pats: ['cn.third'], topics: ['conditionals', 'passive'], fo: 1 as const };
+    expect(todayPatternOf({ book: null, gt, grammar, today: TODAY })).toEqual({ id: 'cn.third', topic: 'conditionals', src: 'done' });
+    // Ohne Fokus-Kennzeichen zählt wie bisher das zuletzt geübte Muster aller Themen von heute.
+    expect(todayPatternOf({ book: null, gt: { intro: null, pats: ['cn.third'], topics: ['conditionals', 'passive'] }, grammar, today: TODAY })).toMatchObject({ id: 'pv.simple', src: 'done' });
+    // Fokus-Thema heute noch nicht geübt, nur das Aufwärm-Thema: Regel 1 greift nicht, es gilt das Muster des Fokus-Schritts.
+    const warmOnly = new Map<string, Doc>([...grammar, ['conditionals', { p: 0.55, n: 20, pats: { 'cn.first': entry(at(YESTERDAY)) } }]]);
+    const r = todayPatternOf({ book: null, gt, grammar: warmOnly, today: TODAY });
+    expect(r?.topic).toBe('conditionals');
+    expect(r?.src).toBe('plan');
+  });
 });
