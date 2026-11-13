@@ -65,9 +65,39 @@ export function bigVocab(n: number): Record<string, Doc> {
  * weiter. Liefert, ob eine Auswahl da war.
  */
 export async function passPick(page: Page): Promise<boolean> {
+  // Politur P2: Vorkarte „Kennst du es schon?“ vor der Einführung eines neuen Einzelworts → „Nein, neu“.
+  if (await passKnow(page)) return true;
   const pick = page.getByTestId('vm-pick');
   if (!(await pick.isVisible())) return false;
   await pick.getByTestId('vm-pick-choices').getByRole('button').first().click();
   await page.getByTestId('vm-pick-next').click();
   return true;
+}
+
+/** Politur P2: steht die Vorkarte „Kennst du es schon?“ da, „Nein, neu“ tippen (dann kommt die Einführung). Liefert, ob sie da war. */
+export async function passKnow(page: Page): Promise<boolean> {
+  const know = page.getByTestId('vm-know-no');
+  if (!(await know.isVisible())) return false;
+  await know.click();
+  await page.getByTestId('vm-intro-go').waitFor();
+  return true;
+}
+
+/**
+ * Politur P2: gelerntes Wort der Wörter-App (Lexem `base` wie `newLex` der Specs, Uhr `now`), bei dem nur Verstehen heute fällig ist (Benutzen
+ * erst in 20 Tagen); zuletzt mit Form `last` abgefragt, Treffer je Form `h` – das steuert, welche Hör-Karte kommt.
+ */
+export function heardLex(base: Doc, now: number, last: string, h: Record<string, [number, number]> = {}): Doc {
+  const D = 86_400_000;
+  const dayOf = (ms: number): string => new Date(ms + 2 * 3_600_000).toISOString().slice(0, 10);
+  return {
+    ...base,
+    lv: 3,
+    intro: dayOf(now - 10 * D),
+    day: dayOf(now - 4 * D),
+    u: { due: now - D, s: 3, d: 5, st: 2, reps: 2, lapses: 0, last: now - 4 * D, sd: 3, ls: 0 },
+    b: { due: now + 20 * D, s: 20, d: 5, st: 2, reps: 2, lapses: 0, last: now - 4 * D, sd: 24, ls: 0 },
+    sync: now - 4 * D,
+    fq: { l: last, c: 0, h, nb: 0, ak: null, ew: [] },
+  };
 }

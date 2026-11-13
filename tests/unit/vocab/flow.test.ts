@@ -55,7 +55,8 @@ describe('cardOf', () => {
     const lex = learned(T0 - 10 * D);
     const bare = { word: 'scope', de: 'Umfang' };
     expect(cardOf({ task: task(), doc: bare, lex, teach: {}, nowMs: T0, sbGate: null })!.mode).toBe('nosent');
-    const m = cardOf({ task: task({ form: 'listen' }), doc, lex, teach: {}, nowMs: T0, sbGate: null })!;
+    // Formen ohne eigene Karte (Diktat, Bausteine) fallen auf „Bedeutung lesen“ zurück; Satz hören hat seit Politur P2 eine eigene Karte.
+    const m = cardOf({ task: task({ form: 'dictation' }), doc, lex, teach: {}, nowMs: T0, sbGate: null })!;
     expect(m.mode).toBe('meaning');
     expect(m.form).toBe('meaning');
   });
@@ -68,6 +69,27 @@ describe('cardOf', () => {
     expect(m.contrast).toEqual({ w: 'become', ff: 'bekommen', pair: null });
     const bare = cardOf({ task: task({ form: 'contrast' }), doc: { word: 'scope', de: 'Umfang' }, lex, teach: {}, nowMs: T0, sbGate: null })!;
     expect([bare.mode, bare.form]).toEqual(['nosent', 'contrast']);
+  });
+  it('Politur P2 (Prüfbericht S2): Wendung mit ganzer Lücke wird als freier Abruf gebucht – „Gut“, Aufstieg möglich, kein „knapp“ bei richtig', () => {
+    const chunk: Doc = { en: 'to weigh up the options', de: 'die Möglichkeiten abwägen', ex: 'We should weigh up the options before we decide.', wx: [{ en: 'Let us weigh up the options first.', de: 'Wägen wir erst die Möglichkeiten ab.' }] };
+    const lex: Lex = { ...learned(T0 - 10 * D), k: 'ch', lv: 2, b: { ...learned(T0 - 10 * D).b!, due: T0 - D } };
+    // Auch ein alter Plan-Eintrag oder Entwurf mit der Form „Teil einer Wendung“ zeigt die ganze Lücke und bucht sie als Lücke.
+    const m = cardOf({ task: task({ path: 'chunk/weigh-up', form: 'cloze_part' }), doc: chunk, lex, teach: {}, nowMs: T0, sbGate: null })!;
+    expect([m.mode, m.form]).toEqual(['gap', 'gap']);
+    expect(m.answer.toLowerCase()).toBe('weigh up the options');
+    const check = evaluate(m, 'weigh up the options', dict);
+    expect(check.outcome).toBe('ok');
+    const a = answerOf(m, check, { t: T0, ms: 6000, fk: 1200, hint: 0 });
+    const r = resultOf(lex, a, ctx({ path: 'chunk/weigh-up' }));
+    expect(r.grade).toBe(3);
+    expect(r.lex.lv).toBe(3);
+    const band = previewOf({ m, check, given: 'weigh up the options', lang: 'de', before: lex, result: r, planned: true, t: T0 })!;
+    expect(band.tone).toBe('ok');
+    expect(band.next).toMatchObject({ kind: 'date' });
+    if (band.next.kind === 'date') expect(band.next.extra).not.toBe('tight');
+    // Vorher: als Teil-Lücke gebucht → höchstens „Schwer“, kein Aufstieg, Band „knapp“.
+    const old = applyAnswer(lex, { ...a, form: 'cloze_part' }, ctx({ path: 'chunk/weigh-up' }));
+    expect([old.grade, old.lex.lv]).toEqual([2, 2]);
   });
   it('Formen mit späterer eigener Karte → null', () => {
     for (const form of ['transfer', 'own'] as const) expect(cardOf({ task: task({ form }), doc, lex: learned(T0 - 10 * D), teach: {}, nowMs: T0, sbGate: null })).toBeNull();

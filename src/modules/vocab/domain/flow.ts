@@ -1,4 +1,4 @@
-import { leechTreatment } from './leech';
+import { isProblem, leechTreatment } from './leech';
 import { addDays, dayKey } from '../shared';
 import { type Band, bandOf } from './band';
 import { type CardSentence, chooseSentence, cueOf, headShown, type Pos, posOf, sentencesOf, targetOf, type Teach, tipOf, usableSentences } from './card';
@@ -18,10 +18,31 @@ type Doc = Record<string, unknown>;
 
 /**
  * Darstellung: `intro` neues Wort (Satz, kurz versuchen, aufdecken) · `probe` „Kenne ich schon“ frei ohne Satz · `gap` Lücke im Satz ·
- * `nosent` Deutsch → Englisch ohne Satz · `meaning` markiertes Wort im Satz → deutsche Bedeutung (Verstehen-Spur) ·
- * `flip` Anki-Modus: Wort (im Satz) → Aufdecken → Selbsturteil (nur Verstehen, A7/F3).
+ * `nosent` Deutsch → Englisch ohne Satz (bei `probe` seit Politur P2: Wort → deutsche Bedeutung, siehe `asksMeaning`) · `meaning` markiertes Wort im Satz → deutsche Bedeutung (Verstehen-Spur) ·
+ * `flip` Anki-Modus: Wort (im Satz) → Aufdecken → Selbsturteil (nur Verstehen, A7/F3) ·
+ * `tone_mean` Hören → Bedeutung: nur der Klang des Worts, getippt wird die deutsche Bedeutung (Verstehen) ·
+ * `listen` Satz hören → Wort tippen: der Satz wird vorgelesen, im Text ist das Wort eine Lücke (Verstehen, höchstens „Gut“).
  */
-export type CardMode = 'intro' | 'probe' | 'gap' | 'nosent' | 'meaning' | 'flip';
+export type CardMode = 'intro' | 'probe' | 'gap' | 'nosent' | 'meaning' | 'flip' | 'tone_mean' | 'listen';
+
+/**
+ * Politur P2 (E3 „Hören“, „Kennst du es schon?“): Karten, deren Antwort die deutsche Bedeutung ist – „Bedeutung lesen“ (Wort markiert im
+ * Satz), „Hören → Bedeutung“ (nur der Klang des Worts) und die Probe nach „Ja, prüf mich“ (das Wort stand auf der Vorkarte schon da; die
+ * Probe prüft, ob Emrah es versteht, das Benutzen prüft die Kontrolle in 7 Tagen). Lösung, Prüfung und Warum laufen für alle gleich.
+ */
+export const asksMeaning = (mode: CardMode): boolean => mode === 'meaning' || mode === 'tone_mean' || mode === 'probe';
+/** Bedeutung ohne Satz („hier“ passt nicht): Hören → Bedeutung, Probe und „Bedeutung“ ohne Satz. Ihr Warum hat eigene Texte `vmWhyBare…`. */
+export const bareMeaning = (m: Pick<CardModel, 'mode' | 'sentence'>): boolean => m.mode === 'tone_mean' || m.mode === 'probe' || (m.mode === 'meaning' && !m.sentence);
+/** Hör-Karten (Politur P2): Ton ist die Frage; ohne Ton zeigt die Karte stattdessen die Textform (`textOf`). */
+export const isHear = (mode: CardMode): boolean => mode === 'tone_mean' || mode === 'listen';
+
+/**
+ * „Kann gerade nicht hören“ (Politur P2): dieselbe Abfrage als Text – „Bedeutung lesen“ im selben Satz (Satz hören) bzw. das Wort als Text
+ * (Hören → Bedeutung). Gebucht wird dann `meaning`; der Wechsel selbst hat keine Note. Andere Karten bleiben, wie sie sind.
+ */
+export function textOf(m: CardModel): CardModel {
+  return isHear(m.mode) ? { ...m, mode: 'meaning', form: 'meaning' } : m;
+}
 
 export type CardModel = {
   path: string;
@@ -76,6 +97,8 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   const open = lex.ct ? { contrast: { w: lex.ct.w ?? null, ff: teach.ff ?? null, pair: teach.pair ?? null } } : {};
   const base = { path: task.path, head, de, def: str(doc.def), pos, teach, moreSentences: usable.length > 1, col: doc.col, ...open };
   const spec = FORM_SPEC[task.form];
+  // Problemwort ab dem 3. Vergessen (Politur P2): ein Satz, den das Wort noch nie hatte, wenn es einen gibt.
+  const unseen = isProblem(lex.lc);
   const noSentence = (form: Form, mode: CardMode): CardModel => {
     const answer = baseAnswer(head);
     return { ...base, mode, form, sentence: null, answer, target: targetOf(lex, answer, pos, teach, null), cue: null, firstLetters: false };
@@ -85,7 +108,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   if (task.form === 'contrast') {
     const contrast = { w: lex.ct?.w ?? null, ff: teach.ff ?? null, pair: teach.pair ?? null };
     const cue = de ? { de, ff: !!teach.ff } : null;
-    const s = chooseSentence(lex, usable, day, { fresh: true, avoid: x.avoid ?? null });
+    const s = chooseSentence(lex, usable, day, { fresh: true, avoid: x.avoid ?? null, unseen });
     if (!s) return { ...noSentence('contrast', 'nosent'), cue, contrast };
     return { ...base, mode: 'gap', form: 'contrast', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue, firstLetters: false, contrast };
   }
@@ -109,16 +132,23 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     const answer = s ? s.gap.answer : baseAnswer(head);
     return { ...base, mode: 'flip', form: 'flip', sentence: s, answer, target: targetOf(lex, answer, pos, teach, s ? s.gap : null), cue: null, firstLetters: false };
   }
-  // Verstehen-Spur: das Wort steht markiert im Satz, gesucht ist die Bedeutung (Hören und Bausteine folgen mit eigenen Karten).
+  // Verstehen-Spur: „Bedeutung lesen“ (Wort markiert im Satz) oder – mit Ton – eine der Hör-Formen (Politur P2, E3). Formen ohne eigene
+  // Karte (Diktat, Bausteine) fallen auf „Bedeutung lesen“ zurück und werden so gebucht.
   if (spec.track === 'u') {
-    const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null });
+    // Hören → Bedeutung: nur das Wort als Klang, ohne Satz und ohne Text.
+    if (task.form === 'tone_mean' && de) return noSentence('tone_mean', 'tone_mean');
+    const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null, unseen });
+    // Satz hören → Wort tippen: der ganze Satz als Klang, im Text ist das Wort die Lücke.
+    if (task.form === 'listen' && s) return { ...base, mode: 'listen', form: 'listen', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
     if (s && de) return { ...base, mode: 'meaning', form: 'meaning', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
     return noSentence('nosent', 'nosent');
   }
   if (task.form === 'nosent' || spec.sent === 'n') return noSentence('nosent', 'nosent');
-  const s = chooseSentence(lex, usable, day, { anchorOnly: task.step === 1, fresh: task.step === 3, avoid: x.avoid ?? null });
+  const s = chooseSentence(lex, usable, day, { anchorOnly: task.step === 1, fresh: task.step === 3, avoid: x.avoid ?? null, unseen });
   if (!s) return noSentence('nosent', 'nosent');
-  const form: Form = task.form === 'gap_hint' || task.form === 'gap' || task.form === 'cloze_part' ? task.form : 'gap';
+  // Gebucht wird, was gezeigt wird (Politur P2, Prüfbericht S2): Eine Wendung mit ganzer Lücke ist ein freier Abruf (`gap`), keine Teil-Lücke.
+  // `cloze_part` (höchstens „Schwer“) gilt erst wieder, wenn es eine Karte gibt, die wirklich nur einen Teil der Wendung offen lässt.
+  const form: Form = task.form === 'gap_hint' ? 'gap_hint' : 'gap';
   return {
     ...base,
     mode: 'gap',
@@ -188,7 +218,7 @@ const POS_DICT: Readonly<Record<string, string>> = { noun: 'n', verb: 'v', adj: 
 /** Antwort werten. `dunno` = „Weiß ich nicht“. */
 export function evaluate(m: CardModel, given: string, dict: CheckDict, dunno = false): Check {
   if (dunno) return { outcome: 'dunno' };
-  if (m.mode === 'meaning') {
+  if (asksMeaning(m.mode)) {
     // Erst die gelernte Bedeutung; dann die Wörterbuch-Bedeutungen derselben Wortart (Emrah 05.11.2026: „grant“ → „gewähren“ war richtig).
     const own = checkMeaning(given, m.de);
     if (own.outcome !== 'wrong' || !dict.senses) return own;
@@ -283,13 +313,14 @@ export function previewOf(x: {
   soon?: boolean;
 }): Band | null {
   const m = x.m;
-  // Bedeutung: Lösung ist die deutsche Bedeutung; Warum nennt Wort = Bedeutung.
-  const answer = m.mode === 'meaning' ? m.de : m.answer;
-  return bandOf({
+  // Bedeutung (gelesen oder gehört): Lösung ist die deutsche Bedeutung; Warum nennt Wort = Bedeutung.
+  const meaning = asksMeaning(m.mode);
+  const answer = meaning ? m.de : m.answer;
+  const band = bandOf({
     check: x.check,
     given: x.given,
     answer,
-    de: m.mode === 'meaning' ? m.answer : m.de,
+    de: meaning ? m.answer : m.de,
     pos: m.pos,
     teach: m.teach,
     lang: x.lang,
@@ -299,10 +330,29 @@ export function previewOf(x: {
     t: x.t,
     moreSentences: m.moreSentences,
     col: m.col,
-    ...(x.meaningOf && m.mode !== 'meaning' ? { meaningOf: x.meaningOf } : {}),
-    ...(m.mode === 'meaning' ? { meaning: true } : {}),
+    ...(x.meaningOf && !meaning ? { meaningOf: x.meaningOf } : {}),
+    ...(meaning ? { meaning: true } : {}),
     ...(x.soon === false ? { soon: false } : {}),
   });
+  // Hören → Bedeutung und Probe: dieselben Warum-Sätze, aber ohne „hier“ (es gab keinen Satz) – eigene Texte `vmWhyBare…`.
+  if (band && bareMeaning(m) && band.why.kind === 'rule' && band.why.key.startsWith('vmWhyMean')) return { ...band, why: { ...band.why, key: band.why.key.replace(/^vmWhyMean/, 'vmWhyBare') } };
+  return band;
+}
+
+/**
+ * Was die Karte von selbst vorliest bzw. als Ton stellt (Politur P2, E3): Einführung = Wort, dann der Satz · Hören → Bedeutung = das Wort ·
+ * Satz hören = der ganze Satz. `null` = die Karte hat keinen eigenen Ton. Derselbe Text geht ans Vorab-Rechnen (`prefetchSpeech`), damit der
+ * Ton beim Erscheinen der Karte sofort spielt.
+ */
+export function audioOf(m: CardModel): string | null {
+  const sentence = m.sentence ? m.sentence.gap.segs.map((g) => g.s).join('') : '';
+  if (m.mode === 'tone_mean') return m.answer || null;
+  if (m.mode === 'listen') return sentence || null;
+  if (m.mode === 'intro') {
+    const word = baseAnswer(m.head);
+    return sentence ? `${word}. ${sentence}` : word || null;
+  }
+  return null;
 }
 
 /** Tipp-Zeile (`vmTip`/`vmTipOne`). */

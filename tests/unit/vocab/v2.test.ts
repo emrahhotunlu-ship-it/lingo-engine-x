@@ -3,7 +3,7 @@ import { addDays, dayKey, dayStartOf } from '../../../src/domain/date';
 import { toUSText } from '../../../src/domain/text/british';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
 import { type CheckDict, checkAnswer, damerau, type Target } from '../../../src/modules/vocab/domain/check';
-import { available, emptyFq, formLevel, LADDER_B, LADDER_U, leaks, pickForm, pickSentence, updateFq } from '../../../src/modules/vocab/domain/forms';
+import { available, emptyFq, formLevel, LADDER_B, LADDER_U, leaks, pickForm, pickSentence, updateFq, NO_CARD } from '../../../src/modules/vocab/domain/forms';
 import { baseGrade, easyAllowed, FORM_SPEC, gradeOf, isFreeGood, speedOf } from '../../../src/modules/vocab/domain/grade';
 import { isLeechCount, leechTreatment } from '../../../src/modules/vocab/domain/leech';
 import { type Answer, applyAnswer, emptyLex, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
@@ -108,6 +108,20 @@ describe('Formen je Stufe (M22)', () => {
   it('Formen mit höchstens Hard nie zweimal hintereinander; Trefferquote zählt richtige Antworten auch dort (Blocker 1)', () => {
     const l = { ...at(learned(T0, 'col'), 3), fq: { ...emptyFq(), l: 'cloze_part' as Form, h: { cloze_part: [5, 5] as [number, number], gap: [5, 5] as [number, number] } } };
     expect(CAPPED_OK(pickForm(l, 'b', { de: true }).form)).toBe(true);
+  });
+  it('Politur P2 (Prüfbericht S2): „Teil einer Wendung“ hat noch keine Karte und wird nicht gewählt – Wendungen wechseln wie Wörter zwischen Lücke und „ohne Satz“', () => {
+    const col = at(learned(T0, 'col'), 3);
+    expect(NO_CARD.has('cloze_part')).toBe(true);
+    for (const k of ['col', 'pv', 'ch', 'w'] as const) expect(available('cloze_part', { ...col, k }, { de: true, partner: true, grOn: true })).toBe(false);
+    let x = { ...col, fq: emptyFq() };
+    const seen: Form[] = [];
+    for (let i = 0; i < 6; i++) {
+      const f = pickForm(x, 'b', { de: true }).form;
+      seen.push(f);
+      x = { ...x, fq: { ...x.fq, l: f, h: { ...x.fq.h, [f]: [i + 1, i + 1] } } };
+    }
+    expect(new Set(seen)).toEqual(new Set<Form>(['gap', 'nosent']));
+    expect(seen.every((f) => FORM_SPEC[f].free && FORM_SPEC[f].max === 4)).toBe(true);
   });
   it('Satzbindung wirkt auch auf Stufe 2–3 und baut sich nach 2 Abrufen ohne Satz ab (Befund 5, Nachprüfung 1)', () => {
     const l = { ...at(learned(), 3), fq: { ...emptyFq(), nb: 2, l: 'gap' as Form } };

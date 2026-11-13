@@ -9,23 +9,46 @@ import type { Form, FormStats, Lex, TrackKey, VocabCfg } from './types';
 //  - Rückstand: höchstens 1 Tagesbudget je Tag (Emrah 04.11.2026, Wahl A: „88 Wörter in einem Durchgang“ – der Plan passt in die eingestellte
 //    Wörter-Zeit; vorher 2 Budgets). Der Rest: Randwörter werden nach Gefährdung auf die nächsten 7 Tage verteilt (Lastausgleich),
 //    jedes höchstens 3-mal (`lex.mv`); Kernwörter und dreimal verschobene bleiben fällig und kommen am nächsten Tag zuerst.
-//  - Neue: das eingestellte Kontingent (`newPerDay`) kommt an JEDEM Lerntag, auch bei Rückstand (Emrah 08.11.2026, Wörter-Tempo „A: 10 pro Tag“:
-//    vorher fiel es bei Rückstand auf 2, ohne Rückstand auf 5 – Emrah bekam trotz Einstellung 10 meist nur 2). Die Fälligen teilen sich die übrige
-//    Wörter-Zeit; was nicht passt, wird wie bisher verteilt. Bei Kontingent 0 keine (Emrahs Antwort 5); am kurzen Tag höchstens SHORT_DAY_NEW (api.ts). Nie zwei verwechselbare neue am selben Tag, nie eine Kollokation am Einführungstag ihres Kernworts.
+//  - Politur P2 (Emrah 13.11.2026, E3 „A: Wiederholungen zuerst“; ersetzt „das Kontingent kommt immer“ vom 08.11.): Im Minuten-Modus kommen
+//    die WIEDERHOLUNGEN ZUERST. Der erste Abruf nach dem Einführungstag („gestern gelernt“) steht immer im Plan. Die Wiederholungen bekommen
+//    mindestens 60 % der Wörter-Zeit (`REVIEW_SHARE`) und alles darüber hinaus, was sie brauchen – bis auf den Platz für die Mindestzahl neuer
+//    Wörter. Neue = was übrig bleibt: mindestens `MIN_NEW` (bei sehr kurzer Wörter-Zeit 1), höchstens das Tempo des Tages (`newPerDay`,
+//    domain/tempo.ts). Vorher rechnete der Plan „Zeit − neue × Kosten“: bei Tagesziel 30/35 blieben 10 neue und 1 Wiederholung (Prüfbericht S1).
+//    Bei Tempo 0 keine neuen (Emrahs Antwort 5). Nie zwei verwechselbare neue am selben Tag, nie eine Kollokation am Einführungstag ihres Kernworts.
+//  - Wörter-Zahl-Modus (`cfg.cnt`, Großpaket WT): unverändert – jedes Wort zählt 1, das ganze Kontingent neuer Wörter kommt.
 
 export const MOVE_MAX = 3;
 export const BACKLOG_BUDGETS = 1;
 export const SPREAD_DAYS = 7;
-/** Höchstens so viele neue behält der kurze Tag beim nachträglichen Verkleinern (`shrinkDayPlan`). */
+/** Mindestens so viele neue Wörter je Lerntag (wenn das Tempo sie erlaubt); so viele behält auch der kurze Tag beim Verkleinern (`shrinkDayPlan`). */
 export const MIN_NEW = 2;
-/** Unter so vielen Wörter-Minuten kommen höchstens `BRAKE_NEW` neue (learning-scientist 08.11.2026: 10 neue in 15 Minuten → Behalten ≈ 66 %). */
-export const BRAKE_MIN = 20;
-export const BRAKE_NEW = 5;
+/** Politur P2 (E3): mindestens dieser Anteil der Wörter-Zeit gehört den Wiederholungen. */
+export const REVIEW_SHARE = 0.6;
+
 /**
- * Mindestzahl neuer Wörter für einen Lerntag: das ganze restliche Kontingent (Emrah 08.11.2026, „A: 10 pro Tag“), unabhängig vom Rückstand –
- * aber nur, wenn die Wörter genug Zeit haben (Tagesziel 35 → 21 Minuten). Mit weniger als `BRAKE_MIN` Minuten höchstens `BRAKE_NEW`.
+ * Mindestzahl neuer Wörter an einem Lerntag im Minuten-Modus: `MIN_NEW`, aber nie mehr als das Tempo und nie mehr, als in den Anteil passt,
+ * der nicht den Wiederholungen gehört – bei sehr kurzer Wörter-Zeit (kurzer Tag) 1, damit an keinem Lerntag gar kein neues Wort kommt (Kap. 15).
  */
-export const minNewFor = (quota: number, budgetMs: number = BRAKE_MIN * 60_000): number => Math.max(0, budgetMs < BRAKE_MIN * 60_000 ? Math.min(quota, BRAKE_NEW) : quota);
+export function minNewFor(quota: number, budgetMs: number, nc: number): number {
+  if (quota <= 0) return 0;
+  const fit = nc > 0 ? Math.floor(((1 - REVIEW_SHARE) * budgetMs) / nc) : MIN_NEW;
+  return Math.min(quota, Math.max(1, Math.min(MIN_NEW, fit)));
+}
+
+/** So viel der Wörter-Zeit dürfen die Wiederholungen belegen: alles bis auf den Platz der Mindestzahl neuer Wörter, nie unter `REVIEW_SHARE`. */
+export function reviewCapMs(quota: number, budgetMs: number, nc: number): number {
+  return Math.max(REVIEW_SHARE * budgetMs, budgetMs - minNewFor(quota, budgetMs, nc) * nc);
+}
+
+/**
+ * Neue Wörter eines Lerntags im Minuten-Modus (eine Regel für Tagesplan und Vorschau, domain/overview.ts): was nach den Wiederholungen
+ * (`reviewMs`) übrig bleibt, mindestens `minNewFor`, höchstens das Tempo `quota`.
+ */
+export function freshFor(x: { quota: number; budgetMs: number; reviewMs: number; nc: number }): number {
+  if (x.quota <= 0) return 0;
+  const room = Math.max(0, x.budgetMs - x.reviewMs);
+  return Math.min(x.quota, Math.max(minNewFor(x.quota, x.budgetMs, x.nc), x.nc > 0 ? Math.floor(room / x.nc) : 0));
+}
 /** Vorgezogen (M15): bis zu dieser Zahl Lerntage voraus, nur solange der Plan unter AHEAD_FILL × Zielzeit liegt. */
 export const AHEAD_DAYS = 2;
 export const AHEAD_FILL = 0.9;
@@ -42,6 +65,18 @@ export type PlanEntry = [string, TrackKey | 'n', Form];
 export type DayPlan = { d: string; plan: PlanEntry[]; min: number; due: number; fresh: number; ahead: number; moved: number; why: string; sp?: [string, number][]; ry?: number };
 export type Move = { path: string; track: TrackKey; to: string };
 
+/** Der erste Abruf nach der Einführung gilt so viele Lerntage als „immer im Plan“ (danach ordnet ihn die Gefährdung ohnehin nach vorn). */
+export const FIRST_RECALL_DAYS = 3;
+
+/**
+ * Steht der erste Abruf nach dem Einführungstag noch aus („gestern gelernt, heute zum ersten Mal wieder“)? Eingeführt in den letzten
+ * `FIRST_RECALL_DAYS` Lerntagen vor `day` und seither nicht gebucht. Diese Abrufe stehen immer im Tagesplan und kommen zuerst: ohne sie ist
+ * das neue Wort nach zwei Tagen wieder weg. Übernommene Wörter (älterer Einführungstag) fallen nicht darunter.
+ */
+export function firstRecallOpen(l: Pick<Lex, 'intro' | 'day'>, day: string): boolean {
+  return l.intro !== null && l.intro < day && daysBetween(l.intro, day) <= FIRST_RECALL_DAYS && (l.day === null || l.day <= l.intro);
+}
+
 /** Minuten für ein neues Lexem: Einführung + Schritt A + Schritt B. */
 export function newCostMs(med: FormStats): number {
   return formMs('intro', med) + formMs('gap_hint', med) + formMs('gap', med);
@@ -54,30 +89,33 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
   const byCount = (cfg.cnt ?? 0) > 0;
   const costOf = (f: Form): number => (byCount ? 1 : formMs(f, med));
   const budgetMs = byCount ? (cfg.cnt as number) : cfg.min * 60_000;
-  type Due = { path: string; lex: Lex; track: TrackKey; form: Form; ms: number; r: number };
+  type Due = { path: string; lex: Lex; track: TrackKey; form: Form; ms: number; r: number; first: boolean };
   const due: Due[] = [];
   let introducedToday = 0;
   for (const it of cat.items()) {
     if (it.lex.intro === day) introducedToday++;
     if (it.lex.day === day) continue; // heute schon gebucht
-    if (cat.rests(it.path)) continue; // Paar-Regel (M14)
+    if (cat.rests(it.path, day)) continue; // Paar-Regel (M14), Problemwort-Pause (Politur P2)
     const d = dueOn(it.lex, day, it.av);
-    if (d) due.push({ path: it.path, lex: it.lex, ...d, ms: costOf(d.form), r: danger(it.lex, nowMs) });
+    if (d) due.push({ path: it.path, lex: it.lex, ...d, ms: costOf(d.form), r: danger(it.lex, nowMs), first: firstRecallOpen(it.lex, day) });
   }
   const mustOf = (x: Due) => (x.lex.pri === 'core' || x.lex.mv >= MOVE_MAX ? 0 : 1);
-  due.sort((a, b) => mustOf(a) - mustOf(b) || a.r - b.r || a.path.localeCompare(b.path));
+  // Der erste Abruf nach dem Einführungstag zuerst (E3: „Abrufe für gestern eingeführte Wörter immer“), dann Kernwörter, dann nach Gefährdung.
+  due.sort((a, b) => Number(b.first) - Number(a.first) || mustOf(a) - mustOf(b) || a.r - b.r || a.path.localeCompare(b.path));
 
   const quota = Math.max(0, cfg.newPerDay - introducedToday);
-  const minNew = byCount ? quota : minNewFor(quota, budgetMs);
   const nc = byCount ? 1 : newCostMs(med);
+  // Wörter-Zahl-Modus: das ganze Kontingent hat Platz (wie bisher). Minuten-Modus: nur die Mindestzahl ist reserviert, der Rest gehört den Wiederholungen.
+  const minNew = byCount ? quota : minNewFor(quota, budgetMs, nc);
   // Kurzer Tag (2A, learning-scientist 6): Rückstand höchstens ein Tagesbudget, nichts verschieben, nichts vorziehen (wie `shrinkDayPlan`).
   const short = cfg.short === true;
-  const cap = (short ? 1 : BACKLOG_BUDGETS) * budgetMs - minNew * nc;
+  const cap = byCount ? (short ? 1 : BACKLOG_BUDGETS) * budgetMs - minNew * nc : reviewCapMs(quota, budgetMs, nc);
   const taken: Due[] = [];
   const rest: Due[] = [];
   let used = 0;
   for (const x of due) {
-    if (used + x.ms <= Math.max(cap, x.ms) || taken.length === 0) {
+    // Erste Abrufe stehen immer im Plan (am kurzen Tag gilt auch für sie die Zeit).
+    if ((x.first && !short) || used + x.ms <= Math.max(cap, x.ms) || taken.length === 0) {
       taken.push(x);
       used += x.ms;
     } else rest.push(x);
@@ -94,8 +132,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
     moves.push({ path: x.path, track: x.track, to });
   }
   // Neue Lexeme.
-  const room = Math.max(0, budgetMs - used);
-  const nFresh = quota === 0 ? 0 : !byCount && budgetMs < BRAKE_MIN * 60_000 ? minNew : Math.min(quota, Math.max(minNew, Math.floor(room / nc)));
+  const nFresh = byCount ? (quota === 0 ? 0 : Math.min(quota, Math.max(minNew, Math.floor(Math.max(0, budgetMs - used) / nc)))) : freshFor({ quota, budgetMs, reviewMs: used, nc });
   const fresh: string[] = [];
   const blocked = new Set<string>();
   for (const it of cat.items()) if (it.lex.intro === day) for (const s of cat.siblingsOf(it.path)) blocked.add(s);
@@ -134,7 +171,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
     const limit = startOfOffset(day, AHEAD_DAYS + 1);
     const cands = cat
       .items()
-      .filter((it) => !isNewLex(it.lex) && it.lex.day !== day && !dueOn(it.lex, day, it.av) && !cat.rests(it.path) && !(it.lex.step && dayKey(it.lex.step.at) === day) && (it.lex.b ?? it.lex.u).sd >= AHEAD_MIN_IVL)
+      .filter((it) => !isNewLex(it.lex) && it.lex.day !== day && !dueOn(it.lex, day, it.av) && !cat.rests(it.path, day) && !(it.lex.step && dayKey(it.lex.step.at) === day) && (it.lex.b ?? it.lex.u).sd >= AHEAD_MIN_IVL)
       .map((it) => ({ it, at: Math.min(it.lex.u.due, it.lex.b?.due ?? Infinity), lead: aheadDays((it.lex.b ?? it.lex.u).sd) }))
       .filter((x) => x.at < startOfOffset(day, x.lead + 1) && x.at < limit)
       .sort((a, b) => a.at - b.at || a.it.path.localeCompare(b.it.path));
@@ -143,7 +180,7 @@ export function buildDayPlan(cat: Catalog, nowMs: number, cfg: VocabCfg, med: Fo
       const form: Form = it.lex.b ? formForLex(it.lex, it.av) : 'gap';
       const ms = costOf(form);
       if (total + ms > budgetMs) break;
-      ahead.push({ path: it.path, lex: it.lex, track, form, ms, r: 1 });
+      ahead.push({ path: it.path, lex: it.lex, track, form, ms, r: 1, first: false });
       total += ms;
     }
   }

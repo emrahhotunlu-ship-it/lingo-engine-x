@@ -12,11 +12,15 @@ import type { Band } from '../domain/band';
 import { Catalog, formMs, isNewLex, type Item } from '../domain/catalog';
 import { srcOf, weightsOf, type WtRaw } from '../domain/sources';
 import type { SourceData } from '../data/refill';
-import { VMOD_PACE_PATH, VMOD_PLACE_PATH } from '../registry';
+import { VMOD_PACE_PATH, VMOD_PLACE_PATH, VMOD_TEMPO_PATH } from '../registry';
+import { readTempo, writeTempo } from '../data/tempo';
+import { nextDayRecall, nextTempo, type Recall, startTempo, type Tempo, type TempoInfo, TEMPO_MAX, TEMPO_MIN, TEMPO_READ_DAYS } from '../domain/tempo';
+export type { TempoInfo } from '../domain/tempo';
+import type { VlogTuple } from '../domain/vlog';
 import type { Check, CheckDict } from '../domain/check';
 import { buildDayPlan, type DayPlan, newCostMs } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
-import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
+import { answerOf, audioOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, isHear, planCtxOf, previewOf, resultOf, textOf } from '../domain/flow';
 import { type Answer, type AnswerResult, FLAG, introduce } from '../domain/planner';
 import { type PickCand, type PickModel, pickOptions } from '../domain/pick';
 /** Auswahl nach so vielen anderen Karten (vor Schritt A, der nach ≥ 3 kommt). */
@@ -50,8 +54,12 @@ export type UnfairResult = 'void' | 'again' | 'counts';
 export type LearnView =
   | { k: 'loading' }
   | { k: 'closed'; why: 'off' | 'migrate' | 'error' }
-  /** `teach`: übernommenes Wort zum ersten Mal in der neuen App – erst einmal die Einführungskarte (nur Anzeige), dann diese Karte (K10). */
-  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null; teach?: CardModel | null }
+  /**
+   * `teach`: übernommenes Wort zum ersten Mal in der neuen App – erst einmal die Einführungskarte (nur Anzeige), dann diese Karte (K10).
+   * Politur P2: `ask` = Vorkarte „Kennst du es schon?“ vor der Einführung eines neuen Einzelworts (Wort + Ton; „Ja, prüf mich“ → Probe,
+   * „Nein, neu“ → Einführung). `again` = Einführung kurz noch einmal nach falscher Auswahl (nur Anzeige, keine Buchung).
+   */
+  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null; teach?: CardModel | null; ask?: boolean; again?: boolean }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
   /**
    * Großpaket WT: Wiedererkennen gleich nach der Einführung – die richtige Bedeutung aus vier wählen (keine Planwirkung, im Verlauf als
@@ -69,7 +77,8 @@ export type LearnView =
  * Start-Bildschirm: Zahlen aus dem eingefrorenen Plan. `back` = letzter Lerntag liegt ≥ 2 Tage zurück („Willkommen zurück“);
  * `sp` = Rückstand je Lerntag (fehlt ohne Rückstand); `fewer` = weniger neue als üblich, weil viel fällig ist.
  */
-export type StartInfo = { min: number; due: number; ahead: number; fresh: number; fewer: boolean; back: boolean; today: string; sp: [string, number][] | null };
+export type StartInfo = { min: number; due: number; ahead: number; fresh: number; fewer: boolean; back: boolean; today: string; sp: [string, number][] | null; /** Politur P2: Tempo neuer Wörter heute, mit Grund (fehlt ohne Stand von heute). */ tempo?: TempoInfo | null };
+
 
 /**
  * Abschluss (Bild B8): Minuten (aktive Zeit), Pflicht oder Extra, neue Wörter (Stichwörter), aufgestiegene (ohne neue; `w` = Beispiel,
@@ -157,6 +166,8 @@ export type LearnEnv = {
   read?: ReadDoc;
   /** Quellen neuer Wörter (S7; die App lädt sie per dynamischem Import). Fehlt = kein Nachfüllen. */
   loadSources?: () => Promise<SourceData>;
+  /** Politur P2 (E3 „Hören“): kann das Gerät gerade vorlesen? Fehlt = nein (dann keine Hör-Karten). */
+  audio?: () => boolean;
 };
 
 export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, Doc]>; profile: Doc | null; schema: Doc | null; paths?: string[] };
@@ -171,6 +182,11 @@ export type Measured = { ms: number; fk: number };
 export type FlipWhen = { k: 'soon' } | { k: 'day'; day: string } | { k: 'none' };
 export type FlipBack = { opts: { g: Grade; when: FlipWhen }[]; why: Band['why'] | null; partners: Band['partners'] };
 
+/** Erst wenn die geplante Restzeit die Wörter-Zeit um mehr als so viel überschreitet, rücken neue Wörter hinter die Wiederholungen. */
+export const HOLD_SLACK_MS = 60_000;
+/** Das echte Tempo der Runde zählt ab so vielen beantworteten Karten, höchstens mit diesem Faktor. */
+const PACE_MIN_CARDS = 3;
+const PACE_FACTOR_MAX = 3;
 /** Gestolperte Wörter im Abschluss höchstens so viele mit Namen (gruppiert nach Tag, der Rest als „+n“). */
 const SLIP_MAX = 12;
 /** Schutz gegen eine endlose Folge von Aufgaben ohne Karte (spätere Formen werden übersprungen). */
@@ -259,6 +275,17 @@ export class LearnRun {
   private activeMs = 0;
   /** Emrah 07.11.2026 (Tageszeit „A“): echte Kosten je Lexem in dieser Runde (alle Auftritte zusammen) – für `vmod/pace`. */
   private spent = new Map<string, number>();
+  /**
+   * Politur P2: echte Kosten der neuen Wörter dieser Runde – `spentIntro` = alles vor dem ersten getippten Abruf („Kennst du es?“, Einführung,
+   * Auswahl, erneutes Zeigen), `spentA` = Schritt A samt Rückmeldung. Beides geht als Form `intro` bzw. `gap_hint` nach `vmod/pace`.
+   */
+  private spentIntro = new Map<string, number>();
+  private spentA = new Map<string, number>();
+  /** Die Zeit wurde knapp: neue Wörter stehen hinter den Wiederholungen (einmal je Runde, `SessionRun.holdFresh`). */
+  private heldFresh = false;
+  /** Geplante Zeit der schon beantworteten Karten dieser Runde und ihre Zahl: daraus das echte Tempo der Runde (`paceFactor`). */
+  private plannedDoneMs = 0;
+  private cardsDone = 0;
   /** Zeitdeckel erreicht: so viele geplante Wörter kommen morgen (`null` = nicht gedeckelt). */
   private capped: number | null = null;
   private paceDone = false;
@@ -280,6 +307,8 @@ export class LearnRun {
   private useMs = 0;
   /** Angezeigte Anwenden-Karte schon gebucht (Weiter und Verlassen zugleich). */
   private useBooked = false;
+  /** Politur P2: „Kann gerade nicht hören“ getippt – bis zum Ende der Runde nur noch Textformen. */
+  private noHear = false;
 
   constructor(private readonly env: LearnEnv) {}
 
@@ -298,6 +327,10 @@ export class LearnRun {
 
   /** Der heutige, eingefrorene Wörter-Plan (nur Pflicht): die Zählquelle, die auch Heute nutzt (K11). */
   private dayPlan: DayPlan | null = null;
+  /** Politur P2: Tempo neuer Wörter von heute (für die Zeile am Rundenstart); `null` = kein Stand von heute. */
+  private tempo: TempoInfo | null = null;
+  /** Verlauf der letzten Lerntage, einmal je Runde gelesen (Tempo und „Junge Wörter früher“). */
+  private hist: Promise<VlogTuple[]> | null = null;
 
   /**
    * Zähler der Übungsleiste (K11/K12/K13, Emrah 04.11.2026): `n` = erledigte Wörter + 1 (die gezeigte Karte), `total` = Wörter der Runde.
@@ -424,6 +457,8 @@ export class LearnRun {
     let i = 0;
     // Eigener Satz (Stufe 5/6) nur, wenn Claude ihn prüfen kann (forms.ts `available('own')`); sonst die Grundformen.
     const ai = this.aiReady();
+    // Politur P2 (E3): Hör-Formen nur, wenn das Gerät gerade vorlesen kann; sonst die Textformen (forms.ts `available`).
+    const audio = this.audioOk();
     for (const [path, doc] of s.docs) {
       const lex = lexOf(doc);
       if (!lex || doc.hidden === true) continue;
@@ -435,7 +470,7 @@ export class LearnRun {
         lex,
         order: typeof doc.order === 'number' ? doc.order : i++,
         trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null,
-        av: { de: true, ai, anki: !!cfg.anki },
+        av: { de: true, ai, anki: !!cfg.anki, audio },
         src: srcOf(doc.src),
       });
     }
@@ -444,19 +479,24 @@ export class LearnRun {
     const cur = await this.env.readDay();
     // „Noch 5 neue Wörter“ (Emrah 08.11.2026): fehlen Kandidaten, legt das Nachfüllen bis zu 5 an (sonst bliebe die Runde nach ein paar Tagen leer).
     const refillNow = (s.kind === 'pflicht' && !(cur && cur.d === dayKey(dayNow))) || (s.kind === 'new5' && items.filter((x) => isNewLex(x.lex)).length < NEW5_SIZE);
+    // Politur P2: das Tempo kann über der Einstellung liegen (gut behalten) – der Vorrat neuer Wörter reicht dann bis zur Obergrenze.
+    const stock = cfg.newPerDay >= TEMPO_MIN && !cfg.short ? Math.max(cfg.newPerDay, TEMPO_MAX) : cfg.newPerDay;
     if (refillNow && this.env.loadSources) {
-      for (const [path, doc] of await this.refill(s.docs, items, s.kind === 'new5' ? { ...cfg, newPerDay: NEW5_SIZE } : cfg, dayNow)) {
+      for (const [path, doc] of await this.refill(s.docs, items, { ...cfg, newPerDay: s.kind === 'new5' ? NEW5_SIZE : stock }, dayNow)) {
         const lex = lexOf(doc);
         if (!lex) continue;
         this.docs.set(path, doc);
-        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki }, src: srcOf(doc.src) });
+        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki, audio }, src: srcOf(doc.src) });
       }
     }
     const cat = new Catalog(items);
     this.cat = cat;
     // „Junge Wörter früher“ (Großpaket A S6): steht fest im heutigen Plan; nur ein neuer Pflicht-Plan rechnet es aus dem Verlauf.
-    if (cur && cur.d === dayKey(dayNow)) cfg.retY = typeof cur.ry === 'number' ? cur.ry : null;
+    const planned = !!cur && cur.d === dayKey(dayNow);
+    if (planned) cfg.retY = typeof cur.ry === 'number' ? cur.ry : null;
     else if (s.kind === 'pflicht') cfg.retY = await this.youngTarget(cfg, dayNow);
+    // Politur P2 (E3): Tempo neuer Wörter nach Behalten. Es steht je Lerntag fest; nur ein neuer Pflicht-Plan rechnet es fort.
+    cfg.newPerDay = await this.tempoFor(cat, cfg, dayNow, s.kind === 'pflicht' && !planned);
     await this.replay();
     await this.loadUse();
     const nowMs = this.env.now();
@@ -496,16 +536,70 @@ export class LearnRun {
     }
   }
 
+  /** Verlauf der letzten Lerntage (für „Junge Wörter früher“ und das Tempo), einmal je Runde gelesen. Ohne Lesezugang leer. */
+  private history(nowMs: number): Promise<VlogTuple[]> {
+    const read = this.env.read;
+    if (!read) return Promise.resolve([]);
+    this.hist ??= readVlogRecent(read, nowMs, Math.max(RET_WINDOW_DAYS, TEMPO_READ_DAYS));
+    return this.hist;
+  }
+
   /** Ziel für junge Wörter aus der echten Rate der letzten 30 Tage (`null` = nicht nachsteuern; ein Lesefehler steuert nie nach). */
   private async youngTarget(cfg: VocabCfg, nowMs: number): Promise<number | null> {
-    const read = this.env.read;
-    if (!read) return null;
+    if (!this.env.read) return null;
     try {
-      return youngBoost(cfg.ret, retention(await readVlogRecent(read, nowMs, RET_WINDOW_DAYS), nowMs));
+      return youngBoost(cfg.ret, retention(await this.history(nowMs), nowMs));
     } catch (err) {
       logError('vocab:young-target', err);
       return null;
     }
+  }
+
+  /**
+   * Politur P2 (E3): Tempo neuer Wörter für diese Runde (= Obergrenze im Tagesplan, domain/day.ts). `fresh` = es entsteht gleich ein neuer
+   * Pflicht-Plan: dann wird das Tempo aus dem Verlauf fortgeschrieben und in `vmod/tempo` gespeichert. Sonst gilt der gespeicherte Stand
+   * (heute eingefroren oder zuletzt), ohne zu schreiben. Am kurzen Tag und ohne Lesezugang gilt die Einstellung. Jeder Fehler lässt den Tag mit
+   * dem letzten bekannten Tempo bzw. der Einstellung laufen – nie mit mehr.
+   */
+  private async tempoFor(cat: Catalog, cfg: VocabCfg, nowMs: number, fresh: boolean): Promise<number> {
+    const setting = cfg.newPerDay;
+    const read = this.env.read;
+    if (cfg.short || !read) return setting;
+    const today = dayKey(nowMs);
+    let prev: Tempo | null;
+    let rec: Recall;
+    try {
+      prev = readTempo(await read(VMOD_TEMPO_PATH));
+      rec = nextDayRecall(await this.history(nowMs), nowMs);
+    } catch (err) {
+      logError('vocab:tempo-read', err);
+      return Math.min(setting, startTempo(setting));
+    }
+    const lastOf = (): TempoInfo['last'] => (rec.last ? { ago: daysBetween(rec.last.d, today), ok: rec.last.ok, all: rec.last.all } : null);
+    const same = prev && prev.base === setting ? prev : null;
+    if (same && same.d === today) {
+      this.tempo = { n: same.n, why: same.why, ok: same.ok, all: same.all, last: lastOf() };
+      return same.n;
+    }
+    if (!fresh) return same ? same.n : startTempo(setting);
+    // Rückstand: bleiben mit dem bisherigen Tempo heute fällige Wiederholungen liegen? (Probe-Plan, nichts wird gespeichert.)
+    const cur = same ? same.n : startTempo(setting);
+    let backlog = false;
+    try {
+      backlog = (buildDayPlan(cat, nowMs, { ...cfg, newPerDay: cur }, this.med).plan.sp ?? []).length > 0;
+    } catch (err) {
+      logError('vocab:tempo-plan', err);
+    }
+    const next = nextTempo(same, setting, rec, backlog, today);
+    let stored: Tempo | null = null;
+    try {
+      stored = await writeTempo(this.env.deps.writer, next, nowMs);
+    } catch (err) {
+      logError('vocab:tempo-write', err);
+    }
+    const t = stored ?? next;
+    this.tempo = { n: t.n, why: t.why, ok: t.ok, all: t.all, last: lastOf() };
+    return t.n;
   }
 
   /**
@@ -534,6 +628,7 @@ export class LearnRun {
       back: !!last && daysBetween(last, today) >= BACK_DAYS,
       today,
       sp,
+      tempo: this.tempo,
     };
   }
 
@@ -610,7 +705,10 @@ export class LearnRun {
       const card = this.cardFor(task);
       if (card) {
         this.shownAt = nowMs;
-        this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: task.intro, tip: false, teach });
+        // Politur P2: Hör-Karte ohne Ton (Gerät stumm, „Kann gerade nicht hören“) → dieselbe Abfrage als Text.
+        const shown = isHear(card.mode) && !this.hearNow() ? textOf(card) : card;
+        const ask = task.intro && this.asksKnown(task.path);
+        this.set({ k: 'card', card: shown, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: ask, tip: false, teach, ...(ask ? { ask: true } : {}) });
         return;
       }
       run.done(task, nowMs);
@@ -954,12 +1052,75 @@ export class LearnRun {
     if (v.k === 'card' && !v.tip) this.set({ ...v, tip: true });
   }
 
-  /** „Kenne ich schon“ bei der Einführung: freie Probe ohne Satz. */
+  /**
+   * „Kennst du es schon?“ → „Ja, prüf mich“ (Politur P2, Prüfbericht S5): die Probe ohne Satz – das Wort steht da, gefragt ist die deutsche
+   * Bedeutung. Richtig → Stufe 3, Kontrolle in 7 Tagen (planner.ts `probeKnown`); falsch → die normale Einführung (`next`).
+   */
   probe(): void {
     const v = this.view;
     if (v.k !== 'card' || !v.canProbe) return;
     const card = this.cardFor({ ...v.task, form: 'probe' });
-    if (card) this.set({ ...v, card, kind: 'probe', canProbe: false, tip: false });
+    if (card) this.set({ ...v, card, kind: 'probe', canProbe: false, tip: false, ask: false });
+  }
+
+  /** „Kennst du es schon?“ → „Nein, neu“: die Einführungskarte (die Zeit der Vorkarte zählt zur Einführung). */
+  knowNo(): void {
+    const v = this.view;
+    if (v.k === 'card' && v.ask) this.set({ ...v, ask: false, canProbe: false });
+  }
+
+  /** Vorkarte „Kennst du es schon?“ nur vor der Einführung eines neuen Einzelworts (Wendungen lernt man als Ganzes, ohne Probe). */
+  private asksKnown(path: string): boolean {
+    const lex = this.cat?.get(path)?.lex;
+    return !!lex && lex.k === 'w' && lex.intro === null;
+  }
+
+  /** Kann gerade vorgelesen werden? (Gerät, nicht „Kann gerade nicht hören“ in dieser Runde.) */
+  private hearNow(): boolean {
+    return !this.noHear && this.audioOk();
+  }
+
+  private audioOk(): boolean {
+    try {
+      return !!this.env.audio?.();
+    } catch (err) {
+      logWarn('vocab:audio', err);
+      return false;
+    }
+  }
+
+  /**
+   * „Kann gerade nicht hören“ (Politur P2): dieselbe Abfrage als Text, ohne Note für den Wechsel; bis zum Ende der Runde nur noch Textformen
+   * (der Plan bleibt, die Hör-Formen kommen an einem anderen Tag wieder).
+   */
+  cantHear(): void {
+    const v = this.view;
+    if (v.k !== 'card' || !isHear(v.card.mode)) return;
+    this.noHear = true;
+    this.set({ ...v, card: textOf(v.card), tip: false });
+  }
+
+  /**
+   * Darf die gezeigte Karte von selbst vorlesen? Hör-Karten immer (sie SIND der Ton); Einführung und Vorkarte nur beim ersten Zeigen (nicht
+   * nach falscher Auswahl) – ob Emrah neue Wörter vorgelesen haben will, prüft die Karte (Einstellung „Neue Wörter vorlesen“).
+   */
+  autoAudio(): boolean {
+    const v = this.view;
+    if (v.k !== 'card' || v.flip) return false;
+    return isHear(v.card.mode) ? this.hearNow() : v.kind === 'intro' && !v.again && this.hearNow();
+  }
+
+  /** Ton der nächsten Karte zum Vorab-Rechnen (`prefetchSpeech`), damit er beim Erscheinen sofort spielt; `null` = keiner. */
+  upcomingAudio(): string | null {
+    const next = this.run?.ahead()[0];
+    if (!next || !this.hearNow()) return null;
+    const card = this.cardFor({ path: next.path, form: next.form, step: next.step, intro: next.intro, planned: false, why: 'peek', sent: '-', cue: false });
+    return card && (isHear(card.mode) || card.mode === 'intro') ? audioOf(card) : null;
+  }
+
+  /** Lerntag der Runde (Schlüssel für „schon vorgelesen“). */
+  dayOf(): string {
+    return this.day ?? dayKey(this.env.now());
   }
 
   /** Satz vor dem Prüfen anhören (Einstellung, Standard an). */
@@ -1076,18 +1237,29 @@ export class LearnRun {
     return true;
   }
 
-  /** Großpaket WT: vier Bedeutungen für ein neues Einzelwort (Ablenker aus dem Bestand); `null` = keine Auswahl möglich. */
+  /**
+   * Großpaket WT: vier Bedeutungen für ein neues Wort (Ablenker aus dem Bestand); `null` = keine Auswahl möglich. Politur P2 (Prüfbericht S6):
+   * auch für Wendungen (Ablenker aus Wendungen); bevorzugt Verwechslungspartner (Paar, offene Verwechslung, Lehrer-Paar), dann gleiche
+   * Wortart, schon eingeführt, ähnlich (domain/pick.ts `rank`).
+   */
   private pickFor(card: CardModel): PickModel | null {
     const cat = this.cat;
     const lex = cat?.get(card.path)?.lex;
-    if (!cat || !lex || lex.k !== 'w' || !card.de) return null;
+    if (!cat || !lex || !card.de) return null;
+    const prefix = card.path.startsWith('chunk/') ? 'chunk/' : 'vocab/';
+    const head = card.head.toLowerCase();
+    const pair = (card.teach.pair ?? '').toLowerCase();
     const pool: PickCand[] = [];
     for (const it of cat.items()) {
-      if (it.path === card.path || !it.path.startsWith('vocab/')) continue;
+      if (it.path === card.path || !it.path.startsWith(prefix)) continue;
       const d = this.docs.get(it.path);
-      if (d && typeof d.de === 'string' && d.de) pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null, head: typeof d.word === 'string' ? d.word : undefined });
+      if (!d || typeof d.de !== 'string' || !d.de) continue;
+      const h = headOf(it.path, d);
+      const lh = h.toLowerCase();
+      const near = lex.pair === it.path || it.lex.pair === card.path || (!!pair && lh === pair) || (!!lex.ct?.w && lex.ct.w.toLowerCase() === lh) || (!!it.lex.ct?.w && it.lex.ct.w.toLowerCase() === head);
+      pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null, ...(h ? { head: h } : {}), intro: it.lex.intro !== null, ...(near ? { near } : {}) });
     }
-    return pickOptions({ path: card.path, de: card.de, pos: card.pos ?? null }, pool, `${card.path}|${dayKey(this.env.now())}`);
+    return pickOptions({ path: card.path, de: card.de, pos: card.pos ?? null, head: card.head }, pool, `${card.path}|${dayKey(this.env.now())}`);
   }
 
   /** Auswahl getippt: Lösung zeigen, im Verlauf festhalten (Form `choice`, ohne Planwirkung). */
@@ -1109,11 +1281,43 @@ export class LearnRun {
     });
   }
 
-  /** Nach der Auswahl weiter (nächste Karte). */
+  /**
+   * Nach der Auswahl weiter (nächste Karte). Politur P2 (Prüfbericht S6): falsch gewählt → die Einführungskarte kurz noch einmal (nur zum
+   * Lesen, keine Buchung), dann geht es weiter; Schritt A fragt das Wort danach ohnehin ab.
+   */
   pickNext(): void {
-    if (this.view.k !== 'pick' || this.view.chosen === null) return;
+    const v = this.view;
+    if (v.k !== 'pick' || v.chosen === null) return;
+    this.spendIntro(v.path);
     this.n += 1;
+    if (v.chosen !== v.right) {
+      const task: Task = { path: v.path, form: 'intro', step: 0, intro: true, planned: false, why: 'again', sent: '-', cue: false };
+      const card = this.cardFor(task);
+      if (card) {
+        this.set({ k: 'card', card, task, kind: 'intro', n: this.n, left: (this.run?.remaining() ?? 0) + this.pickQ.length, canProbe: false, tip: false, again: true });
+        return;
+      }
+    }
     this.advance();
+  }
+
+  /** Einführung nach falscher Auswahl gelesen: ohne Buchung weiter (die Zeit zählt zur Einführung des Worts). */
+  againSeen(): void {
+    const v = this.view;
+    if (v.k !== 'card' || !v.again) return;
+    this.spendIntro(v.task.path);
+    this.advance();
+  }
+
+  /** Zeit seit der letzten Karte dem neuen Wort `path` zurechnen (Auswahl, erneutes Zeigen): aktive Zeit und Messwert „Einführung“. */
+  private spendIntro(path: string): void {
+    const now = this.env.now();
+    if (this.shownAt !== null) {
+      const d = Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
+      this.activeMs += d;
+      this.spentIntro.set(path, (this.spentIntro.get(path) ?? 0) + d);
+    }
+    this.shownAt = now;
   }
 
   /** Rein gerechnetes Ergebnis je Art (gebucht wird dasselbe auf dem frischen Dokument). */
@@ -1248,6 +1452,11 @@ export class LearnRun {
       const d = Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
       this.activeMs += d;
       this.spent.set(p.card.path, (this.spent.get(p.card.path) ?? 0) + d);
+      // Neue Wörter echt messen (Politur P2): Einführung (samt Probe davor) und Schritt A je für sich.
+      if (p.kind !== 'answer') this.spentIntro.set(p.card.path, (this.spentIntro.get(p.card.path) ?? 0) + d);
+      else if (p.task.step === 1) this.spentA.set(p.card.path, (this.spentA.get(p.card.path) ?? 0) + d);
+      this.plannedDoneMs += formMs(p.kind === 'answer' ? p.card.form : 'intro', this.med);
+      this.cardsDone += 1;
     }
     this.shownAt = now;
     if (!this.lv0.has(p.card.path)) this.lv0.set(p.card.path, p.before.lv);
@@ -1272,7 +1481,37 @@ export class LearnRun {
       void this.capNow();
       return;
     }
+    this.holdFreshIfTight();
     this.advance();
+  }
+
+  /** Geplante Zeit dessen, was in dieser Runde noch ansteht (neues Wort = Einführung + Schritt A + B, sonst die Form). */
+  private plannedLeftMs(): number {
+    let ms = 0;
+    for (const s of this.run?.ahead() ?? []) ms += s.intro ? newCostMs(this.med) : formMs(s.form, this.med);
+    return ms;
+  }
+
+  /**
+   * Echtes Tempo dieser Runde gegen den Plan (1 = wie geplant, 2 = doppelt so langsam), ab `PACE_MIN_CARDS` Karten; nie unter 1 (wer schneller
+   * ist, bekommt nichts weggenommen) und höchstens `PACE_FACTOR_MAX`.
+   */
+  private paceFactor(): number {
+    if (this.cardsDone < PACE_MIN_CARDS || this.plannedDoneMs <= 0) return 1;
+    return Math.min(PACE_FACTOR_MAX, Math.max(1, this.activeMs / this.plannedDoneMs));
+  }
+
+  /**
+   * Politur P2 (E3 „Wiederholungen zuerst“): Reicht die Wörter-Zeit voraussichtlich nicht für alles, was noch ansteht (geplante Zeit × echtes
+   * Tempo der Runde), kommen erst die Wiederholungen und danach die neuen Wörter. Der Zeitdeckel nimmt dann am Ende neue Wörter weg (sie
+   * bleiben neu und kommen morgen), nie fällige Wiederholungen. Einmal je Runde; nur in der Pflicht.
+   */
+  private holdFreshIfTight(): void {
+    if (this.heldFresh || this.kind !== 'pflicht' || !this.dayPlan || !this.cfg || !this.run) return;
+    const left = this.cfg.min * 60_000 - (this.priorMs + this.activeMs);
+    if (this.plannedLeftMs() * this.paceFactor() <= left + HOLD_SLACK_MS) return;
+    this.heldFresh = true;
+    this.run.holdFresh();
   }
 
   /** Wörter-Zeit um: Plan auf das Erledigte kürzen (Heute zeigt „erledigt“), Messwerte speichern, Abschluss zeigen. */
@@ -1296,17 +1535,23 @@ export class LearnRun {
     this.set(this.doneView());
   }
 
-  /** Echte Kosten je geplanter Wiederholung dieser Runde → `vmod/pace` (einmal je Runde; neue Wörter zählen nicht, ihre Schritte laufen über Tage). */
+  /**
+   * Echte Kosten dieser Runde → `vmod/pace` (einmal je Runde). Je geplanter Wiederholung die ganze Zeit des Worts (alle Auftritte). Politur P2:
+   * auch die neuen Wörter werden gemessen – `intro` = alles vor dem ersten getippten Abruf, `gap_hint` = Schritt A; Schritt B kostet wie eine
+   * Lücke. Vorher rechnete der Plan neue Wörter immer mit dem Startwert (156 s), nie mit Emrahs echter Zeit (Prüfbericht S1).
+   */
   private savePace(): void {
     if (this.paceDone || this.kind !== 'pflicht' || !this.dayPlan) return;
     this.paceDone = true;
     const obs = new Map<Form, number[]>();
+    const add = (f: Form, ms: number | undefined) => {
+      if (ms) obs.set(f, [...(obs.get(f) ?? []), ms]);
+    };
     for (const [path, track, form] of this.dayPlan.plan) {
-      if (track === 'n') continue;
-      const ms = this.spent.get(path);
-      if (!ms) continue;
-      const f = form;
-      obs.set(f, [...(obs.get(f) ?? []), ms]);
+      if (track === 'n') {
+        add('intro', this.spentIntro.get(path));
+        add('gap_hint', this.spentA.get(path));
+      } else add(form, this.spent.get(path));
     }
     void writePace(this.env.deps.writer, this.env.now(), obs).catch((err: unknown) => logError('vocab:pace', err));
   }

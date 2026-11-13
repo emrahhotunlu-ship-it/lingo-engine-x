@@ -109,7 +109,9 @@ for (const d of DEVICES) {
       await press(page, d, (await page.getByTestId('vh-go').isVisible()) ? 'vh-go' : 'vh-more');
       // Erste Karte mit Lücke (Einführungen werden übersprungen).
       for (let i = 0; i < 6 && !(await page.getByTestId('vm-check').isVisible().catch(() => false)); i++) {
-        if (await page.getByTestId('vm-intro-go').isVisible().catch(() => false)) await press(page, d, 'vm-intro-go');
+        // Politur P2: Vorkarte „Kennst du es schon?“ vor neuen Einzelwörtern → „Nein, neu“.
+        if (await page.getByTestId('vm-know-no').isVisible().catch(() => false)) await press(page, d, 'vm-know-no');
+        else if (await page.getByTestId('vm-intro-go').isVisible().catch(() => false)) await press(page, d, 'vm-intro-go');
         else await page.waitForTimeout(300);
       }
       await expect(page.getByTestId('vm-check')).toBeVisible();

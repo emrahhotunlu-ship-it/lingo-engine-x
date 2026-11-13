@@ -261,11 +261,15 @@ export function usableSentences(sents: readonly Sent[], head: string, pv: boolea
  * Satz für diese Karte (learning-scientist V3 Befund 7): Einführung und Schritt A im Ankersatz; danach `pickSentence` (am längsten nicht
  * gezeigt). `avoid` = gerade gezeigter Satz (Wiederkehr nach Fehler oder Einspruch: nie derselbe, wenn es einen anderen gibt).
  */
-export function chooseSentence(lex: Lex, usable: readonly CardSentence[], day: string, o: { anchorOnly?: boolean; fresh?: boolean; avoid?: string | null } = {}): CardSentence | null {
+export function chooseSentence(lex: Lex, usable: readonly CardSentence[], day: string, o: { anchorOnly?: boolean; fresh?: boolean; avoid?: string | null; unseen?: boolean } = {}): CardSentence | null {
   if (!usable.length) return null;
   const anchor = usable.find((u) => u.sent.key === 'a');
   if (o.anchorOnly && anchor) return anchor;
-  const pool = o.avoid && usable.length > 1 ? usable.filter((u) => u.sent.key !== o.avoid) : usable;
+  const pool0 = o.avoid && usable.length > 1 ? usable.filter((u) => u.sent.key !== o.avoid) : usable;
+  // Politur P2 (Problemwort ab dem 3. Vergessen): ein Satz, der noch nie gezeigt wurde, wenn es einen gibt – der alte Satz trägt die Verwechslung mit.
+  const shown = new Set(lex.sn.map((x) => x[0]));
+  const never = o.unseen ? pool0.filter((u) => !shown.has(u.sent.key)) : [];
+  const pool = never.length ? never : pool0;
   const key = pickSentence(
     lex,
     pool.map((u) => u.sent.key),

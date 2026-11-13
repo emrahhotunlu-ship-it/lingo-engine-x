@@ -99,7 +99,7 @@ export class SessionRun {
       // 3–5 Minuten), sondern zu Schritt 3 „Anwenden“ (Runde `use`, Anwenden › „Text mit deinen Wörtern“).
     } else if (this.kind === 'more5' || this.kind === 'free' || FREE_KINDS[this.kind] !== undefined) {
       const n = this.kind === 'more5' ? 5 : (FREE_KINDS[this.kind] ?? FREE_SIZE);
-      const open = (it: (typeof items)[number]) => notCarried(it.path) && !this.seen.has(it.path) && !doneToday(it.lex, day) && !this.cat.rests(it.path);
+      const open = (it: (typeof items)[number]) => notCarried(it.path) && !this.seen.has(it.path) && !doneToday(it.lex, day) && !this.cat.rests(it.path, day);
       const due = items.filter((it) => open(it) && dueOn(it.lex, day, it.av)).sort((a, b) => danger(a.lex, nowMs) - danger(b.lex, nowMs) || a.path.localeCompare(b.path));
       const out: Slot[] = due.slice(0, n).map((it) => ({ path: it.path, form: dueOn(it.lex, day, it.av)!.form, step: 0, why: 'due' }));
       // Großpaket WT: reicht das Fällige nicht, kommen die wackeligsten schon gelernten Wörter (niedrigste Abrufwahrscheinlichkeit) vor neuen dran.
@@ -168,7 +168,7 @@ export class SessionRun {
     if (this.kind !== 'word' && this.kind !== 'use') {
       const asked = new Set(this.queue.filter((s) => s.why === 'due').map((s) => s.path));
       const open = items
-        .filter((it) => it.lex.ct && !asked.has(it.path) && !it.hidden && !this.cat.rests(it.path))
+        .filter((it) => it.lex.ct && !asked.has(it.path) && !it.hidden && !this.cat.rests(it.path, this.day))
         .sort((a, b) => b.lex.ct!.at - a.lex.ct!.at || a.path.localeCompare(b.path))
         .slice(0, CONTRAST_MAX)
         .map((it): Slot => ({ path: it.path, form: 'contrast', step: 0, why: 'contrast' }));
@@ -286,6 +286,27 @@ export class SessionRun {
     this.blocked.add(path);
     this.pending = this.pending.filter((s) => s.path !== path);
     this.queue = this.queue.filter((s) => s.path !== path);
+  }
+
+  /**
+   * Was in dieser Runde noch ansteht, in der Reihenfolge der Schlange, danach die offenen Lernschritte (Politur P2: Zeit-Vorschau der Runde
+   * und Ton vorab rechnen). Nur zum Lesen.
+   */
+  ahead(): { path: string; form: Form; intro: boolean; step: 0 | 1 | 2 | 3 }[] {
+    return [...this.queue, ...this.pending].map((s) => ({ path: s.path, form: s.form, intro: !!s.intro, step: s.step }));
+  }
+
+  /**
+   * Politur P2 (E3 „Wiederholungen zuerst“): Wird die Zeit knapp, rücken die noch nicht eingeführten neuen Wörter hinter die Wiederholungen
+   * (Reihenfolge untereinander bleibt). So nimmt der Zeitdeckel am Ende neue Wörter weg, nie fällige Wiederholungen. Liefert, ob sich etwas
+   * geändert hat.
+   */
+  holdFresh(): boolean {
+    const lastReview = this.queue.reduce((at, s, i) => (s.intro ? at : i), -1);
+    const firstFresh = this.queue.findIndex((s) => s.intro);
+    if (firstFresh < 0 || firstFresh > lastReview) return false;
+    this.queue = [...this.queue.filter((s) => !s.intro), ...this.queue.filter((s) => s.intro)];
+    return true;
   }
 
   /**

@@ -5,6 +5,8 @@ import type { LearnRun, LearnView } from './learnRun';
 // nicht Kurzzeitgedächtnis; learning-scientist WT1). Zählt nicht für den Plan (Form `choice`); danach folgen die getippten Abrufe (Schritt A, B).
 // Pflichtfragen (Kap. 2 Nr. 4): Was tun (Aufgabe), wozu (ⓘ), was hatte ich / was ist richtig (Auswahl + Urteil), warum (Satz, „… heißt …“).
 // Gleiche Übungsfläche wie alle Karten (ExerciseShell, UX-Prüfung WT1: Kartenrahmen, Rückmeldekarte, Hauptknopf in voller Größe).
+// Politur P2 (Prüfbericht S6): Ablenker aus eingeführten, ähnlichen Wörtern (domain/pick.ts), auch für Wendungen; falsch gewählt → „Weiter“
+// zeigt die Einführung kurz noch einmal (learnRun.ts `pickNext`).
 
 const LETTERS = ['A', 'B', 'C', 'D'] as const;
 
@@ -43,7 +45,7 @@ export function PickCard({ view, run }: { view: Extract<LearnView, { k: 'pick' }
     </div>
   );
   const answer = <Choices options={view.options} chosen={view.chosen} correct={done ? view.right : null} revealed={done} onPick={(i) => run.pickChoose(i)} lang="de" label={t('vmPickLabel', { w: view.head })} testId="vm-pick-choices" />;
-  const sub = [ok ? t('vmPickOk', { w: view.head, de: right }) : t('vmPickWrong', { w: view.head, de: right }), other && view.chosen !== null ? t('vmPickOther', { de: view.options[view.chosen] ?? '', w: other }) : null, t('vmPickThen')]
+  const sub = [ok ? t('vmPickOk', { w: view.head, de: right }) : t('vmPickWrong', { w: view.head, de: right }), other && view.chosen !== null ? t('vmPickOther', { de: view.options[view.chosen] ?? '', w: other }) : null, t(ok ? 'vmPickThen' : 'vmPickAgain')]
     .filter((x): x is string => !!x)
     .join(' ');
   return (

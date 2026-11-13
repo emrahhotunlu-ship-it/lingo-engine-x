@@ -33,10 +33,12 @@ import {
 import { addDays, dayKey } from '../shared';
 import { type Band, type Line, type Next, partnersOf, type Why } from '../domain/band';
 import { tipOf } from '../domain/card';
-import type { CardModel } from '../domain/flow';
+import { asksMeaning, audioOf, baseAnswer, type CardModel, isHear } from '../domain/flow';
 import type { Reason } from '../domain/reason';
 import type { Grade } from '../domain/types';
 import type { FlipWhen, LearnRun, LearnView } from './learnRun';
+import { HearButton, speakNewOn, useAutoSpeak } from './hear';
+import { KnowCard } from './KnowCard';
 
 // Wörter-Modul V3 Schritt 2b-2: eine Lernkarte und ihr Band (v3-bau.md §1–§3, Bilder s1-*). Die Karte rechnet nichts selbst: Prüfen, Wahl und
 // Weiter gehen an die Steuerung (`learnRun.ts`). Feste Reihenfolge im Band: Urteil · Lösungszeile · Warum · Wortpartner · Kommt wieder · Knöpfe.
@@ -389,8 +391,13 @@ function Retype({ answer, onDone, onEnter }: { answer: string; onDone: (ok: bool
 function taskKey(v: CardView | BandView): MessageKey {
   if (v.card.mode === 'flip') return 'vmTask_flip';
   if (v.kind === 'intro') return 'vmTask_intro';
-  if (v.kind === 'probe') return 'vmTask_probe';
+  // Politur P2: die Probe nach „Kennst du es schon?“ fragt die Bedeutung (das Wort stand auf der Vorkarte schon da).
+  if (v.kind === 'probe') return 'vmTask_probe_meaning';
   if (v.card.form === 'contrast') return 'vmTask_contrast';
+  if (v.card.mode === 'tone_mean') return 'vmTask_tone_mean';
+  if (v.card.mode === 'listen') return 'vmTask_listen';
+  // „Bedeutung“ ohne Satz (Textform von „Hören → Bedeutung“): nichts ist markiert, gefragt ist das Wort selbst.
+  if (v.card.mode === 'meaning' && !v.card.sentence) return 'vmTask_meaning_bare';
   return v.card.mode === 'meaning' ? 'vmTask_meaning' : v.card.mode === 'nosent' ? 'vmTask_nosent' : v.card.firstLetters ? 'vmTask_gap_hint' : 'vmTask_gap';
 }
 const wozuKey = (k: MessageKey): MessageKey => k.replace('vmTask_', 'vmWozu_') as MessageKey;
@@ -400,6 +407,7 @@ const wozuKey = (k: MessageKey): MessageKey => k.replace('vmTask_', 'vmWozu_') a
  * „Erster Abruf“ / „Zweiter Abruf“, nach einem Fehler „Noch einmal“. „Wiederholung“ nur für ein geplantes Wort von früheren Tagen.
  */
 function kindLabel(t: T, v: CardView | BandView, introToday: boolean, refreshed = false): string {
+  if (v.k === 'card' && v.again) return t('vmKindIntroAgain');
   if (v.kind === 'intro') return t('vmKindNew');
   if (v.kind === 'probe') return t('vmKindProbe');
   if (v.card.form === 'contrast') return t(v.card.contrast?.ff ? 'vmKindContrastFf' : 'vmKindContrast');
@@ -413,8 +421,10 @@ function kindLabel(t: T, v: CardView | BandView, introToday: boolean, refreshed 
 }
 
 export function LearnCard({ view, run }: { view: CardView | BandView; run: LearnRun }) {
+  // Politur P2: Vorkarte „Kennst du es schon?“ vor der Einführung eines neuen Einzelworts.
+  if (view.k === 'card' && view.ask) return <KnowCard key={`know|${view.task.path}|${view.n}`} view={view} run={run} />;
   // Je Karte frisch (Lücke, Messung); das Band behält die Eingabe der Karte.
-  const key = `${view.task.path}|${view.kind}|${view.n}|${view.k === 'card' && view.teach ? 't' : ''}`;
+  const key = `${view.task.path}|${view.kind}|${view.n}|${view.k === 'card' && view.teach ? 't' : ''}|${view.k === 'card' && view.again ? 'a' : ''}|${view.card.mode}`;
   return <CardInner key={key} view={view} run={run} />;
 }
 
@@ -436,6 +446,17 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     shownAt.current = performance.now();
     lookupAtStart.current = lookupOpenMs();
   }, []);
+  // Politur P2 (E3 „Hören“): Bedeutung als Antwort (gelesen, gehört, Probe) und Hör-Karten.
+  const meaningLike = asksMeaning(card.mode);
+  const hear = isHear(card.mode);
+  // Von selbst vorlesen: Einführung (Wort, dann Satz; Einstellung „Neue Wörter vorlesen“) und Hör-Karten (ihre Frage), je Karte einmal.
+  const autoText = audioOf(card);
+  const autoOn = view.k === 'card' && !!autoText && run.autoAudio() && (hear || speakNewOn());
+  const autoKey = hear ? `hear|${card.path}|${view.n}|${card.mode}` : `intro|${card.path}|${run.dayOf()}`;
+  useAutoSpeak(autoText, autoOn, autoKey, hear ? (ms) => (listenMs.current += ms) : undefined);
+  // Ton der nächsten Karte vorab rechnen (einmal je Karte), damit er beim Erscheinen sofort spielt.
+  const [upcoming] = useState(() => run.upcomingAudio());
+  usePrefetchSpeech(upcoming ?? '');
   // Jede neue Karte ist sofort tippbereit (UX-Neuanfang 02.11.2026): der Cursor steht in der Lücke, auf jedem Gerät. Am Handy hält „Weiter“
   // die Tastatur offen (das Feld bleibt dasselbe und wird im Tipp selbst fokussiert); ohne Lücke (Anki-Karte) ruht das Feld. Einmal je Karte.
   const focused = useRef(false);
@@ -483,16 +504,18 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     run.flipGrade(g);
     api.focusNow();
   };
+  const again = view.k === 'card' && !!view.again;
   const introGo = () => {
     if (!teaching) return;
     if (teachCard) run.teachSeen();
+    else if (again) run.againSeen();
     else run.introSeen(measure());
     api.focusNow();
   };
   // Nach einem Fehler einmal richtig nachtippen (Emrah 03.11.2026): „Weiter“ erst danach. Nicht bei „Bedeutung“ (Antwort Deutsch), nicht
   // nach „Das wusste ich“/„Später prüfen“, nicht in Einführung und Probe (dort gibt es keinen Fehler).
   const [retyped, setRetyped] = useState(false);
-  const needRetype = !!band && band.kind === 'answer' && band.band.tone !== 'ok' && !band.choice && card.mode !== 'meaning' && !isFlip;
+  const needRetype = !!band && band.kind === 'answer' && band.band.tone !== 'ok' && !band.choice && !meaningLike && !isFlip;
   const blocked = needRetype && !retyped;
   const onEnter = () => (teaching ? introGo() : isFlip ? flipOpen() : band ? (blocked ? undefined : next()) : check());
   useHotkeys(
@@ -510,16 +533,19 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   );
 
   const tip = view.k === 'card' && (view.tip || card.firstLetters);
-  const typedGap = card.mode !== 'meaning' && !isFlip;
+  const typedGap = !meaningLike && !isFlip;
   const mask = typedGap && tip ? maskOf(card.answer, { firstLetter: true, perWord: true }) : null;
   const gapState: GapState = band ? GAP[band.band.tone] : 'input';
   const intro = view.kind === 'intro';
   const shown = band ? (band.given.trim() ? band.given : null) : null;
   // Bedeutung abfragen: die Lösung in der Lücke ist die deutsche Bedeutung.
-  const reveal = band && band.band.tone !== 'ok' ? { solution: card.mode === 'meaning' ? card.de : card.answer, given: shown } : null;
+  const reveal = band && band.band.tone !== 'ok' ? { solution: meaningLike ? card.de : card.answer, given: shown } : null;
 
   const gapLabel = (() => {
     const g = gapText(card);
+    // Hören → Bedeutung: das Wort steht nirgends, auch nicht im Feld-Namen (Vorleseprogramme lesen ihn vor).
+    if (card.mode === 'tone_mean') return t('vmGapToneLabel');
+    if (card.mode === 'probe') return t('vmProbeLabel', { word: card.answer });
     if (card.mode === 'meaning') return t('vmGapMeaningLabel', { word: card.answer });
     return g ? t('vmGapLabel', { sentence: `${g.text.slice(0, g.start)}…${g.text.slice(g.end)}` }) : t('vmTypeLabel', { de: card.de });
   })();
@@ -527,13 +553,20 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   // Was Claude sieht („Claude erklärt“, Begleiter): Aufgabe und Satz mit Lücke; vor dem Prüfen nie die Lösung.
   const seeGap = gapText(card);
   const seeSentence = seeGap ? `${seeGap.text.slice(0, seeGap.start)}___${seeGap.text.slice(seeGap.end)}` : '';
-  const seeSolution = card.mode === 'meaning' ? card.de : card.answer;
+  const seeSolution = meaningLike ? card.de : card.answer;
+  // Hör-Karten: vor dem Prüfen sieht Claude nur die Aufgabe (und beim Satz hören den Satz mit Lücke) – das Wort ist die Frage.
+  const seeDetail =
+    card.mode === 'tone_mean' && !band
+      ? t(tk)
+      : meaningLike
+        ? `${t(tk)}\n${card.answer}${seeSentence ? `\n${seeSentence}` : ''}`
+        : `${t(tk)}\n${seeSentence || card.de}${seeSentence && card.de && card.mode !== 'listen' ? `\n(${card.de})` : ''}`;
   const see = {
     area: 'trainer',
     label: `${t('cmpSeeTrainer')} · ${t(tk)}`.slice(0, 60),
     phase: band ? 'feedback' : 'question',
-    detail: card.mode === 'meaning' ? `${t(tk)}\n${card.answer}${seeSentence ? `\n${seeSentence}` : ''}` : `${t(tk)}\n${seeSentence || card.de}${seeSentence && card.de ? `\n(${card.de})` : ''}`,
-    ...(band ? { reveal: `Solution: ${seeSolution}. Learner: ${band.given || '(empty)'}` } : { mask: card.mode === 'meaning' ? [card.de] : [card.answer, card.head] }),
+    detail: seeDetail,
+    ...(band ? { reveal: `Solution: ${seeSolution}. Learner: ${band.given || '(empty)'}` } : { mask: card.mode === 'tone_mean' ? [card.de, card.answer, card.head] : meaningLike ? [card.de] : [card.answer, card.head] }),
   } as const;
   const gap = (
     <KineticGap
@@ -544,8 +577,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       shown={shown}
       reveal={reveal}
       silent
-      fill={card.mode === 'meaning'}
-      placeholder={card.mode === 'meaning' ? t('vmMeaningPh') : undefined}
+      fill={meaningLike}
+      placeholder={meaningLike ? t('vmMeaningPh') : undefined}
       onChange={(v, info) => {
         typed.current = v;
         if (info.firstKey && firstKeyAt.current === null) {
@@ -562,7 +595,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
 
   // Nach dem Prüfen entfällt „Gesucht: …“ (ux-reviewer 05.11.2026 Nr. 12): die Bedeutung steht dann in der Wortkarte, nicht dreimal.
   const cue =
-    card.cue && card.mode !== 'meaning' && !band ? (
+    card.cue && !meaningLike && !band ? (
       <p className="lx-t-support text-muted" data-testid="vm-cue" lang={lang}>
         {t(card.cue.ff ? 'vmCueFf' : 'vmCue', { de: card.cue.de })}
       </p>
@@ -582,7 +615,19 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   const g = gapText(card);
   const whole = fullText(card);
   // Vorlesen: nach dem Prüfen und bei sichtbarem Wort der ganze Satz; vor dem Prüfen einer Lücke nur mit der Einstellung (Lücke als Ton).
-  const parts = band || (card.mode !== 'gap' && card.mode !== 'intro') ? (whole ? [whole.text] : null) : run.listenFirst() ? gapParts(card) : null;
+  // Hör-Karten vor dem Prüfen: der Ton IST die Frage (großer Knopf unten), kein zweiter Vorlese-Knopf.
+  const parts = hear && !band ? null : band || (card.mode !== 'gap' && card.mode !== 'intro') ? (whole ? [whole.text] : null) : run.listenFirst() ? gapParts(card) : null;
+  const hearNode =
+    hear && autoText ? (
+      <HearButton
+        big
+        text={autoText}
+        testId="vm-hear"
+        label={t(card.mode === 'listen' ? 'vmHearSentenceLabel' : 'vmHearWordLabel')}
+        heard={autoOn}
+        onSpent={band ? undefined : (ms) => (listenMs.current += ms)}
+      />
+    ) : null;
   const listen = parts ? <ListenButton key={band ? 'full' : 'pre'} parts={parts} testId="vm-listen" onSpent={band ? undefined : (ms) => (listenMs.current += ms)} /> : null;
   if (teachCard) {
     prompt = <IntroTeach card={teachCard} />;
@@ -632,6 +677,39 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         ) : null}
       </div>
     ) : null;
+  } else if (card.mode === 'tone_mean') {
+    // Hören → Bedeutung (Politur P2): nur der Klang des Worts; das Wort erscheint erst nach dem Prüfen („Gehört: …“).
+    prompt = (
+      <div className="flex flex-col items-start gap-3">
+        {hearNode}
+        {band ? (
+          <p className="lx-t-title m-0" data-testid="vm-heard">
+            <span className="text-subtle">{t('vmHeardWord')} </span>
+            <span lang="en">{card.answer}</span>
+          </p>
+        ) : null}
+      </div>
+    );
+    answer = (
+      <div className="lx-t-prompt w-full" data-testid="vm-meaning-field">
+        {gap}
+      </div>
+    );
+  } else if (card.mode === 'probe') {
+    // Probe nach „Ja, prüf mich“ (Politur P2): das Wort steht da (wie auf der Vorkarte), gefragt ist die deutsche Bedeutung.
+    prompt = (
+      <div className="lx-kintro-head">
+        <p className="lx-kword m-0" lang="en" data-testid="vm-probe-word">
+          {card.head}
+        </p>
+        <SpeakWord text={baseAnswer(card.head)} testId="vm-probe-listen" />
+      </div>
+    );
+    answer = (
+      <div className="lx-t-prompt w-full" data-testid="vm-meaning-field">
+        {gap}
+      </div>
+    );
   } else if (card.mode === 'meaning') {
     const f = whole;
     prompt = f ? (
@@ -639,7 +717,12 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         <EnglishText as="p" testId="vm-sentence" text={f.text} area="trainer" source={card.path} title={card.head} highlight={[f.start, f.end]} exclude={band ? null : [f.start, f.end]} />
         {listen}
       </div>
-    ) : null;
+    ) : (
+      // Ohne Satz (Hören → Bedeutung als Text, „Kann gerade nicht hören“): das Wort selbst ist die Frage.
+      <p className="lx-t-display m-0 min-w-0 break-words" lang="en" data-testid="vm-meaning-word">
+        {card.answer}
+      </p>
+    );
     // Emrah 05.11.2026: „das Eingabefeld ist das kleinste auf der Karte“ – volle Breite, in der Schriftgröße des Satzes.
     answer = (
       <div className="lx-t-prompt w-full" data-testid="vm-meaning-field">
@@ -648,9 +731,11 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     );
   } else if (teaching) {
     prompt = <IntroTeach card={card} />;
-  } else if (g && (card.mode === 'gap' || card.mode === 'intro')) {
+  } else if (g && (card.mode === 'gap' || card.mode === 'intro' || card.mode === 'listen')) {
     prompt = (
       <div className="flex flex-col gap-3">
+        {/* Satz hören → Wort tippen (Politur P2): erst der Ton (der ganze Satz), im Text ist das Wort die Lücke. */}
+        {card.mode === 'listen' && !band ? <div className="flex">{hearNode}</div> : null}
         {cue}
         <EnglishText as="p" testId="vm-sentence" text={g.text} area={intro ? 'intro' : 'trainer'} source={card.path} title={card.head} slot={{ start: g.start, end: g.end, node: gap }} />
         {tipLine}
@@ -673,22 +758,23 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
 
   const card0 = view.k === 'card' ? view : null;
   const secondary: ShellSecondary[] = [
-    ...(card0 && !teachCard && card0.kind === 'answer' && typedGap && !card0.tip && !card.firstLetters
+    ...(card0 && !teachCard && card0.kind === 'answer' && typedGap && !hear && !card0.tip && !card.firstLetters
       ? [{ id: 'hint', label: t('vmBtnTip'), onClick: () => run.tip(), testId: 'vm-tip-btn', variant: 'quiet' } as const]
       : []),
     ...(card0 && card0.kind !== 'intro' && !teachCard && !isFlip ? [{ id: 'dontKnow', label: t('vmBtnDunno'), onClick: () => check(true), testId: 'vm-dunno', variant: 'quiet' } as const] : []),
-    // Kern (learning-scientist 03.11.2026): nicht auf der Einführungskarte – dort stehen Wort und Bedeutung schon (kein echter Abruf).
-    ...(card0?.canProbe && !teaching
+    // Politur P2: Hör-Karte ohne Ton (Bahn, Büro): dieselbe Abfrage als Text, ohne Note für den Wechsel, bis zum Ende der Runde.
+    // („Kenne ich schon“ steht nicht mehr hier, sondern als eigene Vorkarte vor der Einführung, KnowCard.tsx.)
+    ...(card0 && hear
       ? [
           {
-            id: 'skip',
-            label: t('vmBtnKnowIt'),
+            id: 'noSound',
+            label: t('vmHearNoSound'),
             onClick: () => {
-              run.probe();
-              api.focusNow();
+              run.cantHear();
+              toast(t('vmHearNoSoundDone'));
             },
-            testId: 'vm-knowit',
-            variant: 'secondary',
+            testId: 'vm-no-sound',
+            variant: 'quiet',
           } as const,
         ]
       : []),
@@ -720,8 +806,8 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
       status={{ area: 'words', state: null, kindLabel: teachCard ? t('kernKindKnown') : kindLabel(t, view, run.introducedToday(view.task.path), run.refreshedNow(view.task.path)) }}
       see={see}
       task={{
-        text: teachCard ? t('kernTeachTask') : teaching ? t('kernIntroTask') : t(tk),
-        purpose: teachCard ? t('kernTeachWozu') : teaching ? t('kernIntroWozu') : t(view.card.form === 'contrast' && view.card.contrast?.ff ? 'vmWozu_contrastFf' : wozuKey(tk)),
+        text: teachCard ? t('kernTeachTask') : again ? t('vmIntroAgainTask') : teaching ? t('kernIntroTask') : t(tk),
+        purpose: teachCard ? t('kernTeachWozu') : again ? t('vmIntroAgainWozu') : teaching ? t('kernIntroWozu') : t(view.card.form === 'contrast' && view.card.contrast?.ff ? 'vmWozu_contrastFf' : wozuKey(tk)),
         open: !teaching,
         reason: () => reasonLine(t, run.reason(), dateShort),
       }}
@@ -746,9 +832,11 @@ function tutorOf(v: BandView, t: T, run: LearnRun): ReactNode {
   if (v.kind === 'intro' || v.band.tone !== 'no' || !v.given.trim() || v.choice) return null;
   const g = gapText(v.card);
   // Bedeutungskarte (ux-reviewer W7 Nr. 2): Claude bekommt den ganzen Satz und die Frage nach der Bedeutung, nicht einen Lückensatz.
-  const meaning = v.card.mode === 'meaning';
+  const meaning = asksMeaning(v.card.mode);
   const prompt = meaning
-    ? `What does “${v.card.answer}” mean in this sentence? Answer in German. Sentence: ${g?.text ?? v.card.answer}`
+    ? g
+      ? `What does “${v.card.answer}” mean in this sentence? Answer in German. Sentence: ${g.text}`
+      : `What does “${v.card.answer}” mean? Answer in German.`
     : g
       ? `${g.text.slice(0, g.start)}___${g.text.slice(g.end)}`
       : // Emrah 07.11.2026 („robuster“ → „more robust“: „Ist doch eigentlich auch richtig?!“): ohne Satz ist es eine Übersetzung, gleichwertige Wörter passen.

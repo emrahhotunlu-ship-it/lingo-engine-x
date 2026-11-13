@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import bank from '../../../src/content/wt/bsl.json';
 import { Catalog, type Item } from '../../../src/modules/vocab/domain/catalog';
 import { buildDayPlan } from '../../../src/modules/vocab/domain/day';
+import { planMed } from '../../../src/modules/vocab/domain/pace';
 import { pickOptions } from '../../../src/modules/vocab/domain/pick';
 import { applyAnswer, emptyLex, introduce } from '../../../src/modules/vocab/domain/planner';
 import { SessionRun } from '../../../src/modules/vocab/domain/session';
@@ -77,10 +78,16 @@ describe('Tagesziel in Wörtern', () => {
     expect(plan.due).toBe(40);
     expect(plan.min).toBeGreaterThan(0);
   });
-  it('ohne Tagesziel in Wörtern (cnt 0) wie bisher nach Minuten', () => {
+  it('ohne Tagesziel in Wörtern (cnt 0) nach Minuten: Wiederholungen zuerst, neue = Rest, höchstens das Tempo (Politur P2)', () => {
     const fresh: Item[] = Array.from({ length: 30 }, (_, i) => ({ path: `vocab/new-${i}`, lex: emptyLex('w', 'edge', T0), order: i }));
-    const { plan } = buildDayPlan(new Catalog(fresh), T0, { ...DEFAULT_CFG, min: 15, cnt: 0, newPerDay: 10 }, {});
-    expect(plan.fresh).toBeLessThanOrEqual(5);
+    const due: Item[] = Array.from({ length: 80 }, (_, i) => ({ path: `vocab/due-${i}`, lex: learnedDue(T0 - 20 * D, T0 - D), order: 100 + i }));
+    // Nichts fällig: die neuen füllen die Zeit, höchstens das Tempo.
+    expect(buildDayPlan(new Catalog(fresh), T0, { ...DEFAULT_CFG, min: 15, cnt: 0, newPerDay: 10 }, {}).plan.fresh).toBe(10);
+    expect(buildDayPlan(new Catalog(fresh), T0, { ...DEFAULT_CFG, min: 15, cnt: 0, newPerDay: 10 }, planMed(null)).plan.fresh).toBe(5);
+    // Viel fällig: nur die Mindestzahl neuer; im Wörter-Modus (cnt 50) bleibt das ganze Kontingent.
+    const full = new Catalog([...due, ...fresh]);
+    expect(buildDayPlan(full, T0, { ...DEFAULT_CFG, min: 15, cnt: 0, newPerDay: 10 }, planMed(null)).plan.fresh).toBe(2);
+    expect(buildDayPlan(full, T0, { ...DEFAULT_CFG, min: 40, cnt: 50, newPerDay: 10 }, planMed(null)).plan.fresh).toBe(10);
   });
 });
 

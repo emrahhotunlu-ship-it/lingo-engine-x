@@ -6,7 +6,9 @@ import { addDays, dayKey, dayStartOf } from '../../../src/domain/date';
 import { dayWeight, pickDay } from '../../../src/modules/vocab/domain/balance';
 import { capDays } from '../../../src/modules/vocab/domain/cap';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
-import { BRAKE_NEW, buildDayPlan, minNewFor } from '../../../src/modules/vocab/domain/day';
+import { buildDayPlan, firstRecallOpen, freshFor, MIN_NEW, minNewFor, newCostMs, REVIEW_SHARE, reviewCapMs } from '../../../src/modules/vocab/domain/day';
+import { formMs } from '../../../src/modules/vocab/domain/catalog';
+import { planMed } from '../../../src/modules/vocab/domain/pace';
 import { corridor, fuzzRange } from '../../../src/modules/vocab/domain/fuzz';
 import { FORM_SPEC, gradeOf } from '../../../src/modules/vocab/domain/grade';
 import { type Answer, applyAnswer, emptyLex, evidencePlans, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
@@ -226,6 +228,54 @@ describe('Lernschritte (M9, Regel)', () => {
   });
 });
 
+describe('Fehler → morgen wieder (Politur P2, Prüfbericht S3)', () => {
+  const tomorrow = dayStartOf(addDays(dayKey(T0), 1));
+  /** Altes Wort: Stufe 5, drei Beleg-Tage (Deckel 21 Tage), lange Abstände, heute fällig. */
+  const old = (): Lex => {
+    const l = learned(T0 - 60 * D);
+    return { ...l, lv: 5, ev: { f: ['2026-09-20', '2026-10-01', '2026-10-15'], o: 0, s: 0 }, u: { ...l.u, s: 40, sd: 30, due: T0 + 9 * D, last: T0 - 21 * D }, b: { ...l.b!, s: 30, sd: 18, due: T0 - D, last: T0 - 19 * D } };
+  };
+  it('„Nochmal“ auf Benutzen: Termin morgen, auch bei hoher Stufe, vollem Deckel und voller Last an den nächsten Tagen', () => {
+    // Last so, dass der Lastausgleich den Termin gern nach hinten legen würde.
+    const r = applyAnswer(old(), ans(T0, { outcome: 'wrong' }), ctx({ load: (i) => (i <= 2 ? 60 : 0) }));
+    expect(r.grade).toBe(1);
+    expect(r.booked).toEqual(['b']);
+    expect(r.lex.b!.due).toBe(tomorrow);
+    expect(r.lex.b!.sd).toBe(1);
+    // Die andere Spur (nicht gebucht) behält ihren Termin; Stufe sinkt um eins.
+    expect(r.lex.u.due).toBe(old().u.due);
+    expect(r.lex.lv).toBe(4);
+    // FSRS-Zustand bleibt der nach dem Fehler (nur der Termin ist begrenzt).
+    expect(r.lex.b!.lapses).toBe(old().b!.lapses + 1);
+    expect(r.lex.b!.s).toBeLessThan(old().b!.s);
+  });
+  it('anderes echtes Wort getippt: beide Spuren morgen; „Weiß ich nicht“ ebenso die gebuchte', () => {
+    const other = applyAnswer(old(), ans(T0, { outcome: 'other' }), ctx());
+    expect(other.booked).toEqual(['b', 'u']);
+    expect([other.lex.b!.due, other.lex.u.due]).toEqual([tomorrow, tomorrow]);
+    const dunno = applyAnswer(old(), ans(T0, { outcome: 'dunno' }), ctx());
+    expect(dunno.lex.b!.due).toBe(tomorrow);
+  });
+  it('Verstehen-Abfrage falsch: Verstehen morgen, Benutzen bleibt', () => {
+    const l = { ...old(), u: { ...old().u, due: T0 - D }, b: { ...old().b!, due: T0 + 5 * D } };
+    const r = applyAnswer(l, ans(T0, { form: 'meaning', outcome: 'wrong' }), ctx());
+    expect(r.booked).toEqual(['u']);
+    expect(r.lex.u.due).toBe(tomorrow);
+    expect(r.lex.b!.due).toBe(T0 + 5 * D);
+  });
+  it('richtig bleibt unberührt: der Termin wächst wie bisher (kein Deckel auf morgen)', () => {
+    const r = applyAnswer(old(), ans(T0), ctx());
+    expect(r.grade).toBe(3);
+    expect(r.lex.b!.due).toBeGreaterThan(tomorrow + 5 * D);
+  });
+  it('zweiter Versuch nach Hinweis (keine Stufe verloren) kommt trotzdem morgen', () => {
+    const r = applyAnswer(old(), ans(T0, { outcome: 'ok', first: 'wrong' }), ctx());
+    expect(r.grade).toBe(1);
+    expect(r.lex.lv).toBe(5);
+    expect(r.lex.b!.due).toBe(tomorrow);
+  });
+});
+
 describe('Abstieg kürzt die Belege (learning-scientist V1, Befund 7)', () => {
   it('Stufe 3 mit 3 Beleg-Tagen, Fehler → Stufe 2, ev.f leer, Deckel 1', () => {
     const l = { ...learned(T0 - 20 * D), lv: 3, ev: { f: ['2026-10-20', '2026-10-24', '2026-10-28'], o: 0, s: 0 } };
@@ -244,20 +294,88 @@ describe('Tagesplan (M12, M13, M21)', () => {
     });
   const fresh = (n: number) => Array.from({ length: n }, (_, i) => ({ path: `vocab/new-${i}`, lex: emptyLex('w', 'edge', T0), order: 1000 + i }));
 
-  it('das Kontingent kommt auch bei großem Rückstand, wenn die Wörter genug Zeit haben (Emrah 08.11.2026, „A: 10 pro Tag“, Tagesziel 35)', () => {
+  // Politur P2 (Emrah 13.11.2026, E3 „A: Wiederholungen zuerst“; ersetzt „das Kontingent kommt immer“ vom 08.11. und die Bremse unter 20 Minuten).
+  it('Wiederholungen zuerst: bei großem Rückstand nur die Mindestzahl neuer Wörter, der Rest der Zeit gehört den Wiederholungen', () => {
     const cat = new Catalog([...mk(200, -3), ...fresh(12)]);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 10 }, {}).plan.fresh).toBe(10);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 5 }, {}).plan.fresh).toBe(5);
+    for (const newPerDay of [10, 5]) {
+      const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay }, {});
+      expect(plan.fresh).toBe(MIN_NEW);
+      expect(plan.due).toBeGreaterThan(60);
+      expect(plan.min).toBeLessThanOrEqual(21);
+    }
   });
-  it('Bremse: unter 20 Wörter-Minuten höchstens 5 neue (learning-scientist 08.11.2026)', () => {
-    expect(minNewFor(10, 15 * 60_000)).toBe(BRAKE_NEW);
-    expect(minNewFor(10, 21 * 60_000)).toBe(10);
-    expect(minNewFor(2, 15 * 60_000)).toBe(2);
-    expect(minNewFor(0, 21 * 60_000)).toBe(0);
+  it('neue = was übrig bleibt: wenig fällig → bis zum Tempo, nie mehr; die Regel in Zahlen', () => {
     const cat = new Catalog([...mk(3, -1), ...fresh(12)]);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 15, newPerDay: 10 }, {}).plan.fresh).toBe(BRAKE_NEW);
-    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 10 }, {}).plan.fresh).toBe(10);
+    // 15 Minuten, 3 Wiederholungen (je 14 s): es bleibt Zeit für mehr als 10 neue (je 52 s) → das Tempo deckelt.
+    expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 15, newPerDay: 10 }, {}).plan.fresh).toBe(10);
     expect(buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 21, newPerDay: 2 }, {}).plan.fresh).toBe(2);
+    const nc = 156_000;
+    const min = 60_000;
+    // Mindestzahl: 2, bei sehr kurzer Wörter-Zeit 1, nie über dem Tempo, bei Tempo 0 keine.
+    expect(minNewFor(10, 18 * min, nc)).toBe(2);
+    expect(minNewFor(10, 10 * min, nc)).toBe(1);
+    expect(minNewFor(10, 5 * min, nc)).toBe(1);
+    expect(minNewFor(1, 25 * min, nc)).toBe(1);
+    expect(minNewFor(0, 25 * min, nc)).toBe(0);
+    // Deckel der Wiederholungen: alles bis auf die Mindestzahl neuer, nie unter 60 %.
+    expect(reviewCapMs(10, 18 * min, nc)).toBe(18 * min - 2 * nc);
+    expect(reviewCapMs(10, 5 * min, nc)).toBe(REVIEW_SHARE * 5 * min);
+    expect(reviewCapMs(0, 18 * min, nc)).toBe(18 * min);
+    // Neue: Rest der Zeit, mindestens 2, höchstens das Tempo.
+    expect(freshFor({ quota: 10, budgetMs: 18 * min, reviewMs: 0, nc })).toBe(6);
+    expect(freshFor({ quota: 4, budgetMs: 18 * min, reviewMs: 0, nc })).toBe(4);
+    expect(freshFor({ quota: 10, budgetMs: 18 * min, reviewMs: 18 * min, nc })).toBe(2);
+    expect(freshFor({ quota: 0, budgetMs: 18 * min, reviewMs: 0, nc })).toBe(0);
+  });
+  it('realistische Zeiten (planMed), 18/21/25 Wörter-Minuten, 30 fällig, 10 neue verfügbar: Wiederholungen werden nie verdrängt', () => {
+    const med = planMed(null);
+    const cat = new Catalog([...mk(30, -1), ...fresh(10)]);
+    const nc = newCostMs(med);
+    const one = formMs('gap', med);
+    expect(nc).toBe(156_000);
+    const seen: Record<number, [number, number]> = {};
+    for (const min of [18, 21, 25]) {
+      const budget = min * 60_000;
+      const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, min, newPerDay: 10 }, med);
+      const reviews = plan.plan.filter((e) => e[1] !== 'n');
+      const reviewMs = reviews.reduce((a, e) => a + formMs(e[2], med), 0);
+      seen[min] = [reviews.length, plan.fresh];
+      // Die Wiederholungen bekommen alles bis auf den Platz der zwei neuen – mindestens 60 % der Wörter-Zeit, sofern so viel fällig ist.
+      expect(reviewMs).toBeGreaterThan(Math.min(30 * one, reviewCapMs(10, budget, nc)) - one);
+      expect(reviewMs).toBeGreaterThanOrEqual(Math.min(30 * one, REVIEW_SHARE * budget) - one);
+      // Neue: mindestens 2, höchstens das Tempo, und nie mehr, als nach den Wiederholungen übrig ist.
+      expect(plan.fresh).toBeGreaterThanOrEqual(MIN_NEW);
+      expect(plan.fresh).toBeLessThanOrEqual(Math.max(MIN_NEW, Math.floor((budget - reviewMs) / nc)));
+      expect(plan.min).toBeLessThanOrEqual(min + 0.05);
+    }
+    // Vorher (Regel 08.11.): 21 und 25 Minuten → 10 neue und höchstens eine Handvoll Wiederholungen (Prüfbericht S1).
+    expect(seen).toEqual({ 18: [18, 2], 21: [22, 2], 25: [28, 2] });
+    // Wenig fällig (5): die neuen füllen den Rest, höchstens das Tempo.
+    const few = new Catalog([...mk(5, -1), ...fresh(10)]);
+    expect(buildDayPlan(few, T0, { ...DEFAULT_CFG, min: 18, newPerDay: 10 }, med).plan.fresh).toBe(5);
+    expect(buildDayPlan(few, T0, { ...DEFAULT_CFG, min: 18, newPerDay: 4 }, med).plan.fresh).toBe(4);
+    expect(buildDayPlan(few, T0, { ...DEFAULT_CFG, min: 25, newPerDay: 10 }, med).plan.fresh).toBe(8);
+  });
+  it('der erste Abruf nach dem Einführungstag steht immer im Plan und kommt zuerst (E3: „gestern gelernt“)', () => {
+    const yesterday = dayKey(T0 - D);
+    const young = Array.from({ length: 6 }, (_, i) => {
+      const l = learned(T0 - D);
+      return { path: `vocab/young-${i}`, lex: { ...l, intro: yesterday, day: yesterday, u: { ...l.u, due: T0 }, b: { ...l.b!, due: T0 } }, order: 500 + i };
+    });
+    expect(firstRecallOpen(young[0]!.lex, dayKey(T0))).toBe(true);
+    // Nicht mehr „erster Abruf“: seither gebucht, heute eingeführt, oder vor mehr als 3 Lerntagen eingeführt (z. B. übernommene Wörter).
+    expect(firstRecallOpen({ intro: yesterday, day: dayKey(T0) }, dayKey(T0))).toBe(false);
+    expect(firstRecallOpen({ intro: dayKey(T0), day: null }, dayKey(T0))).toBe(false);
+    expect(firstRecallOpen({ intro: dayKey(T0 - 9 * D), day: null }, dayKey(T0))).toBe(false);
+    const med = planMed(null);
+    // 5 Wörter-Minuten Deckel wären 4 Wiederholungen; die 6 von gestern kommen trotzdem alle, vor den 200 alten Kernwörtern.
+    const cat = new Catalog([...mk(200, -3, 'core'), ...young, ...fresh(4)]);
+    const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 5, newPerDay: 10 }, med);
+    expect(plan.plan.slice(0, 6).map((e) => e[0]).sort()).toEqual(young.map((y) => y.path).sort());
+    // Am kurzen Tag gilt die Zeit auch für sie.
+    const short = buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 5, newPerDay: 2, short: true }, med).plan;
+    expect(short.plan.filter((e) => e[0].includes('young')).length).toBeLessThan(6);
+    expect(short.fresh).toBe(1);
   });
   it('Kontingent 0 → keine neuen', () => {
     const cat = new Catalog([...mk(5, -1), ...fresh(10)]);

@@ -132,6 +132,23 @@ export const vmodPaceWriteSchema = z
   })
   .strict();
 
+/**
+ * `vmod/tempo` (Politur P2, E3 „neue Wörter nach Behalten“): Tempo `n` neuer Wörter am Lerntag `d`, begonnen bei der Einstellung `base`,
+ * mit Grund `why` und der Quote „am Folgetag frei richtig“ (`ok` von `all` in 14 Lerntagen) zum Zeitpunkt der Rechnung.
+ */
+export const vmodTempoWriteSchema = z
+  .object({
+    v: z.literal(1),
+    d: day,
+    n: int.min(0).max(15),
+    base: int.min(0).max(15),
+    why: z.enum(['start', 'up', 'down', 'keep', 'few', 'backlog', 'top', 'floor', 'fixed']),
+    ok: int.min(0),
+    all: int.min(0),
+    t: int.positive(),
+  })
+  .strict();
+
 /** Großpaket A S5c: höchstens so viele Texte warten auf „Später prüfen lassen“ (die ältesten fallen weg). */
 export const USE_LATER_MAX = 6;
 const useFrame = z.enum(['mail', 'slack', 'call', 'pitch', 'life']);

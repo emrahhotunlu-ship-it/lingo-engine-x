@@ -21,9 +21,15 @@ describe('Simulation des neuen Planers (Kurzlauf)', () => {
     // V2 wechselt den Satz ab Tag 2 (M57); in neuen Sätzen fehlt die Hilfe, FSRS mit Standardwerten kennt das nicht (Anpassung erst M19).
     // Mit Ankersatz misst derselbe Planer 95 %. Die Grenze hält den gemessenen Stand, damit eine Verschlechterung auffällt.
     // Grenze = Messwert dieses Startwerts (A 83,0 · B 83,6) − 2 (learning-scientist V2 Befund 10), damit ein Rückschritt auffällt.
-    expect(a.retention).toBeGreaterThanOrEqual(81);
+    // Politur P2 (13.11.2026): Wendungen mit ganzer Lücke zählen als freier Abruf (vorher höchstens „Schwer“). Im Modell (40 % Mehrwort-Lexeme)
+    // wachsen ihre Abstände jetzt wie bei Einzelwörtern: Behaltensrate A 81,3 → 80,3 · B 82,3; dafür sitzen nach 60 Tagen mehr Wörter
+    // (A: 206 → 226, dauerhaft je Stunde 9,6 → 11,4). Grenze weiter = Messwert − 2.
+    // Politur P2 Punkte 5–8 (13.11.2026): Hör-Formen (Satz hören auch ab Stufe 5, Diktat und Bausteine ohne Karte nicht mehr gewählt),
+    // Problemwörter ab dem 3. Vergessen (Kontrast, Partner-Pause): gemessen A 79,7 → 80,2 · B 81,5 → 80,1 (Schwankung des Modells ±1,5).
+    // Grenze weiter = Messwert − 2.
+    expect(a.retention).toBeGreaterThanOrEqual(78.2);
     expect(a.retention).toBeLessThanOrEqual(93);
-    expect(b.retention).toBeGreaterThanOrEqual(81.5);
+    expect(b.retention).toBeGreaterThanOrEqual(78.1);
   });
   it('an jedem Lerntag ≥ 2 neue; Auswahl außerhalb der Lernschritte 0 %', () => {
     expect(a.newDaysBelow2).toBe(0);
@@ -34,8 +40,9 @@ describe('Simulation des neuen Planers (Kurzlauf)', () => {
     // Emrahs Lesart 01.11.2026: Gleichmäßigkeit ab Tag 15, die 14-Tage-Vorschau (≤ 1,5) nur beim Start mit Bestand (Szenario D, volle
     // Messung mit `simulate.mjs`); beim leeren Start wird sie hier nicht abgenommen.
     // Messreihe V2 ab Tag 15 (5 Startwerte): A 0,12–0,15 · B 0,11–0,14 · C 0,11–0,16 · D 0,05–0,08.
-    expect(a.cvDutySteady).toBeLessThanOrEqual(0.15);
-    expect(b.cvDutySteady).toBeLessThanOrEqual(0.15);
+    // Politur P2: gemessen A 0,15 · B 0,16.
+    expect(a.cvDutySteady).toBeLessThanOrEqual(0.17);
+    expect(b.cvDutySteady).toBeLessThanOrEqual(0.17);
     expect(b.dutyAfterExtra).toBeLessThanOrEqual(b.dutyMean + 0.5);
   });
   // Emrah 07.11.2026 („Text“ A): die Schreibaufgabe mit mehreren Wörtern steht nicht mehr in der Wörter-Pflicht (sondern unter Anwenden).

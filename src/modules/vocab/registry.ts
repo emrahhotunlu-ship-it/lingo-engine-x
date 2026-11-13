@@ -14,3 +14,5 @@ export const VMOD_PACE_PATH = 'vmod/pace';
 export { VLOG_INDEX_PATH, vlogIdsOf, vlogDocCountOf, vlogProbeIds, nextVlogPart, vlogPath, vlogIdOfPath } from './domain/vlogIndex';
 /** Großpaket A S7c: Einstufung (Grenze in der Häufigkeitsliste, gekonnte Stichwörter). */
 export const VMOD_PLACE_PATH = 'vmod/place';
+/** Politur P2 (E3): Tempo neuer Wörter des Lerntags mit Grund (`vmodTempoWriteSchema`, data/tempo.ts). */
+export const VMOD_TEMPO_PATH = 'vmod/tempo';
