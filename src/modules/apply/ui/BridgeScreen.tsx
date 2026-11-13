@@ -12,6 +12,7 @@ import {
   SentenceInput,
   SessionEnd,
   Skeleton,
+  stepNextLabel,
   takeTutorCall,
   unitDone,
   useAiAvailable,
@@ -475,6 +476,7 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
   );
 
   const last = pos + 1 >= targets.length;
+  // Politur P1: der letzte Knopf eines Tagesschritts nennt das Ziel („Weiter: Grammatik“ / „Fertig für heute“), wie jeder Abschluss.
   return (
     <>
       <ExerciseTop onClose={onClose} progress={{ n: pos + 1, total: targets.length }} ctx={unit ? 'duty' : 'xtra'} />
@@ -496,7 +498,7 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
           secondary={[{ id: 'skip', label: t('rxSkip'), onClick: next, testId: 'bx-skip', disabled: busy }]}
           primary={
             res
-              ? { label: last ? t('axDone') : t('rxNext'), onClick: next, testId: 'bx-next' }
+              ? { label: last ? ((unit ? stepNextLabel(t) : null) ?? t('axDone')) : t('rxNext'), onClick: next, testId: 'bx-next' }
               : { label: miss ? t('axBCheckAnyway') : t('rxCheck'), onClick: () => void check(), testId: 'bx-check', disabled: !text.trim() || busy, busy, busyLabel: t('exChecking') }
           }
           feedback={fb}

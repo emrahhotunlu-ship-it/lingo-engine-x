@@ -45,9 +45,12 @@ function twPlan(over: Doc = {}): Doc {
   };
 }
 
-/** Wie bei Emrah: Wörter-App an; ein Wort wird gerade gelernt (Stufe 3, heute geübt), eines sitzt (Stufe 6, ein eigener Satz); ein sicheres Muster. */
+/**
+ * Wie bei Emrah: Wörter-App an; ein Wort wird gerade gelernt (Stufe 3, heute geübt), eines sitzt (Stufe 6, ein eigener Satz); ein sicheres Muster.
+ * Schritt 1 und 2 sind erledigt: Schritt 3 ist der letzte, danach geht es zu Heute (Politur P1: ein offener Schritt würde direkt starten).
+ */
 function emrah(profile: Doc = {}, plan: Doc = twPlan()): Record<string, Doc> {
-  const base = profileWith(TUE, plan, ['u-focus'], { vcfg: { min: 15, ret: 0.9, mod: 1 }, newPerDay: 0, ...profile });
+  const base = profileWith(TUE, plan, ['review', 'u-focus'], { vcfg: { min: 15, ret: 0.9, mod: 1 }, newPerDay: 0, ...profile });
   return {
     ...base,
     ...reviewedLog(TUE),
@@ -159,7 +162,8 @@ test.describe('Handy 375 × 700 (Außendisplay)', () => {
     await expect(page.getByTestId('bx-pat-counted')).toBeVisible();
     await expect(page.getByTestId('bx-next')).toHaveText('Fertig');
     await page.getByTestId('bx-next').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    // Politur P1: ein Abschluss je Schritt – nach dem letzten Schritt des Tages direkt zu Heute, keine Zwischenkarte.
+    await screen(page, 'today');
 
     // Gespeichert: zwei Ergebnisse (Art bridge) mit Wort-Kennung und Schreibzeit; Schritt 3 erledigt, Anwenden-Tag gezählt.
     expect(await calls(page)).toEqual(['apply-bridge:default', 'apply-bridge:default']);
@@ -206,7 +210,7 @@ test.describe('Handy 375 × 700 (Außendisplay)', () => {
     await expect(page.getByTestId('bx-task')).toHaveAttribute('data-word', 'achieve');
     await expect(page.getByTestId('exercise')).toContainText('Satz 1 von 1');
     await page.getByTestId('bx-skip').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    await screen(page, 'today');
     await expect.poll(async () => ((await doc(page, 'app/profile')).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
     expect((await doc(page, 'app/profile')).apc).toEqual({ n: 2, d: '2026-09-21' });
     expect(await bridgeItems(page)).toEqual([]);
@@ -268,14 +272,12 @@ test.describe('Laptop 1440 × 900', () => {
     const second = (await task.getAttribute('data-word')) ?? '';
     expect(second).not.toBe(first);
     await page.getByTestId('bx-skip').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    // Politur P1: nach dem letzten Schritt direkt zu Heute (kein zweites Rundenende).
+    await screen(page, 'today');
     await expect.poll(async () => ((await doc(page, 'app/profile')).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
     await expect.poll(async () => (await bridgeItems(page)).length).toBe(1);
 
     // Pflicht erledigt: die Seite zeigt den Zustand und bietet zwei weitere eigene Sätze an (freiwillig, andere Wörter).
-    await expect(page.getByTestId('unit-end')).toBeVisible();
-    await page.getByTestId('session-end-next').click();
-    await screen(page, 'today');
     await openTab(page, 'apply');
     await expect(page.getByTestId('ax-today-done')).toContainText('Erledigt');
     await expect(page.getByTestId('hub-combo-own')).toContainText('Noch zwei eigene Sätze');

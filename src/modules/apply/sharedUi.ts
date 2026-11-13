@@ -63,6 +63,7 @@ export { reportEvidence } from '../vocab/api';
 
 // P4 „Anwenden als Brücke“ (13.11.2026): Übungsgerüst, Rundenende, Muster des heutigen Grammatik-Schritts (Adapter), Rückfluss
 export { ExerciseShell, SentenceInput } from '../../ui/exercise';
+export { stepNextLabel } from '../../ui/exercise/runCtx';
 export type { ShellFeedback } from '../../ui/exercise';
 export { SessionEnd } from '../../ui/SessionEnd';
 export { useTodayPattern } from '../../features/apply/todayPattern';

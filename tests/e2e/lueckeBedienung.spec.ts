@@ -42,9 +42,14 @@ async function pastIntros(page: Page, tap = false): Promise<void> {
   const go = page.getByTestId('vm-intro-go');
   // Politur P2: vor der Einführung eines neuen Einzelworts steht die Vorkarte „Kennst du es schon?“ (passPick tippt „Nein, neu“).
   const pick = page.getByTestId('vm-pick').or(page.getByTestId('vm-know'));
-  await expect(go.or(page.getByTestId('vm-check')).or(page.getByTestId('vm-know')).first()).toBeVisible();
-  for (let i = 0; i < 8 && (await go.or(pick).first().isVisible()); i++) {
+  const check = page.getByTestId('vm-check');
+  // Je neues Wort bis zu drei Karten (Vorkarte, Einführung, Auswahl): nach jedem Schritt auf die nächste Karte warten, nicht nur kurz schlafen
+  // (sonst endet die Schleife unter Last vor der ersten Lücke).
+  for (let i = 0; i < 20; i++) {
+    await expect(go.or(pick).or(check).first()).toBeVisible();
+    if (await check.isVisible()) return;
     if (await passPick(page)) continue;
+    if (!(await go.isVisible())) continue;
     if (tap) await go.tap();
     else await go.click();
     await page.waitForTimeout(150);
