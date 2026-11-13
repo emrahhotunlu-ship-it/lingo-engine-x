@@ -118,7 +118,9 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   if (task.form === 'nosent' || spec.sent === 'n') return noSentence('nosent', 'nosent');
   const s = chooseSentence(lex, usable, day, { anchorOnly: task.step === 1, fresh: task.step === 3, avoid: x.avoid ?? null });
   if (!s) return noSentence('nosent', 'nosent');
-  const form: Form = task.form === 'gap_hint' || task.form === 'gap' || task.form === 'cloze_part' ? task.form : 'gap';
+  // Gebucht wird, was gezeigt wird (Politur P2, Prüfbericht S2): Eine Wendung mit ganzer Lücke ist ein freier Abruf (`gap`), keine Teil-Lücke.
+  // `cloze_part` (höchstens „Schwer“) gilt erst wieder, wenn es eine Karte gibt, die wirklich nur einen Teil der Wendung offen lässt.
+  const form: Form = task.form === 'gap_hint' ? 'gap_hint' : 'gap';
   return {
     ...base,
     mode: 'gap',

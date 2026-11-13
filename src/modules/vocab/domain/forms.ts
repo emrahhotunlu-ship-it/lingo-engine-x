@@ -86,9 +86,17 @@ export function formLevel(l: Lex): number {
   return l.lv >= 4 && l.u.s < HEAVY_MIN_US ? 3 : Math.max(1, Math.min(7, l.lv));
 }
 
+/**
+ * Formen der Leitern, für die es noch keine eigene Karte gibt (Politur P2): Sie werden nicht gewählt, bis ihre Karte gebaut ist. Vorher
+ * zeigte die Runde an ihrer Stelle die ganze Lücke bzw. „Bedeutung lesen“ – bei `cloze_part` mit der Note einer Teil-Lücke (höchstens
+ * „Schwer“, kein Beleg-Tag): richtig getippte Wendungen stiegen nie auf, das Band sagte „knapp“ (Prüfbericht S2).
+ */
+export const NO_CARD: ReadonlySet<Form> = new Set(['cloze_part']);
+
 /** Ist die Form für dieses Lexem stellbar? */
 export function available(f: Form, l: Lex, av: Avail): boolean {
   const multi = l.k !== 'w';
+  if (NO_CARD.has(f)) return false;
   switch (f) {
     case 'gap':
     case 'gap_hint':
