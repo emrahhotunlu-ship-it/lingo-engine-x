@@ -97,7 +97,8 @@
   animation: dz-rise 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* kwt am Handy (UX-Prüfung W3): Antwortzeile in der Lücke des Satzes, Vorrat als feste Leiste über „Prüfen“ – alles ohne Scrollen bedienbar. */
+/* kwt am Handy (Politur P1, 13.11.2026; vorher UX-Prüfung W3 mit fester Leiste): Antwortzeile in der Lücke des Satzes, der Vorrat steht im
+   Kartenfluss direkt unter dem Satz – nie schwebend. Die feste Leiste verdeckte am Außendisplay (375 × 700) Ablage, Satzende und „Tipp“. */
 .dz-kwt-sentence {
   line-height: 1.7;
 }
@@ -110,24 +111,11 @@
   min-height: 3.25rem;
   line-height: 1.3;
 }
-/* Vorrat fest über „Prüfen“ (nur solange die Aufgabe offen ist); der Inhalt bekommt Polster in Leistenhöhe. */
-.dz-kwt-dock:not([data-locked]) {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom));
-  z-index: 29;
-  padding: 0.625rem max(1rem, env(safe-area-inset-left)) 0.5rem;
-  background: var(--lx-bg);
-  border-top: 1px solid var(--lx-border);
+.dz-kwt-dock {
+  margin-top: 0.25rem;
 }
-.dz-kwt-dock:not([data-locked]) > * {
-  max-width: 40rem;
-  margin-inline: auto;
-  width: 100%;
-}
-html:has(.dz-kwt-dock:not([data-locked])) #main {
-  padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 11rem);
+.dz-kwt-dock[hidden] {
+  display: none;
 }
 /* Tempo-Runde (UX-Prüfung B3): der Zeitbalken sieht anders aus als der Fortschrittsbalken – eine dünne Kante in Hinweisfarbe, keine zweite Leiste. */
 .cx-tempo-bar {
