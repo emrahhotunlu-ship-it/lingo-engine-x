@@ -23,3 +23,13 @@ Urteil: fragt ab, lehrt kaum.
 - Zielbild: Runde = Aufwärmen (2 verteilte Wiederholungen) · Fokus (3–4 Aufgaben EIN Thema, Stufe des Tages: Verstehen → Bilden → Umformen → Mischen → Test) · eigener Satz. Adaptiv: Vortest sauber → kürzen; 2 Fehler am Muster → Mini-Lektion.
 - 12 Änderungen: Regel vor Übung · Check-Fehler ruhen bis Thema eingeführt · Übung C reihum · Zeit ehrlich · Lerntage statt Seiten · Aufwärmen · eigener Satz/Anwenden = Muster der Runde · Vortest · eine Fehler-Karte geprüft zuerst · Qualitätstor `tasks-v2.json` · Umformung erst mit Bausteinen · eine Fortschrittsanzeige.
 - Stichprobe: Befunde `tasks-v2.json:8671` (kwt Lösungsraum offen), `:20400` (zweite Korrektur fehlt), `:41866` (richtige Antwort abgelehnt), weich `:3132`, `:14733`, `:14796`.
+
+## Wörter (learning-scientist)
+Urteil: Kern solide (getippter Abruf ab Tag 0, FSRS je Spur, Deckel 1/3/7/21, Note aus Richtigkeit/Hilfe/Zeit). Schwer wiegen (Pfade unter `src/modules/vocab/`):
+- **S1 Wiederholungen verhungern im Minuten-Modus:** `domain/day.ts:70-84` rechnet Budget − neue × 156 s (Einführung/Schritt A nie gemessen, `ui/learnRun.ts:1300-1312`); bei Tagesziel 30/35 → 10 neue, 1 Wiederholung. Bei Emrahs 25 Min. bremst die Kurztag-Regel auf 5 neue (heute 24 fällig + 5 neu).
+- **S2 Wendungen falsch benotet:** `domain/flow.ts:121` zeigt `cloze_part` als ganze Lücke, bucht „höchstens Schwer“ (`domain/grade.ts:36`); Band sagt „knapp“ bei richtig.
+- **S3 Fehler ≠ morgen:** Termin vor Abstieg gesetzt (`domain/planner.ts:247-286`), altes Wort kommt nach Fehler erst in 3–4 Tagen.
+- **S4 Verstehen nur „Bedeutung lesen“, kein Hören:** `learnRun.ts:438,452`; Hören/Partner/Situation/Sprechen haben keine Karten (`flow.ts:24,52`).
+- **S5 „Kenne ich schon“ unerreichbar** (`ui/LearnCard.tsx:681`), Probe-Logik fertig (`planner.ts:136-154`).
+- S6 Auswahl-Ablenker nur gleiche Wortart · S7 Ereignisse (Problemwort, Partner-Fehler) ungenutzt · S8 Tempo fest.
+- Vorschläge (Rang): 1 Wiederholungen zuerst (≥ 60 %), neue = Rest (min 2), Tempo nach Behalten 14 Tage; Einführung messen · 2 Wendungen korrekt buchen · 3 Fehler → morgen · 4 Hör-Abfragen (Hören → Bedeutung, Satz hören → Wort) · 5 Ohr ab Tag 0 (Einführung liest vor, Auswahl als Hör-Variante) · 6 Vortest „Kennst du es?“ · 7 Hör-Runde (Extra) · 8 Mischung neuer Wörter (Liste 0,6, eigene 0,2, Beruf 0,1, Partner 0,1) · 9 Auswahl schärfen · 10 Problemwörter ab 3. Vergessen · 11 Hör-Probe als Fortschritt.
