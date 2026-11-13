@@ -1,5 +1,5 @@
 import { retypeIfAsked } from './learnHelpers';
-import { passPick } from './wortschatzHelpers';
+import { heardLex, passPick } from './wortschatzHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, MIGRATED, SEED_EVENING, screen } from './fixtures';
 import { TUE_9 } from './heuteHelpers';
@@ -53,7 +53,7 @@ async function playRound(page: Page, base: number): Promise<void> {
   for (let i = 0; i < 60; i++) {
     const check = page.getByTestId('vm-check');
     const go = page.getByTestId('vm-intro-go');
-    await expect(check.or(go).or(page.getByTestId('vm-done')).or(page.getByTestId('vm-pick')).first()).toBeVisible();
+    await expect(check.or(go).or(page.getByTestId('vm-done')).or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first()).toBeVisible();
     if (await page.getByTestId('vm-done').isVisible()) return;
     if (await passPick(page)) continue;
     await page.clock.setFixedTime(new Date(base + (i + 1) * 60_000));
@@ -89,12 +89,19 @@ test.describe('Handy 390', () => {
   test('Schalter an: neues Wort einführen → Band → Weiter; je Antwort ein Verlaufseintrag; ohne Querüberstand', async ({ page }) => {
     const { errors, external } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
     await screen(page, 'vlearn');
-    // Kern (03.11.2026): neues Wort = Einführungskarte mit EINEM Knopf; „Kenne ich schon“ steht dort nicht (Wort und Bedeutung sind schon sichtbar).
-    await expect(page.getByTestId('vm-intro-go')).toBeVisible();
-    await expect(page.getByTestId('vm-knowit')).toHaveCount(0);
+    // Politur P2 (Prüfbericht S5): vor der Einführung die Vorkarte „Kennst du es schon?“ – nur das Wort (mit Ton), nie die Bedeutung.
+    await expect(page.getByTestId('vm-know')).toBeVisible();
+    await expect(page.getByTestId('vm-know-word')).not.toBeEmpty();
+    await expect(page.getByTestId('vm-know-yes')).toBeVisible();
+    await expect(page.getByTestId('vm-intro-de')).toHaveCount(0);
     // Die eine Übungsleiste: ✕, Fortschritt, „Extra“ (UX-Prüfung V3 Nr. 1).
     await expect(page.getByTestId('vm-close')).toBeVisible();
     await expect(page.getByTestId('vm-progress').first()).toBeVisible();
+    expect(await layoutProblems(page)).toEqual([]);
+    // „Nein, neu“ → die Einführungskarte mit EINEM Knopf; der alte Knopf „Kenne ich schon“ ist weg (ein Weg).
+    await page.getByTestId('vm-know-no').click();
+    await expect(page.getByTestId('vm-intro-go')).toBeVisible();
+    await expect(page.getByTestId('vm-knowit')).toHaveCount(0);
     expect(await layoutProblems(page)).toEqual([]);
     // Einführung gelesen: „Verstanden – weiter“ bucht sie und zeigt die nächste Karte.
     await page.getByTestId('vm-intro-go').click();
@@ -106,8 +113,8 @@ test.describe('Handy 390', () => {
         return PATHS.filter((p) => ((d[p]?.lex as Doc | undefined)?.intro ?? null) !== null).length;
       })
       .toBe(1);
-    // Nächste Karte steht (Einführung des nächsten Worts oder Lernschritt).
-    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).first()).toBeVisible();
+    // Nächste Karte steht (Vorkarte bzw. Einführung des nächsten Worts oder Lernschritt).
+    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).or(page.getByTestId('vm-know')).first()).toBeVisible();
     // ✕ verlässt die Runde ohne Nachfrage; nichts zusätzlich gebucht.
     await page.getByTestId('vm-close').click();
     await expect(page.locator('[data-screen="vlearn"]')).toHaveCount(0);
@@ -119,15 +126,16 @@ test.describe('Handy 390', () => {
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
     await screen(page, 'vlearn');
     // Einführung: der Grund steht im Menü („Neues Wort für heute.“); melden gibt es dort nicht (keine Abfrage).
+    await page.getByTestId('vm-know-no').click();
     await page.getByTestId('exercise-menu').click();
     const list = page.getByTestId('exercise-menu-list');
     await expect(list.getByTestId('menu-report')).toHaveCount(0);
     await list.getByTestId('menu-whyTask').click();
     await expect(page.getByTestId('why-line').first()).toContainText('Neues Wort für heute.');
     // Bis zur ersten echten Abfrage (Lernschritt A): Einführungen aufdecken und weiter.
-    for (let i = 0; i < 10 && (await page.getByTestId('vm-intro-go').or(page.getByTestId('vm-pick')).first().isVisible()); i++) {
+    for (let i = 0; i < 10 && (await page.getByTestId('vm-intro-go').or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first().isVisible()); i++) {
       if (!(await passPick(page))) await page.getByTestId('vm-intro-go').click();
-      await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).or(page.getByTestId('vm-pick')).first()).toBeVisible();
+      await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first()).toBeVisible();
     }
     await expect(page.getByTestId('vm-check')).toHaveText('Prüfen');
     // Die Uhr steht in den E2E-Tests (setFixedTime); eine Minute weiter, damit der Verlaufseintrag einen eigenen Zeitschlüssel hat.
@@ -163,7 +171,7 @@ test.describe('Handy 390', () => {
       if (await page.getByTestId('vm-done').isVisible()) break;
       const check = page.getByTestId('vm-check');
       const go = page.getByTestId('vm-intro-go');
-      await expect(check.or(go).or(page.getByTestId('vm-done')).or(page.getByTestId('vm-pick')).first()).toBeVisible();
+      await expect(check.or(go).or(page.getByTestId('vm-done')).or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first()).toBeVisible();
       if (await page.getByTestId('vm-done').isVisible()) break;
       if (await passPick(page)) continue;
       await page.clock.setFixedTime(new Date(NOW + (i + 1) * 60_000));
@@ -205,7 +213,8 @@ test.describe('Handy 390', () => {
       await page.clock.setFixedTime(new Date(base + (i + 1) * 60_000));
       const go = page.getByTestId('vm-intro-go');
       const check = page.getByTestId('vm-check');
-      await expect(check.or(go).first()).toBeVisible();
+      await expect(check.or(go).or(page.getByTestId('vm-know')).first()).toBeVisible();
+      await passPick(page);
       if (await go.isVisible()) {
         await go.click();
         continue;
@@ -258,5 +267,77 @@ test.describe('Handy 390', () => {
     await expect(page.getByTestId('unit-between')).toHaveAttribute('data-next', /^ch:u-/);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
+  });
+});
+
+// Politur P2 (Emrah 13.11.2026, E3 „Hören“; Prüfbericht S4/S5): Hör-Karten der Verstehen-Spur und die Vorkarte „Kennst du es schon?“.
+const hearPatch = (lex: Doc): Record<string, Doc> => ({ ...patch(true), 'vocab/achieve': { lex } });
+const heard = (last: string, h: Record<string, [number, number]> = {}): Doc => heardLex(newLex(), NOW, last, h);
+const spokenIn = (page: Page): Promise<string[]> => page.evaluate(() => [...(window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken]);
+
+test.describe('Hören und „Kennst du es schon?“ (Politur P2)', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test('Hören → Bedeutung: Ton statt Text, liest von selbst vor; das Wort erst nach dem Prüfen', async ({ page }) => {
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: hearPatch(heard('meaning')) } });
+    await screen(page, 'vlearn');
+    await expect(page.getByTestId('vm-hear')).toBeVisible();
+    await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'vm:tone_mean');
+    // Das Wort steht nirgends auf der Karte (auch nicht im Feld-Namen), es kommt nur als Ton.
+    await expect(page.getByTestId('exercise')).not.toContainText(/achieve/i);
+    await expect.poll(() => spokenIn(page)).toContain('achieve');
+    await expect(page.getByTestId('vm-no-sound')).toBeVisible();
+    expect(await layoutProblems(page)).toEqual([]);
+    await page.getByTestId('vm-dunno').click();
+    await expect(page.getByTestId('vm-heard')).toContainText(/achieve/i);
+    await expect(page.getByTestId('vm-why')).toBeVisible();
+    // Bedeutung als Antwort: kein Nachtippen des englischen Worts.
+    await expect(page.getByTestId('vm-retype')).toHaveCount(0);
+    await expect(page.getByTestId('vm-next')).toBeEnabled();
+    expect(errors).toEqual([]);
+  });
+
+  test('„Kann gerade nicht hören“: dieselbe Abfrage als Text, ohne Eintrag im Verlauf', async ({ page }) => {
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: hearPatch(heard('meaning')) } });
+    await screen(page, 'vlearn');
+    await expect(page.getByTestId('vm-hear')).toBeVisible();
+    await page.getByTestId('vm-no-sound').click();
+    await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'vm:meaning');
+    await expect(page.getByTestId('vm-meaning-word')).toContainText(/achieve/i);
+    await expect(page.getByTestId('vm-hear')).toHaveCount(0);
+    expect(vlogEntries(await dump(page))).toBe(0);
+    expect(errors).toEqual([]);
+  });
+
+  test('Satz hören → Wort tippen: Ton ist der ganze Satz, im Text die Lücke; Lösung erst nach dem Prüfen', async ({ page }) => {
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: hearPatch(heard('tone_mean', { meaning: [3, 3], tone_mean: [3, 3] })) } });
+    await screen(page, 'vlearn');
+    await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'vm:listen');
+    await expect(page.getByTestId('vm-hear')).toBeVisible();
+    await expect(page.getByTestId('vm-sentence')).toBeVisible();
+    await expect.poll(async () => (await spokenIn(page)).some((t) => /achiev/i.test(t) && t.split(' ').length > 3)).toBe(true);
+    expect(await layoutProblems(page)).toEqual([]);
+    await page.getByTestId('vm-dunno').click();
+    await expect(page.getByTestId('vm-next').or(page.getByTestId('vm-retype')).first()).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
+  test('„Kennst du es schon?“ → „Ja, prüf mich“: Bedeutung ohne Hilfe; falsch → normale Einführung', async ({ page }) => {
+    const { errors } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
+    await screen(page, 'vlearn');
+    await expect(page.getByTestId('vm-know')).toBeVisible();
+    const word = (await page.getByTestId('vm-know-word').textContent()) ?? '';
+    await page.getByTestId('vm-know-yes').click();
+    await expect(page.getByTestId('vm-probe-word')).toHaveText(word);
+    await expect(page.getByTestId('vm-meaning-field')).toBeVisible();
+    await page.clock.setFixedTime(new Date(NOW + 60_000));
+    await page.getByTestId('vm-dunno').click();
+    await expect(page.getByTestId('vm-next')).toBeVisible();
+    await page.getByTestId('vm-next').click();
+    // Nicht gewusst: die Einführung desselben Worts, ohne zweite Vorkarte.
+    await expect(page.getByTestId('vm-intro-go')).toBeVisible();
+    await expect(page.getByTestId('vm-intro-word')).toHaveText(word);
+    await expect(page.getByTestId('vm-know')).toHaveCount(0);
+    expect(errors).toEqual([]);
   });
 });

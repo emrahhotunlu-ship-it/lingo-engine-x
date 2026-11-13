@@ -15,6 +15,7 @@ import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './l
 import { tempoText } from '../domain/tempo';
 import { readMistakes } from './mistakes';
 import { fillKnow } from './know';
+import { audioReady } from './hear';
 
 // Wörter-Modul V3 Schritt 2b-2: Bildschirm der neuen Lernrunde (Route `vlearn`, nur bei `vcfg.mod = 1`). Liest die Live-Daten einmal beim
 // Start (die Runde rechnet danach mit ihrem eigenen Bestand), bucht jede Antwort beim Weiter und beim Verlassen genau einmal.
@@ -69,6 +70,8 @@ function createRun(ai?: VocabAi): LearnRun | null {
       : undefined,
     now: () => Date.now(),
     meaningOf,
+    // Politur P2 (E3 „Hören“): Hör-Karten nur, wenn das Gerät gerade vorlesen kann.
+    audio: audioReady,
   });
 }
 

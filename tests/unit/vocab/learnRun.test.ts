@@ -286,13 +286,14 @@ describe('LearnRun', () => {
     expect(s3.vlog()).toBe(0);
   });
 
-  it('Neues Wort: Einführung mit „Kenne ich schon“; Probe falsch → noch einmal als Einführung (ohne zweite Probe), dann Lernschritt A', async () => {
+  it('Neues Wort: Vorkarte „Kennst du es schon?“; Probe falsch → noch einmal als Einführung (ohne zweite Probe), dann Lernschritt A', async () => {
     const s = setup(emptyLex('w', 'core', T0 - 5 * D));
     await s.start('more5');
     const v = s.run.get();
     if (v.k !== 'card') throw new Error(v.k);
     expect(v.kind).toBe('intro');
     expect(v.canProbe).toBe(true);
+    expect(v.ask).toBe(true);
     s.run.probe();
     const p = s.run.get();
     if (p.k !== 'card') throw new Error(p.k);

@@ -40,8 +40,9 @@ async function startTypeCard(page: Page, tap = false): Promise<string[]> {
 /** Kern (03.11.2026): neue Wörter kommen erst mit der Einführungskarte – durchtippen bis zur ersten Lücke. */
 async function pastIntros(page: Page, tap = false): Promise<void> {
   const go = page.getByTestId('vm-intro-go');
-  const pick = page.getByTestId('vm-pick');
-  await expect(go.or(page.getByTestId('vm-check')).first()).toBeVisible();
+  // Politur P2: vor der Einführung eines neuen Einzelworts steht die Vorkarte „Kennst du es schon?“ (passPick tippt „Nein, neu“).
+  const pick = page.getByTestId('vm-pick').or(page.getByTestId('vm-know'));
+  await expect(go.or(page.getByTestId('vm-check')).or(page.getByTestId('vm-know')).first()).toBeVisible();
   for (let i = 0; i < 8 && (await go.or(pick).first().isVisible()); i++) {
     if (await passPick(page)) continue;
     if (tap) await go.tap();
@@ -223,7 +224,7 @@ test.describe('Laptop', () => {
     await page.getByTestId('vm-check').click();
     await retypeIfAsked(page);
     await page.getByTestId('vm-next').click();
-    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-pick')).first()).toBeVisible();
+    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first()).toBeVisible();
     await passPick(page);
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('gap-input')).toBeFocused();
@@ -267,7 +268,7 @@ test.describe('Handy mit Touch', () => {
     await page.getByTestId('vm-check').tap();
     await retypeIfAsked(page);
     await page.getByTestId('vm-next').tap();
-    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-pick')).first()).toBeVisible();
+    await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first()).toBeVisible();
     await passPick(page);
     await expect(page.getByTestId('vm-check')).toBeVisible();
     await expect(page.getByTestId('gap-input')).not.toBeFocused();

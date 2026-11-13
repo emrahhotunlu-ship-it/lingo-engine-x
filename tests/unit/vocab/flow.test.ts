@@ -55,7 +55,8 @@ describe('cardOf', () => {
     const lex = learned(T0 - 10 * D);
     const bare = { word: 'scope', de: 'Umfang' };
     expect(cardOf({ task: task(), doc: bare, lex, teach: {}, nowMs: T0, sbGate: null })!.mode).toBe('nosent');
-    const m = cardOf({ task: task({ form: 'listen' }), doc, lex, teach: {}, nowMs: T0, sbGate: null })!;
+    // Formen ohne eigene Karte (Diktat, Bausteine) fallen auf „Bedeutung lesen“ zurück; Satz hören hat seit Politur P2 eine eigene Karte.
+    const m = cardOf({ task: task({ form: 'dictation' }), doc, lex, teach: {}, nowMs: T0, sbGate: null })!;
     expect(m.mode).toBe('meaning');
     expect(m.form).toBe('meaning');
   });

@@ -20,7 +20,7 @@ import type { VlogTuple } from '../domain/vlog';
 import type { Check, CheckDict } from '../domain/check';
 import { buildDayPlan, type DayPlan, newCostMs } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
-import { answerOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, planCtxOf, previewOf, resultOf } from '../domain/flow';
+import { answerOf, audioOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, isHear, planCtxOf, previewOf, resultOf, textOf } from '../domain/flow';
 import { type Answer, type AnswerResult, FLAG, introduce } from '../domain/planner';
 import { type PickCand, type PickModel, pickOptions } from '../domain/pick';
 /** Auswahl nach so vielen anderen Karten (vor Schritt A, der nach ≥ 3 kommt). */
@@ -54,8 +54,12 @@ export type UnfairResult = 'void' | 'again' | 'counts';
 export type LearnView =
   | { k: 'loading' }
   | { k: 'closed'; why: 'off' | 'migrate' | 'error' }
-  /** `teach`: übernommenes Wort zum ersten Mal in der neuen App – erst einmal die Einführungskarte (nur Anzeige), dann diese Karte (K10). */
-  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null; teach?: CardModel | null }
+  /**
+   * `teach`: übernommenes Wort zum ersten Mal in der neuen App – erst einmal die Einführungskarte (nur Anzeige), dann diese Karte (K10).
+   * Politur P2: `ask` = Vorkarte „Kennst du es schon?“ vor der Einführung eines neuen Einzelworts (Wort + Ton; „Ja, prüf mich“ → Probe,
+   * „Nein, neu“ → Einführung). `again` = Einführung kurz noch einmal nach falscher Auswahl (nur Anzeige, keine Buchung).
+   */
+  | { k: 'card'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; canProbe: boolean; tip: boolean; flip?: FlipBack | null; teach?: CardModel | null; ask?: boolean; again?: boolean }
   | { k: 'band'; card: CardModel; task: Task; kind: AnswerKind; n: number; left: number; given: string; check: Check; band: Band; choice: Choice }
   /**
    * Großpaket WT: Wiedererkennen gleich nach der Einführung – die richtige Bedeutung aus vier wählen (keine Planwirkung, im Verlauf als
@@ -162,6 +166,8 @@ export type LearnEnv = {
   read?: ReadDoc;
   /** Quellen neuer Wörter (S7; die App lädt sie per dynamischem Import). Fehlt = kein Nachfüllen. */
   loadSources?: () => Promise<SourceData>;
+  /** Politur P2 (E3 „Hören“): kann das Gerät gerade vorlesen? Fehlt = nein (dann keine Hör-Karten). */
+  audio?: () => boolean;
 };
 
 export type LearnStart = { kind: SessionKind; docs: Iterable<readonly [string, Doc]>; profile: Doc | null; schema: Doc | null; paths?: string[] };
@@ -301,6 +307,8 @@ export class LearnRun {
   private useMs = 0;
   /** Angezeigte Anwenden-Karte schon gebucht (Weiter und Verlassen zugleich). */
   private useBooked = false;
+  /** Politur P2: „Kann gerade nicht hören“ getippt – bis zum Ende der Runde nur noch Textformen. */
+  private noHear = false;
 
   constructor(private readonly env: LearnEnv) {}
 
@@ -449,6 +457,8 @@ export class LearnRun {
     let i = 0;
     // Eigener Satz (Stufe 5/6) nur, wenn Claude ihn prüfen kann (forms.ts `available('own')`); sonst die Grundformen.
     const ai = this.aiReady();
+    // Politur P2 (E3): Hör-Formen nur, wenn das Gerät gerade vorlesen kann; sonst die Textformen (forms.ts `available`).
+    const audio = this.audioOk();
     for (const [path, doc] of s.docs) {
       const lex = lexOf(doc);
       if (!lex || doc.hidden === true) continue;
@@ -460,7 +470,7 @@ export class LearnRun {
         lex,
         order: typeof doc.order === 'number' ? doc.order : i++,
         trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null,
-        av: { de: true, ai, anki: !!cfg.anki },
+        av: { de: true, ai, anki: !!cfg.anki, audio },
         src: srcOf(doc.src),
       });
     }
@@ -476,7 +486,7 @@ export class LearnRun {
         const lex = lexOf(doc);
         if (!lex) continue;
         this.docs.set(path, doc);
-        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki }, src: srcOf(doc.src) });
+        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki, audio }, src: srcOf(doc.src) });
       }
     }
     const cat = new Catalog(items);
@@ -695,7 +705,10 @@ export class LearnRun {
       const card = this.cardFor(task);
       if (card) {
         this.shownAt = nowMs;
-        this.set({ k: 'card', card, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: task.intro, tip: false, teach });
+        // Politur P2: Hör-Karte ohne Ton (Gerät stumm, „Kann gerade nicht hören“) → dieselbe Abfrage als Text.
+        const shown = isHear(card.mode) && !this.hearNow() ? textOf(card) : card;
+        const ask = task.intro && this.asksKnown(task.path);
+        this.set({ k: 'card', card: shown, task, kind: task.intro ? 'intro' : 'answer', n: this.n, left: run.remaining() + (task.intro ? 1 : 0), canProbe: ask, tip: false, teach, ...(ask ? { ask: true } : {}) });
         return;
       }
       run.done(task, nowMs);
@@ -1039,12 +1052,75 @@ export class LearnRun {
     if (v.k === 'card' && !v.tip) this.set({ ...v, tip: true });
   }
 
-  /** „Kenne ich schon“ bei der Einführung: freie Probe ohne Satz. */
+  /**
+   * „Kennst du es schon?“ → „Ja, prüf mich“ (Politur P2, Prüfbericht S5): die Probe ohne Satz – das Wort steht da, gefragt ist die deutsche
+   * Bedeutung. Richtig → Stufe 3, Kontrolle in 7 Tagen (planner.ts `probeKnown`); falsch → die normale Einführung (`next`).
+   */
   probe(): void {
     const v = this.view;
     if (v.k !== 'card' || !v.canProbe) return;
     const card = this.cardFor({ ...v.task, form: 'probe' });
-    if (card) this.set({ ...v, card, kind: 'probe', canProbe: false, tip: false });
+    if (card) this.set({ ...v, card, kind: 'probe', canProbe: false, tip: false, ask: false });
+  }
+
+  /** „Kennst du es schon?“ → „Nein, neu“: die Einführungskarte (die Zeit der Vorkarte zählt zur Einführung). */
+  knowNo(): void {
+    const v = this.view;
+    if (v.k === 'card' && v.ask) this.set({ ...v, ask: false, canProbe: false });
+  }
+
+  /** Vorkarte „Kennst du es schon?“ nur vor der Einführung eines neuen Einzelworts (Wendungen lernt man als Ganzes, ohne Probe). */
+  private asksKnown(path: string): boolean {
+    const lex = this.cat?.get(path)?.lex;
+    return !!lex && lex.k === 'w' && lex.intro === null;
+  }
+
+  /** Kann gerade vorgelesen werden? (Gerät, nicht „Kann gerade nicht hören“ in dieser Runde.) */
+  private hearNow(): boolean {
+    return !this.noHear && this.audioOk();
+  }
+
+  private audioOk(): boolean {
+    try {
+      return !!this.env.audio?.();
+    } catch (err) {
+      logWarn('vocab:audio', err);
+      return false;
+    }
+  }
+
+  /**
+   * „Kann gerade nicht hören“ (Politur P2): dieselbe Abfrage als Text, ohne Note für den Wechsel; bis zum Ende der Runde nur noch Textformen
+   * (der Plan bleibt, die Hör-Formen kommen an einem anderen Tag wieder).
+   */
+  cantHear(): void {
+    const v = this.view;
+    if (v.k !== 'card' || !isHear(v.card.mode)) return;
+    this.noHear = true;
+    this.set({ ...v, card: textOf(v.card), tip: false });
+  }
+
+  /**
+   * Darf die gezeigte Karte von selbst vorlesen? Hör-Karten immer (sie SIND der Ton); Einführung und Vorkarte nur beim ersten Zeigen (nicht
+   * nach falscher Auswahl) – ob Emrah neue Wörter vorgelesen haben will, prüft die Karte (Einstellung „Neue Wörter vorlesen“).
+   */
+  autoAudio(): boolean {
+    const v = this.view;
+    if (v.k !== 'card' || v.flip) return false;
+    return isHear(v.card.mode) ? this.hearNow() : v.kind === 'intro' && !v.again && this.hearNow();
+  }
+
+  /** Ton der nächsten Karte zum Vorab-Rechnen (`prefetchSpeech`), damit er beim Erscheinen sofort spielt; `null` = keiner. */
+  upcomingAudio(): string | null {
+    const next = this.run?.ahead()[0];
+    if (!next || !this.hearNow()) return null;
+    const card = this.cardFor({ path: next.path, form: next.form, step: next.step, intro: next.intro, planned: false, why: 'peek', sent: '-', cue: false });
+    return card && (isHear(card.mode) || card.mode === 'intro') ? audioOf(card) : null;
+  }
+
+  /** Lerntag der Runde (Schlüssel für „schon vorgelesen“). */
+  dayOf(): string {
+    return this.day ?? dayKey(this.env.now());
   }
 
   /** Satz vor dem Prüfen anhören (Einstellung, Standard an). */
@@ -1161,18 +1237,29 @@ export class LearnRun {
     return true;
   }
 
-  /** Großpaket WT: vier Bedeutungen für ein neues Einzelwort (Ablenker aus dem Bestand); `null` = keine Auswahl möglich. */
+  /**
+   * Großpaket WT: vier Bedeutungen für ein neues Wort (Ablenker aus dem Bestand); `null` = keine Auswahl möglich. Politur P2 (Prüfbericht S6):
+   * auch für Wendungen (Ablenker aus Wendungen); bevorzugt Verwechslungspartner (Paar, offene Verwechslung, Lehrer-Paar), dann gleiche
+   * Wortart, schon eingeführt, ähnlich (domain/pick.ts `rank`).
+   */
   private pickFor(card: CardModel): PickModel | null {
     const cat = this.cat;
     const lex = cat?.get(card.path)?.lex;
-    if (!cat || !lex || lex.k !== 'w' || !card.de) return null;
+    if (!cat || !lex || !card.de) return null;
+    const prefix = card.path.startsWith('chunk/') ? 'chunk/' : 'vocab/';
+    const head = card.head.toLowerCase();
+    const pair = (card.teach.pair ?? '').toLowerCase();
     const pool: PickCand[] = [];
     for (const it of cat.items()) {
-      if (it.path === card.path || !it.path.startsWith('vocab/')) continue;
+      if (it.path === card.path || !it.path.startsWith(prefix)) continue;
       const d = this.docs.get(it.path);
-      if (d && typeof d.de === 'string' && d.de) pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null, head: typeof d.word === 'string' ? d.word : undefined });
+      if (!d || typeof d.de !== 'string' || !d.de) continue;
+      const h = headOf(it.path, d);
+      const lh = h.toLowerCase();
+      const near = lex.pair === it.path || it.lex.pair === card.path || (!!pair && lh === pair) || (!!lex.ct?.w && lex.ct.w.toLowerCase() === lh) || (!!it.lex.ct?.w && it.lex.ct.w.toLowerCase() === head);
+      pool.push({ path: it.path, de: d.de, pos: typeof d.pos === 'string' ? d.pos : null, ...(h ? { head: h } : {}), intro: it.lex.intro !== null, ...(near ? { near } : {}) });
     }
-    return pickOptions({ path: card.path, de: card.de, pos: card.pos ?? null }, pool, `${card.path}|${dayKey(this.env.now())}`);
+    return pickOptions({ path: card.path, de: card.de, pos: card.pos ?? null, head: card.head }, pool, `${card.path}|${dayKey(this.env.now())}`);
   }
 
   /** Auswahl getippt: Lösung zeigen, im Verlauf festhalten (Form `choice`, ohne Planwirkung). */
@@ -1194,12 +1281,31 @@ export class LearnRun {
     });
   }
 
-  /** Nach der Auswahl weiter (nächste Karte). */
+  /**
+   * Nach der Auswahl weiter (nächste Karte). Politur P2 (Prüfbericht S6): falsch gewählt → die Einführungskarte kurz noch einmal (nur zum
+   * Lesen, keine Buchung), dann geht es weiter; Schritt A fragt das Wort danach ohnehin ab.
+   */
   pickNext(): void {
     const v = this.view;
     if (v.k !== 'pick' || v.chosen === null) return;
     this.spendIntro(v.path);
     this.n += 1;
+    if (v.chosen !== v.right) {
+      const task: Task = { path: v.path, form: 'intro', step: 0, intro: true, planned: false, why: 'again', sent: '-', cue: false };
+      const card = this.cardFor(task);
+      if (card) {
+        this.set({ k: 'card', card, task, kind: 'intro', n: this.n, left: (this.run?.remaining() ?? 0) + this.pickQ.length, canProbe: false, tip: false, again: true });
+        return;
+      }
+    }
+    this.advance();
+  }
+
+  /** Einführung nach falscher Auswahl gelesen: ohne Buchung weiter (die Zeit zählt zur Einführung des Worts). */
+  againSeen(): void {
+    const v = this.view;
+    if (v.k !== 'card' || !v.again) return;
+    this.spendIntro(v.task.path);
     this.advance();
   }
 

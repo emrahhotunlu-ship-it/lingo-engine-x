@@ -53,15 +53,19 @@ export const LADDER_B: Readonly<Record<number, readonly Form[]>> = {
   7: ['gap', 'say', 'nosent', 'situation'],
 };
 
-/** Verstehen-Formen je Stufe (nur Verstehen fällig, plan.md §3.2: nie eine Auswahl). */
+/**
+ * Verstehen-Formen je Stufe (nur Verstehen fällig, plan.md §3.2: nie eine Auswahl). Politur P2 (E3 „Hören“): Mit Ton wechselt die Spur
+ * zwischen „Bedeutung lesen“ und den Hör-Formen – je Wort die schwächere, nie zweimal dieselbe (`pickForm`). Ab Stufe 5 steht „Satz hören“
+ * an der Stelle des Diktats, bis das Diktat eine eigene Karte hat (`NO_CARD`).
+ */
 export const LADDER_U: Readonly<Record<number, readonly Form[]>> = {
   1: ['meaning', 'listen'],
   2: ['meaning', 'listen'],
   3: ['meaning', 'tone_mean', 'listen', 'tiles'],
   4: ['meaning', 'tone_mean', 'listen', 'tiles'],
-  5: ['meaning', 'tone_mean', 'dictation'],
-  6: ['meaning', 'tone_mean', 'dictation'],
-  7: ['meaning', 'tone_mean', 'dictation'],
+  5: ['meaning', 'tone_mean', 'listen', 'dictation'],
+  6: ['meaning', 'tone_mean', 'listen', 'dictation'],
+  7: ['meaning', 'tone_mean', 'listen', 'dictation'],
 };
 
 /** Mindestabstand der Verstehen-Stabilität für die schweren Formen ab Stufe 4 (plan.md §3.2, konfigurierbar). */
@@ -91,7 +95,9 @@ export function formLevel(l: Lex): number {
  * zeigte die Runde an ihrer Stelle die ganze Lücke bzw. „Bedeutung lesen“ – bei `cloze_part` mit der Note einer Teil-Lücke (höchstens
  * „Schwer“, kein Beleg-Tag): richtig getippte Wendungen stiegen nie auf, das Band sagte „knapp“ (Prüfbericht S2).
  */
-export const NO_CARD: ReadonlySet<Form> = new Set(['cloze_part']);
+export const NO_CARD: ReadonlySet<Form> = new Set(['cloze_part', 'tiles', 'dictation']);
+/** Hör-Formen mit eigener Karte (Politur P2, E3): „Hören → Bedeutung tippen“ und „Satz hören → Wort tippen“. */
+export const HEAR_FORMS: ReadonlySet<Form> = new Set(['tone_mean', 'listen']);
 
 /** Ist die Form für dieses Lexem stellbar? */
 export function available(f: Form, l: Lex, av: Avail): boolean {

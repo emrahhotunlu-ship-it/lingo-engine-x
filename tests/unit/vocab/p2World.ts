@@ -1,6 +1,7 @@
 import { createWriter } from '../../../src/data/writer';
 import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { type CheckDict } from '../../../src/modules/vocab/domain/check';
+import { asksMeaning } from '../../../src/modules/vocab/domain/flow';
 import { applyAnswer, emptyLex, introduce, type PlanCtx } from '../../../src/modules/vocab/domain/planner';
 import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
 import { LearnRun, type LearnEnv, type LearnStart, type LearnView } from '../../../src/modules/vocab/ui/learnRun';
@@ -93,6 +94,16 @@ export function play(w: ReturnType<typeof world>, o: { wrong?: ReadonlySet<strin
       continue;
     }
     if (v.k !== 'card') break;
+    if (v.ask) {
+      seen.push(`know:${v.task.path}`);
+      w.run.knowNo();
+      continue;
+    }
+    if (v.again) {
+      seen.push(`again:${v.task.path}`);
+      w.run.againSeen();
+      continue;
+    }
     if (v.kind === 'intro') {
       seen.push(`intro:${v.task.path}`);
       w.run.introSeen({ ms: 4000, fk: 0 });
@@ -101,7 +112,7 @@ export function play(w: ReturnType<typeof world>, o: { wrong?: ReadonlySet<strin
     seen.push(`${v.card.form}:${v.task.path}`);
     const bad = !!o.wrong?.has(v.task.path) && !failed.has(v.task.path);
     if (bad) failed.add(v.task.path);
-    const right = v.card.mode === 'meaning' ? v.card.de.split(',')[0]! : v.card.answer;
+    const right = asksMeaning(v.card.mode) ? v.card.de.split(',')[0]! : v.card.answer;
     w.run.check(bad ? 'zzzz' : right, { ms: 5000, fk: 1500 });
     w.run.next();
   }

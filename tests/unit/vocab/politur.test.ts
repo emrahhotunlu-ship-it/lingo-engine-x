@@ -38,15 +38,17 @@ describe('Wiederholungen zuerst in der Runde (E3)', () => {
     const quick = world({ due: 12, fresh: 2 });
     await quick.start();
     const q = play(quick);
-    const firstIntro = q.findIndex((x) => x.startsWith('intro:'));
+    // Politur P2 Nr. 6: vor der Einführung eines neuen Einzelworts steht die Vorkarte „Kennst du es schon?“ (hier „Nein, neu“).
+    const firstIntro = q.findIndex((x) => x.startsWith('know:'));
     expect(firstIntro).toBe(4);
+    expect(q[firstIntro + 1]).toMatch(/^intro:/);
     expect(q.slice(firstIntro).some((x) => x.startsWith('nosent:'))).toBe(true);
     // Langsam (90 s je Karte statt der geplanten 42 s, 18 Wörter-Minuten): die Zeit reicht nur für die 12 Wiederholungen → sie kommen alle,
     // keine Einführung davor; der Zeitdeckel nimmt am Ende die zwei neuen Wörter weg.
     const slow = world({ due: 12, fresh: 2, tick: () => 30_000 });
     await slow.start();
     const s = play(slow);
-    expect(s.some((x) => x.startsWith('intro:'))).toBe(false);
+    expect(s.some((x) => x.startsWith('intro:') || x.startsWith('know:'))).toBe(false);
     expect(s.filter((x) => x.startsWith('nosent:'))).toHaveLength(12);
     // Der Zeitdeckel kürzt den Plan in der Datenbank, dann erst steht der Abschluss.
     for (let i = 0; i < 50 && slow.run.get().k !== 'done'; i++) await new Promise((r) => setTimeout(r, 2));
