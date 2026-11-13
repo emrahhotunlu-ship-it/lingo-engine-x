@@ -215,6 +215,17 @@
         },
         "paket": "Fokus 2.0 F3: Schreibaufgabe Anwenden"
       },
+      "src/modules/apply/ui/BridgeScreen.tsx": {
+        "basis": 8000,
+        "zuwachs": {},
+        "paket": "Großpaket P „Politur“ P4: Brücken-Sätze (Schritt 3 Anwenden)",
+        "freigabe": "Emrahs Entscheidung E2 „A“ (13.11.2026): täglich zwei Brücken-Sätze als Pflicht; Bildschirm nur beim Start von Schritt 3 oder „Frei üben“ nachgeladen"
+      },
+      "src/modules/vocab/ui/bridgeCtx.ts": {
+        "basis": 2000,
+        "zuwachs": {},
+        "paket": "Großpaket P „Politur“ P4: Tür der Wörter-App für die Brücken-Sätze (Zielwahl, Rückfluss, Verlauf in einem Stück)"
+      },
       "src/content/wt/bsl.json": {
         "basis": 180000,
         "zuwachs": {},
@@ -228,8 +239,8 @@
     },
     "lazyNeu": 150000,
     "bin": 500000,
-    "files": 111,
-    "filesFreigabe": "Hauptsitzung 10.11.2026 (WT Schritt 1): geprüfte Wortliste und Satzschlüssel-Stück (111 Dateien). Hauptsitzung 09.11.2026 (Stift): Bild-Stück des Stift-Werkzeugs (html-to-image, nur beim Rückmelden nachgeladen), 109 Dateien. Hauptsitzung 09.11.2026 (Stimme): neue Stimme bringt zwei Dateien (engine-*.js Sprach-KI-Bibliothek, voice-ort.js Rechenkern-Lader), 108 Dateien. Davor 09.11.2026: Grammatik-Buch (106). 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege, 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
+    "files": 114,
+    "filesFreigabe": "Großpaket P „Politur“ P4 (13.11.2026, Emrahs E2 „A“): Brücken-Sätze bringen den Bildschirm (BridgeScreen) und die Tür der Wörter-App (bridgeCtx); die gemeinsame Nutzung von Wörter-Bausteinen teilt drei kleine Stücke neu auf (114 Dateien). Hauptsitzung 10.11.2026 (WT Schritt 1): geprüfte Wortliste und Satzschlüssel-Stück (111 Dateien). Hauptsitzung 09.11.2026 (Stift): Bild-Stück des Stift-Werkzeugs (html-to-image, nur beim Rückmelden nachgeladen), 109 Dateien. Hauptsitzung 09.11.2026 (Stimme): neue Stimme bringt zwei Dateien (engine-*.js Sprach-KI-Bibliothek, voice-ort.js Rechenkern-Lader), 108 Dateien. Davor 09.11.2026: Grammatik-Buch (106). 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege, 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
     "binEinzeln": {
       "raw-atlas": {
         "bytes": 560000,

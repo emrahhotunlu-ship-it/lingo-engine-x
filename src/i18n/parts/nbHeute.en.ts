@@ -35,7 +35,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteWhy_focus: 'Your corrections and typical mistakes',
   nbHeuteWhy_grammar: 'Today’s topic; your due mistake sentences come first',
   nbHeuteWhy_order: 'Practice word order in whole sentences',
-  nbHeuteWhy_apply: 'Three sentences of your own with your words and a rule',
+  nbHeuteWhy_apply: 'Sentences of your own with a word you are learning and the grammar topic',
   nbHeuteWhy_again: 'Say your typical mistakes correctly in new sentences',
   nbHeuteDoneTitle: 'Done for today',
   nbHeuteDoneAnswers_one: '{n} answer',

@@ -29,10 +29,10 @@ const use = (o: Partial<BridgeUseInput> = {}): BridgeUseInput => ({ path: 'vocab
 function setup(seed: Record<string, Doc>) {
   const h = createMemoryDb({ seed });
   const writer = createWriter(h.db);
-  const docs = (): [string, Doc][] => Object.entries(h.dump()).filter(([p]) => /^(vocab|chunk)\//.test(p)) as [string, Doc][];
+  const docs = (): [string, Doc][] => Object.entries(h.dump()).filter(([p]) => /^(vocab|chunk)\//.test(p));
   const book = (i: BridgeUseInput, dayDoc: Doc | null = null) => bookBridgeUse({ writer, device: 'phone1' }, i, { docs: docs(), cfg: { ...DEFAULT_CFG, mod: 1 }, dayDoc });
-  const lex = (path: string): Lex => lexOf(h.dump()[path] as Doc)!;
-  const vlog = (t: number): unknown[][] => Object.values(((h.dump()[vlogDocId(t)] as { e?: Record<string, unknown[]> } | undefined)?.e ?? {}) as Record<string, unknown[]>);
+  const lex = (path: string): Lex => lexOf(h.dump()[path])!;
+  const vlog = (t: number): unknown[][] => Object.values(((h.dump()[vlogDocId(t)] as { e?: Record<string, unknown[]> } | undefined)?.e ?? {}));
   return { h, book, lex, vlog };
 }
 

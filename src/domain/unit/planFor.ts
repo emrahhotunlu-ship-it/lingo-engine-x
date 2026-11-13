@@ -12,6 +12,7 @@ import type {
 } from './types';
 import type { StepArgs } from '../plan/types';
 import { dayMinutes, grammarTasksFor, mixedErrorsFor } from '../plan/dayMinutes';
+import { BRIDGE_MIN, BRIDGE_MIN_RANGE } from '../apply/bridgeTime';
 
 // Wochenplan der Tageseinheit (Plan §1.5, N10/N12; Prüfung Tageseinheit M2, M3, M5, M7, M10, S1, S2, S5).
 // `unitPlanFor` hängt nur von Tag, `app/week` und den Einstellungen ab – nie von KI oder Sprachausgabe.
@@ -168,6 +169,12 @@ export function unitPlanFor(day: string, _week: unknown, prefs: UnitPrefs = {}):
  * mit den Minuten aus `dayMinutes` (eine Quelle). Fällige Fehlersätze laufen in der Grammatikrunde mit (höchstens 3); Satzbau und
  * „Fehler korrigieren“ sind freiwillig. Neustart-Woche: die Minuten des kleinsten Ziels (15). Der Samstag behält seine Form (C1-Check-Tag).
  */
+/** Minuten von Schritt 3 „Anwenden“ (Brücken-Sätze): der gemessene Wert in den Grenzen 2–6, sonst der Standard (3). */
+export function applyStepMinutes(measured: number | undefined): number {
+  if (typeof measured !== 'number' || !Number.isFinite(measured)) return BRIDGE_MIN;
+  return Math.min(BRIDGE_MIN_RANGE[1], Math.max(BRIDGE_MIN_RANGE[0], Math.round(measured)));
+}
+
 function tagesweg(day: string, dow: number, goalMin: number, prefs: UnitPrefs, restart: boolean): UnitPlan {
   const m = dayMinutes(restart ? 15 : goalMin);
   const errs = mixedErrorsFor(prefs.fixDue);
@@ -175,7 +182,9 @@ function tagesweg(day: string, dow: number, goalMin: number, prefs: UnitPrefs, r
     block(1, step('review'), m.words, CHANNEL[1], { repairs: 0 }),
     block(2, step('grammar', { n: grammarTasksFor(m.grammar) }), m.grammar, 'ch:u-focus', { errs }),
     // Emrah 02.11.2026: sonntags ist Schritt 3 der Wochen-Check (ca. 5 Min.) statt Anwenden (nicht in der Neustart-Woche).
-    dow === 7 && !restart ? block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check') : block(3, step('task.apply'), m.apply, CHANNEL[3]),
+    // Großpaket P „Politur“, P4 (E2, 13.11.2026): Schritt 3 sind täglich zwei Brücken-Sätze. Die Minuten nennen, was das wirklich dauert
+    // (rund 3 Min., später der eigene Messwert `prefs.applyMin`), nicht das 10-%-Budget `m.apply` – auch bei sehr kleinem Budget bleiben es zwei Sätze.
+    dow === 7 && !restart ? block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check') : block(3, step('task.apply'), applyStepMinutes(prefs.applyMin), CHANNEL[3]),
   ];
   const kept = blocks.filter((b) => !(prefs.reviewCount === 0 && b.block === 1));
   const short = goalMin <= SHORT_GOAL_MAX || restart;

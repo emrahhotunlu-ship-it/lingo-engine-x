@@ -2,7 +2,7 @@
  "seed 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -30,11 +30,11 @@
   "streak": "6 1 6"
  },
  "seed 2026-09-14 fast": {
-  "min": "16",
+  "min": "17",
   "restart": null,
-  "n": "14. 0 3 16 0 3 16 1 1 2 18 2 1 5 3 2 25 6 6 1 6 6 124 170",
+  "n": "14. 0 3 17 0 3 17 1 1 2 18 2 1 5 3 3 25 6 6 1 6 6 124 170",
   "s": [
-   "settled= today-card shape=full rest=16",
+   "settled= today-card shape=full rest=17",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.5,0,0",
@@ -43,7 +43,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -60,7 +60,7 @@
  "seed 2026-09-14 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -90,7 +90,7 @@
  "seed 2026-09-15 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -118,11 +118,11 @@
   "streak": "7 2 6"
  },
  "seed 2026-09-15 fast": {
-  "min": "16",
+  "min": "17",
   "restart": null,
-  "n": "15. 0 3 16 0 3 16 1 1 2 18 2 1 5 3 2 25 7 7 2 6 7 124 170",
+  "n": "15. 0 3 17 0 3 17 1 1 2 18 2 1 5 3 3 25 7 7 2 6 7 124 170",
   "s": [
-   "settled= today-card shape=full rest=16",
+   "settled= today-card shape=full rest=17",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.5,0,0",
@@ -131,7 +131,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -148,7 +148,7 @@
  "seed 2026-09-15 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 7 7 2 6 7 7 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -178,7 +178,7 @@
  "seed 2026-09-16 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -206,11 +206,11 @@
   "streak": "8 3 6"
  },
  "seed 2026-09-16 fast": {
-  "min": "11",
+  "min": "12",
   "restart": null,
-  "n": "16. 0 3 11 0 3 11 1 4 5 18 2 1 5 3 2 25 6 8 3 6 8 124 170",
+  "n": "16. 0 3 12 0 3 12 1 4 5 18 2 1 5 3 3 25 6 8 3 6 8 124 170",
   "s": [
-   "settled= today-card shape=full rest=11",
+   "settled= today-card shape=full rest=12",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.8,0,0",
@@ -219,7 +219,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -236,7 +236,7 @@
  "seed 2026-09-16 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 8 8 3 6 6 8 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -266,7 +266,7 @@
  "seed 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -294,11 +294,11 @@
   "streak": "9 4 6"
  },
  "seed 2026-09-17 fast": {
-  "min": "10",
+  "min": "11",
   "restart": null,
-  "n": "17. 0 3 10 0 3 10 1 7 8 18 2 1 5 3 2 25 3 9 4 6 9 124 170",
+  "n": "17. 0 3 11 0 3 11 1 7 8 18 2 1 5 3 3 25 3 9 4 6 9 124 170",
   "s": [
-   "settled= today-card shape=full rest=10",
+   "settled= today-card shape=full rest=11",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.88,0,0",
@@ -307,7 +307,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -324,7 +324,7 @@
  "seed 2026-09-17 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 3 3 9 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -354,7 +354,7 @@
  "seed 2026-09-18 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -382,11 +382,11 @@
   "streak": "10 5 6"
  },
  "seed 2026-09-18 fast": {
-  "min": "9",
+  "min": "10",
   "restart": null,
-  "n": "18. 0 3 9 0 3 9 1 16 17 18 2 1 5 3 2 25 4 10 5 6 10 124 170",
+  "n": "18. 0 3 10 0 3 10 1 16 17 18 2 1 5 3 3 25 4 10 5 6 10 124 170",
   "s": [
-   "settled= today-card shape=full rest=9",
+   "settled= today-card shape=full rest=10",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.94,0,0",
@@ -395,7 +395,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -412,7 +412,7 @@
  "seed 2026-09-18 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 10 10 5 6 12 4 10 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -442,7 +442,7 @@
  "seed 2026-09-19 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
+  "n": "26 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -470,11 +470,11 @@
   "streak": "11 6 6"
  },
  "seed 2026-09-19 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "19. 0 3 8 0 3 8 1 21 22 18 2 1 5 3 2 25 11 6 6 11 124 170",
+  "n": "19. 0 3 9 0 3 9 1 21 22 18 2 1 5 3 3 25 11 6 6 11 124 170",
   "s": [
-   "settled= today-card shape=sat rest=8",
+   "settled= today-card shape=sat rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -483,7 +483,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -500,7 +500,7 @@
  "seed 2026-09-19 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
+  "n": "26 3 7 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -618,7 +618,7 @@
  "seed 2026-09-21 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -646,11 +646,11 @@
   "streak": "12"
  },
  "seed 2026-09-21 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "21. 0 3 8 0 3 8 1 61 62 18 2 1 5 3 2 25 12 12 124 0",
+  "n": "21. 0 3 9 0 3 9 1 61 62 18 2 1 5 3 3 25 12 12 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -659,7 +659,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -676,7 +676,7 @@
  "seed 2026-09-21 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
+  "n": "26 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 12 12 62 12 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -706,7 +706,7 @@
  "seed 2026-09-22 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 74 124 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 74 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -734,11 +734,11 @@
   "streak": null
  },
  "seed 2026-09-22 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "22. 0 3 8 0 3 8 1 72 73 18 2 1 5 3 2 25 124 0",
+  "n": "22. 0 3 9 0 3 9 1 72 73 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -747,7 +747,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -764,7 +764,7 @@
  "seed 2026-09-22 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 74 124 0",
+  "n": "26 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 74 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -794,7 +794,7 @@
  "seed 2026-09-23 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 85 124 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 85 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -822,11 +822,11 @@
   "streak": null
  },
  "seed 2026-09-23 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "23. 0 3 8 0 3 8 1 83 84 18 2 1 5 3 2 25 124 0",
+  "n": "23. 0 3 9 0 3 9 1 83 84 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -835,7 +835,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -852,7 +852,7 @@
  "seed 2026-09-23 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 85 124 0",
+  "n": "26 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 85 124 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -882,7 +882,7 @@
  "seed 2026-09-24 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 92 124 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 92 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -910,11 +910,11 @@
   "streak": null
  },
  "seed 2026-09-24 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "24. 0 3 8 0 3 8 1 90 91 18 2 1 5 3 2 25 124 0",
+  "n": "24. 0 3 9 0 3 9 1 90 91 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -923,7 +923,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -941,7 +941,7 @@
  "seed 2026-09-24 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 92 124 0",
+  "n": "26 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 92 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -971,7 +971,7 @@
  "seed 2026-09-25 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 98 124 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 98 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -999,11 +999,11 @@
   "streak": null
  },
  "seed 2026-09-25 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "25. 0 3 8 0 3 8 1 98 99 18 2 1 5 3 2 25 124 0",
+  "n": "25. 0 3 9 0 3 9 1 98 99 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1012,7 +1012,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -1030,7 +1030,7 @@
  "seed 2026-09-25 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 98 124 0",
+  "n": "26 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 98 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1060,7 +1060,7 @@
  "seed 2026-09-26 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 21. 22. 23. 24. 25. 26. 27. 100 124 0",
+  "n": "26 3 100 100 12 21. 22. 23. 24. 25. 26. 27. 100 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1088,11 +1088,11 @@
   "streak": null
  },
  "seed 2026-09-26 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "26. 0 3 8 0 3 8 1 100 101 18 2 1 5 3 2 25 124 0",
+  "n": "26. 0 3 9 0 3 9 1 100 101 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=sat rest=8",
+   "settled= today-card shape=sat rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1101,7 +1101,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -1119,7 +1119,7 @@
  "seed 2026-09-26 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 12 21. 22. 23. 24. 25. 26. 27. 100 124 0",
+  "n": "26 3 7 100 100 12 21. 22. 23. 24. 25. 26. 27. 100 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1238,7 +1238,7 @@
  "seed 2026-09-28 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 103 124 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 103 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1266,11 +1266,11 @@
   "streak": null
  },
  "seed 2026-09-28 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "28. 0 3 8 0 3 8 1 104 105 18 2 1 5 3 2 124 104 25 124 0",
+  "n": "28. 0 3 9 0 3 9 1 104 105 18 2 1 5 3 3 124 104 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1279,7 +1279,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=104 learned=124",
@@ -1298,7 +1298,7 @@
  "seed 2026-09-28 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 103 124 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 103 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1328,7 +1328,7 @@
  "seed 2026-09-29 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 105 124 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 105 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1356,11 +1356,11 @@
   "streak": null
  },
  "seed 2026-09-29 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "29. 0 3 8 0 3 8 1 106 107 18 2 1 5 3 2 124 103 25 124 0",
+  "n": "29. 0 3 9 0 3 9 1 106 107 18 2 1 5 3 3 124 103 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1369,7 +1369,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=103 learned=124",
@@ -1388,7 +1388,7 @@
  "seed 2026-09-29 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 105 124 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 105 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1418,7 +1418,7 @@
  "seed 2026-09-30 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 109 124 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 109 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1446,11 +1446,11 @@
   "streak": null
  },
  "seed 2026-09-30 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "30. 0 3 8 0 3 8 1 110 111 18 2 1 5 3 2 124 102 25 124 0",
+  "n": "30. 0 3 9 0 3 9 1 110 111 18 2 1 5 3 3 124 102 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1459,7 +1459,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=102 learned=124",
@@ -1478,7 +1478,7 @@
  "seed 2026-09-30 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 109 124 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 109 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1508,7 +1508,7 @@
  "seed 2026-10-01 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 114 124 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 114 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1536,11 +1536,11 @@
   "streak": null
  },
  "seed 2026-10-01 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "1. 0 3 8 0 3 8 1 113 114 18 2 1 5 3 2 124 101 25 124 0",
+  "n": "1. 0 3 9 0 3 9 1 113 114 18 2 1 5 3 3 124 101 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1549,7 +1549,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=101 learned=124",
@@ -1568,7 +1568,7 @@
  "seed 2026-10-01 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 114 124 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 114 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1598,7 +1598,7 @@
  "seed 2026-10-02 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 115 124 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 115 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1626,11 +1626,11 @@
   "streak": null
  },
  "seed 2026-10-02 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "2. 0 3 8 0 3 8 1 113 114 18 2 1 5 3 2 124 100 25 124 0",
+  "n": "2. 0 3 9 0 3 9 1 113 114 18 2 1 5 3 3 124 100 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1639,7 +1639,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=100 learned=124",
@@ -1658,7 +1658,7 @@
  "seed 2026-10-02 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 115 124 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 115 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1688,7 +1688,7 @@
  "seed 2026-10-03 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 28. 29. 30. 1. 2. 3. 4. 118 124 0",
+  "n": "26 3 100 100 12 28. 29. 30. 1. 2. 3. 4. 118 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1716,11 +1716,11 @@
   "streak": null
  },
  "seed 2026-10-03 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "3. 0 3 8 0 3 8 1 113 114 18 2 1 5 3 2 124 99 25 124 0",
+  "n": "3. 0 3 9 0 3 9 1 113 114 18 2 1 5 3 3 124 99 25 124 0",
   "s": [
-   "settled= today-card shape=sat rest=8",
+   "settled= today-card shape=sat rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -1729,7 +1729,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=99 learned=124",
@@ -1748,7 +1748,7 @@
  "seed 2026-10-03 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 12 28. 29. 30. 1. 2. 3. 4. 118 124 0",
+  "n": "26 3 7 100 100 12 28. 29. 30. 1. 2. 3. 4. 118 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1868,7 +1868,7 @@
  "seed 2026-10-05 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1897,8 +1897,8 @@
  },
  "seed 2026-10-05 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 14 120 124 98 6 124 0 25",
+  "restart": "7",
+  "n": "7 14 120 124 98 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -1921,7 +1921,7 @@
  "seed 2026-10-05 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1951,7 +1951,7 @@
  "seed 2026-10-06 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -1980,8 +1980,8 @@
  },
  "seed 2026-10-06 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 15 121 124 97 6 124 0 25",
+  "restart": "7",
+  "n": "7 15 121 124 97 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2004,7 +2004,7 @@
  "seed 2026-10-06 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 121 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2034,7 +2034,7 @@
  "seed 2026-10-07 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2063,8 +2063,8 @@
  },
  "seed 2026-10-07 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 16 121 124 97 6 124 0 25",
+  "restart": "7",
+  "n": "7 16 121 124 97 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2087,7 +2087,7 @@
  "seed 2026-10-07 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2117,7 +2117,7 @@
  "seed 2026-10-08 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2146,8 +2146,8 @@
  },
  "seed 2026-10-08 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 17 122 124 96 6 124 0 25",
+  "restart": "7",
+  "n": "7 17 122 124 96 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2170,7 +2170,7 @@
  "seed 2026-10-08 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2200,7 +2200,7 @@
  "seed 2026-10-09 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2229,8 +2229,8 @@
  },
  "seed 2026-10-09 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 18 122 124 95 6 124 0 25",
+  "restart": "7",
+  "n": "7 18 122 124 95 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2253,7 +2253,7 @@
  "seed 2026-10-09 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2283,7 +2283,7 @@
  "seed 2026-10-10 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 12 5. 6. 7. 8. 9. 10. 11. 123 124 0",
+  "n": "17 3 100 100 12 5. 6. 7. 8. 9. 10. 11. 123 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2312,8 +2312,8 @@
  },
  "seed 2026-10-10 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 19 122 124 95 6 124 0 25",
+  "restart": "7",
+  "n": "7 19 122 124 95 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2336,7 +2336,7 @@
  "seed 2026-10-10 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 12 5. 6. 7. 8. 9. 10. 11. 123 124 0",
+  "n": "17 3 7 100 100 12 5. 6. 7. 8. 9. 10. 11. 123 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2366,7 +2366,7 @@
  "seed 2026-10-11 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 123 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 123 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2395,8 +2395,8 @@
  },
  "seed 2026-10-11 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 20 123 124 94 6 124 0 25",
+  "restart": "7",
+  "n": "7 20 123 124 94 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2419,7 +2419,7 @@
  "seed 2026-10-11 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 123 124 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 123 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2449,7 +2449,7 @@
  "seed 2026-10-12 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 12. 13. 14. 15. 16. 17. 18. 123 124 0",
+  "n": "17 3 100 100 12. 13. 14. 15. 16. 17. 18. 123 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2478,8 +2478,8 @@
  },
  "seed 2026-10-12 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 21 123 124 94 6 124 0 25",
+  "restart": "7",
+  "n": "7 21 123 124 94 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2502,7 +2502,7 @@
  "seed 2026-10-12 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 12. 13. 14. 15. 16. 17. 18. 123 124 0",
+  "n": "17 3 7 100 100 12. 13. 14. 15. 16. 17. 18. 123 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2532,7 +2532,7 @@
  "seed 2026-10-13 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 12. 13. 14. 15. 16. 17. 18. 124 124 0",
+  "n": "17 3 100 100 12. 13. 14. 15. 16. 17. 18. 124 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2561,8 +2561,8 @@
  },
  "seed 2026-10-13 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 22 123 124 93 6 124 0 25",
+  "restart": "7",
+  "n": "7 22 123 124 93 7 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -2585,7 +2585,7 @@
  "seed 2026-10-13 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 12. 13. 14. 15. 16. 17. 18. 124 124 0",
+  "n": "17 3 7 100 100 12. 13. 14. 15. 16. 17. 18. 124 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2615,7 +2615,7 @@
  "gross 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2643,11 +2643,11 @@
   "streak": "6 1 6"
  },
  "gross 2026-09-14 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "14. 0 3 8 0 3 8 1 134 135 18 2 1 5 3 2 25 60 6 1 6 6 1.240 170",
+  "n": "14. 0 3 9 0 3 9 1 134 135 18 2 1 5 3 3 25 60 6 1 6 6 1.240 170",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -2656,7 +2656,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -2673,7 +2673,7 @@
  "gross 2026-09-14 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 299 60 6 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2703,7 +2703,7 @@
  "gross 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2731,11 +2731,11 @@
   "streak": "9 4 6"
  },
  "gross 2026-09-17 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "17. 0 3 8 0 3 8 1 127 128 18 2 1 5 3 2 25 30 9 4 6 9 1.240 170",
+  "n": "17. 0 3 9 0 3 9 1 127 128 18 2 1 5 3 3 25 30 9 4 6 9 1.240 170",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -2744,7 +2744,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -2761,7 +2761,7 @@
  "gross 2026-09-17 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
+  "n": "26 3 7 100 100 14. 15. 16. 17. 18. 19. 20. 9 9 4 6 589 30 9 1.240 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2879,7 +2879,7 @@
  "gross 2026-09-23 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 1.023 1.240 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 1.023 1.240 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2907,11 +2907,11 @@
   "streak": null
  },
  "gross 2026-09-23 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "23. 0 3 8 0 3 8 1 127 128 18 2 1 5 3 2 25 1.240 0",
+  "n": "23. 0 3 9 0 3 9 1 127 128 18 2 1 5 3 3 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -2920,7 +2920,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -2937,7 +2937,7 @@
  "gross 2026-09-23 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 1.023 1.240 0",
+  "n": "26 3 7 100 100 21. 22. 23. 24. 25. 26. 27. 1.023 1.240 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -2967,7 +2967,7 @@
  "gross 2026-09-26 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 21. 22. 23. 24. 25. 26. 27. 1.107 1.240 0",
+  "n": "26 3 100 100 12 21. 22. 23. 24. 25. 26. 27. 1.107 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -2995,11 +2995,11 @@
   "streak": null
  },
  "gross 2026-09-26 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "26. 0 3 8 0 3 8 1 127 128 18 2 1 5 3 2 25 1.240 0",
+  "n": "26. 0 3 9 0 3 9 1 127 128 18 2 1 5 3 3 25 1.240 0",
   "s": [
-   "settled= today-card shape=sat rest=8",
+   "settled= today-card shape=sat rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -3008,7 +3008,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -3026,7 +3026,7 @@
  "gross 2026-09-26 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 12 21. 22. 23. 24. 25. 26. 27. 1.107 1.240 0",
+  "n": "26 3 7 100 100 12 21. 22. 23. 24. 25. 26. 27. 1.107 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3056,7 +3056,7 @@
  "gross 2026-09-29 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 1.167 1.240 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 1.167 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3084,11 +3084,11 @@
   "streak": null
  },
  "gross 2026-09-29 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "29. 0 3 8 0 3 8 1 127 128 18 2 1 5 3 2 1.240 991 25 1.240 0",
+  "n": "29. 0 3 9 0 3 9 1 127 128 18 2 1 5 3 3 1.240 991 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -3097,7 +3097,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=991 learned=1240",
@@ -3116,7 +3116,7 @@
  "gross 2026-09-29 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 1.167 1.240 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 1.167 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3146,7 +3146,7 @@
  "gross 2026-10-02 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 1.207 1.240 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 1.207 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3174,11 +3174,11 @@
   "streak": null
  },
  "gross 2026-10-02 fast": {
-  "min": "8",
+  "min": "9",
   "restart": null,
-  "n": "2. 0 3 8 0 3 8 1 127 128 18 2 1 5 3 2 1.240 970 25 1.240 0",
+  "n": "2. 0 3 9 0 3 9 1 127 128 18 2 1 5 3 3 1.240 970 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=8",
+   "settled= today-card shape=full rest=9",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.95,0,0",
@@ -3187,7 +3187,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=970 learned=1240",
@@ -3206,7 +3206,7 @@
  "gross 2026-10-02 bilanz": {
   "min": null,
   "restart": null,
-  "n": "25 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 1.207 1.240 0",
+  "n": "26 3 7 100 100 28. 29. 30. 1. 2. 3. 4. 1.207 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3236,7 +3236,7 @@
  "gross 2026-10-05 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 1.225 1.240 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 1.225 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3265,8 +3265,8 @@
  },
  "gross 2026-10-05 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 14 1.221 1.240 953 6 1.240 0 25",
+  "restart": "7",
+  "n": "7 14 1.221 1.240 953 7 1.240 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -3289,7 +3289,7 @@
  "gross 2026-10-05 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 1.225 1.240 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 1.225 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3319,7 +3319,7 @@
  "gross 2026-10-08 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 1.233 1.240 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 1.233 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3348,8 +3348,8 @@
  },
  "gross 2026-10-08 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 17 1.231 1.240 938 6 1.240 0 25",
+  "restart": "7",
+  "n": "7 17 1.231 1.240 938 7 1.240 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -3372,7 +3372,7 @@
  "gross 2026-10-08 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 1.233 1.240 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 1.233 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3402,7 +3402,7 @@
  "gross 2026-10-11 fertig": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 1.244 1.240 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 1.244 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3431,8 +3431,8 @@
  },
  "gross 2026-10-11 fast": {
   "min": null,
-  "restart": "6",
-  "n": "6 20 1.241 1.240 924 6 1.240 0 25",
+  "restart": "7",
+  "n": "7 20 1.241 1.240 924 7 1.240 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.95,0,0 closed=false",
@@ -3455,7 +3455,7 @@
  "gross 2026-10-11 bilanz": {
   "min": null,
   "restart": null,
-  "n": "16 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 1.244 1.240 0",
+  "n": "17 3 7 100 100 5. 6. 7. 8. 9. 10. 11. 1.244 1.240 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -3485,7 +3485,7 @@
  "leer 2026-09-14 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 0 0",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3513,11 +3513,11 @@
   "streak": null
  },
  "leer 2026-09-14 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "14. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3526,7 +3526,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3543,7 +3543,7 @@
  "leer 2026-09-17 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 0 0",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3571,11 +3571,11 @@
   "streak": null
  },
  "leer 2026-09-17 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "17. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "17. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3584,7 +3584,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3659,7 +3659,7 @@
  "leer 2026-09-23 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 0 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3687,11 +3687,11 @@
   "streak": null
  },
  "leer 2026-09-23 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "23. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "23. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3700,7 +3700,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3717,7 +3717,7 @@
  "leer 2026-09-26 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 21. 22. 23. 24. 25. 26. 27. 0 0",
+  "n": "26 3 100 100 12 21. 22. 23. 24. 25. 26. 27. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3745,11 +3745,11 @@
   "streak": null
  },
  "leer 2026-09-26 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "26. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "26. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=sat rest=25",
+   "settled= today-card shape=sat rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3758,7 +3758,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3775,7 +3775,7 @@
  "leer 2026-09-29 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 0 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3803,11 +3803,11 @@
   "streak": null
  },
  "leer 2026-09-29 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "29. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3816,7 +3816,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3833,7 +3833,7 @@
  "leer 2026-10-02 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 0 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3861,11 +3861,11 @@
   "streak": null
  },
  "leer 2026-10-02 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "2. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "2. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3874,7 +3874,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3891,7 +3891,7 @@
  "leer 2026-10-05 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 5. 6. 7. 8. 9. 10. 11. 0 0",
+  "n": "26 3 100 100 5. 6. 7. 8. 9. 10. 11. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3919,11 +3919,11 @@
   "streak": null
  },
  "leer 2026-10-05 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "5. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "5. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3932,7 +3932,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -3949,7 +3949,7 @@
  "leer 2026-10-08 fertig": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 5. 6. 7. 8. 9. 10. 11. 0 0",
+  "n": "26 3 100 100 5. 6. 7. 8. 9. 10. 11. 0 0",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -3977,11 +3977,11 @@
   "streak": null
  },
  "leer 2026-10-08 fast": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "8. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "8. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -3990,7 +3990,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4063,11 +4063,11 @@
   "streak": null
  },
  "seed 2026-09-14 leer breit": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 18 0 2 2 1 5 3 2 25 6 6 1 6 6 124 170",
+  "n": "14. 0 3 26 0 3 26 1 18 0 2 2 1 5 3 3 25 6 6 1 6 6 124 170",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4076,7 +4076,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4093,7 +4093,7 @@
  "seed 2026-09-14 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
+  "n": "26 3 100 100 14. 15. 16. 17. 18. 19. 20. 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -4121,11 +4121,11 @@
   "streak": "6 1 6"
  },
  "seed 2026-09-19 leer breit": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 18 0 22 2 1 5 3 2 25 11 6 6 11 124 170",
+  "n": "19. 0 3 26 0 3 26 1 18 0 22 2 1 5 3 3 25 11 6 6 11 124 170",
   "s": [
-   "settled= today-card shape=sat rest=25",
+   "settled= today-card shape=sat rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4134,7 +4134,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4151,7 +4151,7 @@
  "seed 2026-09-19 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
+  "n": "26 3 100 100 12 14. 15. 16. 17. 18. 19. 20. 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -4179,11 +4179,11 @@
   "streak": "11 6 6"
  },
  "seed 2026-09-24 leer breit": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 18 0 91 2 1 5 3 2 10 25 2 2 25 124 0",
+  "n": "24. 0 3 26 0 3 26 1 18 0 91 2 1 5 3 3 10 26 2 2 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4192,7 +4192,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -4210,7 +4210,7 @@
  "seed 2026-09-24 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21. 22. 23. 24. 25. 26. 27. 92 124 0",
+  "n": "26 3 100 100 21. 22. 23. 24. 25. 26. 27. 92 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -4238,11 +4238,11 @@
   "streak": null
  },
  "seed 2026-09-29 leer breit": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 18 0 107 2 1 5 3 2 124 103 25 124 0",
+  "n": "29. 0 3 26 0 3 26 1 18 0 107 2 1 5 3 3 124 103 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4251,7 +4251,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=103 learned=124",
@@ -4270,7 +4270,7 @@
  "seed 2026-09-29 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28. 29. 30. 1. 2. 3. 4. 105 124 0",
+  "n": "26 3 100 100 28. 29. 30. 1. 2. 3. 4. 105 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -4359,8 +4359,8 @@
  },
  "seed 2026-10-09 leer breit": {
   "min": null,
-  "restart": "16",
-  "n": "16 18 122 124 95 16 124 0 25",
+  "restart": "17",
+  "n": "17 18 122 124 95 17 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -4382,7 +4382,7 @@
  "seed 2026-10-09 fertig breit": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
+  "n": "17 3 100 100 5. 6. 7. 8. 9. 10. 11. 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -4466,11 +4466,11 @@
   "streak": null
  },
  "seed 2026-09-14 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 18 0 2 2 1 5 3 2 25 6 7 1 6 7 124 170",
+  "n": "14. 0 3 26 0 3 26 1 18 0 2 2 1 5 3 3 25 6 7 1 6 7 124 170",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4479,7 +4479,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4494,11 +4494,11 @@
   "streak": "7 1 6"
  },
  "seed 2026-09-14 halb 02:30": {
-  "min": "16",
+  "min": "17",
   "restart": null,
-  "n": "14. 0 3 16 0 3 16 1 1 2 18 2 1 5 3 2 25 6 7 1 6 7 124 170",
+  "n": "14. 0 3 17 0 3 17 1 1 2 18 2 1 5 3 3 25 6 7 1 6 7 124 170",
   "s": [
-   "settled= today-card shape=full rest=16",
+   "settled= today-card shape=full rest=17",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.5,0,0",
@@ -4507,7 +4507,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4522,11 +4522,11 @@
   "streak": "7 1 6"
  },
  "seed 2026-09-17 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "17. 0 3 25 0 3 25 1 18 0 8 2 1 5 3 2 25 3 10 4 6 10 124 170",
+  "n": "17. 0 3 26 0 3 26 1 18 0 8 2 1 5 3 3 25 3 10 4 6 10 124 170",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4535,7 +4535,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4550,11 +4550,11 @@
   "streak": "10 4 6"
  },
  "seed 2026-09-17 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "17. 0 3 19 0 3 19 1 3 8 18 2 1 5 3 2 25 3 10 4 6 10 124 170",
+  "n": "17. 0 3 20 0 3 20 1 3 8 18 2 1 5 3 3 25 3 10 4 6 10 124 170",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.38,0,0",
@@ -4563,7 +4563,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4634,11 +4634,11 @@
   "streak": "12 7"
  },
  "seed 2026-09-23 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "23. 0 3 25 0 3 25 1 18 0 84 2 1 5 3 2 10 25 2 2 25 124 0",
+  "n": "23. 0 3 26 0 3 26 1 18 0 84 2 1 5 3 3 10 26 2 2 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4647,7 +4647,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4662,11 +4662,11 @@
   "streak": null
  },
  "seed 2026-09-23 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "23. 0 3 19 0 3 19 1 28 84 18 2 1 5 3 2 25 124 0",
+  "n": "23. 0 3 20 0 3 20 1 28 84 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.33,0,0",
@@ -4675,7 +4675,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -4690,11 +4690,11 @@
   "streak": null
  },
  "seed 2026-09-26 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "26. 0 3 25 0 3 25 1 18 0 101 2 1 5 3 2 10 25 2 2 25 124 0",
+  "n": "26. 0 3 26 0 3 26 1 18 0 101 2 1 5 3 3 10 26 2 2 25 124 0",
   "s": [
-   "settled= today-card shape=sat rest=25",
+   "settled= today-card shape=sat rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4703,7 +4703,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -4719,11 +4719,11 @@
   "streak": null
  },
  "seed 2026-09-26 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "26. 0 3 19 0 3 19 1 34 101 18 2 1 5 3 2 25 124 0",
+  "n": "26. 0 3 20 0 3 20 1 34 101 18 2 1 5 3 3 25 124 0",
   "s": [
-   "settled= today-card shape=sat rest=19",
+   "settled= today-card shape=sat rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.34,0,0",
@@ -4732,7 +4732,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -4748,11 +4748,11 @@
   "streak": null
  },
  "seed 2026-09-29 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 18 0 107 2 1 5 3 2 124 102 25 124 0",
+  "n": "29. 0 3 26 0 3 26 1 18 0 107 2 1 5 3 3 124 102 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4761,7 +4761,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=102 learned=124",
@@ -4778,11 +4778,11 @@
   "streak": null
  },
  "seed 2026-09-29 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "29. 0 3 19 0 3 19 1 36 107 18 2 1 5 3 2 124 102 25 124 0",
+  "n": "29. 0 3 20 0 3 20 1 36 107 18 2 1 5 3 3 124 102 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.34,0,0",
@@ -4791,7 +4791,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=102 learned=124",
@@ -4808,11 +4808,11 @@
   "streak": null
  },
  "seed 2026-10-02 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "2. 0 3 25 0 3 25 1 18 0 114 2 1 5 3 2 124 99 25 124 0",
+  "n": "2. 0 3 26 0 3 26 1 18 0 114 2 1 5 3 3 124 99 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -4821,7 +4821,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=99 learned=124",
@@ -4838,11 +4838,11 @@
   "streak": null
  },
  "seed 2026-10-02 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "2. 0 3 19 0 3 19 1 38 114 18 2 1 5 3 2 124 99 25 124 0",
+  "n": "2. 0 3 20 0 3 20 1 38 114 18 2 1 5 3 3 124 99 25 124 0",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.33,0,0",
@@ -4851,7 +4851,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=99 learned=124",
@@ -4869,8 +4869,8 @@
  },
  "seed 2026-10-05 leer 02:30": {
   "min": null,
-  "restart": "16",
-  "n": "16 14 120 124 97 16 124 0 25",
+  "restart": "17",
+  "n": "17 14 120 124 97 17 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -4891,8 +4891,8 @@
  },
  "seed 2026-10-05 halb 02:30": {
   "min": null,
-  "restart": "13",
-  "n": "13 14 120 124 97 13 124 0 25",
+  "restart": "14",
+  "n": "14 14 120 124 97 14 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -4914,8 +4914,8 @@
  },
  "seed 2026-10-08 leer 02:30": {
   "min": null,
-  "restart": "16",
-  "n": "16 17 122 124 95 16 124 0 25",
+  "restart": "17",
+  "n": "17 17 122 124 95 17 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -4936,8 +4936,8 @@
  },
  "seed 2026-10-08 halb 02:30": {
   "min": null,
-  "restart": "13",
-  "n": "13 17 122 124 95 13 124 0 25",
+  "restart": "14",
+  "n": "14 17 122 124 95 14 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -4959,8 +4959,8 @@
  },
  "seed 2026-10-11 leer 02:30": {
   "min": null,
-  "restart": "16",
-  "n": "16 20 123 124 94 16 124 0 25",
+  "restart": "17",
+  "n": "17 20 123 124 94 17 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -4981,8 +4981,8 @@
  },
  "seed 2026-10-11 halb 02:30": {
   "min": null,
-  "restart": "13",
-  "n": "13 20 123 124 94 13 124 0 25",
+  "restart": "14",
+  "n": "14 20 123 124 94 14 124 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.33,0,0 closed=false",
@@ -5003,11 +5003,11 @@
   "streak": null
  },
  "gross 2026-09-14 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 18 0 135 2 1 5 3 2 25 60 7 1 6 7 1.240 170",
+  "n": "14. 0 3 26 0 3 26 1 18 0 135 2 1 5 3 3 25 60 7 1 6 7 1.240 170",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5016,7 +5016,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5031,11 +5031,11 @@
   "streak": "7 1 6"
  },
  "gross 2026-09-14 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "14. 0 3 19 0 3 19 1 45 135 18 2 1 5 3 2 25 60 7 1 6 7 1.240 170",
+  "n": "14. 0 3 20 0 3 20 1 45 135 18 2 1 5 3 3 25 60 7 1 6 7 1.240 170",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.33,0,0",
@@ -5044,7 +5044,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5059,11 +5059,11 @@
   "streak": "7 1 6"
  },
  "gross 2026-09-19 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 18 0 128 2 1 5 3 2 25 12 6 6 12 1.240 170",
+  "n": "19. 0 3 26 0 3 26 1 18 0 128 2 1 5 3 3 25 12 6 6 12 1.240 170",
   "s": [
-   "settled= today-card shape=sat rest=25",
+   "settled= today-card shape=sat rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5072,7 +5072,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5087,11 +5087,11 @@
   "streak": "12 6 6"
  },
  "gross 2026-09-19 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "19. 0 3 19 0 3 19 1 43 128 18 2 1 5 3 2 25 12 6 6 12 1.240 170",
+  "n": "19. 0 3 20 0 3 20 1 43 128 18 2 1 5 3 3 25 12 6 6 12 1.240 170",
   "s": [
-   "settled= today-card shape=sat rest=19",
+   "settled= today-card shape=sat rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.34,0,0",
@@ -5100,7 +5100,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5115,11 +5115,11 @@
   "streak": "12 6 6"
  },
  "gross 2026-09-24 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 18 0 128 2 1 5 3 2 10 25 2 2 25 1.240 0",
+  "n": "24. 0 3 26 0 3 26 1 18 0 128 2 1 5 3 3 10 26 2 2 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5128,7 +5128,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -5144,11 +5144,11 @@
   "streak": null
  },
  "gross 2026-09-24 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "24. 0 3 19 0 3 19 1 43 128 18 2 1 5 3 2 25 1.240 0",
+  "n": "24. 0 3 20 0 3 20 1 43 128 18 2 1 5 3 3 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.34,0,0",
@@ -5157,7 +5157,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=short",
    "more-rows tiles=",
@@ -5173,11 +5173,11 @@
   "streak": null
  },
  "gross 2026-09-29 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 18 0 128 2 1 5 3 2 1.240 984 25 1.240 0",
+  "n": "29. 0 3 26 0 3 26 1 18 0 128 2 1 5 3 3 1.240 984 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5186,7 +5186,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=984 learned=1240",
@@ -5203,11 +5203,11 @@
   "streak": null
  },
  "gross 2026-09-29 halb 02:30": {
-  "min": "19",
+  "min": "20",
   "restart": null,
-  "n": "29. 0 3 19 0 3 19 1 43 128 18 2 1 5 3 2 1.240 984 25 1.240 0",
+  "n": "29. 0 3 20 0 3 20 1 43 128 18 2 1 5 3 3 1.240 984 25 1.240 0",
   "s": [
-   "settled= today-card shape=full rest=19",
+   "settled= today-card shape=full rest=20",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0.34,0,0",
@@ -5216,7 +5216,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "comeback-band band=long",
    "still-there known=984 learned=1240",
@@ -5294,8 +5294,8 @@
  },
  "gross 2026-10-09 leer 02:30": {
   "min": null,
-  "restart": "16",
-  "n": "16 18 1.233 1.240 929 16 1.240 0 25",
+  "restart": "17",
+  "n": "17 18 1.233 1.240 929 17 1.240 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0,0,0 closed=false",
@@ -5316,8 +5316,8 @@
  },
  "gross 2026-10-09 halb 02:30": {
   "min": null,
-  "restart": "13",
-  "n": "13 18 1.233 1.240 929 13 1.240 0 25",
+  "restart": "14",
+  "n": "14 18 1.233 1.240 929 14 1.240 0 25",
   "s": [
    "raised= restart-card",
    "restart-ring segments=3 filled=0 fills=0.34,0,0 closed=false",
@@ -5338,11 +5338,11 @@
   "streak": null
  },
  "leer 2026-09-14 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "14. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5351,7 +5351,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5366,11 +5366,11 @@
   "streak": null
  },
  "leer 2026-09-14 halb 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "14. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "14. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5379,7 +5379,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5394,11 +5394,11 @@
   "streak": null
  },
  "leer 2026-09-19 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "19. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=sat rest=25",
+   "settled= today-card shape=sat rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5407,7 +5407,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5422,11 +5422,11 @@
   "streak": null
  },
  "leer 2026-09-19 halb 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "19. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "19. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=sat rest=25",
+   "settled= today-card shape=sat rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5435,7 +5435,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5450,11 +5450,11 @@
   "streak": null
  },
  "leer 2026-09-24 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "24. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5463,7 +5463,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5478,11 +5478,11 @@
   "streak": null
  },
  "leer 2026-09-24 halb 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "24. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "24. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5491,7 +5491,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5506,11 +5506,11 @@
   "streak": null
  },
  "leer 2026-09-29 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "29. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5519,7 +5519,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5534,11 +5534,11 @@
   "streak": null
  },
  "leer 2026-09-29 halb 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "29. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "29. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5547,7 +5547,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5618,11 +5618,11 @@
   "streak": null
  },
  "leer 2026-10-09 leer 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "9. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "9. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5631,7 +5631,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5646,11 +5646,11 @@
   "streak": null
  },
  "leer 2026-10-09 halb 02:30": {
-  "min": "25",
+  "min": "26",
   "restart": null,
-  "n": "9. 0 3 25 0 3 25 1 18 0 5 2 1 5 3 2 10 25 2 2 25 0 0",
+  "n": "9. 0 3 26 0 3 26 1 18 0 5 2 1 5 3 3 10 26 2 2 25 0 0",
   "s": [
-   "settled= today-card shape=full rest=25",
+   "settled= today-card shape=full rest=26",
    "hero duty=review",
    "today-status status=open done=0 total=3",
    "day-segs fills=0,0,0",
@@ -5659,7 +5659,7 @@
    "variant=pri full= start duty=review",
    "st=open duty duty=ch:u-focus state=open min=5",
    "reason why=grammar",
-   "st=open duty duty=ch:u-task state=open min=2",
+   "st=open duty duty=ch:u-task state=open min=3",
    "reason why=task.apply",
    "more-rows tiles=",
    "variant=row today-stand",
@@ -5676,7 +5676,7 @@
  "seed 2026-09-14 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 14 15 16 17 18 19 20 6 6 1 6 6 6 124 170",
+  "n": "26 3 100 100 14 15 16 17 18 19 20 6 6 1 6 6 6 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -5706,7 +5706,7 @@
  "seed 2026-09-19 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 12 14 15 16 17 18 19 20 11 11 6 6 17 11 124 170",
+  "n": "26 3 100 100 12 14 15 16 17 18 19 20 11 11 6 6 17 11 124 170",
   "s": [
    "raised= today-card done=true",
    "today-status status=allDone done=3 total=3",
@@ -5736,7 +5736,7 @@
  "seed 2026-09-24 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 21 22 23 24 25 26 27 92 124 0",
+  "n": "26 3 100 100 21 22 23 24 25 26 27 92 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -5766,7 +5766,7 @@
  "seed 2026-09-29 fertig en": {
   "min": null,
   "restart": null,
-  "n": "25 3 100 100 28 29 30 1 2 3 4 105 124 0",
+  "n": "26 3 100 100 28 29 30 1 2 3 4 105 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",
@@ -5826,7 +5826,7 @@
  "seed 2026-10-09 fertig en": {
   "min": null,
   "restart": null,
-  "n": "16 3 100 100 5 6 7 8 9 10 11 122 124 0",
+  "n": "17 3 100 100 5 6 7 8 9 10 11 122 124 0",
   "s": [
    "raised= today-card done=true back=true",
    "today-status status=allDone done=3 total=3",

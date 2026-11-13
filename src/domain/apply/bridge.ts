@@ -1,7 +1,6 @@
 import { addDays, daysBetween } from '../date';
 import { hash32 } from '../random';
-import { freeUsesOf } from '../grammar/freeUse';
-import { patsOf, patternState, type PatternState } from '../metrics/pattern';
+import { freeUsesOf, patsOf, patternState, type PatternState } from '../metrics/pattern';
 import { comboBlocked } from './combo';
 
 // Brücken-Sätze (Großpaket P „Politur“, P4 „Anwenden als Brücke“; Entscheidung E2 vom 13.11.2026). Rein und getestet.
@@ -248,10 +247,17 @@ export function pickBridge(i: PickInput): BridgeTarget[] {
   };
 
   // Satz 1: Muster des heutigen Grammatik-Schritts (sonst das beste sichere, sonst ein begonnenes) + ein Wort, das gerade gelernt wird.
-  const safe = i.safe.filter((p) => !skipPats.has(p.id));
-  const known = (i.known ?? []).filter((p) => !skipPats.has(p.id));
+  // Freie Zusatzrunde: heute schon benutzte Muster nur, wenn es sonst keines gibt (lieber dasselbe Muster mit anderen Wörtern als gar kein Satz).
+  const allSafe = i.safe;
+  const allKnown = i.known ?? [];
+  const freshSafe = allSafe.filter((p) => !skipPats.has(p.id));
+  const freshKnown = allKnown.filter((p) => !skipPats.has(p.id));
+  const todayFresh = !!i.todayPat && !skipPats.has(i.todayPat.id);
+  const anyFresh = todayFresh || freshSafe.length > 0 || freshKnown.length > 0;
+  const safe = anyFresh ? freshSafe : allSafe;
+  const known = anyFresh ? freshKnown : allKnown;
   const first: { p: { id: string; topic: string }; why: PatWhy } | null =
-    i.todayPat && !skipPats.has(i.todayPat.id) ? { p: i.todayPat, why: 'today' } : safe[0] ? { p: safe[0], why: safe[0].state === 'firm' ? 'firm' : 'safe' } : known[0] ? { p: known[0], why: 'known' } : null;
+    i.todayPat && (todayFresh || !anyFresh) ? { p: i.todayPat, why: 'today' } : safe[0] ? { p: safe[0], why: safe[0].state === 'firm' ? 'firm' : 'safe' } : known[0] ? { p: known[0], why: 'known' } : null;
   if (first && i.n >= 1) {
     const c = wordFor([learning, settled, legacy], first.p.topic);
     if (c) push(1, c, first.p, first.why);

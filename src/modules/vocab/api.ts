@@ -339,10 +339,10 @@ export type { BridgeLex, BridgeUseInput, BridgeUseResult } from './data/bridge';
  * (dann nimmt Anwenden die Wörter des alten Wegs). Nachgeladen.
  */
 export async function loadBridgeWords(nowMs: number = Date.now()): Promise<BridgeLex[] | null> {
-  const { bridgeCtx } = await import('./ui/bridgeCtx');
+  // EIN nachgeladenes Stück (Umgebung, Zielwahl, Verlauf), damit die Brücke die übrigen Stücke der Wörter-App nicht neu aufteilt.
+  const { bridgeCtx, bridgeWordsOf, readVlogRecent } = await import('./ui/bridgeCtx');
   const ctx = await bridgeCtx();
   if (!ctx || !vocabModuleOn(ctx.profile)) return null;
-  const [{ bridgeWordsOf }, { readVlogRecent }] = await Promise.all([import('./data/bridge'), import('./data/history')]);
   // Ist der Verlauf nicht lesbar, gelten die Tagesmarken der Lexeme (`bridgeWordsOf`): lieber eine etwas gröbere Wahl als keine.
   const vlog = await readVlogRecent(ctx.read, nowMs, 2).catch((err: unknown): VlogTuple[] => {
     logWarn('vocab:bridge', err, 'vlog');
@@ -357,9 +357,8 @@ export async function loadBridgeWords(nowMs: number = Date.now()): Promise<Bridg
  * (Wörter-App aus, kein Schreibweg, Lexem unbekannt, schon gebucht). Wirft nie wegen eines fehlenden Lexems; Schreibfehler gehen an den Aufrufer.
  */
 export async function reportBridgeUse(i: BridgeUseInput): Promise<BridgeUseResult | null> {
-  const { bridgeCtx } = await import('./ui/bridgeCtx');
+  const { bridgeCtx, bookBridgeUse } = await import('./ui/bridgeCtx');
   const ctx = await bridgeCtx();
   if (!ctx || !vocabModuleOn(ctx.profile)) return null;
-  const { bookBridgeUse } = await import('./data/bridge');
   return bookBridgeUse({ writer: ctx.writer, device: ctx.device }, i, { docs: ctx.docs, cfg: vocabCfg(ctx.profile), dayDoc: ctx.dayDoc ?? null });
 }

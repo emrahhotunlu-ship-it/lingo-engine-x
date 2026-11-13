@@ -321,7 +321,7 @@ test('Ab 1280 px: schmale Glas-Schiene mit Marke, vier Reiter ohne Unterpunkte, 
   await screen(page, 'apply');
   if (FOCUS2) {
     // Fokus 2.0: die neue Seite „Anwenden“ (src/modules/apply) statt Praxis mit Lesen und Sprechen.
-    await expect(page.getByTestId('apply-hub')).toHaveAttribute('data-v', '2');
+    await expect(page.getByTestId('apply-hub')).toHaveAttribute('data-v', '3');
   } else {
     await expect(page.getByTestId('practice-more')).toBeVisible();
     await page.getByTestId('hub-read').click();

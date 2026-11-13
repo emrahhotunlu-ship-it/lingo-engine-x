@@ -155,9 +155,10 @@ export function ApplyTaskScreen({ route }: ScreenProps<'applyTask'>) {
   const [started, setStarted] = useState(false);
 
   const close = (): void => back();
+  // P4: der eigene Satz ist jetzt der Brücken-Satz (Wort + Muster aus dem Lernstand).
   const comboInstead = (): void => {
-    if (unit) go({ name: 'comboSentence', unit });
-    else go({ name: 'comboSentence' });
+    if (unit) go({ name: 'applyBridge', unit });
+    else go({ name: 'applyBridge' });
   };
   const header = <ApplyTop kind={kind} unit={unit} onClose={close} />;
 

@@ -32,10 +32,16 @@ export function readApplyCount(profile: Doc | null | undefined): ApplyCount | nu
 /** Disziplin zu einem Zählerstand. */
 export const applyOfCount = (n: number): ApplyKind => APPLY_KINDS[((Math.floor(n) % APPLY_KINDS.length) + APPLY_KINDS.length) % APPLY_KINDS.length] ?? 'combo';
 
-/** Disziplin für einen NEUEN Tagesplan (beim Einfrieren). Ein unlesbarer Zähler gibt den eigenen Satz (nie raten). */
+/**
+ * Disziplin für einen NEUEN Tagesplan (beim Einfrieren, `u.ap`).
+ * Großpaket P „Politur“, P4 (Entscheidung E2 vom 13.11.2026): Pflicht sind täglich die Brücken-Sätze (eigene Sätze mit Wort + Muster); Mails und
+ * Zusammenfassung sind freiwillig. Neue Pläne frieren deshalb immer `combo` ein (die Familie „eigener Satz“) – so startet auch eine ältere
+ * App-Version (Rückweg) an diesem Tag den eigenen Satz und nie eine Mail. Die Rotation über den Zähler endet damit; `apc` wird weiter gelesen und
+ * weiter gezählt (erledigte Anwenden-Tage), `applyOfCount` bleibt für das Lesen älterer Stände.
+ */
 export function applyOfDay(profile: Doc | null | undefined): ApplyKind {
-  const c = readApplyCount(profile);
-  return c ? applyOfCount(c.n) : 'combo';
+  void profile;
+  return 'combo';
 }
 
 /** Ist `day` ein kurzer Tag (`kt[day] = 1`)? */

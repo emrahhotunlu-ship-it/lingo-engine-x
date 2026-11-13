@@ -128,6 +128,8 @@ export type UnitPrefs = {
   tw?: 1;
   /** Plan 3.0 (P23): Format von Schritt 3 (nur volle Tage, nur Regelversion 2); fehlt = Satzbau. */
   step3?: { mode: Step3Mode; fmt?: Step3Fmt } | null;
+  /** Großpaket P, P4: gemessene Minuten der Brücken-Sätze von Schritt 3 (`domain/apply/bridgeTime.ts`); fehlt = Standard (3). */
+  applyMin?: number;
 };
 
 /**

@@ -10,6 +10,11 @@ declare module '../../app/router/types' {
   interface RouteParams {
     /** Schreibübung „Auf eine Mail antworten“, „Eine Mail schreiben“, „Einen Artikel zusammenfassen“. `unit` = Schritt des Tagesweges, sonst frei. */
     applyTask: { kind: 'reply' | 'write' | 'summary'; unit?: number };
+    /**
+     * Brücken-Sätze (Großpaket P, P4): eigene Sätze mit einem Wort aus der Wörter-App und einem Grammatik-Muster. `unit` = Schritt 3 des Tagesweges
+     * (Pflicht), sonst freie Zusatzrunde; `n = 1` am kurzen Tag (sonst zwei Sätze).
+     */
+    applyBridge: { unit?: number; n?: number };
   }
 }
 
@@ -25,6 +30,7 @@ function lazyScreen<P extends object>(load: () => Promise<ComponentType<P>>): Co
 }
 
 const TaskScreen = lazyScreen<ScreenProps<'applyTask'>>(() => import('./ui/TaskScreen').then((m) => m.ApplyTaskScreen));
+const BridgeScreen = lazyScreen<ScreenProps<'applyBridge'>>(() => import('./ui/BridgeScreen').then((m) => m.ApplyBridgeScreen));
 
 /** Seite „Anwenden“ (Fokus 2.0), nachgeladen. */
 export const ApplyPage = lazyScreen<object>(() => import('./ui/ApplyPage').then((m) => m.ApplyPage));
@@ -32,7 +38,7 @@ export const ApplyPage = lazyScreen<object>(() => import('./ui/ApplyPage').then(
 /** Teil-Dateien einmal im Leerlauf nach dem Start vorladen (wie die Wörter-Bildschirme, app/prefetch.ts): nur Laden, keine Ausführung, keine Schreibvorgänge. */
 function prefetchApply(): void {
   const run = (): void => {
-    for (const load of [() => import('./ui/ApplyPage'), () => import('./ui/TaskScreen')]) load().catch((err: unknown) => logWarn('prefetch', err));
+    for (const load of [() => import('./ui/ApplyPage'), () => import('./ui/BridgeScreen'), () => import('./ui/TaskScreen')]) load().catch((err: unknown) => logWarn('prefetch', err));
   };
   const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
   if (typeof w.requestIdleCallback === 'function') w.requestIdleCallback(run, { timeout: 4000 });
@@ -48,6 +54,12 @@ export const applyArea = defineArea({
       component: TaskScreen,
       title: 'axTitle',
       params: z.object({ kind: z.enum(['reply', 'write', 'summary']), unit: z.number().int().min(1).max(5).optional() }),
+    },
+    applyBridge: {
+      kind: 'exercise',
+      component: BridgeScreen,
+      title: 'axBTitle',
+      params: z.object({ unit: z.number().int().min(1).max(5).optional(), n: z.number().int().min(1).max(2).optional() }),
     },
   },
 });

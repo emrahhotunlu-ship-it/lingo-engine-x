@@ -47,6 +47,7 @@ import { chosenChapterOf, programStartedOf, readC1 } from '../../domain/c1/c1doc
 import { chapterPlanInput } from '../../domain/c1/cursor';
 import { nextDeskForm } from '../../domain/c1/check/select';
 import { applyOfDay } from '../../modules/apply/registry';
+import { bridgeMinutesOf } from '../../domain/apply/bridgeTime';
 
 // Tagesplan = Tageseinheit (plan.md §1.5, N10/N12): einmal je Lerntag festgelegt und in
 // app/profile.plan gespeichert, nie neu gewürfelt (Kap. 15). Ein schon gespeicherter Plan von heute
@@ -255,6 +256,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const c1doc = c1raw;
   const c1 = checkPlanned(today, draft.shape, { programStarted: programStartedOf(c1doc), lastCheck: lastCheckDay(c1doc), formAvailable: flags.c1check && nextDeskForm(readC1(c1doc).checks) !== null }) ? ('check' as const) : undefined;
   const goal = fest ? nextGoal({ festUnits: fest.units, vocabFest: fest.vocab, history: profile?.history, today }) : null;
+  const applyMin = bridgeMinutesOf(profile);
   const stored = buildUnitStored({
     day: today,
     nowMs,
@@ -272,6 +274,8 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     ...(goal ? { nx: goal.id } : {}),
     // Fokus 2.0 F3: Disziplin von Schritt 3 aus dem Zähler erledigter Anwenden-Tage, mit dem Plan eingefroren (nie neu gewürfelt).
     ap: applyOfDay(profile),
+    // Großpaket P, P4: Minuten von Schritt 3 aus den gemessenen Brücken-Sätzen (`app/profile.abm`), sobald genug gemessen sind; sonst Standard.
+    ...(applyMin !== undefined ? { applyMin } : {}),
   });
   // Neue Wörter-App an (V3 Schritt 4b): Block 1 = die gewählte Wörter-Zeit (F5), wie der Start der Runde sie nennt.
   return vocabOn ? withReviewMinutes(stored, vocabCfg(profile).min) : stored;

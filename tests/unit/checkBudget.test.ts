@@ -135,6 +135,16 @@ describe('scripts/budget.json', () => {
     expect(evaluate(m, budget).problems).toEqual([]);
     expect(Object.keys(budget.vorab ?? {})).toEqual(['P1 S1-TOK', 'P2 S1-SHELL', 'P3 S1-BAND', 'P4 S1-ZEIT', 'P5 S1-ZAHL', 'P6 S1-START', 'P7 S1-DIKTAT', 'D1 V-BAU', 'D2 V-HEUTE', 'D3 V-UEBUNG', 'V1 V-MODUL', 'V2 V-STUFEN', 'D5 V-GRAMMATIK']);
   });
+  it('Großpaket P, P4 (Brücken-Sätze): beide neuen Stücke stehen mit Paket und fester Basis im Budget, die Dateigrenze ist freigegeben', () => {
+    const b = loadBudget() as unknown as { grenzen: { lazy: Record<string, { basis: number; paket?: string } | undefined>; files: number; filesFreigabe?: string } };
+    const screen = b.grenzen.lazy['src/modules/apply/ui/BridgeScreen.tsx'];
+    const door = b.grenzen.lazy['src/modules/vocab/ui/bridgeCtx.ts'];
+    expect([screen?.basis, door?.basis]).toEqual([8000, 2000]);
+    expect(screen?.paket).toContain('P4');
+    expect(door?.paket).toContain('P4');
+    expect(b.grenzen.files).toBe(114);
+    expect(b.grenzen.filesFreigabe).toContain('P4');
+  });
   it('vorab-Beträge sind die aus dem Bauplan (stufe1-plan.md, P0 Nr. 4) und werden nicht still erhöht (platform-guard S4)', () => {
     expect(loadBudget().vorab).toEqual({
       'P1 S1-TOK': { css: 4000 },

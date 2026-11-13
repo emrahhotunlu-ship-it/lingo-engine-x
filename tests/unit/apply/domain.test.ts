@@ -45,10 +45,12 @@ describe('Abschreib-Schutz (lokal)', () => {
 });
 
 describe('Disziplin des Tages: Zähler statt Datum', () => {
-  it('Rotation combo → reply → write → summary', () => {
+  it('alter Zähler bleibt lesbar (combo → reply → write → summary); neue Pläne frieren seit P4 immer den eigenen Satz ein', () => {
     expect([0, 1, 2, 3, 4, 7].map(applyOfCount)).toEqual(['combo', 'reply', 'write', 'summary', 'combo', 'summary']);
     expect(applyOfDay({})).toBe('combo');
-    expect(applyOfDay({ apc: { n: 2, d: '2026-09-20' } })).toBe('write');
+    // Großpaket P, P4 (E2): Pflicht sind die Brücken-Sätze; die Rotation endet, der Zähler wird weiter gelesen und gezählt.
+    expect(applyOfDay({ apc: { n: 2, d: '2026-09-20' } })).toBe('combo');
+    expect(readApplyCount({ apc: { n: 2, d: '2026-09-20' } })).toEqual({ n: 2, d: '2026-09-20' });
     // Unerwarteter Aufbau: nie raten, eigener Satz.
     expect(applyOfDay({ apc: 'x' })).toBe('combo');
     expect(readApplyCount({ apc: { n: -1 } })).toBeNull();
@@ -64,12 +66,12 @@ describe('Disziplin des Tages: Zähler statt Datum', () => {
     expect(applyCountPatch({ apc: { n: 2, d: '2026-09-22' } }, '2026-09-21')).toBeNull();
   });
 
-  it('Schritt 3: ohne Claude Satzbau, kurzer Tag ein eigener Satz, sonst die eingefrorene Disziplin', () => {
+  it('Schritt 3: ohne Claude Satzbau, kurzer Tag ein eigener Satz, sonst zwei – auch bei einem älteren Plan mit eingefrorener Mail', () => {
     expect(resolveStep({ ap: 'reply', short: false, ai: false })).toEqual({ to: 'order' });
-    expect(resolveStep({ ap: 'summary', short: true, ai: true })).toEqual({ to: 'combo', n: 1 });
-    expect(resolveStep({ ap: 'write', short: false, ai: true })).toEqual({ to: 'task', kind: 'write' });
-    expect(resolveStep({ ap: undefined, short: false, ai: true })).toEqual({ to: 'combo', n: 3 });
-    expect(resolveStep({ ap: 'bogus', short: false, ai: true })).toEqual({ to: 'combo', n: 3 });
+    expect(resolveStep({ ap: 'summary', short: true, ai: true })).toEqual({ to: 'bridge', n: 1 });
+    expect(resolveStep({ ap: 'write', short: false, ai: true })).toEqual({ to: 'bridge', n: 2 });
+    expect(resolveStep({ ap: undefined, short: false, ai: true })).toEqual({ to: 'bridge', n: 2 });
+    expect(resolveStep({ ap: 'bogus', short: false, ai: true })).toEqual({ to: 'bridge', n: 2 });
   });
 });
 

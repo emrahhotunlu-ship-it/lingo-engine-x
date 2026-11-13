@@ -168,8 +168,10 @@ for (const d of DEVICES) {
       if (d.touch) await link.tap();
       else await link.click();
       await screen(page, 'apply');
+      // Großpaket P, P4: Pflicht sind die Brücken-Sätze; die Aufgabe öffnet ebenso ohne Tastatur.
       await press(page, d, 'ax-today-start');
-      await screen(page, 'applyTask');
+      await screen(page, 'applyBridge');
+      await expect(page.getByTestId('bx-item')).toBeVisible();
       if (d.touch) expect(await page.evaluate(() => ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName ?? ''))).toBe(false);
       expect(await layoutProblems(page)).toEqual([]);
       expect(errors).toEqual([]);

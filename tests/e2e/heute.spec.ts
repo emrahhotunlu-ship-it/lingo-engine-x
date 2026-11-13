@@ -30,8 +30,8 @@ test('Morgen-Journey: Tagesweg mit 3 Schritten (Wörter · Grammatik · Anwenden
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-focus"]')).toContainText('Grammatik');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Anwenden');
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
-  // Tagesziel 25 → Wörter 15 Min. (60 %, Emrah 08.11.2026 Wörter-Tempo), Grammatik 7, Anwenden 3.
-  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['18', '5', '2']);
+  // Tagesziel 25 → Wörter 18, Grammatik 5 (70/20/10), Anwenden 3 = zwei Brücken-Sätze (Großpaket P, P4, nicht das 10-%-Budget).
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['18', '5', '3']);
   // Kern e (03.11.2026): Kopf der Pflicht-Karte „Pflicht: 0 von 3 erledigt“, ein Balken je Schritt (statt Minutenbalken).
   await expect(page.getByTestId('today-title')).toHaveText('Pflicht: 0 von 3 erledigt');
   await expect(page.getByTestId('day-segs')).toHaveAttribute('data-fills', '0,0,0');
@@ -135,8 +135,8 @@ test('Kurz-Einheit (Tagesziel 15): 3 Schritte, Wörter mindestens 10 Min.', asyn
   await screen(page, 'today');
   await expect(page.getByTestId('duty')).toHaveCount(3);
   expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(TW_DUTY);
-  // 15 Min. → Wörter 11 (70 %), Grammatik 3, Anwenden 2 (Untergrenzen; Emrah 12.11.2026: 70/20/10).
-  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['11', '3', '2']);
+  // 15 Min. → Wörter 11 (70 %), Grammatik 3 (Untergrenzen; Emrah 12.11.2026: 70/20/10); Anwenden 3 = zwei Brücken-Sätze (Großpaket P, P4).
+  expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-min')))).toEqual(['11', '3', '3']);
 });
 
 test('Kein Wochenthema mehr auf Heute: keine Themenzeile, keine Bestätigungskarte, app/week bleibt unberührt', async ({ page }) => {

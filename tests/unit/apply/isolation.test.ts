@@ -20,6 +20,10 @@ const ALLOWED_SHARED: RegExp[] = [
   /^src\/platform\/diagnostics$/,
   /^src\/content\/nb\/(load|schemas|stock)$/,
   /^src\/prompts\/(common|applyReply|applySummary|applyKeypoints|applyCommon|c1Mail)$/,
+  // P4 „Anwenden als Brücke“ (13.11.2026): Zielwahl und Zeit der Brücken-Sätze, Rahmen je Muster, Wortvergleich, Vorlage apply-bridge@1.
+  /^src\/domain\/(apply\/(bridge|bridgeTime)|answer\/align)$/,
+  /^src\/content\/apply\/frames$/,
+  /^src\/prompts\/applyBridge$/,
 ];
 const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/app\/(registry|nav|clock|unit\/done)$/,
@@ -33,6 +37,9 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/modules\/read\/registry$/,
   // F2: Wort-Belege an die Wörter-App (eine Tür).
   /^src\/modules\/vocab\/api$/,
+  // P4 „Anwenden als Brücke“ (13.11.2026): das eine Übungsgerüst und das Rundenende; Adapter „Muster von heute“ und Schreibweg „frei verwendet“.
+  /^src\/ui\/(exercise|SessionEnd)$/,
+  /^src\/features\/apply\/(todayPattern|bridgeStore)$/,
 ];
 const ALLOWED_PACKAGES = new Set(['zod', 'react', 'react/jsx-runtime']);
 const IMPORT_RE = /(?:import|export)\s[^'"]*?from\s*['"]([^'"]+)['"]|import\s*['"]([^'"]+)['"]|import\(\s*['"]([^'"]+)['"]\s*\)/g;

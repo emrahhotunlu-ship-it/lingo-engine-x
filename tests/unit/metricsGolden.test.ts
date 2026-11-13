@@ -169,6 +169,13 @@ function retire(section: 'today' | 'screens' | 'extra', a: unknown, now: Record<
     // UX-Neuanfang (ux-reviewer M3, 02.11.2026): Im Tagesweg nennt die Zeile „Wörter“ Minuten statt „75 Karten · Fällige zuerst“ (sonst stünden
     // Karten und Minuten widersprüchlich nebeneinander). Die Kartenzahl entfällt nur dort, wo der jetzige Lauf gar keine Zahl mehr zeigt.
     if (cur && 'rev' in e && cur.rev === '') e = { ...e, rev: '' };
+    // Großpaket P „Politur“, P4 (Emrah E2 „A“, 13.11.2026): Schritt 3 sind zwei Brücken-Sätze; seine Minuten nennen, was das wirklich dauert
+    // (3 Min.), statt des 10-%-Budgets. In allen Datensätzen dieses Tests (Tagesziel 25, Neustart-Woche 15) war das Budget 2 Minuten: die
+    // Restminuten (`min`, Wiedereinstieg `restart`) steigen deshalb, solange Schritt 3 offen ist, um GENAU 1 – jede andere Abweichung bleibt ein Fehler.
+    for (const f of ['min', 'restart'] as const) {
+      const was = e[f];
+      if (cur && typeof was === 'string' && /^\d+$/.test(was) && cur[f] === String(Number(was) + 1)) e = { ...e, [f]: cur[f] };
+    }
     // Kern e (Emrah 03.11.2026 „Kern zuerst“, Vorschau `Main`/`Monitor-Heute`): „Dein Fortschritt“ steht jetzt auf jeder Breite und zeigt Serie ·
     // Wörter fest · Minuten der Woche statt Wörter fest · Kapitelstand (der Kapitelstand steht weiter auf „Grammatik“). Der neue Stand wird nur
     // übernommen, wo früher keiner stand oder seine erste Zahl (Wörter fest bzw. im Lernen) im neuen wieder vorkommt. Hatte der alte Stand nur

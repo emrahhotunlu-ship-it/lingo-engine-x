@@ -1,19 +1,17 @@
-import { isApplyKind, type ApplyKind, type WriteKind } from './count';
+import { BRIDGE_N, BRIDGE_SHORT_N } from '../shared';
 
-// Tagesweg Schritt 3 „Anwenden“ (F3, Nachtrag learning-scientist Muss 4): was beim Start läuft. Rein.
-// - Die Disziplin steht im eingefrorenen Plan (`u.ap`); ältere Pläne ohne `ap` laufen wie bisher (eigener Satz).
-// - Kurzer Tag: eigener Satz mit EINEM Satz (die Disziplin wandert zum nächsten vollen Tag, der Zähler zählt kurze Tage nicht).
-// - Ohne Claude: Satzbau wie bisher (ohne KI erfüllbar). Fehlendes Material (kein Artikel) erkennt erst der Bildschirm; er bietet dann den eigenen Satz an.
+// Tagesweg Schritt 3 „Anwenden“: was beim Start läuft. Rein.
+// Großpaket P „Politur“, P4 (Entscheidung E2 vom 13.11.2026): Pflicht sind täglich ZWEI Brücken-Sätze (ein Wort aus der Wörter-App + ein
+// Grammatik-Muster je Satz). Mail beantworten, Mail schreiben und Zusammenfassen sind freiwillig („Frei üben“).
+// - Die früher eingefrorene Disziplin (`u.ap`: combo/reply/write/summary) wird weiter gelesen, steuert Schritt 3 aber nicht mehr: auch ein
+//   älterer Plan von heute mit `ap: 'reply'` startet die Brücken-Sätze (alte Pläne bleiben lesbar, nichts wird umgeschrieben).
+// - Kurzer Tag: ein Satz (der Tag ist bewusst kurz; der Zähler `apc` zählt kurze Tage wie bisher nicht).
+// - Sehr kleines Anwenden-Budget: trotzdem zwei Sätze (die Minuten nennt `domain/apply/bridgeTime.ts` ehrlich).
+// - Ohne Claude: Satzbau wie bisher (ohne KI erfüllbar). Fehlen passende Wörter oder Muster, bietet der Bildschirm den Satzbau an.
 
-export type StepPlan = { to: 'combo'; n: number } | { to: 'task'; kind: WriteKind } | { to: 'order' };
-
-/** Sätze des eigenen Satzes am vollen Tag und am kurzen Tag. */
-export const COMBO_FULL = 3;
-export const COMBO_SHORT = 1;
+export type StepPlan = { to: 'bridge'; n: number } | { to: 'order' };
 
 export function resolveStep(i: { ap: unknown; short: boolean; ai: boolean }): StepPlan {
   if (!i.ai) return { to: 'order' };
-  if (i.short) return { to: 'combo', n: COMBO_SHORT };
-  const ap: ApplyKind = isApplyKind(i.ap) ? i.ap : 'combo';
-  return ap === 'combo' ? { to: 'combo', n: COMBO_FULL } : { to: 'task', kind: ap };
+  return { to: 'bridge', n: i.short ? BRIDGE_SHORT_N : BRIDGE_N };
 }

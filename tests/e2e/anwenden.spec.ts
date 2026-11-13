@@ -5,7 +5,8 @@ import { TUE_9, TW_DUTY, profileWith, reviewedLog } from './heuteHelpers';
 import { dump } from './trainerHelpers';
 
 // F3 Anwenden (docs/umbau/fokus2/anwenden-plan.md): Seite „Anwenden“, die Schreibübungen Antworten/Schreiben/Zusammenfassen am Handy (390) und Laptop (1440),
-// Tagesweg Schritt 3 mit der eingefrorenen Disziplin (`u.ap`), Zähler `apc`, kurzer Tag. Die Testlaufzeit antwortet fest (`src/platform/dev/canned/apply.ts`,
+// seit Großpaket P, P4 (E2) frei geübt („Frei üben“); Schritt 3 sind die Brücken-Sätze (`anwendenBruecke.spec.ts`), ältere Pläne mit `u.ap` bleiben lesbar,
+// Zähler `apc`, kurzer Tag. Die Testlaufzeit antwortet fest (`src/platform/dev/canned/apply.ts`,
 // Fehler aus der Tabelle der Satz-Klinik: „discussed about“, „informations“, „depends of“ …).
 
 type Doc = Record<string, unknown>;
@@ -68,21 +69,26 @@ function twPlan(ap: string): Doc {
 test.describe('Handy 390 px', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('Seite: Heute dran aus dem eingefrorenen Plan (Zähler 1 → Antworten), vier Disziplinen; Antwort mit einem Feld je Pflichtpunkt, erst selbst verbessern, dann Lösung; Schritt 3 erledigt, Zähler +1', async ({ page }) => {
+  test('Seite: Pflicht sind die eigenen Sätze (auch beim Zähler 1, früher „Antworten“); Mails frei mit ehrlicher Zeit; Antwort mit einem Feld je Pflichtpunkt, erst selbst verbessern, dann Lösung; frei geübt zählt nicht zur Pflicht', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true, now: TUE_9, localStorage: { 'lx:input': 'touch' }, fake: { patch: { 'app/profile': { apc: { n: 1, d: '2026-09-21' } } } } });
     await screen(page, 'today');
-    await expect.poll(async () => ((await profile(page)).plan as { u?: { ap?: string } } | undefined)?.u?.ap).toBe('reply');
+    // Großpaket P, P4 (E2): neue Pläne frieren immer den eigenen Satz ein; der Zähler `apc` bleibt lesbar, steuert aber nicht mehr die Disziplin.
+    await expect.poll(async () => ((await profile(page)).plan as { u?: { ap?: string } } | undefined)?.u?.ap).toBe('combo');
     await openTab(page, 'apply');
-    await expect(page.getByTestId('apply-hub')).toHaveAttribute('data-v', '2');
-    await expect(page.getByTestId('ax-today-start')).toHaveAttribute('data-kind', 'reply');
-    // UX-Befund 4: Die Art von heute steht nicht noch einmal unter „Frei üben“ (der einzige Weg zur Pflicht ist Schritt 3).
+    await expect(page.getByTestId('apply-hub')).toHaveAttribute('data-v', '3');
+    await expect(page.getByTestId('ax-today-start')).toHaveAttribute('data-kind', 'bridge');
+    await expect(page.getByTestId('ax-today-start')).toContainText('ca. 3 Min.');
+    // Die eigenen Sätze stehen nicht noch einmal unter „Frei üben“ (der einzige Weg zur Pflicht ist Schritt 3); Mails und Zusammenfassung frei.
     await expect(page.getByTestId('ax-all').locator('button')).toHaveCount(3);
-    await expect(page.getByTestId('ax-row-reply')).toHaveCount(0);
-    for (const id of ['hub-combo-own', 'ax-row-write', 'ax-row-summary']) await expect(page.getByTestId(id)).toBeEnabled();
+    await expect(page.getByTestId('hub-combo-own')).toHaveCount(0);
+    for (const id of ['ax-row-reply', 'ax-row-write', 'ax-row-summary']) {
+      await expect(page.getByTestId(id)).toBeEnabled();
+      await expect(page.getByTestId(id)).toContainText('6–9 Min.');
+    }
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe(page)).toEqual([]);
 
-    await page.getByTestId('ax-today-start').click();
+    await page.getByTestId('ax-row-reply').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-device', 'touch');
     await expect(page.getByTestId('ax-bar-title')).toHaveText('Antworten');
@@ -183,10 +189,12 @@ test.describe('Handy 390 px', () => {
     expect(reps.length).toBeLessThanOrEqual(3);
     expect(reps.every((r) => typeof r.ctx === 'string' && r.ctx.length > 0)).toBe(true);
 
+    // Frei geübt: zurück auf die Seite Anwenden; Schritt 3 bleibt offen, der Zähler der Anwenden-Tage unverändert.
     await page.getByTestId('ax-done').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
-    await expect.poll(async () => ((await profile(page)).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
-    await expect.poll(async () => (await profile(page)).apc).toEqual({ n: 2, d: TUE });
+    await screen(page, 'apply');
+    await expect(page.getByTestId('ax-today-start')).toBeVisible();
+    expect(((await profile(page)).act as Record<string, Doc> | undefined)?.[TUE]?.['u-task']).toBeUndefined();
+    expect((await profile(page)).apc).toEqual({ n: 1, d: '2026-09-21' });
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
@@ -222,7 +230,7 @@ test.describe('Handy 390 px', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Kurzer Tag: Schritt 3 ist ein eigener Satz mit EINEM Satz; der Zähler zählt nicht (die Disziplin wandert)', async ({ page }) => {
+  test('Kurzer Tag mit älterem Plan (eingefroren „Mail schreiben“): Schritt 3 ist ein eigener Satz mit EINEM Satz; der Zähler zählt nicht', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
       now: TUE_9,
@@ -231,12 +239,15 @@ test.describe('Handy 390 px', () => {
     });
     await screen(page, 'today');
     await openTab(page, 'apply');
-    await expect(page.getByTestId('ax-today-start')).toHaveAttribute('data-kind', 'combo');
+    // Großpaket P, P4: der ältere Plan bleibt lesbar (`ap: 'write'` steht weiter darin), Schritt 3 startet trotzdem die Brücken-Sätze.
+    await expect(page.getByTestId('ax-today-start')).toHaveAttribute('data-kind', 'bridge');
     await expect(page.getByTestId('ax-today-start')).toContainText('Kurzer Tag');
+    expect(((await profile(page)).plan as { u?: { ap?: string } }).u?.ap).toBe('write');
     await page.getByTestId('ax-today-start').click();
-    await screen(page, 'comboSentence');
-    await expect(page.getByTestId('combo-item')).toBeVisible();
-    await page.getByTestId('combo-skip').click();
+    await screen(page, 'applyBridge');
+    await expect(page.getByTestId('bx-item')).toBeVisible();
+    await expect(page.getByTestId('exercise')).toContainText('Satz 1 von 1');
+    await page.getByTestId('bx-skip').click();
     await page.locator('[data-screen="unitCard"]').waitFor();
     await expect.poll(async () => ((await profile(page)).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
     expect((await profile(page)).apc).toEqual({ n: 2, d: '2026-09-21' });
@@ -256,7 +267,7 @@ test.describe('Handy 390 px', () => {
 test.describe('Laptop 1440 px', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test('Tagesweg Schritt 3 „Artikel zusammenfassen“: Artikel beim Schreiben eingeklappt, Einfügen gesperrt, Hinweis „eigene Worte“; Kernpunkte einmal festgelegt; Rückmeldung in fester Reihenfolge', async ({ page }) => {
+  test('Frei üben „Artikel zusammenfassen“ (auch mit älterem Plan, eingefroren „Zusammenfassen“): Artikel beim Schreiben eingeklappt, Einfügen gesperrt, Hinweis „eigene Worte“; Kernpunkte einmal festgelegt; Rückmeldung in fester Reihenfolge', async ({ page }) => {
     const { errors, external } = await boot(page, {
       migrated: true,
       now: TUE_9,
@@ -264,8 +275,8 @@ test.describe('Laptop 1440 px', () => {
       fake: { patch: { ...profileWith(TUE, twPlan('summary'), ['u-focus']), ...reviewedLog(TUE) } },
     });
     await screen(page, 'today');
-    await expect(page.getByTestId('start')).toHaveAttribute('data-duty', 'ch:u-task');
-    await page.getByTestId('start').click();
+    await openTab(page, 'apply');
+    await page.getByTestId('ax-row-summary').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-kind', 'summary');
     await expect(page.getByTestId('ax-task')).toContainText('3 bis 5 Sätzen');
@@ -310,8 +321,10 @@ test.describe('Laptop 1440 px', () => {
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe(page)).toEqual([]);
     await page.getByTestId('ax-done').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
-    await expect.poll(async () => (await profile(page)).apc).toEqual({ n: 1, d: TUE });
+    await screen(page, 'apply');
+    // Frei geübt: kein Anwenden-Tag gezählt, Schritt 3 bleibt offen (die Pflicht sind die eigenen Sätze).
+    expect((await profile(page)).apc).toBeUndefined();
+    await expect(page.getByTestId('ax-today-start')).toHaveAttribute('data-kind', 'bridge');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
@@ -324,7 +337,8 @@ test.describe('Laptop 1440 px', () => {
       fake: { patch: { ...profileWith(TUE, twPlan('summary'), ['u-focus']), ...reviewedLog(TUE), 'read/r-2026-09-20': null } },
     });
     await screen(page, 'today');
-    await page.getByTestId('start').click();
+    await openTab(page, 'apply');
+    await page.getByTestId('ax-row-summary').click();
     await screen(page, 'applyTask');
     await expect(page.getByTestId('ax-nomaterial')).toHaveCount(0);
     await expect(page.getByTestId('ax-flow')).toHaveAttribute('data-material', /^av\d{2}$/);
