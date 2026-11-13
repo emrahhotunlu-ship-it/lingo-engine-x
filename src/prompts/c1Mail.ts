@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { keepEdits, keepUsed, normWs, type Edit, type Used } from '../domain/tutor/edits';
 import { patIdsOf } from '../domain/tutor/patList';
-import { GREET_EXAMPLE, GREET_RULE, greetOf, greetTaskLine, STYLE_EXAMPLE, STYLE_RULE, styleOf, type GreetCheck, type GreetVars, type StyleTip } from './applyCommon';
+import { GREET_EXAMPLE, GREET_RULE, greetOf, greetTaskLine, STYLE_EXAMPLE, STYLE_RULE, styleOf, targetWordsLine, targetWordsOf, usedWhyIn, wordAliasOf, type GreetCheck, type GreetVars, type StyleTip, type TargetWord } from './applyCommon';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { intIn, clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
@@ -15,6 +15,9 @@ import type { PromptTemplate, UiLang } from './types';
 // @2 (W5, Lehrer-Prüfung F3, Anwenden „Eine Mail schreiben“): `style` „So klingt es gehobener“ (K1) und – nur mit Vorgabe `greet` – Anrede und Gruß (K7).
 // Beide tolerant (fehlen sie, gelten die Verbesserungen der Liste bzw. kein Urteil); die Schreibwerkstatt ruft ohne `greet` und zeigt beides nicht.
 // W5b (Lehrer-Prüfung): mit `greet` behält oder ergänzt `upgraded` Anrede und Gruß. Gleiche Version: nur eine Regelzeile, Schema unverändert, @2 war noch nie live.
+// @3 (Großpaket P „Politur“, P4, 13.11.2026; Prüfbefund „c1-mail@2 beurteilt Wörter nie“): mit `words` (nur Anwenden) gehen die Zielwörter mit Kennung und
+// gelernter Bedeutung mit, `used` beurteilt sie (Kennung `w1`, gespeichert als Wortlaut) wie die Muster, jeder Eintrag mit `why`. `summary` ist das
+// Kurzurteil („Kurz gesagt“). Ohne `words` (Schreibwerkstatt) bleibt alles wie in @2, nur `why` kommt dazu.
 
 export type MailVars = {
   /** Anlass und Gegenüber, ≤ 400 Zeichen. */
@@ -34,6 +37,8 @@ export type MailVars = {
   greet?: GreetVars;
   /** „So klingt es gehobener“ anfragen (W5 K1, nur Anwenden; die Schreibwerkstatt zeigt es nicht und hält ihre Anfrage kurz). */
   polish?: boolean;
+  /** Zielwörter aus der Wörter-App mit Kennung und gelernter Bedeutung (@3, nur Anwenden; höchstens 2). */
+  words?: readonly TargetWord[];
 };
 
 export type ToneFit = 'fits' | 'too-direct' | 'too-informal' | 'too-stiff';
@@ -60,10 +65,10 @@ export const MAIL_PHRASES_MAX = 4;
 export const MAIL_MAX_EDITS = 12;
 
 const ID = 'c1-mail';
-const VERSION = 2;
+const VERSION = 3;
 
 export const MAIL_EXAMPLE =
-  '{"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"tone":{"fit":"fits","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
+  '{"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…","why":"…"}],"tone":{"fit":"fits","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
 
 /** Beispielantwort mit den Anwenden-Feldern (W5): Anrede und Gruß nach dem Ton, Stil-Verbesserungen davor der Fassung. */
 export function mailExample(v: Pick<MailVars, 'greet' | 'polish'>): string {
@@ -90,12 +95,13 @@ export const toneFit = (v: unknown): unknown => {
 
 export function mailSchema(v: MailVars): z.ZodType<C1Mail> {
   const allIds = patIdsOf(v.pats);
-  const chapterIds = new Set(v.patterns.map((p) => p.id));
+  const words = targetWordsOf(v.words ?? []);
+  const chapterIds = new Set([...v.patterns.map((p) => p.id), ...words.map((w) => w.word)]);
   const given = block(v.text, MAIL_TEXT_MAX);
   const base = z
     .object({
       edits: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepEdits(xs, given, allIds, MAIL_MAX_EDITS, { sevDefault: 'upgrade' })),
-      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepUsed(xs, given, chapterIds)),
+      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => usedWhyIn(keepUsed(xs, given, chapterIds, wordAliasOf(words)), (s) => isWrongLang(s, v.uiLang))),
       tone: z.object({ fit: z.preprocess(toneFit, z.enum(['fits', 'too-direct', 'too-informal', 'too-stiff']).catch('fits')), why: z.preprocess((x) => x ?? '', clipped(0, 160)) }),
       style: z.unknown().optional(),
       greet: z.unknown().optional().transform((x) => (v.greet ? greetOf(x, v.uiLang) : null)),
@@ -135,7 +141,8 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       v.greet ? greetTaskLine(v.greet) : '',
       v.ctx ? `Learner work context: ${clip(v.ctx, 200)}` : '',
       `Target patterns (id: name (form)):\n${pats.join('\n')}`,
-      `Target phrases: ${v.phrases.slice(0, MAIL_PHRASES_MAX).map((p) => clip(p, 60)).join(' | ')}`,
+      v.phrases.length ? `Target phrases: ${v.phrases.slice(0, MAIL_PHRASES_MAX).map((p) => clip(p, 60)).join(' | ')}` : '',
+      targetWordsLine(v.words ?? []),
       `Explanation language: ${langName(v.uiLang)}`,
       'Learner text:',
       fenced(block(v.text, MAIL_TEXT_MAX)),
@@ -145,12 +152,14 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       mailExample(v),
       'Rules:',
       '- edits: at most 12, each with "from" copied EXACTLY from the learner text (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors (kind register is always sev upgrade).',
-      '- used: for each target pattern id that the learner tried to use, one entry with ok (true if used correctly) and a "quote" copied exactly from the text. Skip patterns the learner did not try.',
+      (v.words ?? []).length
+        ? '- used: for each target pattern id and each target word (by its id, e.g. "w1") that the learner tried to use, one entry with pat (the id), ok (true only if used correctly; a word only in the meaning given, with the right form and partner words), a "quote" copied exactly from the text and "why" (one short sentence in the explanation language: why it works here, or what is wrong and the right form). Skip what the learner did not try.'
+        : '- used: one entry per target pattern id the learner tried: pat (the id), ok (true if correct), "quote" copied exactly from the text, "why" (one short sentence in the explanation language).',
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
       v.greet ? GREET_RULE : '',
       v.polish ? STYLE_RULE : '',
       `- upgraded: the whole email rewritten at C1 level in American English, keeping the learner ideas and structure and roughly the same length${v.greet ? '; keep or add a fitting salutation and sign-off for this reader' : ''}; it must differ from the learner text.`,
-      '- summary: one short sentence in the explanation language: what works, whether every point of the task is covered, and what to work on next.',
+      '- summary: the gist in ONE short sentence in the explanation language: what works, whether every task point is covered, what to work on next.',
       '- errorCount: after writing everything, count the mistakes (sev "error") in the learner text once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',
     ]

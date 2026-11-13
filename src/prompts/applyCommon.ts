@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { clip } from './common';
 import { isWrongLang } from '../domain/lang/detect';
-import { normWs, type Edit } from '../domain/tutor/edits';
+import { normWs, type Edit, type Used } from '../domain/tutor/edits';
 import type { UiLang } from './types';
 
 // Gemeinsame Bausteine der Anwenden-Vorlagen (F3, docs/umbau/fokus2/anwenden-plan.md, Nachtrag learning-scientist Muss 1/2/5). Rein.
@@ -174,3 +174,61 @@ export const greetTaskLine = (g: GreetVars): string =>
   `Reader: ${clip(g.reader, 120)}. A fitting salutation is ${clip(g.hello, 60)} and a fitting sign-off is ${clip(g.close, 40)}; other forms in the same register are fine too.`;
 export const GREET_RULE =
   '- greet: the salutation and sign-off together for this reader: "fits", "off" (too formal, too casual, wrong name or title) or "missing"; why is one short sentence in the explanation language. They also count for tone.';
+
+// ---------------------------------------------------------------- Mail-Vorlagen @3 (Großpaket P „Politur“, P4, 13.11.2026)
+
+/** Höchstens so viele Zielwörter je Schreibaufgabe. */
+export const WORDS_MAX = 2;
+
+/** Zielwort mit Kennung (`w1`, `w2`) und gelernter Bedeutung (Deutsch; leer, wenn unbekannt). */
+export type TargetWord = { id: string; word: string; de: string };
+
+/** Zielwörter einheitlich (höchstens 2): ein bloßer Wortlaut bekommt die Kennung nach seiner Stelle. */
+export function targetWordsOf(words: readonly (string | TargetWord)[]): TargetWord[] {
+  const out: TargetWord[] = [];
+  for (const w of words) {
+    if (out.length >= WORDS_MAX) break;
+    const t = typeof w === 'string' ? { id: '', word: w, de: '' } : w;
+    const word = t.word.trim();
+    if (!word || out.some((x) => x.word.toLowerCase() === word.toLowerCase())) continue;
+    out.push({ id: /^w\d$/.test(t.id) ? t.id : `w${out.length + 1}`, word, de: t.de.trim() });
+  }
+  return out;
+}
+
+/** Erlaubte Kennungen in `used`: die Zielwörter (Wortlaut) und `rule` (nur wenn es eine Regel gibt). */
+export const usedIdsOf = (words: readonly (string | TargetWord)[], rule: string): Set<string> => new Set([...targetWordsOf(words).map((w) => w.word), ...(rule.trim() ? ['rule'] : [])]);
+
+/** Kennungen, die auf ein Zielwort zeigen (`w1` und der Wortlaut in Kleinschreibung) → Wortlaut, wie er in `used` gespeichert wird. */
+export function wordAliasOf(words: readonly (string | TargetWord)[]): Map<string, string> {
+  const m = new Map<string, string>();
+  for (const w of targetWordsOf(words)) {
+    m.set(w.id, w.word);
+    m.set(w.word.toLowerCase(), w.word);
+  }
+  return m;
+}
+
+/** Ein `why` in falscher Sprache fällt weg (die Verwendung selbst bleibt belegt). */
+export const usedWhyIn = (used: readonly Used[], wrong: (s: string) => boolean): Used[] => used.map((u) => (u.why && wrong(u.why) ? { pat: u.pat, ok: u.ok, quote: u.quote } : u));
+
+/** Zeile der Zielwörter im Prompt: Kennung, Wortlaut und gelernte Bedeutung. */
+export const targetWordsLine = (words: readonly (string | TargetWord)[]): string => {
+  const ws = targetWordsOf(words);
+  return ws.length ? `Target words (id: word = meaning the learner learned): ${ws.map((w) => `${w.id}: ${clip(w.word, 40)}${w.de ? ` = ${clip(w.de, 60)}` : ''}`).join(' | ')}` : '';
+};
+
+/** Kurzurteil (@3): steht als „Kurz gesagt“ ganz oben in der Rückmeldung. */
+export const GIST_RULE = '- summary: the gist in ONE short sentence in the explanation language (shown first): what works and the one thing to work on next.';
+
+/** Regel für `used` (@3): Kennung, Urteil in der gelernten Bedeutung, wörtliches Zitat und ein Satz Grund. */
+export const USED_RULE =
+  '- used: for each target word (by its id, e.g. "w1") and for the target rule ("rule") that the learner tried to use, one entry with pat (the id), ok (true only if the word is used correctly in the meaning given, with the right form and partner words; for the rule: the form is right), a "quote" copied exactly from the text and "why" (one short sentence in the explanation language: why it works here, or what is wrong and the right form). Skip what the learner did not try.';
+
+/** Gemeinsame Regeln der Anwenden-Prüfungen (Antwort und Zusammenfassung). */
+export const APPLY_EDIT_RULES = [
+  'First list every error as an atomic edit: copy the exact wrong span from the text into "from", write the minimal replacement into "to". Only then explain each edit.',
+  'Keep the learner\'s words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
+  'American and British grammar both count as correct (e.g. past simple with already/just/yet, have got, collective nouns with plural verbs).',
+  'List all errors first, then upgrades; never drop an error to make room for an upgrade.',
+];

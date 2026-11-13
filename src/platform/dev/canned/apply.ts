@@ -1,8 +1,8 @@
-// Testantworten F3 Anwenden (apply-reply@2, apply-summary@2, apply-keypoints@1; W5: `style` und `greet`). Besitzer: nur dieses Paket.
+// Testantworten F3 Anwenden (apply-reply@3, apply-summary@3, apply-keypoints@1; W5: `style` und `greet`; P4: Wort-Kennungen und `why` in `used`). Besitzer: nur dieses Paket.
 // Nur Entwicklung und Tests – nie Teil des Produktions-Builds.
 
 import { registerCannedReply } from '../fakeSample';
-import { mailTextOf } from './lp3/p47';
+import { mailTextOf, targetWords } from './lp3/p47';
 import { CLINIC_RULES } from './lp3/p46';
 import { applyBridgeReply } from './applyBridge';
 
@@ -20,13 +20,6 @@ function numbered(input: string, label: string): string[] {
   }
   return out;
 }
-
-/** Zielwörter aus „Target words: a | b“. */
-const targetWords = (input: string): string[] =>
-  (/^Target words: (.*)$/m.exec(input)?.[1] ?? '')
-    .split(' | ')
-    .map((w) => w.trim())
-    .filter(Boolean);
 
 /** W5 K1: Stil-Verbesserungen aus einer festen Tabelle (nur Stellen, die wörtlich im Text stehen; `zzfakestyle` → dazu eine erfundene Stelle, fällt weg). */
 const STYLE_RULES: ReadonlyArray<{ from: string; to: string; de: string; en: string }> = [
@@ -78,10 +71,13 @@ function core(input: string, n: number) {
   });
   const used: Array<Record<string, unknown>> = [];
   for (const w of targetWords(input)) {
-    const at = clean.toLowerCase().indexOf(w.toLowerCase());
-    if (at >= 0) used.push({ pat: w, ok: true, quote: clean.slice(at, at + w.length) });
+    const at = clean.toLowerCase().indexOf(w.word.toLowerCase());
+    if (at >= 0) used.push({ pat: w.id, ok: true, quote: clean.slice(at, at + w.word.length), why: de ? 'Das Wort passt hier in der gelernten Bedeutung.' : 'The word fits here in the meaning you learned.' });
   }
-  if (/^Target rule/m.test(input) && sents[0]) used.push({ pat: 'rule', ok: !/zzrule/i.test(text), quote: sents[0] });
+  if (/^Target rule/m.test(input) && sents[0]) {
+    const bad = /zzrule/i.test(text);
+    used.push({ pat: 'rule', ok: !bad, quote: sents[0], why: bad ? (de ? 'Hier fehlt die Form der Regel.' : 'The form of the rule is missing here.') : de ? 'Die Form der Regel ist richtig gebildet.' : 'The form of the rule is built correctly.' });
+  }
   const good = sents[0] ? { quote: sents[0], why: de ? 'Der Einstieg ist klar und freundlich.' : 'The opening is clear and friendly.' } : null;
   const style = styleOf(clean, de, /zzfakestyle/i.test(text));
   return { text, de, clean, fixed, edits, points, used, good, style, errors: hits.length };

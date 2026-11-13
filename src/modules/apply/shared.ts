@@ -40,7 +40,7 @@ export type { ApplySummary } from '../../prompts/applySummary';
 export { applyKeypoints } from '../../prompts/applyKeypoints';
 export { c1Mail } from '../../prompts/c1Mail';
 export type { C1Mail } from '../../prompts/c1Mail';
-export type { Good, GreetCheck, GreetVars, PointCheck, StyleTip } from '../../prompts/applyCommon';
+export type { Good, GreetCheck, GreetVars, PointCheck, StyleTip, TargetWord } from '../../prompts/applyCommon';
 
 // P4 „Anwenden als Brücke“ (13.11.2026): Brücken-Sätze – Zielwahl, Rahmen, Zeit, Muster, Vorlage
 export { dayKey } from '../../domain/date';

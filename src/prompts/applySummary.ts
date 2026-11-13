@@ -3,7 +3,7 @@ import { isWrongLang } from '../domain/lang/detect';
 import { keepEdits, keepUsed, normWs, type Edit, type Used } from '../domain/tutor/edits';
 import { patIdsOf } from '../domain/tutor/patList';
 import { asList, keepGood, POINT_SCALE, POINT_WHY_RULE, pointsField, pointWhyIssues, STYLE_EXAMPLE, STYLE_RULE, styleOf, type Good, type PointCheck, type StyleTip } from './applyCommon';
-import { APPLY_EDIT_RULES, APPLY_MAX_EDITS, APPLY_TEXT_MAX, usedIdsOf, usedLine } from './applyReply';
+import { APPLY_EDIT_RULES, APPLY_MAX_EDITS, APPLY_TEXT_MAX, GIST_RULE, USED_RULE, usedIdsOf, usedLine, usedWhyIn, wordAliasOf, type TargetWord } from './applyReply';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { clipped, intIn } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
@@ -13,6 +13,8 @@ import type { PromptTemplate, UiLang } from './types';
 // erfunden, keine eigene Meinung), Fehlerstellen (`keepEdits`), Zielwörter und Regel (`keepUsed`), eine bessere Fassung. Ob in eigenen Worten geschrieben, misst
 // die App selbst (domain/copy im Modul Anwenden), nicht Claude. Stufe `default`, 24 h zwischengespeichert, Neuversuch nur bei Schemaverletzung (A6.3).
 // @2 (W5 K1): `style` „So klingt es gehobener“ (1–2 zitierte Stil-Verbesserungen, getrennt von den Fehlern; tolerant wie in apply-reply@2).
+// @3 (Großpaket P, P4, 13.11.2026): Zielwörter mit Kennung und gelernter Bedeutung, `used` mit Kennung und `why` (wie apply-reply@3); `summary` ist
+// das Kurzurteil („Kurz gesagt“), das die App zuerst zeigt.
 
 export type SummaryVars = {
   /** Titel des Artikels, ≤ 160. */
@@ -23,7 +25,8 @@ export type SummaryVars = {
   keyPoints: readonly string[];
   /** Ziel der Länge (Prüfbefund T4): Sätze (von–bis) und höchstens so viele Wörter, wie die Aufgabe sie nennt. */
   goal: { sentences: readonly [number, number]; maxWords: number };
-  words: readonly string[];
+  /** Zielwörter (höchstens 2), mit Kennung und gelernter Bedeutung (@3). */
+  words: readonly (string | TargetWord)[];
   rule: string;
   text: string;
   uiLang: UiLang;
@@ -50,9 +53,9 @@ export const TITLE_MAX = 160;
 export const KEYPOINTS_MAX = 4;
 
 const ID = 'apply-summary';
-const VERSION = 2;
+const VERSION = 3;
 
-export const SUMMARY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
+export const SUMMARY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"w1","ok":true,"quote":"…","why":"…"}],"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
@@ -76,7 +79,7 @@ export function summarySchema(v: SummaryVars): z.ZodType<ApplySummary> {
       points: pointsField(given, n),
       faithful: z.unknown().optional().transform((x) => faithfulOf(x, given)),
       edits: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepEdits(xs, given, allIds, APPLY_MAX_EDITS, { sevDefault: 'upgrade' })),
-      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepUsed(xs, given, usedIdsOf(v.words, v.rule))),
+      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => usedWhyIn(keepUsed(xs, given, usedIdsOf(v.words, v.rule), wordAliasOf(v.words)), (s) => isWrongLang(s, v.uiLang))),
       good: z.unknown().optional().transform((x) => keepGood(x, given)),
       style: z.unknown().optional(),
       upgraded: clipped(20, 1400),
@@ -128,11 +131,11 @@ export const applySummary: PromptTemplate<SummaryVars, ApplySummary> = {
       `- points: one entry for each key point (i = its number, 1 to ${Math.min(KEYPOINTS_MAX, v.keyPoints.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the summary that cover it (empty when "no"). Judge whether the point is there, not the grammar. ${POINT_SCALE} ${POINT_WHY_RULE}`,
       '- faithful: ok is false if the summary states something the article does not say (an invented fact, a wrong number, a wrong cause) or adds the learner\'s own opinion; then quote copies EXACTLY that span and why says in one short sentence in the explanation language what is wrong. Otherwise ok is true, quote is empty and why is one short sentence why it is accurate.',
       '- edits: at most 12, each with "from" copied EXACTLY from the summary (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Register is never an error.',
-      '- used: for each target word and for the target rule that the learner tried to use, one entry with pat (the word exactly as given, or "rule"), ok (true if used correctly) and a "quote" copied exactly from the summary. Skip what the learner did not try.',
+      USED_RULE,
       '- good: one strong span copied exactly from the summary ("quote") and one short sentence in the explanation language why it works ("why").',
       STYLE_RULE,
       `- upgraded: a better summary in American English with ${sentences} sentences and at most ${v.goal.maxWords} words, in the learner's own words where they are correct; it must cover every key point, must not copy long phrases from the article and must differ from the learner's summary.`,
-      '- summary: one short sentence in the explanation language: what works and what to work on next.',
+      GIST_RULE,
       '- errorCount: after writing everything, count the mistakes (sev "error") in the summary once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',
     ]

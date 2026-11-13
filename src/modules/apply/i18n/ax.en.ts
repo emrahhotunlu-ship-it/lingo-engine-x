@@ -168,7 +168,6 @@ export const axEn: Record<keyof typeof axDe, string> = {
   axPeeked: 'You opened the article again while writing.',
 
   axBTitle: 'Your own sentences',
-  axBBar: 'Your own sentence',
   axKindBridge: 'Two sentences of your own: word + grammar',
   axKindBridgeOne: 'Short day: one sentence of your own',
   axWhyBridge: 'You use a word and a grammar pattern you are learning right now in your own sentence – that makes them active.',
@@ -241,5 +240,4 @@ export const axEn: Record<keyof typeof axDe, string> = {
   axGist: 'In short',
   axSpotsMore_one: 'Show {n} more mistake',
   axSpotsMore_other: 'Show {n} more mistakes',
-  axPointsNeed: 'Short version: {n} key points are enough.',
 };

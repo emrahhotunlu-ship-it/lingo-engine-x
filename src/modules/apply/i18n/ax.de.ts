@@ -168,7 +168,6 @@ export const axDe = {
 
   // Großpaket P „Politur“, P4 (13.11.2026): täglich zwei eigene Sätze mit einem Wort und einem Grammatik-Muster (Pflicht); Mails und Zusammenfassung freiwillig.
   axBTitle: 'Eigene Sätze',
-  axBBar: 'Eigener Satz',
   axKindBridge: 'Zwei eigene Sätze: Wort + Grammatik',
   axKindBridgeOne: 'Kurzer Tag: ein eigener Satz',
   axWhyBridge: 'Du benutzt ein Wort und ein Grammatik-Muster, die du gerade lernst, in deinem eigenen Satz – so werden sie aktiv.',
@@ -238,9 +237,8 @@ export const axDe = {
   axBBack: 'Zurück zu Anwenden',
   axBEndTitle: 'Eigene Sätze geschafft',
 
-  // Mail-Vorlagen @3: Kurzurteil überall, höchstens drei Fehlerkarten offen, kurze Fassung wertet zwei Kernpunkte.
+  // Mail-Vorlagen @3: Kurzurteil überall, höchstens drei Fehlerkarten offen.
   axGist: 'Kurz gesagt',
   axSpotsMore_one: 'Noch {n} Fehlerstelle zeigen',
   axSpotsMore_other: 'Noch {n} Fehlerstellen zeigen',
-  axPointsNeed: 'Kurze Fassung: {n} Kernpunkte reichen.',
 } as const;

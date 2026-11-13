@@ -165,8 +165,15 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('ax-style-0')).toContainText('Warum');
     await expect(page.getByTestId('ax-style-0').locator('s')).toHaveCount(0);
     await expect(page.getByTestId('ax-helped')).toBeVisible();
-    // Feste Reihenfolge: Pflichtpunkte → Ton → Länge → Fehlerstellen.
-    const ys = await Promise.all(['ax-points', 'ax-tone', 'ax-length', 'ax-spots'].map(async (id) => (await page.getByTestId(id).boundingBox())?.y ?? 0));
+    // Feste Reihenfolge: Kurz gesagt (Mail-Vorlagen @3) → Pflichtpunkte → Ton → Länge → Fehlerstellen; höchstens drei Fehlerkarten offen.
+    await expect(page.getByTestId('ax-gist')).toContainText('Kurz gesagt');
+    const cards = page.locator('[data-testid^="ax-spot-"][data-self]');
+    expect(await cards.count()).toBeLessThanOrEqual(3);
+    if ((await page.getByTestId('ax-spots-more').count()) > 0) {
+      await page.getByTestId('ax-spots-more').click();
+      expect(await cards.count()).toBeGreaterThan(3);
+    }
+    const ys = await Promise.all(['ax-gist', 'ax-points', 'ax-tone', 'ax-length', 'ax-spots'].map(async (id) => (await page.getByTestId(id).boundingBox())?.y ?? 0));
     expect([...ys].sort((a, b) => a - b)).toEqual(ys);
     // UX-Befund 8: „Melden“ nur mit aufgeklappter Fassung; der Gruß steht darin genau einmal (Befund 9).
     await expect(page.getByTestId('ax-mark')).toHaveCount(0);

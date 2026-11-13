@@ -15,6 +15,8 @@ import type { Greet } from '../domain/greet';
 // Farbe nie allein: ✓/✕ steht immer mit Wort.
 // W5: Anrede und Gruß stehen beim Ton (K7); „So klingt es professioneller“ (K1) kommt NACH den Fehlerstellen und „Das sitzt“, als eigener Block ohne Durchstreichen
 // (ein Vorschlag, kein Fehler); die Starthilfe (K9) ist unten vermerkt.
+// Mail-Vorlagen @3 (Großpaket P „Politur“, P4): „Kurz gesagt“ (Claudes Kurzurteil) steht bei jeder Disziplin ganz oben; höchstens drei Fehlerkarten
+// sind offen (die Stellen zum Selbst-Verbessern immer), der Rest auf Antippen; je Lernwort steht Claudes Grund (`used.why`) darunter.
 
 const TONE_KEY: Record<string, MessageKey> = { fits: 'axToneFits', 'too-direct': 'axToneDirect', 'too-informal': 'axToneInformal', 'too-stiff': 'axToneStiff' };
 const GREET_KEY: Record<GreetCheck['fit'], MessageKey> = { fits: 'axGreetFits', off: 'axGreetOff', missing: 'axGreetMissing' };
@@ -66,6 +68,9 @@ function Block({ title, testId, children, data }: { title: string; testId: strin
   );
 }
 
+/** So viele Fehlerkarten sind offen; weitere auf Antippen. */
+export const SPOTS_OPEN = 3;
+
 const ruleState = (rule: Rule | null, run: ApplyRun): WordUse['state'] | null => {
   if (!rule) return null;
   const hit = run.feedback.used.find((u) => u.pat === (rule.patId ?? RULE_ID));
@@ -75,8 +80,13 @@ const ruleState = (rule: Rule | null, run: ApplyRun): WordUse['state'] | null =>
 export function ApplyResult({ run, save, targets, pointLabels, goal, self, checksLeft, tpl, greet: suggest = null, onRevise, onDone, headRef }: Props) {
   const { t, lang } = useT();
   const [reported, setReported] = useState(false);
+  const [allSpots, setAllSpots] = useState(false);
   const f = run.feedback;
   const errs = errorEdits(f.edits);
+  // Offen: die ersten drei Stellen und jede Stelle, die Emrah selbst verbessert hat; der Rest auf Antippen.
+  const shownErrs = allSpots ? errs : errs.filter((e, k) => k < SPOTS_OPEN || (self ? self.spots.includes(e) : false));
+  const hiddenErrs = errs.length - shownErrs.length;
+  const whyOf = (item: string): string => f.used.find((u) => u.pat.toLowerCase() === item.toLowerCase())?.why ?? '';
   const errors = errorsOf(f);
   const len = lengthState(run.text, goal);
   const uses = wordUses(targets.words, f, run.text);
@@ -253,7 +263,7 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
         </p>
       ) : (
         <ol className="m-0 flex list-none flex-col gap-3 p-0">
-          {errs.map((e, k) => {
+          {shownErrs.map((e, k) => {
             const si = self ? self.spots.indexOf(e) : -1;
             const tried = si >= 0 ? (self?.fixes[si] ?? '') : '';
             const fixed = si >= 0 && selfFixOk(tried, e);
@@ -281,6 +291,11 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
             );
           })}
         </ol>
+      )}
+      {hiddenErrs > 0 && (
+        <Button variant="quiet" className="self-start" onClick={() => setAllSpots(true)} data-testid="ax-spots-more">
+          {t(hiddenErrs === 1 ? 'axSpotsMore_one' : 'axSpotsMore_other', { n: hiddenErrs })}
+        </Button>
       )}
     </Block>
   );
@@ -314,8 +329,17 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
     </Block>
   ) : null;
 
+  // Kurzurteil zuerst (Antwort und Zusammenfassung; beim Mail-Schreiben steht es schon im ersten Block mit dem Ton).
+  const gist = run.kind !== 'write' && f.gist.trim() ? (
+    <Block title={t('axGist')} testId="ax-gist">
+      <p className="lx-ax-text m-0" lang={lang}>
+        {f.gist}
+      </p>
+    </Block>
+  ) : null;
+
   const order: ReactNode[] =
-    run.kind === 'summary' ? [points, faithful, own, length, spots] : run.kind === 'reply' ? [points, tone, length, spots] : [first, length, spots];
+    run.kind === 'summary' ? [gist, points, faithful, own, length, spots] : run.kind === 'reply' ? [gist, points, tone, length, spots] : [first, length, spots];
 
   return (
     <div className="flex scroll-mt-28 flex-col gap-6" data-testid="ax-result" data-kind={run.kind} data-errors={errors} data-check={run.check}>
@@ -329,19 +353,37 @@ export function ApplyResult({ run, save, targets, pointLabels, goal, self, check
         <Block title={t('axWords')} testId="ax-words">
           <ul className="m-0 flex list-none flex-col gap-1 p-0">
             {uses.map((u, k) => (
-              <li key={u.word} className="lx-ax-text flex items-center gap-2" data-testid={`ax-word-${k}`} data-state={u.state}>
+              <li key={u.word} className="lx-ax-text flex items-start gap-2" data-testid={`ax-word-${k}`} data-state={u.state}>
                 <Mark ok={u.state === 'ok'} partly={u.state === 'none' || u.state === 'open'} />
-                <span lang="en" className="font-semibold">
-                  {u.word}
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  <span>
+                    <span lang="en" className="font-semibold">
+                      {u.word}
+                    </span>
+                    <span className="text-muted"> · {t(useKey[u.state])}</span>
+                  </span>
+                  {whyOf(u.word) && (u.state === 'ok' || u.state === 'bad') && (
+                    <span className="lx-ax-hint text-muted" lang={lang} data-testid={`ax-word-why-${k}`}>
+                      {whyOf(u.word)}
+                    </span>
+                  )}
                 </span>
-                <span className="text-muted">· {t(useKey[u.state])}</span>
               </li>
             ))}
             {targets.rule && rs && (
-              <li className="lx-ax-text flex items-center gap-2" data-testid="ax-rule-state" data-state={rs}>
+              <li className="lx-ax-text flex items-start gap-2" data-testid="ax-rule-state" data-state={rs}>
                 <Mark ok={rs === 'ok'} partly={rs === 'none'} />
-                <span className="font-semibold">{t('axRule', { name: targets.rule.label })}</span>
-                <span className="text-muted">· {t(useKey[rs])}</span>
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  <span>
+                    <span className="font-semibold">{t('axRule', { name: targets.rule.label })}</span>
+                    <span className="text-muted"> · {t(useKey[rs])}</span>
+                  </span>
+                  {rs !== 'none' && whyOf(targets.rule.patId ?? RULE_ID) && (
+                    <span className="lx-ax-hint text-muted" lang={lang} data-testid="ax-rule-why">
+                      {whyOf(targets.rule.patId ?? RULE_ID)}
+                    </span>
+                  )}
+                </span>
               </li>
             )}
           </ul>

@@ -11,9 +11,19 @@ export function mailTextOf(input: string): string {
   return /<<<TEXT\n([\s\S]*?)\nTEXT>>>/.exec(input)?.[1]?.trim() ?? '';
 }
 
+/** Zielwörter aus „Target words (id: word = meaning …): w1: a = … | w2: b“ (@3) bzw. „Target words: a | b“ (älter). */
+export const targetWords = (input: string): Array<{ id: string; word: string }> =>
+  (/^Target words(?: \([^)]*\))?: (.*)$/m.exec(input)?.[1] ?? '')
+    .split(' | ')
+    .map((w, k) => {
+      const m = /^(w\d): (.+?)(?: = .*)?$/.exec(w.trim());
+      return m ? { id: m[1] ?? `w${k + 1}`, word: (m[2] ?? '').trim() } : { id: `w${k + 1}`, word: w.trim() };
+    })
+    .filter((w) => !!w.word);
+
 /** Kennungen der Zielmuster aus dem Prompt (Zeilen „id: Name (Formel)“ unter „Target patterns“). */
 function targetIds(input: string): string[] {
-  const block = /^Target patterns \(id: name \(form\)\):\n((?:.+\n)+?)Target phrases:/m.exec(input)?.[1] ?? '';
+  const block = /^Target patterns \(id: name \(form\)\):\n((?:.+\n)+?)(?:Target phrases:|Target words|Explanation language:)/m.exec(input)?.[1] ?? '';
   return block
     .split('\n')
     .map((l) => /^([a-z0-9]+\.[a-z0-9-]+):/.exec(l)?.[1] ?? '')
@@ -45,7 +55,14 @@ export function c1MailReply(input: string): string {
   const errors = hits.length;
   return JSON.stringify({
     edits,
-    used: /zzused/i.test(text) && first ? [{ pat: first, ok: true, quote }] : [],
+    // c1-mail@3 (P4): die Zielwörter (Kennung `w1` …) werden beurteilt, sobald sie im Text stehen, jeder Eintrag mit Grund.
+    used: [
+      ...(/zzused/i.test(text) && first ? [{ pat: first, ok: true, quote, why: de ? 'Die Form ist richtig gebildet.' : 'The form is built correctly.' }] : []),
+      ...targetWords(input)
+        .map((w) => ({ w, at: clean.toLowerCase().indexOf(w.word.toLowerCase()) }))
+        .filter((x) => x.at >= 0)
+        .map(({ w, at }) => ({ pat: w.id, ok: !/zzwordbad/i.test(text), quote: clean.slice(at, at + w.word.length), why: /zzwordbad/i.test(text) ? (de ? 'Hier passt die gelernte Bedeutung nicht.' : 'The learned meaning does not fit here.') : de ? 'Das Wort passt hier in der gelernten Bedeutung.' : 'The word fits here in the meaning you learned.' })),
+    ],
     tone: /zztone/i.test(text)
       ? { fit: 'too-informal', why: de ? 'Für diesen Empfänger klingt der Text zu locker.' : 'For this reader the text sounds too casual.' }
       : { fit: 'fits', why: de ? 'Der Ton passt zum Empfänger.' : 'The tone suits the reader.' },

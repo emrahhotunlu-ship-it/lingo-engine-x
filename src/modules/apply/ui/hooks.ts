@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getDb, loadRecentArticle, outPath, readDoc, topicById, useComboPairs, useLive, useT, useTodayPlan, type RecentArticle } from '../sharedUi';
 import { articleStock, inboxMails, logWarn, patternById, readCtx2 } from '../shared';
-import type { InboxMail, MailSituation } from '../shared';
+import type { InboxMail, MailSituation, TargetWord } from '../shared';
 import type { WriteKind } from '../domain/count';
 import { historyDays, lastShown, pickFresh } from '../domain/fresh';
 import { mailGreet, situationGreet, type Greet } from '../domain/greet';
@@ -110,8 +110,11 @@ export function useMaterial(kind: WriteKind, day: string): MaterialState {
 }
 
 export type Rule = { label: string; text: string; prompt: string; patId: string | null };
-/** `keys`: Wort (klein) → Pfad der Wortkarte, für den Beleg an die Wörter-App (F2). */
-export type Targets = { words: string[]; keys: Record<string, string>; rule: Rule | null };
+/**
+ * `keys`: Wort (klein) → Pfad der Wortkarte, für den Beleg an die Wörter-App (F2). `prompt` (Mail-Vorlagen @3, Großpaket P, P4): dieselben Wörter mit
+ * Kennung (`w1`, `w2`) und gelernter Bedeutung aus der Wortkarte, damit Claude die Verwendung in DIESER Bedeutung beurteilt.
+ */
+export type Targets = { words: string[]; keys: Record<string, string>; rule: Rule | null; prompt: TargetWord[] };
 
 /**
  * Zwei Zielwörter aus dem eigenen Wortschatz und eine Regel (Nachtrag learning-scientist „Sollte“: kombinierte Aufgabe). Wörter und Regel wie beim eigenen Satz
@@ -120,6 +123,7 @@ export type Targets = { words: string[]; keys: Record<string, string>; rule: Rul
 export function useTargets(m: Material | null): Targets {
   const { lang } = useT();
   const pairs = useComboPairs();
+  const vocab = useLive((s) => s.collections.vocab);
   return useMemo(() => {
     const words: string[] = [];
     const keys: Record<string, string> = {};
@@ -144,6 +148,11 @@ export function useTargets(m: Material | null): Targets {
         rule = { label: lang === 'en' ? name : topic.name, text: lang === 'en' ? en : topic.rule, prompt: `${name}: ${en}`, patId: null };
       }
     }
-    return { words, keys, rule };
-  }, [pairs, m, lang]);
+    const prompt = words.map((word, k): TargetWord => {
+      const key = keys[word.toLowerCase()];
+      const de: unknown = key?.startsWith('vocab/') ? vocab?.get(key.slice('vocab/'.length))?.de : undefined;
+      return { id: `w${k + 1}`, word, de: typeof de === 'string' ? de.trim() : '' };
+    });
+    return { words, keys, rule, prompt };
+  }, [pairs, m, lang, vocab]);
 }
