@@ -39,6 +39,8 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/modules\/vocab\/api$/,
   // P4 „Anwenden als Brücke“ (13.11.2026): das eine Übungsgerüst und das Rundenende; Adapter „Muster von heute“ und Schreibweg „frei verwendet“.
   /^src\/ui\/(exercise|SessionEnd)$/,
+  // Politur P1: der letzte Knopf eines Tagesschritts nennt das Ziel („Weiter: …“ / „Fertig für heute“).
+  /^src\/ui\/exercise\/runCtx$/,
   /^src\/features\/apply\/(todayPattern|bridgeStore)$/,
 ];
 const ALLOWED_PACKAGES = new Set(['zod', 'react', 'react/jsx-runtime']);
