@@ -289,6 +289,27 @@ export class SessionRun {
   }
 
   /**
+   * Was in dieser Runde noch ansteht, in der Reihenfolge der Schlange, danach die offenen Lernschritte (Politur P2: Zeit-Vorschau der Runde
+   * und Ton vorab rechnen). Nur zum Lesen.
+   */
+  ahead(): { path: string; form: Form; intro: boolean; step: 0 | 1 | 2 | 3 }[] {
+    return [...this.queue, ...this.pending].map((s) => ({ path: s.path, form: s.form, intro: !!s.intro, step: s.step }));
+  }
+
+  /**
+   * Politur P2 (E3 „Wiederholungen zuerst“): Wird die Zeit knapp, rücken die noch nicht eingeführten neuen Wörter hinter die Wiederholungen
+   * (Reihenfolge untereinander bleibt). So nimmt der Zeitdeckel am Ende neue Wörter weg, nie fällige Wiederholungen. Liefert, ob sich etwas
+   * geändert hat.
+   */
+  holdFresh(): boolean {
+    const lastReview = this.queue.reduce((at, s, i) => (s.intro ? at : i), -1);
+    const firstFresh = this.queue.findIndex((s) => s.intro);
+    if (firstFresh < 0 || firstFresh > lastReview) return false;
+    this.queue = [...this.queue.filter((s) => !s.intro), ...this.queue.filter((s) => s.intro)];
+    return true;
+  }
+
+  /**
    * Zähler „x von y erledigt“ außerhalb der Pflicht (K11): einzelne Wörter der Runde, je Wort einmal. Lernschritte, Wiederkehr nach einem
    * Fehler und Kontrastkarten desselben Worts erhöhen die Gesamtzahl nicht; ein Wort zählt als erledigt, sobald es einmal beantwortet ist.
    */

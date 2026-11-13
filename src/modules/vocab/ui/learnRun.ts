@@ -171,6 +171,11 @@ export type Measured = { ms: number; fk: number };
 export type FlipWhen = { k: 'soon' } | { k: 'day'; day: string } | { k: 'none' };
 export type FlipBack = { opts: { g: Grade; when: FlipWhen }[]; why: Band['why'] | null; partners: Band['partners'] };
 
+/** Erst wenn die geplante Restzeit die Wörter-Zeit um mehr als so viel überschreitet, rücken neue Wörter hinter die Wiederholungen. */
+export const HOLD_SLACK_MS = 60_000;
+/** Das echte Tempo der Runde zählt ab so vielen beantworteten Karten, höchstens mit diesem Faktor. */
+const PACE_MIN_CARDS = 3;
+const PACE_FACTOR_MAX = 3;
 /** Gestolperte Wörter im Abschluss höchstens so viele mit Namen (gruppiert nach Tag, der Rest als „+n“). */
 const SLIP_MAX = 12;
 /** Schutz gegen eine endlose Folge von Aufgaben ohne Karte (spätere Formen werden übersprungen). */
@@ -259,6 +264,17 @@ export class LearnRun {
   private activeMs = 0;
   /** Emrah 07.11.2026 (Tageszeit „A“): echte Kosten je Lexem in dieser Runde (alle Auftritte zusammen) – für `vmod/pace`. */
   private spent = new Map<string, number>();
+  /**
+   * Politur P2: echte Kosten der neuen Wörter dieser Runde – `spentIntro` = alles vor dem ersten getippten Abruf („Kennst du es?“, Einführung,
+   * Auswahl, erneutes Zeigen), `spentA` = Schritt A samt Rückmeldung. Beides geht als Form `intro` bzw. `gap_hint` nach `vmod/pace`.
+   */
+  private spentIntro = new Map<string, number>();
+  private spentA = new Map<string, number>();
+  /** Die Zeit wurde knapp: neue Wörter stehen hinter den Wiederholungen (einmal je Runde, `SessionRun.holdFresh`). */
+  private heldFresh = false;
+  /** Geplante Zeit der schon beantworteten Karten dieser Runde und ihre Zahl: daraus das echte Tempo der Runde (`paceFactor`). */
+  private plannedDoneMs = 0;
+  private cardsDone = 0;
   /** Zeitdeckel erreicht: so viele geplante Wörter kommen morgen (`null` = nicht gedeckelt). */
   private capped: number | null = null;
   private paceDone = false;
@@ -1111,9 +1127,22 @@ export class LearnRun {
 
   /** Nach der Auswahl weiter (nächste Karte). */
   pickNext(): void {
-    if (this.view.k !== 'pick' || this.view.chosen === null) return;
+    const v = this.view;
+    if (v.k !== 'pick' || v.chosen === null) return;
+    this.spendIntro(v.path);
     this.n += 1;
     this.advance();
+  }
+
+  /** Zeit seit der letzten Karte dem neuen Wort `path` zurechnen (Auswahl, erneutes Zeigen): aktive Zeit und Messwert „Einführung“. */
+  private spendIntro(path: string): void {
+    const now = this.env.now();
+    if (this.shownAt !== null) {
+      const d = Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
+      this.activeMs += d;
+      this.spentIntro.set(path, (this.spentIntro.get(path) ?? 0) + d);
+    }
+    this.shownAt = now;
   }
 
   /** Rein gerechnetes Ergebnis je Art (gebucht wird dasselbe auf dem frischen Dokument). */
@@ -1248,6 +1277,11 @@ export class LearnRun {
       const d = Math.min(CARD_MS_MAX, Math.max(0, now - this.shownAt));
       this.activeMs += d;
       this.spent.set(p.card.path, (this.spent.get(p.card.path) ?? 0) + d);
+      // Neue Wörter echt messen (Politur P2): Einführung (samt Probe davor) und Schritt A je für sich.
+      if (p.kind !== 'answer') this.spentIntro.set(p.card.path, (this.spentIntro.get(p.card.path) ?? 0) + d);
+      else if (p.task.step === 1) this.spentA.set(p.card.path, (this.spentA.get(p.card.path) ?? 0) + d);
+      this.plannedDoneMs += formMs(p.kind === 'answer' ? p.card.form : 'intro', this.med);
+      this.cardsDone += 1;
     }
     this.shownAt = now;
     if (!this.lv0.has(p.card.path)) this.lv0.set(p.card.path, p.before.lv);
@@ -1272,7 +1306,37 @@ export class LearnRun {
       void this.capNow();
       return;
     }
+    this.holdFreshIfTight();
     this.advance();
+  }
+
+  /** Geplante Zeit dessen, was in dieser Runde noch ansteht (neues Wort = Einführung + Schritt A + B, sonst die Form). */
+  private plannedLeftMs(): number {
+    let ms = 0;
+    for (const s of this.run?.ahead() ?? []) ms += s.intro ? newCostMs(this.med) : formMs(s.form, this.med);
+    return ms;
+  }
+
+  /**
+   * Echtes Tempo dieser Runde gegen den Plan (1 = wie geplant, 2 = doppelt so langsam), ab `PACE_MIN_CARDS` Karten; nie unter 1 (wer schneller
+   * ist, bekommt nichts weggenommen) und höchstens `PACE_FACTOR_MAX`.
+   */
+  private paceFactor(): number {
+    if (this.cardsDone < PACE_MIN_CARDS || this.plannedDoneMs <= 0) return 1;
+    return Math.min(PACE_FACTOR_MAX, Math.max(1, this.activeMs / this.plannedDoneMs));
+  }
+
+  /**
+   * Politur P2 (E3 „Wiederholungen zuerst“): Reicht die Wörter-Zeit voraussichtlich nicht für alles, was noch ansteht (geplante Zeit × echtes
+   * Tempo der Runde), kommen erst die Wiederholungen und danach die neuen Wörter. Der Zeitdeckel nimmt dann am Ende neue Wörter weg (sie
+   * bleiben neu und kommen morgen), nie fällige Wiederholungen. Einmal je Runde; nur in der Pflicht.
+   */
+  private holdFreshIfTight(): void {
+    if (this.heldFresh || this.kind !== 'pflicht' || !this.dayPlan || !this.cfg || !this.run) return;
+    const left = this.cfg.min * 60_000 - (this.priorMs + this.activeMs);
+    if (this.plannedLeftMs() * this.paceFactor() <= left + HOLD_SLACK_MS) return;
+    this.heldFresh = true;
+    this.run.holdFresh();
   }
 
   /** Wörter-Zeit um: Plan auf das Erledigte kürzen (Heute zeigt „erledigt“), Messwerte speichern, Abschluss zeigen. */
@@ -1296,17 +1360,23 @@ export class LearnRun {
     this.set(this.doneView());
   }
 
-  /** Echte Kosten je geplanter Wiederholung dieser Runde → `vmod/pace` (einmal je Runde; neue Wörter zählen nicht, ihre Schritte laufen über Tage). */
+  /**
+   * Echte Kosten dieser Runde → `vmod/pace` (einmal je Runde). Je geplanter Wiederholung die ganze Zeit des Worts (alle Auftritte). Politur P2:
+   * auch die neuen Wörter werden gemessen – `intro` = alles vor dem ersten getippten Abruf, `gap_hint` = Schritt A; Schritt B kostet wie eine
+   * Lücke. Vorher rechnete der Plan neue Wörter immer mit dem Startwert (156 s), nie mit Emrahs echter Zeit (Prüfbericht S1).
+   */
   private savePace(): void {
     if (this.paceDone || this.kind !== 'pflicht' || !this.dayPlan) return;
     this.paceDone = true;
     const obs = new Map<Form, number[]>();
+    const add = (f: Form, ms: number | undefined) => {
+      if (ms) obs.set(f, [...(obs.get(f) ?? []), ms]);
+    };
     for (const [path, track, form] of this.dayPlan.plan) {
-      if (track === 'n') continue;
-      const ms = this.spent.get(path);
-      if (!ms) continue;
-      const f = form;
-      obs.set(f, [...(obs.get(f) ?? []), ms]);
+      if (track === 'n') {
+        add('intro', this.spentIntro.get(path));
+        add('gap_hint', this.spentA.get(path));
+      } else add(form, this.spent.get(path));
     }
     void writePace(this.env.deps.writer, this.env.now(), obs).catch((err: unknown) => logError('vocab:pace', err));
   }
