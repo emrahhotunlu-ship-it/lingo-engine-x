@@ -350,7 +350,7 @@ export function WordSettings({ onPlace, legacy = null, advancedOpen = false }: {
         <Segmented
           label={t('vmSetNew')}
           value={String(npd)}
-          columns={4}
+          columns={5}
           testId="vs-new"
           options={NEW_OPTIONS.map((n) => ({ value: String(n), label: String(n), testId: `vs-new-${n}` }))}
           onChange={(v) => save({ newPerDay: Number(v) as SettingsPatch['newPerDay'] })}
