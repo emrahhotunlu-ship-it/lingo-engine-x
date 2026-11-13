@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { closeContext, contextPortalTarget, openContext, useContextPresentation } from '../../app/shell/contextColumn';
 import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
@@ -184,6 +184,23 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
   return p.state ?? 'answering';
 }
 
+/**
+ * Die zuletzt gezeichnete Karte (Politur P1): Wechselt die Karte – am selben Gerüst oder mit einem neu eingehängten –, beginnt die neue
+ * oben. Vorher blieb der Bildlauf der Rückmeldung stehen, und die nächste Karte startete mitten im Inhalt (Aufgabe hinter der Leiste).
+ */
+let LAST_CARD: string | null = null;
+
+/** Die neue Karte an den Anfang rollen, wenn ihr Anfang über dem sichtbaren Bereich (bzw. hinter der Übungsleiste) liegt. */
+function scrollCardToTop(card: HTMLElement | null): void {
+  if (typeof window === 'undefined' || !card) return;
+  const barBottom = document.querySelector<HTMLElement>('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0;
+  const top = card.getBoundingClientRect().top;
+  if (top >= barBottom) return;
+  // Steht die Karte am Seitenanfang (Übungsebene), ganz nach oben; eine Karte weiter unten auf einer Seite rückt direkt unter die Leiste.
+  const y = window.scrollY + top - barBottom - 16;
+  window.scrollTo({ top: y < 200 ? 0 : y, behavior: 'auto' });
+}
+
 /** Übungsarten, deren Zweck in dieser Sitzung schon offen stand (Großpaket T, B6). */
 const PURPOSE_SEEN = new Set<string>();
 
@@ -291,6 +308,16 @@ export function ExerciseShell(props: ExerciseShellProps) {
   useEffect(() => {
     PURPOSE_SEEN.add(purposeKey);
   }, [purposeKey, meta.id]);
+  // Politur P1: jede neue Karte startet oben (nicht beim ersten Einhängen – das regelt die Ebene – und nicht beim Wiedereinblenden).
+  const seenCard = useRef<string | null>(null);
+  useLayoutEffect(() => {
+    const prev = seenCard.current ?? LAST_CARD;
+    seenCard.current = meta.id;
+    LAST_CARD = meta.id;
+    if (prev === null || prev === meta.id) return;
+    const sel = typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(meta.id) : meta.id.replace(/["\\]/g, '\\$&');
+    scrollCardToTop(document.querySelector<HTMLElement>(`[data-testid="exercise"][data-card="${sel}"]`));
+  }, [meta.id]);
   const resultKey = feedback ? `${meta.id}:${feedback.verdict}:${feedback.title ?? ''}:${feedback.sub ?? ''}` : `${meta.id}:answering`;
   const auto = feedback
     ? shouldAutoAdvance({

@@ -94,8 +94,11 @@ function ExerciseLayer({ route }: { route: Route }) {
   );
 }
 
-/** Bildlauf je sichtbarer Ebene merken und beim Wiederkehren vor dem Zeichnen herstellen. */
-function useScrollMemo(key: string, name: RouteName): void {
+/**
+ * Bildlauf je sichtbarer Ebene merken und beim Wiederkehren vor dem Zeichnen herstellen. `exercise` (Politur P1): auch ein neues Ziel der
+ * Übungsebene unter DEMSELBEN Schlüssel (nächste Übung derselben Art, z. B. der nächste Schritt des Tages) beginnt oben.
+ */
+function useScrollMemo(key: string, name: RouteName, exercise: Route | null): void {
   const current = useRef(key);
   useEffect(() => {
     const onScroll = () => scrollMemo.set(current.current, window.scrollY);
@@ -124,7 +127,7 @@ function useScrollMemo(key: string, name: RouteName): void {
     };
     id = requestAnimationFrame(again);
     return () => cancelAnimationFrame(id);
-  }, [key, name]);
+  }, [key, name, exercise]);
 }
 
 export function Layers() {
@@ -142,7 +145,7 @@ export function Layers() {
   const activeTop = topOf(tab);
   const visibleRoute = overlay ? overlay.route : activeTop;
   const visibleKey = overlay ? `x:${overlay.route.name}` : `${tab}:${activeTop.name}`;
-  useScrollMemo(visibleKey, visibleRoute.name);
+  useScrollMemo(visibleKey, visibleRoute.name, overlay ? overlay.route : null);
 
   if (!KEEP_ALIVE) {
     // Notbremse: nur die sichtbare Ebene (Verhalten wie vor WP0b).
