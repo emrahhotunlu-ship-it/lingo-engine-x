@@ -638,6 +638,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       sub: fb.alt && !fb.override ? altSub : sub,
       // Fehler finden: die Muster-Fachsprache steht unter „Mehr“, das Kontrastbeispiel (z. B. -ing gegen -ed) offen (Rückmeldung 7).
       ...(item.kind === 'err' ? { fold: ['pattern'] as const, unfold: fb.alt && !fb.override ? (['contrast', 'note'] as const) : (['contrast'] as const) } : fb.alt && !fb.override ? { unfold: ['note'] as const } : {}),
+      // UX-Nachprüfung Politur W1a: Umformung am Touch-Gerät – „Merke“ (Muster) steht unter „Mehr“, „Weiter“ direkt unter dem Warum.
+      ...(item.kind === 'kwt' && inp === 'touch' ? { fold: ['pattern'] as const, exampleInMore: true } : {}),
       explanation: model,
       depth,
       menu,

@@ -8,6 +8,8 @@ import { vcfgSchema } from './schemas';
 export const PROFILE_PATH = 'app/profile';
 export const MIN_OPTIONS = [10, 15, 20, 30] as const;
 export const NEW_OPTIONS = [0, 2, 5, 10, 15] as const;
+/** UX-Nachprüfung K6: zur Wahl stehen nur Werte bis zur Tempo-Grenze (`TEMPO_MAX` 10); 15 bleibt lesbar (alte Einstellung), wird aber nicht mehr angeboten. */
+export const NEW_PICK = [0, 2, 5, 10] as const;
 /** Großpaket WT: Tagesziel in Wörtern (0 = nach Minuten). */
 export const CNT_OPTIONS = [0, 30, 40, 50] as const;
 export const RET_OPTIONS = [0.85, 0.9, 0.95] as const;

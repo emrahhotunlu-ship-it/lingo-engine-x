@@ -406,72 +406,78 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
       : null;
 
   const prompt = (
-    <div className="lx-t-support flex flex-col gap-3" data-testid="bx-task" data-word={cur.word.word} data-pat={cur.pat} data-slot-no={cur.slot} data-starter={starter ?? ''}>
-      {situation && (
-        <p className="m-0" data-testid="bx-situation">
-          <span className="text-muted">{t('axBSituation')}: </span>
-          {situation}
-        </p>
-      )}
-      <div className="flex flex-col gap-1.5" data-testid="bx-use">
-        <p className="lx-t-label m-0 text-muted">{t('axBUse')}</p>
-        <ul className="m-0 flex list-none flex-col gap-2 p-0">
-          <li className="flex flex-col" data-testid="bx-word" data-in={inText ? 'true' : 'false'}>
-            <span>
-              <span className="text-muted">{t('axBWordLabel')}: </span>
-              <strong lang="en" className="lx-t-body font-semibold">
-                {cur.word.word}
-              </strong>
-              {cur.word.de && (
-                <span lang="de" className="text-muted" data-testid="bx-meaning">
-                  {' '}
-                  ({cur.word.de})
-                </span>
-              )}
-            </span>
-            <span className="lx-t-meta text-muted">
-              <span data-testid="bx-word-why" data-why={cur.whyWord}>
-                {t(WORD_WHY[cur.whyWord], { n: Math.min(2, cur.word.own + 1) })}
-              </span>
-              {!res && (
-                <span className={`ml-2 inline-flex items-center gap-1 ${inText ? 'text-ok-text' : 'text-subtle'}`} role="status" data-testid="bx-word-dot">
-                  <span className={`inline-block size-2 rounded-full ${inText ? 'bg-ok' : 'bg-line-strong'}`} aria-hidden="true" />
-                  {t(inText ? 'axBInText' : 'axBNotInText')}
-                </span>
-              )}
-            </span>
-          </li>
-          <li className="flex flex-col" data-testid="bx-pat">
-            <span>
-              <span className="text-muted">{t('axBPatLabel')}: </span>
-              <strong className="lx-t-body font-semibold">{pat.name[lang]}</strong>
-              <span className="text-muted" data-testid="bx-form">
-                {' '}
-                ({pat.form[lang]})
-              </span>
-            </span>
-            <span className="lx-t-meta text-muted" data-testid="bx-pat-why" data-why={cur.whyPat}>
-              {t(PAT_WHY[cur.whyPat])}
-            </span>
-          </li>
-        </ul>
-      </div>
-      {starter ? (
-        <div className="flex flex-col gap-1" data-testid="bx-starter">
-          <span className="text-muted">{t(starterHead && !res ? 'axBStarterTap' : 'axBStarter')}</span>
-          {starterHead && !res ? (
-            <Button variant="quiet" className="self-start text-left" onClick={() => setText((cur0) => (cur0.trim() ? cur0 : `${starterHead} `))} disabled={!!text.trim() || busy} data-testid="bx-starter-use">
-              <span lang="en">{starter}</span>
-            </Button>
-          ) : (
-            <span lang="en">{starter}</span>
+    // UX-Nachprüfung Politur W1b: nach dem Prüfen klappen Situation, „Benutze:“ und Satzanfang ein – die Urteilszeilen nennen Wort und Muster
+    // schon, und „Weiter“ bleibt am kurzen Bildschirm (375 × 700) im Bild. Der eigene Satz steht weiter im Feld darunter.
+    <div className="lx-t-support flex flex-col gap-3 empty:hidden" data-testid="bx-task" data-word={cur.word.word} data-pat={cur.pat} data-slot-no={cur.slot} data-starter={starter ?? ''}>
+      {!res && (
+        <>
+          {situation && (
+            <p className="m-0" data-testid="bx-situation">
+              <span className="text-muted">{t('axBSituation')}: </span>
+              {situation}
+            </p>
           )}
-        </div>
-      ) : example ? (
-        <p className="m-0" data-testid="bx-example">
-          <span className="text-muted">{t('axBExample')}</span> <span lang="en">{example}</span>
-        </p>
-      ) : null}
+          <div className="flex flex-col gap-1.5" data-testid="bx-use">
+            <p className="lx-t-label m-0 text-muted">{t('axBUse')}</p>
+            <ul className="m-0 flex list-none flex-col gap-2 p-0">
+              <li className="flex flex-col" data-testid="bx-word" data-in={inText ? 'true' : 'false'}>
+                <span>
+                  <span className="text-muted">{t('axBWordLabel')}: </span>
+                  <strong lang="en" className="lx-t-body font-semibold">
+                    {cur.word.word}
+                  </strong>
+                  {cur.word.de && (
+                    <span lang="de" className="text-muted" data-testid="bx-meaning">
+                      {' '}
+                      ({cur.word.de})
+                    </span>
+                  )}
+                </span>
+                <span className="lx-t-meta text-muted">
+                  <span data-testid="bx-word-why" data-why={cur.whyWord}>
+                    {t(WORD_WHY[cur.whyWord], { n: Math.min(2, cur.word.own + 1) })}
+                  </span>
+                  {!res && (
+                    <span className={`ml-2 inline-flex items-center gap-1 ${inText ? 'text-ok-text' : 'text-subtle'}`} role="status" data-testid="bx-word-dot">
+                      <span className={`inline-block size-2 rounded-full ${inText ? 'bg-ok' : 'bg-line-strong'}`} aria-hidden="true" />
+                      {t(inText ? 'axBInText' : 'axBNotInText')}
+                    </span>
+                  )}
+                </span>
+              </li>
+              <li className="flex flex-col" data-testid="bx-pat">
+                <span>
+                  <span className="text-muted">{t('axBPatLabel')}: </span>
+                  <strong className="lx-t-body font-semibold">{pat.name[lang]}</strong>
+                  <span className="text-muted" data-testid="bx-form">
+                    {' '}
+                    ({pat.form[lang]})
+                  </span>
+                </span>
+                <span className="lx-t-meta text-muted" data-testid="bx-pat-why" data-why={cur.whyPat}>
+                  {t(PAT_WHY[cur.whyPat])}
+                </span>
+              </li>
+            </ul>
+          </div>
+          {starter ? (
+            <div className="flex flex-col gap-1" data-testid="bx-starter">
+              <span className="text-muted">{t(starterHead && !res ? 'axBStarterTap' : 'axBStarter')}</span>
+              {starterHead && !res ? (
+                <Button variant="quiet" className="self-start text-left" onClick={() => setText((cur0) => (cur0.trim() ? cur0 : `${starterHead} `))} disabled={!!text.trim() || busy} data-testid="bx-starter-use">
+                  <span lang="en">{starter}</span>
+                </Button>
+              ) : (
+                <span lang="en">{starter}</span>
+              )}
+            </div>
+          ) : example ? (
+            <p className="m-0" data-testid="bx-example">
+              <span className="text-muted">{t('axBExample')}</span> <span lang="en">{example}</span>
+            </p>
+          ) : null}
+        </>
+      )}
     </div>
   );
 
@@ -479,7 +485,8 @@ function Round({ targets, unit, saveKey, stored, onClose }: RoundProps) {
   // Politur P1: der letzte Knopf eines Tagesschritts nennt das Ziel („Weiter: Grammatik“ / „Fertig für heute“), wie jeder Abschluss.
   return (
     <>
-      <ExerciseTop onClose={onClose} progress={{ n: pos + 1, total: targets.length }} ctx={unit ? 'duty' : 'xtra'} />
+      {/* UX-Nachprüfung Politur K1: Kopf wie bei den anderen Übungen – Titel „Anwenden“ mit Zähler, nicht „Heute · Schritt 3: Anwenden“. */}
+      <ExerciseTop onClose={onClose} progress={{ n: pos + 1, total: targets.length }} ctx={unit ? 'duty' : 'xtra'} area="words" areaLabel={t('axBBarTitle')} />
       <div data-testid="bx-item" data-pos={pos}>
         <ExerciseShell
           meta={{ ex: 'bridge', id: `${cur.word.key}|${cur.pat}`, kind: 'produce' }}

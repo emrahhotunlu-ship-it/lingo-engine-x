@@ -23,7 +23,7 @@ export const vmDe = {
   vmWhyMeanOkNoPos: '{word} heißt hier: {de}.',
   vmWhyMeanWrong: '„{given}“ trifft es nicht. {word} ({pos}) heißt hier: {de}.',
   vmWhyMeanWrongNoPos: '„{given}“ trifft es nicht. {word} heißt hier: {de}.',
-  vmWhyMeanDunno: 'Kein Problem: {word} heißt hier {de}. Es kommt bald wieder.',
+  vmWhyMeanDunno: 'Kein Problem: {word} heißt hier {de}.',
   vmWhyMeanAlt: '„{given}“ stimmt auch. Gelernt hast du für {word}: {de}.',
   vmWhyMeaning: '{answer} = {de} ({pos}).',
   vmWhyMeaningNoPos: '{answer} = {de}.',
@@ -58,8 +58,8 @@ export const vmDe = {
   vmCappedBody: 'Du hast heute schon so lange geübt, wie für die Wörter geplant war. {n} Wörter kommen morgen – die wichtigsten zuerst.',
   vmWhyWrong: '{given} passt hier nicht. Gesucht war {answer} ({pos}): {de}.',
   vmWhyWrongNoPos: '{given} passt hier nicht. Gesucht war {answer}: {de}.',
-  vmWhyDunno: 'Kein Problem – hier ist es: {answer} ({pos}) = {de}. Schreib es jetzt einmal richtig, es kommt bald wieder.',
-  vmWhyDunnoNoPos: 'Kein Problem – hier ist es: {answer} = {de}. Schreib es jetzt einmal richtig, es kommt bald wieder.',
+  vmWhyDunno: 'Kein Problem – hier ist es: {answer} ({pos}) = {de}. Schreib es jetzt einmal richtig.',
+  vmWhyDunnoNoPos: 'Kein Problem – hier ist es: {answer} = {de}. Schreib es jetzt einmal richtig.',
 
   // Wortart
   vmPos_noun: 'Nomen',
@@ -749,7 +749,7 @@ export const vmDe = {
   vmWhyBareOkNoPos: '{word} heißt: {de}.',
   vmWhyBareWrong: '„{given}“ trifft es nicht. {word} ({pos}) heißt: {de}.',
   vmWhyBareWrongNoPos: '„{given}“ trifft es nicht. {word} heißt: {de}.',
-  vmWhyBareDunno: 'Kein Problem: {word} heißt {de}. Es kommt bald wieder.',
+  vmWhyBareDunno: 'Kein Problem: {word} heißt {de}.',
   vmWhyBareAlt: '„{given}“ stimmt auch. Gelernt hast du für {word}: {de}.',
   vmHearPlay: 'Anhören',
   vmHearAgain: 'Noch einmal anhören',
@@ -772,5 +772,5 @@ export const vmDe = {
   vmKindIntroAgain: 'Noch einmal ansehen',
   vmIntroAgainTask: 'Sieh dir das Wort noch einmal kurz an.',
   vmIntroAgainWozu: 'Die Auswahl war noch nicht sicher. Einmal ansehen, dann fragen wir es ab.',
-  vmPickAgain: 'Gleich siehst du das Wort noch einmal kurz, danach tippst du es selbst.',
+  vmPickAgain: 'Gleich kommt es kurz noch einmal, dann tippst du es.',
 };

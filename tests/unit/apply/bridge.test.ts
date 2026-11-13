@@ -107,6 +107,36 @@ describe('Brücken-Sätze: Ziele aus dem Lernstand', () => {
     expect(withKnown[1]).toMatchObject({ pat: 'pv.simple', whyPat: 'known' });
   });
 
+  it('UX-Nachprüfung W3: ohne zweites sicheres Muster bekommt Satz 2 einen anderen Rahmen als Satz 1 (fest je Lerntag), sonst keinen', () => {
+    const words = [word('postpone', 3, { practiced: TODAY }), word('leverage', 6)];
+    const two: BridgeFrame[] = [
+      { de: 'Nach einem verlorenen Auftrag …', en: 'After losing an order …', starter: 'If we had called them earlier, …' },
+      { de: 'Ein Projekt ist knapp gescheitert …', en: 'A project narrowly failed …', starter: 'If the supplier had delivered on time, …' },
+    ];
+    const frames = new Map<string, readonly BridgeFrame[]>([['cn.third', two]]);
+    for (const today of [TODAY, YESTERDAY, '2026-11-14', '2026-11-20', '2026-12-01']) {
+      const a = pickBridge({ ...base, today, frames, safe: [], words });
+      expect(a.map((x) => x.pat)).toEqual(['cn.third', 'cn.third']);
+      expect(a[0]!.frame).not.toBeNull();
+      expect(a[1]!.frame).not.toBeNull();
+      expect(a[1]!.frame!.starter).not.toBe(a[0]!.frame!.starter);
+      expect(a[1]!.frame!.de).not.toBe(a[0]!.frame!.de);
+      expect(pickBridge({ ...base, today, frames, safe: [], words })).toEqual(a);
+    }
+    // Nur ein Rahmen: Satz 2 ohne Rahmen (der Bildschirm zeigt das Musterbeispiel statt derselben Situation).
+    const one = pickBridge({ ...base, safe: [], words });
+    expect(one[0]!.frame?.starter).toBe('If we had called them earlier, …');
+    expect(one[1]!.frame).toBeNull();
+    // Echte Rahmen: Satz 2 ist nie eine Kopie von Satz 1.
+    const real = bridgeFrames();
+    for (const [id, list] of real) {
+      const a = pickBridge({ ...base, todayPat: { id, topic: patternById(id)?.topic ?? 'x' }, frames: real, safe: [], words });
+      if (a.length < 2) continue;
+      if (list.length > 1) expect(a[1]!.frame?.starter).not.toBe(a[0]!.frame?.starter);
+      else expect(a[1]!.frame).toBeNull();
+    }
+  });
+
   it('kurzer Tag: ein Satz; freie Zusatzrunde: heute benutzte Wörter und Muster bleiben draußen; lange Einträge und Zustandsverben passen nicht', () => {
     const words = [word('postpone', 3, { practiced: TODAY }), word('streamline', 3, { practiced: TODAY }), word('leverage', 6), word('deadline', 6)];
     expect(pickBridge({ ...base, words, n: 1 })).toHaveLength(1);

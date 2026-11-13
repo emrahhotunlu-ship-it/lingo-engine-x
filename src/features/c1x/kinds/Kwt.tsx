@@ -119,6 +119,28 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
     />
   );
 
+  // UX-Nachprüfung Politur W1a: nach dem Prüfen steht die Antwort wie am Laptop IN der Lücke des Satzes (falsch: eigene Fassung klein
+  // durchgestrichen, darüber die Lösung), Ablage und Vorrat sind weg – vorher blieb die Baustein-Fläche mit gestricheltem Feld stehen und
+  // schob „Weiter“ am kurzen Bildschirm aus dem Bild.
+  const placedText = tileText(placed);
+  const lockedOk = verdict === 'correct';
+  const lockedGap = (
+    <span className="lx-gap" data-testid="gap" data-state={lockedOk ? 'correct' : 'reveal'} data-revealed={lockedOk ? undefined : true} style={{ width: 'auto', whiteSpace: 'normal' }} lang="en">
+      {!lockedOk && placedText && (
+        <span className="lx-gap-given" data-testid="gap-given">
+          <span className="sr-only">{t('exGapYours')}: </span>
+          {placedText}
+        </span>
+      )}
+      <span className="lx-gap-inner" data-settled="">
+        <span className="lx-gap-reveal" data-testid={lockedOk ? 'gap-answer' : 'gap-solution'}>
+          {!lockedOk && <span className="sr-only">{t('exGapSolution')}: </span>}
+          {lockedOk ? placedText : solution}
+        </span>
+      </span>
+    </span>
+  );
+
   const counterN = mode === 'desk' ? kwtCount(value) : kwtWords(`${tileText(placed)} ${mode === 'part' ? value : ''}`, atom).length;
   const answer =
     mode === 'desk' ? (
@@ -179,7 +201,7 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
         {mode === 'tiles' ? (
           <div className="dz-kwt-sentence" lang="en" data-testid="sentence">
             {item.before && <span>{item.before} </span>}
-            {tilesNode}
+            {ctrl.locked ? lockedGap : tilesNode}
             {item.after && <span> {item.after}</span>}
           </div>
         ) : (

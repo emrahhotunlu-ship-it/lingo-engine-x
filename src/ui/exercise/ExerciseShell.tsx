@@ -85,6 +85,8 @@ export type ShellFeedback = {
   /** Zusätzlich unter „Mehr“ (z. B. 'pattern') bzw. immer offen (z. B. 'contrast'); `unfold` gewinnt. */
   fold?: ReadonlyArray<ExplainLine['k']>;
   unfold?: ReadonlyArray<ExplainLine['k']>;
+  /** Der erste Beispielsatz steht nicht offen im Merke-Block, sondern mit den übrigen unter „Mehr“ (Umformung am Touch-Gerät, UX-Nachprüfung W1a). */
+  exampleInMore?: boolean;
   /** `bandOnly`: nur im Band (Handy) – am Laptop zeigen Lücke und Optionen die Lösung schon. */
   comparison?: { given: string; ops: WordOp[]; compact?: boolean; label?: string; correct?: string; hideCorrect?: boolean; bandOnly?: boolean } | null;
   /** Auswahl (Punkt 1b, LS6): Lösungszeile „Du: B · Richtig: C …“ im Band. `you` = Buchstabe der Wahl (`null` = nichts gewählt). */
@@ -191,7 +193,7 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 let LAST_CARD: string | null = null;
 
 /** Die neue Karte an den Anfang rollen, wenn ihr Anfang über dem sichtbaren Bereich (bzw. hinter der Übungsleiste) liegt. */
-function scrollCardToTop(card: HTMLElement | null): void {
+export function scrollCardToTop(card: HTMLElement | null): void {
   if (typeof window === 'undefined' || !card) return;
   const barBottom = document.querySelector<HTMLElement>('[data-testid="exercise-bar"]')?.getBoundingClientRect().bottom ?? 0;
   const top = card.getBoundingClientRect().top;
@@ -504,7 +506,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
     (k): k is ExplainLine['k'] => !unfoldExtra.includes(k as ExplainLine['k']),
   );
   const UNFOLD: ReadonlyArray<ExplainLine['k']> | undefined = contrastStep || unfoldExtra.length ? [...(contrastStep ? (['contrast'] as const) : []), ...unfoldExtra] : undefined;
-  const plan: ResultPlan = feedback?.explanation ? planResult(feedback.explanation, feedback.depth, { learning, fold: FOLD, unfold: UNFOLD }) : { why: [], remember: [], more: [], example: null };
+  const plan0: ResultPlan = feedback?.explanation ? planResult(feedback.explanation, feedback.depth, { learning, fold: FOLD, unfold: UNFOLD }) : { why: [], remember: [], more: [], example: null };
+  const plan: ResultPlan = feedback?.exampleInMore ? { ...plan0, example: null } : plan0;
   // Der offene Beispielsatz (Merke-Block) steht nicht noch einmal unter „Mehr“.
   const examples = (feedback?.explanation?.examples ?? []).slice(plan.example ? 1 : 0);
   // Großpaket T (Wahl „A“): ohne Seitenspalte stehen Claudes Erklärung (startet erst beim Aufklappen, weil sie erst dann eingehängt wird) und

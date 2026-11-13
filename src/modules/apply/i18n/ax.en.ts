@@ -176,6 +176,7 @@ export const axEn: Record<keyof typeof axDe, string> = {
   axMinRange: '{a}–{b} min',
   axBTask: 'Write a sentence with this word and this pattern.',
   axBPurpose: 'Only your own sentence shows whether the word and the pattern have really stuck.',
+  axBBarTitle: 'Use it',
   axBKind: 'Your own sentence',
   axBSentenceOf: 'Sentence {n} of {total}',
   axBSituation: 'Situation',

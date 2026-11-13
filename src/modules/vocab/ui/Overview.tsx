@@ -3,7 +3,7 @@ import { Disclosure, getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switc
 import { dayMinutes, logError, normGoalMin } from '../shared';
 import { lexOf } from '../data/lex';
 import { readVlogRecent } from '../data/history';
-import { CNT_OPTIONS, NEW_OPTIONS, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
+import { CNT_OPTIONS, NEW_OPTIONS, NEW_PICK, RET_OPTIONS, writeVocabSettings, type SettingsPatch } from '../data/settings';
 import { vcfgSchema } from '../data/schemas';
 import { Catalog, forecastMinutes, type Item } from '../domain/catalog';
 import { outlook, type Outlook } from '../domain/overview';
@@ -352,9 +352,10 @@ export function WordSettings({ onPlace, legacy = null, advancedOpen = false }: {
         <Segmented
           label={t('vmSetNew')}
           value={String(npd)}
-          columns={5}
+          columns={(NEW_PICK as readonly number[]).includes(npd) ? 4 : 5}
           testId="vs-new"
-          options={NEW_OPTIONS.map((n) => ({ value: String(n), label: String(n), testId: `vs-new-${n}` }))}
+          // Ein gespeicherter Altwert außerhalb der Wahl (15) bleibt sichtbar gewählt, bis eine andere Zahl gewählt wird – nichts wird still geändert.
+          options={[...NEW_PICK, ...((NEW_PICK as readonly number[]).includes(npd) ? [] : [npd])].map((n) => ({ value: String(n), label: String(n), testId: `vs-new-${n}` }))}
           onChange={(v) => save({ newPerDay: Number(v) as SettingsPatch['newPerDay'] })}
         />
         <p className="m-0 text-sm text-muted">{t('vmSetNewHint')}</p>

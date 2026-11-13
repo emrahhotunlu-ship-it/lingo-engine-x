@@ -176,6 +176,7 @@ export const axDe = {
   axMinRange: '{a}–{b} Min.',
   axBTask: 'Schreib einen Satz mit diesem Wort und diesem Muster.',
   axBPurpose: 'Erst im eigenen Satz zeigt sich, ob Wort und Muster wirklich sitzen.',
+  axBBarTitle: 'Anwenden',
   axBKind: 'Eigener Satz',
   axBSentenceOf: 'Satz {n} von {total}',
   axBSituation: 'Situation',

@@ -23,7 +23,7 @@ export const vmEn = {
   vmWhyMeanOkNoPos: '{word} means here: {de}.',
   vmWhyMeanWrong: '“{given}” isn’t it. {word} ({pos}) means here: {de}.',
   vmWhyMeanWrongNoPos: '“{given}” isn’t it. {word} means here: {de}.',
-  vmWhyMeanDunno: 'No problem: {word} means {de} here. It’ll come back soon.',
+  vmWhyMeanDunno: 'No problem: {word} means {de} here.',
   vmWhyMeanAlt: '“{given}” works too. For {word} you learned: {de}.',
   vmWhyMeaning: '{answer} = {de} ({pos}).',
   vmWhyMeaningNoPos: '{answer} = {de}.',
@@ -57,8 +57,8 @@ export const vmEn = {
   vmCappedBody: "You've already practiced as long as planned for words today. {n} words come tomorrow – the most important first.",
   vmWhyWrong: "{given} doesn't fit here. The word is {answer} ({pos}): {de}.",
   vmWhyWrongNoPos: "{given} doesn't fit here. The word is {answer}: {de}.",
-  vmWhyDunno: 'No problem – here it is: {answer} ({pos}) = {de}. Type it once now; it’ll come back soon for practice.',
-  vmWhyDunnoNoPos: 'No problem – here it is: {answer} = {de}. Type it once now; it’ll come back soon for practice.',
+  vmWhyDunno: 'No problem – here it is: {answer} ({pos}) = {de}. Type it once correctly now.',
+  vmWhyDunnoNoPos: 'No problem – here it is: {answer} = {de}. Type it once correctly now.',
 
   // Word type
   vmPos_noun: 'noun',
@@ -748,7 +748,7 @@ export const vmEn = {
   vmWhyBareOkNoPos: '{word} means: {de}.',
   vmWhyBareWrong: '“{given}” isn’t it. {word} ({pos}) means: {de}.',
   vmWhyBareWrongNoPos: '“{given}” isn’t it. {word} means: {de}.',
-  vmWhyBareDunno: 'No problem: {word} means {de}. It’ll come back soon.',
+  vmWhyBareDunno: 'No problem: {word} means {de}.',
   vmWhyBareAlt: '“{given}” works too. For {word} you learned: {de}.',
   vmHearPlay: 'Listen',
   vmHearAgain: 'Listen again',
@@ -771,5 +771,5 @@ export const vmEn = {
   vmKindIntroAgain: 'Another look',
   vmIntroAgainTask: 'Take another quick look at the word.',
   vmIntroAgainWozu: "The choice wasn't sure yet. One more look, then you'll type it.",
-  vmPickAgain: "You'll see the word again briefly, then you type it yourself.",
+  vmPickAgain: 'You see it again briefly, then you type it.',
 };

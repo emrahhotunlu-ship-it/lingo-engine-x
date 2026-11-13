@@ -218,8 +218,14 @@ function settledPool(words: readonly BridgeWord[], today: string): Cand[] {
   return [...strict.map((w): Cand => ({ w, why: 'sits' })), ...loose.map((w): Cand => ({ w, why: 'known' }))];
 }
 
-const frameFor = (frames: PickInput['frames'], pat: string, wordKey: string, today: string): BridgeFrame | null => {
-  const list = frames.get(pat) ?? [];
+/**
+ * Rahmen (Situation + Satzanfang) eines Satzes, fest je Lerntag. `avoid`: der Rahmen eines früheren Satzes mit demselben Muster – Satz 2 bekommt
+ * dann einen anderen Rahmen; gibt es keinen anderen, keinen (der Bildschirm zeigt dann das Musterbeispiel). UX-Nachprüfung Politur W3: ohne
+ * zweites sicheres Muster war Satz 2 sonst eine Kopie von Satz 1 (gleiche Situation, gleicher Satzanfang).
+ */
+const frameFor = (frames: PickInput['frames'], pat: string, wordKey: string, today: string, avoid: BridgeFrame | null = null): BridgeFrame | null => {
+  const all = frames.get(pat) ?? [];
+  const list = avoid ? all.filter((f) => f.en !== avoid.en && f.de !== avoid.de && f.starter !== avoid.starter) : all;
   const f = list.length ? list[hash32(`${today}|${wordKey}|${pat}`) % list.length] : undefined;
   return f ? { de: f.de, en: f.en, starter: f.starter } : null;
 };
@@ -243,7 +249,8 @@ export function pickBridge(i: PickInput): BridgeTarget[] {
   };
   const push = (slot: 1 | 2, c: Cand, pat: { id: string; topic: string }, whyPat: PatWhy): void => {
     taken.add(c.w.key);
-    out.push({ slot, word: c.w, pat: pat.id, topic: pat.topic, frame: frameFor(i.frames, pat.id, c.w.key, i.today), whyWord: c.why, whyPat });
+    const before = out.find((o) => o.pat === pat.id)?.frame ?? null;
+    out.push({ slot, word: c.w, pat: pat.id, topic: pat.topic, frame: frameFor(i.frames, pat.id, c.w.key, i.today, before), whyWord: c.why, whyPat });
   };
 
   // Satz 1: Muster des heutigen Grammatik-Schritts (sonst das beste sichere, sonst ein begonnenes) + ein Wort, das gerade gelernt wird.

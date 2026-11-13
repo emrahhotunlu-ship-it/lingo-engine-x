@@ -447,15 +447,17 @@ function Done({ sum, review, onMore, onNew5, onToday, capped, finishLabel = null
       ),
     });
   // Mehr Gestolperte für morgen, als der Plan von morgen an Wiederholungen aufnimmt (Zeitdeckel)?
-  const slipsTomorrow = sum.slips.list.filter((x) => x.day === tomorrow).length;
+  // UX-Nachprüfung K2: Zahlen je Tag über alle Gestolperten (die Namensliste ist gekürzt) – „20 kommen ab morgen wieder: …, +18“.
+  const slipsOn = (day: string, listed: number): number => Math.max(listed, sum.slips.days?.[day] ?? 0);
+  const slipsTomorrow = slipsOn(tomorrow, sum.slips.list.filter((x) => x.day === tomorrow).length);
   const overTomorrow = !!sum.tomorrow && slipsTomorrow > sum.tomorrow.due;
   if (sum.slips.n > 0) {
     // Nach Tag gruppiert (Befund ux 4b Nr. 9): „3 kommen morgen wieder: access rights, to achieve, +1“ statt dreimal derselbe Satz.
     const groups = new Map<string, string[]>();
     for (const x of sum.slips.list) groups.set(x.day, [...(groups.get(x.day) ?? []), x.w]);
-    const rest = sum.slips.n - sum.slips.list.length;
+    const rest = sum.slips.n - [...groups].reduce((k, [day, ws]) => k + slipsOn(day, ws.length), 0);
     const lines = [...groups].map(([day, ws]) => {
-      const n = ws.length;
+      const n = slipsOn(day, ws.length);
       const shown = ws.slice(0, SLIP_NAMES);
       const more = n - shown.length;
       // Politur P1 (Kap. 2 Nr. 2): Passen morgen nicht alle in die Zeit („12 kommen morgen wieder“ stand über „Morgen: 7 fällig“), heißt es

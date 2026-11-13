@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { patternsOf } from '../../domain/grammar/patterns';
 import type { Pattern, TopicPatterns } from '../../domain/grammar/patternTypes';
 import { examplesFor, ruleOf } from '../../domain/grammar/rules';
@@ -6,6 +6,7 @@ import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { useSplitLayout } from '../../platform/input';
 import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
+import { scrollCardToTop } from '../../ui/exercise';
 import { useSwipeLeft } from '../../engine/swipe';
 import { topicName } from './topicUi';
 import { filmFor } from '../../domain/c1/anim';
@@ -42,6 +43,15 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
   const last = idx >= total - 1;
   // Wischen nach links = weiter (nur Finger, Knopf und Tastatur bleiben der Hauptweg).
   useSwipeLeft(() => (last ? undefined : setIdx((i) => i + 1)), !split && !last && total > 0);
+  // UX-Nachprüfung Politur W2: beim Weiterblättern beginnt die nächste Karte oben (wie der Kartenwechsel im Übungsgerüst) – vorher blieb der
+  // Bildlauf stehen, und die neue Karte startete mitten im Inhalt.
+  const box = useRef<HTMLElement | null>(null);
+  const shownIdx = useRef(idx);
+  useLayoutEffect(() => {
+    if (shownIdx.current === idx) return;
+    shownIdx.current = idx;
+    scrollCardToTop(box.current);
+  }, [idx]);
   if (!tp || !cards.length) return <LegacyCard topic={topic} onGo={onGo} />;
   const card = cards[Math.min(idx, total - 1)] as Card;
   const go = () => (last ? onGo() : setIdx((i) => i + 1));
@@ -50,7 +60,7 @@ export function IntroFlow({ topic, pats, fresh, onGo, kurzMiss = false }: { topi
   const eyebrow = t(fresh ? 'gxIntroEyebrowNew' : 'gxIntroEyebrowNext');
 
   return (
-    <article className="lx-glass lx-exercise flex flex-col gap-4" data-testid="intro-flow" data-topic={topic} data-card={idx}>
+    <article ref={box} className="lx-glass lx-exercise flex flex-col gap-4" data-testid="intro-flow" data-topic={topic} data-card={idx}>
       <header className="flex flex-col gap-2">
         <IntroLine label={eyebrow} />
         <h2 className="lx-vu-h5-q" data-testid="task">

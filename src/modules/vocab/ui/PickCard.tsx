@@ -45,7 +45,9 @@ export function PickCard({ view, run }: { view: Extract<LearnView, { k: 'pick' }
     </div>
   );
   const answer = <Choices options={view.options} chosen={view.chosen} correct={done ? view.right : null} revealed={done} onPick={(i) => run.pickChoose(i)} lang="de" label={t('vmPickLabel', { w: view.head })} testId="vm-pick-choices" />;
-  const sub = [ok ? t('vmPickOk', { w: view.head, de: right }) : t('vmPickWrong', { w: view.head, de: right }), other && view.chosen !== null ? t('vmPickOther', { de: view.options[view.chosen] ?? '', w: other }) : null, t(ok ? 'vmPickThen' : 'vmPickAgain')]
+  // UX-Nachprüfung Politur W1c (375 × 700: „Weiter“ lag 19 px unter dem Rand): bei falscher Wahl mit bekanntem Gegenstück sagt die Zeile nur, was
+  // die gewählte Bedeutung wäre – die richtige steht mit ✓ an der Option; der Ausblick ist kürzer.
+  const sub = [ok ? t('vmPickOk', { w: view.head, de: right }) : other ? null : t('vmPickWrong', { w: view.head, de: right }), other && view.chosen !== null ? t('vmPickOther', { de: view.options[view.chosen] ?? '', w: other }) : null, t(ok ? 'vmPickThen' : 'vmPickAgain')]
     .filter((x): x is string => !!x)
     .join(' ');
   return (

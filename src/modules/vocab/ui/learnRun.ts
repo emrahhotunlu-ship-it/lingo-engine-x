@@ -89,7 +89,8 @@ export type DoneSummary = {
   duty: boolean;
   learned: string[];
   up: { n: number; w: string | null; lv: number; produce: boolean };
-  slips: { n: number; list: { w: string; day: string }[] };
+  /** `days`: Anzahl je Termin über ALLE Gestolperten (die Liste ist auf `SLIP_MAX` gekürzt; die Überschrift nennt die echte Zahl, UX-Nachprüfung K2). */
+  slips: { n: number; list: { w: string; day: string }[]; days?: Record<string, number> };
   tomorrow: { min: number; due: number; fresh: number } | null;
   today: string;
 };
@@ -1616,7 +1617,7 @@ export class LearnRun {
       duty: this.kind === 'pflicht',
       learned: learned.slice(0, LIST_MAX),
       up: { n: upN, w: best?.w ?? null, lv: best?.lv ?? 0, produce: best?.produce ?? false },
-      slips: { n: slipList.length, list: slipList.slice(0, SLIP_MAX) },
+      slips: { n: slipList.length, list: slipList.slice(0, SLIP_MAX), days: slipList.reduce<Record<string, number>>((m, x) => ({ ...m, [x.day]: (m[x.day] ?? 0) + 1 }), {}) },
       tomorrow,
       today,
     };
