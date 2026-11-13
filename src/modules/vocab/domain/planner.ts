@@ -161,6 +161,16 @@ function offsetOf(due: number, nowMs: number): number {
   return daysBetween(dayKey(nowMs), dayKey(due));
 }
 
+/** Termin der gebuchten Spuren höchstens auf `at` legen (früher bleibt früher); `sd` = Tage seit der Buchung. */
+function limitDue(lex: Lex, booked: readonly TrackKey[], at: number): void {
+  for (const k of booked) {
+    const tr = k === 'b' ? lex.b : lex.u;
+    if (!tr || tr.due <= at || tr.last === null) continue;
+    tr.due = at;
+    tr.sd = Math.max(1, offsetOf(at, tr.last));
+  }
+}
+
 export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
   const lex = clone(lex0);
   const day = dayKey(a.t);
@@ -274,6 +284,10 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     }
     if (a.form === 'flip') lex.dayU = day;
     else lex.day = day;
+    // Politur P2 (Prüfbericht S3): Nach „Nochmal“ kommt das Wort MORGEN wieder. Vorher rechnete der Termin mit dem Deckel der alten Stufe und
+    // dem Lastausgleich – ein altes Wort kam nach einem Fehler erst in 3–4 Tagen, während das Band „kommt morgen wieder“ sagte. Begrenzt wird
+    // nur der Termin der gebuchten Spur(en); Stabilität und Schwierigkeit bleiben, wie FSRS sie nach dem Fehler gerechnet hat.
+    if (wrong) limitDue(lex, booked, dayStartOf(addDays(day, 1)));
     if (wrong && !second && !(a.flags && a.flags & FLAG.override)) {
       lex.lv = descend(lex.lv);
       lex.lc += 1;

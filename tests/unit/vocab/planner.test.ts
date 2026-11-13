@@ -228,6 +228,54 @@ describe('Lernschritte (M9, Regel)', () => {
   });
 });
 
+describe('Fehler → morgen wieder (Politur P2, Prüfbericht S3)', () => {
+  const tomorrow = dayStartOf(addDays(dayKey(T0), 1));
+  /** Altes Wort: Stufe 5, drei Beleg-Tage (Deckel 21 Tage), lange Abstände, heute fällig. */
+  const old = (): Lex => {
+    const l = learned(T0 - 60 * D);
+    return { ...l, lv: 5, ev: { f: ['2026-09-20', '2026-10-01', '2026-10-15'], o: 0, s: 0 }, u: { ...l.u, s: 40, sd: 30, due: T0 + 9 * D, last: T0 - 21 * D }, b: { ...l.b!, s: 30, sd: 18, due: T0 - D, last: T0 - 19 * D } };
+  };
+  it('„Nochmal“ auf Benutzen: Termin morgen, auch bei hoher Stufe, vollem Deckel und voller Last an den nächsten Tagen', () => {
+    // Last so, dass der Lastausgleich den Termin gern nach hinten legen würde.
+    const r = applyAnswer(old(), ans(T0, { outcome: 'wrong' }), ctx({ load: (i) => (i <= 2 ? 60 : 0) }));
+    expect(r.grade).toBe(1);
+    expect(r.booked).toEqual(['b']);
+    expect(r.lex.b!.due).toBe(tomorrow);
+    expect(r.lex.b!.sd).toBe(1);
+    // Die andere Spur (nicht gebucht) behält ihren Termin; Stufe sinkt um eins.
+    expect(r.lex.u.due).toBe(old().u.due);
+    expect(r.lex.lv).toBe(4);
+    // FSRS-Zustand bleibt der nach dem Fehler (nur der Termin ist begrenzt).
+    expect(r.lex.b!.lapses).toBe(old().b!.lapses + 1);
+    expect(r.lex.b!.s).toBeLessThan(old().b!.s);
+  });
+  it('anderes echtes Wort getippt: beide Spuren morgen; „Weiß ich nicht“ ebenso die gebuchte', () => {
+    const other = applyAnswer(old(), ans(T0, { outcome: 'other' }), ctx());
+    expect(other.booked).toEqual(['b', 'u']);
+    expect([other.lex.b!.due, other.lex.u.due]).toEqual([tomorrow, tomorrow]);
+    const dunno = applyAnswer(old(), ans(T0, { outcome: 'dunno' }), ctx());
+    expect(dunno.lex.b!.due).toBe(tomorrow);
+  });
+  it('Verstehen-Abfrage falsch: Verstehen morgen, Benutzen bleibt', () => {
+    const l = { ...old(), u: { ...old().u, due: T0 - D }, b: { ...old().b!, due: T0 + 5 * D } };
+    const r = applyAnswer(l, ans(T0, { form: 'meaning', outcome: 'wrong' }), ctx());
+    expect(r.booked).toEqual(['u']);
+    expect(r.lex.u.due).toBe(tomorrow);
+    expect(r.lex.b!.due).toBe(T0 + 5 * D);
+  });
+  it('richtig bleibt unberührt: der Termin wächst wie bisher (kein Deckel auf morgen)', () => {
+    const r = applyAnswer(old(), ans(T0), ctx());
+    expect(r.grade).toBe(3);
+    expect(r.lex.b!.due).toBeGreaterThan(tomorrow + 5 * D);
+  });
+  it('zweiter Versuch nach Hinweis (keine Stufe verloren) kommt trotzdem morgen', () => {
+    const r = applyAnswer(old(), ans(T0, { outcome: 'ok', first: 'wrong' }), ctx());
+    expect(r.grade).toBe(1);
+    expect(r.lex.lv).toBe(5);
+    expect(r.lex.b!.due).toBe(tomorrow);
+  });
+});
+
 describe('Abstieg kürzt die Belege (learning-scientist V1, Befund 7)', () => {
   it('Stufe 3 mit 3 Beleg-Tagen, Fehler → Stufe 2, ev.f leer, Deckel 1', () => {
     const l = { ...learned(T0 - 20 * D), lv: 3, ev: { f: ['2026-10-20', '2026-10-24', '2026-10-28'], o: 0, s: 0 } };
