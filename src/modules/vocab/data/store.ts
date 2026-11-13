@@ -4,7 +4,7 @@ import { type Catalog, loadByDay } from '../domain/catalog';
 import { applyMove, buildDayPlan, type DayPlan } from '../domain/day';
 import { LEGACY_EX, mirrorLegacy } from '../domain/mirror';
 import { type Draft, draftOpen } from '../domain/flow';
-import { type Answer, type AnswerResult, applyAnswer, introduce, type PlanCtx, probeKnown } from '../domain/planner';
+import { type Answer, type AnswerResult, applyAnswer, introduce, mayPlan, type PlanCtx, probeKnown } from '../domain/planner';
 import type { FormStats, Lex, VocabCfg } from '../domain/types';
 import { tuple, VLOG_MAX_PARTS, VLOG_SOFT_MAX, vlogDocId, vlogKey } from '../domain/vlog';
 import { VMOD_DAY_PATH, VMOD_USE_PATH } from '../registry';
@@ -134,6 +134,31 @@ export async function writeUse(deps: VocabDeps, path: string, a: Answer, u: UseI
     if (lex.sync >= u.t) return null;
     const r = applyUse(lex, u, ctx);
     // Auch ohne Note und Beleg gilt die Verwendung als gebucht (der Entwurf ist damit erledigt, kein zweiter Verlaufseintrag).
+    out = r.lex.sync >= u.t ? r : { ...r, lex: { ...r.lex, sync: u.t } };
+    return out;
+  });
+  return done ? out : null;
+}
+
+/**
+ * P4 „Anwenden als Brücke“ (13.11.2026), rein ergänzend: Urteil über ein Zielwort aus einem Brücken-Satz buchen. Wie `writeUse`, aber die
+ * Schutzregeln gelten auf dem FRISCHEN Dokument (zwei Geräte, erneutes Laden):
+ *  - Planwirkung nur, wenn der Aufrufer sie erlaubt (`o.planned`: Wort nicht im heutigen Pflichtplan) UND `mayPlan` es auf dem frischen Stand
+ *    noch erlaubt; sonst nur Beleg und Verlaufseintrag (`evidenceOnly`).
+ *  - Als eigener geprüfter Satz (Stufe 7) zählt höchstens EINER je Wort und Lerntag: steht für heute schon ein eigener Satz in „Deine Sätze“
+ *    (`os`), zählt dieser nicht noch einmal (`evDone`).
+ *  - Die Stufe beim Schreiben ist die frische (`lvAt`). Schon gebucht (`sync ≥ t`) → nichts.
+ */
+export async function writeBridgeUse(deps: VocabDeps, path: string, a: Answer, u: UseInput, o: BookOpts): Promise<UseResult | null> {
+  const base = ctxOf(path, u.t, o);
+  const day = dayKey(u.t);
+  let out: UseResult | null = null;
+  const done = await commit(deps, path, a, o.cat, (lex) => {
+    if (lex.sync >= u.t) return null;
+    const plan = o.planned && mayPlan(lex, u.t);
+    const ownToday = (lex.os ?? []).some(([t]) => dayKey(t) === day);
+    const fresh: UseInput = { ...u, lvAt: lex.lv, evidenceOnly: !plan, evDone: u.evDone === true || ownToday };
+    const r = applyUse(lex, fresh, { ...base, planned: plan });
     out = r.lex.sync >= u.t ? r : { ...r, lex: { ...r.lex, sync: u.t } };
     return out;
   });
