@@ -255,7 +255,8 @@ test.describe('Handy 390 px', () => {
     await expect(page.getByTestId('bx-item')).toBeVisible();
     await expect(page.getByTestId('exercise')).toContainText('Satz 1 von 1');
     await page.getByTestId('bx-skip').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    // Politur P1: keine Zwischenkarte mehr – außerhalb der Kette geht es zu Heute.
+    await screen(page, 'today');
     await expect.poll(async () => ((await profile(page)).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
     expect((await profile(page)).apc).toEqual({ n: 2, d: '2026-09-21' });
     expect(errors).toEqual([]);

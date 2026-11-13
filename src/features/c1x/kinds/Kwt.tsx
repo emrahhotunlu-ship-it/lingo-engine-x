@@ -52,7 +52,8 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
   const mode = kwtModeFor(item, ctrl.inp, ctrl.p);
   const [value, setValue] = useState('');
   const [placed, setPlaced] = useState<number[]>([]);
-  // UX-Prüfung W3: am Handy (Bausteine) liegt der Vorrat in einer festen Leiste über „Prüfen“; die Antwortzeile steht in der Lücke im Satz.
+  // Politur P1 (13.11.2026, ersetzt UX-Prüfung W3): am Handy (Bausteine) steht die Antwortzeile in der Lücke im Satz und der Vorrat im
+  // Kartenfluss direkt darunter – nie als schwebende Leiste (am Außendisplay verdeckte sie Ablage, Satzende und „Tipp“).
   const [poolEl, setPoolEl] = useState<HTMLDivElement | null>(null);
   const [lo, hi] = kwtRange(item);
   const verdict = ctrl.score?.verdict;
@@ -123,7 +124,9 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
     mode === 'desk' ? (
       <WordCounter n={counterN} min={lo} max={hi} />
     ) : mode === 'tiles' ? (
-      <div className="dz-kwt-dock flex flex-col gap-2" data-testid="kwt-tiles" data-locked={ctrl.locked || undefined}>
+      // Nach dem Prüfen sind die übrigen Bausteine weg (sie standen sonst gesperrt zwischen Satz und Lösung): der Vorrat hängt weiter am
+      // selben Ziel, das Ziel selbst ist dann verborgen.
+      <div className="dz-kwt-dock flex flex-col gap-2" data-testid="kwt-tiles" data-locked={ctrl.locked || undefined} hidden={ctrl.locked}>
         <div ref={setPoolEl} />
         {!ctrl.locked && <WordCounter n={counterN} min={lo} max={hi} />}
       </div>

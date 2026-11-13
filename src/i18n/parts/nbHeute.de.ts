@@ -63,6 +63,7 @@ export const nbHeuteDe = {
   nbHeuteRecapBand: 'Dein Wochenrückblick ist da.',
   nbHeuteRecapOpen: 'Ansehen',
   nbHeuteTomorrow: 'Morgen: {what}',
+  nbHeuteTomorrowDay: '{steps} · ca. {min} Min.',
   nbHeuteWorth: 'Extra: lohnt sich jetzt',
   nbHeuteMore: 'Extra',
   nbHeuteLocal: 'Plan nur auf diesem Gerät gespeichert.',
@@ -70,6 +71,7 @@ export const nbHeuteDe = {
   // Zwischen- und Bestätigungskarte (unitCard)
   nbHeuteBetweenDone: '{block} geschafft',
   nbHeuteBetweenGo: 'Weiter: {block}',
+  nbHeuteDoneToday: 'Fertig für heute',
   nbHeuteEndBack: 'Zurück zu Heute',
   nbHeuteClose: 'Einheit schließen',
   nbHeuteSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',

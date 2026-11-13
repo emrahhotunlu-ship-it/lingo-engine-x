@@ -163,17 +163,32 @@ async function flowRules(page: Page, label: string): Promise<Flow> {
   // (ux-reviewer 05.11.2026 Nr. 11: kein zweiter Claude-Zugang neben „Weiter“).
   await expect(page.getByTestId('claude-explain')).toBeVisible();
   await expect(page.getByTestId('claude-ask-about')).toHaveCount(0);
-  // Ganz unten gerollt verschwindet nichts hinter der festen Leiste; dort steht nur „Weiter“. Erneut messen, bis das Einrollen nach dem
-  // Prüfen und die Erklärung von Claude fertig sind (beide ändern Lage und Höhe noch kurz).
-  await expect
-    .poll(
-      async () => {
-        const n = await measureFlow(page);
-        return n.flowBottom - n.barTop;
-      },
-      { timeout: 5000 },
-    )
-    .toBeLessThanOrEqual(1);
+  if ((page.viewportSize()?.height ?? 900) < 760) {
+    // Politur P1 (13.11.2026), kurzer Touch-Bildschirm: „Weiter“ steht IM Ergebnis direkt nach dem, was man lesen muss (Urteil, Warum),
+    // vor allem Zusätzlichen (Regel, „Mehr“) – sonst lag es nach dem Prüfen außerhalb des Bilds.
+    const next = page.getByTestId('result').locator('[data-slot="next"]').getByTestId('next');
+    await expect(next).toBeVisible();
+    const order = await page.evaluate(() => {
+      const res = document.querySelector<HTMLElement>('[data-testid="result"]');
+      const nx = res?.querySelector<HTMLElement>('[data-slot="next"]');
+      const why = res?.querySelector<HTMLElement>('[data-block="why"]');
+      if (!nx || !why) return true;
+      return !!(why.compareDocumentPosition(nx) & Node.DOCUMENT_POSITION_FOLLOWING);
+    });
+    expect(order, '„Weiter“ nach dem Warum').toBe(true);
+  } else {
+    // Ganz unten gerollt verschwindet nichts hinter der festen Leiste; dort steht nur „Weiter“. Erneut messen, bis das Einrollen nach dem
+    // Prüfen und die Erklärung von Claude fertig sind (beide ändern Lage und Höhe noch kurz).
+    await expect
+      .poll(
+        async () => {
+          const n = await measureFlow(page);
+          return n.flowBottom - n.barTop;
+        },
+        { timeout: 5000 },
+      )
+      .toBeLessThanOrEqual(1);
+  }
   await expect(page.getByTestId('actionbar').getByTestId('next')).toBeVisible();
   return m;
 }

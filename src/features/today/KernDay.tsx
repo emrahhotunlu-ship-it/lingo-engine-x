@@ -3,6 +3,7 @@ import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
+import { usePending } from '../progress/persist';
 import { useVocabMetrics } from '../progress/WordsSegment';
 import { dateLabelOf } from './dateLabel';
 import type { DayRow } from './DayCard';
@@ -171,7 +172,9 @@ export function KernStand({ sw, variant, foot: withFoot = true }: { sw: StreakWe
   const words = fest === 0 && onWay > 0 ? { n: onWay, label: t('kernOnWay') } : { n: fest, label: t('kernFest') };
   const profile = useLive((s) => s.docs['app/profile']);
   const minutes = obj(obj(profile).minutes);
-  const week = Math.round(sw.week.reduce((a, d) => a + Math.max(0, Number(minutes[d.day] ?? 0) || 0), 0));
+  // Politur P1: gespeicherte Minuten plus die noch nicht gespeicherten (Sammel-Puffer) – dieselbe Rechnung wie die Minuten im erledigten Ring.
+  const pendingMin = usePending((s) => s.minutes);
+  const week = Math.round(sw.week.reduce((a, d) => a + Math.max(0, Number(minutes[d.day] ?? 0) || 0) + Math.max(0, pendingMin[d.day] ?? 0), 0));
   const streak = sw.streak ?? 0;
   // Fußzeile der Serie für Screenreader und Tests (`today-streak`, früher bei der Woche): steht genau einmal, hier bei „Dein Fortschritt“.
   const foot =

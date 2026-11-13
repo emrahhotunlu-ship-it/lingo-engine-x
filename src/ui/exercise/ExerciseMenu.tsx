@@ -159,5 +159,8 @@ export function TopMenu({ lead, tail, onPause }: { lead: MenuEntry[]; tail: Menu
   const task: MenuEntry[] = [...(why ? [{ id: 'whyTask', label: t('bandMenuWhy'), onClick: why, testId: 'menu-whyTask' }] : []), ...taskEntries(items, t, ['report'])];
   const report = items.report ? [{ id: 'report', label: t(LABEL.report), onClick: items.report, testId: 'menu-report' }] : [];
   const pause: MenuEntry = { id: 'pause', label: t('bandMenuPause'), onClick: onPause, testId: 'menu-pause' };
-  return <MenuView groups={[lead, task, [...tail, pause], report]} open={open} setOpen={setBandMenuOpen} slot />;
+  // Politur P1 (E4 A): der Stift steht in Übungen hier – bei „Problem melden“, beides sind Rückmeldungen – statt als Knopf über der Karte.
+  const pen = useBand((s) => s.pen);
+  const feedback: MenuEntry[] = [...report, ...(pen ? [{ id: 'pen', label: t('penMenu'), onClick: pen, testId: 'menu-pen' }] : [])];
+  return <MenuView groups={[lead, task, [...tail, pause], feedback]} open={open} setOpen={setBandMenuOpen} slot />;
 }

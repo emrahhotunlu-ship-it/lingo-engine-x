@@ -18,7 +18,7 @@ import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps, SheetProps } from '../app/registry';
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { loadOverview, loadPlace, loadScreens, loadSwitch, loadWordPage, vocabModuleOn, type RoundReport } from '../modules/vocab/api';
 import { useLive } from '../data/live';
 import { recordRoundEnd } from '../features/progress/persist';
@@ -29,6 +29,7 @@ import { useNav } from '../app/nav';
 import { closeSettings } from '../app/sheets';
 import { openCompanion } from '../features/companion/store';
 import { Skeleton } from '../ui/Skeleton';
+import { Disclosure } from '../ui/Disclosure';
 import { ExerciseTop } from '../features/learn/ui';
 import { askJson } from '../ai/gate';
 import { selectAiAvailable } from '../ai/scope';
@@ -37,6 +38,9 @@ import { getDb, useCapabilities } from '../platform/capabilities';
 import { loadSnapshot } from '../data/snapshot';
 import { exportAll } from '../features/settings/exportData';
 import type { VocabAi } from '../modules/vocab/api';
+import { useT } from '../i18n';
+import { useToday } from '../features/today/state';
+import { stepNextLabel } from '../ui/exercise/runCtx';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
 // Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
@@ -109,9 +113,12 @@ function WordSettingsHost() {
   const go = useNav((s) => s.go);
   // Die Einstellungen der Wörter-App stehen IN der Karte „Neue Wörter-App“ (unter der Zustandszeile); eigene Ladegrenze, damit die Karte
   // beim Nachladen stehen bleibt (Sprungziel nach dem Einschalten).
-  const ws = on && (
+  // Politur P1: die Karte reicht ihre Altlast (Zustand, Rückweg) herein – sie steht in „Erweitert“ der Wörter-Einstellungen.
+  const settings = (legacy: ReactNode = null, fresh = false) => (
     <Suspense fallback={<Skeleton className="h-48 w-full" />}>
       <WordSettings
+        legacy={legacy}
+        advancedOpen={fresh}
         onPlace={() => {
           // Einstellungen zu, sonst liegt das Blatt über dem Test (E2E vplace).
           closeSettings();
@@ -120,16 +127,32 @@ function WordSettingsHost() {
       />
     </Suspense>
   );
+  const ws = on && settings();
   return (
     <Suspense fallback={on ? <Skeleton className="h-48 w-full" /> : null}>
       {dbReady ? (
         <SwitchPanel on={on} read={switchRead} backup={switchBackup}>
-          {ws}
+          {on ? settings : null}
         </SwitchPanel>
       ) : (
         ws
       )}
     </Suspense>
+  );
+}
+
+/**
+ * Einstellungen der alten Wörter-Ansicht (Politur P1): Solange die Wörter-App an ist, wirken sie auf nichts, was man täglich sieht –
+ * sie stehen dann eingeklappt unter ihrem Namen (Altlast), statt drei Auswahlleisten lang unter der einen Hauptfrage zu hängen.
+ */
+function OldVocabSettings() {
+  const { t } = useT();
+  const on = useLive((s) => vocabModuleOn(s.docs['app/profile']));
+  if (!on) return <VocabSettingsSection />;
+  return (
+    <Disclosure label={t('nbWsSetTitle')} testId="set-vocab-old">
+      <VocabSettingsSection />
+    </Disclosure>
   );
 }
 
@@ -171,6 +194,12 @@ const vocabAi: VocabAi = {
 };
 
 function VlearnPage({ route }: ScreenProps<'vlearn'>) {
+  const { t } = useT();
+  // Politur P1: Ist die Runde Schritt 1 der Tageseinheit (dieselbe Bedingung wie `onVlearnFinish`), nennt der Hauptknopf des Abschlusses
+  // das Ziel („Weiter: Grammatik“ / „Fertig für heute“) und führt direkt dorthin – die Zwischenkarte entfällt.
+  const inUnit = useUnitRun((s) => s.block === 1 && s.duty === 'review');
+  useToday((s) => s.duties.done);
+  const finishLabel = route.kind === 'pflicht' && inUnit ? stepNextLabel(t) : null;
   return (
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
       <LearnScreen
@@ -179,6 +208,7 @@ function VlearnPage({ route }: ScreenProps<'vlearn'>) {
         ai={vocabAi}
         onRoundEnd={onVlearnEnd}
         onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
+        finishLabel={finishLabel}
         renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} area="words" />}
       />
     </Suspense>
@@ -310,7 +340,7 @@ export const wortschatz = defineArea({
   ],
   settings: [
     { id: 'ws-vmod', group: 'vocab', order: 0, component: WordSettingsHost },
-    { id: 'ws-vocab', group: 'vocab', order: 10, component: VocabSettingsSection },
+    { id: 'ws-vocab', group: 'vocab', order: 10, component: OldVocabSettings },
   ],
   resumables: [trainerResume],
   unitBlocks: [reviewBlock],

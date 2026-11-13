@@ -73,6 +73,11 @@ for (const vp of [
       await vs.scrollIntoViewIfNeeded();
       await expect(vs).toBeVisible();
       await expect(page.getByTestId('set-newperday')).toHaveCount(0);
+      // Politur P1 (13.11.2026): eine Hauptfrage (Wörter pro Tag) sichtbar, alles andere unter „Erweitert“ (eingeklappt).
+      await expect(page.getByTestId('vs-cnt')).toBeVisible();
+      await expect(page.getByTestId('vs-advanced')).toHaveCount(0);
+      await page.getByTestId('vs-more').click();
+      await expect(page.getByTestId('vs-advanced')).toBeVisible();
       for (const r of [85, 90, 95]) await expect(page.getByTestId(`vs-ret-${r}`)).toContainText(/\d/);
       await expect(page.getByTestId('vs-when')).not.toBeEmpty();
       // Wörter-Zeit folgt dem Tagesziel (UX-Neuanfang C): Anzeige statt Auswahl.

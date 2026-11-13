@@ -418,8 +418,9 @@
   text-transform: uppercase;
   color: var(--fg-3);
 }
+/* Politur P1: Textfarbe des Akzents (`--act-text`), nicht die Flächenfarbe – im Modus „Gedämpft“ reichte der Kontrast am Laptop nicht (WCAG 4,5 : 1). */
 .lx-kintro-label {
-  color: var(--act);
+  color: var(--act-text);
 }
 .lx-kintro-head {
   display: flex;
@@ -1074,4 +1075,128 @@ html[data-lx-retyping] .lx-exercise :is([data-block='why'] > ul, [data-slot='why
   border: 0;
   background: none;
   box-shadow: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════ Politur P1 (13.11.2026): EINE Kopfzeile, kurze Bildschirme, feste Breite */
+
+/* Titel werden nie abgeschnitten: sie brechen um (vorher `nowrap` + „…“; „Grammatik · 0 von 1 erl…“, „used to · Übu…“). */
+:root .lx-kbar-title,
+:root .lx-kbar-area,
+:root .lx-kbar-count {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+:root .lx-kbar-count {
+  white-space: nowrap;
+}
+/* Leiste ohne eigenen Titel (`data-plain`, früher ein zweiter Kopf): das kleine Wort („Pflicht“, „Extra“, „Tageseinheit · Block 2 von 5“)
+   steht an der Titelstelle, ruhiger als ein Bereichsname. */
+:root .lx-exbar.lx-kbar[data-plain] .lx-kbar-title {
+  font-weight: 500;
+  color: var(--fg-2);
+}
+:root .lx-exbar.lx-kbar[data-plain] .lx-kbar-title:empty {
+  min-height: 1px;
+}
+
+/* Claude-Symbol statt der Kapsel „Frag Claude“: 44 × 44 px Tippfläche, rund; die Beschriftung bleibt für Vorleseprogramme und steht ab
+   768 px sichtbar neben dem Symbol. */
+:root .lx-kask {
+  gap: 8px;
+  width: 44px;
+  padding: 0;
+  border-radius: 999px;
+  color: var(--act-text, var(--fg));
+}
+:root .lx-kask > svg {
+  flex: none;
+}
+/* Die Beschriftung ist unter 768 px `sr-only`, darüber sichtbar (`md:not-sr-only` in `Chrome.tsx`). */
+@media (min-width: 768px) {
+  :root .lx-kask {
+    width: auto;
+    padding: 0 16px 0 12px;
+    color: var(--fg);
+  }
+  :root .lx-kask > svg {
+    color: var(--act-text, currentColor);
+  }
+}
+
+/* Kurze Handy-Bildschirme (Außendisplay 375 × 700; unter 760 px Höhe): schlankere Übungsleiste (84 → 64 px) und dichtere Karte, damit nach
+   dem Prüfen Lösung, Warum und „Weiter“ ohne Rollen im Bild stehen. Tippflächen bleiben 44 px. */
+@media (max-height: 759.98px) and (max-width: 767.98px) {
+  :root .lx-exbar.lx-kbar {
+    gap: 4px;
+    padding: 6px 0 6px;
+  }
+  :root .lx-kbar-prog .lx-segs,
+  :root .lx-kbar-prog .lx-segs > * {
+    height: 4px;
+  }
+  :root .lx-glass.lx-exercise[data-kern] {
+    margin-top: 0;
+  }
+  :root .lx-glass.lx-exercise[data-kern]:not([data-kres]) {
+    padding: 16px;
+  }
+  /* Nach dem Prüfen ist die Übung nur der Rahmen (Streifen und Rumpf tragen die Flächen, siehe oben „Handy und Tablet“). */
+  :root .lx-exercise[data-kern][data-kres] .lx-kstrip[data-slot] {
+    padding: 10px 16px;
+  }
+  /* Der Rumpf trägt die Polster (siehe „Großpaket T“ oben), die linke Spalte nur den Abstand zwischen den Blöcken. */
+  :root .lx-exercise[data-kern][data-kres] .lx-kbody {
+    padding: 12px 16px 16px;
+  }
+  :root .lx-exercise[data-kern][data-kres] .lx-kleft {
+    gap: 12px;
+  }
+  /* Umformung mit Bausteinen: Ausgangssatz in Textgröße, Zielsatz etwas kleiner – Ablage und Vorrat stehen so ohne Rollen im Bild. */
+  [data-testid='c1x-kwt'][data-kwt-mode='tiles'] [data-testid='transform-from'] {
+    font-size: var(--t-text);
+    line-height: 1.4;
+  }
+  [data-testid='c1x-kwt'][data-kwt-mode='tiles'] .dz-kwt-sentence {
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+  .lx-exercise[data-kern] .lx-kstrip .lx-vi {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  .lx-exercise[data-kern][data-kres] .lx-kleft [data-block='why'] {
+    padding: 10px 12px;
+  }
+}
+/* „Weiter“ im Ergebnis (kurzer Touch-Bildschirm, `ExerciseShell` `tight`): steht direkt unter dem Pflichtteil, ohne eigenen Abstand oben. */
+.lx-exercise[data-tight] [data-slot='next'] .lx-actionbar-column {
+  padding-top: 0;
+}
+
+/* Laptop mit Tastatur (`data-split` an der Leiste): Start, Karte und Abschluss einer Übung stehen unter EINER gleich breiten Leiste
+   (1120 px wie die Karte). Vorher sprang die Leiste von 768 px (Start, Abschluss) auf 1120 px (Karte) und zurück. Der Inhalt ohne Karte
+   (Start, Abschluss, Zwischenseiten) steht mittig in fester Lesebreite. */
+@media (min-width: 1024px) {
+  :root :is(.max-w-3xl, .max-w-2xl):has(> .lx-exbar.lx-kbar[data-split]) {
+    max-width: 1120px;
+  }
+  :root :is(.max-w-3xl, .max-w-2xl):has(> .lx-exbar.lx-kbar[data-split]) > :not(.lx-exbar):not(.lx-exercise):not(:has(.lx-exercise)) {
+    width: 100%;
+    max-width: 45rem;
+    margin-inline: auto;
+  }
+  /* Start der Wörter-Runde: Karte und Hinweis in derselben Lesebreite wie der Abschluss (vorher 576 px neben 720 px). */
+  :root :is(.max-w-3xl, .max-w-2xl):has(> .lx-exbar.lx-kbar[data-split]) > [data-testid='vm-start'] > * {
+    max-width: none;
+  }
+}
+/* Auswahl auf dem kurzen Touch-Bildschirm: Optionen etwas dichter (52 px hoch, 8 px Abstand), damit Zusatztext und „Weiter“ ins Bild passen. */
+.lx-exercise[data-tight] [data-testid='choices'] {
+  gap: 0.5rem;
+}
+.lx-exercise[data-tight] .lx-choice-big {
+  min-height: 3.25rem;
 }

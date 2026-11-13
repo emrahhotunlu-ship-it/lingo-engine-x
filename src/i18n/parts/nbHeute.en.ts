@@ -59,6 +59,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteRecapBand: 'Your weekly review is ready.',
   nbHeuteRecapOpen: 'View',
   nbHeuteTomorrow: 'Tomorrow: {what}',
+  nbHeuteTomorrowDay: '{steps} · about {min} min',
   nbHeuteWorth: 'Extra: worth doing now',
   nbHeuteMore: 'Extra',
   nbHeuteLocal: 'Plan saved on this device only.',
@@ -66,6 +67,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   // Phone mode (Emrah 2026-10-01)
   nbHeuteBetweenDone: '{block} done',
   nbHeuteBetweenGo: 'Next: {block}',
+  nbHeuteDoneToday: 'Done for today',
   nbHeuteEndBack: 'Back to Today',
   nbHeuteClose: 'Close session',
   nbHeuteSaved: 'Saved. You can pick up where you left off anytime.',

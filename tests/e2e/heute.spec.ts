@@ -81,11 +81,11 @@ test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne 
   await page.getByTestId('repair-check').click();
   await expect(page.getByTestId('repair-right')).toContainText(SAY_REPAIR.right);
   await page.getByTestId('repair-next').click();
-  // Rundenende von Schritt 4 (ein Satz), dann weiter zum Ende der Einheit.
+  // Rundenende von Schritt 4 (ein Satz). Politur P1 (13.11.2026): EIN Abschluss je Schritt – der letzte offene Schritt nennt
+  // „Fertig für heute“ und führt direkt zu Heute (kein zweites Ende der Einheit mehr): Fertig-Zustand, kein Knopf, Serie +1.
+  await expect(page.getByTestId('session-end-next')).toHaveText(/Fertig für heute/);
   await page.getByTestId('session-end-next').click();
-  // Ende der Einheit → zurück zu Heute: Fertig-Zustand, kein Knopf, Serie +1.
-  await expect(page.getByTestId('unit-end')).toBeVisible();
-  await page.getByTestId('session-end-next').click();
+  await expect(page.getByTestId('unit-end')).toHaveCount(0);
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveAttribute('data-status', 'allDone');
   await expect(page.getByTestId('start')).toHaveCount(0);

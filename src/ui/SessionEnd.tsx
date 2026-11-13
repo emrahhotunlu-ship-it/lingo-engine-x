@@ -11,6 +11,7 @@ import { Eyebrow } from "./Eyebrow";
 import { emit } from "../engine/fx";
 import { startMoment } from "../engine/fx/measure";
 import { isUnsure } from "./exercise/ExerciseStatus";
+import { stepNextLabel } from "./exercise/runCtx";
 
 // Gemeinsames Ende einer Runde (N06, plan.md §4.10, Prototyp v1): Kacheln Richtig · Zeit · Neu,
 // „Das nimmst du mit“ (antippbar – die Übung reicht antippbare Wörter herein), GENAU EIN nächster
@@ -26,8 +27,13 @@ type SessionEndPropsAlt = {
   newItems?: string[];
   /** Was bleiben soll (z. B. 1–3 Wendungen oder ein Satz; Wörter antippbar über `EnglishText`). */
   takeaways?: ReactNode;
-  /** Der eine Hauptknopf (z. B. „Weiter: Block 3“ oder „Zurück zu Heute“). */
-  next: { label: string; run: () => void };
+  /**
+   * Der eine Hauptknopf (z. B. „Zurück zu Heute“). Politur P1: Schließt er einen Schritt der Tageseinheit ab (`run` meldet `unitDone`),
+   * nennt er das Ziel – „Weiter: Grammatik“, „Weiter: Anwenden“, „Fertig für heute“ (`stepNextLabel`, `ui/exercise/runCtx.ts`). Das gilt
+   * von selbst für den allgemeinen Knopf „Weiter“ (`nbShNext`, so beschriften alle Runden ihren Einheits-Abschluss); `step: true` erzwingt
+   * es für eine eigene Beschriftung, `step: false` schaltet es ab.
+   */
+  next: { label: string; run: () => void; step?: boolean };
   /** Optional ein ruhiger zweiter Weg. */
   secondary?: { label: string; run: () => void };
   /** Überschrift (Standard „Geschafft“), z. B. „✓ Wiederholen geschafft“. */
@@ -447,8 +453,12 @@ export function SessionEnd(props: SessionEndProps) {
     // Einmal beim Erscheinen.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (props.mode === "growth") return <GrowthEnd {...props} />;
-  return <TilesEnd {...props} />;
+  const { t } = useT();
+  const wantsStep = props.next.step ?? props.next.label === t("nbShNext");
+  const stepLabel = wantsStep ? stepNextLabel(t) : null;
+  const shown: SessionEndProps = stepLabel ? { ...props, next: { ...props.next, label: stepLabel } } : props;
+  if (shown.mode === "growth") return <GrowthEnd {...shown} />;
+  return <TilesEnd {...shown} />;
 }
 
 function TilesEnd({

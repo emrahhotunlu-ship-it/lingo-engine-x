@@ -32,6 +32,8 @@ import { syncTodayDoc } from '../today/startDoc';
 import { startSession } from '../vocab/session';
 import { EMPTY_RUN, useUnitRun, type UnitRun, type UnitVia } from './runStore';
 import { applyCountPatch } from '../../modules/apply/registry';
+import { setStepNextProvider } from '../../ui/exercise/runCtx';
+import { blockName } from './labels';
 
 // Die Tageseinheit als Kette im Player (plan.md §1.5, N10; architektur.md §2.7):
 // - Ein Tipp auf der Tageskarte startet den ersten offenen Block (montags erst die Bestätigungskarte).
@@ -171,8 +173,33 @@ export function checkDayOf(u: UnitNow): string[] | null {
   return checkDayDuties({ c1: u.plan.u.c1, rows: u.rows, skipped: checkSkipped(u.day), on: flags.c1check });
 }
 
+/**
+ * Fokus-Schnittstelle des letzten Blockstarts (Politur P1): der nächste Schritt startet direkt aus dem Abschluss des vorigen
+ * (`handleUnitDone`), ohne Zwischenkarte – dort gibt es kein eigenes `useHiddenInput`. Vor dem ersten Start: nur Fokus lösen.
+ */
+const NO_FOCUS: FocusApi = {
+  focusNow: () => undefined,
+  blur: () => {
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  },
+};
+let lastApi: FocusApi = NO_FOCUS;
+
+/**
+ * Was nach dem laufenden Schritt kommt (für die Beschriftung des Abschluss-Knopfs, `ui/exercise/runCtx.ts`): der nächste offene Schritt
+ * außer dem laufenden, oder `last`. `null`, wenn gerade kein Schritt der Einheit von heute läuft.
+ */
+export function unitStepNext(): { last: false; row: UnitRow } | { last: true } | null {
+  const run = useUnitRun.getState();
+  const u = unitNow();
+  if (!u || run.block === null || !run.duty || run.day !== u.day) return null;
+  const row = u.rows.find((r) => r.state !== 'done' && r.id !== run.duty) ?? null;
+  return row ? { last: false, row } : { last: true };
+}
+
 /** Einen Block starten (Anbieter oder Ersatz); ein unterbrochener Block wird fortgesetzt. SYNCHRON im Klick (iPhone-Tastatur). */
 export function startRow(u: UnitNow, row: UnitRow, api: FocusApi): void {
+  lastApi = api;
   unlockSpeech();
   // Check-Tag: statt Schritt 2 bzw. 3 kommt die Wahl „C1-Check starten“ oder „Heute nicht“ (Route `unitStep`, Schritt `c1check`).
   if (checkDayOf(u)?.includes(row.id)) {
@@ -321,9 +348,27 @@ export function handleUnitDone(block: UnitBlockNo, result?: UnitTaskResult, opts
   if (apDone) setRun({ apDone: false });
   if (target.duty !== 'review') markBlockDone(target.day, target.duty, apDone);
   if (late) return;
-  setRun({ via: null, watch: null, routeName: 'unitCard', route: { name: 'unitCard', step: 'next' } });
-  useNav.getState().go({ name: 'unitCard', step: 'next' });
+  // Politur P1 (13.11.2026): EIN Abschluss je Schritt. Der Abschluss der Übung war schon die Zusammenfassung, sein Hauptknopf nennt das
+  // Ziel („Weiter: Grammatik“) – deshalb startet hier direkt der nächste offene Schritt; die Zwischenkarte (`unitCard`) entfällt. Nach dem
+  // letzten Schritt geht es zu Heute (dort steht der Tag als erledigt), nicht mehr über ein zweites Rundenende.
+  const u = unitNow();
+  // Der gerade beendete Schritt zählt nie als „offen“ (Wörter melden ihr Rundenende über den Sammel-Puffer, nicht über `markBlockDone`).
+  const nextRow = u && u.day === target.day ? (u.rows.find((r) => r.state !== 'done' && r.id !== target.duty) ?? null) : null;
+  if (u && nextRow) {
+    setRun({ via: null, watch: null });
+    startRow(u, nextRow, lastApi);
+    return;
+  }
+  setRun({ block: null, duty: null, kind: null, via: null, watch: null, routeName: null, route: null });
+  useNav.getState().go({ name: 'today' });
 }
+
+// Beschriftung „Weiter: …“ / „Fertig für heute“ für jeden Abschluss (Politur P1).
+setStepNextProvider((t) => {
+  const n = unitStepNext();
+  if (!n) return null;
+  return n.last ? { last: true } : { last: false, name: blockName(n.row.kind, n.row.block, t, n.row.fmt) };
+});
 
 /**
  * Mehrschrittiger Block (Block 2: Input → Nachsprechen, plan.md §1.5): Nach dem ersten Schritt startet

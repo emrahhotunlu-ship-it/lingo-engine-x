@@ -24,6 +24,7 @@ export { Icon } from '../../ui/Icon';
 export { toast } from '../../ui/Toast';
 // Übersicht und Einstellungen Wörter (Großpaket A S6): Auswahl als Radiogruppe.
 export { Segmented } from '../../ui/Segmented';
+export { Disclosure } from '../../ui/Disclosure';
 export { Switch } from '../../ui/Switch';
 // Anki-Modus (S6b-3): Nochmal · Schwer · Gut · Leicht in der Aktionsleiste.
 export { GradeButtons } from '../../ui/GradeButtons';
