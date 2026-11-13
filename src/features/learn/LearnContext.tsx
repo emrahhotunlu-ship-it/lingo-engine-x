@@ -1,4 +1,5 @@
-import { programChapters } from '../../domain/c1/chapters';
+import { chapterIndexOf, programChapters } from '../../domain/c1/chapters';
+import { useFocusView } from '../grammar/focusView';
 import { ChapterDetail } from '../c1/ChapterSheet';
 import { useChapterState } from '../c1/ProgramMap';
 import { useLive } from '../../data/live';
@@ -14,11 +15,15 @@ export function LearnContext() {
   // G8 (UX M1): mit neuer Grammatik nur, was der Themen-Weg links nicht zeigt.
   const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
   const chs = programChapters();
+  // Politur P3: mit dem Fokus-Thema ist „jetzt dran“ das Kapitel des Fokus-Themas (dieselbe Aussage wie die Karte „Du bist hier“).
+  const focus = useFocusView();
   if (!chs.length || state.chapters.length !== chs.length) return null;
-  const idx = Math.min(chs.length - 1, picked ?? Math.max(0, state.current));
+  const focusIdx = gmod && focus ? chapterIndexOf(focus.topic) : -1;
+  const current = focusIdx >= 0 ? focusIdx : state.current;
+  const idx = Math.min(chs.length - 1, picked ?? Math.max(0, current));
   const c = chs[idx]!;
   const p = state.chapters[idx]!;
-  const later = chapterLater(p, idx, state.current);
+  const later = chapterLater(p, idx, current);
   return (
     <div className="lx-vg-ctx" data-testid="learn-context">
       <ChapterDetail key={c.id} chapter={c} progress={p} view="column" later={later} slim={gmod} />

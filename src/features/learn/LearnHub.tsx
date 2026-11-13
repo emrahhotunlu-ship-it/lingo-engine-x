@@ -23,6 +23,9 @@ import { TopicPath } from './TopicPath';
 import { useBookNext } from '../grammar/BookScreen';
 import { bookChapters } from '../../domain/grammar/book';
 import { topicName } from '../grammar/topicUi';
+import { useFocusView } from '../grammar/focusView';
+import { startGrammar, topicTestReady, useGrammarSession } from '../grammar/session';
+import { TT_N } from '../../domain/grammar/topicTest';
 
 // Reiter „Grammatik“ (Relaunch Teil 1c, D5 V-GRAMMATIK; Vorschau H6 `path` screens.js:468–480, L4 desk.js:238–248). Aufbau wie die Vorschau:
 // Kopf „Grammatik“ (vom Rahmen, `LearnHead`), Karte „Du bist hier“ mit dem EINEN Hauptknopf, die Kapitelliste „Dein Weg zu C1“ und leise
@@ -63,7 +66,22 @@ export function LearnHub() {
   const fix = useFix();
   const { cursor } = useChapterNow();
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
-  const highlight = cursor?.topic ?? null;
+  // Politur P3: mit der neuen Grammatik ist das Fokus-Thema „jetzt dran“ (Karte „Du bist hier“); der Themen-Weg hebt dasselbe Thema hervor.
+  const focus = useFocusView();
+  const docs = useLive((s) => s.collections.grammar);
+  const highlight = focus?.topic ?? cursor?.topic ?? null;
+  const testTopic = focus?.topic ?? null;
+  const testReady = !!testTopic && topicTestReady(testTopic, docs ?? undefined);
+  /** Themen-Test zum Fokus-Thema (6 Aufgaben ohne Hilfe): bestanden heißt, das Thema ist abgeschlossen. */
+  const startTest = () => {
+    if (!testTopic) return;
+    const step0 = useGrammarSession.getState().step;
+    const kind = startGrammar({ mode: 'topic', topic: testTopic, test: true });
+    if (useGrammarSession.getState().step === step0) return;
+    if (kind === 'typed') api.focusNow();
+    else api.blur();
+    go({ name: 'grammarSession', mode: 'topic', topic: testTopic });
+  };
   // Großpaket G5: mit der neuen Grammatik EIN Themen-Weg (Als Nächstes / Sitzt schon) statt Kapitelliste und zweiter Themenliste (M12);
   // die Fehlersätze stehen mit Überschrift an EINEM Ort. Schalter aus (`gcfg.mod = 0`): der bisherige Aufbau, unverändert.
   const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
@@ -80,14 +98,39 @@ export function LearnHub() {
     <div className="lx-vg" data-testid="learn-hub">
       <HereCard />
 
-      {/* Grammatik-Buch (Emrah 08.11.2026): Kapitel, Lektionen, Übungen und Klausuren; die Zeile nennt den nächsten Schritt. */}
-      <div className="lx-vg-rows" data-testid="hub-book-list">
-        <VRow icon="book" title={t('bkRow')} sub={bookSub} onClick={() => go({ name: 'book' })} data-testid="hub-book" />
-      </div>
-
-      {gmod ? <TopicPath current={highlight} onOpen={setOpen} /> : program && <ChapterList />}
-
-      {!gmod && <Slot name="grammar.foot" />}
+      {gmod ? (
+        // Politur P3 (ein Weg): Buch, Themen-Test, Kapitel/Themen und Einstufung stehen als Detail unter der Karte, eingeklappt.
+        <section className="lx-vg-all" data-testid="hub-details">
+          <Disclosure label={t('gfDetails')} testId="hub-details-toggle">
+            <div className="flex flex-col gap-3">
+              <div className="lx-vg-rows" data-testid="hub-book-list">
+                <VRow icon="book" title={t('bkRow')} sub={bookSub} onClick={() => go({ name: 'book' })} data-testid="hub-book" />
+                {testTopic && (
+                  <VRow
+                    icon="target"
+                    title={t('gmBtnTest', { n: TT_N })}
+                    sub={testReady ? `${t('gfDetailTest', { topic: topicName(testTopic, lang) })} · ${t('gfDetailTestSub', { n: TT_N })}` : t('gfDetailTestPrep')}
+                    {...(testReady ? { onClick: startTest } : {})}
+                    data-testid="hub-topic-test"
+                    data-ready={testReady ? 'true' : 'false'}
+                  />
+                )}
+              </div>
+              <TopicPath current={highlight} onOpen={setOpen} />
+              <Slot name="grammar.foot" />
+            </div>
+          </Disclosure>
+        </section>
+      ) : (
+        <>
+          {/* Grammatik-Buch (Emrah 08.11.2026): Kapitel, Lektionen, Übungen und Klausuren; die Zeile nennt den nächsten Schritt. */}
+          <div className="lx-vg-rows" data-testid="hub-book-list">
+            <VRow icon="book" title={t('bkRow')} sub={bookSub} onClick={() => go({ name: 'book' })} data-testid="hub-book" />
+          </div>
+          {program && <ChapterList />}
+          <Slot name="grammar.foot" />
+        </>
+      )}
 
       {gmod && (
         <h2 className="lx-vg-lbl lx-vg-pathlbl" data-testid="hub-errors-head">
@@ -120,8 +163,6 @@ export function LearnHub() {
           {lookupRows}
         </div>
       )}
-
-      {gmod && <Slot name="grammar.foot" />}
 
       {gmod ? null : program ? (
         // Die vollständige Themenliste bleibt eingeklappt erreichbar (kein doppelter Kapitelkopf neben der Kapitelliste).

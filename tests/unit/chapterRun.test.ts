@@ -257,7 +257,7 @@ describe('Tagesplan im Kapitel (K3)', () => {
     const docs = docsOf({ [k1]: shakyDoc(k1, 3, 2), passive: safeDoc('passive'), 'passive-plus': shakyDoc('passive-plus', 3, 2) });
     const chapter = chapterPlanInput({ docs, today: TODAY, nowMs: NOW, chosen: 4 });
     expect(chapter?.n).toBe(4);
-    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter });
+    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, legacy: true });
     expect(gt.ch).toBe(4);
     expect(gt.topics.length).toBeLessThanOrEqual(3);
     // Etwa ein Drittel Wiederholung: ein Thema aus einem anderen Kapitel, das schon begonnen ist.
@@ -267,14 +267,14 @@ describe('Tagesplan im Kapitel (K3)', () => {
   });
   it('ohne Kapitel (Schalter aus) unverändert: kein ch', () => {
     const docs = docsOf({ [k1]: shakyDoc(k1, 3, 2) });
-    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY });
+    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, legacy: true });
     expect(gt).not.toHaveProperty('ch');
   });
   it('höchstens eine Einführung je Tag: heute schon außerhalb eingeführt → keine weitere', () => {
     const intro = { ...shakyDoc(k1, 1, 0), pats: Object.fromEntries(pid(k1).map((id) => [id, { n: 1, c: 0, last: NOW, h: 0, r: 0, k: 1, dd: [], i: TODAY }])) };
     const docs = docsOf({ [k1]: intro });
     const chapter = chapterPlanInput({ docs, today: TODAY, nowMs: NOW, chosen: 4 });
-    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter });
+    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, legacy: true });
     expect(gt.intro).toBeNull();
     expect(gt.ch).toBe(4);
   });
@@ -367,13 +367,13 @@ describe('Nachbesserungen aus den Prüfungen (11.10.2026)', () => {
     const [out1, out2, fresh] = outsideTopics() as [string, string, string];
     const docs = docsOf({ [out1]: shakyDoc(out1, 1, 0), [out2]: safeDoc(out2), passive: shakyDoc('passive', 1, 0) });
     const chapter = chapterPlanInput({ docs, today: TODAY, nowMs: NOW, chosen: 4 });
-    const plain = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter }).gt;
-    const withFocus = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, focus: out2 }).gt;
+    const plain = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, legacy: true }).gt;
+    const withFocus = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, focus: out2, legacy: true }).gt;
     const outside = (ts: string[]) => ts.filter((t) => !K[3]!.topics.includes(t));
     expect(outside(plain.topics)).toHaveLength(1);
     expect(outside(withFocus.topics)).toEqual([out2]);
     // Nie begonnenes Fokus-Thema: kein Platz.
-    const f2 = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, focus: fresh }).gt;
+    const f2 = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, focus: fresh, legacy: true }).gt;
     expect(f2.topics).not.toContain(fresh);
   });
   it('5. nur ein Kapitel-Thema begonnen: es bekommt beide Kapitel-Plätze, Wiederholung bleibt bei einem', () => {
@@ -381,7 +381,7 @@ describe('Nachbesserungen aus den Prüfungen (11.10.2026)', () => {
     const docs = docsOf({ [out1]: shakyDoc(out1, 1, 0), [out2]: shakyDoc(out2, 1, 0), passive: shakyDoc('passive', 1, 0) });
     const chapter = chapterPlanInput({ docs, today: TODAY, nowMs: NOW, chosen: 4 });
     expect(chapter?.cursor.topic).toBe('passive');
-    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter });
+    const { gt } = freezeGrammarDay({ docs, today: TODAY, nowMs: NOW, introPlanOf: INTRO_PLAN_OF, seed: TODAY, chapter, legacy: true });
     expect(gt.topics).toHaveLength(3);
     expect(gt.topics.slice(0, 2)).toEqual(['passive', 'passive']);
     expect(gt.topics.filter((t) => !K[3]!.topics.includes(t))).toHaveLength(1);

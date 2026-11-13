@@ -38,7 +38,9 @@ export const gmDe = {
   dxRule: 'Regel ansehen',
   dxRuleHide: 'Regel ausblenden',
   dxAskClaude: 'Claude fragen, warum',
-  dxWhyLead: 'Warum:',
+  dxFallbackSol: 'Richtig ist „{richtig}“.',
+  dxFallbackSolForm: 'Richtig ist „{richtig}“. Form: {form}.',
+  dxAskFailed: 'Claude ist gerade nicht erreichbar. Die Erklärung oben gilt.',
   // Politur P3 (Emrah E1 „A“ 13.11.2026): Fokus-Thema – eine Runde = ein Thema über mehrere Tage, vier Stufen, vorn kurzes Aufwärmen.
   gfStage1: 'Verstehen',
   gfStage2: 'Bilden',

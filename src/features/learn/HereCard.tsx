@@ -17,6 +17,9 @@ import { topicName } from '../grammar/topicUi';
 import { useToday } from '../today/state';
 import { useFix } from './fix';
 import { grammarModuleOn } from '../../modules/grammar/api';
+import { useFocusView } from '../grammar/focusView';
+import { FocusHere } from './FocusHere';
+import { TT_N } from '../../domain/grammar/topicTest';
 
 // „Du bist hier“ (Relaunch Teil 1c, D5 V-GRAMMATIK; Vorschau `hereCard` screens.js:445–450): Kleinüberschrift, Thema groß (20/26), eine Zeile,
 // der Lernweg als geteilter Balken und EIN Hauptknopf. Ersetzt die Weiter-Karte des Reiters und den Kopf der C1-Reise (eine rote Linie, Kap. 2 Nr. 1).
@@ -55,7 +58,19 @@ function Steps({ topic, shown = false }: { topic: string | null; /** G8 (UX M2):
   );
 }
 
+/**
+ * Politur P3: mit der neuen Grammatik zeigt der Reiter EINEN Weg – das Fokus-Thema mit seiner Stufe (`FocusHere`). Nur am Tag der Umstellung,
+ * wenn der Plan von heute noch kein Fokus-Thema trägt und der Grammatik-Schritt offen ist, bleibt die bisherige Karte (Heute und Reiter sagen dasselbe).
+ */
 export function HereCard() {
+  const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
+  const view = useFocusView();
+  const hasPlanTopic = useToday((s) => !!s.plan?.u?.gt);
+  if (gmod && view && (view.frozen || !hasPlanTopic)) return <FocusHere view={view} />;
+  return <CursorHere />;
+}
+
+function CursorHere() {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -118,7 +133,7 @@ export function HereCard() {
             data-action={cursor.phase}
             data-prep={prep ? 'true' : undefined}
           >
-            {gmod && cursor.phase === 'test' && !prep ? t('gmBtnTest') : t(chapterBtnKey(cursor, prep))}
+            {gmod && cursor.phase === 'test' && !prep ? t('gmBtnTest', { n: TT_N }) : t(chapterBtnKey(cursor, prep))}
           </VButton>
         )}
       </VCard>

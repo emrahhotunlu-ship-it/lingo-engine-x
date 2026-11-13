@@ -38,7 +38,9 @@ export const gmEn = {
   dxRule: 'Show rule',
   dxRuleHide: 'Hide rule',
   dxAskClaude: 'Ask Claude why',
-  dxWhyLead: 'Why:',
+  dxFallbackSol: 'The right answer is “{richtig}”.',
+  dxFallbackSolForm: 'The right answer is “{richtig}”. Form: {form}.',
+  dxAskFailed: 'Claude cannot be reached right now. The explanation above stands.',
   // Polish P3 (Emrah E1 “A”, 13.11.2026): focus topic – one round = one topic over several days, four stages, a short warm-up first.
   gfStage1: 'Understand',
   gfStage2: 'Build',

@@ -275,11 +275,13 @@ export function freezeGrammarDay(i: {
   chapter?: ChapterInput | null;
   /** Wochenfokus (P50, Thema des Fokus-Musters), nur im Kapitel-Modus: ein begonnenes Fokus-Thema bekommt einen Platz (`chapterDay`). */
   focus?: string | null;
+  /** Den bisherigen Weg erzwingen (drei Themen gemischt, Einführungsbremse bzw. Kapitel-Plan) – ohne Fokus-Thema. Sonst gilt er nur, wenn alles sitzt. */
+  legacy?: boolean;
 }): { gt: GrammarDay; ps: Record<string, PatState> } {
   let gt: GrammarDay;
   // Fokus-Thema (Politur P3, Emrah E1 „A“ 13.11.2026): EIN Thema über mehrere Tage. Es steht vorn (`topics[0]`, Marke `fo`), dahinter die
   // Aufwärm-Kandidaten (fällige frühere Themen). Ein neues Thema ist zugleich die Einführung des Tages. Sitzt alles, gilt der bisherige Weg.
-  const fp = focusPick({ docs: i.docs, today: i.today, nowMs: i.nowMs, chapterTopic: i.chapter?.cursor.topic ?? null });
+  const fp = i.legacy ? null : focusPick({ docs: i.docs, today: i.today, nowMs: i.nowMs, chapterTopic: i.chapter?.cursor.topic ?? null });
   if (fp) {
     const day = focusDay(fp.topic, i.docs.get(fp.topic), i.today, fp.state);
     const inChapter = !!i.chapter && i.chapter.topics.includes(fp.topic);

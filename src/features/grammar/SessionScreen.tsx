@@ -106,6 +106,8 @@ export function GrammarSessionScreen() {
   // Buch-Seite: nach den Seiten-Aufgaben angehängte Fehlersätze bzw. Wiederholung sichtbar zählen (Nachprüfung 09.11.2026 N1).
   const bookExtra = !!s.book?.n && s.status === 'running' && s.pos >= s.book.n ? { n: s.pos - s.book.n + 1, total: s.tasks.length - s.book.n } : null;
   // Fokus-Runde (Politur P3): die Plakette sagt, wo man in der Runde steht – „Aufwärmen“ bzw. die Stufe des Fokus-Themas.
+  // „Gleich nochmal“ der Fehler-Karte nimmt keinen Satz, der in dieser Runde noch kommt.
+  const roundKeys = useMemo(() => new Set(s.tasks.map((x) => x.key)), [s.tasks]);
   const focusBadge = !s.focus || !task || inRepeat(s) ? null : task.warm && task.errorT === null ? t('gfWarmBadge') : task.fo ? stageLine(task.fo, t) : null;
   const badge = bookExtra ? t('bkExtraBadge', bookExtra) : bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : focusBadge ? focusBadge : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
@@ -140,7 +142,7 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest || bookExtra || focusBadge ? 'hint' : undefined} topicRound={task.fo === 1 || (!s.focus && (s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))))} support={task.fo === 1} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest || bookExtra || focusBadge ? 'hint' : undefined} topicRound={task.fo === 1 || (!s.focus && (s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))))} support={task.fo === 1} roundKeys={roundKeys} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">

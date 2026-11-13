@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { sameGapAnswer, type MistakeSpot } from '../../domain/grammar/mistakeSpot';
@@ -7,113 +7,126 @@ import { useT } from '../../i18n';
 import { mistakeWhy, type MistakeWhyVars } from '../../prompts/mistakeWhy';
 import { Button } from '../../ui/Button';
 
-// Neustart E1 (Emrah 08.11.2026: „selbst wenn ich alles lese, checke ich meinen Fehler nicht, weil du ihn nicht erklärst, sondern mir generelle
-// Regeln gibst“). Bei einer falschen Antwort steht oben genau das:
-//   Du: will sign → richtig: signs
-//   EIN Satz, warum genau diese Form hier nicht passt (hinterlegte Erklärung zu genau dieser Antwort, sonst Claude `mistake-why@1`)
-//   „Gleich nochmal“: ein neuer Lückensatz zum selben Punkt, sofort selbst prüfbar (zählt nicht)
-// Die Regel steht nur auf Tipp („Regel ansehen“). Ohne KI bleibt eine kurze Satzvorlage mit der Form des Musters.
+// Die EINE Fehler-Karte der Grammatik (Politur P3, 13.11.2026; vorher Neustart E1 vom 08.11.): für jede Aufgabenart dieselbe, flache Karte.
+//   EIN Satz warum – zuerst der geprüfte Text (die hinterlegte Erklärung zu genau dieser Antwort, sonst die Begründung der Lösung)
+//   darunter eine ruhige Zeile mit Wegen auf Tipp: „Gleich nochmal“ (neuer Lückensatz aus dem Vorrat) · „Regel ansehen“ · „Claude fragen, warum“
+// Die Lösung steht genau einmal: im Satz (Lücke, Auswahl, korrigierter Satz) – die Karte wiederholt sie nicht. Claude fragt nur, wer tippt;
+// von selbst läuft nichts (kein Warten, keine springende Karte). Keine Kästen in der Karte: am Außendisplay (375×700) bleibt „Weiter“ im Bild.
+
+export type MistakeAgain = { en: string; answer: string; accepted: readonly string[] };
 
 export type MistakeCardProps = {
   taskKey: string;
-  spot: MistakeSpot;
-  /** Hinterlegte Erklärung zu genau dieser falschen Antwort (Regel mit Bedingung), sonst null. */
-  known: { de: string; en: string } | null;
+  /** Geprüfter Warum-Satz: `catalog` = Erklärung zu genau dieser falschen Antwort, `ok` = Begründung der Lösung. `null`: nichts hinterlegt (dann die Satzvorlage). */
+  why: { text: string; src: 'catalog' | 'ok' } | null;
+  /** Abweichende Stelle (eigene Antwort → Lösung) für die Satzvorlage und für Claude; `null` ohne eigene Antwort („Weiß ich nicht“, Auswahl). */
+  spot: MistakeSpot | null;
   vars: Omit<MistakeWhyVars, 'du' | 'richtig' | 'known' | 'uiLang'>;
-  /** Formel des Musters für die Satzvorlage ohne KI. */
+  /** Formel des Musters für die Satzvorlage. */
   form: string | null;
-  /** Aufgabeneigene Begründung der Lösung („usually“ und „on Fridays“ nennen eine Regel …): besser als die Formel, wenn es sie gibt. */
-  okWhy?: string | null;
   rule: ReactNode;
-  /** Claude fragen (nicht im Test ohne Hilfe). */
+  /** „Gleich nochmal“: ein anderer Lückensatz zum selben Muster aus dem Vorrat (geprüfter Inhalt, nie von Claude erzeugt). */
+  again?: MistakeAgain | null;
+  /** Claude fragen erlaubt (nicht im Test ohne Hilfe, nicht wenn schon „Claude fragen, ob deine Antwort auch stimmt“ dasteht). */
   ai?: boolean;
+  /** Leiser Weg „Aufgabe war unfair?“ in derselben Zeile. */
+  onUnfair?: (() => void) | null;
 };
 
-export function MistakeCard({ taskKey, spot, known, vars, form, okWhy = null, rule, ai: aiAllowed = true }: MistakeCardProps) {
+export function MistakeCard({ taskKey, why, spot, vars, form, rule, again = null, ai: aiAllowed = true, onUnfair = null }: MistakeCardProps) {
   const { t, lang } = useT();
   const aiOn = useAiAvailable() && aiAllowed;
   const ask = useAsk(mistakeWhy);
-  const [ruleOpen, setRuleOpen] = useState(false);
+  const [open, setOpen] = useState<null | 'again' | 'rule'>(null);
+  const [asked, setAsked] = useState(false);
   const full: MistakeWhyVars = useMemo(
-    () => ({ ...vars, du: spot.du, richtig: spot.richtig, known: known?.de ?? null, uiLang: lang }),
+    () => ({ ...vars, du: spot?.du ?? '', richtig: spot?.richtig ?? vars.answer, known: why?.text ?? null, uiLang: lang }),
     // Eine Anfrage je Aufgabe und Antwort (Schlüssel), nicht je Zeichnen.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [taskKey, lang],
   );
-  const run = ask.run;
-  useEffect(() => {
-    if (aiOn) void run(full);
-  }, [aiOn, full, run]);
+  const askNow = (): void => {
+    if (asked) return;
+    setAsked(true);
+    void ask.run(full);
+  };
 
-  const ai = ask.data;
-  const warum = known ? known[lang] : ai ? ai.warum[lang] : null;
-  const base = t('dxFallback', { du: spot.du || t('dxMissing'), richtig: spot.richtig });
-  const fallback = okWhy ? `${base} ${okWhy}` : form ? t('dxFallbackForm', { du: spot.du || t('dxMissing'), richtig: spot.richtig, form }) : t('dxFallback', { du: spot.du || t('dxMissing'), richtig: spot.richtig });
-  const waiting = !known && aiOn && (ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'streaming' || ask.phase === 'slow');
+  const data = ask.data;
+  const richtig = spot?.richtig ?? vars.answer;
+  const fallback = !spot?.du
+    ? form
+      ? t('dxFallbackSolForm', { richtig, form })
+      : t('dxFallbackSol', { richtig })
+    : form
+      ? t('dxFallbackForm', { du: spot.du, richtig, form })
+      : t('dxFallback', { du: spot.du, richtig });
+  const waiting = asked && !data && (ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'streaming' || ask.phase === 'slow');
+  const failed = asked && !data && !waiting;
 
   return (
-    <div className="flex flex-col gap-3" data-testid="mistake-card">
-      <p className="lx-t-body m-0" data-testid="mistake-spot">
-        <span className="text-muted">{t('dxYou')}: </span>
-        {spot.du ? (
-          <del lang="en" className="text-wrong-text">
-            {spot.du}
-          </del>
-        ) : (
-          <span className="text-muted">{t('dxMissing')}</span>
-        )}
-        <span aria-hidden="true" className="text-muted">
-          {' → '}
-        </span>
-        <span className="text-muted">{t('dxRight')}: </span>
-        <ins lang="en" className="font-semibold text-ok-text no-underline">
-          {spot.richtig}
-        </ins>
+    <div className="flex flex-col gap-2" data-testid="mistake-card">
+      <p className="lx-t-body m-0" lang={lang} data-testid="mistake-why" data-src={why ? why.src : 'fallback'}>
+        {why ? why.text : fallback}
       </p>
-      {waiting ? (
+      {waiting && (
         <p className="lx-t-support m-0 text-muted" role="status" data-testid="mistake-thinking">
           {t('dxThinking')}
         </p>
-      ) : (
-        <p className="lx-t-support m-0" lang={lang} data-testid="mistake-why" data-src={known ? 'catalog' : ai ? 'ai' : 'fallback'} data-also={!known && ai?.alsoOk ? '1' : undefined}>
-          {!known && ai?.alsoOk && <span className="font-semibold">{t('dxAlsoOk')} </span>}
-          {warum ?? fallback}
+      )}
+      {data && (
+        <p className="lx-t-support m-0" lang={lang} data-testid="mistake-ai" data-also={data.alsoOk ? '1' : undefined}>
+          {data.alsoOk && <span className="font-semibold">{t('dxAlsoOk')} </span>}
+          {data.warum[lang]} <span className="text-muted">· {t('exAiNote')}</span>
         </p>
       )}
-      {ai && !known && (
-        <p className="lx-t-meta m-0 text-muted" data-testid="mistake-ai-note">
-          {t('exAiNote')}
+      {failed && (
+        <p className="lx-t-support m-0 text-muted" role="status" data-testid="mistake-ai-failed">
+          {t('dxAskFailed')}
         </p>
       )}
-      {ai?.nochmal && <AgainGap key={`${taskKey}:${ai.nochmal.en}`} en={ai.nochmal.en} answer={ai.nochmal.answer} accepted={ai.nochmal.accepted} />}
-      {rule && (
-        <div className="flex flex-col gap-2">
-          <button type="button" className="lx-vu-link self-start" aria-expanded={ruleOpen} onClick={() => setRuleOpen(!ruleOpen)} data-testid="mistake-rule">
-            {ruleOpen ? t('dxRuleHide') : t('dxRule')}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1" data-testid="mistake-actions">
+        {again && (
+          <button type="button" className="lx-vu-link" aria-expanded={open === 'again'} onClick={() => setOpen(open === 'again' ? null : 'again')} data-testid="mistake-again-open">
+            {t('dxAgain')}
           </button>
-          {ruleOpen && rule}
-        </div>
-      )}
+        )}
+        {rule && (
+          <button type="button" className="lx-vu-link" aria-expanded={open === 'rule'} onClick={() => setOpen(open === 'rule' ? null : 'rule')} data-testid="mistake-rule">
+            {open === 'rule' ? t('dxRuleHide') : t('dxRule')}
+          </button>
+        )}
+        {aiOn && !asked && (
+          <button type="button" className="lx-vu-link" onClick={askNow} data-testid="mistake-ask">
+            {t('dxAskClaude')}
+          </button>
+        )}
+        {onUnfair && (
+          <button type="button" className="lx-vu-link text-muted" onClick={onUnfair} data-testid="gm-unfair">
+            {t('gmUnfairLink')}
+          </button>
+        )}
+      </div>
+      {open === 'again' && again && <AgainGap key={`${taskKey}:${again.en}`} en={again.en} answer={again.answer} accepted={again.accepted} />}
+      {open === 'rule' && rule}
     </div>
   );
 }
 
 /** „Gleich nochmal“: der neue Satz mit einem Eingabefeld in der Lücke; geprüft wird nur hier, gebucht wird nichts. */
-function AgainGap({ en, answer, accepted }: { en: string; answer: string; accepted: readonly string[] }) {
+function AgainGap({ en, answer, accepted }: MistakeAgain) {
   const { t } = useT();
   const [value, setValue] = useState('');
   const [done, setDone] = useState<null | boolean>(null);
-  const m = /_{3,}/.exec(en);
+  const m = /_{3,}(\s*\([^)]*\))?/.exec(en);
   const before = m ? en.slice(0, m.index) : en;
+  const cue = m?.[1]?.trim() ?? '';
   const after = m ? en.slice(m.index + m[0].length) : '';
   const check = (): void => {
     if (done === null && value.trim()) setDone(sameGapAnswer(value, answer, accepted));
   };
   return (
     <section className="flex flex-col gap-2" data-testid="mistake-again" aria-label={t('dxAgain')}>
-      <p className="lx-t-support m-0 font-semibold">
-        {t('dxAgain')} <span className="font-normal text-muted">· {t('dxAgainLead')}</span>
-      </p>
+      <p className="lx-t-meta m-0 text-muted">{t('dxAgainLead')}</p>
       <p className="lx-t-body m-0" lang="en">
         {before && <EnglishText as="span" text={before} area="trainer" />}
         {/* UX-Prüfung 09.11.2026 K4: eine Linie wie die Lücke der Aufgabe, kein Kasten (Inline-Stil, kein neues CSS). */}
@@ -149,6 +162,7 @@ function AgainGap({ en, answer, accepted }: { en: string; answer: string; accept
           data-testid="mistake-again-input"
           data-state={done === null ? undefined : done ? 'correct' : 'wrong'}
         />
+        {cue && <span className="text-muted">{cue} </span>}
         {after && <EnglishText as="span" text={after} area="trainer" />}
       </p>
       {done === null ? (

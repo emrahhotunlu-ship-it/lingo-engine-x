@@ -4,8 +4,8 @@ import type { GrammarAnswer } from '../learn/types';
 import { patPush, patsOf, type PatEntry } from '../metrics/pattern';
 import { guessOptions } from './check';
 import { introDay } from './path';
-import { focusDoc, focusStep, groupOf, groupsLeft, readFocus } from './focus';
-import { nextTt, readTt } from './topicTest';
+import { focusDoc, focusPassed, focusStep, groupOf, groupsLeft, readFocus } from './focus';
+import { nextTt, readTt, ttPassed } from './topicTest';
 import { patternsOf } from './patterns';
 import { bktStep, displayP, nextDue, p0Of } from './bkt';
 import type { NewRepair } from '../repair/repair';
@@ -143,6 +143,8 @@ function finishPatch(cur: Doc, a: GrammarAnswer, ok: boolean, patch: Doc): { pat
   if (!claude && a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 6) };
   // Themen-Test (K4): Ergebnis mit der letzten Antwort; `ok` bleibt bestanden, `k` zählt die Versuche, ein neuer Versuch löscht „trotzdem weiter“ (`s`).
   if (!claude && a.tt) patch.tt = nextTt(readTt(cur), { day: a.day, c: a.tt.c, n: a.tt.n, ...(a.tt.w ? { w: a.tt.w } : {}) });
+  // Fokus-Thema (Politur P3): ein bestandener Themen-Test schließt das Thema ab (der Lauf endet, das nächste Thema ist dran).
+  if (!claude && a.tt && ttPassed(a.tt.c, a.tt.n)) patch.fo = focusDoc(focusPassed(readFocus(cur), a.day));
   if (!claude && a.vt?.ok && a.vt.pats.length) {
     // Bestandener Vortest (§4.7): p = max(p, 0,6), aber nur, wenn damit alle Muster des Themas getestet sind.
     const all = patternsOf(topic)?.patterns.map((p) => p.id) ?? [];

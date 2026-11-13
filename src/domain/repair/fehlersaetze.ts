@@ -2,6 +2,8 @@ import { dayKey } from '../date';
 import { whyOfError } from '../grammar/errorWhy';
 import type { Lang } from '../srs/types';
 import { dueErrors, errorSentences } from '../grammar/errors';
+import { patternById } from '../grammar/patterns';
+import { patsOf } from '../metrics/pattern';
 import { hasFk } from './fk';
 import { fehlersatzProblem, gapHintOf, type HideReason } from './quality';
 import { dueRepairs, readRepairs, repairNorm, type RepairSrc } from './repair';
@@ -42,6 +44,27 @@ export type HiddenFehlersatz = { id: string; reason: HideReason };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
+/**
+ * Politur P3 (13.11.2026, Emrah: „Sau schwere Aufgabe – woher soll ich das wissen?“): Ein Fehler aus dem Einstufungstest (`src: 'check'`) ruht,
+ * bis sein Thema eingeführt ist – das Thema begonnen (mindestens eine Antwort) und, wo das Thema seine Muster einzeln einführt, auch das Muster.
+ * Reiner Lesefilter an der EINEN Quelle (`collect`): Runde, „Fehler korrigieren“, Tagesplan und alle Zähler sehen dieselbe Liste. Nichts wird
+ * gelöscht oder verändert; Box und Fälligkeit bleiben, der Satz kommt von selbst wieder, sobald das Thema dran war. Ohne erkennbares
+ * Grammatik-Muster (z. B. Wortschatz `lx.*`) gilt der Filter nicht.
+ */
+export function checkRests(r: { src: string; pat?: string; ctx?: string }, grammarDocs: ReadonlyMap<string, Doc>): boolean {
+  if (r.src !== 'check') return false;
+  const pat = patternById(r.pat ?? '') ?? patternById(r.ctx ?? '');
+  if (!pat) return false;
+  const doc = grammarDocs.get(pat.topic);
+  const n = typeof doc?.n === 'number' && Number.isFinite(doc.n) ? doc.n : 0;
+  if (n <= 0) return true;
+  const entries = patsOf(doc);
+  // Altbestand ohne `pats`: das ganze Thema gilt als eingeführt.
+  if (!Object.keys(entries).length) return false;
+  const e = entries[pat.id];
+  return !e || (e.i === undefined && (e.n ?? 0) <= 0);
+}
+
 
 type CollectIn = { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; /** Eigene Sätze und Grammatik-Fehlersätze im Wechsel statt „älteste zuerst“. Ohne Angabe: gemischt, sobald eine Grenze (`limit`) gesetzt ist. */ mix?: boolean; lang?: Lang; /** Beherrschung je Muster aus dem einen Lernermodell (Tutor-Engine v3 S2): am selben Fälligkeitstag kommt das schwächere Muster zuerst. */ pOf?: (pat: string) => number | undefined };
 
@@ -64,6 +87,7 @@ function collect(i: CollectIn): { list: Fehlersatz[]; dropped: HiddenFehlersatz[
   };
   for (const r of dueRepairs(readRepairs(i.repairDoc ?? undefined), i.nowMs)) {
     if (dayKey(r.t) === i.today) continue;
+    if (checkRests(r, i.grammarDocs)) continue;
     const f: Fehlersatz = { id: r.id, wrong: r.wrong, right: r.right, ...(r.why ? { why: r.why } : {}), due: r.due, store: 'repair', src: r.src, ...(r.fix ? { fix: r.fix } : {}), ...(r.pat ? { pat: r.pat } : {}), ...(r.ctx ? { ctx: r.ctx } : {}) };
     keep(f, fehlersatzProblem({ wrong: r.wrong, right: r.right, src: r.src, confirmed: (r as { confirmed?: unknown }).confirmed === true }));
   }

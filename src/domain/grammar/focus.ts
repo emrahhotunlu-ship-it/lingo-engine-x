@@ -175,6 +175,22 @@ export function focusStep(cur: FocusState | null, a: FocusFact): { next: FocusSt
   return { next: st, move };
 }
 
+/** Wie `focusStep`; die Beherrschung liest die Funktion selbst aus dem Thema (für die Runde, die ihre Kopie des Laufs fortschreibt). */
+export function focusStepLive(topic: string, doc: Doc | undefined, cur: FocusState | null, a: Omit<FocusFact, 'p'>, nowMs: number): { next: FocusState; move: FocusMove } {
+  return focusStep(cur, { ...a, p: topicP(topic, doc, nowMs) });
+}
+
+/**
+ * Themen-Test bestanden (6 Aufgaben ohne Hilfe): das Thema ist abgeschlossen – der Lauf endet sofort („sitzt“), auch aus einer frühen Stufe.
+ * Wer das Thema schon kann, kürzt so ab; ohne Lauf entsteht ein abgeschlossener, damit das Thema nicht gleich wieder Fokus wird.
+ */
+export function focusPassed(cur: FocusState | null, day: string): FocusState {
+  const base: FocusState = focusOpen(cur) ? { ...cur } : { v: 1, s: FOCUS_STAGES, k: STAGE_UP_CLEAN, d0: day, d: day, n: 1 };
+  delete base.w;
+  delete base.gp;
+  return { ...base, s: FOCUS_STAGES, k: STAGE_UP_CLEAN, m: 1, d: day, ok: day };
+}
+
 // ------------------------------------------------------------------ Wahl des Fokus-Themas
 
 export type FocusReason = 'run' | 'weak' | 'chapter' | 'next' | 'new';

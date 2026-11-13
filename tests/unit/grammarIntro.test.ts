@@ -76,7 +76,7 @@ describe('Einführung über mehrere Tage (§3.2)', () => {
     let k = 0;
     for (let n = 0; n < 14; n++) {
       const nowMs = berlin(day, 10);
-      const { gt } = freezeGrammarDay({ docs, today: day, nowMs, introPlanOf: plan, seed: day });
+      const { gt } = freezeGrammarDay({ docs, today: day, nowMs, introPlanOf: plan, seed: day, legacy: true });
       const block = gt.intro === 'mixed-cond' && gt.pats.length ? { topic: 'mixed-cond', pats: gt.pats } : null;
       const round = selectRound({ mode: 'duty', grammarDocs: docs, dailyOpen: [], pool: [], nowMs, size: 6, seed: `${day}|x`, errorsMax: 0, gt, ...(block ? { introBlock: block } : {}) });
       if (block) {

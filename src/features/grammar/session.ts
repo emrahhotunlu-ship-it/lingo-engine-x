@@ -41,8 +41,7 @@ import {
   type RoundMode,
 } from '../../domain/grammar/tasks';
 import { patPush, patsOf, type PatEntry } from '../../domain/metrics/pattern';
-import { topicP } from '../../domain/grammar/bkt';
-import { focusDay, focusOpen, focusStep, groupOf, groupsLeft, readFocus, stageOf, type FocusMove, type FocusStage, type FocusState } from '../../domain/grammar/focus';
+import { focusDay, focusOpen, focusStepLive, groupOf, groupsLeft, readFocus, stageOf, type FocusMove, type FocusStage, type FocusState } from '../../domain/grammar/focus';
 import { refocus, selectFocusRound, type FocusRoundIn } from '../../domain/grammar/focusRound';
 import { dayKeyNoon } from '../../domain/date';
 import { DUTY_ROUND } from '../../domain/plan/channels';
@@ -349,7 +348,7 @@ function focusAnswer(s: State, f: FocusRun, a: GrammarAnswer, tasks: GrammarTask
   const add = pat ? (stage === 1 ? groupOf(f.topic, pat) : [pat]) : [];
   const introduced: string[] | 'all' = f.introduced === 'all' ? 'all' : [...new Set([...f.introduced, ...add])];
   const has = (id: string): boolean => introduced === 'all' || introduced.includes(id);
-  const r = focusStep(f.st, { day: s.day, clean: ok && a.help.level === 0, wrong: !ok, pat, p: topicP(f.topic, docs.get(f.topic), nowMs), stage, more: groupsLeft(f.topic, has) });
+  const r = focusStepLive(f.topic, docs.get(f.topic), f.st, { day: s.day, clean: ok && a.help.level === 0, wrong: !ok, pat, stage, more: groupsLeft(f.topic, has) }, nowMs);
   let next: FocusRun = { ...f, st: r.next, stage: r.next.s, introduced, moved: r.move === 'none' ? f.moved : r.move };
   const end = s.repeatAt ?? tasks.length;
   if ((r.move !== 'up' && r.move !== 'down') || pos >= end) return { focus: next, tasks };

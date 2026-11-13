@@ -41,7 +41,8 @@ function withErrors(m: Map<string, Doc>, topics: readonly string[], per: number)
 }
 
 const NO_PLAN = (): string[][] | null => null;
-const freeze = (d: Map<string, Doc>, plan: (t: string) => string[][] | null = NO_PLAN) => freezeGrammarDay({ docs: d, today: TODAY, nowMs: NOW, introPlanOf: plan, seed: TODAY });
+// Diese Datei prüft den bisherigen Weg (drei Themen gemischt, Einführungsbremse); das Fokus-Thema (Politur P3) prüft grammarFocusTopic.test.ts.
+const freeze = (d: Map<string, Doc>, plan: (t: string) => string[][] | null = NO_PLAN) => freezeGrammarDay({ docs: d, today: TODAY, nowMs: NOW, introPlanOf: plan, seed: TODAY, legacy: true });
 
 describe('freezeGrammarDay', () => {
   it('ist für denselben Stand deterministisch', () => {

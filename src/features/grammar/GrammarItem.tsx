@@ -13,8 +13,9 @@ import { asAlsoRight, checkFind, checkGrammar, checkMeaning, fixSpan } from '../
 import { shortWhy } from '../../domain/grammar/alsoRight';
 import { caseFix, isVariant } from '../../domain/grammar/learnerView';
 import { grammarExplanation } from '../../domain/grammar/explain';
-import { patternOf, whyFor } from '../../domain/grammar/patterns';
+import { patternOf } from '../../domain/grammar/patterns';
 import { mistakeSpot } from '../../domain/grammar/mistakeSpot';
+import { againFromPool } from '../../domain/grammar/again';
 import { MistakeCard } from './MistakeCard';
 import { topicState } from '../../domain/grammar/path';
 import { formHint } from '../../domain/grammar/rules';
@@ -102,6 +103,8 @@ export type GrammarItemProps = {
   topicRound?: boolean;
   /** Fokus-Thema, Stufe „Verstehen“ (Politur P3): die Lücke zeigt von Anfang an ihre Platzhalter (Stütze), unabhängig von der Beherrschung. */
   support?: boolean;
+  /** Schlüssel der Aufgaben dieser Runde: „Gleich nochmal“ nimmt keinen Satz, der in der Runde noch kommt. */
+  roundKeys?: ReadonlySet<string>;
   /** Grammatikrunde mit Tutor-Engine (S3): nach 2 Fehlern gleicher Ursache kommt statt der Rückmeldung die Mini-Lektion. */
   tutor?: boolean;
   /** Großpaket G (Schalter `gcfg.mod`): neue Grammatik – ruhige Claude-Karte bei falsch (G3). */
@@ -219,6 +222,7 @@ function LegacyGrammarItem({
   profile: profileProp,
   topicRound = false,
   support = false,
+  roundKeys,
   tutor: tutorOn = false,
   reason = null,
   onLeave = null,
@@ -311,6 +315,13 @@ function LegacyGrammarItem({
   }, [hasFb]);
 
   const solution = task.answer;
+  // „Gleich nochmal“ der Fehler-Karte: ein anderer Lückensatz zum selben Muster aus dem Vorrat (einmal je Aufgabe gewählt).
+  const again = useMemo(
+    () => againFromPool(task, { seen: new Set(Array.isArray(doc?.seen) ? (doc.seen as unknown[]).map(String) : []), ...(roundKeys ? { avoid: roundKeys } : {}) }),
+    // Der Satz bleibt für die Aufgabe fest (er soll nicht wechseln, wenn die Antwort gespeichert ist und `seen` sich ändert).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [task],
+  );
   // Fehler finden an einer anderen gültigen Stelle: deren Lösung (für Anzeige und Claude).
   const errSpan: [number, number] | null = activeErr ?? err;
   const errAltHere =
@@ -1009,7 +1020,8 @@ function LegacyGrammarItem({
     );
     const opts = task.options ?? [];
     const why: Partial<Record<number, string>> = {};
-    if (model && fb && fb.verdict === 'wrong' && chosen !== null) {
+    // Politur P3: mit der Fehler-Karte (neue Grammatik) steht der Warum-Satz genau einmal – in der Karte, nicht zusätzlich unter der Option.
+    if (model && fb && fb.verdict === 'wrong' && chosen !== null && !mod) {
       const yours = model.lines.find((l) => l.k === 'yours');
       if (yours && yours.k === 'yours') why[chosen] = yours.text;
     }
@@ -1036,7 +1048,7 @@ function LegacyGrammarItem({
     );
     const correctIdx = MEANING_KEYS.indexOf(task.answer as 'a' | 'b' | 'both');
     const why: Partial<Record<number, string>> = {};
-    if (model && fb && fb.verdict === 'wrong' && chosen !== null) {
+    if (model && fb && fb.verdict === 'wrong' && chosen !== null && !mod) {
       const yours = model.lines.find((l) => l.k === 'yours');
       if (yours && yours.k === 'yours') why[chosen] = yours.text;
     }
@@ -1237,31 +1249,30 @@ function LegacyGrammarItem({
     // Muster, Regel, Falle und Beispiele stehen unter „Mehr“ bzw. hinter „Regel ansehen“. Nie bei „Fast“, „Weiß ich nicht“, „Auch richtig“,
     // Fehler finden, Bedeutungspaar, Lektion oder bei „Sicher?“.
     // Im Test ohne Hilfe (Vortest, Themen-Test) ohne Claude: nur die hinterlegte Erklärung bzw. die kurze Satzvorlage, kein „Gleich nochmal“.
-    const dxSpot =
+    // Politur P3 (13.11.2026): EINE Fehler-Karte für jede Aufgabenart – auch Auswahl, Bedeutungspaar, Fehler finden und „Weiß ich nicht“.
+    const cardOn =
       mod &&
       !lesson &&
       !held &&
       !fb.override &&
-      !fb.dontKnow &&
       !fb.sure &&
-      fb.verdict === 'wrong' &&
-      !findTask &&
-      type !== 'meaning' &&
+      (fb.verdict === 'wrong' || fb.dontKnow) &&
       variantModel === null &&
       c?.kind !== 'other' &&
       // „Claude fragen, ob deine Antwort auch richtig ist“ (askAi) bleibt als Einspruch darunter stehen; gerade dann fehlte bisher jede Erklärung.
       (composed?.action ?? 'next') !== 'targetForm' &&
-      (composed?.action ?? 'next') !== 'counts'
-        ? mistakeSpot(choiceType ? (fb.picked ?? '') : fb.given, solution)
-        : null;
+      (composed?.action ?? 'next') !== 'counts';
+    // Abweichende Stelle der eigenen Antwort (nur getippte Formen): für die Satzvorlage ohne hinterlegten Text und für Claude.
+    const dxSpot = cardOn && !fb.dontKnow && !findTask && type !== 'meaning' ? mistakeSpot(choiceType ? (fb.picked ?? '') : fb.given, solution) : null;
     const stepsMode =
-      !dxSpot &&
+      !cardOn &&
       mod && !findTask && !lesson && !fb.override && variantModel === null && c?.kind !== 'other' && (fb.verdict === 'wrong' || fb.dontKnow) && (!!pattern || hasRule(task.topic, lang));
     const stepWrong = t('kernStep', { n: 1, label: t('kernStepWrong') });
     // Vergleich nur, wo Lücke und Optionen die Lösung nicht schon zeigen (§5.2).
     let comparison: ShellFeedback['comparison'] = null;
-    // Mit der Fehler-Karte steht „Du → richtig“ genau einmal (dort), nicht noch als Wortvergleich darüber.
-    if (!dxSpot && fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
+    // Mit der Fehler-Karte steht die Lösung genau einmal: im Satz (Lücke, Auswahl, korrigierter Satz). Nur ganze Sätze brauchen den Vergleich.
+    if (cardOn && fb.verdict === 'wrong' && !fb.dontKnow && (type === 'correct' || (type === 'transform' && whole))) comparison = { given: fb.given, ops: c?.ops ?? alignWords(fb.given, task.answer) };
+    if (!cardOn && fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
       if (type === 'correct' || (type === 'transform' && whole)) comparison = { given: fb.given, ops: c?.ops ?? alignWords(fb.given, task.answer) };
       else if (type === 'kwt' && (c?.ops ?? []).filter((o) => o.op !== 'eq').length > 1) comparison = { given: fb.given, ops: c?.ops ?? [] };
       // Lücke: die Lösung steht seit UX-Neuanfang D in der Lücke selbst (deine Antwort durchgestrichen darüber) – keine zweite Lösungszeile
@@ -1306,7 +1317,7 @@ function LegacyGrammarItem({
     const tutor =
       // Emrah 05.11.2026 („Lösung gezeigt … Claude-Erklärung nicht vorhanden“): auch nach „Weiß ich nicht“ erklärt Claude die Lösung (ohne eigene Antwort).
       // Neustart E1: mit der Fehler-Karte erklärt Claude dort schon – kein zweiter Weg „Erklär mir meine Antwort“ (Rückfragen: „Frag Claude“ oben).
-      dxSpot || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
+      cardOn || fb.verdict === 'correct' || fb.override || action === 'askAi' || fb.sure ? null : (
         <TutorButton
           taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
           vars={{
@@ -1341,8 +1352,8 @@ function LegacyGrammarItem({
         ...(h.title ? { title: h.title } : {}),
         // Andere gültige Stelle (`errAlt`): „Du hast … getippt“ entfällt, die Zeile sagt schon, was passiert ist.
         sub: [sub, fb.altWhy ? null : h.sub].filter((x): x is string => !!x).join(' · ') || null,
-        fold: ['pattern'],
-        unfold: ['contrast'],
+        // Mit der Fehler-Karte steht alles Allgemeine unter „Mehr“ (s. u.).
+        ...(cardOn ? {} : { fold: ['pattern' as const], unfold: ['contrast' as const] }),
       };
     }
     // „Auch richtig“ (Art `other`): eigener Kopf, nie rot; bleibt stehen (kein Weiter von allein), damit „Gesucht war …“ gelesen wird.
@@ -1421,32 +1432,45 @@ function LegacyGrammarItem({
     }
     const unsureHead = fb.unsure && !fb.override && fb.verdict === 'near' && !lesson;
     let dxNode: ReactNode = null;
-    if (dxSpot) {
-      const hit = whyFor(task, { given: fb.given, ...(fb.picked !== undefined ? { picked: fb.picked } : {}) }).rule;
-      // Nur eine Erklärung mit Bedingung trifft genau diese Antwort; Auffangregeln (nur Muster) wären wieder allgemein.
-      const known = hit && (hit.opt !== undefined || (hit.if?.length ?? 0) > 0) ? { de: hit.de, en: hit.en } : null;
+    if (cardOn) {
+      // Geprüfter Text zuerst: die hinterlegte Erklärung zu genau dieser Antwort (`why.wrong`, Zeile „Deine Antwort“), sonst die Begründung der
+      // Lösung (`why.ok`). Claude fragt nur, wer tippt.
+      const yoursLine = fb.dontKnow ? undefined : shown.lines.find((l): l is Extract<ExplainLine, { k: 'yours' }> => l.k === 'yours');
+      const okLine = shown.lines.find((l): l is Extract<ExplainLine, { k: 'why' }> => l.k === 'why');
+      const whyText = yoursLine?.text.trim() ? { text: yoursLine.text.trim(), src: 'catalog' as const } : okLine?.text.trim() ? { text: okLine.text.trim(), src: 'ok' as const } : null;
+      const mxNow = task.x?.kind === 'meaning' ? task.x : null;
+      const fixedNow = task.x?.kind === 'find' ? task.x.fixed : null;
       dxNode = (
         <MistakeCard
-          taskKey={`gr:${task.key}:${fb.picked ?? fb.given}`}
+          taskKey={`gr:${task.key}:${fb.dontKnow ? '?' : (fb.picked ?? fb.given)}`}
           spot={dxSpot}
-          known={known}
+          why={whyText}
           vars={{
-            task: kwtKey && task.x?.kind === 'kwt' ? `${task.x.from}\nKey word: ${kwtKey}\n${task.prompt}` : choiceType && task.options ? `${task.prompt}\nOptions: ${task.options.join(' | ')}` : task.prompt,
-            given: choiceType ? (fb.picked ?? '') : fb.given,
-            answer: solution,
+            task: mxNow
+              ? `${mxNow.q.en}\na) ${mxNow.a}\nb) ${mxNow.b}`
+              : kwtKey && task.x?.kind === 'kwt'
+                ? `${task.x.from}\nKey word: ${kwtKey}\n${task.prompt}`
+                : findTask
+                  ? `Find the mistake: ${task.prompt}`
+                  : choiceType && task.options
+                    ? `${task.prompt}\nOptions: ${task.options.join(' | ')}`
+                    : task.prompt,
+            given: fb.dontKnow ? '' : choiceType ? (fb.picked ?? '') : fb.given,
+            answer: findTask && fixedNow ? fixedNow : solution,
             accepted: task.accepted,
             pattern: pattern ? { name: pattern.name.en, form: pattern.form.en } : null,
             clues: [...(pattern?.signals ?? []), ...(kwtKey ? [kwtKey] : [])],
           }}
           form={pattern ? pattern.form[lang] : null}
-          ai={!noHelp}
-          okWhy={shown.lines.find((l): l is Extract<ExplainLine, { k: 'why' }> => l.k === 'why')?.text ?? null}
+          ai={!noHelp && action !== 'askAi'}
+          again={noHelp ? null : again}
           rule={!!pattern || hasRule(task.topic, lang) ? <RuleSide topic={task.topic} pattern={pattern} onWhole={() => setSheet(true)} /> : null}
+          onUnfair={!noHelp && !fb.void ? () => setReportOpen(true) : null}
         />
       );
       // Alles Allgemeine (Muster, Begründung der Lösung, Falle, Kontrast, Beispiele) unter „Mehr“; die Karte zeigt nur den eigenen Fehler.
       // Der offene Beispielsatz entfiele sonst nicht (ohne Merke-Block steht er offen): Beispiele stehen im Themenblatt.
-      explanation = { ...shown, lines: shown.lines.filter((l) => l.k !== 'yours'), examples: [] };
+      explanation = { ...shown, lines: shown.lines.filter((l) => l.k !== 'yours' && !(whyText?.src === 'ok' && l.k === 'why')), examples: [] };
       dxOn = true;
     }
     feedback = {
@@ -1458,14 +1482,15 @@ function LegacyGrammarItem({
       ...(helped ? { helped: true } : {}),
       explanation,
       ...(whyTitle ? { whyTitle } : {}),
-      ...(dxNode ? { why: dxNode, whyTitle: t('dxTitle'), fold: ['pattern' as const, 'why' as const, 'contrast' as const, 'note' as const, 'mistake' as const] } : {}),
+      // Flach, ohne Kasten im Kasten: die Fehler-Karte steht als ruhige Zeilen direkt unter Satz und Lösung (Platz `tail`), alles Allgemeine unter „Mehr“.
+      ...(dxNode ? { tail: dxNode, fold: ['pattern' as const, 'why' as const, 'contrast' as const, 'note' as const, 'mistake' as const] } : {}),
       ...(comeBack ? { nextIn: comeBack } : {}),
       depth,
       menu,
       tutor,
       act: foot,
       // G6 (M14): Melden nicht nur hinter „…“ – mit der neuen Grammatik ein leiser Link bei „Noch nicht“/„Fast“, solange die Antwort noch nicht zählt.
-      ...(mod && !held && !noHelp && !fb.void && !fb.override && (fb.verdict === 'wrong' || fb.verdict === 'near')
+      ...(mod && !dxNode && !held && !noHelp && !fb.void && !fb.override && (fb.verdict === 'wrong' || fb.verdict === 'near')
         ? {
             late: (
               <button type="button" className="self-start text-sm text-muted underline underline-offset-4 min-h-11" onClick={() => setReportOpen(true)} data-testid="gm-unfair">
