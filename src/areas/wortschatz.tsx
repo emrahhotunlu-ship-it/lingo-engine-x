@@ -37,6 +37,9 @@ import { getDb, useCapabilities } from '../platform/capabilities';
 import { loadSnapshot } from '../data/snapshot';
 import { exportAll } from '../features/settings/exportData';
 import type { VocabAi } from '../modules/vocab/api';
+import { useT } from '../i18n';
+import { useToday } from '../features/today/state';
+import { stepNextLabel } from '../ui/exercise/runCtx';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
 // Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
@@ -171,6 +174,12 @@ const vocabAi: VocabAi = {
 };
 
 function VlearnPage({ route }: ScreenProps<'vlearn'>) {
+  const { t } = useT();
+  // Politur P1: Ist die Runde Schritt 1 der Tageseinheit (dieselbe Bedingung wie `onVlearnFinish`), nennt der Hauptknopf des Abschlusses
+  // das Ziel („Weiter: Grammatik“ / „Fertig für heute“) und führt direkt dorthin – die Zwischenkarte entfällt.
+  const inUnit = useUnitRun((s) => s.block === 1 && s.duty === 'review');
+  useToday((s) => s.duties.done);
+  const finishLabel = route.kind === 'pflicht' && inUnit ? stepNextLabel(t) : null;
   return (
     <Suspense fallback={<Skeleton className="m-4 h-40" />}>
       <LearnScreen
@@ -179,6 +188,7 @@ function VlearnPage({ route }: ScreenProps<'vlearn'>) {
         ai={vocabAi}
         onRoundEnd={onVlearnEnd}
         onFinish={route.kind === 'pflicht' ? onVlearnFinish : undefined}
+        finishLabel={finishLabel}
         renderTop={({ onClose, progress, ctx }) => <ExerciseTop onClose={onClose} closeTestId="vm-close" progress={progress} progressTestId="vm-progress" ctx={ctx} duty={ctx === 'duty' ? 'review' : null} area="words" />}
       />
     </Suspense>

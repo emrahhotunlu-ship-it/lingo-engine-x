@@ -70,6 +70,7 @@ export const nbHeuteDe = {
   // Zwischen- und Bestätigungskarte (unitCard)
   nbHeuteBetweenDone: '{block} geschafft',
   nbHeuteBetweenGo: 'Weiter: {block}',
+  nbHeuteDoneToday: 'Fertig für heute',
   nbHeuteEndBack: 'Zurück zu Heute',
   nbHeuteClose: 'Einheit schließen',
   nbHeuteSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',

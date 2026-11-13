@@ -98,10 +98,14 @@ function meaningOf(w: string): string | null {
 /** Obere Übungsleiste (✕, Fortschritt, Pflicht/Extra): kommt vom Bereich, weil das Modul `features/learn` nicht kennt (Isolation). */
 export type LearnTop = (p: { onClose: () => void; progress: { n: number; total: number } | null; ctx: 'duty' | 'extra' }) => ReactNode;
 
-/** Rundenende und „Fertig“: kommen vom Bereich (Heute, Serie, Tageseinheit), weil das Modul `features/*` nicht kennt (Isolation). */
-export type LearnHooks = { onRoundEnd?: (r: RoundReport) => void; onFinish?: () => void };
+/**
+ * Rundenende und „Fertig“: kommen vom Bereich (Heute, Serie, Tageseinheit), weil das Modul `features/*` nicht kennt (Isolation).
+ * `finishLabel` (Politur P1): Beschriftung des Hauptknopfs im Abschluss, wenn die Runde ein Schritt des Tages ist – er nennt das Ziel
+ * („Weiter: Grammatik“ / „Fertig für heute“) und führt direkt dorthin; ohne Angabe „Fertig“.
+ */
+export type LearnHooks = { onRoundEnd?: (r: RoundReport) => void; onFinish?: () => void; finishLabel?: string | null };
 
-export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd, onFinish }: { kind: SessionKind; paths?: string[]; ai?: VocabAi; renderTop?: LearnTop } & LearnHooks) {
+export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd, onFinish, finishLabel = null }: { kind: SessionKind; paths?: string[]; ai?: VocabAi; renderTop?: LearnTop } & LearnHooks) {
   const { t, lang } = useT();
   const gapInput = useHiddenInput();
   // „Noch 5“ im Abschluss startet eine neue Runde (Extra) im selben Bildschirm; ein anderer Routen-Parameter beginnt von vorn.
@@ -253,6 +257,7 @@ export function LearnScreen({ kind: routeKind, paths, ai, renderTop, onRoundEnd,
           onMore={() => setRound((r) => ({ ...r, kind: 'more5', n: r.n + 1 }))}
           onNew5={() => setRound((r) => ({ ...r, kind: 'new5', n: r.n + 1 }))}
           onToday={() => (onFinish ? onFinish() : switchTab('today'))}
+          finishLabel={onFinish ? finishLabel : null}
         />,
       );
     case 'card':
@@ -398,7 +403,7 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
 /** Namen je Tag-Gruppe im Abschluss (der Rest als „+n“). */
 const SLIP_NAMES = 2;
 
-function Done({ sum, review, onMore, onNew5, onToday, capped }: { sum: DoneSummary; review: number; onMore: () => void; onNew5: () => void; onToday: () => void; capped: number | null }) {
+function Done({ sum, review, onMore, onNew5, onToday, capped, finishLabel = null }: { sum: DoneSummary; review: number; onMore: () => void; onNew5: () => void; onToday: () => void; capped: number | null; finishLabel?: string | null }) {
   const { t, lang } = useT();
   useEnterGo(onToday);
   const W = '\u0000';
@@ -429,6 +434,9 @@ function Done({ sum, review, onMore, onNew5, onToday, capped }: { sum: DoneSumma
         </>
       ),
     });
+  // Mehr Gestolperte für morgen, als der Plan von morgen an Wiederholungen aufnimmt (Zeitdeckel)?
+  const slipsTomorrow = sum.slips.list.filter((x) => x.day === tomorrow).length;
+  const overTomorrow = !!sum.tomorrow && slipsTomorrow > sum.tomorrow.due;
   if (sum.slips.n > 0) {
     // Nach Tag gruppiert (Befund ux 4b Nr. 9): „3 kommen morgen wieder: access rights, to achieve, +1“ statt dreimal derselbe Satz.
     const groups = new Map<string, string[]>();
@@ -438,7 +446,14 @@ function Done({ sum, review, onMore, onNew5, onToday, capped }: { sum: DoneSumma
       const n = ws.length;
       const shown = ws.slice(0, SLIP_NAMES);
       const more = n - shown.length;
-      const head = day === tomorrow ? (n === 1 ? t('vmDoneSlipTomorrow1') : t('vmDoneSlipTomorrowN', { n })) : t('vmDoneSlipOn', { n, date: dayDate(lang, day) });
+      // Politur P1 (Kap. 2 Nr. 2): Passen morgen nicht alle in die Zeit („12 kommen morgen wieder“ stand über „Morgen: 7 fällig“), heißt es
+      // „ab morgen“, und die Morgen-Zeile sagt, dass der Rest danach folgt.
+      const head =
+        day === tomorrow
+          ? n === 1
+            ? t('vmDoneSlipTomorrow1')
+            : t(overTomorrow ? 'vmDoneSlipFromTomorrowN' : 'vmDoneSlipTomorrowN', { n })
+          : t('vmDoneSlipOn', { n, date: dayDate(lang, day) });
       return (
         <span key={day} className="block">
           <b>{head}</b> <span lang="en">{shown.join(', ')}</span>
@@ -459,7 +474,21 @@ function Done({ sum, review, onMore, onNew5, onToday, capped }: { sum: DoneSumma
     });
   }
   if (sum.tomorrow)
-    rows.push({ id: 'tomorrow', icon: 'arrowRight', label: t('vmDoneTomorrow'), body: <b>{t('vmDoneTomorrowLine', { min: sum.tomorrow.min, due: sum.tomorrow.due, fresh: sum.tomorrow.fresh })}</b> });
+    rows.push({
+      id: 'tomorrow',
+      icon: 'arrowRight',
+      label: t('vmDoneTomorrow'),
+      body: (
+        <>
+          <b>{t(overTomorrow ? 'vmDoneTomorrowLinePlan' : 'vmDoneTomorrowLine', { min: sum.tomorrow.min, due: sum.tomorrow.due, fresh: sum.tomorrow.fresh })}</b>
+          {overTomorrow && (
+            <span className="lx-t-support text-muted block" data-testid="vm-done-tomorrow-rest">
+              {t('vmDoneTomorrowRest')}
+            </span>
+          )}
+        </>
+      ),
+    });
   return (
     <section className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 pt-4 sm:px-0" data-testid="vm-done">
       <div className="flex flex-col items-center gap-3 text-center">
@@ -489,17 +518,21 @@ function Done({ sum, review, onMore, onNew5, onToday, capped }: { sum: DoneSumma
           </div>
         ))}
       </dl>
-      <div className="flex flex-wrap gap-3">
-        <Button variant="secondary" className="flex-1" onClick={onNew5} data-testid="vm-new5">
-          {t('vmDoneNew5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
-        </Button>
-        <Button variant="secondary" className="flex-1" onClick={onMore} data-testid="vm-more5">
-          {t('vmDoneMore5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
-        </Button>
-        <Button variant="primary" className="flex-1" onClick={onToday} data-testid="vm-back">
-          {t('vmDoneFinish')}
+      {/* Politur P1: EIN Abschluss je Schritt – der Hauptknopf nennt das Ziel („Weiter: Grammatik“) und steht über die ganze Breite;
+          die beiden Extras stehen ruhig darunter (vorher drei gleich große Knöpfe in einer Zeile, am Handy dreizeilig umbrochen). */}
+      <div className="flex flex-col gap-3">
+        <Button variant="primary" size="lg" className="w-full" onClick={onToday} data-testid="vm-back" data-step={finishLabel ? '' : undefined} {...(finishLabel ? { iconAfter: 'arrowRight' as const } : {})}>
+          {finishLabel ?? t('vmDoneFinish')}
           <EnterKey />
         </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="secondary" className="flex-1" onClick={onNew5} data-testid="vm-new5">
+            {t('vmDoneNew5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
+          </Button>
+          <Button variant="secondary" className="flex-1" onClick={onMore} data-testid="vm-more5">
+            {t('vmDoneMore5')} <span className="text-muted font-normal">· {t('vmExtra')}</span>
+          </Button>
+        </div>
       </div>
     </section>
   );

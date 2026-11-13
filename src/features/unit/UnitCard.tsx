@@ -17,6 +17,9 @@ import { unitRows } from '../../domain/unit/rows';
 // Zwischenkarte der Tageseinheit (plan.md §1.5, Route `unitCard`): „✓ Wiederholen geschafft – Als Nächstes: …“
 // mit „Weiter“; nach dem letzten Block das gemeinsame Ende (`SessionEnd`). ✕ führt immer zu Heute, nichts geht
 // verloren. Seit dem Fokus-Umbau gibt es keine Wochenthema-Bestätigung mehr.
+// Politur P1 (13.11.2026): Im normalen Ablauf kommt diese Karte NICHT mehr. Jeder Schritt hat genau einen Abschluss (den der Übung),
+// dessen Hauptknopf das Ziel nennt („Weiter: Grammatik“) und den nächsten Schritt direkt startet (`handleUnitDone`, run.ts); nach dem
+// letzten Schritt geht es zu Heute. Die Route bleibt nur als Auffangweg (alter Fortsetz-Stand, Adress-Anker, „Weiter“ ohne offenen Schritt).
 
 function leaveToToday(t: (k: MessageKey) => string): void {
   toast(t('nbHeuteSaved'));
