@@ -14,6 +14,7 @@ const MODULE = 'src/modules/vocab';
 const SHARED = `${MODULE}/shared.ts`;
 const SHARED_UI = `${MODULE}/sharedUi.ts`;
 const PROMPT_REGISTRY = 'src/prompts/registry.ts';
+const BRIDGE_PROMPT = 'src/prompts/applyBridge.ts';
 
 const ALLOWED_SHARED: RegExp[] = [/^src\/domain\/date$/, /^src\/domain\/text\/british$/, /^src\/domain\/text\/lemma$/, /^src\/domain\/text\/drillSentence$/, /^src\/data\/writer$/, /^src\/platform\/diagnostics$/, /^src\/prompts\/(common|types|tolerant|fixedGate)$/, /^src\/domain\/lang\/detect$/, /^src\/content\/falseFriends$/, /^src\/content\/atlas\/atlas\.json\?raw$/, /^src\/content\/col\/charge1\.json$/, /^src\/content\/wt\/bsl\.json$/, /^src\/domain\/plan\/dayMinutes$/, /^src\/domain\/progress\/settings$/];
 // V3 Schritt 2b-2: zweite Tür nur für die Oberfläche (Lernkarte, Band, Runde); nie von registry.ts/api.ts statisch erreichbar.
@@ -56,7 +57,8 @@ export function outsideViolation(fileRel: string, spec: string): string | null {
   if (target === null || !(target === MODULE || target.startsWith(`${MODULE}/`))) return null;
   if (target === `${MODULE}/api` || target === `${MODULE}/registry`) return null;
   // Großpaket A Schritt 5: dritte Tür nur für die Vorlagen-Liste (src/prompts/registry.ts lädt die App nicht; registry.ts liegt in der Einstiegsdatei).
-  if (target === `${MODULE}/prompts` && fileRel === PROMPT_REGISTRY) return null;
+  // Großpaket P, P4: dazu die Vorlage apply-bridge@1 (Brücken-Sätze), die die Urteilsregeln je Zielwort wiederverwendet statt sie abzuschreiben.
+  if (target === `${MODULE}/prompts` && (fileRel === PROMPT_REGISTRY || fileRel === BRIDGE_PROMPT)) return null;
   return `"${spec}" greift an den Türen des Wörter-Moduls vorbei`;
 }
 
@@ -154,6 +156,8 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/vocab/hub/VocabHome.tsx',
       'src/features/vocab/vmod.slot.tsx',
       'src/modules/apply/sharedUi.ts',
+      // Großpaket P, P4: apply-bridge@1 nutzt die Urteilsregeln je Zielwort über die Vorlagen-Tür (modules/vocab/prompts).
+      'src/prompts/applyBridge.ts',
       'src/prompts/registry.ts',
     ]);
   });
@@ -169,6 +173,8 @@ describe('Wörter-Modul: Isolation', () => {
     expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/api')).toBeNull();
     expect(outsideViolation('src/features/today/store.ts', '../../modules/vocab/prompts')).toMatch(/vorbei/);
     expect(outsideViolation(PROMPT_REGISTRY, '../modules/vocab/prompts')).toBeNull();
+    expect(outsideViolation(BRIDGE_PROMPT, '../modules/vocab/prompts')).toBeNull();
+    expect(outsideViolation(BRIDGE_PROMPT, '../modules/vocab/prompts/common')).toMatch(/vorbei/);
   });
 
   it('ESLint-Konfiguration: die Sperren greifen für Modul-Dateien und Dateien außerhalb', async () => {

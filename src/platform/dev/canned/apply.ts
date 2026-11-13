@@ -4,6 +4,7 @@
 import { registerCannedReply } from '../fakeSample';
 import { mailTextOf } from './lp3/p47';
 import { CLINIC_RULES } from './lp3/p46';
+import { applyBridgeReply } from './applyBridge';
 
 const NOT_JSON = 'Here is my check, but sadly not in the requested format.';
 
@@ -138,4 +139,6 @@ export function registerApplyReplies(): void {
   registerCannedReply('apply-reply', applyReplyReply);
   registerCannedReply('apply-summary', applySummaryReply);
   registerCannedReply('apply-keypoints', applyKeypointsReply);
+  // P4 „Anwenden als Brücke“ (13.11.2026): Brücken-Sätze (apply-bridge@1)
+  registerCannedReply('apply-bridge', applyBridgeReply);
 }
