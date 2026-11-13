@@ -20,7 +20,9 @@ type Props<T extends string> = {
   testId?: string;
 };
 
-const COLS: Record<4 | 6 | 8, string> = { 4: 'grid-cols-4', 6: 'grid-cols-3 sm:grid-cols-6', 8: 'grid-cols-4 @md:grid-cols-8' };
+// Politur P1: 4 Wahlen stehen in EINER Zeile ohne Umbruch im Knopf („Nach Zeit · 30 · 40 · 50“ brach am Handy zweizeilig um) – jede Spalte
+// ist mindestens so breit wie ihr Text, der Rest wird gleich verteilt.
+const COLS: Record<4 | 6 | 8, string> = { 4: 'grid-cols-[repeat(4,minmax(max-content,1fr))]', 6: 'grid-cols-3 sm:grid-cols-6', 8: 'grid-cols-4 @md:grid-cols-8' };
 
 /** Auswahl als Radiogruppe: Pfeiltasten wechseln, gemeinsames Hervorhebungs-Element gleitet mit. */
 export function Segmented<T extends string>({ label, value, options, onChange, columns, testId }: Props<T>) {
@@ -63,7 +65,7 @@ export function Segmented<T extends string>({ label, value, options, onChange, c
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(o.value)}
             data-testid={o.testId}
-            className={`relative min-h-11 min-w-0 rounded-[calc(var(--radius-control)-4px)] px-2 text-sm leading-tight transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            className={`relative min-h-11 min-w-0 rounded-[calc(var(--radius-control)-4px)] px-2 text-sm leading-tight transition-colors ${columns === 4 ? 'whitespace-nowrap ' : ''}${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {active && (
               // UX-Prüfung W11 (Relaunch P1, Nora 28.10.2026): Gewählt = deckende Fläche über der Spur, Ring in line-2, Fettung und

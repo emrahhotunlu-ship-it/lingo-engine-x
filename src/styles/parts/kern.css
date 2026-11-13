@@ -418,8 +418,9 @@
   text-transform: uppercase;
   color: var(--fg-3);
 }
+/* Politur P1: Textfarbe des Akzents (`--act-text`), nicht die Flächenfarbe – im Modus „Gedämpft“ reichte der Kontrast am Laptop nicht (WCAG 4,5 : 1). */
 .lx-kintro-label {
-  color: var(--act);
+  color: var(--act-text);
 }
 .lx-kintro-head {
   display: flex;

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switch, toast, useClock, useLive, useT, type MessageKey } from '../sharedUi';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Disclosure, getDb, getWriter, Icon, readDoc, Segmented, Skeleton, Switch, toast, useClock, useLive, useT, type MessageKey } from '../sharedUi';
 import { dayMinutes, logError, normGoalMin } from '../shared';
 import { lexOf } from '../data/lex';
 import { readVlogRecent } from '../data/history';
@@ -295,7 +295,12 @@ function RateChip({ label, v, testId }: { label: string; v: number | null; testI
 
 // ---------- Einstellungen Wörter
 
-export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
+/**
+ * Politur P1 (13.11.2026): EINE Hauptfrage oben („Wörter pro Tag“), alles andere unter „Erweitert“ – je Einstellung höchstens eine Zeile
+ * Erklärung. `legacy`: die Altlast „Neue Wörter-App ist an · Zur alten Wörter-Ansicht zurück“ (`SwitchPanel`), steht ganz unten in „Erweitert“;
+ * `advancedOpen`: „Erweitert“ ist von Anfang an offen (direkt nach dem Einschalten, damit Zustand und Rückweg im Bild stehen).
+ */
+export function WordSettings({ onPlace, legacy = null, advancedOpen = false }: { onPlace?: () => void; legacy?: ReactNode; advancedOpen?: boolean } = {}) {
   const { t } = useT();
   const now = useClock((s) => s.now);
   const { items, cfg, ready } = useWords();
@@ -322,10 +327,9 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
     });
   };
   return (
-    <section className="flex flex-col gap-5" data-testid="vs">
-      <h3 className="lx-eyebrow m-0">{t('vmSetTitle')}</h3>
+    <section className="flex flex-col gap-4" data-testid="vs">
       <div className="flex flex-col gap-2">
-        <p className="m-0 text-sm font-medium">{t('vmSetCnt')}</p>
+        <p className="m-0 text-base font-semibold">{t('vmSetCnt')}</p>
         <Segmented
           label={t('vmSetCnt')}
           value={String(cfg.cnt ?? 0)}
@@ -334,15 +338,13 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
           options={CNT_OPTIONS.map((n) => ({ value: String(n), label: n === 0 ? t('vmSetCntTime') : String(n), testId: `vs-cnt-${n}` }))}
           onChange={(v) => save({ cnt: Number(v) as SettingsPatch['cnt'] })}
         />
-        <p className="m-0 text-sm text-muted">{t('vmSetCntHint')}</p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p className="m-0 text-sm font-medium">{t('vmSetMin')}</p>
-        {/* UX-Neuanfang C (Emrah 02.11.2026): die Wörter-Zeit folgt dem Tagesziel (40 %, mindestens 10 Min.), keine eigene Wahl mehr. */}
+        {/* Eine Zeile: was die Wahl bedeutet, mit der Wörter-Zeit (sie folgt dem Tagesziel, UX-Neuanfang C – Anzeige, keine eigene Wahl). */}
         <p className="m-0 text-sm text-muted" data-testid="vs-min" data-min={cfg.min}>
           {cfg.cnt ? t('vmSetMinCap', { n: cfg.min, cnt: cfg.cnt }) : t('vmSetMinAuto', { n: cfg.min })}
         </p>
       </div>
+      <Disclosure label={t('vmSetMore')} testId="vs-more" defaultOpen={advancedOpen}>
+        <div className="flex flex-col gap-5 pt-1" data-testid="vs-advanced">
       <div className="flex flex-col gap-2">
         <p className="m-0 text-sm font-medium">{t('vmSetNew')}</p>
         <Segmented
@@ -393,6 +395,9 @@ export function WordSettings({ onPlace }: { onPlace?: () => void } = {}) {
         <p className="m-0 text-sm text-muted">{t('vmSetPreHint')}</p>
       </div>
       {onPlace && <PlaceEntry onPlace={onPlace} />}
+          {legacy}
+        </div>
+      </Disclosure>
     </section>
   );
 }

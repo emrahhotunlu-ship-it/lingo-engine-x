@@ -61,7 +61,14 @@ function jumpTo(el: HTMLElement | null): void {
   el?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
 }
 
-export function SwitchPanel({ on, read, backup: saveBackup, children }: { on: boolean; children?: ReactNode } & SwitchPorts) {
+/**
+ * `children` als Funktion (Politur P1): Die eingeschaltete Karte zeigt zuerst die Einstellungen der Wörter-App; die Altlast (Zustandszeile
+ * „Neue Wörter-App ist an“, Hinweis, Rückweg zur alten Ansicht) reicht die Karte als `legacy` hinein – sie steht dort unter „Erweitert“.
+ * `fresh` = gerade in dieser Sitzung eingeschaltet: dann steht die Zustandszeile oben und „Erweitert“ ist offen (Bestätigung im Bild).
+ */
+export type SwitchChildren = ReactNode | ((legacy: ReactNode, fresh: boolean) => ReactNode);
+
+export function SwitchPanel({ on, read, backup: saveBackup, children }: { on: boolean; children?: SwitchChildren } & SwitchPorts) {
   const { t, tn } = useT();
   const done = useLive((s) => {
     const m = s.docs['app/schema']?.vocabModule as { state?: unknown } | undefined;
@@ -84,8 +91,10 @@ export function SwitchPanel({ on, read, backup: saveBackup, children }: { on: bo
   const view = useMemo(() => (data ? sw.preview(data.st.input, pairs, data.st.skipped).summary : null), [data, pairs]);
 
   /** Nach dem Einschalten: Häkchen-Zeile oben im Abschnitt; nur Nachgetragenes als EINE Meldung. */
+  const [fresh, setFresh] = useState(false);
   const switchedOn = (caught: sw.CatchUpResult | undefined) => {
     want.current = true;
+    setFresh(true);
     const msg = [caught?.docs ? tn('vmSwCaught', caught.docs) : '', caught?.incomplete.length ? tn('vmSwGap', caught.incomplete.length) : ''].filter(Boolean).join(' ');
     if (msg) toast(msg);
   };
@@ -210,29 +219,41 @@ export function SwitchPanel({ on, read, backup: saveBackup, children }: { on: bo
   // Eigene Karte, abgesetzt von den Einstellungen der alten Ansicht darunter; der Anfang ist das Sprungziel nach dem Umschalten.
   const card = (testId: string, inner: ReactNode) => (
     <section ref={ref} className="lx-card flex scroll-mt-4 flex-col gap-3 p-4" data-testid={testId}>
-      <h3 className="m-0 text-base font-semibold">{t('vmSwTitle')}</h3>
+      <h3 className="m-0 text-base font-semibold">{t(testId === 'vsw-on' ? 'vmSetTitle' : 'vmSwTitle')}</h3>
       {inner}
     </section>
   );
 
   // Eingeschaltet: Zustand oben, die Einstellungen der Wörter-App, darunter der Rückweg.
   if (on) {
+    const state = <Done testId="vsw-state">{t('vmSwOnState')}</Done>;
+    const backBlock = (
+      <div className="flex flex-col gap-2 border-t border-line pt-3" data-testid="vsw-back">
+        {!fresh && state}
+        <p className="m-0 text-sm text-muted">{t('vmSwOnHint')}</p>
+        <p className="m-0 text-sm text-muted">{t('vmSwBackHint')}</p>
+        <div>
+          <Button variant="secondary" onClick={() => void back()} busy={busy} data-testid="vsw-back-btn">
+            {t('vmSwBack')}
+          </Button>
+        </div>
+        {noteEl}
+      </div>
+    );
     return card(
       'vsw-on',
-      <>
-        <Done testId="vsw-state">{t('vmSwOnState')}</Done>
-        <p className="m-0 text-sm text-muted">{t('vmSwOnHint')}</p>
-        {children}
-        <div className="flex flex-col gap-2 border-t border-line pt-3" data-testid="vsw-back">
-          <p className="m-0 text-sm text-muted">{t('vmSwBackHint')}</p>
-          <div>
-            <Button variant="secondary" onClick={() => void back()} busy={busy} data-testid="vsw-back-btn">
-              {t('vmSwBack')}
-            </Button>
-          </div>
-          {noteEl}
-        </div>
-      </>,
+      typeof children === 'function' ? (
+        <>
+          {fresh && state}
+          {children(backBlock, fresh)}
+        </>
+      ) : (
+        <>
+          {fresh && state}
+          {children}
+          {backBlock}
+        </>
+      ),
     );
   }
 

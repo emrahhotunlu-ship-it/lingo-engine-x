@@ -64,6 +64,13 @@ html:not([data-theme='dim']) nav.lx-nav {
   backdrop-filter: blur(28px) saturate(1.5);
   border-color: var(--glass-rim);
 }
+/* Politur P1 (13.11.2026): Die Leiste UNTEN ist deckender (86 % statt 55 %). Unter ihr rollt Inhalt durch – mit dem dünnen Glas schienen
+   Zeilen und Knöpfe durch die Reiter (die Unschärfe allein trug nicht). Die Schiene links (ab 600 px, nichts rollt darunter) bleibt Glas. */
+@media (max-width: 599.98px) {
+  html:not([data-theme='dim']) nav.lx-nav {
+    background: var(--glass-dense);
+  }
+}
 @media (prefers-reduced-transparency: reduce) {
   html:not([data-theme='dim']) nav.lx-nav {
     background: var(--surface);
@@ -684,5 +691,102 @@ html[data-actionbar-inline] .lx-actionbar-column {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     box-shadow: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════ Politur P1 (13.11.2026): Navigation nach Eingabeart, nicht nur nach Breite
+   Touch-Geräte zwischen 600 und 1023 px (Innendisplay 669 px, kleines Tablet hochkant): die Leiste steht UNTEN mit Beschriftung wie am Handy
+   – der Daumen erreicht sie, und die schmale Fläche bleibt für den Inhalt. Die Schiene links gilt weiter für Maus/Trackpad ab 600 px und für
+   alles ab 1024 px. Die Regeln stellen den Handy-Aufbau wieder her (shell.css „Navigation: Handy“); `html:root:root` schlägt die Schienen-Regeln
+   oben und in shell.css. Claude, Übersetzer und Einstellungen stehen dann wie am Handy im Kopf der Seite (`.lx-vh-tool`). */
+@media (min-width: 600px) and (max-width: 1023.98px) and (pointer: coarse) {
+  html:root:root .lx-frame[data-nav] {
+    --lx-side-w: 0px;
+    display: block;
+  }
+  html:root:root .lx-frame[data-nav] > .lx-dmain {
+    grid-column: auto;
+  }
+  html:root:root .lx-main-nav {
+    padding-bottom: 7rem;
+  }
+  html:root:root nav.lx-nav.dz-tabbar {
+    position: fixed;
+    inset-inline: 0;
+    top: auto;
+    bottom: 0;
+    z-index: 40;
+    display: block;
+    height: auto;
+    min-height: calc(3.5rem + env(safe-area-inset-bottom));
+    margin: 0;
+    padding: 0.125rem 0.5rem max(env(safe-area-inset-bottom), 0.25rem);
+    overflow: visible;
+    border: 0;
+    border-top: 1px solid var(--glass-rim);
+    border-radius: 0;
+    background: var(--glass-dense);
+    box-shadow: none;
+  }
+  html:root:root[data-theme='dim'] nav.lx-nav.dz-tabbar {
+    border-top-color: var(--lx-border);
+    background: var(--lx-bg);
+  }
+  html:root:root .lx-nav-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 0;
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+  html:root:root :is(.lx-nav-mark, .lx-nav-tools) {
+    display: none;
+  }
+  html:root:root .lx-nav-tabs .lx-nav-item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.125rem;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.375rem 0.125rem 0.25rem;
+    border-radius: var(--radius-control);
+    font-size: var(--t-small);
+    line-height: 1rem;
+    font-weight: 500;
+    background: none;
+  }
+  html:root:root .lx-nav-tabs .lx-nav-item[aria-current='page'] {
+    font-weight: 600;
+    color: var(--lx-accent-text);
+  }
+  html:root:root .lx-nav-tabs .lx-nav-item[aria-current='page'] .lx-nav-icon {
+    color: var(--lx-accent-text);
+  }
+  html:root:root .lx-nav-tabs .lx-nav-label {
+    position: static;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    clip-path: none;
+    pointer-events: auto;
+  }
+  html:root:root .lx-nav-pill-item {
+    display: none;
+  }
+  html:root:root .lx-nav-pill-icon {
+    display: block;
+    background: var(--lx-accent-soft);
+    box-shadow: none;
+  }
+  /* Wie am Handy: Aktionsleiste oder ein Eingabefeld ersetzen die Leiste unten, solange sie stehen. */
+  html:root:root[data-actionbar] nav.lx-nav[data-testid='tabbar'],
+  html:root:root[data-actionbar-inline] nav.lx-nav[data-testid='tabbar'],
+  html:root:root[data-field-focus] nav.lx-nav[data-testid='tabbar'] {
+    display: none;
+  }
+  html:root:root .lx-vh-tool {
+    display: grid;
   }
 }

@@ -4,8 +4,8 @@ import { Icon } from './Icon';
 import { DURATION, EASE_OUT } from './motion';
 
 /** Eingeklappter Bereich, z. B. „Messwerte dahinter" (Kap. 5). */
-export function Disclosure({ label, children, testId }: { label: string; children: ReactNode; testId?: string }) {
-  const [open, setOpen] = useState(false);
+export function Disclosure({ label, children, testId, defaultOpen = false }: { label: string; children: ReactNode; testId?: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const id = useId();
   return (
     <div>
