@@ -1,5 +1,5 @@
 import { addDays, dayKey, daysBetween } from '../shared';
-import { isFreeGood } from './grade';
+import { FORM_SPEC, isFreeGood } from './grade';
 import { FLAG } from './planner';
 import type { VlogTuple } from './vlog';
 
@@ -54,6 +54,9 @@ export function nextDayRecall(tuples: readonly VlogTuple[], nowMs: number, days 
     }
     const at = intro.get(path);
     if (!at || done.has(path) || note <= 0 || d <= at) continue;
+    // Nur Abrufe, die frei sein KÖNNEN (Benutzen, getippt): eine Verstehen-Abfrage am Folgetag („Bedeutung lesen“, Hören) ist kein Misserfolg
+    // des freien Abrufs – gezählt wird dann der erste freie Abruf danach (Simulation Politur P2: sonst sank das Tempo grundlos auf 3).
+    if (!(FORM_SPEC as Partial<Record<string, { free: boolean }>>)[form]?.free) continue;
     done.add(path);
     if (daysBetween(at, d) > TEMPO_GAP_MAX || d < from) continue;
     const good = note >= 2 && isFreeGood(form, outcome, hint);

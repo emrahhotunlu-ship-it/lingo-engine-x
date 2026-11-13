@@ -50,11 +50,17 @@ describe('Quote „am Folgetag frei richtig“ (nextDayRecall)', () => {
         tp(t, 'vocab/e', 'intro', 0, 'dunno'),
         tp(t + D, 'vocab/e', 'gap', 0, 'syn'), // ohne Buchung: zählt nicht
         tp(t + D + 1000, 'vocab/e', 'gap', 3, 'ok'), // … der erste gebuchte danach schon
+        // Politur P2: eine Verstehen-Abfrage am Folgetag (Bedeutung, Hören) ist kein freier Abruf – sie zählt weder als gewusst noch als vergessen;
+        // es zählt der erste freie Abruf danach.
+        tp(t, 'vocab/f', 'intro', 0, 'dunno'),
+        tp(t + D, 'vocab/f', 'tone_mean', 1, 'wrong'),
+        tp(t + D + 2000, 'vocab/f', 'listen', 3, 'ok'),
+        tp(t + 2 * D, 'vocab/f', 'gap', 3, 'ok'),
       ],
       T0,
     );
-    expect(rec).toMatchObject({ ok: 3, all: 5 });
-    expect(rec.last).toEqual({ d: dayKey(t + D), ok: 3, all: 5 });
+    expect(rec).toMatchObject({ ok: 4, all: 6 });
+    expect(rec.last).toEqual({ d: dayKey(t + 2 * D), ok: 1, all: 1 });
   });
   it('nicht gezählt: Probe „Kenne ich schon“ (keine Einführung), Belege von außen, umgerechnete Einträge, erster Abruf nach mehr als 2 Tagen, außerhalb des Fensters', () => {
     const t = T0 - 5 * D;
