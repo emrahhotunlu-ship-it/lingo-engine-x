@@ -40,7 +40,8 @@ describe('Eigenschaften über alle Inhalte', () => {
   });
 
   it('der LP2-Adapter wandelt jede heutige kwt- und find-Aufgabe (ohne meaning)', () => {
-    // 904 vor P36; die vier neuen Themen von P36 bringen je 8 kwt und 8 find (2 fehlerfrei) dazu.
+    // 904 vor P36; die vier neuen Themen von P36 bringen je 8 kwt und 8 find (2 fehlerfrei) dazu. Politur P3: stillgelegte Aufgaben
+    // (`retired.json`) fehlen, ep-f8 (find) seit 13.11.2026 – die IDs der übrigen bleiben (Position in der Datei); dafür hinten neu ep-f9.
     expect(legacy.length).toBe(1037);
     expect(legacy.filter((i) => i.kind === 'kwt')).toHaveLength(465);
     expect(legacy.filter((i) => i.kind === 'err')).toHaveLength(572);

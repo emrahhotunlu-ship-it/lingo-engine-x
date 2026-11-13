@@ -658,5 +658,70 @@
     }
    ]
   }
+ },
+ {
+  "id": "ep-m5",
+  "type": "meaning",
+  "pat": "ep.concession",
+  "a": "Small as our team is, we finished the project on time.",
+  "b": "As our team is small, we finished the project on time.",
+  "q": {
+   "de": "In welchem Satz ist das kleine Team der Grund für den pünktlichen Abschluss?",
+   "en": "In which sentence is the small team the reason the project finished on time?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Steht as mit Subjekt und Verb am Satzanfang, heißt es hier „weil“.",
+    "en": "Right: sentence b. As + subject + verb at the start means “because” here."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Small as our team is heißt „so klein unser Team ist“: ein Gegensatz, kein Grund.",
+     "en": "Small as our team is means “although our team is small”: a contrast, not a reason."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Adjektiv vor as räumt etwas ein (a), as vorn nennt den Grund (b).",
+     "en": "Not the same: an adjective before as concedes a point (a); as at the front gives a reason (b)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ep-f9",
+  "type": "find",
+  "pat": "ep.object-front",
+  "prompt": "Those figures did we check twice.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "we checked",
+  "fixed": "Those figures we checked twice.",
+  "hint": {
+   "de": "Das Objekt steht zur Betonung vorn; der Rest bleibt ein normaler Aussagesatz.",
+   "en": "The object comes first for emphasis; the rest stays a normal statement."
+  },
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: nach dem vorgezogenen Objekt bleibt die normale Reihenfolge: we checked.",
+    "en": "The error: after the fronted object the normal order stays: we checked."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach dem vorgezogenen Objekt steht das Subjekt vor dem Verb.",
+     "en": "There is an error: After the fronted object the subject comes before the verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt woanders: Nach dem vorgezogenen Objekt steht das Subjekt vor dem Verb.",
+     "en": "The error is elsewhere: After the fronted object the subject comes before the verb."
+    }
+   ]
+  }
  }
 ]

@@ -31,6 +31,10 @@ genau diese Liste lesen.
 Harte Unfairness in den acht Fokus-Themen nach der ersten natürlichen Antwort: 0 von 323. Die Lücke lag bei der **zweiten gültigen Antwort**:
 rund 7 % der Aufgaben (23 von 323) lehnten eine Antwort ab, die ein Lehrer gelten ließe.
 
+**Nachprüfung (13.11.2026, Gesamtlauf der Unit-Tests):** Die britischen „got“-Formen in `md-ch-k2`, `md-ih-k1` und `ut-get-k1` hatte nur das
+Werkzeug G1 abgelehnt; das Urteil der App (`judge`) nimmt sie schon als britische Form an und sagt das dazu. Diese Ergänzungen sind deshalb wieder
+entfernt (sonst fehlte der Hinweis „britische Form“). Alle übrigen Ergänzungen bleiben.
+
 ## Änderungen je Aufgabe
 Nur Ergänzungen (weitere gültige Lösungen, zweite Korrekturstelle `errAlt`); keine Aufgabe wurde gelöscht, die Reihenfolge in `tasks-v2.json`
 bleibt (die IDs `kwt-v2-<n>` hängen an der Position). Die Teile unter `scripts/grammar/parts/<thema>/v2.json` sind gleich nachgezogen.
@@ -45,7 +49,7 @@ bleibt (die IDs `kwt-v2-<n>` hängen an der Position). Die Teile unter `scripts/
 | `mc.kwt31` mixed-cond | „If we had tested“ erfüllt Stichwort und Wortzahl, wurde abgelehnt | gilt jetzt (auch richtig) |
 | `mc.find32` mixed-cond | „If had the client signed“: „If the client had signed“ wurde abgelehnt | eine Stelle „If had the client“ mit beiden Lösungen |
 | `cp-sub-f2` c1-participle | hängendes Partizip: Hauptsatz umbauen („I thought the figures were wrong.“) abgelehnt | zweite Korrekturstelle `errAlt` (wie `cp-sub-f1`) |
-| `md-ch-k2`, `md-ih-k1` modals-deduction | britisches „got“ statt „gotten“ abgelehnt (A7: britische Formen gelten) | gilt jetzt |
+| `md-ch-k2`, `md-ih-k1` modals-deduction | britisches „got“ statt „gotten“: das Werkzeug G1 wertete es als falsch, die App (Tutor-Urteil `judge`) nimmt es schon als britische Form an („britisch, gilt“) | **nicht ergänzt** (Nachprüfung 13.11.: als feste Lösung eingetragen, verlöre die Antwort den Hinweis „britische Form“; Gold-Liste `uk-got-kwt`) |
 | `md-mi-k1`, `md-cn-k2` modals-deduction | „might still be“, „can’t possibly be“ abgelehnt | gilt jetzt |
 | `pv-pre-f2` passive | fehlendes „with“: Tipp auf das Nachbarwort „quickly“ zählte als falsche Stelle | zweite Korrekturstelle `errAlt` |
 | `fpc-cn-f1`, `fpc-cn-k1`, `fpc-pf-k1` future-perf-cont | „will be“, „will be at“, „will already have sent“ abgelehnt | gilt jetzt |
@@ -54,7 +58,7 @@ bleibt (die IDs `kwt-v2-<n>` hängen an der Position). Die Teile unter `scripts/
 | `pp-ft-f1` past-perfect | „had ever won“ und (US-üblich) „won“ abgelehnt | gilt jetzt |
 | `pp-rep-f3b` past-perfect | „they signed … two days earlier“ ist im US-Englisch normal | gilt jetzt |
 | `pp-inv-m1` past-perfect (und `wo-hs-m1`) | Ja/Nein-Frage „Sagen beide Sätze dasselbe?“ passt nicht zu den Antworten a / b / beide | Frage umformuliert („Welcher Satz sagt: …?“) |
-| `ut-get-k1` used-to | „was used to working“, britisch „had got used to working“ abgelehnt | gilt jetzt |
+| `ut-get-k1` used-to | „was used to working“ abgelehnt; britisch „had got used to working“ nimmt die App schon als britische Form an | „was used to working“ gilt jetzt; die britische Form bleibt beim Urteil `judge` (Gold-Liste `kwt-got-used-british`) |
 | Buch `pp-a4` | „had ever led“ abgelehnt | gilt jetzt |
 | Buch `ut-a4` | „never used to“ abgelehnt | gilt jetzt |
 | Buch `pv-a5` | „will have been delivered“ (mit „before the end of next week“ richtig) abgelehnt | gilt jetzt |
@@ -68,6 +72,15 @@ bleibt (die IDs `kwt-v2-<n>` hängen an der Position). Die Teile unter `scripts/
 | `:3132` | `em-wc-f2` | weich: „The thing we need most …“ abgelehnt | gilt jetzt |
 | `:14733` | `ep-f8` | der Fehler (Verbform nach „must“) gehört nicht zum Muster „Objekt nach vorn“ | **stillgelegt** |
 | `:14796` | `ep-m2` | ohne Lernwert: die Antwort steht wörtlich im Satz („cannot support“) | **stillgelegt** |
+
+### Ersatz für die stillgelegten Aufgaben (Nachprüfung 13.11.2026)
+Damit jedes Muster von `emph-plus` weiter mindestens 2 „Fehler finden“ und 1 Bedeutungspaar hat (Abnahme der neuen Themen), stehen hinten in
+`tasks-v2.json` (und in `scripts/grammar/parts/emph-plus/v2.json`) zwei neue Aufgaben – **noch ohne Gegenlesung durch `english-teacher`**:
+
+| Aufgabe | Muster | Inhalt |
+|---|---|---|
+| `ep-f9` | ep.object-front | „Those figures did we check twice.“ → „Those figures we checked twice.“ (nach dem vorgezogenen Objekt keine Umstellung; der Fehler gehört zum Muster) |
+| `ep-m5` | ep.concession | a „Small as our team is, we finished the project on time.“ · b „As our team is small, we finished the project on time.“ – Frage: In welchem Satz ist das kleine Team der Grund? Lösung b (Einräumung mit Adjektiv vor *as* gegen *as* = „weil“) |
 
 ## Stilllegen – wie es wirkt
 `src/content/grammar/retired.json` (Schlüssel `thema|satzschlüssel`). Neu ist, dass stillgelegte Aufgaben auch **nicht mehr gestellt** werden

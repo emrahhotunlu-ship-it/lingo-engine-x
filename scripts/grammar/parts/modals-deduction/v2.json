@@ -824,11 +824,7 @@
    "couldn't have received",
    "couldn't have gotten",
    "could not have received",
-   "could not have gotten",
-   "can't have got",
-   "cannot have got",
-   "couldn't have got",
-   "could not have got"
+   "could not have gotten"
   ],
   "words": [
    3,
@@ -975,9 +971,7 @@
   "accepted": [
    "might not have received",
    "might have not gotten",
-   "might have not received",
-   "might not have got",
-   "might have not got"
+   "might have not received"
   ],
   "words": [
    4,
