@@ -877,3 +877,10 @@ Emrah: „Ich habe als Tageszeit 25 min, aber nur der erste Teil dauert schon 30
 
 ## 10.11.2026 – Großpaket WT „Wörter-Trainer C1“ (Emrah: „ja“)
 Plan `docs/umbau/vokabeln/grosspaket-wt.md` freigegeben mit Emrahs Idee „im Netz gibt es genug Wortlisten“: Auswahl aus freien Listen (NGSL, Business Service List, NAWL) plus Atlas; deutsche Bedeutungen automatisch mit freiem Wörterbuch (Ding/Wiktionary) gegengeprüft, nur Abweichungen an den Englisch-Lehrer; neue kurze Business-Beispielsätze von Claude mit automatischer Prüfung und Lehrer-Stichprobe statt Tatoeba. Keine geschützten Bücher. Empfehlungen angenommen: 50 Wörter/Tag (Einstellung 30/40/50/60), Bekanntes aussortieren (Kontrolle nach 21 Tagen), zwei Schritte: Schritt 1 = Atlas geprüft im Plan, Tagesziel in Wörtern, Knöpfe 10/20/30, Auswählen als Stufe → Test-Link; Schritt 2 = restliche Stufen, Aussortieren, Abdeckungs-Anzeige → Test-Link.
+
+## 13.11.2026 – Großpaket P „Politur“ (Emrah: 4× „A“)
+Auftrag: „einmal komplett polieren … UI/UX, Design für Laptop und iPhone Duo, Wörter lernen sehr effektiv, Grammatik (immer noch nicht richtig gut gelöst), Anwenden“. Plan `docs/umbau/politur/plan.md`, Prüfberichte `docs/umbau/politur/audits.md`. Entscheidungen im Auswahlfenster:
+- **E1 Grammatik: A** – eine Runde = ein Thema über mehrere Tage (kurze Regel mit Job-Beispiel am ersten Tag, dann leicht → schwer, vorne 1–2 kurze Wiederholungen alter Themen; Thema bleibt, bis es sitzt).
+- **E2 Anwenden: A** – täglich 2 Brücken-Sätze als Pflicht (≈ 3 Min., Vorgabe Wort + Grammatik-Thema, Urteil je Element); Mails/Zusammenfassung freiwillig unter „Frei üben“.
+- **E3 Wörter: A** – Wiederholungen zuerst, neue Wörter nach Behalten (3–10), Hör-Übungen (Einführung liest vor, Abfragen mit Lautsprecher).
+- **E4 Stift: A** – in Übungen im Menü „…“, sonst schmale Lasche am Rand.
