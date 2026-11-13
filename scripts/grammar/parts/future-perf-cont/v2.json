@@ -129,9 +129,7 @@
   "answer": "will be sitting",
   "fixed": "This time next week, the whole team will be sitting in workshops in Lisbon.",
   "accepted": [
-   "is sitting",
    "is going to be sitting",
-   "will sit",
    "will be"
   ],
   "why": {
@@ -689,8 +687,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Der Fehler: „will launched“. Nach will steht die Grundform; es fehlt have.",
-    "en": "The error: “will launched”. After will use the base form; the have is missing."
+    "de": "Fehler: „will launched“. Auch „will launch“ ist grammatisch möglich; mit „By next quarter“ (spätestens bis) passt will have launched besser.",
+    "en": "Error: “will launched”. “will launch” is also possible; with “By next quarter” (at the latest by then), will have launched fits better."
    },
    "wrong": [
     {

@@ -25,7 +25,7 @@ describe('Eigener Satz: Paare und Prüfvorlage', () => {
   });
   it('Vorlage: Kopfzeile, Beispiel und Test-Antwort bestehen das Schema; Korrektur Pflicht bei falschem Satz', () => {
     const v = { word: 'deadline', topic: 'Present perfect', rule: 'have + 3. Form', sentence: 'We have been working on the deadline.', uiLang: 'de' as const };
-    expect(comboCheck.build(v).split('\n')[0]).toBe('[combo-check@3]');
+    expect(comboCheck.build(v).split('\n')[0]).toBe('[combo-check@4]');
     const s = comboCheck.schema(v);
     expect(s.safeParse({ ruleOk: false, correct: false, fixed: 'We have been working on it.', why: 'Hier braucht die Regel eine andere Form.' }).success).toBe(true);
     // Leere Korrektur bei falschem Satz: erlaubt, aber als „nicht sicher geprüft“ markiert (Auswertung 15.10.2026), nie als richtige Fassung.
@@ -70,18 +70,22 @@ describe('Eigener Satz: Paare und Prüfvorlage', () => {
     // Das übersprungene Thema geht an das nächste Wort.
     expect(pairs[1]).toMatchObject({ word: 'invoice', topicId: PPC_TOPIC });
   });
-  it('combo-check@3: Situation und Satzanfang im Prompt; Korrektur ohne Bezugspunkt ist ein Schemafehler, beim Neuversuch „nicht sicher geprüft“', () => {
+  it('combo-check@4: Situation und Satzanfang im Prompt; Korrektur ohne Bezugspunkt ist ein Schemafehler, beim Neuversuch „nicht sicher geprüft“', () => {
     const v = { word: 'lack', topic: 'Past Perfect', rule: 'had + past participle for the earlier of two past events.', sentence: 'They have lacked on quality after migration.', uiLang: 'de' as const, topicId: 'past-perfect', situation: 'You explain what things looked like before the move.', starter: 'By the time we migrated their data, …' };
     const p = comboCheck.build(v);
     expect(p).toContain('Situation: You explain');
     expect(p).toContain('Required sentence start: By the time we migrated their data, …');
-    expect(p).toContain('State verbs (lack, know, own, need, belong, consist, seem) never take a continuous form');
+    expect(p).toContain('State verbs (know, own, belong, consist, seem) normally do not take a continuous form; polite "will be needing" and "I\'m hoping" are fine.');
+    expect(p).toContain('or a present result it explains');
     const why = 'Hier fehlt der Bezugspunkt in der Vergangenheit.';
     expect(comboCheck.schema(v).safeParse({ ruleOk: false, correct: false, fixed: 'They had lacked quality.', why }).success).toBe(false);
     expect(comboCheck.schema(v).safeParse({ ruleOk: false, correct: false, fixed: 'By the time we migrated their data, they had lacked quality for years.', why }).success).toBe(true);
     expect(comboCheck.lenient!(v).parse({ ruleOk: false, correct: false, fixed: 'They had lacked quality.', why })).toMatchObject({ fixed: '', fixedUnsure: true });
     expect(comboContextProblem('pres-perf-cont', 'We have been working on the rollout.')).toMatch(/for, since/);
     expect(comboContextProblem('pres-perf-cont', 'We have been working on the rollout since March.')).toBeNull();
+    // @4: ein Ergebnis jetzt, das die Dauer erklärt, reicht als Bezug.
+    expect(comboContextProblem('pres-perf-cont', "I've been calling him, but he doesn't answer.")).toBeNull();
+    expect(comboContextProblem('pres-perf-cont', 'We have been testing it all morning.')).toBeNull();
     expect(comboContextProblem('passive', 'They had lacked quality.')).toBeNull();
     // Ohne Rahmen keine Zeilen für Situation und Satzanfang.
     expect(comboCheck.build({ ...v, situation: undefined, starter: undefined })).not.toContain('Required sentence start');

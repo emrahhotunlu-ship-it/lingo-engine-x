@@ -52,8 +52,9 @@ export const ARTICLE_MAX = 6_000;
 export const TITLE_MAX = 160;
 export const KEYPOINTS_MAX = 4;
 
+// @4 (Befund english-teacher, 13.11.2026): `used` mit der milderen Regel aus applyCommon (`USED_RULE`: ok false nur bei klarem Fehler). Ausgabe unverändert.
 const ID = 'apply-summary';
-const VERSION = 3;
+const VERSION = 4;
 
 export const SUMMARY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"faithful":{"ok":true,"quote":"","why":"…"},"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"w1","ok":true,"quote":"…","why":"…"}],"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
 

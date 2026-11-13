@@ -18,6 +18,9 @@ import type { PromptTemplate, UiLang } from './types';
 // @3 (Großpaket P „Politur“, P4, 13.11.2026; Prüfbefund „c1-mail@2 beurteilt Wörter nie“): mit `words` (nur Anwenden) gehen die Zielwörter mit Kennung und
 // gelernter Bedeutung mit, `used` beurteilt sie (Kennung `w1`, gespeichert als Wortlaut) wie die Muster, jeder Eintrag mit `why`. `summary` ist das
 // Kurzurteil („Kurz gesagt“). Ohne `words` (Schreibwerkstatt) bleibt alles wie in @2, nur `why` kommt dazu.
+// @4 (Befund english-teacher, 13.11.2026): `used.ok` false nur bei klarem Fehler (falsche Bedeutung, Form, Partnerwort); natürlich, aber seltener = true mit
+// der üblicheren Wahl im Grund; im Zweifel true. Muster: Form richtig UND der nötige Zusammenhang. Nur mit `words` (Anwenden); die Schreibwerkstatt bleibt wie @3 (Prompt unter 8 KB).
+// Ausgabe unverändert, ältere Antworten lesen sich gleich.
 
 export type MailVars = {
   /** Anlass und Gegenüber, ≤ 400 Zeichen. */
@@ -65,7 +68,7 @@ export const MAIL_PHRASES_MAX = 4;
 export const MAIL_MAX_EDITS = 12;
 
 const ID = 'c1-mail';
-const VERSION = 3;
+const VERSION = 4;
 
 export const MAIL_EXAMPLE =
   '{"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…","why":"…"}],"tone":{"fit":"fits","why":"…"},"upgraded":"…","summary":"…","errorCount":0}';
@@ -153,7 +156,7 @@ export const c1Mail: PromptTemplate<MailVars, C1Mail> = {
       'Rules:',
       '- edits: at most 12, each with "from" copied EXACTLY from the learner text (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors (kind register is always sev upgrade).',
       (v.words ?? []).length
-        ? '- used: for each target pattern id and each target word (by its id, e.g. "w1") that the learner tried to use, one entry with pat (the id), ok (true only if used correctly; a word only in the meaning given, with the right form and partner words), a "quote" copied exactly from the text and "why" (one short sentence in the explanation language: why it works here, or what is wrong and the right form). Skip what the learner did not try.'
+        ? '- used: for each target pattern id and each target word (by its id, e.g. "w1") that the learner tried to use, one entry with pat (the id), ok (true only if used correctly; a word only in the meaning given, with the right form and partner words; a pattern: the form is right and it fits the context it needs), a "quote" copied exactly from the text and "why" (one short sentence in the explanation language: why it works here, or what is wrong and the right form). Skip what the learner did not try. ok is false only for a clear error (wrong meaning, wrong form, wrong partner word). A use that is natural but less common is ok true; name the more common option in "why". If you cannot tell, ok true and say what is unclear in "why".'
         : '- used: one entry per target pattern id the learner tried: pat (the id), ok (true if correct), "quote" copied exactly from the text, "why" (one short sentence in the explanation language).',
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
       v.greet ? GREET_RULE : '',

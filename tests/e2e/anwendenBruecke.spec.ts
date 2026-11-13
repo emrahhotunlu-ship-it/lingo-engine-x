@@ -103,8 +103,8 @@ test.describe('Handy 375 × 700 (Außendisplay)', () => {
     // Satzanfang antippen übernimmt ihn; ohne das Wort kommt erst ein Hinweis – ohne Anfrage an Claude.
     await page.getByTestId('bx-starter-use').click();
     const input = page.getByTestId('bx-input');
-    await expect(input).toHaveValue('If we had called them earlier, ');
-    await input.fill('If we had called them earlier, we would have won the order.');
+    await expect(input).toHaveValue('Looking back, if we ');
+    await input.fill('Looking back, if we had called them earlier, we would have won the order.');
     await expect(page.getByTestId('bx-word')).toHaveAttribute('data-in', 'false');
     await page.getByTestId('bx-check').click();
     await expect(page.locator('[data-slot="hint"]')).toContainText('„achieve“ steht noch nicht in deinem Satz');

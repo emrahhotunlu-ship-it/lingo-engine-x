@@ -238,10 +238,10 @@
    "were less strict",
    "were more relaxed",
    "were flexible",
-   "were not so inflexible",
-   "were less inflexible",
    "were not so rigid",
-   "were not so strict"
+   "were not so strict",
+   "were not so inflexible",
+   "were less inflexible"
   ],
   "words": [
    2,
@@ -1043,8 +1043,7 @@
   "answer": "Had we tested",
   "accepted": [
    "Had we only tested",
-   "Had we properly tested",
-   "If we had tested"
+   "Had we properly tested"
   ],
   "words": [
    3,
@@ -1060,8 +1059,8 @@
      "if": [
       "if"
      ],
-     "de": "Mit if wäre es If we had tested. Das Schlüsselwort HAD soll aber am Satzanfang stehen, ohne if.",
-     "en": "With if it would be If we had tested. The key word HAD must open the sentence, without if."
+     "de": "Grammatisch richtig, aber hier wird die förmliche Form ohne if geübt: Had we tested …",
+     "en": "Grammatically correct, but this task practices the formal form without if: Had we tested …"
     },
     {
      "if": [

@@ -219,7 +219,7 @@
    "ex": [
     {
      "en": "If the client moved the deadline, we would finish without overtime.",
-     "de": "Wenn der Kunde die Frist verschöbe, würden wir ohne Überstunden fertig.",
+     "de": "Wenn der Kunde die Frist verschöbe, würden wir ohne Überstunden fertig werden.",
      "ctx": "meeting"
     },
     {
@@ -468,7 +468,7 @@
     },
     {
      "en": "I'll join provided that the meeting ends by five.",
-     "de": "Ich komme dazu, sofern das Meeting um fünf endet.",
+     "de": "Ich komme dazu, sofern das Meeting bis fünf endet.",
      "ctx": "talk"
     }
    ],

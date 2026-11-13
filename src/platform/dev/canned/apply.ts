@@ -1,4 +1,4 @@
-// Testantworten F3 Anwenden (apply-reply@3, apply-summary@3, apply-keypoints@1; W5: `style` und `greet`; P4: Wort-Kennungen und `why` in `used`). Besitzer: nur dieses Paket.
+// Testantworten F3 Anwenden (apply-reply@4, apply-summary@4, apply-keypoints@1; W5: `style` und `greet`; P4: Wort-Kennungen und `why` in `used`). Besitzer: nur dieses Paket.
 // Nur Entwicklung und Tests – nie Teil des Produktions-Builds.
 
 import { registerCannedReply } from '../fakeSample';
@@ -135,6 +135,6 @@ export function registerApplyReplies(): void {
   registerCannedReply('apply-reply', applyReplyReply);
   registerCannedReply('apply-summary', applySummaryReply);
   registerCannedReply('apply-keypoints', applyKeypointsReply);
-  // P4 „Anwenden als Brücke“ (13.11.2026): Brücken-Sätze (apply-bridge@1)
+  // P4 „Anwenden als Brücke“ (13.11.2026): Brücken-Sätze (apply-bridge@2)
   registerCannedReply('apply-bridge', applyBridgeReply);
 }
