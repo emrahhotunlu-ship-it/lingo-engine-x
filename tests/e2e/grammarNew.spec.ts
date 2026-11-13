@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openLearnPage, openTab, screen } from './fixtures';
-import { answerGrammar, grammarKey, nextItem } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openHubDetails } from './learnHelpers';
 import { NO_GRAMMAR_ERRORS, profileWith, vgPlan } from './heuteHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
@@ -25,6 +25,8 @@ for (const size of SIZES) {
     await openLearnPage(page);
     const hub = page.getByTestId('learn-hub');
     await expect(hub.getByTestId('hub-next-start')).toBeVisible();
+    // Politur P3: der Themen-Weg steht als Detail unter der Karte „Du bist hier“ (eingeklappt).
+    await openHubDetails(page);
     const path = hub.getByTestId('gpath');
     await expect(path).toBeVisible();
     // „Als Nächstes“: höchstens drei Themen, nicht das aktuelle der Karte darüber (keine Wiederholung auf einem Bildschirm, Kap. 15).

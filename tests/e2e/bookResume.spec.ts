@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, screen } from './fixtures';
-import { answerGrammar, grammarKey, nextItem } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openHubDetails } from './learnHelpers';
 
 // Live-Fehler 09.11.2026 (Emrah): „Grammatik-Übung für heute zweimal gestartet, muss zum dritten Mal von vorne anfangen.“
 // Eine begonnene Buch-Seite geht nach dem Verlassen an derselben Aufgabe weiter – über „Weiter“ im Buch wie über die Heute-Zeile.
@@ -13,8 +13,11 @@ async function bookNext(page: Page): Promise<void> {
   await page.getByTestId('tab-learn').click();
   const go = page.getByTestId('book-next-go');
   const hub = page.getByTestId('hub-book');
-  await expect(go.or(hub)).toBeVisible();
-  if (!(await go.isVisible())) await hub.click();
+  await expect(page.getByTestId('learn-hub').or(go)).toBeVisible();
+  if (!(await go.isVisible())) {
+    await openHubDetails(page);
+    await hub.click();
+  }
   await go.click();
 }
 

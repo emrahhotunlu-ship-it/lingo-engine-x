@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen } from './fixtures';
 import { TUE_9 } from './heuteHelpers';
+import { skipMiniLesson } from './learnHelpers';
 
 // UI-Stichprobe (Emrah 07.11.2026: „als Framework bauen … Stichproben statt kompletter Suite“). Alle Übungskarten laufen durch EINEN Rahmen
 // (`ExerciseShell`): eine Änderung dort wirkt überall. Deshalb prüft diese Datei wenige typische Karten (Wort-Lücke, Grammatik-Lücke,
@@ -136,20 +137,34 @@ for (const d of DEVICES) {
       await screen(page, 'today');
       await press(page, d, 'tab-learn');
       await press(page, d, 'hub-next-start');
+      // Politur P3: am ersten Tag des Fokus-Themas steht vorn die kurze Regel; danach die erste Aufgabe.
+      await skipMiniLesson(page);
       await expect(page.getByTestId('exercise')).toBeVisible();
       expect(await uiRules(page, d, 'task')).toEqual([]);
       expect(await layoutProblems(page)).toEqual([]);
-      const typed = await page.getByTestId('gap-input').isVisible();
+      // Stufe „Verstehen“ beginnt oft mit einer Auswahl: bis zur ersten Lücke weitergehen (höchstens 3 Aufgaben).
+      for (let i = 0; i < 3 && (await page.getByTestId('gr-item').getAttribute('data-type')) !== 'gap'; i++) {
+        await press(page, d, 'choice');
+        await press(page, d, 'check');
+        await expect(page.getByTestId('gr-item').getByTestId('verdict')).toBeVisible();
+        await press(page, d, 'next');
+        await expect(page.getByTestId('gr-item').getByTestId('result')).toHaveCount(0);
+      }
+      const typed = (await page.getByTestId('gr-item').getAttribute('data-type')) === 'gap' && (await page.getByTestId('gap-input').isVisible());
       if (typed) {
         if (d.touch) await page.getByTestId('gap-input').tap();
         await page.keyboard.type('zzz');
         await press(page, d, 'check');
-      } else await press(page, d, 'choice-0');
+        // Erster Versuch falsch: zuerst die Leitfrage (Zweitversuch), dann das Urteil.
+        await expect(page.getByTestId('result').or(page.getByTestId('hint-line')).first()).toBeVisible();
+        if (!(await page.getByTestId('result').count())) await press(page, d, 'check');
+      } else await press(page, d, 'choice');
       await expect(page.getByTestId('result')).toBeVisible();
-      // Neustart E1: bei klar falscher Antwort „Du → richtig“, EIN Satz warum, „Gleich nochmal“; die Regel erst auf Tipp.
+      // Politur P3: bei klar falscher Antwort die EINE flache Fehler-Karte – EIN geprüfter Satz warum (die Lösung steht nur im Satz),
+      // „Gleich nochmal“ und Claude erst auf Tipp; die Regel erst auf Tipp.
       if (typed) {
-        await expect(page.getByTestId('mistake-spot')).toContainText('zzz');
         await expect(page.getByTestId('mistake-why')).toBeVisible();
+        await expect(page.getByTestId('mistake-spot')).toHaveCount(0);
         await expect(page.getByTestId('rule-side')).toHaveCount(0);
         if (d.touch) expect(await page.evaluate(() => document.activeElement?.getAttribute('data-testid'))).not.toBe('mistake-again-input');
       }

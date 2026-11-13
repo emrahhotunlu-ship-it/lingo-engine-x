@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, screen } from './fixtures';
-import { answerGrammar, grammarKey, nextItem, typeInGap } from './learnHelpers';
+import { answerGrammar, grammarKey, nextItem, openHubDetails, typeInGap } from './learnHelpers';
 import { dumpDb } from './diagnoseHelpers';
 
 // Grammatik-Buch (Emrah 08.11.2026): Reiter Grammatik → Buch → Lektion → Übung A (mit Rückmeldung) → Ergebnis gespeichert; Klausur ohne
@@ -12,6 +12,7 @@ const bookDoc = async (page: Page) => (await dumpDb(page))['app/book'] ?? null;
 async function openBook(page: Page) {
   await screen(page, 'today');
   await page.getByTestId('tab-learn').click();
+  await openHubDetails(page);
   await expect(page.getByTestId('hub-book')).toBeVisible();
   await page.getByTestId('hub-book').click();
   await expect(page.getByTestId('book')).toBeVisible();

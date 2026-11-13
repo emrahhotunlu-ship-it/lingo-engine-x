@@ -486,3 +486,15 @@ export function gapsSeenExcept(topic: string, needle: string): string[] {
   const gaps = [...read('../../src/content/grammar-bank.json'), ...read('../../src/content/grammar-extra.json')].filter((t) => t.topic === topic && t.type === 'gap' && !t.prompt.includes(needle));
   return [...bookSeen(topic), ...gaps.map((t) => legacyTaskKey(t.prompt))];
 }
+
+/**
+ * Grammatik-Reiter (Politur P3, ein Weg): Buch, Themen-Test, Themen-Weg und Einstufung stehen eingeklappt unter „Buch, Kapitel und Tests“.
+ * Klappt das Detail auf, falls es da und noch zu ist (ohne neue Grammatik gibt es kein Detail: dann nichts).
+ */
+export async function openHubDetails(page: Page): Promise<void> {
+  const toggle = page.getByTestId('hub-details-toggle');
+  await expect(page.getByTestId('learn-hub')).toBeVisible();
+  if (!(await toggle.count())) return;
+  if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+}
