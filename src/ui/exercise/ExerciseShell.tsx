@@ -218,6 +218,12 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const band = !split;
   const tablet = useMediaQuery('(min-width: 768px)');
   const fine = useMediaQuery('(pointer: fine)');
+  // Politur P1 (13.11.2026): kurzer Touch-Bildschirm (Außendisplay 375 × 700). Dort steht die Knopfleiste im Inhalt (`ActionBar`), und nach
+  // dem Prüfen lag „Weiter“ außerhalb des Bilds. `tight`: „Weiter“ steht direkt unter Lösung, Warum und Pflicht-Nachtippen – vor allem
+  // Zusätzlichen (Regel, „Das wusste ich“, „Mehr“); bei einer Auswahl schiebt das Urteil den Inhalt nicht (siehe `compactChoice`).
+  const coarse = useMediaQuery('(pointer: coarse)');
+  const short = useMediaQuery('(max-height: 759.98px)');
+  const tight = short && !split && (coarse || !keys);
   const presentation = useContextPresentation();
   // Kern (Vorschau 9pdpf…, 03.11.2026): keine eigene Seitenspalte mehr. Die Rückmeldung ist EINE Karte – oben der Urteilsstreifen,
   // darunter links Satz, Vergleich und Warum, rechts (Monitor) bzw. darunter (Handy) die Wortkarte/Regel (`side`); „Frag Claude“ steht oben.
@@ -418,6 +424,25 @@ export function ExerciseShell(props: ExerciseShellProps) {
     return () => window.cancelAnimationFrame(id);
   }, [hasResult, resultKey]);
 
+  // Politur P1 „Auswahl-Urteil schiebt keinen Inhalt“: Beim Tipp (vor dem Prüfen) merkt sich das Gerüst, wo die Vorlage steht; erscheint
+  // das Urteil einer Auswahl auf dem kurzen Bildschirm, wird der Streifen genau so hoch wie Status und Aufgabe davor waren.
+  const promptRef = useRef<HTMLDivElement>(null);
+  const promptY = useRef<number | null>(null);
+  const notePromptY = (): void => {
+    if (!tight || hasResult || !promptRef.current) return;
+    promptY.current = promptRef.current.getBoundingClientRect().top + window.scrollY;
+  };
+  const keepChoice = tight && !!feedback?.choice;
+  useLayoutEffect(() => {
+    const before = promptY.current;
+    promptY.current = null;
+    const el = promptRef.current;
+    const strip = resultRef.current?.querySelector<HTMLElement>('[data-slot="verdict"]');
+    if (!keepChoice || before === null || !el || !strip) return;
+    const delta = before - (el.getBoundingClientRect().top + window.scrollY);
+    if (delta > 0.5) strip.style.minHeight = `${strip.offsetHeight + delta}px`;
+  }, [keepChoice, resultKey]);
+
   // Hauptknopf in der Bereichsfarbe (Design LP2): Wörter violett, Grammatik blau; nur solange die Übung steht.
   const area = status.area;
   useEffect(() => {
@@ -492,7 +517,10 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const hasMore = !!feedback && (plan.more.length > 0 || examples.length > 0 || !!feedback.after || !!feedback.foot || tutorInMore || sideInMore);
   const blocksSource = feedback?.explanation ? { source: feedback.explanation.source } : {};
   const whyBefore = feedback?.why ? { before: <div data-slot="why">{feedback.why}</div> } : {};
-  const verdictNode = feedback ? <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} title={feedback.title ?? null} help={!!feedback.helped} /> : null;
+  // Auswahl auf dem kurzen Bildschirm: der Urteilsstreifen nimmt genau den Platz von Status und Aufgabe ein (die nach dem Prüfen zurücktreten),
+  // der Zusatztext steht UNTER den Optionen – Wort, Satz und Optionen bleiben, wo sie beim Antippen waren (`keepPromptInPlace`).
+  const compactChoice = tight && !!feedback?.choice;
+  const verdictNode = feedback ? <Verdict verdict={feedback.verdict} sub={compactChoice ? null : (feedback.sub ?? null)} title={feedback.title ?? null} help={!!feedback.helped} /> : null;
   // Im Band ersetzt die Auswahl-Zeile („Du: B · Richtig: C“) den Wortvergleich – EINE Lösungszeile (Punkt 1b).
   const cmp = feedback?.comparison && (band ? !feedback.choice : !feedback.comparison.bandOnly) ? feedback.comparison : null;
   const comparisonNode = cmp ? (
@@ -554,6 +582,37 @@ export function ExerciseShell(props: ExerciseShellProps) {
     </div>
   ) : null;
 
+  // ux-reviewer 05.11.2026 Nr. 11: nach dem Prüfen kein zweites „Frag Claude dazu“ neben „Weiter“ – Claude bleibt EINMAL oben in der Übungsleiste
+  // („Frag Claude“, fragt nach dem Prüfen mit Lösung und eigener Antwort) und als „Nachfragen“ an Claudes Erklärung. Unten steht nur „Weiter“.
+  const bar = (
+    // Emrah 04.11.2026 (iPhone aufgeklappt ≈ iPad mini): Die feste Leiste am unteren Rand lag hinter der Bildschirmtastatur – im Claude-Rahmen
+    // meldet der Browser die Tastatur nicht zuverlässig, und dazwischen klaffte leere Fläche. Auf Touch-Geräten stehen die Knöpfe deshalb direkt
+    // unter der Aufgabe in der Karte (wie am Monitor); die Tastatur liegt darunter und verdeckt sie nicht.
+    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={(feedback ? null : asideSecondary) || undefined}>
+      {barOverride ?? (
+        <PrimaryAction
+          onClick={feedback ? fire : primary.onClick}
+          disabled={primary.disabled}
+          busy={primary.busy}
+          busyLabel={primary.busyLabel}
+          iconAfter={feedback || primary.arrow ? 'arrowRight' : undefined}
+          testId={primary.testId}
+          data-auto={running ? '' : undefined}
+          data-kbd={keys ? '⏎' : undefined}
+          className="overflow-hidden"
+        >
+          {primary.label}
+          {running && <span className="lx-autonext" aria-hidden="true" data-testid="autonext" />}
+        </PrimaryAction>
+      )}
+    </ActionBar>
+  );
+
+  const barInResult = tight && !!feedback;
+  // Auswahl, kurzer Bildschirm: bei richtig steht „Weiter“ zuerst (am alten Platz), bei falsch nach der Erklärung (erst lesen, dann weiter).
+  const nextFirst = compactChoice && feedback?.verdict === 'ok';
+  // Die Zeile „Du: D · Richtig: A …“ entfällt dort, wenn ein Zusatztext dasselbe sagt (die Optionen tragen ✓ und ✕).
+  const choiceLine = compactChoice && feedback?.sub ? null : choiceNode;
   let result: ReactNode = null;
   // UX-Neuanfang B: EINE Rückmeldung im Fluss (Handy und Laptop). Am Laptop mit eigener Spalte stehen Warum, Merke, Tutor und „Mehr“ rechts
   // in „Erklärung“ (Vorschau `.aside`); sonst (Handy, angedockter Begleiter) hier unter dem Urteil.
@@ -602,13 +661,20 @@ export function ExerciseShell(props: ExerciseShellProps) {
   if (feedback) {
     result = (
       <>
+        {/* Richtige Auswahl auf dem kurzen Bildschirm: „Weiter“ bleibt genau dort, wo der Knopf vor dem Antippen stand (nichts bewegt sich). */}
+        {barInResult && nextFirst && <div data-slot="next">{bar}</div>}
         {/* ux-reviewer W7 Nr. 6: leere Hülle nicht zeichnen (sie kostete einen Abstand ohne Inhalt). */}
-        {(feedback.head || feedback.right || comparisonNode || choiceNode) && (
+        {(feedback.head || feedback.right || comparisonNode || choiceLine || (compactChoice && feedback.sub)) && (
           <div data-block="verdict" className="flex flex-col gap-3">
             {feedback.head && <div data-slot="head">{feedback.head}</div>}
             {feedback.right && <div data-slot="right">{feedback.right}</div>}
             {comparisonNode}
-            {choiceNode}
+            {choiceLine}
+            {compactChoice && feedback.sub && (
+              <p className="lx-t-support m-0 text-muted" data-testid="verdict-sub" data-below="">
+                {feedback.sub}
+              </p>
+            )}
           </div>
         )}
         {explainNode}
@@ -617,6 +683,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
             {feedback.tail}
           </div>
         )}
+        {/* Kurzer Touch-Bildschirm: „Weiter“ hier – nach dem, was man lesen bzw. tun MUSS, vor allem Zusätzlichen. */}
+        {barInResult && !nextFirst && <div data-slot="next">{bar}</div>}
         {sideInline && (
           <section className="lx-kside" data-testid="ex-rule" data-inline="" aria-label={t('vuSideRule')}>
             {side}
@@ -714,7 +782,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           <div className="lx-kleft">
             {(wrapCard ?? ((c: ReactNode) => c))(
               <>
-                <div data-slot="prompt" className="lx-t-prompt">
+                <div ref={promptRef} data-slot="prompt" className="lx-t-prompt">
                   {prompt}
                 </div>
                 <div ref={answerRef} data-slot="answer" className="empty:hidden">
@@ -746,32 +814,6 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </p>
       )}
     </>
-  );
-
-  // ux-reviewer 05.11.2026 Nr. 11: nach dem Prüfen kein zweites „Frag Claude dazu“ neben „Weiter“ – Claude bleibt EINMAL oben in der Übungsleiste
-  // („Frag Claude“, fragt nach dem Prüfen mit Lösung und eigener Antwort) und als „Nachfragen“ an Claudes Erklärung. Unten steht nur „Weiter“.
-  const bar = (
-    // Emrah 04.11.2026 (iPhone aufgeklappt ≈ iPad mini): Die feste Leiste am unteren Rand lag hinter der Bildschirmtastatur – im Claude-Rahmen
-    // meldet der Browser die Tastatur nicht zuverlässig, und dazwischen klaffte leere Fläche. Auf Touch-Geräten stehen die Knöpfe deshalb direkt
-    // unter der Aufgabe in der Karte (wie am Monitor); die Tastatur liegt darunter und verdeckt sie nicht.
-    <ActionBar stateKey={feedback ? 'next' : 'main'} placement={split ? 'column' : 'fixed'} aside={(feedback ? null : asideSecondary) || undefined}>
-      {barOverride ?? (
-        <PrimaryAction
-          onClick={feedback ? fire : primary.onClick}
-          disabled={primary.disabled}
-          busy={primary.busy}
-          busyLabel={primary.busyLabel}
-          iconAfter={feedback || primary.arrow ? 'arrowRight' : undefined}
-          testId={primary.testId}
-          data-auto={running ? '' : undefined}
-          data-kbd={keys ? '⏎' : undefined}
-          className="overflow-hidden"
-        >
-          {primary.label}
-          {running && <span className="lx-autonext" aria-hidden="true" data-testid="autonext" />}
-        </PrimaryAction>
-      )}
-    </ActionBar>
   );
 
   // Tastenzeile (Punkt 3): ohne „? Regel“; T nur vor dem Prüfen, danach „Enter geht weiter“; „? alle Kürzel“ öffnet die Übersicht.
@@ -809,6 +851,8 @@ export function ExerciseShell(props: ExerciseShellProps) {
       data-kind={meta.kind}
       data-kern=""
       data-kres={feedback ? '' : undefined}
+      data-tight={tight ? '' : undefined}
+      onPointerDownCapture={notePromptY}
     >
       <div className="lx-split" data-split={split || undefined} data-noside={split ? '' : undefined}>
         <div data-col="main" className="flex min-w-0 flex-col gap-4">
@@ -818,7 +862,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
         </div>
       </div>
       {!split && keysLine}
-      {!split && bar}
+      {!split && !barInResult && bar}
     </article>
   );
 }

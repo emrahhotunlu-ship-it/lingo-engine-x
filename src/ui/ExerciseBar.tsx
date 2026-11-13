@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { useT } from '../i18n';
+import { useSplitLayout } from '../platform/input';
 import { IconButton } from './Button';
 import { DURATION, EASE_OUT } from './motion';
 
-// Eine Leiste für alle Vollbild-Übungen (UX-Beratung Nr. 4): links ✕, in der Mitte ein dünner
-// Fortschrittsbalken mit „3 / 8", rechts das Claude-Symbol (`end`). „Pflicht" bzw. „Extra" steht
-// als kleines graues Wort unter dem Balken, nie als Pille (visuelle Regel 8).
+// Eine Leiste für alle Vollbild-Übungen (UX-Beratung Nr. 4; Politur P1, 13.11.2026: wirklich EINE).
+// Aufbau immer gleich: Zeile ✕ · Titel (mit Zähler) · `end` (Übersetzer ab 768 px, Claude-Symbol, Menü „…“), darunter der Balken
+// über die ganze Breite. Vorher gab es drei Köpfe: diesen mit Titel („Wörter · 12 von 38 erledigt“), einen ohne Titel (✕ · Balken ·
+// kleines Wort darunter) und eigene Köpfe einzelner Übungen. Ohne `title` steht jetzt das kleine Wort (`note`: „Pflicht“, „Extra“,
+// „Tageseinheit · Block 2 von 5“) an der Titelstelle. Titel werden nie abgeschnitten (sie brechen um, `kern.css`).
+// Neue Übungen bauen keinen eigenen Kopf: `ExerciseTop` (`features/learn/ui.tsx`) mit `title`/`area`, oder diese Leiste direkt mit
+// `end={<ExerciseActions onPause={…} />}` (`features/system/Chrome.tsx`).
 
 type Props = {
   onClose: () => void;
@@ -57,6 +62,7 @@ export function ExerciseBar({
   title,
 }: Props) {
   const { t } = useT();
+  const split = useSplitLayout();
   const progress = counter ? { n: counter.card[0], total: counter.card[1], extra: counter.extra } : progressProp;
   const has = !!progress && progress.total > 0;
   const n = has ? Math.max(1, Math.min(progress.total, progress.n)) : 0;
@@ -102,29 +108,21 @@ export function ExerciseBar({
   ) : (
     <div className="h-1.5" aria-hidden="true" />
   );
-  if (title) {
-    return (
-      <div className="lx-exbar lx-kbar sticky top-0 z-30" data-testid="exercise-bar" data-kern="">
-        <div className="lx-kbar-row">
-          <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
-          <span className="lx-kbar-title" data-testid="exercise-title">
-            {title}
-          </span>
-          {note && <span className="sr-only">{note}</span>}
-          <div className="flex min-w-11 flex-none items-center justify-end">{end}</div>
-        </div>
-        <div className="lx-kbar-prog">{barNode}</div>
-      </div>
-    );
-  }
+  // Ohne eigenen Titel steht das kleine Wort an der Titelstelle (bei `counter` nennt die Zählzeile schon alles).
+  const plain = !title;
+  const head = title ?? (counter ? null : note);
   return (
-    <div className="lx-exbar sticky top-0 z-30 flex min-h-12 items-center gap-2 sm:gap-3" data-testid="exercise-bar">
-      <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        {barNode}
-        {note && !counter && <div className="text-2xs leading-none text-subtle">{note}</div>}
+    // `data-split`: Laptop mit Tastatur – dort hält `kern.css` Leiste und Inhalt auf EINER Breite (Start, Karte, Abschluss springen nicht).
+    <div className="lx-exbar lx-kbar sticky top-0 z-30" data-testid="exercise-bar" data-kern="" data-plain={plain ? '' : undefined} data-split={split ? '' : undefined}>
+      <div className="lx-kbar-row">
+        <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
+        <span className="lx-kbar-title" data-testid={plain ? 'exercise-note' : 'exercise-title'}>
+          {head}
+        </span>
+        {!plain && note && <span className="sr-only">{note}</span>}
+        <div className="flex min-w-11 flex-none items-center justify-end">{end}</div>
       </div>
-      <div className="flex min-w-11 flex-none items-center justify-end">{end}</div>
+      <div className="lx-kbar-prog">{barNode}</div>
     </div>
   );
 }

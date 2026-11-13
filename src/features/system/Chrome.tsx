@@ -4,6 +4,7 @@ import { useLayer } from '../../app/shell/layer';
 import { openSettings } from '../../app/sheets';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
+import { Icon } from '../../ui/Icon';
 import { TopMenu, type MenuEntry } from '../../ui/exercise/ExerciseMenu';
 import { useBand } from '../../ui/exercise/bandStore';
 import { useMediaQuery } from '../../platform/input';
@@ -119,8 +120,11 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
     <div className="flex flex-none items-center gap-1" data-testid="exercise-actions">
       {wide && !noAi && <TranslateButton />}
       {ask && (
-        <button type="button" className="lx-kask" onClick={ask} data-testid={explain ? 'claude-explain' : 'open-companion'} data-ai="">
-          {t('kernAsk')}
+        // Politur P1 (13.11.2026): Claude-Symbol statt der großen Kapsel „Frag Claude“ – am Handy nahm sie dem Titel den Platz (er wurde
+        // abgeschnitten oder zweizeilig). Die Beschriftung bleibt für Vorleseprogramme und steht ab 768 px sichtbar neben dem Symbol (`kern.css`).
+        <button type="button" className="lx-kask" onClick={ask} title={t('kernAsk')} data-testid={explain ? 'claude-explain' : 'open-companion'} data-ai="">
+          <Icon name="sparkle" size={20} />
+          <span className="lx-kask-label">{t('kernAsk')}</span>
         </button>
       )}
       <TopMenu lead={lead} tail={tail} onPause={onPause} />
