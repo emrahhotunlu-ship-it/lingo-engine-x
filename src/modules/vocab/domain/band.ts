@@ -229,9 +229,12 @@ export function nextOf(r: AnswerResult, planned: boolean, t: number, moreSentenc
     // versprechen, sondern „heute später“ (learning-scientist W7, Kap. 2 Nr. 2).
     return { kind: 'step', mode: l.step.n === 2 || !soon ? 'later' : stepMode(l.step.n, moreSentences), thenTomorrow: d !== null && dayKey(d) === tomorrow };
   }
-  if (!planned || !r.booked.length) return { kind: 'practice', day: l.intro === null ? null : dayKey(nextDue()) };
+  // Politur P1 (Kap. 2 Nr. 2): nie ein Termin in der Vergangenheit („Kommt am 3. Nov. wieder“ am 13. Nov.). Ein überfälliger Termin der
+  // anderen Spur heißt: ab heute fällig.
+  const notBefore = (k: string): string => (k < day ? day : k);
+  if (!planned || !r.booked.length) return { kind: 'practice', day: l.intro === null ? null : notBefore(dayKey(nextDue())) };
   const d = due(r.booked[0]!) ?? nextDue();
-  return { kind: 'date', day: dayKey(d), extra: r.grade === HARD_GRADE ? 'tight' : moreSentences ? 'newSent' : null };
+  return { kind: 'date', day: notBefore(dayKey(d)), extra: r.grade === HARD_GRADE ? 'tight' : moreSentences ? 'newSent' : null };
 }
 
 /** Band nach einer Antwort. `null` bei einer Abfrage, die nicht zählt (unfair, Spracherkennung abgelehnt). */

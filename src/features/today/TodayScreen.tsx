@@ -40,7 +40,7 @@ import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
 import { buildTrainCards, legacyDutyMinutes, overdueUnits, todaySummary, type TodaySummary } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
-import { blockWhy } from '../unit/labels';
+import { blockName, blockWhy } from '../unit/labels';
 import { vocabModuleOn } from '../../modules/vocab/api';
 import { lessonMeta } from '../../domain/course/catalog';
 import { Slot } from '../../app/slots';
@@ -403,7 +403,11 @@ export function TodayScreen() {
       return { line: sun, topic: sun };
     }
     if (!task) return { line: '', topic: '' };
-    const what = blockWhy(task, t);
+    // Politur P1 (Kap. 2 Nr. 2): „Morgen: Drei eigene Sätze mit deinen Wörtern und einer Regel“ nannte nur Schritt 3 – als wäre das der ganze
+    // Tag. Jetzt stehen die Schritte von morgen und ihre Zeit da („Wörter, Grammatik, Anwenden · ca. 25 Min.“), aus demselben Plan.
+    const names = [...new Set(p.blocks.map((b) => blockName(b.kind, b.block, t, b.args?.mode === 'format' ? b.args.fmt : undefined)))];
+    const min = Math.round(p.blocks.reduce((a, b) => a + b.min, 0));
+    const what = names.length ? t('nbHeuteTomorrowDay', { steps: names.join(', '), min }) : blockWhy(task, t);
     return { line: t('nbHeuteTomorrow', { what }), topic: what };
   }, [today, unit, t]);
 

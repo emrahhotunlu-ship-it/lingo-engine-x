@@ -55,8 +55,8 @@ export const vmEn = {
   vmCappedLine: "Your word time for today is up. {n} words come tomorrow – the most important first.",
   vmCappedTitle: 'Word time done for today',
   vmCappedBody: "You've already practiced as long as planned for words today. {n} words come tomorrow – the most important first.",
-  vmWhyWrong: "{given} doesn't fit this sentence. It needs {answer} ({pos}): {de}.",
-  vmWhyWrongNoPos: "{given} doesn't fit this sentence. It needs {answer}: {de}.",
+  vmWhyWrong: "{given} doesn't fit here. The word is {answer} ({pos}): {de}.",
+  vmWhyWrongNoPos: "{given} doesn't fit here. The word is {answer}: {de}.",
   vmWhyDunno: 'No problem – here it is: {answer} ({pos}) = {de}. Type it once now; it’ll come back soon for practice.',
   vmWhyDunnoNoPos: 'No problem – here it is: {answer} = {de}. Type it once now; it’ll come back soon for practice.',
 

@@ -59,6 +59,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteRecapBand: 'Your weekly review is ready.',
   nbHeuteRecapOpen: 'View',
   nbHeuteTomorrow: 'Tomorrow: {what}',
+  nbHeuteTomorrowDay: '{steps} · about {min} min',
   nbHeuteWorth: 'Extra: worth doing now',
   nbHeuteMore: 'Extra',
   nbHeuteLocal: 'Plan saved on this device only.',

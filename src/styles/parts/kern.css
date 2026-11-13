@@ -1203,6 +1203,10 @@ html[data-lx-retyping] .lx-exercise :is([data-block='why'] > ul, [data-slot='why
     max-width: 45rem;
     margin-inline: auto;
   }
+  /* Start der Wörter-Runde: Karte und Hinweis in derselben Lesebreite wie der Abschluss (vorher 576 px neben 720 px). */
+  :root :is(.max-w-3xl, .max-w-2xl):has(> .lx-exbar.lx-kbar[data-split]) > [data-testid='vm-start'] > * {
+    max-width: none;
+  }
 }
 /* Auswahl auf dem kurzen Touch-Bildschirm: Optionen etwas dichter (52 px hoch, 8 px Abstand), damit Zusatztext und „Weiter“ ins Bild passen. */
 .lx-exercise[data-tight] [data-testid='choices'] {

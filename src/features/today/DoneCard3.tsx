@@ -96,6 +96,9 @@ export function DoneCard3({ view, sum, mins, tomorrow, tomorrowTopic = '', today
   const goalText = !msText && facts.goal ? t(facts.goal.key, facts.goal.params) : null;
   const ringRef = useRef<HTMLSpanElement>(null);
   const play = usePlayOnce(today, ringRef);
+  // Politur P1 (Kap. 2 Nr. 2): In der Mitte stehen die Minuten, die heute wirklich gelernt wurden (gespeichert + noch im Puffer) – dieselbe
+  // Quelle wie „Min. diese Woche“ darunter. Vorher stand hier die geplante Zeit („25 Min.“ neben „4 Min. diese Woche“). Mindestens 1.
+  const realMin = Math.max(1, Math.round(view.balance.minutes));
   // P60: ein großer Meilenstein (Kapitel, C1, Wort-Marken ab 250) bekommt einmal je Gerät die Aufstiegskarte, nach dem Tagesmoment.
   const msId = ms?.id ?? null;
   const msN = ms?.n;
@@ -131,7 +134,9 @@ export function DoneCard3({ view, sum, mins, tomorrow, tomorrowTopic = '', today
             <span className="lx-vh-done-check" aria-hidden="true">
               <Icon name="check" size={24} />
             </span>
-            <b className="lx-v-disp lx-v-num lx-vh-done-min">{t('vhMinDone', { n: mins.reduce((a, m) => a + m, 0) })}</b>
+            <b className="lx-v-disp lx-v-num lx-vh-done-min" data-testid="today-done-min" data-min={realMin}>
+              {t('vhMinDone', { n: realMin })}
+            </b>
             <span aria-hidden="true">{back ? t('moBackTitle') : t('nbHeuteDoneTitle')}</span>
           </TodayRing>
         </span>
