@@ -124,7 +124,7 @@ export function ExerciseActions({ onPause }: { onPause: () => void }) {
         // abgeschnitten oder zweizeilig). Die Beschriftung bleibt für Vorleseprogramme und steht ab 768 px sichtbar neben dem Symbol (`kern.css`).
         <button type="button" className="lx-kask" onClick={ask} title={t('kernAsk')} data-testid={explain ? 'claude-explain' : 'open-companion'} data-ai="">
           <Icon name="sparkle" size={20} />
-          <span className="lx-kask-label">{t('kernAsk')}</span>
+          <span className="lx-kask-label sr-only md:not-sr-only">{t('kernAsk')}</span>
         </button>
       )}
       <TopMenu lead={lead} tail={tail} onPause={onPause} />

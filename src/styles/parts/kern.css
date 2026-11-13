@@ -1113,15 +1113,7 @@ html[data-lx-retyping] .lx-exercise :is([data-block='why'] > ul, [data-slot='why
 :root .lx-kask > svg {
   flex: none;
 }
-.lx-kask-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
+/* Die Beschriftung ist unter 768 px `sr-only`, darüber sichtbar (`md:not-sr-only` in `Chrome.tsx`). */
 @media (min-width: 768px) {
   :root .lx-kask {
     width: auto;
@@ -1130,14 +1122,6 @@ html[data-lx-retyping] .lx-exercise :is([data-block='why'] > ul, [data-slot='why
   }
   :root .lx-kask > svg {
     color: var(--act-text, currentColor);
-  }
-  .lx-kask-label {
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    clip: auto;
   }
 }
 
