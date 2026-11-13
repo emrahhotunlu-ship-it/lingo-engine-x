@@ -253,9 +253,13 @@ test.describe('Handy 390', () => {
     // Rundenende gespeichert: act.review (Heute „erledigt“, geräteübergreifend) und Antworten in days (Serie).
     await expect.poll(async () => (((await dump(page))['app/profile']?.act as Record<string, Doc> | undefined)?.[DAY] ?? {}).review).toBe(1);
     expect((((await dump(page))['app/profile']?.days as Record<string, number> | undefined)?.[DAY] ?? 0) > 0).toBe(true);
+    // Politur P1 (13.11.2026): EIN Abschluss je Schritt – der Hauptknopf nennt den nächsten Schritt und startet ihn direkt (keine Zwischenkarte).
+    await expect(page.getByTestId('vm-back')).toContainText(/Weiter: .+/);
     await page.getByTestId('vm-back').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
-    await expect(page.getByTestId('unit-between')).toHaveAttribute('data-next', /^ch:u-/);
+    await expect(page.locator('[data-screen="vlearn"]')).toHaveCount(0);
+    await expect(page.getByTestId('unit-between')).toHaveCount(0);
+    await expect(page.locator('[data-screen="today"]')).toHaveCount(0);
+    await expect(page.locator('[data-screen]').first()).toBeVisible();
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });

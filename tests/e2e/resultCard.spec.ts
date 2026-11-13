@@ -113,10 +113,11 @@ for (const theme of ['dark', 'dim', 'light'] as const) {
   });
 }
 
-test('Zwischenkarte: Ring und Häkchen in Smaragd, Knopf „Weiter: …“ nennt den nächsten Schritt', async ({ page }) => {
+// Politur P1 (13.11.2026): EIN Abschluss je Schritt. Der Abschluss der Übung nennt das Ziel („Weiter: …“) und startet den nächsten Schritt
+// direkt; die Zwischenkarte (`unitCard`) kommt im normalen Ablauf nicht mehr.
+test('Abschluss eines Schritts: Knopf „Weiter: …“ nennt den nächsten Schritt und startet ihn direkt, keine Zwischenkarte', async ({ page }) => {
   test.slow();
-  // Bewegung an (die Tests laufen sonst mit Stufe „Aus“): Ring 250 ms, danach das Häkchen.
-  await boot(page, { migrated: true, now: MON_9, localStorage: { 'lx:fx': 'full' }, fake: { capabilities: { sample: false }, patch: { ...WEEK_W39, ...profileWith(MON, vgPlan(), []), ...reviewedLog(MON) } } });
+  await boot(page, { migrated: true, now: MON_9, fake: { capabilities: { sample: false }, patch: { ...WEEK_W39, ...profileWith(MON, vgPlan(), []), ...reviewedLog(MON) } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'grammarSession');
@@ -127,7 +128,17 @@ test('Zwischenkarte: Ring und Häkchen in Smaragd, Knopf „Weiter: …“ nennt
     await answerGrammar(page, solve);
     await nextItem(page);
   }
+  await expect(page.getByTestId('session-end-next')).toContainText(/^Weiter: .+/);
   await page.getByTestId('session-end-next').click();
+  await expect(page.locator('[data-screen="grammarSession"]')).toHaveCount(0);
+  await expect(page.getByTestId('unit-between')).toHaveCount(0);
+  await expect(page.locator('[data-screen="today"]')).toHaveCount(0);
+});
+
+// Die Zwischenkarte bleibt als Auffangweg (alter Fortsetz-Stand, Adress-Anker): Ring und Häkchen weiter in Smaragd.
+test('Zwischenkarte (Auffangweg): Ring und Häkchen in Smaragd, Knopf „Weiter: …“ nennt den nächsten Schritt', async ({ page }) => {
+  // Bewegung an (die Tests laufen sonst mit Stufe „Aus“): Ring 250 ms, danach das Häkchen.
+  await bootAt(page, { name: 'unitCard', step: 'next' }, { migrated: true, now: MON_9, localStorage: { 'lx:fx': 'full' }, fake: { capabilities: { sample: false }, patch: { ...WEEK_W39, ...profileWith(MON, vgPlan(), ['u-focus']), ...reviewedLog(MON) } } });
   await expect(page.getByTestId('unit-between')).toBeVisible();
   const mark = page.getByTestId('done-mark');
   await expect(mark).toBeVisible();

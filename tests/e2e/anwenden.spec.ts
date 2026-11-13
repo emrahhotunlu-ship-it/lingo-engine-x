@@ -184,7 +184,9 @@ test.describe('Handy 390 px', () => {
     expect(reps.every((r) => typeof r.ctx === 'string' && r.ctx.length > 0)).toBe(true);
 
     await page.getByTestId('ax-done').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    // Politur P1 (13.11.2026): keine Zwischenkarte mehr – der nächste offene Schritt des Tages startet direkt.
+    await expect(page.locator('[data-screen="applyTask"]')).toHaveCount(0);
+    await expect(page.getByTestId('unit-between')).toHaveCount(0);
     await expect.poll(async () => ((await profile(page)).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
     await expect.poll(async () => (await profile(page)).apc).toEqual({ n: 2, d: TUE });
     expect(errors).toEqual([]);
@@ -237,7 +239,8 @@ test.describe('Handy 390 px', () => {
     await screen(page, 'comboSentence');
     await expect(page.getByTestId('combo-item')).toBeVisible();
     await page.getByTestId('combo-skip').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    // Politur P1 (13.11.2026): keine Zwischenkarte mehr – nach dem letzten offenen Schritt bzw. außerhalb der Kette geht es zu Heute.
+    await screen(page, 'today');
     await expect.poll(async () => ((await profile(page)).act as Record<string, Doc>)[TUE]?.['u-task']).toBe(1);
     expect((await profile(page)).apc).toEqual({ n: 2, d: '2026-09-21' });
     expect(errors).toEqual([]);
@@ -310,7 +313,8 @@ test.describe('Laptop 1440 px', () => {
     expect(await layoutProblems(page)).toEqual([]);
     expect(await axe(page)).toEqual([]);
     await page.getByTestId('ax-done').click();
-    await page.locator('[data-screen="unitCard"]').waitFor();
+    // Politur P1 (13.11.2026): keine Zwischenkarte mehr – nach dem letzten offenen Schritt bzw. außerhalb der Kette geht es zu Heute.
+    await screen(page, 'today');
     await expect.poll(async () => (await profile(page)).apc).toEqual({ n: 1, d: TUE });
     expect(errors).toEqual([]);
     expect(external).toEqual([]);

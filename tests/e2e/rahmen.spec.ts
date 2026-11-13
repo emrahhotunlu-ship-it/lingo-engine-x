@@ -236,8 +236,8 @@ test('Praxis am Handy: Seite unter Heute (UX-Neuanfang B), Lesen und Sprechen al
 
 type Box = { x: number; y: number; width: number; height: number };
 
-async function at(browser: Browser, width: number, height: number, fake: InstallOptions = {}): Promise<{ page: Page; errors: string[]; close: () => Promise<void> }> {
-  const ctx = await browser.newContext({ viewport: { width, height } });
+async function at(browser: Browser, width: number, height: number, fake: InstallOptions = {}, touch?: boolean): Promise<{ page: Page; errors: string[]; close: () => Promise<void> }> {
+  const ctx = await browser.newContext({ viewport: { width, height }, ...(touch === undefined ? {} : { hasTouch: touch, isMobile: touch }) });
   const page = await ctx.newPage();
   const { errors } = await boot(page, { migrated: true, fake });
   await screen(page, 'today');
@@ -277,8 +277,9 @@ async function startTrainer(page: Page): Promise<void> {
 
 for (const width of [600, 1024]) {
   // Glas (Emrah 03.11.2026, Küchenstudio): die Schiene schwebt 14 px vom Rand, oben die Petrol-Marke, Beschriftung unter dem Symbol.
+  // Politur P1 (13.11.2026): Die Schiene gilt für Maus/Trackpad ab 600 px und für alles ab 1.024 px; Touch 600–1.023 px hat die Leiste unten.
   test(`Schiene bei ${width} px: links schwebend, Marke, vier Reiter + Werkzeuge, keine Leiste unten`, async ({ browser }) => {
-    const { page, errors, close } = await at(browser, width, 800);
+    const { page, errors, close } = await at(browser, width, 800, {}, width < 1024 ? false : undefined);
     const nav = await boxOf(page, 'tabbar');
     expect(nav.x).toBeLessThanOrEqual(14);
     expect(nav.width).toBeLessThan(100);
@@ -300,6 +301,21 @@ for (const width of [600, 1024]) {
     await close();
   });
 }
+
+// Politur P1 (13.11.2026): Innendisplay (Touch, 669 px) – die Leiste steht unten mit Beschriftung wie am Handy, keine Schiene links.
+test('Touch bei 669 px: Leiste unten mit vier beschrifteten Reitern, Bühne über die ganze Breite', async ({ browser }) => {
+  const { page, errors, close } = await at(browser, 669, 911, {}, true);
+  const nav = await boxOf(page, 'tabbar');
+  expect(nav.width).toBeGreaterThan(600);
+  expect(nav.y + nav.height).toBeGreaterThan(905);
+  expect(nav.height).toBeLessThan(120);
+  await expect(page.getByTestId('tabbar').locator('button[data-tab]')).toHaveCount(4);
+  await expect(page.getByTestId('tab-vocab')).toContainText('Wörter');
+  expect((await boxOf(page, 'stage')).x).toBeLessThan(40);
+  expect(await layoutProblems(page)).toEqual([]);
+  expect(errors).toEqual([]);
+  await close();
+});
 
 test('Ab 1280 px: schmale Glas-Schiene mit Marke, vier Reiter ohne Unterpunkte, Werkzeuge, Kontextspalte reserviert, Praxis über Heute', async ({ browser }) => {
   const { page, errors, close } = await at(browser, 1280, 800);
