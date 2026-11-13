@@ -125,9 +125,11 @@ export type FocusMove = 'none' | 'up' | 'down' | 'sits';
 
 /**
  * Eine Fokus-Antwort buchen (rein; `write.ts` rechnet damit auf dem frischen Stand, die Runde auf ihrer Kopie). Ohne Lauf beginnt einer bei
- * Stufe 1; ein abgeschlossener Lauf (`ok`) beginnt neu. Nach der Ruhe des Sicherheitsventils zählen die Lerntage neu.
+ * Stufe 1; ein abgeschlossener Lauf (`ok`) beginnt neu – frühestens am nächsten Lerntag (am Tag von `ok` ändert eine Antwort nichts). Nach der Ruhe des Sicherheitsventils zählen die Lerntage neu.
  */
 export function focusStep(cur: FocusState | null, a: FocusFact): { next: FocusState; move: FocusMove } {
+  // Am Tag, an dem das Thema „sitzt“, bleibt der Lauf abgeschlossen: die restlichen Fokus-Aufgaben derselben Runde beginnen keinen neuen Lauf.
+  if (cur?.ok && cur.ok === a.day) return { next: cur, move: 'none' };
   let st: FocusState = focusOpen(cur) ? { ...cur } : { v: 1, s: 1, k: 0, d0: a.day, d: a.day, n: 1 };
   if (st.d !== a.day) {
     const rested = st.n >= FOCUS_MAX_DAYS && daysBetween(st.d, a.day) >= FOCUS_REST_DAYS;
