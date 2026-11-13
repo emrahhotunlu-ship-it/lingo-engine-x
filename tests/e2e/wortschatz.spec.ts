@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, openSettings, openTab, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { bigVocab } from './wortschatzHelpers';
@@ -8,6 +8,22 @@ import { bigVocab } from './wortschatzHelpers';
 // Extra-Runde, Einstellungen „Wortschatz“.
 
 type Doc = Record<string, unknown>;
+
+/**
+ * Dokumentenzahl, nachdem die Hintergrund-Schreibvorgänge des Starts gelandet sind (Startbild `app/today`, Wendungen aus dem Kurs `chunk/…`;
+ * schon vor dem Politur-Paket so). Unter Last landen sie erst nach dem Öffnen des Reiters – dann zählte der Test sie fälschlich der Aktion zu.
+ */
+async function settledDocCount(page: Page): Promise<number> {
+  await expect.poll(async () => Object.keys(await dump(page)).includes('app/today')).toBe(true);
+  let last = -1;
+  for (let i = 0; i < 20; i++) {
+    const n = Object.keys(await dump(page)).length;
+    if (n === last) return n;
+    last = n;
+    await page.waitForTimeout(400);
+  }
+  return last;
+}
 
 test.describe('Handy 390', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
@@ -97,7 +113,7 @@ test.describe('Handy 390', () => {
     await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]')).toHaveCount(6);
     await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]').first()).toContainText('neue Wörter');
     for (const g of ['grammar', 'speak', 'apply']) await expect(page.getByTestId(`extra-group-${g}`)).toHaveCount(0);
-    const before = Object.keys(await dump(page)).length;
+    const before = await settledDocCount(page);
     const opt = page.locator('[data-testid="extra-opt"]:not([disabled])').first();
     await opt.click();
     await screen(page, 'trainer');
@@ -252,7 +268,7 @@ test('Atlas-Sperre: ab 4.500 Karten legt „Als Karte“ nichts an und sagt es r
   await page.getByTestId('ws-atlas').click();
   await expect(page.getByTestId('atlas-cap')).toHaveAttribute('data-state', 'full');
   await page.getByTestId('atlas-search').fill('monopol');
-  const before = Object.keys(await dump(page)).length;
+  const before = await settledDocCount(page);
   await page.getByTestId('atlas-hits').getByTestId('atlas-add').first().click();
   await expect(page.getByTestId('atlas-hits').getByTestId('atlas-word').first()).toHaveAttribute('data-have', 'false');
   expect(Object.keys(await dump(page)).length).toBe(before);
