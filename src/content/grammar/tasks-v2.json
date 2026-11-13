@@ -3141,8 +3141,7 @@
    "fixed": "What we need most is a clear owner for each task.",
    "accepted": [
     "The thing",
-    "The one thing",
-    "All"
+    "The one thing"
    ],
    "why": {
     "ok": {
@@ -17194,9 +17193,7 @@
    "answer": "will be sitting",
    "fixed": "This time next week, the whole team will be sitting in workshops in Lisbon.",
    "accepted": [
-    "is sitting",
     "is going to be sitting",
-    "will sit",
     "will be"
    ],
    "why": {
@@ -17768,8 +17765,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Der Fehler: „will launched“. Nach will steht die Grundform; es fehlt have.",
-     "en": "The error: “will launched”. After will use the base form; the have is missing."
+     "de": "Fehler: „will launched“. Auch „will launch“ ist grammatisch möglich; mit „By next quarter“ (spätestens bis) passt will have launched besser.",
+     "en": "Error: “will launched”. “will launch” is also possible; with “By next quarter” (at the latest by then), will have launched fits better."
     },
     "wrong": [
      {
@@ -22196,10 +22193,10 @@
     "were less strict",
     "were more relaxed",
     "were flexible",
-    "were not so inflexible",
-    "were less inflexible",
     "were not so rigid",
-    "were not so strict"
+    "were not so strict",
+    "were not so inflexible",
+    "were less inflexible"
    ],
    "words": [
     2,
@@ -23026,8 +23023,7 @@
    "answer": "Had we tested",
    "accepted": [
     "Had we only tested",
-    "Had we properly tested",
-    "If we had tested"
+    "Had we properly tested"
    ],
    "words": [
     3,
@@ -23043,8 +23039,8 @@
       "if": [
        "if"
       ],
-      "de": "Mit if wäre es If we had tested. Das Schlüsselwort HAD soll aber am Satzanfang stehen, ohne if.",
-      "en": "With if it would be If we had tested. The key word HAD must open the sentence, without if."
+      "de": "Grammatisch richtig, aber hier wird die förmliche Form ohne if geübt: Had we tested …",
+      "en": "Grammatically correct, but this task practices the formal form without if: Had we tested …"
      },
      {
       "if": [
@@ -24525,11 +24521,10 @@
    "from": "Perhaps she is still waiting outside right now.",
    "key": "MIGHT",
    "frame": "She ___ outside right now.",
-   "answer": "might be waiting",
+   "answer": "might still be waiting",
    "accepted": [
-    "might still be waiting",
-    "might well be waiting",
-    "might still be"
+    "might be waiting",
+    "might well be waiting"
    ],
    "words": [
     3,
@@ -24537,8 +24532,8 @@
    ],
    "why": {
     "ok": {
-     "de": "Richtig: might be waiting = nur möglich, gerade jetzt, mit be + -ing.",
-     "en": "Right: might be waiting = only possible, right now, with be + -ing."
+     "de": "Richtig: might still be waiting = nur möglich, gerade jetzt, mit be + -ing; still bleibt aus dem Ausgangssatz stehen.",
+     "en": "Right: might still be waiting = only possible, right now, with be + -ing; still stays from the original sentence."
     },
     "wrong": [
      {
@@ -30230,8 +30225,8 @@
    "answer": "both",
    "why": {
     "ok": {
-     "de": "Richtig: beide. Gleiche Bedeutung, förmlichere Form, Hardly had we … ist nur betonter.",
-     "en": "Right: both. Same meaning, more formal form: Hardly had we … is more emphatic."
+     "de": "Richtig: beide. Gleiche Bedeutung; Hardly had we … ist nur förmlicher und betonter.",
+     "en": "Right: both. Same meaning; Hardly had we … is just more formal and more emphatic."
     },
     "wrong": [
      {
@@ -48183,23 +48178,23 @@
    "id": "ep-m5",
    "type": "meaning",
    "pat": "ep.concession",
-   "a": "Small as our team is, we finished the project on time.",
-   "b": "As our team is small, we finished the project on time.",
+   "a": "Small as our team is, we support over 300 customers.",
+   "b": "As our team is small, we can only take on a few new projects at a time.",
    "q": {
-    "de": "In welchem Satz ist das kleine Team der Grund für den pünktlichen Abschluss?",
-    "en": "In which sentence is the small team the reason the project finished on time?"
+    "de": "In welchem Satz ist das kleine Team der Grund für das, was danach folgt?",
+    "en": "In which sentence is the small team the reason for what follows?"
    },
    "answer": "b",
    "why": {
     "ok": {
-     "de": "Richtig: Satz b. Steht as mit Subjekt und Verb am Satzanfang, heißt es hier „weil“.",
-     "en": "Right: sentence b. As + subject + verb at the start means “because” here."
+     "de": "Richtig: Satz b. As mit Subjekt und Verb am Satzanfang heißt hier „weil“: Das kleine Team ist der Grund.",
+     "en": "Right: sentence b. As + subject + verb at the start means “because” here: the small team is the reason."
     },
     "wrong": [
      {
       "opt": "a",
-      "de": "Small as our team is heißt „so klein unser Team ist“: ein Gegensatz, kein Grund.",
-      "en": "Small as our team is means “although our team is small”: a contrast, not a reason."
+      "de": "Small as our team is heißt „so klein unser Team auch ist“: ein Gegensatz (trotzdem über 300 Kunden), kein Grund.",
+      "en": "Small as our team is means “although our team is small”: a contrast (still over 300 customers), not a reason."
      },
      {
       "opt": "both",
@@ -48214,18 +48209,20 @@
    "id": "ep-f9",
    "type": "find",
    "pat": "ep.object-front",
-   "prompt": "Those figures did we check twice.",
+   "prompt": "Those figures did we check twice; the others only once.",
    "err": [
     2,
     4
    ],
    "answer": "we checked",
-   "fixed": "Those figures we checked twice.",
+   "fixed": "Those figures we checked twice; the others only once.",
    "hint": {
     "de": "Das Objekt steht zur Betonung vorn; der Rest bleibt ein normaler Aussagesatz.",
     "en": "The object comes first for emphasis; the rest stays a normal statement."
    },
-   "accepted": [],
+   "accepted": [
+    "we did check"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: nach dem vorgezogenen Objekt bleibt die normale Reihenfolge: we checked.",

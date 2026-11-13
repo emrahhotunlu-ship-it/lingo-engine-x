@@ -5,7 +5,8 @@ import { logError } from '../../platform/diagnostics';
 // Rahmen für „Eigener Satz“ (Anwenden): je Grammatikthema 2–3 Situationen aus dem Vertriebsalltag mit einem Satzanfang, der den Zusammenhang erzwingt,
 // den die Regel braucht (Emrahs Live-Rückmeldung 05.11.2026: „Schreibe einen Satz mit ‚to lack‘ – Regel: Past Perfect“ ohne Bezugspunkt war unlösbar).
 // Als Text eingebettet und erst beim ersten Gebrauch geparst; ungültige Einträge fallen weg und landen in der Diagnose.
-// P4 (13.11.2026, Brücken-Sätze): die Situationen stammen aus Emrahs Berufswelt (Vertrieb/Projekte Küchen- und Möbelbranche); `pats` nennt die Muster,
+// P4 (13.11.2026, Brücken-Sätze): die Situationen stammen aus Emrahs Berufswelt (Business Development bei einem DMS/ECM-Hersteller mit neuem Cloud-Produkt
+// für den Mittelstand, dazu etwa ein Drittel Alltag und Nachrichten); der Satzanfang gibt den Zusammenhang, enthält die Zielform aber nicht. `pats` nennt die Muster,
 // zu denen ein Satzanfang passt (ein Thema hat mehrere Muster, „If you sign by Friday, we will …“ passt nur zum First Conditional). `more` hält
 // zusätzliche Rahmen für einzelne Muster; `comboFrames()` (Rahmen je Thema) liest sie nicht.
 

@@ -218,8 +218,8 @@
    ],
    "ex": [
     {
-     "en": "It was the second time the vendor had missed a deadline.",
-     "de": "Es war das zweite Mal, dass der Lieferant eine Frist verpasst hat.",
+     "en": "It was the first time the vendor had missed a deadline.",
+     "de": "Es war das erste Mal, dass der Lieferant eine Frist verpasst hatte.",
      "ctx": "meeting"
     },
     {
@@ -298,8 +298,8 @@
    ],
    "ex": [
     {
-     "en": "Our lawyer said the terms would change after the review.",
-     "de": "Unser Anwalt sagte, die Bedingungen würden sich nach der Prüfung ändern.",
+     "en": "The partner told us they had signed the contract the day before.",
+     "de": "Der Partner sagte uns, er habe den Vertrag am Vortag unterschrieben.",
      "ctx": "meeting"
     },
     {

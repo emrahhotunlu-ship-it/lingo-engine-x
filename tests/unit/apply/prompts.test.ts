@@ -74,8 +74,8 @@ describe('Pflicht- und Kernpunkte einzeln (Nachtrag learning-scientist Muss 1/2)
 describe('Vorlagen', () => {
   it('sind registriert, mit Kopfzeile, Stufe und Zwischenspeicher', () => {
     for (const tpl of [applyReply, applySummary, applyKeypoints]) expect(TEMPLATES).toContain(tpl);
-    expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@3]');
-    expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@3]');
+    expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@4]');
+    expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@4]');
     expect(applyKeypoints.build({ title: 'x', article: ARTICLE }).split('\n')[0]).toBe('[apply-keypoints@1]');
     expect([applyReply.tier, applySummary.tier, applyKeypoints.tier]).toEqual(['default', 'default', 'default']);
     // T2–T4: Bewertungsstufen, Ton über die ganze Antwort, bessere Fassung deckt alle Punkte, Ziel als Wert.
@@ -250,8 +250,11 @@ describe('Mail-Vorlagen @3: Wörter mit Kennung und Bedeutung, `used` mit Grund'
   it('c1-mail@3 beurteilt mit `words` auch die Zielwörter (früher nur Muster); ohne `words` bleibt die Schreibwerkstatt wie bisher', () => {
     const base = { situation: 'Write to Laura about the setup.', patterns: [{ id: 'psc.now', name: 'present continuous', form: 'am/is/are + -ing' }], phrases: [] as string[], text: TEXT, uiLang: 'de' as const, ctx: '', pats: patListText() };
     const p = c1Mail.build({ ...base, words });
-    expect(p.split('\n')[0]).toBe('[c1-mail@3]');
+    expect(p.split('\n')[0]).toBe('[c1-mail@4]');
     expect(p).toContain('w1: setup = Einrichtung');
+    // @4: ok false nur bei klarem Fehler; Muster: Form und nötiger Zusammenhang.
+    expect(p).toContain('ok is false only for a clear error (wrong meaning, wrong form, wrong partner word)');
+    expect(p).toContain('the form is right and it fits the context it needs');
     expect(p).not.toContain('Target phrases:');
     const r = c1Mail.schema({ ...base, words }).safeParse(JSON.parse(c1MailReply(p)));
     expect(r.success).toBe(true);

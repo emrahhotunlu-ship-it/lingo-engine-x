@@ -221,9 +221,10 @@ export const targetWordsLine = (words: readonly (string | TargetWord)[]): string
 /** Kurzurteil (@3): steht als „Kurz gesagt“ ganz oben in der Rückmeldung. */
 export const GIST_RULE = '- summary: the gist in ONE short sentence in the explanation language (shown first): what works and the one thing to work on next.';
 
-/** Regel für `used` (@3): Kennung, Urteil in der gelernten Bedeutung, wörtliches Zitat und ein Satz Grund. */
+/** Regel für `used` (@3): Kennung, Urteil in der gelernten Bedeutung, wörtliches Zitat und ein Satz Grund. @4 (Befund english-teacher, 13.11.2026):
+ * ok false nur bei klarem Fehler; natürlich, aber seltener = ok true mit der üblicheren Wahl im Grund; im Zweifel ok true; Regel: Form UND nötiger Zusammenhang. */
 export const USED_RULE =
-  '- used: for each target word (by its id, e.g. "w1") and for the target rule ("rule") that the learner tried to use, one entry with pat (the id), ok (true only if the word is used correctly in the meaning given, with the right form and partner words; for the rule: the form is right), a "quote" copied exactly from the text and "why" (one short sentence in the explanation language: why it works here, or what is wrong and the right form). Skip what the learner did not try.';
+  '- used: for each target word (by its id, e.g. "w1") and for the target rule ("rule") that the learner tried to use, one entry with pat (the id), ok (true only if the word is used correctly in the meaning given, with the right form and partner words; for the rule: the form is right and it fits the context it needs), a "quote" copied exactly from the text and "why" (one short sentence in the explanation language: why it works here, or what is wrong and the right form). Skip what the learner did not try. ok is false only for a clear error (wrong meaning, wrong form, wrong partner word). A use that is natural but less common is ok true; name the more common option in "why". If you cannot tell, ok true and say what is unclear in "why".';
 
 /** Gemeinsame Regeln der Anwenden-Prüfungen (Antwort und Zusammenfassung). */
 export const APPLY_EDIT_RULES = [

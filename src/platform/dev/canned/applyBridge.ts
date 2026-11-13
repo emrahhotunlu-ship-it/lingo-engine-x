@@ -1,10 +1,12 @@
-// Feste, realistische Antwort für apply-bridge@1 (Anwenden, Brücken-Sätze: ein Wort + ein Muster im eigenen Satz). Besitzer: Paket P4.
+// Feste, realistische Antwort für apply-bridge@2 (Anwenden, Brücken-Sätze: ein Wort + ein Muster im eigenen Satz). Besitzer: Paket P4.
+// @2: Wörter aus dem vorgeschlagenen Satzanfang zählen nicht; ergänzt der Satz den Anfang um weniger als zwei eigene Wörter, ist das Muster „unsure“.
 // Marker im Satz: `zzword` → Wort falsch (falsche Bedeutung), `zzodd` → Wort fast richtig (Präposition), `zzthin` → zu nah am Kartensatz,
 // `zzpat` → Muster falsch, `zzavoid` → Muster vermieden, `zzunsure` → Muster nicht entscheidbar, `zzextra` → ein weiterer Fehler,
 // `zzjson` → kein JSON, `zzschema` → beim ersten Aufruf ungültige Form (der Neuversuch ist gültig).
 // Nur Entwicklung und Tests – nie Teil des Produktions-Builds.
 
 const line = (input: string, label: string): string => (new RegExp(`^${label}: (.*)$`, 'm').exec(input)?.[1] ?? '').trim();
+const flat = (s: string): string => s.toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').trim();
 const NOT_JSON = 'Sorry, I cannot give a clean answer for that right now.';
 
 /** Wörtliche Fundstelle des Zielworts im Satz (auch gebeugt: der Wortanfang reicht), sonst leer. */
@@ -31,7 +33,9 @@ export function applyBridgeReply(input: string): string {
     .trim();
   const at = findWord(sentence, word);
   const wv = has('zzword') ? 'wrong' : has('zzodd') ? 'odd' : has('zzthin') ? 'thin' : 'ok';
-  const pv = has('zzpat') ? 'wrong' : has('zzavoid') ? 'avoided' : has('zzunsure') ? 'unsure' : 'ok';
+  const head = flat(line(input, 'Suggested sentence start \\(a help, not required\\)').replace(/\s*…$/, ''));
+  const own = head && flat(sentence).startsWith(head) ? flat(sentence).slice(head.length).split(/\s+/).filter((w) => /[a-z]/.test(w) && !/^zz/.test(w)) : null;
+  const pv = has('zzpat') ? 'wrong' : has('zzavoid') ? 'avoided' : has('zzunsure') || (own !== null && own.length < 2) ? 'unsure' : 'ok';
   const wWhy: Record<string, readonly [string, string]> = {
     ok: [`„${word}“ passt hier genau in der gelernten Bedeutung.`, `The word fits here in exactly the meaning you learned.`],
     odd: [`Die Bedeutung stimmt, aber nach „${word}“ steht hier eine andere Präposition.`, `The meaning is right, but the word takes a different preposition here.`],

@@ -91,8 +91,9 @@ export { WORDS_MAX } from './applyCommon';
 /** Kennung der Regel in `used` (die Zielwörter stehen dort unter ihrem eigenen Wortlaut). */
 export const RULE_ID = 'rule';
 
+// @4 (Befund english-teacher, 13.11.2026): `used` mit der milderen Regel aus applyCommon (`USED_RULE`: ok false nur bei klarem Fehler). Ausgabe unverändert.
 const ID = 'apply-reply';
-const VERSION = 3;
+const VERSION = 4;
 
 export const REPLY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"w1","ok":true,"quote":"…","why":"…"}],"tone":{"fit":"fits","why":"…"},${GREET_EXAMPLE},"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
 

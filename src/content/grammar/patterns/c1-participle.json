@@ -294,8 +294,8 @@
           "ctx": "mail"
         },
         {
-          "en": "Leaving the party early, Tom missed the surprise.",
-          "de": "Weil Tom die Party früh verließ, verpasste er die Überraschung.",
+          "en": "Having left the party early, Tom missed the surprise.",
+          "de": "Weil Tom die Party früh verlassen hatte, verpasste er die Überraschung.",
           "ctx": "talk"
         }
       ],

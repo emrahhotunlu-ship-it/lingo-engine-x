@@ -4,7 +4,7 @@ import { applyBridge, BRIDGE_EXAMPLE, bridgeContextProblem, bridgeNeedsFix, brid
 import { promptBytes, PROMPT_MAX_BYTES } from '../../../src/prompts/common';
 import { TEMPLATES } from '../../../src/prompts/registry';
 
-// apply-bridge@1 (P4): Vorlage, Schema mit lokaler Gegenprüfung, Neuversuch-Fassung, Test-Antwort des Entwicklungs-Adapters.
+// apply-bridge@2 (P4, Lehrer-Befund 13.11.2026): Vorlage, Schema mit lokaler Gegenprüfung, Neuversuch-Fassung, Test-Antwort des Entwicklungs-Adapters.
 
 const vars = (sentence: string, o: Partial<BridgeVars> = {}): BridgeVars => ({
   word: { word: 'postpone', meaning: 'verschieben', kind: 'w', example: 'We had to postpone the meeting.' },
@@ -13,19 +13,19 @@ const vars = (sentence: string, o: Partial<BridgeVars> = {}): BridgeVars => ({
   starter: 'If we had called them earlier, …',
   sentence,
   uiLang: 'de',
-  ctx: 'Sales and project manager in the kitchen and furniture industry',
+  ctx: 'Head of Business Development at a German document management (DMS/ECM) software vendor launching a cloud product for SMBs',
   ...o,
 });
 const GOOD = 'If we had called them earlier, we would have postponed the delivery.';
 const reply = (v: BridgeVars): unknown => JSON.parse(applyBridgeReply(applyBridge.build(v)));
 
-describe('apply-bridge@1', () => {
+describe('apply-bridge@2', () => {
   it('Vorlage: Kopfzeile, Stufe, kein Zwischenspeicher, registriert; Prompt nennt Wort mit Bedeutung und Kartensatz, Muster mit Formel, Situation und Satzanfang', () => {
     const p = applyBridge.build(vars(GOOD));
-    expect(p.split('\n')[0]).toBe('[apply-bridge@1]');
+    expect(p.split('\n')[0]).toBe('[apply-bridge@2]');
     expect(applyBridge.tier).toBe('default');
     expect(applyBridge.cache).toBe(false);
-    expect(TEMPLATES.some((t) => t.id === 'apply-bridge' && t.version === 1)).toBe(true);
+    expect(TEMPLATES.some((t) => t.id === 'apply-bridge' && t.version === 2)).toBe(true);
     expect(TEMPLATES.some((t) => t.id === 'combo-check')).toBe(true);
     expect(p).toContain('Target word: w1: postpone (word; meaning: verschieben) | card example (a sentence too close to it does not count): We had to postpone the meeting.');
     expect(p).toContain('Target pattern: cn.third: third conditional · missed chance | form: if + Past Perfect, would have + participle');
@@ -39,6 +39,13 @@ describe('apply-bridge@1', () => {
     expect(p).toContain('"thin" also if the sentence gives no context');
     expect(p).toContain('"avoided" = the sentence does not use the target pattern at all');
     expect(p).toContain('never guess');
+    // @2: Wörter des Satzanfangs zählen nicht; „wrong“ nur für klare Fehler; Present Perfect Continuous auch mit Ergebnis jetzt; Zustandsverben ohne „never“.
+    expect(p).toContain('Words taken over from the suggested sentence start do not count as using the pattern.');
+    expect(p).toContain('if the pattern form lies entirely inside the suggested start');
+    expect(p).toContain('"wrong" only for an error a teacher would clearly mark');
+    expect(p).toContain('or a present result it explains');
+    expect(p).toContain('polite "will be needing" and "I\'m hoping" are fine');
+    expect(p).not.toContain('never take a continuous form');
     expect(p).toContain('at most 12 words');
     expect(promptBytes(p)).toBeLessThan(PROMPT_MAX_BYTES / 4);
     // Ohne Rahmen keine Zeilen für Situation und Satzanfang.
@@ -71,6 +78,9 @@ describe('apply-bridge@1', () => {
 
     const u = vars(`${GOOD} zzunsure`);
     expect(applyBridge.schema(u).parse(reply(u)).pat.v).toBe('unsure');
+    // @2 (Test-Antwort): nur der übernommene Satzanfang, kaum eigene Wörter → Muster „unsure“.
+    const bare = vars('If we had called them earlier, postponed.');
+    expect(applyBridge.schema(bare).parse(reply(bare)).pat.v).toBe('unsure');
 
     const en = vars(GOOD, { uiLang: 'en' });
     expect(applyBridge.schema(en).safeParse(reply(en)).success).toBe(true);

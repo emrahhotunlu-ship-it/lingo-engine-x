@@ -385,11 +385,10 @@
   "from": "Perhaps she is still waiting outside right now.",
   "key": "MIGHT",
   "frame": "She ___ outside right now.",
-  "answer": "might be waiting",
+  "answer": "might still be waiting",
   "accepted": [
-   "might still be waiting",
-   "might well be waiting",
-   "might still be"
+   "might be waiting",
+   "might well be waiting"
   ],
   "words": [
    3,
@@ -397,8 +396,8 @@
   ],
   "why": {
    "ok": {
-    "de": "Richtig: might be waiting = nur möglich, gerade jetzt, mit be + -ing.",
-    "en": "Right: might be waiting = only possible, right now, with be + -ing."
+    "de": "Richtig: might still be waiting = nur möglich, gerade jetzt, mit be + -ing; still bleibt aus dem Ausgangssatz stehen.",
+    "en": "Right: might still be waiting = only possible, right now, with be + -ing; still stays from the original sentence."
    },
    "wrong": [
     {

@@ -35,6 +35,10 @@ import type { PromptTemplate, UiLang } from './types';
 // Die App rechnet daraus Belege und Noten selbst (nie Claude). Stufe `default`, kein Zwischenspeicher (jede Prüfung ist neu), nur auf Antippen;
 // ein Neuversuch ausschließlich bei Schemaverletzung (A6.3), dann gilt `lenient` (Unsicheres fällt weg, statt die Antwort zu verwerfen).
 // `combo-check@3` (Vorgänger, ein Urteil für Regel und Satz) bleibt als Datei für den alten Bildschirm „Eigener Satz“.
+// apply-bridge@2 (Befund english-teacher, 13.11.2026): Wörter aus dem vorgeschlagenen Satzanfang zählen nicht als Muster (geurteilt wird, was Emrah
+// selbst ergänzt; liegt die ganze Form im Satzanfang: „unsure“); „wrong“ nur für klare Fehler, Nuancen sind „ok“ mit Hinweis; Present Perfect
+// Continuous darf statt Zeitangabe ein Ergebnis jetzt erklären; Zustandsverben ohne „never“ (höfliches „will be needing“, „I'm hoping“ sind richtig).
+// Ausgabeformat unverändert: Antworten von @1 lesen sich genauso.
 
 export type BridgePatVars = {
   id: string;
@@ -79,7 +83,7 @@ export type BridgeOut = {
 };
 
 const ID = 'apply-bridge';
-const VERSION = 1;
+const VERSION = 2;
 const KEY = 'w1';
 export const BRIDGE_SENTENCE_MAX = 400;
 export const BRIDGE_BETTER_MAX_WORDS = 25;
@@ -217,9 +221,12 @@ export const applyBridge: PromptTemplate<BridgeVars, BridgeOut> = {
       ...verdictRules('sentence'),
       'Rules for "pat" (the target pattern):',
       '- v: "ok" = the sentence really uses the target pattern, in the right form and with the context it needs. "wrong" = the learner tried to use the pattern, but the form or its use is wrong (wrong tense or verb form, a missing part, wrong word order, or the pattern does not fit what the sentence says). "avoided" = the sentence does not use the target pattern at all (a different structure), whether or not it is correct otherwise. "unsure" = you cannot decide whether this is the target pattern or whether it is correct; never guess.',
+      '- "wrong" only for an error a teacher would clearly mark; if it is a matter of nuance, use "ok" and name the nuance in "why"; if you cannot tell, "unsure".',
       '- A different pattern of the same family (e.g. second conditional when the target is third conditional) is "avoided" if it is correct on its own, and "wrong" if it is a failed attempt at the target form.',
-      '- If the pattern needs a context to make sense (past perfect needs a later past event or time in the same sentence; present perfect continuous needs for, since, how long, lately or recently), a sentence without that context is "wrong", and "why" names the missing part.',
-      '- State verbs (lack, know, own, need, belong, consist, seem) never take a continuous form; with perfect forms they need for/since/until or a second past event.',
+      '- If the pattern needs a context to make sense (past perfect needs a later past event or time in the same sentence; present perfect continuous needs a time phrase (for, since, how long, lately, recently, all morning, this week, over the past …) or a present result it explains ("I\'ve been calling him, but he doesn\'t answer")), a sentence without that context is "wrong", and "why" names the missing part.',
+      '- State verbs (know, own, belong, consist, seem) normally do not take a continuous form; polite "will be needing" and "I\'m hoping" are fine. Perfect forms of state verbs need a time frame (for, since, always, never, ever) or a second past event.',
+      '- Words taken over from the suggested sentence start do not count as using the pattern. If the pattern appears only in those words (the start holds part of the form, e.g. it ends with "has been"), judge what the learner added: "ok" only if his own words complete the pattern correctly, otherwise "avoided".',
+      '- If the learner sentence begins with the suggested start, judge "pat" only on the words he added; if the pattern form lies entirely inside the suggested start (nothing of it is left for him to build), use "unsure".',
       '- at: the exact words of the learner sentence that carry the pattern or the failed attempt, copied character by character; "" for "avoided" and "unsure".',
       '- why: one short sentence in the explanation language. ok: name the form he built and why it fits here. wrong: give the right form in "…" and the reason; name the German habit if it caused the error. avoided: say which structure he used instead and show in "…" how the target pattern would look in his sentence. unsure: say what is unclear.',
       '- Judge the pattern independently of the word: a wrong word never makes the pattern wrong, and a wrong pattern never makes the word wrong.',

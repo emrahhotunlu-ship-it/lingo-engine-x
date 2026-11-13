@@ -170,10 +170,31 @@ describe('Rahmen (frames.json)', () => {
       expect(topics[t]?.length ?? 0, t).toBeGreaterThanOrEqual(2);
       expect(topics[t]?.length ?? 0, t).toBeLessThanOrEqual(3);
     }
-    // Berufswelt: Küchen- und Möbelbranche statt Software-Vertrieb.
+    // Berufswelt (Lehrer-Befund 13.11.2026): Business Development bei einem DMS/ECM-Hersteller mit Cloud-Produkt, nicht Küchen- und Möbelbranche.
     const all = [...byPat.values()].flat().map((f) => `${f.de} ${f.en} ${f.starter}`).join(' ');
-    expect(all).not.toMatch(/\b(migration|migrated|go-live|dashboard|platform|IT team|user accounts|data center)\b/i);
-    expect(all).toMatch(/kitchen/i);
+    expect(all).not.toMatch(/\b(kitchen|countertops?|cabinets?|showroom|furniture|installers?)\b|Küche|Möbel/i);
+    expect(all).toMatch(/\bcloud\b/i);
+    expect(all).toMatch(/\b(CFO|head of IT)\b/);
+    // Etwa ein Drittel Alltag und Nachrichten (Wirtschaft, Politik, Technik).
+    const unique = [...new Set([...byPat.values()].flat())];
+    const daily = unique.filter((f) => /\b(friend|neighbor|acquaintance|economy|news|headlines|minister|central bank|interest rates|energy|vacation|phone|electric cars|smartphones|small talk|dinner|lunch|tech fair|trade deal|study|carmaker|takeover|chip|airport|mechanic|strike|laptop|Silicon Valley|batteries|app|government|nephew|election|exhibition)\b/i.test(f.en));
+    expect(daily.length / unique.length).toBeGreaterThan(0.25);
+    // Der Satzanfang enthält die Zielform nicht schon fertig (Emrah bildet sie selbst; „despite …“ nach Vorgabe des Lehrers erlaubt).
+    const GIVEN_AWAY: Readonly<Record<string, RegExp>> = {
+      'cn.were': /\bif I were\b/i, 'cn.third': /\bwould have\b/i, 'pc.duration': /\b(has|have|'ve) been\b/i, 'pc.recent': /\b(has|have|'ve) been\b/i,
+      'pp.earlier': /\bhad\b/i, 'fut.perfect': /\bwill have\b/i, 'fut.perf-cont': /\bwill have been\b/i, 'fut.continuous': /\bwill be\b|\bI'll be\b/i,
+      'ut.used-to': /\bused to\b/i, 'ut.be-used-to': /\bused to\b/i, 'ut.get-used-to': /\bused to\b/i, 'mc.wish-past': /\bwish\b/i, 'mc.wish-now': /\bwish\b/i,
+      'em.not-only': /\bnot only\b/i, 'pp.inversion': /\bno sooner\b/i, 'inv.negative': /\b(never before|rarely)\b/i, 'inv.cond': /^should\b/i,
+      'ep.concession': /\bas it is\b/i, 'hg.worth': /\bworth\b/i, 'hg.seems': /\bseems?\b/i, 'dip.wondering': /\bwondering\b/i, 'dip.possible': /\bwould it be possible\b/i,
+      'em.what-cleft': /^what\b/i, 'em.it-cleft': /\bit (is|was)\b.*\bwho\b/i, 'cmp.the-the': /^the more\b/i, 'dm.concede': /\b(that said|having said)\b/i,
+      'dm.return': /\bcoming back\b/i, 'dm.sum': /\b(all in all|in short|to sum up)\b/i, 'nm.following': /\b(following|upon|prior to)\b/i, 'cp.having': /\bhaving\b/i,
+      'cp.within': /\bwithin\b/i, 'cp.as-of': /\bas of\b/i, 'ca.unless': /\bunless\b/i, 'ca.as-long-as': /\bas long as\b/i, 'cn.if-words': /\b(provided|providing|unless)\b/i,
+      'pp.personal': /\bis (said|believed|thought|reported)\b/i, 'mp.may-well': /\bmay well\b/i, 'mp.chance': /\bchance\b/i, 'mp.likely': /\blikely\b/i,
+      'sa.soft': /\b(hoping|wondering)\b/i, 'fp.was-going': /\bgoing to\b/i, 'fp.about-to': /\babout to\b/i, 'qn.none': /\bnone\b/i,
+      'qn.no-longer': /\b(no longer|anymore)\b/i, 'qn.hardly': /\b(hardly|barely|scarcely)\b/i, 'tc.by-the-time': /\bby the time\b/i, 'lk.although': /\balthough\b/i,
+      'np.to-inf': /\bthe first\b/i, 'pp.first-time': /\bfirst time\b/i, 'tc.present-for-future': /\b(as soon as|once|when)\b/i,
+    };
+    for (const [id, list] of byPat) for (const f of list) if (GIVEN_AWAY[id]) expect(GIVEN_AWAY[id].test(f.starter), `${id}: ${f.starter}`).toBe(false);
   });
 });
 
