@@ -135,6 +135,13 @@ describe('scripts/budget.json', () => {
     expect(evaluate(m, budget).problems).toEqual([]);
     expect(Object.keys(budget.vorab ?? {})).toEqual(['P1 S1-TOK', 'P2 S1-SHELL', 'P3 S1-BAND', 'P4 S1-ZEIT', 'P5 S1-ZAHL', 'P6 S1-START', 'P7 S1-DIKTAT', 'D1 V-BAU', 'D2 V-HEUTE', 'D3 V-UEBUNG', 'V1 V-MODUL', 'V2 V-STUFEN', 'D5 V-GRAMMATIK']);
   });
+  it('Politur P2 (13.11.2026): Zuwachs der Wörter-Runde und eine Datei mehr, je mit Freigabe der Hauptsitzung', () => {
+    const b = loadBudget() as unknown as { grenzen: { files: number; filesFreigabe: string; lazy: Record<string, { zuwachs: Record<string, { bytes: number; freigabe: string }> }> } };
+    expect(b.grenzen.lazy['src/modules/vocab/ui/LearnScreen.tsx']?.zuwachs['Politur P2']).toMatchObject({ bytes: 3500 });
+    expect(b.grenzen.lazy['src/modules/vocab/ui/LearnScreen.tsx']?.zuwachs['Politur P2']?.freigabe).toContain('Hauptsitzung 13.11.2026');
+    expect(b.grenzen.files).toBe(112);
+    expect(b.grenzen.filesFreigabe).toContain('Politur P2');
+  });
   it('vorab-Beträge sind die aus dem Bauplan (stufe1-plan.md, P0 Nr. 4) und werden nicht still erhöht (platform-guard S4)', () => {
     expect(loadBudget().vorab).toEqual({
       'P1 S1-TOK': { css: 4000 },

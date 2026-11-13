@@ -99,6 +99,10 @@
           "WT1": {
             "bytes": 1500,
             "freigabe": "Hauptsitzung 10.11.2026: Großpaket WT Schritt 1 – Auswählen nach der Einführung (PickCard), Emrahs „ja“"
+          },
+          "Politur P2": {
+            "bytes": 3500,
+            "freigabe": "Hauptsitzung 13.11.2026: Großpaket P „Politur“ Paket P2 Wörter lernen (Emrahs E3 „A“) – Wiederholungen zuerst, Tempo nach Behalten, Hör-Karten, Vorkarte „Kennst du es schon?“, Auswahl noch einmal, Problemwörter; gemessen 34094 → 37465 B"
           }
         }
       },
@@ -228,8 +232,8 @@
     },
     "lazyNeu": 150000,
     "bin": 500000,
-    "files": 111,
-    "filesFreigabe": "Hauptsitzung 10.11.2026 (WT Schritt 1): geprüfte Wortliste und Satzschlüssel-Stück (111 Dateien). Hauptsitzung 09.11.2026 (Stift): Bild-Stück des Stift-Werkzeugs (html-to-image, nur beim Rückmelden nachgeladen), 109 Dateien. Hauptsitzung 09.11.2026 (Stimme): neue Stimme bringt zwei Dateien (engine-*.js Sprach-KI-Bibliothek, voice-ort.js Rechenkern-Lader), 108 Dateien. Davor 09.11.2026: Grammatik-Buch (106). 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege, 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
+    "files": 112,
+    "filesFreigabe": "Hauptsitzung 13.11.2026 (Politur P2): Tempo neuer Wörter teilt die Zeit-Messwerte (pace-*.js, Wörter-Runde und Heute), 112 Dateien. Hauptsitzung 10.11.2026 (WT Schritt 1): Hauptsitzung 10.11.2026 (WT Schritt 1): geprüfte Wortliste und Satzschlüssel-Stück (111 Dateien). Hauptsitzung 09.11.2026 (Stift): Bild-Stück des Stift-Werkzeugs (html-to-image, nur beim Rückmelden nachgeladen), 109 Dateien. Hauptsitzung 09.11.2026 (Stimme): neue Stimme bringt zwei Dateien (engine-*.js Sprach-KI-Bibliothek, voice-ort.js Rechenkern-Lader), 108 Dateien. Davor 09.11.2026: Grammatik-Buch (106). 05.11.2026: Fokus 2.0 – Modul Anwenden und F2-Belege, 19 nachgeladene Stücke (101 Dateien). Harte Grenze je Veröffentlichung bleibt 255 (scripts/limits.mjs); Zusammenlegen der Stücke ist ein eigenes Paket (Ziel wieder < 100).",
     "binEinzeln": {
       "raw-atlas": {
         "bytes": 560000,
