@@ -69,8 +69,11 @@ export function LearnHub() {
   // Politur P3: mit der neuen Grammatik ist das Fokus-Thema „jetzt dran“ (Karte „Du bist hier“); der Themen-Weg hebt dasselbe Thema hervor.
   const focus = useFocusView();
   const docs = useLive((s) => s.collections.grammar);
-  const highlight = focus?.topic ?? cursor?.topic ?? null;
-  const testTopic = focus?.topic ?? null;
+  // Großpaket G5: mit der neuen Grammatik EIN Themen-Weg (Als Nächstes / Sitzt schon) statt Kapitelliste und zweiter Themenliste (M12);
+  // die Fehlersätze stehen mit Überschrift an EINEM Ort. Schalter aus (`gcfg.mod = 0`): der bisherige Aufbau, unverändert (Hervorhebung = Kapitel-Cursor).
+  const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
+  const highlight = (gmod ? focus?.topic : null) ?? cursor?.topic ?? null;
+  const testTopic = gmod ? (focus?.topic ?? null) : null;
   const testReady = !!testTopic && topicTestReady(testTopic, docs ?? undefined);
   /** Themen-Test zum Fokus-Thema (6 Aufgaben ohne Hilfe): bestanden heißt, das Thema ist abgeschlossen. */
   const startTest = () => {
@@ -82,9 +85,6 @@ export function LearnHub() {
     else api.blur();
     go({ name: 'grammarSession', mode: 'topic', topic: testTopic });
   };
-  // Großpaket G5: mit der neuen Grammatik EIN Themen-Weg (Als Nächstes / Sitzt schon) statt Kapitelliste und zweiter Themenliste (M12);
-  // die Fehlersätze stehen mit Überschrift an EINEM Ort. Schalter aus (`gcfg.mod = 0`): der bisherige Aufbau, unverändert.
-  const gmod = useLive((s) => grammarModuleOn(s.docs['app/profile']));
 
   const lookupRows = (
     <>

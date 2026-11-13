@@ -13,7 +13,11 @@ import { Button } from '../../ui/Button';
 // Die Lösung steht genau einmal: im Satz (Lücke, Auswahl, korrigierter Satz) – die Karte wiederholt sie nicht. Claude fragt nur, wer tippt;
 // von selbst läuft nichts (kein Warten, keine springende Karte). Keine Kästen in der Karte: am Außendisplay (375×700) bleibt „Weiter“ im Bild.
 
-export type MistakeAgain = { en: string; answer: string; accepted: readonly string[] };
+/** Links der Wege-Zeile: ohne eigenen negativen Rand (den trägt die Zeile). */
+const LINK = { margin: 0 } as const;
+
+/** `hint`: Stichwort der Vorrat-Aufgabe (z. B. „(sign)“), wenn es nicht im Satz steht. */
+export type MistakeAgain = { en: string; answer: string; accepted: readonly string[]; hint?: string | null };
 
 export type MistakeCardProps = {
   taskKey: string;
@@ -84,42 +88,46 @@ export function MistakeCard({ taskKey, why, spot, vars, form, rule, again = null
           {t('dxAskFailed')}
         </p>
       )}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1" data-testid="mistake-actions">
+      {/* Die Links tragen 44 px Tippfläche mit negativem Rand (`.lx-vu-link`); beim Umbruch (Außendisplay) überlappten die Zeilen. Deshalb sitzt
+          der negative Rand an der Zeile, die Links selbst haben keinen: eine Zeile bleibt so flach wie bisher, umbrochene Zeilen überlappen nicht. */}
+      <div className="flex flex-wrap items-center gap-x-5" style={{ margin: '-8px 0 -10px' }} data-testid="mistake-actions">
         {again && (
-          <button type="button" className="lx-vu-link" aria-expanded={open === 'again'} onClick={() => setOpen(open === 'again' ? null : 'again')} data-testid="mistake-again-open">
+          <button type="button" className="lx-vu-link" style={LINK} aria-expanded={open === 'again'} onClick={() => setOpen(open === 'again' ? null : 'again')} data-testid="mistake-again-open">
             {t('dxAgain')}
           </button>
         )}
         {rule && (
-          <button type="button" className="lx-vu-link" aria-expanded={open === 'rule'} onClick={() => setOpen(open === 'rule' ? null : 'rule')} data-testid="mistake-rule">
+          <button type="button" className="lx-vu-link" style={LINK} aria-expanded={open === 'rule'} onClick={() => setOpen(open === 'rule' ? null : 'rule')} data-testid="mistake-rule">
             {open === 'rule' ? t('dxRuleHide') : t('dxRule')}
           </button>
         )}
         {aiOn && !asked && (
-          <button type="button" className="lx-vu-link" onClick={askNow} data-testid="mistake-ask">
+          <button type="button" className="lx-vu-link" style={LINK} onClick={askNow} data-testid="mistake-ask">
             {t('dxAskClaude')}
           </button>
         )}
         {onUnfair && (
-          <button type="button" className="lx-vu-link text-muted" onClick={onUnfair} data-testid="gm-unfair">
+          <button type="button" className="lx-vu-link text-muted" style={LINK} onClick={onUnfair} data-testid="gm-unfair">
             {t('gmUnfairLink')}
           </button>
         )}
       </div>
-      {open === 'again' && again && <AgainGap key={`${taskKey}:${again.en}`} en={again.en} answer={again.answer} accepted={again.accepted} />}
+      {open === 'again' && again && <AgainGap key={`${taskKey}:${again.en}`} en={again.en} answer={again.answer} accepted={again.accepted} hint={again.hint ?? null} />}
       {open === 'rule' && rule}
     </div>
   );
 }
 
 /** „Gleich nochmal“: der neue Satz mit einem Eingabefeld in der Lücke; geprüft wird nur hier, gebucht wird nichts. */
-function AgainGap({ en, answer, accepted }: MistakeAgain) {
+function AgainGap({ en, answer, accepted, hint }: MistakeAgain) {
   const { t } = useT();
   const [value, setValue] = useState('');
   const [done, setDone] = useState<null | boolean>(null);
   const m = /_{3,}(\s*\([^)]*\))?/.exec(en);
   const before = m ? en.slice(0, m.index) : en;
-  const cue = m?.[1]?.trim() ?? '';
+  const own = m?.[1]?.trim() ?? '';
+  // Stichwort aus der Aufgabe (eigenes Feld `hint`), in Klammern wie im Satz.
+  const cue = own || (hint ? (hint.startsWith('(') ? hint : `(${hint})`) : '');
   const after = m ? en.slice(m.index + m[0].length) : '';
   const check = (): void => {
     if (done === null && value.trim()) setDone(sameGapAnswer(value, answer, accepted));

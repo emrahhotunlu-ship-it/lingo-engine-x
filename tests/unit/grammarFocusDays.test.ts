@@ -5,7 +5,7 @@ import { focusDay, focusPick, readFocus, FOCUS_DONE_REST_DAYS } from '../../src/
 import { focusOfDay, SAFE_TOPIC_P } from '../../src/domain/grammar/focusOfDay';
 import { selectFocusRound } from '../../src/domain/grammar/focusRound';
 import { freezeGrammarDay } from '../../src/domain/grammar/path';
-import { patternsOf } from '../../src/domain/grammar/patterns';
+import { patternOf, patternsOf } from '../../src/domain/grammar/patterns';
 import { allSeedTasks } from '../../src/domain/grammar/tasks';
 import { grammarWrite } from '../../src/domain/grammar/write';
 import type { GrammarAnswer, GrammarTask } from '../../src/domain/learn/types';
@@ -204,7 +204,7 @@ describe('„Gleich nochmal“ aus dem Vorrat (againFromPool)', () => {
       if (!a) continue;
       const src = allSeedTasks().find((x) => x.prompt === a.en)!;
       expect(src.topic).toBe('conditionals');
-      expect(src.pat).toBe(t.pat);
+      expect(src.pat ?? patternOf(src)?.id).toBe(t.pat);
       expect(src.type).toBe('gap');
       expect(src.key).not.toBe(t.key);
       expect(a.en.match(/_{3,}/g)).toHaveLength(1);
@@ -222,7 +222,21 @@ describe('„Gleich nochmal“ aus dem Vorrat (againFromPool)', () => {
     const other = againFromPool(t, { seen: new Set([firstKey]) })!;
     expect(other.en).not.toBe(first.en);
     expect(againFromPool(t, { avoid: new Set([firstKey]) })!.en).not.toBe(first.en);
-    expect(againFromPool({ ...t, pat: undefined })).toBeNull();
+    expect(againFromPool({ key: 'x', topic: 'kein-thema', prompt: 'We ___ (go) home.' })).toBeNull();
+  });
+
+  it('Aufgaben ohne `pat` (Pool, Tagesauftrag): das erkannte Muster zählt (Zuordnungstabelle/Signalwörter), nie ein fremdes', () => {
+    let found = 0;
+    for (const t of cn.filter((x) => x.type === 'gap')) {
+      const bare = { key: `pool:${t.key}`, topic: t.topic, prompt: t.prompt, answer: t.answer, src: 'pool' };
+      const p = patternOf(bare);
+      const a = againFromPool(bare);
+      if (!p || !a) continue;
+      found++;
+      const src = allSeedTasks().find((x) => x.prompt === a.en)!;
+      expect(src.pat ?? patternOf(src)?.id).toBe(p.id);
+    }
+    expect(found).toBeGreaterThan(10);
   });
 });
 
