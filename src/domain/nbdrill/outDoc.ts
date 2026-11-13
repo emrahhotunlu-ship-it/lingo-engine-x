@@ -23,7 +23,9 @@ export type OutKind = 'colloc' | 'transform' | 'wordform' | 'register' | 'phrasa
   // Lernplattform 3.0 (KI-Tutor): Satz-Klinik (P46) und Wochen-Mail (P47).
   | 'clinic' | 'c1mail'
   // Fokus 2.0 F3 Anwenden (additiv, tolerant gelesen: `outSchema.k` ist ein freier Text): Antwort auf eine Mail, Zusammenfassung, festgelegte Kernpunkte eines Artikels.
-  | 'reply' | 'summary' | 'sumkp';
+  | 'reply' | 'summary' | 'sumkp'
+  // Großpaket P „Politur“ P4 (additiv, tolerant gelesen): Brücken-Satz (ein Wort + ein Muster im eigenen Satz); `theme` = Wort-Kennung, `ms` = Schreibzeit.
+  | 'bridge';
 
 export type OutItem = {
   id: string;
