@@ -4,7 +4,7 @@ import { capDays, EV_F_MAX } from './cap';
 import { corridor } from './fuzz';
 import { easyAllowed, FORM_SPEC, gradeOf, isFreeGood, isVoid, speedOf } from './grade';
 import { formLevel, fqOf, updateFq } from './forms';
-import { isLeechCount } from './leech';
+import { isProblem } from './leech';
 import { canAscend, descend } from './ladder';
 import { book, newTrack, retr } from './tracks';
 import type { Form, FormStats, Grade, Lex, LexKind, Outcome, Track, TrackKey, VocabCfg } from './types';
@@ -90,7 +90,7 @@ export type PlanCtx = {
 };
 
 /**
- * Ereignisse für die Oberfläche (V3): `leech` neue Darstellung (M14) · `partner` Kollokationsfehler am Einzelwort, Partner-Lexem markieren (M56) ·
+ * Ereignisse für die Oberfläche (V3): `leech` neue Darstellung (M14; Politur P2: bei jedem Vergessen ab dem 3.) · `partner` Kollokationsfehler am Einzelwort, Partner-Lexem markieren (M56) ·
  * `unfair` an die Inhaltsprüfung (M43) · `bound` Signal satzgebunden (M57) · `grammar` Beugungsfehler mit Grammatik-Hinweis (M40c).
  */
 export type AnswerEvent = 'leech' | 'partner' | 'unfair' | 'bound' | 'grammar';
@@ -291,9 +291,10 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (wrong && !second && !(a.flags && a.flags & FLAG.override)) {
       lex.lv = descend(lex.lv);
       lex.lc += 1;
-      if (isLeechCount(lex.lc)) {
+      if (isProblem(lex.lc)) {
         events.push('leech');
-        // Leech eines falschen Freundes: Kontrast statt Werkstatt (leech.ts `leechTreatment`).
+        // Leech/Problemwort mit Falle (falscher Freund oder Paar): Kontrast statt Werkstatt (leech.ts `leechTreatment`). Politur P2: schon ab dem
+        // 3. Vergessen (vorher erst ab dem 6.), damit die Gegenüberstellung kommt, solange die Verwechslung frisch ist.
         if (ctx.ff && !lex.ct) lex.ct = { at: a.t, w: null };
       }
       // Nach einem Fehler gelten die Belege der höheren Stufe nicht mehr: Deckel und Schwelle passen zur neuen Stufe (Befund 7).

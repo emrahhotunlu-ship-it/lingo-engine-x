@@ -2,7 +2,7 @@ import type { Src } from './sources';
 import { addDays, dayKey, dayStartOf, daysBetween } from '../shared';
 import { type Avail, pickForm } from './forms';
 import { retr } from './tracks';
-import { LEECH_AT, PAIR_HOLD_DAYS } from './leech';
+import { isProblem, LEECH_AT, PAIR_HOLD_DAYS, PROBLEM_REST_DAYS } from './leech';
 import { DEFAULT_FORM_MS, type Form, type FormStats, type Lex, type TrackKey } from './types';
 
 // Wörter-Modul V1: Bestand im Speicher (Lexeme mit Geschwistern) und erwartete Last je Tag in MINUTEN (M11, M63).
@@ -81,13 +81,20 @@ export class Catalog {
   /**
    * Paar-Regel (M14): Ein Lexem ruht, solange sein englischer Verwechslungspartner ein Problemwort ist (≥ 6 Fehler, mehr als dieses)
    * und noch nicht 7 Tage hält. Falsche Freunde ruhen nie (sie bekommen eine Kontrastkarte).
+   * Politur P2 (Problemwort ab dem 3. Vergessen): mit `day` ruht der Partner auch, wenn das Problemwort (≥ 3 Fehler, mehr als dieses) zuletzt
+   * vergessen wurde und das höchstens `PROBLEM_REST_DAYS` Lerntage her ist. „Zuletzt vergessen“ steht im Termin selbst: nach einem Fehler kommt
+   * das Wort morgen wieder (Abstand 1 Tag, planner.ts `limitDue`); eine richtige Antwort danach legt den Termin weiter und beendet die Pause.
    */
-  rests(path: string): boolean {
+  rests(path: string, day?: string): boolean {
     const it = this.byPath.get(path);
     if (!it?.lex.pair || it.trap === 'ff') return false;
     const p = this.byPath.get(it.lex.pair);
-    if (!p || p.trap === 'ff' || p.lex.lc < LEECH_AT || p.lex.lc <= it.lex.lc) return false;
-    return (p.lex.b ?? p.lex.u).s < PAIR_HOLD_DAYS;
+    if (!p || p.trap === 'ff' || p.lex.lc <= it.lex.lc) return false;
+    const tr = p.lex.b ?? p.lex.u;
+    if (p.lex.lc >= LEECH_AT && tr.s < PAIR_HOLD_DAYS) return true;
+    if (!day || !isProblem(p.lex.lc) || tr.sd > 1 || tr.last === null) return false;
+    const ago = daysBetween(dayKey(tr.last), day);
+    return ago >= 0 && ago <= PROBLEM_REST_DAYS;
   }
   /** Lexeme, deren Kernwort `path` ist (Wortpartner, M56: beim Kollokationsfehler am Einzelwort markieren). */
   partnersOf(path: string): string[] {

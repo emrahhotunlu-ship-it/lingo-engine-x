@@ -4,6 +4,15 @@
 //  - Falsche Freunde (*eventually* ≠ eventuell) ruhen nie; sie bekommen statt der Pause eine Kontrastkarte Deutsch ↔ Englisch.
 
 export const LEECH_AT = 6;
+/**
+ * Politur P2 (Prüfbericht S7, Emrah E3): Ab dem 3. Vergessen gilt ein Wort als Problemwort. Dann kommt es in einem Satz, den es noch nie
+ * hatte; hat es eine Falle (falscher Freund, Paar) oder wurde es mit einem anderen Wort verwechselt, folgt in der nächsten Runde die
+ * Gegenüberstellung (Kontrastkarte); ein echter Verwechslungspartner ruht 2 Tage, damit das Problemwort allein neu sitzen kann.
+ */
+export const PROBLEM_AT = 3;
+/** So viele Lerntage nach dem Vergessen des Problemworts ruht sein Verwechslungspartner (Tag des Fehlers zählt nicht mit). */
+export const PROBLEM_REST_DAYS = 2;
+export const isProblem = (lc: number): boolean => lc >= PROBLEM_AT;
 export const LEECH_EVERY = 4;
 export const PAIR_HOLD_DAYS = 7;
 export const isLeechCount = (lc: number): boolean => lc >= LEECH_AT && (lc - LEECH_AT) % LEECH_EVERY === 0;
