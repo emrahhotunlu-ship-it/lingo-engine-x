@@ -19,8 +19,8 @@ test.describe('Handy 390', () => {
     // Seit UX-Neuanfang C hat der Schritt „Wörter“ feste Minuten aus dem Tagesziel (Emrah 02.11.2026: „mindestens 10 Minuten und immer 40 %“),
     // er wächst nicht mehr mit dem Rückstand; die Zeile sagt in Worten, dass die Wörter zur Zeit passen (keine Kartenzahl mehr auf Heute).
     await expect(first.getByTestId('reason')).toContainText('passend zu deiner Zeit');
-    // Tagesziel 25 → Wörter 15 Minuten (60 %, Großpaket Buch + Tempo 08.11.2026), auch bei Rückstand.
-    await expect(first).toHaveAttribute('data-min', '15');
+    // Tagesziel 25 → Wörter 18 Minuten (70 % aufgerundet, Tagesaufteilung 70/20/10 vom 12.11.2026), auch bei Rückstand.
+    await expect(first).toHaveAttribute('data-min', '18');
 
     await openTab(page, 'vocab');
     await expect(page.getByTestId('ws-behind')).toHaveAttribute('data-n', '40');
@@ -68,28 +68,34 @@ test.describe('Desktop', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
   test('Pflichtrunde mit 130 überfälligen Karten: danach „Weitere Runde · n fällig“ startet eine freie Runde', async ({ page }) => {
-    const { patch } = ankiPatch(130);
+    const N = 130;
+    const { patch } = ankiPatch(N);
     const { errors } = await boot(page, {
       migrated: true,
       now: TUE_9,
-      fake: { patch: { ...WEEK_W39, ...patch, 'app/profile': { newPerDay: 0 }, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } },
+      // Tagesziel 20 → Wörter 14 Min. (70/20/10): das Zeitbudget reicht sicher nicht für alle 130 Karten (der Testbestand hat nur ~136 Wörter).
+      fake: { patch: { ...WEEK_W39, ...patch, 'app/profile': { newPerDay: 0, goalMin: 20 }, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } },
     });
     await screen(page, 'today');
     await openTab(page, 'vocab');
     await page.getByTestId('ws-review').click();
     await screen(page, 'trainer');
-    for (let i = 0; i < 170 && !(await page.getByTestId('summary').isVisible()); i++) {
+    let reviewed = 0;
+    for (let i = 0; i < 400 && !(await page.getByTestId('summary').isVisible()); i++) {
       const flip = page.getByTestId('flip');
       if (!(await flip.isVisible())) continue;
       const card = (await flip.getAttribute('data-card')) ?? '';
       await page.keyboard.press(' ');
       await page.keyboard.press('3');
       await expect(page.locator(`[data-testid="flip"][data-card="${card}"]`)).toHaveCount(0);
+      reviewed++;
     }
     await expect(page.getByTestId('summary')).toBeVisible();
-    // Budget 900 s (Wörter 15 Min. bei Tagesziel 25) + höchstens 50 % = 1350 s: 112 Karten zu je 12 s – nicht alle 130.
-    // UX-Prüfung W6 (07.10.2026): ohne doppeltes „Noch“.
-    await expect(page.getByTestId('session-end-more')).toContainText(/Weitere Runde · 1[89] fällig/);
+    // Zeitbudget der Pflichtrunde (Wörter 14 Min. bei Tagesziel 20, mit Rückstand-Zuschlag) reicht nicht für alle 130 Karten;
+    // der Knopf nennt genau den Rest. UX-Prüfung W6 (07.10.2026): ohne doppeltes „Noch“.
+    expect(reviewed).toBeGreaterThan(60);
+    expect(reviewed).toBeLessThan(N);
+    await expect(page.getByTestId('session-end-more')).toHaveText(new RegExp(`Weitere Runde · ${N - reviewed} fällig`));
     await page.getByTestId('session-end-more').click();
     await screen(page, 'trainer');
     await expect(page.getByTestId('flip')).toBeVisible();
