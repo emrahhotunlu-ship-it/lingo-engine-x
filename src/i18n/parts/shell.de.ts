@@ -20,6 +20,7 @@ export const shellDe = {
   shReadSub: 'Artikel von heute und Kurse',
   shSpeakSub: 'Rollenspiel und Einwand-Training',
   penOpen: 'Rückmelden',
+  penMenu: 'Rückmeldung mit Stift',
   penHint: 'Tippe auf eine Stelle oder zieh einen Rahmen.',
   penShooting: 'Bild wird erstellt …',
   penTitle: 'Rückmeldung',

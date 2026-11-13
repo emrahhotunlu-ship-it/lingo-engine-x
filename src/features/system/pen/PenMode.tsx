@@ -6,16 +6,27 @@ import { Chips } from '../../../ui/Chips';
 import { Sheet } from '../../../ui/Sheet';
 import { toast } from '../../../ui/Toast';
 import { logWarn } from '../../../platform/diagnostics';
+import { useNav } from '../../../app/nav';
+import { useBand } from '../../../ui/exercise/bandStore';
 import { elementPath, savePen, screenInfo, type PenKind, type PenScreen, type PenTarget } from './save';
 import type { Box } from './shot';
 
-// Stift-Werkzeug (Emrah 09.11.2026, ersetzt das Kommentarfeld von claude.ai): Griff am rechten Rand auf jedem Bildschirm.
-// Tipp → Auswahl-Modus: eine Stelle antippen ODER einen Rahmen ziehen. Danach Bild der Stelle (im Browser gezeichnet),
+// Stift-Werkzeug (Emrah 09.11.2026, ersetzt das Kommentarfeld von claude.ai).
+// Start → Auswahl-Modus: eine Stelle antippen ODER einen Rahmen ziehen. Danach Bild der Stelle (im Browser gezeichnet),
 // Art (Funktion / Design / Fehler) und Text; „Senden“ speichert alles als `pen/<id>`, Claude Code liest es dort.
 // Im Auswahl-Modus löst kein Tipp etwas in der App aus.
+// Politur P1 (13.11.2026, Entscheidung E4 A): Der Start liegt nicht mehr als Knopf über der Karte.
+//  · In Übungen mit Menü „…“ (Übungsleiste): Punkt „Rückmeldung mit Stift“ dort (`useBand.pen`, `ui/exercise/ExerciseMenu`).
+//  · Sonst (Reiter, Seiten, Blätter, Übungen ohne Menü): schmale Lasche am rechten Rand. Sie zeigt in Ruhe nur einen 12-px-Streifen im
+//    Seitenrand (unter 480 px Breite unten über der Reiterleiste, nie auf Kartenhöhe über Inhalt), hat 44 × 56 px Tippfläche und fährt
+//    erst auf Tipp aus („Rückmelden“); der zweite Tipp startet. Mit der Maus fährt sie beim Darüberfahren aus, ein Klick startet.
 
 const UI = '[data-lx-pen-ui]';
 const SLOP = 10;
+/** So lange bleibt die ausgefahrene Lasche stehen, wenn nichts passiert. */
+const TAB_OPEN_MS = 4000;
+/** Start aus dem Menü: erst, wenn das Menü-Blatt zu ist (sonst träfe der erste Tipp das ausgleitende Blatt). */
+const MENU_START_MS = 260;
 
 type Phase = 'idle' | 'pick' | 'shoot' | 'form';
 type Draft = { box: Box; el: Element | null; img: string | null; screen: PenScreen; target: PenTarget };
@@ -31,6 +42,36 @@ export function PenMode() {
   const [tool, setTool] = useState('lx:pen-shot');
   const down = useRef<{ x: number; y: number; el: Element | null } | null>(null);
   const swallowNext = useRef(false);
+  // In Übungen mit Menü „…“ steht der Stift im Menü; die Lasche bleibt überall sonst.
+  const exercise = useNav((s) => s.overlay !== null);
+  const menuHosts = useBand((s) => s.hosts);
+  const inMenu = exercise && menuHosts > 0;
+  const [out, setOut] = useState(false);
+  useEffect(() => {
+    let timer = 0;
+    const start = (): void => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setPhase((p) => (p === 'idle' ? 'pick' : p)), MENU_START_MS);
+    };
+    useBand.setState({ pen: start });
+    return () => {
+      window.clearTimeout(timer);
+      if (useBand.getState().pen === start) useBand.setState({ pen: null });
+    };
+  }, []);
+  // Ausgefahrene Lasche: fährt nach kurzer Zeit oder beim Tipp daneben wieder ein.
+  useEffect(() => {
+    if (!out) return;
+    const timer = window.setTimeout(() => setOut(false), TAB_OPEN_MS);
+    const onDown = (e: PointerEvent): void => {
+      if (!(e.target instanceof Element && e.target.closest('[data-testid="pen-open"]'))) setOut(false);
+    };
+    window.addEventListener('pointerdown', onDown, true);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('pointerdown', onDown, true);
+    };
+  }, [out]);
 
   async function capture(el: Element | null, box: Box) {
     const screen = screenInfo();
@@ -169,9 +210,36 @@ export function PenMode() {
   return (
     <div data-lx-pen-ui="" data-uncommentable="">
       {/* tabIndex -1: der Griff liegt über allem und darf die Tab-Reihenfolge offener Fenster nicht verlassen (settings.spec „Tab bleibt im Dialog“). */}
-      {phase === 'idle' && (
-        <button type="button" tabIndex={-1} className="lx-cmode-btn" onClick={() => setPhase('pick')} aria-label={t('penOpen')} title={t('penOpen')} data-testid="pen-open">
-          <Icon name="pen" size={20} />
+      {phase === 'idle' && !inMenu && (
+        <button
+          type="button"
+          tabIndex={-1}
+          className="lx-pen-tab"
+          data-out={out || undefined}
+          aria-expanded={out}
+          aria-label={t('penOpen')}
+          title={t('penOpen')}
+          data-testid="pen-open"
+          // Maus: Darüberfahren fährt die Lasche aus, der Klick startet. Finger: erster Tipp fährt aus, zweiter startet.
+          onPointerEnter={(e) => {
+            if (e.pointerType === 'mouse') setOut(true);
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType === 'mouse') setOut(false);
+          }}
+          onClick={(e) => {
+            if (!out && (e.nativeEvent as Partial<PointerEvent>).pointerType !== 'mouse') {
+              setOut(true);
+              return;
+            }
+            setOut(false);
+            setPhase('pick');
+          }}
+        >
+          <span className="lx-pen-tab-face">
+            <Icon name="pen" size={18} />
+            <span>{t('penOpen')}</span>
+          </span>
         </button>
       )}
       {(phase === 'pick' || phase === 'shoot') && (

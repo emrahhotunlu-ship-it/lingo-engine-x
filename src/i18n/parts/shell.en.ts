@@ -22,6 +22,7 @@ export const shellEn: Record<keyof typeof shellDe, string> = {
   shReadSub: 'Today’s article and courses',
   shSpeakSub: 'Role-play and objection training',
   penOpen: 'Give feedback',
+  penMenu: 'Feedback with the pen',
   penHint: 'Tap a spot or drag a frame.',
   penShooting: 'Taking a picture…',
   penTitle: 'Feedback',

@@ -26,9 +26,14 @@ export type BandState = {
   explain: (() => void) | null;
   /** Klausur des Grammatik-Buchs (Emrah 08.11.2026): ohne Claude – „Frag Claude“, Begleiter und Übersetzer stehen nicht in der Leiste. */
   noAi?: boolean;
+  /**
+   * Stift-Werkzeug (Politur P1, Entscheidung E4 A): In Übungen steht es als Punkt „Rückmeldung mit Stift“ im Menü „…“ statt als schwebender
+   * Knopf über der Karte. `features/system/pen/PenMode` meldet hier den Start an; `null` = kein Stift (z. B. Tests ohne Rahmen).
+   */
+  pen: (() => void) | null;
 };
 
-export const useBand = create<BandState>(() => ({ items: {}, why: null, hosts: 0, shells: 0, menuOpen: false, moreOpen: false, keysOpen: false, explain: null }));
+export const useBand = create<BandState>(() => ({ items: {}, why: null, hosts: 0, shells: 0, menuOpen: false, moreOpen: false, keysOpen: false, explain: null, pen: null }));
 
 export const setBandMenuOpen = (open: boolean): void => useBand.setState({ menuOpen: open });
 export const setBandMoreOpen = (open: boolean): void => useBand.setState({ moreOpen: open });
