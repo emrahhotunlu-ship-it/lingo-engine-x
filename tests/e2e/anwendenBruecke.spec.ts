@@ -60,7 +60,8 @@ function emrah(profile: Doc = {}, plan: Doc = twPlan()): Record<string, Doc> {
 
 const S1_BAD = 'If we had called them earlier, we would have achieved our sales target zzpat.';
 const S1_FIXED = 'If we had called them earlier, we would have achieved our sales target.';
-const S2_OK = 'Their buyer told me that the delay would affect the budget.';
+// Eigener Satzanfang (nicht der vorgeschlagene „Their buyer told me that …“): nur dann zählt das Muster als „frei verwendet“ (Prüfbefund 13.11.2026).
+const S2_OK = 'The client’s buyer told me that the delay would affect the budget.';
 
 test.describe('Handy 375 × 700 (Außendisplay)', () => {
   test.use({ viewport: { width: 375, height: 700 }, hasTouch: true });
