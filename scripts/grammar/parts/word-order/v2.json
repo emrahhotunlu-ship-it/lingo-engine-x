@@ -1019,8 +1019,8 @@
   "a": "Hardly had we started when the power failed.",
   "b": "We had barely started when the power failed.",
   "q": {
-   "de": "Welche Sätze sagen: Der Strom fiel kurz nach dem Start aus?",
-   "en": "Which sentences say the power failed soon after we started?"
+   "de": "Welcher Satz sagt: Kaum hatten wir angefangen, fiel der Strom aus?",
+   "en": "Which sentence says: we had only just started when the power failed?"
   },
   "answer": "both",
   "why": {

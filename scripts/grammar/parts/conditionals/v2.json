@@ -64,11 +64,13 @@
   "accepted": [
    "when a build fails",
    "when the build breaks",
-   "when builds fail"
+   "when builds fail",
+   "when a build has failed",
+   "when the build has failed"
   ],
   "words": [
    3,
-   4
+   5
   ],
   "why": {
    "ok": {
@@ -1076,7 +1078,21 @@
      "en": "The error is “don't approve”: unless already carries the not."
     }
    ]
-  }
+  },
+  "errAlt": [
+   {
+    "err": [
+     3,
+     3
+    ],
+    "answer": "if",
+    "accepted": [],
+    "why": {
+     "de": "Auch richtig: Mit if bleibt die Verneinung stehen (if … don’t approve). unless heißt schon „wenn nicht“.",
+     "en": "Also correct: with if the negation stays (if … don’t approve). Unless already means “if not”."
+    }
+   }
+  ]
  },
  {
   "id": "cn-i-f2",

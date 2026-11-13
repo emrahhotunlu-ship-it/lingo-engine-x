@@ -1364,7 +1364,9 @@
    "hint": "(lead)",
    "answer": "had led",
    "accepted": [
-    "'d led"
+    "'d led",
+    "had ever led",
+    "'d ever led"
    ],
    "why": {
     "ok": {
@@ -1784,7 +1786,8 @@
    "answer": "didn't use to",
    "accepted": [
     "did not use to",
-    "used not to"
+    "used not to",
+    "never used to"
    ],
    "why": {
     "ok": {
@@ -6724,7 +6727,8 @@
    "hint": "(deliver)",
    "answer": "will be delivered",
    "accepted": [
-    "are going to be delivered"
+    "are going to be delivered",
+    "will have been delivered"
    ],
    "why": {
     "ok": {

@@ -534,7 +534,10 @@
   ],
   "answer": "had won",
   "fixed": "It was the first time our team had won a client in Asia.",
-  "accepted": [],
+  "accepted": [
+   "had ever won",
+   "won"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won. Locker hört man auch „won“, im Business-Text: had won.",
@@ -833,7 +836,9 @@
   ],
   "answer": "had signed",
   "fixed": "On Friday the client told us they had signed the contract two days earlier.",
-  "accepted": [],
+  "accepted": [
+   "signed"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: Berichtet wird aus der Vergangenheit, und „two days earlier“ liegt davor: had + Partizip.",
@@ -1035,8 +1040,8 @@
   "a": "We had barely started when the call dropped.",
   "b": "Hardly had we started when the call dropped.",
   "q": {
-   "de": "Sagen beide Sätze dasselbe?",
-   "en": "Do both sentences say the same thing?"
+   "de": "Welcher Satz sagt: Kaum hatten wir angefangen, brach der Anruf ab?",
+   "en": "Which sentence says: we had only just started when the call dropped?"
   },
   "answer": "both",
   "why": {

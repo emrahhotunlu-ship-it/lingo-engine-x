@@ -1067,7 +1067,21 @@
      "en": "The error is “dealt”: with is missing."
     }
    ]
-  }
+  },
+  "errAlt": [
+   {
+    "err": [
+     4,
+     4
+    ],
+    "answer": "with quickly",
+    "accepted": [],
+    "why": {
+     "de": "Auch richtig: Das fehlende with steht zwischen dealt und quickly: dealt with quickly.",
+     "en": "Also correct: the missing with goes between dealt and quickly: dealt with quickly."
+    }
+   }
+  ]
  },
  {
   "id": "pv-pre-f3",

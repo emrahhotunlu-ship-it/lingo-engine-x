@@ -3139,7 +3139,11 @@
    ],
    "answer": "What",
    "fixed": "What we need most is a clear owner for each task.",
-   "accepted": [],
+   "accepted": [
+    "The thing",
+    "The one thing",
+    "All"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: „Which“ am Anfang. Richtig: What we need most is …",
@@ -6885,7 +6889,29 @@
    "hint": {
     "de": "Das Partizip am Anfang passt nicht zum Subjekt.",
     "en": "The participle at the start does not match the subject."
-   }
+   },
+   "errAlt": [
+    {
+     "err": [
+      3,
+      8
+     ],
+     "answer": "I thought the figures were wrong.",
+     "accepted": [
+      "I found the figures wrong.",
+      "I felt the figures were wrong.",
+      "I noticed the figures were wrong.",
+      "I thought the figures seemed wrong.",
+      "I had the impression the figures were wrong.",
+      "I found that the figures seemed wrong.",
+      "I thought the figures looked wrong."
+     ],
+     "why": {
+      "de": "Auch richtig: Jetzt ist „I“ das Subjekt. „Reading the report“ gehört zu dir, denn du liest den Bericht.",
+      "en": "Also correct: now “I” is the subject, so “Reading the report” refers to you, the one reading."
+     }
+    }
+   ]
   },
   {
    "id": "cp-sub-f3",
@@ -8680,7 +8706,14 @@
     "longer than we'd planned",
     "much longer than we planned",
     "longer than we originally planned",
-    "longer than planned"
+    "longer than planned",
+    "longer than was planned",
+    "longer than had been planned",
+    "an hour longer than planned",
+    "one hour longer than planned",
+    "more time than planned",
+    "more time than we planned",
+    "longer than we planned for"
    ],
    "words": [
     3,
@@ -11348,11 +11381,13 @@
    "accepted": [
     "when a build fails",
     "when the build breaks",
-    "when builds fail"
+    "when builds fail",
+    "when a build has failed",
+    "when the build has failed"
    ],
    "words": [
     3,
-    4
+    5
    ],
    "why": {
     "ok": {
@@ -12387,7 +12422,21 @@
      }
     ]
    },
-   "topic": "conditionals"
+   "topic": "conditionals",
+   "errAlt": [
+    {
+     "err": [
+      3,
+      3
+     ],
+     "answer": "if",
+     "accepted": [],
+     "why": {
+      "de": "Auch richtig: Mit if bleibt die Verneinung stehen (if … don’t approve). unless heißt schon „wenn nicht“.",
+      "en": "Also correct: with if the negation stays (if … don’t approve). Unless already means “if not”."
+     }
+    }
+   ]
   },
   {
    "id": "cn-i-f2",
@@ -17033,7 +17082,9 @@
     "'ll be sitting in",
     "'m going to be attending",
     "will be participating in",
-    "'ll be participating in"
+    "'ll be participating in",
+    "will be at",
+    "'ll be at"
    ],
    "words": [
     3,
@@ -17145,7 +17196,8 @@
    "accepted": [
     "is sitting",
     "is going to be sitting",
-    "will sit"
+    "will sit",
+    "will be"
    ],
    "why": {
     "ok": {
@@ -17394,7 +17446,21 @@
      }
     ]
    },
-   "topic": "future-perf-cont"
+   "topic": "future-perf-cont",
+   "errAlt": [
+    {
+     "err": [
+      2,
+      3
+     ],
+     "answer": "need",
+     "accepted": [],
+     "why": {
+      "de": "Auch richtig: Ohne be ist es das einfache Futur (Will you need …?). Höflicher klingt: Will you be needing …?",
+      "en": "Also correct: without be it is the simple future (Will you need …?). More polite: Will you be needing …?"
+     }
+    }
+   ]
   },
   {
    "id": "fpc-cp-f2",
@@ -17482,7 +17548,9 @@
     "will have dispatched",
     "'ll have dispatched",
     "will have submitted",
-    "'ll have submitted"
+    "'ll have submitted",
+    "will already have sent",
+    "'ll already have sent"
    ],
    "words": [
     3,
@@ -17695,7 +17763,9 @@
    ],
    "answer": "will have launched",
    "fixed": "By next quarter, our competitors will have launched their own product.",
-   "accepted": [],
+   "accepted": [
+    "will launch"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: „will launched“. Nach will steht die Grundform; es fehlt have.",
@@ -20406,7 +20476,10 @@
    "fixed": "Although the project was late, the client stayed loyal.",
    "accepted": [
     "Even though",
-    "Though"
+    "Though",
+    "Despite the fact that",
+    "In spite of the fact that",
+    "While"
    ],
    "why": {
     "ok": {
@@ -20427,7 +20500,23 @@
      }
     ]
    },
-   "topic": "linkers"
+   "topic": "linkers",
+   "errAlt": [
+    {
+     "err": [
+      3,
+      3
+     ],
+     "answer": "being",
+     "accepted": [
+      "having been"
+     ],
+     "why": {
+      "de": "Auch richtig: Nach despite steht keine gebeugte Verbform, mit being passt es (despite the project being late).",
+      "en": "Also correct: despite takes no finite verb; with being it works (despite the project being late)."
+     }
+    }
+   ]
   },
   {
    "id": "lk-dsp-f2",
@@ -22106,7 +22195,11 @@
     "were a little more flexible",
     "were less strict",
     "were more relaxed",
-    "were flexible"
+    "were flexible",
+    "were not so inflexible",
+    "were less inflexible",
+    "were not so rigid",
+    "were not so strict"
    ],
    "words": [
     2,
@@ -22146,7 +22239,8 @@
    "frame": "I wish I ___ the proposal without legal review.",
    "answer": "hadn't sent",
    "accepted": [
-    "had not sent"
+    "had not sent",
+    "had never sent"
    ],
    "words": [
     2,
@@ -22932,7 +23026,8 @@
    "answer": "Had we tested",
    "accepted": [
     "Had we only tested",
-    "Had we properly tested"
+    "Had we properly tested",
+    "If we had tested"
    ],
    "words": [
     3,
@@ -23043,11 +23138,13 @@
    "prompt": "If had the client signed the contract in May, we would be live by now.",
    "err": [
     0,
-    1
+    3
    ],
-   "answer": "Had",
+   "answer": "Had the client",
    "fixed": "Had the client signed the contract in May, we would be live by now.",
-   "accepted": [],
+   "accepted": [
+    "If the client had"
+   ],
    "why": {
     "ok": {
      "de": "Entweder If the client had signed oder Had the client signed: nie beides zugleich.",
@@ -24278,7 +24375,10 @@
     "can not be",
     "couldn't be",
     "could not be",
-    "must not be"
+    "must not be",
+    "can't possibly be",
+    "cannot possibly be",
+    "couldn't possibly be"
    ],
    "words": [
     2,
@@ -24428,7 +24528,8 @@
    "answer": "might be waiting",
    "accepted": [
     "might still be waiting",
-    "might well be waiting"
+    "might well be waiting",
+    "might still be"
    ],
    "words": [
     3,
@@ -24874,7 +24975,11 @@
     "couldn't have received",
     "couldn't have gotten",
     "could not have received",
-    "could not have gotten"
+    "could not have gotten",
+    "can't have got",
+    "cannot have got",
+    "couldn't have got",
+    "could not have got"
    ],
    "words": [
     3,
@@ -25025,7 +25130,9 @@
    "accepted": [
     "might not have received",
     "might have not gotten",
-    "might have not received"
+    "might have not received",
+    "might not have got",
+    "might have not got"
    ],
    "words": [
     4,
@@ -27908,7 +28015,21 @@
      }
     ]
    },
-   "topic": "passive"
+   "topic": "passive",
+   "errAlt": [
+    {
+     "err": [
+      4,
+      4
+     ],
+     "answer": "with quickly",
+     "accepted": [],
+     "why": {
+      "de": "Auch richtig: Das fehlende with steht zwischen dealt und quickly: dealt with quickly.",
+      "en": "Also correct: the missing with goes between dealt and quickly: dealt with quickly."
+     }
+    }
+   ]
   },
   {
    "id": "pv-pre-f3",
@@ -29589,7 +29710,10 @@
    ],
    "answer": "had won",
    "fixed": "It was the first time our team had won a client in Asia.",
-   "accepted": [],
+   "accepted": [
+    "had ever won",
+    "won"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won. Locker hört man auch „won“, im Business-Text: had won.",
@@ -29896,7 +30020,9 @@
    ],
    "answer": "had signed",
    "fixed": "On Friday the client told us they had signed the contract two days earlier.",
-   "accepted": [],
+   "accepted": [
+    "signed"
+   ],
    "why": {
     "ok": {
      "de": "Der Fehler: Berichtet wird aus der Vergangenheit, und „two days earlier“ liegt davor: had + Partizip.",
@@ -30104,8 +30230,8 @@
    "a": "We had barely started when the call dropped.",
    "b": "Hardly had we started when the call dropped.",
    "q": {
-    "de": "Sagen beide Sätze dasselbe?",
-    "en": "Do both sentences say the same thing?"
+    "de": "Welcher Satz sagt: Kaum hatten wir angefangen, brach der Anruf ab?",
+    "en": "Which sentence says: we had only just started when the call dropped?"
    },
    "answer": "both",
    "why": {
@@ -41874,7 +42000,11 @@
     "he had not seen",
     "that he hadn't seen",
     "that he had not seen",
-    "he'd not seen"
+    "he'd not seen",
+    "he hasn't seen",
+    "he has not seen",
+    "that he hasn't seen",
+    "that he has not seen"
    ],
    "words": [
     3,
@@ -41882,17 +42012,10 @@
    ],
    "why": {
     "ok": {
-     "de": "Nach „told“ rückt „I haven't seen“ zurück: he hadn't seen. Auch he had not seen geht.",
-     "en": "After “told”, “I haven't seen” moves back: he hadn't seen. He had not seen also works."
+     "de": "Nach „told“ rückt „I haven’t seen“ meist zurück: he hadn’t seen. Gilt es noch, geht auch he hasn’t seen.",
+     "en": "After “told”, “I haven’t seen” usually moves back: he hadn’t seen. If it is still true, he hasn’t seen works too."
     },
     "wrong": [
-     {
-      "if": [
-       "hasn't"
-      ],
-      "de": "hasn't seen geht im Gespräch, wenn es noch gilt. Hier üben wir das Zurückrücken nach told: hadn't seen.",
-      "en": "hasn't seen works in conversation if it is still true. Here we practice the backshift after told: hadn't seen."
-     },
      {
       "if": [
        "haven't"
@@ -45252,7 +45375,10 @@
     "grew used to working",
     "had grown used to working",
     "became used to working",
-    "had become used to working"
+    "had become used to working",
+    "was used to working",
+    "had got used to working",
+    "'d got used to working"
    ],
    "words": [
     4,
@@ -47824,8 +47950,8 @@
    "a": "Hardly had we started when the power failed.",
    "b": "We had barely started when the power failed.",
    "q": {
-    "de": "Welche Sätze sagen: Der Strom fiel kurz nach dem Start aus?",
-    "en": "Which sentences say the power failed soon after we started?"
+    "de": "Welcher Satz sagt: Kaum hatten wir angefangen, fiel der Strom aus?",
+    "en": "Which sentence says: we had only just started when the power failed?"
    },
    "answer": "both",
    "why": {

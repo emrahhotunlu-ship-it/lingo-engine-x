@@ -19,7 +19,9 @@
    "'ll be sitting in",
    "'m going to be attending",
    "will be participating in",
-   "'ll be participating in"
+   "'ll be participating in",
+   "will be at",
+   "'ll be at"
   ],
   "words": [
    3,
@@ -129,7 +131,8 @@
   "accepted": [
    "is sitting",
    "is going to be sitting",
-   "will sit"
+   "will sit",
+   "will be"
   ],
   "why": {
    "ok": {
@@ -371,7 +374,21 @@
      "en": "The error is “need”: after be the verb needs -ing here."
     }
    ]
-  }
+  },
+  "errAlt": [
+   {
+    "err": [
+     2,
+     3
+    ],
+    "answer": "need",
+    "accepted": [],
+    "why": {
+     "de": "Auch richtig: Ohne be ist es das einfache Futur (Will you need …?). Höflicher klingt: Will you be needing …?",
+     "en": "Also correct: without be it is the simple future (Will you need …?). More polite: Will you be needing …?"
+    }
+   }
+  ]
  },
  {
   "id": "fpc-cp-f2",
@@ -457,7 +474,9 @@
    "will have dispatched",
    "'ll have dispatched",
    "will have submitted",
-   "'ll have submitted"
+   "'ll have submitted",
+   "will already have sent",
+   "'ll already have sent"
   ],
   "words": [
    3,
@@ -665,7 +684,9 @@
   ],
   "answer": "will have launched",
   "fixed": "By next quarter, our competitors will have launched their own product.",
-  "accepted": [],
+  "accepted": [
+   "will launch"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: „will launched“. Nach will steht die Grundform; es fehlt have.",

@@ -237,7 +237,11 @@
    "were a little more flexible",
    "were less strict",
    "were more relaxed",
-   "were flexible"
+   "were flexible",
+   "were not so inflexible",
+   "were less inflexible",
+   "were not so rigid",
+   "were not so strict"
   ],
   "words": [
    2,
@@ -276,7 +280,8 @@
   "frame": "I wish I ___ the proposal without legal review.",
   "answer": "hadn't sent",
   "accepted": [
-   "had not sent"
+   "had not sent",
+   "had never sent"
   ],
   "words": [
    2,
@@ -1038,7 +1043,8 @@
   "answer": "Had we tested",
   "accepted": [
    "Had we only tested",
-   "Had we properly tested"
+   "Had we properly tested",
+   "If we had tested"
   ],
   "words": [
    3,
@@ -1146,11 +1152,13 @@
   "prompt": "If had the client signed the contract in May, we would be live by now.",
   "err": [
    0,
-   1
+   3
   ],
-  "answer": "Had",
+  "answer": "Had the client",
   "fixed": "Had the client signed the contract in May, we would be live by now.",
-  "accepted": [],
+  "accepted": [
+   "If the client had"
+  ],
   "why": {
    "ok": {
     "de": "Entweder If the client had signed oder Had the client signed: nie beides zugleich.",

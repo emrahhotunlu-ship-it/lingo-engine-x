@@ -674,7 +674,10 @@
   "fixed": "Although the project was late, the client stayed loyal.",
   "accepted": [
    "Even though",
-   "Though"
+   "Though",
+   "Despite the fact that",
+   "In spite of the fact that",
+   "While"
   ],
   "why": {
    "ok": {
@@ -694,7 +697,23 @@
      "en": "The error is at Despite: subject and verb follow it, not a noun."
     }
    ]
-  }
+  },
+  "errAlt": [
+   {
+    "err": [
+     3,
+     3
+    ],
+    "answer": "being",
+    "accepted": [
+     "having been"
+    ],
+    "why": {
+     "de": "Auch richtig: Nach despite steht keine gebeugte Verbform, mit being passt es (despite the project being late).",
+     "en": "Also correct: despite takes no finite verb; with being it works (despite the project being late)."
+    }
+   }
+  ]
  },
  {
   "id": "lk-dsp-f2",

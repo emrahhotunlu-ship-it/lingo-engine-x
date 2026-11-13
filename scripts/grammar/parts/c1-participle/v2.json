@@ -822,7 +822,29 @@
   "hint": {
    "de": "Das Partizip am Anfang passt nicht zum Subjekt.",
    "en": "The participle at the start does not match the subject."
-  }
+  },
+  "errAlt": [
+   {
+    "err": [
+     3,
+     8
+    ],
+    "answer": "I thought the figures were wrong.",
+    "accepted": [
+     "I found the figures wrong.",
+     "I felt the figures were wrong.",
+     "I noticed the figures were wrong.",
+     "I thought the figures seemed wrong.",
+     "I had the impression the figures were wrong.",
+     "I found that the figures seemed wrong.",
+     "I thought the figures looked wrong."
+    ],
+    "why": {
+     "de": "Auch richtig: Jetzt ist „I“ das Subjekt. „Reading the report“ gehört zu dir, denn du liest den Bericht.",
+     "en": "Also correct: now “I” is the subject, so “Reading the report” refers to you, the one reading."
+    }
+   }
+  ]
  },
  {
   "id": "cp-sub-f3",

@@ -49,7 +49,11 @@
    "he had not seen",
    "that he hadn't seen",
    "that he had not seen",
-   "he'd not seen"
+   "he'd not seen",
+   "he hasn't seen",
+   "he has not seen",
+   "that he hasn't seen",
+   "that he has not seen"
   ],
   "words": [
    3,
@@ -57,17 +61,10 @@
   ],
   "why": {
    "ok": {
-    "de": "Nach „told“ rückt „I haven't seen“ zurück: he hadn't seen. Auch he had not seen geht.",
-    "en": "After “told”, “I haven't seen” moves back: he hadn't seen. He had not seen also works."
+    "de": "Nach „told“ rückt „I haven’t seen“ meist zurück: he hadn’t seen. Gilt es noch, geht auch he hasn’t seen.",
+    "en": "After “told”, “I haven’t seen” usually moves back: he hadn’t seen. If it is still true, he hasn’t seen works too."
    },
    "wrong": [
-    {
-     "if": [
-      "hasn't"
-     ],
-     "de": "hasn't seen geht im Gespräch, wenn es noch gilt. Hier üben wir das Zurückrücken nach told: hadn't seen.",
-     "en": "hasn't seen works in conversation if it is still true. Here we practice the backshift after told: hadn't seen."
-    },
     {
      "if": [
       "haven't"

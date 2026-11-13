@@ -32,6 +32,14 @@
   {
    "key": "past-perfect|theclientsaidtheysignedthecontractthedaybefore",
    "reason": "Gegenlesung 19.10.2026: bad ist im US-Englisch normal; ersetzt durch pp-rep-f3b."
+  },
+  {
+   "key": "emph-plus|thisriskwemustavoidingatallcosts",
+   "reason": "Qualitätstor P3 13.11.2026 (ep-f8): Der Fehler (Verbform nach must) gehört nicht zum Muster ep.object-front."
+  },
+  {
+   "key": "emph-plus|muchasiliketheplanicannotsupportit",
+   "reason": "Qualitätstor P3 13.11.2026 (ep-m2): ohne Lernwert – die Antwort steht wörtlich im Satz („cannot support“), „much as“ muss man dafür nicht verstehen."
   }
  ]
 }

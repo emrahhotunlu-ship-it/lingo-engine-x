@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { checkFind, checkKwt, checkMeaning, fixSpan, guessOptions } from '../../src/domain/grammar/check';
 import { bktStep } from '../../src/domain/grammar/bkt';
 import { asFind, fromV2, allSeedTasks } from '../../src/domain/grammar/tasks';
-import { v2Tasks } from '../../src/domain/grammar/patterns';
+import { isRetired, v2Tasks } from '../../src/domain/grammar/patterns';
 import type { GrammarTask } from '../../src/domain/learn/types';
 
 const tasks = (type: GrammarTask['type']): GrammarTask[] => allSeedTasks().filter((t) => t.type === type && t.src === 'seed' && t.ref === 'content/grammar/tasks-v2');
@@ -13,7 +13,10 @@ describe('neue Aufgabenarten (Lernplattform 2.0 §4.7)', () => {
     expect(n).toBeGreaterThan(0);
     const mapped = v2Tasks().map(fromV2);
     expect(mapped.every((t) => t && t.pat && t.why && t.x)).toBe(true);
-    expect(tasks('kwt').length + tasks('find').length + tasks('meaning').length).toBe(n);
+    // Stillgelegte Aufgaben (`retired.json`, Qualitätstor P3) bleiben in der Datei, werden aber nie gestellt.
+    const retired = v2Tasks().filter((t) => isRetired(t.type === 'kwt' ? t.frame : t.type === 'find' ? t.prompt : t.a, t.topic)).length;
+    expect(retired).toBeGreaterThan(0);
+    expect(tasks('kwt').length + tasks('find').length + tasks('meaning').length).toBe(n - retired);
   });
 
   it('kwt: Schlüsselwort muss ausgeschrieben dastehen, Lösung und accepted gelten', () => {

@@ -129,7 +129,11 @@
   ],
   "answer": "What",
   "fixed": "What we need most is a clear owner for each task.",
-  "accepted": [],
+  "accepted": [
+   "The thing",
+   "The one thing",
+   "All"
+  ],
   "why": {
    "ok": {
     "de": "Der Fehler: „Which“ am Anfang. Richtig: What we need most is …",
