@@ -4,8 +4,8 @@ import type { LearnRun, LearnView } from './learnRun';
 import { HearButton, speakNewOn, useAutoSpeak } from './hear';
 
 // Politur P2 (Emrah 13.11.2026, E3; Prüfbericht S5): Vorkarte „Kennst du es schon?“ vor der Einführung eines neuen Einzelworts. Sie zeigt nur
-// das Wort (mit Ton, Lautschrift und Wortart), nie die Bedeutung. „Ja, prüf mich“ → die Probe (Bedeutung ohne Hilfe; richtig → Stufe 3,
-// Kontrolle in 7 Tagen), „Nein, neu“ → die Einführungskarte. Ein Weg statt des alten Knopfs „Kenne ich schon“ auf der Einführung.
+// das Wort (mit Ton, Lautschrift und Wortart), nie die Bedeutung. „Ja, prüf mich“ → die Probe (Bedeutung ohne Hilfe; richtig → Stufe 2,
+// Benutzen-Kontrolle am nächsten Lerntag), „Nein, neu“ → die Einführungskarte. Ein Weg statt des alten Knopfs „Kenne ich schon“ auf der Einführung.
 // Pflichtfragen an fester Stelle (Kap. 2 Nr. 4): Was tun (Aufgabe), wozu (offen darüber), was richtig ist und warum zeigt die Probe danach.
 
 type CardView = Extract<LearnView, { k: 'card' }>;

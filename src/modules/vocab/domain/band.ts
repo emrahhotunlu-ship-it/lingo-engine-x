@@ -28,7 +28,9 @@ export type Next =
   /** gebuchter Termin (`day` = dayKey des gespeicherten `due`), Zusatz knapp/neuer Satz. */
   | { kind: 'date'; day: string; extra: 'tight' | 'newSent' | null }
   /** Übung ohne Planwirkung, `day` = nächster Termin. */
-  | { kind: 'practice'; day: string | null };
+  | { kind: 'practice'; day: string | null }
+  /** Probe „Kennst du es schon?“ nicht bestanden: die Einführung folgt sofort („Jetzt lernst du es neu.“, Prüfbefund 13.11.2026). */
+  | { kind: 'relearn' };
 
 export type Band = {
   verdict: Verdict;

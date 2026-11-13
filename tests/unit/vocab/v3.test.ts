@@ -4,6 +4,7 @@ import { exDeKey as appExDeKey } from '../../../src/domain/srs/exDeKey';
 import { bandOf, nextOf, stepMode, verdictOf, whyOf } from '../../../src/modules/vocab/domain/band';
 import { chooseSentence, exDeKey, headWords, locateGap, posOf, sbGateOn, sentencesOf, targetOf, tipOf, usableSentences } from '../../../src/modules/vocab/domain/card';
 import { type CheckDict, checkAnswer } from '../../../src/modules/vocab/domain/check';
+import { dueOn } from '../../../src/modules/vocab/domain/catalog';
 import { letterDiff } from '../../../src/modules/vocab/domain/diff';
 import { type Answer, applyAnswer, emptyLex, FLAG, introduce, mayVoid, type PlanCtx, PROBE_CHECK_DAYS, probeKnown, STEP_LATER, STEP_OVERRIDE } from '../../../src/modules/vocab/domain/planner';
 import { DEFAULT_CFG, type Lex } from '../../../src/modules/vocab/domain/types';
@@ -244,11 +245,21 @@ describe('Planer: Einspruch und Probe (learning-scientist V3)', () => {
     const l = introduce(emptyLex('w', 'edge', T0), T0);
     expect(mayVoid(l, T0 + 60_000)).toBe(false);
   });
-  it('„Kenne ich schon“ bestanden: Gut, Benutzen fest in 7 Tagen, Stufe 3, kein Beleg', () => {
+  it('„Kenne ich schon“ bestanden (Prüfbefund 13.11.2026): nur Verstehen „Gut“, Stufe 2, Benutzen neu und morgen fällig als Lücke im Satz, kein Beleg', () => {
     const r = probeKnown(emptyLex('w', 'edge', T0), T0, ctx());
     expect(r.grade).toBe(3);
-    expect(r.lex.b!.due).toBe(dayStartOf(addDays(dayKey(T0), PROBE_CHECK_DAYS)));
-    expect(r.lex.lv).toBe(3);
+    expect(r.booked).toEqual(['u']);
+    expect(r.track).toBe(0);
+    expect(r.lex.u.reps).toBe(1);
+    expect(r.lex.u.due).toBeGreaterThan(T0);
+    expect(r.lex.b!.reps).toBe(0);
+    expect(r.lex.b!.last).toBeNull();
+    expect(PROBE_CHECK_DAYS).toBe(1);
+    expect(r.lex.b!.due).toBe(dayStartOf(addDays(dayKey(T0), 1)));
+    expect(r.lex.lv).toBe(2);
+    // Am nächsten Lerntag: Benutzen fällig, als Lücke frei im Satz (Stufe 2).
+    expect(dueOn(r.lex, addDays(dayKey(T0), 1))).toEqual({ track: 'b', form: 'gap' });
+    expect(dueOn(r.lex, dayKey(T0))).toBeNull();
     expect(r.lex.ev.f).toEqual([]);
     expect(r.lex.intro).toBe(dayKey(T0));
     expect(r.lex.step).toBeNull();

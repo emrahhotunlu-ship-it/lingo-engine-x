@@ -947,6 +947,8 @@ function nextText(t: T, next: Next, dateShort: (ms: number) => string): string {
       return `${label(next.day)}${next.extra === 'tight' ? ` · ${t('vmNextTight')}` : next.extra === 'newSent' ? ` · ${t('vmNextNewSent')}` : ''}`;
     case 'practice':
       return next.day ? t('vmNextPracticeDate', { date: label(next.day) }) : t('vmNextPractice');
+    case 'relearn':
+      return t('vmNextRelearn');
   }
 }
 
@@ -957,6 +959,8 @@ function nextText(t: T, next: Next, dateShort: (ms: number) => string): string {
 function comeBack(t: T, b: Band, dateShort: (ms: number) => string): string {
   const next = b.next;
   if (next.kind === 'practice') return `${t('vmNextTitle')}: ${nextText(t, next, dateShort)}`;
+  // Probe nicht bestanden: ein eigener Satz statt „Kommt gleich noch einmal …“ – die Einführung kommt sofort.
+  if (next.kind === 'relearn') return t('vmNextRelearn');
   const today = dayKey(Date.now());
   let when: string;
   if (next.kind === 'step') {

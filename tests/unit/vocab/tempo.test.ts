@@ -5,7 +5,7 @@ import { addDays, dayKey } from '../../../src/domain/date';
 import { readTempo, writeTempo } from '../../../src/modules/vocab/data/tempo';
 import { vmodTempoWriteSchema } from '../../../src/modules/vocab/data/schemas';
 import { FLAG } from '../../../src/modules/vocab/domain/planner';
-import { nextDayRecall, nextTempo, startTempo, TEMPO_DAYS, TEMPO_MAX, TEMPO_MIN, TEMPO_MIN_N, tempoText, type Tempo } from '../../../src/modules/vocab/domain/tempo';
+import { nextDayRecall, nextTempo, startTempo, TEMPO_CAL_DAYS, TEMPO_DAYS, tempoWindowFrom, TEMPO_MAX, TEMPO_MIN, TEMPO_MIN_N, tempoText, type Tempo } from '../../../src/modules/vocab/domain/tempo';
 import { tuple, vlogDocId, vlogKey, type VlogTuple } from '../../../src/modules/vocab/domain/vlog';
 import type { Form, Outcome } from '../../../src/modules/vocab/domain/types';
 import { emptyLex } from '../../../src/modules/vocab/domain/planner';
@@ -84,6 +84,29 @@ describe('Quote „am Folgetag frei richtig“ (nextDayRecall)', () => {
     expect(nextDayRecall([tp(t, 'vocab/ext', 'intro', 0, 'dunno'), tp(t + D, 'vocab/ext', 'gap', 3, 'ok', { flags: FLAG.ext }), tp(t + D + 5000, 'vocab/ext', 'gap', 3, 'ok')], T0).all).toBe(1);
     expect(TEMPO_DAYS).toBe(14);
   });
+  it('Fenster über echte Lerntage (Prüfbefund 13.11.2026): 14 Tage mit Antworten, sonst 21 Kalendertage; Mindestzahl 20 Abrufe', () => {
+    expect(TEMPO_MIN_N).toBe(20);
+    expect(TEMPO_CAL_DAYS).toBe(21);
+    // Nur jeden zweiten Kalendertag gelernt: 14 Lerntage reichen 28 Kalendertage zurück – alle zählen, auch ältere als 14 Kalendertage.
+    const sparse: VlogTuple[] = [];
+    for (let k = 1; k <= 14; k++) {
+      const at = T0 - 2 * k * D;
+      for (let i = 0; i < 2; i++) {
+        const path = `vocab/s${k}-${i}`;
+        sparse.push(tp(at + i * 1000, path, 'intro', 0, 'dunno'));
+        sparse.push(tp(at + 2 * D + i * 1000 + 500, path, 'gap', 3, 'ok')); // nächster Lerntag (Ruhetag dazwischen): zählt als Folgetag
+      }
+    }
+    // (Die Abrufe zu k = 1 liegen kurz nach „jetzt“ und zählen noch nicht: Lerntage −2 … −28.)
+    expect(tempoWindowFrom(sparse, T0)).toBe(addDays(dayKey(T0), -28));
+    // 26 Folgetag-Abrufe im Fenster (mit 14 Kalendertagen wären es nur 12 gewesen, unter der Mindestzahl).
+    expect(nextDayRecall(sparse, T0)).toMatchObject({ ok: 26, all: 26 });
+    // Wenige Lerntage im Verlauf: 21 Kalendertage zurück.
+    expect(tempoWindowFrom(history(3, 2, 2), T0)).toBe(addDays(dayKey(T0), -(TEMPO_CAL_DAYS - 1)));
+    // Belege von außen machen keinen Lerntag.
+    const ext = Array.from({ length: 20 }, (_, i) => tp(T0 - i * D, `vocab/x${i}`, 'gap', 3, 'ok', { flags: FLAG.ext }));
+    expect(tempoWindowFrom(ext, T0)).toBe(addDays(dayKey(T0), -(TEMPO_CAL_DAYS - 1)));
+  });
   it('„Gestern“: der jüngste Lerntag vor heute mit Folgetag-Abrufen', () => {
     const rec = nextDayRecall(history(3, 10, 6), T0);
     expect(rec).toMatchObject({ ok: 18, all: 30 });
@@ -108,7 +131,7 @@ describe('Regel des Tempos (nextTempo)', () => {
     expect(nextTempo(prev(6), 10, { ok: 34, all: 40 }, true, day)).toMatchObject({ n: 6, why: 'backlog' });
     expect(nextTempo(prev(10), 10, { ok: 40, all: 40 }, false, day)).toMatchObject({ n: 10, why: 'top' });
   });
-  it('< 70 % → −2 (nie unter 3); dazwischen bleibt es; unter 40 Abrufen keine Änderung', () => {
+  it('< 70 % → −2 (nie unter 3); dazwischen bleibt es; unter 20 Abrufen keine Änderung', () => {
     expect(nextTempo(prev(8), 10, { ok: 27, all: 40 }, false, day)).toMatchObject({ n: 6, why: 'down' });
     expect(nextTempo(prev(4), 10, { ok: 20, all: 40 }, true, day)).toMatchObject({ n: 3, why: 'down' });
     expect(nextTempo(prev(TEMPO_MIN), 10, { ok: 20, all: 40 }, false, day)).toMatchObject({ n: 3, why: 'floor' });

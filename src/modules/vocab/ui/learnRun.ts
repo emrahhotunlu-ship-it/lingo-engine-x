@@ -18,7 +18,7 @@ import { nextDayRecall, nextTempo, type Recall, startTempo, type Tempo, type Tem
 export type { TempoInfo } from '../domain/tempo';
 import type { VlogTuple } from '../domain/vlog';
 import type { Check, CheckDict } from '../domain/check';
-import { buildDayPlan, type DayPlan, newCostMs } from '../domain/day';
+import { buildDayPlan, type DayPlan, MIN_NEW, newCostMs } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
 import { answerOf, audioOf, type CardModel, cardOf, headOf, type Draft, evaluate, type Frozen, isDraft, isHear, planCtxOf, previewOf, resultOf, textOf } from '../domain/flow';
 import { type Answer, type AnswerResult, FLAG, introduce } from '../domain/planner';
@@ -1054,7 +1054,7 @@ export class LearnRun {
 
   /**
    * „Kennst du es schon?“ → „Ja, prüf mich“ (Politur P2, Prüfbericht S5): die Probe ohne Satz – das Wort steht da, gefragt ist die deutsche
-   * Bedeutung. Richtig → Stufe 3, Kontrolle in 7 Tagen (planner.ts `probeKnown`); falsch → die normale Einführung (`next`).
+   * Bedeutung. Richtig → Verstehen „Gut“, Stufe 2, Benutzen-Kontrolle am nächsten Lerntag (planner.ts `probeKnown`); falsch → die normale Einführung (`next`).
    */
   probe(): void {
     const v = this.view;
@@ -1348,11 +1348,15 @@ export class LearnRun {
       this.next();
       return;
     }
-    // Einführung und Probe: kein Einspruch (es gibt keine Note), danach „gleich noch einmal“.
-    const fixed: Band =
-      p.kind === 'answer'
-        ? band
-        : { ...band, knewIt: false, alsoRight: false, ...(p.kind === 'probe' && p.check.outcome !== 'ok' ? { next: { kind: 'step', mode: 'same', thenTomorrow: false } } : {}) };
+    // Einführung und Probe: kein Einspruch (es gibt keine Note). Probe nicht bestanden: „Jetzt lernst du es neu.“ (die Einführung folgt
+    // sofort, Prüfbefund 13.11.2026); bestanden: das Wort kommt am nächsten Lerntag als Lücke im Satz wieder (Benutzen-Kontrolle).
+    const probeNext = (): Partial<Band> => {
+      if (p.kind !== 'probe') return {};
+      if (p.check.outcome !== 'ok') return { next: { kind: 'relearn' } };
+      const due = p.result.lex.b?.due;
+      return due !== undefined ? { next: { kind: 'date', day: dayKey(due), extra: null } } : {};
+    };
+    const fixed: Band = p.kind === 'answer' ? band : { ...band, knewIt: false, alsoRight: false, ...probeNext() };
     this.set({ k: 'band', card: p.card, task: p.task, kind: p.kind, n, left, given: p.given, check: p.check, band: fixed, choice: p.choice });
   }
 
@@ -1511,7 +1515,11 @@ export class LearnRun {
     const left = this.cfg.min * 60_000 - (this.priorMs + this.activeMs);
     if (this.plannedLeftMs() * this.paceFactor() <= left + HOLD_SLACK_MS) return;
     this.heldFresh = true;
-    this.run.holdFresh();
+    // Die Untergrenze neuer Wörter je Lerntag bleibt eingestreut (Prüfbefund BLOCKER 13.11.2026): nur was darüber hinausgeht, rückt nach hinten.
+    const plan = this.dayPlan;
+    const cat = this.cat;
+    const introduced = plan.plan.filter((e) => e[1] === 'n' && cat?.get(e[0])?.lex.intro === plan.d).length;
+    this.run.holdFresh(Math.max(0, MIN_NEW - introduced));
   }
 
   /** Wörter-Zeit um: Plan auf das Erledigte kürzen (Heute zeigt „erledigt“), Messwerte speichern, Abschluss zeigen. */

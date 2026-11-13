@@ -56,9 +56,9 @@ const recall = (tr: Track | null, now: number): number => {
 /** Realistische Zeiten je Karte (ms): Lesen, Tippen, Rückmeldung lesen; ein Fehler kostet Nachtippen und Lesen. */
 const MS = { know: 3_000, intro: 22_000, pick: 8_000, again: 6_000, probe: 9_000, gapStep: 15_000, gap: 15_000, nosent: 14_000, meaning: 10_000, wrongExtra: 15_000 };
 
-type DayOut = { day: number; minutes: number; reviewShare: number; fresh: number; reviews: number; overdue: number; capped: number };
+type DayOut = { day: number; minutes: number; reviewShare: number; fresh: number; reviews: number; overdue: number; capped: number; tempo: number | null; why: string | null };
 
-async function simulate(seed: number): Promise<DayOut[]> {
+async function simulate(seed: number, o: { good?: number; profile?: Doc } = {}): Promise<DayOut[]> {
   const rand = rng(seed);
   const h = createMemoryDb({ seed: Object.fromEntries(words(300)) });
   const read = (path: string): Promise<Doc | null> => Promise.resolve(h.dump()[path] ?? null);
@@ -71,7 +71,7 @@ async function simulate(seed: number): Promise<DayOut[]> {
     const run = new LearnRun({ deps: { writer: createWriter(h.db), device: 'phone' }, dict, lang: () => 'de', drafts, readDay: () => read('vmod/day'), read, now: () => now, audio: () => true });
     const docs = Object.entries(h.dump()).filter(([p]) => p.startsWith('vocab/'));
     const lexOf = new Map(docs.map(([p, x]) => [p, x.lex as Lex]));
-    await run.start({ kind: 'pflicht', docs, profile: PROFILE, schema: SCHEMA });
+    await run.start({ kind: 'pflicht', docs, profile: o.profile ?? PROFILE, schema: SCHEMA });
     let reviewMs = 0;
     let freshMs = 0;
     const fresh = new Set<string>();
@@ -125,7 +125,9 @@ async function simulate(seed: number): Promise<DayOut[]> {
       }
       const lex = lexOf.get(path);
       const meaning = asksMeaning(v.card.mode);
-      const p = v.task.step === 1 ? 0.9 : v.task.step === 2 ? 0.8 : v.task.step === 3 ? 0.85 : meaning ? Math.min(0.98, recall(lex?.u ?? null, now) + 0.05) : recall(lex?.b ?? lex?.u ?? null, now);
+      const base0 = v.task.step === 1 ? 0.9 : v.task.step === 2 ? 0.8 : v.task.step === 3 ? 0.85 : meaning ? Math.min(0.98, recall(lex?.u ?? null, now) + 0.05) : recall(lex?.b ?? lex?.u ?? null, now);
+      // `good`: ein Lerner, der fast alles behält (gute Quote) – jede Abfrage mindestens mit dieser Wahrscheinlichkeit richtig.
+      const p = o.good ? Math.max(o.good, base0) : base0;
       const ok = rand() < p;
       const base = v.task.step === 1 ? MS.gapStep : meaning ? MS.meaning : v.card.mode === 'nosent' ? MS.nosent : MS.gap;
       spend(base + (ok ? 0 : MS.wrongExtra));
@@ -146,7 +148,8 @@ async function simulate(seed: number): Promise<DayOut[]> {
       if ((l.b && l.b.due < endOfDay) || l.u.due < endOfDay) overdue++;
     }
     const total = reviewMs + freshMs;
-    out.push({ day: d + 1, minutes: Math.round(total / 6000) / 10, reviewShare: total ? Math.round((reviewMs / total) * 100) : 0, fresh: fresh.size, reviews: reviews.size, overdue, capped });
+    const tempoDoc = h.dump()['vmod/tempo'] as { n?: number; why?: string } | undefined;
+    out.push({ day: d + 1, minutes: Math.round(total / 6000) / 10, reviewShare: total ? Math.round((reviewMs / total) * 100) : 0, fresh: fresh.size, reviews: reviews.size, overdue, capped, tempo: tempoDoc?.n ?? null, why: tempoDoc?.why ?? null });
   }
   return out;
 }
@@ -167,6 +170,7 @@ describe('Simulation 30 Lerntage (Politur P2)', () => {
       gekapptJeTag: days.map((x) => x.capped),
       anteilJeTag: days.map((x) => x.reviewShare),
       minutenJeTag: days.map((x) => x.minutes),
+      tempoJeTag: days.map((x) => `${x.tempo ?? '-'}${x.why ? `:${x.why}` : ''}`),
     };
     // Ergebnis für den Bericht (vitest --silent=false): eine Zeile.
     console.warn(`P2-SIM ${JSON.stringify(summary)}`);
@@ -181,5 +185,15 @@ describe('Simulation 30 Lerntage (Politur P2)', () => {
     }
     // Rückstand am Tagesende bleibt begrenzt (kein Anwachsen ohne Ende).
     expect(days.at(-1)!.overdue).toBeLessThanOrEqual(15);
+  }, 120_000);
+
+  it('Gute Quote: das Tempo neuer Wörter ändert sich innerhalb von 30 Tagen mindestens einmal (Prüfbefund 13.11.2026)', async () => {
+    // Einstellung 5 neue je Tag (Start-Tempo 5, Luft nach oben); mit 40 Abrufen und 14 Kalendertagen blieb es bei 2–5 neuen je Tag für immer.
+    const days = await simulate(20261114, { good: 0.95, profile: { ...PROFILE, newPerDay: 5 } });
+    const tempos = days.map((x) => x.tempo);
+    console.warn(`P2-SIM-TEMPO ${JSON.stringify(days.map((x) => `${x.tempo ?? '-'}:${x.why ?? '-'}:${x.fresh}`))}`);
+    const changed = days.some((x) => x.why === 'up' || x.why === 'down');
+    expect(changed, JSON.stringify(tempos)).toBe(true);
+    expect(new Set(tempos.filter((n) => n !== null)).size).toBeGreaterThan(1);
   }, 120_000);
 });

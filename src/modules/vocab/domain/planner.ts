@@ -130,8 +130,11 @@ export function mayVoid(lex: Lex, t: number): boolean {
 }
 
 /**
- * „Kenne ich schon“ mit bestandener Probe (V3, learning-scientist Befund 6): Benutzen bucht „Gut“, Termin fest in 7 Tagen (Kontrolle), Stufe 3,
- * kein Beleg-Tag; Verstehen bucht „Gut“ mit normalem Termin. Nur für ein noch nicht eingeführtes Lexem.
+ * „Kenne ich schon“ mit bestandener Probe. Die Probe fragt die deutsche Bedeutung ab (Verstehen, Politur P2), also bucht sie nur VERSTEHEN
+ * (Prüfbefund learning-scientist 13.11.2026; vorher „Gut“ auf beiden Spuren und Stufe 3 – das Benutzen war nie geprüft):
+ *  - Verstehen: „Gut“ mit normalem Termin · Stufe 2 · Einführungstag und Buchungstag heute, kein Lernschritt.
+ *  - Benutzen: neue Spur (noch keine Buchung), fällig am nächsten Lerntag – dort kommt das Wort als Lücke frei im Satz (Stufe 2, `forms.ts`).
+ * Nur für ein noch nicht eingeführtes Lexem. Der Verlauf bucht die Probe als Form `meaning` (data/store.ts `writeProbe`).
  */
 export function probeKnown(lex0: Lex, t: number, ctx: PlanCtx): AnswerResult {
   const lex = clone(lex0);
@@ -140,20 +143,20 @@ export function probeKnown(lex0: Lex, t: number, ctx: PlanCtx): AnswerResult {
   lex.intro = day;
   lex.day = day;
   lex.step = null;
-  lex.lv = Math.max(lex.lv, 3);
-  const rb = book(newTrack(t), 3, t, retOf(lex0, ctx.cfg));
-  lex.b = rb.track;
+  lex.lv = Math.max(lex.lv, PROBE_LV);
+  lex.b = newTrack(t);
   lex.b.due = dayStartOf(addDays(day, PROBE_CHECK_DAYS));
-  lex.b.sd = PROBE_CHECK_DAYS;
   const ru = book(lex.u, 3, t, retOf(lex0, ctx.cfg));
   lex.u = ru.track;
   lex.u.due = placeDue(lex, lex.u, ru.ivl, 'u', ctx, t, PROBE_CHECK_DAYS);
   lex.u.sd = offsetOf(lex.u.due, t);
   lex.sync = Math.max(lex.sync, t);
-  return { lex, grade: 3, booked: ['b', 'u'], note: 3, track: 2, events: [], speed: null };
+  return { lex, grade: 3, booked: ['u'], note: 3, track: 0, events: [], speed: null };
 }
-/** Kontrolle nach bestandener Probe: fest nach so vielen Tagen. */
-export const PROBE_CHECK_DAYS = 7;
+/** Benutzen-Kontrolle nach bestandener Probe: am nächsten Lerntag (Lücke frei im Satz). */
+export const PROBE_CHECK_DAYS = 1;
+/** Stufe nach bestandener Probe: Verstehen sitzt, Benutzen noch ungeprüft. */
+export const PROBE_LV = 2;
 /** Kontrastkarte gilt als gelöst (kleiner Tippfehler eingeschlossen). */
 const CONTRAST_OK = new Set<string>(['ok', 'typo']);
 
@@ -291,7 +294,7 @@ export function applyAnswer(lex0: Lex, a: Answer, ctx: PlanCtx): AnswerResult {
     if (wrong && !second && !(a.flags && a.flags & FLAG.override)) {
       lex.lv = descend(lex.lv);
       lex.lc += 1;
-      if (isProblem(lex.lc)) {
+      if (isProblem(lex)) {
         events.push('leech');
         // Leech/Problemwort mit Falle (falscher Freund oder Paar): Kontrast statt Werkstatt (leech.ts `leechTreatment`). Politur P2: schon ab dem
         // 3. Vergessen (vorher erst ab dem 6.), damit die Gegenüberstellung kommt, solange die Verwechslung frisch ist.

@@ -56,17 +56,30 @@ export const LADDER_B: Readonly<Record<number, readonly Form[]>> = {
 /**
  * Verstehen-Formen je Stufe (nur Verstehen fällig, plan.md §3.2: nie eine Auswahl). Politur P2 (E3 „Hören“): Mit Ton wechselt die Spur
  * zwischen „Bedeutung lesen“ und den Hör-Formen – je Wort die schwächere, nie zweimal dieselbe (`pickForm`). Ab Stufe 5 steht „Satz hören“
- * an der Stelle des Diktats, bis das Diktat eine eigene Karte hat (`NO_CARD`).
+ * an der Stelle des Diktats, bis das Diktat eine eigene Karte hat (`NO_CARD`). „Hören → Bedeutung“ auf jeder Stufe (Prüfbefund 13.11.2026).
+ *
+ * Zwei Textformen auf jeder Stufe, auch ohne Ton (Kap. 15 „jede Lernstufe mit nur einer Abfrageart“; Prüfbefund learning-scientist
+ * 13.11.2026): `meaning` zeigt abwechselnd das Wort markiert IM SATZ und das Wort OHNE SATZ (→ Bedeutung, `meaningBare`). Beides wird als
+ * `meaning` gebucht – keine neue Form, damit ältere Fassungen (Rückweg) Plan und Verlauf weiter lesen; das Kennzeichen der Darstellung ist
+ * der Satz im Verlauf (leer = ohne Satz).
  */
 export const LADDER_U: Readonly<Record<number, readonly Form[]>> = {
-  1: ['meaning', 'listen'],
-  2: ['meaning', 'listen'],
+  1: ['meaning', 'tone_mean', 'listen'],
+  2: ['meaning', 'tone_mean', 'listen'],
   3: ['meaning', 'tone_mean', 'listen', 'tiles'],
   4: ['meaning', 'tone_mean', 'listen', 'tiles'],
   5: ['meaning', 'tone_mean', 'listen', 'dictation'],
   6: ['meaning', 'tone_mean', 'listen', 'dictation'],
   7: ['meaning', 'tone_mean', 'listen', 'dictation'],
 };
+
+/**
+ * Zeigt die nächste Verstehen-Abfrage `meaning` das Wort ohne Satz (Wort → Bedeutung)? Abwechselnd mit „im Satz“: jede zweite `meaning`-
+ * Abfrage des Lexems (gezählt in `fq.h.meaning`), die erste im Satz. Rein und ohne neues Feld im Lexem.
+ */
+export function meaningBare(l: Lex): boolean {
+  return (fqOf(l).h.meaning?.[0] ?? 0) % 2 === 1;
+}
 
 /** Mindestabstand der Verstehen-Stabilität für die schweren Formen ab Stufe 4 (plan.md §3.2, konfigurierbar). */
 export const HEAVY_MIN_US = 3;

@@ -108,8 +108,9 @@ export async function writeIntro(deps: VocabDeps, path: string, a: Answer, cat: 
 }
 
 /**
- * „Kenne ich schon“ (V3 §3): richtig ohne Hilfe → Stufe 3, Kontrolle in 7 Tagen (`probeKnown`); sonst nur der Verlaufseintrag, das Wort wird
- * danach normal eingeführt (eigene Buchung `writeIntro`).
+ * „Kenne ich schon“ (V3 §3): richtig ohne Hilfe → Verstehen „Gut“, Stufe 2, Benutzen-Kontrolle am nächsten Lerntag (`probeKnown`); sonst nur
+ * der Verlaufseintrag, das Wort wird danach normal eingeführt (eigene Buchung `writeIntro`). Die bestandene Probe steht im Verlauf als Form
+ * `meaning` (gefragt war die Bedeutung, gebucht wird Verstehen; Prüfbefund 13.11.2026), die nicht bestandene als `probe` ohne Note.
  */
 export async function writeProbe(deps: VocabDeps, path: string, a: Answer, o: BookOpts): Promise<AnswerResult | null> {
   if (a.outcome !== 'ok') {
@@ -118,7 +119,7 @@ export async function writeProbe(deps: VocabDeps, path: string, a: Answer, o: Bo
     return null;
   }
   const ctx = ctxOf(path, a.t, o);
-  return commit(deps, path, a, o.cat, (lex) => (lex.intro !== null ? null : probeKnown(lex, a.t, ctx)));
+  return commit(deps, path, { ...a, form: 'meaning' }, o.cat, (lex) => (lex.intro !== null ? null : probeKnown(lex, a.t, ctx)));
 }
 
 /**

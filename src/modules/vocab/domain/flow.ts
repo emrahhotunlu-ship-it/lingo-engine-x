@@ -5,6 +5,7 @@ import { type CardSentence, chooseSentence, cueOf, headShown, type Pos, posOf, s
 import { type Catalog, loadByDay } from './catalog';
 import { type Check, type CheckDict, checkAnswer, damerau, type Target } from './check';
 import { FORM_SPEC } from './grade';
+import { meaningBare } from './forms';
 import { type Answer, type AnswerResult, applyAnswer, FLAG, type PlanCtx, probeKnown } from './planner';
 import type { UseInput } from './apply';
 import type { Task } from './session';
@@ -98,7 +99,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   const base = { path: task.path, head, de, def: str(doc.def), pos, teach, moreSentences: usable.length > 1, col: doc.col, ...open };
   const spec = FORM_SPEC[task.form];
   // Problemwort ab dem 3. Vergessen (Politur P2): ein Satz, den das Wort noch nie hatte, wenn es einen gibt.
-  const unseen = isProblem(lex.lc);
+  const unseen = isProblem(lex);
   const noSentence = (form: Form, mode: CardMode): CardModel => {
     const answer = baseAnswer(head);
     return { ...base, mode, form, sentence: null, answer, target: targetOf(lex, answer, pos, teach, null), cue: null, firstLetters: false };
@@ -140,6 +141,8 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null, unseen });
     // Satz hören → Wort tippen: der ganze Satz als Klang, im Text ist das Wort die Lücke.
     if (task.form === 'listen' && s) return { ...base, mode: 'listen', form: 'listen', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
+    // Zweite Textform (Prüfbefund 13.11.2026, auch ohne Ton): jede zweite „Bedeutung“ zeigt das Wort ohne Satz – gebucht als `meaning`.
+    if (task.form === 'meaning' && de && meaningBare(lex)) return noSentence('meaning', 'meaning');
     if (s && de) return { ...base, mode: 'meaning', form: 'meaning', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
     return noSentence('nosent', 'nosent');
   }

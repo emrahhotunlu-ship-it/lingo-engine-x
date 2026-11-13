@@ -92,7 +92,7 @@ export class Catalog {
     if (!p || p.trap === 'ff' || p.lex.lc <= it.lex.lc) return false;
     const tr = p.lex.b ?? p.lex.u;
     if (p.lex.lc >= LEECH_AT && tr.s < PAIR_HOLD_DAYS) return true;
-    if (!day || !isProblem(p.lex.lc) || tr.sd > 1 || tr.last === null) return false;
+    if (!day || !isProblem(p.lex) || tr.sd > 1 || tr.last === null) return false;
     const ago = daysBetween(dayKey(tr.last), day);
     return ago >= 0 && ago <= PROBLEM_REST_DAYS;
   }

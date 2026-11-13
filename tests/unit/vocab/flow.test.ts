@@ -181,12 +181,15 @@ describe('Buchungswege Einführung, „Kenne ich schon“, Entwurf', () => {
     expect(await writeIntro(deps, 'vocab/scope', a, cat)).toBeNull();
     expect(vlogCount(h)).toBe(1);
   });
-  it('„Kenne ich schon“ richtig → Stufe 3, Kontrolle in 7 Tagen; falsch → nur Verlauf, Lexem unverändert', async () => {
+  it('„Kenne ich schon“ richtig → Verstehen „Gut“, Stufe 2, Benutzen morgen, Verlauf als `meaning`; falsch → nur Verlauf, Lexem unverändert', async () => {
     const s1 = setup(fresh());
     const ok = { t: T0, form: 'probe' as const, outcome: 'ok' as const, hint: 0, ms: 4000, fk: 1500, sentence: null };
     const r = await writeProbe(s1.deps, 'vocab/scope', ok, { cfg: DEFAULT_CFG, cat: s1.cat, med: {}, planned: true });
-    expect(lexIn(s1.h).lv).toBe(3);
-    expect(r!.lex.b!.sd).toBe(7);
+    expect(lexIn(s1.h).lv).toBe(2);
+    expect(r!.booked).toEqual(['u']);
+    expect(lexIn(s1.h).b!.reps).toBe(0);
+    const rows = Object.entries(s1.h.dump()).filter(([p]) => /^vlog\/\d/.test(p)).flatMap(([, d]) => Object.values((d).e as Doc).filter(Boolean) as unknown[][]);
+    expect(rows.map((x) => [x[2], x[3], x[4]])).toEqual([[0, 'meaning', 3]]);
     const s2 = setup(fresh());
     const before = lexIn(s2.h);
     expect(await writeProbe(s2.deps, 'vocab/scope', { ...ok, outcome: 'wrong' }, { cfg: DEFAULT_CFG, cat: s2.cat, med: {}, planned: true })).toBeNull();

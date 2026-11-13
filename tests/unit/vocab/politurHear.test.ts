@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { vmDe as de } from '../../../src/i18n/parts/vm.de';
+import { vmEn as en } from '../../../src/i18n/parts/vm.en';
 import { Catalog } from '../../../src/modules/vocab/domain/catalog';
 import { type CheckDict } from '../../../src/modules/vocab/domain/check';
-import { audioOf, cardOf, evaluate, isHear, previewOf, resultOf, textOf, planCtxOf } from '../../../src/modules/vocab/domain/flow';
-import { emptyFq, LADDER_U, NO_CARD, pickForm } from '../../../src/modules/vocab/domain/forms';
+import { audioOf, bareMeaning, cardOf, evaluate, isHear, previewOf, resultOf, textOf, planCtxOf } from '../../../src/modules/vocab/domain/flow';
+import { emptyFq, LADDER_U, meaningBare, NO_CARD, pickForm } from '../../../src/modules/vocab/domain/forms';
 import { applyAnswer, emptyLex, type PlanCtx, PROBE_CHECK_DAYS } from '../../../src/modules/vocab/domain/planner';
 import { looksClose, pickOptions } from '../../../src/modules/vocab/domain/pick';
-import { isProblem, PROBLEM_AT, PROBLEM_REST_DAYS } from '../../../src/modules/vocab/domain/leech';
+import { isProblem, PROBLEM_AT, PROBLEM_CLEAR_S, PROBLEM_REST_DAYS } from '../../../src/modules/vocab/domain/leech';
 import type { Task } from '../../../src/modules/vocab/domain/session';
 import { addDays, dayKey, dayStartOf } from '../../../src/domain/date';
 import { DEFAULT_CFG, type Form, type Lex } from '../../../src/modules/vocab/domain/types';
@@ -45,6 +47,29 @@ describe('Hören: Formen der Verstehen-Spur (P2 Nr. 5b, S4)', () => {
       expect(forms.length, `Stufe ${lv}`).toBeGreaterThanOrEqual(2);
       expect(forms).toContain('listen');
     }
+  });
+
+  it('ohne Ton zwei Textformen je Stufe (Prüfbefund 13.11.2026): „Bedeutung“ abwechselnd im Satz und ohne Satz, gebucht als `meaning`', () => {
+    // „Hören → Bedeutung“ steht auf jeder Stufe (auch 1–2).
+    for (const lv of [1, 2, 3, 4, 5, 6, 7]) expect(LADDER_U[lv], `Stufe ${lv}`).toContain('tone_mean');
+    // Ohne Ton wählt die Spur immer `meaning` – die Darstellung wechselt mit jeder `meaning`-Abfrage des Worts.
+    const shown: string[] = [];
+    let lex = uDue('vocab/scope', 'gap');
+    for (let i = 0; i < 4; i++) {
+      const f = pickForm(lex, 'u', { de: true }).form;
+      expect(f).toBe('meaning');
+      const card = cardOf({ task: task({ form: f }), doc, lex, teach: {}, nowMs: T0, sbGate: null })!;
+      expect([card.mode, card.form]).toEqual(['meaning', 'meaning']);
+      expect(bareMeaning(card)).toBe(meaningBare(lex));
+      shown.push(card.sentence ? 'satz' : 'ohne');
+      lex = { ...lex, fq: { ...lex.fq!, l: 'meaning', h: { ...lex.fq!.h, meaning: [i + 1, i + 1] } } };
+    }
+    expect(shown).toEqual(['satz', 'ohne', 'satz', 'ohne']);
+    // Ohne Satz: gefragt ist die Bedeutung des Worts (Antwort = Stichwort, geprüft wird die deutsche Bedeutung).
+    const bareLex = { ...lex, fq: { ...lex.fq!, h: { meaning: [1, 1] as [number, number] } } };
+    const bareCard = cardOf({ task: task({ form: 'meaning' }), doc, lex: bareLex, teach: {}, nowMs: T0, sbGate: null })!;
+    expect([bareCard.sentence, bareCard.answer]).toEqual([null, 'scope']);
+    expect(evaluate(bareCard, 'Umfang', dict).outcome).toBe('ok');
   });
 
   it('Karten: „Hören → Bedeutung“ ohne Satz und Text, „Satz hören“ mit Lücke; Textform bei „Kann gerade nicht hören“', () => {
@@ -142,7 +167,7 @@ describe('Hören: Formen der Verstehen-Spur (P2 Nr. 5b, S4)', () => {
 });
 
 describe('„Kennst du es schon?“ vor der Einführung (P2 Nr. 6, S5)', () => {
-  it('Vorkarte nur vor neuen Einzelwörtern; „Nein, neu“ → Einführung; „Ja, prüf mich“ richtig → Stufe 3, Kontrolle in 7 Tagen', async () => {
+  it('Vorkarte nur vor neuen Einzelwörtern; „Nein, neu“ → Einführung; „Ja, prüf mich“ richtig → Verstehen „Gut“, Stufe 2, Benutzen morgen als Lücke', async () => {
     const w = world({ fresh: 2 });
     await w.start('new5');
     let v = w.run.get();
@@ -164,9 +189,17 @@ describe('„Kennst du es schon?“ vor der Einführung (P2 Nr. 6, S5)', () => {
     expect(b.check.outcome).toBe('ok');
     w.run.next();
     await w.run.settled();
+    // Band: kommt am nächsten Lerntag wieder (Benutzen-Kontrolle).
+    expect(b.band.next).toEqual({ kind: 'date', day: addDays(dayKey(T0), 1), extra: null });
     const lex = w.lexIn(first);
-    expect(lex.lv).toBe(3);
-    expect(lex.b?.due).toBe(dayStartOf(addDays(dayKey(T0), PROBE_CHECK_DAYS)));
+    expect(lex.lv).toBe(2);
+    expect(PROBE_CHECK_DAYS).toBe(1);
+    expect(lex.b?.due).toBe(dayStartOf(addDays(dayKey(T0), 1)));
+    expect(lex.b?.reps).toBe(0);
+    expect(lex.u.reps).toBe(1);
+    // Verlauf: als Form `meaning`, Spur Verstehen, Note „Gut“.
+    const probeRow = w.tuples().find((x) => x[1] === first);
+    expect([probeRow?.[2], probeRow?.[3], probeRow?.[4]]).toEqual([0, 'meaning', 3]);
     // Das zweite Wort: „Nein, neu“ → die Einführungskarte, ohne Vorkarte.
     const n = w.run.get();
     if (n.k !== 'card') throw new Error(n.k);
@@ -176,6 +209,27 @@ describe('„Kennst du es schon?“ vor der Einführung (P2 Nr. 6, S5)', () => {
     if (intro.k !== 'card') throw new Error(intro.k);
     expect([intro.kind, intro.ask, intro.canProbe]).toEqual(['intro', false, false]);
     expect(intro.card.mode).toBe('intro');
+  });
+  it('Probe nicht bestanden: das Band sagt „Jetzt lernst du es neu.“ (nicht „Kommt gleich noch einmal …“), danach die Einführung', async () => {
+    const w = world({ fresh: 1 });
+    await w.start('new5');
+    let v = w.run.get();
+    if (v.k === 'start') {
+      w.run.begin();
+      v = w.run.get();
+    }
+    if (v.k !== 'card') throw new Error(v.k);
+    w.run.probe();
+    w.run.check('zzzz', { ms: 4000, fk: 1500 });
+    const b = w.run.get();
+    if (b.k !== 'band') throw new Error(b.k);
+    expect(b.band.next).toEqual({ kind: 'relearn' });
+    w.run.next();
+    const intro = w.run.get();
+    if (intro.k !== 'card') throw new Error(intro.k);
+    expect(intro.kind).toBe('intro');
+    expect(de.vmNextRelearn).toBe('Jetzt lernst du es neu.');
+    expect(en.vmNextRelearn.length).toBeGreaterThan(0);
   });
 
   it('„Ja, prüf mich“ falsch → normale Einführung (keine zweite Probe), Wendungen ohne Vorkarte', async () => {
@@ -287,7 +341,7 @@ describe('Problemwörter ab dem 3. Vergessen (P2 Nr. 8, S7)', () => {
     expect(two.lex.ct).toBeUndefined();
     const three = lapse({ ...l0, lc: 2 }, T0, ctx({ ff: true }));
     expect(three.lex.lc).toBe(PROBLEM_AT);
-    expect(isProblem(three.lex.lc)).toBe(true);
+    expect(isProblem(three.lex)).toBe(true);
     expect(three.events).toContain('leech');
     expect(three.lex.ct).toEqual({ at: T0, w: null });
     // Ohne Falle: kein Kontrast (nichts gegenüberzustellen), aber das Ereignis.
@@ -297,6 +351,18 @@ describe('Problemwörter ab dem 3. Vergessen (P2 Nr. 8, S7)', () => {
     // Verwechselt mit einem anderen echten Wort: Gegenüberstellung mit genau diesem Wort.
     const other = applyAnswer({ ...l0, lc: 2 }, { t: T0, form: 'gap', outcome: 'other', hit: 'range', hint: 0, ms: 6000, fk: 2000, sentence: 'a' }, ctx());
     expect(other.lex.ct).toEqual({ at: T0, w: 'range' });
+  });
+  it('Problemwort nicht für immer (Prüfbefund 13.11.2026): ab 21 Tagen Stabilität der führenden Spur ist es keins mehr', () => {
+    const l0 = learned('vocab/scope', T0 - 10 * D);
+    const b = l0.b!;
+    expect(isProblem({ ...l0, lc: 3, b: { ...b, s: 5 } })).toBe(true);
+    expect(isProblem({ ...l0, lc: 3, b: { ...b, s: PROBLEM_CLEAR_S - 0.1 } })).toBe(true);
+    expect(isProblem({ ...l0, lc: 3, b: { ...b, s: PROBLEM_CLEAR_S } })).toBe(false);
+    expect(isProblem({ ...l0, lc: 9, b: { ...b, s: 40 } })).toBe(false);
+    expect(isProblem({ ...l0, lc: 2, b: { ...b, s: 1 } })).toBe(false);
+    // Ohne Benutzen-Spur zählt Verstehen.
+    expect(isProblem({ ...l0, lc: 3, b: null, u: { ...l0.u, s: 30 } })).toBe(false);
+    expect(isProblem({ ...l0, lc: 3, b: null, u: { ...l0.u, s: 2 } })).toBe(true);
   });
 
   it('neuer Satz bevorzugt: ein Problemwort bekommt einen Satz, den es noch nie hatte', () => {

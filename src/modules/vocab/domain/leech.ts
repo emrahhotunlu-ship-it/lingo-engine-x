@@ -3,6 +3,8 @@
 //  - Paar-Regel nur für echte englische Paare (*affect/effect*): das zweite Wort ruht, bis das Problemwort 7 Tage hält (`Catalog.rests`).
 //  - Falsche Freunde (*eventually* ≠ eventuell) ruhen nie; sie bekommen statt der Pause eine Kontrastkarte Deutsch ↔ Englisch.
 
+import type { Lex } from './types';
+
 export const LEECH_AT = 6;
 /**
  * Politur P2 (Prüfbericht S7, Emrah E3): Ab dem 3. Vergessen gilt ein Wort als Problemwort. Dann kommt es in einem Satz, den es noch nie
@@ -12,7 +14,13 @@ export const LEECH_AT = 6;
 export const PROBLEM_AT = 3;
 /** So viele Lerntage nach dem Vergessen des Problemworts ruht sein Verwechslungspartner (Tag des Fehlers zählt nicht mit). */
 export const PROBLEM_REST_DAYS = 2;
-export const isProblem = (lc: number): boolean => lc >= PROBLEM_AT;
+/** Ein Problemwort hört auf, eins zu sein, sobald die führende Spur so stabil ist (Tage): sonst blieb es nach 3 Fehlern für immer eins. */
+export const PROBLEM_CLEAR_S = 21;
+/**
+ * Problemwort: mindestens `PROBLEM_AT`-mal vergessen UND die führende Spur (Benutzen, sonst Verstehen) noch unter `PROBLEM_CLEAR_S` Tagen
+ * Stabilität (Prüfbefund learning-scientist 13.11.2026). `lc` wird nie zurückgesetzt; ein Wort, das inzwischen sitzt, ist kein Problem mehr.
+ */
+export const isProblem = (lex: Pick<Lex, 'lc' | 'u' | 'b'>): boolean => lex.lc >= PROBLEM_AT && (lex.b ?? lex.u).s < PROBLEM_CLEAR_S;
 export const LEECH_EVERY = 4;
 export const PAIR_HOLD_DAYS = 7;
 export const isLeechCount = (lc: number): boolean => lc >= LEECH_AT && (lc - LEECH_AT) % LEECH_EVERY === 0;

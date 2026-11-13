@@ -33,6 +33,23 @@ describe('Wiederholungen zuerst in der Runde (E3)', () => {
     expect(run.holdFresh()).toBe(false);
   });
 
+  it('holdFresh(keep): die ersten `keep` neuen Wörter bleiben eingestreut, nur der Rest rückt nach hinten (Prüfbefund BLOCKER)', () => {
+    const cat = new Catalog([...mk(12), ...fresh(4)]);
+    const { plan } = buildDayPlan(cat, T0, { ...DEFAULT_CFG, min: 25, newPerDay: 4 }, {});
+    const run = new SessionRun('pflicht', cat, plan, T0, { cfg: DEFAULT_CFG });
+    const before = run.ahead();
+    const freshBefore = before.filter((s) => s.intro).map((s) => s.path);
+    expect(freshBefore.length).toBeGreaterThanOrEqual(3);
+    expect(run.holdFresh(2)).toBe(true);
+    const after = run.ahead();
+    // Die ersten zwei neuen Wörter stehen an derselben Stelle wie vorher.
+    for (const p of freshBefore.slice(0, 2)) expect(after.findIndex((s) => s.path === p && s.intro)).toBe(before.findIndex((s) => s.path === p && s.intro));
+    // Der Rest steht hinter der letzten Wiederholung.
+    const lastReview = after.reduce((at, s, i) => (s.intro ? at : i), -1);
+    for (const p of freshBefore.slice(2)) expect(after.findIndex((s) => s.path === p && s.intro)).toBeGreaterThan(lastReview);
+    expect(run.holdFresh(2)).toBe(false);
+  });
+
   it('Runde im Plan: neue Wörter bleiben eingestreut; Runde deutlich langsamer als geplant: erst alle Wiederholungen, der Zeitdeckel nimmt die neuen', async () => {
     // Im Plan (1 s je Karte): das erste neue Wort kommt nach 4 Wiederholungen.
     const quick = world({ due: 12, fresh: 2 });
@@ -43,22 +60,32 @@ describe('Wiederholungen zuerst in der Runde (E3)', () => {
     expect(firstIntro).toBe(4);
     expect(q[firstIntro + 1]).toMatch(/^intro:/);
     expect(q.slice(firstIntro).some((x) => x.startsWith('nosent:'))).toBe(true);
-    // Langsam (90 s je Karte statt der geplanten 42 s, 18 Wörter-Minuten): die Zeit reicht nur für die 12 Wiederholungen → sie kommen alle,
-    // keine Einführung davor; der Zeitdeckel nimmt am Ende die zwei neuen Wörter weg.
+    // Langsam (90 s je Karte statt der geplanten 42 s, 18 Wörter-Minuten): die Zeit reicht nicht für alles. Die Untergrenze von zwei neuen
+    // Wörtern je Lerntag bleibt aber eingestreut (Prüfbefund BLOCKER 13.11.2026) – der Zeitdeckel nimmt am Ende Wiederholungen weg (sie
+    // bleiben fällig und kommen morgen zuerst), nie die Mindestzahl neuer Wörter.
     const slow = world({ due: 12, fresh: 2, tick: () => 30_000 });
     await slow.start();
     const s = play(slow);
-    expect(s.some((x) => x.startsWith('intro:') || x.startsWith('know:'))).toBe(false);
-    expect(s.filter((x) => x.startsWith('nosent:'))).toHaveLength(12);
+    expect(s.filter((x) => x.startsWith('intro:'))).toHaveLength(2);
     // Der Zeitdeckel kürzt den Plan in der Datenbank, dann erst steht der Abschluss.
     for (let i = 0; i < 50 && slow.run.get().k !== 'done'; i++) await new Promise((r) => setTimeout(r, 2));
     const done = slow.run.get();
     expect(done.k).toBe('done');
-    if (done.k === 'done') expect(done.capped).toBe(2);
-    // Die neuen Wörter sind unberührt (bleiben neu, kommen morgen).
     await slow.run.settled();
-    expect(slow.lexIn('vocab/postpone').intro).toBeNull();
+    expect(slow.lexIn('vocab/postpone').intro).not.toBeNull();
+    expect(slow.lexIn('vocab/negotiate').intro).not.toBeNull();
     expect(HOLD_SLACK_MS).toBe(60_000);
+  });
+
+  it('Doppelt so langsamer Lerner mit vier neuen Wörtern im Plan: weiter mindestens zwei neue am Tag (Prüfbefund BLOCKER)', async () => {
+    // Geplant ~42 s je Karte; der Lerner braucht doppelt so lange. Die Wörter-Zeit reicht nicht für alles → Wiederholungen zuerst, aber die
+    // Untergrenze MIN_NEW = 2 bleibt eingestreut.
+    const slow = world({ due: 12, fresh: 4, tick: () => 28_000 });
+    await slow.start();
+    const s = play(slow);
+    expect(s.filter((x) => x.startsWith('intro:')).length).toBeGreaterThanOrEqual(2);
+    for (let i = 0; i < 50 && slow.run.get().k !== 'done'; i++) await new Promise((r) => setTimeout(r, 2));
+    expect(slow.run.get().k).toBe('done');
   });
 
   it('Messung neuer Wörter: Einführung (samt Auswahl) und Schritt A gehen als `intro` und `gap_hint` nach vmod/pace', async () => {

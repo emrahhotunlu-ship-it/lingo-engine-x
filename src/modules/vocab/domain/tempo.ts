@@ -6,7 +6,9 @@ import type { VlogTuple } from './vlog';
 // Politur P2 (Emrah 13.11.2026, E3 „A: neue Wörter nach Behalten, 3–10“): Tempo neuer Wörter je Lerntag. Rein, ohne Uhr und ohne Datenbank.
 //
 // Messgröße: „am Folgetag frei richtig“ – der ERSTE gebuchte Abruf eines neu eingeführten Worts an einem späteren Lerntag (höchstens
-// `TEMPO_GAP_MAX` Tage nach der Einführung), frei getippt, ohne Hilfe, richtig. Fenster: die letzten `TEMPO_DAYS` Lerntage.
+// `TEMPO_GAP_MAX` Tage nach der Einführung), frei getippt, ohne Hilfe, richtig. Fenster: die letzten `TEMPO_DAYS` ECHTEN Lerntage (Tage mit
+// gebuchten Antworten im Verlauf); gibt es weniger, die letzten `TEMPO_CAL_DAYS` Kalendertage (Prüfbefund learning-scientist 13.11.2026:
+// vorher 14 Kalendertage und 40 Abrufe – bei 2–3 neuen Wörtern je Tag passte sich das Tempo nie an).
 // Regel je neuem Lerntag: Quote ≥ 85 % und kein Rückstand → +1 · Quote < 70 % → −2 · sonst bleibt es. Grenzen 3–10. Unter `TEMPO_MIN_N`
 // Abrufen im Fenster keine Änderung. Start = Einstellung „Neue Wörter pro Tag“ (auf 3–10 begrenzt); ändert Emrah die Einstellung, beginnt
 // das Tempo dort neu. Eine Einstellung unter 3 (0 = keine neuen, 2 = bewusst wenige) bleibt fest: die App erhöht sie nie von selbst.
@@ -14,17 +16,40 @@ import type { VlogTuple } from './vlog';
 
 export const TEMPO_MIN = 3;
 export const TEMPO_MAX = 10;
+/** Fenster in echten Lerntagen (Tage mit gebuchten Antworten im Verlauf). */
 export const TEMPO_DAYS = 14;
+/** Fenster in Kalendertagen, solange es noch keine `TEMPO_DAYS` Lerntage im Verlauf gibt. */
+export const TEMPO_CAL_DAYS = 21;
 /** Unter so vielen Folgetag-Abrufen im Fenster ändert sich das Tempo nicht. */
-export const TEMPO_MIN_N = 40;
+export const TEMPO_MIN_N = 20;
 export const TEMPO_UP = 0.85;
 export const TEMPO_DOWN = 0.7;
 export const TEMPO_STEP_UP = 1;
 export const TEMPO_STEP_DOWN = 2;
 /** Der erste Abruf zählt als „Folgetag“, wenn er höchstens so viele Lerntage nach der Einführung liegt (ein Ruhetag dazwischen ist erlaubt). */
 export const TEMPO_GAP_MAX = 2;
-/** So viele Lerntage Verlauf braucht die Rechnung (Fenster + Abstand zur Einführung). */
-export const TEMPO_READ_DAYS = TEMPO_DAYS + TEMPO_GAP_MAX;
+/**
+ * So viele Kalendertage Verlauf liest die Runde mindestens für die Rechnung (Kalender-Fenster + Abstand zur Einführung; die Runde liest
+ * ohnehin 30 Tage, `RET_WINDOW_DAYS`). Liegen die 14 Lerntage weiter zurück, zählt, was gelesen wurde.
+ */
+export const TEMPO_READ_DAYS = TEMPO_CAL_DAYS + TEMPO_GAP_MAX;
+
+/**
+ * Erster Tag des Fensters: der `days`-jüngste echte Lerntag (Tag mit einer Antwort im Verlauf, ohne Belege aus anderen Bereichen und umgerechnete
+ * Einträge) bis heute; gibt es weniger Lerntage im Verlauf, `TEMPO_CAL_DAYS` Kalendertage zurück.
+ */
+export function tempoWindowFrom(tuples: readonly VlogTuple[], nowMs: number, days = TEMPO_DAYS): string {
+  const today = dayKey(nowMs);
+  const learnDays = new Set<string>();
+  for (const tp of tuples) {
+    const [t, , , , , , , , , , , flags] = tp;
+    if (t > nowMs || (flags & (FLAG.ext | FLAG.mig)) !== 0) continue;
+    learnDays.add(dayKey(t));
+  }
+  const sorted = [...learnDays].sort();
+  if (sorted.length >= days) return sorted[sorted.length - days]!;
+  return addDays(today, -(TEMPO_CAL_DAYS - 1));
+}
 
 /** Folgetag-Abrufe im Fenster: `ok` frei richtig von `all`; `last` = der jüngste Lerntag vor heute mit solchen Abrufen (für den Satz „Gestern …“). */
 export type Recall = { ok: number; all: number; last: { d: string; ok: number; all: number } | null };
@@ -36,7 +61,7 @@ export type Recall = { ok: number; all: number; last: { d: string; ok: number; a
  */
 export function nextDayRecall(tuples: readonly VlogTuple[], nowMs: number, days = TEMPO_DAYS): Recall {
   const today = dayKey(nowMs);
-  const from = addDays(today, -(days - 1));
+  const from = tempoWindowFrom(tuples, nowMs, days);
   const intro = new Map<string, string>();
   const done = new Set<string>();
   const byDay = new Map<string, { ok: number; all: number }>();
@@ -109,7 +134,7 @@ export function nextTempo(prev: TempoState | null, setting: number, rec: Pick<Re
 
 /**
  * Tempo für die eine Zeile am Rundenstart: `n` = höchstens so viele neue heute, `why` = Grund, `ok`/`all` = „am nächsten Tag noch gewusst“
- * in den letzten 14 Lerntagen, `last` = der jüngste Lerntag mit solchen Abrufen (`ago` = Tage vor heute).
+ * in den letzten 14 Lerntagen (sonst 21 Kalendertagen), `last` = der jüngste Lerntag mit solchen Abrufen (`ago` = Tage vor heute).
  */
 export type TempoInfo = { n: number; why: TempoWhy; ok: number; all: number; last: { ago: number; ok: number; all: number } | null };
 

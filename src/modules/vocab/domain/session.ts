@@ -300,12 +300,19 @@ export class SessionRun {
    * Politur P2 (E3 „Wiederholungen zuerst“): Wird die Zeit knapp, rücken die noch nicht eingeführten neuen Wörter hinter die Wiederholungen
    * (Reihenfolge untereinander bleibt). So nimmt der Zeitdeckel am Ende neue Wörter weg, nie fällige Wiederholungen. Liefert, ob sich etwas
    * geändert hat.
+   *
+   * `keep` (Prüfbefund learning-scientist 13.11.2026, BLOCKER): so viele neue Wörter bleiben an ihrem Platz in der Mischung – die Untergrenze
+   * `MIN_NEW` (day.ts) abzüglich der heute schon eingeführten. Sonst fielen an knappen Tagen neue Wörter ganz aus (Kap. 15: „neue Wörter, die
+   * an Tagen mit Wiederholungen nie auftauchen“). Nur die neuen Wörter ab Index `keep` rücken nach hinten.
    */
-  holdFresh(): boolean {
-    const lastReview = this.queue.reduce((at, s, i) => (s.intro ? at : i), -1);
-    const firstFresh = this.queue.findIndex((s) => s.intro);
-    if (firstFresh < 0 || firstFresh > lastReview) return false;
-    this.queue = [...this.queue.filter((s) => !s.intro), ...this.queue.filter((s) => s.intro)];
+  holdFresh(keep = 0): boolean {
+    const fresh = this.queue.filter((s) => s.intro);
+    const moved = new Set(fresh.slice(Math.max(0, keep)));
+    if (!moved.size) return false;
+    const lastStay = this.queue.reduce((at, s, i) => (moved.has(s) ? at : i), -1);
+    const firstMoved = this.queue.findIndex((s) => moved.has(s));
+    if (firstMoved > lastStay) return false;
+    this.queue = [...this.queue.filter((s) => !moved.has(s)), ...this.queue.filter((s) => moved.has(s))];
     return true;
   }
 

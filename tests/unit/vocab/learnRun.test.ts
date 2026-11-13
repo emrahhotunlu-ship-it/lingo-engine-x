@@ -303,7 +303,8 @@ describe('LearnRun', () => {
     const pb = s.run.get();
     if (pb.k !== 'band') throw new Error(pb.k);
     expect(pb.band.knewIt).toBe(false);
-    expect(pb.band.next).toEqual({ kind: 'step', mode: 'same', thenTomorrow: false });
+    // Prüfbefund 13.11.2026: eigener Satz „Jetzt lernst du es neu.“ statt „Kommt gleich noch einmal …“.
+    expect(pb.band.next).toEqual({ kind: 'relearn' });
     s.run.next();
     const again = s.run.get();
     if (again.k !== 'card') throw new Error(again.k);
