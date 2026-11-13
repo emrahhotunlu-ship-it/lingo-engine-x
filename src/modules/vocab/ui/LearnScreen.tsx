@@ -12,6 +12,7 @@ import { LearnCard } from './LearnCard';
 import { PickCard } from './PickCard';
 import { sitKey, UseCard } from './UseCard';
 import { type DoneSummary, LearnRun, type DraftStore, type StartInfo } from './learnRun';
+import { tempoText } from '../domain/tempo';
 import { readMistakes } from './mistakes';
 import { fillKnow } from './know';
 
@@ -330,6 +331,8 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
   const freshText = s.fresh === 1 ? t(only ? 'vmStartWhyFreshOnly1' : 'vmStartWhyFresh1') : t(only ? 'vmStartWhyFreshOnly' : 'vmStartWhyFresh', { n: s.fresh });
   const spread = s.sp ? [[s.today, s.due + s.ahead] as [string, number], ...s.sp] : null;
   const maxN = spread ? Math.max(...spread.map((x) => x[1]), 1) : 1;
+  // Politur P2 (E3): eine Zeile, warum heute so viele neue Wörter möglich sind (Kap. 2 Nr. 4). Bei fester Einstellung (unter 3) keine Zeile.
+  const tempo = s.tempo ? tempoText(s.tempo) : null;
   return (
     <section className="flex w-full flex-col gap-4 px-4 sm:px-0" data-testid="vm-start">
       <div className="lx-card mx-auto flex w-full max-w-xl flex-col gap-4 p-5">
@@ -377,6 +380,12 @@ function Start({ s, onGo }: { s: StartInfo; onGo: () => void }) {
               </div>
             </div>
           </>
+        )}
+        {tempo && (
+          <p className="lx-t-support text-muted" data-testid="vm-start-tempo" data-why={s.tempo?.why}>
+            {tempo.last ? `${t(tempo.last.key as MessageKey, tempo.last.vars)} ` : ''}
+            {t(tempo.main as MessageKey, tempo.vars)}
+          </p>
         )}
         <Button variant="primary" onClick={onGo} data-testid="vm-start-go">
           {t('vmStartGo')}

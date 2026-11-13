@@ -727,4 +727,16 @@ export const vmDe = {
   vmWhNew5: "Noch 5 neue Wörter",
   vmWhNew5Sub: "Über dein Tagesziel hinaus",
   vmDoneNew5: "5 neue Wörter",
+  // Politur P2 „Wörter lernen“ (Emrah 13.11.2026, E3): Tempo nach Behalten, Hören, „Kennst du es schon?“, Auswahl, Problemwörter.
+  // Tempo neuer Wörter (eine Zeile am Rundenstart): {n} = höchstens so viele neue heute, {ok} von {all} = am nächsten Tag noch gewusst (14 Lerntage).
+  vmTempoStart: 'Zum Start höchstens {n} neue Wörter am Tag. Die Zahl richtet sich bald danach, wie viele neue Wörter du am nächsten Tag noch weißt.',
+  vmTempoFew: 'Höchstens {n} neue Wörter heute. Die Zahl passt sich an, sobald genug Abrufe da sind (wie viele neue Wörter du am nächsten Tag noch weißt).',
+  vmTempoUp: 'Du behältst neue Wörter gut: {ok} von {all} wusstest du am nächsten Tag noch. Darum heute bis zu {n} neue, eins mehr als zuletzt.',
+  vmTempoDown: 'Von {all} neuen Wörtern wusstest du am nächsten Tag nur {ok} noch. Darum heute höchstens {n} neue, damit mehr hängen bleibt.',
+  vmTempoKeep: 'Von {all} neuen Wörtern wusstest du {ok} am nächsten Tag noch. Es bleibt bei höchstens {n} neuen am Tag.',
+  vmTempoBacklog: 'Du behältst neue Wörter gut ({ok} von {all}). Weil heute noch Wiederholungen warten, bleibt es bei höchstens {n} neuen.',
+  vmTempoTop: 'Du behältst neue Wörter gut ({ok} von {all}). Mehr als {n} neue am Tag werden es nicht.',
+  vmTempoFloor: 'Von {all} neuen Wörtern wusstest du am nächsten Tag nur {ok} noch. Weniger als {n} neue am Tag werden es nicht.',
+  vmTempoLast1: 'Gestern {ok} von {all} behalten.',
+  vmTempoLastN: 'Zuletzt {ok} von {all} behalten.',
 };

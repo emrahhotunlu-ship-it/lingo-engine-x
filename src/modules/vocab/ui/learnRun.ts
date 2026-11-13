@@ -12,7 +12,11 @@ import type { Band } from '../domain/band';
 import { Catalog, formMs, isNewLex, type Item } from '../domain/catalog';
 import { srcOf, weightsOf, type WtRaw } from '../domain/sources';
 import type { SourceData } from '../data/refill';
-import { VMOD_PACE_PATH, VMOD_PLACE_PATH } from '../registry';
+import { VMOD_PACE_PATH, VMOD_PLACE_PATH, VMOD_TEMPO_PATH } from '../registry';
+import { readTempo, writeTempo } from '../data/tempo';
+import { nextDayRecall, nextTempo, type Recall, startTempo, type Tempo, type TempoInfo, TEMPO_MAX, TEMPO_MIN, TEMPO_READ_DAYS } from '../domain/tempo';
+export type { TempoInfo } from '../domain/tempo';
+import type { VlogTuple } from '../domain/vlog';
 import type { Check, CheckDict } from '../domain/check';
 import { buildDayPlan, type DayPlan, newCostMs } from '../domain/day';
 import { type Reason, reasonOf } from '../domain/reason';
@@ -69,7 +73,8 @@ export type LearnView =
  * Start-Bildschirm: Zahlen aus dem eingefrorenen Plan. `back` = letzter Lerntag liegt ≥ 2 Tage zurück („Willkommen zurück“);
  * `sp` = Rückstand je Lerntag (fehlt ohne Rückstand); `fewer` = weniger neue als üblich, weil viel fällig ist.
  */
-export type StartInfo = { min: number; due: number; ahead: number; fresh: number; fewer: boolean; back: boolean; today: string; sp: [string, number][] | null };
+export type StartInfo = { min: number; due: number; ahead: number; fresh: number; fewer: boolean; back: boolean; today: string; sp: [string, number][] | null; /** Politur P2: Tempo neuer Wörter heute, mit Grund (fehlt ohne Stand von heute). */ tempo?: TempoInfo | null };
+
 
 /**
  * Abschluss (Bild B8): Minuten (aktive Zeit), Pflicht oder Extra, neue Wörter (Stichwörter), aufgestiegene (ohne neue; `w` = Beispiel,
@@ -314,6 +319,10 @@ export class LearnRun {
 
   /** Der heutige, eingefrorene Wörter-Plan (nur Pflicht): die Zählquelle, die auch Heute nutzt (K11). */
   private dayPlan: DayPlan | null = null;
+  /** Politur P2: Tempo neuer Wörter von heute (für die Zeile am Rundenstart); `null` = kein Stand von heute. */
+  private tempo: TempoInfo | null = null;
+  /** Verlauf der letzten Lerntage, einmal je Runde gelesen (Tempo und „Junge Wörter früher“). */
+  private hist: Promise<VlogTuple[]> | null = null;
 
   /**
    * Zähler der Übungsleiste (K11/K12/K13, Emrah 04.11.2026): `n` = erledigte Wörter + 1 (die gezeigte Karte), `total` = Wörter der Runde.
@@ -460,8 +469,10 @@ export class LearnRun {
     const cur = await this.env.readDay();
     // „Noch 5 neue Wörter“ (Emrah 08.11.2026): fehlen Kandidaten, legt das Nachfüllen bis zu 5 an (sonst bliebe die Runde nach ein paar Tagen leer).
     const refillNow = (s.kind === 'pflicht' && !(cur && cur.d === dayKey(dayNow))) || (s.kind === 'new5' && items.filter((x) => isNewLex(x.lex)).length < NEW5_SIZE);
+    // Politur P2: das Tempo kann über der Einstellung liegen (gut behalten) – der Vorrat neuer Wörter reicht dann bis zur Obergrenze.
+    const stock = cfg.newPerDay >= TEMPO_MIN && !cfg.short ? Math.max(cfg.newPerDay, TEMPO_MAX) : cfg.newPerDay;
     if (refillNow && this.env.loadSources) {
-      for (const [path, doc] of await this.refill(s.docs, items, s.kind === 'new5' ? { ...cfg, newPerDay: NEW5_SIZE } : cfg, dayNow)) {
+      for (const [path, doc] of await this.refill(s.docs, items, { ...cfg, newPerDay: s.kind === 'new5' ? NEW5_SIZE : stock }, dayNow)) {
         const lex = lexOf(doc);
         if (!lex) continue;
         this.docs.set(path, doc);
@@ -471,8 +482,11 @@ export class LearnRun {
     const cat = new Catalog(items);
     this.cat = cat;
     // „Junge Wörter früher“ (Großpaket A S6): steht fest im heutigen Plan; nur ein neuer Pflicht-Plan rechnet es aus dem Verlauf.
-    if (cur && cur.d === dayKey(dayNow)) cfg.retY = typeof cur.ry === 'number' ? cur.ry : null;
+    const planned = !!cur && cur.d === dayKey(dayNow);
+    if (planned) cfg.retY = typeof cur.ry === 'number' ? cur.ry : null;
     else if (s.kind === 'pflicht') cfg.retY = await this.youngTarget(cfg, dayNow);
+    // Politur P2 (E3): Tempo neuer Wörter nach Behalten. Es steht je Lerntag fest; nur ein neuer Pflicht-Plan rechnet es fort.
+    cfg.newPerDay = await this.tempoFor(cat, cfg, dayNow, s.kind === 'pflicht' && !planned);
     await this.replay();
     await this.loadUse();
     const nowMs = this.env.now();
@@ -512,16 +526,70 @@ export class LearnRun {
     }
   }
 
+  /** Verlauf der letzten Lerntage (für „Junge Wörter früher“ und das Tempo), einmal je Runde gelesen. Ohne Lesezugang leer. */
+  private history(nowMs: number): Promise<VlogTuple[]> {
+    const read = this.env.read;
+    if (!read) return Promise.resolve([]);
+    this.hist ??= readVlogRecent(read, nowMs, Math.max(RET_WINDOW_DAYS, TEMPO_READ_DAYS));
+    return this.hist;
+  }
+
   /** Ziel für junge Wörter aus der echten Rate der letzten 30 Tage (`null` = nicht nachsteuern; ein Lesefehler steuert nie nach). */
   private async youngTarget(cfg: VocabCfg, nowMs: number): Promise<number | null> {
-    const read = this.env.read;
-    if (!read) return null;
+    if (!this.env.read) return null;
     try {
-      return youngBoost(cfg.ret, retention(await readVlogRecent(read, nowMs, RET_WINDOW_DAYS), nowMs));
+      return youngBoost(cfg.ret, retention(await this.history(nowMs), nowMs));
     } catch (err) {
       logError('vocab:young-target', err);
       return null;
     }
+  }
+
+  /**
+   * Politur P2 (E3): Tempo neuer Wörter für diese Runde (= Obergrenze im Tagesplan, domain/day.ts). `fresh` = es entsteht gleich ein neuer
+   * Pflicht-Plan: dann wird das Tempo aus dem Verlauf fortgeschrieben und in `vmod/tempo` gespeichert. Sonst gilt der gespeicherte Stand
+   * (heute eingefroren oder zuletzt), ohne zu schreiben. Am kurzen Tag und ohne Lesezugang gilt die Einstellung. Jeder Fehler lässt den Tag mit
+   * dem letzten bekannten Tempo bzw. der Einstellung laufen – nie mit mehr.
+   */
+  private async tempoFor(cat: Catalog, cfg: VocabCfg, nowMs: number, fresh: boolean): Promise<number> {
+    const setting = cfg.newPerDay;
+    const read = this.env.read;
+    if (cfg.short || !read) return setting;
+    const today = dayKey(nowMs);
+    let prev: Tempo | null;
+    let rec: Recall;
+    try {
+      prev = readTempo(await read(VMOD_TEMPO_PATH));
+      rec = nextDayRecall(await this.history(nowMs), nowMs);
+    } catch (err) {
+      logError('vocab:tempo-read', err);
+      return Math.min(setting, startTempo(setting));
+    }
+    const lastOf = (): TempoInfo['last'] => (rec.last ? { ago: daysBetween(rec.last.d, today), ok: rec.last.ok, all: rec.last.all } : null);
+    const same = prev && prev.base === setting ? prev : null;
+    if (same && same.d === today) {
+      this.tempo = { n: same.n, why: same.why, ok: same.ok, all: same.all, last: lastOf() };
+      return same.n;
+    }
+    if (!fresh) return same ? same.n : startTempo(setting);
+    // Rückstand: bleiben mit dem bisherigen Tempo heute fällige Wiederholungen liegen? (Probe-Plan, nichts wird gespeichert.)
+    const cur = same ? same.n : startTempo(setting);
+    let backlog = false;
+    try {
+      backlog = (buildDayPlan(cat, nowMs, { ...cfg, newPerDay: cur }, this.med).plan.sp ?? []).length > 0;
+    } catch (err) {
+      logError('vocab:tempo-plan', err);
+    }
+    const next = nextTempo(same, setting, rec, backlog, today);
+    let stored: Tempo | null = null;
+    try {
+      stored = await writeTempo(this.env.deps.writer, next, nowMs);
+    } catch (err) {
+      logError('vocab:tempo-write', err);
+    }
+    const t = stored ?? next;
+    this.tempo = { n: t.n, why: t.why, ok: t.ok, all: t.all, last: lastOf() };
+    return t.n;
   }
 
   /**
@@ -550,6 +618,7 @@ export class LearnRun {
       back: !!last && daysBetween(last, today) >= BACK_DAYS,
       today,
       sp,
+      tempo: this.tempo,
     };
   }
 

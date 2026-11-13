@@ -726,4 +726,16 @@ export const vmEn = {
   vmWhNew5: "5 more new words",
   vmWhNew5Sub: "Beyond your daily goal",
   vmDoneNew5: "5 new words",
+  // Polish P2 "Learning words" (Emrah 13.11.2026, E3): pace by retention, listening, "Do you know it already?", choice, problem words.
+  // Pace of new words (one line at the start of the round): {n} = at most this many new today, {ok} of {all} = still known the next day (14 learning days).
+  vmTempoStart: 'At most {n} new words a day to start with. Soon the number follows how many new words you still know the next day.',
+  vmTempoFew: 'At most {n} new words today. The number adapts as soon as there are enough recalls (how many new words you still know the next day).',
+  vmTempoUp: 'You remember new words well: you still knew {ok} of {all} the next day. So up to {n} new ones today, one more than before.',
+  vmTempoDown: 'Of {all} new words, you still knew only {ok} the next day. So at most {n} new ones today, so that more of them stick.',
+  vmTempoKeep: 'Of {all} new words, you still knew {ok} the next day. It stays at no more than {n} new ones a day.',
+  vmTempoBacklog: 'You remember new words well ({ok} of {all}). Because reviews are still waiting today, it stays at no more than {n} new ones.',
+  vmTempoTop: 'You remember new words well ({ok} of {all}). It will not be more than {n} new ones a day.',
+  vmTempoFloor: 'Of {all} new words, you still knew only {ok} the next day. It will not be fewer than {n} new ones a day.',
+  vmTempoLast1: 'Yesterday you remembered {ok} of {all}.',
+  vmTempoLastN: 'Last time you remembered {ok} of {all}.',
 };
