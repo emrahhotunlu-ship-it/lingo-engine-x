@@ -68,7 +68,11 @@
         "D1 V-BAU": 3000,
         "D2 V-HEUTE": 1500,
         "D3 V-UEBUNG": 1500,
-        "D5 V-GRAMMATIK": 500
+        "D5 V-GRAMMATIK": 500,
+        "Politur P1": {
+          "bytes": 1000,
+          "freigabe": "Hauptsitzung 13.11.2026: Großpaket P Politur P1 Design und Bedienung (Baustein-Vorrat im Kartenfluss, Stift-Lasche, kurze Bildschirme, feste Breite am Laptop, Leiste unten am Touch-Innendisplay); gemessen +907 B gzip gegen 255c555f"
+        }
       }
     },
     "html": {
