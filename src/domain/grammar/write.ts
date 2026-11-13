@@ -4,6 +4,7 @@ import type { GrammarAnswer } from '../learn/types';
 import { patPush, patsOf, type PatEntry } from '../metrics/pattern';
 import { guessOptions } from './check';
 import { introDay } from './path';
+import { focusDoc, focusStep, groupOf, groupsLeft, readFocus } from './focus';
 import { nextTt, readTt } from './topicTest';
 import { patternsOf } from './patterns';
 import { bktStep, displayP, nextDue, p0Of } from './bkt';
@@ -91,6 +92,13 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
     patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
     const pats = patsPatch(cur, a, ok);
     if (pats) patch.pats = pats;
+    // Fokus-Thema (Politur P3): nur Aufgaben aus dem Fokus-Teil der Runde (`task.fo` = Stufe) bewegen den Lauf; das Feld `fo` ist rein ergänzend.
+    if (a.task.fo && !a.ext && !a.again) {
+      const known = pats ?? patsOf(cur);
+      const legacy = !Object.keys(known).length && num(cur.n, 0) > 0;
+      const more = groupsLeft(topic, (id) => legacy || known[id]?.i !== undefined);
+      patch.fo = focusDoc(focusStep(readFocus(cur), { day: a.day, clean: ok && a.help.level === 0, wrong: !ok, pat: a.task.pat ?? null, p: pNew, stage: a.task.fo, more }).next);
+    }
     // M0: die eine BKT-Wirkung des Lerntags aus `ext` ist verbraucht (Tempo und c1x teilen den Deckel).
     if (a.ext) patch.xd = a.day;
   }
@@ -188,6 +196,8 @@ function patsPatch(cur: Doc, a: GrammarAnswer, ok: boolean): Record<string, PatE
   const help = a.help.level > 0 || a.firstWrong !== undefined || (!!a.pts && a.free !== true) || a.again === true;
   const next = patPush(prev, { ok, help, day: a.day, t: a.t, form: a.c1k ?? a.task.type });
   next.i ??= a.day;
+  // Fokus-Thema, Stufe „Verstehen“: die Regel zeigt beide Muster des Einführungsschritts; mit der ersten Antwort gilt der ganze Schritt als eingeführt.
+  if (a.task.fo === 1) for (const sib of groupOf(a.task.topic, id)) if (sib !== id && out[sib]?.i === undefined) out[sib] = { ...(out[sib] ?? { n: 0, c: 0, h: 0, r: 0, k: 0, dd: [] }), i: a.day };
   // Unbekannte Felder eines Eintrags bleiben erhalten (Datenregel 2: nie strippen).
   const rawOld = rawPats[id];
   out[id] = rawOld && typeof rawOld === 'object' && !Array.isArray(rawOld) ? { ...(rawOld as PatEntry), ...next } : next;

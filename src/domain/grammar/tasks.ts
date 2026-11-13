@@ -18,7 +18,7 @@ import { topicP } from './bkt';
 import { dueErrors, type ErrorEntry } from './errors';
 import { isNewTopic, nextNewTopic } from './path';
 import { legacyTaskKey } from './key';
-import { familyOf, mapEntryOf, patternById, patternOf, patternsOf, v2Tasks } from './patterns';
+import { familyOf, isRetired, mapEntryOf, patternById, patternOf, patternsOf, v2Tasks } from './patterns';
 import { TaskWhySchema, type V2Task } from './patternTypes';
 import { errorSpan } from './span';
 import { asText } from '../text/str';
@@ -171,7 +171,8 @@ export function seedTasks(): readonly GrammarTask[] {
   const out: GrammarTask[] = [];
   const keys = new Set<string>();
   const push = (t: GrammarTask | null) => {
-    if (t && !keys.has(t.key)) {
+    // Stillgelegte Aufgaben (`retired.json`, Qualitätstor P3 13.11.2026) werden nie gestellt; die Inhalte bleiben in den Dateien (IDs und Schlüssel bleiben stabil).
+    if (t && !keys.has(t.key) && !isRetired(t.prompt, t.topic)) {
       keys.add(t.key);
       out.push(t);
     }
@@ -201,7 +202,7 @@ export function allSeedTasks(): readonly GrammarTask[] {
   const keys = new Set(out.map((t) => `${t.topic}|${t.key}`));
   for (const v of v2Tasks()) {
     const t = fromV2(v);
-    if (t && !keys.has(`${t.topic}|${t.key}`)) {
+    if (t && !keys.has(`${t.topic}|${t.key}`) && !isRetired(t.prompt, t.topic)) {
       keys.add(`${t.topic}|${t.key}`);
       out.push(t);
     }
@@ -209,7 +210,7 @@ export function allSeedTasks(): readonly GrammarTask[] {
   // Grammatik-Buch (Emrah 08.11.2026): Übung A (Lücke) und B (Auswahl) aller 47 Themen auch in den Tagesrunden.
   for (const b of bookTasks()) {
     const t = bookToTask(b);
-    if (!keys.has(`${t.topic}|${t.key}`)) {
+    if (!keys.has(`${t.topic}|${t.key}`) && !isRetired(t.prompt, t.topic)) {
       keys.add(`${t.topic}|${t.key}`);
       out.push(t);
     }
@@ -232,7 +233,7 @@ export function wantTypes(p: number, profile: InputProfile = 'keys'): GrammarTas
 }
 
 /** Rückfall, wenn die gewünschten Formen fehlen (ersetzt `anySeed` ohne Typfilter): Reihenfolge nach Profil. */
-const FALLBACK: Readonly<Record<InputProfile, readonly GrammarTaskType[]>> = {
+export const FALLBACK: Readonly<Record<InputProfile, readonly GrammarTaskType[]>> = {
   touch: ['find', 'gap', 'mc', 'kwt', 'meaning'],
   keys: ['correct', 'transform', 'find', 'gap', 'mc', 'kwt', 'meaning'],
 };
@@ -351,10 +352,10 @@ const touchList = (list: readonly GrammarTask[]): GrammarTask[] =>
 /** Aufgabe eines Fehlereintrags in der Form des Profils (nur `correct` ändert sich). */
 export const forProfile = (t: GrammarTask, profile: InputProfile): GrammarTask | null => (profile === 'touch' && wholeSentence(t) ? asFind(t) : t);
 
-type PickReq = { topic: string; prefer: readonly GrammarTaskType[]; strict?: boolean; pats?: readonly string[] | null; allowSeen?: boolean };
+export type PickReq = { topic: string; prefer: readonly GrammarTaskType[]; strict?: boolean; pats?: readonly string[] | null; allowSeen?: boolean };
 
-/** Auswahl-Werkzeuge einer Runde (gemeinsamer Zustand `used`, Quellenliste, Eignung). Für `selectRound` und `selectVortest`. */
-function picker(i: Pick2) {
+/** Auswahl-Werkzeuge einer Runde (gemeinsamer Zustand `used`, Quellenliste, Eignung). Für `selectRound`, `selectVortest` und die Fokus-Runde (`focusRound.ts`). */
+export function roundPicker(i: Pick2) {
   const rng = mulberry32(hash32(i.seed));
   const used = new Set<string>(i.exclude ?? []);
   const profile: InputProfile = i.profile ?? 'keys';
@@ -441,7 +442,7 @@ function picker(i: Pick2) {
   };
   return { used, profile, sources, gt, block, fresh, anySeed, take, eligible, isRep };
 }
-type Pick2 = Pick<RoundInput, 'mode' | 'introduce' | 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'introBlock' | 'profile' | 'wordsToday' | 'exclude' | 'reported'>;
+export type Pick2 = Pick<RoundInput, 'mode' | 'introduce' | 'grammarDocs' | 'dailyOpen' | 'pool' | 'seed' | 'gt' | 'introBlock' | 'profile' | 'wordsToday' | 'exclude' | 'reported'>;
 
 /** Vorrang der Formen im Einführungsblock: erkennen (meaning, mc), ergänzen (gap), dann das Gegenstück (§5.3). */
 const INTRO_FORMS: readonly (readonly GrammarTaskType[])[] = [['meaning', 'mc'], ['mc', 'meaning'], ['gap', 'kwt', 'find'], ['mc', 'meaning', 'find', 'kwt', 'gap']];
@@ -451,7 +452,7 @@ const INTRO_FORMS: readonly (readonly GrammarTaskType[])[] = [['meaning', 'mc'],
  * Kurzweg der Einstufung (Lernplattform 3.0 P34): `n = 4`, die Aufgaben laufen reihum über die übergebenen Muster (alle Muster des Themas).
  */
 export function selectVortest(i: Pick2 & { topic: string; pats: readonly string[]; n?: 2 | 4 }): GrammarTask[] {
-  const pk = picker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
+  const pk = roundPicker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
   const out: GrammarTask[] = [];
   const pats = i.pats.length ? i.pats : [null];
   for (let k = 0; k < (i.n ?? 2); k++) {
@@ -467,7 +468,7 @@ export function selectVortest(i: Pick2 & { topic: string; pats: readonly string[
  * erst ungesehene, dann auch schon gesehene. Ohne Musterdatei: beliebige Aufgaben des Themas. Ohne Hilfe gestellt; Bewertung in `topicTest.ts`.
  */
 export function selectTopicTest(i: Pick2 & { topic: string; pats: readonly string[]; n: number }): GrammarTask[] {
-  const pk = picker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
+  const pk = roundPicker({ ...i, mode: 'duty', introBlock: { topic: i.topic, pats: [...i.pats] } });
   const out: GrammarTask[] = [];
   const pats = i.pats.length ? i.pats : [null];
   // Emrah 08.11.2026: Umformungen (kwt) nur noch als letzte Wunschform, auch im Themen-Test.
@@ -493,7 +494,7 @@ export function selectTopicTest(i: Pick2 & { topic: string; pats: readonly strin
  */
 export function variantOf(t: GrammarTask, i: Pick2 & { exclude?: ReadonlySet<string> }): GrammarTask | null {
   if (!t.pat) return null;
-  const pk = picker({ ...i, mode: 'xtra', exclude: new Set([...(i.exclude ?? []), t.key]) });
+  const pk = roundPicker({ ...i, mode: 'xtra', exclude: new Set([...(i.exclude ?? []), t.key]) });
   return pk.fresh({ topic: t.topic, prefer: [t.type], strict: false, pats: [t.pat] });
 }
 
@@ -506,7 +507,7 @@ export function variantOf(t: GrammarTask, i: Pick2 & { exclude?: ReadonlySet<str
  * Mit Einführungsblock stehen nach den Fehlersätzen 4 Aufgaben zu den Mustern des Tages am Stück.
  */
 export function selectRound(i: RoundInput): GrammarTask[] {
-  const pk = picker(i);
+  const pk = roundPicker(i);
   const { used, profile, gt, block, fresh, anySeed, take, isRep } = pk;
 
   // 1. Fällige Fehler.

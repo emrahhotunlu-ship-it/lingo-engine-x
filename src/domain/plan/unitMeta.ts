@@ -39,6 +39,8 @@ function readGt(v: unknown): GrammarDay | null {
   const out: GrammarDay = { intro: o.intro, pats, topics };
   // Kapitel-Arbeit (K3): nur eine ganze Zahl 1 bis 7 gilt, alles andere fällt still weg (der Plan bleibt gültig).
   if (typeof o.ch === 'number' && Number.isInteger(o.ch) && o.ch >= 1 && o.ch <= 7) out.ch = o.ch;
+  // Fokus-Thema (Politur P3): nur die Marke 1 gilt, alles andere fällt still weg (der Plan bleibt gültig, die Runde mischt dann wie bisher).
+  if (o.fo === 1) out.fo = 1;
   return out;
 }
 

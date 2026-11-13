@@ -44,7 +44,9 @@ const bookOrder = (topic: string): number => {
   return i;
 };
 import { pageLabel, startBookStep } from './BookScreen';
-import { bookGrammarLeft, bookKeys, bookTesting, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type TestState } from './session';
+import { bookGrammarLeft, bookKeys, bookTesting, cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, testVoidOpen, touchGrammar, useGrammarSession, type FocusRun, type TestState } from './session';
+import { stageLine, stageName } from './focusView';
+import { STAGE_UP_CLEAN } from '../../domain/grammar/focus';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt. Vorn steht bei einem neuen Muster der Vortest und die Einführung
@@ -103,7 +105,9 @@ export function GrammarSessionScreen() {
   const win = useWinOn(task ?? null, tutorOn);
   // Buch-Seite: nach den Seiten-Aufgaben angehängte Fehlersätze bzw. Wiederholung sichtbar zählen (Nachprüfung 09.11.2026 N1).
   const bookExtra = !!s.book?.n && s.status === 'running' && s.pos >= s.book.n ? { n: s.pos - s.book.n + 1, total: s.tasks.length - s.book.n } : null;
-  const badge = bookExtra ? t('bkExtraBadge', bookExtra) : bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
+  // Fokus-Runde (Politur P3): die Plakette sagt, wo man in der Runde steht – „Aufwärmen“ bzw. die Stufe des Fokus-Themas.
+  const focusBadge = !s.focus || !task || inRepeat(s) ? null : task.warm && task.errorT === null ? t('gfWarmBadge') : task.fo ? stageLine(task.fo, t) : null;
+  const badge = bookExtra ? t('bkExtraBadge', bookExtra) : bookTest ? (blind ? t('bkExamBadge', { n: s.pos + 1, total: s.tasks.length }) : t('bkTestBadge')) : win ? t('ttWin') : inTest && s.test ? t('pxKTestBadge') : vortest ? t('gxBadgeVortest', { n: s.pos + 1, total: s.intro?.vtN ?? 2 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : focusBadge ? focusBadge : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       {/* Grammatik-Buch (UX-Prüfung 09.11.2026 S3): der Kopf nennt Lektion und Seite bzw. die Klausur statt nur „Grammatik“. */}
@@ -136,7 +140,7 @@ export function GrammarSessionScreen() {
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             {/* Tutor-Engine v3 (S2/S3): nach dem Tausch „Kurz etwas Bekanntes“ als Plakette in der Statuszeile (U3: kein reservierter Platz); „Warum diese Aufgabe?“ steht im ⓘ – nicht im Vortest, im Test und in der Wiederholung. */}
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest || bookExtra ? 'hint' : undefined} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} onLeave={leaveBook} profile={s.profile} noHelp={vortest || inTest || bookTest} blind={blind} testVoid={inTest && testVoidOpen(s)} badgeTone={win || inTest || bookTest || bookExtra || focusBadge ? 'hint' : undefined} topicRound={task.fo === 1 || (!s.focus && (s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))))} support={task.fo === 1} badge={badge} {...(win ? { badgeTestId: 'tutor-win' } : {})} tutor={tutorOn && !s.fixed} reason={reason} mod={gmod} />
           </StepBoundary>
         ) : (
           <div data-testid="summary">
@@ -226,6 +230,9 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
   }));
   // Ohne Muster (Themen ohne Musterdatei): die geübten Themen als Zeilen ohne Punkte.
   const plain = growth.length ? [] : [...new Set(s.results.map((r) => r.topic))].map((tp) => t('gxEndNoPattern', { topic: topicName(tp, lang) }));
+  // Fokus-Runde: EIN Satz, wo das Thema jetzt steht (aufgestiegen, Serie, leichter, sitzt) – steht vor den übrigen Fakten.
+  const focusFact = focusEndLine(s.focus ?? null, s.day, t, lang);
+  if (focusFact) facts.unshift(focusFact);
   const right = s.results.filter((r) => r.ok).length;
   const next = s.block ? null : ready ? firstOpenDuty({ duties }) : null;
   const main = s.block
@@ -275,6 +282,18 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
       {...(!s.block && next ? { secondary: { label: t('sumBack'), run: back } } : {})}
     />
   );
+}
+
+/** Rundenende einer Fokus-Runde: wo das Fokus-Thema jetzt steht. `null` ohne Fokus-Antwort in dieser Runde. */
+function focusEndLine(f: FocusRun | null, day: string, t: ReturnType<typeof useT>['t'], lang: 'de' | 'en'): string | null {
+  if (!f?.st) return null;
+  const v = { topic: topicName(f.topic, lang), n: f.stage, name: stageName(f.stage, t), k: Math.min(STAGE_UP_CLEAN, f.st.k) };
+  if (f.st.ok) return t('gfEndSits', v);
+  if (f.moved === 'up') return t('gfEndUp', v);
+  if (f.moved === 'down') return t('gfEndDown', v);
+  if (f.st.gp === day) return t('gfEndNextStep', v);
+  if (f.st.m === 1) return t('gfEndMix', v);
+  return t('gfEndStay', v);
 }
 
 /** Kopfzeile einer Buch-Runde: „used to · Übung A“ bzw. „Klausur Kapitel 1“. */

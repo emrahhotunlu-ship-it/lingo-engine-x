@@ -1,5 +1,5 @@
 import { splitWords } from '../answer/align';
-import { v2Tasks } from '../grammar/patterns';
+import { isRetired, v2Tasks } from '../grammar/patterns';
 import type { FindTask, KwtTask, V2Task } from '../grammar/patternTypes';
 import { keyOf, findSeq } from './kinds/common';
 import { kwtWords } from './kwtNorm';
@@ -71,8 +71,9 @@ export function legacyV2Items(): readonly C1Item[] {
   const all = v2Tasks();
   const out: C1Item[] = [];
   all.forEach((t: V2Task, i) => {
-    if (t.type === 'kwt') out.push(kwtFrom(t, i + 1));
-    else if (t.type === 'find') out.push(errFrom(t, i + 1));
+    // Stillgelegte Aufgaben (`retired.json`) fehlen hier; die Zählung bleibt (IDs `kwt-v2-<n>` hängen an der Position in der Datei).
+    if (t.type === 'kwt' && !isRetired(t.frame, t.topic)) out.push(kwtFrom(t, i + 1));
+    else if (t.type === 'find' && !isRetired(t.prompt, t.topic)) out.push(errFrom(t, i + 1));
   });
   cache = out;
   return out;

@@ -100,6 +100,8 @@ export type GrammarItemProps = {
   profile?: InputProfile;
   /** Themenrunde oder Einführung: die Musterkarte steht offen. */
   topicRound?: boolean;
+  /** Fokus-Thema, Stufe „Verstehen“ (Politur P3): die Lücke zeigt von Anfang an ihre Platzhalter (Stütze), unabhängig von der Beherrschung. */
+  support?: boolean;
   /** Grammatikrunde mit Tutor-Engine (S3): nach 2 Fehlern gleicher Ursache kommt statt der Rückmeldung die Mini-Lektion. */
   tutor?: boolean;
   /** Großpaket G (Schalter `gcfg.mod`): neue Grammatik – ruhige Claude-Karte bei falsch (G3). */
@@ -198,7 +200,8 @@ export function wholeSentences(text: string): string {
 
 export function GrammarItem(props: GrammarItemProps) {
   const { task } = props;
-  return isC1Task(task) ? <C1Item {...props} task={task} /> : <LegacyGrammarItem {...props} />;
+  // Fokus-Thema, Stufe „Umformen“: die erste Umformung kommt mit Bausteinen (`ease`), auf jedem Gerät.
+  return isC1Task(task) ? <C1Item {...props} task={task} tiles={task.ease === 'tiles'} /> : <LegacyGrammarItem {...props} />;
 }
 
 function LegacyGrammarItem({
@@ -215,6 +218,7 @@ function LegacyGrammarItem({
   blind = false,
   profile: profileProp,
   topicRound = false,
+  support = false,
   tutor: tutorOn = false,
   reason = null,
   onLeave = null,
@@ -333,7 +337,7 @@ function LegacyGrammarItem({
   const fixedCase = fb && kwtKey && !fb.dontKnow && fb.verdict === 'correct' ? caseFix(fb.given, kwtKey, solution) : null;
   const typedKind = !choiceType && !findTask;
   const gapKind = typedKind && !whole && (type === 'gap' || type === 'transform' || type === 'kwt');
-  const scaff = type === 'gap' && scaffolded(pStart) && !noHelp;
+  const scaff = type === 'gap' && (support || scaffolded(pStart)) && !noHelp;
   const maskShown = gapKind && type !== 'kwt' && (scaff || tip >= 3);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 3 }) : null;
   // Jede Stufe der Tipp-Leiter zählt als Hilfe: H1 (Leitfrage) bis „Gut“, H2 (Formel) und H3 (erster Buchstabe) bis „Schwer“; der Zweitversuch wie H2/H3.

@@ -7,6 +7,8 @@ import { grammarFehlersaetzeDue } from '../repair/fehlersaetze';
 import { certainty, topicP } from './bkt';
 import { liveErrorsOf } from './errors';
 import { rankTopics } from './tasks';
+import { focusDay, focusPick } from './focus';
+import { warmTopics } from './focusRound';
 
 // Grammatik-Pfad (Gesamtkonzept Kap. 3.4, `docs/umbau/02-lehrplan.md` Kap. 4): die Themen in
 // Lehrreihenfolge B2 → C1, der Zustand je Thema, die Einführungsbremse und der Lernweg ①–⑤.
@@ -275,7 +277,20 @@ export function freezeGrammarDay(i: {
   focus?: string | null;
 }): { gt: GrammarDay; ps: Record<string, PatState> } {
   let gt: GrammarDay;
-  if (i.chapter) gt = chapterDay({ ...i, chapter: i.chapter, focus: i.focus ?? null });
+  // Fokus-Thema (Politur P3, Emrah E1 „A“ 13.11.2026): EIN Thema über mehrere Tage. Es steht vorn (`topics[0]`, Marke `fo`), dahinter die
+  // Aufwärm-Kandidaten (fällige frühere Themen). Ein neues Thema ist zugleich die Einführung des Tages. Sitzt alles, gilt der bisherige Weg.
+  const fp = focusPick({ docs: i.docs, today: i.today, nowMs: i.nowMs, chapterTopic: i.chapter?.cursor.topic ?? null });
+  if (fp) {
+    const day = focusDay(fp.topic, i.docs.get(fp.topic), i.today, fp.state);
+    const inChapter = !!i.chapter && i.chapter.topics.includes(fp.topic);
+    gt = {
+      intro: fp.fresh ? fp.topic : null,
+      pats: fp.fresh ? day.pats.slice(0, 2) : [],
+      topics: [fp.topic, ...warmTopics(i.docs, i.nowMs, fp.topic, 2)].slice(0, 3),
+      ...(inChapter && i.chapter ? { ch: i.chapter.n } : {}),
+      fo: 1,
+    };
+  } else if (i.chapter) gt = chapterDay({ ...i, chapter: i.chapter, focus: i.focus ?? null });
   else {
     const step = introStepFor(i);
     const intro = step?.topic ?? null;

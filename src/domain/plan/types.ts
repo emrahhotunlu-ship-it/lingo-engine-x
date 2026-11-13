@@ -49,6 +49,11 @@ export type GrammarDay = {
   topics: string[];
   /** Kapitel-Arbeit (K3), additiv: Der Grammatikschritt folgt diesem Kapitel (1 bis 7). Ältere Versionen lesen ihn nicht und rechnen wie bisher. */
   ch?: number;
+  /**
+   * Fokus-Thema (Politur P3, 13.11.2026), additiv: `topics[0]` ist das Fokus-Thema des Tages (eine Runde = ein Thema über mehrere Tage), die
+   * übrigen Themen sind die Aufwärm-Kandidaten. Ältere Versionen lesen das Feld nicht und mischen die drei Themen wie bisher.
+   */
+  fo?: 1;
 };
 
 /** Eingefrorene Eckdaten der Tageseinheit (ohne `env`, Prüfbefund M5). */

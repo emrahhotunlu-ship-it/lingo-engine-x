@@ -107,6 +107,8 @@ export type C1ItemProps = {
   topicRound?: boolean;
   /** Kein automatisches Weiter nach einer richtigen Antwort (Tempo-Runde, P24). */
   noAuto?: boolean;
+  /** Fokus-Thema, Stufe „Umformen“ (Politur P3): die Umformung mit Bausteinen stellen, auf jedem Gerät und bei jeder Beherrschung. */
+  tiles?: boolean;
   /** Nachtrag LS3: geprüft, aber nicht bestätigt → beim Verlassen buchen (`stay`: verborgen, Aufgabe bleibt; `go`: weiterrechnen). Wie `GrammarItem`. */
   onLeave?: ((a: GrammarAnswer, mode: 'stay' | 'go') => void) | null;
 };
@@ -116,7 +118,7 @@ const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().
 const tick = (): number => performance.now();
 
 export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObject<HTMLDivElement | null>): ExerciseShellProps {
-  const { task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, noAuto = false, onLeave = null } = props;
+  const { task, ctx, day, onDone, area = 'trainer', badge = null, badgeTone, noHelp = false, profile: profileProp, topicRound = false, noAuto = false, onLeave = null, tiles = false } = props;
   const item = task.c1;
   const { t, lang } = useT();
   const api = useHiddenInput();
@@ -125,6 +127,9 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const inp = profile === 'touch' ? 'touch' : 'desk';
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const p = topicP(task.topic, doc, now);
+  // Eingabeform der Art: mit `tiles` Bausteine (wie am Handy bis p 0,7), sonst nach Gerät und Beherrschung. Protokoll (`inp`) und Erklärtiefe (`p`) bleiben echt.
+  const formInp = tiles ? 'touch' : inp;
+  const formP = tiles ? Math.min(p, 0.7) : p;
   // Fehler finden: Muster, Beispiele und „Nicht verwechseln“ nur, wenn die Aufgabe ihr Muster ausdrücklich nennt (Signalwörter im Fehlersatz treffen oft ein fremdes).
   const pattern = useMemo(() => (item.kind === 'err' && !task.pat && !item.pat ? null : patternOf(task)), [task, item]);
   const patId = task.pat ?? pattern?.id ?? null;
@@ -486,12 +491,12 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const ctrl: C1Ctrl = {
     task,
     item,
-    inp,
+    inp: formInp,
     profile,
     lang,
     day,
     area,
-    p,
+    p: formP,
     locked: fb !== null,
     busy: fit.busy,
     ownFix: fb?.alt && !fb.override && fb.response.kind === 'err' ? (fb.response.fix?.trim() ?? null) : null,
@@ -549,7 +554,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const caseLine = fixedCase && item.kind === 'kwt' ? t('grCaseHint', { key: item.key }) : null;
   // Teile und Teilpunkte nur, wo auch in Teilen geantwortet wurde (Handy: Bausteine bzw. Teil A/B); eine einzige getippte Lücke zeigt keine (UX-Prüfung Q0).
   // Ausnahme „Fast“: dann sagen die Teile, WAS gefehlt hat (Pflichtfrage „Was hatte ich?“, learning-scientist Q0).
-  const noParts = item.kind === 'kwt' && rv !== 'near' && (kwtShort(item) || kwtModeFor(item, inp, p) === 'desk');
+  const noParts = item.kind === 'kwt' && rv !== 'near' && (kwtShort(item) || kwtModeFor(item, formInp, formP) === 'desk');
   const sub = [noParts ? null : pointsSub, head?.sub, variantModel ? t('grVariantSub', { model: variantModel }) : null, caseLine].filter((x): x is string => !!x).join(' · ') || null;
   const matched = fb && !fb.dontKnow ? whyFor(task, { given: fb.given, ...(fb.meta.picked !== undefined ? { picked: fb.meta.picked } : {}), ...(fb.meta.tapped !== undefined ? { tapped: fb.meta.tapped } : {}) }).rule : null;
 

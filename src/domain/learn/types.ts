@@ -48,6 +48,15 @@ export type GrammarTask = {
   slot?: TaskSlot;
   /** Großpaket G4: eigener Fehlersatz aus `app/repair` (Kennung des Eintrags). Die Antwort gehört in `app/repair` (Boxen 1/3/9), nie in `grammar/<thema>`. */
   rep?: string;
+  /**
+   * Fokus-Thema (Politur P3): Stufe (1 Verstehen … 4 Mischen), für die die Aufgabe im Fokus-Teil der Runde gewählt wurde. Nur solche Antworten
+   * bewegen den Lauf (`grammar/<thema>.fo`, `domain/grammar/focus.ts`). Nur in der Runde, nie in Pool oder Protokoll gespeichert.
+   */
+  fo?: 1 | 2 | 3 | 4;
+  /** Fokus-Runde: Aufwärm-Aufgabe vorn (fällige Wiederholung eines früheren Themas oder eigener Fehlersatz). Nur in der Runde. */
+  warm?: true;
+  /** Fokus-Runde, Stufe „Umformen“: die erste Umformung mit Bausteinen statt getippt (auf jedem Gerät). Nur in der Runde. */
+  ease?: 'tiles';
 };
 
 /**

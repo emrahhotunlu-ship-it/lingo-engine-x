@@ -41,6 +41,10 @@ import {
   type RoundMode,
 } from '../../domain/grammar/tasks';
 import { patPush, patsOf, type PatEntry } from '../../domain/metrics/pattern';
+import { topicP } from '../../domain/grammar/bkt';
+import { focusDay, focusOpen, focusStep, groupOf, groupsLeft, readFocus, stageOf, type FocusMove, type FocusStage, type FocusState } from '../../domain/grammar/focus';
+import { refocus, selectFocusRound, type FocusRoundIn } from '../../domain/grammar/focusRound';
+import { dayKeyNoon } from '../../domain/date';
 import { DUTY_ROUND } from '../../domain/plan/channels';
 import { planRvOf, unitGrammarArgs } from '../../domain/unit/plan';
 import type { Ctx, GrammarAnswer, GrammarTask } from '../../domain/learn/types';
@@ -92,6 +96,8 @@ export type IntroState = {
   fresh: boolean;
   /** Zahl der Vortest-Aufgaben vorn (0 oder 2; 4 beim Kurzweg der Einstufung). */
   vtN: number;
+  /** Fokus-Runde: Stelle, an der die kurze Regel steht (nach dem Aufwärmen); ohne Angabe nach dem Vortest (`vtN`). */
+  at?: number;
   /** Kurzweg der Einstufung (Lernplattform 3.0 P34): 4 Aufgaben über alle Muster, bestanden bei mindestens 3 sauberen. */
   kurz?: boolean;
   /** Karten schon gesehen? */
@@ -148,6 +154,26 @@ type State = {
   ext?: 'c1x' | null;
   /** Grammatik-Buch: Seite oder Klausur (sonst `null`). */
   book?: BookRun | null;
+  /** Fokus-Runde (Politur P3): ein Thema in der Stufe des Tages, vorn das Aufwärmen (sonst `null`). */
+  focus?: FocusRun | null;
+};
+
+/**
+ * Fokus-Runde (Emrah E1 „A“ 13.11.2026): das Fokus-Thema, seine Stufe beim Start und jetzt, die lokale Kopie des Laufs (dieselbe reine Rechnung
+ * wie beim Speichern, `focusStep`), die Muster des Tages, die Zahl der Aufwärm-Aufgaben und die geplante Größe (für die ehrliche Zeit).
+ */
+export type FocusRun = {
+  topic: string;
+  stage0: FocusStage;
+  stage: FocusStage;
+  st: FocusState | null;
+  pats: string[];
+  /** Lokal eingeführte Muster (`all` = Altbestand ohne `pats`). */
+  introduced: string[] | 'all';
+  warm: number;
+  size: number;
+  /** Letzte Bewegung in dieser Runde (für die Abschlusszeile). */
+  moved: FocusMove;
 };
 
 export type TestState = { topic: string; n: number; result: { c: number; n: number; ok: boolean } | null };
@@ -192,6 +218,7 @@ export const useGrammarSession = create<State>(() => ({
   patLog: [],
   test: null,
   prep: false,
+  focus: null,
 }));
 
 const IDLE_CAP_MS = 60_000;
@@ -216,6 +243,8 @@ export type StartOpts = {
   pats?: readonly string[] | null;
   /** Kapitel-Arbeit: Übung statt Themen-Test (zu wenig Testaufgaben); die Runde zeigt vorn den Hinweis `pxKTestPrep`. */
   prep?: boolean;
+  /** Fokus-Runde zu `topic` aus dem Grammatik-Reiter (auch nach erledigter Pflicht: „Noch eine Runde“). Die Pflichtrunde erkennt sie selbst am Plan (`u.gt.fo`). */
+  focus?: boolean;
 } & {
   /** Grammatik-Buch: diese Seite (`topic` + A/B/C/T) bzw. die Klausur (`chapter` + X); `attempt` = Zahl der bisherigen Versuche (mischt neu). */
   book?: BookRun;
@@ -235,7 +264,7 @@ const kindOf = (t: GrammarTask | undefined): 'typed' | 'choice' | null => (!t ? 
 
 /** Anfangs gibt es für den ersten Handler noch keine Karten: dann ist die erste Aufgabe der Vortest oder die erste Aufgabe. */
 function firstKind(s: Pick<State, 'tasks' | 'intro'>): 'typed' | 'choice' | null {
-  if (s.intro && s.intro.vtN === 0 && s.intro.cards === 'pending') return null;
+  if (s.intro && (s.intro.at ?? s.intro.vtN) === 0 && s.intro.cards === 'pending') return null;
   return kindOf(s.tasks[0]);
 }
 
@@ -256,6 +285,87 @@ export function topicTestReady(topic: string, grammarDocs?: ReadonlyMap<string, 
   // Die Rangfolge der Wörter von heute ändert nur die Reihenfolge, nie die Zahl: hier nicht nötig.
   const base = { grammarDocs: docs, dailyOpen: [...extraTasks, ...inputs.dailyOpen], pool: inputs.pool, seed: 'tt-probe', gt: null, profile: inputProfile(), wordsToday: [] };
   return pickTopicTest(base, topic).length >= TT_MIN;
+}
+
+type FocusBase = Pick<RoundInput, 'dailyOpen' | 'pool' | 'profile' | 'wordsToday' | 'reported'>;
+
+/**
+ * Eingabe der Fokus-Runde aus dem Stand des Themas: Stufe und Lauf (`fo`), die Muster des Tages, ob vorn die kurze Regel steht, und die schon
+ * eingeführten Muster. `state`: der lokal fortgeschriebene Lauf (nach einem Stufenwechsel mitten in der Runde), sonst der gespeicherte.
+ */
+function focusInput(a: {
+  topic: string;
+  day: string;
+  seed: string;
+  size: number;
+  docs: ReadonlyMap<string, Record<string, unknown>>;
+  base: FocusBase;
+  nowMs: number;
+  repairs?: readonly GrammarTask[];
+  c1?: RoundInput['c1'];
+  state?: FocusState | null;
+}): { input: FocusRoundIn; day: ReturnType<typeof focusDay>; st: FocusState | null; introduced: string[] | 'all' } {
+  const doc = a.docs.get(a.topic);
+  const st0 = a.state === undefined ? readFocus(doc) : a.state;
+  const st = focusOpen(st0) ? st0 : null;
+  const day = focusDay(a.topic, doc, a.day, st);
+  const entries = patsOf(doc);
+  const introduced: string[] | 'all' = !isNewTopic(doc) && !Object.keys(entries).length ? 'all' : Object.entries(entries).filter(([, e]) => e.i !== undefined).map(([id]) => id);
+  // Abwechselnd je Lerntag: zuerst ein eigener Fehlersatz bzw. zuerst eine fällige Themen-Wiederholung (bei nur einem Aufwärm-Platz kommt so beides dran).
+  const warmFirst = Math.floor(dayKeyNoon(a.day) / 86_400_000) % 2 === 0 ? ('error' as const) : ('review' as const);
+  const input: FocusRoundIn = {
+    grammarDocs: a.docs,
+    dailyOpen: a.base.dailyOpen,
+    pool: a.base.pool,
+    seed: a.seed,
+    ...(a.base.profile ? { profile: a.base.profile } : {}),
+    ...(a.base.wordsToday ? { wordsToday: a.base.wordsToday } : {}),
+    ...(a.base.reported ? { reported: a.base.reported } : {}),
+    ...(a.repairs?.length ? { repairs: a.repairs } : {}),
+    ...(a.c1 ? { c1: a.c1 } : {}),
+    nowMs: a.nowMs,
+    size: a.size,
+    topic: a.topic,
+    stage: stageOf(st),
+    pats: day.pats,
+    rule: day.rule,
+    warmFirst,
+  };
+  return { input, day, st, introduced };
+}
+
+/**
+ * Fokus-Runde: eine Antwort auf eine Fokus-Aufgabe im Lauf buchen (dieselbe reine Rechnung wie beim Speichern) und nach einem Stufenwechsel
+ * die noch offenen Fokus-Aufgaben in der neuen Stufe neu wählen (Aufstieg nach 3 sauberen Antworten in Folge, Abstieg nach 2 Fehlern am selben Muster).
+ */
+function focusAnswer(s: State, f: FocusRun, a: GrammarAnswer, tasks: GrammarTask[], pos: number): { focus: FocusRun; tasks: GrammarTask[] } {
+  const stage = a.task.fo;
+  if (!stage) return { focus: f, tasks };
+  const live = useLive.getState();
+  const docs = live.collections.grammar ?? new Map<string, Record<string, unknown>>();
+  const nowMs = useClock.getState().now;
+  const ok = isOk(a);
+  const pat = a.task.pat ?? null;
+  const add = pat ? (stage === 1 ? groupOf(f.topic, pat) : [pat]) : [];
+  const introduced: string[] | 'all' = f.introduced === 'all' ? 'all' : [...new Set([...f.introduced, ...add])];
+  const has = (id: string): boolean => introduced === 'all' || introduced.includes(id);
+  const r = focusStep(f.st, { day: s.day, clean: ok && a.help.level === 0, wrong: !ok, pat, p: topicP(f.topic, docs.get(f.topic), nowMs), stage, more: groupsLeft(f.topic, has) });
+  let next: FocusRun = { ...f, st: r.next, stage: r.next.s, introduced, moved: r.move === 'none' ? f.moved : r.move };
+  const end = s.repeatAt ?? tasks.length;
+  if ((r.move !== 'up' && r.move !== 'down') || pos >= end) return { focus: next, tasks };
+  const inputs = useLearnInputs.getState();
+  const fin = focusInput({
+    topic: f.topic,
+    day: s.day,
+    seed: `${s.day}|focus|${s.step}`,
+    size: f.size,
+    docs,
+    base: { dailyOpen: inputs.dailyOpen, pool: inputs.pool, profile: s.profile, wordsToday: ctxInput?.wordsToday ?? [], reported: reportedSetOf(live.docs['app/c1']) },
+    nowMs,
+    state: r.next,
+  });
+  next = { ...next, pats: fin.day.pats };
+  return { focus: next, tasks: refocus(fin.input, tasks, pos, end) };
 }
 
 /** Runde bauen. Rückgabe: Eingabeart der ersten Aufgabe (für den Fokus im selben Handler). */
@@ -307,7 +417,13 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const chapterTopics = mode === 'duty' && gt?.ch ? (programChapters()[gt.ch - 1]?.topics ?? null) : null;
   // Großpaket G4 (Entscheidung 2): Mit der neuen Grammatik kommen eigene Fehlersätze (`app/repair`) im Grammatik-Schritt und in der
   // Fehlersatz-Runde zurück, innerhalb derselben Höchstzahl. Der alte Weg (`gcfg.mod = 0`) bleibt unverändert.
-  const repairs = (mode === 'duty' || mode === 'errors') && grammarModuleOn(live.docs['app/profile'])
+  const gmod = grammarModuleOn(live.docs['app/profile']);
+  // Fokus-Thema (Politur P3): die Pflichtrunde folgt dem eingefrorenen Fokus-Thema des Plans (`u.gt.fo`); aus dem Reiter ausdrücklich (`o.focus`).
+  // Nie im Buch, im Test, in festen Runden und nicht mit dem Schalter „Neue Grammatik“ aus (dann der bisherige gemischte Weg).
+  const gtFocus = gt?.fo === 1 && gt.topics[0] && topicById(gt.topics[0]) ? gt.topics[0] : null;
+  const plainRound = !o.book && !o.test && !o.tasks?.length && !o.kind && !o.pat && !o.intro && !o.pats?.length && !o.prep;
+  const focusTopic = !gmod || !plainRound ? null : o.focus && o.topic && topicById(o.topic) ? o.topic : mode === 'duty' && (!o.topic || o.topic === gtFocus) ? gtFocus : null;
+  const repairs = (mode === 'duty' || mode === 'errors' || !!focusTopic) && gmod
     ? repairTasks(dueFehlersaetze({ grammarDocs: docs, repairDoc: live.docs['app/repair'], nowMs, today: day, lang }).filter((f) => f.store === 'repair' && !isReportedTask(reported, `rep:${f.id}`)), checkKwtOf)
     : [];
   const common = { ...base, nowMs, topic: o.topic ?? null, ...(errorsMax !== undefined ? { errorsMax } : {}), ...(c1 ? { c1 } : {}), ...(chapterTopics ? { chapter: chapterTopics } : {}), ...(repairs.length ? { repairs } : {}) };
@@ -316,7 +432,8 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   let bookN = 0;
   let intro: IntroState | null = null;
   let test: TestState | null = null;
-  const size = o.size ?? (tabBlock ? unitGrammarArgs(plan).n : ROUND_SIZE[mode]);
+  const size = o.size ?? (tabBlock || focusTopic ? unitGrammarArgs(plan).n : ROUND_SIZE[mode]);
+  let focus: FocusRun | null = null;
   // Einführung: die des Tages (Pflicht, `u.gt`) oder ein Einführungsschritt aus dem Kapitel (`o.intro`, Themenrunde).
   const introSrc = o.intro && topicById(o.intro.topic) ? { topic: o.intro.topic, pats: [...o.intro.pats] } : gt?.intro ? { topic: gt.intro, pats: gt.pats } : null;
   const introTopicId = introSrc ? introSrc.topic : null;
@@ -327,9 +444,18 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     if (!own.length) return null;
     // learning-scientist 08.11.2026: Ist die Buch-Seite der Grammatik-Schritt des Tages, kommen die fälligen Fehlersätze danach als Wiederholung
     // (nicht im Lektionstest und nicht in der Klausur); sie zählen nicht ins Seitenergebnis.
-    const due = ctx === 'duty' && o.book.part !== 'T' && o.book.part !== 'X' ? selectRound({ ...common, mode: 'errors', size: errorsMax ?? 2 }).filter((t) => t.errorT !== null || !!t.rep) : [];
+    // Zeit ehrlich (Politur P3): höchstens 2 angehängte Fehlersätze.
+    const due = ctx === 'duty' && o.book.part !== 'T' && o.book.part !== 'X' ? selectRound({ ...common, mode: 'errors', size: Math.min(APPEND_MAX, errorsMax ?? APPEND_MAX) }).filter((t) => t.errorT !== null || !!t.rep) : [];
     tasks = [...own, ...due.filter((t) => !own.some((x) => x.key === t.key))];
     bookN = own.length;
+  } else if (focusTopic) {
+    // Fokus-Runde: 1–2 Aufwärm-Aufgaben, dann nur das Fokus-Thema in der Stufe des Tages; am ersten Tag (bzw. beim nächsten Einführungsschritt)
+    // steht nach dem Aufwärmen die kurze Regel (höchstens 2 Muster).
+    const fin = focusInput({ topic: focusTopic, day, seed, size, docs, base, nowMs, repairs, c1 });
+    const r = selectFocusRound(fin.input);
+    tasks = r.tasks;
+    if (fin.day.rule && tasks.some((t) => t.fo !== undefined)) intro = { topic: focusTopic, pats: fin.day.pats, fresh: isNewTopic(docs.get(focusTopic)), vtN: 0, at: r.warm, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 };
+    focus = { topic: focusTopic, stage0: fin.input.stage, stage: fin.input.stage, st: fin.st, pats: fin.day.pats, introduced: fin.introduced, warm: r.warm, size, moved: 'none' };
   } else if (o.test && o.topic) {
     // Themen-Test (K4): 6 Aufgaben über alle Muster des Themas; weniger als 4 → „in Vorbereitung“, keine Runde.
     const picked = pickTopicTest(base, o.topic);
@@ -425,7 +551,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     before,
     patLog: [],
   };
-  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind || o.book), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null, book: o.book ? { ...o.book, saved: false, n: bookN } : null });
+  useGrammarSession.setState({ ...next, fixed: !!(test || o.tasks?.length || o.kind || o.book), displaced: [], ext: o.ext && o.kind && ctx === 'xtra' ? o.ext : null, book: o.book ? { ...o.book, saved: false, n: bookN } : null, focus });
   tutorRoundStart(day, ctx === 'duty');
   return tasks.length ? firstKind({ tasks, intro }) : null;
 }
@@ -446,12 +572,27 @@ export function touchGrammar(): void {
 
 /** Höchstens so viele falsche Aufgaben kommen am Rundenende noch einmal (N47). */
 export const REPEAT_MAX = 3;
+/** Zeit ehrlich (Politur P3): höchstens so viele Aufgaben werden an eine Fokus-Runde bzw. Buch-Seite angehängt. */
+export const APPEND_MAX = 2;
+/** Geplante Dauer: rund 0,8 Aufgaben je Minute (`grammarTasksFor`); je angehängter Aufgabe muss so viel Zeit übrig sein. */
+const TASK_MS = 75_000;
+const REPEAT_MS = 50_000;
+
+/**
+ * Wie viele falsche Aufgaben dürfen am Ende noch einmal kommen? Fokus-Runde: höchstens `APPEND_MAX` und nur, solange die geplante Zeit
+ * (Plätze ÷ 0,8 Aufgaben je Minute) nicht überschritten wird – die Runde dauert nie länger als angekündigt. Sonst wie bisher `REPEAT_MAX`.
+ */
+export function repeatCap(s: Pick<State, 'focus' | 'activeMs'>): number {
+  if (!s.focus) return REPEAT_MAX;
+  const left = s.focus.size * TASK_MS - s.activeMs;
+  return Math.max(0, Math.min(APPEND_MAX, Math.floor(left / REPEAT_MS)));
+}
 
 /** Steht die Runde gerade in der Wiederholung der falschen Aufgaben? */
 export const inRepeat = (s: Pick<State, 'repeatAt' | 'pos'>): boolean => s.repeatAt !== null && s.pos >= s.repeatAt;
 
 /** Sind jetzt die Musterkarten (bzw. die Regelkarte) dran? Vor der ersten Aufgabe, bzw. nach dem nicht bestandenen Vortest. */
-export const cardsDue = (s: Pick<State, 'status' | 'pos' | 'intro'>): boolean => s.status === 'running' && !!s.intro && s.intro.cards === 'pending' && s.pos === s.intro.vtN && s.intro.passed !== true;
+export const cardsDue = (s: Pick<State, 'status' | 'pos' | 'intro'>): boolean => s.status === 'running' && !!s.intro && s.intro.cards === 'pending' && s.pos === (s.intro.at ?? s.intro.vtN) && s.intro.passed !== true;
 
 /** Läuft gerade der Vortest (Position 0 oder 1 bei zwei Vortest-Aufgaben)? */
 export const inVortest = (s: Pick<State, 'pos' | 'intro' | 'status'>): boolean => s.status === 'running' && !!s.intro && s.pos < s.intro.vtN;
@@ -578,19 +719,28 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   const patLog = repeating || voided || !a.task.pat || a.alt ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
   const pos = s.pos + 1;
   let repeatAt = s.repeatAt;
+  // Fokus-Runde: nur Antworten auf Fokus-Aufgaben (`task.fo`) bewegen den Lauf; „Auch richtig“ ist kein Beleg (wie beim Speichern).
+  let focus = s.focus ?? null;
+  if (focus && !repeating && !voided && a.task.fo && a.task.topic === focus.topic && !a.alt) {
+    const fa = focusAnswer(s, focus, a, tasks, pos);
+    focus = fa.focus;
+    tasks = fa.tasks;
+  }
   // Themen-Test: keine „Nochmal“-Runde, das Ergebnis kommt sofort; die schwachen Stellen übt die nächste Runde (Cursor-Phase „Üben“).
   if (pos >= tasks.length && repeatAt === null && !test && !bookTesting(s.book)) {
     const wrong = new Set(results.filter((r) => !r.ok).map((r) => r.key));
     const used = new Set(tasks.map((t) => t.key));
     const again: GrammarTask[] = [];
+    // Zeit ehrlich (Politur P3): in der Fokus-Runde höchstens 2 und nur, solange die geplante Zeit reicht.
+    const cap = repeatCap(s);
     // Von `win` verdrängte Aufgaben zuerst (sie kamen heute sonst nicht mehr dran), dann die falschen.
     for (const t of s.displaced ?? []) {
-      if (again.length >= REPEAT_MAX || used.has(t.key)) continue;
+      if (again.length >= cap || used.has(t.key)) continue;
       used.add(t.key);
       again.push(t);
     }
     for (const t of tasks.filter((x) => wrong.has(x.key))) {
-      if (again.length >= REPEAT_MAX) break;
+      if (again.length >= cap) break;
       // Eine ungesehene Variante desselben Musters statt derselben Aufgabe (§4.7). Ohne Muster gilt nur in Plänen der alten Regel dieselbe Aufgabe.
       if (t.pat && ctxInput) {
         const v = variantOf(t, { mode: 'xtra', ...ctxInput, exclude: used });
@@ -606,7 +756,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     }
   }
   const done = pos >= tasks.length;
-  const next: State = { ...s, tasks, intro, test, repeatAt, results, patLog, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
+  const next: State = { ...s, tasks, intro, test, repeatAt, results, patLog, pos, step: s.step + 1, status: done ? 'summary' : 'running', focus };
   // Grammatik-Buch: Ergebnis speichern, sobald die Seite (ohne die freiwillige Wiederholung am Ende) fertig ist – genau einmal.
   if (s.book && !s.book.saved && pos >= Math.min(s.book.n ?? Infinity, repeatAt ?? tasks.length)) next.book = saveBook(s.book, results, s.activeMs, bookKeys(s));
   // Im Themen-Test bleibt jede Aufgabe, wie sie ist (keine Rückstufung).
@@ -615,7 +765,8 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
   const acted = !repeating && !voided && !s.book && !inVortest(s) && !(s.test && s.pos < s.test.n) ? tutorStep(s, next, a, done) : false;
   // Hat die Tutor-Engine die Runde schon eine Stufe gestützter gestellt (−1), greift die alte Rückstufung nicht zusätzlich (nicht doppelt erleichtern).
   const eased = !next.fixed && useTutorSession.getState().s.shift === -1;
-  if (!acted && !eased && !done && !s.book && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
+  // Fokus-Runde: die Stufe des Laufs entscheidet über leichtere Formen (`focusStep`), nicht die Rückstufung der gemischten Runde.
+  if (!acted && !eased && !done && !s.book && !s.focus && !inRepeat(next) && !cardsDue(next) && !(test && pos < test.n)) {
     // Rückstufung: zwei Fehlschläge in Folge im Thema der nächsten Aufgabe → eine Form leichter (nur in dieser Runde), gleiches Muster.
     const live = useLive.getState();
     const nextTask = tasks[pos];
@@ -690,11 +841,18 @@ function tutorStep(s: State, next: State, a: GrammarAnswer, done: boolean): bool
     m ? roundMove({ tasks: next.tasks, pos: next.pos, end, d, m, shift: useTutorSession.getState().s.shift, profile: s.profile, seed: `${next.day}|${next.step}`, pool, seen, pat: a.task.pat ?? null }) : null;
   // `win` nur, wenn es eine bekannte Aufgabe gibt; sonst bleibt die Runde, wie sie ist (die Serie zählt weiter). `explain` gilt, wo die
   // Rückmeldung die Mini-Lektion zeigt (nicht in festen Runden), auch wenn danach keine leichtere Aufgabe bereitsteht.
-  const d = tutorRecord(factOf(a, fresh), m, (x) => (x.move === 'win' ? open && (run(x)?.at ?? null) !== null : x.move === 'explain' ? !next.fixed : true));
+  // Fokus-Runde: kein Stufenwechsel über die Quote (freier/gestützter) – dort führt die Stufe des Laufs; Mini-Lektion und „Kurz etwas Bekanntes“ bleiben.
+  const d = tutorRecord(factOf(a, fresh), m, (x) => (x.move === 'win' ? open && (run(x)?.at ?? null) !== null : x.move === 'explain' ? !next.fixed : !next.focus));
   if (!open) return false;
   const r = run(d);
   if (!r || r.at === null) return false;
-  const t = r.tasks[r.at] as GrammarTask;
+  let t = r.tasks[r.at] as GrammarTask;
+  // Nach der Mini-Lektion ersetzt die Engine die nächste Aufgabe durch dasselbe Muster in leichterer Form: sie bleibt eine Fokus-Aufgabe.
+  const replaced = next.tasks[r.at];
+  if (next.focus && d.move === 'explain' && replaced?.fo && t.topic === next.focus.topic) {
+    t = { ...t, slot: 'focus', fo: next.focus.stage };
+    r.tasks[r.at] = t;
+  }
   next.tasks = r.tasks;
   if (r.displaced) next.displaced = [...(next.displaced ?? []), r.displaced];
   if (t.pat && !(t.pat in next.before)) next.before = { ...next.before, [t.pat]: patsOf(useLive.getState().collections.grammar?.get(t.topic))[t.pat] };
@@ -757,14 +915,16 @@ export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day
   /** M0: Herkunft Praxis der c1x-Runde (fehlt bei älteren Ständen = keine). */
   ext?: 'c1x' | null;
   book?: BookRun | null;
+  /** Fokus-Runde (fehlt bei älteren Ständen = keine). */
+  focus?: FocusRun | null;
 };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN, ext, book } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}), ...(ext ? { ext } : {}), ...(book ? { book } : {}) };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, fixed, displaced, endedN, ext, book, focus } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro, profile, rv, before, patLog, test, ...(fixed ? { fixed } : {}), ...(displaced?.length ? { displaced } : {}), ...(endedN ? { endedN } : {}), ...(ext ? { ext } : {}), ...(book ? { book } : {}), ...(focus ? { focus } : {}) };
 }
 
 const legacyIntro = (topic: string): IntroState => ({ topic, pats: [], fresh: true, vtN: 0, cards: 'pending', passed: null, alt: [], blockAt: 0, blockLen: 0 });
@@ -789,6 +949,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     displaced: Array.isArray(snap.displaced) ? snap.displaced : [],
     ext: snap.ext === 'c1x' && snap.ctx === 'xtra' ? 'c1x' : null,
     book: snap.book && typeof snap.book === 'object' && ['A', 'B', 'C', 'T', 'X'].includes(String(snap.book.part)) ? snap.book : null,
+    focus: snap.focus && typeof snap.focus === 'object' && typeof snap.focus.topic === 'string' && [1, 2, 3, 4].includes(snap.focus.stage) && typeof snap.focus.size === 'number' ? snap.focus : null,
     active: true,
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),
