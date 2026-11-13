@@ -134,7 +134,7 @@ export function DoneCard3({ view, sum, mins, tomorrow, tomorrowTopic = '', today
             <span className="lx-vh-done-check" aria-hidden="true">
               <Icon name="check" size={24} />
             </span>
-            <b className="lx-v-disp lx-v-num lx-vh-done-min" data-testid="today-done-min" data-min={realMin}>
+            <b className="lx-v-disp lx-v-num lx-vh-done-min" data-min={realMin}>
               {t('vhMinDone', { n: realMin })}
             </b>
             <span aria-hidden="true">{back ? t('moBackTitle') : t('nbHeuteDoneTitle')}</span>

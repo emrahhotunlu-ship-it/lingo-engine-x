@@ -185,7 +185,8 @@ describe('Tageseinheit seit 04.10.2026 (Vokabeln und Grammatik)', () => {
     expect(u?.up.blocks.find((b) => b.block === 3)?.kind).toBe('task.order');
     useUnitRun.setState({ ...EMPTY_RUN, day: MON, block: 2, duty: 'ch:u-focus', kind: 'grammar', via: 'provider', routeName: 'unitFocus', route: { name: 'unitFocus' }, at: 1 }, true);
     run.handleUnitDone(2);
-    expect(useNav.getState().route).toMatchObject({ name: 'unitCard', step: 'next' });
+    // Politur P1 (13.11.2026): keine Zwischenkarte mehr – der nächste offene Schritt startet direkt (hier: die Wörter, Ersatzweg „trainer“).
+    expect(useNav.getState().route).toMatchObject({ name: 'trainer', round: 'pflicht' });
     await vi.waitFor(() => expect(actOf(MON)?.['u-focus']).toBe(1));
   });
 });

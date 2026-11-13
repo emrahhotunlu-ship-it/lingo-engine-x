@@ -23,7 +23,8 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   // UX-Neuanfang D (02.11.2026): Claude-Hilfe bei falscher Antwort in der Lernkarte, und ob die Hilfe offen war (zählt als Hilfe).
   /^src\/ui\/exercise\/TutorButton$/,
   /^src\/features\/companion\/store$/,
-  /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented|GradeButtons|Switch)$/,
+  // Politur P1 (13.11.2026): „Erweitert“ in Einstellungen › Wörter (`Disclosure`).
+  /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented|GradeButtons|Switch|Disclosure)$/,
   /^src\/engine\/(EnglishText|Choices|KineticGap|HiddenInput|MicButton|useHotkeys|usePrefetchSpeech|SpeakButton|wordTap)$/,
   /^src\/domain\/answer\/mask$/,
   // Großpaket B3 (03.11.2026): Reiter Wörter im neuen Aussehen.
