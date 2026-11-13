@@ -8,6 +8,7 @@ import { applySummary, faithfulOf, type SummaryVars } from '../../../src/prompts
 import { promptBytes, PROMPT_MAX_BYTES } from '../../../src/prompts/common';
 import { TEMPLATES } from '../../../src/prompts/registry';
 import { applyKeypointsReply, applyReplyReply, applySummaryReply } from '../../../src/platform/dev/canned/apply';
+import { c1MailReply } from '../../../src/platform/dev/canned/lp3/p47';
 import { patListText } from '../../../src/domain/tutor/patList';
 
 const TEXT = 'Hi Laura, I fully understand that your team is busy with the year-end closing. The setup takes about two hours for your team. We discussed about a short summary for your managing director.';
@@ -73,8 +74,8 @@ describe('Pflicht- und Kernpunkte einzeln (Nachtrag learning-scientist Muss 1/2)
 describe('Vorlagen', () => {
   it('sind registriert, mit Kopfzeile, Stufe und Zwischenspeicher', () => {
     for (const tpl of [applyReply, applySummary, applyKeypoints]) expect(TEMPLATES).toContain(tpl);
-    expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@2]');
-    expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@2]');
+    expect(applyReply.build(replyVars()).split('\n')[0]).toBe('[apply-reply@3]');
+    expect(applySummary.build(sumVars()).split('\n')[0]).toBe('[apply-summary@3]');
     expect(applyKeypoints.build({ title: 'x', article: ARTICLE }).split('\n')[0]).toBe('[apply-keypoints@1]');
     expect([applyReply.tier, applySummary.tier, applyKeypoints.tier]).toEqual(['default', 'default', 'default']);
     // T2–T4: Bewertungsstufen, Ton über die ganze Antwort, bessere Fassung deckt alle Punkte, Ziel als Wert.
@@ -214,5 +215,49 @@ describe('W5 K1 „So klingt es gehobener“ und K7 Anrede/Gruß', () => {
     const v = { situation: 'Reader: CFO. Write about the timeline.', patterns: [], phrases: [], text: 'Dear Daniel, I will tell you the timeline next week. Best regards', uiLang: 'de' as const, ctx: '', pats: patListText() };
     expect(c1Mail.build({ ...v, greet: { reader: 'CFO, Daniel', hello: 'Hi Daniel,', close: 'Best regards,' } })).toContain(rule);
     expect(c1Mail.build(v)).not.toContain(rule);
+  });
+});
+
+// Großpaket P „Politur“, P4 (13.11.2026): Mail-Vorlagen @3 – Zielwörter mit Kennung und Bedeutung, `used` mit Kennung und `why`, Kurzurteil.
+describe('Mail-Vorlagen @3: Wörter mit Kennung und Bedeutung, `used` mit Grund', () => {
+  const words = [
+    { id: 'w1', word: 'setup', de: 'Einrichtung' },
+    { id: 'w2', word: 'closing', de: 'Jahresabschluss' },
+  ];
+  it('der Prompt nennt Kennung, Wort und gelernte Bedeutung; ein bloßer Wortlaut bekommt w1/w2', () => {
+    expect(applyReply.build(replyVars({ words }))).toContain('Target words (id: word = meaning the learner learned): w1: setup = Einrichtung | w2: closing = Jahresabschluss');
+    expect(applySummary.build(sumVars())).toContain('Target words (id: word = meaning the learner learned): w1: council');
+    for (const p of [applyReply.build(replyVars({ words })), applySummary.build(sumVars())]) {
+      expect(p).toContain('by its id, e.g. "w1"');
+      expect(p).toContain('the gist in ONE short sentence');
+    }
+  });
+  it('`used` über die Kennung wird als Wortlaut gespeichert, `why` kommt mit; ein `why` in falscher Sprache fällt weg, die Verwendung bleibt', () => {
+    const raw = JSON.parse(applyReplyReply(applyReply.build(replyVars({ words })))) as Record<string, unknown>;
+    raw.used = [
+      { pat: 'w1', ok: true, quote: 'The setup takes', why: 'Passt hier in der gelernten Bedeutung.' },
+      { pat: 'w2', ok: false, quote: 'year-end closing', why: 'This explanation is in the wrong language for a German learner.' },
+      { pat: 'w9', ok: true, quote: 'Hi Laura', why: 'Unbekannt.' },
+    ];
+    const r = applyReply.schema(replyVars({ words })).safeParse(raw);
+    expect(r.success).toBe(true);
+    if (!r.success) return;
+    expect(r.data.used).toEqual([
+      { pat: 'setup', ok: true, quote: 'The setup takes', why: 'Passt hier in der gelernten Bedeutung.' },
+      { pat: 'closing', ok: false, quote: 'year-end closing' },
+    ]);
+  });
+  it('c1-mail@3 beurteilt mit `words` auch die Zielwörter (früher nur Muster); ohne `words` bleibt die Schreibwerkstatt wie bisher', () => {
+    const base = { situation: 'Write to Laura about the setup.', patterns: [{ id: 'psc.now', name: 'present continuous', form: 'am/is/are + -ing' }], phrases: [] as string[], text: TEXT, uiLang: 'de' as const, ctx: '', pats: patListText() };
+    const p = c1Mail.build({ ...base, words });
+    expect(p.split('\n')[0]).toBe('[c1-mail@3]');
+    expect(p).toContain('w1: setup = Einrichtung');
+    expect(p).not.toContain('Target phrases:');
+    const r = c1Mail.schema({ ...base, words }).safeParse(JSON.parse(c1MailReply(p)));
+    expect(r.success).toBe(true);
+    if (r.success) expect(r.data.used.map((u) => [u.pat, u.ok, !!u.why])).toEqual([['setup', true, true], ['closing', true, true]]);
+    const studio = c1Mail.build({ ...base, phrases: ['as discussed'] });
+    expect(studio).toContain('Target phrases: as discussed');
+    expect(studio).not.toContain('Target words');
   });
 });

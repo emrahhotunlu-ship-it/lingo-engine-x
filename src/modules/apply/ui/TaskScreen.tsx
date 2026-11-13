@@ -155,9 +155,10 @@ export function ApplyTaskScreen({ route }: ScreenProps<'applyTask'>) {
   const [started, setStarted] = useState(false);
 
   const close = (): void => back();
+  // P4: der eigene Satz ist jetzt der Brücken-Satz (Wort + Muster aus dem Lernstand).
   const comboInstead = (): void => {
-    if (unit) go({ name: 'comboSentence', unit });
-    else go({ name: 'comboSentence' });
+    if (unit) go({ name: 'applyBridge', unit });
+    else go({ name: 'applyBridge' });
   };
   const header = <ApplyTop kind={kind} unit={unit} onClose={close} />;
 
@@ -316,12 +317,12 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
     let fb: Feedback | null = null;
     let kps: string[] | null = keyPoints;
     if (m.kind === 'reply') {
-      const out = await askReply.run({ incoming: m.incoming, must: m.mail.must.map((x) => x.en), words: targets.words, rule: rulePrompt, text: given, uiLang: lang, ctx, pats: patListText(), greet: greetVars });
+      const out = await askReply.run({ incoming: m.incoming, must: m.mail.must.map((x) => x.en), words: targets.prompt, rule: rulePrompt, text: given, uiLang: lang, ctx, pats: patListText(), greet: greetVars });
       if (out) fb = fromReply(out);
     } else if (m.kind === 'write') {
-      // T7: Claude prüft, was Emrah sieht – die Regel ist das erste Muster der Situation, die Wendungen sind die beiden Zielwörter.
+      // T7: Claude prüft, was Emrah sieht – die Regel ist das erste Muster der Situation; c1-mail@3 (P4): die beiden Zielwörter mit Kennung und Bedeutung.
       const v = mailVars({ situation: m.situation, text: given, ctx, uiLang: lang });
-      const out = await askMail.run({ ...v, patterns: v.patterns.slice(0, 1), phrases: targets.words, greet: greetVars, polish: true });
+      const out = await askMail.run({ ...v, patterns: v.patterns.slice(0, 1), phrases: [], words: targets.prompt, greet: greetVars, polish: true });
       if (out) fb = fromMail(out);
     } else {
       // K8: Texte aus dem Vorrat bringen ihre geprüften Kernpunkte mit (keine Anfrage, derselbe Maßstab bei jeder Prüfung).
@@ -337,7 +338,7 @@ function TaskBody({ m, kind, day, unit, device, onStarted, onBack, onCombo }: Bo
         article: m.article.text,
         keyPoints: kps,
         goal: { sentences: goal.sentences ?? [3, 5], maxWords: goal.words[1] },
-        words: targets.words,
+        words: targets.prompt,
         rule: rulePrompt,
         text: given,
         uiLang: lang,

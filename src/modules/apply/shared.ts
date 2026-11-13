@@ -40,4 +40,14 @@ export type { ApplySummary } from '../../prompts/applySummary';
 export { applyKeypoints } from '../../prompts/applyKeypoints';
 export { c1Mail } from '../../prompts/c1Mail';
 export type { C1Mail } from '../../prompts/c1Mail';
-export type { Good, GreetCheck, GreetVars, PointCheck, StyleTip } from '../../prompts/applyCommon';
+export type { Good, GreetCheck, GreetVars, PointCheck, StyleTip, TargetWord } from '../../prompts/applyCommon';
+
+// P4 „Anwenden als Brücke“ (13.11.2026): Brücken-Sätze – Zielwahl, Rahmen, Zeit, Muster, Vorlage
+export { dayKey } from '../../domain/date';
+export { BRIDGE_MIN, BRIDGE_N, BRIDGE_SHORT_N, BRIDGE_STAT_MIN, bridgeMinutes, readBridgeStat } from '../../domain/apply/bridgeTime';
+export { bridgeHistory, bridgeHistoryDays, knownPatterns, pickBridge, safePatterns } from '../../domain/apply/bridge';
+export type { BridgeFrame, BridgeHistory, BridgeTarget, BridgeWord, PatWhy, WordWhy } from '../../domain/apply/bridge';
+export { bridgeFrames } from '../../content/apply/frames';
+export { alignWords } from '../../domain/answer/align';
+export { applyBridge, bridgeNeedsFix, bridgeWordInText } from '../../prompts/applyBridge';
+export type { BridgeOut, BridgeVars, PatVerdict } from '../../prompts/applyBridge';

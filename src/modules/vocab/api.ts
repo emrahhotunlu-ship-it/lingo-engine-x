@@ -1,4 +1,4 @@
-import { dayKey, dayMinutes, normGoalMin } from './shared';
+import { dayKey, dayMinutes, logWarn, normGoalMin } from './shared';
 import type { Writer } from './shared';
 import { lexOf } from './data/lex';
 import { type DayMark, planCount, type PlanEntry } from './domain/dayCount';
@@ -8,6 +8,8 @@ import type { SessionKind } from './domain/session';
 import type { DayPlan } from './domain/day';
 import { countCfg, DEFAULT_CFG, type Lex, type VocabCfg } from './domain/types';
 import { vcfgSchema } from './data/schemas';
+import type { BridgeLex, BridgeUseInput, BridgeUseResult } from './data/bridge';
+import type { VlogTuple } from './domain/vlog';
 export type { RoundReport } from './domain/session';
 export type { VocabAi } from './aiPort';
 
@@ -325,4 +327,38 @@ export const catchUpDone = (): Promise<unknown> => catchUpP ?? (starter ? startC
 export async function countMistakes(nowMs: number): Promise<number> {
   const { readMistakes } = await import('./ui/mistakes');
   return (await readMistakes(nowMs)).length;
+}
+
+// ---------------------------------------------------------------- P4 „Anwenden als Brücke“ (13.11.2026), rein ergänzend
+
+export type { BridgeLex, BridgeUseInput, BridgeUseResult } from './data/bridge';
+
+/**
+ * Lexeme für die Zielwahl der Brücken-Sätze (Anwenden): Stufe, Einführungstag, letzter Übungstag laut Verlauf `vlog` (die letzten zwei
+ * Lerntage, träge gelesen), eigene geprüfte Sätze, gelernte Bedeutung, Kartensatz. Nur lesen. `null` = Wörter-App aus oder kein Zugriff
+ * (dann nimmt Anwenden die Wörter des alten Wegs). Nachgeladen.
+ */
+export async function loadBridgeWords(nowMs: number = Date.now()): Promise<BridgeLex[] | null> {
+  // EIN nachgeladenes Stück (Umgebung, Zielwahl, Verlauf), damit die Brücke die übrigen Stücke der Wörter-App nicht neu aufteilt.
+  const { bridgeCtx, bridgeWordsOf, readVlogRecent } = await import('./ui/bridgeCtx');
+  const ctx = await bridgeCtx();
+  if (!ctx || !vocabModuleOn(ctx.profile)) return null;
+  // Ist der Verlauf nicht lesbar, gelten die Tagesmarken der Lexeme (`bridgeWordsOf`): lieber eine etwas gröbere Wahl als keine.
+  const vlog = await readVlogRecent(ctx.read, nowMs, 2).catch((err: unknown): VlogTuple[] => {
+    logWarn('vocab:bridge', err, 'vlog');
+    return [];
+  });
+  return bridgeWordsOf(ctx.docs, vlog, nowMs);
+}
+
+/**
+ * Rückfluss eines von Claude beurteilten Brücken-Satzes an die Wörter-App (`data/bridge.ts`): Verlaufseintrag, „richtig“ ab Stufe 5 einmal je
+ * Lerntag als eigener geprüfter Satz (Stufe 7) samt „Deine Sätze“, Planwirkung nur außerhalb des heutigen Pflichtplans. `null` = nichts gebucht
+ * (Wörter-App aus, kein Schreibweg, Lexem unbekannt, schon gebucht). Wirft nie wegen eines fehlenden Lexems; Schreibfehler gehen an den Aufrufer.
+ */
+export async function reportBridgeUse(i: BridgeUseInput): Promise<BridgeUseResult | null> {
+  const { bridgeCtx, bookBridgeUse } = await import('./ui/bridgeCtx');
+  const ctx = await bridgeCtx();
+  if (!ctx || !vocabModuleOn(ctx.profile)) return null;
+  return bookBridgeUse({ writer: ctx.writer, device: ctx.device }, i, { docs: ctx.docs, cfg: vocabCfg(ctx.profile), dayDoc: ctx.dayDoc ?? null });
 }

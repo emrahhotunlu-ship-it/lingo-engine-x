@@ -48,6 +48,8 @@ export type UnitBuildInput = {
   tw?: 1;
   /** Fokus 2.0 F3: Disziplin von Schritt 3 (nur gespeichert, wenn der Plan einen Schritt „Anwenden“ hat). */
   ap?: ApplyDiscipline;
+  /** Großpaket P, P4: gemessene Minuten der Brücken-Sätze (Schritt 3), beim Anlegen in die Blockminuten eingefroren; fehlt = Standard. */
+  applyMin?: number;
 };
 
 /** Plan-Vorstufe ohne Block-1-Umfang: liefert das Budget für die Berechnung von `goal.review`. */
@@ -55,8 +57,9 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2; step3?: UnitPrefs['step3']; tw?: 1 }, reviewCount?: number, reviewMin?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2; step3?: UnitPrefs['step3']; tw?: 1; applyMin?: number }, reviewCount?: number, reviewMin?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
+  if (i.applyMin !== undefined) p.applyMin = i.applyMin;
   if (i.rv === 2) p.rv = 2;
   if (i.tw === 1) p.tw = 1;
   if (i.fixDue !== undefined) p.fixDue = i.fixDue;

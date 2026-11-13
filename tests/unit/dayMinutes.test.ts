@@ -37,14 +37,15 @@ describe('Tagesweg (tw: 1)', () => {
     expect(p.blocks.map((b) => [b.block, b.kind, b.min])).toEqual([
       [1, 'review', 18],
       [2, 'grammar', 5],
-      [3, 'task.apply', 2],
+      // Großpaket P, P4: Schritt 3 sind zwei eigene Sätze; die Minuten nennen, was das dauert (3), nicht das 10-%-Budget (2).
+      [3, 'task.apply', 3],
     ]);
     expect(p.blocks[1]!.opts.n).toBe(4);
     expect(p.blocks.some((b) => b.kind === 'task.order')).toBe(false);
   });
   it('Samstag und kleines Tagesziel: weiterhin drei Schritte, Wörter mindestens 10 Minuten', () => {
     const sat = unitPlanFor('2026-11-07', null, { goalMin: 40, tw: 1, reviewCount: 20 });
-    expect(sat.blocks.map((b) => b.min)).toEqual([28, 8, 4]);
+    expect(sat.blocks.map((b) => b.min)).toEqual([28, 8, 3]);
     const small = unitPlanFor(day, null, { goalMin: 10, tw: 1, reviewCount: 20 });
     expect(small.blocks.map((b) => b.kind)).toEqual(['review', 'grammar', 'task.apply']);
     expect(small.blocks[0]!.min).toBe(10);

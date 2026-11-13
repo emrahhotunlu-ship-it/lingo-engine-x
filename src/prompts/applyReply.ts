@@ -21,7 +21,16 @@ import {
   type Good,
   type PointCheck,
   type StyleTip,
+  APPLY_EDIT_RULES,
+  GIST_RULE,
+  targetWordsLine,
+  USED_RULE,
+  usedIdsOf,
+  usedWhyIn,
+  wordAliasOf,
+  type TargetWord,
 } from './applyCommon';
+export { APPLY_EDIT_RULES, GIST_RULE, targetWordsLine, targetWordsOf, USED_RULE, usedIdsOf, usedWhyIn, wordAliasOf, type TargetWord } from './applyCommon';
 import { toneFit, type ToneFit } from './c1Mail';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { clipped, intIn } from './tolerant';
@@ -34,14 +43,17 @@ import type { PromptTemplate, UiLang } from './types';
 // @2 (W5, Lehrer-Prüfung F3): `style` „So klingt es gehobener“ (K1, 1–2 zitierte Stil-Verbesserungen, getrennt von den Fehlern) und `greet` (K7: Anrede und
 // Gruß für den genannten Leser). Beide tolerant: fehlen sie, gelten die Verbesserungen der Liste bzw. kein Urteil.
 // W5b (Lehrer-Prüfung): `upgraded` behält oder ergänzt Anrede und Gruß. Gleiche Version: nur eine Regelzeile, Schema unverändert, @2 war noch nie live.
+// @3 (Großpaket P „Politur“, P4, 13.11.2026; learning-scientist „Mail-Vorlagen @3“): die Zielwörter gehen mit Kennung und gelernter Bedeutung mit
+// („w1: postpone = verschieben“), damit Claude die Verwendung in DIESER Bedeutung beurteilt; `used` nennt das Wort über seine Kennung (der Wortlaut
+// gilt weiter) und sagt mit `why` in einem Satz, warum es passt bzw. was falsch ist. Ein `why` in falscher Sprache fällt weg (kein Neuversuch dafür).
 
 export type ReplyVars = {
   /** Die eingegangene Mail (Absender, Betreff, Text), ≤ 1.600 Zeichen. */
   incoming: string;
   /** Pflichtpunkte auf Englisch (2 bis 4). */
   must: readonly string[];
-  /** Zielwörter aus der Wörter-App (höchstens 2). */
-  words: readonly string[];
+  /** Zielwörter aus der Wörter-App (höchstens 2), mit Kennung und gelernter Bedeutung (@3); ein bloßer Wortlaut bekommt `w1`, `w2` ohne Bedeutung. */
+  words: readonly (string | TargetWord)[];
   /** Regel des Tages (englischer Name und Kurzregel), ≤ 240; leer = keine. */
   rule: string;
   /** Emrahs Antwort, ≤ 1.800 Zeichen. */
@@ -75,28 +87,18 @@ export const APPLY_TEXT_MAX = 1_800;
 export const RULE_MAX = 240;
 export const APPLY_MAX_EDITS = 12;
 export const MUST_MAX = 4;
-export const WORDS_MAX = 2;
+export { WORDS_MAX } from './applyCommon';
 /** Kennung der Regel in `used` (die Zielwörter stehen dort unter ihrem eigenen Wortlaut). */
 export const RULE_ID = 'rule';
 
 const ID = 'apply-reply';
-const VERSION = 2;
+const VERSION = 3;
 
-export const REPLY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"…","ok":true,"quote":"…"}],"tone":{"fit":"fits","why":"…"},${GREET_EXAMPLE},"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
+export const REPLY_EXAMPLE = `{"points":[{"i":1,"covered":"yes","quote":"…","why":""}],"edits":[{"from":"…","to":"…","kind":"grammar","sev":"error","pat":null,"why":"…"}],"used":[{"pat":"w1","ok":true,"quote":"…","why":"…"}],"tone":{"fit":"fits","why":"…"},${GREET_EXAMPLE},"good":{"quote":"…","why":"…"},${STYLE_EXAMPLE},"upgraded":"…","summary":"…","errorCount":0}`;
 
-/** Erlaubte Kennungen in `used`: die Zielwörter und `rule` (nur wenn es eine Regel gibt). */
-export const usedIdsOf = (words: readonly string[], rule: string): Set<string> => new Set([...words.slice(0, WORDS_MAX).map((w) => w.trim()).filter(Boolean), ...(rule.trim() ? [RULE_ID] : [])]);
-
-/** Gemeinsame Regeln der Anwenden-Prüfungen (Antwort und Zusammenfassung). */
-export const APPLY_EDIT_RULES = [
-  'First list every error as an atomic edit: copy the exact wrong span from the text into "from", write the minimal replacement into "to". Only then explain each edit.',
-  'Keep the learner\'s words wherever they are correct. Style improvements are sev "upgrade", never "error". American English is the standard; British spelling and British words are correct (mention the US form only as an upgrade).',
-  'American and British grammar both count as correct (e.g. past simple with already/just/yet, have got, collective nouns with plural verbs).',
-  'List all errors first, then upgrades; never drop an error to make room for an upgrade.',
-];
-
-export const usedLine = (words: readonly string[], rule: string): string =>
-  [words.length ? `Target words: ${words.slice(0, WORDS_MAX).map((w) => clip(w, 40)).join(' | ')}` : '', rule.trim() ? `Target rule (id "${RULE_ID}"): ${clip(rule, RULE_MAX)}` : ''].filter(Boolean).join('\n');
+// Zielwörter mit Kennung und Bedeutung, `used` mit `why`, Kurzurteil: gemeinsam mit c1-mail@3 und apply-summary@3 (applyCommon.ts).
+export const usedLine = (words: readonly (string | TargetWord)[], rule: string): string =>
+  [targetWordsLine(words), rule.trim() ? `Target rule (id "${RULE_ID}"): ${clip(rule, RULE_MAX)}` : ''].filter(Boolean).join('\n');
 
 export function replySchema(v: ReplyVars): z.ZodType<ApplyReply> {
   const allIds = patIdsOf(v.pats);
@@ -106,7 +108,7 @@ export function replySchema(v: ReplyVars): z.ZodType<ApplyReply> {
     .object({
       points: pointsField(given, n),
       edits: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepEdits(xs, given, allIds, APPLY_MAX_EDITS, { sevDefault: 'upgrade' })),
-      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => keepUsed(xs, given, usedIdsOf(v.words, v.rule))),
+      used: z.preprocess(asList, z.array(z.unknown())).transform((xs) => usedWhyIn(keepUsed(xs, given, usedIdsOf(v.words, v.rule), wordAliasOf(v.words)), (s) => isWrongLang(s, v.uiLang))),
       tone: z.object({ fit: z.preprocess(toneFit, z.enum(['fits', 'too-direct', 'too-informal', 'too-stiff']).catch('fits')), why: z.preprocess((x) => x ?? '', clipped(0, 160)) }),
       good: z.unknown().optional().transform((x) => keepGood(x, given)),
       style: z.unknown().optional(),
@@ -159,13 +161,13 @@ export const applyReply: PromptTemplate<ReplyVars, ApplyReply> = {
       'Rules:',
       `- points: one entry for each point above (i = its number, 1 to ${Math.min(MUST_MAX, v.must.length)}); covered is "yes", "partly" or "no"; quote copies EXACTLY the words of the learner reply that cover the point (empty when "no"). Judge whether the point is there, not the grammar. For a point about tone, judge the whole reply and quote the sentence that shows it best. ${POINT_SCALE} ${POINT_WHY_RULE}`,
       '- edits: at most 12, each with "from" copied EXACTLY from the learner reply (no paraphrase), "to", kind (grammar, word, collocation, spelling, punctuation or register), sev ("error" or "upgrade"), pat (id or null) and "why" (one short sentence in the explanation language: the rule or the reason). Tone and register are never errors (kind register is always sev upgrade).',
-      '- used: for each target word and for the target rule that the learner tried to use, one entry with pat (the word exactly as given, or "rule"), ok (true if used correctly) and a "quote" copied exactly from the reply. Skip what the learner did not try.',
+      USED_RULE,
       '- tone: fit is "fits", "too-direct", "too-informal" or "too-stiff" for this reader and purpose; why is one short sentence in the explanation language.',
       v.greet ? GREET_RULE : '',
       '- good: one strong span copied exactly from the reply ("quote") and one short sentence in the explanation language why it works ("why").',
       STYLE_RULE,
       "- upgraded: the whole reply rewritten at C1 level in American English, keeping the learner's ideas, facts and structure and roughly the same length; it must cover every point above (add one short sentence for a missing point), must not add new facts, must keep or add a fitting salutation and sign-off, and must differ from the learner's reply.",
-      '- summary: one short sentence in the explanation language: what works and what to work on next.',
+      GIST_RULE,
       '- errorCount: after writing everything, count the mistakes (sev "error") in the learner reply once more, independently of the list, and give the number.',
       '- Never invent grammar rules. Never use the straight double quote character inside text values.',
     ]

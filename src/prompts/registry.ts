@@ -12,6 +12,7 @@ import { c1Mail } from './c1Mail';
 import { applyReply } from './applyReply';
 import { applySummary } from './applySummary';
 import { applyKeypoints } from './applyKeypoints';
+import { applyBridge } from './applyBridge';
 import { grammarItems } from './grammarItems';
 import { grammarFit } from './grammarFit';
 import { grammarJudge } from './grammarJudge';
@@ -101,6 +102,9 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   applyReply,
   applySummary,
   applyKeypoints,
+  // Großpaket P „Politur“ P4 (Anwenden als Brücke): Brücken-Sätze – ein Wort und ein Muster im eigenen Satz, Urteil je Element.
+  // `combo-check@3` bleibt für den alten Bildschirm „Eigener Satz“ registriert.
+  applyBridge,
   // Lernplattform 3.0 P52: Wörter-Tutor (neue Sätze und Kontrast für schwache Wörter)
   wordCtx,
   // Tutor-Engine S4 (E6): Satzbank je Karte (Quarantäne in `domain/tutor/sentenceBank.ts`)

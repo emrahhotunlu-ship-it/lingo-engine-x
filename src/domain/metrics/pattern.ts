@@ -115,6 +115,11 @@ export function patsOf(doc: Doc | undefined): Record<string, PatEntry> {
   return out;
 }
 
+// Großpaket P „Politur“, P4 (13.11.2026): „frei verwendet“ je Muster steht NEBEN `pats` im selben Dokument (`grammar/<thema>.fu`, eigener
+// Beleg-Zähler aus den Brücken-Sätzen, nie ein BKT-Schritt). `patsOf` liest es bewusst nicht: der Musterzustand bleibt allein die Sache der
+// Grammatikrunde. Lesen tolerant (ein Eintrag mit unerwartetem Aufbau fällt weg, fehlt `fu`, ist alles 0) über diese eine Stelle.
+export { freeUseOf, freeUsesOf, readFreeUse, type FreeUse } from '../grammar/freeUse';
+
 /**
  * Zustand eines Themas aus seinen Mustern; `null`, wenn das Dokument noch keine `pats` hat (dann gilt allein die p-Regel, `metrics/grammar`).
  * Ein Thema ist höchstens „Sicher“, wenn jedes Muster mindestens „Lernt“ ist: Fehlt ein Muster oder ist es Neu, ist das Thema „Lernt“.

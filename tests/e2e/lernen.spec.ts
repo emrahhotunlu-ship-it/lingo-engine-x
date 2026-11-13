@@ -320,12 +320,11 @@ test('Anwenden › Hörübung: ohne Claude gibt es keine Kachel', async ({ page 
   await expect(page.getByTestId('hub-listen-q')).toHaveCount(0);
 });
 
-test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz → zwei Häkchen; falscher Satz → Korrektur und Reparatur-Satz', async ({ page }) => {
+test('Anwenden › Eigener Satz (alter Bildschirm, per Link): Wort fehlt → lokal, keine KI; richtiger Satz → zwei Häkchen; falscher Satz → Korrektur und Reparatur-Satz', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'today');
-  await openTab(page, 'apply');
-  await page.getByTestId('hub-combo-own').click();
+  // Großpaket P, P4: Die Seite Anwenden führt seit den Brücken-Sätzen nicht mehr hierher (`anwendenBruecke.spec.ts`); der Bildschirm bleibt als Rückweg erreichbar.
+  const { errors } = await bootAt(page, { name: 'comboSentence' });
+  await screen(page, 'comboSentence');
   const item = page.getByTestId('combo-item');
   await expect(item).toBeVisible();
   const word = (await item.getAttribute('data-word')) ?? '';

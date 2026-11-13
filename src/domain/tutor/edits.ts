@@ -126,20 +126,32 @@ export function locateEdits(text: string, edits: readonly Edit[]): Located[] {
   return out.sort((a, b) => a.start - b.start);
 }
 
-export type Used = { pat: string; ok: boolean; quote: string };
+/**
+ * Eine belegte Verwendung: `pat` = Muster-Kennung, Zielwort (Wortlaut) oder `rule`. `why` (seit den Mail-Vorlagen @3, Großpaket P, P4): ein
+ * Satz, warum die Verwendung passt bzw. was daran falsch ist; fehlt bei älteren Antworten.
+ */
+export type Used = { pat: string; ok: boolean; quote: string; why?: string };
 
-/** Belegte Musterverwendungen (`used`): nur mit Zitat, das wörtlich im Text steht; sonst fällt der Eintrag weg. */
-export function keepUsed(xs: readonly unknown[], text: string, patIds: ReadonlySet<string> | readonly string[]): Used[] {
+export const USED_WHY_MAX = 160;
+
+/**
+ * Belegte Musterverwendungen (`used`): nur mit Zitat, das wörtlich im Text steht; sonst fällt der Eintrag weg.
+ * `alias` (P4, Mail-Vorlagen @3): Kennungen, die auf einen Eintrag zeigen (Wort-Kennung `w1` → Wortlaut); erlaubt ist, was in `patIds` oder
+ * `alias` steht, gespeichert wird immer der Zielwert. `why` wird übernommen, wenn es ein Text ist (gekürzt, sonst weggelassen).
+ */
+export function keepUsed(xs: readonly unknown[], text: string, patIds: ReadonlySet<string> | readonly string[], alias?: ReadonlyMap<string, string>): Used[] {
   const ids = patIds instanceof Set ? patIds : new Set(patIds);
   const hay = normWs(text);
   const out: Used[] = [];
   for (const x of xs) {
     if (!isObj(x)) continue;
-    const pat = typeof x.pat === 'string' ? x.pat.trim() : '';
+    const raw = typeof x.pat === 'string' ? x.pat.trim() : typeof x.id === 'string' ? x.id.trim() : '';
+    const pat = alias?.get(raw) ?? alias?.get(raw.toLowerCase()) ?? raw;
     const quote = typeof x.quote === 'string' ? normWs(x.quote) : '';
     const ok = typeof x.ok === 'boolean' ? x.ok : x.ok === 'true';
     if (!pat || !ids.has(pat) || !quote || !hay.includes(quote) || out.some((o) => o.pat === pat)) continue;
-    out.push({ pat, ok, quote: clip(quote, 160) });
+    const why = typeof x.why === 'string' ? normWs(x.why) : '';
+    out.push({ pat, ok, quote: clip(quote, 160), ...(why ? { why: clip(why, USED_WHY_MAX) } : {}) });
   }
   return out.slice(0, 6);
 }

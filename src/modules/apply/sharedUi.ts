@@ -52,7 +52,7 @@ export { useToday } from '../../features/today/state';
 export { fehlersaetzeDue, fixToday } from '../../domain/metrics';
 export { useComboPairs } from '../../features/apply/ComboSentence';
 export { topicById } from '../../domain/content';
-export { startDrill } from '../../features/drills/session';
+export { startDrill, useDrill } from '../../features/drills/session';
 
 // Lesen-Modul: der neueste Artikel (nur lesen) als Material für „Artikel zusammenfassen“
 export { loadRecentArticle } from '../read/registry';
@@ -60,3 +60,12 @@ export type { RecentArticle } from '../read/registry';
 
 // Wörter-App: Wort-Belege `used` aus Anwenden (F2, eine Tür `reportEvidence`, Umgebung holt die Wörter-App selbst)
 export { reportEvidence } from '../vocab/api';
+
+// P4 „Anwenden als Brücke“ (13.11.2026): Übungsgerüst, Rundenende, Muster des heutigen Grammatik-Schritts (Adapter), Rückfluss
+export { ExerciseShell, SentenceInput } from '../../ui/exercise';
+export type { ShellFeedback } from '../../ui/exercise';
+export { SessionEnd } from '../../ui/SessionEnd';
+export { useTodayPattern } from '../../features/apply/todayPattern';
+export { saveBridgeStat, saveFreeUse } from '../../features/apply/bridgeStore';
+export { loadBridgeWords, reportBridgeUse } from '../vocab/api';
+export type { BridgeLex, BridgeUseResult } from '../vocab/api';
