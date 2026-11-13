@@ -343,7 +343,9 @@ export function WordSettings({ onPlace, legacy = null, advancedOpen = false }: {
           {cfg.cnt ? t('vmSetMinCap', { n: cfg.min, cnt: cfg.cnt }) : t('vmSetMinAuto', { n: cfg.min })}
         </p>
       </div>
-      <Disclosure label={t('vmSetMore')} testId="vs-more" defaultOpen={advancedOpen}>
+      {/* `key`: „gerade eingeschaltet“ kommt oft erst nach dem ersten Zeichnen (der Schalter-Snapshot ist schneller als das Ende der Übernahme) –
+          dann öffnet sich „Erweitert“ nachträglich, wie gewollt (Bestätigung und Rückweg im Bild). */}
+      <Disclosure key={advancedOpen ? 'open' : 'closed'} label={t('vmSetMore')} testId="vs-more" defaultOpen={advancedOpen}>
         <div className="flex flex-col gap-5 pt-1" data-testid="vs-advanced">
       <div className="flex flex-col gap-2">
         <p className="m-0 text-sm font-medium">{t('vmSetNew')}</p>

@@ -76,8 +76,8 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   // Der Fokus liegt auf „Weitere Beispiele“: weiter geht es mit dem Knopf.
   await page.getByTestId('next').click();
   await expect(page.getByTestId('summary')).toBeVisible();
-  const card = (await dump(page))['vocab/avoid'] as { hist: Array<{ g: number }> };
-  expect(card.hist.at(-1)?.g).toBeGreaterThanOrEqual(2);
+  // Die Karte wird über den Sammel-Puffer gespeichert; unter Last landet sie erst kurz nach dem Rundenende.
+  await expect.poll(async () => ((await dump(page))['vocab/avoid'] as { hist?: Array<{ g: number }> } | undefined)?.hist?.at(-1)?.g ?? 0).toBeGreaterThanOrEqual(2);
   expect(errors).toEqual([]);
 });
 

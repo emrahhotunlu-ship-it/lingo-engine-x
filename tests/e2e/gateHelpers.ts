@@ -44,8 +44,22 @@ export async function start(page: Page, patch: Record<string, Doc>, now?: string
   return booted;
 }
 
-/** Zahl der bisherigen Schreibvorgänge (vor dem Start der Prüfung); `since` liefert nur, was danach dazukam. */
-export const mark = async (page: Page): Promise<number> => (await writes(page)).length;
+/**
+ * Zahl der bisherigen Schreibvorgänge (vor dem Start der Prüfung); `since` liefert nur, was danach dazukam.
+ * Wartet erst die Hintergrund-Schreibvorgänge des Starts ab (Plan friert ein → `app/schema.pflichtSince`, Startbild `app/today`): unter Last
+ * landen sie sonst erst nach der Marke und zählten fälschlich als „von der Prüfung geschrieben“.
+ */
+export async function mark(page: Page): Promise<number> {
+  await expect.poll(async () => 'app/today' in (await dump(page)), { timeout: 15_000 }).toBe(true);
+  let last = -1;
+  for (let i = 0; i < 20; i++) {
+    const n = (await writes(page)).length;
+    if (n === last) return n;
+    last = n;
+    await page.waitForTimeout(400);
+  }
+  return last;
+}
 export const since = async (page: Page, n: number): Promise<string[]> => (await writes(page)).slice(n).map((w) => w.path);
 
 export async function openChapterOne(page: Page): Promise<void> {

@@ -72,7 +72,10 @@ for (const vp of [
       await expect(page.getByTestId('vs')).toBeVisible();
       await expect(page.getByTestId('vsw-back')).toBeVisible();
       await expect(page.getByTestId('vsw-on').getByTestId('vs'), 'Einstellungen der Wörter-App in der Karte').toHaveCount(1);
-      await expect(page.getByTestId('set-vocab').locator('h3')).toHaveText('Alte Wörter-Ansicht');
+      // Politur P1.8: die Einstellungen der alten Ansicht stehen eingeklappt unter ihrem Namen (wirken bei eingeschalteter Wörter-App auf nichts).
+      await expect(page.getByTestId('set-vocab-old')).toContainText('Alte Wörter-Ansicht');
+      await expect(page.getByTestId('set-vocab-old')).toHaveAttribute('aria-expanded', 'false');
+      await expect(page.getByTestId('set-vocab')).toHaveCount(0);
       expect(await layoutProblems(page)).toEqual([]);
       expect(await axe(page, '[data-testid="vsw-back"]')).toEqual([]);
 
@@ -84,6 +87,10 @@ for (const vp of [
 
       // Rückweg: mod 0, alte Ansicht wieder da, Umrechnung bleibt.
       await openSettings(page);
+      // Politur P1.8: der Rückweg steht unter „Erweitert“ (nur direkt nach dem Einschalten offen).
+      const more = page.getByTestId('vsw-on').getByTestId('vs-more');
+      await more.scrollIntoViewIfNeeded();
+      await more.click();
       const back = page.getByTestId('vsw-back-btn');
       await back.scrollIntoViewIfNeeded();
       await back.click();

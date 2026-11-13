@@ -28,7 +28,10 @@ test('der Produktions-Build enthält keinen Entwicklungs-Adapter und keine Testd
     'Our onboarding takes two weeks',
   ];
   for (const marker of markers) {
-    expect(html.includes(marker), marker).toBe(false);
+    // Reine Buchstaben-Kennungen (`zzqx`, `zzjson`) können zufällig mitten in den base64-gepackten Inhalts-Bündeln (raw-*.txt) stehen:
+    // dort zählt nur ein Treffer, der nicht von base64-Zeichen umgeben ist (im Code steht die Kennung in Anführungszeichen).
+    const found = /^[A-Za-z0-9]+$/.test(marker) ? new RegExp(`(?<![A-Za-z0-9+/])${marker}(?![A-Za-z0-9+/=])`).test(html) : html.includes(marker);
+    expect(found, marker).toBe(false);
   }
 });
 

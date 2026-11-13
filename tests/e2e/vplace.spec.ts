@@ -117,6 +117,10 @@ for (const vp of [
       const { errors } = await bootAt(page, { name: 'overview' }, { migrated: false, fake: { patch: patch() } });
       await screen(page, 'overview');
       await openSettings(page);
+      // Politur P1.8: „Wörter einstufen“ steht unter „Erweitert“.
+      const more = page.getByTestId('vs').getByTestId('vs-more');
+      await more.scrollIntoViewIfNeeded();
+      await more.click();
       const entry = page.getByTestId('vs').getByTestId('vo-place');
       await entry.scrollIntoViewIfNeeded();
       await entry.click();
