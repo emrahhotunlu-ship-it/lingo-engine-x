@@ -23,8 +23,15 @@ type PackManifest = { v: string; total: number; parts: string[]; files: { path: 
 
 export type EngineProgress = (p: { phase: 'download' | 'cache' | 'start'; pct: number }) => void;
 
+export type EngineDevice = 'webgpu' | 'wasm';
+
+export type EngineOptions = {
+  /** 'wasm': gleich auf dem Prozessor rechnen (der Grafikchip hat hier schon gehangen, z. B. Safari am Mac). Sonst Grafikchip, wenn da. */
+  device?: EngineDevice;
+};
+
 export type Engine = {
-  device: 'webgpu' | 'wasm';
+  device: EngineDevice;
   fromCache: boolean;
   /** Ladezeit in ms (aus dem Speicher bzw. mit Herunterladen). */
   loadMs: number;
@@ -161,7 +168,7 @@ async function hasGpu(): Promise<boolean> {
 }
 
 /** Lädt Paket und Modell; wirft bei jedem Fehler (der Aufrufer bleibt dann bei der Gerätestimme). */
-export async function loadEngine(onProgress: EngineProgress): Promise<Engine> {
+export async function loadEngine(onProgress: EngineProgress, opts: EngineOptions = {}): Promise<Engine> {
   const t0 = performance.now();
   // Bitte an den Browser, den Speicher nicht von selbst zu räumen (sonst lädt die Stimme wieder 210 MB herunter).
   const st = (navigator as unknown as { storage?: { persist?: () => Promise<boolean> } }).storage;
@@ -209,7 +216,7 @@ export async function loadEngine(onProgress: EngineProgress): Promise<Engine> {
     onnx.wasm.numThreads = 1;
   }
   onProgress({ phase: 'start', pct: 0 });
-  let device: 'webgpu' | 'wasm' = (await hasGpu()) ? 'webgpu' : 'wasm';
+  let device: EngineDevice = opts.device === 'wasm' ? 'wasm' : (await hasGpu()) ? 'webgpu' : 'wasm';
   let tts: KokoroTTS;
   try {
     tts = await KokoroTTS.from_pretrained(MODEL_ID, { dtype: 'fp32', device });

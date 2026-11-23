@@ -6,15 +6,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 type Gen = { text: string; resolve: (v: { audio: Float32Array; rate: number }) => void; reject: (e: Error) => void };
 
-const state = vi.hoisted(() => ({ loads: 0, disposed: 0, lost: false, gens: [] as Gen[], log: [] as string[] }));
+const state = vi.hoisted(() => ({ loads: 0, disposed: 0, lost: false, gens: [] as Gen[], log: [] as string[], devices: [] as string[] }));
 
 vi.mock('../../src/platform/voice/engine', () => ({
-  loadEngine: () => {
+  loadEngine: (_p: unknown, opts?: { device?: 'webgpu' | 'wasm' }) => {
     state.loads += 1;
     state.log.push(`load${state.loads}`);
     const n = state.loads;
+    const device = opts?.device ?? 'webgpu';
+    state.devices.push(device);
     return Promise.resolve({
-      device: 'webgpu',
+      device,
       fromCache: true,
       loadMs: 10,
       lost: () => state.lost,
@@ -28,7 +30,7 @@ vi.mock('../../src/platform/voice/engine', () => ({
   },
 }));
 
-import { loadNeuralVoice, prefetchNeural, resetNeural, speakNeural, useNeuralVoice } from '../../src/platform/voice/neural';
+import { loadNeuralVoice, prefetchNeural, resetNeural, speakNeural, useNeuralVoice, VOICE_DEVICE_KEY } from '../../src/platform/voice/neural';
 
 class FakeSource {
   buffer: unknown = null;
@@ -65,15 +67,31 @@ const flush = async () => {
 };
 const run = (chunks: string[], alive = () => true) => speakNeural({ chunks, from: 0, rate: 1, voice: 'af_heart', alive, onChunk: () => undefined });
 
+class FakeStorage {
+  m = new Map<string, string>();
+  getItem(k: string) {
+    return this.m.get(k) ?? null;
+  }
+  setItem(k: string, v: string) {
+    this.m.set(k, v);
+  }
+  removeItem(k: string) {
+    this.m.delete(k);
+  }
+}
+let store = new FakeStorage();
+
 describe('neue Stimme', () => {
   beforeEach(async () => {
     vi.useFakeTimers();
-    g.window = { indexedDB: {}, DecompressionStream: function D() {}, AudioContext: FakeCtx };
+    store = new FakeStorage();
+    g.window = { indexedDB: {}, DecompressionStream: function D() {}, AudioContext: FakeCtx, localStorage: store };
     state.loads = 0;
     state.disposed = 0;
     state.lost = false;
     state.gens = [];
     state.log = [];
+    state.devices = [];
     resetNeural();
     await loadNeuralVoice();
     expect(useNeuralVoice.getState().status).toBe('ready');
@@ -155,5 +173,107 @@ describe('neue Stimme', () => {
     await vi.advanceTimersByTimeAsync(17_000);
     await flush();
     expect(state.log).toEqual(['load1', 'dispose1', 'load2']);
+  });
+
+  // Safari am Mac (23.11.2026): WebGPU wird angeboten und lädt, `generate` kommt aber nie zurück → früher endlos neu geladen.
+  it('Grafikchip hängt, bevor er je geantwortet hat: Neuaufbau auf dem Prozessor, gemerkt im Browser-Speicher', async () => {
+    void run(['Stuck.']);
+    await vi.advanceTimersByTimeAsync(20_100);
+    await flush();
+    expect(state.log).toEqual(['load1', 'dispose1', 'load2']);
+    expect(state.devices).toEqual(['webgpu', 'wasm']);
+    expect(store.getItem(VOICE_DEVICE_KEY)).toBe('wasm');
+    expect(useNeuralVoice.getState()).toMatchObject({ status: 'ready', device: 'wasm' });
+  });
+
+  it('gemerkter Prozessor: beim nächsten Start gleich wasm', async () => {
+    resetNeural();
+    store.setItem(VOICE_DEVICE_KEY, 'wasm');
+    await loadNeuralVoice();
+    expect(state.devices).toEqual(['webgpu', 'wasm']);
+  });
+
+  it('hängt auch der Prozessor: aufhören, Gerätestimme, keine Schleife', async () => {
+    void run(['Stuck.']);
+    await vi.advanceTimersByTimeAsync(20_100);
+    await flush();
+    expect(state.devices).toEqual(['webgpu', 'wasm']);
+    void run(['Still stuck.']);
+    await vi.advanceTimersByTimeAsync(90_100);
+    await flush();
+    expect(useNeuralVoice.getState().status).toBe('failed');
+    // Viel später, auch nach Rückkehr und erneutem Vorlesen: nichts wird mehr geladen.
+    await vi.advanceTimersByTimeAsync(30 * 60_000);
+    await expect(loadNeuralVoice()).resolves.toBeNull();
+    await expect(run(['Hello.'])).resolves.toBe('unavailable');
+    expect(state.loads).toBe(2);
+    expect(state.disposed).toBe(2);
+  });
+
+  it('iPhone-Fall: Grafikchip hat schon geantwortet und hängt einmal – wieder Grafikchip, nichts gemerkt', async () => {
+    const p = run(['Fine.']);
+    await flush();
+    state.gens[0]?.resolve(clip());
+    await vi.advanceTimersByTimeAsync(50);
+    await expect(p).resolves.toBe('done');
+    void run(['Stuck.']);
+    await vi.advanceTimersByTimeAsync(20_100);
+    await flush();
+    expect(state.devices).toEqual(['webgpu', 'webgpu']);
+    expect(store.getItem(VOICE_DEVICE_KEY)).toBeNull();
+  });
+
+  it('Prozessor: langsamer erster Satz (6 s) spielt noch die neue Stimme; kein Vorab-Rechnen', async () => {
+    resetNeural();
+    store.setItem(VOICE_DEVICE_KEY, 'wasm');
+    await loadNeuralVoice();
+    prefetchNeural(['Card.'], 'af_heart', 1);
+    await vi.advanceTimersByTimeAsync(400);
+    expect(state.gens).toHaveLength(0);
+    const p = run(['Slow on the processor.']);
+    await vi.advanceTimersByTimeAsync(6_000);
+    state.gens[0]?.resolve(clip());
+    await vi.advanceTimersByTimeAsync(50);
+    await expect(p).resolves.toBe('done');
+  });
+
+  // Der Prozessor rechnet im Hauptfaden: währenddessen laufen keine Wecker, danach sind sie überfällig (Uhr ist weiter als geplant).
+  const blockClock = () => {
+    const base = Date.now.bind(Date);
+    let offset = 0;
+    const spy = vi.spyOn(Date, 'now').mockImplementation(() => base() + offset);
+    return { block: (ms: number) => (offset += ms), restore: () => spy.mockRestore() };
+  };
+
+  it('Prozessor: Satz direkt nach blockiertem Rechnen fertig – der überfällige Tipp-Wecker gibt ihm Vorrang', async () => {
+    resetNeural();
+    store.setItem(VOICE_DEVICE_KEY, 'wasm');
+    await loadNeuralVoice();
+    const clock = blockClock();
+    const p = run(['A very long sentence.']);
+    await flush();
+    clock.block(20_000);
+    await vi.advanceTimersByTimeAsync(8_000);
+    state.gens[0]?.resolve(clip());
+    await vi.advanceTimersByTimeAsync(50);
+    await expect(p).resolves.toBe('done');
+    clock.restore();
+  });
+
+  it('Prozessor: überfälliger Hänger-Wecker nach blockiertem Rechnen zählt nicht als Hänger', async () => {
+    resetNeural();
+    store.setItem(VOICE_DEVICE_KEY, 'wasm');
+    await loadNeuralVoice();
+    const clock = blockClock();
+    void run(['A very long sentence.']);
+    await flush();
+    clock.block(100_000);
+    await vi.advanceTimersByTimeAsync(90_000);
+    state.gens[0]?.resolve(clip());
+    await vi.advanceTimersByTimeAsync(5_000);
+    // 1 = Start im beforeEach, 2 = Start auf dem Prozessor; kein Neuaufbau.
+    expect(state.loads).toBe(2);
+    expect(useNeuralVoice.getState()).toMatchObject({ status: 'ready', device: 'wasm' });
+    clock.restore();
   });
 });
