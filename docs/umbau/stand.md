@@ -1144,3 +1144,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Ursache: `sentencesOf` las `xEx` nie, `usableSentences` nahm den Leseausschnitt `ex` (mit „…“, ~35 Wörter) als einzigen Satz. Behebung `9838ca22` (`src/modules/vocab/domain/card.ts`): `xEx` als Satzquelle, jeder Satz auf den EINEN Satz mit der Fundstelle gekürzt, Fragmente nur im Notfall. Thread `d5374c86` beantwortet.
 - **Test-Link `AXHkh6…` v110 `1795442937-df7e`** (Rückweg v109 `1794609152-bc87`). Wartet auf Emrahs „live“.
 - Emrahs „Live“ → **live `JLL8…` v120 `1795444241-4d3e`** (Rückweg v119 `1794628258-4227`), Programm gleich Test-Link v110.
+
+## 23.11.2026 – Live-Kommentar „to be aware of“ und Stimme Safari am Mac
+- „to“: `b1625a7c` (Prüfung getippter Antworten: Infinitiv-„to“ optional, „to be + Adj.“ ohne „be“ auf Karten ohne Satz) + `e3168232` (eigener Satz: `usedIn` erkennt jede Form von „be“, Prompt-Regel, Aufgabe zeigt „be aware of“). Thread `53b42fae`. **Live `JLL8…` v121 `1795453683-bd5f`** (Rückweg v120 `1795444241-4d3e`), gebaut ohne die Stimmen-Änderung.
+- Stimme Safari-Mac (`fa19b021`): Ursache `for await` über ReadableStream in phonemizer (Safari ohne async-iterierbare Streams) → Wörterbuch kam nie an, `generate` hing ewig. Behebung `src/platform/compat.ts` + Prozessor-Rückfall/Deckel in `neural.ts`. **Test-Link `AXHkh6…` v111 `1795454062-ee5b`** (Rückweg v110). Wartet auf Emrahs Mac-Test.
