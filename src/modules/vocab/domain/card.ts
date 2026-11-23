@@ -31,7 +31,8 @@ export type Sent = {
   key: string;
   en: string;
   de: string | null;
-  src: 'ex' | 'wx' | 'sb';
+  /** `xex` = gespeicherte, beim Speichern geprüfte Claude-Beispiele der Karte (`xEx`, Live-Kommentar 23.11.2026). */
+  src: 'ex' | 'wx' | 'xex' | 'sb';
   /** Vom Inhalt markierte Stelle (`[…]` im Rohsatz), Zeichenbereich im gezeigten Satz `en`; Rückfall für die Lücke (Inhalts-Audit 04.11.2026). */
   mark?: readonly [number, number];
 };
@@ -60,7 +61,7 @@ export function sbGateOn(raw: unknown): boolean {
 
 /**
  * Alle Sätze eines Wort-Dokuments in fester Reihenfolge (= Schlüsselliste für `pickSentence`): Ankersatz `ex` → Claude-Sätze `wx` ohne `bad`
- * → Satzbank `sb` (aus Lesen/C1 sofort; von Claude nur bei wirksamer Freigabe und 4 Wochen nach Erzeugung). Doppelte Sätze einmal.
+ * → gespeicherte Claude-Beispiele `xEx` → Satzbank `sb` (aus Lesen/C1 sofort; von Claude nur bei wirksamer Freigabe und 4 Wochen nach Erzeugung). Doppelte Sätze einmal.
  */
 export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate: unknown, o: { read?: boolean } = {}): Sent[] {
   const exDe = isObj(doc.exDe) ? doc.exDe : {};
@@ -89,6 +90,9 @@ export function sentencesOf(doc: Record<string, unknown>, nowMs: number, sbGate:
   const up = isObj(doc.src) ? str(doc.src.upgraded) : '';
   if (up) push(up, null, ex ? 'wx' : 'ex', !ex);
   if (Array.isArray(doc.wx)) for (const x of doc.wx) if (isObj(x) && x.bad !== 1 && x.bad !== true && str(x.en)) push(str(x.en), x.de, 'wx');
+  // Live-Kommentar 23.11.2026 („viel Text für ein Wort“): die kurzen, beim Speichern geprüften Beispiele der Karte (`xEx`: Wort enthalten,
+  // sinnvolle Länge, `src/domain/srs/examples.ts`) wurden hier nie gelesen – ein Wort mit Lese-Ausschnitt als `ex` hatte keinen anderen Satz.
+  if (Array.isArray(doc.xEx)) for (const x of doc.xEx) if (isObj(x) && x.bad !== 1 && x.bad !== true && str(x.en)) push(str(x.en), x.de, 'xex');
   const gate = sbGateOn(sbGate);
   if (Array.isArray(doc.sb))
     for (const x of doc.sb) {
@@ -238,20 +242,75 @@ export type CardSentence = { sent: Sent; gap: Gap };
 /** Längster Satz, der in einer Abfrage noch ruhig lesbar ist (Wörter). Emrah 05.11.2026: „ein ganzer Roman“. */
 export const SENT_MAX_WORDS = 22;
 const ELLIPSIS = /^\s*(…|\.\.\.)|(…|\.\.\.)\s*$/;
-/** Kurzer, vollständiger Satz: höchstens `SENT_MAX_WORDS` Wörter, kein Ausschnitt mit „…“ am Anfang oder Ende (Emrah 05.11.2026). */
-export const tidySentence = (en: string): boolean => !ELLIPSIS.test(en) && en.trim().split(/\s+/).length <= SENT_MAX_WORDS;
+/** Satzanfang: Großbuchstabe oder Ziffer (davor höchstens Anführung oder Klammer). */
+const START_OK = /^["'“‘(]?[A-Z0-9]/;
+/** Satzende: . ! ? (danach höchstens Anführung oder Klammer). */
+const END_OK = /[.!?]["'”’)]*$/;
+/**
+ * Kurzer, vollständiger Satz: höchstens `SENT_MAX_WORDS` Wörter, kein Ausschnitt mit „…“ am Anfang oder Ende (Emrah 05.11.2026), beginnt groß
+ * und endet mit Satzzeichen (Live-Kommentar 23.11.2026: „…real production file … went undetected. We take …“ war ein Leseausschnitt).
+ */
+export const tidySentence = (en: string): boolean => {
+  const t = en.trim();
+  return !ELLIPSIS.test(t) && START_OK.test(t) && END_OK.test(t) && t.split(/\s+/).length <= SENT_MAX_WORDS;
+};
+
+/** Abkürzungen, nach deren Punkt kein neuer Satz beginnt (*Mr. Smith*, *e.g. The*). */
+const ABBR = new Set(['mr', 'mrs', 'ms', 'dr', 'prof', 'st', 'vs', 'etc', 'inc', 'ltd', 'co', 'corp', 'jr', 'sr', 'no', 'nos', 'approx', 'dept', 'e.g', 'i.e', 'u.s', 'u.k', 'a.m', 'p.m', 'fig', 'ca']);
+
+/**
+ * Satzgrenzen im Text: nach . ! ? (auch mehreren, danach Anführung/Klammer), Leerzeichen, dann ein Großbuchstabe oder eine Ziffer. Kein Schnitt
+ * nach Abkürzungen und Initialen („J. Smith“) und nicht an „…“ (Auslassung, kein Satzende). Ergebnis: Zeichenbereiche ohne Rand-Leerzeichen.
+ */
+export function sentenceSpans(en: string): [number, number][] {
+  const out: [number, number][] = [];
+  let start = 0;
+  for (const m of en.matchAll(/[.!?]+["'”’)\]]*(\s+)(?=["'“‘([]?[A-Z0-9])/g)) {
+    const end = m.index + m[0].length - m[1]!.length;
+    const before = /(\S+)$/.exec(en.slice(start, m.index + 1))?.[1] ?? '';
+    const word = before.replace(/^["'“‘([]+/, '').replace(/[.!?]+$/, '').toLowerCase();
+    if (m[0][0] === '.' && (ABBR.has(word) || /^[a-z]$/.test(word))) continue;
+    out.push([start, end]);
+    start = m.index + m[0].length;
+  }
+  out.push([start, en.length]);
+  return out
+    .map(([a, b]): [number, number] => {
+      const seg = en.slice(a, b);
+      const lead = seg.length - seg.trimStart().length;
+      return [a + lead, a + seg.trimEnd().length];
+    })
+    .filter(([a, b]) => b > a);
+}
+
+/**
+ * Nur der EINE Satz mit der Fundstelle (Live-Kommentar 23.11.2026): Ein Lese-Ausschnitt mit mehreren Sätzen wird auf den Satz gekürzt, der die
+ * markierte Stelle enthält bzw. (ohne Markierung) das Stichwort. Schlüssel bleibt gleich (Verlauf `sn`, „nie derselbe Satz“); die gespeicherte
+ * Übersetzung gilt dem ganzen Text und fällt bei einer Kürzung weg. Gespeichert wird nichts.
+ */
+export function oneSentence(s: Sent, head: string, pv: boolean): Sent {
+  const spans = sentenceSpans(s.en);
+  if (spans.length < 2) return s;
+  const mark = s.mark;
+  const hit = mark ? spans.find(([a, b]) => a <= mark[0] && mark[1] <= b) : spans.find(([a, b]) => locateGap(s.en.slice(a, b), head, { pv }));
+  if (!hit) return s;
+  const [a, b] = hit;
+  return { key: s.key, en: s.en.slice(a, b), de: null, src: s.src, ...(mark ? { mark: [mark[0] - a, mark[1] - a] as const } : {}) };
+}
 
 /**
  * Nutzbare Sätze: Lücke gefunden und der Satz verrät das Ziel nicht. `skipped` = Sätze ohne gefundene Lücke (Meldung an die Inhaltsprüfung).
- * Lange Sätze und Ausschnitte („… gilt das …“) kommen nur, wenn das Wort sonst keinen nutzbaren Satz hat (`tidySentence`).
+ * Jeder Satz wird vorher auf den einen Satz mit der Fundstelle gekürzt (`oneSentence`). Lange Sätze und Ausschnitte („… gilt das …“, klein
+ * begonnen, ohne Satzende) kommen nur, wenn das Wort sonst keinen nutzbaren Satz hat (`tidySentence`).
  */
 export function usableSentences(sents: readonly Sent[], head: string, pv: boolean): { ok: CardSentence[]; skipped: Sent[] } {
   const ok: CardSentence[] = [];
   const rough: CardSentence[] = [];
   const skipped: Sent[] = [];
-  for (const s of sents) {
+  for (const s0 of sents) {
+    const s = oneSentence(s0, head, pv);
     const gap = locateGap(s.en, head, { pv }) ?? (s.mark ? gapFromMark(s.en, s.mark, head) : null);
-    if (!gap) skipped.push(s);
+    if (!gap) skipped.push(s0);
     else if (!leaks(bracketed(gap), gap.answer)) (tidySentence(s.en) ? ok : rough).push({ sent: s, gap });
   }
   return { ok: ok.length ? ok : rough, skipped };
