@@ -108,7 +108,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **Großpaket P Politur** (P1 Design, P2 Wörter, P3 Grammatik, P4 Anwenden; `docs/umbau/politur/plan.md`) **live** `JLL8…` v119 `1794628258-4227` (14.11.2026, Emrahs „Ja live nehmen“, Rückweg v118 `1794525659-3aa7`; Test-Link v109 `1794609152-bc87`)
   - [x] **Wort-Lücke immer ein kurzer ganzer Satz** (Live-Kommentar 23.11. „viel Text für ein Wort“, `to strip`; `xEx` als Satzquelle, ein Satz um die Fundstelle) **live** `JLL8…` v120 `1795444241-4d3e` (23.11.2026, Emrahs „Live“, Rückweg v119 `1794628258-4227`; Test-Link v110 `1795442937-df7e`)
   - [x] **„to“ nie Pflicht** (Live-Kommentar 23.11. „to be aware of“: Infinitiv-„to“ optional, eigener Satz zählt jede Form von „be“) **live** `JLL8…` v121 `1795453683-bd5f` (23.11.2026, Emrahs „Ja, direkt live“, Rückweg v120 `1795444241-4d3e`; ohne Test-Link)
-  - [ ] **Stimme Safari-Mac** (Wörterbuch entpacken in Safari, Prozessor-Rückfall, keine Neulade-Schleife) auf Test-Link `AXHkh6…` v111 `1795454062-ee5b` (Rückweg v110 `1795442937-df7e`), noch nicht live
+  - [x] **Stimme Safari-Mac** (Wörterbuch entpacken in Safari, Prozessor-Rückfall, keine Neulade-Schleife) **live** `JLL8…` v122 `1795461683-dc64` (23.11.2026, Emrahs „ja live nehmen klappt“, Rückweg v121 `1795453683-bd5f`; Test-Link v111 `1795454062-ee5b`)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
