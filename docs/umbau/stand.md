@@ -1143,3 +1143,4 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 23.11.2026 – Live-Kommentar „Schlechte Aufgabe wieder viel Text für ein Wort“ (Wort `to strip`)
 - Ursache: `sentencesOf` las `xEx` nie, `usableSentences` nahm den Leseausschnitt `ex` (mit „…“, ~35 Wörter) als einzigen Satz. Behebung `9838ca22` (`src/modules/vocab/domain/card.ts`): `xEx` als Satzquelle, jeder Satz auf den EINEN Satz mit der Fundstelle gekürzt, Fragmente nur im Notfall. Thread `d5374c86` beantwortet.
 - **Test-Link `AXHkh6…` v110 `1795442937-df7e`** (Rückweg v109 `1794609152-bc87`). Wartet auf Emrahs „live“.
+- Emrahs „Live“ → **live `JLL8…` v120 `1795444241-4d3e`** (Rückweg v119 `1794628258-4227`), Programm gleich Test-Link v110.
