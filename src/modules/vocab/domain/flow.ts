@@ -102,7 +102,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   const unseen = isProblem(lex);
   const noSentence = (form: Form, mode: CardMode): CardModel => {
     const answer = baseAnswer(head);
-    return { ...base, mode, form, sentence: null, answer, target: targetOf(lex, answer, pos, teach, null), cue: null, firstLetters: false };
+    return { ...base, mode, form, sentence: null, answer, target: targetOf(lex, answer, pos, teach, null, head), cue: null, firstLetters: false };
   };
   if (task.form === 'probe') return noSentence('probe', 'probe');
   // Kontrastkarte: frischer Satz (nie der zuletzt gezeigte), „Gesucht: …“ immer (auch auf hohen Stufen) – die Falle ist der Grund der Karte.
@@ -111,7 +111,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     const cue = de ? { de, ff: !!teach.ff } : null;
     const s = chooseSentence(lex, usable, day, { fresh: true, avoid: x.avoid ?? null, unseen });
     if (!s) return { ...noSentence('contrast', 'nosent'), cue, contrast };
-    return { ...base, mode: 'gap', form: 'contrast', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue, firstLetters: false, contrast };
+    return { ...base, mode: 'gap', form: 'contrast', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap, head), cue, firstLetters: false, contrast };
   }
   if (task.intro) {
     const s = chooseSentence(lex, usable, day, { anchorOnly: true });
@@ -122,7 +122,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
       form: 'intro',
       sentence: s,
       answer: s.gap.answer,
-      target: targetOf(lex, s.gap.answer, pos, teach, s.gap),
+      target: targetOf(lex, s.gap.answer, pos, teach, s.gap, head),
       cue: cueOf({ ...lex, lv: 1 }, de, teach),
       firstLetters: false,
     };
@@ -131,7 +131,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
   if (task.form === 'flip') {
     const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null });
     const answer = s ? s.gap.answer : baseAnswer(head);
-    return { ...base, mode: 'flip', form: 'flip', sentence: s, answer, target: targetOf(lex, answer, pos, teach, s ? s.gap : null), cue: null, firstLetters: false };
+    return { ...base, mode: 'flip', form: 'flip', sentence: s, answer, target: targetOf(lex, answer, pos, teach, s ? s.gap : null, head), cue: null, firstLetters: false };
   }
   // Verstehen-Spur: „Bedeutung lesen“ (Wort markiert im Satz) oder – mit Ton – eine der Hör-Formen (Politur P2, E3). Formen ohne eigene
   // Karte (Diktat, Bausteine) fallen auf „Bedeutung lesen“ zurück und werden so gebucht.
@@ -140,10 +140,10 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     if (task.form === 'tone_mean' && de) return noSentence('tone_mean', 'tone_mean');
     const s = chooseSentence(lex, usable, day, { avoid: x.avoid ?? null, unseen });
     // Satz hören → Wort tippen: der ganze Satz als Klang, im Text ist das Wort die Lücke.
-    if (task.form === 'listen' && s) return { ...base, mode: 'listen', form: 'listen', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
+    if (task.form === 'listen' && s) return { ...base, mode: 'listen', form: 'listen', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap, head), cue: null, firstLetters: false };
     // Zweite Textform (Prüfbefund 13.11.2026, auch ohne Ton): jede zweite „Bedeutung“ zeigt das Wort ohne Satz – gebucht als `meaning`.
     if (task.form === 'meaning' && de && meaningBare(lex)) return noSentence('meaning', 'meaning');
-    if (s && de) return { ...base, mode: 'meaning', form: 'meaning', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap), cue: null, firstLetters: false };
+    if (s && de) return { ...base, mode: 'meaning', form: 'meaning', sentence: s, answer: s.gap.answer, target: targetOf(lex, s.gap.answer, pos, teach, s.gap, head), cue: null, firstLetters: false };
     return noSentence('nosent', 'nosent');
   }
   if (task.form === 'nosent' || spec.sent === 'n') return noSentence('nosent', 'nosent');
@@ -158,7 +158,7 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     form,
     sentence: s,
     answer: s.gap.answer,
-    target: targetOf(lex, s.gap.answer, pos, teach, s.gap),
+    target: targetOf(lex, s.gap.answer, pos, teach, s.gap, head),
     cue: task.cue ? cueOf(lex, de, teach) : null,
     firstLetters: form === 'gap_hint',
   };

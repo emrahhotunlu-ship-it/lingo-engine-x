@@ -1,5 +1,5 @@
 import { isDrillSentence, lemmaCandidates } from '../shared';
-import { inflections, normalize, type Target } from './check';
+import { inflections, normalize, PARTICLES, PREPOSITIONS, type Target } from './check';
 import { CUE_MAX_LV, leaks, pickSentence } from './forms';
 import { hash32 } from './rand';
 import type { Lex } from './types';
@@ -143,6 +143,47 @@ function verbTo(normalized: string): boolean {
   if (!m) return false;
   if (KEEP_TO.has(m[1]!)) return false;
   return !(m[1] === 'begin' && m[2] === 'with');
+}
+
+/**
+ * Satzadverbiale mit „to be“: hier gehört das „to“ fest zur Wendung (*to be honest*, *to be fair to them*), es ist kein Infinitiv-Zeichen.
+ */
+const TO_BE_FIXED = /^to be (honest|fair|frank|clear|exact|blunt|sure|precise|brief|more precise|perfectly honest|on the safe side)( to (them|him|her|you|me|us))?$/;
+
+/**
+ * Beginnt das Stichwort mit dem Infinitiv-„to“ (*to adjust*, *to be aware of*)? Live-Kommentar 23.11.2026: dieses „to“ ist beim Tippen nie
+ * Pflicht. Anders als `verbTo` zählt hier auch „to be …“ (dort bleibt „to be“ stehen, damit *To be honest* nicht als „To ___“ erscheint).
+ */
+export function infinitiveTo(head: string): boolean {
+  const n = normalize(head);
+  if (verbTo(n)) return true;
+  return /^to be \S/.test(n) && !TO_BE_FIXED.test(n);
+}
+
+/** Nach „to be“ ohne „be“ eine andere Bedeutung (*due to* = wegen, *used to* = pflegte) oder kein Adjektiv/Partizip (*on the fence*). */
+const BE_KEEP = new Set([...PREPOSITIONS, ...PARTICLES, 'a', 'an', 'the', 'due', 'used', 'use', 'not', 'no']);
+
+/**
+ * „to be + Adjektiv/Partizip (+ Präposition)“ (*to be aware of*, *to be keen on*, *to be liable for*): ohne Satz zählt auch die Form ohne
+ * „be“ (*aware of*), Live-Kommentar 23.11.2026. Nicht bei Satzadverbialen und nicht, wenn ohne „be“ etwas anderes entstünde (`BE_KEEP`).
+ */
+export function beAdjHead(head: string): boolean {
+  const n = normalize(head);
+  const m = /^to be (\S+)/.exec(n);
+  return !!m && infinitiveTo(head) && !BE_KEEP.has(m[1]!);
+}
+
+/**
+ * Was beim Tippen locker gilt (Live-Kommentar 23.11.2026): ohne Satz das Infinitiv-„to“ (beidseitig) und bei „to be + Adjektiv“ auch „be“.
+ * In der Lücke nur das „to“ vor einer Grundform, wenn die Lücke selbst kein „to“ enthält (*We need to [adjust]*): dort muss die getippte
+ * Form in den Satz passen, mehr wird nicht aufgeweicht.
+ */
+export function looseOf(head: string, gap: Gap | null): Pick<Target, 'toFree' | 'beFree'> {
+  if (!infinitiveTo(head)) return {};
+  if (!gap) return { toFree: true, ...(beAdjHead(head) ? { beFree: true } : {}) };
+  const a = normalize(gap.answer);
+  const base = normalize(head).split(' ')[1];
+  return !/^to /.test(a) && a.split(' ')[0] === base ? { toFree: true } : {};
 }
 
 /**
@@ -371,10 +412,11 @@ export function posOf(raw: unknown): Pos | null {
 }
 
 /** Ziel für die Auswertung (`checkAnswer`). `answer` = Gesuchtes, wie es in der Lücke steht; ohne Satz die Grundform. */
-export function targetOf(lex: Lex, answer: string, pos: Pos | null, teach: Teach, gap: Gap | null): Target {
+export function targetOf(lex: Lex, answer: string, pos: Pos | null, teach: Teach, gap: Gap | null, head?: string): Target {
   const syn = [...(lex.gr?.var ?? []), ...(teach.syn ?? [])];
   return {
     answer,
+    ...(head ? looseOf(head, gap) : {}),
     k: lex.k,
     pos,
     ...(syn.length ? { syn } : {}),

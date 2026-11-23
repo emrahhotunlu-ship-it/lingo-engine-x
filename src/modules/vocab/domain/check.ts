@@ -33,6 +33,13 @@ export type Target = {
   after?: string;
   /** Falscher Freund (für die Warum-Zeile: Hinweis `ff` statt `pair`). */
   ff?: boolean;
+  /**
+   * Infinitiv-„to“ am Anfang ist nie Pflicht (Live-Kommentar 23.11.2026): *be aware of* = *to be aware of*, in beide Richtungen. Nur das
+   * eine Wort am Anfang; ein „to“ weiter hinten (*look forward to*) bleibt Pflicht. In der Lücke nur gesetzt, wenn sie kein „to“ enthält.
+   */
+  toFree?: boolean;
+  /** Nur ohne Satz: bei „to be + Adjektiv/Partizip“ zählt auch die Form ohne „be“ (*aware of*). */
+  beFree?: boolean;
 };
 
 export type CheckDict = {
@@ -211,9 +218,17 @@ function isInfl(inp: string, ans: string, pos: Target['pos']): boolean {
 
 /** Antwort auswerten. `raw` = Eingabe, wie getippt. */
 export function checkAnswer(raw: string, t: Target, d: CheckDict): Check {
-  const answer = normalize(t.answer);
+  let answer = normalize(t.answer);
   let input = normalize(raw);
   if (!input) return { outcome: 'dunno' };
+  // Infinitiv-„to“ (und ohne Satz bei „to be + Adjektiv“ auch „be“) angleichen, bevor verglichen wird: sonst wäre *be aware of* für
+  // *to be aware of* ein Präpositionsfehler (Live-Kommentar 23.11.2026). Tippfehler im Rest bleiben Tippfehler.
+  if (t.toFree) {
+    answer = answer.replace(/^to /, '');
+    input = input.replace(/^to /, '');
+    if (t.beFree && /^be /.test(answer) && !/^be /.test(input)) input = `be ${input}`;
+    if (input === answer) return { outcome: 'ok' };
+  }
   // (g) Kurzformen in beide Lesarten: *she's been* = *she has been*, *I'd sent* = *I had sent* (english-teacher V2)
   const hadHas = (x: string) => normalize(normalizeRaw(x).replace(/\b(it|that|what|there|here|he|she|who)'s\b/g, '$1 has').replace(/\b(i|you|we|they|he|she|it|that|there)'d\b/g, '$1 had'));
   const alt = hadHas(raw);
