@@ -1139,3 +1139,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - **Test-Link `AXHkh6…` v109 `1794609152-bc87`** (Rückweg v108 `1794524358-f38c`). Wartet auf Emrahs Review. Live-Rückweg wäre v118 `1794525659-3aa7`.
 - Offen: b10:81 (Kurzer Tag friert vmod/day zu früh ein), Stimmen-Fallback härten, K4 (Prüfen auf 375 unter dem Rand), K5 (Extra-Knopf Grammatik), Einzeldatei-Rückfall prüfen, 115 Dateien (Ziel < 100), mc.kwt6, mistake-why@1 „nochmal“, Anwenden-Reiter „Fertig“ startet offenen Schritt.
 - 14.11.2026 Emrahs „Ja live nehmen“ → **live `JLL8…` v119 `1794628258-4227`** (Rückweg v118 `1794525659-3aa7`), Programm gleich Test-Link v109 (nur Startdatei mit neuer Bau-Kennung).
+
+## 23.11.2026 – Live-Kommentar „Schlechte Aufgabe wieder viel Text für ein Wort“ (Wort `to strip`)
+- Ursache: `sentencesOf` las `xEx` nie, `usableSentences` nahm den Leseausschnitt `ex` (mit „…“, ~35 Wörter) als einzigen Satz. Behebung `9838ca22` (`src/modules/vocab/domain/card.ts`): `xEx` als Satzquelle, jeder Satz auf den EINEN Satz mit der Fundstelle gekürzt, Fragmente nur im Notfall. Thread `d5374c86` beantwortet.
+- **Test-Link `AXHkh6…` v110 `1795442937-df7e`** (Rückweg v109 `1794609152-bc87`). Wartet auf Emrahs „live“.
