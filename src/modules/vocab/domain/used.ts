@@ -36,7 +36,18 @@ function slots(head: string): { h: string; gap: number }[] {
 }
 
 /** Kommt das Zielwort (gebeugt, mit Einschüben je nach Art) im Text vor? */
+/**
+ * Live-Kommentar 23.11.2026: Das Infinitiv-„to“ am Anfang ist nie Pflicht, und bei „to be + Adjektiv“ zählt jede Form von „be“
+ * („to be aware of“ → „I am aware of …“, „we're aware of“, „being aware of“): geprüft wird dann der Kern ohne „be“.
+ */
 export function usedIn(text: string, head: string, kind: LexKind): boolean {
+  const h = head.trim().replace(/^to\s+(?=\S)/i, '');
+  if (usedHead(text, h, kind)) return true;
+  const core = /^be\s+\S/i.test(h) ? h.replace(/^be\s+/i, '') : null;
+  return !!core && usedHead(text, core, kind);
+}
+
+function usedHead(text: string, head: string, kind: LexKind): boolean {
   const toks = tokens(text);
   const sl = slots(head);
   if (!sl.length || !toks.length) return false;

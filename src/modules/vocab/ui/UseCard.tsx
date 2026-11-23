@@ -3,6 +3,7 @@ import { Button, EnglishText, ExerciseShell, Icon, lookupOpenMs, MicButton, Prim
 import { hasTarget } from '../prompts/common';
 import type { UseVerdict } from '../prompts/common';
 import type { UseModel, UseTarget } from '../domain/use';
+import { infinitiveTo } from '../domain/card';
 import type { LearnRun, LearnView, UseRow, UseState } from './learnRun';
 
 // Großpaket A S5c-3: Anwenden und eigener Satz (Bilder s2-07 … s2-12). Die Karte rechnet nichts selbst: Prüfen, Nochmal, Aufdecken,
@@ -50,6 +51,9 @@ function wordList(t: T, ws: readonly string[]): ReactNode {
 }
 
 /** Text mit unterstrichenen Fundstellen je Urteil; ohne Fundstelle wird das Zielwort selbst gesucht. */
+/** Live-Kommentar 23.11.2026: In der Schreibaufgabe das Infinitiv-„to“ weglassen („be aware of“) – damit lässt sich ein Satz bilden. */
+const shownWord = (w: string): string => (infinitiveTo(w) ? w.replace(/^\s*to\s+/i, '') : w);
+
 function Marked({ text, rows, targets, testId }: { text: string; rows: readonly UseRow[]; targets: readonly UseTarget[]; testId: string }) {
   const low = text.toLowerCase();
   const spans: { a: number; b: number; v: UseVerdict; key: string }[] = [];
@@ -164,7 +168,7 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
     .filter(Boolean)
     .join(' · ');
   const kindLabel = `${t(own ? 'vmKindOwn' : 'vmKindUse')} · ${detail}`;
-  const taskText = later ? t('vmTask_later') : own ? t('vmTask_own', { w: m.targets[0]?.word ?? '' }) : t('vmTask_use', { n: t(numKey(m.targets.length)) });
+  const taskText = later ? t('vmTask_later') : own ? t('vmTask_own', { w: shownWord(m.targets[0]?.word ?? '') }) : t('vmTask_use', { n: t(numKey(m.targets.length)) });
   // Ohne Claude sagt der Wozu-Text es schon vorher (nicht erst nach drei Minuten Schreiben).
   const purpose = later ? t('vmWozu_later') : !run.canCheck() ? t('vmWozu_noAi') : t(own ? 'vmWozu_own' : 'vmWozu_use');
 
@@ -199,7 +203,7 @@ function UseInner({ view, run }: { view: UseView; run: LearnRun }) {
                 {r ? <Icon name={TONE[r.v].icon} size={14} /> : used ? <span className="lx-v-dot" data-ch="w" /> : null}
               </span>
               <span lang="en" title={tg.head}>
-                {tg.word}
+                {shownWord(tg.word)}
               </span>
               {/* Gemeinte Bedeutung sichtbar (am Handy gibt es kein `title`): danach urteilt Claude. */}
               {tg.de ? (
