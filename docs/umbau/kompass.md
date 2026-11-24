@@ -59,6 +59,7 @@ Reihenfolge darf Emrah jederzeit ändern. Jedes Großpaket durchläuft §2 „Gr
 6. **Review Emrah** → Korrekturen → Eintrag in `stand.md` und hier §3.
 
 ## 5. Technik-Stolpersteine (Cloud-Umgebung)
+- **Live-Schaltung lädt offene Ansichten neu** (24.11.2026: Emrah lernte am iPhone, v123 um 21:21 UTC → Neustarts 21:25 und 21:28). Deshalb: Live-Schaltung vorher kurz ankündigen („gleich lädt die App einmal neu“), alte Teil-Dateien eine Runde stehen lassen (removeMap erst beim nächsten Veröffentlichen), damit eine noch offene alte Seite nachladen kann.
 - Playwright: `PW_CHROMIUM=/opt/pw-browsers/chromium`; nie `playwright install`. Nie `npm run grammar:build`.
 - Platte voll (alte Vitest-Reste in /tmp, nicht löschen ohne Emrahs OK): `TMPDIR=/dev/shm/lx` (vorher `mkdir -p`) für Playwright und Vitest, dann startet der Browser wieder.
 - Nach jedem Build/E2E: `git checkout -q -- dist && git clean -fdq dist` und `rm -rf test-results` (Platte knapp, ENOSPC → Browser-Abstürze; dann betroffene Specs einzeln wiederholen). `dist/` nur beim Test-Link aktualisieren.
