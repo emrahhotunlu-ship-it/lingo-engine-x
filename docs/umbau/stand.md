@@ -1149,3 +1149,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - „to“: `b1625a7c` (Prüfung getippter Antworten: Infinitiv-„to“ optional, „to be + Adj.“ ohne „be“ auf Karten ohne Satz) + `e3168232` (eigener Satz: `usedIn` erkennt jede Form von „be“, Prompt-Regel, Aufgabe zeigt „be aware of“). Thread `53b42fae`. **Live `JLL8…` v121 `1795453683-bd5f`** (Rückweg v120 `1795444241-4d3e`), gebaut ohne die Stimmen-Änderung.
 - Stimme Safari-Mac (`fa19b021`): Ursache `for await` über ReadableStream in phonemizer (Safari ohne async-iterierbare Streams) → Wörterbuch kam nie an, `generate` hing ewig. Behebung `src/platform/compat.ts` + Prozessor-Rückfall/Deckel in `neural.ts`. **Test-Link `AXHkh6…` v111 `1795454062-ee5b`** (Rückweg v110). Wartet auf Emrahs Mac-Test.
 - Emrahs „ja live nehmen klappt“ (Mac-Test bestanden) → **live `JLL8…` v122 `1795461683-dc64`** (Rückweg v121 `1795453683-bd5f`), Programm gleich Test-Link v111.
+
+## 24.11.2026 – Live-Kommentar „Warum keine deutsche Übersetzung?“ (Wort-Rückmeldung)
+- `aa735ba3`: Rückmeldung zeigte die Satzübersetzung nie (nur `IntroTeach`); `xEx`-/gekürzte Sätze haben meist kein `de`. Neu `src/ui/exercise/SentenceDe.tsx`: gespeicherte Übersetzung anzeigen, sonst Knopf „Auf Deutsch“ (translate@3, quick, nur auf Tipp, nichts gespeichert). Thread `6679a595`.
+- Emrahs „Direkt live“ → **live `JLL8…` v123 `1795555294-4520`** (Rückweg v122 `1795461683-dc64`), ohne Test-Link. Bekannt rot unabhängig davon: `wortKern.spec:60` (alter Trainer).
