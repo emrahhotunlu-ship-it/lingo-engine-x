@@ -26,6 +26,7 @@ import {
   type ShellSecondary,
   toast,
   TutorButton,
+  SentenceDe,
   companionOpenedSince,
   inputProfile,
   tapLeadMs,
@@ -33,7 +34,7 @@ import {
 import { addDays, dayKey } from '../shared';
 import { type Band, type Line, type Next, partnersOf, type Why } from '../domain/band';
 import { tipOf } from '../domain/card';
-import { asksMeaning, audioOf, baseAnswer, type CardModel, isHear } from '../domain/flow';
+import { asksMeaning, audioOf, bareMeaning, baseAnswer, type CardModel, isHear } from '../domain/flow';
 import type { Reason } from '../domain/reason';
 import type { Grade } from '../domain/types';
 import type { FlipWhen, LearnRun, LearnView } from './learnRun';
@@ -1052,6 +1053,9 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
   // Beim Buchstabenvergleich (Fast richtig) steht nur der Vergleich, ohne „→ Richtig: …“: die Lücke zeigt die Lösung schon (UX-Nachprüfung V3).
   // ux-reviewer W7 Nr. 7: bei richtig zeigt die grüne Lücke die Antwort schon – „Du: … ✓“ wäre die zweite Aussage derselben Sache.
   const inGap = b.line.kind === 'answer' || b.line.kind === 'swap' || b.line.kind === 'ok';
+  // Nur wenn der Satz auf der Karte stand (nicht bei Hören → Bedeutung, Probe, Karte ohne Satz).
+  const shownSentence = v.card.sentence && !bareMeaning(v.card) ? fullText(v.card) : null;
+  const sentDe = shownSentence ? <SentenceDe key={shownSentence.text} en={shownSentence.text} de={v.card.sentence?.sent.de ?? null} /> : null;
   return {
     verdict,
     title,
@@ -1065,10 +1069,16 @@ function feedbackOf(v: BandView, t: T, dateShort: (ms: number) => string, run: L
           },
         }
       : undefined,
+    // Live-Kommentar 24.11.2026 („Warum wird an dieser Stelle nicht die deutsche Übersetzung angezeigt oder mindestens angeboten?“): unter dem
+    // Warum der gezeigte Satz auf Deutsch – gespeichert sofort, sonst „Auf Deutsch“ auf Tipp (Sätze aus `xEx`/Satzbank und gekürzte Sätze
+    // haben meist keine Übersetzung). Die Bedeutung des Wortes bleibt, wo sie ist (Warum, Wortkarte).
     why: (
-      <p className="lx-t-support" data-testid="vm-why">
-        {whyText(t, b.why)}
-      </p>
+      <div className="flex flex-col gap-2">
+        <p className="lx-t-support" data-testid="vm-why">
+          {whyText(t, b.why)}
+        </p>
+        {sentDe}
+      </div>
     ),
     // Feste Reihenfolge: Urteil · Lösung · Warum · Wortpartner · Kommt wieder (volle Breite, nie abgeschnitten).
     tail: (

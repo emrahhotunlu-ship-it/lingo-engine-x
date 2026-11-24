@@ -156,6 +156,41 @@ test.describe('Handy 390', () => {
       .toBe(true);
     expect(errors).toEqual([]);
   });
+  test('Rückmeldung (Live-Kommentar 24.11.2026): Satz ohne gespeicherte Übersetzung → „Auf Deutsch“ holt sie auf Tipp, nichts gespeichert', async ({ page }) => {
+    const { errors, external } = await bootAt(page, { name: 'vlearn', kind: 'more5' }, { migrated: false, fake: { patch: patch(true) } });
+    await screen(page, 'vlearn');
+    await page.getByTestId('vm-know-no').click();
+    for (let i = 0; i < 10 && (await page.getByTestId('vm-intro-go').or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first().isVisible()); i++) {
+      if (!(await passPick(page))) await page.getByTestId('vm-intro-go').click();
+      await expect(page.getByTestId('vm-check').or(page.getByTestId('vm-intro-go')).or(page.getByTestId('vm-pick')).or(page.getByTestId('vm-know')).first()).toBeVisible();
+    }
+    // Vor dem Prüfen: keine Übersetzung, kein Knopf (sie verriete die Lösung).
+    await expect(page.getByTestId('vm-sent-de-btn')).toHaveCount(0);
+    await page.clock.setFixedTime(new Date(NOW + 60_000));
+    await page.getByTestId('vm-dunno').click();
+    await expect(page.getByTestId('vm-why')).toBeVisible();
+    // Seed-Sätze haben keine gespeicherte Übersetzung: nichts von selbst gefragt, ein Knopf (≥ 44 px) unter dem Warum.
+    const btn = page.getByTestId('vm-sent-de-btn');
+    await expect(btn).toBeVisible();
+    await expect(btn).toHaveText('Auf Deutsch');
+    expect((await btn.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    const before = JSON.stringify(Object.entries(await dump(page)).filter(([p]) => /^vocab\//.test(p)));
+    const asked = (): Promise<Array<{ tier: string; input: string }>> =>
+      page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; tier: string; input: string }> } }).__LINGO_FAKE__.sampleCalls.filter((c) => c.id === 'translate'));
+    expect(await asked()).toEqual([]);
+    await btn.click();
+    await expect(page.getByTestId('vm-sent-de-text')).toHaveText('Das ist die Übersetzung deines Textes auf Deutsch.');
+    await expect(page.getByTestId('vm-sent-de-btn')).toHaveCount(0);
+    // Genau ein Aufruf, quick, mit dem ganzen gezeigten Satz (ohne Lücke).
+    const calls = await asked();
+    expect(calls.map((c) => c.tier)).toEqual(['quick']);
+    expect(calls[0]!.input).toMatch(/<<<\n[A-Z][^\n_]+[.!?]\n>>>/);
+    expect(await layoutProblems(page)).toEqual([]);
+    // Nur angezeigt, nicht am Wort gespeichert.
+    expect(JSON.stringify(Object.entries(await dump(page)).filter(([p]) => /^vocab\//.test(p)))).toBe(before);
+    expect(errors).toEqual([]);
+    expect(external).toEqual([]);
+  });
   test('Pflicht: Start „Wörter · ca. X Min.“ → Runde → Abschluss „Wörter erledigt“ mit morgen; „Fertig“ führt zu Heute', async ({ page }) => {
     test.setTimeout(90_000);
     const { errors } = await bootAt(page, { name: 'vlearn', kind: 'pflicht' }, { migrated: false, fake: { patch: patch(true) } });

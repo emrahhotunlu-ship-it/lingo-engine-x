@@ -18,6 +18,12 @@ export const vmEn = {
   vmLineRight: 'Correct:',
   vmLinePracticed: 'practicing:',
 
+  // The sentence in German in the feedback (live comment 11/24/2026): stored right away, otherwise from Claude on tap
+  vmSentDeLabel: 'The sentence in German',
+  vmSentDeBtn: 'In German',
+  vmSentDeBusy: 'Translating …',
+  vmSentDeFail: 'Translation not possible right now. Tap again.',
+
   // Why
   vmWhyMeanOk: '{word} ({pos}) means here: {de}.',
   vmWhyMeanOkNoPos: '{word} means here: {de}.',

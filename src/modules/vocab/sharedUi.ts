@@ -15,6 +15,8 @@ export type { MessageKey } from '../../i18n';
 // Bausteine der Übungsseite
 export { ExerciseShell, SentenceInput } from '../../ui/exercise';
 export { TutorButton } from '../../ui/exercise/TutorButton';
+// Live-Kommentar 24.11.2026: Satz auf Deutsch in der Rückmeldung (gespeichert sofort, sonst „Auf Deutsch“ auf Tipp über das KI-Tor).
+export { SentenceDe } from '../../ui/exercise/SentenceDe';
 export { companionOpenedSince } from '../../features/companion/store';
 export { PrimaryAction } from '../../ui/ActionBar';
 export type { ShellAction, ShellFeedback, ShellSecondary, ShellStatus } from '../../ui/exercise';

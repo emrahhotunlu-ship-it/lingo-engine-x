@@ -23,6 +23,8 @@ const ALLOWED_SHARED_UI: RegExp[] = [
   /^src\/i18n$/,
   // UX-Neuanfang D (02.11.2026): Claude-Hilfe bei falscher Antwort in der Lernkarte, und ob die Hilfe offen war (zählt als Hilfe).
   /^src\/ui\/exercise\/TutorButton$/,
+  // Live-Kommentar 24.11.2026: Satz auf Deutsch in der Rückmeldung (auf Tipp über das KI-Tor, nichts gespeichert).
+  /^src\/ui\/exercise\/SentenceDe$/,
   /^src\/features\/companion\/store$/,
   // Politur P1 (13.11.2026): „Erweitert“ in Einstellungen › Wörter (`Disclosure`).
   /^src\/ui\/(exercise|ActionBar|Button|Skeleton|Toast|Icon|Segmented|GradeButtons|Switch|Disclosure)$/,

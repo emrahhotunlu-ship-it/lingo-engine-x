@@ -18,6 +18,12 @@ export const vmDe = {
   vmLineRight: 'Richtig:',
   vmLinePracticed: 'geübt wird:',
 
+  // Satz auf Deutsch in der Rückmeldung (Live-Kommentar 24.11.2026): gespeichert sofort, sonst auf Tipp von Claude
+  vmSentDeLabel: 'Der Satz auf Deutsch',
+  vmSentDeBtn: 'Auf Deutsch',
+  vmSentDeBusy: 'Übersetzt …',
+  vmSentDeFail: 'Übersetzung gerade nicht möglich. Tippe noch einmal.',
+
   // Warum
   vmWhyMeanOk: '{word} ({pos}) heißt hier: {de}.',
   vmWhyMeanOkNoPos: '{word} heißt hier: {de}.',
