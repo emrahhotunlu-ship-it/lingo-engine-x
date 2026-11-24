@@ -47,10 +47,31 @@ function persist(): void {
   if (!ok) pushEntry({ level: 'warn', scope: 'diagnostics:persist', message: 'Protokoll konnte nicht lokal gesichert werden' }, false);
 }
 
+// Sichern gesammelt (Tempo 24.11.2026): Beim Start meldet das Qualitätstor oft viele Aufgaben hintereinander (Emrahs Protokoll: ~100 Zeilen
+// „quality:gate zurückgehalten …“); jede Zeile schrieb bisher sofort das ganze Protokoll in den Browser-Speicher (synchron, im Hauptfaden).
+// Warnungen und Hinweise werden jetzt kurz gesammelt und EINMAL gesichert; Fehler weiterhin sofort (sie sollen ein Neuladen nach einem Absturz
+// überleben). Vor dem Verlassen bzw. Minimieren der Seite wird Offenes sofort gesichert.
+const PERSIST_DELAY_MS = 500;
+let persistTimer: ReturnType<typeof setTimeout> | null = null;
+
+function flushPersist(): void {
+  if (persistTimer) clearTimeout(persistTimer);
+  persistTimer = null;
+  persist();
+}
+
+function persistSoon(): void {
+  if (persistTimer) return;
+  persistTimer = setTimeout(flushPersist, PERSIST_DELAY_MS);
+}
+
 function pushEntry(e: Omit<LogEntry, 'id' | 't'>, save: boolean): LogEntry {
   const entry: LogEntry = { ...e, id: nextId++, t: Date.now() };
   entries = [...entries, entry].slice(-MAX_ENTRIES);
-  if (save) persist();
+  if (save) {
+    if (e.level === 'error') flushPersist();
+    else persistSoon();
+  }
   listeners.forEach((fn) => fn());
   return entry;
 }
@@ -79,7 +100,7 @@ export function subscribeLog(fn: () => void): () => void {
 
 export function clearLog(): void {
   entries = [];
-  persist();
+  flushPersist();
   listeners.forEach((fn) => fn());
 }
 
@@ -101,6 +122,14 @@ export function initDiagnostics(): void {
     window.addEventListener('unhandledrejection', (ev) => {
       logError('window:unhandledrejection', ev.reason, withContext(undefined));
     });
+    // Gesammelte Warnungen nicht verlieren, wenn die Seite geht oder in den Hintergrund rückt (iPhone: App minimiert).
+    window.addEventListener('pagehide', () => {
+      if (persistTimer) flushPersist();
+    });
+    if (typeof document !== 'undefined')
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden' && persistTimer) flushPersist();
+      });
     probeKeyboardOnFirstFocus();
   }
 }
@@ -127,8 +156,8 @@ function probeKeyboardOnFirstFocus(): void {
 // ---------------------------------------------------------------- Kontext (Neubau WP0b, leistung.md §6)
 // Globale Fehler (außerhalb des Renderns) bekommen die aktuelle Route und Position mit ins
 // Protokoll. Der Rahmen meldet eine Lesefunktion an; die Diagnose importiert nichts aus dem Rahmen.
-// Jeder Eintrag wird wie bisher SOFORT lokal gesichert (`persist` in `log`) und überlebt so ein
-// anschließendes Neuladen.
+// Jeder Fehler wird wie bisher SOFORT lokal gesichert (`flushPersist` in `pushEntry`) und überlebt so ein
+// anschließendes Neuladen; Warnungen und Hinweise folgen gesammelt nach höchstens `PERSIST_DELAY_MS`.
 
 let context: (() => string | null) | null = null;
 

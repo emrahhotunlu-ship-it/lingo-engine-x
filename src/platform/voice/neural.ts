@@ -348,12 +348,68 @@ function drop(job: Job, err: Error): void {
   job.reject(err);
 }
 
+// ---------------------------------------------------------------- Eingabe-Ruhe für das Vorab-Rechnen
+// Emrah 24.11.2026 am iPhone („Eintippen, Tastatur aufklappen, zuklappen … alles echt laggy“): Das Vorab-Rechnen des sichtbaren Satzes lief
+// genau dann auf dem Grafikchip, wenn Emrah die Lücke antippte und tippte (die Lautschrift und das Anstoßen der Rechenschritte belegen dazu den
+// Hauptfaden). Gemessen (Chromium mit Software-Grafikchip, 4-fach gedrosselt, Wörter-Lücke): je Tastendruck Median 57 ms mit gegenüber 42 ms
+// ohne neue Stimme; mit dieser Regel p90 50–86 statt 67–98 ms (schwankt; der Grafikchip des iPhones lässt sich hier nicht nachstellen). Vorab-Aufträge starten deshalb erst nach einer Tipp-Pause und nie, während die Tastatur auf- oder zugeht; ein Tipp auf „Anhören“
+// (dringend) rechnet wie bisher sofort. Gestartet wird im Leerlauf des Browsers (Safari ohne `requestIdleCallback`: kurzer Wecker).
+
+/** So lange nach dem letzten Antippen, Tastendruck bzw. der letzten Tastatur-Bewegung wartet ein Vorab-Auftrag. */
+export const INPUT_QUIET_MS = 1_200;
+let inputAt = Number.NEGATIVE_INFINITY;
+let quietTimer: ReturnType<typeof setTimeout> | null = null;
+const clockMs = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+/** Antippen, Tippen, Fokuswechsel eines Felds oder Tastatur-Bewegung (sichtbarer Bereich ändert die Größe): Vorab-Rechnen wartet. */
+export function noteInputActivity(): void {
+  inputAt = clockMs();
+}
+
+const quietLeft = (): number => Math.max(0, inputAt + INPUT_QUIET_MS - clockMs());
+
+type IdleWin = { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+function whenIdle(fn: () => void): void {
+  const w = typeof window !== 'undefined' ? (window as unknown as IdleWin) : null;
+  if (w && typeof w.requestIdleCallback === 'function') w.requestIdleCallback(fn, { timeout: 1_000 });
+  else setTimeout(fn, 50);
+}
+
+/** Vorab-Aufträge nach der Ruhezeit erneut versuchen (ein Wecker, kein Warten in einer Schleife). */
+function pumpWhenQuiet(ms: number): void {
+  if (quietTimer) return;
+  quietTimer = setTimeout(() => {
+    quietTimer = null;
+    whenIdle(pump);
+  }, ms + 30);
+}
+
+if (typeof document !== 'undefined') {
+  const onInput = (ev: Event): void => {
+    if (ev.type === 'focusin' || ev.type === 'focusout') {
+      const el = ev.target as HTMLElement | null;
+      if (!el || !(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
+    }
+    noteInputActivity();
+  };
+  for (const type of ['pointerdown', 'keydown', 'beforeinput', 'compositionupdate', 'focusin', 'focusout']) document.addEventListener(type, onInput, { capture: true, passive: true });
+  if (typeof window !== 'undefined') window.visualViewport?.addEventListener('resize', noteInputActivity, { passive: true });
+}
+
 function pump(): void {
   const e = engine;
   if (running || !e) return;
   let job: Job | undefined;
   while (!job && queue.length) {
     const i = queue.findIndex((j) => j.urgent);
+    // Nur Vorab-Aufträge übrig und gerade wird getippt bzw. die Tastatur bewegt sich: später, im Leerlauf.
+    if (i < 0) {
+      const left = quietLeft();
+      if (left > 0) {
+        pumpWhenQuiet(left);
+        return;
+      }
+    }
     const next = queue.splice(i >= 0 ? i : 0, 1)[0] as Job;
     if (next.wanted()) job = next;
     else drop(next, new StaleError());
@@ -613,5 +669,8 @@ export function resetNeural(): void {
   troubleAt = [];
   forceWasm = false;
   gaveUp = false;
+  inputAt = Number.NEGATIVE_INFINITY;
+  if (quietTimer) clearTimeout(quietTimer);
+  quietTimer = null;
   useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null });
 }

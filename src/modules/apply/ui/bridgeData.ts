@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { getDb, loadBridgeWords, outPath, readDoc, useComboPairs, useLive, useTodayPattern, type BridgeLex } from '../sharedUi';
+import { comboPairsNow, getDb, loadBridgeWords, outPath, readDoc, useLive, useTodayPattern, type BridgeLex } from '../sharedUi';
 import { bridgeFrames, bridgeHistory, bridgeHistoryDays, knownPatterns, logWarn, patternById, pickBridge, safePatterns } from '../shared';
 import type { BridgeHistory, BridgeTarget, BridgeWord } from '../shared';
 
@@ -55,13 +55,12 @@ function legacyWords(pairs: ReadonlyArray<{ word: string; key?: string }>, vocab
  * Zusatzrunde: heute schon benutzte Wörter und Muster bleiben draußen.
  */
 export function useBridgeTargets(i: { day: string; n: number; free: boolean; frozen: boolean }): BridgeLoad {
-  const pairs = useComboPairs();
   const todayPat = useTodayPattern();
   const ready = useLive((s) => s.status !== 'waiting');
-  const live = useRef({ pairs, todayPat });
+  const live = useRef({ todayPat });
   useEffect(() => {
-    live.current = { pairs, todayPat };
-  }, [pairs, todayPat]);
+    live.current = { todayPat };
+  }, [todayPat]);
   const [state, setState] = useState<BridgeLoad>({ state: 'loading' });
   const { day, n, free, frozen } = i;
   useEffect(() => {
@@ -82,7 +81,9 @@ export function useBridgeTargets(i: { day: string; n: number; free: boolean; fro
       const tp = live.current.todayPat;
       const targets = pickBridge({
         words: (lex ?? []).map(lexWord),
-        legacy: legacyWords(live.current.pairs, s.collections.vocab),
+        // Tempo 24.11.2026: die Paare des alten Wegs erst hier, einmal je Öffnen (vorher ein Abo, das bei jeder Kartenänderung und alle 30 s
+        // alle Karten neu baute, während Emrah tippte – mit 2.500 Wörtern über 300 ms je Tastendruck, 4-fach gedrosselt).
+        legacy: legacyWords(comboPairsNow(), s.collections.vocab),
         todayPat: tp ? { id: tp.id, topic: tp.topic } : null,
         safe: safePatterns(grammar, day, known),
         known: knownPatterns(grammar, day, known),

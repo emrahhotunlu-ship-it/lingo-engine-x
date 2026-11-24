@@ -50,7 +50,7 @@ export { useInputProfile } from '../../platform/input';
 export { useTodayPlan } from '../../features/today/store';
 export { useToday } from '../../features/today/state';
 export { fehlersaetzeDue, fixToday } from '../../domain/metrics';
-export { useComboPairs } from '../../features/apply/ComboSentence';
+export { comboPairsNow, useComboPairs } from '../../features/apply/ComboSentence';
 export { topicById } from '../../domain/content';
 export { startDrill, useDrill } from '../../features/drills/session';
 

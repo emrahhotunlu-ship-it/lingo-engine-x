@@ -24,6 +24,12 @@ function cardsFor(vocab: ReadonlyMap<string, Doc>, chunks: ReadonlyMap<string, D
   return cards;
 }
 
+/** Dieselben Karten wie `useVocabCards`, aber einmalig aus dem aktuellen Stand (ohne Abo; derselbe Zwischenspeicher). */
+export function vocabCardsNow(): TrainCard[] {
+  const s = useLive.getState();
+  return cardsFor(s.collections.vocab ?? EMPTY, s.collections.chunk ?? EMPTY, useClock.getState().now, s.invalid);
+}
+
 export function useVocabCards(): TrainCard[] {
   const now = useClock((s) => s.now);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;

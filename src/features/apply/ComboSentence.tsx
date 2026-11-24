@@ -28,7 +28,8 @@ import { SessionEnd } from '../../ui/SessionEnd';
 import { ExerciseShell, SentenceInput, type ShellFeedback } from '../../ui/exercise';
 import { ExerciseTop } from '../learn/ui';
 import { saveRepairs } from '../repair/store';
-import { useVocabCards } from '../vocab/hub/data';
+import { useVocabCards, vocabCardsNow } from '../vocab/hub/data';
+import type { TrainCard } from '../../domain/srs/types';
 import { lapsesOf } from '../../domain/srs/lapses';
 
 // „Eigener Satz“ im Reiter Anwenden (Stufe 2, Übung 2 Teil B; Plan docs/umbau/anwenden-plan.md): Emrah schreibt einen
@@ -56,6 +57,20 @@ function readCombo(key: string): { fixed: ComboPair[]; pos: number; results: Don
 const DEEPEN_BOOST = 1000;
 const TODAY_BOOST = 500;
 
+type PairsIn = { cards: readonly TrainCard[]; grammar: ReadonlyMap<string, Record<string, unknown>> | undefined; today: string; log: Parameters<typeof laptopDeepen>[0]['log']; gtTopics: readonly string[] | undefined };
+
+function comboPairsOf({ cards, grammar, today, log, gtTopics }: PairsIn): ComboPair[] {
+  // „Am Laptop vertiefen“ (Matrix §6): Wörter, die heute am Handy geübt wurden und fest sitzen, kommen zuerst; danach die heute geübten.
+  const deepen = new Set(laptopDeepen({ log, cards, today }).map((w) => w.toLowerCase()));
+  const practiced = new Set(practicedToday({ log, cards, today }).map((w) => w.toLowerCase()));
+  const boost = (w: string): number => (deepen.has(w) ? DEEPEN_BOOST : practiced.has(w) ? TODAY_BOOST : 0);
+  const words = cards
+    .filter((c) => !c.hidden && !c.isNew && c.stage >= 1 && c.word.trim() && c.word.trim().split(/\s+/).length <= 2)
+    .map((c) => ({ word: c.word.trim(), lapses: lapsesOf(c.doc) + boost(c.word.trim().toLowerCase()), stage: c.stage, key: c.key }));
+  const errorTopics = [...(grammar ?? new Map<string, Record<string, unknown>>()).entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
+  return pickPairs(words, TOPICS, errorTopics, today, undefined, gtTopics ?? []);
+}
+
 /** Paare für die Runde: aus den Live-Daten, fest je Lerntag. */
 export function useComboPairs(): ComboPair[] {
   const cards = useVocabCards();
@@ -64,17 +79,18 @@ export function useComboPairs(): ComboPair[] {
   const log = useLive((s) => s.day?.doc);
   // Thema des Tages aus dem eingefrorenen Plan (`u.gt`), nur wenn der Plan von heute ist.
   const gtTopics = useTodayPlan((s) => (s.plan && s.plan.d === today ? s.plan.u?.gt?.topics : undefined));
-  return useMemo(() => {
-    // „Am Laptop vertiefen“ (Matrix §6): Wörter, die heute am Handy geübt wurden und fest sitzen, kommen zuerst; danach die heute geübten.
-    const deepen = new Set(laptopDeepen({ log, cards, today }).map((w) => w.toLowerCase()));
-    const practiced = new Set(practicedToday({ log, cards, today }).map((w) => w.toLowerCase()));
-    const boost = (w: string): number => (deepen.has(w) ? DEEPEN_BOOST : practiced.has(w) ? TODAY_BOOST : 0);
-    const words = cards
-      .filter((c) => !c.hidden && !c.isNew && c.stage >= 1 && c.word.trim() && c.word.trim().split(/\s+/).length <= 2)
-      .map((c) => ({ word: c.word.trim(), lapses: lapsesOf(c.doc) + boost(c.word.trim().toLowerCase()), stage: c.stage, key: c.key }));
-    const errorTopics = [...(grammar ?? new Map<string, Record<string, unknown>>()).entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
-    return pickPairs(words, TOPICS, errorTopics, today, undefined, gtTopics ?? []);
-  }, [cards, grammar, today, log, gtTopics]);
+  return useMemo(() => comboPairsOf({ cards, grammar, today, log, gtTopics }), [cards, grammar, today, log, gtTopics]);
+}
+
+/**
+ * Dieselben Paare einmalig aus dem aktuellen Stand, ohne Abo (Tempo 24.11.2026): Die Brücken-Sätze brauchen sie nur beim Öffnen. Als Abo baute
+ * `useComboPairs` bei JEDER Änderung einer Wortkarte (und alle 30 s mit der Uhr) alle Karten neu – mit 2.500 Wörtern über 300 ms je Tastendruck.
+ */
+export function comboPairsNow(): ComboPair[] {
+  const today = useClock.getState().today;
+  const live = useLive.getState();
+  const p = useTodayPlan.getState();
+  return comboPairsOf({ cards: vocabCardsNow(), grammar: live.collections.grammar, today, log: live.day?.doc, gtTopics: p.plan && p.plan.d === today ? p.plan.u?.gt?.topics : undefined });
 }
 
 export function ComboSentenceScreen() {
