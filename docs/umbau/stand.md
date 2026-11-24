@@ -1153,3 +1153,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 24.11.2026 – Live-Kommentar „Warum keine deutsche Übersetzung?“ (Wort-Rückmeldung)
 - `aa735ba3`: Rückmeldung zeigte die Satzübersetzung nie (nur `IntroTeach`); `xEx`-/gekürzte Sätze haben meist kein `de`. Neu `src/ui/exercise/SentenceDe.tsx`: gespeicherte Übersetzung anzeigen, sonst Knopf „Auf Deutsch“ (translate@3, quick, nur auf Tipp, nichts gespeichert). Thread `6679a595`.
 - Emrahs „Direkt live“ → **live `JLL8…` v123 `1795555294-4520`** (Rückweg v122 `1795461683-dc64`), ohne Test-Link. Bekannt rot unabhängig davon: `wortKern.spec:60` (alter Trainer).
+
+## 24.11.2026 – „App heute laggy“ (iPhone Duo, Tippen/Tastatur)
+- Messung (Chromium, Touch 375/669, CPU 4×, v119 vs. aktuell): Tippen in Wörter-/Grammatik-Lücken nicht langsamer als v119. Große Bremse im Brücken-Satz bei vielen Wörtern (2.500 Wörter: 289 ms/Tastendruck → 33 ms), Ursache Karten-Abo `useComboPairs` in `useBridgeTargets`. `fd6f29f4`: Brücken-Ziele einmal je Öffnen, Stimmen-Vorabrechnung erst nach 1,2 s Tipp-Pause im Leerlauf, Diagnose-Protokoll gesammelt gesichert.
+- **Test-Link `AXHkh6…` v112 `1795561971-fc7d`** (Rückweg v111). Offen: Schreibaufgabe nach Anwenden (`useTargets` hängt live an `useComboPairs`), `live.ts` verarbeitet je Lieferung alle Dokumente, Prüfen-Rechnung `planCtxOf` ~60 ms.
