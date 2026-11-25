@@ -73,20 +73,27 @@ function moduleOn(): boolean {
   return s.status === 'ready' && vocabModuleOn(s.docs['app/profile']) && !s.invalid['app/profile'];
 }
 
+type AutoSwitch = Awaited<ReturnType<typeof loadAutoSwitch>>;
+
+/**
+ * Nachholen und Wörter-Pflege aus EINEM vollen Lesen. Warten muss die Wörter-Runde nur auf das Nachholen (`catchUpDone`); die Pflege
+ * (bis zu hunderte Aufträge, jeder mit eigenen Datenbank-Aufrufen) läuft danach im Hintergrund und hält nie eine Runde im Ladezustand
+ * (Test-Link v113: weiße Übungsseite, solange 236 Aufträge liefen). Ein Fehler der Pflege wird protokolliert, die Runde läuft weiter.
+ */
+export async function catchUpWork(sw: Pick<AutoSwitch, 'startCatchUp' | 'startCare'>, writer: NonNullable<ReturnType<typeof getWriter>>, readAll: typeof read, nowMs: number): Promise<unknown> {
+  const snap = await readAll();
+  const caught = await sw.startCatchUp(writer, () => Promise.resolve(snap), nowMs);
+  void Promise.resolve()
+    .then(() => sw.startCare(writer, snap, Date.now()))
+    .catch((err: unknown) => logError('vocab:care', err, 'Start'));
+  return caught;
+}
+
 async function runCatchUp(): Promise<unknown> {
   const writer = getWriter();
   if (!writer) return null;
   try {
-    const sw = await loadAutoSwitch();
-    // EIN volles Lesen für Nachholen und Wörter-Pflege (Emrah 25.11.2026): erst die alten Antworten, dann die offenen Pflege-Aufträge.
-    const snap = await read();
-    const caught = await sw.startCatchUp(writer, () => Promise.resolve(snap), Date.now());
-    try {
-      await sw.startCare(writer, snap, Date.now());
-    } catch (err) {
-      logError('vocab:care', err, 'Start');
-    }
-    return caught;
+    return await catchUpWork(await loadAutoSwitch(), writer, read, Date.now());
   } catch (err) {
     logError('vocab:catchup', err, 'Start');
     return null;
