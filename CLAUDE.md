@@ -110,6 +110,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] **„to“ nie Pflicht** (Live-Kommentar 23.11. „to be aware of“: Infinitiv-„to“ optional, eigener Satz zählt jede Form von „be“) **live** `JLL8…` v121 `1795453683-bd5f` (23.11.2026, Emrahs „Ja, direkt live“, Rückweg v120 `1795444241-4d3e`; ohne Test-Link)
   - [x] **Stimme Safari-Mac** (Wörterbuch entpacken in Safari, Prozessor-Rückfall, keine Neulade-Schleife) **live** `JLL8…` v122 `1795461683-dc64` (23.11.2026, Emrahs „ja live nehmen klappt“, Rückweg v121 `1795453683-bd5f`; Test-Link v111 `1795454062-ee5b`)
   - [x] **Satz auf Deutsch in der Wort-Rückmeldung** (Live-Kommentar 24.11.: gespeicherte Übersetzung immer zeigen, sonst Knopf „Auf Deutsch“ mit `translate@3` auf Tipp) **live** `JLL8…` v123 `1795555294-4520` (24.11.2026, Emrahs „Direkt live“, Rückweg v122 `1795461683-dc64`; ohne Test-Link)
+  - [x] **Tempo am Handy** (Brücken-Sätze ohne Karten-Abo, Stimme rechnet nur in Tipp-Pausen vor, Protokoll gesammelt) **live** `JLL8…` v124 `1795591800-422b` (25.11.2026, Emrahs „Live nehmen“, Rückweg v123 `1795555294-4520`; Test-Link v112 `1795561971-fc7d`; alte Teil-Dateien eine Runde stehen gelassen)
   - [ ] R4 Messen · [x] R5 Dein Lehrer (live `JLL8…` v72 `1791500848-5d8d`, Rückweg v71) · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
