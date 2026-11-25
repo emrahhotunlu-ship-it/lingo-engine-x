@@ -142,6 +142,12 @@ describe('scripts/budget.json', () => {
     expect(b.grenzen.files).toBe(115);
     expect(b.grenzen.filesFreigabe).toContain('Politur P2');
   });
+  it('Wörter-Pflege (25.11.2026): Zuwachs der Wortseite mit Freigabe der Hauptsitzung', () => {
+    const b = loadBudget() as unknown as { grenzen: { lazy: Record<string, { zuwachs: Record<string, { bytes: number; freigabe: string }> }> } };
+    const z = b.grenzen.lazy['src/modules/vocab/ui/WordPage.tsx']?.zuwachs['Wörter-Pflege'];
+    expect(z).toMatchObject({ bytes: 500 });
+    expect(z?.freigabe).toContain('Hauptsitzung 25.11.2026');
+  });
   it('Großpaket P, P4 (Brücken-Sätze): beide neuen Stücke stehen mit Paket und fester Basis im Budget, die Dateigrenze ist freigegeben', () => {
     const b = loadBudget() as unknown as { grenzen: { lazy: Record<string, { basis: number; paket?: string } | undefined>; files: number; filesFreigabe?: string } };
     const screen = b.grenzen.lazy['src/modules/apply/ui/BridgeScreen.tsx'];

@@ -120,7 +120,12 @@
       },
       "src/modules/vocab/ui/WordPage.tsx": {
         "basis": 6500,
-        "zuwachs": {}
+        "zuwachs": {
+          "Wörter-Pflege": {
+            "bytes": 500,
+            "freigabe": "Hauptsitzung 25.11.2026: Wortseite zeigt Wortfamilie, „Gehört zusammen mit“ und zusammengeführte Karten (Emrahs Entscheidung Wortfamilien + Pflege); gemessen +405 B gzip gegen 7cf39291"
+          }
+        }
       },
       "src/modules/vocab/content/index.ts": {
         "basis": 36000,
