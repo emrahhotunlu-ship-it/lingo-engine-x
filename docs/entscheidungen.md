@@ -884,3 +884,7 @@ Auftrag: „einmal komplett polieren … UI/UX, Design für Laptop und iPhone Du
 - **E2 Anwenden: A** – täglich 2 Brücken-Sätze als Pflicht (≈ 3 Min., Vorgabe Wort + Grammatik-Thema, Urteil je Element); Mails/Zusammenfassung freiwillig unter „Frei üben“.
 - **E3 Wörter: A** – Wiederholungen zuerst, neue Wörter nach Behalten (3–10), Hör-Übungen (Einführung liest vor, Abfragen mit Lautsprecher).
 - **E4 Stift: A** – in Übungen im Menü „…“, sonst schmale Lasche am Rand.
+
+## 25.11.2026 – Wortformen üben und Wörter-Pflege (Emrah, Auswahlfenster)
+- **Wortformen (A):** Wortfamilien (Verb/Nomen/Adjektiv/Adverb) kommen in der normalen Wörter-Wiederholung ab Stufe 3 als Abfrageart „Wortfamilie“ (Lücke mit Stammwort in Klammern), ohne Extra-Zeit. Familien werden von Claude erstellt und vom english-teacher gegengelesen.
+- **Pflege (A):** wöchentlicher Lehrer-Durchgang über neue/geänderte Wörter; eindeutige Übersetzungsfehler direkt korrigieren, Zusammenführen von Doppelten nur nach Emrahs „OK“; Lernstand bleibt immer erhalten. Zusammengehörige Wörter (decide/decision) werden verknüpft, nicht zusammengeführt.
