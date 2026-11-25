@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { ensureStreamAsyncIterator } from '../compat';
 import { logInfo, logWarn } from '../diagnostics';
+import { inputQuietLeft, resetInputQuiet, whenIdle } from '../inputQuiet';
 import { local } from '../storage';
 import type { Engine, EngineDevice } from './engine';
 
@@ -355,25 +356,10 @@ function drop(job: Job, err: Error): void {
 // ohne neue Stimme; mit dieser Regel p90 50–86 statt 67–98 ms (schwankt; der Grafikchip des iPhones lässt sich hier nicht nachstellen). Vorab-Aufträge starten deshalb erst nach einer Tipp-Pause und nie, während die Tastatur auf- oder zugeht; ein Tipp auf „Anhören“
 // (dringend) rechnet wie bisher sofort. Gestartet wird im Leerlauf des Browsers (Safari ohne `requestIdleCallback`: kurzer Wecker).
 
-/** So lange nach dem letzten Antippen, Tastendruck bzw. der letzten Tastatur-Bewegung wartet ein Vorab-Auftrag. */
-export const INPUT_QUIET_MS = 1_200;
-let inputAt = Number.NEGATIVE_INFINITY;
+// Die Ruhe-Regel selbst (Ereignisse, Ruhezeit, Leerlauf) steht in `platform/inputQuiet.ts`; die Wörter-Pflege nutzt dieselbe.
+export { INPUT_QUIET_MS, noteInputActivity } from '../inputQuiet';
 let quietTimer: ReturnType<typeof setTimeout> | null = null;
-const clockMs = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
-
-/** Antippen, Tippen, Fokuswechsel eines Felds oder Tastatur-Bewegung (sichtbarer Bereich ändert die Größe): Vorab-Rechnen wartet. */
-export function noteInputActivity(): void {
-  inputAt = clockMs();
-}
-
-const quietLeft = (): number => Math.max(0, inputAt + INPUT_QUIET_MS - clockMs());
-
-type IdleWin = { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
-function whenIdle(fn: () => void): void {
-  const w = typeof window !== 'undefined' ? (window as unknown as IdleWin) : null;
-  if (w && typeof w.requestIdleCallback === 'function') w.requestIdleCallback(fn, { timeout: 1_000 });
-  else setTimeout(fn, 50);
-}
+const quietLeft = inputQuietLeft;
 
 /** Vorab-Aufträge nach der Ruhezeit erneut versuchen (ein Wecker, kein Warten in einer Schleife). */
 function pumpWhenQuiet(ms: number): void {
@@ -382,18 +368,6 @@ function pumpWhenQuiet(ms: number): void {
     quietTimer = null;
     whenIdle(pump);
   }, ms + 30);
-}
-
-if (typeof document !== 'undefined') {
-  const onInput = (ev: Event): void => {
-    if (ev.type === 'focusin' || ev.type === 'focusout') {
-      const el = ev.target as HTMLElement | null;
-      if (!el || !(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return;
-    }
-    noteInputActivity();
-  };
-  for (const type of ['pointerdown', 'keydown', 'beforeinput', 'compositionupdate', 'focusin', 'focusout']) document.addEventListener(type, onInput, { capture: true, passive: true });
-  if (typeof window !== 'undefined') window.visualViewport?.addEventListener('resize', noteInputActivity, { passive: true });
 }
 
 function pump(): void {
@@ -669,7 +643,7 @@ export function resetNeural(): void {
   troubleAt = [];
   forceWasm = false;
   gaveUp = false;
-  inputAt = Number.NEGATIVE_INFINITY;
+  resetInputQuiet();
   if (quietTimer) clearTimeout(quietTimer);
   quietTimer = null;
   useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null });

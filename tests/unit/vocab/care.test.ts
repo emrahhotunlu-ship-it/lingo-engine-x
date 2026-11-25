@@ -1,11 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { createWriter } from '../../../src/data/writer';
+import { createWriter, WriteError, type Writer } from '../../../src/data/writer';
 import { snapshotFromRecord } from '../../../src/data/snapshot';
 import { createMemoryDb } from '../../../src/platform/dev/memoryDb';
 import { carePatch, SAMPLE_FAM } from '../../../src/platform/dev/careSample';
-import { applyCare, openOps } from '../../../src/modules/vocab/data/care';
+import { applyCare, CARE_CHUNK, openOps } from '../../../src/modules/vocab/data/care';
 import { careOpSchema, famListSchema } from '../../../src/modules/vocab/data/schemas';
 import { famOf, famStep, fixStep, linkStep, mergeStep, mergedInto, relOf, type FamOp, type FixOp, type LinkOp, type MergeOp } from '../../../src/modules/vocab/domain/care';
 import { familyCard } from '../../../src/modules/vocab/domain/card';
@@ -192,6 +192,115 @@ describe('Pflege beim Start: über den einen Schreibpfad', () => {
     });
     expect(await applyCare(createWriter(h.db), raw(h), NOW)).toEqual({ done: 1, skip: 0, err: 0 });
     expect((h.dump()['vocab/feasible'] as Doc).de).toBe('durchführbar');
+  });
+});
+
+describe('Pflege in Portionen mit Zwischenstand (Test-Link v114)', () => {
+  // Test-Link v114 (echtes iPhone, 236 Aufträge): 38 Karten bearbeitet, `vmod/care` blieb ganz `open`, weil der Status erst am Ende geschrieben
+  // wurde. Jetzt steht er nach jeder Portion; Abbruch oder Budget-Fehler lassen nur den Rest offen, der nächste Lauf setzt fort.
+  const schemaDone = { version: 1, cutover: '2026-09-26', migratedAt: 1, vocabModule: { v: 1, t: NOW - 86_400_000, state: 'done' } };
+  const N = 40;
+  const id = (i: number): string => `fix-pf${String(i).padStart(2, '0')}`;
+  const world = () => {
+    const base: Record<string, Doc> = { ...seed, 'app/schema': schemaDone };
+    base['app/profile'] = { ...(seed['app/profile'] ?? {}), vcfg: { min: 15, ret: 0.9, mod: 1 } };
+    const ops: Record<string, Doc> = {};
+    for (let i = 0; i < N; i++) {
+      base[`vocab/pf${i}`] = { id: `pf${i}`, word: `portion${i}`, de: 'alt', added: '2026-09-01' };
+      ops[id(i)] = { k: 'fix', t: 100 + i, st: 'open', p: `vocab/pf${i}`, set: { de: { from: 'alt', to: 'neu' } } };
+    }
+    base[VMOD_CARE_PATH] = { v: 1, ops };
+    return createMemoryDb({ seed: base });
+  };
+  const raw = (h: ReturnType<typeof createMemoryDb>) => snapshotFromRecord(h.dump()).raw;
+  const states = (h: ReturnType<typeof createMemoryDb>): string[] => {
+    const ops = (h.dump()[VMOD_CARE_PATH] as Doc).ops as Record<string, Doc>;
+    return Array.from({ length: N }, (_, i) => String(ops[id(i)]!.st));
+  };
+  /** Schreibpfad, der nach `n` Karten-Schritten mit `code` scheitert (Status-Schreiben auf vmod/care ausgenommen). */
+  const failingAfter = (w: Writer, n: number, code: string): Writer => {
+    let calls = 0;
+    return {
+      ...w,
+      transform: (path, compute) => {
+        if (path !== VMOD_CARE_PATH && ++calls > n) return Promise.reject(new WriteError(code, code, path));
+        return w.transform(path, compute);
+      },
+    };
+  };
+
+  it('Status je Portion: nach jeder Portion ein Status-Schreiben auf das Auftragsdokument', async () => {
+    const h = world();
+    const w = createWriter(h.db);
+    const seen: string[][] = [];
+    const r = await applyCare(w, raw(h), NOW, { chunk: 15, pause: () => (seen.push(states(h)), Promise.resolve()) });
+    expect(r).toEqual({ done: N, skip: 0, err: 0 });
+    // Vor der 2. Portion sind genau 15 erledigt, vor der 3. genau 30.
+    expect(seen.map((s) => s.filter((x) => x === 'done').length)).toEqual([15, 30]);
+    expect(states(h).every((x) => x === 'done')).toBe(true);
+    expect(CARE_CHUNK).toBeGreaterThanOrEqual(10);
+  });
+
+  it('Abbruch nach Portion 1 (App geschlossen): Portion 1 bleibt done, der Rest open; zweiter Lauf setzt fort', async () => {
+    const h = world();
+    const w = createWriter(h.db);
+    let paused!: () => void;
+    const atPause = new Promise<void>((res) => (paused = res));
+    // Die Pause kehrt nie zurück: so sieht ein Schließen der App zwischen zwei Portionen aus.
+    void applyCare(w, raw(h), NOW, { chunk: 16, pause: () => (paused(), new Promise<void>(() => undefined)) });
+    await atPause;
+    const s = states(h);
+    expect(s.slice(0, 16).every((x) => x === 'done')).toBe(true);
+    expect(s.slice(16).every((x) => x === 'open')).toBe(true);
+    expect((h.dump()['vocab/pf20'] as Doc).de).toBe('alt');
+    // Nächster App-Start: neues Lesen, nur die offenen 24.
+    const r2 = await applyCare(createWriter(h.db), raw(h), NOW + 1000, { chunk: 16 });
+    expect(r2).toEqual({ done: N - 16, skip: 0, err: 0 });
+    expect(states(h).every((x) => x === 'done')).toBe(true);
+    expect(((h.dump()[VMOD_CARE_PATH] as Doc).ops as Record<string, Doc>)[id(0)]!.at).toBe(NOW);
+  });
+
+  it('keep = false (Sperre an einen anderen Tab verloren): hört vor der nächsten Portion auf, Rest bleibt open', async () => {
+    const h = world();
+    let k = 0;
+    const r = await applyCare(createWriter(h.db), raw(h), NOW, { chunk: 16, keep: () => ++k < 2 });
+    expect(r).toMatchObject({ done: 16, left: N - 16 });
+    expect(states(h).filter((x) => x === 'open').length).toBe(N - 16);
+  });
+
+  it('resource_exhausted mitten in Portion 2: Erledigtes done, betroffener Auftrag und Rest open (nicht err), Lauf hält an', async () => {
+    for (const code of ['resource_exhausted', 'rate_limited']) {
+      const h = world();
+      const w = failingAfter(createWriter(h.db), 20, code);
+      let pauses = 0;
+      const r = await applyCare(w, raw(h), NOW, { chunk: 16, pause: () => (pauses++, Promise.resolve()) });
+      expect(r).toEqual({ done: 20, skip: 0, err: 0, halted: code, left: N - 20 });
+      const s = states(h);
+      expect(s.slice(0, 20).every((x) => x === 'done')).toBe(true);
+      expect(s.slice(20).every((x) => x === 'open')).toBe(true);
+      expect(pauses).toBe(1);
+      // Nächster Start ohne Budget-Fehler: setzt bei Auftrag 21 fort.
+      expect(await applyCare(createWriter(h.db), raw(h), NOW + 1, { chunk: 16 })).toEqual({ done: N - 20, skip: 0, err: 0 });
+    }
+  });
+
+  it('andere Fehler bleiben err wie bisher; der Lauf geht weiter', async () => {
+    const h = world();
+    const w = failingAfter(createWriter(h.db), 38, 'invalid_argument');
+    expect(await applyCare(w, raw(h), NOW, { chunk: 16 })).toEqual({ done: 38, skip: 0, err: 2 });
+    expect(states(h).slice(38)).toEqual(['err', 'err']);
+  });
+
+  it('Budget-Fehler beim Status-Schreiben: Portion bleibt open, nächster Lauf erledigt sie idempotent (same)', async () => {
+    const h = world();
+    const base = createWriter(h.db);
+    const w: Writer = { ...base, transform: (path, compute) => (path === VMOD_CARE_PATH ? Promise.reject(new WriteError('resource_exhausted', 'x', path)) : base.transform(path, compute)) };
+    const r = await applyCare(w, raw(h), NOW, { chunk: 16 });
+    expect(r).toMatchObject({ done: 0, halted: 'resource_exhausted', left: N });
+    expect(states(h).every((x) => x === 'open')).toBe(true);
+    expect((h.dump()['vocab/pf0'] as Doc).de).toBe('neu');
+    expect(await applyCare(base, raw(h), NOW + 1, { chunk: 16 })).toEqual({ done: N, skip: 0, err: 0 });
+    expect(((h.dump()[VMOD_CARE_PATH] as Doc).ops as Record<string, Doc>)[id(0)]!.msg).toBe('same');
   });
 });
 

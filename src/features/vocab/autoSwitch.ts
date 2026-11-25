@@ -8,6 +8,8 @@ import { useClock } from '../../app/clock';
 import { loadWordsDay } from '../today/wordsDay';
 import { getDb, useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
+import { quietPause } from '../../platform/inputQuiet';
+import { tryTabLock } from '../../platform/tabLock';
 import { dismissToast, toast } from '../../ui/Toast';
 import { useNav } from '../../app/nav';
 
@@ -83,10 +85,37 @@ type AutoSwitch = Awaited<ReturnType<typeof loadAutoSwitch>>;
 export async function catchUpWork(sw: Pick<AutoSwitch, 'startCatchUp' | 'startCare'>, writer: NonNullable<ReturnType<typeof getWriter>>, readAll: typeof read, nowMs: number): Promise<unknown> {
   const snap = await readAll();
   const caught = await sw.startCatchUp(writer, () => Promise.resolve(snap), nowMs);
-  void Promise.resolve()
-    .then(() => sw.startCare(writer, snap, Date.now()))
-    .catch((err: unknown) => logError('vocab:care', err, 'Start'));
+  void Promise.resolve().then(() => runCare(sw, writer, snap));
   return caught;
+}
+
+/** Sperre der Pflege im Browser-Speicher (zwei Tabs); länger als eine Portion samt Pause, verlängert vor jeder Portion. */
+export const CARE_LOCK = 'care-run';
+const CARE_LOCK_MS = 60_000;
+/** Pause zwischen zwei Portionen (danach bis zur Eingabe-Ruhe und zum Leerlauf), damit Tippen flüssig bleibt. */
+export const CARE_PAUSE_MS = 600;
+let careStopped = false;
+
+/**
+ * Wörter-Pflege in Portionen (Test-Link v114: 236 Aufträge, Abbruch vor dem Ende = alles von vorn): höchstens eine Ausführung zugleich
+ * (Sperre `lx:care-run`), Pause im Leerlauf zwischen den Portionen. Hielt sie wegen eines Budget-Fehlers an, versucht diese Sitzung es nicht
+ * weiter; der nächste App-Start setzt bei den offenen Aufträgen fort.
+ */
+async function runCare(sw: Pick<AutoSwitch, 'startCare'>, writer: NonNullable<ReturnType<typeof getWriter>>, snap: Awaited<ReturnType<typeof read>>): Promise<void> {
+  if (careStopped) return;
+  const lock = tryTabLock(CARE_LOCK, CARE_LOCK_MS);
+  if (!lock) {
+    logWarn('vocab:care', { message: 'Pflege läuft schon in einem anderen Tab' }, '');
+    return;
+  }
+  try {
+    const r = await sw.startCare(writer, snap, Date.now(), { pause: () => quietPause(CARE_PAUSE_MS), keep: lock.renew });
+    if (r?.halted) careStopped = true;
+  } catch (err) {
+    logError('vocab:care', err, 'Start');
+  } finally {
+    lock.release();
+  }
 }
 
 async function runCatchUp(): Promise<unknown> {
