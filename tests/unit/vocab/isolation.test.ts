@@ -159,6 +159,8 @@ describe('Wörter-Modul: Isolation', () => {
       'src/features/vocab/hub/VocabHome.tsx',
       'src/features/vocab/vmod.slot.tsx',
       'src/modules/apply/sharedUi.ts',
+      // Wörter-Pflege (25.11.2026): erfundene Pflege-Aufträge des Entwicklungs-Adapters (Pfad über registry, nie im Produktions-Build).
+      'src/platform/dev/careSample.ts',
       // Großpaket P, P4: apply-bridge@1 nutzt die Urteilsregeln je Zielwort über die Vorlagen-Tür (modules/vocab/prompts).
       'src/prompts/applyBridge.ts',
       'src/prompts/registry.ts',

@@ -46,12 +46,25 @@ export type Avail = {
 export const LADDER_B: Readonly<Record<number, readonly Form[]>> = {
   1: ['intro', 'probe'],
   2: ['gap', 'de_sent', 'nosent'],
-  3: ['gap', 'partner', 'cloze_part', 'prep', 'particle', 'count'],
-  4: ['gap', 'de_sent', 'nosent'],
+  3: ['gap', 'partner', 'cloze_part', 'prep', 'particle', 'count', 'family'],
+  4: ['gap', 'de_sent', 'nosent', 'family'],
   5: ['family', 'partner', 'gap', 'de_sent', 'situation', 'nosent', 'diplomatic', 'own'],
   6: ['gap', 'partner', 'family', 'own', 'situation', 'say', 'nosent'],
-  7: ['gap', 'say', 'nosent', 'situation'],
+  7: ['gap', 'say', 'nosent', 'situation', 'family'],
 };
+
+/**
+ * Wortfamilie (Emrah 25.11.2026, „A“): ab Stufe 3 in der normalen Wiederholung, ohne Extra-Zeit, höchstens jede `FAMILY_EVERY`. Benutzen-Abfrage
+ * des Lexems (gezählt über alle Benutzen-Formen in `fq.h`, also auch Übung) und nie zweimal in Folge. Rein, ohne neues Feld im Lexem.
+ */
+export const FAMILY_EVERY = 3;
+const B_FORMS: readonly Form[] = (Object.keys(FORM_SPEC) as Form[]).filter((f) => FORM_SPEC[f].track === 'b');
+export function familySlot(l: Lex): boolean {
+  const fq = fqOf(l);
+  if (fq.l === 'family') return false;
+  const n = B_FORMS.reduce((a, f) => a + (fq.h[f]?.[0] ?? 0), 0);
+  return n % FAMILY_EVERY === FAMILY_EVERY - 1;
+}
 
 /**
  * Verstehen-Formen je Stufe (nur Verstehen fällig, plan.md §3.2: nie eine Auswahl). Politur P2 (E3 „Hören“): Mit Ton wechselt die Spur
@@ -138,7 +151,7 @@ export function available(f: Form, l: Lex, av: Avail): boolean {
     case 'partner':
       return !!av.partner;
     case 'family':
-      return !!av.family;
+      return !!av.family && familySlot(l);
     case 'situation':
       return !!av.situation;
     case 'own':

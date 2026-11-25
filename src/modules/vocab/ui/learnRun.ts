@@ -30,6 +30,7 @@ import { doneToday, planCount } from '../domain/dayCount';
 import { planMed } from '../domain/pace';
 import { capToday, readPace, writePace } from '../data/shrink';
 import { sentencesOf, usableSentences } from '../domain/card';
+import { famAsked, famOf } from '../domain/care';
 import { NEW5_SIZE, type RoundReport, type SessionKind, SessionRun, type Task } from '../domain/session';
 import { groupOf } from '../domain/ladder';
 import { type Form, type FormStats, type Grade, type Lex, OS_TEXT_MAX, type VocabCfg } from '../domain/types';
@@ -471,7 +472,8 @@ export class LearnRun {
         lex,
         order: typeof doc.order === 'number' ? doc.order : i++,
         trap: tc.ff ? ('ff' as const) : tc.pair ? ('pair' as const) : null,
-        av: { de: true, ai, anki: !!cfg.anki, audio },
+        // Wortfamilie (Emrah 25.11.2026): nur mit geprüfter Familie an der Karte (`famx`).
+        av: { de: true, ai, anki: !!cfg.anki, audio, family: famOf(doc, headOf(path, doc)).some(famAsked) },
         src: srcOf(doc.src),
       });
     }
@@ -487,7 +489,7 @@ export class LearnRun {
         const lex = lexOf(doc);
         if (!lex) continue;
         this.docs.set(path, doc);
-        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki, audio }, src: srcOf(doc.src) });
+        items.push({ path, lex, order: typeof doc.order === 'number' ? doc.order : i++, trap: null, av: { de: true, ai, anki: !!cfg.anki, audio, family: famOf(doc, headOf(path, doc)).some(famAsked) }, src: srcOf(doc.src) });
       }
     }
     const cat = new Catalog(items);

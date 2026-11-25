@@ -7,7 +7,8 @@ import { catchUp, convertDoc, type LogEntry } from '../domain/migrate';
 import type { DupePair } from '../domain/dupes';
 import { DEFAULT_CFG } from '../domain/types';
 import { deviceId } from './device';
-import { VOCAB_LOCK_PATH } from '../registry';
+import { VMOD_CARE_PATH, VOCAB_LOCK_PATH } from '../registry';
+import { applyCare, type CareResult } from '../data/care';
 
 // „Neue Wörter-App einschalten“ (plan.md §9.1–9.4): der Kleber zwischen Einstellungen › Wortschatz und der Umrechnung. Nachgeladen
 // (api.loadSwitch), nie in der Einstiegsdatei. Lesen und Sicherung macht der Aufrufer (src/features/settings), hier wird nur gerechnet und
@@ -302,6 +303,23 @@ export async function startCatchUp(writer: Writer, read: () => Promise<SwitchRea
   const lock = await writer.acquire(VOCAB_LOCK_PATH, { holder: lockHolder(), ttlMs: 30_000 });
   if (!lock.acquired) return null;
   return catchUpAll(writer, docs, st.input.logs, nowMs);
+}
+
+/**
+ * Wörter-Pflege beim App-Start (Emrah 25.11.2026, docs/umbau/vokabeln/pflege.md): offene Aufträge aus `vmod/care` einmal anwenden, mit
+ * denselben Wächtern wie das Nachholen (Wörter-App an, Umrechnung fertig, Profil gültig, nichts gekappt). `snap` = dasselbe volle Lesen wie
+ * beim Nachholen (kein zweites). `null` = nicht gelaufen bzw. nichts offen.
+ */
+export async function startCare(writer: Writer, snap: SwitchRead, nowMs: number): Promise<CareResult | null> {
+  const profile = snap.raw.get(PROFILE_PATH);
+  const vcfg = profile && isObj(profile.vcfg) ? profile.vcfg : null;
+  if (!vcfg || vcfg.mod !== 1) return null;
+  const st = fromRead(snap, nowMs);
+  if (!migrationDone(st.schema) || !st.profileValid || st.truncated) return null;
+  if (!snap.raw.has(VMOD_CARE_PATH)) return null;
+  const r = await applyCare(writer, snap.raw, nowMs);
+  if (r.done || r.skip || r.err) logWarn('vocab:care', { message: 'Wörter-Pflege' }, `${r.done} angewendet, ${r.skip} übersprungen, ${r.err} Fehler`);
+  return r;
 }
 
 /** Umrechnungstag (`app/schema.vocabModule.t`) als Tagesschlüssel, sonst `null`. */

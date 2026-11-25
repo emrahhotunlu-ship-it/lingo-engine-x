@@ -71,6 +71,8 @@ export type BandIn = {
   meaning?: boolean;
   /** Holt die Runde das Wort noch zurück? `false` → „heute später“ statt „gleich noch einmal“. */
   soon?: boolean;
+  /** Wortfamilie (Emrah 25.11.2026): Stammwort und gesuchte Form; `pos`/`de` sind dann die der Form. Eigene Warum-Sätze `vmWhyFam…`. */
+  family?: { stem: string; form: string };
 };
 
 const HARD_GRADE = 2;
@@ -130,10 +132,18 @@ const rule = (key: string, vars: Record<string, string>): Why => ({ kind: 'rule'
  * falscher Freund → Lehrer-Zeile der Charge, wenn vorhanden (nur Deutsch); anderes Wort → was das getippte Wort heißt (Kap. 5 Nr. 11);
  * sonst Bedeutungszeile.
  */
-export function whyOf(x: Pick<BandIn, 'check' | 'given' | 'answer' | 'de' | 'pos' | 'teach' | 'lang' | 'meaningOf' | 'meaning'>): Why {
+export function whyOf(x: Pick<BandIn, 'check' | 'given' | 'answer' | 'de' | 'pos' | 'teach' | 'lang' | 'meaningOf' | 'meaning' | 'family'>): Why {
   const { check, answer, de, pos, teach } = x;
   const given = check.hit ?? x.given.trim();
   const v = { answer, de, given, ...(pos ? { pos } : {}) };
+  // Wortfamilie: immer Form, Wortart (kurz) und Bedeutung („implementation (n) – Umsetzung“) und warum diese Form in den Satz gehört.
+  // Form- und Tippfehler behalten ihre genaueren Regel-Zeilen.
+  if (x.family && pos) {
+    const fv = { answer, given, pos, ps: pos, dm: de ? ` – ${de}` : '', stem: x.family.stem };
+    if (check.outcome === 'ok') return rule('vmWhyFamOk', fv);
+    if (check.outcome === 'pos') return rule('vmWhyFamPos', fv);
+    if (check.outcome === 'wrong' || check.outcome === 'other' || check.outcome === 'dunno') return rule('vmWhyFamWrong', fv);
+  }
   // Bedeutungskarte (Emrah 05.11.2026 „Erklärung und Logik schlecht“): kein „passt nicht in diesen Satz“ – ein deutsches Wort gehört nie in
   // den englischen Satz. Gesagt wird, was das englische Wort hier bedeutet.
   if (x.meaning) {

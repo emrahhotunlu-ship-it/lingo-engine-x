@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Button, EnglishText, getDb, useClock, getWriter, Icon, ipaOf, readDoc, Skeleton, speak, toast, useLive, useSpeech, usePrefetchSpeech, useT, type MessageKey } from '../sharedUi';
+import { Button, EnglishText, getDb, useClock, getWriter, Icon, ipaOf, readDoc, Skeleton, speak, toast, useLive, useNav, useSpeech, usePrefetchSpeech, useT, type MessageKey } from '../sharedUi';
 import { addDays, dayKey, logError } from '../shared';
 import { lexOf } from '../data/lex';
 import { writeManage } from '../data/store';
 import { readVlogRange } from '../data/history';
 import { partnersOf } from '../domain/band';
 import { sentencesOf } from '../domain/card';
+import { famRows, headAt, mergedFrom, mergedInto, relRows } from '../domain/care';
 import { needsKnow, reportPatch } from '../domain/know';
 import type { VocabAi } from '../aiPort';
 import { fillKnowOne } from './know';
@@ -248,6 +249,53 @@ function KnowSection({ path, doc, head, partners, isChunk, ai }: { path: string;
   );
 }
 
+// ---------------------------------------------------------------- Wörter-Pflege (Emrah 25.11.2026): Wortfamilie, verknüpft, zusammengeführt
+
+/** Antippbares Stichwort: öffnet die Wort-Seite dieser Karte. */
+const LinkTo = ({ p, head, testId }: { p: string; head: string; testId: string }) => (
+  <button type="button" className="lx-link" lang="en" onClick={() => useNav.getState().go({ name: 'vword', path: p })} data-testid={testId}>
+    {head}
+  </button>
+);
+
+type CareRow = { k: string; en: ReactNode; meta?: string; de?: string };
+
+/** Wortfamilie, „Gehört zusammen mit …“ und in diese Karte zusammengeführte Doppel. */
+function CareSection({ path, doc, head, cols }: { path: string; doc: Doc; head: string; cols: Parameters<typeof relRows>[2] }) {
+  const { t } = useT();
+  const from = mergedFrom(path, cols);
+  const lists: [string, string, CareRow[]][] = [
+    ['vw-family', t('vmWpFamily'), famRows(doc, head).map((f) => ({ k: f.form + f.pos, en: <span lang="en">{f.form}</span>, meta: t(POS_KEYS[f.pos] as MessageKey), ...(f.de ? { de: f.de } : {}) }))],
+    ['vw-rel', t('vmWpRel'), relRows(doc, path, cols).map((r) => ({ k: r.p, en: <LinkTo p={r.p} head={r.head} testId="vw-rel-link" />, de: r.de }))],
+  ];
+  return (
+    <>
+      {lists.map(
+        ([id, label, rows]) =>
+          rows.length > 0 && (
+            <section key={id} className="flex flex-col gap-1.5" data-testid={id}>
+              <Label>{label}</Label>
+              <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                {rows.map((r) => (
+                  <li key={r.k} className="lx-t-body flex flex-wrap items-baseline gap-x-2" data-testid={`${id}-item`}>
+                    {r.en}
+                    {r.meta && <span className="lx-t-meta text-muted">{r.meta}</span>}
+                    {r.de && <span className="text-muted">({r.de})</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ),
+      )}
+      {from.length > 0 && (
+        <p className="lx-t-support m-0 text-muted" data-testid="vw-merged-from">
+          {t('vmWpMergedFrom', { w: from.map((x) => x.head).join(', ') })}
+        </p>
+      )}
+    </>
+  );
+}
+
 function Label({ children }: { children: ReactNode }) {
   return <div className="lx-t-label text-muted">{children}</div>;
 }
@@ -364,6 +412,9 @@ function WordBody({ path, doc, lex, onPractice, onAsk, ai }: { path: string; doc
   const ipa = isChunk ? null : ipaOf(head);
   const pos = isChunk ? t('pos_phrase') : posLabel(doc.pos, t);
   const hidden = doc.hidden === true;
+  // Als Doppel stillgelegt (Wörter-Pflege): Verweis auf den Gewinner statt „Pausiert“, keine Aktionen (geübt wird nur dort).
+  const merged = mergedInto(doc) ?? (lex.of && lex.of !== path ? lex.of : null);
+  const cols = { vocab: useLive((s) => s.collections.vocab), chunk: useLive((s) => s.collections.chunk) };
   const now = useClock((s) => s.now);
   const origin = str(doc.ex).replace(/\[([^\]]*)\]/g, '$1');
   // Markiertes Wort im Ursprungssatz („[…]“ in `ex`) als Hervorhebung (ux-reviewer S6c).
@@ -408,9 +459,11 @@ function WordBody({ path, doc, lex, onPractice, onAsk, ai }: { path: string; doc
         </p>
       )}
       <SpeakRow text={head} testId="vw-listen" />
-      {hidden && (
-        <p className="lx-t-support bg-surface rounded-[var(--radius-control)] p-3" data-testid="vw-paused">
-          {t('vmWpPaused')}
+      {(hidden || merged) && (
+        <p className="lx-t-support bg-surface rounded-[var(--radius-control)] p-3" data-testid={merged ? 'vw-merged' : 'vw-paused'}>
+          {merged ? t('vmWpMergedInto', { w: headAt(cols, merged) }) : t('vmWpPaused')}
+          {merged && ' '}
+          {merged && <LinkTo p={merged} head={headAt(cols, merged)} testId="vw-merged-link" />}
         </p>
       )}
 
@@ -470,6 +523,9 @@ function WordBody({ path, doc, lex, onPractice, onAsk, ai }: { path: string; doc
       {/* Wortpartner und Beispielsätze (Großpaket W3): von Claude Ergänztes ist automatisch geprüft und lässt sich melden. */}
       <KnowSection path={path} doc={doc} head={head} partners={partners} isChunk={isChunk} {...(ai ? { ai } : {})} />
 
+      {/* Wortfamilie, „Gehört zusammen mit …“ und zusammengeführte Doppel (Wörter-Pflege, Emrah 25.11.2026). */}
+      <CareSection path={path} doc={doc} head={head} cols={cols} />
+
       {/* Deine Sätze */}
       <section className="flex flex-col gap-2" data-testid="vw-own">
         <Label>{t('vmWpOwn')}</Label>
@@ -503,7 +559,7 @@ function WordBody({ path, doc, lex, onPractice, onAsk, ai }: { path: string; doc
         </section>
       )}
 
-      <Actions path={path} lex={lex} head={head} de={de} hidden={hidden} due={due} onPractice={onPractice} onAsk={onAsk} />
+      {!merged && <Actions path={path} lex={lex} head={head} de={de} hidden={hidden} due={due} onPractice={onPractice} onAsk={onAsk} />}
     </div>
   );
 }

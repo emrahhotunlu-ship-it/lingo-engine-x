@@ -4,6 +4,7 @@ import { FAKE_VOICES, installFakeSpeech } from './fakeSpeech';
 import type { SpeechVoiceLike } from '../speech';
 
 import { installFakeStt, type FakeSttMode } from './fakeStt';
+import { carePatch } from './careSample';
 
 const FAKE_DE_VOICE: SpeechVoiceLike = Object.freeze({ name: 'Anna', lang: 'de-DE', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Anna' });
 // Befund 29.09. (Emrah, „weiterhin komplett nutzlose Stimmen"): die Stimmenwahl zeigt nur noch
@@ -105,5 +106,7 @@ export function optionsFromUrl(search: string): InstallOptions {
     ...(flags.has('slowsample') ? { sampleTickMs: 150 } : {}),
     // Phase 6: erste Einschätzung schemawidrig (`?fake=assessbad`).
     ...(flags.has('assessbad') ? { assessBad: true } : {}),
+    // Wörter-Pflege (25.11.2026): erfundene Pflege-Aufträge und ein Doppel (`?fake=care`, careSample.ts).
+    ...(flags.has('care') ? { patch: carePatch(Date.parse('2026-09-20T08:00:00+02:00')) } : {}),
   };
 }

@@ -3,6 +3,7 @@ import { inflections, normalize, PARTICLES, PREPOSITIONS, type Target } from './
 import { CUE_MAX_LV, leaks, pickSentence } from './forms';
 import { hash32 } from './rand';
 import type { Lex } from './types';
+import { type Fam, famAsked, famOf, type FamPos } from './care';
 
 // Wörter-Modul V3: die Lernkarte, rein gerechnet (docs/umbau/vokabeln/v3-bau.md §1). Welche Sätze ein Lexem hat, welcher heute gezeigt wird,
 // wo die Lücke steht, was als Antwort gilt und welche Stützen die Karte zeigt. Keine Uhr, kein Schreiben, keine Inhalte (die Lehrer-Angaben
@@ -32,7 +33,7 @@ export type Sent = {
   en: string;
   de: string | null;
   /** `xex` = gespeicherte, beim Speichern geprüfte Claude-Beispiele der Karte (`xEx`, Live-Kommentar 23.11.2026). */
-  src: 'ex' | 'wx' | 'xex' | 'sb';
+  src: 'ex' | 'wx' | 'xex' | 'sb' | 'fam';
   /** Vom Inhalt markierte Stelle (`[…]` im Rohsatz), Zeichenbereich im gezeigten Satz `en`; Rückfall für die Lücke (Inhalts-Audit 04.11.2026). */
   mark?: readonly [number, number];
 };
@@ -271,6 +272,44 @@ export function gapFromMark(en: string, mark: readonly [number, number], head: s
   if (!inside.length) return null;
   if (!inside.some(({ t }) => hw.some((h) => matchesWord(t.w, h)))) return null;
   return build(en, toks, [[inside[0]!.i, inside.at(-1)!.i]]);
+}
+
+/** Lücke genau an der markierten Stelle, ohne Abgleich mit dem Stichwort (Wortfamilie: *implementation* zu *implement*). */
+export function gapAt(en: string, mark: readonly [number, number]): Gap | null {
+  const toks = tokenize(en);
+  const inside = toks.map((t, i) => ({ t, i })).filter(({ t }) => t.s >= mark[0] && t.e <= mark[1]);
+  return inside.length ? build(en, toks, [[inside[0]!.i, inside.at(-1)!.i]]) : null;
+}
+
+// ---------------------------------------------------------------- Wortfamilie (Emrah 25.11.2026)
+
+export type FamilyCard = { sent: CardSentence; fam: Fam & { pos: FamPos }; stem: string };
+
+/**
+ * Karte „Wortfamilie“: eine geprüfte Form aus `famx` mit ihrem Satz, die Lücke an der markierten Stelle, das Stichwort als Stammwort in
+ * Klammern (*The ___ (implement) took three months.*). Reihum je Abfrage (`fq.h.family`); ein Satz, der Form oder Stammwort außerhalb der
+ * Lücke verrät, fällt weg. `null` = keine nutzbare Form.
+ */
+export function familyCard(doc: Record<string, unknown>, head: string, lex: Lex): FamilyCard | null {
+  const fams = famOf(doc, head).filter(famAsked);
+  if (!fams.length) return null;
+  const stem = headShown(head) || head.trim();
+  const start = (lex.fq?.h.family?.[0] ?? 0) % fams.length;
+  for (let i = 0; i < fams.length; i++) {
+    const fam = fams[(start + i) % fams.length]!;
+    const m = /\[([^\]]+)\]/.exec(fam.ex);
+    if (!m) continue;
+    const en = fam.ex.replace(/\[([^\]]*)\]/g, '$1').replace(/\s+/g, ' ').trim();
+    const lead = fam.ex.slice(0, m.index).replace(/\s+/g, ' ').replace(/^\s+/, '').length;
+    const mark: [number, number] = [lead, lead + m[1]!.length];
+    if (isDrillSentence(en)) continue;
+    const gap = gapAt(en, mark);
+    if (!gap) continue;
+    const b = bracketed(gap);
+    if (leaks(b, gap.answer) || leaks(b, stem)) continue;
+    return { sent: { sent: { key: `f${hash32(exampleKey(en)).toString(36)}`, en, de: null, src: 'fam', mark }, gap }, fam, stem };
+  }
+  return null;
 }
 
 /** Satz mit dem Gesuchten in eckigen Klammern (Format der Inhalte, für `leaks`). */

@@ -78,7 +78,15 @@ async function runCatchUp(): Promise<unknown> {
   if (!writer) return null;
   try {
     const sw = await loadAutoSwitch();
-    return await sw.startCatchUp(writer, read, Date.now());
+    // EIN volles Lesen für Nachholen und Wörter-Pflege (Emrah 25.11.2026): erst die alten Antworten, dann die offenen Pflege-Aufträge.
+    const snap = await read();
+    const caught = await sw.startCatchUp(writer, () => Promise.resolve(snap), Date.now());
+    try {
+      await sw.startCare(writer, snap, Date.now());
+    } catch (err) {
+      logError('vocab:care', err, 'Start');
+    }
+    return caught;
   } catch (err) {
     logError('vocab:catchup', err, 'Start');
     return null;

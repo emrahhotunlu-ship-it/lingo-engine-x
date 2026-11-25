@@ -387,6 +387,15 @@ export const vocabSchema = z.looseObject({
    * gelesen (`unitMarkOf`). `ok: true` = feste Einheit bestätigt bzw. von Emrah freigegeben („Doch lernen“).
    */
   lu: loose,
+  /**
+   * Neu (Wörter-Pflege 25.11.2026, docs/umbau/vokabeln/pflege.md, nur ergänzend, tolerant gelesen im Wörter-Modul): geprüfte Wortfamilie
+   * `famx` `[{form, pos, de?, ex}]`, verknüpfte Karten `rel` `[Pfad]`, Stilllegung als Doppel `merged` `{into, t, id, h}` und der
+   * Pflege-Verlauf `care` `[{id, t, k, old}]` (alte Werte, nie verworfen).
+   */
+  famx: loose,
+  rel: loose,
+  merged: loose,
+  care: loose,
   ...schedulingFields,
 });
 
@@ -409,6 +418,15 @@ export const chunkSchema = z.looseObject({
   /** Neu (Wort-Lernen 2): Merkhilfe `{text, lang, t, own?}` wie bei Vokabeln und geschaffte Aktivierungen A1/A2 (`na`). */
   mnemo: z.looseObject({ text: str, lang: str, t: num, own: loose }).nullish(),
   na: num,
+  /**
+   * Neu (Wörter-Pflege 25.11.2026, docs/umbau/vokabeln/pflege.md, nur ergänzend, tolerant gelesen im Wörter-Modul): geprüfte Wortfamilie
+   * `famx` `[{form, pos, de?, ex}]`, verknüpfte Karten `rel` `[Pfad]`, Stilllegung als Doppel `merged` `{into, t, id, h}` und der
+   * Pflege-Verlauf `care` `[{id, t, k, old}]` (alte Werte, nie verworfen).
+   */
+  famx: loose,
+  rel: loose,
+  merged: loose,
+  care: loose,
   ...schedulingFields,
 });
 

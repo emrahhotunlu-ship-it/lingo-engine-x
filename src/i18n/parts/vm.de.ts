@@ -72,6 +72,14 @@ export const vmDe = {
   vmPos_verb: 'Verb',
   vmPos_adj: 'Adjektiv',
   vmPos_adv: 'Adverb',
+  vmPosS_noun: 'n',
+  vmPosS_verb: 'v',
+  vmPosS_adj: 'adj',
+  vmPosS_adv: 'adv',
+  // Wortfamilie (Emrah 25.11.2026): Form, Wortart, Bedeutung und warum diese Form in den Satz gehört.
+  vmWhyFamOk: '{answer} ({ps}){dm}. Hier braucht der Satz ein {pos}, gebildet aus „{stem}“.',
+  vmWhyFamPos: 'Richtige Wortfamilie, andere Form. Hier braucht der Satz ein {pos}: {answer} ({ps}){dm}.',
+  vmWhyFamWrong: 'Gesucht war {answer} ({ps}){dm}: die Form von „{stem}“, die hier als {pos} passt.',
 
   // Wortpartner, Kommt wieder
   vmPartners: 'Wortpartner',
@@ -122,6 +130,8 @@ export const vmDe = {
   vmWozu_gap: 'Selbst abrufen statt wiedererkennen: so wird es aktiv.',
   vmTask_gap_hint: 'Setz das Wort ein, der erste Buchstabe hilft.',
   vmWozu_gap_hint: 'Ein kleiner Anstoß, bis du es ganz frei kannst.',
+  vmTask_family: 'Bilde aus dem Wort in Klammern die passende Form.',
+  vmWozu_family: 'Ein Wort, mehrere Formen: so benutzt du es auch als Nomen, Verb oder Adjektiv.',
   vmTask_nosent: 'Schreib das auf Englisch.',
   vmWozu_nosent: 'Ohne Satz als Stütze, wie im echten Gespräch.',
   vmTask_de_sent: 'Lies den deutschen Satz, ergänze den englischen.',
@@ -410,6 +420,11 @@ export const vmDe = {
   vmWpPause: 'Pausieren',
   vmWpResume: 'Fortsetzen',
   vmWpPaused: 'Pausiert: Das Wort kommt in keiner Runde, bis du es fortsetzt.',
+  // Wörter-Pflege (Emrah 25.11.2026): Wortfamilie, verknüpfte Karten, zusammengeführte Doppel.
+  vmWpFamily: 'Wortfamilie',
+  vmWpRel: 'Gehört zusammen mit',
+  vmWpMergedFrom: 'Zusammengeführt mit {w}. Die Karte ruht, deine Antworten dort bleiben gespeichert.',
+  vmWpMergedInto: 'Diese Karte ist mit {w} zusammengeführt und ruht. Geübt wird nur noch dort, deine Antworten bleiben gespeichert.',
   vmWpManage: 'Verwalten',
   vmWpTomorrow: 'Morgen wieder',
   vmWpTomorrowSub: 'Kommt morgen in der Runde, ohne Wertung.',

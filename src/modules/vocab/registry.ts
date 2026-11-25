@@ -16,3 +16,5 @@ export { VLOG_INDEX_PATH, vlogIdsOf, vlogDocCountOf, vlogProbeIds, nextVlogPart,
 export const VMOD_PLACE_PATH = 'vmod/place';
 /** Politur P2 (E3): Tempo neuer Wörter des Lerntags mit Grund (`vmodTempoWriteSchema`, data/tempo.ts). */
 export const VMOD_TEMPO_PATH = 'vmod/tempo';
+/** Wörter-Pflege (Emrah 25.11.2026): Aufträge der wöchentlichen Lehrer-Routine (korrigieren, zusammenführen, verknüpfen, Wortfamilie; data/care.ts). */
+export const VMOD_CARE_PATH = 'vmod/care';

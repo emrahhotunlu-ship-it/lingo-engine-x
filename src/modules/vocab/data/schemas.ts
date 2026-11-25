@@ -205,3 +205,112 @@ export const vmodPlaceWriteSchema = z
   })
   .strict();
 export type PlaceDoc = z.infer<typeof vmodPlaceWriteSchema>;
+
+// ---------------------------------------------------------------- Wörter-Pflege (Emrah 25.11.2026, docs/umbau/vokabeln/pflege.md)
+
+/** Kartenpfad `vocab/<id>` oder `chunk/<id>`. */
+const cardPath = z.string().regex(/^(vocab|chunk)\/[^/]{1,80}$/);
+/** Kennung einer Pflege-Operation (Schlüssel in `ops`). */
+export const CARE_ID = /^[a-z0-9][a-z0-9_-]{0,47}$/;
+/** Weitere Teil-Dokumente neben `vmod/care` (wenn eines an 256 KiB heranreicht): Kennung ohne `vmod/`. */
+export const CARE_PART = /^care-[a-z0-9-]{1,24}$/;
+export const CARE_PARTS_MAX = 12;
+/** Höchstens so viele Formen je Wortfamilie (Verb, Nomen, Adjektiv, Adverb und zwei weitere). */
+export const FAM_MAX = 6;
+/** Höchstens so viele verknüpfte Karten je Karte. */
+export const REL_MAX = 12;
+/** Höchstens so viele Einträge im Pflege-Verlauf einer Karte (`care`); der vollständige Auftrag bleibt in `vmod/care`. */
+export const CARE_HIST_MAX = 50;
+
+/** Wortart einer Form, wie der Lehrer sie schreibt (kurz oder lang); abgefragt werden nur Nomen, Verb, Adjektiv und Adverb. */
+const famPos = z.enum(['noun', 'verb', 'adj', 'adv', 'adjective', 'adverb', 'phrasal verb', 'phrase', 'preposition', 'conjunction']);
+/**
+ * Eine Form der Wortfamilie (`famx` am Kartendokument): Wort, Wortart, deutsche Bedeutung und ein geprüfter Satz, in dem genau diese Form in
+ * eckigen Klammern steht (*The [implementation] took three months.*). Die Klammer darf eine gebeugte Form tragen (*[implemented]*).
+ */
+export const famEntrySchema = z
+  .object({
+    form: z.string().trim().min(2).max(40),
+    pos: famPos,
+    de: z.string().trim().min(1).max(80).optional(),
+    ex: z
+      .string()
+      .trim()
+      .min(8)
+      .max(200)
+      .refine((s) => (s.match(/\[[^\]]+\]/g) ?? []).length === 1 && !/[[\]]/.test(s.replace(/\[[^\]]+\]/, '')), { message: 'genau eine [Form] im Satz' }),
+  })
+  .strict();
+export type FamEntry = z.infer<typeof famEntrySchema>;
+export const famListSchema = z.array(famEntrySchema).min(1).max(FAM_MAX);
+
+/** Alt → neu je Feld einer Korrektur. `from: null` = Feld fehlt bzw. ist leer. */
+const fixField = z.object({ from: z.string().max(400).nullable(), to: z.string().trim().min(1).max(400) }).strict();
+const opBase = {
+  /** Zeitpunkt des Auftrags (ms); angewendet wird in dieser Reihenfolge. */
+  t: int.positive(),
+  /** `open` wartet · `done` angewendet (oder war schon so) · `skip` übersprungen (alter Wert passt nicht mehr) · `err` Fehler. */
+  st: z.enum(['open', 'done', 'skip', 'err']),
+  /** Begründung des Lehrers (Deutsch, kurz). */
+  why: z.string().max(200).optional(),
+  /** Wer den Auftrag schrieb (z. B. `pflege@1`). */
+  by: z.string().max(40).optional(),
+  /** Vom Gerät beim Anwenden gesetzt: Zeitpunkt und Grund (`skip`/`err`, z. B. `stale`, `missing`). */
+  at: int.positive().nullable().optional(),
+  msg: z.string().max(80).nullable().optional(),
+};
+export const careFixSchema = z
+  .object({
+    ...opBase,
+    k: z.literal('fix'),
+    p: cardPath,
+    /** Felder: `de`, `pos`, `ex` und `word` (Vokabel) bzw. `en` (Wendung). */
+    set: z.partialRecord(z.enum(['de', 'word', 'en', 'pos', 'ex']), fixField).refine((s) => Object.keys(s).length > 0, { message: 'mindestens ein Feld' }),
+  })
+  .strict();
+export const careMergeSchema = z
+  .object({
+    ...opBase,
+    k: z.literal('merge'),
+    keep: cardPath,
+    drop: cardPath,
+    /** Erwartete Stichwörter (Schutz gegen einen inzwischen anders belegten Pfad). */
+    kw: z.string().min(1).max(80),
+    dw: z.string().min(1).max(80),
+    /** Emrahs „OK“ (Tag), ohne das nie zusammengeführt wird. */
+    ok: day,
+  })
+  .strict()
+  .refine((o) => o.keep !== o.drop, { message: 'keep und drop verschieden' });
+export const careLinkSchema = z
+  .object({
+    ...opBase,
+    k: z.literal('link'),
+    /** Erwartete Stichwörter je Karte der Gruppe (2–6 Karten). */
+    hs: z.record(cardPath, z.string().min(1).max(80)).refine((h) => Object.keys(h).length >= 2 && Object.keys(h).length <= 6, { message: '2–6 Karten' }),
+    /** Lehrer-Hinweis „eigentlich ein Doppel“ (nur Vorschlag für Emrahs nächstes OK; ohne Wirkung in der App). */
+    sm: z.boolean().optional(),
+  })
+  .strict();
+export const careFamSchema = z
+  .object({
+    ...opBase,
+    k: z.literal('fam'),
+    p: cardPath,
+    /** Erwartetes Stichwort der Karte. */
+    w: z.string().min(1).max(80),
+    /** Erwarteter bisheriger Stand von `famx` (`null` = noch keine Familie). */
+    from: famListSchema.nullable(),
+    fam: famListSchema,
+  })
+  .strict();
+export const careOpSchema = z.union([careFixSchema, careMergeSchema, careLinkSchema, careFamSchema]);
+export type CareOp = z.infer<typeof careOpSchema>;
+export type CareStatus = CareOp['st'];
+
+/** `vmod/care` und seine Teile: `{v: 1, ops: {Kennung: Operation}, parts?: [Teil-Kennungen]}`. Tolerant gelesen, je Operation geprüft. */
+export const careDocSchema = z.looseObject({
+  v: z.literal(1),
+  ops: z.record(z.string(), z.unknown()).optional(),
+  parts: z.array(z.string().regex(CARE_PART)).max(CARE_PARTS_MAX).optional(),
+});

@@ -395,6 +395,7 @@ function taskKey(v: CardView | BandView): MessageKey {
   // Politur P2: die Probe nach „Kennst du es schon?“ fragt die Bedeutung (das Wort stand auf der Vorkarte schon da).
   if (v.kind === 'probe') return 'vmTask_probe_meaning';
   if (v.card.form === 'contrast') return 'vmTask_contrast';
+  if (v.card.form === 'family' && v.card.fam) return 'vmTask_family';
   if (v.card.mode === 'tone_mean') return 'vmTask_tone_mean';
   if (v.card.mode === 'listen') return 'vmTask_listen';
   // „Bedeutung“ ohne Satz (Textform von „Hören → Bedeutung“): nichts ist markiert, gefragt ist das Wort selbst.
@@ -548,12 +549,12 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     if (card.mode === 'tone_mean') return t('vmGapToneLabel');
     if (card.mode === 'probe') return t('vmProbeLabel', { word: card.answer });
     if (card.mode === 'meaning') return t('vmGapMeaningLabel', { word: card.answer });
-    return g ? t('vmGapLabel', { sentence: `${g.text.slice(0, g.start)}…${g.text.slice(g.end)}` }) : t('vmTypeLabel', { de: card.de });
+    return g ? t('vmGapLabel', { sentence: `${g.text.slice(0, g.start)}…${card.fam ? ` (${card.fam.stem})` : ''}${g.text.slice(g.end)}` }) : t('vmTypeLabel', { de: card.de });
   })();
   const tk = taskKey(view);
   // Was Claude sieht („Claude erklärt“, Begleiter): Aufgabe und Satz mit Lücke; vor dem Prüfen nie die Lösung.
   const seeGap = gapText(card);
-  const seeSentence = seeGap ? `${seeGap.text.slice(0, seeGap.start)}___${seeGap.text.slice(seeGap.end)}` : '';
+  const seeSentence = seeGap ? `${seeGap.text.slice(0, seeGap.start)}___${card.fam ? ` (${card.fam.stem})` : ''}${seeGap.text.slice(seeGap.end)}` : '';
   const seeSolution = meaningLike ? card.de : card.answer;
   // Hör-Karten: vor dem Prüfen sieht Claude nur die Aufgabe (und beim Satz hören den Satz mit Lücke) – das Wort ist die Frage.
   const seeDetail =
@@ -567,7 +568,7 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
     label: `${t('cmpSeeTrainer')} · ${t(tk)}`.slice(0, 60),
     phase: band ? 'feedback' : 'question',
     detail: seeDetail,
-    ...(band ? { reveal: `Solution: ${seeSolution}. Learner: ${band.given || '(empty)'}` } : { mask: card.mode === 'tone_mean' ? [card.de, card.answer, card.head] : meaningLike ? [card.de] : [card.answer, card.head] }),
+    ...(band ? { reveal: `Solution: ${seeSolution}. Learner: ${band.given || '(empty)'}` } : { mask: card.mode === 'tone_mean' ? [card.de, card.answer, card.head] : meaningLike ? [card.de] : card.fam ? [card.answer, card.fam.form, ...(card.fam.de ? [card.fam.de] : [])] : [card.answer, card.head] }),
   } as const;
   const gap = (
     <KineticGap
@@ -738,7 +739,30 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
         {/* Satz hören → Wort tippen (Politur P2): erst der Ton (der ganze Satz), im Text ist das Wort die Lücke. */}
         {card.mode === 'listen' && !band ? <div className="flex">{hearNode}</div> : null}
         {cue}
-        <EnglishText as="p" testId="vm-sentence" text={g.text} area={intro ? 'intro' : 'trainer'} source={card.path} title={card.head} slot={{ start: g.start, end: g.end, node: gap }} />
+        <EnglishText
+          as="p"
+          testId="vm-sentence"
+          text={g.text}
+          area={intro ? 'intro' : 'trainer'}
+          source={card.path}
+          title={card.head}
+          slot={{
+            start: g.start,
+            end: g.end,
+            // Wortfamilie (Emrah 25.11.2026): das Stammwort steht in Klammern direkt hinter der Lücke („The ___ (implement) took …“).
+            node: card.fam ? (
+              <>
+                {gap}
+                <span className="text-muted" lang="en" data-testid="vm-fam-stem">
+                  {' '}
+                  ({card.fam.stem})
+                </span>
+              </>
+            ) : (
+              gap
+            ),
+          }}
+        />
         {tipLine}
         {listen}
       </div>
@@ -935,6 +959,7 @@ function whyText(t: T, why: Why): string {
   if (why.kind === 'teach') return why.text;
   const vars: Record<string, string> = { ...why.vars };
   if (vars.pos) vars.pos = t(`vmPos_${vars.pos}` as MessageKey);
+  if (vars.ps) vars.ps = t(`vmPosS_${vars.ps}` as MessageKey);
   return t(why.key as MessageKey, vars);
 }
 

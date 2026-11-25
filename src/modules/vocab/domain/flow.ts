@@ -1,7 +1,8 @@
 import { isProblem, leechTreatment } from './leech';
 import { addDays, dayKey } from '../shared';
 import { type Band, bandOf } from './band';
-import { type CardSentence, chooseSentence, cueOf, headShown, type Pos, posOf, sentencesOf, targetOf, type Teach, tipOf, usableSentences } from './card';
+import { type CardSentence, chooseSentence, cueOf, familyCard, headShown, type Pos, posOf, sentencesOf, targetOf, type Teach, tipOf, usableSentences } from './card';
+import { famOf, type FamPos } from './care';
 import { type Catalog, loadByDay } from './catalog';
 import { type Check, type CheckDict, checkAnswer, damerau, type Target } from './check';
 import { FORM_SPEC } from './grade';
@@ -68,6 +69,11 @@ export type CardModel = {
   col: unknown;
   /** Kontrastkarte (M14, ohne Planwirkung): womit verwechselt (`w`, null = Leech) und die Lehrer-Falle (falscher Freund / Paar). */
   contrast?: { w: string | null; ff: string | null; pair: string | null };
+  /**
+   * Wortfamilie (Emrah 25.11.2026): gesucht ist eine andere Form des Stichworts (`form`, Wortart, Bedeutung), das Stichwort steht als
+   * Stammwort in Klammern hinter der Lücke. `answer` ist die Form, wie sie im Satz steht.
+   */
+  fam?: { stem: string; form: string; pos: FamPos; de: string };
 };
 
 /** Formen ohne Lernkarte: Anwenden und eigener Satz haben eine eigene Karte (`use.ts`, S5c); die übrigen kommen mit späteren Schritten. */
@@ -147,6 +153,18 @@ export function cardOf(x: { task: Task; doc: Doc; lex: Lex; teach: Teach; nowMs:
     return noSentence('nosent', 'nosent');
   }
   if (task.form === 'nosent' || spec.sent === 'n') return noSentence('nosent', 'nosent');
+  // Wortfamilie (Emrah 25.11.2026): eigene Lücke im geprüften Satz der Form, Stammwort in Klammern. Ziel ist die Form selbst: keine Synonyme
+  // des Stichworts als „Auch richtig“; jede andere Form der Familie (auch das Stichwort) gilt als „richtige Familie, falsche Wortart“.
+  // Ohne nutzbare Form fällt die Karte auf die normale Lücke zurück (gebucht als `gap`).
+  if (task.form === 'family') {
+    const fc = familyCard(doc, head, lex);
+    if (fc) {
+      const g = fc.sent.gap;
+      const family = [fc.stem, ...famOf(doc, head).map((f) => f.form)].filter((w) => w.toLowerCase() !== g.answer.toLowerCase());
+      const target = { answer: g.answer, k: 'w' as const, pos: fc.fam.pos, family, ...(g.before ? { before: g.before } : {}), ...(g.after ? { after: g.after } : {}) };
+      return { ...base, mode: 'gap', form: 'family', sentence: fc.sent, answer: g.answer, target, cue: null, firstLetters: false, fam: { stem: fc.stem, form: fc.fam.form, pos: fc.fam.pos, de: fc.fam.de ?? '' } };
+    }
+  }
   const s = chooseSentence(lex, usable, day, { anchorOnly: task.step === 1, fresh: task.step === 3, avoid: x.avoid ?? null, unseen });
   if (!s) return noSentence('nosent', 'nosent');
   // Gebucht wird, was gezeigt wird (Politur P2, Prüfbericht S2): Eine Wendung mit ganzer Lücke ist ein freier Abruf (`gap`), keine Teil-Lücke.
@@ -284,8 +302,10 @@ export function answerOf(m: CardModel, c: Check, f: Frozen, o: { override?: bool
     hint: m.firstLetters ? Math.max(1, f.hint) : f.hint,
     ms: f.ms,
     fk: f.fk,
-    sentence: m.sentence?.sent.key ?? null,
-    anchor: m.sentence ? m.sentence.sent.key === 'a' : null,
+    // Wortfamilie: der Satz gehört der Form, nicht dem Stichwort – er zählt weder in „zuletzt gezeigte Sätze“ (`lex.sn`) noch für das
+    // Signal „satzgebunden“ (Ankersatz gegen neue Sätze, M57).
+    sentence: m.form === 'family' ? null : (m.sentence?.sent.key ?? null),
+    anchor: m.sentence && m.form !== 'family' ? m.sentence.sent.key === 'a' : null,
     hit: c.hit ?? null,
     ...(flags ? { flags } : {}),
   };
@@ -319,12 +339,15 @@ export function previewOf(x: {
   // Bedeutung (gelesen oder gehört): Lösung ist die deutsche Bedeutung; Warum nennt Wort = Bedeutung.
   const meaning = asksMeaning(m.mode);
   const answer = meaning ? m.de : m.answer;
+  // Wortfamilie: Bedeutung und Wortart der gesuchten Form, nicht des Stichworts („implementation (n) – Umsetzung“).
+  const fam = m.fam;
   const band = bandOf({
     check: x.check,
     given: x.given,
     answer,
-    de: meaning ? m.answer : m.de,
-    pos: m.pos,
+    de: fam ? fam.de : meaning ? m.answer : m.de,
+    pos: fam ? fam.pos : m.pos,
+    ...(fam ? { family: { stem: fam.stem, form: fam.form } } : {}),
     teach: m.teach,
     lang: x.lang,
     before: x.before,
