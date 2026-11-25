@@ -1158,3 +1158,8 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Messung (Chromium, Touch 375/669, CPU 4×, v119 vs. aktuell): Tippen in Wörter-/Grammatik-Lücken nicht langsamer als v119. Große Bremse im Brücken-Satz bei vielen Wörtern (2.500 Wörter: 289 ms/Tastendruck → 33 ms), Ursache Karten-Abo `useComboPairs` in `useBridgeTargets`. `fd6f29f4`: Brücken-Ziele einmal je Öffnen, Stimmen-Vorabrechnung erst nach 1,2 s Tipp-Pause im Leerlauf, Diagnose-Protokoll gesammelt gesichert.
 - **Test-Link `AXHkh6…` v112 `1795561971-fc7d`** (Rückweg v111). Offen: Schreibaufgabe nach Anwenden (`useTargets` hängt live an `useComboPairs`), `live.ts` verarbeitet je Lieferung alle Dokumente, Prüfen-Rechnung `planCtxOf` ~60 ms.
 - Emrahs „Live nehmen“ → **live `JLL8…` v124 `1795591800-422b`** (Rückweg v123 `1795555294-4520`), alte Teil-Dateien von v123 bleiben eine Runde stehen (`keptFromPrevious` in `docs/relaunch/publish/JLL8.json`).
+
+## 25.11.2026 – Wortfamilien + Wörter-Pflege (Emrahs Entscheidungen A/A, erster Pflege-Durchgang A/A/A)
+- Lehrer-Durchgang über 370 Karten (nur lesen): 9 sichere Doppelte, 19 ähnliche Paare, 26 Übersetzungsfehler, 130 Karten mit Wortfamilie (254 Formen); Inhalte gegengelesen, echte Daten nur im Scratchpad.
+- `039b8ca9`: Pflege-Aufträge `vmod/care` (fix/merge/link/fam, idempotent, nie löschen), Form „Wortfamilie“ ab Stufe 3, Wortseite „Wortfamilie“ und „Gehört zusammen mit“ (`docs/umbau/vokabeln/pflege.md`); Budget Wortseite +500 B (Freigabe Hauptsitzung).
+- **Test-Link `AXHkh6…` v113 `1795608155-1503`** (Rückweg v112) + `vmod/care` (236 Aufträge) in die Test-Datenbank geschrieben. Live: erst nach Emrahs OK Version veröffentlichen und denselben Auftrag in die Live-Datenbank schreiben. Danach wöchentliche Pflege-Routine einrichten.
