@@ -1170,3 +1170,8 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 ## 26.11.2026 – Pflege-Stand und Live-Kommentar „treat“
 - `vmod/care` live: 228 erledigt, 7 übersprungen (Stichwort inzwischen geändert), 1 Fehler (merge `core`) – Pflege-Durchgang durch.
 - Kommentar „treat: Übersetzung (behandeln) passt nicht zum Wort (Belohnung)“: Karte ist das Verb (Fundsatz „treat X as Y“), `xEx` waren Nomen-Sätze. Drei `xEx` mit `bad: 1` stillgelegt, zwei Verb-Sätze ergänzt, `def` korrigiert (direkt per Datenbank, Version 21). Für die wöchentliche Pflege merken: `xEx`/`col` gegen `pos` und `de` prüfen.
+
+## 26.11.2026 – Stimme 2.0 und C1-Check nur freiwillig (Test-Link v115)
+- Stimme 2.0 (`254cc35c`, Plan in `docs/umbau/stimme.md`): Tonvorrat in IndexedDB (`lx-voice-clips`, bis 150 MB), Vorab-Rechnen der Runde in Ruhephasen, Hintergrund-Rechner (Worker, Rückfall Hauptfaden nach 8 s), Gerätestimme nur noch bei echtem Ausfall bzw. allererstem Herunterladen; Lautsprecher pulsiert, solange gerechnet wird. Budget-Freigabe Hauptsitzung (`engine`, `worker`, `workerHost`, 119 Dateien).
+- Kommentar „der C1-Check nervt … nur optional auf der Startseite“ (`09bf1744`): kein Check-Tag mehr im Tagesweg (Schritt 2 und 3 starten normal, alter gespeicherter Check-Schritt geht weiter), Kurzer Tag am Check-Tag wieder möglich; Check nur noch als Karte unter „Extra“ auf Heute, wenn er dran ist.
+- **Test-Link `AXHkh6…` v115 `1795698605-7dba`** (Rückweg v114 `1795610775-a67c`). Noch nicht live. Offen: Messung am echten iPhone/Mac (Worker in claude.ai, WebGPU im Worker in Safari).
