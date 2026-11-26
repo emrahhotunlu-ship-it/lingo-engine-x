@@ -52,7 +52,8 @@ describe('shortDayAllowed', () => {
     expect(shortDayAllowed({ plan, today: '2026-11-04', kt: { '2026-11-03': 1 }, untouched: true })).toBe(false);
     expect(shortDayAllowed({ plan: readPlan(raw({ cb: 'reduced' }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
     expect(shortDayAllowed({ plan: readPlan(raw({ tw: undefined }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
-    expect(shortDayAllowed({ plan: readPlan(raw({ c1: 'check' }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(false);
+    // Check-Tag sperrt nicht mehr (26.11.2026: der C1-Check ist nur noch freiwillig auf Heute).
+    expect(shortDayAllowed({ plan: readPlan(raw({ c1: 'check' }), '2026-11-04'), today: '2026-11-04', kt: undefined, untouched: true })).toBe(true);
     // Woche Mo 02.11.–So 08.11.: zwei schon genommen → nein; Vorwoche zählt nicht.
     expect(shortDayAllowed({ plan, today: '2026-11-05', kt: { '2026-11-02': 1, '2026-11-03': 1 }, untouched: true })).toBe(false);
     expect(shortDayAllowed({ plan, today: '2026-11-04', kt: { '2026-11-01': 1, '2026-10-31': 1, '2026-11-02': 1 }, untouched: true })).toBe(true);

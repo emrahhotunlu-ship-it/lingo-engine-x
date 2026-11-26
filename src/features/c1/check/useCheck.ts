@@ -8,7 +8,7 @@ import { formFor } from '../../../domain/c1/check/select';
 import { useInputProfile } from '../../../platform/input';
 
 // Stand des C1-Checks für die Extra-Karte auf Heute (Lernplattform 3.0 P40): reine Ableitung aus `app/c1`, Tag und Gerät. Nichts wird gespeichert.
-// Der Check-Tag selbst (Plan `u.c1`) läuft über den Tagesablauf (`features/unit/run.ts` → Schritt `c1check`), nicht über diese Karte.
+// Seit 26.11.2026 ersetzt der Check keine Schritte des Tagesablaufs mehr; diese Karte ist der einzige, freiwillige Weg.
 
 export type CheckCard = { touch: boolean } | null;
 

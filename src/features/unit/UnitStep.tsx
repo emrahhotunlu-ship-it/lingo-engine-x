@@ -12,15 +12,14 @@ import { ExerciseTop } from '../learn/ui';
 import { useToday } from '../today/state';
 import { AgainScreen } from '../repair/again/AgainScreen';
 import { startAgain, useAgain } from '../repair/again/session';
-import { skipCheckToday, useC1CheckSheet } from '../c1/check/store';
-import { checkDayOf, continueUnit, unitNow } from './run';
+import { continueUnit } from './run';
 
 // Eigene Ersatzschritte der Tageseinheit (Route `unitStep`), solange die Anbieter der Pakete fehlen
 // oder nicht machbar sind – ohne KI erfüllbar (G6, M4):
 // - `again` (Schritt 4 „Fehler korrigieren“): die eine Fehlerschlange, Satz für Satz (`AgainScreen`); der alte Ersatzschritt mit
 //   einem Textfeld für mehrere Sätze ist entfernt (Lernplattform 2.0 §5.7).
 // - `check`: Wochen-Check ohne genug Stoff – kurzer Hinweis, der Block zählt.
-// - `c1check`: Check-Tag (Lernplattform 3.0 P40, Plan `u.c1`): „C1-Check starten“ (ersetzt Schritt 2 und 3) oder „Heute nicht“ (normale Schritte).
+// - `c1check`: früherer Check-Tag-Schritt; seit 26.11.2026 nur noch Weiterleitung in den normalen Tagesweg (der Check ist freiwillig auf Heute).
 
 type T = (k: MessageKey, v?: Record<string, string | number>) => string;
 
@@ -42,45 +41,16 @@ function CheckEmpty({ block }: { block: number }) {
 }
 
 /** Check-Tag: die Wahl zwischen C1-Check und den normalen Schritten. Nach dem gespeicherten Check: „Weiter“ zum nächsten Schritt. */
+/**
+ * Alter Check-Tag-Schritt (bis 26.11.2026): Der C1-Check ersetzt keine Schritte mehr (Emrahs Kommentar, nur noch freiwillig auf Heute).
+ * Ein gespeicherter Lauf, der noch auf diesem Schritt steht, geht sofort im normalen Tagesweg weiter.
+ */
 function C1CheckDay() {
-  const { t } = useT();
   const api = useHiddenInput();
-  const show = useC1CheckSheet((s) => s.show);
-  // Neu gelesen bei jeder Änderung der Pflicht (der Check markiert Schritt 2 und 3 als erledigt).
-  useToday((s) => s.duties.done);
-  const u = unitNow();
-  const duties = u ? checkDayOf(u) : null;
-  if (!u || !duties) {
-    return (
-      <section className="flex flex-col gap-4" data-testid="unit-c1check-done">
-        <p className="text-base">{t('pxCkDayDone')}</p>
-        <Button variant="primary" size="lg" className="w-full" onClick={() => continueUnit(api)} data-testid="unit-c1check-next">
-          {t('pxCkDayNext')}
-        </Button>
-      </section>
-    );
-  }
-  return (
-    <section className="flex flex-col gap-4" data-testid="unit-c1check">
-      <h2 className="lx-t-answer tracking-tight">{t('pxCkDayTitle')}</h2>
-      <p className="text-base leading-relaxed">{t('pxCkDayText')}</p>
-      <Button variant="primary" size="lg" className="w-full" onClick={() => show({ day: u.day, duties })} data-testid="unit-c1check-start">
-        {t('pxCkCardStart')}
-      </Button>
-      <Button
-        variant="ghost"
-        className="w-full"
-        onClick={() => {
-          skipCheckToday(u.day);
-          toast(t('pxCkSkipped'));
-          continueUnit(api);
-        }}
-        data-testid="unit-c1check-skip"
-      >
-        {t('pxCkCardSkip')}
-      </Button>
-    </section>
-  );
+  useLayoutEffect(() => {
+    continueUnit(api);
+  }, [api]);
+  return null;
 }
 
 /** Ersatzweg zu Schritt 4: startet die Schlange, falls sie noch nicht läuft, und zeigt den einen Bildschirm. */

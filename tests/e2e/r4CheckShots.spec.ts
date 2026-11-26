@@ -39,12 +39,4 @@ test.describe('Fotos C1-Check 390 dunkel', () => {
     await page.getByTestId('ck-res-weak').scrollIntoViewIfNeeded();
     await page.screenshot({ path: `${OUT}/r4-check-05-ergebnis-muster.png` });
   });
-
-  test('Check-Tag im Tagesablauf', async ({ page }) => {
-    await bootCheck(page, { now: SAT_9, patch: checkDayPatch(), touch: true, theme: 'dark' });
-    await page.getByTestId('start').click();
-    await expect(page.getByTestId('unit-c1check')).toBeVisible();
-    await page.waitForTimeout(800);
-    await page.screenshot({ path: `${OUT}/r4-check-06-check-tag.png` });
-  });
 });

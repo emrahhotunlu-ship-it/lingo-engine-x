@@ -37,10 +37,11 @@ export function isShortToday(kt: unknown, today: string): boolean {
   return !!kt && typeof kt === 'object' && !Array.isArray(kt) && (kt as Raw)[today] === 1;
 }
 
-/** Darf der Tagesweg von heute verkürzt werden? Nur ein Tagesweg-Plan (drei Schritte), noch nicht kurz, kein C1-Check-Tag, unberührt, Wochengrenze. */
+/** Darf der Tagesweg von heute verkürzt werden? Nur ein Tagesweg-Plan (drei Schritte), noch nicht kurz, unberührt, Wochengrenze.
+ *  Ein Check-Tag (`u.c1`) sperrt nicht mehr: der C1-Check ersetzt seit 26.11.2026 keine Schritte (nur noch freiwillig auf Heute). */
 export function shortDayAllowed(c: ShortDayCheck): boolean {
   const u = c.plan?.u;
-  if (!u || u.tw !== 1 || u.c1 === 'check' || isShortToday(c.kt, c.today)) return false;
+  if (!u || u.tw !== 1 || isShortToday(c.kt, c.today)) return false;
   // Nicht zwei Tage hintereinander und nicht in der Neustart-Woche: sonst wächst der Rückstand (learning-scientist 1).
   if (u.cb || isShortToday(c.kt, addDays(c.today, -1))) return false;
   if (!c.untouched) return false;

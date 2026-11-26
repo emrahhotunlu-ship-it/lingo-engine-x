@@ -1,5 +1,4 @@
 import { useClock } from '../../app/clock';
-import { flags } from '../../app/flags';
 import { useNav } from '../../app/nav';
 import { resumables, unitBlockFor, type FocusApi } from '../../app/registry';
 import { loadResume } from '../../app/resume';
@@ -7,7 +6,6 @@ import type { Route } from '../../app/router/types';
 import type { UnitBlockNo, UnitCtx, UnitDoneOpts, UnitTaskResult } from '../../app/unit/types';
 import { invalidIdsOf, useLive } from '../../data/live';
 import type { DutyId, StoredPlan, UnitMeta } from '../../domain/plan/types';
-import { checkDayDuties } from '../../domain/c1/check/day';
 import { buildTrainCards } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { isUnitPlan, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
@@ -19,7 +17,6 @@ import { selectAiAvailable } from '../../ai/scope';
 import { useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
-import { checkSkipped } from '../c1/check/store';
 import { startFormatRound } from '../c1x/FormatRound';
 import { startCheck } from '../check/session';
 import { startGrammar } from '../grammar/session';
@@ -166,14 +163,6 @@ function resumeRow(u: UnitNow, row: UnitRow): boolean {
 }
 
 /**
- * Pflichtpunkte, die heute der C1-Check ersetzt (Lernplattform 3.0 §2.4, P40): Trägt der Plan den Check-Tag (`u.c1 = 'check'`, eingefroren von P23) und
- * ist „Heute nicht“ nicht gewählt, sind es die offenen Zeilen von Schritt 2 und 3. Sonst `null` (der normale Ablauf gilt).
- */
-export function checkDayOf(u: UnitNow): string[] | null {
-  return checkDayDuties({ c1: u.plan.u.c1, rows: u.rows, skipped: checkSkipped(u.day), on: flags.c1check });
-}
-
-/**
  * Fokus-Schnittstelle des letzten Blockstarts (Politur P1): der nächste Schritt startet direkt aus dem Abschluss des vorigen
  * (`handleUnitDone`), ohne Zwischenkarte – dort gibt es kein eigenes `useHiddenInput`. Vor dem ersten Start: nur Fokus lösen.
  */
@@ -201,14 +190,7 @@ export function unitStepNext(): { last: false; row: UnitRow } | { last: true } |
 export function startRow(u: UnitNow, row: UnitRow, api: FocusApi): void {
   lastApi = api;
   unlockSpeech();
-  // Check-Tag: statt Schritt 2 bzw. 3 kommt die Wahl „C1-Check starten“ oder „Heute nicht“ (Route `unitStep`, Schritt `c1check`).
-  if (checkDayOf(u)?.includes(row.id)) {
-    const route: Route = { name: 'unitStep', step: 'c1check', block: row.block };
-    setRun({ day: u.day, block: row.block, duty: row.id, kind: null, offline: false, at: Date.now(), via: 'own', watch: null, routeName: route.name, route });
-    api.blur();
-    useNav.getState().go(route);
-    return;
-  }
+  // Kein Check-Tag im Tagesweg mehr (26.11.2026, Emrahs Kommentar): der C1-Check ist nur noch die freiwillige Karte unter „Extra“ auf Heute.
   if (resumeRow(u, row)) return;
   const block = u.up.blocks.find((b) => b.block === row.block && b.channel === row.id) ?? u.up.blocks.find((b) => b.channel === row.id);
   if (!block) {

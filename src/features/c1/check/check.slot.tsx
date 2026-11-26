@@ -6,8 +6,8 @@ import { useC1CheckSheet } from './store';
 import { useCheckCard } from './useCheck';
 
 // Heute, unter „Extra“ (nach der Pflicht): die Karte des C1-Checks (Lernplattform 3.0 P40), nur im Check-Fenster (letzte 7 Tage des Monats), mit Programm,
-// mindestens 21 Tage nach dem letzten Check und mit freier Form. Keine Pflicht. Der Check-Tag selbst kommt über den Tagesablauf (Schritt `c1check`
-// mit „Heute nicht“). Ohne Angebot kommt nichts (keine Höhe). Schalter `flags.c1check`.
+// mindestens 21 Tage nach dem letzten Check und mit freier Form. Keine Pflicht. Seit 26.11.2026 der EINZIGE Weg zum Check (Emrahs Kommentar): kein Check-Tag
+// mehr im Tagesweg. Ohne Angebot kommt nichts (keine Höhe). Schalter `flags.c1check`.
 
 function CheckCardView() {
   const { t } = useT();
