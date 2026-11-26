@@ -526,7 +526,10 @@ function pump(): void {
     (out) => {
       if (running !== mine) return;
       genErrors = 0;
-      if (engine === e) engineOk += 1;
+      if (engine === e) {
+        engineOk += 1;
+        workerFails = 0;
+      }
       if (j.store) {
         cachePut(j.key, out);
         const sk = clipStoreKey(e.version, j.voice, j.speed, j.text);
@@ -553,9 +556,22 @@ function finish(mine: Running): void {
 
 /** Fehler beim Rechnen: Grafikchip weg → neu laden; sonst erst beim zweiten Fehler in Folge (und höchstens alle 2 Minuten). */
 let genErrors = 0;
+/** Fehler von Hintergrund-Rechnern, die noch nie einen Satz geliefert haben – zählt über das Neuladen hinweg (sonst Endlosschleife). */
+let workerFails = 0;
 function onGenError(e: Engine, err: unknown): void {
   logWarn('voice:generate', err);
   genErrors += 1;
+  // Hintergrund-Rechner meldet „bereit“, hat aber noch nie einen Satz geliefert (iPhone in claude.ai, 26.11.2026: „no engine“ nach „ready“):
+  // nicht dem Grafikchip die Schuld geben, sondern den Hintergrund-Rechner für einen Tag abschalten und im Hauptfaden rechnen wie vorher.
+  if (e.worker && engineOk === 0 && !e.lost()) workerFails += 1;
+  if (e.worker && engineOk === 0 && workerFails >= 2 && !e.lost()) {
+    workerFails = 0;
+    noWorker = true;
+    local.set(VOICE_WORKER_KEY, `off:${Date.now()}`);
+    logWarn('voice:worker', err, 'Hintergrund-Rechner liefert keine Sätze – die neue Stimme rechnet im Hauptfaden');
+    void rebuild(e, 'check');
+    return;
+  }
   if (e.lost() || genErrors >= 2) void rebuild(e, e.lost() ? 'gpu lost' : 'errors');
 }
 
@@ -980,6 +996,7 @@ export function resetNeural(): void {
   engine = null;
   loading = null;
   failures = 0;
+  workerFails = 0;
   lastTry = 0;
   warming = false;
   cache.clear();

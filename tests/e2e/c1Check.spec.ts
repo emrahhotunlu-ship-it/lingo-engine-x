@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { layoutProblems } from './fixtures';
-import { SAT, SAT_9, WED, WED_9, bootCheck, checkDayPatch, donePatch, runCheck, answerCheckItem, type Doc } from './c1CheckHelpers';
+import { SAT_9, WED, WED_9, bootCheck, checkDayPatch, donePatch, runCheck, answerCheckItem, type Doc } from './c1CheckHelpers';
 import { dump, writes } from './trainerHelpers';
 
 // C1-Check (Lernplattform 3.0 §4.3, P40): Karte unter „Extra“ im Check-Fenster, 30 Aufgaben ohne Rückmeldung, Ergebnis mit Spanne, Teilen, schwächsten

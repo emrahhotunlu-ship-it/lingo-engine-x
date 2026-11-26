@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { SAT_9, WED, WED_9, answerCheckItem, bootCheck, checkDayPatch, donePatch } from './c1CheckHelpers';
+import { WED, WED_9, answerCheckItem, bootCheck, donePatch } from './c1CheckHelpers';
 
 // Bildschirmfotos für den Design-Vergleich (R4 C1-Check, P40) nach `docs/umbau/design-vergleich/r4-check-*.png`, 390 px, dunkel.
 // Läuft nur auf Zuruf (`LX_SHOTS=1`), sonst übersprungen: Bilder sind Belege für Emrah und den ux-reviewer, keine Prüfung.

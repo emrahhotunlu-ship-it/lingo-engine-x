@@ -17,6 +17,12 @@ describe('checkMulti', () => {
   it('gibt einen sauberen Build frei', () => {
     expect(checkMulti(base()).problems).toEqual([]);
   });
+  it('Hintergrund-Rechner der Stimme muss eine einzige Datei sein (iPhone 26.11.2026: doppelt geladen → „no engine“)', () => {
+    const w = (text: string) => checkMulti([...base(), { name: 'worker-x1.js', size: text.length, text }]).problems.join('|');
+    expect(w('/*lx:voice-engine*/self.onmessage=()=>{};')).not.toContain('Hintergrund-Rechner');
+    expect(w('/*lx:voice-engine*/import{a}from"./worker-x1.js";')).toContain('Hintergrund-Rechner verweist auf andere Stücke');
+    expect(w('/*lx:voice-engine*/const m=await import("./engine-y.js");')).toContain('Hintergrund-Rechner verweist auf andere Stücke');
+  });
   it('lehnt Unterordner, fremde Dateitypen und zu große Dateien ab', () => {
     const p = checkMulti([...base(), { name: 'assets/x.js', size: 1, text: '' }, { name: 'x.exe', size: 1 }, { name: 'big.txt', size: MULTI_MAX_FILE }, { name: 'alt.bin', size: 1 }]).problems.join('|');
     expect(p).toContain('Unterordner');

@@ -189,6 +189,12 @@ export function checkMulti(files) {
     for (const m of removedTemplates) if (text.includes(m)) problems.push(`${f.name}: Kennung einer entfernten Vorlage im Build: "${m}"`);
     for (const m of devMarkers) if (text.includes(m)) problems.push(`${f.name}: Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
   }
+  // Hintergrund-Rechner der Stimme (Stimme 2.0): genau eine Datei ohne Verweise auf andere Stücke. Sonst lädt ein nachgeladenes Stück die
+  // Worker-Datei unter anderer Adresse ein zweites Mal, und deren Nachrichten-Empfänger kennt die geladene Stimme nicht (iPhone 26.11.2026: „no engine“).
+  for (const f of files) {
+    if (!/^worker-[^/]*\.js$/.test(f.name) || !f.text) continue;
+    if (/\bfrom\s*["']\.\/|\bimport\s*\(\s*["']\.\/|\bimport\s*["']\.\//.test(f.text)) problems.push(`${f.name}: Hintergrund-Rechner verweist auf andere Stücke (muss eine einzige Datei sein)`);
+  }
   return { problems, notes };
 }
 

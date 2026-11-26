@@ -430,6 +430,22 @@ describe('neue Stimme', () => {
       expect(useNeuralVoice.getState().worker).toBe(false);
     });
 
+    it('Worker meldet „bereit“, liefert aber nie einen Satz (iPhone 26.11.2026 „no engine“): Rückfall auf den Hauptfaden, gemerkt', async () => {
+      await fresh({ worker: 'ok' });
+      await flush();
+      // Aufwärmen scheitert → Neuladen (wieder im Worker); dann scheitert auch der erste echte Satz → kein dritter Worker, Hauptfaden.
+      for (const g of state.gens.splice(0)) g.reject(new Error('no engine'));
+      await vi.advanceTimersByTimeAsync(5_000);
+      expect(state.workerLoads).toBe(2);
+      void run(['Hello there.']);
+      await flush();
+      for (const g of state.gens.splice(0)) g.reject(new Error('no engine'));
+      await vi.advanceTimersByTimeAsync(5_000);
+      expect(store.getItem(VOICE_WORKER_KEY)).toMatch(/^off:\d+$/);
+      expect(state.workerLoads).toBe(2);
+      expect(useNeuralVoice.getState()).toMatchObject({ status: 'ready', worker: false, device: 'webgpu' });
+    });
+
     it('im Worker wärmt die Stimme nach dem Laden still auf (ein Mini-Satz, nicht abgespielt)', async () => {
       await fresh({ worker: 'ok' });
       await flush();

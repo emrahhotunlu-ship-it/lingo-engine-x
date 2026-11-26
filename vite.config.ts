@@ -63,7 +63,7 @@ export default defineConfig(({ command }) => {
     worker: {
       format: 'es' as const,
       plugins: () => [voiceOrt({ multi: MULTI, emitOrt: false })],
-      ...(MULTI ? { rolldownOptions: { output: { entryFileNames: '[name]-[hash].js', chunkFileNames: '[name]-[hash].js', assetFileNames: '[name]-[hash][extname]' } } } : {}),
+      ...(MULTI ? { rolldownOptions: { output: { codeSplitting: false, entryFileNames: '[name]-[hash].js', chunkFileNames: '[name]-[hash].js', assetFileNames: '[name]-[hash][extname]' } } } : {}),
     },
     // Einzeldatei (Rückfall): genau eine Datei, also kein Hintergrund-Rechner – die Stimme rechnet dort wie bisher im Hauptfaden.
     ...(MULTI ? {} : { resolve: { alias: [{ find: /^\.\/workerHost$/, replacement: fileURLToPath(new URL('./src/platform/voice/workerHost.single.ts', import.meta.url)) }] } }),
