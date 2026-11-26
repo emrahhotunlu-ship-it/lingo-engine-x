@@ -139,7 +139,7 @@ describe('scripts/budget.json', () => {
     const b = loadBudget() as unknown as { grenzen: { files: number; filesFreigabe: string; lazy: Record<string, { zuwachs: Record<string, { bytes: number; freigabe: string }> }> } };
     expect(b.grenzen.lazy['src/modules/vocab/ui/LearnScreen.tsx']?.zuwachs['Politur P2']).toMatchObject({ bytes: 3500 });
     expect(b.grenzen.lazy['src/modules/vocab/ui/LearnScreen.tsx']?.zuwachs['Politur P2']?.freigabe).toContain('Hauptsitzung 13.11.2026');
-    expect(b.grenzen.files).toBe(115);
+    expect(b.grenzen.files).toBe(119);
     expect(b.grenzen.filesFreigabe).toContain('Politur P2');
   });
   it('Wörter-Pflege (25.11.2026): Zuwachs der Wortseite mit Freigabe der Hauptsitzung', () => {
@@ -155,7 +155,7 @@ describe('scripts/budget.json', () => {
     expect([screen?.basis, door?.basis]).toEqual([8000, 2000]);
     expect(screen?.paket).toContain('P4');
     expect(door?.paket).toContain('P4');
-    expect(b.grenzen.files).toBe(115);
+    expect(b.grenzen.files).toBe(119);
     expect(b.grenzen.filesFreigabe).toContain('P4');
   });
   it('vorab-Beträge sind die aus dem Bauplan (stufe1-plan.md, P0 Nr. 4) und werden nicht still erhöht (platform-guard S4)', () => {
