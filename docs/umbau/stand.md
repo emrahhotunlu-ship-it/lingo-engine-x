@@ -1166,3 +1166,7 @@ Reihenfolge: V0a (läuft) → Q0 → V0 → Emrahs OK → V1–V5.
 - Test-Link v113: Wörter-Übung weiß (Runde wartete auf die 236 Pflege-Aufträge). `7ef5a9e6`: Pflege läuft im Hintergrund nach dem Nachholen. **Test-Link v114 `1795610775-a67c`**. Offen: Pflege macht viele Aufrufe am Stück, Status erst am Ende (ggf. Portionen).
 - `cd60011b`: Pflege in Portionen (16), Status je Portion, Pause in Tipp-Ruhe, Budget-Fehler → offen lassen, Sperre `lx:care-run`.
 - Emrahs „Ja live“ → **live `JLL8…` v125 `1795613251-2321`** (Rückweg v124 `1795591800-422b`), danach `vmod/care` (236 Aufträge, gegengelesen) in die Live-Datenbank geschrieben. Alte v123-Teil-Dateien entfernt, v124-Dateien bleiben eine Runde stehen.
+
+## 26.11.2026 – Pflege-Stand und Live-Kommentar „treat“
+- `vmod/care` live: 228 erledigt, 7 übersprungen (Stichwort inzwischen geändert), 1 Fehler (merge `core`) – Pflege-Durchgang durch.
+- Kommentar „treat: Übersetzung (behandeln) passt nicht zum Wort (Belohnung)“: Karte ist das Verb (Fundsatz „treat X as Y“), `xEx` waren Nomen-Sätze. Drei `xEx` mit `bad: 1` stillgelegt, zwei Verb-Sätze ergänzt, `def` korrigiert (direkt per Datenbank, Version 21). Für die wöchentliche Pflege merken: `xEx`/`col` gegen `pos` und `de` prüfen.
