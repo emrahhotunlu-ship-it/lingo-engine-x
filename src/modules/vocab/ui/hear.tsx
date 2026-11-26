@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Icon, local, speak, stopSpeech, usePrefetchSpeech, useSpeech, useT } from '../sharedUi';
+import { Icon, local, speak, stopSpeech, usePrefetchSpeech, useSpeakWaiting, useSpeech, useT } from '../sharedUi';
 
 // Politur P2 (Emrah 13.11.2026, E3 „Hören“): Ton der Wörter-Karten. Die Einführung und die Vorkarte „Kennst du es schon?“ lesen von selbst
 // vor, die Hör-Karten („Hören → Bedeutung“, „Satz hören → Wort“) stellen ihre Frage als Ton. Vorlesen startet erst, wenn die Karte steht,
@@ -59,6 +59,7 @@ export function HearButton({ text, testId, label, big = false, heard = false, on
   const { t } = useT();
   const status = useSpeech((x) => x.status);
   const speaking = useSpeech((x) => x.speaking);
+  const waiting = useSpeakWaiting(text);
   const [played, setPlayed] = useState(heard);
   usePrefetchSpeech(text);
   if (status === 'unsupported' || status === 'novoice' || !text.trim()) return null;
@@ -77,6 +78,8 @@ export function HearButton({ text, testId, label, big = false, heard = false, on
       aria-label={label}
       data-testid={testId}
       data-speaking={speaking ? '' : undefined}
+      aria-busy={waiting || undefined}
+      data-voice-wait={waiting ? '' : undefined}
     >
       <Icon name="speaker" size={big ? 24 : 18} aria-hidden="true" />
       <span>{t(played ? 'vmHearAgain' : 'vmHearPlay')}</span>

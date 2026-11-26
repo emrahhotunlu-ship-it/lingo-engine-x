@@ -47,6 +47,8 @@ export type FakeControl = {
   sampleCalls: SampleCall[];
   /** Gesprochene Texte der nachgebildeten Sprachausgabe (siehe install.ts). */
   spoken: string[];
+  /** Stimme 2.0: von der nachgebildeten neuen Stimme gerechnete Texte (siehe fakeNeural.ts). */
+  neural: string[];
   /** Phase 3: Fehler je Vorlage setzen (`null` entfernt ihn). */
   setSampleFail(templateId: string, code: SampleErrorCode | null): void;
   /** Phase 3: nachgebildete Spracheingabe „hört“ diesen Text (siehe fakeStt.ts). */
@@ -182,6 +184,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
       saved,
       sampleCalls,
       spoken: [],
+      neural: [],
       setSampleMode: (m) => {
         sampleMode = m;
       },

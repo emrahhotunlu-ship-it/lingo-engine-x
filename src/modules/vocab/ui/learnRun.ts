@@ -1121,6 +1121,21 @@ export class LearnRun {
     return card && (isHear(card.mode) || card.mode === 'intro') ? audioOf(card) : null;
   }
 
+  /**
+   * Stimme 2.0 (Vorab-Rechnen): die nächsten höchstens `n` Karten der Runde in ihrer Reihenfolge (nur zum Lesen, wie `upcomingAudio`). Die
+   * Runde ist der heutige Wörter-Plan (`vmod/day`); Anwenden/eigener Satz haben keinen Ton und fehlen.
+   */
+  aheadCards(n: number): CardModel[] {
+    const out: CardModel[] = [];
+    for (const next of this.run?.ahead() ?? []) {
+      if (out.length >= n) break;
+      if (next.form === 'transfer' || next.form === 'own') continue;
+      const card = this.cardFor({ path: next.path, form: next.form, step: next.step, intro: next.intro, planned: false, why: 'peek', sent: '-', cue: false });
+      if (card) out.push(card);
+    }
+    return out;
+  }
+
   /** Lerntag der Runde (Schlüssel für „schon vorgelesen“). */
   dayOf(): string {
     return this.day ?? dayKey(this.env.now());

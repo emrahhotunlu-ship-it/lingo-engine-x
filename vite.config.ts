@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { rawJsonZip } from './scripts/vite-raw-json-zip.mjs';
 import { contentStore } from './scripts/content/vite-plugin.mjs';
 import { bootFirst } from './scripts/vite-boot-first.mjs';
@@ -58,5 +59,13 @@ export default defineConfig(({ command }) => {
         : {}),
     },
     base: MULTI ? './' : '/',
+    // Stimme 2.0 (docs/umbau/stimme.md): Hintergrund-Rechner der neuen Stimme als Modul-Worker in eigener, flacher Datei (gleiche Herkunft).
+    worker: {
+      format: 'es' as const,
+      plugins: () => [voiceOrt({ multi: MULTI, emitOrt: false })],
+      ...(MULTI ? { rolldownOptions: { output: { entryFileNames: '[name]-[hash].js', chunkFileNames: '[name]-[hash].js', assetFileNames: '[name]-[hash][extname]' } } } : {}),
+    },
+    // Einzeldatei (Rückfall): genau eine Datei, also kein Hintergrund-Rechner – die Stimme rechnet dort wie bisher im Hauptfaden.
+    ...(MULTI ? {} : { resolve: { alias: [{ find: /^\.\/workerHost$/, replacement: fileURLToPath(new URL('./src/platform/voice/workerHost.single.ts', import.meta.url)) }] } }),
   };
 });

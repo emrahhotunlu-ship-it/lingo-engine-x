@@ -49,7 +49,7 @@ export { maskOf } from '../../domain/answer/mask';
 export { dictLookup, isDictWord } from '../../domain/lexicon/dict';
 // Wort-Seite (Großpaket A S6): Lautschrift und Vorlesen (Wort und Satz, normal und langsam).
 export { ipaOf } from '../../domain/lexicon/pron';
-export { speak, stopSpeech, useSpeech } from '../../platform/speech';
+export { planSpeech, planSpeechWanted, speak, stopSpeech, useSpeakWaiting, useSpeech } from '../../platform/speech';
 export { usePrefetchSpeech } from '../../engine/usePrefetchSpeech';
 export { SpeakButton } from '../../engine/SpeakButton';
 // „Satz vor dem Prüfen anhören“ (S6b-3): die Lücke als kurzer Ton.

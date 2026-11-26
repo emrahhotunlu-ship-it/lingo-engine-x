@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { logWarn } from './diagnostics';
-import { isNeuralVoice, neuralWanted, prefetchNeural, scheduleNeuralVoice, speakNeural, stopNeural, unlockNeural } from './voice/neural';
+import { isNeuralVoice, neuralWanted, planAccepts, planNeural, prefetchNeural, scheduleNeuralVoice, speakNeural, stopNeural, unlockNeural } from './voice/neural';
 
 // Sprachausgabe (A7.4, Kap. 15 „Sprachausgabe am Handy abgehackt", Architektur-Entwurf §10.3).
 // iPhone/Safari zuerst:
@@ -71,9 +71,22 @@ export const RATE_MAX = 1.1;
 /** Phase 3 (Plan §7): Stimme für die Auswahl in den Einstellungen. */
 export type VoiceInfo = { name: string; lang: string; local: boolean; us: boolean };
 
-type SpeechState = { status: SpeechStatus; voiceName: string | null; speaking: boolean; voices?: VoiceInfo[] };
+/**
+ * `waiting`: Text einer Ausgabe, die gerade auf die neue Stimme wartet (der Satz wird erst gerechnet, Stimme 2.0) – der passende
+ * Anhören-Knopf zeigt dann einen ruhigen Lade-Zustand (`useSpeakWaiting`).
+ */
+type SpeechState = { status: SpeechStatus; voiceName: string | null; speaking: boolean; waiting: string | null; voices?: VoiceInfo[] };
 
-export const useSpeech = create<SpeechState>(() => ({ status: 'loading', voiceName: null, speaking: false }));
+export const useSpeech = create<SpeechState>(() => ({ status: 'loading', voiceName: null, speaking: false, waiting: null }));
+
+/** Wartet gerade eine Ausgabe dieses Texts (oder eines dieser Teile) auf die neue Stimme? Für den Lade-Zustand der Anhören-Knöpfe. */
+export function useSpeakWaiting(text: string | readonly string[]): boolean {
+  return useSpeech((s) => {
+    const w = s.waiting;
+    if (w === null) return false;
+    return typeof text === 'string' ? w === text.trim() : text.some((p) => p.trim() === w);
+  });
+}
 
 function env(): Env | null {
   if (typeof window === 'undefined') return null;
@@ -372,7 +385,7 @@ function finishCurrent(outcome: SpeakOutcome): void {
   stopWake();
   stopNeural();
   if (c) {
-    useSpeech.setState({ speaking: false });
+    useSpeech.setState({ speaking: false, waiting: null });
     c.finish(outcome);
   }
 }
@@ -501,12 +514,17 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
     const alive = () => id === session && current?.id === id;
     // Zuletzt angesagtes Stück der neuen Stimme: fällt sie aus, spricht die Gerätestimme ab dem nächsten weiter.
     let said = from - 1;
+    const shown = text.trim();
     void speakNeural({
       chunks,
       from,
       rate,
       voice: neuralVoice(opts),
       alive,
+      // Stimme 2.0: Satz wird erst gerechnet → der Knopf zeigt „lädt“ (statt sofort die Gerätestimme).
+      onWait: (on) => {
+        if (alive()) useSpeech.setState({ waiting: on ? shown : null });
+      },
       onChunk: (i) => {
         said = i;
         const listener = current?.onChunk;
@@ -527,7 +545,9 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
         speakChunk(dev, chunks, Math.max(from, said + 1), id, rate);
         return;
       }
-      finishCurrent(o === 'unavailable' ? 'unavailable' : o);
+      // `slow`: die gute Stimme war diesmal nicht rechtzeitig fertig – still bleiben statt Gerätestimme (Emrah 26.11.2026); der Satz rechnet
+      // weiter in den Tonvorrat und spielt beim nächsten Tipp sofort.
+      finishCurrent(o === 'slow' ? 'error' : o);
     });
   });
 }
@@ -539,6 +559,19 @@ function speakWithNeural(text: string, opts: SpeakOptions): Promise<SpeakOutcome
 export function prefetchSpeech(text: string, opts: Pick<SpeakOptions, 'rate'> = {}): void {
   if (!text.trim() || !neuralWanted()) return;
   prefetchNeural(chunkText(text), neuralVoice({}), clampRate(opts.rate ?? prefs.rate));
+}
+
+/** Lohnt es, Texte für `planSpeech` zusammenzustellen? (nein ohne neue Stimme oder wenn diese Maschine so weit nicht vorab rechnet) */
+export const planSpeechWanted = (prio: 'next' | 'later'): boolean => neuralWanted() && planAccepts(prio);
+
+/**
+ * Stimme 2.0: Texte, die heute sicher vorgelesen werden (nächste Karten, Rest der Runde), im Leerlauf vorab rechnen lassen (Tonvorrat).
+ * `prio`: `next` = gleich dran (nach dem Sichtbaren), `later` = Rest der Runde. Ohne neue Stimme passiert nichts.
+ */
+export function planSpeech(texts: readonly string[], opts: { prio?: 'next' | 'later'; rate?: number } = {}): void {
+  if (!planSpeechWanted(opts.prio ?? 'later')) return;
+  const chunks = texts.flatMap((t) => (t.trim() ? chunkText(t) : []));
+  if (chunks.length) planNeural(chunks, neuralVoice({}), clampRate(opts.rate ?? prefs.rate), opts.prio ?? 'later');
 }
 
 export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutcome> {
@@ -653,5 +686,5 @@ export function resetSpeech(): void {
   current = null;
   startTimer = null;
   voiceOverride = null;
-  useSpeech.setState({ status: 'loading', voiceName: null, speaking: false, voices: [] });
+  useSpeech.setState({ status: 'loading', voiceName: null, speaking: false, waiting: null, voices: [] });
 }

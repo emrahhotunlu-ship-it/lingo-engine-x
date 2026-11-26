@@ -516,6 +516,21 @@
   outline: 2px solid var(--act);
   outline-offset: 2px;
 }
+/* Stimme 2.0: der Anhören-Knopf wartet auf die gute Stimme (der Satz wird gerade gerechnet) – ruhiges Pulsieren, kein Kreisel. */
+[data-voice-wait] svg {
+  animation: lx-voice-wait 1.1s ease-in-out 0.15s infinite;
+}
+@keyframes lx-voice-wait {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-voice-wait] svg {
+    animation: none;
+    opacity: 0.5;
+  }
+}
 .lx-kwordcard {
   display: flex;
   flex-direction: column;

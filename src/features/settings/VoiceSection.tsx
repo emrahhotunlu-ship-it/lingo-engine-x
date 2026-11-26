@@ -11,6 +11,7 @@ import { toast } from '../../ui/Toast';
 import { AUTOPLAY_KEY, autoplayOn, SPEAK_NEW_KEY, speakNewOn } from '../../app/voice/autoplay';
 import { resolveVoice } from '../../domain/progress/settings';
 import { isNeuralVoice, NEURAL_VOICES, useNeuralVoice } from '../../platform/voice/neural';
+import { useClipStore } from '../../platform/voice/clipStore';
 
 // Einstellungen „Stimme“ (Plan §5.6): englische Stimmen (en-US zuerst) mit Probehören, Tempo
 // 0,8–1,1 (gespeichert beim Loslassen, nicht beim Ziehen), „Antworten im Rollenspiel vorlesen“.
@@ -47,6 +48,9 @@ export function VoiceSection() {
   const neuralPct = useNeuralVoice((s) => s.pct);
   const neuralMs = useNeuralVoice((s) => s.loadMs);
   const neuralCache = useNeuralVoice((s) => s.fromCache);
+  const neuralWorker = useNeuralVoice((s) => s.worker);
+  // Stimme 2.0: Tonvorrat (Sätze, Größe) und wie oft heute sofort aus Gedächtnis/Vorrat gespielt wurde.
+  const clips = useClipStore();
   const neuralOn = neural === 'ready' || neural === 'loading';
   const neuralCurrent = isNeuralVoice(typeof profile?.voice === 'string' ? profile.voice : null) ? (profile?.voice as string) : 'af_heart';
   const [rate, setRate] = useState(savedRate);
@@ -120,7 +124,17 @@ export function VoiceSection() {
             {neural === 'ready'
               ? `${t('voiceNeuralReady')}${neuralMs !== null ? ` · ${t(neuralCache ? 'voiceNeuralCache' : 'voiceNeuralDown', { s: (neuralMs / 1000).toFixed(1).replace('.', lang === 'de' ? ',' : '.') })}` : ''}`
               : `${t('voiceNeuralLoading')}${neuralPct > 0 ? ` ${neuralPct} %` : ''}`}
+            {neural === 'ready' ? ` · ${t(neuralWorker ? 'voiceNeuralWorker' : 'voiceNeuralMain')}` : ''}
           </p>
+          {clips.ready && (
+            <p className="text-sm text-muted" data-testid="voice-clips">
+              {clips.on
+                ? `${t('voiceClips', { n: String(clips.count), mb: (clips.bytes / 1_048_576).toFixed(1).replace('.', lang === 'de' ? ',' : '.') })}${
+                    clips.hits + clips.misses > 0 ? ` · ${t('voiceClipsHits', { pct: String(Math.round((100 * clips.hits) / (clips.hits + clips.misses))), total: String(clips.hits + clips.misses) })}` : ''
+                  }`
+                : t('voiceClipsOff')}
+            </p>
+          )}
           <div role="radiogroup" aria-label={t('voiceTitle')} className="flex flex-col gap-1" data-testid="voice-neural-select">
             {NEURAL_VOICES.map((v) => {
               const on = v.id === neuralCurrent;

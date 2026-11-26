@@ -12,10 +12,13 @@ import {
   maskOf,
   playGapTone,
   primeGapTone,
+  planSpeech,
+  planSpeechWanted,
   speak,
   stopSpeech,
   useHiddenInput,
   useHotkeys,
+  useSpeakWaiting,
   useSpeech,
   usePrefetchSpeech,
   useClock,
@@ -83,6 +86,19 @@ function fullText(card: CardModel): { text: string; start: number; end: number }
   return start < 0 ? null : { text, start, end };
 }
 
+/**
+ * Stimme 2.0: alles, was eine Karte vorlesen kann (Wort, Wort ohne „to“, ihr eigener Ton, der ganze Satz, die Satzteile vor dem Prüfen) –
+ * damit es vorab gerechnet im Tonvorrat liegt, bevor Emrah tippt.
+ */
+export function cardSpeechTexts(card: CardModel, listenFirst: boolean): string[] {
+  const all = [card.head, baseAnswer(card.head), audioOf(card), fullText(card)?.text, ...(listenFirst ? (gapParts(card) ?? []) : [])];
+  return [...new Set(all.filter((x): x is string => typeof x === 'string' && x.trim().length > 0).map((x) => x.trim()))];
+}
+
+/** So viele Karten der Runde rechnet die Stimme höchstens vorab (die nächsten drei zuerst). */
+const PLAN_CARDS = 40;
+const PLAN_NEXT = 3;
+
 /** „Satz vor dem Prüfen anhören“: die Teile zwischen den Lücken; jede Lücke wird beim Abspielen ein kurzer Ton. */
 function gapParts(card: CardModel): string[] | null {
   const s = card.sentence;
@@ -102,6 +118,7 @@ const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 function ListenButton({ parts, testId, onSpent }: { parts: readonly string[]; testId: string; onSpent?: (ms: number) => void }) {
   const { t } = useT();
   const status = useSpeech((x) => x.status);
+  const waiting = useSpeakWaiting(parts);
   usePrefetchSpeech(parts);
   const run = useRef(0);
   const mine = useRef(false);
@@ -138,7 +155,7 @@ function ListenButton({ parts, testId, onSpent }: { parts: readonly string[]; te
   return (
     <div>
       {/* ux-reviewer W7 Nr. 9: dieselbe Kapsel wie „Anhören“ beim Wort (vorher zwei Stile, am Monitor kaum sichtbar). */}
-      <button type="button" className="lx-kspeak" onClick={() => void play()} data-testid={testId} data-parts={parts.length}>
+      <button type="button" className="lx-kspeak" onClick={() => void play()} data-testid={testId} data-parts={parts.length} aria-busy={waiting || undefined} data-voice-wait={waiting ? '' : undefined}>
         <Icon name="speaker" size={18} aria-hidden="true" />
         <span>{t('vmListen')}</span>
       </button>
@@ -180,10 +197,19 @@ function partnersNode(t: T, partners: Band['partners']): ReactNode {
 function SpeakWord({ text, testId }: { text: string; testId: string }) {
   const { t } = useT();
   const status = useSpeech((x) => x.status);
+  const waiting = useSpeakWaiting(text);
   usePrefetchSpeech(text);
   if (status === 'unsupported' || status === 'novoice' || !text) return null;
   return (
-    <button type="button" className="lx-kspeak" onClick={() => void speak(text)} aria-label={t('kernListenWord', { word: text })} data-testid={testId}>
+    <button
+      type="button"
+      className="lx-kspeak"
+      onClick={() => void speak(text)}
+      aria-label={t('kernListenWord', { word: text })}
+      data-testid={testId}
+      aria-busy={waiting || undefined}
+      data-voice-wait={waiting ? '' : undefined}
+    >
       <Icon name="speaker" size={18} aria-hidden="true" />
       <span>{t('kernListen')}</span>
     </button>
@@ -459,6 +485,17 @@ function CardInner({ view, run }: { view: CardView | BandView; run: LearnRun }) 
   // Ton der nächsten Karte vorab rechnen (einmal je Karte), damit er beim Erscheinen sofort spielt.
   const [upcoming] = useState(() => run.upcomingAudio());
   usePrefetchSpeech(upcoming ?? '');
+  // Stimme 2.0: die nächsten Karten und der Rest der Runde (= heutiger Wörter-Plan) kommen in den Vorab-Plan; gerechnet wird nur im Leerlauf.
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      if (!planSpeechWanted('next')) return;
+      const lf = run.listenFirst();
+      const ahead = run.aheadCards(planSpeechWanted('later') ? PLAN_CARDS : PLAN_NEXT);
+      planSpeech(ahead.slice(0, PLAN_NEXT).flatMap((c) => cardSpeechTexts(c, lf)), { prio: 'next' });
+      planSpeech(ahead.slice(PLAN_NEXT).flatMap((c) => cardSpeechTexts(c, lf)), { prio: 'later' });
+    }, 600);
+    return () => window.clearTimeout(id);
+  }, [run, card.path, view.n]);
   // Jede neue Karte ist sofort tippbereit (UX-Neuanfang 02.11.2026): der Cursor steht in der Lücke, auf jedem Gerät. Am Handy hält „Weiter“
   // die Tastatur offen (das Feld bleibt dasselbe und wird im Tipp selbst fokussiert); ohne Lücke (Anki-Karte) ruht das Feld. Einmal je Karte.
   const focused = useRef(false);

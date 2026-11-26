@@ -4,6 +4,7 @@ import { FAKE_VOICES, installFakeSpeech } from './fakeSpeech';
 import type { SpeechVoiceLike } from '../speech';
 
 import { installFakeStt, type FakeSttMode } from './fakeStt';
+import { installFakeNeural, type FakeNeuralOptions } from './fakeNeural';
 import { carePatch } from './careSample';
 
 const FAKE_DE_VOICE: SpeechVoiceLike = Object.freeze({ name: 'Anna', lang: 'de-DE', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Anna' });
@@ -22,6 +23,8 @@ export type InstallOptions = Omit<FakeOptions, 'seed'> & {
   speech?: boolean;
   /** Phase 3: Spracheingabe nachbilden; Standard 'absent' (kein Mikrofon-Knopf). */
   stt?: FakeSttMode;
+  /** Stimme 2.0: nachgebildete neue Stimme (sonst lädt sie unter Testwerkzeugen nie). Gerechnete Texte stehen in `neural`. */
+  neural?: FakeNeuralOptions;
 };
 
 declare global {
@@ -74,7 +77,7 @@ export function largeSeed(): Record<string, Record<string, unknown>> {
 
 export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | null {
   if ((window as { claude?: unknown }).claude) return null;
-  const { seed, patch, speech, stt, ...rest } = opts;
+  const { seed, patch, speech, stt, neural, ...rest } = opts;
   const resolved: FakeOptions = { ...rest };
   let base: Record<string, Record<string, unknown>> = {};
   if (seed === 'sample' || seed === undefined) base = sampleSeed();
@@ -91,6 +94,7 @@ export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | nul
   if (speech !== false) installFakeSpeech(window, { spoken: fake.control.spoken, voices: [...FAKE_VOICES, FAKE_DE_VOICE, FAKE_US_VOICE2] });
   const sttHandle = installFakeStt(window, stt ?? 'absent');
   fake.control.sttSay = (text: string) => sttHandle.say(text);
+  if (neural) installFakeNeural(window, neural, fake.control.neural);
   window.__LINGO_FAKE__ = fake.control;
   return fake.control;
 }

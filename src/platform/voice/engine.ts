@@ -28,10 +28,16 @@ export type EngineDevice = 'webgpu' | 'wasm';
 export type EngineOptions = {
   /** 'wasm': gleich auf dem Prozessor rechnen (der Grafikchip hat hier schon gehangen, z. B. Safari am Mac). Sonst Grafikchip, wenn da. */
   device?: EngineDevice;
+  /** Adresse, gegen die Paket und Rechenkern-Lader aufgelöst werden (Stimme 2.0: im Hintergrund-Rechner gibt es kein `document`). */
+  base?: string;
 };
 
 export type Engine = {
   device: EngineDevice;
+  /** Stand des Stimmen-Pakets (`voice-manifest.json` › `v`): Teil des Schlüssels im Tonvorrat (Stimme 2.0). */
+  version: string;
+  /** Rechnet im Hintergrund-Rechner (Web Worker) statt im Hauptfaden (Stimme 2.0). */
+  worker?: boolean;
   fromCache: boolean;
   /** Ladezeit in ms (aus dem Speicher bzw. mit Herunterladen). */
   loadMs: number;
@@ -103,7 +109,7 @@ function fromBase64(text: string): Uint8Array<ArrayBuffer> {
   return out;
 }
 
-async function download(man: PackManifest, onProgress: EngineProgress): Promise<Uint8Array> {
+async function download(man: PackManifest, base: string, onProgress: EngineProgress): Promise<Uint8Array> {
   const all = new Uint8Array(man.total);
   const ds = new DecompressionStream('gzip');
   const writer = ds.writable.getWriter();
@@ -119,7 +125,7 @@ async function download(man: PackManifest, onProgress: EngineProgress): Promise<
   })();
   for (let i = 0; i < man.parts.length; i++) {
     const name = man.parts[i] as string;
-    const r = await fetch(name);
+    const r = await fetch(new URL(name, base).href);
     if (!r.ok) throw new Error(`voice part ${name}: ${r.status}`);
     await writer.write(fromBase64(await r.text()));
     onProgress({ phase: 'download', pct: Math.round(((i + 1) / man.parts.length) * 100) });
@@ -136,12 +142,13 @@ let shimmed: Map<string, Uint8Array> | null = null;
 
 function installFetch(files: Map<string, Uint8Array>): void {
   shimmed = files;
-  const w = window as unknown as { __lxVoiceFetch?: string };
+  // `globalThis`: Hauptfaden (window) und Hintergrund-Rechner (self) gleich.
+  const w = globalThis as unknown as { __lxVoiceFetch?: string; fetch: typeof fetch };
   if (w.__lxVoiceFetch) return;
   // Trägt die Kennung ins gebaute Stück (scripts/check-platform.mjs erkennt das Stimmen-Stück daran).
   w.__lxVoiceFetch = VOICE_ENGINE_MARK;
-  const real = window.fetch.bind(window);
-  window.fetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const real = w.fetch.bind(globalThis);
+  w.fetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
     const map = shimmed;
     if (map) {
@@ -170,10 +177,11 @@ async function hasGpu(): Promise<boolean> {
 /** Lädt Paket und Modell; wirft bei jedem Fehler (der Aufrufer bleibt dann bei der Gerätestimme). */
 export async function loadEngine(onProgress: EngineProgress, opts: EngineOptions = {}): Promise<Engine> {
   const t0 = performance.now();
-  // Bitte an den Browser, den Speicher nicht von selbst zu räumen (sonst lädt die Stimme wieder 210 MB herunter).
+  const base = opts.base ?? (typeof document !== 'undefined' ? document.baseURI : String((globalThis as { location?: { href: string } }).location?.href ?? ''));
+  // Bitte an den Browser, den Speicher nicht von selbst zu räumen (sonst lädt die Stimme wieder 210 MB herunter). Nur im Hauptfaden vorhanden.
   const st = (navigator as unknown as { storage?: { persist?: () => Promise<boolean> } }).storage;
-  if (st?.persist) void st.persist().catch((err: unknown) => logWarn('voice:persist', err));
-  const mr = await fetch('voice-manifest.json');
+  if (typeof st?.persist === 'function') void st.persist().catch((err: unknown) => logWarn('voice:persist', err));
+  const mr = await fetch(new URL('voice-manifest.json', base).href);
   if (!mr.ok) throw new Error(`voice manifest: ${mr.status}`);
   const man = (await mr.json()) as PackManifest;
   let db: IDBDatabase | null;
@@ -195,7 +203,7 @@ export async function loadEngine(onProgress: EngineProgress, opts: EngineOptions
   const fromCache = all !== null;
   if (all) onProgress({ phase: 'cache', pct: 100 });
   else {
-    all = await download(man, onProgress);
+    all = await download(man, base, onProgress);
     if (db) {
       try {
         await writeCache(db, man, all);
@@ -212,7 +220,7 @@ export async function loadEngine(onProgress: EngineProgress, opts: EngineOptions
   hfEnv.allowLocalModels = false;
   const onnx = hfEnv.backends.onnx as { wasm?: { wasmPaths?: unknown; numThreads?: number } };
   if (onnx.wasm) {
-    onnx.wasm.wasmPaths = { mjs: new URL('voice-ort.js', document.baseURI).href, wasm: new URL(WASM_NAME, document.baseURI).href };
+    onnx.wasm.wasmPaths = { mjs: new URL('voice-ort.js', base).href, wasm: new URL(WASM_NAME, base).href };
     onnx.wasm.numThreads = 1;
   }
   onProgress({ phase: 'start', pct: 0 });
@@ -248,6 +256,7 @@ export async function loadEngine(onProgress: EngineProgress, opts: EngineOptions
   const loadMs = Math.round(performance.now() - t0);
   return {
     device,
+    version: man.v,
     fromCache,
     loadMs,
     lost: () => lost,

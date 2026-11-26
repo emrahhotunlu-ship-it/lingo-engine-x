@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 
 export const VOICE_ORT_FILE = 'voice-ort.js';
 
-export function voiceOrt({ multi }) {
+// `emitOrt: false`: im Bau des Hintergrund-Rechners (Stimme 2.0, vite.config.ts › worker) nur umschreiben, voice-ort.js legt der Hauptbau an.
+export function voiceOrt({ multi, emitOrt = true }) {
   return {
     name: 'lx-voice-ort',
     apply: 'build',
@@ -23,6 +24,7 @@ export function voiceOrt({ multi }) {
     generateBundle(_opts, bundle) {
       if (!multi) return;
       for (const c of Object.values(bundle)) if (c.type === 'chunk' && c.code.includes('\uFFFD')) c.code = c.code.replaceAll('\uFFFD', '\\uFFFD');
+      if (!emitOrt) return;
       const src = readFileSync(fileURLToPath(new URL('../node_modules/@huggingface/transformers/dist/ort-wasm-simd-threaded.jsep.mjs', import.meta.url)), 'utf8');
       this.emitFile({ type: 'asset', fileName: VOICE_ORT_FILE, source: `/* lx:voice-engine onnxruntime-web 1.22 (MIT) */\n${src}` });
     },

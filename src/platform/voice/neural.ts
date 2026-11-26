@@ -3,18 +3,33 @@ import { ensureStreamAsyncIterator } from '../compat';
 import { logInfo, logWarn } from '../diagnostics';
 import { inputQuietLeft, resetInputQuiet, whenIdle } from '../inputQuiet';
 import { local } from '../storage';
+import { clipStoreKey, clipStored, dropOtherVersions, knownVoiceVersion, noteClipUse, openClipStore, readClip, writeClip, type Clip } from './clipStore';
 import type { Engine, EngineDevice } from './engine';
 
 // Neue Stimme (Kokoro, Emrahs Auftrag 09.11.2026): ersetzt die Gerätestimme beim Vorlesen. Dieses Modul bleibt klein
-// und liegt im Haupt-Bündel; Modell und Bibliothek kommen erst mit `engine.ts` (eigenes, nachgeladenes Stück).
-// Ablauf: kurz nach dem Start wird im Hintergrund geladen (beim ersten Mal ~210 MB, danach aus dem Browser-Speicher).
-// Solange sie lädt, wartet ein Antippen auf sie; schlägt das Laden fehl, spricht wie bisher die Gerätestimme.
+// und liegt im Haupt-Bündel; Modell und Bibliothek kommen erst mit `engine.ts` (eigenes, nachgeladenes Stück) – seit Stimme 2.0
+// bevorzugt im Hintergrund-Rechner (`workerHost.ts` + `worker.ts`), sonst wie bisher im Hauptfaden.
+// Stimme 2.0 (Emrah 26.11.2026: „auf Handy und Mac IMMER die gute Stimme, schnell und immer verfügbar“, docs/umbau/stimme.md):
+// - Tonvorrat (`clipStore.ts`): jeder gerechnete Satz bleibt im Browser; Abspielen daraus startet sofort, auch bevor die Stimme geladen ist.
+// - Vorab-Rechnen (`planNeural`): in Tipp-Pausen die Sätze der nächsten Karten und der ganzen Runde, mit Pausen und Obergrenze.
+// - Nie mehr die Gerätestimme, nur weil ein Satz dauert: der Knopf zeigt „lädt“, die gute Stimme spielt, sobald sie fertig ist.
+//   Gerätestimme nur, wenn die gute Stimme hier gar nicht lädt (Status `failed`) oder beim allerersten Herunterladen.
+// - Aufwärmen nach dem Zurückkehren: ein kurzer Satz wird still gerechnet, damit Grafikchip/Rechner wach sind, bevor Emrah tippt.
 
 export type NeuralStatus = 'off' | 'loading' | 'ready' | 'failed';
 
-type NeuralState = { status: NeuralStatus; pct: number; phase: 'download' | 'cache' | 'start' | null; device: 'webgpu' | 'wasm' | null; fromCache: boolean; loadMs: number | null };
+type NeuralState = {
+  status: NeuralStatus;
+  pct: number;
+  phase: 'download' | 'cache' | 'start' | null;
+  device: 'webgpu' | 'wasm' | null;
+  /** Rechnet im Hintergrund-Rechner (Web Worker). */
+  worker: boolean;
+  fromCache: boolean;
+  loadMs: number | null;
+};
 
-export const useNeuralVoice = create<NeuralState>(() => ({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null }));
+export const useNeuralVoice = create<NeuralState>(() => ({ status: 'off', pct: 0, phase: null, device: null, worker: false, fromCache: false, loadMs: null }));
 
 /** Sprecher der neuen Stimme; Standard ist „Heart“ (US, Frau). */
 export const NEURAL_VOICES = [
@@ -27,9 +42,16 @@ let engine: Engine | null = null;
 let loading: Promise<Engine | null> | null = null;
 let ctx: AudioContext | null = null;
 
-/** Läuft die App unter einem Testwerkzeug (Playwright)? Dann wird die neue Stimme nie geladen. */
+/** Testhilfe des Entwicklungs-Adapters (E2E): eine nachgebildete Maschine statt des Stimmen-Pakets. Im echten Artefakt nie gesetzt. */
+type EngineFactory = () => Promise<Engine>;
+const testFactory = (): EngineFactory | null => {
+  const f = (globalThis as { __lxVoiceEngine?: unknown }).__lxVoiceEngine;
+  return typeof f === 'function' ? (f as EngineFactory) : null;
+};
+
+/** Läuft die App unter einem Testwerkzeug (Playwright)? Dann wird die neue Stimme nie geladen (außer mit der Testhilfe). */
 function automated(): boolean {
-  return typeof navigator !== 'undefined' && (navigator as Navigator & { webdriver?: boolean }).webdriver === true;
+  return typeof navigator !== 'undefined' && (navigator as Navigator & { webdriver?: boolean }).webdriver === true && !testFactory();
 }
 
 function supported(): boolean {
@@ -48,13 +70,63 @@ const RETRY_MS = [15_000, 60_000, 180_000];
  * gehangen hat (Safari am Mac 23.11.2026: WebGPU wird angeboten und lädt, `generate` kommt aber nie zurück). Gilt auch beim nächsten Start.
  */
 export const VOICE_DEVICE_KEY = 'lx:voice-device';
+/**
+ * Browser-Speicher: `off:<ms>` = der Hintergrund-Rechner ließ sich hier nicht starten (z. B. im Artefakt gesperrt); einen Tag lang gleich im
+ * Hauptfaden rechnen, statt jedes Mal auf ihn zu warten.
+ */
+export const VOICE_WORKER_KEY = 'lx:voice-worker';
+const WORKER_RETRY_MS = 24 * 3_600_000;
 /** In dieser Sitzung auf den Prozessor gewechselt (auch, wenn der Browser-Speicher gesperrt ist). */
 let forceWasm = false;
+/** In dieser Sitzung ohne Hintergrund-Rechner (Start gescheitert oder er hat keinen Grafikchip, der Hauptfaden aber schon). */
+let noWorker = false;
 /** Die neue Stimme hängt auch auf dem Prozessor bzw. zu oft: in dieser Sitzung nicht mehr laden, es spricht die Gerätestimme. */
 let gaveUp = false;
 
 function wantedDevice(): EngineDevice | undefined {
   return forceWasm || local.get(VOICE_DEVICE_KEY) === 'wasm' ? 'wasm' : undefined;
+}
+
+function workerWanted(): boolean {
+  if (noWorker || testFactory() || typeof (globalThis as { Worker?: unknown }).Worker !== 'function') return false;
+  const m = /^off:(\d+)$/.exec(local.get(VOICE_WORKER_KEY) ?? '');
+  return !m || Date.now() - Number(m[1]) > WORKER_RETRY_MS;
+}
+
+async function mainHasGpu(): Promise<boolean> {
+  const gpu = (navigator as unknown as { gpu?: { requestAdapter(): Promise<unknown> } }).gpu;
+  if (!gpu) return false;
+  try {
+    return (await gpu.requestAdapter()) != null;
+  } catch (err) {
+    logWarn('voice:gpu', err);
+    return false;
+  }
+}
+
+const baseUrl = (): string => (typeof document !== 'undefined' ? document.baseURI : '');
+const progress = (p: { phase: 'download' | 'cache' | 'start'; pct: number }): void => useNeuralVoice.setState({ phase: p.phase, pct: p.pct });
+
+/** Maschine laden: zuerst im Hintergrund-Rechner, sonst (oder wenn der scheitert) im Hauptfaden. */
+async function startEngine(device: EngineDevice | undefined): Promise<Engine> {
+  const f = testFactory();
+  if (f) return f();
+  if (workerWanted()) {
+    try {
+      const host = await import('./workerHost');
+      return await host.loadWorkerEngine(progress, { base: baseUrl(), mainGpu: mainHasGpu, ...(device ? { device } : {}) });
+    } catch (err) {
+      noWorker = true;
+      if (err instanceof Error && err.name === 'WorkerNoGpuError') logInfo('voice:worker', 'Grafikchip nur im Hauptfaden – die neue Stimme rechnet dort');
+      else {
+        logWarn('voice:worker', err, 'Hintergrund-Rechner startet nicht – die neue Stimme rechnet im Hauptfaden');
+        local.set(VOICE_WORKER_KEY, `off:${Date.now()}`);
+      }
+      useNeuralVoice.setState({ pct: 0, phase: null });
+    }
+  }
+  const m = await import('./engine');
+  return m.loadEngine(progress, device ? { device } : {});
 }
 
 /** Startet das Laden (einmal). Liefert die Maschine oder `null`, wenn die neue Stimme hier (noch) nicht läuft. */
@@ -67,14 +139,22 @@ export function loadNeuralVoice(): Promise<Engine | null> {
   const device = wantedDevice();
   // Safari: die Lautschrift im Stimmen-Stück braucht `for await` über einen ReadableStream (sonst hängt jedes `generate`).
   if (ensureStreamAsyncIterator()) logInfo('voice:compat', 'ReadableStream-Durchlauf nachgerüstet (Safari)');
-  const run: Promise<Engine | null> = import('./engine')
-    .then((m) => m.loadEngine((p) => useNeuralVoice.setState({ phase: p.phase, pct: p.pct }), device ? { device } : {}))
+  // Bitte an den Browser, Paket und Tonvorrat nicht von selbst zu räumen (nur im Hauptfaden möglich).
+  const st = (navigator as unknown as { storage?: { persist?: () => Promise<boolean> } }).storage;
+  if (typeof st?.persist === 'function') void st.persist().catch((err: unknown) => logWarn('voice:persist', err));
+  void openClipStore();
+  const run: Promise<Engine | null> = startEngine(device)
     .then((e) => {
       engine = e;
       engineOk = 0;
       failures = 0;
-      useNeuralVoice.setState({ status: 'ready', device: e.device, fromCache: e.fromCache, loadMs: e.loadMs, pct: 100 });
-      logInfo('voice:ready', `${e.device}, ${e.fromCache ? 'aus dem Speicher' : 'heruntergeladen'}, ${(e.loadMs / 1000).toFixed(1)} s`);
+      if (loading === run) loading = null;
+      useNeuralVoice.setState({ status: 'ready', device: e.device, worker: e.worker === true, fromCache: e.fromCache, loadMs: e.loadMs, pct: 100 });
+      logInfo('voice:ready', `${e.device}${e.worker ? ' im Hintergrund' : ''}, ${e.fromCache ? 'aus dem Speicher' : 'heruntergeladen'}, ${(e.loadMs / 1000).toFixed(1)} s`);
+      void openClipStore().then(() => dropOtherVersions(e.version));
+      // Im Hintergrund-Rechner gleich still aufwärmen (Grafikchip-Programme bauen), dann das Vorab-Rechnen anstoßen.
+      if (e.worker) void warmUp(e, 'ready');
+      kickPlan(0);
       return e;
     })
     .catch((err: unknown) => {
@@ -94,27 +174,39 @@ export function loadNeuralVoice(): Promise<Engine | null> {
 /** Gleich nach dem Start im Hintergrund laden (kurz warten, damit der erste Bildschirm zuerst steht). */
 export function scheduleNeuralVoice(delayMs = 300): void {
   if (!supported() || loading || engine) return;
+  // Der Tonvorrat öffnet sofort: gespeicherte Sätze spielen schon, während die Stimme noch lädt.
+  void openClipStore();
   setTimeout(() => void loadNeuralVoice(), delayMs);
 }
 
 /**
- * Soll `speak` die neue Stimme nehmen? Nur, wenn sie fertig geladen ist (Emrah 10.11.2026: bis dahin sofort die Gerätestimme,
- * danach automatisch die neue). Eine abgebrochene Ladung wird beim nächsten Vorlesen wieder angestoßen.
+ * Soll `speak` die neue Stimme nehmen? Stimme 2.0: immer, außer sie läuft hier gar nicht (nicht unterstützt, Laden gescheitert, aufgegeben).
+ * Ob sie einen Satz schon hat oder erst rechnet bzw. lädt, entscheidet `speakNeural` (dort wartet der Knopf sichtbar).
  */
 export function neuralWanted(): boolean {
+  if (!supported() || gaveUp) return false;
   const s = useNeuralVoice.getState().status;
-  // Nach dem Hintergrund wird die Stimme erst kurz geprüft (`checkAfterReturn`); so lange spricht die Gerätestimme.
-  if (s === 'ready') return !checking && !busyTooLong();
+  if (s !== 'failed') return true;
   // Alle geplanten Versuche vorbei: höchstens alle 5 Minuten beim Vorlesen einen neuen anstoßen.
-  if (s === 'failed' && !gaveUp && !loading && failures > RETRY_MS.length && Date.now() - lastTry > 300_000) void loadNeuralVoice();
+  if (!loading && failures > RETRY_MS.length && Date.now() - lastTry > 300_000) void loadNeuralVoice();
   return false;
 }
 
 /** Die App war im Hintergrund (iPhone: App minimiert): die Tonausgabe danach im nächsten Tipp frisch aufbauen. */
 let wasHidden = false;
 let hiddenAt = 0;
-/** Läuft gerade die Prüfung nach dem Zurückkehren? Dann spricht die Gerätestimme (Emrah 10.11.2026: „nach einer Zeit gar keine Sprachausgabe“). */
-let checking = false;
+/**
+ * Ab so langer Abwesenheit wird nach dem Zurückkehren still aufgewärmt: im Hintergrund-Rechner schon nach 5 s (kostet die App nichts), im
+ * Hauptfaden wie bisher nach 20 s und nur auf dem Grafikchip (auf dem Prozessor hielte der Mini-Satz die App sekundenlang an).
+ */
+const WARM_AFTER_MS = { worker: 5_000, main: 20_000 };
+function onReturn(): void {
+  const e = engine;
+  // Zurück in der App und die Stimme fehlt noch: gleich neu versuchen.
+  if (!e && !loading && !gaveUp && useNeuralVoice.getState().status === 'failed') void loadNeuralVoice();
+  else if (e && (e.worker || e.device !== 'wasm' || e.lost()) && Date.now() - hiddenAt > (e.worker ? WARM_AFTER_MS.worker : WARM_AFTER_MS.main)) void warmUp(e, 'return');
+  kickPlan(500);
+}
 if (typeof document !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
@@ -122,30 +214,47 @@ if (typeof document !== 'undefined') {
       hiddenAt = Date.now();
       return;
     }
-    // Zurück in der App und die Stimme fehlt noch: gleich neu versuchen.
-    if (!engine && !loading && !gaveUp && useNeuralVoice.getState().status === 'failed') void loadNeuralVoice();
-    // Länger weg (iPhone räumt dann oft Grafikchip und Speicher): kurz prüfen, ob die Stimme noch rechnet.
-    else if (engine && Date.now() - hiddenAt > 20_000) void checkAfterReturn(engine);
+    onReturn();
   });
+  // Safari: Rückkehr aus dem Verlauf-Speicher (zurück-Taste, Wechsel zwischen Tabs am iPhone) meldet nur `pageshow`.
+  if (typeof window !== 'undefined')
+    window.addEventListener('pageshow', (ev) => {
+      if (ev.persisted) {
+        wasHidden = true;
+        onReturn();
+      }
+    });
 }
 
-/** Ein kurzes Wort rechnen (höchstens 8 s); bei Fehler oder Grafikchip-Verlust neu laden. Bis dahin spricht die Gerätestimme. */
-async function checkAfterReturn(e: Engine): Promise<void> {
-  if (checking) return;
-  checking = true;
+/** Läuft gerade ein Aufwärmen? (nur eins zur Zeit) */
+let warming = false;
+const WARM_TEXT = 'Hi.';
+
+/**
+ * Still einen Mini-Satz rechnen (nicht abspielen), damit Grafikchip bzw. Rechner wach sind, bevor Emrah tippt: nach dem Laden und nach dem
+ * Zurückkehren. Grafikchip verloren → neu laden; Fehler → neu laden. Kein Wechsel zur Gerätestimme. Protokoll nur, wenn es auffällig dauert.
+ */
+async function warmUp(e: Engine, why: 'ready' | 'return'): Promise<void> {
+  if (warming) return;
+  warming = true;
+  const t0 = Date.now();
   try {
     if (e.lost()) {
       await rebuild(e, 'gpu lost');
       return;
     }
-    const ok = await within(synth('Hi.', 'af_heart', 1, true, () => true), Math.max(8_000, limitsOf(e).next));
-    // Noch keine Antwort: der Wächter (Grenzwert `hang` je Gerät) lädt neu, falls die Maschine wirklich hängt.
-    logInfo('voice:check', ok ? 'Stimme nach dem Zurückkehren in Ordnung' : 'Stimme antwortet langsam');
+    const voice = 'af_heart';
+    // Ein eigener Schlüssel je Aufwärmen, damit wirklich gerechnet wird (nicht aus dem Gedächtnis).
+    const out = await synth(WARM_TEXT, voice, 1, true, () => true, `warm|${t0}`);
+    const ms = Date.now() - t0;
+    if (out && ms > 3_000) logInfo('voice:warm', `${why === 'return' ? 'nach dem Zurückkehren' : 'nach dem Laden'} wach nach ${(ms / 1000).toFixed(1)} s`);
   } catch (err) {
-    logWarn('voice:check', err);
-    if (!(err instanceof StaleError)) await rebuild(e, 'check');
+    if (!(err instanceof StaleError)) {
+      logWarn('voice:warm', err);
+      await rebuild(e, 'check');
+    }
   } finally {
-    checking = false;
+    warming = false;
   }
 }
 
@@ -233,17 +342,20 @@ export type NeuralRun = {
   /** Ist diese Ausgabe noch die aktuelle? (sonst still beenden) */
   alive: () => boolean;
   onChunk: (i: number) => void;
+  /** Wartet die Ausgabe gerade auf einen Satz, der erst gerechnet wird? (Knopf zeigt dann „lädt“) */
+  onWait?: (waiting: boolean) => void;
 };
+
+/** `slow` = die gute Stimme war diesmal nicht rechtzeitig fertig: still bleiben (nicht die Gerätestimme), der Satz landet im Vorrat. */
+export type NeuralOutcome = 'done' | 'stopped' | 'unavailable' | 'slow' | 'error';
 
 // ---------------------------------------------------------------- Rechnen: eins nach dem anderen, mit Gedächtnis
 // Emrah 10.11.2026 („auf einmal ging es nicht mehr und das Handy wurde laggy … es dauert immer so eine Sekunde“):
 // - Der Grafikchip rechnet immer nur EINEN Satz; neue Tipps überholen das Vorab-Rechnen, veraltete Aufträge fallen weg.
-// - Fertig gerechnete Sätze bleiben im Gedächtnis (zuletzt benutzte zuerst): nochmal anhören kommt sofort.
-// - Der Satz der sichtbaren Karte wird vorab gerechnet (`prefetchNeural`), der Tipp spielt dann ohne Wartezeit.
-// - Dauert ein Satz zu lange, spricht diesmal die Gerätestimme; die neue Stimme wird dafür NICHT neu geladen
-//   (früher: jedes Zeitlimit lud ~190 MB nach, während die alte noch im Speicher lag → Ruckeln, dann Stille).
+// - Fertig gerechnete Sätze bleiben im Gedächtnis (zuletzt benutzte zuerst) und seit Stimme 2.0 dauerhaft im Tonvorrat.
+// - Dauert ein Satz, wartet der Tipp sichtbar (bis `wait` je Gerät); die neue Stimme wird dafür NICHT neu geladen, nur bei echtem Hänger.
 
-export type Clip = { audio: Float32Array; rate: number };
+export type { Clip };
 
 /** Gedächtnis: höchstens so viele Abtastwerte (≈ 16 MB) und Einträge. */
 const CACHE_SAMPLES = 4_000_000;
@@ -251,6 +363,11 @@ const CACHE_MAX = 60;
 const cache = new Map<string, Clip>();
 let cacheSamples = 0;
 const clipKey = (text: string, voice: string, speed: number) => `${voice}|${speed.toFixed(2)}|${text}`;
+/** Schlüssel im Tonvorrat (mit Paket-Stand; ohne bekannten Stand kein Vorrat). */
+const storeKeyOf = (text: string, voice: string, speed: number): string | null => {
+  const v = engine?.version ?? knownVoiceVersion();
+  return v ? clipStoreKey(v, voice, speed, text) : null;
+};
 
 function cacheGet(k: string): Clip | undefined {
   const v = cache.get(k);
@@ -273,7 +390,7 @@ function cachePut(k: string, v: Clip): void {
   }
 }
 
-type Job = { key: string; text: string; voice: string; speed: number; urgent: boolean; wanted: () => boolean; promise: Promise<Clip>; resolve: (c: Clip) => void; reject: (e: Error) => void };
+type Job = { key: string; text: string; voice: string; speed: number; urgent: boolean; store: boolean; wanted: () => boolean; promise: Promise<Clip>; resolve: (c: Clip) => void; reject: (e: Error) => void };
 
 const queue: Job[] = [];
 const pending = new Map<string, Job>();
@@ -284,27 +401,28 @@ let running: Running | null = null;
 let engineOk = 0;
 
 type Limits = {
-  /** So lange wartet ein Tipp auf den ersten Satz, sonst spricht diesmal die Gerätestimme. */
-  first: number;
-  /** So lange wartet der nächste Satz nach dem Ende des vorigen. */
-  next: number;
+  /** So lange wartet ein Tipp sichtbar auf einen Satz (danach still, der Satz rechnet weiter in den Vorrat). */
+  wait: number;
   /** Ab hier gilt ein Satz als hängend (die Maschine antwortet nicht mehr): dann, und nur dann, neu laden. */
   hang: number;
 };
 /**
- * Grenzwerte je Gerät. Der Prozessor ist deutlich langsamer als der Grafikchip und rechnet ohne eigenen Faden, also im
- * Hauptfaden (gemessen 23.11.2026, ein Kern der Cloud-Umgebung: „Hi.“ 4–5 s, 35 Zeichen 6,5 s, 117 Zeichen 23 s; ein Mac ist
- * etwa zwei- bis dreimal so schnell). Während des Rechnens laufen keine Wecker; ein fertiger, nur langsamer Satz zählt nie als Hänger.
+ * Grenzwerte je Maschine. Der Prozessor ist deutlich langsamer als der Grafikchip (gemessen 23.11.2026, ein Kern der Cloud-Umgebung: „Hi.“
+ * 4–5 s, 35 Zeichen 6,5 s, 117 Zeichen 23 s; ein Mac ist etwa zwei- bis dreimal so schnell). Im Hauptfaden laufen während des Rechnens keine
+ * Wecker (ein fertiger, nur langsamer Satz zählt dort nie als Hänger); im Hintergrund-Rechner laufen sie pünktlich.
  */
-const LIMITS: Record<EngineDevice, Limits> = {
-  webgpu: { first: 4_000, next: 6_000, hang: 20_000 },
-  wasm: { first: 8_000, next: 12_000, hang: 90_000 },
+const LIMITS: Record<'webgpu' | 'wasm' | 'wasmWorker', Limits> = {
+  webgpu: { wait: 15_000, hang: 20_000 },
+  wasm: { wait: 30_000, hang: 90_000 },
+  wasmWorker: { wait: 30_000, hang: 45_000 },
 };
-const limitsOf = (e: Engine): Limits => LIMITS[e.device === 'wasm' ? 'wasm' : 'webgpu'];
+const limitsOf = (e: Engine): Limits => (e.device === 'wasm' ? (e.worker ? LIMITS.wasmWorker : LIMITS.wasm) : LIMITS.webgpu);
+/** Wartezeit eines Tipps, solange noch keine Maschine da ist (sie lädt gerade aus dem Speicher). */
+const WAIT_LOADING_MS = 15_000;
 /** Kommt ein Wecker so viel zu spät, war der Hauptfaden vom Rechnen belegt: dann erst kurz nachsehen, ob der Satz fertig ist. */
 const LATE_MS = 1_000;
 const GRACE_MS = 1_500;
-/** Vorab gerechnet wird höchstens so viel. */
+/** Vorab-Aufträge in der Rechen-Schlange höchstens so viele (der Vorab-Plan reicht ohnehin nur einen zur Zeit herein). */
 const PREFETCH_MAX = 6;
 
 class StaleError extends Error {
@@ -313,11 +431,12 @@ class StaleError extends Error {
   }
 }
 
-function synth(text: string, voice: string, speed: number, urgent: boolean, wanted: () => boolean): Promise<Clip> {
-  const key = clipKey(text, voice, speed);
-  const hit = cacheGet(key);
+/** Rechnet einen Satz (oder holt ihn aus dem Gedächtnis). `key` nur fürs Aufwärmen (eigener Schlüssel, nie gespeichert). */
+function synth(text: string, voice: string, speed: number, urgent: boolean, wanted: () => boolean, key?: string): Promise<Clip> {
+  const k = key ?? clipKey(text, voice, speed);
+  const hit = cacheGet(k);
   if (hit) return Promise.resolve(hit);
-  const known = pending.get(key);
+  const known = pending.get(k);
   if (known) {
     if (urgent && !known.urgent) known.urgent = true;
     const before = known.wanted;
@@ -332,8 +451,8 @@ function synth(text: string, voice: string, speed: number, urgent: boolean, want
   });
   // Nicht abgeholte Ablehnungen (Vorab-Rechnen) sind gewollt still.
   promise.catch(() => undefined);
-  const job: Job = { key, text, voice, speed, urgent, wanted, promise, resolve, reject };
-  pending.set(key, job);
+  const job: Job = { key: k, text, voice, speed, urgent, store: key === undefined, wanted, promise, resolve, reject };
+  pending.set(k, job);
   queue.push(job);
   // Zu viel Vorab-Rechnen: die ältesten Vorab-Aufträge fallen weg.
   const pre = queue.filter((j) => !j.urgent);
@@ -350,13 +469,9 @@ function drop(job: Job, err: Error): void {
 }
 
 // ---------------------------------------------------------------- Eingabe-Ruhe für das Vorab-Rechnen
-// Emrah 24.11.2026 am iPhone („Eintippen, Tastatur aufklappen, zuklappen … alles echt laggy“): Das Vorab-Rechnen des sichtbaren Satzes lief
-// genau dann auf dem Grafikchip, wenn Emrah die Lücke antippte und tippte (die Lautschrift und das Anstoßen der Rechenschritte belegen dazu den
-// Hauptfaden). Gemessen (Chromium mit Software-Grafikchip, 4-fach gedrosselt, Wörter-Lücke): je Tastendruck Median 57 ms mit gegenüber 42 ms
-// ohne neue Stimme; mit dieser Regel p90 50–86 statt 67–98 ms (schwankt; der Grafikchip des iPhones lässt sich hier nicht nachstellen). Vorab-Aufträge starten deshalb erst nach einer Tipp-Pause und nie, während die Tastatur auf- oder zugeht; ein Tipp auf „Anhören“
-// (dringend) rechnet wie bisher sofort. Gestartet wird im Leerlauf des Browsers (Safari ohne `requestIdleCallback`: kurzer Wecker).
-
-// Die Ruhe-Regel selbst (Ereignisse, Ruhezeit, Leerlauf) steht in `platform/inputQuiet.ts`; die Wörter-Pflege nutzt dieselbe.
+// Emrah 24.11.2026 am iPhone („Eintippen, Tastatur aufklappen, zuklappen … alles echt laggy“): Vorab-Aufträge starten erst nach einer
+// Tipp-Pause und nie, während die Tastatur auf- oder zugeht; ein Tipp auf „Anhören“ (dringend) rechnet sofort. Die Ruhe-Regel selbst steht in
+// `platform/inputQuiet.ts`; die Wörter-Pflege nutzt dieselbe.
 export { INPUT_QUIET_MS, noteInputActivity } from '../inputQuiet';
 let quietTimer: ReturnType<typeof setTimeout> | null = null;
 const quietLeft = inputQuietLeft;
@@ -401,7 +516,7 @@ function pump(): void {
         arm(GRACE_MS);
         return;
       }
-      logWarn('voice:hang', new Error(`generate > ${lim.hang} ms (${e.device})`));
+      logWarn('voice:hang', new Error(`generate > ${lim.hang} ms (${e.device}${e.worker ? ', Hintergrund' : ''})`));
       void rebuild(e, 'hang');
     }, ms);
   };
@@ -412,7 +527,11 @@ function pump(): void {
       if (running !== mine) return;
       genErrors = 0;
       if (engine === e) engineOk += 1;
-      cachePut(j.key, out);
+      if (j.store) {
+        cachePut(j.key, out);
+        const sk = clipStoreKey(e.version, j.voice, j.speed, j.text);
+        void writeClip(sk, out);
+      }
       finish(mine);
       j.resolve(out);
     },
@@ -432,9 +551,6 @@ function finish(mine: Running): void {
   pump();
 }
 
-/** Rechnet die Maschine schon zu lange an einem Satz? Dann spricht sofort die Gerätestimme statt zu warten. */
-const busyTooLong = (): boolean => running !== null && !cache.has(running.job.key) && Date.now() - running.since > limitsOf(running.engine).first;
-
 /** Fehler beim Rechnen: Grafikchip weg → neu laden; sonst erst beim zweiten Fehler in Folge (und höchstens alle 2 Minuten). */
 let genErrors = 0;
 function onGenError(e: Engine, err: unknown): void {
@@ -443,28 +559,18 @@ function onGenError(e: Engine, err: unknown): void {
   if (e.lost() || genErrors >= 2) void rebuild(e, e.lost() ? 'gpu lost' : 'errors');
 }
 
-/**
- * Den Satz der sichtbaren Karte schon einmal rechnen (nur, wenn die neue Stimme bereit ist und die App sichtbar).
- * Kurz verzögert, damit der Kartenwechsel zuerst flüssig abläuft. Nicht auf dem Prozessor: der rechnet im Hauptfaden und
- * hielte die App sekundenlang an, während Emrah tippt – dort wird erst beim Antippen gerechnet.
- */
-export function prefetchNeural(chunks: readonly string[], voice: string, speed: number): void {
-  if (!engine || engine.device === 'wasm' || checking || chunks.length === 0) return;
-  setTimeout(() => {
-    if (!engine || engine.device === 'wasm' || checking || (typeof document !== 'undefined' && document.visibilityState === 'hidden')) return;
-    for (const c of chunks.slice(0, 2)) void synth(c, voice, speed, false, () => true).catch(() => undefined);
-  }, 350);
-}
-
-/** Wartet höchstens `ms` auf einen Satz; danach `null` (der Auftrag rechnet weiter und landet im Gedächtnis). */
-function within(p: Promise<Clip>, ms: number): Promise<Clip | null> {
-  return new Promise<Clip | null>((res, rej) => {
+/** Wartet höchstens `ms` auf ein Ergebnis; danach `null` (der Auftrag rechnet weiter und landet in Gedächtnis und Vorrat). */
+function within<T>(p: Promise<T>, ms: number): Promise<T | null> {
+  return new Promise<T | null>((res, rej) => {
     const due = Date.now() + ms;
-    let t = setTimeout(() => {
-      // Zu spät geweckt (Hauptfaden vom Rechnen belegt): dem gerade fertig gewordenen Satz noch kurz Vorrang geben.
-      if (Date.now() - due > LATE_MS) t = setTimeout(() => res(null), GRACE_MS);
-      else res(null);
-    }, ms);
+    let t = setTimeout(
+      () => {
+        // Zu spät geweckt (Hauptfaden vom Rechnen belegt): dem gerade fertig gewordenen Satz noch kurz Vorrang geben.
+        if (Date.now() - due > LATE_MS) t = setTimeout(() => res(null), GRACE_MS);
+        else res(null);
+      },
+      Math.max(0, ms),
+    );
     p.then(
       (v) => {
         clearTimeout(t);
@@ -479,23 +585,109 @@ function within(p: Promise<Clip>, ms: number): Promise<Clip | null> {
 }
 
 /**
- * Spricht die Stücke nacheinander; das nächste Stück wird schon erzeugt, während das aktuelle läuft.
- * Liefert `done`, `stopped` oder `unavailable` (diesmal nicht möglich → der Aufrufer nimmt ab dem nächsten Stück die Gerätestimme).
+ * Wartet auf die Maschine, während sie lädt. `null` = sie kommt nicht (gescheitert, aufgegeben) oder es ist das allererste Herunterladen
+ * (dann lieber diesmal die Gerätestimme als eine halbe Minute Stille); `'slow'` = Wartezeit vorbei.
  */
-export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 'unavailable' | 'error'> {
+function awaitEngine(deadline: number): Promise<Engine | null | 'slow'> {
+  if (engine) return Promise.resolve(engine);
+  const p = loadNeuralVoice();
+  if (!knownVoiceVersion()) return Promise.resolve(null);
+  return new Promise((res) => {
+    let settled = false;
+    const end = (v: Engine | null | 'slow'): void => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(t);
+      unsub();
+      res(v);
+    };
+    // Das Paket liegt doch nicht im Speicher (vom Browser geräumt): es wird heruntergeladen → diesmal die Gerätestimme.
+    const unsub = useNeuralVoice.subscribe((s) => {
+      if (s.phase === 'download') end(null);
+    });
+    const t = setTimeout(() => end('slow'), Math.max(0, deadline - Date.now()));
+    void p.then((e) => end(e));
+  });
+}
+
+type Got = Clip | 'unavailable' | 'slow' | 'stopped';
+
+/**
+ * Holt einen Satz zum Abspielen: Gedächtnis → Tonvorrat (sofort) → rechnen (sichtbar warten, bis `wait`). Nie die Gerätestimme, nur weil
+ * es dauert: `unavailable` nur, wenn die neue Stimme hier gar nicht läuft oder genau dieser Satz wiederholt nicht gerechnet werden kann.
+ */
+async function obtain(text: string, voice: string, speed: number, alive: () => boolean, onWait?: (w: boolean) => void): Promise<Got> {
+  const mk = clipKey(text, voice, speed);
+  const hit = cacheGet(mk);
+  if (hit) {
+    noteClipUse(true);
+    return hit;
+  }
+  let sk = storeKeyOf(text, voice, speed);
+  if (sk) {
+    await openClipStore();
+    sk = storeKeyOf(text, voice, speed);
+    if (sk && clipStored(sk)) {
+      const c = await readClip(sk);
+      if (c) {
+        cachePut(mk, c);
+        noteClipUse(true);
+        return c;
+      }
+    }
+  }
+  if (!alive()) return 'stopped';
+  const t0 = Date.now();
+  let deadline = t0 + (engine ? limitsOf(engine).wait : WAIT_LOADING_MS);
+  let errors = 0;
+  onWait?.(true);
+  try {
+    for (;;) {
+      if (!alive()) return 'stopped';
+      let e = engine;
+      if (!e) {
+        if (gaveUp || !supported()) return 'unavailable';
+        const got = await awaitEngine(deadline);
+        if (got === 'slow') return 'slow';
+        if (!got) return 'unavailable';
+        e = got;
+        // Frisch geladen: jetzt gilt die Wartezeit dieser Maschine (ab jetzt).
+        deadline = Math.max(deadline, Date.now() + limitsOf(e).wait);
+      }
+      try {
+        const out = await within(synth(text, voice, speed, true, alive), deadline - Date.now());
+        if (!out) return 'slow';
+        noteClipUse(false);
+        return out;
+      } catch (err) {
+        if (!alive()) return 'stopped';
+        if (Date.now() >= deadline) return 'slow';
+        // Maschine wurde neu aufgebaut (Hänger, Grafikchip weg): auf die neue warten und denselben Satz noch einmal.
+        if (err instanceof StaleError) continue;
+        errors += 1;
+        if (errors >= 2) return 'unavailable';
+      }
+    }
+  } finally {
+    onWait?.(false);
+  }
+}
+
+/**
+ * Spricht die Stücke nacheinander; das nächste Stück wird schon geholt, während das aktuelle läuft.
+ * Liefert `done`, `stopped`, `slow` (still: diesmal nicht rechtzeitig fertig) oder `unavailable` (die neue Stimme läuft hier nicht →
+ * der Aufrufer nimmt ab dem nächsten Stück die Gerätestimme).
+ */
+export async function speakNeural(run: NeuralRun): Promise<NeuralOutcome> {
   // Zuerst (noch im Tippen, vor jedem await) die Tonausgabe sichern.
-  if (!supported()) return 'unavailable';
+  if (!supported() || gaveUp) return 'unavailable';
   const c = ensureCtx();
   if (!c) return 'unavailable';
   const e = engine;
-  if (!e) return 'unavailable';
-  // Grafikchip verloren (iPhone nach dem Minimieren): diesmal die Gerätestimme, die neue lädt im Hintergrund neu (aus dem Speicher).
-  if (e.lost()) {
-    void rebuild(e, 'gpu lost');
-    return 'unavailable';
-  }
-  const gen = (i: number) => synth(run.chunks[i] as string, run.voice, run.rate, true, run.alive);
-  let next = gen(run.from);
+  // Grafikchip verloren (iPhone nach dem Minimieren): neu laden (aus dem Speicher); der Satz wartet darauf bzw. kommt aus dem Vorrat.
+  if (e?.lost()) void rebuild(e, 'gpu lost');
+  const get = (i: number) => obtain(run.chunks[i] as string, run.voice, run.rate, run.alive, run.onWait);
+  let next = get(run.from);
   if (c.state !== 'running') {
     await Promise.race([c.resume().catch((err: unknown) => logWarn('voice:resume', err)), new Promise((r) => setTimeout(r, 800))]);
     // Tonausgabe springt nicht an (iPhone nach langer Pause): lieber gleich die Gerätestimme als Stille.
@@ -506,14 +698,14 @@ export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 
   }
   try {
     for (let i = run.from; i < run.chunks.length; i++) {
-      const lim = limitsOf(e);
-      const out = await within(next, i === run.from ? lim.first : lim.next);
-      if (!run.alive()) return 'stopped';
-      if (!out) {
-        logInfo('voice:slow', `Satz ${i + 1} dauert zu lange – diesmal die Gerätestimme`);
-        return 'unavailable';
+      const out = await next;
+      if (!run.alive() || out === 'stopped') return 'stopped';
+      if (out === 'unavailable') return 'unavailable';
+      if (out === 'slow') {
+        logInfo('voice:slow', `Satz ${i + 1} noch nicht fertig – diesmal still, er kommt in den Vorrat`);
+        return 'slow';
       }
-      if (i + 1 < run.chunks.length) next = gen(i + 1);
+      if (i + 1 < run.chunks.length) next = get(i + 1);
       run.onChunk(i);
       const buf = c.createBuffer(1, out.audio.length, out.rate);
       buf.copyToChannel(out.audio as Float32Array<ArrayBuffer>, 0);
@@ -534,10 +726,166 @@ export async function speakNeural(run: NeuralRun): Promise<'done' | 'stopped' | 
   } catch (err) {
     if (!run.alive()) return 'stopped';
     logWarn('voice:speak', err);
-    // Diese Ausgabe spricht sofort die Gerätestimme weiter (nie Stille).
+    // Abspielen selbst gescheitert (Tonausgabe): diese Ausgabe spricht sofort die Gerätestimme weiter (nie Stille).
     return 'unavailable';
   }
 }
+
+// ---------------------------------------------------------------- Vorab-Plan (Stimme 2.0)
+// In Tipp-Pausen rechnet die neue Stimme die Sätze vor, die gleich bzw. heute sicher drankommen: zuerst die sichtbare Karte und die nächsten
+// Karten (`now`/`next`), dann der Rest der Runde (`later`). Eins nach dem anderen, mit kurzer Pause dazwischen und einer längeren nach jeder Portion, und
+// höchstens so viele je Sitzung – das Gerät soll nicht heiß laufen. Was schon im Gedächtnis oder im Vorrat ist, wird übersprungen.
+// Im Hauptfaden auf dem Prozessor gibt es kein Vorab-Rechnen (es hielte die App an); im Hauptfaden auf dem Grafikchip nur `now` (wie bisher).
+
+/** Vorrang im Vorab-Plan: `now` = sichtbare Karte, `next` = die nächsten Karten, `later` = Rest der Runde. */
+export type PlanPrio = 'now' | 'next' | 'later';
+const PRIO: Record<PlanPrio, number> = { now: 0, next: 1, later: 2 };
+type PlanItem = { key: string; text: string; voice: string; speed: number; prio: number };
+const plan: PlanItem[] = [];
+/** Länge des Plans höchstens (älteste Rest-Einträge fallen weg). */
+const PLAN_MAX = 400;
+/** Gerechnete Sätze je Sitzung höchstens. */
+export const PLAN_SESSION_MAX: Record<'gpu' | 'cpu', number> = { gpu: 400, cpu: 150 };
+/** Pause zwischen zwei Vorab-Sätzen und nach jeder Portion. */
+const PLAN_GAP_MS: Record<'gpu' | 'cpu', number> = { gpu: 250, cpu: 1_200 };
+export const PLAN_PORTION = 15;
+export const PLAN_REST_MS = 20_000;
+let planTimer: ReturnType<typeof setTimeout> | null = null;
+let planBusy = false;
+let planDone = 0;
+let planSkipped = 0;
+let planLogAt = 0;
+let planCapLogged = false;
+
+const planKind = (e: Engine): 'gpu' | 'cpu' => (e.device === 'wasm' ? 'cpu' : 'gpu');
+/** Darf diese Maschine vorab rechnen, und wenn ja, auch über die sichtbare und die nächste Karte hinaus? */
+const planScope = (e: Engine): 'none' | 'near' | 'all' => (e.worker ? 'all' : e.device === 'wasm' ? 'none' : 'near');
+
+const haveClip = (it: { key: string; text: string; voice: string; speed: number }): boolean => {
+  if (cache.has(it.key) || pending.has(it.key)) return true;
+  const sk = storeKeyOf(it.text, it.voice, it.speed);
+  return sk !== null && clipStored(sk);
+};
+
+/**
+ * Nimmt der Vorab-Plan Sätze dieses Vorrangs an? (Vor dem Laden: ja, solange die neue Stimme hier grundsätzlich läuft.) So rechnen Aufrufer
+ * die Texte vieler Karten nur, wenn sie auch gebraucht werden.
+ */
+export function planAccepts(prio: PlanPrio): boolean {
+  if (!supported() || gaveUp) return false;
+  const e = engine;
+  if (!e) return useNeuralVoice.getState().status !== 'failed';
+  const scope = planScope(e);
+  return scope === 'all' || (scope === 'near' && PRIO[prio] <= PRIO.now);
+}
+
+/**
+ * Sätze zum Vorab-Rechnen vormerken. `now` kommt ganz nach vorn (die zuletzt gezeigte Karte zuerst), `next`/`later` reihen sich hinter alles
+ * mit gleichem oder höherem Vorrang ein. Wirkt auch, bevor die Stimme bereit ist: der Plan startet, sobald sie es ist.
+ */
+export function planNeural(chunks: readonly string[], voice: string, speed: number, prio: PlanPrio = 'later'): void {
+  if (!planAccepts(prio)) return;
+  const p = PRIO[prio];
+  const items: PlanItem[] = [];
+  for (const raw of chunks) {
+    const text = raw.trim();
+    if (!text || items.some((x) => x.text === text)) continue;
+    const key = clipKey(text, voice, speed);
+    const at = plan.findIndex((x) => x.key === key);
+    if (at >= 0) {
+      if ((plan[at] as PlanItem).prio <= p && p !== 0) continue;
+      plan.splice(at, 1);
+    }
+    items.push({ key, text, voice, speed, prio: p });
+  }
+  if (!items.length) return;
+  const at = p === 0 ? 0 : (() => {
+    const i = plan.findIndex((x) => x.prio > p);
+    return i < 0 ? plan.length : i;
+  })();
+  plan.splice(at, 0, ...items);
+  if (plan.length > PLAN_MAX) plan.length = PLAN_MAX;
+  kickPlan(p === 0 ? 350 : 800);
+}
+
+function kickPlan(ms: number): void {
+  if (planTimer || planBusy) return;
+  planTimer = setTimeout(() => {
+    planTimer = null;
+    whenIdle(() => void planStep());
+  }, ms);
+}
+
+async function planStep(): Promise<void> {
+  if (planBusy) return;
+  const e = engine;
+  if (!e || warming) {
+    if (e) kickPlan(500);
+    return;
+  }
+  const scope = planScope(e);
+  if (scope === 'none') return;
+  if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+  const left = quietLeft();
+  if (left > 0) {
+    kickPlan(left + 30);
+    return;
+  }
+  if (running?.job.urgent || queue.some((j) => j.urgent)) {
+    kickPlan(300);
+    return;
+  }
+  const kind = planKind(e);
+  if (planDone >= PLAN_SESSION_MAX[kind]) {
+    if (!planCapLogged) logInfo('voice:prefetch', `Obergrenze dieser Sitzung erreicht (${planDone} Sätze vorab gerechnet)`);
+    planCapLogged = true;
+    plan.length = 0;
+    return;
+  }
+  let item: PlanItem | undefined;
+  while (plan.length) {
+    const it = plan.shift() as PlanItem;
+    // Hauptfaden (Grafikchip): wie bisher nur die sichtbare Karte und die nächste – mehr kostete beim Tippen Zeit im Hauptfaden.
+    if (scope === 'near' && it.prio > PRIO.now) continue;
+    if (haveClip(it)) {
+      planSkipped += 1;
+      continue;
+    }
+    item = it;
+    break;
+  }
+  if (!item) {
+    planLog();
+    return;
+  }
+  planBusy = true;
+  try {
+    await synth(item.text, item.voice, item.speed, false, () => true);
+    planDone += 1;
+  } catch (err) {
+    if (!(err instanceof StaleError)) logWarn('voice:prefetch', err);
+  } finally {
+    planBusy = false;
+  }
+  kickPlan(planDone % PLAN_PORTION === 0 ? PLAN_REST_MS : PLAN_GAP_MS[kind]);
+}
+
+/** Knappes Protokoll: höchstens alle 10 Minuten eine Zeile, wenn der Plan leer gelaufen ist. */
+function planLog(): void {
+  if (!planDone || Date.now() - planLogAt < 600_000) return;
+  planLogAt = Date.now();
+  logInfo('voice:prefetch', `${planDone} Sätze vorab gerechnet, ${planSkipped} schon im Vorrat`);
+}
+
+/**
+ * Den Text der sichtbaren Karte schon einmal rechnen (vorn im Vorab-Plan). Nicht auf dem Prozessor im Hauptfaden: der hielte die App
+ * sekundenlang an, während Emrah tippt – dort wird erst beim Antippen gerechnet.
+ */
+export function prefetchNeural(chunks: readonly string[], voice: string, speed: number): void {
+  planNeural(chunks.slice(0, 2), voice, speed, 'now');
+}
+
+// ---------------------------------------------------------------- Neu laden, aufgeben
 
 let lastRebuild = 0;
 const REBUILD_GAP_MS = 120_000;
@@ -546,7 +894,7 @@ let troubleAt: number[] = [];
 const TROUBLE_WINDOW_MS = 10 * 60_000;
 const TROUBLE_MAX = 3;
 
-/** Maschine abhängen: laufende und wartende Aufträge enden still (der Aufrufer nimmt die Gerätestimme). */
+/** Maschine abhängen: laufende und wartende Aufträge enden still (wartende Tipps warten auf die neue Maschine). */
 function detach(): void {
   engine = null;
   loading = null;
@@ -567,6 +915,7 @@ function detach(): void {
  * Modell doppelt im Speicher und das Gerät ruckelt. Wegen Fehlern höchstens alle 2 Minuten; bei Grafikchip-Verlust immer.
  * Hängt der Grafikchip (oder scheitert er), bevor er je geantwortet hat, oder zum zweiten Mal: ab dann der Prozessor (gemerkt).
  * Hängt auch der Prozessor oder hängt es zu oft: aufhören, es spricht die Gerätestimme (Safari am Mac 23.11.2026: Endlosschleife).
+ * Im Hintergrund-Rechner beendet das Freigeben den Worker – auch einen, der in einem Hänger feststeckt.
  */
 async function rebuild(old: Engine, why: 'gpu lost' | 'hang' | 'errors' | 'check'): Promise<Engine | null> {
   if (engine !== old) return loading ?? engine;
@@ -600,8 +949,9 @@ async function rebuild(old: Engine, why: 'gpu lost' | 'hang' | 'errors' | 'check
 function giveUp(old: Engine, why: 'hang' | 'errors'): null {
   gaveUp = true;
   detach();
+  plan.length = 0;
   logWarn('voice:give-up', new Error(`${why} on ${old.device} – Gerätestimme für diese Sitzung`));
-  useNeuralVoice.setState({ status: 'failed', device: null, pct: 0, phase: null });
+  useNeuralVoice.setState({ status: 'failed', device: null, worker: false, pct: 0, phase: null });
   void withTimeout(old.dispose(), 3_000);
   return null;
 }
@@ -631,7 +981,7 @@ export function resetNeural(): void {
   loading = null;
   failures = 0;
   lastTry = 0;
-  checking = false;
+  warming = false;
   cache.clear();
   cacheSamples = 0;
   queue.length = 0;
@@ -642,9 +992,21 @@ export function resetNeural(): void {
   lastRebuild = 0;
   troubleAt = [];
   forceWasm = false;
+  noWorker = false;
   gaveUp = false;
+  plan.length = 0;
+  if (planTimer) clearTimeout(planTimer);
+  planTimer = null;
+  planBusy = false;
+  planDone = 0;
+  planSkipped = 0;
+  planLogAt = 0;
+  planCapLogged = false;
   resetInputQuiet();
   if (quietTimer) clearTimeout(quietTimer);
   quietTimer = null;
-  useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, fromCache: false, loadMs: null });
+  useNeuralVoice.setState({ status: 'off', pct: 0, phase: null, device: null, worker: false, fromCache: false, loadMs: null });
 }
+
+/** Nur für Tests: Stand des Vorab-Plans. */
+export const planState = (): { queued: number; done: number; skipped: number } => ({ queued: plan.length, done: planDone, skipped: planSkipped });
